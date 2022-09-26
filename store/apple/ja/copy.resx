@@ -122,15 +122,32 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden は、あらゆる端末間で同期しつつログイン情報やパスワードを保管しておける、最も簡単で安全なサービスです。Bitwarden アプリ拡張機能で Safari や Chrome などの多数の人気アプリに対応しており、ウェブサイトでログイン情報の素早い自動入力ができます。
+    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
 
-パスワードの盗難は深刻な問題になっています。ウェブサイトやアプリは毎日攻撃を受けており、もしセキュリティに問題があればパスワードが盗難されてしまいます。 同じパスワードを他のアプリでも再利用していると、攻撃者はメールや銀行口座など大切なアカウントに簡単に侵入できてしまいます。
+NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
 
-セキュリティの専門家は、アカウント毎に別のランダムに生成したパスワードを使うことを推奨していますが、ランダムなパスワードをすべて覚えていられますか？　Bitwarden を使えば、わざわざパスワードを覚えなくても簡単にパスワードの生成、保管や利用ができます。
+Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
 
-Bitwarden は端末間で同期できる、暗号化された保管庫にログイン情報を保管します。端末から送信される前に暗号化されるので、あなただけがそのデータにアクセスできるのです。Bitwarden の開発者チームですら、あなたに頼まれたとしてもデータを読み取ることはできません。データは AES-256 bit 暗号化、ソルト化ハッシュ、PBKDF2 SHA-256 で保護されます。
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
 
-Bitwarden は100%オープンソースソフトウェアです。Bitwarden のソースコードは GitHub にホストされており、誰でもBitwardenのコードを自由にレビュー、監査、貢献できます。</value>
+Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+
+Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+
+Why Choose Bitwarden:
+
+World-Class Encryption
+Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+
+Built-in Password Generator
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+
+Global Translations
+Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+
+Cross-Platform Applications
+Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">

@@ -299,6 +299,10 @@
     <value>Min boks</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Autentifikator</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Navn</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Kan ikke læse autentificeringsnøgle.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Skanning vil ske automatisk.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Peg dit kamera mod QR-koden.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Ret kameraet mod QR-koden.
+Skanning vil ske automatisk.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Skan QR-kode</value>
@@ -2259,6 +2261,43 @@
   <data name="All" xml:space="preserve">
     <value>Alle</value>
   </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Bekræftelseskoder</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Premium-abonnement kræves</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Kan ikke tilføje autentificeringsnøgle?</value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Skan QR-kode</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Kan ikke skanne QR-kode? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Autentificeringsnøgle</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Angiv nøgle manuelt</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Tilføj TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Opsæt TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Når nøglen er angivet,
+vælg Tilføj TOTP for at gemme nøglen sikkert</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Sættes låseindstillingen til “Aldrig”, er din boks tilgængelig for alle med adgang til enheden. Bruges denne mulighed, så vær sikker på, at din enhed er ordentligt beskyttet.</value>
   </data>
@@ -2273,5 +2312,80 @@
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Er du sikker på, at du vil aktivere skærmoptagelse?</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Adgangskodetype</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Hvad vil du gerne generere?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Brugernavnstype</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Plus adresseret e-mail</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Fang-alle e-mail</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Videresendt e-mail alias</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Tilfældigt ord</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-mail (obligatorisk)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Domænenavn (obligatorisk)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API-nøgle (obligatorisk)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Tjeneste</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API-adgangstoken</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Er du sikker på, at du vil overskrive det aktuelle brugernavn?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Generér brugernavn</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>E-mail-type</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Websted (obligatorisk)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Ukendt {0}-fejl opstod.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Brug din e-mailudbyders underadresseringsmuligheder</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Brug dit domænes konfigurerede fang-alle-indbakke.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Generér et e-mail alias med en ekstern viderestillingstjeneste.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Tilfældig</value>
   </data>
 </root>

@@ -299,6 +299,10 @@
     <value>La meua caixa forta</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Autenticador</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nom</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>No es pot llegir la clau d'autenticació.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>L'escaneig serà automàtic.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Dirigiu la càmera al codi QR.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Apunteu la càmera cap al codi QR.
+L'escaneig es farà automàticament.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Escaneja el codi QR</value>
@@ -2259,6 +2261,43 @@
   <data name="All" xml:space="preserve">
     <value>Totes</value>
   </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Codis de verificació</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Cal una subscripció premium</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>No es pot afegir la clau d'autenticació? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Escaneja el codi QR</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>No podeu escanejar el codi QR? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Clau autenticadora</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Introdueix la clau manualment</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Afegeix TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Configura TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Una vegada introduïda la clau correctament,
+seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Si configureu les opcions de bloqueig a "Mai", la vostra caixa forta està disponible per a qualsevol persona amb accés al vostre dispositiu. Si utilitzeu aquesta opció, hauríeu d'assegurar-vos de mantenir el vostre dispositiu correctament protegit.</value>
   </data>
@@ -2273,5 +2312,80 @@
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Segur que voleu activar la captura de pantalla?</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Tipus de contrasenya</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Què voleu generar?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Tipus de nom d'usuari</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Adreça amb sufix</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Captura tot el correu electrònic</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Àlies de correu electrònic reenviat</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Paraula aleatòria</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Correu electrònic (obligatori)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Nom de domini (obligatori)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Clau API (obligatòria)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Servei</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Token d'accés a l'API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Segur que voleu sobreescriure el nom d'usuari actual?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Genera un nom d'usuari</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Tipus de correu electrònic</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Pàgina web (obligatòria)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>S'ha produït un error {0} desconegut.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Utilitzeu les capacitats de subadreçament del vostre proveïdor de correu electrònic</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Utilitzeu la safata d'entrada global configurada del vostre domini.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Genera un àlies de correu electrònic amb un servei de reenviament extern.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Aleatori</value>
   </data>
 </root>

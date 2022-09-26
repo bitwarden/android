@@ -299,6 +299,10 @@
     <value>保管庫</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>認証システム</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>名前</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>認証キーを読み取れません。</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>自動的に読み取ります。</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>カメラで QR コードを写してください。</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>QR コードにカメラを向けてください。
+スキャンは自動的に行われます。</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>QR コードを読み取る</value>
@@ -2259,6 +2261,43 @@
   <data name="All" xml:space="preserve">
     <value>すべて</value>
   </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>認証コード</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>プレミアム版が必要です</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>認証キーを追加できませんか？ </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>QR コードを読み取る</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>QR コードをスキャンできませんか？ </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>認証キー</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>キーを手動で入力してください</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>TOTP を追加</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>TOTP の設定</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>キーを入力したら、安全に保存するため
+『TOTP を追加』を選択してください。</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>ロックオプションを「なし」に設定すると、あなたのデバイスを操作できる誰もが保管庫を見られます。 このオプションを使用する場合は、デバイスを適切に保護しておく必要があります。</value>
   </data>
@@ -2273,5 +2312,80 @@
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>スクリーンショットを撮影できるようにしてもよろしいですか？</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>パスワードの種類</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>何を生成しますか？</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>ユーザー名の種類</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>プラス付きのメールアドレス</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>キャッチオールメール</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>転送されたメールエイリアス</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>ランダムな単語</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>メールアドレス（必須）</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>ドメイン名（必須）</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API キー (必須)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>サービス</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API アクセストークン</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>現在のユーザー名を上書きしてもよろしいですか？</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>ユーザー名を生成</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>メールの種類</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>ウェブサイト (必須)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>不明な {0} エラーが発生しました。</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>メールプロバイダのエイリアス機能を使用します。</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>ドメインに設定されたキャッチオール受信トレイを使用します。</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>外部転送サービスを使用してメールエイリアスを生成します。</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>ランダム</value>
   </data>
 </root>

@@ -299,6 +299,10 @@
     <value>Széfem</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Hitelesítés</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Név</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,8 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Nem lehet olvasni a hitelesítő kulcsot.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>A szkennelés automatikusan megtörténik.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Irányítsd a kamerát a QR-kódra.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Irányítsa a kamerát a QR-kódra.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>QR kód beolvasása</value>
@@ -2259,6 +2260,43 @@
   <data name="All" xml:space="preserve">
     <value>Összes</value>
   </data>
+  <data name="Totp" xml:space="preserve">
+    <value>Idő alapú egyszer használatos jelszó (TOTP)</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Hitelesítő kód</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Prémium előfizetés szükséges</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Cannot add authenticator key? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>QR kód beolvasása</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Nem sikerül beolvasni a QR kódot? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Authenticator Key</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Kód megadása manuálisan</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>TOTP hozzáadása</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>TOTP beállítása</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Once the key is successfully entered,
+select Add TOTP to store the key safely</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Ha a zárolási lehetőségeket "Soha” értékre állítjuk, akkor a széf bárki számára elérhető lesz, aki hozzáfér az eszközhöz. Ha ezt az opciót használjuk, akkor gondoskodni kell arról, hogy az eszköz megfelelően védett legyen.</value>
   </data>
@@ -2273,5 +2311,80 @@
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Biztosan engedélyzni szeretnénk a képernyőrögzítést?</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Jelszótípus</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Mit szeretnénk generálni?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Felhasználónév típusa</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>További címzési email cím</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Összes email cím begyűjtése</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Továbbított email álnevek</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Véletlenszerű szó</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Email cím (kötelező)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Domain név (kötelező)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API kulcs (kötelező)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Szolgáltatás</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API hozzáférési vezérjel</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Biztosan felülírásra kerüljön az aktuális felhasználónév?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Felhasználónév generálása</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Email típus</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Webhely (kötelező)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Ismeretlen {0} hiba történt.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Használjuk az email cím szolgáltató alcímzési képességeit.</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Használjuk a domain konfigurált összes befogási bejövő postaládát.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Email álnév generálása külső továbbító szolgáltatással.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Véletlen</value>
   </data>
 </root>

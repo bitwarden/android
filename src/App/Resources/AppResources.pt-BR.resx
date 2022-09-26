@@ -299,6 +299,10 @@
     <value>Meu Cofre</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Autenticação</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nome</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Não é possível ler a chave do autenticador.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>O escaneamento acontecerá automaticamente.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Aponte sua câmera para o QR code.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Aponte a câmera para o QR Code.
+A leitura será feita automaticamente.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Escanear Código QR</value>
@@ -1574,7 +1576,7 @@
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
-    <value>Auto-preencher URIs bloqueadas</value>
+    <value>Preencher automaticamente URIs bloqueadas</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
     <value>O preenchimento automático não será oferecido para URIs bloqueados. Separe vários URIs com uma vírgula. Por exemplo: "https://twitter.com, androidapp://com.twitter.android".</value>
@@ -2260,6 +2262,43 @@
   <data name="All" xml:space="preserve">
     <value>Todos</value>
   </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Códigos de Verificação</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Necessário assinatura Premium</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Não foi possível adicionar chave de autenticação? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Escanear QR Code</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Não foi possível escanear o QR Code? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Chave de Autenticação</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Insira manualmente a chave</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Adicionar TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Configurar TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Assim que a chave for inserida corretamente,
+selecione Adicionar TOTP para armazenar a chave de forma segura</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Definir suas opções de bloqueio para "Nunca" mantém o cofre disponível para qualquer pessoa com acesso ao seu dispositivo. Se usar esta opção, você deverá garantir que manterá seu dispositivo devidamente protegido.</value>
   </data>
@@ -2274,5 +2313,80 @@
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Tem certeza de que deseja ativar a Captura de Tela?</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Tipo de Senha</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>O que você gostaria de gerar?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Tipo de Nome de Usuário</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>E-mail endereçado mais</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>E-mail pega-tudo</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Alias de E-mail Encaminhado</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Palavra Aleatória</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-mail (obrigatório)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Nome do Domínio (obrigatório)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Chave de API (obrigatória)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Serviço</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Token de Acesso à API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Tem certeza que deseja substituir o usuário atual?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Gerar Usuário</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Tipo de Email</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Website (obrigatório)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Ocorreu um erro desconhecido {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Use os recursos de subendereço do seu provedor de e-mail</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Use a caixa de entrada "pega-tudo" configurada do seu domínio.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Gere um alias de e-mail com um serviço de encaminhamento externo.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Aleatória</value>
   </data>
 </root>

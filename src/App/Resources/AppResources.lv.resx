@@ -299,6 +299,10 @@
     <value>Mana glabātava</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Autentificētājs</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nosaukums</value>
     <comment>Label for an entity name.</comment>
@@ -815,11 +819,11 @@
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Ievadi 6 ciparu apstiprinājuma kodu no autentificētāja lietotnes!</value>
+    <value>Jāievada 6 ciparu apstiprinājuma kods no autentificētāja lietotnes.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Ievadi 6 ciparu apstiprinājuma kodu, kas tika nosūtīts uz $EMAIL$!</value>
+    <value>Jāievada 6 ciparu apstiprinājuma kods, kas tika nosūtīts uz {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Nevar nolasīt autentificētāja atslēgu.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Nolasīšana notiks automātiski.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Kamera ir jāvērš uz kvadrātkodu.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Kamera jāpavērš pret kvadrātkodu.
+Nolasīšana notiks automātiski.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Nolasīt kvadrātkodu</value>
@@ -2259,6 +2261,43 @@
   <data name="All" xml:space="preserve">
     <value>Visi</value>
   </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Apstiprinājuma kodi</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Nepieciešams Premium abonements</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Nevar pievienot autentificētāja atslēgu? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Nolasīt kvadrātkodu</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Nevar nolasīt kvadrātkodu? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Autentificētāja atslēga</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Ievadīt atslēgu pašrocīgi</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Pievienot TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Uzstādīt TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Tiklīdz atslēga ir veiksmīgi ievadīta,
+jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Aizslēgšanas iespējas iestatīšana uz "Nekad" padara glabātavu pieejamu ikvienam, kam ir piekļuve ierīcei. Ja šis iestatījums tiek izmantots, jānodrošina, ka ierīce ir pienācīgi aizsargāta.</value>
   </data>
@@ -2273,5 +2312,80 @@
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Vai tiešām iespējot ekrāna tveršanu?</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Paroles veids</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Ko ir nepieciešams izveidot?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Lietotājvārda veids</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>E-pasta adrese ar plusu</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Visu tverošā e-pasta adrese</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Pārvirzīto e-pastu aizstājvārds</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Nejaušs vārds</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-pasta adrese (nepieciešama)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Domēna vārds (nepieciešams)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API atslēga (nepieciešama)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Pakalpojums</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API piekļuves pilnvara</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Vai tiešām pārrakstīt pašreizējo lietotājvārdu?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Izveidot lietotājvārdu</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>E-pasta veids</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Mājaslapa (nepieciešama)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Notika nezināma kļūda {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Izmantot e-pasta pakalpojuma nodrošinātāja apakšadrešu spējas</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Izmantot uzstādīto domēna visu tverošo iesūtni.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Izveidot e-pastu aizstājvārdu ar ārēju pārvirzīšanas pakalpojumu.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Nejauši</value>
   </data>
 </root>

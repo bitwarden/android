@@ -5,14 +5,14 @@ using Xamarin.Forms;
 namespace Bit.App.Utilities
 {
     /**
-     * Helper class to format a password with numeric encoding to separate
+     * Helper class to format a password/username with numeric encoding to separate
      * normal text from numbers and special characters.
      */
-    class PasswordFormatter
+    class GeneratedValueFormatter
     {
         /**
          * This enum is used for the state machine when building the colorized
-         * password string.
+         * password/username string.
          */
         private enum CharType
         {
@@ -22,9 +22,9 @@ namespace Bit.App.Utilities
             Special
         }
 
-        public static string FormatPassword(string password)
+        public static string Format(string generatedValue)
         {
-            if (password == null)
+            if (generatedValue == null)
             {
                 return string.Empty;
             }
@@ -37,7 +37,7 @@ namespace Bit.App.Utilities
             var result = string.Empty;
 
             // iOS won't hide the zero-width space char without these div attrs, but Android won't respect
-            // display:inline-block and adds a newline after the password.  Hence, only iOS gets the div.
+            // display:inline-block and adds a newline after the password/username.  Hence, only iOS gets the div.
             if (Device.RuntimePlatform == Device.iOS)
             {
                 result += "<div style=\"display:inline-block; align-items:center; justify-content:center; text-align:center; word-break:break-all; white-space:pre-wrap; min-width:0\">";
@@ -47,7 +47,7 @@ namespace Bit.App.Utilities
             // state.
             var currentType = CharType.None;
 
-            foreach (var c in password)
+            foreach (var c in generatedValue)
             {
                 // First, identify what the current char is.
                 CharType charType;

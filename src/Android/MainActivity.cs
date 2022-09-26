@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Content.Res;
 using Android.Nfc;
 using Android.OS;
 using Android.Runtime;
-using AndroidX.Core.Content;
+using Android.Views;
 using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Resources;
@@ -19,7 +20,9 @@ using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using Bit.Droid.Receivers;
 using Bit.Droid.Utilities;
+using Xamarin.Essentials;
 using ZXing.Net.Mobile.Android;
+using FileProvider = AndroidX.Core.Content.FileProvider;
 
 namespace Bit.Droid
 {
@@ -36,6 +39,7 @@ namespace Bit.Droid
         private IStateService _stateService;
         private IAppIdService _appIdService;
         private IEventService _eventService;
+        private ILogger _logger;
         private PendingIntent _eventUploadPendingIntent;
         private AppOptions _appOptions;
         private string _activityKey = $"{nameof(MainActivity)}_{Java.Lang.JavaSystem.CurrentTimeMillis().ToString()}";
@@ -46,7 +50,7 @@ namespace Bit.Droid
         {
             var eventUploadIntent = new Intent(this, typeof(EventUploadReceiver));
             _eventUploadPendingIntent = PendingIntent.GetBroadcast(this, 0, eventUploadIntent,
-                PendingIntentFlags.UpdateCurrent);
+                AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, false));
 
             var policy = new StrictMode.ThreadPolicy.Builder().PermitAll().Build();
             StrictMode.SetThreadPolicy(policy);
@@ -57,6 +61,7 @@ namespace Bit.Droid
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
@@ -71,7 +76,7 @@ namespace Bit.Droid
                 Window.AddFlags(Android.Views.WindowManagerFlags.Secure);
             });
 
-            ServiceContainer.Resolve<ILogger>("logger").InitAsync();
+            _logger.InitAsync();
 
             var toplayout = Window?.DecorView?.RootView;
             if (toplayout != null)
@@ -84,6 +89,7 @@ namespace Bit.Droid
             _appOptions = GetOptions();
             CreateNotificationChannel();
             LoadApplication(new App.App(_appOptions));
+            DisableAndroidFontScale();
 
             _broadcasterService.Subscribe(_activityKey, (message) =>
             {
@@ -274,7 +280,7 @@ namespace Bit.Droid
             {
                 var intent = new Intent(this, Class);
                 intent.AddFlags(ActivityFlags.SingleTop);
-                var pendingIntent = PendingIntent.GetActivity(this, 0, intent, 0);
+                var pendingIntent = PendingIntent.GetActivity(this, 0, intent, AndroidHelpers.AddPendingIntentMutabilityFlag(0, true));
                 // register for all NDEF tags starting with http och https
                 var ndef = new IntentFilter(NfcAdapter.ActionNdefDiscovered);
                 ndef.AddDataScheme("http");
@@ -420,6 +426,20 @@ namespace Bit.Droid
                 notificationManager.CreateNotificationChannel(channel);
             }
 #endif
+        }
+
+        private void DisableAndroidFontScale()
+        {
+            try
+            {
+                //As we are using NamedSizes the xamarin will change the font size. So we are disabling the Android scaling.
+                Resources.Configuration.FontScale = 1f;
+                BaseContext.Resources.DisplayMetrics.ScaledDensity = Resources.Configuration.FontScale * (float)DeviceDisplay.MainDisplayInfo.Density;
+            }
+            catch (Exception e)
+            {
+                _logger.Exception(e);
+            }
         }
     }
 }

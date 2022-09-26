@@ -111,8 +111,8 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
             IsBusy = false;
+            _vm.StopCiphersTotpTick().FireAndForget();
             _broadcasterService.Unsubscribe(nameof(CipherDetailsPage));
-            _vm.CleanUp();
         }
 
         private async void PasswordHistory_Tapped(object sender, System.EventArgs e)

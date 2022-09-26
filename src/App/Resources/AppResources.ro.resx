@@ -299,6 +299,10 @@
     <value>Seiful meu</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Authenticator</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Denumire</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Nu se poate citi cheia de autentificare.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Scanarea va avea loc automat.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Îndreptați camera spre codul QR.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Îndreptați camera spre codul QR.
+Scanarea se va face automat.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Scanare cod QR</value>
@@ -2259,6 +2261,43 @@
   <data name="All" xml:space="preserve">
     <value>Toate</value>
   </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Coduri de verificare</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Este necesar un abonament Premium</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Nu puteți adăuga cheia authenticator? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Scanare cod QR</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Nu puteți scana codul QR? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Cheie authenticator</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Introduceți cheia manual</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Adăugare TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Configurare TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>După ce cheia este introdusă corect,
+selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Setarea opțiunilor de blocare la „Niciodată” face ca seiful dvs. să fie disponibil oricui are acces la acesta. Dacă utilizați această opțiune, trebuie să vă asigurați că vă păstrați dispozitivul protejat corespunzător.</value>
   </data>
@@ -2273,5 +2312,80 @@
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Sunteți sigur că doriți să activați Captura de ecran?</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Tip de parolă</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Ce doriți să generați?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Tip de nume de utilizator</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Plus e-mail adresat</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>E-mail Catch-all</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Alias de e-mail redirecționat</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Cuvânt aleatoriu</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-mail (obligatoriu)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Nume de domeniu (obligatoriu)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Cheie API (obligatoriu)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Serviciu</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Token de acces API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Sunteți sigur că doriți să suprascrieți numele de utilizator curent?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Generare nume de utilizator</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Tip e-mail</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Website (obligatoriu)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>A survenit o eroare {0} necunoscută.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Utilizați capacitățile de subadresare ale furnizorului dvs. de e-mail</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Utilizați inbox-ul catch-all configurat pentru domeniul dvs.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Generați un alias de e-mail cu un serviciu de redirecționare extern.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Aleatoriu</value>
   </data>
 </root>

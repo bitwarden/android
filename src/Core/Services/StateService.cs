@@ -1146,6 +1146,22 @@ namespace Bit.Core.Services
             await SetValueAsync(key, value, reconciledOptions);
         }
 
+        public async Task<UsernameGenerationOptions> GetUsernameGenerationOptionsAsync(string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var key = Constants.UsernameGenOptionsKey(reconciledOptions.UserId);
+            return await GetValueAsync<UsernameGenerationOptions>(key, reconciledOptions);
+        }
+
+        public async Task SetUsernameGenerationOptionsAsync(UsernameGenerationOptions value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var key = Constants.UsernameGenOptionsKey(reconciledOptions.UserId);
+            await SetValueAsync(key, value, reconciledOptions);
+        }
+
         public async Task<List<GeneratedPasswordHistory>> GetEncryptedPasswordGenerationHistory(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
@@ -1492,6 +1508,7 @@ namespace Bit.Core.Services
                 await SetAddSitePromptShownAsync(null, userId);
                 await SetPasswordGenerationOptionsAsync(null, userId);
                 await SetApprovePasswordlessLoginsAsync(null, userId);
+                await SetUsernameGenerationOptionsAsync(null, userId);
             }
         }
 

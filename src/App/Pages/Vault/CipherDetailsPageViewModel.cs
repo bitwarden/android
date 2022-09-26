@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
+using Bit.App.Lists.ItemViewModels.CustomFields;
 using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core;
@@ -17,18 +19,20 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class CipherDetailsPageViewModel : BaseCipherViewModel
+    public class CipherDetailsPageViewModel : BaseCipherViewModel, IPasswordPromptable
     {
         private readonly ICipherService _cipherService;
         private readonly IStateService _stateService;
+        private readonly IAuditService _auditService;
         private readonly ITotpService _totpService;
         private readonly IMessagingService _messagingService;
         private readonly IEventService _eventService;
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly ILocalizeService _localizeService;
+        private readonly ICustomFieldItemFactory _customFieldItemFactory;
         private readonly IClipboardService _clipboardService;
 
-        private List<CipherDetailsPageFieldViewModel> _fields;
+        private List<ICustomFieldItemViewModel> _fields;
         private bool _canAccessPremium;
         private bool _showPassword;
         private bool _showCardNumber;
@@ -42,16 +46,21 @@ namespace Bit.App.Pages
         private byte[] _attachmentData;
         private string _attachmentFilename;
         private bool _passwordReprompted;
+        private TotpHelper _totpTickHelper;
+        private CancellationTokenSource _totpTickCancellationToken;
+        private Task _totpTickTask;
 
         public CipherDetailsPageViewModel()
         {
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
             _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
             _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
+            _customFieldItemFactory = ServiceContainer.Resolve<ICustomFieldItemFactory>("customFieldItemFactory");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
             CopyCommand = new AsyncCommand<string>((id) => CopyAsync(id, null), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
@@ -91,8 +100,9 @@ namespace Bit.App.Pages
             nameof(ShowIdentityAddress),
             nameof(IsDeleted),
             nameof(CanEdit),
+            nameof(ShowUpgradePremiumTotpText)
         };
-        public List<CipherDetailsPageFieldViewModel> Fields
+        public List<ICustomFieldItemViewModel> Fields
         {
             get => _fields;
             set => SetProperty(ref _fields, value);
@@ -134,7 +144,7 @@ namespace Bit.App.Pages
         public bool IsIdentity => Cipher?.Type == Core.Enums.CipherType.Identity;
         public bool IsCard => Cipher?.Type == Core.Enums.CipherType.Card;
         public bool IsSecureNote => Cipher?.Type == Core.Enums.CipherType.SecureNote;
-        public FormattedString ColoredPassword => PasswordFormatter.FormatPassword(Cipher.Login.Password);
+        public FormattedString ColoredPassword => GeneratedValueFormatter.Format(Cipher.Login.Password);
         public FormattedString UpdatedText
         {
             get
@@ -191,21 +201,22 @@ namespace Bit.App.Pages
                 return fs;
             }
         }
+
+        public bool ShowUpgradePremiumTotpText => !CanAccessPremium && !Cipher.OrganizationUseTotp && ShowTotp;
         public bool ShowUris => IsLogin && Cipher.Login.HasUris;
         public bool ShowIdentityAddress => IsIdentity && (
             !string.IsNullOrWhiteSpace(Cipher.Identity.Address1) ||
             !string.IsNullOrWhiteSpace(Cipher.Identity.City) ||
             !string.IsNullOrWhiteSpace(Cipher.Identity.Country));
         public bool ShowAttachments => Cipher.HasAttachments && (CanAccessPremium || Cipher.OrganizationId != null);
-        public bool ShowTotp => IsLogin && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
-            !string.IsNullOrWhiteSpace(TotpCodeFormatted);
+        public bool ShowTotp => IsLogin && !string.IsNullOrWhiteSpace(Cipher.Login.Totp);
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string ShowCardNumberIcon => ShowCardNumber ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string ShowCardCodeIcon => ShowCardCode ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string TotpCodeFormatted
         {
-            get => _totpCodeFormatted;
+            get => ShowUpgradePremiumTotpText ? string.Empty : _totpCodeFormatted;
             set => SetProperty(ref _totpCodeFormatted, value,
                 additionalPropertyNames: new string[]
                 {
@@ -215,7 +226,11 @@ namespace Bit.App.Pages
         public string TotpSec
         {
             get => _totpSec;
-            set => SetProperty(ref _totpSec, value);
+            set => SetProperty(ref _totpSec, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(TotpProgress)
+                });
         }
         public bool TotpLow
         {
@@ -226,12 +241,12 @@ namespace Bit.App.Pages
                 Page.Resources["textTotp"] = ThemeManager.Resources()[value ? "text-danger" : "text-default"];
             }
         }
+        public double TotpProgress => string.IsNullOrEmpty(TotpSec) ? 0 : double.Parse(TotpSec) * 100 / 30;
         public bool IsDeleted => Cipher.IsDeleted;
         public bool CanEdit => !Cipher.IsDeleted;
 
         public async Task<bool> LoadAsync(Action finishedLoadingAction = null)
         {
-            CleanUp();
             var cipher = await _cipherService.GetAsync(CipherId);
             if (cipher == null)
             {
@@ -240,24 +255,18 @@ namespace Bit.App.Pages
             }
             Cipher = await cipher.DecryptAsync();
             CanAccessPremium = await _stateService.CanAccessPremiumAsync();
-            Fields = Cipher.Fields?.Select(f => new CipherDetailsPageFieldViewModel(this, Cipher, f)).ToList();
+
+            Fields = Cipher.Fields?
+                        .Select(f => _customFieldItemFactory.CreateCustomFieldItem(f, false, Cipher, this, CopyFieldCommand, null))
+                        .ToList();
 
             if (Cipher.Type == Core.Enums.CipherType.Login && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
                 (Cipher.OrganizationUseTotp || CanAccessPremium))
             {
-                await TotpUpdateCodeAsync();
-                var interval = _totpService.GetTimeInterval(Cipher.Login.Totp);
-                await TotpTickAsync(interval);
-                _totpInterval = DateTime.UtcNow;
-                Device.StartTimer(new TimeSpan(0, 0, 1), () =>
-                {
-                    if (_totpInterval == null)
-                    {
-                        return false;
-                    }
-                    var task = TotpTickAsync(interval);
-                    return true;
-                });
+                _totpTickHelper = new TotpHelper(Cipher);
+                _totpTickCancellationToken?.Cancel();
+                _totpTickCancellationToken = new CancellationTokenSource();
+                _totpTickTask = new TimerTask(_logger, StartCiphersTotpTick, _totpTickCancellationToken).RunPeriodic();
             }
             if (_previousCipherId != CipherId)
             {
@@ -268,9 +277,27 @@ namespace Bit.App.Pages
             return true;
         }
 
-        public void CleanUp()
+        private async void StartCiphersTotpTick()
         {
-            _totpInterval = null;
+            try
+            {
+                await _totpTickHelper.GenerateNewTotpValues();
+                TotpSec = _totpTickHelper.TotpSec;
+                TotpCodeFormatted = _totpTickHelper.TotpCodeFormatted;
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
+        }
+
+        public async Task StopCiphersTotpTick()
+        {
+            _totpTickCancellationToken?.Cancel();
+            if (_totpTickTask != null)
+            {
+                await _totpTickTask;
+            }
         }
 
         public async void TogglePassword()
@@ -592,7 +619,7 @@ namespace Bit.App.Pages
             }
             else if (id == "LoginTotp")
             {
-                text = _totpCode;
+                text = TotpCodeFormatted.Replace(" ", string.Empty);
                 name = AppResources.VerificationCodeTotp;
             }
             else if (id == "LoginUri")
@@ -644,7 +671,7 @@ namespace Bit.App.Pages
             }
         }
 
-        internal async Task<bool> PromptPasswordAsync()
+        public async Task<bool> PromptPasswordAsync()
         {
             if (Cipher.Reprompt == CipherRepromptType.None || _passwordReprompted)
             {
@@ -652,112 +679,6 @@ namespace Bit.App.Pages
             }
 
             return _passwordReprompted = await _passwordRepromptService.ShowPasswordPromptAsync();
-        }
-    }
-
-    public class CipherDetailsPageFieldViewModel : ExtendedViewModel
-    {
-        private II18nService _i18nService;
-        private CipherDetailsPageViewModel _vm;
-        private FieldView _field;
-        private CipherView _cipher;
-        private bool _showHiddenValue;
-
-        public CipherDetailsPageFieldViewModel(CipherDetailsPageViewModel vm, CipherView cipher, FieldView field)
-        {
-            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
-            _vm = vm;
-            _cipher = cipher;
-            Field = field;
-            ToggleHiddenValueCommand = new Command(ToggleHiddenValue);
-        }
-
-        public FieldView Field
-        {
-            get => _field;
-            set => SetProperty(ref _field, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ValueText),
-                    nameof(ValueAccessibilityText),
-                    nameof(IsBooleanType),
-                    nameof(IsHiddenType),
-                    nameof(IsTextType),
-                    nameof(ShowCopyButton),
-                });
-        }
-
-        public bool ShowHiddenValue
-        {
-            get => _showHiddenValue;
-            set => SetProperty(ref _showHiddenValue, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ShowHiddenValueIcon)
-                });
-        }
-
-        public string ValueText
-        {
-            get
-            {
-                if (IsBooleanType)
-                {
-                    return _field.BoolValue ? BitwardenIcons.CheckSquare : BitwardenIcons.Square;
-                }
-                else if (IsLinkedType)
-                {
-                    var i18nKey = _cipher.LinkedFieldI18nKey(Field.LinkedId.GetValueOrDefault());
-                    return BitwardenIcons.Link + _i18nService.T(i18nKey);
-                }
-                else
-                {
-                    return _field.Value;
-                }
-            }
-        }
-
-        public string ValueAccessibilityText
-        {
-            get
-            {
-                if (IsBooleanType)
-                {
-                    return _field.BoolValue ? AppResources.Enabled : AppResources.Disabled;
-                }
-
-                return ValueText;
-            }
-        }
-
-        public FormattedString ColoredHiddenValue => PasswordFormatter.FormatPassword(_field.Value);
-
-        public Command ToggleHiddenValueCommand { get; set; }
-
-        public string ShowHiddenValueIcon => _showHiddenValue ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
-        public bool IsTextType => _field.Type == Core.Enums.FieldType.Text;
-        public bool IsBooleanType => _field.Type == Core.Enums.FieldType.Boolean;
-        public bool IsHiddenType => _field.Type == Core.Enums.FieldType.Hidden;
-        public bool IsLinkedType => _field.Type == Core.Enums.FieldType.Linked;
-        public bool ShowViewHidden => IsHiddenType && _cipher.ViewPassword;
-        public bool ShowCopyButton => _field.Type != Core.Enums.FieldType.Boolean &&
-            !string.IsNullOrWhiteSpace(_field.Value) &&
-            !(IsHiddenType && !_cipher.ViewPassword) &&
-            _field.Type != FieldType.Linked;
-
-        public async void ToggleHiddenValue()
-        {
-            if (!await _vm.PromptPasswordAsync())
-            {
-                return;
-            }
-            ShowHiddenValue = !ShowHiddenValue;
-            if (ShowHiddenValue)
-            {
-                var eventService = ServiceContainer.Resolve<IEventService>("eventService");
-                var task = eventService.CollectAsync(
-                    Core.Enums.EventType.Cipher_ClientToggledHiddenFieldVisible, _cipher.Id);
-            }
         }
     }
 }

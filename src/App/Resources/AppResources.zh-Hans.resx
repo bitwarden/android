@@ -222,7 +222,7 @@
     <value>文件夹已删除。</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>默认文件夹</value>
+    <value>无文件夹</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
@@ -298,6 +298,10 @@
   <data name="MyVault" xml:space="preserve">
     <value>密码库</value>
     <comment>The title for the vault page.</comment>
+  </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>身份验证器</value>
+    <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
     <value>名称</value>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>无法读取验证器密钥。</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>将会自动扫描。</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>将相机对准 QR 码。</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>将您的摄像头对准二维码。
+扫描将自动完成。</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>扫描 QR 码</value>
@@ -1577,7 +1579,7 @@
     <value>自动填充已屏蔽的 URI</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>不会为被阻止的 URI 提供自动填充功能。用逗号分隔多个URI。例如："https://twitter.com, androidapp://com.twitter.android"。</value>
+    <value>不会对已阻止的 URI 提供自动填充功能。使用逗号分隔多个 URI。例如：「 https://twitter.com, androidapp://com.twitter.android」。</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>询问添加登录</value>
@@ -2259,6 +2261,43 @@
   <data name="All" xml:space="preserve">
     <value>全部</value>
   </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>验证码</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>需要高级版订阅</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>无法添加验证器密钥？</value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>扫描二维码</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>无法扫描二维码？ </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>验证器密钥</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>手动输入密钥</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>添加 TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>设置 TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>成功输入密钥后，
+选择「添加 TOTP」即可安全地存储密钥</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>将锁定选项设置为「从不」可让任何能够访问您的设备的人都可以使用您的密码库。如果您使用此选项，则应确保您的设备得到妥善的保护。</value>
   </data>
@@ -2273,5 +2312,80 @@
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>确定要启用屏幕截图吗？</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>密码类型</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>您想要生成什么？</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>用户名类型</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>附加地址电子邮件</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Catch-all 电子邮件</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>转发的电子邮件别名</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>随机单词</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>电子邮件地址（必填）</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>域名（必填）</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API 密钥（必填）</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>服务</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API 访问令牌</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>您确定要覆盖当前用户名吗？</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>生成用户名</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>电子邮件类型</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>网站（必填）</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>发生未知的 {0} 错误。</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>使用您的电子邮件提供商的子地址功能</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>使用您的域名配置的 Catch-all 收件箱。</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>使用外部转发服务生成一个电子邮件别名。</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>随机</value>
   </data>
 </root>

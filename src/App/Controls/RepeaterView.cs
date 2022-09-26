@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Specialized;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
+    [Obsolete]
     public class RepeaterView : StackLayout
     {
         public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create(

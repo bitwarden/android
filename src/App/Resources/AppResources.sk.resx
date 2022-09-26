@@ -299,6 +299,10 @@
     <value>Môj trezor</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Authenticator</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Meno</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Overovací kľúč sa nedá čítať.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Skenovanie prebehne automaticky.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Namierte fotoaparát na QR kód.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Namierte fotoaparát na kód QR.
+Skenovanie prebehne automaticky.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Skenovať QR kód</value>
@@ -2259,6 +2261,43 @@
   <data name="All" xml:space="preserve">
     <value>Všetky</value>
   </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Overovacie kódy</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Vyžaduje sa predplatné Prémium</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Overovací kľúč sa nedá pridať? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Skenovať QR kód</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>QR kód sa nedá skenovať? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Kľúč z aplikácie Authenticator</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Zadajte kľúč manuálne</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Pridať TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Nastaviť TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Po úspešnom zadaní kľúča, vyberte možnosť
+Pridať TOTP, aby ste kľúč bezpečne uložili</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Nastavením možností uzamknutia na možnosť "Nikdy" zostane váš trezor dostupný pre každého, kto má prístup k vášmu zariadeniu. Ak používate túto možnosť, mali by ste zabezpečiť, aby bolo vaše zariadenie riadne chránené.</value>
   </data>
@@ -2273,5 +2312,80 @@
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Naozaj chcete povoliť snímanie obrazovky?</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Typ hesla</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Čo by ste chceli vygenerovať?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Typ používateľského mena</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>E-mail s plusovým aliasom</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Catch-all e-mail</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Alias preposlaného e-mailu</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Náhodné slovo</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-mail (povinné)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Názov domény (povinné)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Kľúč API (povinné)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Služba</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Prístupový token API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Naozaj chcete prepísať aktuálne používateľské meno?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Vygenerovať používateľské meno</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Typ e-mailu</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Webové stránka (povinné)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Nastala neznáma chyba {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Použiť možnosti subadresovania svojho poskytovateľa e-mailu</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Použiť doručenú poštu typu catch-all nastavenú na doméne.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Vytvoriť e-mailový alias pomocou externej služby preposielania.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Náhodné</value>
   </data>
 </root>

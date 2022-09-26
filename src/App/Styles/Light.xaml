@@ -72,4 +72,5 @@
     
     <Color x:Key="HyperlinkColor">#175DDC</Color>
     <Color x:Key="FingerprintPhrase">#C01176</Color>
+    <Color x:Key="ScanningToggleModeTextColor">#80BDFF</Color>
 </ResourceDictionary>

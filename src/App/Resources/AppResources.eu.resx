@@ -296,8 +296,12 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>Nire Kutxa Gotorra</value>
+    <value>Kutxa Gotorra</value>
     <comment>The title for the vault page.</comment>
+  </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Autentifikatzailea</value>
+    <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Izena</value>
@@ -367,7 +371,7 @@
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>{0} eremua ezinbestekoa da.</value>
+    <value>{0} ezinbestekoa da.</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
@@ -895,11 +899,8 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Ezin da autentifikazio-gakoa irakurri.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Eskaneatzea automatikoa izango da.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Apuntatu zure kamera QR kodera.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Apuntatu zure kamera QR kodera. Eskaneatzea automatikoki egingo da.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Eskaneatu QR kodea</value>
@@ -1015,7 +1016,7 @@
     <value>Saio-hasiera</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Ohar segurua</value>
+    <value>Ohar seguruak</value>
   </data>
   <data name="Address1" xml:space="preserve">
     <value>1go helbidea</value>
@@ -1150,7 +1151,7 @@
     <value>Kutxa gotorra blokeatuta dago</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Joan nire kutxa gotorrera</value>
+    <value>Joan kutxa gotorrera</value>
   </data>
   <data name="Collections" xml:space="preserve">
     <value>Bildumak</value>
@@ -1951,7 +1952,7 @@
     <value>Pasahitz berria</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>Nahi izanez gero, pasahitza eskatu erabiltzaileak bidalketa honetara sar daitezen.</value>
+    <value>Nahi izanez gero, pasahitza eskatu erabiltzaileak Send honetara sar daitezen.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
@@ -2260,6 +2261,42 @@
   <data name="All" xml:space="preserve">
     <value>Guztiak</value>
   </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Egiaztatze-kodeak</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Premium harpidetza beharrezkoa da</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Ezin duzu autentifikazio-gakoa gehitu? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Eskaneatu QR kodea</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Ezin duzu QR kodea eskaneatu? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Autentifikazio gakoa</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Sartu kodea eskuz</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Gehitu TOTP-a</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>TOTP-a konfiguratu</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Gakoa ondo sartzen duzunean, sakatu Gehitu TOTP-a gakoa modu seguruan gordetzeko</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Zure blokeo aukerak "inoiz ez" bezala ezartzen badituzu, gailura sarbidea duen edonork izango du kutxa gotorra eskuragarri. Aukera hau erabiltzen baduzu, gailua behar bezala babestuta duzula ziurtatu behar duzu.</value>
   </data>
@@ -2274,5 +2311,80 @@
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Ziur al zaude pantaila-argazkia gaitu nahi duzula?</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Pasahitz mota</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Zer sortu nahi duzu?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Erabiltzaile izen mota</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Atzizkidun emaila</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Harrapatu email guztiak</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Emaileko ezizena berbidalia</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Ausazko hitza</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Emaila (beharrezkoa)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Domeinu izena (beharrezkoa)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API gakoa (beharrezkoa)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Zerbitzua</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Token sarbide API-a</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Ziur al zaude erabiltzaile-izena berridatzi nahi duzula?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Sortu erabiltzaile izena</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Email mota</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Webgunea (beharrezkoa)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>{0} akats ezezaguna gertatu da.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Erabili emailaren hornitzailearen azpihelbideratze gaitasunak</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Erabili zure domeinuan konfiguratutako sarrerako ontzia.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Emaileko ezizen bat sortu kanpoko bidalketa zerbitzu batekin.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Ausazkoa</value>
   </data>
 </root>

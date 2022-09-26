@@ -299,6 +299,10 @@
     <value>Mon coffre</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Authentification</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nom</value>
     <comment>Label for an entity name.</comment>
@@ -701,7 +705,7 @@
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Identification à double facteurs</value>
+    <value>Identification en deux étapes</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
     <value>L'authentification en deux étapes sécurise davantage votre compte en exigeant que chaque connexion soit confirmée par un autre dispositif tel qu'une clé de sécurité, une application d'authentification, un SMS, un appel téléphonique ou un courriel. Cette option peut être activée depuis le coffre web sur bitwarden.com. Voulez-vous y accéder maintenant ?</value>
@@ -723,7 +727,7 @@
     <value>Afficher l'élément</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Coffre web bitwarden</value>
+    <value>Coffre web Bitwarden</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Application d'authentification perdue ?</value>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Impossible de lire la clé d'authentification.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Le scan se fera automatiquement.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Pointez votre appareil photo sur le QR code.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Pointez votre caméra sur le QR Code.
+La numérisation se fera automatiquement.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Scanner le QR code</value>
@@ -1168,7 +1170,7 @@
     <value>Service d'accessibilité pour le remplissage automatique</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Le service de saisie automatique de Bitwarden utilise l'outil de saisie automatique d'Android pour aider à saisir les identifiants, les cartes de crédit et les informations d'identité dans d'autres applis sur votre appareil.</value>
+    <value>Le service de remplissage automatique de Bitwarden utilise l'outil de remplissage automatique d'Android pour aider à saisir les identifiants, les cartes de crédit et les informations d'identité dans d'autres applications sur votre appareil.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
     <value>Utilisez le service de remplissage automatique de Bitwarden pour remplir les informations de connexion dans d'autres applications.</value>
@@ -1305,7 +1307,7 @@
     <value>1. Allez dans l'application "Réglages" d'iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Appuyez sur "Mots de passes et comptes"</value>
+    <value>2. Appuyez sur "Mots de passe et comptes"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Appuyez sur "Préremplir mots de passe"</value>
@@ -2259,6 +2261,43 @@
   <data name="All" xml:space="preserve">
     <value>Tous</value>
   </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Codes de vérification</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Abonnement Premium requis</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Problème lors de l'ajout de la clé d'authentification ? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Scanner le QR code</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Impossible de scanner le QR Code ? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Clé d'authentification</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Saisir la clé manuellement</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Ajouter un TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Configurer le TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Une fois que la clé est entrée avec succès,
+sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Définir vos options de verrouillage sur "Jamais" garde votre coffre ouvert à n'importe qui ayant accès à votre appareil. Si vous utilisez cette option, vous devez vous assurer que votre appareil est bien protégé.</value>
   </data>
@@ -2273,5 +2312,80 @@
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir activer la capture d'écran ?</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Type de mot de passe</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Que souhaitez-vous générer ?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Type de Nom d'Utilisateur</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Email prenant en charge le "plus-addressing"</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Collecteur d'e-mail</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Alias d'email transféré</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Mot aléatoire</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-mail (requis)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Nom de domaine (requis)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Clé API (requise)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Service</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Jeton d'accès API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Êtes-vous sûr(e) de vouloir remplacer le nom d'utilisateur actuel ?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Générer un nom d'utilisateur</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Type d'email</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Site web (requis)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>L'erreur {0} inconnue est survenue.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Utilisez les capacités de sous-adressage de votre fournisseur de messagerie</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Utilisez la boîte de réception de votre email collecteur/attrape-tout (catch-all).</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Générer un alias d'email avec un service de transfert externe.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Aléatoire</value>
   </data>
 </root>

@@ -299,6 +299,10 @@
     <value>Моє сховище</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Автентифікатор</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Назва</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Не вдається прочитати ключ авторизації.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Сканування відбудеться автоматично.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Наведіть свою камеру на QR-код.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Наведіть свою камеру на QR-код.
+Сканування відбудеться автоматично.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Сканувати QR-код</value>
@@ -1432,7 +1434,7 @@
     <value>Немає організацій.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>Виберіть організацію, до якої ви бажаєте перемістити цей запис. При переміщенні до організації власність запису передається тій організації. Ви більше не будете єдиним власником цього запису після переміщення.</value>
+    <value>Виберіть організацію, до якої ви бажаєте перемістити цей запис. Переміщуючи до організації, власність запису передається тій організації. Ви більше не будете єдиним власником цього запису після переміщення.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Кількість слів</value>
@@ -2259,6 +2261,43 @@
   <data name="All" xml:space="preserve">
     <value>Усі</value>
   </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Коди підтвердження</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Необхідна передплата преміум</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Не вдається додати ключ авторизації? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Сканувати QR-код</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Не вдається сканувати QR-код? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Ключ авторизації</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Введіть ключ вручну</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Додати TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Налаштувати TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Після успішного введення ключа виберіть
+Додати TOTP для надійного збереження ключа</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Встановивши параметр блокування "Ніколи", ви залишаєте своє сховище відкритим будь-кому, хто зможе отримати доступ до вашого пристрою. Користуючись цим параметром, ви маєте бути впевненими в тому, що ваш пристрій надійно захищений.</value>
   </data>
@@ -2273,5 +2312,80 @@
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Ви дійсно хочете увімкнути знімки екрана?</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Тип пароля</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Що ви бажаєте згенерувати?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Тип імені користувача</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Адреса е-пошти з плюсом</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Адреса е-пошти Catch-all</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Псевдонім е-пошти для пересилання</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Випадкове слово</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Е-пошти (обов'язково)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Ім'я домену (обов'язково)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Ключ API (обов'язково)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Послуга</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Токен доступу до АРІ</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Ви дійсно бажаєте перезаписати поточне ім'я користувача?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Генерувати ім'я користувача</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Тип е-пошти</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Вебсайт (обов'язково)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Сталася невідома помилка {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Використовуйте розширені можливості адрес вашого постачальника електронної пошти</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Використовуйте свою скриньку вхідних Catch-All власного домену.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Згенеруйте псевдонім е-пошти зі стороннім сервісом пересилання.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Випадково</value>
   </data>
 </root>

@@ -122,15 +122,32 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden bietet dir die einfachste und sicherste Möglichkeit, alle Ihre Benutzernamen und Passwörter zu speichern und zwischen deinen Geräten zu synchronisieren. Die Bitwarden App Erweiterung ermöglicht den schnellen Zugriff auf den Tresor in Safari und Chrome sowie hunderten weiteren Apps.
+    <value>Bitwarden, Inc. ist die Muttergesellschaft von 8bit Solutions LLC.
 
-Passwortdiebstahl ist ein echtes Problem. Die von dir verwendeten Webseiten und Apps werden jeden Tag angegriffen und oftmals werden deine Passwörter dabei gestohlen. Wenn du das gleiche Passwort bei mehreren Apps und Websites verwendest, können Hacker sich damit ganz einfach auch in deinen E-Mail, deinen Online-Banking oder andere wichtige Accounts einloggen.
+AUSGEZEICHNET ALS BESTER PASSWORTMANAGER VON THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET UND WEITEREN.
 
-Sicherheitsexperten empfehlen daher, dass für jeden Account ein anderes, zufällig generiertes Passwort verwendet wird. Aber wie sollst du dir all diese Passwörter merken? Bitwarden hilft dir dabei, deine Passwörter zu erstellen, speichern und zu verwalten.
+Verwalte, speichere, sichere und teile von überall und auf beliebig vielen Geräten eine unbegrenzte Anzahl von Passwörtern. Bitwarden bietet Open-Source-Passwortverwaltung für alle, egal ob zu Hause, bei der Arbeit oder unterwegs.
 
-Bitwarden speichert all deine Zugangsdaten in einem verschlüsselten Tresor, der mit allen Geräten synchronisiert wird. Da er komplett verschlüsselt ist, bevor er überhaupt dein Gerät verlässt, hast nur du Zugriff auf deine Daten. Nicht einmal Bitwarden kann deine Daten lesen, selbst, wenn wir es wollten. Deine Daten sind mit einer AES-256-Bit-Verschlüsselung, sowie Salted Hashing und PBKDF2 SHA-256 abgesichert.
+Generiere sichere, einzigartige und zufällige Passwörter basierend auf den Sicherheitsanforderungen jeder Website, die du besuchst.
 
-Bitwarden ist auf Open-Source-Software ausgerichtet. Der Quellcode für Bitwarden wird auf GitHub gehostet und jeder kann die Bitwarden-Codebasis überprüfen, prüfen und dazu beitragen.</value>
+Bitwarden Send überträgt in kurzer Zeit verschlüsselte Informationen - Dateien und Klartext - ohne Umwege an beliebige Personen.
+
+Bitwarden bietet Teams und Enterprise-Pläne für Unternehmen, sodass Du sicher Passwörter mit Kollegen teilen kannst.
+
+Warum Bitwarden:
+
+Weltklasse Verschlüsselung
+Passwörter werden mit erweiterter Ende-zu-Ende-Verschlüsselung (AES-256 bit, salted hashtag, und PBKDF2 SHA-256) geschützt, so dass Deine Daten sicher und vertraulich bleiben.
+
+Integrierter Passwort-Generator
+Generiere sichere, einzigartige und zufällige Passwörter auf der Grundlage der jeweiligen Sicherheitsanforderungen für jede von Dir besuchte Website.
+
+Globale Übersetzungen
+Bitwarden gibt es in 40 Sprachen und es werden immer mehr, dank unserer globalen Community.
+
+Plattformübergreifende Anwendungen
+Sichere und teile sensible Daten innerhalb deines Bitwarden Tresors in jedem Browser, mobilem Gerät, Desktop Betriebssystem und vielen weiteren Anwendungen.
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">

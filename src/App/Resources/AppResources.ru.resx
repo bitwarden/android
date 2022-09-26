@@ -299,6 +299,10 @@
     <value>Хранилище</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Аутентификатор</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Название</value>
     <comment>Label for an entity name.</comment>
@@ -393,10 +397,10 @@
     <value>Посетить наш сайт</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Посетите наш веб-сайт, чтобы получить помощь, прочесть новости, связаться с нами и/или узнать больше о том, как использовать Bitwarden.</value>
+    <value>Посетите наш сайт, чтобы получить помощь, прочесть новости, связаться с нами и/или узнать больше о том, как использовать Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
-    <value>Веб-сайт</value>
+    <value>Сайт</value>
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Не удается прочитать ключ проверки подлинности.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Сканирование будет происходить автоматически.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Наведите камеру на QR-код.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Наведите камеру на QR-код.
+Сканирование произойдет автоматически.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Сканировать QR-код</value>
@@ -1290,7 +1292,7 @@
     <value>Перед использованием автозаполнения необходимо войти в основное приложение Bitwarden.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Теперь ваши логины легко доступны прямо с клавиатуры при входе в приложения и на веб-сайты.</value>
+    <value>Теперь ваши логины легко доступны прямо с клавиатуры при входе в приложения и на сайты.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>Рекомендуется отключить все другие приложения автозаполнения в настройках, если вы не планируете их использовать.</value>
@@ -1589,7 +1591,7 @@
     <value>При перезапуске приложения</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Автозаполнение упрощает безопасный доступ к вашему хранилищу Bitwarden со сторонних веб-сайтов и приложений. Похоже, вы не включили службу автозаполнения Bitwarden. Это можно сделать в настройках.</value>
+    <value>Автозаполнение упрощает безопасный доступ к вашему хранилищу Bitwarden со сторонних сайтов и приложений. Похоже, вы не включили службу автозаполнения Bitwarden. Это можно сделать в настройках.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Тема будет изменена после перезапуска приложения.</value>
@@ -2259,6 +2261,43 @@
   <data name="All" xml:space="preserve">
     <value>Все</value>
   </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Коды подтверждения</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Требуется подписка Премиум</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Не удается добавить ключ проверки подлинности? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Сканировать QR-код</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Не удается сосканировать QR-код? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Ключ аутентификатора</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Ввести ключ вручную</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Добавить TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Настроить TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>После успешного ввода ключа
+ выберите Добавить TOTP для безопасного сохранения ключа</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>При установке опции блокировки на "Никогда" хранилище будет доступно любому, кто имеет доступ к вашему устройству, поэтому убедитесь, что устройство защищено должным образом.</value>
   </data>
@@ -2273,5 +2312,80 @@
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Вы уверены, что хотите разрешить скриншоты?</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Тип пароля</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Что вы хотите сгенерировать?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Тип имени пользователя</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Субадресованные email</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Catch-all-адрес электронной почты</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Псевдоним электронной почты для пересылки</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Случайное слово</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Email (требуется)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Доменное имя (требуется)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Ключ API (требуется)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Служба</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Токен доступа к API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Вы хотите перезаписать текущее имя пользователя?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Создать имя пользователя</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Тип email</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Сайт (требуется)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Произошла неизвестная ошибка {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Используйте возможности субадресации вашей электронной почты</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Использовать настроенную в вашем домене почту catch-all.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Создать псевдоним электронной почты для внешней службы пересылки.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Случайно</value>
   </data>
 </root>

@@ -299,6 +299,10 @@
     <value>Sejf</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Uwierzytelniacz</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nazwa</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Nie można odczytać klucza uwierzytelniającego.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Skanowanie rozpocznie się automatycznie.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Skieruj aparat w stronę kodu QR.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Skieruj kamerę na kod QR.
+Skanowanie nastąpi automatycznie.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Zeskanuj kod QR</value>
@@ -2259,6 +2261,43 @@
   <data name="All" xml:space="preserve">
     <value>Wszystkie</value>
   </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Kody weryfikacyjne</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Wymagana jest subskrypcja Premium</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Nie możesz dodać klucza uwierzytelniającego? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Zeskanuj kod QR</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Nie możesz zeskanować kodu QR? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Klucz uwierzytelniający</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Wprowadź klucz ręcznie</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Dodaj TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Skonfiguruj TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Gdy klucz zostanie pomyślnie wprowadzony,
+wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Ustawienie opcji blokady na „Nigdy” sprawi, że sejf będzie dostępny dla każdego, kto ma dostęp do urządzenia. Jeśli korzystasz z tej opcji, upewnij się, że urządzenie jest odpowiednio chronione.</value>
   </data>
@@ -2273,5 +2312,80 @@
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Jesteś pewien, że chcesz włączyć możliwość robienia zrzutów ekranu?</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Rodzaj hasła</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Co chcesz wygenerować?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Rodzaj nazwy użytkownika</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Adres e-mail z plusem</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Adres catch-all</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Alias przekazywanego e-maila</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Losowe słowo</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-mail (wymagany)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Nazwa domeny (wymagana)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Klucz API (wymagany)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Usługa</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Token dostępu API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Czy na pewno chcesz nadpisać obecną nazwę użytkownika?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Wygeneruj nazwę użytkownika</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Typ e-maila</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Strona internetowa (wymagana)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Wystąpił nieznany błąd {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Użyj możliwości dodawania aliasów u swojego dostawcy poczty e-mail</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Użyj skonfigurowanej skrzynki catch-all w swojej domenie.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Wygeneruj alias adresu e-mail z zewnętrznej usługi przekazywania.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Losowy</value>
   </data>
 </root>
