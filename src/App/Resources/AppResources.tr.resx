@@ -553,7 +553,7 @@
     <value>Hemen</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Kasa Zaman Aşımı</value>
+    <value>Kasa zaman aşımı</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
     <value>Kasa zaman aşımı eylemi</value>
@@ -663,7 +663,7 @@
     <value>Ana parolayı tekrar yazın</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Kasada Ara</value>
+    <value>Kasada ara</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Güvenlik</value>
@@ -727,7 +727,7 @@
     <value>Kaydı görüntüle</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Bitwarden Web Kasası</value>
+    <value>Bitwarden web kasası</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Kimlik doğrulama uygulamanızı kayıp mı ettiniz?</value>
@@ -916,7 +916,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>TOTP'yi kopyala</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>Hesabınıza bağlı bir kimlik doğrulama anahtarı varsa giriş bilgilerini otomatik olarak doldurduğunuzda TOTP doğrulama kodu da otomatik olarak panonuza kopyalanır.</value>
+    <value>Hesabınıza bağlı bir kimlik doğrulama anahtarı varsa giriş bilgilerini otomatik doldurduğunuzda TOTP doğrulama kodu panonuza kopyalanır.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>TOTP'yi otomatik kopyala</value>
@@ -1307,7 +1307,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>1. iOS'te "Ayarlar" uygulamasını açın</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. "Parolalar ve Hesaplar"a dokunun</value>
+    <value>2. "Parolalar"a dokunun</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. "Parolaları Oto. Doldur"a dokunun</value>
@@ -1457,7 +1457,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Listelenecek klasör yok.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Parmak izi kelimeleri</value>
+    <value>Parmak izi ifadesi</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
@@ -1468,7 +1468,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Bitwarden, kuruluş hesabı kullanarak kasanızdaki kayıtları başkalarıyla paylaşmanıza olanak verir. Daha fazla bilgi için bitwarden.com sitesini ziyaret etmek ister misiniz?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Kasayı Dışa Aktar</value>
+    <value>Kasayı dışa aktar</value>
   </data>
   <data name="LockNow" xml:space="preserve">
     <value>Şimdi kilitle</value>
@@ -1553,10 +1553,10 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Varsayılan koyu tema</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Varsayılan (sistem) temayı kullanırken cihazınızın koyu modu açıldığında koyu temaya geçmek için bunu seçin</value>
+    <value>Varsayılan (sistem) temayı kullanırken cihazınızın koyu modu açıldığında koyu temaya geçmek için bunu seçin.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Notları kopyala</value>
+    <value>Notu kopyala</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Çıkış</value>
@@ -1576,10 +1576,10 @@ Kod otomatik olarak taranacaktır.</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
-    <value>Auto-fill blocked URIs</value>
+    <value>Engellenmiş URI'leri otomatik doldur</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Auto-fill will not be offered for blocked URIs. Separate multiple URIs with a comma. For example: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Engellenen URI'lerde otomatik doldurma önerilmeyecektir. Birden fazla URI'yi virgülle ayırabilirsiniz. Örnek: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Hesap eklemeyi öner</value>
@@ -1898,16 +1898,16 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Göndermek istediğiniz dosya.</value>
   </data>
   <data name="FileTypeIsSelected" xml:space="preserve">
-    <value>Dosya türü seçilmiş.</value>
+    <value>Dosya türü seçildi.</value>
   </data>
   <data name="FileTypeIsNotSelected" xml:space="preserve">
-    <value>Dosya türü seçilmemiş, seçmek için dokunun.</value>
+    <value>Dosya türü seçilmedi. Seçmek için dokunun.</value>
   </data>
   <data name="TextTypeIsSelected" xml:space="preserve">
-    <value>Yazı türü seçildi.</value>
+    <value>Metin türü seçildi.</value>
   </data>
   <data name="TextTypeIsNotSelected" xml:space="preserve">
-    <value>Yazı türü seçilmemiş, seçmek için dokunun.</value>
+    <value>Metin türü seçilmedi. Seçmek için dokunun.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Silinme tarihi</value>
@@ -2172,7 +2172,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Silinen hesaplar geri getirilemez</value>
   </data>
   <data name="DeleteAccountExplanation" xml:space="preserve">
-    <value>Hesabınız ve içindeki tüm veriler kalıcı olarak silinecektir. Devam etmek istediğinizden emin misiniz?</value>
+    <value>Hesabınız ve kasanızdaki tüm veriler kalıcı olarak silinecektir. Devam etmek istediğinizden emin misiniz?</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
     <value>Hesabınız siliniyor</value>
@@ -2307,10 +2307,10 @@ Kod otomatik olarak taranacaktır.</value>
     <value>İsteğinizi işleyemedik. Lütfen yeniden deneyin veya bizimle iletişime geçin.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
-    <value>Ekran yakalamaya izin ver</value>
+    <value>Ekran kaydına izin ver</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>Ekran Yakalama özelliğini etkinleştirmek istediğinizden emin misiniz?</value>
+    <value>Ekran kaydını etkinleştirmek istediğinizden emin misiniz?</value>
   </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Parola türü</value>
@@ -2373,10 +2373,10 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Web sitesi (gerekli)</value>
   </data>
   <data name="UnknownXErrorMessage" xml:space="preserve">
-    <value>Bilinmeyen {0} hata oluştu.</value>
+    <value>Bilinmeyen {0} hatası oluştu.</value>
   </data>
   <data name="PlusAddressedEmailDescription" xml:space="preserve">
-    <value>Use your email provider's subaddress capabilities</value>
+    <value>E-posta sağlayıcınızın alt adres özelliklerini kullanın</value>
   </data>
   <data name="CatchAllEmailDescription" xml:space="preserve">
     <value>Alan adınızın tüm iletileri yakalamaya ayarlanmış adresini kullanın.</value>
