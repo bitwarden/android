@@ -189,9 +189,9 @@ namespace Bit.Core.Utilities
             {
                 var queryStringParams = urlString.Split('?').Last();
                 var queryStringNameValueCollection = HttpUtility.ParseQueryString(queryStringParams);
-                foreach(var key in queryStringNameValueCollection.AllKeys)
+                foreach (var key in queryStringNameValueCollection.AllKeys)
                 {
-                    if (key!= null && !dict.ContainsKey(key))
+                    if (key != null && !dict.ContainsKey(key))
                     {
                         dict.Add(key, queryStringNameValueCollection[key]);
                     }
