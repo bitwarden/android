@@ -191,9 +191,9 @@ namespace Bit.Core.Utilities
                 var queryStringNameValueCollection = HttpUtility.ParseQueryString(queryStringParams);
                 foreach(var key in queryStringNameValueCollection.AllKeys)
                 {
-                    if (!dict.ContainsKey(key))
+                    if (key!= null && !dict.ContainsKey(key))
                     {
-                        dict.Add(key, queryStringNameValueCollection[key] == null ? string.Empty : System.Net.WebUtility.UrlDecode(queryStringNameValueCollection[key]));
+                        dict.Add(key, queryStringNameValueCollection[key]);
                     }
                 }
             }
