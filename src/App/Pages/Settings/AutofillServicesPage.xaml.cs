@@ -55,14 +55,6 @@ namespace Bit.App.Pages
             _vm.ToggleInlineAutofill();
         }
 
-        private async void ToggleAccessibilityAsync(object sender, EventArgs e)
-        {
-            if (DoOnce())
-            {
-                await _vm.ToggleAccessibilityAsync();
-            }
-        }
-
         private void ToggleDrawOver(object sender, EventArgs e)
         {
             if (DoOnce())

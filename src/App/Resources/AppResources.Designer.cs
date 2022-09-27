@@ -4265,13 +4265,12 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string AllNotifications
-        {
-            get
-            {
+        public static string AllNotifications {
+            get {
                 return ResourceManager.GetString("AllNotifications", resourceCulture);
             }
         }
+        
         public static string PasswordType {
             get {
                 return ResourceManager.GetString("PasswordType", resourceCulture);
@@ -4416,9 +4415,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string AccessibilityDisclosureTitle {
+        public static string AccessibilityServiceDisclosure {
             get {
-                return ResourceManager.GetString("AccessibilityDisclosureTitle", resourceCulture);
+                return ResourceManager.GetString("AccessibilityServiceDisclosure", resourceCulture);
             }
         }
         
@@ -4428,15 +4427,15 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string AcceptAccessibilityDisclosure {
+        public static string Accept {
             get {
-                return ResourceManager.GetString("AcceptAccessibilityDisclosure", resourceCulture);
+                return ResourceManager.GetString("Accept", resourceCulture);
             }
         }
         
-        public static string DeclineAccessibilityDisclosure {
+        public static string Decline {
             get {
-                return ResourceManager.GetString("DeclineAccessibilityDisclosure", resourceCulture);
+                return ResourceManager.GetString("Decline", resourceCulture);
             }
         }
     }
