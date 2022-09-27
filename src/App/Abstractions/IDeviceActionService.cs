@@ -50,5 +50,6 @@ namespace Bit.App.Abstractions
         Task OnAccountSwitchCompleteAsync();
         Task SetScreenCaptureAllowedAsync();
         void OpenAppSettings();
+        void ClosePopUpPage();
     }
 }

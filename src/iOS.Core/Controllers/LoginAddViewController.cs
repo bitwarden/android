@@ -30,6 +30,8 @@ namespace Bit.iOS.Core.Controllers
         public AppExtensionContext Context { get; set; }
         public FormEntryTableViewCell NameCell { get; set; } = new FormEntryTableViewCell(AppResources.Name);
         public FormEntryTableViewCell UsernameCell { get; set; } = new FormEntryTableViewCell(AppResources.Username);
+        public UITableViewCell GenerateUsernameCell { get; set; } = new ExtendedUITableViewCell(
+            UITableViewCellStyle.Subtitle, "GenerateUsernameCell");
         public FormEntryTableViewCell PasswordCell { get; set; } = new FormEntryTableViewCell(AppResources.Password);
         public UITableViewCell GeneratePasswordCell { get; set; } = new ExtendedUITableViewCell(
             UITableViewCellStyle.Subtitle, "GeneratePasswordCell");
@@ -72,6 +74,11 @@ namespace Bit.iOS.Core.Controllers
                 PasswordCell.TextField.BecomeFirstResponder();
                 return true;
             };
+
+            GenerateUsernameCell.TextLabel.Text = AppResources.GenerateUsername;
+            GenerateUsernameCell.TextLabel.TextColor = GenerateUsernameCell.TextLabel.TintColor =
+                ThemeHelpers.TextColor;
+            GenerateUsernameCell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
 
             PasswordCell.TextField.SecureTextEntry = true;
             PasswordCell.TextField.ReturnKeyType = UIReturnKeyType.Next;
@@ -210,6 +217,26 @@ namespace Bit.iOS.Core.Controllers
                 AppResources.InternetConnectionRequiredMessage, AppResources.Ok);
         }
 
+        private void LaunchUsernameGeneratorFlow()
+        {
+            var appOptions = new AppOptions { IosExtension = true };
+            var app = new App.App(appOptions);
+
+            var generatorPage = new GeneratorPage(false, selectAction: async (username) =>
+            {
+                UsernameCell.TextField.Text = username;
+                DismissViewController(false, null);
+            }, isUsernameGenerator: true, emailWebsite: NameCell.TextField.Text, fromExtension: true);
+
+            ThemeManager.SetTheme(app.Resources);
+            ThemeManager.ApplyResourcesTo(generatorPage);
+
+            var navigationPage = new NavigationPage(generatorPage);
+            var generatorController = navigationPage.CreateViewController();
+            generatorController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            PresentViewController(generatorController, true, null);
+        }
+
         public class TableSource : ExtendedUITableViewSource
         {
             private LoginAddViewController _controller;
@@ -233,9 +260,13 @@ namespace Bit.iOS.Core.Controllers
                     }
                     else if (indexPath.Row == 2)
                     {
-                        return _controller.PasswordCell;
+                        return _controller.GenerateUsernameCell;
                     }
                     else if (indexPath.Row == 3)
+                    {
+                        return _controller.PasswordCell;
+                    }
+                    else if (indexPath.Row == 4)
                     {
                         return _controller.GeneratePasswordCell;
                     }
@@ -277,7 +308,7 @@ namespace Bit.iOS.Core.Controllers
             {
                 if (section == 0)
                 {
-                    return 4;
+                    return 5;
                 }
                 else if (section == 1)
                 {
@@ -317,7 +348,11 @@ namespace Bit.iOS.Core.Controllers
                 tableView.DeselectRow(indexPath, true);
                 tableView.EndEditing(true);
 
-                if (indexPath.Section == 0 && indexPath.Row == 3)
+                if (indexPath.Section == 0 && indexPath.Row == 2)
+                {
+                    _controller.LaunchUsernameGeneratorFlow();
+                }
+                if (indexPath.Section == 0 && indexPath.Row == 4)
                 {
                     _controller.PerformSegue("passwordGeneratorSegue", this);
                 }

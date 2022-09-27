@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Styles;
 using Bit.Core.Abstractions;
@@ -15,17 +16,21 @@ namespace Bit.App.Pages
 
         private GeneratorPageViewModel _vm;
         private readonly bool _fromTabPage;
+        private readonly bool _fromExtension;
         private readonly Action<string> _selectAction;
         private readonly TabsPage _tabsPage;
+        private readonly IDeviceActionService _deviceActionService;
 
-        public GeneratorPage(bool fromTabPage, Action<string> selectAction = null, TabsPage tabsPage = null, bool isUsernameGenerator = false, string emailWebsite = null, bool editMode = false)
+        public GeneratorPage(bool fromTabPage, Action<string> selectAction = null, TabsPage tabsPage = null, bool isUsernameGenerator = false, string emailWebsite = null, bool editMode = false, bool fromExtension = false)
         {
             _tabsPage = tabsPage;
             InitializeComponent();
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>();
             _vm = BindingContext as GeneratorPageViewModel;
             _vm.Page = this;
             _fromTabPage = fromTabPage;
+            _fromExtension = fromExtension;
             _selectAction = selectAction;
             _vm.ShowTypePicker = fromTabPage;
             _vm.IsUsername = isUsernameGenerator;
@@ -138,7 +143,14 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                await Navigation.PopModalAsync();
+                if (_fromExtension)
+                {
+                    _deviceActionService.ClosePopUpPage();
+                }
+                else
+                {
+                    await Navigation.PopModalAsync();
+                }
             }
         }
 

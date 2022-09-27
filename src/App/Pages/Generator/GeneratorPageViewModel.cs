@@ -666,6 +666,7 @@ namespace Bit.App.Pages
                 return;
             }
 
+            _usernameOptions.EmailWebsite = EmailWebsite;
             await _usernameGenerationService.SaveOptionsAsync(_usernameOptions);
 
             if (regenerate)
@@ -746,6 +747,7 @@ namespace Bit.App.Pages
             TriggerPropertyChanged(nameof(PlusAddressedEmail));
             TriggerPropertyChanged(nameof(GeneratorTypeSelected));
             TriggerPropertyChanged(nameof(UsernameTypeDescriptionLabel));
+            TriggerPropertyChanged(nameof(EmailWebsite));
         }
 
         private void SetOptions()
