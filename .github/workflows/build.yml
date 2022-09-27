@@ -228,7 +228,7 @@ jobs:
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
           name: com.x8bit.bitwarden.qa
-          path: ${{ env.GITHUB_WORKSPACE }}/src/Android/bin/Release/com.x8bit.bitwarden.qa
+          path: ./src/Android/bin/Release/com.x8bit.bitwarden.qa
           if-no-files-found: error
 
       - name: Deploy to Play Store
