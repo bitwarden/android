@@ -83,7 +83,7 @@
                             StyleClass="box-value"
                             HorizontalOptions="End" />
                         <Button
-                            Clicked="ToggleAccessibility"
+                            Command="{Binding ToggleAccessibilityCommand}"
                             StyleClass="box-overlay"
                             RelativeLayout.XConstraint="0"
                             RelativeLayout.YConstraint="0"
