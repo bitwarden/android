@@ -227,8 +227,8 @@ jobs:
         if: ${{ matrix.variant == 'qa' }}
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
-          name: com.x8bit.bitwarden.qa.apk
-          path: ./com.x8bit.bitwarden.qa.apk
+          name: com.x8bit.bitwarden.qa
+          path: ./com.x8bit.bitwarden.qa
           if-no-files-found: error
 
       - name: Deploy to Play Store
