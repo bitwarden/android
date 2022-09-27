@@ -13,6 +13,10 @@ using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Bit.Core.Exceptions;
+using Bit.App.Models;
+using Bit.App.Pages;
+using Bit.App.Utilities;
+using Xamarin.Forms;
 
 namespace Bit.iOS.Core.Controllers
 {
