@@ -55,11 +55,11 @@ namespace Bit.App.Pages
             _vm.ToggleInlineAutofill();
         }
 
-        private void ToggleAccessibility(object sender, EventArgs e)
+        private async void ToggleAccessibilityAsync(object sender, EventArgs e)
         {
             if (DoOnce())
             {
-                _vm.ToggleAccessibility();
+                await _vm.ToggleAccessibilityAsync();
             }
         }
 

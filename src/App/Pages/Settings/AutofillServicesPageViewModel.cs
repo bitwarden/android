@@ -12,6 +12,7 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly IStateService _stateService;
         private readonly MobileI18nService _i18nService;
+        private readonly IPlatformUtilsService _platformUtilsService;
 
         private bool _autofillServiceToggled;
         private bool _inlineAutofillToggled;
@@ -24,6 +25,7 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService;
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             PageTitle = AppResources.AutofillServices;
         }
 
@@ -176,8 +178,19 @@ namespace Bit.App.Pages
             InlineAutofillToggled = !InlineAutofillToggled;
         }
 
-        public void ToggleAccessibility()
+        public async Task ToggleAccessibilityAsync()
         {
+            if (!_deviceActionService.AutofillAccessibilityServiceRunning())
+            {
+                var accept = await _platformUtilsService.ShowDialogAsync(AppResources.AccessibilityDisclosureText,
+                    AppResources.AccessibilityDisclosureTitle, AppResources.AcceptAccessibilityDisclosure,
+                    AppResources.DeclineAccessibilityDisclosure);
+                if (accept)
+                {
+                    _deviceActionService.OpenAccessibilitySettings();
+                }
+                return;
+            }
             _deviceActionService.OpenAccessibilitySettings();
         }
 
