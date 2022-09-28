@@ -164,7 +164,7 @@ jobs:
           $qaApkPath = $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/com.x8bit.bitwarden.qa.apk");
           $qaApkPathDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden.qa.apk");
 
-          Copy-Item $signedApkPath $signedApkDestPath
+          Copy-Item $qaApkPath $qaApkPathDestPath
         shell: pwsh
 
       - name: Sign for Play Store
