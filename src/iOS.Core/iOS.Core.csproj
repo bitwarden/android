@@ -204,6 +204,7 @@
     <Compile Include="Renderers\CollectionView\CollectionException.cs" />
     <Compile Include="Renderers\CollectionView\ExtendedGroupableItemsViewDelegator.cs" />
     <Compile Include="Effects\NoEmojiKeyboardEffect.cs" />
+    <Compile Include="Utilities\WCSessionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">

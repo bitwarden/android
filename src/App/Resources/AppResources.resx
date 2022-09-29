@@ -2449,6 +2449,9 @@ select Add TOTP to store the key safely</value>
   <data name="Random" xml:space="preserve">
     <value>Random</value>
   </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
+  </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Accessibility Service Disclosure</value>
   </data>

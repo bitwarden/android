@@ -491,6 +491,12 @@ namespace Bit.App.Pages
             }
             else
             {
+                autofillItems.Add(new SettingsPageListItem
+                {
+                    Name = AppResources.ConnectToWatch,
+                    SubLabel = _deviceActionService.IsWatchReachable ? AppResources.On : AppResources.Off
+                });
+
                 if (_deviceActionService.SystemMajorVersion() >= 12)
                 {
                     autofillItems.Add(new SettingsPageListItem

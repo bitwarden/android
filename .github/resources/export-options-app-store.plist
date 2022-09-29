@@ -14,6 +14,10 @@
         <string>Dist: Extension 2021</string>
         <key>com.8bit.bitwarden.share-extension</key>
         <string>Dist: Share Extension 2021</string>
+        <key>com.8bit.bitwarden.watchkitapp</key>
+        <string>Dist: Bitwarden Watch App</string>
+        <key>com.8bit.bitwarden.watchkitapp.watchkitextension</key>
+        <string>Dist: Bitwarden Watch App Extension</string>
     </dict>
 </dict>
 </plist>
