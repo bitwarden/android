@@ -162,7 +162,7 @@ jobs:
           Write-Output "########################################"
           msbuild "$($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj")" "/p:Configuration=$configuration"
 
-          if ("${{ matrix.variant }}"" -eq "qa") {
+          if ("${{ matrix.variant }}" -eq "qa") {
             $ApkPath = $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/com.x8bit.bitwarden.${{ matrix.variant }}.apk");
             $ApkPathDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden.${{ matrix.variant }}.apk");
             Copy-Item $ApkPath $ApkPathDestPath
