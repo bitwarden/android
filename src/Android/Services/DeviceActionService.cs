@@ -966,5 +966,14 @@ namespace Bit.Droid.Services
             }
             activity.RunOnUiThread(() => activity.Window.AddFlags(WindowManagerFlags.Secure));
         }
+
+        public void OpenAppSettings()
+        {
+            var intent = new Intent(Android.Provider.Settings.ActionApplicationDetailsSettings);
+            intent.AddFlags(ActivityFlags.NewTask);
+            var uri = Android.Net.Uri.FromParts("package", Application.Context.PackageName, null);
+            intent.SetData(uri);
+            Application.Context.StartActivity(intent);
+        }
     }
 }

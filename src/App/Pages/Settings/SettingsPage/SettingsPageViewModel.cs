@@ -30,7 +30,7 @@ namespace Bit.App.Pages
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly IClipboardService _clipboardService;
         private readonly ILogger _loggerService;
-
+        private readonly IPushNotificationService _pushNotificationService;
         private const int CustomVaultTimeoutValue = -100;
 
         private bool _supportsBiometric;
@@ -42,6 +42,7 @@ namespace Bit.App.Pages
         private string _vaultTimeoutActionDisplayValue;
         private bool _showChangeMasterPassword;
         private bool _reportLoggingEnabled;
+        private bool _approvePasswordlessLoginRequests;
 
         private List<KeyValuePair<string, int?>> _vaultTimeouts =
             new List<KeyValuePair<string, int?>>
@@ -83,6 +84,7 @@ namespace Bit.App.Pages
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
             _loggerService = ServiceContainer.Resolve<ILogger>("logger");
+            _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
 
             GroupedItems = new ObservableRangeCollection<ISettingsPageListItem>();
             PageTitle = AppResources.Settings;
@@ -133,6 +135,7 @@ namespace Bit.App.Pages
             _showChangeMasterPassword = IncludeLinksWithSubscriptionInfo() &&
                 !await _keyConnectorService.GetUsesKeyConnector();
             _reportLoggingEnabled = await _loggerService.IsEnabled();
+            _approvePasswordlessLoginRequests = await _stateService.GetApprovePasswordlessLoginsAsync();
             BuildList();
         }
 
@@ -326,6 +329,38 @@ namespace Bit.App.Pages
             BuildList();
         }
 
+        public async Task ApproveLoginRequestsAsync()
+        {
+            var options = new[]
+            {
+                    CreateSelectableOption(AppResources.Yes, _approvePasswordlessLoginRequests),
+                    CreateSelectableOption(AppResources.No, !_approvePasswordlessLoginRequests),
+            };
+
+            var selection = await Page.DisplayActionSheet(AppResources.UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices, AppResources.Cancel, null, options);
+
+            if (selection == null || selection == AppResources.Cancel)
+            {
+                return;
+            }
+
+            _approvePasswordlessLoginRequests = CompareSelection(selection, AppResources.Yes);
+            await _stateService.SetApprovePasswordlessLoginsAsync(_approvePasswordlessLoginRequests);
+
+            BuildList();
+
+            if (!_approvePasswordlessLoginRequests || await _pushNotificationService.AreNotificationsSettingsEnabledAsync())
+            {
+                return;
+            }
+
+            var openAppSettingsResult = await _platformUtilsService.ShowDialogAsync(AppResources.ReceivePushNotificationsForNewLoginRequests, title: string.Empty, confirmText: AppResources.Settings, cancelText: AppResources.NoThanks);
+            if (openAppSettingsResult)
+            {
+                _deviceActionService.OpenAppSettings();
+            }
+        }
+
         public async Task VaultTimeoutActionAsync()
         {
             var options = _vaultTimeoutActions.Select(o =>
@@ -508,6 +543,12 @@ namespace Bit.App.Pages
                     Name = AppResources.UnlockWithPIN,
                     SubLabel = _pin ? AppResources.On : AppResources.Off,
                     ExecuteAsync = () => UpdatePinAsync()
+                },
+                new SettingsPageListItem
+                {
+                    Name = AppResources.ApproveLoginRequests,
+                    SubLabel = _approvePasswordlessLoginRequests ? AppResources.On : AppResources.Off,
+                    ExecuteAsync = () => ApproveLoginRequestsAsync()
                 },
                 new SettingsPageListItem
                 {

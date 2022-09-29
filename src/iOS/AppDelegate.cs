@@ -17,6 +17,7 @@ using CoreNFC;
 using Foundation;
 using UIKit;
 using WatchConnectivity;
+using UserNotifications;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 

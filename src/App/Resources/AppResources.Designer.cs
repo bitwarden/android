@@ -76,6 +76,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accept.
+        /// </summary>
+        public static string Accept {
+            get {
+                return ResourceManager.GetString("Accept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to By activating this switch you agree to the following:
         ///.
         /// </summary>
@@ -140,6 +149,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials..
+        /// </summary>
+        public static string AccessibilityDisclosureText {
+            get {
+                return ResourceManager.GetString("AccessibilityDisclosureText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bitwarden needs attention - Enable &quot;Draw-Over&quot; in &quot;Auto-fill Services&quot; from Bitwarden Settings.
         /// </summary>
         public static string AccessibilityDrawOverPermissionAlert {
@@ -154,6 +172,15 @@ namespace Bit.App.Resources {
         public static string AccessibilityOverlayPermissionAlert {
             get {
                 return ResourceManager.GetString("AccessibilityOverlayPermissionAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Accessibility Service Disclosure.
+        /// </summary>
+        public static string AccessibilityServiceDisclosure {
+            get {
+                return ResourceManager.GetString("AccessibilityServiceDisclosure", resourceCulture);
             }
         }
         
@@ -383,6 +410,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All notifications.
+        /// </summary>
+        public static string AllNotifications {
+            get {
+                return ResourceManager.GetString("AllNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allow notifications.
+        /// </summary>
+        public static string AllowNotifications {
+            get {
+                return ResourceManager.GetString("AllowNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow screen capture.
         /// </summary>
         public static string AllowScreenCapture {
@@ -473,6 +518,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approve login requests.
+        /// </summary>
+        public static string ApproveLoginRequests {
+            get {
+                return ResourceManager.GetString("ApproveLoginRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to April.
         /// </summary>
         public static string April {
@@ -514,6 +568,15 @@ namespace Bit.App.Resources {
         public static string AreYouSureYouWantToOverwriteTheCurrentUsername {
             get {
                 return ResourceManager.GetString("AreYouSureYouWantToOverwriteTheCurrentUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you trying to log in?.
+        /// </summary>
+        public static string AreYouTryingToLogIn {
+            get {
+                return ResourceManager.GetString("AreYouTryingToLogIn", resourceCulture);
             }
         }
         
@@ -1400,6 +1463,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm login attempt for {0}.
+        /// </summary>
+        public static string ConfimLogInAttempForX {
+            get {
+                return ResourceManager.GetString("ConfimLogInAttempForX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm login.
+        /// </summary>
+        public static string ConfirmLogIn {
+            get {
+                return ResourceManager.GetString("ConfirmLogIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm your identity to continue..
         /// </summary>
         public static string ConfirmYourIdentity {
@@ -1652,6 +1733,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Decline.
+        /// </summary>
+        public static string Decline {
+            get {
+                return ResourceManager.GetString("Decline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Default.
         /// </summary>
         public static string Default {
@@ -1783,6 +1873,24 @@ namespace Bit.App.Resources {
         public static string Denied {
             get {
                 return ResourceManager.GetString("Denied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deny login.
+        /// </summary>
+        public static string DenyLogIn {
+            get {
+                return ResourceManager.GetString("DenyLogIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device type.
+        /// </summary>
+        public static string DeviceType {
+            get {
+                return ResourceManager.GetString("DeviceType", resourceCulture);
             }
         }
         
@@ -3047,6 +3155,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to IP address.
+        /// </summary>
+        public static string IpAddress {
+            get {
+                return ResourceManager.GetString("IpAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Item has been deleted..
         /// </summary>
         public static string ItemDeleted {
@@ -3142,6 +3259,15 @@ namespace Bit.App.Resources {
         public static string June {
             get {
                 return ResourceManager.GetString("June", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Just now.
+        /// </summary>
+        public static string JustNow {
+            get {
+                return ResourceManager.GetString("JustNow", resourceCulture);
             }
         }
         
@@ -3299,6 +3425,33 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login confirmed.
+        /// </summary>
+        public static string LogInAccepted {
+            get {
+                return ResourceManager.GetString("LogInAccepted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login attempt by {0} on {1}.
+        /// </summary>
+        public static string LogInAttemptByXOnY {
+            get {
+                return ResourceManager.GetString("LogInAttemptByXOnY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login denied.
+        /// </summary>
+        public static string LogInDenied {
+            get {
+                return ResourceManager.GetString("LogInDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your login session has expired..
         /// </summary>
         public static string LoginExpired {
@@ -3322,6 +3475,15 @@ namespace Bit.App.Resources {
         public static string LoginOrCreateNewAccount {
             get {
                 return ResourceManager.GetString("LoginOrCreateNewAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login requested.
+        /// </summary>
+        public static string LogInRequested {
+            get {
+                return ResourceManager.GetString("LogInRequested", resourceCulture);
             }
         }
         
@@ -3749,6 +3911,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Near.
+        /// </summary>
+        public static string Near {
+            get {
+                return ResourceManager.GetString("Near", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Never.
         /// </summary>
         public static string Never {
@@ -3979,6 +4150,15 @@ namespace Bit.App.Resources {
         public static string NotesInfo {
             get {
                 return ResourceManager.GetString("NotesInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No thanks.
+        /// </summary>
+        public static string NoThanks {
+            get {
+                return ResourceManager.GetString("NoThanks", resourceCulture);
             }
         }
         
@@ -4620,6 +4800,15 @@ namespace Bit.App.Resources {
         public static string RateTheAppDescription {
             get {
                 return ResourceManager.GetString("RateTheAppDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receive push notifications for new login requests.
+        /// </summary>
+        public static string ReceivePushNotificationsForNewLoginRequests {
+            get {
+                return ResourceManager.GetString("ReceivePushNotificationsForNewLoginRequests", resourceCulture);
             }
         }
         
@@ -5578,6 +5767,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Time.
+        /// </summary>
+        public static string Time {
+            get {
+                return ResourceManager.GetString("Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Title.
         /// </summary>
         public static string Title {
@@ -6019,6 +6217,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use this device to approve login requests made from other devices..
+        /// </summary>
+        public static string UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices {
+            get {
+                return ResourceManager.GetString("UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validating.
         /// </summary>
         public static string Validating {
@@ -6366,6 +6573,15 @@ namespace Bit.App.Resources {
         public static string WordSeparator {
             get {
                 return ResourceManager.GetString("WordSeparator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} minutes ago.
+        /// </summary>
+        public static string XMinutesAgo {
+            get {
+                return ResourceManager.GetString("XMinutesAgo", resourceCulture);
             }
         }
         

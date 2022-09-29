@@ -664,5 +664,11 @@ namespace Bit.iOS.Core.Services
                 _deviceActionService.PickedDocument(url);
             }
         }
+
+        public void OpenAppSettings()
+        {
+            var url = new NSUrl(UIApplication.OpenSettingsUrlString);
+            UIApplication.SharedApplication.OpenUrl(url);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Bit.App.Abstractions;
 
 namespace Bit.App.Services
@@ -6,6 +7,11 @@ namespace Bit.App.Services
     public class NoopPushNotificationService : IPushNotificationService
     {
         public bool IsRegisteredForPush => false;
+
+        public Task<bool> AreNotificationsSettingsEnabledAsync()
+        {
+            return Task.FromResult(false);
+        }
 
         public Task<string> GetTokenAsync()
         {
@@ -21,5 +27,9 @@ namespace Bit.App.Services
         {
             return Task.FromResult(0);
         }
+
+        public void DismissLocalNotification(string notificationId) { }
+
+        public void SendLocalNotification(string title, string message, string notificationId) { }
     }
 }

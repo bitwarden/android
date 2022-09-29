@@ -51,5 +51,6 @@ namespace Bit.App.Abstractions
         float GetSystemFontSizeScale();
         Task OnAccountSwitchCompleteAsync();
         Task SetScreenCaptureAllowedAsync();
+        void OpenAppSettings();
     }
 }
