@@ -50,7 +50,7 @@
                     <StackLayout StyleClass="box">
                         <StackLayout StyleClass="box-row">
                             <Label
-                                Text="Email (TEST Watch PoC)"
+                                Text="{u:I18n EmailAddress}"
                                 StyleClass="box-label" />
                             <Entry
                                 x:Name="_email"

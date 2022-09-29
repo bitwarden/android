@@ -139,20 +139,6 @@ namespace Bit.App.Pages
             };
             FolderOptions = new List<KeyValuePair<string, string>>();
             OwnershipOptions = new List<KeyValuePair<string, string>>();
-
-            ServiceContainer.Resolve<IBroadcasterService>().Subscribe("wcmessage", message =>
-            {
-                Task.Run(async () =>
-                {
-                    var d = (Dictionary<string, object>)message.Data;
-
-                    Device.InvokeOnMainThreadAsync(() => _deviceActionService.ShowLoadingAsync(d.Keys.FirstOrDefault()));
-
-                    await Task.Delay(3000);
-
-                    Device.InvokeOnMainThreadAsync(() => _deviceActionService.HideLoadingAsync());
-                });
-            });
         }
 
         public Command GeneratePasswordCommand { get; set; }

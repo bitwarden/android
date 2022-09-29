@@ -97,7 +97,7 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Label
-                                Text="Master Password (TEST PoC Watch)"
+                                Text="{u:I18n MasterPassword}"
                                 StyleClass="box-label"
                                 Grid.Row="0"
                                 Grid.Column="0" />
