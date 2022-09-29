@@ -87,15 +87,12 @@ namespace Bit.iOS.Core.Services
                 _toast?.Dispose();
                 _toast = null;
             };
+        }
 
-
-
+        public void SendTestMessageToWatch()
+        {
             WCSessionManager.SharedManager.UpdateApplicationContext(new Dictionary<string, object>() { { "message", $"totp app context test" } });
             WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() { { "message", $"totp test" } });
-
-
-
-
         }
 
         public Task ShowLoadingAsync(string text)
