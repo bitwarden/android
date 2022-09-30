@@ -349,7 +349,7 @@
     <value>Адправіць</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Сінхранізаваць</value>
+    <value>Сінхранізацыя</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
@@ -708,7 +708,7 @@
     <value>Двухэтапны ўваход</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Двухэтапны ўваход робіць ваш уліковы запіс больш бяспечным, патрабуючы пацвярджэнне ўваходу на іншай прыладзе з выкарыстаннем ключа бяспекі, праграмы аўтэнтыфікацыі, SMS, тэлефоннага званка або электроннай пошты. Двухэтапны ўваход уключаецца на bitwarden.com. Перайсці на сайт, каб зрабіць гэта?</value>
+    <value>Двухэтапны ўваход робіць ваш уліковы запіс больш бяспечным, патрабуючы пацвярджэнне ўваходу на іншай прыладзе з выкарыстаннем ключа бяспекі, праграмы аўтэнтыфікацыі, SMS, тэлефоннага званка або электроннай пошты. Двухэтапны ўваход уключаецца на bitwarden.com. Перайсці на вэб-сайт, каб зрабіць гэта?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Разблакіраваць з {0}</value>
@@ -1498,7 +1498,7 @@
     <value>Ваша сховішча заблакіравана. Увядзіце PIN-код для працягу.</value>
   </data>
   <data name="VaultLockedIdentity" xml:space="preserve">
-    <value>Ваша сховішча заблакіравана. Пацвердзіце сваю асобу, каб працягнуць.</value>
+    <value>Ваша сховішча заблакіравана. Каб працягнуць, пацвердзіце сваю асобу.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Цёмная</value>
@@ -2059,7 +2059,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>У бясплатных уліковых запісах можна адпраўляць толькі тэкст. Для адпраўкі файлаў праз Send, патрабуецца платная падпіска.</value>
+    <value>У бясплатных уліковых запісах можна адпраўляць толькі тэкст. Для адпраўкі файлаў праз Send, патрабуецца прэміяльны статус.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
@@ -2313,6 +2313,66 @@
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Вы ўпэўнены, што хочаце дазволіць здымкі экрана?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Выкананы запыт уваходу</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Вы спрабуеце ўвайсці?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Спроба ўваходу {0} у {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Тып прылады</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP-адрас</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Час</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Побач</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Пацвердзіць уваход</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Адхіліць уваход</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Толькі што</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} хвілін таму</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Уваход пацверджаны</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Уваход адхілены</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Ухваліць запыт уваходу</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Выкарыстоўваць гэту прыладу для ўхвалення запытаў на ўваход, якія зроблены з іншых прылад.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Дазволіць апавяшчэнні</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Атрымліваць push-апавяшчэнні пра новыя запыты на ўваход</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Не, дзякуй</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Пацвердзіць спробу ўваходу для {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Усе апавяшчэннi</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Тып пароля</value>
   </data>
@@ -2387,5 +2447,17 @@
   </data>
   <data name="Random" xml:space="preserve">
     <value>Выпадкова</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Апісанне службы спецыяльных магчымасцей</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden выкарыстоўвае службу спецыяльных магчымасцей для пошуку палёў уваходу ў праграмах і вэб-сайтах, пасля чаго вызначае належныя ідэнтыфікатары палёў для таго, каб увесці імя карыстальніка і пароль, які адпавядае знойдзенай праграме або вэб-сайту. Мы ніколі не захоўваем ніякай інфармацыі, якая забяспечвае нам служба, і ніколі не прыкладаем намаганняў па кантролі любых элементаў на экране за выключэннем увядзення ўліковых даных у тэкставым выглядзе.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Прыняць</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Адхіліць</value>
   </data>
 </root>
