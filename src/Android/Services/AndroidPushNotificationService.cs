@@ -3,10 +3,12 @@ using System;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
+using Android.OS;
 using AndroidX.Core.App;
 using Bit.App.Abstractions;
 using Bit.Core;
 using Bit.Core.Abstractions;
+using Bit.Droid.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.Droid.Services
@@ -71,16 +73,27 @@ namespace Bit.Droid.Services
             {
                 throw new ArgumentNullException("notificationId cannot be null or empty.");
             }
-            
+
+
             var context = Android.App.Application.Context;
             var intent = new Intent(context, typeof(MainActivity));
-            var pendingIntent = PendingIntent.GetActivity(context, 20220801, intent, PendingIntentFlags.UpdateCurrent);
+            var pendingIntentFlags = AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true);
+            var pendingIntent = PendingIntent.GetActivity(context, 20220801, intent, pendingIntentFlags);
             var builder = new NotificationCompat.Builder(context, Constants.AndroidNotificationChannelId)
                .SetContentIntent(pendingIntent)
                .SetContentTitle(title)
                .SetContentText(message)
-               .SetSmallIcon(Resource.Mipmap.ic_launcher)
                .SetAutoCancel(true);
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+            {
+                builder.SetSmallIcon(Resource.Drawable.ic_notification);
+                builder.SetColor((int)Android.Graphics.Color.White);
+            }
+            else
+            {
+                builder.SetSmallIcon(Resource.Mipmap.ic_launcher);
+            }
 
             var notificationManager = NotificationManagerCompat.From(context);
             notificationManager.Notify(int.Parse(notificationId), builder.Build());
