@@ -7,6 +7,7 @@ using AndroidX.Core.App;
 using Bit.App.Abstractions;
 using Bit.Core;
 using Bit.Core.Abstractions;
+using Bit.Droid.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.Droid.Services
@@ -79,7 +80,7 @@ namespace Bit.Droid.Services
                .SetContentIntent(pendingIntent)
                .SetContentTitle(title)
                .SetContentText(message)
-               .SetSmallIcon(Resource.Mipmap.ic_launcher)
+               .SetTimeoutAfter(Constants.NotificationTimeoutMinutes * 60000)
                .SetAutoCancel(true);
 
             var notificationManager = NotificationManagerCompat.From(context);
