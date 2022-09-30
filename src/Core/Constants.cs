@@ -36,7 +36,7 @@
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;
         public const int TotpDefaultTimer = 30;
-        public const int NotificationTimeoutMinutes = 15;
+        public const int PasswordlessNotificationTimeoutInMinutes = 15;
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {
