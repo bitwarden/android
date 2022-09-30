@@ -82,7 +82,7 @@ namespace Bit.Droid.Services
                .SetContentIntent(pendingIntent)
                .SetContentTitle(title)
                .SetContentText(message)
-               .SetTimeoutAfter(Constants.NotificationTimeoutMinutes * 60000)
+               .SetTimeoutAfter(Constants.PasswordlessNotificationTimeoutInMinutes * 60000)
                .SetSmallIcon(Resource.Drawable.ic_notification)
                .SetColor((int)Android.Graphics.Color.White)
                .SetAutoCancel(true);
