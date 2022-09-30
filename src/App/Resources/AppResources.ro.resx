@@ -2313,6 +2313,66 @@ selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Sunteți sigur că doriți să activați Captura de ecran?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Autentificare solicitată</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Încercați să vă conectați?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Încercare de autentificare de {0} pe {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Tip dispozitiv</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>Adresă IP</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Timp</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Aproape</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Confirmare autentificare</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Refuz autentificare</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Chiar acum</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>acum {0} minute</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Autentificare confirmată</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Autentificare refuzată</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Aprobare solicitări de autentificare</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Utilizați acest dispozitiv pentru a aproba solicitările de conectare făcute de pe alte dispozitive.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Permitere notificări</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Primiți notificări push pentru noile solicitări de autentificare</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Nu, mulțumesc</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Confirmați încercarea de autentificare pentru {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Toate notificările</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Tip de parolă</value>
   </data>
@@ -2387,5 +2447,17 @@ selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Aleatoriu</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Dezvăluirea serviciilor de accesibilitate</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden utilizează Serviciul de accesibilitate pentru a căuta câmpuri de autentificare în aplicații și site-uri web, apoi stabilește ID-urile de câmp corespunzătoare pentru a introduce un nume de utilizator și o parolă atunci când se găsește o potrivire pentru aplicație sau site. Nu stocăm niciuna dintre informațiile care ne sunt prezentate de către serviciu și nici nu încercăm să controlăm vreun element de pe ecran, dincolo de introducerea textului de identificare.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Refuz</value>
   </data>
 </root>

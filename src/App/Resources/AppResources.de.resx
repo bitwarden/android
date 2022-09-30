@@ -2205,7 +2205,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Code erneut senden</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
-    <value>Ein Bestätigungscode wurde an deine E-Mail-Adresse gesendet.</value>
+    <value>Ein Bestätigungscode wurde an deine E-Mail-Adresse gesendet</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
     <value>Beim Senden des Bestätigungscodes an deine E-Mail-Adresse ist ein Fehler aufgetreten. Bitte versuche es erneut</value>
@@ -2312,6 +2312,66 @@ Das Scannen erfolgt automatisch.</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Bist du sicher, dass du die Bildschirmaufnahme aktivieren möchtest?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Zugangsdaten angefordert</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Versuchst du dich anzumelden?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Anmeldeversuch von {0} am {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Gerätetyp</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP-Adresse</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Zeit</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Nahe</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Anmeldung bestätigen</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Anmeldung verweigern</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Gerade eben</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>vor {0} Minute(n)</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Anmeldung bestätigt</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Anmeldung verweigert</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Anmeldeanfragen genehmigen</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Benutze dieses Gerät, um Anmeldeanfragen von anderen Geräten zu genehmigen.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Benachrichtigungen zulassen</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Push-Benachrichtigungen für neue Anmeldeanfragen erhalten</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Nein, danke</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Anmeldeversuch für {0} bestätigen</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Alle Benachrichtigungen</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Passworttyp</value>
   </data>
@@ -2386,5 +2446,17 @@ Das Scannen erfolgt automatisch.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Zufällig</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Bedienungshilfen Offenlegung</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden verwendet die Bedienungshilfen, um nach Anmeldefeldern in Apps und Webseiten zu suchen und legt dann die entsprechenden Feld-IDs fest, um Benutzername und Passwort einzugeben, wenn eine Übereinstimmung mit der App oder der Seite gefunden wird. Wir speichern keine der Informationen, die uns der Dienst zur Verfügung stellt. Ebenso wenig versuchen wir beliebige Elemente auf dem Bildschirm außer der Texteingabe von Anmeldedaten zu kontrollieren.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Akzeptieren</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Ablehnen</value>
   </data>
 </root>
