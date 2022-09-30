@@ -217,6 +217,10 @@
     <AndroidResource Include="Resources\drawable-v26\splash_screen_round.xml" />
     <AndroidResource Include="Resources\drawable\logo_rounded.xml" />
     <AndroidResource Include="Resources\drawable-night-v26\splash_screen_round.xml" />
+    <AndroidResource Include="Resources\drawable\ic_notification.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\splash_screen.xml" />
