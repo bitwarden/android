@@ -85,7 +85,7 @@ namespace Bit.App.Pages
             if (DateTime.UtcNow > LoginRequest?.RequestDate.ToUniversalTime().AddMinutes(15))
             {
                 StopRequestTimeUpdater();
-                await _platformUtilsService.ShowDialogAsync("waiting for a pr with the resource already");//AppResources.LoginRequestHasAlreadyExpired);
+                await _platformUtilsService.ShowDialogAsync(AppResources.LoginRequestHasAlreadyExpired);
                 await Page.Navigation.PopModalAsync();
                 return;
             }
@@ -94,6 +94,13 @@ namespace Bit.App.Pages
         private async Task PasswordlessLoginAsync(bool approveRequest)
         {
             StopRequestTimeUpdater();
+            if (LoginRequest.RequestDate.AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) <= DateTime.Now)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.LoginRequestHasAlreadyExpired);
+                await Page.Navigation.PopModalAsync();
+                return;
+            }
+
             await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
             await _authService.PasswordlessLoginAsync(LoginRequest.Id, LoginRequest.PubKey, approveRequest);
             await _deviceActionService.HideLoadingAsync();
