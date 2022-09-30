@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
@@ -8,6 +10,7 @@ using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
@@ -21,6 +24,8 @@ namespace Bit.App.Pages
         private IPlatformUtilsService _platformUtilsService;
         private ILogger _logger;
         private LoginPasswordlessDetails _resquest;
+        private CancellationTokenSource _requestTimeCts;
+        private Task _requestTimeTask;
 
         public LoginPasswordlessViewModel()
         {
@@ -37,6 +42,8 @@ namespace Bit.App.Pages
             RejectRequestCommand = new AsyncCommand(() => PasswordlessLoginAsync(false),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
+
+            StartRequestTimeUpdater();
         }
 
         public ICommand AcceptRequestCommand { get; }
@@ -63,8 +70,30 @@ namespace Bit.App.Pages
             }
         }
 
+        public void StopRequestTimeUpdater() => _requestTimeCts?.Cancel();
+
+        private void StartRequestTimeUpdater()
+        {
+            _requestTimeCts?.Cancel();
+            _requestTimeCts = new CancellationTokenSource();
+            _requestTimeTask = new TimerTask(_logger, UpdateRequestTime, _requestTimeCts).RunPeriodic(TimeSpan.FromMinutes(5));
+        }
+
+        private async void UpdateRequestTime()
+        {
+            TriggerPropertyChanged(nameof(TimeOfRequestText));
+            if (DateTime.UtcNow > LoginRequest?.RequestDate.ToUniversalTime().AddMinutes(15))
+            {
+                StopRequestTimeUpdater();
+                await _platformUtilsService.ShowDialogAsync("waiting for a pr with the resource already");//AppResources.LoginRequestHasAlreadyExpired);
+                await Page.Navigation.PopModalAsync();
+                return;
+            }
+        }
+
         private async Task PasswordlessLoginAsync(bool approveRequest)
         {
+            StopRequestTimeUpdater();
             await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
             await _authService.PasswordlessLoginAsync(LoginRequest.Id, LoginRequest.PubKey, approveRequest);
             await _deviceActionService.HideLoadingAsync();
@@ -79,17 +108,12 @@ namespace Bit.App.Pages
                 return string.Empty;
             }
 
-            var minutesSinceRequest = requestDate.Value.ToUniversalTime().Minute - DateTime.UtcNow.Minute;
-            if (minutesSinceRequest < 5)
+            if (DateTime.UtcNow < requestDate.Value.ToUniversalTime().AddMinutes(5))
             {
                 return AppResources.JustNow;
             }
-            if (minutesSinceRequest < 59)
-            {
-                return string.Format(AppResources.XMinutesAgo, minutesSinceRequest);
-            }
 
-            return requestDate.Value.ToShortTimeString();
+            return string.Format(AppResources.XMinutesAgo, DateTime.UtcNow.Minute - requestDate.Value.ToUniversalTime().Minute);
         }
 
         private void HandleException(Exception ex)
