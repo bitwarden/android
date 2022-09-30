@@ -2313,6 +2313,66 @@
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>确定要启用屏幕截图吗？</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>已请求登录</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>您正在尝试登录吗？</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>{0} 在 {1} 上的登录尝试</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>设备类型</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP 地址</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>时间</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>靠近</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>确认登录</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>拒绝登录</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>刚刚</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} 分钟前</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>登录已确认</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>登录被拒绝</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>批准登录请求</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>使用此设备批准其他设备的登录请求。</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>允许通知</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>接收新登录请求的推送通知</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>不了，谢谢</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>确认 {0} 的登录尝试</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>所有通知</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>密码类型</value>
   </data>
@@ -2387,5 +2447,17 @@
   </data>
   <data name="Random" xml:space="preserve">
     <value>随机</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>无障碍服务使用声明</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden 使用无障碍服务在应用程序和网站中搜索登录字段，当找到与应用程序或网站相匹配的用户名和密码时，建立适当的字段 ID 以输入它们。我们不会通过此服务存储提供给我们的任何信息，也不会尝试控制除凭据文本输入之外的任何屏幕上的元素。</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>接受</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>拒绝</value>
   </data>
 </root>
