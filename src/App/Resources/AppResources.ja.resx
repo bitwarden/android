@@ -2313,6 +2313,66 @@
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>スクリーンショットを撮影できるようにしてもよろしいですか？</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>ログインリクエスト済み</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>ログインしようとしていますか？</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>{1} への {0} によるログインの試行</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>デバイス種別</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP アドレス</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>時間</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>付近</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>ログインを承認</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>ログインを拒否</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>たった今</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} 分前</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>ログインを承認しました</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>ログインを拒否しました</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>ログインリクエストを承認する</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>このデバイスを使用して、他のデバイスからのログインリクエストを承認します。</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>通知を許可する</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>新しいログインリクエストのプッシュ通知を受け取ります</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>いいえ</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>{0} のログイン試行を承認</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>すべての通知</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>パスワードの種類</value>
   </data>
@@ -2387,5 +2447,17 @@
   </data>
   <data name="Random" xml:space="preserve">
     <value>ランダム</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>アクセシビリティサービスの開示</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden はアクセシビリティサービスを使ってアプリやウェブサイトのログインフィールドを検索します。 次に、アプリまたはサイトの一致が見つかったときにユーザー名とパスワードを入力するための適切なフィールド ID を確立します。 私たちは、サービスによって私たちに提示された情報のいずれも保存しません。 また、資格情報のテキスト入力以外の画面上の要素を制御しようとすることもありません。</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>同意</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>拒否</value>
   </data>
 </root>
