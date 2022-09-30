@@ -65,6 +65,13 @@ namespace Bit.App.Pages
 
         private async Task PasswordlessLoginAsync(bool approveRequest)
         {
+            if (LoginRequest.RequestDate.AddMinutes(Constants.NotificationTimeoutMinutes) <= DateTime.Now)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.LoginRequestHasAlreadyExpired);
+                await Page.Navigation.PopModalAsync();
+                return;
+            }
+
             await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
             await _authService.PasswordlessLoginAsync(LoginRequest.Id, LoginRequest.PubKey, approveRequest);
             await _deviceActionService.HideLoadingAsync();
