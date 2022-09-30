@@ -83,17 +83,9 @@ namespace Bit.Droid.Services
                .SetContentIntent(pendingIntent)
                .SetContentTitle(title)
                .SetContentText(message)
+               .SetSmallIcon(Resource.Drawable.ic_notification)
+               .SetColor((int)Android.Graphics.Color.White)
                .SetAutoCancel(true);
-
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
-            {
-                builder.SetSmallIcon(Resource.Drawable.ic_notification);
-                builder.SetColor((int)Android.Graphics.Color.White);
-            }
-            else
-            {
-                builder.SetSmallIcon(Resource.Mipmap.ic_launcher);
-            }
 
             var notificationManager = NotificationManagerCompat.From(context);
             notificationManager.Notify(int.Parse(notificationId), builder.Build());
