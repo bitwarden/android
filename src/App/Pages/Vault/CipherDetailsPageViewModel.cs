@@ -267,7 +267,7 @@ namespace Bit.App.Pages
                 _totpTickCancellationToken?.Cancel();
                 _totpInterval = _totpTickHelper.Interval;
                 _totpTickCancellationToken = new CancellationTokenSource();
-                _totpTickTask = new TimerTask(_logger, StartCiphersTotpTick, _totpTickCancellationToken).RunPeriodic();
+                _totpTickTask = new TimerTask(_logger, StartCiphersTotpTick, _totpTickCancellationToken.Token).RunPeriodic();
             }
             if (_previousCipherId != CipherId)
             {

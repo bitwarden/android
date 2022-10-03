@@ -10,12 +10,20 @@ namespace Bit.App.Utilities
     {
         private readonly ILogger _logger;
         private readonly Action _action;
-        private readonly CancellationTokenSource _cancellationToken;
+        private readonly Func<Task> _func;
+        private readonly CancellationToken _cancellationToken;
 
-        public TimerTask(ILogger logger, Action action, CancellationTokenSource cancellationToken)
+        public TimerTask(ILogger logger, Action action, CancellationToken cancellationToken)
         {
             _logger = logger;
             _action = action ?? throw new ArgumentNullException();
+            _cancellationToken = cancellationToken;
+        }
+
+        public TimerTask(ILogger logger, Func<Task> action, CancellationToken cancellationToken)
+        {
+            _logger = logger;
+            _func = action ?? throw new ArgumentNullException();
             _cancellationToken = cancellationToken;
         }
 
@@ -28,13 +36,20 @@ namespace Bit.App.Utilities
                 {
                     while (!_cancellationToken.IsCancellationRequested)
                     {
-                        await Device.InvokeOnMainThreadAsync(() =>
+                        await Device.InvokeOnMainThreadAsync(async () => 
                         {
                             if (!_cancellationToken.IsCancellationRequested)
                             {
                                 try
                                 {
-                                    _action();
+                                    if (_action != null)
+                                    {
+                                        _action();
+                                    }
+                                    else if (_func != null)
+                                    {
+                                        await _func();
+                                    }
                                 }
                                 catch (Exception ex)
                                 {
@@ -42,7 +57,7 @@ namespace Bit.App.Utilities
                                 }
                             }
                         });
-                        await Task.Delay(interval.Value, _cancellationToken.Token);
+                        await Task.Delay(interval.Value, _cancellationToken);
                     }
                 }
                 catch (TaskCanceledException) { }
@@ -50,7 +65,7 @@ namespace Bit.App.Utilities
                 {
                     _logger?.Exception(ex);
                 }
-            }, _cancellationToken.Token);
+            }, _cancellationToken);
         }
     }
 }

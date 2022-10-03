@@ -27,6 +27,8 @@ namespace Bit.App.Pages
         private CancellationTokenSource _requestTimeCts;
         private Task _requestTimeTask;
 
+        private const int REQUEST_TIME_UPDATE_PERIOD = 5;
+
         public LoginPasswordlessViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
@@ -70,30 +72,32 @@ namespace Bit.App.Pages
             }
         }
 
-        public void StopRequestTimeUpdater() => _requestTimeCts?.Cancel();
+        public void StopRequestTimeUpdater()
+        {
+            _requestTimeCts?.Cancel();
+            _requestTimeCts?.Dispose();
+        }
 
         private void StartRequestTimeUpdater()
         {
             _requestTimeCts?.Cancel();
             _requestTimeCts = new CancellationTokenSource();
-            _requestTimeTask = new TimerTask(_logger, UpdateRequestTime, _requestTimeCts).RunPeriodic(TimeSpan.FromMinutes(5));
+            _requestTimeTask = new TimerTask(_logger, UpdateRequestTime, _requestTimeCts.Token).RunPeriodic(TimeSpan.FromMinutes(REQUEST_TIME_UPDATE_PERIOD));
         }
 
-        private async void UpdateRequestTime()
+        private async Task UpdateRequestTime()
         {
             TriggerPropertyChanged(nameof(TimeOfRequestText));
-            if (DateTime.UtcNow > LoginRequest?.RequestDate.ToUniversalTime().AddMinutes(15))
+            if (DateTime.UtcNow > LoginRequest?.RequestDate.ToUniversalTime().AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes))
             {
                 StopRequestTimeUpdater();
                 await _platformUtilsService.ShowDialogAsync(AppResources.LoginRequestHasAlreadyExpired);
                 await Page.Navigation.PopModalAsync();
-                return;
             }
         }
 
         private async Task PasswordlessLoginAsync(bool approveRequest)
         {
-            StopRequestTimeUpdater();
             if (LoginRequest.RequestDate.AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) <= DateTime.Now)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.LoginRequestHasAlreadyExpired);
@@ -106,6 +110,8 @@ namespace Bit.App.Pages
             await _deviceActionService.HideLoadingAsync();
             await Page.Navigation.PopModalAsync();
             _platformUtilsService.ShowToast("info", null, approveRequest ? AppResources.LogInAccepted : AppResources.LogInDenied);
+
+            StopRequestTimeUpdater();
         }
 
         private string CreateRequestDate(DateTime? requestDate)
