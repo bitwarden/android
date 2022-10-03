@@ -140,7 +140,7 @@ namespace Bit.App
                                 new NavigationPage(new RemoveMasterPasswordPage()));
                         });
                     }
-                    else if (message.Command == "passwordlessLoginRequest" || message.Command == "unlocked")
+                    else if (message.Command == "passwordlessLoginRequest" || message.Command == "unlocked" || message.Command == "accountSwitched")
                     {
                         CheckPasswordlessLoginRequestsAsync().FireAndForget();
                     }
