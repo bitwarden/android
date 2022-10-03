@@ -215,8 +215,7 @@ namespace Bit.App.Utilities.AccountManagement
                 }
                 await Task.Delay(50);
                 await _accountsManagerHost.UpdateThemeAsync();
-
-                _messagingService.Send("accountSwitched");
+                _messagingService.Send(AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED);
             });
         }
     }
