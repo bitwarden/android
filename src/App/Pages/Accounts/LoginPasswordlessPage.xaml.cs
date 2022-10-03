@@ -24,7 +24,6 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                _vm.StopRequestTimeUpdater();
                 await Navigation.PopModalAsync();
             }
         }
