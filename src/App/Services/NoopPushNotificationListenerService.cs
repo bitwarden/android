@@ -28,5 +28,10 @@ namespace Bit.App.Services
         {
             return false;
         }
+
+        public Task OnNotificationTapped(string type, string data)
+        {
+            return Task.FromResult(0);
+        }
     }
 }
