@@ -1,9 +1,11 @@
 ﻿using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace Bit.App.Pages
 {
@@ -12,6 +14,8 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly IStateService _stateService;
         private readonly MobileI18nService _i18nService;
+        private readonly IPlatformUtilsService _platformUtilsService;
+        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         private bool _autofillServiceToggled;
         private bool _inlineAutofillToggled;
@@ -24,7 +28,11 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService;
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             PageTitle = AppResources.AutofillServices;
+            ToggleAccessibilityCommand = new AsyncCommand(ToggleAccessibilityAsync,
+                onException: ex => _logger.Value.Exception(ex),
+                allowsMultipleExecutions: false);
         }
 
         #region Autofill Service
@@ -73,6 +81,8 @@ namespace Bit.App.Pages
         #endregion
 
         #region Accessibility
+
+        public ICommand ToggleAccessibilityCommand { get; }
 
         public string AccessibilityDescriptionLabel
         {
@@ -176,8 +186,18 @@ namespace Bit.App.Pages
             InlineAutofillToggled = !InlineAutofillToggled;
         }
 
-        public void ToggleAccessibility()
+        public async Task ToggleAccessibilityAsync()
         {
+            if (!_deviceActionService.AutofillAccessibilityServiceRunning())
+            {
+                var accept = await _platformUtilsService.ShowDialogAsync(AppResources.AccessibilityDisclosureText,
+                    AppResources.AccessibilityServiceDisclosure, AppResources.Accept,
+                    AppResources.Decline);
+                if (!accept)
+                {
+                    return;
+                }
+            }
             _deviceActionService.OpenAccessibilitySettings();
         }
 

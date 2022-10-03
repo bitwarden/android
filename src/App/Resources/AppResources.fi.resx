@@ -2313,6 +2313,66 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Haluatko varmasti sallia kuvankaappauksen?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Kirjautumista pyydetty</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Yritätkö kirjautua sisään?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>{0} yrittää kirjautua laitteella {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Laitteen tyyppi</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP-osoite</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Aika</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Lähellä</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Vahvista kirjautuminen</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Estä kirjautuminen</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Juuri nyt</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} minuuttia sitten</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Kirjautuminen vahvistettu</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Kirjautuminen estetty</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Hyväksy kirjautumispyyntöjä</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Hyväksy muilta laitteilta tehdyt kirjautumispyynnöt tältä laitteelta.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Salli ilmoitukset</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Vastaanota push-ilmoitus uusista kirjautumispyynnöistä</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Ei kiitos</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Vahvista käyttäjän {0} kirjautuminen</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Kaikki ilmoitukset</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Salasanan tyyppi</value>
   </data>
@@ -2387,5 +2447,17 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Satunnainen</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Esteettömyyspalvelun ilmoitus</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden käyttää esteettömyyspalvelua kirjautumiskenttien etsintään sovelluksista ja verkkosivustoilta. Löydetyille kentille luodaan asianmukaiset tunnisteet tunnusten ja salasanojen syöttöön sopivan sovelluksen tai sivuston löytyessä. Mitään palvelun paljastamia tietoja ei tallenneta, eikä mitään näytöllä esitettäviä kohteita pyritä hallitsemaan kirjautumistietojen tekstinsyöttöä lukuun ottamatta.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Hyväksy</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Älä hyväksy</value>
   </data>
 </root>
