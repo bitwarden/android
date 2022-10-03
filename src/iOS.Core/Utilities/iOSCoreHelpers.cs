@@ -222,7 +222,8 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Resolve<IStateService>("stateService"),
                 ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
                 ServiceContainer.Resolve<IAuthService>("authService"),
-                ServiceContainer.Resolve<ILogger>("logger"));
+                ServiceContainer.Resolve<ILogger>("logger"),
+                ServiceContainer.Resolve<IMessagingService>("messagingService"));
             ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
 
             if (postBootstrapFunc != null)
