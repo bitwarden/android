@@ -119,7 +119,7 @@ namespace Bit.App.Pages
                 return string.Empty;
             }
 
-            if (DateTime.UtcNow < requestDate.Value.ToUniversalTime().AddMinutes(5))
+            if (DateTime.UtcNow < requestDate.Value.ToUniversalTime().AddMinutes(REQUEST_TIME_UPDATE_PERIOD_IN_MINUTES))
             {
                 return AppResources.JustNow;
             }
