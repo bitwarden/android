@@ -86,7 +86,7 @@ namespace Bit.iOS.Services
             {
                 OnMessageReceived(response?.Notification?.Request?.Content?.UserInfo);
                 var values = UserValuesToJObject(response?.Notification?.Request?.Content?.UserInfo);
-                if(values.TryGetValue("Type", out JToken notificationType) && notificationType != null)
+                if(values.TryGetValue("type", out JToken notificationType) && notificationType != null)
                 {
                     _pushNotificationListenerService.OnNotificationTapped(notificationType.ToString(), values.ToString(Formatting.None));
                 }

@@ -149,7 +149,6 @@ namespace Bit.App.Services
                     await _stateService.SetPasswordlessLoginNotificationAsync(passwordlessLoginMessage, passwordlessLoginMessage?.UserId);
                     var userEmail = await _stateService.GetEmailAsync(passwordlessLoginMessage?.UserId);
                     var notificationData = new Dictionary<string, string>();
-                    notificationData.Add("type", Constants.PasswordlessNotificationType);
                     notificationData.Add("userEmail", userEmail);
                     notificationData.Add("notificationId", passwordlessLoginMessage.Id);
 
