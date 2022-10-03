@@ -72,8 +72,9 @@ namespace Bit.Droid
                     ServiceContainer.Resolve<IStateService>("stateService"),
                     ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
                     ServiceContainer.Resolve<IAuthService>("authService"),
-                    ServiceContainer.Resolve<ILogger>("logger"));
-                ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
+                    ServiceContainer.Resolve<ILogger>("logger"),
+                    ServiceContainer.Resolve<IMessagingService>("messagingService"));
+                    ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
             }
 #if !FDROID
             if (Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)
