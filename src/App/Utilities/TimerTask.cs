@@ -10,21 +10,21 @@ namespace Bit.App.Utilities
     {
         private readonly ILogger _logger;
         private readonly Action _action;
-        private readonly Func<Task> _func;
-        private readonly CancellationToken _cancellationToken;
+        private readonly Func<Task> _actionTask;
+        private readonly CancellationTokenSource _cancellationTokenSource;
 
-        public TimerTask(ILogger logger, Action action, CancellationToken cancellationToken)
+        public TimerTask(ILogger logger, Action action, CancellationTokenSource cancellationTokenSource)
         {
             _logger = logger;
-            _action = action ?? throw new ArgumentNullException();
-            _cancellationToken = cancellationToken;
+            _action = action ?? throw new ArgumentNullException(nameof(action));
+            _cancellationTokenSource = cancellationTokenSource;
         }
 
-        public TimerTask(ILogger logger, Func<Task> action, CancellationToken cancellationToken)
+        public TimerTask(ILogger logger, Func<Task> actionTask, CancellationTokenSource cancellationTokenSource)
         {
             _logger = logger;
-            _func = action ?? throw new ArgumentNullException();
-            _cancellationToken = cancellationToken;
+            _actionTask = actionTask ?? throw new ArgumentNullException(nameof(actionTask));
+            _cancellationTokenSource = cancellationTokenSource;
         }
 
         public Task RunPeriodic(TimeSpan? interval = null)
@@ -34,11 +34,11 @@ namespace Bit.App.Utilities
             {
                 try
                 {
-                    while (!_cancellationToken.IsCancellationRequested)
+                    while (!_cancellationTokenSource.IsCancellationRequested)
                     {
                         await Device.InvokeOnMainThreadAsync(async () =>
                         {
-                            if (!_cancellationToken.IsCancellationRequested)
+                            if (!_cancellationTokenSource.IsCancellationRequested)
                             {
                                 try
                                 {
@@ -46,18 +46,19 @@ namespace Bit.App.Utilities
                                     {
                                         _action();
                                     }
-                                    else if (_func != null)
+                                    else if (_actionTask != null)
                                     {
-                                        await _func();
+                                        await _actionTask();
                                     }
                                 }
                                 catch (Exception ex)
                                 {
+                                    _cancellationTokenSource?.Cancel();
                                     _logger?.Exception(ex);
                                 }
                             }
                         });
-                        await Task.Delay(interval.Value, _cancellationToken);
+                        await Task.Delay(interval.Value, _cancellationTokenSource.Token);
                     }
                 }
                 catch (TaskCanceledException) { }
@@ -65,7 +66,7 @@ namespace Bit.App.Utilities
                 {
                     _logger?.Exception(ex);
                 }
-            }, _cancellationToken);
+            }, _cancellationTokenSource.Token);
         }
     }
 }

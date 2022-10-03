@@ -28,5 +28,17 @@ namespace Bit.App.Pages
                 await Navigation.PopModalAsync();
             }
         }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _vm.StartRequestTimeUpdater();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _vm.StopRequestTimeUpdater();
+        }
     }
 }

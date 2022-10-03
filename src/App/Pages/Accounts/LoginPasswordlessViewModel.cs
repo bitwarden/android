@@ -27,7 +27,7 @@ namespace Bit.App.Pages
         private CancellationTokenSource _requestTimeCts;
         private Task _requestTimeTask;
 
-        private const int REQUEST_TIME_UPDATE_PERIOD = 5;
+        private const int REQUEST_TIME_UPDATE_PERIOD_IN_MINUTES = 5;
 
         public LoginPasswordlessViewModel()
         {
@@ -44,8 +44,6 @@ namespace Bit.App.Pages
             RejectRequestCommand = new AsyncCommand(() => PasswordlessLoginAsync(false),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
-
-            StartRequestTimeUpdater();
         }
 
         public ICommand AcceptRequestCommand { get; }
@@ -78,11 +76,11 @@ namespace Bit.App.Pages
             _requestTimeCts?.Dispose();
         }
 
-        private void StartRequestTimeUpdater()
+        public void StartRequestTimeUpdater()
         {
             _requestTimeCts?.Cancel();
             _requestTimeCts = new CancellationTokenSource();
-            _requestTimeTask = new TimerTask(_logger, UpdateRequestTime, _requestTimeCts.Token).RunPeriodic(TimeSpan.FromMinutes(REQUEST_TIME_UPDATE_PERIOD));
+            _requestTimeTask = new TimerTask(_logger, UpdateRequestTime, _requestTimeCts).RunPeriodic(TimeSpan.FromMinutes(REQUEST_TIME_UPDATE_PERIOD_IN_MINUTES));
         }
 
         private async Task UpdateRequestTime()

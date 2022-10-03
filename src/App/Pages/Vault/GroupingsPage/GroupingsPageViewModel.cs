@@ -423,7 +423,7 @@ namespace Bit.App.Pages
         {
             _totpTickCts?.Cancel();
             _totpTickCts = new CancellationTokenSource();
-            _totpTickTask = new TimerTask(logger, () => ciphersListItems.ForEach(i => i.TotpTickAsync()), _totpTickCts.Token).RunPeriodic();
+            _totpTickTask = new TimerTask(logger, () => ciphersListItems.ForEach(i => i.TotpTickAsync()), _totpTickCts).RunPeriodic();
         }
 
         public async Task StopCiphersTotpTick()
