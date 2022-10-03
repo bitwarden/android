@@ -2,7 +2,9 @@
 using System.Diagnostics;
 using Bit.App.Abstractions;
 using Bit.Core.Services;
+using CoreData;
 using Foundation;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UserNotifications;
 using Xamarin.Forms;
@@ -28,19 +30,7 @@ namespace Bit.iOS.Services
             {
                 Debug.WriteLine($"{TAG} - OnMessageReceived.");
 
-                var json = DictionaryToJson(userInfo);
-                var values = JObject.Parse(json);
-                var keyAps = new NSString("aps");
-                if (userInfo.ContainsKey(keyAps) && userInfo.ValueForKey(keyAps) is NSDictionary aps)
-                {
-                    foreach (var apsKey in aps)
-                    {
-                        if (!values.TryGetValue(apsKey.Key.ToString(), out JToken temp))
-                        {
-                            values.Add(apsKey.Key.ToString(), apsKey.Value.ToString());
-                        }
-                    }
-                }
+                var values = UserValuesToJObject(userInfo);
                 _pushNotificationListenerService.OnMessageAsync(values, Device.iOS);
             }
             catch (Exception ex)
@@ -95,10 +85,34 @@ namespace Bit.iOS.Services
             if (response.IsDefaultAction)
             {
                 OnMessageReceived(response?.Notification?.Request?.Content?.UserInfo);
+                var values = UserValuesToJObject(response?.Notification?.Request?.Content?.UserInfo);
+                if(values.TryGetValue("Type", out JToken notificationType) && notificationType != null)
+                {
+                    _pushNotificationListenerService.OnNotificationTapped(notificationType.ToString(), values.ToString(Formatting.None));
+                }
             }
 
             // Inform caller it has been handled
             completionHandler();
+        }
+
+        private static JObject UserValuesToJObject(NSDictionary userInfo)
+        {
+            var json = DictionaryToJson(userInfo);
+            var values = JObject.Parse(json);
+            var keyAps = new NSString("aps");
+            if (userInfo.ContainsKey(keyAps) && userInfo.ValueForKey(keyAps) is NSDictionary aps)
+            {
+                foreach (var apsKey in aps)
+                {
+                    if (!values.TryGetValue(apsKey.Key.ToString(), out JToken temp))
+                    {
+                        values.Add(apsKey.Key.ToString(), apsKey.Value.ToString());
+                    }
+                }
+            }
+
+            return values;
         }
     }
 }

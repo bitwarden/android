@@ -69,7 +69,7 @@ namespace Bit.iOS.Services
             return Task.FromResult(0);
         }
 
-        public void SendLocalNotification(string title, string message, string notificationId)
+        public void SendLocalNotification(string title, string message, string notificationId, string notificationType, Dictionary<string, string> notificationData = null, int notificationTimeoutMinutes = 0)
         {
             if (string.IsNullOrEmpty(notificationId))
             {
@@ -81,6 +81,12 @@ namespace Bit.iOS.Services
                 Title = title,
                 Body = message
             };
+
+            if (notificationData != null)
+            {
+                notificationData.Add("type", notificationType);
+                content.UserInfo = NSDictionary.FromObjectsAndKeys(notificationData.Values.ToArray(), notificationData.Keys.ToArray());
+            }
 
             var request = UNNotificationRequest.FromIdentifier(notificationId, content, null);
             UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) =>

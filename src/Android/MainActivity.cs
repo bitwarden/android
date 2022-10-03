@@ -39,6 +39,7 @@ namespace Bit.Droid
         private IStateService _stateService;
         private IAppIdService _appIdService;
         private IEventService _eventService;
+        private IPushNotificationListenerService _pushNotificationListenerService;
         private ILogger _logger;
         private PendingIntent _eventUploadPendingIntent;
         private AppOptions _appOptions;
@@ -61,6 +62,7 @@ namespace Bit.Droid
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
+            _pushNotificationListenerService = ServiceContainer.Resolve<IPushNotificationListenerService>();
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -145,6 +147,11 @@ namespace Bit.Droid
             AndroidHelpers.SetPreconfiguredRestrictionSettingsAsync(this)
                 .GetAwaiter()
                 .GetResult();
+
+            if (Intent?.GetStringExtra(Constants.PasswordlessNotificationType) is string notificationDataJson)
+            {
+                _pushNotificationListenerService.OnNotificationTapped(Constants.PasswordlessNotificationType, notificationDataJson).FireAndForget();
+            }
         }
 
         protected override void OnNewIntent(Intent intent)

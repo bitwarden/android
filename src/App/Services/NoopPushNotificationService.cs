@@ -30,6 +30,6 @@ namespace Bit.App.Services
 
         public void DismissLocalNotification(string notificationId) { }
 
-        public void SendLocalNotification(string title, string message, string notificationId) { }
+        public void SendLocalNotification(string title, string message, string notificationId, string notificationType, Dictionary<string, string> notificationData = null, int notificationTimeoutMinutes = 0) { }
     }
 }

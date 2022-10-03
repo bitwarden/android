@@ -1,5 +1,6 @@
 ﻿#if !FDROID
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Response;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -146,8 +148,12 @@ namespace Bit.App.Services
 
                     await _stateService.SetPasswordlessLoginNotificationAsync(passwordlessLoginMessage, passwordlessLoginMessage?.UserId);
                     var userEmail = await _stateService.GetEmailAsync(passwordlessLoginMessage?.UserId);
+                    var notificationData = new Dictionary<string, string>();
+                    notificationData.Add("type", Constants.PasswordlessNotificationType);
+                    notificationData.Add("userEmail", userEmail);
+                    notificationData.Add("notificationId", passwordlessLoginMessage.Id);
 
-                    _pushNotificationService.SendLocalNotification(AppResources.LogInRequested, String.Format(AppResources.ConfimLogInAttempForX, userEmail), Constants.PasswordlessNotificationId);
+                    _pushNotificationService.SendLocalNotification(AppResources.LogInRequested, String.Format(AppResources.ConfimLogInAttempForX, userEmail), Constants.PasswordlessNotificationId, Constants.PasswordlessNotificationType, notificationData, Constants.PasswordlessNotificationTimeoutInMinutes);
                     _messagingService.Send("passwordlessLoginRequest", passwordlessLoginMessage);
                     break;
                 default:
@@ -211,6 +217,29 @@ namespace Bit.App.Services
         public void OnError(string message, string deviceType)
         {
             Debug.WriteLine($"{TAG} error - {message}");
+        }
+
+        public async Task OnNotificationTapped(string type, string dataJson)
+        {
+            try
+            {
+                if (type == Constants.PasswordlessNotificationType)
+                {
+                    var notificationData = JsonConvert.DeserializeObject<Dictionary<string, string>>(dataJson);
+                    var userEmail = notificationData["userEmail"];
+                    var notificationId = notificationData["notificationId"];
+                    var notificationUserId = await _stateService.GetUserIdAsync(userEmail);
+                    if (notificationUserId != null)
+                    {
+                        await _stateService.SetActiveUserAsync(notificationUserId);
+                        _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
         public bool ShouldShowNotification()

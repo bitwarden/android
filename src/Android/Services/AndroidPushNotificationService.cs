@@ -1,5 +1,6 @@
 ﻿#if !FDROID
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
@@ -9,6 +10,7 @@ using Bit.App.Abstractions;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Droid.Utilities;
+using Newtonsoft.Json;
 using Xamarin.Forms;
 
 namespace Bit.Droid.Services
@@ -67,7 +69,7 @@ namespace Bit.Droid.Services
             }
         }
 
-        public void SendLocalNotification(string title, string message, string notificationId)
+        public void SendLocalNotification(string title, string message, string notificationId, string notificationType, Dictionary<string, string> notificationData = null, int notificationTimeoutMinutes = 0)
         {
             if (string.IsNullOrEmpty(notificationId))
             {
@@ -76,16 +78,25 @@ namespace Bit.Droid.Services
             
             var context = Android.App.Application.Context;
             var intent = new Intent(context, typeof(MainActivity));
+            if(notificationData != null)
+            {
+                intent.PutExtra(notificationType, JsonConvert.SerializeObject(notificationData));
+            }
+
             var pendingIntentFlags = AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true);
             var pendingIntent = PendingIntent.GetActivity(context, 20220801, intent, pendingIntentFlags);
             var builder = new NotificationCompat.Builder(context, Constants.AndroidNotificationChannelId)
                .SetContentIntent(pendingIntent)
                .SetContentTitle(title)
                .SetContentText(message)
-               .SetTimeoutAfter(Constants.PasswordlessNotificationTimeoutInMinutes * 60000)
                .SetSmallIcon(Resource.Drawable.ic_notification)
                .SetColor((int)Android.Graphics.Color.White)
                .SetAutoCancel(true);
+
+            if (notificationTimeoutMinutes > 0)
+            {
+                builder.SetTimeoutAfter(notificationTimeoutMinutes * 60000);
+            }
 
             var notificationManager = NotificationManagerCompat.From(context);
             notificationManager.Notify(int.Parse(notificationId), builder.Build());
