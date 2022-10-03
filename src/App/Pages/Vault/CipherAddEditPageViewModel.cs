@@ -605,6 +605,8 @@ namespace Bit.App.Pages
                 return;
             }
 
+            var website = Cipher?.Login?.Uris?.FirstOrDefault()?.Host;
+
             var page = new GeneratorPage(false, async (username) =>
             {
                 try
@@ -617,7 +619,7 @@ namespace Bit.App.Pages
                 {
                     OnGenerateUsernameException(ex);
                 }
-            }, isUsernameGenerator: true, emailWebsite: Cipher?.Name, editMode: true);
+            }, isUsernameGenerator: true, emailWebsite: website, editMode: true);
             await Page.Navigation.PushModalAsync(new NavigationPage(page));
         }
 

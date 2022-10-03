@@ -20,7 +20,7 @@ namespace Bit.App.Utilities.AccountManagement
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuthService _authService;
         private readonly ILogger _logger;
-
+        private readonly IMessagingService _messagingService;
         Func<AppOptions> _getOptionsFunc;
         private IAccountsManagerHost _accountsManagerHost;
 
@@ -30,7 +30,8 @@ namespace Bit.App.Utilities.AccountManagement
                                IStateService stateService,
                                IPlatformUtilsService platformUtilsService,
                                IAuthService authService,
-                               ILogger logger)
+                               ILogger logger,
+                               IMessagingService messagingService)
         {
             _broadcasterService = broadcasterService;
             _vaultTimeoutService = vaultTimeoutService;
@@ -39,6 +40,7 @@ namespace Bit.App.Utilities.AccountManagement
             _platformUtilsService = platformUtilsService;
             _authService = authService;
             _logger = logger;
+            _messagingService = messagingService;
         }
 
         private AppOptions Options => _getOptionsFunc?.Invoke() ?? new AppOptions { IosExtension = true };
@@ -213,6 +215,7 @@ namespace Bit.App.Utilities.AccountManagement
                 }
                 await Task.Delay(50);
                 await _accountsManagerHost.UpdateThemeAsync();
+                _messagingService.Send(AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED);
             });
         }
     }
