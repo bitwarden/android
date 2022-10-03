@@ -50,8 +50,6 @@ namespace Bit.App.Pages
         private bool _showFirefoxRelayApiAccessToken;
         private bool _showAnonAddyApiAccessToken;
         private bool _showSimpleLoginApiKey;
-        private UsernameEmailType _catchAllEmailTypeSelected;
-        private UsernameEmailType _plusAddressedEmailTypeSelected;
         private bool _editMode;
 
         public GeneratorPageViewModel()
@@ -688,6 +686,10 @@ namespace Bit.App.Pages
             if (regenerate && UsernameTypeSelected != UsernameType.ForwardedEmailAlias)
             {
                 await RegenerateUsernameAsync();
+            }
+            else
+            {
+                Username = Constants.DefaultUsernameGenerated;
             }
         }
 

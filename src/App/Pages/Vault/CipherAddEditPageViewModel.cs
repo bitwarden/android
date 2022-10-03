@@ -605,7 +605,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var website = (bool)(Cipher?.Login?.HasUris) ? Cipher?.Login?.Uris[0].Host : null;
+            var website = Cipher?.Login?.Uris?.FirstOrDefault()?.Host;
 
             var page = new GeneratorPage(false, async (username) =>
             {
