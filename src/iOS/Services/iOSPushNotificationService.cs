@@ -4,8 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Models;
+using Bit.App.Services;
+using Bit.Core;
 using Bit.Core.Services;
 using Foundation;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UIKit;
 using UserNotifications;
 
@@ -69,9 +74,9 @@ namespace Bit.iOS.Services
             return Task.FromResult(0);
         }
 
-        public void SendLocalNotification(string title, string message, string notificationId, string notificationType, Dictionary<string, string> notificationData = null, int notificationTimeoutMinutes = 0)
+        public void SendLocalNotification(string title, string message, BaseNotificationData data)
         {
-            if (string.IsNullOrEmpty(notificationId))
+            if (string.IsNullOrEmpty(data.NotificationId))
             {
                 throw new ArgumentNullException("notificationId cannot be null or empty.");
             }
@@ -82,13 +87,12 @@ namespace Bit.iOS.Services
                 Body = message
             };
 
-            if (notificationData != null)
+            if (data != null)
             {
-                notificationData.Add("type", notificationType);
-                content.UserInfo = NSDictionary.FromObjectsAndKeys(notificationData.Values.ToArray(), notificationData.Keys.ToArray());
+                content.UserInfo = NSDictionary.FromObjectAndKey(NSData.FromString(JsonConvert.SerializeObject(data), NSStringEncoding.UTF8), new NSString(Constants.NotificationData));
             }
 
-            var request = UNNotificationRequest.FromIdentifier(notificationId, content, null);
+            var request = UNNotificationRequest.FromIdentifier(data.NotificationId, content, null);
             UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) =>
             {
                 if (err != null)

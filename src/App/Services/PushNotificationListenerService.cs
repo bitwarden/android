@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Models;
 using Bit.App.Pages;
 using Bit.App.Resources;
 using Bit.Core;
@@ -32,6 +33,7 @@ namespace Bit.App.Services
         private IApiService _apiService;
         private IMessagingService _messagingService;
         private IPushNotificationService _pushNotificationService;
+        private ILogger _logger;
 
         public async Task OnMessageAsync(JObject value, string deviceType)
         {
@@ -148,11 +150,15 @@ namespace Bit.App.Services
 
                     await _stateService.SetPasswordlessLoginNotificationAsync(passwordlessLoginMessage, passwordlessLoginMessage?.UserId);
                     var userEmail = await _stateService.GetEmailAsync(passwordlessLoginMessage?.UserId);
-                    var notificationData = new Dictionary<string, string>();
-                    notificationData.Add("userEmail", userEmail);
-                    notificationData.Add("notificationId", passwordlessLoginMessage.Id);
 
-                    _pushNotificationService.SendLocalNotification(AppResources.LogInRequested, String.Format(AppResources.ConfimLogInAttempForX, userEmail), Constants.PasswordlessNotificationId, Constants.PasswordlessNotificationType, notificationData, Constants.PasswordlessNotificationTimeoutInMinutes);
+                    var notificationData = new PasswordlessNotificationData()
+                    {
+                        NotificationId = Constants.PasswordlessNotificationId,
+                        TimeoutInMinutes = Constants.PasswordlessNotificationTimeoutInMinutes,
+                        UserEmail = userEmail,
+                    };
+
+                    _pushNotificationService.SendLocalNotification(AppResources.LogInRequested, String.Format(AppResources.ConfimLogInAttempForX, userEmail), notificationData);
                     _messagingService.Send("passwordlessLoginRequest", passwordlessLoginMessage);
                     break;
                 default:
@@ -218,16 +224,14 @@ namespace Bit.App.Services
             Debug.WriteLine($"{TAG} error - {message}");
         }
 
-        public async Task OnNotificationTapped(string type, string dataJson)
+        public async Task OnNotificationTapped(string type, BaseNotificationData data)
         {
+            Resolve();
             try
             {
-                if (type == Constants.PasswordlessNotificationType)
+                if (data is PasswordlessNotificationData passwordlessNotificationData)
                 {
-                    var notificationData = JsonConvert.DeserializeObject<Dictionary<string, string>>(dataJson);
-                    var userEmail = notificationData["userEmail"];
-                    var notificationId = notificationData["notificationId"];
-                    var notificationUserId = await _stateService.GetUserIdAsync(userEmail);
+                    var notificationUserId = await _stateService.GetUserIdAsync(passwordlessNotificationData.UserEmail);
                     if (notificationUserId != null)
                     {
                         await _stateService.SetActiveUserAsync(notificationUserId);
@@ -237,7 +241,7 @@ namespace Bit.App.Services
             }
             catch (Exception ex)
             {
-                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                _logger.Exception(ex);
             }
         }
 
@@ -258,6 +262,7 @@ namespace Bit.App.Services
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
+            _logger = ServiceContainer.Resolve<ILogger>();
             _resolved = true;
         }
     }

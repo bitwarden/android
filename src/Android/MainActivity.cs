@@ -20,6 +20,8 @@ using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using Bit.Droid.Receivers;
 using Bit.Droid.Utilities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xamarin.Essentials;
 using ZXing.Net.Mobile.Android;
 using FileProvider = AndroidX.Core.Content.FileProvider;
@@ -148,9 +150,13 @@ namespace Bit.Droid
                 .GetAwaiter()
                 .GetResult();
 
-            if (Intent?.GetStringExtra(Constants.PasswordlessNotificationType) is string notificationDataJson)
+            if (Intent?.GetStringExtra(Constants.NotificationData) is string notificationDataJson)
             {
-                _pushNotificationListenerService.OnNotificationTapped(Constants.PasswordlessNotificationType, notificationDataJson).FireAndForget();
+                var notificationType = JToken.Parse(notificationDataJson).SelectToken(Constants.NotificationDataType);
+                if (notificationType!= null && (string)notificationType == PasswordlessNotificationData.TYPE)
+                {
+                    _pushNotificationListenerService.OnNotificationTapped(PasswordlessNotificationData.TYPE, JsonConvert.DeserializeObject<PasswordlessNotificationData>(notificationDataJson)).FireAndForget();
+                }
             }
         }
 

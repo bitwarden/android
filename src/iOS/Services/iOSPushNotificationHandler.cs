@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using Bit.App.Abstractions;
+using Bit.App.Models;
+using Bit.Core;
 using Bit.Core.Services;
 using CoreData;
 using Foundation;
@@ -82,13 +84,19 @@ namespace Bit.iOS.Services
         {
             Debug.WriteLine($"{TAG} DidReceiveNotificationResponse {response?.Notification?.Request?.Content?.UserInfo}");
 
-            if (response.IsDefaultAction)
+            if (response.IsDefaultAction && response?.Notification?.Request?.Content?.UserInfo != null)
             {
-                OnMessageReceived(response?.Notification?.Request?.Content?.UserInfo);
-                var values = UserValuesToJObject(response?.Notification?.Request?.Content?.UserInfo);
-                if(values.TryGetValue("type", out JToken notificationType) && notificationType != null)
+                var userInfo = response?.Notification?.Request?.Content?.UserInfo;
+                OnMessageReceived(userInfo);
+
+                if (userInfo.TryGetValue(NSString.FromObject(Constants.NotificationData), out NSObject nsObject))
                 {
-                    _pushNotificationListenerService.OnNotificationTapped(notificationType.ToString(), values.ToString(Formatting.None));
+                    var token = JToken.Parse(NSString.FromObject(nsObject).ToString());
+                    var typeToken = token.SelectToken(Constants.NotificationDataType);
+                    if (typeToken != null && (string)typeToken == PasswordlessNotificationData.TYPE)
+                    {
+                        _pushNotificationListenerService.OnNotificationTapped(PasswordlessNotificationData.TYPE, token.ToObject<PasswordlessNotificationData>());
+                    }
                 }
             }
 
@@ -99,6 +107,7 @@ namespace Bit.iOS.Services
         private static JObject UserValuesToJObject(NSDictionary userInfo)
         {
             var json = DictionaryToJson(userInfo);
+            Console.WriteLine(json);
             var values = JObject.Parse(json);
             var keyAps = new NSString("aps");
             if (userInfo.ContainsKey(keyAps) && userInfo.ValueForKey(keyAps) is NSDictionary aps)

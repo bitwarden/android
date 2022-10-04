@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Models;
 using Newtonsoft.Json.Linq;
 
 namespace Bit.App.Services
@@ -29,7 +30,7 @@ namespace Bit.App.Services
             return false;
         }
 
-        public Task OnNotificationTapped(string type, string data)
+        public Task OnNotificationTapped(string type, BaseNotificationData data)
         {
             return Task.FromResult(0);
         }

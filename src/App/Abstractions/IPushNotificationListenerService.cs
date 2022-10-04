@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Bit.App.Models;
 using Newtonsoft.Json.Linq;
 
 namespace Bit.App.Abstractions
@@ -9,7 +10,7 @@ namespace Bit.App.Abstractions
         Task OnRegisteredAsync(string token, string device);
         void OnUnregistered(string device);
         void OnError(string message, string device);
-        Task OnNotificationTapped(string type, string data);
+        Task OnNotificationTapped(string type, BaseNotificationData data);
         bool ShouldShowNotification();
     }
 }
