@@ -32,7 +32,19 @@ namespace Bit.iOS.Services
             {
                 Debug.WriteLine($"{TAG} - OnMessageReceived.");
 
-                var values = UserValuesToJObject(userInfo);
+                var json = DictionaryToJson(userInfo);
+                var values = JObject.Parse(json);
+                var keyAps = new NSString("aps");
+                if (userInfo.ContainsKey(keyAps) && userInfo.ValueForKey(keyAps) is NSDictionary aps)
+                {
+                    foreach (var apsKey in aps)
+                    {
+                        if (!values.TryGetValue(apsKey.Key.ToString(), out JToken temp))
+                        {
+                            values.Add(apsKey.Key.ToString(), apsKey.Value.ToString());
+                        }
+                    }
+                }
                 _pushNotificationListenerService.OnMessageAsync(values, Device.iOS);
             }
             catch (Exception ex)
@@ -102,26 +114,6 @@ namespace Bit.iOS.Services
 
             // Inform caller it has been handled
             completionHandler();
-        }
-
-        private static JObject UserValuesToJObject(NSDictionary userInfo)
-        {
-            var json = DictionaryToJson(userInfo);
-            Console.WriteLine(json);
-            var values = JObject.Parse(json);
-            var keyAps = new NSString("aps");
-            if (userInfo.ContainsKey(keyAps) && userInfo.ValueForKey(keyAps) is NSDictionary aps)
-            {
-                foreach (var apsKey in aps)
-                {
-                    if (!values.TryGetValue(apsKey.Key.ToString(), out JToken temp))
-                    {
-                        values.Add(apsKey.Key.ToString(), apsKey.Value.ToString());
-                    }
-                }
-            }
-
-            return values;
         }
     }
 }
