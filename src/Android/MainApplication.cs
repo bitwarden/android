@@ -144,7 +144,7 @@ namespace Bit.Droid
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, clipboardService,
                 messagingService, broadcasterService);
             var biometricService = new BiometricService();
-            var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
+            var cryptoFunctionService = new CryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
 

@@ -107,7 +107,7 @@ namespace Bit.iOS.Core.Utilities
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, clipboardService,
                 messagingService, broadcasterService);
             var biometricService = new BiometricService(mobileStorageService);
-            var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
+            var cryptoFunctionService = new CryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
 

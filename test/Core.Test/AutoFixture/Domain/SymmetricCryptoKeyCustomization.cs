@@ -9,7 +9,7 @@ namespace Bit.Core.Test.AutoFixture
     {
         public void Customize(IFixture fixture)
         {
-            var keyMaterial = (new PclCryptoFunctionService(null)).RandomBytes(32);
+            var keyMaterial = (new CryptoFunctionService(null)).RandomBytes(32);
             fixture.Register(() => new SymmetricCryptoKey(keyMaterial));
         }
     }

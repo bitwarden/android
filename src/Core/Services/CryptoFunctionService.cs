@@ -1,19 +1,19 @@
-﻿using System;
+using System;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
-using PCLCrypto;
-using static PCLCrypto.WinRTCrypto;
 
 namespace Bit.Core.Services
 {
-    public class PclCryptoFunctionService : ICryptoFunctionService
+    public class CryptoFunctionService : ICryptoFunctionService
     {
         private readonly ICryptoPrimitiveService _cryptoPrimitiveService;
 
-        public PclCryptoFunctionService(ICryptoPrimitiveService cryptoPrimitiveService)
+        public CryptoFunctionService(ICryptoPrimitiveService cryptoPrimitiveService)
         {
             _cryptoPrimitiveService = cryptoPrimitiveService;
         }
@@ -44,6 +44,7 @@ namespace Bit.Core.Services
             return Task.FromResult(_cryptoPrimitiveService.Pbkdf2(password, salt, algorithm, iterations));
         }
 
+        // TODO: Replace with System.Security.Cryptography.HKDF when we are on .NET 6+.
         public async Task<byte[]> HkdfAsync(byte[] ikm, string salt, string info, int outputByteSize, HkdfAlgorithm algorithm) =>
             await HkdfAsync(ikm, Encoding.UTF8.GetBytes(salt), Encoding.UTF8.GetBytes(info), outputByteSize, algorithm);
 
@@ -106,78 +107,65 @@ namespace Bit.Core.Services
 
         public Task<byte[]> HashAsync(byte[] value, CryptoHashAlgorithm algorithm)
         {
-            var provider = HashAlgorithmProvider.OpenAlgorithm(ToHashAlgorithm(algorithm));
-            return Task.FromResult(provider.HashData(value));
+            var hash = IncrementalHash.CreateHash(ToHashAlgorithmName(algorithm));
+            hash.AppendData(value);
+            return Task.FromResult(hash.GetHashAndReset());
         }
 
         public Task<byte[]> HmacAsync(byte[] value, byte[] key, CryptoHashAlgorithm algorithm)
         {
-            var provider = MacAlgorithmProvider.OpenAlgorithm(ToMacAlgorithm(algorithm));
-            var hasher = provider.CreateHash(key);
-            hasher.Append(value);
-            return Task.FromResult(hasher.GetValueAndReset());
+            var hash = IncrementalHash.CreateHMAC(ToHashAlgorithmName(algorithm), key);
+            hash.AppendData(value);
+            return Task.FromResult(hash.GetHashAndReset());
         }
 
-        public async Task<bool> CompareAsync(byte[] a, byte[] b)
+        public Task<bool> CompareAsync(byte[] a, byte[] b) =>
+            Task.FromResult(CryptographicOperations.FixedTimeEquals(a, b));
+
+        private static Aes CreateAes(byte[] iv, byte[] key)
         {
-            var provider = MacAlgorithmProvider.OpenAlgorithm(MacAlgorithm.HmacSha256);
-            var hasher = provider.CreateHash(await RandomBytesAsync(32));
-
-            hasher.Append(a);
-            var mac1 = hasher.GetValueAndReset();
-            hasher.Append(b);
-            var mac2 = hasher.GetValueAndReset();
-            if (mac1.Length != mac2.Length)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < mac2.Length; i++)
-            {
-                if (mac1[i] != mac2[i])
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            var aes = Aes.Create();
+            aes.Key = key;
+            aes.IV = iv;
+            aes.Mode = CipherMode.CBC;
+            aes.Padding = PaddingMode.PKCS7;
+            return aes;
         }
 
         public Task<byte[]> AesEncryptAsync(byte[] data, byte[] iv, byte[] key)
         {
-            var provider = SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
-            var cryptoKey = provider.CreateSymmetricKey(key);
-            return Task.FromResult(CryptographicEngine.Encrypt(cryptoKey, data, iv));
+            var aes = CreateAes(iv, key);
+            var transform = aes.CreateEncryptor(key, iv);
+            return Task.FromResult(transform.TransformFinalBlock(data, 0, data.Length));
         }
 
         public Task<byte[]> AesDecryptAsync(byte[] data, byte[] iv, byte[] key)
         {
-            var provider = SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
-            var cryptoKey = provider.CreateSymmetricKey(key);
-            return Task.FromResult(CryptographicEngine.Decrypt(cryptoKey, data, iv));
+            var aes = CreateAes(iv, key);
+            var transform = aes.CreateDecryptor(key, iv);
+            return Task.FromResult(transform.TransformFinalBlock(data, 0, data.Length));
         }
 
         public Task<byte[]> RsaEncryptAsync(byte[] data, byte[] publicKey, CryptoHashAlgorithm algorithm)
         {
-            var provider = AsymmetricKeyAlgorithmProvider.OpenAlgorithm(ToAsymmetricAlgorithm(algorithm));
-            var cryptoKey = provider.ImportPublicKey(publicKey,
-                CryptographicPublicKeyBlobType.X509SubjectPublicKeyInfo);
-            return Task.FromResult(CryptographicEngine.Encrypt(cryptoKey, data));
+            var rsa = RSA.Create();
+            rsa.ImportSubjectPublicKeyInfo(publicKey, out _);
+            return Task.FromResult(rsa.Encrypt(data, ToRSAEncryptionPadding(algorithm)));
         }
 
         public Task<byte[]> RsaDecryptAsync(byte[] data, byte[] privateKey, CryptoHashAlgorithm algorithm)
         {
-            var provider = AsymmetricKeyAlgorithmProvider.OpenAlgorithm(ToAsymmetricAlgorithm(algorithm));
-            var cryptoKey = provider.ImportKeyPair(privateKey, CryptographicPrivateKeyBlobType.Pkcs8RawPrivateKeyInfo);
-            return Task.FromResult(CryptographicEngine.Decrypt(cryptoKey, data));
+            var rsa = RSA.Create();
+            rsa.ImportPkcs8PrivateKey(privateKey, out _);
+            return Task.FromResult(rsa.Decrypt(data, ToRSAEncryptionPadding(algorithm)));
         }
 
         public Task<byte[]> RsaExtractPublicKeyAsync(byte[] privateKey)
         {
             // Have to specify some algorithm
-            var provider = AsymmetricKeyAlgorithmProvider.OpenAlgorithm(AsymmetricAlgorithm.RsaOaepSha1);
-            var cryptoKey = provider.ImportKeyPair(privateKey, CryptographicPrivateKeyBlobType.Pkcs8RawPrivateKeyInfo);
-            return Task.FromResult(cryptoKey.ExportPublicKey(CryptographicPublicKeyBlobType.X509SubjectPublicKeyInfo));
+            var rsa = RSA.Create();
+            rsa.ImportPkcs8PrivateKey(privateKey, out _);
+            return Task.FromResult(rsa.ExportSubjectPublicKeyInfo());
         }
 
         public Task<Tuple<byte[], byte[]>> RsaGenerateKeyPairAsync(int length)
@@ -188,75 +176,63 @@ namespace Bit.Core.Services
             }
 
             // Have to specify some algorithm
-            var provider = AsymmetricKeyAlgorithmProvider.OpenAlgorithm(AsymmetricAlgorithm.RsaOaepSha1);
-            var cryptoKey = provider.CreateKeyPair(length);
-            var publicKey = cryptoKey.ExportPublicKey(CryptographicPublicKeyBlobType.X509SubjectPublicKeyInfo);
-            var privateKey = cryptoKey.Export(CryptographicPrivateKeyBlobType.Pkcs8RawPrivateKeyInfo);
+            var rsa = RSA.Create(length);
+            var publicKey = rsa.ExportSubjectPublicKeyInfo();
+            var privateKey = rsa.ExportPkcs8PrivateKey();
             return Task.FromResult(new Tuple<byte[], byte[]>(publicKey, privateKey));
         }
 
         public Task<byte[]> RandomBytesAsync(int length)
         {
-            return Task.FromResult(CryptographicBuffer.GenerateRandom(length));
+            return Task.FromResult(RandomBytes(length));
         }
 
         public byte[] RandomBytes(int length)
         {
-            return CryptographicBuffer.GenerateRandom(length);
+            byte[] result = new byte[length];
+            RandomNumberGenerator.Fill(result);
+            return result;
         }
 
         public Task<uint> RandomNumberAsync()
         {
-            return Task.FromResult(CryptographicBuffer.GenerateRandomNumber());
+            return Task.FromResult(RandomNumber());
         }
 
         public uint RandomNumber()
         {
-            return CryptographicBuffer.GenerateRandomNumber();
+            Span<byte> bytes = stackalloc byte[sizeof(uint)];
+            RandomNumberGenerator.Fill(bytes);
+            return MemoryMarshal.Read<uint>(bytes);
         }
 
-        private HashAlgorithm ToHashAlgorithm(CryptoHashAlgorithm algorithm)
+        private HashAlgorithmName ToHashAlgorithmName(CryptoHashAlgorithm algorithm)
         {
             switch (algorithm)
             {
                 case CryptoHashAlgorithm.Sha1:
-                    return HashAlgorithm.Sha1;
+                    return HashAlgorithmName.SHA1;
                 case CryptoHashAlgorithm.Sha256:
-                    return HashAlgorithm.Sha256;
+                    return HashAlgorithmName.SHA256;
                 case CryptoHashAlgorithm.Sha512:
-                    return HashAlgorithm.Sha512;
+                    return HashAlgorithmName.SHA512;
                 case CryptoHashAlgorithm.Md5:
-                    return HashAlgorithm.Md5;
+                    return HashAlgorithmName.MD5;
                 default:
                     throw new ArgumentException("Unsupported hash algorithm.");
             }
         }
 
-        private MacAlgorithm ToMacAlgorithm(CryptoHashAlgorithm algorithm)
+        private RSAEncryptionPadding ToRSAEncryptionPadding(CryptoHashAlgorithm algorithm)
         {
             switch (algorithm)
             {
                 case CryptoHashAlgorithm.Sha1:
-                    return MacAlgorithm.HmacSha1;
+                    return RSAEncryptionPadding.OaepSHA1;
                 case CryptoHashAlgorithm.Sha256:
-                    return MacAlgorithm.HmacSha256;
+                    return RSAEncryptionPadding.OaepSHA256;
                 case CryptoHashAlgorithm.Sha512:
-                    return MacAlgorithm.HmacSha512;
-                default:
-                    throw new ArgumentException("Unsupported mac algorithm.");
-            }
-        }
-
-        private AsymmetricAlgorithm ToAsymmetricAlgorithm(CryptoHashAlgorithm algorithm)
-        {
-            switch (algorithm)
-            {
-                case CryptoHashAlgorithm.Sha1:
-                    return AsymmetricAlgorithm.RsaOaepSha1;
-                // RsaOaepSha256 is not supported on iOS
-                // ref: https://github.com/AArnott/PCLCrypto/issues/124
-                // case CryptoHashAlgorithm.SHA256:
-                //    return AsymmetricAlgorithm.RsaOaepSha256;
+                    return RSAEncryptionPadding.OaepSHA512;
                 default:
                     throw new ArgumentException("Unsupported asymmetric algorithm.");
             }

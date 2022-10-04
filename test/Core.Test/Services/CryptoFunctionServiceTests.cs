@@ -31,7 +31,7 @@ namespace Bit.Core.Test.Services
 
 
         [Theory, AutoSubstitutionData]
-        async public Task HkdfExpand_PrkTooSmall_Throws(PclCryptoFunctionService sut)
+        async public Task HkdfExpand_PrkTooSmall_Throws(CryptoFunctionService sut)
         {
             var exception = await Assert.ThrowsAsync<ArgumentException>(
                 () => sut.HkdfExpandAsync(Convert.FromBase64String(prk16Byte), "info", 32, HkdfAlgorithm.Sha256));
@@ -39,7 +39,7 @@ namespace Bit.Core.Test.Services
         }
 
         [Theory, AutoSubstitutionData]
-        async public Task HkdfoExpand_OutputTooBig_Throws(PclCryptoFunctionService sut)
+        async public Task HkdfoExpand_OutputTooBig_Throws(CryptoFunctionService sut)
         {
             var exception = await Assert.ThrowsAsync<ArgumentException>(
                 () => sut.HkdfExpandAsync(Convert.FromBase64String(prk32Byte), "info", 8161, HkdfAlgorithm.Sha256));
@@ -53,7 +53,7 @@ namespace Bit.Core.Test.Services
         [InlineAutoSubstitutionData(regular512Key, HkdfAlgorithm.Sha512, prk16Byte, regularSalt, regularInfo)]
         [InlineAutoSubstitutionData(utf8512Key, HkdfAlgorithm.Sha512, prk16Byte, utf8Salt, utf8Info)]
         [InlineAutoSubstitutionData(unicode512Key, HkdfAlgorithm.Sha512, prk16Byte, unicodeSalt, unicodeInfo)]
-        async public Task Hkdf_Success(string expectedKey, HkdfAlgorithm algorithm, string ikmString, string salt, string info, PclCryptoFunctionService sut)
+        async public Task Hkdf_Success(string expectedKey, HkdfAlgorithm algorithm, string ikmString, string salt, string info, CryptoFunctionService sut)
         {
             byte[] ikm = Convert.FromBase64String(ikmString);
 
@@ -73,7 +73,7 @@ namespace Bit.Core.Test.Services
                 HkdfAlgorithm.Sha512, prk64Byte, 32, regularInfo)]
         [InlineAutoSubstitutionData("uLWbMWodSBms5uGJ5WTRTesyW+MD7nlpCZvagvIRXlkY5Pv0sB+MqvaopmkC6sD/j89zDwTV9Ib2fpucUydO8w==",
                 HkdfAlgorithm.Sha512, prk64Byte, 64, regularInfo)]
-        async public Task HkdfExpand_Success(string expectedKey, HkdfAlgorithm algorithm, string prkString, int outputByteSize, string info, PclCryptoFunctionService sut)
+        async public Task HkdfExpand_Success(string expectedKey, HkdfAlgorithm algorithm, string prkString, int outputByteSize, string info, CryptoFunctionService sut)
         {
             var prk = Convert.FromBase64String(prkString);
 
