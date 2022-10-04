@@ -973,5 +973,11 @@ namespace Bit.Droid.Services
             intent.SetData(uri);
             Application.Context.StartActivity(intent);
         }
+
+        public void ClosePopUpPage()
+        {
+            // only used by iOS
+            throw new NotImplementedException();
+        }
     }
 }
