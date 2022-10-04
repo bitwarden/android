@@ -40,8 +40,8 @@ namespace Bit.App.Pages
         private string _totpCode;
         private string _totpCodeFormatted;
         private string _totpSec;
+        private double _totpInterval = Constants.TotpDefaultTimer;
         private bool _totpLow;
-        private DateTime? _totpInterval = null;
         private string _previousCipherId;
         private byte[] _attachmentData;
         private string _attachmentFilename;
@@ -241,7 +241,7 @@ namespace Bit.App.Pages
                 Page.Resources["textTotp"] = ThemeManager.Resources()[value ? "text-danger" : "text-default"];
             }
         }
-        public double TotpProgress => string.IsNullOrEmpty(TotpSec) ? 0 : double.Parse(TotpSec) * 100 / 30;
+        public double TotpProgress => string.IsNullOrEmpty(TotpSec) ? 0 : double.Parse(TotpSec) * 100 / _totpInterval;
         public bool IsDeleted => Cipher.IsDeleted;
         public bool CanEdit => !Cipher.IsDeleted;
 
@@ -265,6 +265,7 @@ namespace Bit.App.Pages
             {
                 _totpTickHelper = new TotpHelper(Cipher);
                 _totpTickCancellationToken?.Cancel();
+                _totpInterval = _totpTickHelper.Interval;
                 _totpTickCancellationToken = new CancellationTokenSource();
                 _totpTickTask = new TimerTask(_logger, StartCiphersTotpTick, _totpTickCancellationToken).RunPeriodic();
             }
@@ -284,6 +285,7 @@ namespace Bit.App.Pages
                 await _totpTickHelper.GenerateNewTotpValues();
                 TotpSec = _totpTickHelper.TotpSec;
                 TotpCodeFormatted = _totpTickHelper.TotpCodeFormatted;
+                _totpInterval = _totpTickHelper.Interval;
             }
             catch (Exception ex)
             {
@@ -429,7 +431,6 @@ namespace Bit.App.Pages
         {
             if (Cipher == null || Cipher.Type != Core.Enums.CipherType.Login || Cipher.Login.Totp == null)
             {
-                _totpInterval = null;
                 return;
             }
             _totpCode = await _totpService.GetCodeAsync(Cipher.Login.Totp);
@@ -449,7 +450,6 @@ namespace Bit.App.Pages
             else
             {
                 TotpCodeFormatted = null;
-                _totpInterval = null;
             }
         }
 

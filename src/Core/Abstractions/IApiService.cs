@@ -83,6 +83,8 @@ namespace Bit.Core.Abstractions
         Task<SendResponse> PutSendAsync(string id, SendRequest request);
         Task<SendResponse> PutSendRemovePasswordAsync(string id);
         Task DeleteSendAsync(string id);
+        Task<PasswordlessLoginResponse> GetAuthRequestAsync(string id);
+        Task<PasswordlessLoginResponse> PutAuthRequestAsync(string id, string key, string masterPasswordHash, string deviceIdentifier, bool requestApproved);
         Task<string> GetUsernameFromAsync(ForwardedEmailServiceType service, UsernameGeneratorConfig config);
     }
 }

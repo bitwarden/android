@@ -2314,6 +2314,66 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Tem certeza de que deseja ativar a Captura de Tela?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Login solicitado</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Você está tentando fazer login?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Tentativa de login por {0} em {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Tipo de dispositivo</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>Endereço IP</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Hora</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Perto</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Confirmar acesso</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Negar acesso</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Agora há pouco</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} minutos atrás</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Login confirmado</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Login negado</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Aprovar solicitações de login</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Use este dispositivo para aprovar solicitações de login feitas de outros dispositivos.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Permitir notificações</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Receber notificações por push para novas solicitações de login</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Não, obrigado</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Confirmar tentativa de login para {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Todas as notificações</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Tipo de Senha</value>
   </data>
@@ -2388,5 +2448,17 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Aleatória</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Aviso sobre o Serviço de Acessibilidade</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>O Bitwarden utiliza o Serviço de Acessibilidade para procurar campos de login em aplicativos e sites, então estabelecer os IDs de campo apropriados para digitar um nome de usuário e senha quando uma correspondência para o aplicativo ou site for encontrada. Não armazenamos nenhuma das informações que nos são apresentadas pelo serviço nem fazemos qualquer tentativa de controlar quaisquer elementos na tela além da entrada de credenciais em texto.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Aceitar</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Recusar</value>
   </data>
 </root>

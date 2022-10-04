@@ -2313,6 +2313,66 @@
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Вы уверены, что хотите разрешить скриншоты?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Запрошено разрешение на вход</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Вы пытаетесь войти?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Попытка входа {0} на {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Тип устройства</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP-адрес</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Время</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Рядом</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Подтвердить вход</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Запретить вход</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Только что</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} мин. назад</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Вход подтвержден</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Вход запрещен</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Одобрить запросы на вход</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Использовать это устройство для подтверждения запросов на вход, сделанных с других устройств.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Разрешить уведомления</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Получайть push-уведомления о новых запросах на вход</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Нет, спасибо</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Подтвердите попытку входа для {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Все уведомления</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Тип пароля</value>
   </data>
@@ -2387,5 +2447,17 @@
   </data>
   <data name="Random" xml:space="preserve">
     <value>Случайно</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Раскрытие информации о службе специальных возможностей</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden использует службу специальных возможностей для поиска полей авторизации в приложениях и на сайтах, после чего определяет подходящие идентификаторы полей для заполнения логина и пароля если совпадение найдено. Мы не храним никакую информацию, предоставленную нам службой, и не предпринимаем никаких попыток контролировать какие-либо элементы на экране, кроме заполнения учетных данных в текстовом виде.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Принять</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Отклонить</value>
   </data>
 </root>

@@ -373,5 +373,11 @@ namespace Bit.iOS.Core.Services
             // only used by Android. Not possible in iOS
             return Task.CompletedTask;
         }
+
+        public void OpenAppSettings()
+        {
+            var url = new NSUrl(UIApplication.OpenSettingsUrlString);
+            UIApplication.SharedApplication.OpenUrl(url);
+        }
     }
 }

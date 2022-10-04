@@ -1170,7 +1170,7 @@ La numérisation se fera automatiquement.</value>
     <value>Service d'accessibilité pour le remplissage automatique</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Le service de saisie automatique de Bitwarden utilise l'outil de saisie automatique d'Android pour aider à saisir les identifiants, les cartes de crédit et les informations d'identité dans d'autres applis sur votre appareil.</value>
+    <value>Le service de remplissage automatique de Bitwarden utilise l'outil de remplissage automatique d'Android pour aider à saisir les identifiants, les cartes de crédit et les informations d'identité dans d'autres applications sur votre appareil.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
     <value>Utilisez le service de remplissage automatique de Bitwarden pour remplir les informations de connexion dans d'autres applications.</value>
@@ -1307,7 +1307,7 @@ La numérisation se fera automatiquement.</value>
     <value>1. Allez dans l'application "Réglages" d'iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Appuyez sur "Mots de passes et comptes"</value>
+    <value>2. Appuyez sur "Mots de passe et comptes"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Appuyez sur "Préremplir mots de passe"</value>
@@ -2313,6 +2313,66 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir activer la capture d'écran ?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Identifiant requis</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Essayez-vous de vous connecter ?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Login attempt by {0} on {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Type d'appareil</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>Adresse IP</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Near</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Confirmer la connexion</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Refuser la connexion</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>À l'instant</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>il y a {0} minutes</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Connexion confirmée</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Connexion refusée</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Approuver les demandes de connexion</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Utiliser cet appareil pour approuver les demandes de connexion faites à partir d'autres appareils.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Autoriser les notifications</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Recevoir des notifications push pour les nouvelles demandes de connexion</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Non merci</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Confirmer la tentative de connexion pour {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Toutes les notifications</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Type de mot de passe</value>
   </data>
@@ -2323,7 +2383,7 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
     <value>Type de Nom d'Utilisateur</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Plus Addressed Email</value>
+    <value>Email prenant en charge le "plus-addressing"</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
     <value>Collecteur d'e-mail</value>
@@ -2377,15 +2437,27 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
     <value>L'erreur {0} inconnue est survenue.</value>
   </data>
   <data name="PlusAddressedEmailDescription" xml:space="preserve">
-    <value>Use your email provider's subaddress capabilities</value>
+    <value>Utilisez les capacités de sous-adressage de votre fournisseur de messagerie</value>
   </data>
   <data name="CatchAllEmailDescription" xml:space="preserve">
-    <value>Use your domain's configured catch-all inbox.</value>
+    <value>Utilisez la boîte de réception de votre email collecteur/attrape-tout (catch-all).</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
     <value>Générer un alias d'email avec un service de transfert externe.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Aléatoire</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Confidentialité du Service d'accessibilité</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden utilise le Service d'Accessibilité pour rechercher des champs de connexion dans les applis et les sites web, puis trouvent les IDs des champs liés pour saisir un nom d'utilisateur et un mot de passe lorsqu'une correspondance pour l'appli ou le site est trouvée. Nous ne stockons aucune information que nous recevons via le service, et nous n'essayons pas de contrôler des éléments qui se superposeraient aux entrées de saisie des identifiants.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Accepter</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Refuser</value>
   </data>
 </root>

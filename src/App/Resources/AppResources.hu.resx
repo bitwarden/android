@@ -2312,6 +2312,66 @@ select Add TOTP to store the key safely</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Biztosan engedélyzni szeretnénk a képernyőrögzítést?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Bejelentkezés megkérve</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Megpróbálunk bejelentkezni?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Bejelentlezési kísérlet {0} - {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Eszköz típus</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP cím</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Időpont</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Közelében</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Bejelentkezés megerősítése</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Bejelentkezés megtagadása</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Éppen most</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} perce</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>A bejelentkezés megerősítésre került.</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>A bejelentkezés megtagadásra került.</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Bejelentkezési kérelmek jóváhagyása</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Ezen eszköz használata a más eszközökről történő bejelentkezési kérések jóváhagyására.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Értesítések engedélyezése</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Leküldéses értesítések fogadása az új bejelentkezési kérésekhez</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Nem, köszönöm</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Bejelentkezési kísérlet megerősítése: {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Összes értesítés</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Jelszótípus</value>
   </data>
@@ -2386,5 +2446,17 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Véletlen</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Kisegítő lehetőségek szolgáltatás publikálása</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>A Bitwarden az akadálymentesítési szolgáltatást használja a bejelentkezési mezők megkeresésére az alkalmazásokban és webhelyeken, majd létrehozza a megfelelő mezőazonosítókat a felhasználónév és jelszó megadásához, ha talál egyezést az alkalmazáshoz vagy webhelyhez. A szolgáltatás által rendelkezésünkre bocsátott információk nem kerülnek tárolásra és nincs kísérlet a képernyőn megjelenő elemek vezérlésére a hitelesítő adatok szöveges bevitelén túl.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Elfogadás</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Elutasítás</value>
   </data>
 </root>
