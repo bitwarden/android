@@ -189,7 +189,7 @@ namespace Bit.App
             });
             await _stateService.SetPasswordlessLoginNotificationAsync(null);
             _pushNotificationService.DismissLocalNotification(Constants.PasswordlessNotificationId);
-            if (loginRequestData.CreationDate.AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) > DateTime.Now)
+            if (loginRequestData.CreationDate.ToUniversalTime().AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) > DateTime.UtcNow)
             {
                 await Device.InvokeOnMainThreadAsync(() => Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
             }

@@ -110,7 +110,7 @@ namespace Bit.App.Pages
 
         private async Task PasswordlessLoginAsync(bool approveRequest)
         {
-            if (LoginRequest.RequestDate.AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) <= DateTime.Now)
+            if (LoginRequest.RequestDate.ToUniversalTime().AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) <= DateTime.UtcNow)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.LoginRequestHasAlreadyExpired);
                 await Page.Navigation.PopModalAsync();
