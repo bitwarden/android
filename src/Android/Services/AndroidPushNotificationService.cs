@@ -73,8 +73,7 @@ namespace Bit.Droid.Services
             {
                 throw new ArgumentNullException("notificationId cannot be null or empty.");
             }
-
-
+            
             var context = Android.App.Application.Context;
             var intent = new Intent(context, typeof(MainActivity));
             var pendingIntentFlags = AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true);
@@ -83,6 +82,7 @@ namespace Bit.Droid.Services
                .SetContentIntent(pendingIntent)
                .SetContentTitle(title)
                .SetContentText(message)
+               .SetTimeoutAfter(Constants.PasswordlessNotificationTimeoutInMinutes * 60000)
                .SetSmallIcon(Resource.Drawable.ic_notification)
                .SetColor((int)Android.Graphics.Color.White)
                .SetAutoCancel(true);
