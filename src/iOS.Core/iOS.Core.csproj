@@ -174,7 +174,6 @@
     <Compile Include="Utilities\ASHelpers.cs" />
     <Compile Include="Utilities\Dialogs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\CryptoPrimitiveService.cs" />
     <Compile Include="Services\KeyChainStorageService.cs" />
     <Compile Include="Services\LocalizeService.cs" />
     <Compile Include="Utilities\iOSCoreHelpers.cs" />
