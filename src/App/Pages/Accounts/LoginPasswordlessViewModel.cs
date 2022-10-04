@@ -72,15 +72,29 @@ namespace Bit.App.Pages
 
         public void StopRequestTimeUpdater()
         {
-            _requestTimeCts?.Cancel();
-            _requestTimeCts?.Dispose();
+            try
+            {
+                _requestTimeCts?.Cancel();
+                _requestTimeCts?.Dispose();
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
         }
 
         public void StartRequestTimeUpdater()
         {
-            _requestTimeCts?.Cancel();
-            _requestTimeCts = new CancellationTokenSource();
-            _requestTimeTask = new TimerTask(_logger, UpdateRequestTime, _requestTimeCts).RunPeriodic(TimeSpan.FromMinutes(REQUEST_TIME_UPDATE_PERIOD_IN_MINUTES));
+            try
+            {
+                _requestTimeCts?.Cancel();
+                _requestTimeCts = new CancellationTokenSource();
+                _requestTimeTask = new TimerTask(_logger, UpdateRequestTime, _requestTimeCts).RunPeriodic(TimeSpan.FromMinutes(REQUEST_TIME_UPDATE_PERIOD_IN_MINUTES));
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
         }
 
         private async Task UpdateRequestTime()
