@@ -107,14 +107,14 @@ namespace Bit.Core.Services
 
         public Task<byte[]> HashAsync(byte[] value, CryptoHashAlgorithm algorithm)
         {
-            var hash = IncrementalHash.CreateHash(ToHashAlgorithmName(algorithm));
+            using var hash = IncrementalHash.CreateHash(ToHashAlgorithmName(algorithm));
             hash.AppendData(value);
             return Task.FromResult(hash.GetHashAndReset());
         }
 
         public Task<byte[]> HmacAsync(byte[] value, byte[] key, CryptoHashAlgorithm algorithm)
         {
-            var hash = IncrementalHash.CreateHMAC(ToHashAlgorithmName(algorithm), key);
+            using var hash = IncrementalHash.CreateHMAC(ToHashAlgorithmName(algorithm), key);
             hash.AppendData(value);
             return Task.FromResult(hash.GetHashAndReset());
         }
@@ -134,28 +134,28 @@ namespace Bit.Core.Services
 
         public Task<byte[]> AesEncryptAsync(byte[] data, byte[] iv, byte[] key)
         {
-            var aes = CreateAes(iv, key);
+            using var aes = CreateAes(iv, key);
             var transform = aes.CreateEncryptor(key, iv);
             return Task.FromResult(transform.TransformFinalBlock(data, 0, data.Length));
         }
 
         public Task<byte[]> AesDecryptAsync(byte[] data, byte[] iv, byte[] key)
         {
-            var aes = CreateAes(iv, key);
+            using var aes = CreateAes(iv, key);
             var transform = aes.CreateDecryptor(key, iv);
             return Task.FromResult(transform.TransformFinalBlock(data, 0, data.Length));
         }
 
         public Task<byte[]> RsaEncryptAsync(byte[] data, byte[] publicKey, CryptoHashAlgorithm algorithm)
         {
-            var rsa = RSA.Create();
+            using var rsa = RSA.Create();
             rsa.ImportSubjectPublicKeyInfo(publicKey, out _);
             return Task.FromResult(rsa.Encrypt(data, ToRSAEncryptionPadding(algorithm)));
         }
 
         public Task<byte[]> RsaDecryptAsync(byte[] data, byte[] privateKey, CryptoHashAlgorithm algorithm)
         {
-            var rsa = RSA.Create();
+            using var rsa = RSA.Create();
             rsa.ImportPkcs8PrivateKey(privateKey, out _);
             return Task.FromResult(rsa.Decrypt(data, ToRSAEncryptionPadding(algorithm)));
         }
@@ -163,7 +163,7 @@ namespace Bit.Core.Services
         public Task<byte[]> RsaExtractPublicKeyAsync(byte[] privateKey)
         {
             // Have to specify some algorithm
-            var rsa = RSA.Create();
+            using var rsa = RSA.Create();
             rsa.ImportPkcs8PrivateKey(privateKey, out _);
             return Task.FromResult(rsa.ExportSubjectPublicKeyInfo());
         }
@@ -176,7 +176,7 @@ namespace Bit.Core.Services
             }
 
             // Have to specify some algorithm
-            var rsa = RSA.Create(length);
+            using var rsa = RSA.Create(length);
             var publicKey = rsa.ExportSubjectPublicKeyInfo();
             var privateKey = rsa.ExportPkcs8PrivateKey();
             return Task.FromResult(new Tuple<byte[], byte[]>(publicKey, privateKey));
