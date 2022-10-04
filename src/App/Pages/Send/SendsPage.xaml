@@ -39,6 +39,8 @@
                     HorizontalOptions="FillAndExpand"
                     TextChanged="SearchBar_TextChanged"
                     SearchButtonPressed="SearchBar_SearchButtonPressed"
+                    IsSpellCheckEnabled="False"
+                    IsTextPredictionEnabled="False"
                     Placeholder="{Binding PageTitle}" />
             </StackLayout>
             <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform"
