@@ -100,7 +100,7 @@ namespace Bit.App.Pages
         private async Task UpdateRequestTime()
         {
             TriggerPropertyChanged(nameof(TimeOfRequestText));
-            if (DateTime.UtcNow > LoginRequest?.RequestDate.ToUniversalTime().AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes))
+            if (DateTime.UtcNow > LoginRequest?.RequestDate.AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes))
             {
                 StopRequestTimeUpdater();
                 await _platformUtilsService.ShowDialogAsync(AppResources.LoginRequestHasAlreadyExpired);
@@ -110,7 +110,7 @@ namespace Bit.App.Pages
 
         private async Task PasswordlessLoginAsync(bool approveRequest)
         {
-            if (LoginRequest.RequestDate.AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) <= DateTime.Now)
+            if (LoginRequest.RequestDate.AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) <= DateTime.UtcNow)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.LoginRequestHasAlreadyExpired);
                 await Page.Navigation.PopModalAsync();
