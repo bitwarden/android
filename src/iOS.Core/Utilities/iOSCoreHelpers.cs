@@ -97,7 +97,7 @@ namespace Bit.iOS.Core.Utilities
             var i18nService = new MobileI18nService(localizeService.GetCurrentCultureInfo());
             var secureStorageService = new KeyChainStorageService(AppId, AccessGroup,
                 () => ServiceContainer.Resolve<IAppIdService>("appIdService").GetAppIdAsync());
-            var cryptoPrimitiveService = new CryptoPrimitiveService();
+            var cryptoPrimitiveService = new AppleCryptoPrimitiveService();
             var mobileStorageService = new MobileStorageService(preferencesStorage, liteDbStorage);
             var stateService = new StateService(mobileStorageService, secureStorageService, messagingService);
             var stateMigrationService =
