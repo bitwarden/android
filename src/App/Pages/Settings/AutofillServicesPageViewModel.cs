@@ -190,7 +190,7 @@ namespace Bit.App.Pages
 
         public async Task ToggleAccessibilityAsync()
         {
-            if (!_deviceActionService.AutofillAccessibilityServiceRunning())
+            if (!_autofillHandler.AutofillAccessibilityServiceRunning())
             {
                 var accept = await _platformUtilsService.ShowDialogAsync(AppResources.AccessibilityDisclosureText,
                     AppResources.AccessibilityServiceDisclosure, AppResources.Accept,
