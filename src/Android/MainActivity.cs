@@ -153,9 +153,9 @@ namespace Bit.Droid
             if (Intent?.GetStringExtra(Constants.NotificationData) is string notificationDataJson)
             {
                 var notificationType = JToken.Parse(notificationDataJson).SelectToken(Constants.NotificationDataType);
-                if (notificationType != null && (string)notificationType == PasswordlessNotificationData.TYPE)
+                if (notificationType.ToString() == PasswordlessNotificationData.TYPE)
                 {
-                    _pushNotificationListenerService.OnNotificationTapped(PasswordlessNotificationData.TYPE, JsonConvert.DeserializeObject<PasswordlessNotificationData>(notificationDataJson)).FireAndForget();
+                    _pushNotificationListenerService.OnNotificationTapped(JsonConvert.DeserializeObject<PasswordlessNotificationData>(notificationDataJson)).FireAndForget();
                 }
             }
         }

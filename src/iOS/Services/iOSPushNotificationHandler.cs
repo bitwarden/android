@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.Core;
+using Bit.Core.Enums;
 using Bit.Core.Services;
 using CoreData;
 using Foundation;
@@ -105,9 +106,9 @@ namespace Bit.iOS.Services
                 {
                     var token = JToken.Parse(NSString.FromObject(nsObject).ToString());
                     var typeToken = token.SelectToken(Constants.NotificationDataType);
-                    if (typeToken != null && (string)typeToken == PasswordlessNotificationData.TYPE)
+                    if (typeToken.ToString() == PasswordlessNotificationData.TYPE)
                     {
-                        _pushNotificationListenerService.OnNotificationTapped(PasswordlessNotificationData.TYPE, token.ToObject<PasswordlessNotificationData>());
+                        _pushNotificationListenerService.OnNotificationTapped(token.ToObject<PasswordlessNotificationData>());
                     }
                 }
             }

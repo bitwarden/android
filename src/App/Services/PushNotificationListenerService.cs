@@ -224,7 +224,7 @@ namespace Bit.App.Services
             Debug.WriteLine($"{TAG} error - {message}");
         }
 
-        public async Task OnNotificationTapped(string type, BaseNotificationData data)
+        public async Task OnNotificationTapped(BaseNotificationData data)
         {
             Resolve();
             try

@@ -10,7 +10,7 @@ namespace Bit.App.Abstractions
         Task OnRegisteredAsync(string token, string device);
         void OnUnregistered(string device);
         void OnError(string message, string device);
-        Task OnNotificationTapped(string type, BaseNotificationData data);
+        Task OnNotificationTapped(BaseNotificationData data);
         bool ShouldShowNotification();
     }
 }

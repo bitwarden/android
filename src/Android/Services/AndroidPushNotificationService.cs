@@ -72,7 +72,7 @@ namespace Bit.Droid.Services
 
         public void SendLocalNotification(string title, string message, BaseNotificationData data)
         {
-            if (string.IsNullOrEmpty(data.NotificationId))
+            if (string.IsNullOrEmpty(data.Id))
             {
                 throw new ArgumentNullException("notificationId cannot be null or empty.");
             }
@@ -93,11 +93,11 @@ namespace Bit.Droid.Services
 
             if (data is PasswordlessNotificationData passwordlessNotificationData && passwordlessNotificationData.TimeoutInMinutes > 0)
             {
-                builder.SetTimeoutAfter(((PasswordlessNotificationData)data).TimeoutInMinutes * 60000);
+                builder.SetTimeoutAfter(passwordlessNotificationData.TimeoutInMinutes * 60000);
             }
 
             var notificationManager = NotificationManagerCompat.From(context);
-            notificationManager.Notify(int.Parse(data.NotificationId), builder.Build());
+            notificationManager.Notify(int.Parse(data.Id), builder.Build());
         }
     }
 }
