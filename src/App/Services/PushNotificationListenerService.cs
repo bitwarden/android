@@ -153,7 +153,7 @@ namespace Bit.App.Services
 
                     var notificationData = new PasswordlessNotificationData()
                     {
-                        NotificationId = Constants.PasswordlessNotificationId,
+                        Id = Constants.PasswordlessNotificationId,
                         TimeoutInMinutes = Constants.PasswordlessNotificationTimeoutInMinutes,
                         UserEmail = userEmail,
                     };
