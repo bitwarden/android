@@ -76,7 +76,7 @@ namespace Bit.iOS.Services
 
         public void SendLocalNotification(string title, string message, BaseNotificationData data)
         {
-            if (string.IsNullOrEmpty(data.NotificationId))
+            if (string.IsNullOrEmpty(data.Id))
             {
                 throw new ArgumentNullException("notificationId cannot be null or empty.");
             }
@@ -92,7 +92,7 @@ namespace Bit.iOS.Services
                 content.UserInfo = NSDictionary.FromObjectAndKey(NSData.FromString(JsonConvert.SerializeObject(data), NSStringEncoding.UTF8), new NSString(Constants.NotificationData));
             }
 
-            var request = UNNotificationRequest.FromIdentifier(data.NotificationId, content, null);
+            var request = UNNotificationRequest.FromIdentifier(data.Id, content, null);
             UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) =>
             {
                 if (err != null)
