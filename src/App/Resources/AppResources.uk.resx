@@ -2460,4 +2460,7 @@
   <data name="Decline" xml:space="preserve">
     <value>Відмовитись</value>
   </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Термін дії запиту на вхід завершився.</value>
+  </data>
 </root>

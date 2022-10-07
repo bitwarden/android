@@ -2460,4 +2460,7 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</value>
   <data name="Decline" xml:space="preserve">
     <value>Decline</value>
   </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Inlogverzoek is al verlopen.</value>
+  </data>
 </root>

@@ -2459,4 +2459,7 @@ Kod otomatik olarak taranacaktır.</value>
   <data name="Decline" xml:space="preserve">
     <value>Decline</value>
   </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Giriş isteğinin süresi doldu.</value>
+  </data>
 </root>

@@ -2460,4 +2460,7 @@ select Add TOTP to store the key safely</value>
   <data name="Decline" xml:space="preserve">
     <value>Recusar</value>
   </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>O pedido de início de sessão já expirou.</value>
+  </data>
 </root>

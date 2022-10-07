@@ -2460,4 +2460,7 @@ selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</value>
   <data name="Decline" xml:space="preserve">
     <value>Refuz</value>
   </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Solicitarea de autentificare a expirat deja.</value>
+  </data>
 </root>

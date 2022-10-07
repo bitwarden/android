@@ -2460,4 +2460,7 @@
   <data name="Decline" xml:space="preserve">
     <value>拒否</value>
   </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>ログインリクエストの有効期限が切れています。</value>
+  </data>
 </root>

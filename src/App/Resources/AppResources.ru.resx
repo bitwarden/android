@@ -2460,4 +2460,7 @@
   <data name="Decline" xml:space="preserve">
     <value>Отклонить</value>
   </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Запрос на вход истек.</value>
+  </data>
 </root>
