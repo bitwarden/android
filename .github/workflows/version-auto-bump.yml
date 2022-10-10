@@ -18,9 +18,9 @@ jobs:
 
       - name: Get version to bump
         id: version
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
-          REF_TAG='refs/tag/'
-          RELEASE_TAG="${GITHUB_REF/$REF_TAG/}"
           CURR_MAJOR=$(echo $RELEASE_TAG | sed -r 's/v([0-9]{4}\.[0-9]{1,2}\.)([0-9]{1,2})/\1/')
           CURR_VER=$(echo $RELEASE_TAG | sed -r 's/v([0-9]{4}\.[0-9]{1,2}\.)([0-9]{1,2})/\2/')
           echo $CURR_VER
