@@ -245,6 +245,30 @@ namespace Bit.App.Services
             }
         }
 
+        public async Task OnNotificationDismissed(BaseNotificationData data)
+        {
+            Resolve();
+            try
+            {
+                if (data is PasswordlessNotificationData passwordlessNotificationData)
+                {
+                    var notificationUserId = await _stateService.GetUserIdAsync(passwordlessNotificationData.UserEmail);
+                    if (notificationUserId != null)
+                    {
+                        var savedNotification = await _stateService.GetPasswordlessLoginNotificationAsync(notificationUserId);
+                        if (savedNotification != null)
+                        {
+                            await _stateService.SetPasswordlessLoginNotificationAsync(null, notificationUserId);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
+        }
+
         public bool ShouldShowNotification()
         {
             return _showNotification;

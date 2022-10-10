@@ -34,5 +34,10 @@ namespace Bit.App.Services
         {
             return Task.FromResult(0);
         }
+
+        public Task OnNotificationDismissed(BaseNotificationData data)
+        {
+            return Task.FromResult(0);
+        }
     }
 }
