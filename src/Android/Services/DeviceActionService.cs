@@ -321,7 +321,7 @@ namespace Bit.Droid.Services
                 intent.AddCategory(Intent.CategoryOpenable);
                 intent.PutExtra(Intent.ExtraTitle, fileName);
 
-                activity.StartActivityForResult(intent, Constants.SaveFileRequestCode);
+                activity.StartActivityForResult(intent, Core.Constants.SaveFileRequestCode);
                 return true;
             }
             catch (Exception ex)
@@ -386,7 +386,7 @@ namespace Bit.Droid.Services
             {
                 chooserIntent.PutExtra(Intent.ExtraInitialIntents, additionalIntents.ToArray());
             }
-            activity.StartActivityForResult(chooserIntent, Constants.SelectFileRequestCode);
+            activity.StartActivityForResult(chooserIntent, Core.Constants.SelectFileRequestCode);
             return Task.FromResult(0);
         }
 
@@ -882,7 +882,7 @@ namespace Bit.Droid.Services
         private void AskPermission(string permission)
         {
             ActivityCompat.RequestPermissions(CrossCurrentActivity.Current.Activity, new string[] { permission },
-                Constants.SelectFilePermissionRequestCode);
+                Core.Constants.SelectFilePermissionRequestCode);
         }
 
         private List<IParcelable> GetCameraIntents(Android.Net.Uri outputUri)
