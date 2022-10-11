@@ -152,9 +152,9 @@ namespace Bit.Droid
                 .GetAwaiter()
                 .GetResult();
 
-            if (Intent?.GetStringExtra(Constants.NotificationData) is string notificationDataJson)
+            if (Intent?.GetStringExtra(Core.Constants.NotificationData) is string notificationDataJson)
             {
-                var notificationType = JToken.Parse(notificationDataJson).SelectToken(Constants.NotificationDataType);
+                var notificationType = JToken.Parse(notificationDataJson).SelectToken(Core.Constants.NotificationDataType);
                 if (notificationType.ToString() == PasswordlessNotificationData.TYPE)
                 {
                     _pushNotificationListenerService.OnNotificationTapped(JsonConvert.DeserializeObject<PasswordlessNotificationData>(notificationDataJson)).FireAndForget();
@@ -213,7 +213,7 @@ namespace Bit.Droid
         public async override void OnRequestPermissionsResult(int requestCode, string[] permissions,
             [GeneratedEnum] Permission[] grantResults)
         {
-            if (requestCode == Constants.SelectFilePermissionRequestCode)
+            if (requestCode == Core.Constants.SelectFilePermissionRequestCode)
             {
                 if (grantResults.Any(r => r != Permission.Granted))
                 {
@@ -232,7 +232,7 @@ namespace Bit.Droid
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
             if (resultCode == Result.Ok &&
-               (requestCode == Constants.SelectFileRequestCode || requestCode == Constants.SaveFileRequestCode))
+               (requestCode == Core.Constants.SelectFileRequestCode || requestCode == Core.Constants.SaveFileRequestCode))
             {
                 Android.Net.Uri uri = null;
                 string fileName = null;
@@ -254,7 +254,7 @@ namespace Bit.Droid
                     return;
                 }
 
-                if (requestCode == Constants.SaveFileRequestCode)
+                if (requestCode == Core.Constants.SaveFileRequestCode)
                 {
                     _messagingService.Send("selectSaveFileResult",
                         new Tuple<string, string>(uri.ToString(), fileName));
@@ -435,7 +435,7 @@ namespace Bit.Droid
                 return;
             }
 
-            var channel = new NotificationChannel(Constants.AndroidNotificationChannelId, AppResources.AllNotifications, NotificationImportance.Default);
+            var channel = new NotificationChannel(Core.Constants.AndroidNotificationChannelId, AppResources.AllNotifications, NotificationImportance.Default);
             if(GetSystemService(NotificationService) is NotificationManager notificationManager)
             {
                 notificationManager.CreateNotificationChannel(channel);
