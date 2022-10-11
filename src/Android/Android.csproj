@@ -152,6 +152,7 @@
     <Compile Include="Utilities\IntentExtensions.cs" />
     <Compile Include="Renderers\CustomPageRenderer.cs" />
     <Compile Include="Effects\NoEmojiKeyboardEffect.cs" />
+    <Compile Include="Receivers\NotificationDismissReceiver.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\bwi-font.ttf" />
