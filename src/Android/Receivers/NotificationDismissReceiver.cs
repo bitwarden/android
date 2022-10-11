@@ -19,7 +19,7 @@ namespace Bit.Droid.Receivers
         private IPushNotificationListenerService _pushNotificationListenerService;
         private ILogger _logger;
 
-        public override async void OnReceive(Context context, Intent intent)
+        public override void OnReceive(Context context, Intent intent)
         {
             try
             {
