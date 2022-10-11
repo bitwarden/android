@@ -154,6 +154,7 @@
     <Compile Include="Effects\NoEmojiKeyboardEffect.cs" />
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\AutofillHandler.cs" />
+    <Compile Include="Constants.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\bwi-font.ttf" />

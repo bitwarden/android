@@ -20,6 +20,8 @@ using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using Bit.Droid.Receivers;
 using Bit.Droid.Utilities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xamarin.Essentials;
 using ZXing.Net.Mobile.Android;
 using FileProvider = AndroidX.Core.Content.FileProvider;
@@ -40,6 +42,7 @@ namespace Bit.Droid
         private IStateService _stateService;
         private IAppIdService _appIdService;
         private IEventService _eventService;
+        private IPushNotificationListenerService _pushNotificationListenerService;
         private ILogger _logger;
         private PendingIntent _eventUploadPendingIntent;
         private AppOptions _appOptions;
@@ -63,6 +66,7 @@ namespace Bit.Droid
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
+            _pushNotificationListenerService = ServiceContainer.Resolve<IPushNotificationListenerService>();
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -147,6 +151,15 @@ namespace Bit.Droid
             AndroidHelpers.SetPreconfiguredRestrictionSettingsAsync(this)
                 .GetAwaiter()
                 .GetResult();
+
+            if (Intent?.GetStringExtra(Constants.NotificationData) is string notificationDataJson)
+            {
+                var notificationType = JToken.Parse(notificationDataJson).SelectToken(Constants.NotificationDataType);
+                if (notificationType.ToString() == PasswordlessNotificationData.TYPE)
+                {
+                    _pushNotificationListenerService.OnNotificationTapped(JsonConvert.DeserializeObject<PasswordlessNotificationData>(notificationDataJson)).FireAndForget();
+                }
+            }
         }
 
         protected override void OnNewIntent(Intent intent)

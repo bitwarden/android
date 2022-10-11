@@ -72,21 +72,35 @@ namespace Bit.App.Pages
 
         public void StopRequestTimeUpdater()
         {
-            _requestTimeCts?.Cancel();
-            _requestTimeCts?.Dispose();
+            try
+            {
+                _requestTimeCts?.Cancel();
+                _requestTimeCts?.Dispose();
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
         }
 
         public void StartRequestTimeUpdater()
         {
-            _requestTimeCts?.Cancel();
-            _requestTimeCts = new CancellationTokenSource();
-            _requestTimeTask = new TimerTask(_logger, UpdateRequestTime, _requestTimeCts).RunPeriodic(TimeSpan.FromMinutes(REQUEST_TIME_UPDATE_PERIOD_IN_MINUTES));
+            try
+            {
+                _requestTimeCts?.Cancel();
+                _requestTimeCts = new CancellationTokenSource();
+                _requestTimeTask = new TimerTask(_logger, UpdateRequestTime, _requestTimeCts).RunPeriodic(TimeSpan.FromMinutes(REQUEST_TIME_UPDATE_PERIOD_IN_MINUTES));
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
         }
 
         private async Task UpdateRequestTime()
         {
             TriggerPropertyChanged(nameof(TimeOfRequestText));
-            if (DateTime.UtcNow > LoginRequest?.RequestDate.ToUniversalTime().AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes))
+            if (DateTime.UtcNow > LoginRequest?.RequestDate.AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes))
             {
                 StopRequestTimeUpdater();
                 await _platformUtilsService.ShowDialogAsync(AppResources.LoginRequestHasAlreadyExpired);
@@ -96,7 +110,7 @@ namespace Bit.App.Pages
 
         private async Task PasswordlessLoginAsync(bool approveRequest)
         {
-            if (LoginRequest.RequestDate.AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) <= DateTime.Now)
+            if (LoginRequest.RequestDate.AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) <= DateTime.UtcNow)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.LoginRequestHasAlreadyExpired);
                 await Page.Navigation.PopModalAsync();
