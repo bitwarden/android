@@ -46,8 +46,8 @@ namespace Bit.Droid
             {
                 RegisterLocalServices();
                 var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-                ServiceContainer.Init(deviceActionService.DeviceUserAgent, Constants.ClearCiphersCacheKey,
-                    Constants.AndroidAllClearCipherCacheKeys);
+                ServiceContainer.Init(deviceActionService.DeviceUserAgent, Core.Constants.ClearCiphersCacheKey,
+                    Core.Constants.AndroidAllClearCipherCacheKeys);
                 InitializeAppSetup();
 
                 // TODO: Update when https://github.com/bitwarden/mobile/pull/1662 gets merged

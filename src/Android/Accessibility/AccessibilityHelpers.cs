@@ -367,7 +367,7 @@ namespace Bit.Droid.Accessibility
 
         public static string GetUri(AccessibilityNodeInfo root)
         {
-            var uri = string.Concat(Constants.AndroidAppProtocol, root.PackageName);
+            var uri = string.Concat(Core.Constants.AndroidAppProtocol, root.PackageName);
             if (SupportedBrowsers.ContainsKey(root.PackageName))
             {
                 var browser = SupportedBrowsers[root.PackageName];

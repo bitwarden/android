@@ -79,11 +79,11 @@ namespace Bit.Droid.Services
             
             var context = Android.App.Application.Context;
             var intent = new Intent(context, typeof(MainActivity));
-            intent.PutExtra(Constants.NotificationData, JsonConvert.SerializeObject(data));
+            intent.PutExtra(Core.Constants.NotificationData, JsonConvert.SerializeObject(data));
 
             var pendingIntentFlags = AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true);
             var pendingIntent = PendingIntent.GetActivity(context, 20220801, intent, pendingIntentFlags);
-            var builder = new NotificationCompat.Builder(context, Constants.AndroidNotificationChannelId)
+            var builder = new NotificationCompat.Builder(context, Core.Constants.AndroidNotificationChannelId)
                .SetContentIntent(pendingIntent)
                .SetContentTitle(title)
                .SetContentText(message)
