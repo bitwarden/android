@@ -24,8 +24,8 @@ jobs:
           CURR_PATCH=$(echo $RELEASE_TAG | sed -r 's/v([0-9]{4}\.[0-9]{1,2})\.([0-9]{1,2})/\2/')
           echo "Current Patch: $CURR_PATCH"
 
-          ((CURR_PATCH++))
-          NEW_VER=$CURR_MAJOR.$CURR_PATCH
+          NEW_PATCH=$((CURR_PATCH++))
+          NEW_VER=$CURR_MAJOR.$NEW_PATCH
           echo "New Version: $NEW_VER"
           echo "::set-output name=new-version::$NEW_VER"
 
