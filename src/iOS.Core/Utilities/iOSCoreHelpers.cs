@@ -102,7 +102,8 @@ namespace Bit.iOS.Core.Utilities
             var stateService = new StateService(mobileStorageService, secureStorageService, messagingService);
             var stateMigrationService =
                 new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
-            var deviceActionService = new DeviceActionService(stateService, messagingService);
+            var deviceActionService = new DeviceActionService();
+            var fileService = new FileService(stateService, messagingService);
             var clipboardService = new ClipboardService(stateService);
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, clipboardService,
                 messagingService, broadcasterService);
@@ -121,6 +122,8 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Register<IStateService>("stateService", stateService);
             ServiceContainer.Register<IStateMigrationService>("stateMigrationService", stateMigrationService);
             ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
+            ServiceContainer.Register<IFileService>(fileService);
+            ServiceContainer.Register<IAutofillHandler>(new AutofillHandler());            
             ServiceContainer.Register<IClipboardService>("clipboardService", clipboardService);
             ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
             ServiceContainer.Register<IBiometricService>("biometricService", biometricService);

@@ -16,6 +16,7 @@ namespace Bit.App.Pages
     public class ExportVaultPageViewModel : BaseViewModel
     {
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IFileService _fileService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly II18nService _i18nService;
         private readonly IExportService _exportService;
@@ -39,6 +40,7 @@ namespace Bit.App.Pages
         public ExportVaultPageViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _fileService = ServiceContainer.Resolve<IFileService>();
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _exportService = ServiceContainer.Resolve<IExportService>("exportService");
@@ -182,7 +184,7 @@ namespace Bit.App.Pages
                 _defaultFilename = _exportService.GetFileName(null, fileFormat);
                 _exportResult = Encoding.UTF8.GetBytes(data);
 
-                if (!_deviceActionService.SaveFile(_exportResult, null, _defaultFilename, null))
+                if (!_fileService.SaveFile(_exportResult, null, _defaultFilename, null))
                 {
                     ClearResult();
                     await _platformUtilsService.ShowDialogAsync(_i18nService.T("ExportVaultFailure"));
@@ -220,7 +222,7 @@ namespace Bit.App.Pages
 
         public async void SaveFileSelected(string contentUri, string filename)
         {
-            if (_deviceActionService.SaveFile(_exportResult, null, filename ?? _defaultFilename, contentUri))
+            if (_fileService.SaveFile(_exportResult, null, filename ?? _defaultFilename, contentUri))
             {
                 ClearResult();
                 _platformUtilsService.ShowToast("success", null, _i18nService.T("ExportVaultSuccess"));

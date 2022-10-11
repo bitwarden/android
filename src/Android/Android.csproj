@@ -152,6 +152,8 @@
     <Compile Include="Utilities\IntentExtensions.cs" />
     <Compile Include="Renderers\CustomPageRenderer.cs" />
     <Compile Include="Effects\NoEmojiKeyboardEffect.cs" />
+    <Compile Include="Services\FileService.cs" />
+    <Compile Include="Services\AutofillHandler.cs" />
     <Compile Include="Constants.cs" />
   </ItemGroup>
   <ItemGroup>

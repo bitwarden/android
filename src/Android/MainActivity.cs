@@ -36,6 +36,7 @@ namespace Bit.Droid
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         private IDeviceActionService _deviceActionService;
+        private IFileService _fileService;        
         private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
         private IStateService _stateService;
@@ -59,6 +60,7 @@ namespace Bit.Droid
             StrictMode.SetThreadPolicy(policy);
 
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _fileService = ServiceContainer.Resolve<IFileService>();
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
@@ -217,7 +219,7 @@ namespace Bit.Droid
                 {
                     _messagingService.Send("selectFileCameraPermissionDenied");
                 }
-                await _deviceActionService.SelectFileAsync();
+                await _fileService.SelectFileAsync();
             }
             else
             {

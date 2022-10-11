@@ -493,7 +493,7 @@ namespace Bit.App.Pages
                 }
 
                 var canOpenFile = true;
-                if (!_deviceActionService.CanOpenFile(attachment.FileName))
+                if (!_fileService.CanOpenFile(attachment.FileName))
                 {
                     if (Device.RuntimePlatform == Device.iOS)
                     {
@@ -562,7 +562,7 @@ namespace Bit.App.Pages
 
         public async void OpenAttachment(byte[] data, AttachmentView attachment)
         {
-            if (!_deviceActionService.OpenFile(data, attachment.Id, attachment.FileName))
+            if (!_fileService.OpenFile(data, attachment.Id, attachment.FileName))
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.UnableToOpenFile);
                 return;
@@ -573,7 +573,7 @@ namespace Bit.App.Pages
         {
             _attachmentData = data;
             _attachmentFilename = attachment.FileName;
-            if (!_deviceActionService.SaveFile(_attachmentData, null, _attachmentFilename, null))
+            if (!_fileService.SaveFile(_attachmentData, null, _attachmentFilename, null))
             {
                 ClearAttachmentData();
                 await _platformUtilsService.ShowDialogAsync(AppResources.UnableToSaveAttachment);
@@ -582,7 +582,7 @@ namespace Bit.App.Pages
 
         public async void SaveFileSelected(string contentUri, string filename)
         {
-            if (_deviceActionService.SaveFile(_attachmentData, null, filename ?? _attachmentFilename, contentUri))
+            if (_fileService.SaveFile(_attachmentData, null, filename ?? _attachmentFilename, contentUri))
             {
                 ClearAttachmentData();
                 _platformUtilsService.ShowToast("success", null, AppResources.SaveAttachmentSuccess);
