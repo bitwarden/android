@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using Bit.App.Abstractions;
+using Bit.App.Models;
+using Bit.Core;
+using Bit.Core.Enums;
 using Bit.Core.Services;
+using CoreData;
 using Foundation;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UserNotifications;
 using Xamarin.Forms;
@@ -83,7 +88,6 @@ namespace Bit.iOS.Services
         public void WillPresentNotification(UNUserNotificationCenter center, UNNotification notification, Action<UNNotificationPresentationOptions> completionHandler)
         {
             Debug.WriteLine($"{TAG} WillPresentNotification {notification?.Request?.Content?.UserInfo}");
-
             OnMessageReceived(notification?.Request?.Content?.UserInfo);
             completionHandler(UNNotificationPresentationOptions.Alert);
         }
@@ -93,9 +97,20 @@ namespace Bit.iOS.Services
         {
             Debug.WriteLine($"{TAG} DidReceiveNotificationResponse {response?.Notification?.Request?.Content?.UserInfo}");
 
-            if (response.IsDefaultAction)
+            if (response.IsDefaultAction && response?.Notification?.Request?.Content?.UserInfo != null)
             {
-                OnMessageReceived(response?.Notification?.Request?.Content?.UserInfo);
+                var userInfo = response?.Notification?.Request?.Content?.UserInfo;
+                OnMessageReceived(userInfo);
+
+                if (userInfo.TryGetValue(NSString.FromObject(Constants.NotificationData), out NSObject nsObject))
+                {
+                    var token = JToken.Parse(NSString.FromObject(nsObject).ToString());
+                    var typeToken = token.SelectToken(Constants.NotificationDataType);
+                    if (typeToken.ToString() == PasswordlessNotificationData.TYPE)
+                    {
+                        _pushNotificationListenerService.OnNotificationTapped(token.ToObject<PasswordlessNotificationData>());
+                    }
+                }
             }
 
             // Inform caller it has been handled

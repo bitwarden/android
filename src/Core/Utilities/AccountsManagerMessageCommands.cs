@@ -9,5 +9,6 @@
         public const string ADD_ACCOUNT = "addAccount";
         public const string ACCOUNT_ADDED = "accountAdded";
         public const string SWITCHED_ACCOUNT = "switchedAccount";
+        public const string ACCOUNT_SWITCH_COMPLETED = "accountSwitchCompleted";
     }
 }

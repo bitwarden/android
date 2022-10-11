@@ -220,7 +220,7 @@ namespace Bit.App.Pages
                     NestedFolders = NestedFolders.GetRange(0, NestedFolders.Count - 1);
                 }
 
-                var uppercaseGroupNames = _deviceActionService.DeviceType == DeviceType.iOS;
+                var uppercaseGroupNames = Device.RuntimePlatform == Device.iOS;
                 var hasFavorites = FavoriteCiphers?.Any() ?? false;
                 if (hasFavorites)
                 {
@@ -400,7 +400,7 @@ namespace Bit.App.Pages
 
         private void CreateCipherGroupedItems(List<GroupingsPageListGroup> groupedItems)
         {
-            var uppercaseGroupNames = _deviceActionService.DeviceType == DeviceType.iOS;
+            var uppercaseGroupNames = Device.RuntimePlatform == Device.iOS;
             _totpTickCts?.Cancel();
             if (ShowTotp)
             {

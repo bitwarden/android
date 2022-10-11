@@ -2313,6 +2313,66 @@ select Add TOTP to store the key safely</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Are you sure you want to enable Screen Capture?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Início de sessão necessário</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Está a tentar iniciar sessão?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Tentativa de início de sessão por {0} em {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Tipo de dispositivo</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>Endereço IP</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Tempo</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Perto</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Confirmar início de sessão</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Recusar início de sessão</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Agora mesmo</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>Há {0} minutos</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Início de sessão confirmado</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Início de sessão recusado</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Aprovar pedidos de início de sessão</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Utilize este dispositivo para aprovar pedidos de inícios de sessão feitos a partir de outros dispositivos.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Permitir notificações</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Receber notificações para novos pedidos de início de sessão</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Não, obrigado</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Confirmar tentativa de início de sessão para {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Todas as notificações</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Password Type</value>
   </data>
@@ -2387,5 +2447,17 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Random</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Divulgação do Serviço de Acessibilidade</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>O Bitwarden utiliza o Serviço de Acessibilidade na procura de campos de início de sessão em aplicações e sites, para que assim estabeleça os campos ID apropriados ao introduzir o nome de utilizador e palavra-passe assim que seja encontrada uma correspondência. Não armazenamos nenhuma das informações que nos são apresentadas pelo serviço, nem fazemos nenhuma tentativa de controlar quaisquer elementos no ecrã para além da introdução de credenciais de texto.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Aceitar</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Recusar</value>
   </data>
 </root>

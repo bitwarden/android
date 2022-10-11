@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
+using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
@@ -12,7 +12,7 @@ namespace Bit.App.Pages
     public partial class CiphersPage : BaseContentPage
     {
         private readonly string _autofillUrl;
-        private readonly IDeviceActionService _deviceActionService;
+        private readonly IAutofillHandler _autofillHandler;
 
         private CiphersPageViewModel _vm;
         private bool _hasFocused;
@@ -48,7 +48,7 @@ namespace Bit.App.Pages
             {
                 NavigationPage.SetTitleView(this, _titleLayout);
             }
-            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
         }
 
         public SearchBar SearchBar => _searchBar;
@@ -107,7 +107,7 @@ namespace Bit.App.Pages
             }
             else
             {
-                _deviceActionService.CloseAutofill();
+                _autofillHandler.CloseAutofill();
             }
         }
 

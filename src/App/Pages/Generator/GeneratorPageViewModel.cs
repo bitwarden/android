@@ -20,6 +20,7 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IClipboardService _clipboardService;
         private readonly IUsernameGenerationService _usernameGenerationService;
+        private readonly ITokenService _tokenService;
         readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         private PasswordGenerationOptions _options;
@@ -49,8 +50,6 @@ namespace Bit.App.Pages
         private bool _showFirefoxRelayApiAccessToken;
         private bool _showAnonAddyApiAccessToken;
         private bool _showSimpleLoginApiKey;
-        private UsernameEmailType _catchAllEmailTypeSelected;
-        private UsernameEmailType _plusAddressedEmailTypeSelected;
         private bool _editMode;
 
         public GeneratorPageViewModel()
@@ -59,6 +58,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
             _clipboardService = ServiceContainer.Resolve<IClipboardService>();
             _usernameGenerationService = ServiceContainer.Resolve<IUsernameGenerationService>();
+            _tokenService = ServiceContainer.Resolve<ITokenService>();
 
             PageTitle = AppResources.Generator;
             GeneratorTypeOptions = new List<GeneratorType> {
@@ -157,7 +157,7 @@ namespace Bit.App.Pages
 
         public bool ShowUsernameEmailType
         {
-            get => !string.IsNullOrWhiteSpace(EmailWebsite) || EditMode;
+            get => !string.IsNullOrWhiteSpace(EmailWebsite);
         }
 
         public int Length
@@ -367,7 +367,7 @@ namespace Bit.App.Pages
                     IsUsername = value == GeneratorType.Username;
                     TriggerPropertyChanged(nameof(GeneratorTypeSelected));
                     SaveOptionsAsync().FireAndForget();
-                    SaveUsernameOptionsAsync(false).FireAndForget();
+                    SaveUsernameOptionsAsync().FireAndForget();
                 }
             }
         }
@@ -382,6 +382,7 @@ namespace Bit.App.Pages
                     IsPassword = value == 0;
                     TriggerPropertyChanged(nameof(PasswordTypeSelectedIndex));
                     SaveOptionsAsync().FireAndForget();
+                    SaveUsernameOptionsAsync().FireAndForget();
                 }
             }
         }
@@ -396,7 +397,7 @@ namespace Bit.App.Pages
                     _usernameOptions.Type = value;
                     Username = Constants.DefaultUsernameGenerated;
                     TriggerPropertyChanged(nameof(UsernameTypeSelected), new string[] { nameof(UsernameTypeDescriptionLabel) });
-                    SaveUsernameOptionsAsync(false).FireAndForget();
+                    SaveUsernameOptionsAsync().FireAndForget();
                 }
             }
         }
@@ -564,26 +565,28 @@ namespace Bit.App.Pages
 
         public UsernameEmailType PlusAddressedEmailTypeSelected
         {
-            get => _plusAddressedEmailTypeSelected;
+            get => _usernameOptions.PlusAddressedEmailType;
             set
             {
-                if (SetProperty(ref _plusAddressedEmailTypeSelected, value))
+                if (_usernameOptions.PlusAddressedEmailType != value)
                 {
                     _usernameOptions.PlusAddressedEmailType = value;
-                    SaveUsernameOptionsAsync(false).FireAndForget();
+                    TriggerPropertyChanged(nameof(PlusAddressedEmailTypeSelected));
+                    SaveUsernameOptionsAsync().FireAndForget();
                 }
             }
         }
 
         public UsernameEmailType CatchAllEmailTypeSelected
         {
-            get => _catchAllEmailTypeSelected;
+            get => _usernameOptions.CatchAllEmailType;
             set
             {
-                if (SetProperty(ref _catchAllEmailTypeSelected, value))
+                if (_usernameOptions.CatchAllEmailType != value)
                 {
                     _usernameOptions.CatchAllEmailType = value;
-                    SaveUsernameOptionsAsync(false).FireAndForget();
+                    TriggerPropertyChanged(nameof(CatchAllEmailTypeSelected));
+                    SaveUsernameOptionsAsync().FireAndForget();
                 }
             }
         }
@@ -601,16 +604,28 @@ namespace Bit.App.Pages
         {
             (_options, EnforcedPolicyOptions) = await _passwordGenerationService.GetOptionsAsync();
             LoadFromOptions();
-            await RegenerateAsync();
 
             _usernameOptions = await _usernameGenerationService.GetOptionsAsync();
+            _usernameOptions.PlusAddressedEmail = _tokenService.GetEmail();
+            _usernameOptions.EmailWebsite = EmailWebsite;
+            _usernameOptions.CatchAllEmailType = _usernameOptions.PlusAddressedEmailType = string.IsNullOrWhiteSpace(EmailWebsite) || !EditMode ? UsernameEmailType.Random : UsernameEmailType.Website;
 
-            if (!EditMode)
+            if (!IsUsername)
             {
-                _usernameOptions.CatchAllEmailType = _usernameOptions.PlusAddressedEmailType = UsernameEmailType.Random;
+                await RegenerateAsync();
+            }
+            else
+            {
+                if (UsernameTypeSelected != UsernameType.ForwardedEmailAlias)
+                {
+                    await RegenerateUsernameAsync();
+                }
+                else
+                {
+                    Username = Constants.DefaultUsernameGenerated;
+                }
             }
             TriggerUsernamePropertiesChanged();
-            Username = Constants.DefaultUsernameGenerated;
 
             _doneIniting = true;
         }
@@ -668,9 +683,13 @@ namespace Bit.App.Pages
 
             await _usernameGenerationService.SaveOptionsAsync(_usernameOptions);
 
-            if (regenerate)
+            if (regenerate && UsernameTypeSelected != UsernameType.ForwardedEmailAlias)
             {
                 await RegenerateUsernameAsync();
+            }
+            else
+            {
+                Username = Constants.DefaultUsernameGenerated;
             }
         }
 
