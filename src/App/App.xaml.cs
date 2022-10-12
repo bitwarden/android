@@ -11,6 +11,7 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
+using Bit.Core.Models.Response;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
@@ -168,10 +169,26 @@ namespace Bit.App
                 return;
             }
 
-
             var notification = await _stateService.GetPasswordlessLoginNotificationAsync();
             if (notification == null)
             {
+                return;
+            }
+
+            var activeUserId = await _stateService.GetActiveUserIdAsync();
+            if (notification.UserId != activeUserId)
+            {
+                var notificationUserEmail = await _stateService.GetEmailAsync(activeUserId);
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    var result = await _deviceActionService.DisplayAlertAsync(AppResources.LogInRequested, string.Format(AppResources.LoginAttemptFromXDoYouWantToSwitch, notificationUserEmail), AppResources.Cancel, AppResources.Ok);
+                    if (result == AppResources.Ok)
+                    {
+                        await _stateService.SetActiveUserAsync(notification.UserId);
+                        _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
+                    }
+                });
+
                 return;
             }
 

@@ -2464,4 +2464,7 @@ select Add TOTP to store the key safely</value>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>Login request has already expired.</value>
   </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitch" xml:space="preserve">
+    <value>Login attempt from {0}. Do you want to switch to this account?</value>
+  </data>
 </root>
