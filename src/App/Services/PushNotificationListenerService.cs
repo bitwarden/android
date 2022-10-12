@@ -26,11 +26,11 @@ namespace Bit.App.Services
         const string TAG = "##PUSH NOTIFICATIONS";
 
         private bool _showNotification;
-        private LazyResolve<ISyncService> _syncService = new LazyResolve<ISyncService>("syncService");
-        private LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>("stateService");
-        private LazyResolve<IAppIdService> _appIdService = new LazyResolve<IAppIdService>("appIdService");
-        private LazyResolve<IApiService> _apiService = new LazyResolve<IApiService>("apiService");
-        private LazyResolve<IMessagingService> _messagingService = new LazyResolve<IMessagingService>("messagingService");
+        private LazyResolve<ISyncService> _syncService = new LazyResolve<ISyncService>();
+        private LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>();
+        private LazyResolve<IAppIdService> _appIdService = new LazyResolve<IAppIdService>();
+        private LazyResolve<IApiService> _apiService = new LazyResolve<IApiService>();
+        private LazyResolve<IMessagingService> _messagingService = new LazyResolve<IMessagingService>();
         private LazyResolve<IPushNotificationService> _pushNotificationService = new LazyResolve<IPushNotificationService>();
         private LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
 

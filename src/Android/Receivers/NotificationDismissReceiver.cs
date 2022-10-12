@@ -15,8 +15,8 @@ namespace Bit.Droid.Receivers
     [BroadcastReceiver(Name = Constants.PACKAGE_NAME + "." + nameof(NotificationDismissReceiver), Exported = false)]
     public class NotificationDismissReceiver : BroadcastReceiver
     {
-        private readonly LazyResolve<IPushNotificationListenerService> _pushNotificationListenerService = new LazyResolve<IPushNotificationListenerService>("pushNotificationListenerService");
-        private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
+        private readonly LazyResolve<IPushNotificationListenerService> _pushNotificationListenerService = new LazyResolve<IPushNotificationListenerService>();
+        private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
 
         public override void OnReceive(Context context, Intent intent)
         {
