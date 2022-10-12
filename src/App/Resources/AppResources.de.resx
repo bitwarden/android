@@ -2459,4 +2459,7 @@ Das Scannen erfolgt automatisch.</value>
   <data name="Decline" xml:space="preserve">
     <value>Ablehnen</value>
   </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Anmeldeanfrage ist bereits abgelaufen.</value>
+  </data>
 </root>

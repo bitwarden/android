@@ -2449,15 +2449,18 @@
     <value>随机</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
-    <value>无障碍服务使用声明</value>
+    <value>无障碍服务声明</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden 使用无障碍服务在应用程序和网站中搜索登录字段，当找到与应用程序或网站相匹配的用户名和密码时，建立适当的字段 ID 以输入它们。我们不会通过此服务存储提供给我们的任何信息，也不会尝试控制除凭据文本输入之外的任何屏幕上的元素。</value>
+    <value>Bitwarden 使用无障碍服务在应用程序和网站中搜索登录字段，当找到与应用程序或网站相匹配的用户名和密码时，建立适当的字段 ID 以输入它们。我们不会通过此服务存储提供给我们的任何信息，也不会尝试控制除凭据文本输入之外的任何屏幕元素。</value>
   </data>
   <data name="Accept" xml:space="preserve">
     <value>接受</value>
   </data>
   <data name="Decline" xml:space="preserve">
     <value>拒绝</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>登录请求已过期。</value>
   </data>
 </root>

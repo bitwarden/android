@@ -2314,13 +2314,13 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</value>
     <value>Er du sikker på, at du vil aktivere skærmoptagelse?</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
-    <value>Login-anmodning</value>
+    <value>Login anmodet</value>
   </data>
   <data name="AreYouTryingToLogIn" xml:space="preserve">
     <value>Forsøger du at logge ind?</value>
   </data>
   <data name="LogInAttemptByXOnY" xml:space="preserve">
-    <value>Loginforsøg af {0} {1}</value>
+    <value>Loginforsøg af {0} på {1}</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
     <value>Enhedstype</value>
@@ -2449,15 +2449,18 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</value>
     <value>Tilfældig</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
-    <value>Oplysninger om Tilgængelighedstjeneste</value>
+    <value>Oplysninger om tilgængelighedstjeneste</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden bruger Tilgængelighedstjeneste til at søge efter login-felter i apps og på websteder, for så at oprette relevante felt-ID'er til angivelse af brugernavn og adgangskode, når en match findes. Bitwarden gemmer ingen af de af tjenesten præsenterede oplysninger, ej heller gøres noget forsøg på at styre skærmelementer ud over tekstindtastning af legitimationsoplysninger.</value>
+    <value>Bitwarden bruger tilgængelighedstjenesten til at søge efter login-felter i apps og på websteder, for derefter at oprette relevante felt-ID'er til angivelse af brugernavn og adgangskode, når et match findes. Vi gemmer ikke nogen af de oplysninger, som tjenesten giver os, og vi gør heller ikke noget forsøg på at styre skærmelementer ud over tekstindtastning af legitimationsoplysninger.</value>
   </data>
   <data name="Accept" xml:space="preserve">
     <value>Acceptér</value>
   </data>
   <data name="Decline" xml:space="preserve">
     <value>Afvis</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Loginanmodning er allerede udløbet.</value>
   </data>
 </root>

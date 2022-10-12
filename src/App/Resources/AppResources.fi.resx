@@ -203,7 +203,7 @@
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>Lähetä virheraportti</value>
+    <value>Lähetä virheilmoitus</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
     <value>Avaa ongelma GitHub-sivullamme.</value>
@@ -232,7 +232,7 @@
     <value>Kansio päivitetty.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Mene sivustolle</value>
+    <value>Avaa sivusto</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
@@ -243,7 +243,7 @@
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Yhdistä Internetiin jatkaaksesi.</value>
+    <value>Jatka muodostamalla yhteys Internetiin.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
@@ -2459,5 +2459,8 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
   </data>
   <data name="Decline" xml:space="preserve">
     <value>Älä hyväksy</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Kirjautumispyyntö on jo erääntynyt.</value>
   </data>
 </root>

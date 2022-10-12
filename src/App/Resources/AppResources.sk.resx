@@ -2460,4 +2460,7 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</value>
   <data name="Decline" xml:space="preserve">
     <value>Odmietnuť</value>
   </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Platnosť žiadosti o prihlásenie už vypršala.</value>
+  </data>
 </root>

@@ -2460,4 +2460,7 @@ jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
   <data name="Decline" xml:space="preserve">
     <value>Decline</value>
   </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Pierakstīšanās pieprasījuma derīgums jau ir beidzies.</value>
+  </data>
 </root>

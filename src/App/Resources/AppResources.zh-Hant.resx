@@ -1613,7 +1613,7 @@
     <value>切換可見度</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>您的登入階段已過期。</value>
+    <value>您的登入階段已逾期。</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
     <value>生物特徵辨識驗證</value>
@@ -2449,15 +2449,18 @@
     <value>隨機</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
-    <value>Accessibility Service Disclosure</value>
+    <value>無障礙服務聲明</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
+    <value>Bitwarden 使用無障礙服務搜寻應用程式和網站中的登入欄位，然後建立適當的欄位 ID，以便在找到應用程式或網站的匹配項目時輸入用戶名和密碼。 我們不會存儲服務提供給我們的任何資訊，也不會試圖控制憑證文字輸入以外的任何荧幕元素。</value>
   </data>
   <data name="Accept" xml:space="preserve">
     <value>接受</value>
   </data>
   <data name="Decline" xml:space="preserve">
     <value>拒絕</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>登入要求已逾期。</value>
   </data>
 </root>
