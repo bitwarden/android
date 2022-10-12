@@ -2461,4 +2461,7 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</value>
   <data name="Decline" xml:space="preserve">
     <value>Recusar</value>
   </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>O pedido de login já expirou.</value>
+  </data>
 </root>

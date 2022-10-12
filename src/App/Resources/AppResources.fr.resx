@@ -2460,4 +2460,7 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
   <data name="Decline" xml:space="preserve">
     <value>Refuser</value>
   </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>La demande d’identification a déjà expiré.</value>
+  </data>
 </root>

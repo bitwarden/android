@@ -2459,4 +2459,7 @@ select Add TOTP to store the key safely</value>
   <data name="Decline" xml:space="preserve">
     <value>Elutasítás</value>
   </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>A bejelentkezési kérés már lejárt.</value>
+  </data>
 </root>

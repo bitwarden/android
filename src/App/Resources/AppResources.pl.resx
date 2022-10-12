@@ -2460,4 +2460,7 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
   <data name="Decline" xml:space="preserve">
     <value>Odrzuć</value>
   </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Prośba o logowanie wygasła.</value>
+  </data>
 </root>

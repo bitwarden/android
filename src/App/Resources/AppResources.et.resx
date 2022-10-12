@@ -2460,4 +2460,7 @@ Skaneerimine toimub automaatselt.</value>
   <data name="Decline" xml:space="preserve">
     <value>Decline</value>
   </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Login request has already expired.</value>
+  </data>
 </root>

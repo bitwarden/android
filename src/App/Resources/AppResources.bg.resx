@@ -2461,4 +2461,7 @@ select Add TOTP to store the key safely</value>
   <data name="Decline" xml:space="preserve">
     <value>Отказване</value>
   </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Заявката за вписване вече е изтекла.</value>
+  </data>
 </root>
