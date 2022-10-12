@@ -153,6 +153,9 @@
     <Compile Include="Renderers\CustomPageRenderer.cs" />
     <Compile Include="Effects\NoEmojiKeyboardEffect.cs" />
     <Compile Include="Receivers\NotificationDismissReceiver.cs" />
+    <Compile Include="Services\FileService.cs" />
+    <Compile Include="Services\AutofillHandler.cs" />
+    <Compile Include="Constants.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\bwi-font.ttf" />

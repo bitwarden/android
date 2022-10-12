@@ -72,8 +72,13 @@ namespace Bit.App.Services
             });
         }
 
+        /// <summary>
+        /// Gets the device type on the server enum
+        /// </summary>
         public Core.Enums.DeviceType GetDevice()
         {
+            // Can't use Device.RuntimePlatform here because it gets called before Forms.Init() and throws.
+            // so we need to get the DeviceType ourselves
             return _deviceActionService.DeviceType;
         }
 
@@ -115,11 +120,6 @@ namespace Bit.App.Services
                     (options["page"] as Page).DisplayAlert(null, "", ""); // TODO
                 }
             }
-        }
-
-        public void SaveFile()
-        {
-            // TODO
         }
 
         public string GetApplicationVersion()
@@ -206,11 +206,6 @@ namespace Bit.App.Services
             }
 
             return (password, valid);
-        }
-
-        public bool IsDev()
-        {
-            return Core.Utilities.CoreHelpers.InDebugMode();
         }
 
         public bool IsSelfHost()

@@ -8,15 +8,16 @@ namespace Bit.Core.Abstractions
     public interface IPlatformUtilsService
     {
         string GetApplicationVersion();
+        /// <summary>
+        /// Gets the device type on the server enum
+        /// </summary>
         DeviceType GetDevice();
         string GetDeviceString();
         ClientType GetClientType();
-        bool IsDev();
         bool IsSelfHost();
         bool IsViewOpen();
         void LaunchUri(string uri, Dictionary<string, object> options = null);
         Task<string> ReadFromClipboardAsync(Dictionary<string, object> options = null);
-        void SaveFile();
         Task<bool> ShowDialogAsync(string text, string title = null, string confirmText = null,
             string cancelText = null, string type = null);
         Task<bool> ShowPasswordDialogAsync(string title, string body, Func<string, Task<bool>> validator);

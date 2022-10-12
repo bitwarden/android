@@ -134,7 +134,7 @@ namespace Bit.Droid.Autofill
                 {
                     case CipherType.Login:
                         intent.PutExtra("autofillFrameworkName", parser.Uri
-                            .Replace(Constants.AndroidAppProtocol, string.Empty)
+                            .Replace(Core.Constants.AndroidAppProtocol, string.Empty)
                             .Replace("https://", string.Empty)
                             .Replace("http://", string.Empty));
                         intent.PutExtra("autofillFrameworkUri", parser.Uri);
