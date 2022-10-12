@@ -8,46 +8,33 @@ using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using static AndroidX.Concurrent.Futures.CallbackToFutureAdapter;
+using CoreConstants = Bit.Core.Constants;
 
 namespace Bit.Droid.Receivers
 {
-    [BroadcastReceiver(Name = "com.x8bit.bitwarden.NotificationDismissReceiver", Exported = false)]
+    [BroadcastReceiver(Name = Constants.PACKAGE_NAME + "." + nameof(NotificationDismissReceiver), Exported = false)]
     public class NotificationDismissReceiver : BroadcastReceiver
     {
-        private bool _resolved;
-        private IPushNotificationListenerService _pushNotificationListenerService;
-        private ILogger _logger;
+        private readonly LazyResolve<IPushNotificationListenerService> _pushNotificationListenerService = new LazyResolve<IPushNotificationListenerService>("pushNotificationListenerService");
+        private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         public override void OnReceive(Context context, Intent intent)
         {
             try
             {
-                Resolve();
-                if (intent?.GetStringExtra(Constants.NotificationData) is string notificationDataJson)
+                if (intent?.GetStringExtra(CoreConstants.NotificationData) is string notificationDataJson)
                 {
-                    var notificationType = JToken.Parse(notificationDataJson).SelectToken(Constants.NotificationDataType);
+                    var notificationType = JToken.Parse(notificationDataJson).SelectToken(CoreConstants.NotificationDataType);
                     if (notificationType.ToString() == PasswordlessNotificationData.TYPE)
                     {
-                        _pushNotificationListenerService.OnNotificationDismissed(JsonConvert.DeserializeObject<PasswordlessNotificationData>(notificationDataJson)).FireAndForget();
+                        _pushNotificationListenerService.Value.OnNotificationDismissed(JsonConvert.DeserializeObject<PasswordlessNotificationData>(notificationDataJson)).FireAndForget();
                     }
                 }
             }
             catch (System.Exception ex)
             {
-                _logger.Exception(ex);
+                _logger.Value.Exception(ex);
             }
-        }
-
-        private void Resolve()
-        {
-            if (_resolved)
-            {
-                return;
-            }
-            _pushNotificationListenerService = ServiceContainer.Resolve<IPushNotificationListenerService>();
-            _logger = ServiceContainer.Resolve<ILogger>();
-            _resolved = true;
         }
     }
 }

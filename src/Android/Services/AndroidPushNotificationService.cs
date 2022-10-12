@@ -82,15 +82,15 @@ namespace Bit.Droid.Services
             
             var context = Android.App.Application.Context;
             var intent = new Intent(context, typeof(MainActivity));
-            intent.PutExtra(Constants.NotificationData, JsonConvert.SerializeObject(data));
+            intent.PutExtra(Bit.Core.Constants.NotificationData, JsonConvert.SerializeObject(data));
             var pendingIntentFlags = AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true);
             var pendingIntent = PendingIntent.GetActivity(context, 20220801, intent, pendingIntentFlags);
 
             var deleteIntent = new Intent(context, typeof(NotificationDismissReceiver));
-            deleteIntent.PutExtra(Constants.NotificationData, JsonConvert.SerializeObject(data));
+            deleteIntent.PutExtra(Bit.Core.Constants.NotificationData, JsonConvert.SerializeObject(data));
             var deletePendingIntent = PendingIntent.GetBroadcast(context, 20220802, deleteIntent, pendingIntentFlags);
 
-            var builder = new NotificationCompat.Builder(context, Constants.AndroidNotificationChannelId)
+            var builder = new NotificationCompat.Builder(context, Bit.Core.Constants.AndroidNotificationChannelId)
                .SetContentIntent(pendingIntent)
                .SetContentTitle(title)
                .SetContentText(message)
