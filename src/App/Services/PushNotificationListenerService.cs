@@ -26,20 +26,18 @@ namespace Bit.App.Services
         const string TAG = "##PUSH NOTIFICATIONS";
 
         private bool _showNotification;
-        private bool _resolved;
-        private ISyncService _syncService;
-        private IStateService _stateService;
-        private IAppIdService _appIdService;
-        private IApiService _apiService;
-        private IMessagingService _messagingService;
-        private IPushNotificationService _pushNotificationService;
-        private ILogger _logger;
+        private LazyResolve<ISyncService> _syncService = new LazyResolve<ISyncService>();
+        private LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>();
+        private LazyResolve<IAppIdService> _appIdService = new LazyResolve<IAppIdService>();
+        private LazyResolve<IApiService> _apiService = new LazyResolve<IApiService>();
+        private LazyResolve<IMessagingService> _messagingService = new LazyResolve<IMessagingService>();
+        private LazyResolve<IPushNotificationService> _pushNotificationService = new LazyResolve<IPushNotificationService>();
+        private LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
 
         public async Task OnMessageAsync(JObject value, string deviceType)
         {
             Debug.WriteLine($"{TAG} OnMessageAsync called");
 
-            Resolve();
             if (value == null)
             {
                 return;
@@ -65,14 +63,14 @@ namespace Bit.App.Services
 
             Debug.WriteLine($"{TAG} - Notification object created: t:{notification?.Type} - p:{notification?.Payload}");
 
-            var appId = await _appIdService.GetAppIdAsync();
+            var appId = await _appIdService.Value.GetAppIdAsync();
             if (notification?.Payload == null || notification.ContextId == appId)
             {
                 return;
             }
 
-            var myUserId = await _stateService.GetActiveUserIdAsync();
-            var isAuthenticated = await _stateService.IsAuthenticatedAsync();
+            var myUserId = await _stateService.Value.GetActiveUserIdAsync();
+            var isAuthenticated = await _stateService.Value.IsAuthenticatedAsync();
             switch (notification.Type)
             {
                 case NotificationType.SyncCipherUpdate:
@@ -81,7 +79,7 @@ namespace Bit.App.Services
                         notification.Payload);
                     if (isAuthenticated && cipherCreateUpdateMessage.UserId == myUserId)
                     {
-                        await _syncService.SyncUpsertCipherAsync(cipherCreateUpdateMessage,
+                        await _syncService.Value.SyncUpsertCipherAsync(cipherCreateUpdateMessage,
                             notification.Type == NotificationType.SyncCipherUpdate);
                     }
                     break;
@@ -91,7 +89,7 @@ namespace Bit.App.Services
                         notification.Payload);
                     if (isAuthenticated && folderCreateUpdateMessage.UserId == myUserId)
                     {
-                        await _syncService.SyncUpsertFolderAsync(folderCreateUpdateMessage,
+                        await _syncService.Value.SyncUpsertFolderAsync(folderCreateUpdateMessage,
                             notification.Type == NotificationType.SyncFolderUpdate);
                     }
                     break;
@@ -101,7 +99,7 @@ namespace Bit.App.Services
                         notification.Payload);
                     if (isAuthenticated && loginDeleteMessage.UserId == myUserId)
                     {
-                        await _syncService.SyncDeleteCipherAsync(loginDeleteMessage);
+                        await _syncService.Value.SyncDeleteCipherAsync(loginDeleteMessage);
                     }
                     break;
                 case NotificationType.SyncFolderDelete:
@@ -109,7 +107,7 @@ namespace Bit.App.Services
                         notification.Payload);
                     if (isAuthenticated && folderDeleteMessage.UserId == myUserId)
                     {
-                        await _syncService.SyncDeleteFolderAsync(folderDeleteMessage);
+                        await _syncService.Value.SyncDeleteFolderAsync(folderDeleteMessage);
                     }
                     break;
                 case NotificationType.SyncCiphers:
@@ -117,27 +115,27 @@ namespace Bit.App.Services
                 case NotificationType.SyncSettings:
                     if (isAuthenticated)
                     {
-                        await _syncService.FullSyncAsync(false);
+                        await _syncService.Value.FullSyncAsync(false);
                     }
                     break;
                 case NotificationType.SyncOrgKeys:
                     if (isAuthenticated)
                     {
-                        await _apiService.RefreshIdentityTokenAsync();
-                        await _syncService.FullSyncAsync(true);
+                        await _apiService.Value.RefreshIdentityTokenAsync();
+                        await _syncService.Value.FullSyncAsync(true);
                     }
                     break;
                 case NotificationType.LogOut:
                     if (isAuthenticated)
                     {
-                        _messagingService.Send("logout");
+                        _messagingService.Value.Send("logout");
                     }
                     break;
                 case NotificationType.AuthRequest:
                     var passwordlessLoginMessage = JsonConvert.DeserializeObject<PasswordlessRequestNotification>(notification.Payload);
 
                     // if the user has not enabled passwordless logins ignore requests
-                    if (!await _stateService.GetApprovePasswordlessLoginsAsync(passwordlessLoginMessage?.UserId))
+                    if (!await _stateService.Value.GetApprovePasswordlessLoginsAsync(passwordlessLoginMessage?.UserId))
                     {
                         return;
                     }
@@ -148,8 +146,8 @@ namespace Bit.App.Services
                         return;
                     }
 
-                    await _stateService.SetPasswordlessLoginNotificationAsync(passwordlessLoginMessage, passwordlessLoginMessage?.UserId);
-                    var userEmail = await _stateService.GetEmailAsync(passwordlessLoginMessage?.UserId);
+                    await _stateService.Value.SetPasswordlessLoginNotificationAsync(passwordlessLoginMessage, passwordlessLoginMessage?.UserId);
+                    var userEmail = await _stateService.Value.GetEmailAsync(passwordlessLoginMessage?.UserId);
 
                     var notificationData = new PasswordlessNotificationData()
                     {
@@ -158,8 +156,8 @@ namespace Bit.App.Services
                         UserEmail = userEmail,
                     };
 
-                    _pushNotificationService.SendLocalNotification(AppResources.LogInRequested, String.Format(AppResources.ConfimLogInAttempForX, userEmail), notificationData);
-                    _messagingService.Send("passwordlessLoginRequest", passwordlessLoginMessage);
+                    _pushNotificationService.Value.SendLocalNotification(AppResources.LogInRequested, String.Format(AppResources.ConfimLogInAttempForX, userEmail), notificationData);
+                    _messagingService.Value.Send("passwordlessLoginRequest", passwordlessLoginMessage);
                     break;
                 default:
                     break;
@@ -168,31 +166,30 @@ namespace Bit.App.Services
 
         public async Task OnRegisteredAsync(string token, string deviceType)
         {
-            Resolve();
             Debug.WriteLine($"{TAG} - Device Registered - Token : {token}");
-            var isAuthenticated = await _stateService.IsAuthenticatedAsync();
+            var isAuthenticated = await _stateService.Value.IsAuthenticatedAsync();
             if (!isAuthenticated)
             {
                 Debug.WriteLine($"{TAG} - not auth");
                 return;
             }
 
-            var appId = await _appIdService.GetAppIdAsync();
+            var appId = await _appIdService.Value.GetAppIdAsync();
             try
             {
 #if DEBUG
-                await _stateService.SetPushInstallationRegistrationErrorAsync(null);
+                await _stateService.Value.SetPushInstallationRegistrationErrorAsync(null);
 #endif
 
-                await _apiService.PutDeviceTokenAsync(appId,
+                await _apiService.Value.PutDeviceTokenAsync(appId,
                     new Core.Models.Request.DeviceTokenRequest { PushToken = token });
 
                 Debug.WriteLine($"{TAG} Registered device with server.");
 
-                await _stateService.SetPushLastRegistrationDateAsync(DateTime.UtcNow);
+                await _stateService.Value.SetPushLastRegistrationDateAsync(DateTime.UtcNow);
                 if (deviceType == Device.Android)
                 {
-                    await _stateService.SetPushCurrentTokenAsync(token);
+                    await _stateService.Value.SetPushCurrentTokenAsync(token);
                 }
             }
 #if DEBUG
@@ -200,11 +197,11 @@ namespace Bit.App.Services
             {
                 Debug.WriteLine($"{TAG} Failed to register device.");
 
-                await _stateService.SetPushInstallationRegistrationErrorAsync(apiEx.Error?.Message);
+                await _stateService.Value.SetPushInstallationRegistrationErrorAsync(apiEx.Error?.Message);
             }
             catch (Exception e)
             {
-                await _stateService.SetPushInstallationRegistrationErrorAsync(e.Message);
+                await _stateService.Value.SetPushInstallationRegistrationErrorAsync(e.Message);
                 throw;
             }
 #else
@@ -226,44 +223,50 @@ namespace Bit.App.Services
 
         public async Task OnNotificationTapped(BaseNotificationData data)
         {
-            Resolve();
             try
             {
                 if (data is PasswordlessNotificationData passwordlessNotificationData)
                 {
-                    var notificationUserId = await _stateService.GetUserIdAsync(passwordlessNotificationData.UserEmail);
+                    var notificationUserId = await _stateService.Value.GetUserIdAsync(passwordlessNotificationData.UserEmail);
                     if (notificationUserId != null)
                     {
-                        await _stateService.SetActiveUserAsync(notificationUserId);
-                        _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
+                        await _stateService.Value.SetActiveUserAsync(notificationUserId);
+                        _messagingService.Value.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
                     }
                 }
             }
             catch (Exception ex)
             {
-                _logger.Exception(ex);
+                _logger.Value.Exception(ex);
+            }
+        }
+
+        public async Task OnNotificationDismissed(BaseNotificationData data)
+        {
+            try
+            {
+                if (data is PasswordlessNotificationData passwordlessNotificationData)
+                {
+                    var notificationUserId = await _stateService.Value.GetUserIdAsync(passwordlessNotificationData.UserEmail);
+                    if (notificationUserId != null)
+                    {
+                        var savedNotification = await _stateService.Value.GetPasswordlessLoginNotificationAsync(notificationUserId);
+                        if (savedNotification != null)
+                        {
+                            await _stateService.Value.SetPasswordlessLoginNotificationAsync(null, notificationUserId);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Value.Exception(ex);
             }
         }
 
         public bool ShouldShowNotification()
         {
             return _showNotification;
-        }
-
-        private void Resolve()
-        {
-            if (_resolved)
-            {
-                return;
-            }
-            _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
-            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
-            _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
-            _apiService = ServiceContainer.Resolve<IApiService>("apiService");
-            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
-            _logger = ServiceContainer.Resolve<ILogger>();
-            _resolved = true;
         }
     }
 }
