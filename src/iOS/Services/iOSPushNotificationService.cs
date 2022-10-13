@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models;
+using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.Core;
 using Bit.Core.Services;
@@ -84,13 +85,18 @@ namespace Bit.iOS.Services
             var content = new UNMutableNotificationContent()
             {
                 Title = title,
-                Body = message
+                Body = message,
+                CategoryIdentifier = Constants.iOSNotificationCategoryId
             };
 
             if (data != null)
             {
                 content.UserInfo = NSDictionary.FromObjectAndKey(NSData.FromString(JsonConvert.SerializeObject(data), NSStringEncoding.UTF8), new NSString(Constants.NotificationData));
             }
+
+            var actions = new UNNotificationAction[] { UNNotificationAction.FromIdentifier(Constants.iOSNotificationClearActionId, AppResources.Clear, UNNotificationActionOptions.Foreground) };
+            var category = UNNotificationCategory.FromIdentifier(Constants.iOSNotificationCategoryId, actions, new string[] { }, UNNotificationCategoryOptions.CustomDismissAction);
+            UNUserNotificationCenter.Current.SetNotificationCategories(new NSSet<UNNotificationCategory>(new UNNotificationCategory[] { category }));
 
             var request = UNNotificationRequest.FromIdentifier(data.Id, content, null);
             UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) =>
