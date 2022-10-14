@@ -3434,6 +3434,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login attempt from {0}. Do you want to switch to this account?.
+        /// </summary>
+        public static string LoginAttemptFromXDoYouWantToSwitch {
+            get {
+                return ResourceManager.GetString("LoginAttemptFromXDoYouWantToSwitch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login denied.
         /// </summary>
         public static string LogInDenied {
