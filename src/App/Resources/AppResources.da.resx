@@ -232,7 +232,7 @@
     <value>Mappe opdateret.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Gå til hjemmeside</value>
+    <value>Gå til websted</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
@@ -251,7 +251,7 @@
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Ugyldig hovedadgangskode. Prøv igen.</value>
+    <value>Ugyldig hovedadgangskode. Forsøg igen.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
     <value>Ugyldig pinkode. Prøv igen.</value>
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Element er blevet slettet.</value>
+    <value>Element slettet</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -364,7 +364,7 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Lås op med dit fingeraftryk</value>
+    <value>Brug fingeraftryk til at låse op</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Brugernavn</value>
@@ -375,7 +375,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} er blevet kopieret.</value>
+    <value>{0} kopieret</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -394,7 +394,7 @@
     <value>Vis</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Besøg vores hjemmeside</value>
+    <value>Besøg vores websted</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
     <value>Besøg vores hjemmeside for at få hjælp, nyheder, e-maile os og/eller få mere at vide om, hvordan du benytter Bitwarden.</value>
@@ -471,7 +471,7 @@
     <value>Redigér element</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Aktivér automatisk synkronisering</value>
+    <value>Tillad automatisk synkronisering</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>Angiv din kontos e-mailadresse for at modtage dit hovedadgangskodetip.</value>
@@ -587,11 +587,11 @@
     <value>Hovedadgangskode skal være på minimum 8 tegn.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minimum cifre</value>
+    <value>Mindste antal cifre</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Minimum specialtegn</value>
+    <value>Mindste antal specialtegn</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -604,7 +604,7 @@
     <value>Aldrig</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Nyt element oprettet.</value>
+    <value>Element tilføjet</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Der er ingen favoritter i din boks.</value>
@@ -681,7 +681,7 @@
     <value>Elementinformation</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Element opdateret.</value>
+    <value>Element gemt</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Indsender...</value>
@@ -695,7 +695,7 @@
     <value>Synkronisering fuldført.</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Synkronisering mislykkedes.</value>
+    <value>Synkronisering mislykkedes</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>Synkronisér boks nu</value>
@@ -708,7 +708,7 @@
     <value>To-trins login</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>To-trins login øger din kontosikkerhed, ved at kræve at du verificerer dit login med en anden enhed, såsom en sikkerhedsnøgle, autentificerings app, SMS, telefonopkald eller e-mail. To-trins login kan aktiveres i bitwarden.com web-boksen. Vil du besøge hjemmesiden nu?</value>
+    <value>To-trins login gør din konto mere sikker ved at kræve, at du verificerer dit login med en anden enhed, såsom en sikkerhedsnøgle, autentificeringsapp, SMS, telefonopkald eller e-mail. To-trins login kan aktiveres i bitwarden.com web-boksen. Vil du besøge hjemmesiden nu?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Lås op med {0}</value>
@@ -815,7 +815,7 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Autentificerings app</value>
+    <value>Autentificerings-app</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
@@ -831,7 +831,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Denne konto har to-trins login aktiveret, men ingen af de konfigurerede to-trins-udbydere understøttes på denne enhed. Du skal bruge en understøttet enhed og/eller tilføje ekstra udbydere, der understøttes bedre på tværs af enheder (såsom en autentificeringsapp).</value>
+    <value>Denne konto har to-trins login aktiveret, men ingen af de konfigurerede to-trins-udbydere understøttes på denne enhed. Brug venligst en understøttet enhed og/eller tilføj yderligere udbydere, der bedre understøttes på tværs af enheder (såsom en autentificeringsapp).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Gendannelseskode</value>
@@ -1017,7 +1017,7 @@ Skanning vil ske automatisk.</value>
     <value>Login</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Sikret notat</value>
+    <value>Sikkert notat</value>
   </data>
   <data name="Address1" xml:space="preserve">
     <value>Adresse 1</value>
@@ -1553,7 +1553,7 @@ Skanning vil ske automatisk.</value>
     <value>Standard mørkt tema</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Vælg det mørke tema, der skal bruges, når Standard (system) temaet bruges, mens din enheds mørke tilstand er aktiveret.</value>
+    <value>Vælg det mørke tema, der skal bruges, når Standard (System) temaet bruges, mens din enheds mørke tilstand er aktiveret.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopiér notat</value>
@@ -1625,7 +1625,7 @@ Skanning vil ske automatisk.</value>
     <value>Benyt biometri til oplåsning</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden har brug for din opmærksomhed - se "Autoudfyld hjælpefunktion" i Bitwarden-indstillinger</value>
+    <value>Bitwarden har brug for opmærksomhed - se "Autoudfyld hjælpefunktion" i Bitwarden-indstillinger</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
     <value>3. På Android-appindstillinger for Bitwarden, gå til indstillingen "Vis oven på andre apps" (under Avanceret) og tryk på knappen for at aktivere overlejringsunderstøttelse.</value>
@@ -1722,7 +1722,7 @@ Skanning vil ske automatisk.</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Element er gendannet.</value>
+    <value>Element gendannet</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
@@ -1752,7 +1752,7 @@ Skanning vil ske automatisk.</value>
     <value>Biometrisk oplåsning til autoudfyldning deaktiveret - afventer verifikation af hovedadgangskoden.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Aktivér synk ved opfriskning</value>
+    <value>Tillad synk ved opfriskning</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
     <value>Synkronisering af boks med træk nedad-gestus.</value>
@@ -1848,7 +1848,7 @@ Skanning vil ske automatisk.</value>
     <value>Brug "Tegn over"</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>Når aktiveret, tillades Bitwarden-tilgængelighedstjenesten at vise en popup, når login-felter vælges.</value>
+    <value>Tillader Bitwarden-tilgængelighedstjenesten at vise en popup, når login-felter vælges.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
     <value>Hvis aktiveret, vil Bitwarden-tilgængelighedstjenesten vise en popup, når login-felter vælges for at hjælpe med autoudfyldning af logins.</value>
@@ -2002,7 +2002,7 @@ Skanning vil ske automatisk.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Tilføj Send</value>
+    <value>Ny Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
@@ -2010,15 +2010,15 @@ Skanning vil ske automatisk.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Send er blevet slettet.</value>
+    <value>Send slettet</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Send opdateret.</value>
+    <value>Send gemt</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Ny Send oprettet.</value>
+    <value>Send oprettet</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2383,7 +2383,7 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</value>
     <value>Brugernavnstype</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Plus adresseret e-mail</value>
+    <value>Plus-adresseret e-mail</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
     <value>Fang-alle e-mail</value>
