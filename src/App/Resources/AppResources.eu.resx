@@ -918,7 +918,7 @@
     <value>Saio hasiera batek autentifikazio-gakoa badu, TOTP egiaztatze-kodea arbelean automatikoki kopiatuko da saio hasiera bat auto-betetzean.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
-    <value>Kopiatu TOTO automatikoki</value>
+    <value>Kopiatu TOTP automatikoki</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Premium bazkidetza beharrezkoa da ezaugarri hau erabiltzeko.</value>

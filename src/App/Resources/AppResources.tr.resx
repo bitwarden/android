@@ -152,11 +152,11 @@
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Parolayı kopyala</value>
+    <value>Parolayı Kopyala</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Kullanıcı adını kopyala</value>
+    <value>Kullanıcı Adını Kopyala</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -382,7 +382,7 @@
     <value>Parmak İzini Doğrula</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Ana Parolayı Doğrula</value>
+    <value>Ana parolayı doğrula</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>PIN'i doğrula</value>
@@ -663,7 +663,7 @@
     <value>Ana parolayı tekrar yazın</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Kasada ara</value>
+    <value>Kasada Ara</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Güvenlik</value>
@@ -1213,7 +1213,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Metin</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>Yeni özel alan</value>
+    <value>Yeni Özel Alan</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
     <value>Ne tür bir özel alan eklemek istiyorsunuz?</value>
@@ -1252,11 +1252,11 @@ Kod otomatik olarak taranacaktır.</value>
     <value>URI eşleşme tespiti</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Eşleşme tespiti</value>
+    <value>Eşleşme Tespiti</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Evet ve kaydet</value>
+    <value>Evet, Kaydet</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
     <value>Otomatik doldur ve kaydet</value>
@@ -1278,7 +1278,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Erişilebilirlik hizmeti, standart otomatik doldurma hizmetini desteklemeyen uygulamalarda işe yarayabilir.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Parola güncellendi</value>
+    <value>Parola Güncellendi</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
@@ -1480,7 +1480,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Kilidi aç</value>
   </data>
   <data name="UnlockVault" xml:space="preserve">
-    <value>Kasa Kilidini Aç</value>
+    <value>Kasanı Aç</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 dakika</value>
@@ -1556,7 +1556,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Varsayılan (sistem) temayı kullanırken cihazınızın koyu modu açıldığında koyu temaya geçmek için bunu seçin.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Notu kopyala</value>
+    <value>Notları kopyala</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Çıkış</value>
@@ -1770,7 +1770,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Şu anda SSO ile giriş yapılamıyor</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Ana parolayı belirle</value>
+    <value>Ana Parola Belirleyin</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
     <value>SSO ile girişinizi tamamlamak için lütfen kasanıza erişirken kullanacağınız ana parolayı belirleyin.</value>

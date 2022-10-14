@@ -156,7 +156,7 @@
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>رونوشت نام کاربری</value>
+    <value>کپی نام کاربری</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -190,7 +190,7 @@
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>به ما رایانامه بزنید</value>
+    <value>ایمیل ما</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
     <value>برای کمک گرفتن و گذاشتن بازخورد بصورت مستقیم به ما رایانامه ارسال کنید.</value>
@@ -379,10 +379,10 @@
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>تایید اثر انگشت</value>
+    <value>تأیید اثر انگشت</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>تایید کلمه عبور اصلی</value>
+    <value>تأیید کلمه عبور اصلی</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>تایید پین</value>
@@ -394,7 +394,7 @@
     <value>مشاهده</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>از وب‌سایت ما دیدن کنید</value>
+    <value>از وب‌ سایت ما دیدن کنید</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
     <value>برای کمک گرفتن، اخبار، رایانامه ما، و یا آموزش بیشتر برای استفاده از Bitwarden از وب سایت ما دیدن کنید.</value>
@@ -425,7 +425,7 @@
     <value>سرویس پر کردن خودکار</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>از کاراکترهای مبهم اجتناب کن</value>
+    <value>از کاراکترهای مبهم اجتناب شود</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>افزونه برنامه Bitwarden</value>
@@ -635,7 +635,7 @@
     <value>کلمه عبور تولید شد.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>تولید کننده کلمه عبور</value>
+    <value>تولیدکننده کلمه عبور</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>راهنمای کلمه عبور</value>
