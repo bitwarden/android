@@ -229,7 +229,7 @@
     <value>資料夾</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>已更新資料夾。</value>
+    <value>資料夾已更新。</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>前往網站</value>
@@ -425,7 +425,7 @@
     <value>自動填入服務</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>避免易混淆的字元</value>
+    <value>避免使用易混淆的字元</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Bitwarden App 延伸功能</value>
@@ -461,7 +461,7 @@
     <value>繼續</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>建立帳戶</value>
+    <value>新增帳戶</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
     <value>正在建立帳戶...</value>
@@ -578,7 +578,7 @@
     <value>主密碼是用於存取密碼庫的密碼。它非常重要，請您不要忘記它。若您忘記了主密碼，沒有任何方法能將其復原。</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>主密碼提示（選用）</value>
+    <value>主密碼提示（可省略）</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>主密碼提示可以在您忘記主密碼時幫助您回憶主密碼。</value>
@@ -587,11 +587,11 @@
     <value>主密碼需要至少 8 個字元。</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>最少數字位數</value>
+    <value>數字</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>最少符號位數</value>
+    <value>符號</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -799,7 +799,7 @@
     <value>相符的項目</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>可能相符的項目</value>
+    <value>可能符合的項目</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>搜尋</value>
@@ -815,7 +815,7 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>驗證器應用程式</value>
+    <value>認證器應用程式</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
@@ -834,7 +834,7 @@
     <value>此帳戶已啟用兩步驟登入，但是本裝置不支援已設定的兩步驟登入方式。請使用已支援的裝置，及/或新增可以更好地跨裝置的兩步驟登入方式（例如驗證器應用程式）。</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>復原碼</value>
+    <value>復原代碼</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
@@ -863,7 +863,7 @@
     <value>若要繼續，請將您的 YubiKey 靠在裝置的背面或者將 YubiKey 插入您裝置的 USB 連接埠，然後按下按鈕。</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey 安全金鑰</value>
+    <value>YubiKey 安全鑰匙</value>
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -887,10 +887,10 @@
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>驗證器金鑰 (TOTP)</value>
+    <value>驗證器金鑰（TOTP）</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>驗證碼 (TOTP)</value>
+    <value>驗證碼（TOTP）</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
@@ -946,7 +946,7 @@
     <value>檔案來源</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>功能無法使用</value>
+    <value>功能不可用</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
     <value>檔案最大為 100MB。</value>
@@ -987,7 +987,7 @@
     <value>伺服器 URL</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>網頁版密碼庫伺服器 URL</value>
+    <value>網路版密碼庫伺服器 URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>按此通知以檢視密碼庫中的登入資料。</value>
@@ -1143,7 +1143,7 @@
     <value>在每個登入資料旁顯示一個可辨識的圖片。</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>圖示伺服器 URL</value>
+    <value>圖標伺服器 URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
     <value>使用 Bitwarden 自動填入</value>
@@ -1282,7 +1282,7 @@
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>已更新</value>
+    <value>更新於</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
@@ -1610,13 +1610,13 @@
     <value>共用</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>切換可見度</value>
+    <value>切換顯示</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>您的登入階段已逾期。</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>生物特徵辨識驗證</value>
+    <value>生物辨識驗證</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>生物特徵辨識</value>
@@ -1827,7 +1827,7 @@
     <value>使用內嵌式自動填入</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>若您的 IME（鍵盤）支援，將使用內嵌式自動填入。若您的設定不支援（或未啟用此選項），將使用預設的疊加式自動填入。</value>
+    <value>若您的 IME（鍵盤）支援，將使用內嵌式自動填入。若您的設定不支援（或未啟用此選項），將使用預設的覆疊式自動填入。</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
     <value>使用無障礙</value>
@@ -1851,7 +1851,7 @@
     <value>啟用後，在選擇登入欄位時將允許 Bitwarden 無障礙服務顯示彈出式視窗。</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>若啟用，當選擇登入欄位自動填入您的登入資料時，Bitwarden 無障礙服務將顯示一個彈出式視窗。</value>
+    <value>若啟用，當選擇登入欄位自動填入您的登入資料時，Bitwarden 無障礙服務將顯示彈出式視窗。</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
     <value>若啟用，無障礙將顯示一個彈出式視窗以增強不支援 Android 自動填入框架的舊應用程式的自動填入服務。</value>
@@ -2202,7 +2202,7 @@
     <value>正在驗證</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>重新傳送驗證碼</value>
+    <value>重新傳送代碼</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
     <value>已傳送驗證碼至您的電子郵件信箱</value>
@@ -2452,7 +2452,7 @@
     <value>無障礙服務聲明</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden 使用無障礙服務搜寻應用程式和網站中的登入欄位，然後建立適當的欄位 ID，以便在找到應用程式或網站的匹配項目時輸入用戶名和密碼。 我們不會存儲服務提供給我們的任何資訊，也不會試圖控制憑證文字輸入以外的任何荧幕元素。</value>
+    <value>Bitwarden 使用無障礙服務搜寻應用程式和網站中的登入欄位，然後建立適當的欄位 ID，以便在找到應用程式或網站的匹配項目時輸入用戶名和密碼。 我們不會存儲此服務提供給我們的任何資訊，也不會試圖控制憑證文字輸入以外的任何荧幕元素。</value>
   </data>
   <data name="Accept" xml:space="preserve">
     <value>接受</value>

@@ -1286,7 +1286,7 @@ Scanning will happen automatically.</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>Auto-fill activated!</value>
+    <value>AutoFill activated!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
     <value>You must log into the main Bitwarden app before you can use auto-fill.</value>

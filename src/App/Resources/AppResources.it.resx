@@ -375,7 +375,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} è stato copiato.</value>
+    <value>{0} copiata.</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -529,7 +529,7 @@
     <value>Importa rapidamente i tuoi elementi da altre app di gestione password.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>Ultima Sincronizzazione:</value>
+    <value>Ultima sincronizzazione:</value>
   </data>
   <data name="Length" xml:space="preserve">
     <value>Lunghezza</value>
@@ -695,7 +695,7 @@
     <value>Sincronizzazione completata.</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Sincronizzazione non riuscita.</value>
+    <value>Sincronizzazione fallita.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>Sincronizza la cassaforte</value>
@@ -1609,7 +1609,7 @@
     <value>Condiviso</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Mostra/Nascondi</value>
+    <value>Mostra/nascondi</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>La tua sessione è scaduta.</value>
@@ -2103,7 +2103,7 @@
     <value>{0} sta usando SSO con cifratura gestita dal cliente. Continuando la tua password principale sarà rimossa dal tuo profilo e richiederà SSO per accedere.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>Se non desideri rimuovere la tua password principale, potresti lasciare questa organizzazione.</value>
+    <value>Se non vuoi rimuovere la tua password principale, puoi lasciare questa organizzazione.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
     <value>Lascia l'organizzazione</value>
@@ -2202,7 +2202,7 @@
     <value>Verifica</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Invia di nuovo il codice</value>
+    <value>Reinvia codice</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
     <value>Il codice di verifica è stato inviato al tuo indirizzo email</value>
