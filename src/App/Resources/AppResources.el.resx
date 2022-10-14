@@ -289,7 +289,7 @@
     <value>Θα θέλατε να το αλλάξετε τώρα?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
-    <value>Κύριος Κωδικός</value>
+    <value>Κύριος κωδικός</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
@@ -1610,7 +1610,7 @@
     <value>Κοινοποιήθηκε</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Εναλλαγή Ορατότητας</value>
+    <value>Εναλλαγή ορατότητας</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>Η περίοδος σύνδεσης σας έχει λήξει.</value>

@@ -468,7 +468,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Зміна запису</value>
+    <value>Редагування запису</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Увімкніть автоматичну синхронізацію</value>
@@ -922,7 +922,7 @@
     <value>Автоматично копіювати коди TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>Для використання цієї функції необхідний преміум статус.</value>
+    <value>Для використання цієї функції необхідна передплата преміум.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
     <value>Вкладення додано</value>
@@ -1710,7 +1710,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemSoftDeleted" xml:space="preserve">
-    <value>Запис перенесено до смітника.</value>
+    <value>Запис переміщено до смітника.</value>
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
@@ -2059,7 +2059,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>З безплатним обліковим записом можна відправляти лише текст. Щоб відправляти файли через Send, необхідно передплатити тарифний план.</value>
+    <value>З безплатним обліковим записом можна відправляти лише текст. Щоб відправляти файли через Send, необхідна передплата преміум.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
