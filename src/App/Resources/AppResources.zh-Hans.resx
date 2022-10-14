@@ -247,7 +247,7 @@
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>需要因特网连接</value>
+    <value>需要互联网连接</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
@@ -296,7 +296,7 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>密码库</value>
+    <value>我的密码库</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
@@ -353,7 +353,7 @@
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>非常感谢</value>
+    <value>谢谢</value>
   </data>
   <data name="Tools" xml:space="preserve">
     <value>工具</value>
@@ -428,7 +428,7 @@
     <value>避免易混淆的字符</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Bitwarden 应用程序扩展</value>
+    <value>bitwarden App 扩展</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
     <value>向您的密码库中添加新登录项目的最简单方法，就是通过 Bitwarden 应用程序扩展。转到「设置」界面了解更多有关使用 Bitwarden 应用程序扩展的方法。</value>
@@ -443,7 +443,7 @@
     <value>使用 Bitwarden 无障碍服务自动填充您的登录信息。</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>修改 Email</value>
+    <value>修改电子邮件地址</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
     <value>您可以在 bitwarden.com 网页版密码库修改电子邮件地址。您现在要访问这个网站吗？</value>
@@ -461,7 +461,7 @@
     <value>继续</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>创建账户</value>
+    <value>创建账号</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
     <value>正在创建账户...</value>
@@ -477,13 +477,13 @@
     <value>请输入您账户的 Email 地址来接收主密码提示。</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>重新启用应用程序扩展</value>
+    <value>重新开启 App 扩展</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>就差一步！</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>启用应用程序扩展</value>
+    <value>开启 App 扩展</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>在 Safari 中，使用共享图标寻找 Bitwarden （提示：在菜单最下面一行的右边）。</value>
@@ -529,7 +529,7 @@
     <value>从其他密码管理应用中快速批量导入您的项目。</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>上次同步：</value>
+    <value>上次同步:</value>
   </data>
   <data name="Length" xml:space="preserve">
     <value>长度</value>
@@ -578,7 +578,7 @@
     <value>主密码是您访问密码库的唯一密码。它非常重要，请您不要忘记。一旦忘记，无任何办法恢复此密码。</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>主密码提示（可选）</value>
+    <value>主密码提示 (可选)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>主密码提示可以在你忘记密码时帮你回忆起来。</value>
@@ -632,7 +632,7 @@
     <value>其他</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>密码已经生成。</value>
+    <value>密码已生成。</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>密码生成器</value>
@@ -815,7 +815,7 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>验证器 App</value>
+    <value>验证器应用</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
@@ -834,7 +834,7 @@
     <value>此账户已启用两步登录，但此设备上不支持任何已配置的两步提供程序。请使用受支持的设备和/或添加其他跨设备支持的提供程序（例如验证器应用）。</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>恢复代码</value>
+    <value>恢复码</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
@@ -856,14 +856,14 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>验证邮件已发送。</value>
+    <value>验证电子邮件已发送。</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
     <value>要继续，请将您的 YubiKey 靠在设备背面或者将 YubiKey 插入您设备的 USB 端口，然后按下按钮。</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey 安全钥匙</value>
+    <value>YubiKey NEO 安全密钥</value>
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -887,10 +887,10 @@
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>验证器密钥 (TOTP)</value>
+    <value>验证器密钥（TOTP）</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>验证码 (TOTP)</value>
+    <value>验证码（TOTP）</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
@@ -955,7 +955,7 @@
     <value>在您更新加密密钥前，您不能使用此功能。</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>了解更多信息</value>
+    <value>了解更多信息。</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
     <value>API 服务器 URL</value>
@@ -987,7 +987,7 @@
     <value>服务器 URL</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>网页密码库服务器 URL</value>
+    <value>Web 存储库服务器 URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>点击此通知以查看密码库中的项目。</value>
@@ -1286,7 +1286,7 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>自动填充已激活！</value>
+    <value>自动填写已激活！</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
     <value>您必须先登录 Bitwarden 应用，才可以使用自动填充。</value>
@@ -1301,7 +1301,7 @@
     <value>从键盘直接访问密码库以快速自动填充密码。</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>请按照以下步骤在你的设备上开启密码自动填充功能：</value>
+    <value>请按照以下步骤在你的设备上开启密码自动填写功能：</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. 前往 iOS 的「设置」应用</value>
@@ -1836,7 +1836,7 @@
     <value>使用 Bitwarden 无障碍服务来自动填充您在应用和网络中的登录信息。启用后，将在选择登录字段时显示弹出窗口。</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>使用 Bitwarden 无障碍服务来自动填写您在应用和网络上的登录信息。（需同时启用 Draw-Over 功能）</value>
+    <value>使用 Bitwarden 无障碍服务来自动填充您在应用和网络上的登录信息。（需同时启用 Draw-Over 功能）</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
     <value>使用 Bitwarden 无障碍服务来使用自动填写快速行动磁贴，和/或使用 Draw-Over（若已启用）来显示弹出窗口。</value>
@@ -1926,7 +1926,7 @@
     <value>过期日期</value>
   </data>
   <data name="ExpirationTime" xml:space="preserve">
-    <value>过期时间</value>
+    <value>到期时间</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
     <value>设置后，对此 Send 的访问将在指定的日期和时间后过期。</value>
@@ -2235,7 +2235,7 @@
     <value>数字 (0-9)</value>
   </data>
   <data name="SpecialCharacters" xml:space="preserve">
-    <value>特殊字符 (!@#$%^&amp;*)</value>
+    <value>特殊字符（!@#$%^&amp;*）</value>
   </data>
   <data name="TapToGoBack" xml:space="preserve">
     <value>点击以返回</value>
@@ -2250,7 +2250,7 @@
     <value>按密码库过滤项目</value>
   </data>
   <data name="AllVaults" xml:space="preserve">
-    <value>所有密码库</value>
+    <value>全部密码库</value>
   </data>
   <data name="Vaults" xml:space="preserve">
     <value>密码库</value>

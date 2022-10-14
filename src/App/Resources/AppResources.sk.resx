@@ -1610,7 +1610,7 @@ Skenovanie prebehne automaticky.</value>
     <value>Zdieľané</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Toggle Visiblity</value>
+    <value>Toggle visibility</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>Platnosť prihlásenia vypršala.</value>
@@ -2374,7 +2374,7 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</value>
     <value>Všetky upozornenia</value>
   </data>
   <data name="PasswordType" xml:space="preserve">
-    <value>Typ hesla</value>
+    <value>Password Type</value>
   </data>
   <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
     <value>Čo by ste chceli vygenerovať?</value>
