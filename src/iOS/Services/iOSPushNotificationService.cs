@@ -96,7 +96,7 @@ namespace Bit.iOS.Services
 
             var actions = new UNNotificationAction[] { UNNotificationAction.FromIdentifier(Constants.iOSNotificationClearActionId, AppResources.Clear, UNNotificationActionOptions.Foreground) };
             var category = UNNotificationCategory.FromIdentifier(Constants.iOSNotificationCategoryId, actions, new string[] { }, UNNotificationCategoryOptions.CustomDismissAction);
-            UNUserNotificationCenter.Current.SetNotificationCategories(new NSSet<UNNotificationCategory>(new UNNotificationCategory[] { category }));
+            UNUserNotificationCenter.Current.SetNotificationCategories(new NSSet<UNNotificationCategory>(category));
 
             var request = UNNotificationRequest.FromIdentifier(data.Id, content, null);
             UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) =>
