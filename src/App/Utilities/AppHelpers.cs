@@ -121,6 +121,26 @@ namespace Bit.App.Utilities
                     }
                 }
             }
+            else if (selection == AppResources.CopyLicenseNumber)
+            {
+                await clipboardService.CopyTextAsync(cipher.Identity.LicenseNumber);
+                platformUtilsService.ShowToastForCopiedValue(AppResources.LicenseNumber);
+            }
+            else if (selection == AppResources.CopyEmail)
+            {
+                await clipboardService.CopyTextAsync(cipher.Identity.Email);
+                platformUtilsService.ShowToastForCopiedValue(AppResources.Email);
+            }
+            else if (selection == AppResources.CopyPassportNumber)
+            {
+                await clipboardService.CopyTextAsync(cipher.Identity.PassportNumber);
+                platformUtilsService.ShowToastForCopiedValue(AppResources.PassportNumber);
+            }
+            else if (selection == AppResources.CopySSN)
+            {
+                await clipboardService.CopyTextAsync(cipher.Identity.SSN);
+                platformUtilsService.ShowToastForCopiedValue(AppResources.SSN);
+            }
             else if (selection == AppResources.Launch)
             {
                 platformUtilsService.LaunchUri(cipher.Login.LaunchUri);

@@ -2464,4 +2464,20 @@ select Add TOTP to store the key safely</value>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>Login request has already expired.</value>
   </data>
+  <data name="CopyLicenseNumber" xml:space="preserve">
+    <value>Copy license numebr</value>
+    <comment>The button text that allows a user to copy the identity's license number to their clipboard.</comment>
+  </data>
+  <data name="CopyEmail" xml:space="preserve">
+    <value>Copy email</value>
+    <comment>The button text that allows a user to copy the identity's email address to their clipboard.</comment>
+  </data>
+  <data name="CopyPassportNumber" xml:space="preserve">
+    <value>Copy passport number</value>
+    <comment>The button text that allows a user to copy the identity's passport number to their clipboard.</comment>
+  </data>
+  <data name="CopySSN" xml:space="preserve">
+    <value>Copy social security number</value>
+    <comment>The button text that allows a user to copy the identity's social security number to their clipboard.</comment>
+  </data>
 </root>

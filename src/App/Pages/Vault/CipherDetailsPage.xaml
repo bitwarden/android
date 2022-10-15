@@ -415,48 +415,136 @@
                             </StackLayout>
                             <BoxView StyleClass="box-row-separator"
                                      IsVisible="{Binding Cipher.Identity.Company, Converter={StaticResource stringHasValue}}" />
-                            <StackLayout StyleClass="box-row"
-                                         IsVisible="{Binding Cipher.Identity.SSN, Converter={StaticResource stringHasValue}}">
+                            <Grid StyleClass="box-row"
+                                  IsVisible="{Binding Cipher.Identity.SSN, Converter={StaticResource stringHasValue}}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
                                 <Label
                                     Text="{u:I18n SSN}"
-                                    StyleClass="box-label" />
+                                    StyleClass="box-label"
+                                    Grid.Row="0"
+                                    Grid.Column="0" />
                                 <Label
                                     Text="{Binding Cipher.Identity.SSN, Mode=OneWay}"
-                                    StyleClass="box-value" />
-                            </StackLayout>
+                                    StyleClass="box-value"
+                                    Grid.Row="1"
+                                    Grid.Column="0" />
+                                <controls:IconButton
+                                    StyleClass="box-row-button, box-row-button-platform"
+                                    Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                                    Command="{Binding CopySSN}"
+                                    CommandParameter="SSN"
+                                    Grid.Row="0"
+                                    Grid.Coluumn="1"
+                                    Grid.RowSpan="2"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n CopySSN}" />
+                            </Grid>
                             <BoxView StyleClass="box-row-separator"
                                      IsVisible="{Binding Cipher.Identity.SSN, Converter={StaticResource stringHasValue}}" />
-                            <StackLayout StyleClass="box-row"
-                                         IsVisible="{Binding Cipher.Identity.PassportNumber, Converter={StaticResource stringHasValue}}">
+                            <Grid StyleClass="box-row"
+                                  IsVisible="{Binding Cipher.Identity.PassportNumber, Converter={StaticResource stringHasValue}}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
                                 <Label
                                     Text="{u:I18n PassportNumber}"
-                                    StyleClass="box-label" />
+                                    StyleClass="box-label"
+                                    Grid.Row="0"
+                                    Grid.Column="0"/>
                                 <Label
                                     Text="{Binding Cipher.Identity.PassportNumber, Mode=OneWay}"
-                                    StyleClass="box-value" />
-                            </StackLayout>
+                                    StyleClass="box-value"
+                                    Grid.Row="1"
+                                    Grid.Column="0"/>
+                                <controls:IconButton
+                                    StyleClass="box-row-button, box-row-button-platform"
+                                    Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                                    Command="{Binding CopyPassportNumber}"
+                                    CommandParameter="PassportNumber"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Grid.RowSpan="2"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n CopyPassportNumber}" />
+                            </Grid>
                             <BoxView StyleClass="box-row-separator"
                                      IsVisible="{Binding Cipher.Identity.PassportNumber, Converter={StaticResource stringHasValue}}" />
-                            <StackLayout StyleClass="box-row"
-                                         IsVisible="{Binding Cipher.Identity.LicenseNumber, Converter={StaticResource stringHasValue}}">
+                            <Grid StyleClass="box-row"
+                                  IsVisible="{Binding Cipher.Identity.LicenseNumber, Converter={StaticResource stringHasValue}}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
                                 <Label
                                     Text="{u:I18n LicenseNumber}"
-                                    StyleClass="box-label" />
+                                    StyleClass="box-label"
+                                    Grid.Row="0"
+                                    Grid.Column="0" />
                                 <Label
                                     Text="{Binding Cipher.Identity.LicenseNumber, Mode=OneWay}"
-                                    StyleClass="box-value" />
-                            </StackLayout>
+                                    StyleClass="box-value"
+                                    Grid.Row="1"
+                                    Grid.Column="0" />
+                                <controls:IconButton
+                                    StyleClass="box-row-button, box-row-button-platform"
+                                    Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                                    Command="{Binding CopyCommand}"
+                                    CommandParameter="LicenseNumber"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Grid.RowSpan="2"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n CopyLicenseNumber}" />
+                            </Grid>
                             <BoxView StyleClass="box-row-separator"
                                      IsVisible="{Binding Cipher.Identity.LicenseNumber, Converter={StaticResource stringHasValue}}" />
-                            <StackLayout StyleClass="box-row"
-                                         IsVisible="{Binding Cipher.Identity.Email, Converter={StaticResource stringHasValue}}">
+                            <Grid StyleClass="box-row"
+                                  IsVisible="{Binding Cipher.Identity.Email, Converter={StaticResource stringHasValue}}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
                                 <Label
                                     Text="{u:I18n Email}"
-                                    StyleClass="box-label" />
+                                    StyleClass="box-label"
+                                    Grid.Row="0"
+                                    Grid.Column="0" />
                                 <Label
                                     Text="{Binding Cipher.Identity.Email, Mode=OneWay}"
-                                    StyleClass="box-value" />
-                            </StackLayout>
+                                    StyleClass="box-value"
+                                    Grid.Row="1"
+                                    Grid.Column="0" />
+                                <controls:IconButton
+                                    StyleClass="box-row-button, box-row-button-platform"
+                                    Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                                    Command="{Binding CopyCommand}"
+                                    CommandParameter="Email"
+                                    Grid.Row="0",
+                                    Grid.Column="1"
+                                    Grid.RowSpan="2"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n CopyEmail}" />
+                            </Grid>
                             <BoxView StyleClass="box-row-separator"
                                      IsVisible="{Binding Cipher.Identity.Email, Converter={StaticResource stringHasValue}}" />
                             <StackLayout StyleClass="box-row"

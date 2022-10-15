@@ -1506,6 +1506,24 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("Copy", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Copy Email.
+        /// </summary>
+        public static string CopyEmail {
+            get {
+                return ResourceManager.GetString("CopyEmail", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Copy License Number.
+        /// </summary>
+        public static string CopyLicenseNumber {
+            get {
+                return ResourceManager.GetString("CopyLicenseNumber", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Copy Link.
@@ -1535,6 +1553,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy passport number.
+        /// </summary>
+        public static string CopyPassportNumber {
+            get {
+                return ResourceManager.GetString("CopyPassportNumber", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Copy Password.
         /// </summary>
         public static string CopyPassword {
@@ -1558,6 +1585,15 @@ namespace Bit.App.Resources {
         public static string CopySendLinkOnSave {
             get {
                 return ResourceManager.GetString("CopySendLinkOnSave", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Copy social security number.
+        /// </summary>
+        public static string CopySSN {
+            get {
+                return ResourceManager.GetString("CopySSN", resourceCulture);
             }
         }
         

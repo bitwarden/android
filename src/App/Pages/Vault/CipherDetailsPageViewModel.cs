@@ -640,6 +640,26 @@ namespace Bit.App.Pages
                 text = Cipher.Card.Code;
                 name = AppResources.SecurityCode;
             }
+            else if (id == "LicenseNumber")
+            {
+                text = Cipher.Identity.LicenseNumber;
+                name = AppResources.LicenseNumber;
+            }
+            else if (id == "Email")
+            {
+                text = Cipher.Identity.Email;
+                name = AppResources.Email;
+            }
+            else if (id == "PassportNumber")
+            {
+                text = Cipher.Identity.PassportNumber;
+                name = AppResources.PassportNumber;
+            }
+            else if (id == "SSN")
+            {
+                text = Cipher.Identity.SSN;
+                name = AppResources.SSN;
+            }
 
             if (text != null)
             {
