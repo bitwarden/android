@@ -12,14 +12,15 @@ namespace Bit.iOS.Core.Views
         public UITextField TextField { get; set; }
         public UITextView TextView { get; set; }
         public UIButton Button { get; set; }
+        public UIButton SecondButton { get; set; }
         public event EventHandler ValueChanged;
-
 
         public FormEntryTableViewCell(
             string labelName = null,
             bool useTextView = false,
             nfloat? height = null,
             bool useButton = false,
+            bool useTwoButtons = false,
             bool useLabelAsPlaceholder = false,
             float leadingConstant = 15f)
             : base(UITableViewCellStyle.Default, nameof(FormEntryTableViewCell))
@@ -85,7 +86,6 @@ namespace Bit.iOS.Core.Views
                     ValueChanged?.Invoke(sender, e);
                 };
             }
-
             else
             {
                 TextField = new UITextField
@@ -112,7 +112,7 @@ namespace Bit.iOS.Core.Views
                 ContentView.Add(TextField);
                 ContentView.AddConstraints(new NSLayoutConstraint[] {
                     NSLayoutConstraint.Create(TextField, NSLayoutAttribute.Leading, NSLayoutRelation.Equal, ContentView, NSLayoutAttribute.Leading, 1f, leadingConstant),
-                    NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Trailing, NSLayoutRelation.Equal, TextField, NSLayoutAttribute.Trailing, 1f, useButton ? 55f : 15f),
+                    NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Trailing, NSLayoutRelation.Equal, TextField, NSLayoutAttribute.Trailing, 1f, useTwoButtons ? 95f : useButton ? 55f : 15f),
                     NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Bottom, NSLayoutRelation.Equal, TextField, NSLayoutAttribute.Bottom, 1f, 10f)
                 });
 
@@ -148,7 +148,7 @@ namespace Bit.iOS.Core.Views
                 });
             }
 
-            if (useButton)
+            if (useButton && !useTwoButtons)
             {
                 Button = new UIButton(UIButtonType.System);
                 Button.Frame = ContentView.Bounds;
@@ -160,6 +160,27 @@ namespace Bit.iOS.Core.Views
                 ContentView.BottomAnchor.ConstraintEqualTo(Button.BottomAnchor, 10f).Active = true;
                 ContentView.TrailingAnchor.ConstraintEqualTo(Button.TrailingAnchor, 10f).Active = true;
                 Button.LeadingAnchor.ConstraintEqualTo(TextField.TrailingAnchor, 10f).Active = true;
+            }
+            if (useTwoButtons)
+            {
+                Button = new UIButton(UIButtonType.System);
+                Button.Frame = ContentView.Bounds;
+                Button.TranslatesAutoresizingMaskIntoConstraints = false;
+                Button.SetTitleColor(ThemeHelpers.PrimaryColor, UIControlState.Normal);
+
+                SecondButton = new UIButton(UIButtonType.System);
+                SecondButton.Frame = ContentView.Bounds;
+                SecondButton.TranslatesAutoresizingMaskIntoConstraints = false;
+                SecondButton.SetTitleColor(ThemeHelpers.PrimaryColor, UIControlState.Normal);
+
+                ContentView.Add(SecondButton);
+                ContentView.Add(Button);
+
+                ContentView.BottomAnchor.ConstraintEqualTo(Button.BottomAnchor, 10f).Active = true;
+                ContentView.BottomAnchor.ConstraintEqualTo(SecondButton.BottomAnchor, 10f).Active = true;
+                SecondButton.LeadingAnchor.ConstraintEqualTo(TextField.TrailingAnchor, 9f).Active = true;
+                Button.LeadingAnchor.ConstraintEqualTo(SecondButton.TrailingAnchor, 10f).Active = true;
+                ContentView.TrailingAnchor.ConstraintEqualTo(Button.TrailingAnchor, 10f).Active = true;
             }
         }
 

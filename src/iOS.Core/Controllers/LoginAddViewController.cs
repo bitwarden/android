@@ -17,6 +17,8 @@ using Bit.App.Models;
 using Bit.App.Pages;
 using Bit.App.Utilities;
 using Xamarin.Forms;
+using Bit.Core;
+using GameController;
 
 namespace Bit.iOS.Core.Controllers
 {
@@ -33,12 +35,8 @@ namespace Bit.iOS.Core.Controllers
 
         public AppExtensionContext Context { get; set; }
         public FormEntryTableViewCell NameCell { get; set; } = new FormEntryTableViewCell(AppResources.Name);
-        public FormEntryTableViewCell UsernameCell { get; set; } = new FormEntryTableViewCell(AppResources.Username);
-        public UITableViewCell GenerateUsernameCell { get; set; } = new ExtendedUITableViewCell(
-            UITableViewCellStyle.Subtitle, "GenerateUsernameCell");
-        public FormEntryTableViewCell PasswordCell { get; set; } = new FormEntryTableViewCell(AppResources.Password);
-        public UITableViewCell GeneratePasswordCell { get; set; } = new ExtendedUITableViewCell(
-            UITableViewCellStyle.Subtitle, "GeneratePasswordCell");
+        public FormEntryTableViewCell UsernameCell { get; set; } = new FormEntryTableViewCell(AppResources.Username, useButton: true);
+        public FormEntryTableViewCell PasswordCell { get; set; } = new FormEntryTableViewCell(AppResources.Password, useTwoButtons: true);
         public FormEntryTableViewCell UriCell { get; set; } = new FormEntryTableViewCell(AppResources.URI);
         public SwitchTableViewCell FavoriteCell { get; set; } = new SwitchTableViewCell(AppResources.Favorite);
         public FormEntryTableViewCell NotesCell { get; set; } = new FormEntryTableViewCell(
@@ -73,29 +71,48 @@ namespace Bit.iOS.Core.Controllers
             UsernameCell.TextField.AutocorrectionType = UITextAutocorrectionType.No;
             UsernameCell.TextField.SpellCheckingType = UITextSpellCheckingType.No;
             UsernameCell.TextField.ReturnKeyType = UIReturnKeyType.Next;
+            UsernameCell.Button.TitleLabel.Font = UIFont.FromName("bwi-font", 28f);
+            UsernameCell.Button.SetTitle(BitwardenIcons.Generate, UIControlState.Normal);
+            UsernameCell.Button.TouchUpInside += (sender, e) =>
+            {
+                LaunchUsernameGeneratorFlow();
+            };
             UsernameCell.TextField.ShouldReturn += (UITextField tf) =>
             {
                 PasswordCell.TextField.BecomeFirstResponder();
                 return true;
             };
 
-            GenerateUsernameCell.TextLabel.Text = AppResources.GenerateUsername;
-            GenerateUsernameCell.TextLabel.TextColor = GenerateUsernameCell.TextLabel.TintColor =
-                ThemeHelpers.TextColor;
-            GenerateUsernameCell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
-
             PasswordCell.TextField.SecureTextEntry = true;
             PasswordCell.TextField.ReturnKeyType = UIReturnKeyType.Next;
+            PasswordCell.Button.TitleLabel.Font = UIFont.FromName("bwi-font", 28f);
+            PasswordCell.Button.SetTitle(BitwardenIcons.Generate, UIControlState.Normal);
+            PasswordCell.Button.TouchUpInside += (sender, e) =>
+            {
+                PerformSegue("passwordGeneratorSegue", this);
+            };
+
+            PasswordCell.SecondButton.TitleLabel.Font = UIFont.FromName("bwi-font", 28f);
+            PasswordCell.SecondButton.SetTitle(BitwardenIcons.Eye, UIControlState.Normal);
+            PasswordCell.SecondButton.TouchUpInside += (sender, e) =>
+            {
+                if (PasswordCell.TextField.SecureTextEntry)
+                {
+                    PasswordCell.SecondButton.SetTitle(BitwardenIcons.EyeSlash, UIControlState.Normal);
+                    PasswordCell.TextField.SecureTextEntry = false;
+                }
+                else
+                {
+                    PasswordCell.SecondButton.SetTitle(BitwardenIcons.Eye, UIControlState.Normal);
+                    PasswordCell.TextField.SecureTextEntry = true;
+                }
+            };
+
             PasswordCell.TextField.ShouldReturn += (UITextField tf) =>
             {
                 UriCell.TextField.BecomeFirstResponder();
                 return true;
             };
-
-            GeneratePasswordCell.TextLabel.Text = AppResources.GeneratePassword;
-            GeneratePasswordCell.TextLabel.TextColor = GeneratePasswordCell.TextLabel.TintColor =
-                ThemeHelpers.TextColor;
-            GeneratePasswordCell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
 
             UriCell.TextField.Text = Context?.UrlString ?? string.Empty;
             UriCell.TextField.KeyboardType = UIKeyboardType.Url;
@@ -145,6 +162,13 @@ namespace Bit.iOS.Core.Controllers
             {
                 DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
                     AppResources.Name), AppResources.Ok);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(UsernameCell?.TextField?.Text))
+            {
+                DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
+                    AppResources.Username), AppResources.Ok);
                 return;
             }
 
@@ -264,15 +288,7 @@ namespace Bit.iOS.Core.Controllers
                     }
                     else if (indexPath.Row == 2)
                     {
-                        return _controller.GenerateUsernameCell;
-                    }
-                    else if (indexPath.Row == 3)
-                    {
                         return _controller.PasswordCell;
-                    }
-                    else if (indexPath.Row == 4)
-                    {
-                        return _controller.GeneratePasswordCell;
                     }
                 }
                 else if (indexPath.Section == 1)
@@ -312,7 +328,7 @@ namespace Bit.iOS.Core.Controllers
             {
                 if (section == 0)
                 {
-                    return 5;
+                    return 3;
                 }
                 else if (section == 1)
                 {
@@ -351,15 +367,6 @@ namespace Bit.iOS.Core.Controllers
             {
                 tableView.DeselectRow(indexPath, true);
                 tableView.EndEditing(true);
-
-                if (indexPath.Section == 0 && indexPath.Row == 2)
-                {
-                    _controller.LaunchUsernameGeneratorFlow();
-                }
-                if (indexPath.Section == 0 && indexPath.Row == 4)
-                {
-                    _controller.PerformSegue("passwordGeneratorSegue", this);
-                }
 
                 var cell = tableView.CellAt(indexPath);
                 if (cell == null)
