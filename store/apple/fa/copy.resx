@@ -122,32 +122,31 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>Bitwarden، Inc. شرکت مادر 8bit Solutions LLC است.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+به عنوان بهترین مدیر رمز عبور توسط VERGE، US News &amp; WORLD REPORT، CNET و دیگران انتخاب شد.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+گذرواژه‌های با تعداد نامحدود را در دستگاه‌های نامحدود از هر کجا مدیریت کنید، ذخیره کنید، ایمن کنید و به اشتراک بگذارید. Bitwarden راه حل های مدیریت رمز عبور منبع باز را به همه ارائه می دهد، چه در خانه، چه در محل کار یا در حال حرکت.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+بر اساس الزامات امنیتی برای هر وب سایتی که بازدید می کنید، رمزهای عبور قوی، منحصر به فرد و تصادفی ایجاد کنید.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+Bitwarden Send به سرعت اطلاعات رمزگذاری شده --- فایل ها و متن ساده - را مستقیماً به هر کسی منتقل می کند.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+Bitwarden برنامه‌های Teams و Enterprise را برای شرکت‌ها ارائه می‌دهد تا بتوانید به‌طور ایمن گذرواژه‌ها را با همکاران خود به اشتراک بگذارید.
 
-Why Choose Bitwarden:
+چرا Bitwarden را انتخاب کنید:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+رمزگذاری در کلاس جهانی
+گذرواژه‌ها با رمزگذاری پیشرفته (AES-256 بیت، هشتگ سالت و PBKDF2 SHA-256) محافظت می‌شوند تا داده‌های شما امن و خصوصی بمانند.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+تولیدکننده رمز عبور داخلی
+بر اساس الزامات امنیتی برای هر وب سایتی که بازدید می کنید، رمزهای عبور قوی، منحصر به فرد و تصادفی ایجاد کنید.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+ترجمه های جهانی
+ترجمه Bitwarden به 40 زبان وجود دارد و به لطف جامعه جهانی ما در حال رشد است.
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
-</value>
+برنامه های کاربردی چند پلتفرمی
+داده های حساس را در Bitwarden Vault خود از هر مرورگر، دستگاه تلفن همراه یا سیستم عامل دسکتاپ و غیره ایمن کنید و به اشتراک بگذارید.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">

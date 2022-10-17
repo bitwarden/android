@@ -203,7 +203,7 @@
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>Enviar um Relatório de Bug</value>
+    <value>Submeter um relatório de bug</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
     <value>Abrir um issue no nosso repositório do GitHub.</value>
@@ -232,7 +232,7 @@
     <value>Pasta atualizada.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Ir para o Site</value>
+    <value>Ir para o website</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
@@ -251,7 +251,7 @@
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Senha Mestra Inválida. Tente novamente.</value>
+    <value>Senha mestra inválida. Tentar novamente.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
     <value>PIN inválido. Tente novamente.</value>
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>O item foi excluído.</value>
+    <value>O item foi apagado.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -353,7 +353,7 @@
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>Agradecimentos</value>
+    <value>Obrigado</value>
   </data>
   <data name="Tools" xml:space="preserve">
     <value>Ferramentas</value>
@@ -647,7 +647,7 @@
     <value>Tem certeza que deseja substituir a senha atual?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>O Bitwarden mantém o seu cofre sincronizado automaticamente utilizando notificações push. Para a melhor experiência possível, por favor selecione "Permitir" na solicitação seguinte quando for perguntado para ativar as notificações push.</value>
+    <value>O bitwarden mantém o seu cofre sincronizado automaticamente utilizando notificações push. Para a melhor experiência possível, por favor, selecione "Permitir" na seguinte solicitação quando solicitado para ativar notificações push.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -708,7 +708,7 @@
     <value>Login em Duas Etapas</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>O login em duas etapas torna a sua conta mais segura ao exigir que você verifique seu login com outro dispositivo como uma chave de segurança, aplicativo de autenticação, SMS, ligação telefônica, ou e-mail. O login em duas etapas pode ser ativado no cofre web em bitwarden.com. Você deseja visitar o site agora?</value>
+    <value>O login em duas etapas torna a sua conta mais segura ao exigir que você verifique seu login com outro dispositivo como uma chave de segurança, aplicativo de autenticação, SMS, ligação telefônica, ou e-mail. O login em duas etapas pode ser ativado no cofre web em bitwarden.com. Deseja visitar o site agora?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Desbloquear com {0}</value>
@@ -831,7 +831,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Esta conta tem a verificação de duas etapas ativada, no entanto, nenhum dos provedores de verificação de duas etapas configurados são suportados neste dispositivo. Por favor, utilize um dispositivo suportado e/ou adicione provedores adicionais que são melhor suportados entre dispositivos (como um aplicativo de autenticação).</value>
+    <value>Esta conta tem a verificação em duas etapas ativada, no entanto, nenhum dos provedores de verificação em duas etapas configurados são suportados por este dispositivo. Por favor, utilize um dispositivo suportado e/ou adicione provedores adicionais que são melhor suportados entre dispositivos (como um aplicativo de autenticação).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Código de Recuperação</value>
@@ -1119,7 +1119,7 @@ A leitura será feita automaticamente.</value>
     <value>Setembro</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Cadastro de Pessoas Físicas (CPF)</value>
+    <value>Número de Segurança Social</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
     <value>Estado / Província</value>
@@ -1858,7 +1858,7 @@ A leitura será feita automaticamente.</value>
     <value>Se ativado, a acessibilidade mostrará um pop-up para aumentar o Serviço de Autopreenchimento para aplicativos mais antigos que não suportam a Estrutura de Autopreenchimento do Android.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Devido a uma Política Empresarial, você está restrito de salvar itens para seu cofre pessoal. Altere a opção de Propriedade para uma organização e escolha entre as Coleções disponíveis.</value>
+    <value>Devido a uma Política Empresarial, você está restrito de salvar itens para seu cofre pessoal. Altere a opção de propriedade para uma organização e escolha entre Coleções disponíveis.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
     <value>Uma política de organização está afetando suas opções de propriedade.</value>
@@ -2460,5 +2460,8 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</value>
   </data>
   <data name="Decline" xml:space="preserve">
     <value>Recusar</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>O pedido de login já expirou.</value>
   </data>
 </root>

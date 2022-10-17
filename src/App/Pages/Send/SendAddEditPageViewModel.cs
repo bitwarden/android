@@ -19,6 +19,7 @@ namespace Bit.App.Pages
     public class SendAddEditPageViewModel : BaseViewModel
     {
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IFileService _fileService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IMessagingService _messagingService;
         private readonly IStateService _stateService;
@@ -51,6 +52,7 @@ namespace Bit.App.Pages
         public SendAddEditPageViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _fileService = ServiceContainer.Resolve<IFileService>();
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
@@ -292,7 +294,7 @@ namespace Bit.App.Pages
 
         public async Task ChooseFileAsync()
         {
-            await _deviceActionService.SelectFileAsync();
+            await _fileService.SelectFileAsync();
         }
 
         public void ClearExpirationDate()

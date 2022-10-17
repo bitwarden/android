@@ -4,8 +4,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Models;
+using Bit.App.Resources;
+using Bit.App.Services;
+using Bit.Core;
 using Bit.Core.Services;
 using Foundation;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UIKit;
 using UserNotifications;
 
@@ -69,9 +75,9 @@ namespace Bit.iOS.Services
             return Task.FromResult(0);
         }
 
-        public void SendLocalNotification(string title, string message, string notificationId)
+        public void SendLocalNotification(string title, string message, BaseNotificationData data)
         {
-            if (string.IsNullOrEmpty(notificationId))
+            if (string.IsNullOrEmpty(data.Id))
             {
                 throw new ArgumentNullException("notificationId cannot be null or empty.");
             }
@@ -79,10 +85,20 @@ namespace Bit.iOS.Services
             var content = new UNMutableNotificationContent()
             {
                 Title = title,
-                Body = message
+                Body = message,
+                CategoryIdentifier = Constants.iOSNotificationCategoryId
             };
 
-            var request = UNNotificationRequest.FromIdentifier(notificationId, content, null);
+            if (data != null)
+            {
+                content.UserInfo = NSDictionary.FromObjectAndKey(NSData.FromString(JsonConvert.SerializeObject(data), NSStringEncoding.UTF8), new NSString(Constants.NotificationData));
+            }
+
+            var actions = new UNNotificationAction[] { UNNotificationAction.FromIdentifier(Constants.iOSNotificationClearActionId, AppResources.Clear, UNNotificationActionOptions.Foreground) };
+            var category = UNNotificationCategory.FromIdentifier(Constants.iOSNotificationCategoryId, actions, new string[] { }, UNNotificationCategoryOptions.CustomDismissAction);
+            UNUserNotificationCenter.Current.SetNotificationCategories(new NSSet<UNNotificationCategory>(category));
+
+            var request = UNNotificationRequest.FromIdentifier(data.Id, content, null);
             UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) =>
             {
                 if (err != null)

@@ -28,6 +28,7 @@ namespace Bit.App
         private readonly ISyncService _syncService;
         private readonly IAuthService _authService;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IFileService _fileService;
         private readonly IAccountsManager _accountsManager;
         private readonly IPushNotificationService _pushNotificationService;
         private static bool _isResumed;
@@ -49,6 +50,7 @@ namespace Bit.App
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _fileService = ServiceContainer.Resolve<IFileService>();
             _accountsManager = ServiceContainer.Resolve<IAccountsManager>("accountsManager");
             _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
 
@@ -189,7 +191,7 @@ namespace Bit.App
             });
             await _stateService.SetPasswordlessLoginNotificationAsync(null);
             _pushNotificationService.DismissLocalNotification(Constants.PasswordlessNotificationId);
-            if (loginRequestData.CreationDate.AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) > DateTime.Now)
+            if (loginRequestData.CreationDate.ToUniversalTime().AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) > DateTime.UtcNow)
             {
                 await Device.InvokeOnMainThreadAsync(() => Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
             }
@@ -301,7 +303,7 @@ namespace Bit.App
             var lastClear = await _stateService.GetLastFileCacheClearAsync();
             if ((DateTime.UtcNow - lastClear.GetValueOrDefault(DateTime.MinValue)).TotalDays >= 1)
             {
-                var task = Task.Run(() => _deviceActionService.ClearCacheAsync());
+                var task = Task.Run(() => _fileService.ClearCacheAsync());
             }
         }
 

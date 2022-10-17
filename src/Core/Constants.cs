@@ -32,6 +32,10 @@
         public static string RememberedOrgIdentifierKey = "rememberedOrgIdentifier";
         public const string PasswordlessNotificationId = "26072022";
         public const string AndroidNotificationChannelId = "general_notification_channel";
+        public const string iOSNotificationCategoryId = "dismissableCategory";
+        public const string iOSNotificationClearActionId = "Clear";
+        public const string NotificationData = "notificationData";
+        public const string NotificationDataType = "Type";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;

@@ -978,7 +978,7 @@ Skaneerimine toimub automaatselt.</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Self-hosted Environment</value>
+    <value>Enda majutatud keskkond</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
     <value>Sisesta baas URL, kus sinu või ettevõtte majutatud Bitwarden asub.</value>
@@ -1610,7 +1610,7 @@ Skaneerimine toimub automaatselt.</value>
     <value>Jagatud</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Toggle Visiblity</value>
+    <value>Näita sisu</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>Sessioon on aegunud.</value>
@@ -2459,5 +2459,8 @@ Skaneerimine toimub automaatselt.</value>
   </data>
   <data name="Decline" xml:space="preserve">
     <value>Decline</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Login request has already expired.</value>
   </data>
 </root>
