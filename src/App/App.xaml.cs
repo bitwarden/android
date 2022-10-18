@@ -175,7 +175,7 @@ namespace Bit.App
                 return;
             }
 
-            if (!await CheckShouldSwitchActiveUserAsync(notification))
+            if (await CheckShouldSwitchActiveUserAsync(notification))
             {
                 return;
             }
