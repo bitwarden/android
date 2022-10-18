@@ -113,7 +113,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we&apos;ll display a popup when login fields are selected..
+        ///   Looks up a localized string similar to Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When set up, we&apos;ll display a popup when login fields are selected..
         /// </summary>
         public static string AccessibilityDescription {
             get {
@@ -122,7 +122,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well).
+        ///   Looks up a localized string similar to Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be turned on as well).
         /// </summary>
         public static string AccessibilityDescription2 {
             get {
@@ -131,7 +131,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled)..
+        ///   Looks up a localized string similar to Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if turned on)..
         /// </summary>
         public static string AccessibilityDescription3 {
             get {
@@ -140,7 +140,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled)..
+        ///   Looks up a localized string similar to Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if turned on)..
         /// </summary>
         public static string AccessibilityDescription4 {
             get {
@@ -158,7 +158,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bitwarden needs attention - Enable &quot;Draw-Over&quot; in &quot;Auto-fill Services&quot; from Bitwarden Settings.
+        ///   Looks up a localized string similar to Bitwarden needs attention - Turn on &quot;Draw-Over&quot; in &quot;Auto-fill Services&quot; from Bitwarden Settings.
         /// </summary>
         public static string AccessibilityDrawOverPermissionAlert {
             get {
@@ -167,7 +167,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bitwarden needs attention - See &quot;Auto-fill Accessibility Service&quot; from Bitwarden Settings.
+        ///   Looks up a localized string similar to Bitwarden needs attention - See &quot;Auto-fill Accessibility Service&quot; from Bitwarden settings.
         /// </summary>
         public static string AccessibilityOverlayPermissionAlert {
             get {
@@ -194,7 +194,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account Already Added.
+        ///   Looks up a localized string similar to Account already added.
         /// </summary>
         public static string AccountAlreadyAdded {
             get {
@@ -221,7 +221,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account Locked.
+        ///   Looks up a localized string similar to Account locked.
         /// </summary>
         public static string AccountLockedSuccessfully {
             get {
@@ -230,7 +230,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logged Out.
+        ///   Looks up a localized string similar to Logged out.
         /// </summary>
         public static string AccountLoggedOut {
             get {
@@ -284,7 +284,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add Account.
+        ///   Looks up a localized string similar to Add account.
         /// </summary>
         public static string AddAccount {
             get {
@@ -329,7 +329,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add New Attachment.
+        ///   Looks up a localized string similar to Add new attachment.
         /// </summary>
         public static string AddNewAttachment {
             get {
@@ -374,7 +374,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add Send.
+        ///   Looks up a localized string similar to New Send.
         /// </summary>
         public static string AddSend {
             get {
@@ -401,7 +401,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Items.
+        ///   Looks up a localized string similar to All items.
         /// </summary>
         public static string AllItems {
             get {
@@ -446,7 +446,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Vaults.
+        ///   Looks up a localized string similar to All vaults.
         /// </summary>
         public static string AllVaults {
             get {
@@ -482,7 +482,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to API Access Token.
+        ///   Looks up a localized string similar to API access token.
         /// </summary>
         public static string APIAccessToken {
             get {
@@ -491,7 +491,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to API Key (required).
+        ///   Looks up a localized string similar to API key (required).
         /// </summary>
         public static string APIKeyRequiredParenthesis {
             get {
@@ -500,7 +500,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to API Server URL.
+        ///   Looks up a localized string similar to API server URL.
         /// </summary>
         public static string ApiUrl {
             get {
@@ -554,7 +554,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to enable Screen Capture?.
+        ///   Looks up a localized string similar to Are you sure you want to turn on screen capture?.
         /// </summary>
         public static string AreYouSureYouWantToEnableScreenCapture {
             get {
@@ -653,7 +653,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Authenticator App.
+        ///   Looks up a localized string similar to Authenticator app.
         /// </summary>
         public static string AuthenticatorAppTitle {
             get {
@@ -662,7 +662,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Authenticator Key (TOTP).
+        ///   Looks up a localized string similar to Authenticator key (TOTP).
         /// </summary>
         public static string AuthenticatorKey {
             get {
@@ -689,7 +689,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Authenticator Key.
+        ///   Looks up a localized string similar to Authenticator key.
         /// </summary>
         public static string AuthenticatorKeyScanner {
             get {
@@ -725,7 +725,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AutoFill Activated!.
+        ///   Looks up a localized string similar to AutoFill activated!.
         /// </summary>
         public static string AutofillActivated {
             get {
@@ -788,7 +788,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the &quot;Settings&quot; screen..
+        ///   Looks up a localized string similar to Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not set up an auto-fill service for Bitwarden. Set up auto-fill for Bitwarden from the &quot;Settings&quot; screen..
         /// </summary>
         public static string AutofillServiceNotEnabled {
             get {
@@ -824,7 +824,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please enable &quot;Auto-fill Accessibility Service&quot; from Bitwarden Settings to use the Auto-fill tile..
+        ///   Looks up a localized string similar to Please turn on &quot;Auto-fill Accessibility Service&quot; from Bitwarden Settings to use the Auto-fill tile..
         /// </summary>
         public static string AutofillTileAccessibilityRequired {
             get {
@@ -842,7 +842,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To enable password autofill on your device, follow these instructions:.
+        ///   Looks up a localized string similar to To set up password auto-fill on your device, follow these instructions:.
         /// </summary>
         public static string AutofillTurnOn {
             get {
@@ -914,7 +914,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Avoid Ambiguous Characters.
+        ///   Looks up a localized string similar to Avoid ambiguous characters.
         /// </summary>
         public static string AvoidAmbiguousCharacters {
             get {
@@ -968,7 +968,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Biometric Verification.
+        ///   Looks up a localized string similar to Biometric verification.
         /// </summary>
         public static string BiometricsDirection {
             get {
@@ -986,7 +986,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bitwarden App Extension.
+        ///   Looks up a localized string similar to Bitwarden app extension.
         /// </summary>
         public static string BitwardenAppExtension {
             get {
@@ -995,7 +995,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the &quot;Settings&quot; screen..
+        ///   Looks up a localized string similar to The easiest way to add new logins to your vault is from the Bitwarden app extension. Learn more about using the Bitwarden app extension by navigating to the &quot;Settings&quot; screen..
         /// </summary>
         public static string BitwardenAppExtensionAlert2 {
             get {
@@ -1148,7 +1148,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 3. On the Android App Settings screen for Bitwarden, go to the &quot;Display over other apps&quot; options (under Advanced) and tap the toggle to enable overlay support..
+        ///   Looks up a localized string similar to 3. On the Android App Settings screen for Bitwarden, go to the &quot;Display over other apps&quot; options (under Advanced) and tap the toggle to allow overlay support..
         /// </summary>
         public static string BitwardenAutofillServiceOverlayPermission {
             get {
@@ -1265,7 +1265,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Captcha Failed. Please try again..
+        ///   Looks up a localized string similar to Captcha failed. Please try again..
         /// </summary>
         public static string CaptchaFailed {
             get {
@@ -1274,7 +1274,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Captcha Required.
+        ///   Looks up a localized string similar to Captcha required.
         /// </summary>
         public static string CaptchaRequired {
             get {
@@ -1283,7 +1283,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cardholder Name.
+        ///   Looks up a localized string similar to Cardholder name.
         /// </summary>
         public static string CardholderName {
             get {
@@ -1301,7 +1301,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Catch-all Email.
+        ///   Looks up a localized string similar to Catch-all email.
         /// </summary>
         public static string CatchAllEmail {
             get {
@@ -1319,7 +1319,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change Email.
+        ///   Looks up a localized string similar to Change email.
         /// </summary>
         public static string ChangeEmail {
             get {
@@ -1373,7 +1373,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose File.
+        ///   Looks up a localized string similar to Choose file.
         /// </summary>
         public static string ChooseFile {
             get {
@@ -1436,7 +1436,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Code Sent!.
+        ///   Looks up a localized string similar to Code sent!.
         /// </summary>
         public static string CodeSent {
             get {
@@ -1508,7 +1508,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy Link.
+        ///   Looks up a localized string similar to Copy link.
         /// </summary>
         public static string CopyLink {
             get {
@@ -1517,7 +1517,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy Note.
+        ///   Looks up a localized string similar to Copy note.
         /// </summary>
         public static string CopyNotes {
             get {
@@ -1526,7 +1526,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy Number.
+        ///   Looks up a localized string similar to Copy number.
         /// </summary>
         public static string CopyNumber {
             get {
@@ -1535,7 +1535,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy Password.
+        ///   Looks up a localized string similar to Copy password.
         /// </summary>
         public static string CopyPassword {
             get {
@@ -1544,7 +1544,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy Security Code.
+        ///   Looks up a localized string similar to Copy security code.
         /// </summary>
         public static string CopySecurityCode {
             get {
@@ -1589,7 +1589,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy Username.
+        ///   Looks up a localized string similar to Copy username.
         /// </summary>
         public static string CopyUsername {
             get {
@@ -1607,7 +1607,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Account.
+        ///   Looks up a localized string similar to Create account.
         /// </summary>
         public static string CreateAccount {
             get {
@@ -1634,7 +1634,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Current Access Count.
+        ///   Looks up a localized string similar to Current access count.
         /// </summary>
         public static string CurrentAccessCount {
             get {
@@ -1652,7 +1652,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Custom Environment.
+        ///   Looks up a localized string similar to Custom environment.
         /// </summary>
         public static string CustomEnvironment {
             get {
@@ -1670,7 +1670,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Custom Field Name.
+        ///   Looks up a localized string similar to Custom field name.
         /// </summary>
         public static string CustomFieldName {
             get {
@@ -1679,7 +1679,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Custom Fields.
+        ///   Looks up a localized string similar to Custom fields.
         /// </summary>
         public static string CustomFields {
             get {
@@ -1697,7 +1697,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password Updated.
+        ///   Looks up a localized string similar to Password updated.
         /// </summary>
         public static string DatePasswordUpdated {
             get {
@@ -1751,7 +1751,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose the dark theme to use when using Default (System) theme while your device&apos;s dark mode is enabled..
+        ///   Looks up a localized string similar to Choose the dark theme to use when using Default (System) theme while your device&apos;s dark mode is in use..
         /// </summary>
         public static string DefaultDarkThemeDescription {
             get {
@@ -1832,7 +1832,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deletion Date.
+        ///   Looks up a localized string similar to Deletion date.
         /// </summary>
         public static string DeletionDate {
             get {
@@ -1850,7 +1850,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deletion Time.
+        ///   Looks up a localized string similar to Deletion time.
         /// </summary>
         public static string DeletionTime {
             get {
@@ -1895,7 +1895,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One or more organization policies prevents your from exporting your personal vault..
+        ///   Looks up a localized string similar to One or more organization policies prevents your from exporting your individual vault..
         /// </summary>
         public static string DisablePersonalVaultExportPolicyInEffect {
             get {
@@ -1904,7 +1904,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Disable this Send so that no one can access it.
+        ///   Looks up a localized string similar to Deactivate this Send so that no one can access it.
         /// </summary>
         public static string DisableSend {
             get {
@@ -1913,7 +1913,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Domain Name (required).
+        ///   Looks up a localized string similar to Domain name (required).
         /// </summary>
         public static string DomainNameRequiredParenthesis {
             get {
@@ -1994,7 +1994,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected..
+        ///   Looks up a localized string similar to Allows the Bitwarden Accessibility Service to display a popup when login fields are selected..
         /// </summary>
         public static string DrawOverDescription {
             get {
@@ -2003,7 +2003,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins..
+        ///   Looks up a localized string similar to If turned on, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins..
         /// </summary>
         public static string DrawOverDescription2 {
             get {
@@ -2012,7 +2012,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don&apos;t support the Android Autofill Framework..
+        ///   Looks up a localized string similar to If turned on, accessibility will show a popup to augment the Autofill Service for older apps that don&apos;t support the Android Autofill Framework..
         /// </summary>
         public static string DrawOverDescription3 {
             get {
@@ -2030,7 +2030,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Folder.
+        ///   Looks up a localized string similar to Edit folder.
         /// </summary>
         public static string EditFolder {
             get {
@@ -2039,7 +2039,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Item.
+        ///   Looks up a localized string similar to Edit item.
         /// </summary>
         public static string EditItem {
             get {
@@ -2066,7 +2066,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email Address.
+        ///   Looks up a localized string similar to Email address.
         /// </summary>
         public static string EmailAddress {
             get {
@@ -2093,7 +2093,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email Us.
+        ///   Looks up a localized string similar to Email us.
         /// </summary>
         public static string EmailUs {
             get {
@@ -2111,7 +2111,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable Automatic Syncing.
+        ///   Looks up a localized string similar to Allow automatic syncing.
         /// </summary>
         public static string EnableAutomaticSyncing {
             get {
@@ -2129,7 +2129,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable sync on refresh.
+        ///   Looks up a localized string similar to Allow sync on refresh.
         /// </summary>
         public static string EnableSyncOnRefresh {
             get {
@@ -2174,7 +2174,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter Key Manually.
+        ///   Looks up a localized string similar to Enter key manually.
         /// </summary>
         public static string EnterKeyManually {
             get {
@@ -2264,7 +2264,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Re-enable app extension.
+        ///   Looks up a localized string similar to Reactivate app extension.
         /// </summary>
         public static string ExntesionReenable {
             get {
@@ -2282,7 +2282,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expiration Date.
+        ///   Looks up a localized string similar to Expiration date.
         /// </summary>
         public static string ExpirationDate {
             get {
@@ -2300,7 +2300,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expiration Month.
+        ///   Looks up a localized string similar to Expiration month.
         /// </summary>
         public static string ExpirationMonth {
             get {
@@ -2309,7 +2309,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expiration Time.
+        ///   Looks up a localized string similar to Expiration time.
         /// </summary>
         public static string ExpirationTime {
             get {
@@ -2318,7 +2318,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expiration Year.
+        ///   Looks up a localized string similar to Expiration year.
         /// </summary>
         public static string ExpirationYear {
             get {
@@ -2345,7 +2345,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Confirm Vault Export.
+        ///   Looks up a localized string similar to Confirm vault export.
         /// </summary>
         public static string ExportVaultConfirmationTitle {
             get {
@@ -2408,7 +2408,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable app extension.
+        ///   Looks up a localized string similar to Activate app extension.
         /// </summary>
         public static string ExtensionEnable {
             get {
@@ -2516,7 +2516,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Feature Unavailable.
+        ///   Looks up a localized string similar to Feature unavailable.
         /// </summary>
         public static string FeatureUnavailable {
             get {
@@ -2561,7 +2561,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To continue, have your FIDO2 WebAuthn enabled security key ready, then follow the instructions after clicking &apos;Authenticate WebAuthn&apos; on the next screen..
+        ///   Looks up a localized string similar to To continue, have your FIDO2 WebAuthn compatible security key ready, then follow the instructions after clicking &apos;Authenticate WebAuthn&apos; on the next screen..
         /// </summary>
         public static string Fido2Instruction {
             get {
@@ -2570,7 +2570,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Return to App.
+        ///   Looks up a localized string similar to Return to app.
         /// </summary>
         public static string Fido2ReturnToApp {
             get {
@@ -2642,7 +2642,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File a Bug Report.
+        ///   Looks up a localized string similar to File a bug report.
         /// </summary>
         public static string FileBugReport {
             get {
@@ -2660,7 +2660,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File Format.
+        ///   Looks up a localized string similar to File format.
         /// </summary>
         public static string FileFormat {
             get {
@@ -2741,7 +2741,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First Name.
+        ///   Looks up a localized string similar to First name.
         /// </summary>
         public static string FirstName {
             get {
@@ -2804,7 +2804,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Folder updated..
+        ///   Looks up a localized string similar to Folder saved.
         /// </summary>
         public static string FolderUpdated {
             get {
@@ -2822,7 +2822,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Forwarded Email Alias.
+        ///   Looks up a localized string similar to Forwarded email alias.
         /// </summary>
         public static string ForwardedEmailAlias {
             get {
@@ -2849,7 +2849,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Full Name.
+        ///   Looks up a localized string similar to Full name.
         /// </summary>
         public static string FullName {
             get {
@@ -2858,7 +2858,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Generate Password.
+        ///   Looks up a localized string similar to Generate password.
         /// </summary>
         public static string GeneratePassword {
             get {
@@ -2867,7 +2867,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Generate Username.
+        ///   Looks up a localized string similar to Generate username.
         /// </summary>
         public static string GenerateUsername {
             get {
@@ -2912,7 +2912,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Go To Website.
+        ///   Looks up a localized string similar to Go to website.
         /// </summary>
         public static string GoToWebsite {
             get {
@@ -2993,7 +2993,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Icons Server URL.
+        ///   Looks up a localized string similar to Icons server URL.
         /// </summary>
         public static string IconsUrl {
             get {
@@ -3011,7 +3011,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Identity Name.
+        ///   Looks up a localized string similar to Identity name.
         /// </summary>
         public static string IdentityName {
             get {
@@ -3020,7 +3020,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Identity Server URL.
+        ///   Looks up a localized string similar to Identity server URL.
         /// </summary>
         public static string IdentityUrl {
             get {
@@ -3065,7 +3065,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Include Number.
+        ///   Looks up a localized string similar to Include number.
         /// </summary>
         public static string IncludeNumber {
             get {
@@ -3083,7 +3083,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used..
+        ///   Looks up a localized string similar to Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is turned off), the default Autofill overlay will be used..
         /// </summary>
         public static string InlineAutofillDescription {
             get {
@@ -3101,7 +3101,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Internet Connection Required.
+        ///   Looks up a localized string similar to Internet connection required.
         /// </summary>
         public static string InternetConnectionRequiredTitle {
             get {
@@ -3119,7 +3119,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid Master Password. Try again..
+        ///   Looks up a localized string similar to Invalid master password. Try again..
         /// </summary>
         public static string InvalidMasterPassword {
             get {
@@ -3137,7 +3137,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid Verification Code..
+        ///   Looks up a localized string similar to Invalid verification code.
         /// </summary>
         public static string InvalidVerificationCode {
             get {
@@ -3155,7 +3155,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Item has been deleted..
+        ///   Looks up a localized string similar to Item deleted.
         /// </summary>
         public static string ItemDeleted {
             get {
@@ -3164,7 +3164,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Item Information.
+        ///   Looks up a localized string similar to Item information.
         /// </summary>
         public static string ItemInformation {
             get {
@@ -3173,7 +3173,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Item has been restored..
+        ///   Looks up a localized string similar to Item restored.
         /// </summary>
         public static string ItemRestored {
             get {
@@ -3218,7 +3218,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Item updated..
+        ///   Looks up a localized string similar to Item saved.
         /// </summary>
         public static string ItemUpdated {
             get {
@@ -3263,7 +3263,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last Name.
+        ///   Looks up a localized string similar to Last name.
         /// </summary>
         public static string LastName {
             get {
@@ -3272,7 +3272,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last Sync:.
+        ///   Looks up a localized string similar to Last sync:.
         /// </summary>
         public static string LastSync {
             get {
@@ -3290,7 +3290,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Learn More.
+        ///   Looks up a localized string similar to Learn more.
         /// </summary>
         public static string LearnMore {
             get {
@@ -3317,7 +3317,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Leave Organization.
+        ///   Looks up a localized string similar to Leave organization.
         /// </summary>
         public static string LeaveOrganization {
             get {
@@ -3344,7 +3344,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to License Number.
+        ///   Looks up a localized string similar to License number.
         /// </summary>
         public static string LicenseNumber {
             get {
@@ -3430,6 +3430,16 @@ namespace Bit.App.Resources {
         public static string LogInAttemptByXOnY {
             get {
                 return ResourceManager.GetString("LogInAttemptByXOnY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login attempt from {0}. Do you want to switch to this account?.
+        /// </summary>
+        public static string LoginAttemptFromXDoYouWantToSwitchToThisAccount
+        {
+            get {
+                return ResourceManager.GetString("LoginAttemptFromXDoYouWantToSwitchToThisAccount", resourceCulture);
             }
         }
         
@@ -3524,7 +3534,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login Unavailable.
+        ///   Looks up a localized string similar to Login unavailable.
         /// </summary>
         public static string LoginUnavailable {
             get {
@@ -3587,7 +3597,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Master Password.
+        ///   Looks up a localized string similar to Master password.
         /// </summary>
         public static string MasterPassword {
             get {
@@ -3614,7 +3624,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Master Password Hint (optional).
+        ///   Looks up a localized string similar to Master password hint (optional).
         /// </summary>
         public static string MasterPasswordHint {
             get {
@@ -3659,7 +3669,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid Password.
+        ///   Looks up a localized string similar to Invalid password.
         /// </summary>
         public static string MasterPasswordPolicyValidationTitle {
             get {
@@ -3668,7 +3678,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Match Detection.
+        ///   Looks up a localized string similar to Match detection.
         /// </summary>
         public static string MatchDetection {
             get {
@@ -3677,7 +3687,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Matching Items.
+        ///   Looks up a localized string similar to Matching items.
         /// </summary>
         public static string MatchingItems {
             get {
@@ -3695,7 +3705,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum Access Count.
+        ///   Looks up a localized string similar to Maximum access count.
         /// </summary>
         public static string MaximumAccessCount {
             get {
@@ -3731,7 +3741,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Middle Name.
+        ///   Looks up a localized string similar to Middle name.
         /// </summary>
         public static string MiddleName {
             get {
@@ -3740,7 +3750,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Minimum Numbers.
+        ///   Looks up a localized string similar to Minimum numbers.
         /// </summary>
         public static string MinNumbers {
             get {
@@ -3749,7 +3759,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Minimum Special.
+        ///   Looks up a localized string similar to Minimum special.
         /// </summary>
         public static string MinSpecial {
             get {
@@ -3776,7 +3786,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More Settings.
+        ///   Looks up a localized string similar to More settings.
         /// </summary>
         public static string MoreSettings {
             get {
@@ -3803,7 +3813,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move Down.
+        ///   Looks up a localized string similar to Move down.
         /// </summary>
         public static string MoveDown {
             get {
@@ -3884,7 +3894,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to My Vault.
+        ///   Looks up a localized string similar to My vault.
         /// </summary>
         public static string MyVault {
             get {
@@ -3938,7 +3948,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Custom Field.
+        ///   Looks up a localized string similar to New custom field.
         /// </summary>
         public static string NewCustomField {
             get {
@@ -3947,7 +3957,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New item created..
+        ///   Looks up a localized string similar to Item added.
         /// </summary>
         public static string NewItemCreated {
             get {
@@ -3956,7 +3966,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Password.
+        ///   Looks up a localized string similar to New password.
         /// </summary>
         public static string NewPassword {
             get {
@@ -3965,7 +3975,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New send created..
+        ///   Looks up a localized string similar to Send created.
         /// </summary>
         public static string NewSendCreated {
             get {
@@ -4163,7 +4173,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app)..
+        ///   Looks up a localized string similar to This account has two-step login set up, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app)..
         /// </summary>
         public static string NoTwoStepAvailable {
             get {
@@ -4199,7 +4209,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of Words.
+        ///   Looks up a localized string similar to Number of words.
         /// </summary>
         public static string NumberOfWords {
             get {
@@ -4362,7 +4372,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Organization Identifier.
+        ///   Looks up a localized string similar to Organization identifier.
         /// </summary>
         public static string OrgIdentifier {
             get {
@@ -4407,7 +4417,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Passport Number.
+        ///   Looks up a localized string similar to Passport number.
         /// </summary>
         public static string PassportNumber {
             get {
@@ -4461,7 +4471,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password generated..
+        ///   Looks up a localized string similar to Password generated.
         /// </summary>
         public static string PasswordGenerated {
             get {
@@ -4470,7 +4480,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password Generator.
+        ///   Looks up a localized string similar to Password generator.
         /// </summary>
         public static string PasswordGenerator {
             get {
@@ -4488,7 +4498,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password Hint.
+        ///   Looks up a localized string similar to Password hint.
         /// </summary>
         public static string PasswordHint {
             get {
@@ -4506,7 +4516,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password History.
+        ///   Looks up a localized string similar to Password history.
         /// </summary>
         public static string PasswordHistory {
             get {
@@ -4569,7 +4579,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password Type.
+        ///   Looks up a localized string similar to Password type.
         /// </summary>
         public static string PasswordType {
             get {
@@ -4596,7 +4606,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections..
+        ///   Looks up a localized string similar to Due to an enterprise policy, you are restricted from saving items to your individual vault. Change the ownership option to an organization and choose from available collections..
         /// </summary>
         public static string PersonalOwnershipSubmitError {
             get {
@@ -4641,7 +4651,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plus Addressed Email.
+        ///   Looks up a localized string similar to Plus addressed email.
         /// </summary>
         public static string PlusAddressedEmail {
             get {
@@ -4723,7 +4733,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Possible Matching Items.
+        ///   Looks up a localized string similar to Possible matching items.
         /// </summary>
         public static string PossibleMatchingItems {
             get {
@@ -4759,7 +4769,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select &quot;Allow&quot; on the following prompt when asked to enable push notifications..
+        ///   Looks up a localized string similar to Bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select &quot;Allow&quot; on the following prompt when asked to allow push notifications..
         /// </summary>
         public static string PushNotificationAlert {
             get {
@@ -4777,7 +4787,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Random Word.
+        ///   Looks up a localized string similar to Random word.
         /// </summary>
         public static string RandomWord {
             get {
@@ -4813,7 +4823,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Recovery Code.
+        ///   Looks up a localized string similar to Recovery code.
         /// </summary>
         public static string RecoveryCodeTitle {
             get {
@@ -4822,7 +4832,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Regenerate Password.
+        ///   Looks up a localized string similar to Regenerate password.
         /// </summary>
         public static string RegeneratePassword {
             get {
@@ -4858,7 +4868,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove Account.
+        ///   Looks up a localized string similar to Remove account.
         /// </summary>
         public static string RemoveAccount {
             get {
@@ -4876,7 +4886,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove Master Password.
+        ///   Looks up a localized string similar to Remove master password.
         /// </summary>
         public static string RemoveMasterPassword {
             get {
@@ -4885,7 +4895,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login..
+        ///   Looks up a localized string similar to {0} is using SSO with customer-managed encryption. Continuing will remove your master password from your account and require SSO to login..
         /// </summary>
         public static string RemoveMasterPasswordWarning {
             get {
@@ -4894,7 +4904,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you do not want to remove your Master Password, you may leave this organization..
+        ///   Looks up a localized string similar to If you do not want to remove your master password, you may leave this organization..
         /// </summary>
         public static string RemoveMasterPasswordWarning2 {
             get {
@@ -4903,7 +4913,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove Password.
+        ///   Looks up a localized string similar to Remove password.
         /// </summary>
         public static string RemovePassword {
             get {
@@ -4930,7 +4940,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Resend Code.
+        ///   Looks up a localized string similar to Resend code.
         /// </summary>
         public static string ResendCode {
             get {
@@ -4966,7 +4976,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Re-type Master Password.
+        ///   Looks up a localized string similar to Re-type master password.
         /// </summary>
         public static string RetypeMasterPassword {
             get {
@@ -5038,7 +5048,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search File Sends.
+        ///   Looks up a localized string similar to Search file Sends.
         /// </summary>
         public static string SearchFileSends {
             get {
@@ -5065,7 +5075,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search Text Sends.
+        ///   Looks up a localized string similar to Search text Sends.
         /// </summary>
         public static string SearchTextSends {
             get {
@@ -5083,7 +5093,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search Vault.
+        ///   Looks up a localized string similar to Search vault.
         /// </summary>
         public static string SearchVault {
             get {
@@ -5092,7 +5102,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Secure Notes.
+        ///   Looks up a localized string similar to Secure notes.
         /// </summary>
         public static string SecureNotes {
             get {
@@ -5110,7 +5120,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Security Code.
+        ///   Looks up a localized string similar to Security code.
         /// </summary>
         public static string SecurityCode {
             get {
@@ -5155,7 +5165,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Self-hosted Environment.
+        ///   Looks up a localized string similar to Self-hosted environment.
         /// </summary>
         public static string SelfHostedEnvironment {
             get {
@@ -5182,7 +5192,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send Code.
+        ///   Looks up a localized string similar to Send code.
         /// </summary>
         public static string SendCode {
             get {
@@ -5191,7 +5201,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send has been deleted..
+        ///   Looks up a localized string similar to Send deleted.
         /// </summary>
         public static string SendDeleted {
             get {
@@ -5281,7 +5291,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send updated..
+        ///   Looks up a localized string similar to Send saved.
         /// </summary>
         public static string SendUpdated {
             get {
@@ -5335,7 +5345,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set Master Password.
+        ///   Looks up a localized string similar to Set master password.
         /// </summary>
         public static string SetMasterPassword {
             get {
@@ -5434,7 +5444,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Share Link.
+        ///   Looks up a localized string similar to Share link.
         /// </summary>
         public static string ShareLink {
             get {
@@ -5497,7 +5507,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Special Characters (!@#$%^&amp;*).
+        ///   Looks up a localized string similar to Special characters (!@#$%^&amp;*).
         /// </summary>
         public static string SpecialCharacters {
             get {
@@ -5506,7 +5516,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Social Security Number.
+        ///   Looks up a localized string similar to Social Security number.
         /// </summary>
         public static string SSN {
             get {
@@ -5605,7 +5615,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Syncing complete..
+        ///   Looks up a localized string similar to Syncing complete.
         /// </summary>
         public static string SyncingComplete {
             get {
@@ -5614,7 +5624,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Syncing failed..
+        ///   Looks up a localized string similar to Syncing failed.
         /// </summary>
         public static string SyncingFailed {
             get {
@@ -5686,7 +5696,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thank You.
+        ///   Looks up a localized string similar to Thank you.
         /// </summary>
         public static string ThankYou {
             get {
@@ -5785,7 +5795,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Toggle Visibility.
+        ///   Looks up a localized string similar to Toggle visibility.
         /// </summary>
         public static string ToggleVisibility {
             get {
@@ -5884,7 +5894,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?.
+        ///   Looks up a localized string similar to Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be set up on the bitwarden.com web vault. Do you want to visit the website now?.
         /// </summary>
         public static string TwoStepLoginConfirmation {
             get {
@@ -5893,7 +5903,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Two-step Login Options.
+        ///   Looks up a localized string similar to Two-step login options.
         /// </summary>
         public static string TwoStepLoginOptions {
             get {
@@ -5965,7 +5975,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Secure Note.
+        ///   Looks up a localized string similar to Secure note.
         /// </summary>
         public static string TypeSecureNote {
             get {
@@ -6037,7 +6047,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unlock Vault.
+        ///   Looks up a localized string similar to Unlock vault.
         /// </summary>
         public static string UnlockVault {
             get {
@@ -6064,7 +6074,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Updated Master Password.
+        ///   Looks up a localized string similar to Updated master password.
         /// </summary>
         public static string UpdatedMasterPassword {
             get {
@@ -6082,7 +6092,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update Master Password.
+        ///   Looks up a localized string similar to Update master password.
         /// </summary>
         public static string UpdateMasterPassword {
             get {
@@ -6091,7 +6101,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour..
+        ///   Looks up a localized string similar to Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour..
         /// </summary>
         public static string UpdateMasterPasswordWarning {
             get {
@@ -6109,7 +6119,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Updating Password.
+        ///   Looks up a localized string similar to Updating password.
         /// </summary>
         public static string UpdatingPassword {
             get {
@@ -6136,7 +6146,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to URI Match Detection.
+        ///   Looks up a localized string similar to URI match detection.
         /// </summary>
         public static string URIMatchDetection {
             get {
@@ -6172,7 +6182,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use Biometrics To Unlock.
+        ///   Looks up a localized string similar to Use biometrics to unlock.
         /// </summary>
         public static string UseBiometricsToUnlock {
             get {
@@ -6190,7 +6200,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use Fingerprint to Unlock.
+        ///   Looks up a localized string similar to Use fingerprint to unlock.
         /// </summary>
         public static string UseFingerprintToUnlock {
             get {
@@ -6208,7 +6218,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Username Type.
+        ///   Looks up a localized string similar to Username type.
         /// </summary>
         public static string UsernameType {
             get {
@@ -6253,7 +6263,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} has been copied..
+        ///   Looks up a localized string similar to {0} copied.
         /// </summary>
         public static string ValueHasBeenCopied {
             get {
@@ -6343,7 +6353,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is {0} hour(s) and {1} minute(s).
+        ///   Looks up a localized string similar to Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s).
         /// </summary>
         public static string VaultTimeoutPolicyInEffect {
             get {
@@ -6361,7 +6371,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verification Code.
+        ///   Looks up a localized string similar to Verification code.
         /// </summary>
         public static string VerificationCode {
             get {
@@ -6370,7 +6380,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verification Codes.
+        ///   Looks up a localized string similar to Verification codes.
         /// </summary>
         public static string VerificationCodes {
             get {
@@ -6379,7 +6389,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verification Code (TOTP).
+        ///   Looks up a localized string similar to Verification code (TOTP).
         /// </summary>
         public static string VerificationCodeTotp {
             get {
@@ -6397,7 +6407,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verification email sent..
+        ///   Looks up a localized string similar to Verification email sent.
         /// </summary>
         public static string VerificationEmailSent {
             get {
@@ -6415,7 +6425,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verify Fingerprint.
+        ///   Looks up a localized string similar to Verify fingerprint.
         /// </summary>
         public static string VerifyFingerprint {
             get {
@@ -6433,7 +6443,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verify Master Password.
+        ///   Looks up a localized string similar to Verify master password.
         /// </summary>
         public static string VerifyMasterPassword {
             get {
@@ -6469,7 +6479,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View Item.
+        ///   Looks up a localized string similar to View item.
         /// </summary>
         public static string ViewItem {
             get {
@@ -6478,7 +6488,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Visit Our Website.
+        ///   Looks up a localized string similar to Visit our website.
         /// </summary>
         public static string VisitOurWebsite {
             get {
@@ -6532,7 +6542,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web Vault Server URL.
+        ///   Looks up a localized string similar to Web vault server URL.
         /// </summary>
         public static string WebVaultUrl {
             get {
@@ -6568,7 +6578,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Word Separator.
+        ///   Looks up a localized string similar to Word separator.
         /// </summary>
         public static string WordSeparator {
             get {
@@ -6595,7 +6605,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Yes, and Save.
+        ///   Looks up a localized string similar to Yes, and save.
         /// </summary>
         public static string YesAndSave {
             get {
@@ -6640,7 +6650,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to YubiKey Security Key.
+        ///   Looks up a localized string similar to YubiKey security key.
         /// </summary>
         public static string YubiKeyTitle {
             get {
@@ -6649,7 +6659,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Zip / Postal Code.
+        ///   Looks up a localized string similar to Zip / Postal code.
         /// </summary>
         public static string ZipPostalCode {
             get {
