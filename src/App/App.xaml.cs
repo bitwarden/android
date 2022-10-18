@@ -175,13 +175,11 @@ namespace Bit.App
                 return;
             }
 
-            var activeUserId = await _stateService.GetActiveUserIdAsync();
-            var notificationUserEmail = await _stateService.GetEmailAsync(activeUserId);
-            if (notification.UserId != activeUserId)
+            if (!await CheckShouldSwitchActiveUserAsync(notification))
             {
-                await DisplaySwitchAccountAlert(notification.UserId, notificationUserEmail);
                 return;
             }
+
 
             // Delay to wait for the vault page to appear
             await Task.Delay(2000);
@@ -205,17 +203,25 @@ namespace Bit.App
             }
         }
 
-        private async Task DisplaySwitchAccountAlert(string userId, string userEmail)
+        private async Task<bool> CheckShouldSwitchActiveUserAsync(PasswordlessRequestNotification notification)
         {
+            var activeUserId = await _stateService.GetActiveUserIdAsync();
+            var notificationUserEmail = await _stateService.GetEmailAsync(activeUserId);
+            if (notification.UserId == activeUserId)
+            {
+                return false;
+            }
+
             await Device.InvokeOnMainThreadAsync(async () =>
             {
                 var result = await _deviceActionService.DisplayAlertAsync(AppResources.LogInRequested, string.Format(AppResources.LoginAttemptFromXDoYouWantToSwitchToThisAccount, userEmail), AppResources.Cancel, AppResources.Ok);
                 if (result == AppResources.Ok)
                 {
-                    await _stateService.SetActiveUserAsync(userId);
+                    await _stateService.SetActiveUserAsync(notification.UserId);
                     _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
                 }
             });
+            return true;
         }
 
         public AppOptions Options { get; private set; }
