@@ -165,13 +165,6 @@ namespace Bit.iOS.Core.Controllers
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(UsernameCell?.TextField?.Text))
-            {
-                DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
-                    AppResources.Username), AppResources.Ok);
-                return;
-            }
-
             var cipher = new CipherView
             {
                 Name = NameCell.TextField.Text,
