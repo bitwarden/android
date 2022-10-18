@@ -30,7 +30,7 @@
         public static string EventCollectionKey = "eventCollection";
         public static string RememberedEmailKey = "rememberedEmail";
         public static string RememberedOrgIdentifierKey = "rememberedOrgIdentifier";
-        public static string PasswordlessLoginNofiticationKey = "passwordlessLoginNofiticationKey";
+        public static string PasswordlessLoginNotificationKey = "passwordlessLoginNotificationKey";
         public const string PasswordlessNotificationId = "26072022";
         public const string AndroidNotificationChannelId = "general_notification_channel";
         public const string NotificationData = "notificationData";

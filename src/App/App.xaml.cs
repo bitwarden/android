@@ -176,19 +176,10 @@ namespace Bit.App
             }
 
             var activeUserId = await _stateService.GetActiveUserIdAsync();
+            var notificationUserEmail = await _stateService.GetEmailAsync(activeUserId);
             if (notification.UserId != activeUserId)
             {
-                var notificationUserEmail = await _stateService.GetEmailAsync(activeUserId);
-                Device.BeginInvokeOnMainThread(async () =>
-                {
-                    var result = await _deviceActionService.DisplayAlertAsync(AppResources.LogInRequested, string.Format(AppResources.LoginAttemptFromXDoYouWantToSwitch, notificationUserEmail), AppResources.Cancel, AppResources.Ok);
-                    if (result == AppResources.Ok)
-                    {
-                        await _stateService.SetActiveUserAsync(notification.UserId);
-                        _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
-                    }
-                });
-
+                await DisplaySwitchAccountAlert(notification, notificationUserEmail);
                 return;
             }
 
@@ -213,6 +204,19 @@ namespace Bit.App
                 await Device.InvokeOnMainThreadAsync(() => Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
             }
         }
+
+        private async Task DisplaySwitchAccountAlert(PasswordlessRequestNotification notification, string userEmail)
+        {
+            await Device.InvokeOnMainThreadAsync(async () =>
+            {
+                var result = await _deviceActionService.DisplayAlertAsync(AppResources.LogInRequested, string.Format(AppResources.LoginAttemptFromXDoYouWantToSwitchToThisAccount, userEmail), AppResources.Cancel, AppResources.Ok);
+                if (result == AppResources.Ok)
+                {
+                    await _stateService.SetActiveUserAsync(notification.UserId);
+                    _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
+                }
+            });
+        } 
 
         public AppOptions Options { get; private set; }
 
@@ -263,8 +267,10 @@ namespace Bit.App
             }
         }
 
-        protected override void OnResume()
+        protected override async void OnResume()
         {
+            var result = await _deviceActionService.DisplayAlertAsync(AppResources.LogInRequested, string.Format(AppResources.LoginAttemptFromXDoYouWantToSwitchToThisAccount, "abitwarden@bitwarden.com"), AppResources.Cancel, AppResources.Ok);
+
             System.Diagnostics.Debug.WriteLine("XF App: OnResume");
             _isResumed = true;
             if (_pendingCheckPasswordlessLoginRequests)

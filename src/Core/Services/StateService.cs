@@ -1280,14 +1280,14 @@ namespace Bit.Core.Services
         public async Task<PasswordlessRequestNotification> GetPasswordlessLoginNotificationAsync()
         {
             var options = await GetDefaultStorageOptionsAsync();
-            var key = Constants.PasswordlessLoginNofiticationKey;
+            var key = Constants.PasswordlessLoginNotificationKey;
             return await GetValueAsync<PasswordlessRequestNotification>(key, options);
         }
 
         public async Task SetPasswordlessLoginNotificationAsync(PasswordlessRequestNotification value)
         {
             var options = await GetDefaultStorageOptionsAsync();
-            var key = Constants.PasswordlessLoginNofiticationKey;
+            var key = Constants.PasswordlessLoginNotificationKey;
             await SetValueAsync(key, value, options);
         }
         // Helpers
