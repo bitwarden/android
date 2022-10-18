@@ -210,10 +210,10 @@ namespace Bit.App
                 return false;
             }
 
-            var notificationUserEmail = await _stateService.GetEmailAsync(activeUserId);
+            var notificationUserEmail = await _stateService.GetEmailAsync(notification.UserId);
             await Device.InvokeOnMainThreadAsync(async () =>
             {
-                var result = await _deviceActionService.DisplayAlertAsync(AppResources.LogInRequested, string.Format(AppResources.LoginAttemptFromXDoYouWantToSwitchToThisAccount, userEmail), AppResources.Cancel, AppResources.Ok);
+                var result = await _deviceActionService.DisplayAlertAsync(AppResources.LogInRequested, string.Format(AppResources.LoginAttemptFromXDoYouWantToSwitchToThisAccount, notificationUserEmail), AppResources.Cancel, AppResources.Ok);
                 if (result == AppResources.Ok)
                 {
                     await _stateService.SetActiveUserAsync(notification.UserId);
