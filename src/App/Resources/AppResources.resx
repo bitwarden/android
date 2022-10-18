@@ -2466,7 +2466,7 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
     <value>Login attempt from:
-      {0}
-      Do you want to switch to this account?</value>
+{0}
+Do you want to switch to this account?</value>
   </data>
 </root>
