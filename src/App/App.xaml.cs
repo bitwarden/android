@@ -269,8 +269,6 @@ namespace Bit.App
 
         protected override async void OnResume()
         {
-            var result = await _deviceActionService.DisplayAlertAsync(AppResources.LogInRequested, string.Format(AppResources.LoginAttemptFromXDoYouWantToSwitchToThisAccount, "abitwarden@bitwarden.com"), AppResources.Cancel, AppResources.Ok);
-
             System.Diagnostics.Debug.WriteLine("XF App: OnResume");
             _isResumed = true;
             if (_pendingCheckPasswordlessLoginRequests)
