@@ -114,6 +114,8 @@ namespace Bit.App.Utilities
                                 return CheckAndGetThemeForMergedDictionaries(typeof(Black), resources);
                             case Nord:
                                 return CheckAndGetThemeForMergedDictionaries(typeof(Nord), resources);
+                            case SolarizedDark:
+                                return CheckAndGetThemeForMergedDictionaries(typeof(SolarizedDark), resources);
                             default:
                                 return CheckAndGetThemeForMergedDictionaries(typeof(Dark), resources);
                         }
