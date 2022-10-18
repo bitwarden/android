@@ -216,7 +216,7 @@ namespace Bit.App
                     _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
                 }
             });
-        } 
+        }
 
         public AppOptions Options { get; private set; }
 
