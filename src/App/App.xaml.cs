@@ -11,6 +11,7 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
+using Bit.Core.Models.Response;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
@@ -168,9 +169,13 @@ namespace Bit.App
                 return;
             }
 
-
             var notification = await _stateService.GetPasswordlessLoginNotificationAsync();
             if (notification == null)
+            {
+                return;
+            }
+
+            if (await CheckShouldSwitchActiveUserAsync(notification))
             {
                 return;
             }
@@ -195,6 +200,27 @@ namespace Bit.App
             {
                 await Device.InvokeOnMainThreadAsync(() => Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
             }
+        }
+
+        private async Task<bool> CheckShouldSwitchActiveUserAsync(PasswordlessRequestNotification notification)
+        {
+            var activeUserId = await _stateService.GetActiveUserIdAsync();
+            if (notification.UserId == activeUserId)
+            {
+                return false;
+            }
+
+            var notificationUserEmail = await _stateService.GetEmailAsync(notification.UserId);
+            await Device.InvokeOnMainThreadAsync(async () =>
+            {
+                var result = await _deviceActionService.DisplayAlertAsync(AppResources.LogInRequested, string.Format(AppResources.LoginAttemptFromXDoYouWantToSwitchToThisAccount, notificationUserEmail), AppResources.Cancel, AppResources.Ok);
+                if (result == AppResources.Ok)
+                {
+                    await _stateService.SetActiveUserAsync(notification.UserId);
+                    _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
+                }
+            });
+            return true;
         }
 
         public AppOptions Options { get; private set; }
