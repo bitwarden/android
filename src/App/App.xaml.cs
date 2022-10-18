@@ -179,7 +179,7 @@ namespace Bit.App
             var notificationUserEmail = await _stateService.GetEmailAsync(activeUserId);
             if (notification.UserId != activeUserId)
             {
-                await DisplaySwitchAccountAlert(notification, notificationUserEmail);
+                await DisplaySwitchAccountAlert(notification.UserId, notificationUserEmail);
                 return;
             }
 
@@ -205,14 +205,14 @@ namespace Bit.App
             }
         }
 
-        private async Task DisplaySwitchAccountAlert(PasswordlessRequestNotification notification, string userEmail)
+        private async Task DisplaySwitchAccountAlert(string userId, string userEmail)
         {
             await Device.InvokeOnMainThreadAsync(async () =>
             {
                 var result = await _deviceActionService.DisplayAlertAsync(AppResources.LogInRequested, string.Format(AppResources.LoginAttemptFromXDoYouWantToSwitchToThisAccount, userEmail), AppResources.Cancel, AppResources.Ok);
                 if (result == AppResources.Ok)
                 {
-                    await _stateService.SetActiveUserAsync(notification.UserId);
+                    await _stateService.SetActiveUserAsync(userId);
                     _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
                 }
             });
