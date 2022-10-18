@@ -267,7 +267,7 @@ namespace Bit.App
             }
         }
 
-        protected override async void OnResume()
+        protected override void OnResume()
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnResume");
             _isResumed = true;
