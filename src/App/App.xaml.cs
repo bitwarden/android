@@ -180,7 +180,6 @@ namespace Bit.App
                 return;
             }
 
-
             // Delay to wait for the vault page to appear
             await Task.Delay(2000);
             var loginRequestData = await _authService.GetPasswordlessLoginRequestByIdAsync(notification.Id);
@@ -206,12 +205,12 @@ namespace Bit.App
         private async Task<bool> CheckShouldSwitchActiveUserAsync(PasswordlessRequestNotification notification)
         {
             var activeUserId = await _stateService.GetActiveUserIdAsync();
-            var notificationUserEmail = await _stateService.GetEmailAsync(activeUserId);
             if (notification.UserId == activeUserId)
             {
                 return false;
             }
 
+            var notificationUserEmail = await _stateService.GetEmailAsync(activeUserId);
             await Device.InvokeOnMainThreadAsync(async () =>
             {
                 var result = await _deviceActionService.DisplayAlertAsync(AppResources.LogInRequested, string.Format(AppResources.LoginAttemptFromXDoYouWantToSwitchToThisAccount, userEmail), AppResources.Cancel, AppResources.Ok);
