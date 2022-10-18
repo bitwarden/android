@@ -5507,6 +5507,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Solarized Dark.
+        /// </summary>
+        public static string SolarizedDark {
+            get {
+                return ResourceManager.GetString("SolarizedDark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Special characters (!@#$%^&amp;*).
         /// </summary>
         public static string SpecialCharacters {
