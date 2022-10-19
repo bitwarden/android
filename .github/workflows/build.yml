@@ -123,8 +123,11 @@ jobs:
         
       - name: Decrypt secrets - Google Services
         if: ${{ matrix.variant == 'prod' }}
+        env:
+          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
         run: |
-          - gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
         shell: bash
         
       - name: Increment version
