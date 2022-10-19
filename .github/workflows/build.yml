@@ -106,7 +106,34 @@ jobs:
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
         with:
           fetch-depth: 0
+          
+      - name: Test if condition 1
+        if: |
+          ${{ matrix.variant == 'prod' }} &&
+          ${{ (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc') }}
+        run: |
+          echo ${{ matrix.variant }}
+          
+      - name: Test if condition 2
+          if: |
+            ${{ matrix.variant == 'prod' }} &&
+            ( true
+            || false
+            || false )
+          run: |
+            echo ${{ matrix.variant }}
 
+      - name: Test if condition 3
+          if: |
+            ${{ matrix.variant == 'prod' }} &&
+            false
+          run: |
+            echo ${{ matrix.variant }}
+            
       - name: Decrypt secrets
         env:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
