@@ -168,6 +168,10 @@ jobs:
             write-host "---------------------"
             Get-ChildItem $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/")
             write-host "---------------------"
+            Get-ChildItem $($env:GITHUB_WORKSPACE + "/src/Android/")
+            write-host "---------------------"
+            Get-ChildItem $($env:GITHUB_WORKSPACE + "/src/Android/bin/")
+            write-host "---------------------"
             $ApkPath = $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/com.x8bit.bitwarden.${{ matrix.variant }}.apk");
             $ApkPathDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden.${{ matrix.variant }}.apk");
             Copy-Item $ApkPath $ApkPathDestPath
