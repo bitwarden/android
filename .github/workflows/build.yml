@@ -83,11 +83,6 @@ jobs:
           $Arguments = ('/c', "vs_installer.exe", 'modify', '--installPath', "`"$InstallPath`"",$workloadArgs, '--quiet', '--norestart', '--nocache')
           $process = Start-Process -FilePath cmd.exe -ArgumentList $Arguments -Wait -PassThru -WindowStyle Hidden
           
-          if ("${{ matrix.variant }}" -eq "prod")
-          {
-            echo "if statement works"
-          }
-          
           if ($process.ExitCode -eq 0)
           {
               Write-Host "components have been successfully added"
@@ -127,8 +122,7 @@ jobs:
           
           if ( "${{ matrix.variant }}" -eq "prod" )
           {
-            gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-                --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
+            gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
           }
         shell: bash
 
