@@ -195,7 +195,20 @@ jobs:
 
           $signedAabPath = $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/com.x8bit.bitwarden-Signed.aab");
           $signedAabDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden.${{ matrix.variant }}.aab");
-
+          
+          write-host "---------------------"
+          Get-ChildItem
+          write-host "---------------------"
+          Get-ChildItem $($env:GITHUB_WORKSPACE + "/src/Android/")
+          write-host "---------------------"
+          Get-ChildItem $($env:GITHUB_WORKSPACE + "/src/Android/bin/")
+          write-host "---------------------"
+          Get-ChildItem $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/")
+          write-host "---------------------"
+          
+          Write-Output $signedAabPath
+          Write-Output $signedAabDestPath
+          
           Copy-Item $signedAabPath $signedAabDestPath
 
           Write-Output "########################################"
