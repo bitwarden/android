@@ -116,9 +116,11 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output ./src/Android/app_upload-keystore.jks ./.github/secrets/app_upload-keystore.jks.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output $HOME/secrets/play_creds.json ./.github/secrets/play_creds.json.gpg
+          if ("${{ matrix.variant }}" -eq "prod") {
+            gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+              --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
+          }
         shell: bash
 
       - name: Increment version
@@ -162,28 +164,12 @@ jobs:
           Write-Output "########################################"
           msbuild "$($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj")" "/p:Configuration=$configuration"
 
-          if ("${{ matrix.variant }}" -eq "qa") {
-            write-host "---------------------"
-            Get-ChildItem
-            write-host "---------------------"
-            Get-ChildItem $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/")
-            write-host "---------------------"
-            Get-ChildItem $($env:GITHUB_WORKSPACE + "/src/Android/")
-            write-host "---------------------"
-            Get-ChildItem $($env:GITHUB_WORKSPACE + "/src/Android/bin/")
-            write-host "---------------------"
-            $ApkPath = $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/com.x8bit.bitwarden.${{ matrix.variant }}.apk");
-            $ApkPathDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden.${{ matrix.variant }}.apk");
-            Copy-Item $ApkPath $ApkPathDestPath
-          }
-
         shell: pwsh
 
       - name: Sign for Play Store
         env:
           PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
           UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
-        if: ${{ matrix.variant == 'prod' }}
         run: |
           $androidPath = $($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj");
 
@@ -201,7 +187,7 @@ jobs:
           Write-Output "########################################"
 
           $signedAabPath = $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/com.x8bit.bitwarden-Signed.aab");
-          $signedAabDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden.aab");
+          $signedAabDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden.${{ matrix.variant }}.aab");
 
           Copy-Item $signedAabPath $signedAabDestPath
 
@@ -219,7 +205,7 @@ jobs:
           Write-Output "########################################"
 
           $signedApkPath = $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/com.x8bit.bitwarden-Signed.apk");
-          $signedApkDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden.apk");
+          $signedApkDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden.${{ matrix.variant }}.apk"); 
 
           Copy-Item $signedApkPath $signedApkDestPath
         shell: pwsh
