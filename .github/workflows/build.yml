@@ -119,13 +119,14 @@ jobs:
             --output ./src/Android/app_upload-keystore.jks ./.github/secrets/app_upload-keystore.jks.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output $HOME/secrets/play_creds.json ./.github/secrets/play_creds.json.gpg
-          
-          if ( "${{ matrix.variant }}" -eq "prod" )
-          {
-            gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
-          }
         shell: bash
-
+        
+      - name: Decrypt secrets - Google Services
+         if: |
+          ${{ matrix.variant == 'prod' }}
+        run: |
+          - gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
+      
       - name: Increment version
         run: |
           BUILD_NUMBER=$((3000 + $GITHUB_RUN_NUMBER))
