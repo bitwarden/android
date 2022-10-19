@@ -109,26 +109,13 @@ jobs:
           
       - name: Test if condition 1
         if: |
-          ${{ matrix.variant == 'prod' && (( github.ref == 'refs/heads/master'
+          ${{ matrix.variant == 'prod' }} &&
+          (github.ref == 'refs/heads/master'
             && needs.setup.outputs.rc_branch_exists == 0
-            && needs.setup.outputs.hotfix_branch_exists == 0 )
-          || ( github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0 )
-          || github.ref == 'refs/heads/hotfix-rc' ) }}
-        run: |
-          echo ${{ matrix.variant }}
-          
-      - name: Test if condition 2
-        if: |
-          ${{ matrix.variant == 'prod' &&
-          ( true
-          || false
-          || false ) }}
-        run: |
-          echo ${{ matrix.variant }}
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
 
-      - name: Test if condition 3
-        if: |
-          ${{ matrix.variant == 'prod' && false }}
         run: |
           echo ${{ matrix.variant }}
             
@@ -274,12 +261,7 @@ jobs:
 
       - name: Deploy to Play Store
         if: |
-            ${{ matrix.variant == 'prod' }} &&
-            ((github.ref == 'refs/heads/master'
-              && needs.setup.outputs.rc_branch_exists == 0
-              && needs.setup.outputs.hotfix_branch_exists == 0)
-            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix-rc')
+            ${{ matrix.variant == 'prod' }}
         run: |
           PUBLISHER_PATH="$GITHUB_WORKSPACE/store/google/Publisher/bin/Release/netcoreapp3.1/Publisher.dll"
           CREDS_PATH="$HOME/secrets/play_creds.json"
