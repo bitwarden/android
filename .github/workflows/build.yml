@@ -119,20 +119,20 @@ jobs:
           echo ${{ matrix.variant }}
           
       - name: Test if condition 2
-          if: |
-            ${{ matrix.variant == 'prod' }} &&
-            ( true
-            || false
-            || false )
-          run: |
-            echo ${{ matrix.variant }}
+        if: |
+          ${{ matrix.variant == 'prod' }} &&
+          ( true
+          || false
+          || false )
+        run: |
+          echo ${{ matrix.variant }}
 
       - name: Test if condition 3
-          if: |
-            ${{ matrix.variant == 'prod' }} &&
-            false
-          run: |
-            echo ${{ matrix.variant }}
+        if: |
+          ${{ matrix.variant == 'prod' }} &&
+          false
+        run: |
+          echo ${{ matrix.variant }}
             
       - name: Decrypt secrets
         env:
