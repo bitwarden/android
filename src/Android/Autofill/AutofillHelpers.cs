@@ -109,6 +109,7 @@ namespace Bit.Droid.Autofill
             "io.github.forkmaintainers.iceraven",
             "mark.via",
             "mark.via.gp",
+            "net.dezor.browser",
             "net.slions.fulguris.full.download",
             "net.slions.fulguris.full.download.debug",            
             "net.slions.fulguris.full.playstore",
