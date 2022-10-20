@@ -1,8 +1,7 @@
-﻿using Bit.Core;
+﻿using System;
+using Bit.Core;
 using Bit.iOS.Core.Controllers;
 using Bit.iOS.Core.Utilities;
-using System;
-using System.Drawing;
 using UIKit;
 
 namespace Bit.iOS.Core.Views
