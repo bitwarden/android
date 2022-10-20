@@ -224,7 +224,7 @@ jobs:
           Copy-Item $signedApkPath $signedApkDestPath
         shell: pwsh
         
-      - name: Upload Play Store .aab artifact
+      - name: Upload Prod .aab artifact
         if: ${{ matrix.variant == 'prod' }}
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
@@ -232,7 +232,7 @@ jobs:
           path: ./com.x8bit.bitwarden.aab
           if-no-files-found: error
 
-      - name: Upload Play Store .apk artifact
+      - name: Upload Prod .apk artifact
         if: ${{ matrix.variant == 'prod' }}
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
