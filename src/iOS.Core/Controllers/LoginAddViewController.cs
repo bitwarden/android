@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using AuthenticationServices;
+using Bit.App.Models;
+using Bit.App.Pages;
 using Bit.App.Resources;
+using Bit.App.Utilities;
+using Bit.Core;
+using Bit.Core.Abstractions;
+using Bit.Core.Exceptions;
+using Bit.Core.Models.View;
+using Bit.Core.Utilities;
+using Bit.iOS.Core.Models;
+using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using Foundation;
 using UIKit;
-using Bit.iOS.Core.Utilities;
-using Bit.iOS.Core.Models;
-using System.Threading.Tasks;
-using AuthenticationServices;
-using Bit.Core.Abstractions;
-using Bit.Core.Models.View;
-using Bit.Core.Utilities;
-using Bit.Core.Exceptions;
-using Bit.App.Models;
-using Bit.App.Pages;
-using Bit.App.Utilities;
 using Xamarin.Forms;
-using Bit.Core;
-using GameController;
 
 namespace Bit.iOS.Core.Controllers
 {
@@ -35,8 +34,8 @@ namespace Bit.iOS.Core.Controllers
 
         public AppExtensionContext Context { get; set; }
         public FormEntryTableViewCell NameCell { get; set; } = new FormEntryTableViewCell(AppResources.Name);
-        public FormEntryTableViewCell UsernameCell { get; set; } = new FormEntryTableViewCell(AppResources.Username, useButton: true);
-        public FormEntryTableViewCell PasswordCell { get; set; } = new FormEntryTableViewCell(AppResources.Password, useTwoButtons: true);
+        public FormEntryTableViewCell UsernameCell { get; set; } = new FormEntryTableViewCell(AppResources.Username, buttonsConfig: ButtonsConfig.One);
+        public FormEntryTableViewCell PasswordCell { get; set; } = new FormEntryTableViewCell(AppResources.Password, buttonsConfig: ButtonsConfig.Two);
         public FormEntryTableViewCell UriCell { get; set; } = new FormEntryTableViewCell(AppResources.URI);
         public SwitchTableViewCell FavoriteCell { get; set; } = new SwitchTableViewCell(AppResources.Favorite);
         public FormEntryTableViewCell NotesCell { get; set; } = new FormEntryTableViewCell(
@@ -92,22 +91,7 @@ namespace Bit.iOS.Core.Controllers
                 PerformSegue("passwordGeneratorSegue", this);
             };
 
-            PasswordCell.SecondButton.TitleLabel.Font = UIFont.FromName("bwi-font", 28f);
-            PasswordCell.SecondButton.SetTitle(BitwardenIcons.Eye, UIControlState.Normal);
-            PasswordCell.SecondButton.TouchUpInside += (sender, e) =>
-            {
-                if (PasswordCell.TextField.SecureTextEntry)
-                {
-                    PasswordCell.SecondButton.SetTitle(BitwardenIcons.EyeSlash, UIControlState.Normal);
-                    PasswordCell.TextField.SecureTextEntry = false;
-                }
-                else
-                {
-                    PasswordCell.SecondButton.SetTitle(BitwardenIcons.Eye, UIControlState.Normal);
-                    PasswordCell.TextField.SecureTextEntry = true;
-                }
-            };
-
+            PasswordCell.BuildSecureCell(PasswordCell.SecondButton);
             PasswordCell.TextField.ShouldReturn += (UITextField tf) =>
             {
                 UriCell.TextField.BecomeFirstResponder();
@@ -247,7 +231,7 @@ namespace Bit.iOS.Core.Controllers
             {
                 UsernameCell.TextField.Text = username;
                 DismissViewController(false, null);
-            }, isUsernameGenerator: true, emailWebsite: NameCell.TextField.Text, fromExtension: true);
+            }, isUsernameGenerator: true, emailWebsite: NameCell.TextField.Text, appOptions: appOptions);
 
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(generatorPage);

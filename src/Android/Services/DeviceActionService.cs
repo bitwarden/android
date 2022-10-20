@@ -521,7 +521,7 @@ namespace Bit.Droid.Services
             Application.Context.StartActivity(intent);
         }
 
-        public void ClosePopUpPage()
+        public void CloseExtensionPopUp()
         {
             // only used by iOS
             throw new NotImplementedException();

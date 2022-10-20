@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Bit.App.Abstractions;
+using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Styles;
 using Bit.Core.Abstractions;
@@ -16,26 +16,23 @@ namespace Bit.App.Pages
 
         private GeneratorPageViewModel _vm;
         private readonly bool _fromTabPage;
-        private readonly bool _fromExtension;
         private readonly Action<string> _selectAction;
         private readonly TabsPage _tabsPage;
-        private readonly IDeviceActionService _deviceActionService;
 
-        public GeneratorPage(bool fromTabPage, Action<string> selectAction = null, TabsPage tabsPage = null, bool isUsernameGenerator = false, string emailWebsite = null, bool editMode = false, bool fromExtension = false)
+        public GeneratorPage(bool fromTabPage, Action<string> selectAction = null, TabsPage tabsPage = null, bool isUsernameGenerator = false, string emailWebsite = null, bool editMode = false, AppOptions appOptions = null)
         {
             _tabsPage = tabsPage;
             InitializeComponent();
-            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
-            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>();
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>();
             _vm = BindingContext as GeneratorPageViewModel;
             _vm.Page = this;
             _fromTabPage = fromTabPage;
-            _fromExtension = fromExtension;
             _selectAction = selectAction;
             _vm.ShowTypePicker = fromTabPage;
             _vm.IsUsername = isUsernameGenerator;
             _vm.EmailWebsite = emailWebsite;
             _vm.EditMode = editMode;
+            _vm.IosExtension = appOptions != null && appOptions.IosExtension;
             var isIos = Device.RuntimePlatform == Device.iOS;
             if (selectAction != null)
             {
@@ -137,21 +134,6 @@ namespace Bit.App.Pages
         private async void LengthSlider_DragCompleted(object sender, EventArgs e)
         {
             await _vm.SliderChangedAsync();
-        }
-
-        private async void Close_Clicked(object sender, EventArgs e)
-        {
-            if (DoOnce())
-            {
-                if (_fromExtension)
-                {
-                    _deviceActionService.ClosePopUpPage();
-                }
-                else
-                {
-                    await Navigation.PopModalAsync();
-                }
-            }
         }
 
         public override async Task UpdateOnThemeChanged()

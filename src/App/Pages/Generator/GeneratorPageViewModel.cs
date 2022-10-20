@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core;
@@ -21,6 +22,7 @@ namespace Bit.App.Pages
         private readonly IClipboardService _clipboardService;
         private readonly IUsernameGenerationService _usernameGenerationService;
         private readonly ITokenService _tokenService;
+        private readonly IDeviceActionService _deviceActionService;
         readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         private PasswordGenerationOptions _options;
@@ -51,6 +53,7 @@ namespace Bit.App.Pages
         private bool _showAnonAddyApiAccessToken;
         private bool _showSimpleLoginApiKey;
         private bool _editMode;
+        private bool _iosExtension;
 
         public GeneratorPageViewModel()
         {
@@ -59,6 +62,7 @@ namespace Bit.App.Pages
             _clipboardService = ServiceContainer.Resolve<IClipboardService>();
             _usernameGenerationService = ServiceContainer.Resolve<IUsernameGenerationService>();
             _tokenService = ServiceContainer.Resolve<ITokenService>();
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>();
 
             PageTitle = AppResources.Generator;
             GeneratorTypeOptions = new List<GeneratorType> {
@@ -91,6 +95,19 @@ namespace Bit.App.Pages
             RegenerateUsernameCommand = new AsyncCommand(RegenerateUsernameAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
             ToggleForwardedEmailHiddenValueCommand = new AsyncCommand(ToggleForwardedEmailHiddenValueAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
             CopyCommand = new AsyncCommand(CopyAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
+            CloseCommand = new AsyncCommand(CloseAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
+        }
+
+        public async Task CloseAsync()
+        {
+            if (_iosExtension)
+            {
+                _deviceActionService.CloseExtensionPopUp();
+            }
+            else
+            {
+                await Page.Navigation.PopModalAsync();
+            }
         }
 
         public List<GeneratorType> GeneratorTypeOptions { get; set; }
@@ -104,6 +121,7 @@ namespace Bit.App.Pages
         public ICommand RegenerateUsernameCommand { get; set; }
         public ICommand ToggleForwardedEmailHiddenValueCommand { get; set; }
         public ICommand CopyCommand { get; set; }
+        public ICommand CloseCommand { get; set; }
 
         public string Password
         {
@@ -138,6 +156,12 @@ namespace Bit.App.Pages
         {
             get => _isUsername;
             set => SetProperty(ref _isUsername, value);
+        }
+
+        public bool IosExtension
+        {
+            get => _iosExtension;
+            set => SetProperty(ref _iosExtension, value);
         }
 
         public bool ShowTypePicker

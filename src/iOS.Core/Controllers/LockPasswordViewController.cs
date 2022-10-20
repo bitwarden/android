@@ -14,7 +14,6 @@ using Bit.Core.Enums;
 using Bit.App.Pages;
 using Bit.App.Models;
 using Xamarin.Forms;
-using Bit.Core;
 
 namespace Bit.iOS.Core.Controllers
 {
@@ -52,7 +51,7 @@ namespace Bit.iOS.Core.Controllers
         public abstract Action Cancel { get; }
 
         public FormEntryTableViewCell MasterPasswordCell { get; set; } = new FormEntryTableViewCell(
-            AppResources.MasterPassword, useButton: true);
+            AppResources.MasterPassword, buttonsConfig: ButtonsConfig.One);
 
         public string BiometricIntegrityKey { get; set; }
 
@@ -155,12 +154,7 @@ namespace Bit.iOS.Core.Controllers
                 {
                     MasterPasswordCell.TextField.KeyboardType = UIKeyboardType.NumberPad;
                 }
-                MasterPasswordCell.Button.TitleLabel.Font = UIFont.FromName("bwi-font", 28f);
-                MasterPasswordCell.Button.SetTitle(BitwardenIcons.Eye, UIControlState.Normal);
-                MasterPasswordCell.Button.TouchUpInside += (sender, e) => {
-                    MasterPasswordCell.TextField.SecureTextEntry = !MasterPasswordCell.TextField.SecureTextEntry;
-                    MasterPasswordCell.Button.SetTitle(MasterPasswordCell.TextField.SecureTextEntry ? BitwardenIcons.Eye : BitwardenIcons.EyeSlash, UIControlState.Normal);
-                };
+                MasterPasswordCell.BuildSecureCell(MasterPasswordCell.Button);
             }
 
             TableView.RowHeight = UITableView.AutomaticDimension;

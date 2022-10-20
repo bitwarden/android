@@ -21,7 +21,7 @@
             <u:InverseBoolConverter x:Key="inverseBool" />
             <u:LocalizableEnumConverter x:Key="localizableEnum" />
             <xct:EnumToBoolConverter x:Key="enumToBool"/>
-            <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
+            <ToolbarItem Text="{u:I18n Cancel}" Command="{Binding CloseCommand}" Order="Primary" Priority="-1"
                          x:Name="_closeItem" x:Key="closeItem" />
             <ToolbarItem Text="{u:I18n Select}"
                      Clicked="Select_Clicked"

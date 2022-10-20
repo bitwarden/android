@@ -380,7 +380,7 @@ namespace Bit.iOS.Core.Services
             UIApplication.SharedApplication.OpenUrl(url);
         }
 
-        public void ClosePopUpPage()
+        public void CloseExtensionPopUp()
         {
             GetPresentedViewController().DismissViewController(true, null);
         }
