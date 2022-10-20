@@ -274,7 +274,6 @@ jobs:
 
 
   f-droid:
-    if: false
     name: F-Droid Build
     runs-on: windows-2022
     steps:
@@ -460,7 +459,6 @@ jobs:
   ios:
     name: Apple iOS
     runs-on: macos-11
-    if: false
     needs: setup
     steps:
       - name: Setup NuGet
