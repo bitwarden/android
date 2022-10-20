@@ -2314,6 +2314,66 @@ select Add TOTP to store the key safely</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Наистина ли искате да разрешите заснемането на екрана?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Направена е заявка за вписване</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Опитвате се да се впишете ли?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Опит за вписване от {0} в {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Вид устройство</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP адрес</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Време</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Near</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Потвърждаване на вписването</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Отказване на вписването</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Току-що</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>Преди {0} минути</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Вписването е потвърдено</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Вписването е отказано</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Одобряване на заявки за вписване</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Използвайте това устройство за одобряване на заявки за вписване направени от други устройства.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Разрешаване на известията</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Получаване на известия при нови заявки за вписване</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Не, благодаря</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Потвърждаване на заявката за вписване за {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Всички известия</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Тип парола</value>
   </data>
@@ -2388,5 +2448,17 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Произволно</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Използване на услугата за достъпност</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Битуорден използва услугата за достъпност, за да разпознава полета за вписване в приложенията и уеб сайтовете и, ако в трезора има съвпадение, да попълва потребителското име и паролата. Никаква информация, предоставена ни от услугата, не се запазва, както и не правим опити да контролираме елементите на екрана, освен въвеждането на данните за идентификация.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Приемане</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Отказване</value>
   </data>
 </root>

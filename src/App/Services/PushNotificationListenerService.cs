@@ -1,13 +1,19 @@
 ﻿#if !FDROID
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Models;
+using Bit.App.Pages;
+using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Response;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -26,6 +32,8 @@ namespace Bit.App.Services
         private IAppIdService _appIdService;
         private IApiService _apiService;
         private IMessagingService _messagingService;
+        private IPushNotificationService _pushNotificationService;
+        private ILogger _logger;
 
         public async Task OnMessageAsync(JObject value, string deviceType)
         {
@@ -125,6 +133,34 @@ namespace Bit.App.Services
                         _messagingService.Send("logout");
                     }
                     break;
+                case NotificationType.AuthRequest:
+                    var passwordlessLoginMessage = JsonConvert.DeserializeObject<PasswordlessRequestNotification>(notification.Payload);
+
+                    // if the user has not enabled passwordless logins ignore requests
+                    if (!await _stateService.GetApprovePasswordlessLoginsAsync(passwordlessLoginMessage?.UserId))
+                    {
+                        return;
+                    }
+
+                    // if there is a request modal opened ignore all incoming requests
+                    if (App.Current.MainPage.Navigation.ModalStack.Any(p => p is NavigationPage navPage && navPage.CurrentPage is LoginPasswordlessPage))
+                    {
+                        return;
+                    }
+
+                    await _stateService.SetPasswordlessLoginNotificationAsync(passwordlessLoginMessage, passwordlessLoginMessage?.UserId);
+                    var userEmail = await _stateService.GetEmailAsync(passwordlessLoginMessage?.UserId);
+
+                    var notificationData = new PasswordlessNotificationData()
+                    {
+                        Id = Constants.PasswordlessNotificationId,
+                        TimeoutInMinutes = Constants.PasswordlessNotificationTimeoutInMinutes,
+                        UserEmail = userEmail,
+                    };
+
+                    _pushNotificationService.SendLocalNotification(AppResources.LogInRequested, String.Format(AppResources.ConfimLogInAttempForX, userEmail), notificationData);
+                    _messagingService.Send("passwordlessLoginRequest", passwordlessLoginMessage);
+                    break;
                 default:
                     break;
             }
@@ -188,6 +224,27 @@ namespace Bit.App.Services
             Debug.WriteLine($"{TAG} error - {message}");
         }
 
+        public async Task OnNotificationTapped(BaseNotificationData data)
+        {
+            Resolve();
+            try
+            {
+                if (data is PasswordlessNotificationData passwordlessNotificationData)
+                {
+                    var notificationUserId = await _stateService.GetUserIdAsync(passwordlessNotificationData.UserEmail);
+                    if (notificationUserId != null)
+                    {
+                        await _stateService.SetActiveUserAsync(notificationUserId);
+                        _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
+        }
+
         public bool ShouldShowNotification()
         {
             return _showNotification;
@@ -204,6 +261,8 @@ namespace Bit.App.Services
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
+            _logger = ServiceContainer.Resolve<ILogger>();
             _resolved = true;
         }
     }

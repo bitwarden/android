@@ -122,35 +122,35 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden — гэта менеджар імён карыстальніка і паролей, які дапамагае вам захаваць вашу бяспеку у анлайн-прасторы</value>
+    <value>Bitwarden — гэта менеджар лагінаў і пароляў, які дапамагае вам захаваць бяспеку ў інтэрнэце.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>Bitwarden, Inc. - гэта мацярынская кампанія 8bit Solutions LLC.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+НАЗВАНЫ ЛЕПШЫМ МЕНЕДЖАРАМ ПАРОЛЯЎ VERGE, U.S. NEWS &amp; WORLD REPORT, CNET І ІНШЫМІ АРГАНІЗАЦЫЯМІ.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+Кіруйце, захоўвайце, абараняйце і дзяліцеся неабмежаванай колькасцю пароляў на неабмежаванай колькасці прылад з любога месца. Bitwarden прапануе праграмныя рашэнні менеджара пароляў з адкрытым зыходным кодам для кожнага, калі вы на працы, дома або падарожнічаеце.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Генерыруйце надзейныя, унікальныя і выпадковыя паролі на падставе патрабаванняў бяспекі для кожнага вэб-сайта, які вы наведваеце.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+Функцыя Send ад Bitwarden дазваляе хутка перадаць інфармацыю (файлы і нефарматаваны тэкст) у зашыфраваным выглядзе любому карыстальніку.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+Bitwarden прапануе для кампаній тарыфныя планы Teams і Enterprise, каб вы маглі абменьвацца паролямі з вашымі калегамі.
 
-Why Choose Bitwarden:
+Чаму варта выбраць менавіта Bitwarden:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+Шыфраванне сусветнага класа
+Паролі абаронены прасунутым скразным шыфраваннем (AES-256 bit, salted hashtag і PBKDF2 SHA-256). Такім чынам, вашы паролі заўсёды будуць у бяспецы.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Убудаваны генератар пароляў
+Генерыруйце надзейныя, унікальныя і выпадковыя паролі на падставе патрабаванняў бяспекі для кожнага вэб-сайта, які вы наведваеце.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+Шматмоўная падтрымка
+Bitwarden перакладзены на 40 моў свету (прысутнічае беларуская) і іх колькасць працягвае расці дзякуючы нашай глабальнай супольнасці.
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+Кросплатформенныя праграмы
+Абараняйце і дзяліцеся канфідэнцыяльнымі данымі ў вашым сховішчы Bitwarden з любога браўзера, мабільнай прылады або аперацыйнай сістэмы для камп'ютара.
 </value>
   <comment>Max 4000 characters</comment>
   </data>
@@ -158,16 +158,16 @@ Secure and share sensitive data within your Bitwarden Vault from any browser, mo
     <value>Бяспечны і бясплатны менеджар пароляў для ўсіх вашых прылад</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Кіруйце ўсімі вашымі імёнамі карыстальніка і паролямі з бяспечнага сховішча</value>
+    <value>Кіруйце ўсімі вашымі лагінамі і паролямі з бяспечнага сховішча</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Аўтаматычна генерыруйце моцныя, выпадковыя і бяспечныя паролі</value>
+    <value>Аўтаматычна генерыруйце надзейныя, выпадковыя і бяспечныя паролі</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Абараніце ваша сховішча з дапамогай вашага адбітка пальца, PIN-кода ці асноўнага пароля.</value>
+    <value>Абараніце ваша сховішча з дапамогай адбітка вашага пальца, PIN-кода або асноўнага пароля</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Хуткае аўтазапаўненне ўліковых даных з браузера або іншых праграм</value>
+    <value>Хуткае аўтазапаўненне лагінаў у браўзеры і іншых праграмах</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Сінхранізацыя і доступ да сховішча з некалькіх прылад
@@ -175,6 +175,6 @@ Secure and share sensitive data within your Bitwarden Vault from any browser, mo
 - тэлефон
 - планшэт
 - камп'ютар
-- Web-браузер</value>
+- браўзер</value>
   </data>
 </root>

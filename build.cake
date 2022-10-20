@@ -120,6 +120,7 @@ Task("UpdateAndroidCodeFiles")
         var packageFileList = new string[] {
             Path.Combine(_slnPath, "src", "Android", "MainActivity.cs"),
             Path.Combine(_slnPath, "src", "Android", "MainApplication.cs"),
+            Path.Combine(_slnPath, "src", "Android", "Constants.cs"),
             Path.Combine(_slnPath, "src", "Android", "Accessibility", "AccessibilityService.cs"),
             Path.Combine(_slnPath, "src", "Android", "Autofill", "AutofillHelpers.cs"),
             Path.Combine(_slnPath, "src", "Android", "Autofill", "AutofillService.cs"),

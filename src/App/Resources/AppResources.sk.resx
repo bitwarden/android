@@ -2313,6 +2313,66 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Naozaj chcete povoliť snímanie obrazovky?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Požadované prihlásenie</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Snažíte sa prihlásiť?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Pokus o prihlásenie do konta {0} dňa {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Typ zariadenia</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP adresa</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Čas</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>V blízkosti</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Potvrdiť prihlásenie</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Odmietnuť prihlásenie</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Práve teraz</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>Pred {0} minútami</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Prihlásenie potvrdené</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Prihlásenie zamietnuté</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Schvaľovanie žiadostí o prihlásenie</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Použiť toto zariadenie na schvaľovanie požiadaviek na prihlásenie z iných zariadení.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Povoliť upozornenia</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Prijímať push notifikácie o nových požiadavkách na prihlásenie</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Nie, ďakujem</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Potvrdiť pokus o prihlásenie pre {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Všetky upozornenia</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Typ hesla</value>
   </data>
@@ -2387,5 +2447,17 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Náhodné</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Vyhlásenie o prístupnosti</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Služba Bitwarden využíva službu sprístupnenia na vyhľadávanie prihlasovacích polí v aplikáciách a webových lokalitách a potom po nájdení zhody pre aplikáciu alebo lokalitu vytvorí príslušné identifikátory polí na zadanie používateľského mena a hesla. Neukladáme žiadne informácie, ktoré nám služba poskytuje, ani sa nepokúšame kontrolovať žiadne prvky na obrazovke okrem textového zadávania prihlasovacích údajov.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Prijať</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Odmietnuť</value>
   </data>
 </root>

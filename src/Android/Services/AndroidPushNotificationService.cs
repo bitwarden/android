@@ -1,9 +1,17 @@
 ﻿#if !FDROID
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Android.App;
+using Android.Content;
+using Android.OS;
 using AndroidX.Core.App;
 using Bit.App.Abstractions;
+using Bit.App.Models;
+using Bit.Core;
 using Bit.Core.Abstractions;
+using Bit.Droid.Utilities;
+using Newtonsoft.Json;
 using Xamarin.Forms;
 
 namespace Bit.Droid.Services
@@ -22,6 +30,11 @@ namespace Bit.Droid.Services
         }
 
         public bool IsRegisteredForPush => NotificationManagerCompat.From(Android.App.Application.Context)?.AreNotificationsEnabled() ?? false;
+
+        public Task<bool> AreNotificationsSettingsEnabledAsync()
+        {
+            return Task.FromResult(IsRegisteredForPush);
+        }
 
         public async Task<string> GetTokenAsync()
         {
@@ -46,6 +59,45 @@ namespace Bit.Droid.Services
         {
             // Do we ever need to unregister?
             return Task.FromResult(0);
+        }
+
+        public void DismissLocalNotification(string notificationId)
+        {
+            if (int.TryParse(notificationId, out int intNotificationId))
+            {
+                var notificationManager = NotificationManagerCompat.From(Android.App.Application.Context);
+                notificationManager.Cancel(intNotificationId);
+            }
+        }
+
+        public void SendLocalNotification(string title, string message, BaseNotificationData data)
+        {
+            if (string.IsNullOrEmpty(data.Id))
+            {
+                throw new ArgumentNullException("notificationId cannot be null or empty.");
+            }
+            
+            var context = Android.App.Application.Context;
+            var intent = new Intent(context, typeof(MainActivity));
+            intent.PutExtra(Core.Constants.NotificationData, JsonConvert.SerializeObject(data));
+
+            var pendingIntentFlags = AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true);
+            var pendingIntent = PendingIntent.GetActivity(context, 20220801, intent, pendingIntentFlags);
+            var builder = new NotificationCompat.Builder(context, Core.Constants.AndroidNotificationChannelId)
+               .SetContentIntent(pendingIntent)
+               .SetContentTitle(title)
+               .SetContentText(message)
+               .SetSmallIcon(Resource.Drawable.ic_notification)
+               .SetColor((int)Android.Graphics.Color.White)
+               .SetAutoCancel(true);
+
+            if (data is PasswordlessNotificationData passwordlessNotificationData && passwordlessNotificationData.TimeoutInMinutes > 0)
+            {
+                builder.SetTimeoutAfter(passwordlessNotificationData.TimeoutInMinutes * 60000);
+            }
+
+            var notificationManager = NotificationManagerCompat.From(context);
+            notificationManager.Notify(int.Parse(data.Id), builder.Build());
         }
     }
 }

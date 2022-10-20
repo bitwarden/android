@@ -7,6 +7,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
+using Bit.Core.Models.Response;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 
@@ -1260,6 +1261,37 @@ namespace Bit.Core.Services
             await SetValueAsync(key, value, reconciledOptions);
         }
 
+        public async Task<bool> GetApprovePasswordlessLoginsAsync(string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var key = Constants.ApprovePasswordlessLoginsKey(reconciledOptions.UserId);
+            return await GetValueAsync<bool?>(key, reconciledOptions) ?? false;
+        }
+
+        public async Task SetApprovePasswordlessLoginsAsync(bool? value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var key = Constants.ApprovePasswordlessLoginsKey(reconciledOptions.UserId);
+            await SetValueAsync(key, value, reconciledOptions);
+        }
+
+        public async Task<PasswordlessRequestNotification> GetPasswordlessLoginNotificationAsync(string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var key = Constants.PasswordlessLoginNofiticationKey(reconciledOptions.UserId);
+            return await GetValueAsync<PasswordlessRequestNotification>(key, reconciledOptions);
+        }
+
+        public async Task SetPasswordlessLoginNotificationAsync(PasswordlessRequestNotification value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var key = Constants.PasswordlessLoginNofiticationKey(reconciledOptions.UserId);
+            await SetValueAsync(key, value, reconciledOptions);
+        }
         // Helpers
 
         private async Task<T> GetValueAsync<T>(string key, StorageOptions options)
@@ -1455,6 +1487,7 @@ namespace Bit.Core.Services
             await SetEncryptedPasswordGenerationHistoryAsync(null, userId);
             await SetEncryptedSendsAsync(null, userId);
             await SetSettingsAsync(null, userId);
+            await SetApprovePasswordlessLoginsAsync(null, userId);
 
             if (userInitiated)
             {
@@ -1474,6 +1507,7 @@ namespace Bit.Core.Services
                 await SetAutoDarkThemeAsync(null, userId);
                 await SetAddSitePromptShownAsync(null, userId);
                 await SetPasswordGenerationOptionsAsync(null, userId);
+                await SetApprovePasswordlessLoginsAsync(null, userId);
                 await SetUsernameGenerationOptionsAsync(null, userId);
             }
         }
