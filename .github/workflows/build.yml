@@ -174,7 +174,7 @@ jobs:
 
         shell: pwsh
 
-      - name: Sign for Play Store
+      - name: Sign Android Build
         env:
           PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
           UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
