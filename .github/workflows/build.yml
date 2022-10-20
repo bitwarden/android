@@ -149,7 +149,6 @@ jobs:
         shell: pwsh
 
       - name: Verify Format
-        if: ${{ matrix.variant == 'prod' }}
         run: dotnet tool run dotnet-format --check
         shell: pwsh
 
