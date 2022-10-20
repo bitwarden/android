@@ -203,7 +203,7 @@
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>Skicka en buggrapport</value>
+    <value>Skicka en felrapport</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
     <value>Öppna ett problemärende på vårt GitHub-arkiv.</value>
@@ -229,7 +229,7 @@
     <value>Mappar</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Mapp uppdaterad.</value>
+    <value>Mappen uppdaterades.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Gå till webbplats</value>
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Tog bort objekt.</value>
+    <value>Objektet har raderats.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -379,10 +379,10 @@
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Verifiera fingeravtryck</value>
+    <value>Bekräfta fingeravtryck</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Verifiera huvudlösenord</value>
+    <value>Bekräfta huvudlösenord</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>Verifiera PIN-kod</value>
@@ -578,7 +578,7 @@
     <value>Huvudlösenordet är det lösenord som du använder för att komma åt ditt valv. Det är väldigt viktigt att du inte glömmer bort ditt huvudlösenord, eftersom det inte går att återställa lösenordet om du skulle glömma bort det.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Huvudlösenordsledtråd (frivillig)</value>
+    <value>Huvudlösenordsledtråd (valfri)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>En huvudlösenordsledtråd kan hjälpa dig att komma ihåg ditt huvudlösenord om du glömmer bort det.</value>
@@ -587,11 +587,11 @@
     <value>Huvudlösenordet måste vara minst 8 tecken långt.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minst antal nummer</value>
+    <value>Minsta antal siffror</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Minst antal speciella tecken</value>
+    <value>Minsta antal speciella tecken</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -681,7 +681,7 @@
     <value>Objektinformation</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Objekt uppdaterat.</value>
+    <value>Objektet uppdaterades.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Skickar...</value>
@@ -692,7 +692,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Synkronisering genomförd.</value>
+    <value>Synkroniseringen slutfördes.</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
     <value>Synkronisering misslyckades.</value>
@@ -708,7 +708,7 @@
     <value>Tvåfaktorsautentisering</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Tvåstegsverifiering gör ditt konto säkrare genom att kräva att du verifierar din inloggning med en annan enhet, t.ex. en säkerhetsnyckel, autentiseringsapp, SMS, telefonsamtal eller e-post. Tvåstegsverifiering kan aktiveras i Bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
+    <value>Tvåstegsverifiering gör ditt konto säkrare genom att kräva att du verifierar din inloggning med en annan enhet, t.ex. en säkerhetsnyckel, autentiseringsapp, SMS, telefonsamtal eller e-post. Tvåstegsverifiering kan aktiveras i Bitwarden.com webbvalv. Vill du besöka webbplatsen nu?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Lås upp med {0}</value>
@@ -827,11 +827,12 @@
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Inloggning inte tillgänglig</value>
+    <value>Inloggning ej tillgänglig</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Detta konto har tvåstegsverifiering aktiverat, men inget av alternativen som används stöds på den här enheten. Använd en enhet som stöds och/eller lägg till en metod för tvåstegsverifiering med bättre stöd för flera olika typer av enheter (t.ex. via en autentiseringsapp).</value>
+    <value>Detta konto har tvåstegsverifiering aktiverat, men ingen av de konfigurerade metoderna stöds av den här enheten. 
+Vänligen använd en enhet som stöds och/eller lägg till fler metoder som har bättre stöd bland enheter (t.ex. en autentiseringsapp).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Återställningskod</value>
@@ -856,7 +857,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verifierings-mejl skickat.</value>
+    <value>Verifieringsmeddelande har skickats.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -867,7 +868,7 @@
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Bifoga fil</value>
+    <value>Lägg till ny bilaga</value>
   </data>
   <data name="Attachments" xml:space="preserve">
     <value>Bifogade filer</value>
@@ -946,7 +947,7 @@ Scanning will happen automatically.</value>
     <value>Filkälla</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Funktionen är inte tillgänglig</value>
+    <value>Funktion ej tillgänglig</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
     <value>Filen får vara maximalt 100 MB.</value>
@@ -958,7 +959,7 @@ Scanning will happen automatically.</value>
     <value>Läs mer</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>API server-URL</value>
+    <value>API-server-URL</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
     <value>Anpassad miljö</value>
@@ -987,7 +988,7 @@ Scanning will happen automatically.</value>
     <value>Server-URL</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Webbvalv server-URL</value>
+    <value>Webbvalvsserver-URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>Tryck på den här aviseringen för att visa inloggningar från ditt valv.</value>
@@ -1056,10 +1057,10 @@ Scanning will happen automatically.</value>
     <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Förfallomånad</value>
+    <value>Utgångsmånad</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Förfalloår</value>
+    <value>Utgångsår</value>
   </data>
   <data name="February" xml:space="preserve">
     <value>Februari</value>
@@ -1083,7 +1084,7 @@ Scanning will happen automatically.</value>
     <value>Fullständigt namn</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>Licensnummer</value>
+    <value>Körkortsnummer</value>
   </data>
   <data name="March" xml:space="preserve">
     <value>Mars</value>
@@ -1143,7 +1144,7 @@ Scanning will happen automatically.</value>
     <value>Show a recognizable image next to each login.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Ikoner Server-URL</value>
+    <value>Ikonserver-URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
     <value>Fyll i automatiskt med Bitwarden</value>
@@ -1278,7 +1279,7 @@ Scanning will happen automatically.</value>
     <value>Tillgänglighetstjänsten kan vara användbar när appar inte stöder standardvarianten av ifyllnad.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Lösenord uppdaterat</value>
+    <value>Lösenordet uppdaterades</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
@@ -1381,10 +1382,10 @@ Scanning will happen automatically.</value>
     <value>Sök i samling</value>
   </data>
   <data name="SearchFileSends" xml:space="preserve">
-    <value>Search File Sends</value>
+    <value>Search file Sends</value>
   </data>
   <data name="SearchTextSends" xml:space="preserve">
-    <value>Search Text Sends</value>
+    <value>Search text Sends</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
     <value>Sök {0}</value>
@@ -1553,7 +1554,7 @@ Scanning will happen automatically.</value>
     <value>Default dark theme</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is enabled.</value>
+    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is in use.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopiera anteckningar</value>
@@ -1843,7 +1844,7 @@ Scanning will happen automatically.</value>
     <value>Använd Bitwardens tillgänglighetstjänst för att använda snabbåtgärdsbrickan för automatisk ifyllnad och/eller visa ett popup-fönster med överlappning (om aktiverat).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Krävs för att använda för att använda snabbåtgärdsbrickan för automatisk ifyllnad eller för att komplettera tjänsten för automatisk ifyllnad genom att använda överlappning (om aktiverat).</value>
+    <value>Krävs för att använda snabbåtgärdsbrickan för automatisk ifyllnad eller för att komplettera tjänsten för automatisk ifyllnad genom att använda överlappning (om aktiverat).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
     <value>Använd överlappning</value>
@@ -1973,7 +1974,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Disable this Send so that no one can access it</value>
+    <value>Deactivate this Send so that no one can access it</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -2152,13 +2153,13 @@ Scanning will happen automatically.</value>
     <value>Locked</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>Logged Out</value>
+    <value>Logged out</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>Switched to next available account</value>
   </data>
   <data name="AccountLockedSuccessfully" xml:space="preserve">
-    <value>Account Locked</value>
+    <value>Account locked</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
     <value>Account logged out successfully</value>
@@ -2236,7 +2237,7 @@ Scanning will happen automatically.</value>
     <value>Numbers (0 to 9)</value>
   </data>
   <data name="SpecialCharacters" xml:space="preserve">
-    <value>Special Characters (!@#$%^&amp;*)</value>
+    <value>Special characters (!@#$%^&amp;*)</value>
   </data>
   <data name="TapToGoBack" xml:space="preserve">
     <value>Tap to go back</value>
@@ -2266,7 +2267,7 @@ Scanning will happen automatically.</value>
     <value>TOTP</value>
   </data>
   <data name="VerificationCodes" xml:space="preserve">
-    <value>Verification Codes</value>
+    <value>Verification codes</value>
   </data>
   <data name="PremiumSubscriptionRequired" xml:space="preserve">
     <value>Premium subscription required</value>
@@ -2281,10 +2282,10 @@ Scanning will happen automatically.</value>
     <value>Cannot scan QR Code? </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Authenticator Key</value>
+    <value>Authenticator key</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Enter Key Manually</value>
+    <value>Enter key manually</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
     <value>Add TOTP</value>
@@ -2312,7 +2313,7 @@ select Add TOTP to store the key safely</value>
     <value>Allow screen capture</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>Are you sure you want to enable Screen Capture?</value>
+    <value>Are you sure you want to turn on screen capture?</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
     <value>Login requested</value>
@@ -2375,34 +2376,34 @@ select Add TOTP to store the key safely</value>
     <value>All notifications</value>
   </data>
   <data name="PasswordType" xml:space="preserve">
-    <value>Password Type</value>
+    <value>Password type</value>
   </data>
   <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
     <value>What would you like to generate?</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
-    <value>Username Type</value>
+    <value>Username type</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Plus Addressed Email</value>
+    <value>Plus addressed email</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
-    <value>Catch-all Email</value>
+    <value>Catch-all email</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
-    <value>Forwarded Email Alias</value>
+    <value>Forwarded email alias</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
-    <value>Random Word</value>
+    <value>Random word</value>
   </data>
   <data name="EmailRequiredParenthesis" xml:space="preserve">
     <value>Email (required)</value>
   </data>
   <data name="DomainNameRequiredParenthesis" xml:space="preserve">
-    <value>Domain Name (required)</value>
+    <value>Domain name (required)</value>
   </data>
   <data name="APIKeyRequiredParenthesis" xml:space="preserve">
-    <value>API Key (required)</value>
+    <value>API key (required)</value>
   </data>
   <data name="Service" xml:space="preserve">
     <value>Service</value>
@@ -2420,13 +2421,13 @@ select Add TOTP to store the key safely</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
-    <value>API Access Token</value>
+    <value>API access token</value>
   </data>
   <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
     <value>Are you sure you want to overwrite the current username?</value>
   </data>
   <data name="GenerateUsername" xml:space="preserve">
-    <value>Generate Username</value>
+    <value>Generate username</value>
   </data>
   <data name="EmailType" xml:space="preserve">
     <value>Email Type</value>
@@ -2460,5 +2461,8 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="Decline" xml:space="preserve">
     <value>Decline</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Login request has already expired.</value>
   </data>
 </root>

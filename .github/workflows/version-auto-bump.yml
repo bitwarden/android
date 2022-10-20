@@ -2,8 +2,9 @@
 name: Version Auto Bump
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - v**
 
 jobs:
   setup:
@@ -18,13 +19,14 @@ jobs:
       - name: Calculate bumped version
         id: version
         env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_TAG: ${{ github.ref }}
         run: |
           CURR_MAJOR=$(echo $RELEASE_TAG | sed -r 's/v([0-9]{4}\.[0-9]{1,2})\.([0-9]{1,2})/\1/')
           CURR_PATCH=$(echo $RELEASE_TAG | sed -r 's/v([0-9]{4}\.[0-9]{1,2})\.([0-9]{1,2})/\2/')
+          echo "Current Major: $CURR_MAJOR"
           echo "Current Patch: $CURR_PATCH"
 
-          NEW_PATCH=$((CURR_PATCH++))
+          NEW_PATCH=$((CURR_PATCH+1))
           NEW_VER=$CURR_MAJOR.$NEW_PATCH
           echo "New Version: $NEW_VER"
           echo "::set-output name=new-version::$NEW_VER"

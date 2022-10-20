@@ -11,6 +11,7 @@ namespace Bit.App.Abstractions
         void OnUnregistered(string device);
         void OnError(string message, string device);
         Task OnNotificationTapped(BaseNotificationData data);
+        Task OnNotificationDismissed(BaseNotificationData data);
         bool ShouldShowNotification();
     }
 }

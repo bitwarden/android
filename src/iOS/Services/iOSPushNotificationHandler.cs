@@ -96,23 +96,35 @@ namespace Bit.iOS.Services
         public void DidReceiveNotificationResponse(UNUserNotificationCenter center, UNNotificationResponse response, Action completionHandler)
         {
             Debug.WriteLine($"{TAG} DidReceiveNotificationResponse {response?.Notification?.Request?.Content?.UserInfo}");
-
-            if (response.IsDefaultAction && response?.Notification?.Request?.Content?.UserInfo != null)
+            if ((response?.Notification?.Request?.Content?.UserInfo) == null)
             {
-                var userInfo = response?.Notification?.Request?.Content?.UserInfo;
-                OnMessageReceived(userInfo);
+                completionHandler();
+                return;
+            }
 
-                if (userInfo.TryGetValue(NSString.FromObject(Constants.NotificationData), out NSObject nsObject))
+            var userInfo = response?.Notification?.Request?.Content?.UserInfo;
+            OnMessageReceived(userInfo);
+
+            if (userInfo.TryGetValue(NSString.FromObject(Constants.NotificationData), out NSObject nsObject))
+            {
+                var token = JToken.Parse(NSString.FromObject(nsObject).ToString());
+                var typeToken = token.SelectToken(Constants.NotificationDataType);
+                if (response.IsDefaultAction)
                 {
-                    var token = JToken.Parse(NSString.FromObject(nsObject).ToString());
-                    var typeToken = token.SelectToken(Constants.NotificationDataType);
                     if (typeToken.ToString() == PasswordlessNotificationData.TYPE)
                     {
                         _pushNotificationListenerService.OnNotificationTapped(token.ToObject<PasswordlessNotificationData>());
                     }
                 }
+                else if (response.IsDismissAction)
+                {
+                    if (typeToken.ToString() == PasswordlessNotificationData.TYPE)
+                    {
+                        _pushNotificationListenerService.OnNotificationDismissed(token.ToObject<PasswordlessNotificationData>());
+                    }
+                }
             }
-
+            
             // Inform caller it has been handled
             completionHandler();
         }

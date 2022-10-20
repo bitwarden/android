@@ -247,7 +247,7 @@
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Internetverbinding is vereist</value>
+    <value>Internetverbinding vereist</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
@@ -379,7 +379,7 @@
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Vingerafdruk invoeren</value>
+    <value>Vingerafdruk verifiëren</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
     <value>Hoofdwachtwoord invoeren</value>
@@ -681,7 +681,7 @@
     <value>Item</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item is bijgewerkt.</value>
+    <value>Item bijgewerkt.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Opslaan...</value>
@@ -708,7 +708,7 @@
     <value>Tweestapsaanmelding</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Tweestapsaanmelding beschermt je account door je inlogpoging te bevestigen met een ander apparaat zoals een beveiligingscode, authenticatie-app, SMS, spraakoproep of e-mail. Je kunt tweestapsaanmelding inschakelen in de webkluis op bitwarden.com. Wil je de website nu bezoeken?</value>
+    <value>Tweestapsaanmelding beschermt je account door je inlogpoging te bevestigen met een ander apparaat zoals een beveiligingssleutel, authenticatie-app, SMS, spraakoproep of e-mail. Je kunt Tweestapsaanmelding inschakelen in de webkluis op bitwarden.com. Wil je de website nu bezoeken?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Ontgrendelen met {0}</value>
@@ -799,7 +799,7 @@
     <value>Overeenkomstige items</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Mogelijk overeenkomstige items</value>
+    <value>Mogelijke overeenkomstige items</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Zoeken</value>
@@ -887,7 +887,7 @@
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Authenticatiecode (TOTP)</value>
+    <value>Authenticatiesleutel (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
     <value>Verificatiecode (TOTP)</value>
@@ -2459,5 +2459,8 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</value>
   </data>
   <data name="Decline" xml:space="preserve">
     <value>Decline</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Inlogverzoek is al verlopen.</value>
   </data>
 </root>
