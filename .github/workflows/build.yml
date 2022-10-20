@@ -240,12 +240,12 @@ jobs:
           path: ./com.x8bit.bitwarden.apk
           if-no-files-found: error
 
-      - name: Upload QA .apk artifact
-        if: ${{ matrix.variant == 'qa' }}
+      - name: Upload Other .apk artifact
+        if: ${{ matrix.variant != 'prod' }}
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
-          name: com.x8bit.bitwarden.qa.apk
-          path: ./com.x8bit.bitwarden.qa.apk
+          name: com.x8bit.bitwarden.${{ matrix.variant }}.apk
+          path: ./com.x8bit.bitwarden.${{ matrix.variant }}.apk
           if-no-files-found: error
 
       - name: Deploy to Play Store
