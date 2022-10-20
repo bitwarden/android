@@ -182,7 +182,7 @@ jobs:
           $androidPath = $($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj");
           $packageName = "com.x8bit.bitwarden";
           
-          if ("${{ matrix.variant }}" -eq "qa") 
+          if ("${{ matrix.variant }}" -ne "prod") 
           {
             $packageName = "com.x8bit.bitwarden.${{ matrix.variant }}";
           }
