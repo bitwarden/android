@@ -71,15 +71,6 @@ jobs:
 
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ab534842b4bdf384b8aaf93765dc6f721d9f5fab
-
-      - name: Test if condition 1
-        if: ${{ matrix.variant == 'prod' && true }}
-        run: |
-          echo ${{ matrix.variant }}
-          echo ${{ github.ref == 'refs/heads/master' }}
-          echo ${{ needs.setup.outputs.rc_branch_exists == 0 }}
-          echo ${{ github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0 }}
-          echo ${{ github.ref == 'refs/heads/hotfix-rc' }}
           
       - name: Work Around for broken Windows 2022 Runner Image
         run: |
