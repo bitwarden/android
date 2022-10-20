@@ -158,6 +158,7 @@ jobs:
         shell: pwsh
 
       - name: Verify Format
+        if: ${{ matrix.variant == 'prod' }}
         run: dotnet tool run dotnet-format --check
         shell: pwsh
 
@@ -165,6 +166,7 @@ jobs:
         run: dotnet test test/Core.Test/Core.Test.csproj
 
       - name: Build Play Store publisher
+        if: ${{ matrix.variant == 'prod' }}
         run: dotnet build ./store/google/Publisher/Publisher.csproj -p:Configuration=Release
 
       - name: Setup Android build  (${{ matrix.variant }})
@@ -256,7 +258,11 @@ jobs:
           if-no-files-found: error
 
       - name: Deploy to Play Store
-        if: ${{ matrix.variant == 'prod' }}
+        if: ${{ matrix.variant == 'prod' && (( github.ref == 'refs/heads/master'
+          && needs.setup.outputs.rc_branch_exists == 0
+          && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc' ) }}
         run: |
           PUBLISHER_PATH="$GITHUB_WORKSPACE/store/google/Publisher/bin/Release/netcoreapp3.1/Publisher.dll"
           CREDS_PATH="$HOME/secrets/play_creds.json"
