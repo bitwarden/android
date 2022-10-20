@@ -152,11 +152,11 @@
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Kopiuj hasło</value>
+    <value>Skopiuj hasło</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Kopiuj nazwę użytkownika</value>
+    <value>Skopiuj nazwę użytkownika</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -179,7 +179,7 @@
     <value>Edycja</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Edytuj folder</value>
+    <value>Edytuj Folder</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Adres e-mail</value>
@@ -229,7 +229,7 @@
     <value>Foldery</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Folder został zaktualizowany.</value>
+    <value>Folder zaktualizowany.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Przejdź do strony</value>
@@ -247,7 +247,7 @@
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Połączenie z Internetem jest wymagane</value>
+    <value>Wymagane połączenie z Internetem</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
@@ -364,7 +364,7 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Odblokuj odciskiem palca</value>
+    <value>Odblokuj za pomocą odcisku palca</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Nazwa użytkownika</value>
@@ -2283,7 +2283,7 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Klucz uwierzytelniający</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Wpisz klucz ręcznie</value>
+    <value>Wprowadź klucz ręcznie</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
     <value>Dodaj TOTP</value>
@@ -2459,5 +2459,8 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
   </data>
   <data name="Decline" xml:space="preserve">
     <value>Odrzuć</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Prośba o logowanie wygasła.</value>
   </data>
 </root>

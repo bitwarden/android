@@ -349,7 +349,7 @@
     <value>Адправіць</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Сінхранізацыя</value>
+    <value>Сінхранізавана</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
@@ -2459,5 +2459,8 @@
   </data>
   <data name="Decline" xml:space="preserve">
     <value>Адхіліць</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Запыт на ўваход пратэрмінаваны.</value>
   </data>
 </root>
