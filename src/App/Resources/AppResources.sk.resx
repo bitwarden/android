@@ -1575,6 +1575,10 @@ Skenovanie prebehne automaticky.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Tmavá –⁠ Solarized</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Blokované URI pre automatické vypĺňanie</value>
   </data>
@@ -2462,5 +2466,10 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>Platnosť žiadosti o prihlásenie už vypršala.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Pokus o prihlásenie z:
+{0}
+Chcete prepnúť na toto konto?</value>
   </data>
 </root>

@@ -276,7 +276,7 @@
     <value>Êtes-vous sûr de vouloir vous déconnecter ?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Retirer le compte</value>
+    <value>Supprimer le compte</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir retirer ce compte ?</value>
@@ -1575,6 +1575,10 @@ La numérisation se fera automatiquement.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Remplissage automatique des URIs bloqués</value>
   </data>
@@ -2320,7 +2324,7 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
     <value>Essayez-vous de vous connecter ?</value>
   </data>
   <data name="LogInAttemptByXOnY" xml:space="preserve">
-    <value>Login attempt by {0} on {1}</value>
+    <value>Tentative de connexion par {0} le {1}</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
     <value>Type d'appareil</value>
@@ -2329,10 +2333,10 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
     <value>Adresse IP</value>
   </data>
   <data name="Time" xml:space="preserve">
-    <value>Time</value>
+    <value>Heure</value>
   </data>
   <data name="Near" xml:space="preserve">
-    <value>Near</value>
+    <value>Proche de</value>
   </data>
   <data name="ConfirmLogIn" xml:space="preserve">
     <value>Confirmer la connexion</value>
@@ -2462,5 +2466,10 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>La demande d’identification a déjà expiré.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Tentative de connexion depuis :
+{0}
+Voulez-vous commuter sur ce compte ?</value>
   </data>
 </root>

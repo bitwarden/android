@@ -856,7 +856,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>رایانامه تایید فرستاده شد.</value>
+    <value>رایانامه تأیید فرستاده شد</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -1574,6 +1574,10 @@
   <data name="Nord" xml:space="preserve">
     <value>نُرد</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>پر کردن خودکار URI های مسدود شده</value>
@@ -2463,5 +2467,10 @@
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>درخواست ورود قبلاً منقضی شده است.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>تلاش برای ورود از:
+{0}
+آیا می خواهید به این حساب تغییر دهید؟</value>
   </data>
 </root>
