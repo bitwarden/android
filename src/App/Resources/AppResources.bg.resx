@@ -1575,6 +1575,10 @@
     <value>Норд</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Преекспонирано тъмен</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Блокирани за авт. попълване адреси</value>
   </data>
@@ -2463,5 +2467,10 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>Заявката за вписване вече е изтекла.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Опит за вписване от:
+{0}
+Искате ли да превключите към тази регистрация?</value>
   </data>
 </root>

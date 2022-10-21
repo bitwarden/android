@@ -229,7 +229,7 @@
     <value>資料夾</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>資料夾已更新。</value>
+    <value>已更新資料夾。</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>前往網站</value>
@@ -251,10 +251,10 @@
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>主密碼不正確，請再試一次。</value>
+    <value>無效的主密碼，請再試一次。</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
-    <value>PIN 碼不正確，請再試一次。</value>
+    <value>無效的 PIN 碼，請再試一次。</value>
   </data>
   <data name="Launch" xml:space="preserve">
     <value>前往</value>
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>已刪除項目。</value>
+    <value>已刪除項目</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -394,7 +394,7 @@
     <value>檢視</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>前往我們的網站</value>
+    <value>造訪我們的網站</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
     <value>瀏覽我們的網站以取得協助、了解新消息、傳送電子郵件給我們或瀏覽更多有關使用 Bitwarden 的秘訣。</value>
@@ -587,11 +587,11 @@
     <value>主密碼需要至少 8 個字元。</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>數字</value>
+    <value>最少數字位數</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>符號</value>
+    <value>最少符號位數</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -604,7 +604,7 @@
     <value>永不</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>已新增項目。</value>
+    <value>已新增項目</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>您的密碼庫中沒有收藏。</value>
@@ -632,7 +632,7 @@
     <value>其他</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>已產生密碼。</value>
+    <value>已產生密碼</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>密碼產生器</value>
@@ -660,7 +660,7 @@
     <value>重新產生密碼</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>重新輸入主密碼</value>
+    <value>再次輸入主密碼</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>搜尋密碼庫</value>
@@ -692,10 +692,10 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>同步完成。</value>
+    <value>同步完成</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>同步失敗。</value>
+    <value>同步失敗</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>立即同步</value>
@@ -799,7 +799,7 @@
     <value>相符的項目</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>可能符合的項目</value>
+    <value>可能相符的項目</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>搜尋</value>
@@ -815,7 +815,7 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>認證器應用程式</value>
+    <value>驗證器應用程式</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
@@ -863,7 +863,7 @@
     <value>若要繼續，請將您的 YubiKey 靠在裝置的背面或者將 YubiKey 插入您裝置的 USB 連接埠，然後按下按鈕。</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey 安全鑰匙</value>
+    <value>YubiKey 安全金鑰</value>
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -887,10 +887,10 @@
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>驗證器金鑰（TOTP）</value>
+    <value>驗證器金鑰 (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>驗證碼（TOTP）</value>
+    <value>驗證碼 (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
@@ -904,7 +904,7 @@
 掃描將自動進行。</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>掃描 QR Code</value>
+    <value>掃描 QR 碼</value>
   </data>
   <data name="Camera" xml:space="preserve">
     <value>相機</value>
@@ -987,7 +987,7 @@
     <value>伺服器 URL</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>網路版密碼庫伺服器 URL</value>
+    <value>網頁版密碼庫伺服器 URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>按此通知以檢視密碼庫中的登入資料。</value>
@@ -1437,13 +1437,13 @@
     <value>選擇您希望將這個項目移動至哪個組織。項目的擁有權將會轉移至該組織。轉移之後，您將不再是此項目的直接擁有者。</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
-    <value>字數</value>
+    <value>單字數量</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
     <value>密碼短語</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>文字分隔字元</value>
+    <value>單字分隔字元</value>
   </data>
   <data name="Clear" xml:space="preserve">
     <value>清除</value>
@@ -1553,7 +1553,7 @@
     <value>預設深色主題</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>當裝置的深色模式開啟時使用預設（系統）主題，選擇此時要使用的深色主題。</value>
+    <value>當裝置的深色模式開啟時，選擇用於替代預設（系統）主題的深色主題。</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>複製備註</value>
@@ -1574,6 +1574,10 @@
   <data name="Nord" xml:space="preserve">
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark 主題</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>自動填入已阻止的 URI</value>
@@ -1616,7 +1620,7 @@
     <value>您的登入階段已逾期。</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>生物辨識驗證</value>
+    <value>生物特徵辨識驗證</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>生物特徵辨識</value>
@@ -1628,7 +1632,7 @@
     <value>Bitwarden 需要注意 - 請到 Bitwarden 設定中查看「自動填入無障礙服務」</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. 在 Android 應用程式設定介面找到 Bitwarden，進入「顯示在其他應用程式上層」選項（在「進階」下），點選開關以啟用叠加層支援。</value>
+    <value>3. 在 Android 應用程式設定畫面找到 Bitwarden，進入「顯示在其他應用程式上層」選項（在「進階」下），點選開關以啟用叠加層支援。</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>權限</value>
@@ -1749,7 +1753,7 @@
     <value>已停用生物特徵辨識解鎖功能，請先驗證主密碼。</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>在驗證主密碼之前，用於自動填入的生物特徵辨識功能將暫時停用。</value>
+    <value>在驗證主密碼之前，用於自動填入的生物特徵辨識解鎖將暫時停用。</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>啟用重新整理時同步</value>
@@ -1797,7 +1801,7 @@
     <value>至少包含一個下列特殊字元： {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>密碼無效</value>
+    <value>密碼的無效</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
     <value>輸入的密碼不符合組織要求，請確認原則資訊後再試一次。</value>
@@ -1851,7 +1855,7 @@
     <value>啟用後，在選擇登入欄位時將允許 Bitwarden 無障礙服務顯示彈出式視窗。</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>若啟用，當選擇登入欄位自動填入您的登入資料時，Bitwarden 無障礙服務將顯示彈出式視窗。</value>
+    <value>若啟用，當選擇登入欄位自動填入您的登入資料時，Bitwarden 無障礙服務將顯示一個彈出式視窗。</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
     <value>若啟用，無障礙將顯示一個彈出式視窗以增強不支援 Android 自動填入框架的舊應用程式的自動填入服務。</value>
@@ -2010,7 +2014,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>已刪除 Send。</value>
+    <value>已刪除 Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
@@ -2018,7 +2022,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>已建立新的 Send。</value>
+    <value>已建立新的 Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2076,10 +2080,10 @@
     <value>此動作受到保護。若要繼續，請重新輸入您的主密碼以驗證您的身分。</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>需要人機驗證 (Captcha)</value>
+    <value>需要 Captcha 驗證</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>人機驗證 (Captcha) 失敗，請再試一次。</value>
+    <value>Captcha 驗證失敗，請再試一次。</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
     <value>已更新主密碼</value>
@@ -2115,7 +2119,7 @@
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>若要繼續，請準備好您已經啟用 FIDO2 WebAuthn 的安全金鑰，在下個畫面按下 [驗證 WebAuthn]，接著遵循指引。</value>
+    <value>若要繼續，請準備好 FIDO2 WebAuthn 相容的安全金鑰，在下個畫面按下 [驗證 WebAuthn]，接著遵循指引。</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
     <value>使用 FIDO2 WebAuthn 驗證，您可以使用外部安全金鑰進行驗證。</value>
@@ -2181,7 +2185,7 @@
     <value>已永久刪除您的帳戶</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>無效的驗證碼。</value>
+    <value>無效的驗證碼</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
     <value>要求一次性密碼</value>
@@ -2202,7 +2206,7 @@
     <value>正在驗證</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>重新傳送代碼</value>
+    <value>重新傳送驗證碼</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
     <value>已傳送驗證碼至您的電子郵件信箱</value>
@@ -2311,7 +2315,7 @@
     <value>允許螢幕擷取</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>您確定要允許螢幕擷取嗎？</value>
+    <value>您確定要啟用螢幕擷取嗎？</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
     <value>已要求登入</value>
@@ -2462,5 +2466,10 @@
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>登入要求已逾期。</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>登入嘗試來自：
+{0}
+您想要切換至這個帳戶嗎？</value>
   </data>
 </root>

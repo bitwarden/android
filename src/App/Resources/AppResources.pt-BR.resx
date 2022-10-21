@@ -1575,6 +1575,10 @@ A leitura será feita automaticamente.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Preencher automaticamente URIs bloqueadas</value>
   </data>
@@ -2463,5 +2467,10 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>O pedido de login já expirou.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Tentativa de login de:
+{0}
+Você deseja mudar para esta conta?</value>
   </data>
 </root>

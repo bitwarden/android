@@ -186,7 +186,7 @@
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>E-Mail Adresse</value>
+    <value>E-Mail-Adresse</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
@@ -566,7 +566,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Du musst dich anmelden oder einen neuen Account erstellen um auf den Tresor zuzugreifen.</value>
+    <value>Melde dich an oder erstelle einen neuen Account, um auf Deinen Tresor zuzugreifen.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Verwalten</value>
@@ -1575,6 +1575,10 @@ Das Scannen erfolgt automatisch.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Blockierte URIs automatisch ausfüllen</value>
   </data>
@@ -2461,5 +2465,10 @@ Das Scannen erfolgt automatisch.</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>Anmeldeanfrage ist bereits abgelaufen.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Anmeldeversuch von:
+{0}
+Möchtest du zu diesem Konto wechseln?</value>
   </data>
 </root>
