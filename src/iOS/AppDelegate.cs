@@ -16,6 +16,7 @@ using Bit.iOS.Services;
 using CoreNFC;
 using Foundation;
 using UIKit;
+using UserNotifications;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
@@ -56,7 +57,6 @@ namespace Bit.iOS
             LoadApplication(new App.App(null));
             iOSCoreHelpers.AppearanceAdjustments();
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
-
             _broadcasterService.Subscribe(nameof(AppDelegate), async (message) =>
             {
                 try

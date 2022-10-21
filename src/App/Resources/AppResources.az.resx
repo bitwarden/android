@@ -1575,6 +1575,10 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Günəşli tünd</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Əngəllənən URI-lərin avto-doldurulması</value>
   </data>
@@ -2312,6 +2316,66 @@ Skan prosesi avtomatik baş tutacaq.</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Ekranın çəkilməsini fəallaşdırmaq istədiyinizə əminsiniz?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Giriş tələb olundu</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Giriş etməyə çalışırsınız?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>{0} tərəfindən {1} tarixində giriş cəhdi</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Cihaz növü</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP ünvan</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Vaxt</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Yaxın</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Girişi təsdiqlə</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Girişi rədd et</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>İndicə</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} dəqiqə əvvəl</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Giriş təsdiqləndi</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Giriş rədd edildi</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Giriş tələblərini təsdiqlə</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Digər cihazlardan edilən giriş tələblərini təsdiqləmək üçün bu cihazı istifadə edin.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Bildirişlərə icazə ver</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Yeni giriş tələbləri üçün ani bildirişlər alın</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Xeyr təşəkkürlər</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>{0} üçün giriş cəhdini təsdiqlə</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Bütün bildirişlər</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Parol növü</value>
   </data>
@@ -2386,5 +2450,25 @@ Skan prosesi avtomatik baş tutacaq.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Təsadüfi</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Əlçatımlılıq Xidməti açıqlaması</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden, tətbiqlərdə və veb saytlarda giriş sahələrini axtarmaq üçün Əlçatımlılıq Xidmətini istifadə edir, daha sonra tətbiq və ya sayt üçün uyğunluq aşkar etdikdə istifadəçi adı və parolun daxil edilməsi üçün müvafiq sahə kimliklərini yaradır. Xidmət tərəfindən bizə təqdim edilən məlumatların heç birini saxlamırıq, kimlik məlumatlarının daxil edilməsindən kənar ekrandakı hər hansısa elementə nəzarət etməyə cəhd etmirik.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Qəbul et</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Rədd et</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Giriş tələbinin müddəti artıq bitib.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Giriş cəhdi:
+{0}
+Bu hesaba keçmək istəyirsiniz?</value>
   </data>
 </root>

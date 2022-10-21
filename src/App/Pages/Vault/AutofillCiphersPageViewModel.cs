@@ -22,6 +22,7 @@ namespace Bit.App.Pages
     {
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IAutofillHandler _autofillHandler;
         private readonly ICipherService _cipherService;
         private readonly IStateService _stateService;
         private readonly IPasswordRepromptService _passwordRepromptService;
@@ -39,6 +40,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
@@ -235,7 +237,7 @@ namespace Bit.App.Pages
                 }
                 if (autofillResponse == AppResources.Yes || autofillResponse == AppResources.YesAndSave)
                 {
-                    _deviceActionService.Autofill(cipher);
+                    _autofillHandler.Autofill(cipher);
                 }
             }
         }

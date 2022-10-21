@@ -14,6 +14,7 @@ namespace Bit.App.Pages
     {
         private readonly IAuditService _auditService;
         protected readonly IDeviceActionService _deviceActionService;
+        protected readonly IFileService _fileService;
         protected readonly ILogger _logger;
         protected readonly IPlatformUtilsService _platformUtilsService;
         private CipherView _cipher;
@@ -22,6 +23,7 @@ namespace Bit.App.Pages
         public BaseCipherViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _fileService = ServiceContainer.Resolve<IFileService>();
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
             _logger = ServiceContainer.Resolve<ILogger>("logger");

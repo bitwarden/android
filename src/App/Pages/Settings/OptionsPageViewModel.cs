@@ -56,12 +56,14 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, string>(ThemeManager.Dark, AppResources.Dark),
                 new KeyValuePair<string, string>(ThemeManager.Black, AppResources.Black),
                 new KeyValuePair<string, string>(ThemeManager.Nord, AppResources.Nord),
+                new KeyValuePair<string, string>(ThemeManager.SolarizedDark, AppResources.SolarizedDark),
             };
             AutoDarkThemeOptions = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>(ThemeManager.Dark, AppResources.Dark),
                 new KeyValuePair<string, string>(ThemeManager.Black, AppResources.Black),
                 new KeyValuePair<string, string>(ThemeManager.Nord, AppResources.Nord),
+                new KeyValuePair<string, string>(ThemeManager.SolarizedDark, AppResources.SolarizedDark),
             };
             UriMatchOptions = new List<KeyValuePair<UriMatchType?, string>>
             {

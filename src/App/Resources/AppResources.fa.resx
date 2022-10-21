@@ -156,7 +156,7 @@
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>رونوشت نام کاربری</value>
+    <value>کپی نام کاربری</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -190,7 +190,7 @@
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>به ما رایانامه بزنید</value>
+    <value>ایمیل ما</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
     <value>برای کمک گرفتن و گذاشتن بازخورد بصورت مستقیم به ما رایانامه ارسال کنید.</value>
@@ -379,10 +379,10 @@
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>تایید اثر انگشت</value>
+    <value>تأیید اثر انگشت</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>تایید کلمه عبور اصلی</value>
+    <value>تأیید کلمه عبور اصلی</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>تایید پین</value>
@@ -394,7 +394,7 @@
     <value>مشاهده</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>از وب‌سایت ما دیدن کنید</value>
+    <value>از وب‌ سایت ما دیدن کنید</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
     <value>برای کمک گرفتن، اخبار، رایانامه ما، و یا آموزش بیشتر برای استفاده از Bitwarden از وب سایت ما دیدن کنید.</value>
@@ -425,7 +425,7 @@
     <value>سرویس پر کردن خودکار</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>از کاراکترهای مبهم اجتناب کن</value>
+    <value>از کاراکترهای مبهم اجتناب شود</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>افزونه برنامه Bitwarden</value>
@@ -635,7 +635,7 @@
     <value>کلمه عبور تولید شد.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>تولید کننده کلمه عبور</value>
+    <value>تولیدکننده کلمه عبور</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>راهنمای کلمه عبور</value>
@@ -856,7 +856,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>رایانامه تایید فرستاده شد.</value>
+    <value>رایانامه تأیید فرستاده شد</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -1574,6 +1574,10 @@
   <data name="Nord" xml:space="preserve">
     <value>نُرد</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>پر کردن خودکار URI های مسدود شده</value>
@@ -2314,6 +2318,66 @@
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>آیا مطمئن هستید که می خواهید ضبط صفحه را فعال کنید؟</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>ورود الزامیست</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>آیا در تلاش برای ورود به سیستم هستید؟</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>تلاش برای ورود به سیستم توسط {0} در {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>نوع دستگاه</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>آدرس IP</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>زمان</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>نزدیک</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>تأیید ورود</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>رَدِ ورود</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>همین الان</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} دقيقه پیش</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>ورود تأیید شد</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>ورود رَد شد</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>درخواست های ورود را تأیید کنید</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>از این دستگاه برای تأیید درخواست‌های ورود به سیستم از دستگاه‌های دیگر استفاده کنید.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>اجازه دادن به اعلان‌ها</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>دریافت اعلان‌های پوش برای درخواست‌های ورود جدید</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>نه ممنون</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>تأیید تلاش برای ورود به سیستم برای {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>همه اعلان‌ها</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>نوع گذرواژه</value>
   </data>
@@ -2388,5 +2452,25 @@
   </data>
   <data name="Random" xml:space="preserve">
     <value>تصادفی</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>افشای سرویس دسترسی</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden از سرویس دسترس‌پذیری برای جستجوی فیلدهای ورود در برنامه‌ها و وب‌سایت‌ها استفاده می‌کند، سپس زمانی که مطابقتی با برنامه یا سایت پیدا شد، شناسه‌های فیلد مناسب را برای وارد کردن نام کاربری و رمز عبور ایجاد می‌کند. ما هیچ کدام از اطلاعات ارائه شده توسط سرویس به ما را ذخیره نمی کنیم و هیچ تلاشی برای کنترل عناصر روی صفحه فراتر از ورود متن اعتبارنامه ها انجام نمی دهیم.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>پذیرفتن</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>رَد کردن</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>درخواست ورود قبلاً منقضی شده است.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>تلاش برای ورود از:
+{0}
+آیا می خواهید به این حساب تغییر دهید؟</value>
   </data>
 </root>

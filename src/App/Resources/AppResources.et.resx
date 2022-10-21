@@ -978,7 +978,7 @@ Skaneerimine toimub automaatselt.</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Self-hosted Environment</value>
+    <value>Enda majutatud keskkond</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
     <value>Sisesta baas URL, kus sinu või ettevõtte majutatud Bitwarden asub.</value>
@@ -1575,6 +1575,10 @@ Skaneerimine toimub automaatselt.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized tume</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Täida blokeeritud URId automaatselt</value>
   </data>
@@ -1610,7 +1614,7 @@ Skaneerimine toimub automaatselt.</value>
     <value>Jagatud</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Toggle Visiblity</value>
+    <value>Näita sisu</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>Sessioon on aegunud.</value>
@@ -2313,6 +2317,66 @@ Skaneerimine toimub automaatselt.</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Oled kindel, et soovid lubada ekraanikuva salvestamist?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Sisselogimise päring</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Oled sisse logimas?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Sisselogimise päring kontolt {0} kuupäeval {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Seadme tüüp</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP aadress</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Aeg</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Asukoht</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Kinnita sisselogimine</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Tühista sisselogimine</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Just praegu</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} minuti eest</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Sisselogimine on kinnitatud</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Sisselogimine on tühistatud</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Sisselogimise päringute kinnitamine</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Kasuta seda seadet, et kinnitada teistes seadmetes tehtavad sisselogimised.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Luba teavitused</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Saa uute sisselogimise päringute kohta teavitusi</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Ei soovi</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Kinnita sisselogimise katse kontole {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Kõik teavitused</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Parooli tüüp</value>
   </data>
@@ -2387,5 +2451,25 @@ Skaneerimine toimub automaatselt.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Juhuslik</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Accessibility Service Disclosure</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Nõustu</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Keeldu</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Sisselogimise päring on juba aegunud.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Sisselogimise päring:
+{0}
+Soovid selle konto peale lülituda?</value>
   </data>
 </root>

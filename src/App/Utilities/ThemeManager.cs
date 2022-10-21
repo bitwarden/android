@@ -21,6 +21,7 @@ namespace Bit.App.Utilities
         public const string Dark = "dark";
         public const string Black = "black";
         public const string Nord = "nord";
+        public const string SolarizedDark = "solarizeddark";
 
         public static void SetThemeStyle(string name, string autoDarkName, ResourceDictionary resources)
         {
@@ -102,6 +103,8 @@ namespace Bit.App.Utilities
                     return CheckAndGetThemeForMergedDictionaries(typeof(Nord), resources);
                 case Light:
                     return CheckAndGetThemeForMergedDictionaries(typeof(Light), resources);
+                case SolarizedDark:
+                    return CheckAndGetThemeForMergedDictionaries(typeof(SolarizedDark), resources);
                 default:
                     if (OsDarkModeEnabled())
                     {
@@ -111,6 +114,8 @@ namespace Bit.App.Utilities
                                 return CheckAndGetThemeForMergedDictionaries(typeof(Black), resources);
                             case Nord:
                                 return CheckAndGetThemeForMergedDictionaries(typeof(Nord), resources);
+                            case SolarizedDark:
+                                return CheckAndGetThemeForMergedDictionaries(typeof(SolarizedDark), resources);
                             default:
                                 return CheckAndGetThemeForMergedDictionaries(typeof(Dark), resources);
                         }

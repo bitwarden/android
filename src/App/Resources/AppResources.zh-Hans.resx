@@ -229,7 +229,7 @@
     <value>文件夹</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>文件夹已更新。</value>
+    <value>文件夹已保存</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>前往网站</value>
@@ -247,7 +247,7 @@
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>需要因特网连接</value>
+    <value>需要互联网连接</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
@@ -296,7 +296,7 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>密码库</value>
+    <value>我的密码库</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>项目已被删除。</value>
+    <value>项目已删除</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -353,7 +353,7 @@
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>非常感谢</value>
+    <value>谢谢</value>
   </data>
   <data name="Tools" xml:space="preserve">
     <value>工具</value>
@@ -375,7 +375,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} 已复制。</value>
+    <value>{0} 已复制</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -443,7 +443,7 @@
     <value>使用 Bitwarden 无障碍服务自动填充您的登录信息。</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>修改 Email</value>
+    <value>修改电子邮件地址</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
     <value>您可以在 bitwarden.com 网页版密码库修改电子邮件地址。您现在要访问这个网站吗？</value>
@@ -604,7 +604,7 @@
     <value>从不</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>已新建项目。</value>
+    <value>项目已添加</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>你的密码库中没有任何收藏。</value>
@@ -632,7 +632,7 @@
     <value>其他</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>密码已经生成。</value>
+    <value>密码已生成</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>密码生成器</value>
@@ -660,7 +660,7 @@
     <value>重新生成密码</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>重新输入主密码</value>
+    <value>再次输入主密码</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>搜索密码库</value>
@@ -681,7 +681,7 @@
     <value>项目信息</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>项目已更新。</value>
+    <value>项目已保存</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>正在提交...</value>
@@ -692,10 +692,10 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>同步完成。</value>
+    <value>同步完成</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>同步失败。</value>
+    <value>同步失败</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>立即同步</value>
@@ -799,7 +799,7 @@
     <value>匹配项目</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>可能的匹配项</value>
+    <value>可能匹配的项目</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>搜索</value>
@@ -815,7 +815,7 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>验证器 App</value>
+    <value>验证器应用</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
@@ -856,7 +856,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>验证邮件已发送。</value>
+    <value>验证邮件已发送</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -867,7 +867,7 @@
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>添加新附件</value>
+    <value>添加新的附件</value>
   </data>
   <data name="Attachments" xml:space="preserve">
     <value>附件</value>
@@ -1083,7 +1083,7 @@
     <value>全名</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>许可证编号</value>
+    <value>许可证号码</value>
   </data>
   <data name="March" xml:space="preserve">
     <value>三月</value>
@@ -1213,7 +1213,7 @@
     <value>文本型</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>新建自定义字段</value>
+    <value>新增自定义字段</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
     <value>您想添加的自定义字段的类型是？</value>
@@ -1553,7 +1553,7 @@
     <value>默认深色主题</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>当设备的深色模式启用时使用默认（系统）主题，选择此时要使用的深色主题。</value>
+    <value>当设备的深色模式启用时，选择用来代替默认（系统）主题的深色主题。</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>复制备注</value>
@@ -1575,6 +1575,10 @@
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>过曝暗</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>自动填充已屏蔽的 URI</value>
   </data>
@@ -1591,7 +1595,7 @@
     <value>应用重启时</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>自动填充可以简单安全地从其他网站和应用程序中访问您的 Bitwarden 密码库。看起来您还没有启用 Bitwarden 自动填充服务。从「设置」界面启用 Bitwarden 自动填充。</value>
+    <value>自动填充可以简单安全地从其他网站和应用程序中访问您的 Bitwarden 密码库。看起来您还没有启用 Bitwarden 自动填充服务。请从「设置」界面启用 Bitwarden 自动填充。</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>您的主题将在应用程序重启后生效。</value>
@@ -1722,7 +1726,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>项目已恢复。</value>
+    <value>项目已恢复</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
@@ -1797,7 +1801,7 @@
     <value>包含至少一个下列的特殊字符： {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>无效密码</value>
+    <value>无效的密码</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
     <value>密码不符合组织要求。请检查策略信息并重试。</value>
@@ -1827,19 +1831,19 @@
     <value>使用内嵌自动填充</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>如果您所选的 IME（键盘）支持，将使用内嵌方式的自动填充。 如果您的配置不支持（或此选项被禁用），将使用默认的叠加层方式的自动填充。</value>
+    <value>如果您所选的 IME（键盘）支持，将使用内嵌方式的自动填充。如果您的配置不支持（或此选项被关闭），将使用默认的叠加层方式的自动填充。</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
     <value>使用无障碍</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>使用 Bitwarden 无障碍服务来自动填充您在应用和网络中的登录信息。启用后，将在选择登录字段时显示弹出窗口。</value>
+    <value>使用 Bitwarden 无障碍服务来自动填充您在应用和网络中的登录信息。启用后，选中登录字段时将显示弹出窗口。</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>使用 Bitwarden 无障碍服务来自动填写您在应用和网络上的登录信息。（需同时启用 Draw-Over 功能）</value>
+    <value>使用 Bitwarden 无障碍服务来自动填充您在应用和网络上的登录信息。（需同时启用 Draw-Over 功能）</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>使用 Bitwarden 无障碍服务来使用自动填写快速行动磁贴，和/或使用 Draw-Over（若已启用）来显示弹出窗口。</value>
+    <value>使用 Bitwarden 无障碍服务来使用自动填充快速行动磁贴，和/或使用 Draw-Over（若已启用）来显示弹出窗口。</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
     <value>要求使用自动填充快速行动磁贴，或通过使用 Draw-Over （若已启用）来增强自动填充服务。</value>
@@ -1848,16 +1852,16 @@
     <value>使用 Draw-Over</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>启用后，需允许 Bitwarden 无障碍服务在选择登录字段时显示弹出窗口。</value>
+    <value>允许 Bitwarden 无障碍服务在登录字段选中时显示弹出窗口。</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>若启用，当选择登录字段自动填充您的登录时，Bitwarden 无障碍服务将显示一个弹出窗口。</value>
+    <value>如果开启，当登录字段选中时，Bitwarden 无障碍服务将显示一个弹出窗口以帮助自动填充您的登录信息。</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>若启用，无障碍将显示一个弹出窗口以增强不支持 Android 自动填充框架的旧应用的自动填充服务。</value>
+    <value>如果开启，无障碍将显示一个弹出窗口以增强不支持 Android 自动填充框架的旧应用的自动填充服务。</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>由于企业策略，您被限制为保存项目到您的个人密码库。将所有权选项更改为组织，并从可用的集合中选择。</value>
+    <value>由于企业策略，您被限制为保存项目到您的个人密码库。将所有权选项更改为组织，然后从可用的集合中选择。</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
     <value>某个组织策略正影响您的所有权选项。</value>
@@ -1923,10 +1927,10 @@
     <value>等待删除</value>
   </data>
   <data name="ExpirationDate" xml:space="preserve">
-    <value>过期日期</value>
+    <value>到期日期</value>
   </data>
   <data name="ExpirationTime" xml:space="preserve">
-    <value>过期时间</value>
+    <value>到期时间</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
     <value>设置后，对此 Send 的访问将在指定的日期和时间后过期。</value>
@@ -1972,7 +1976,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>禁用此 Send 以阻止任何人访问它</value>
+    <value>停用此 Send 则任何人无法访问它</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -2002,7 +2006,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>添加 Send</value>
+    <value>新增 Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
@@ -2010,15 +2014,15 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Send 已删除。</value>
+    <value>Send 已删除</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Send 已更新。</value>
+    <value>Send 已保存</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>已新建 Send。</value>
+    <value>Send 已创建</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2076,10 +2080,10 @@
     <value>此操作受到保护，要继续，请重新输入您的主密码以验证您的身份。</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>请完成人机验证</value>
+    <value>请完成 Captcha 验证</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>人机验证失败。请重试。</value>
+    <value>Captcha 验证失败。请重试。</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
     <value>已更新主密码</value>
@@ -2088,7 +2092,7 @@
     <value>更新主密码</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>您的主密码最近被您组织的管理员更改过。要访问密码库，您必须立即更新主密码。继续操作将使您退出当前会话，要求您重新登录。其他设备上的活动会话可能会继续保持活动状态长达一小时。</value>
+    <value>您的主密码最近被您组织的管理员更改过。要访问此密码库，必须立即更新您的主密码。继续操作将使您退出当前会话，要求您重新登录。其他设备上的活动会话可能会继续保持活动状态长达一小时。</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
     <value>正在更新密码</value>
@@ -2103,19 +2107,19 @@
     <value>{0} 正在使用客户管理加密的 SSO。继续操作将删除您的账户主密码并要求 SSO 登录。</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>如果您不想删除您的账号主密码，您可以离开这个组织。</value>
+    <value>如果您不想移除您的账号主密码，您可以退出这个组织。</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>离开组织</value>
+    <value>退出组织</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>离开 {0}？</value>
+    <value>退出 {0}？</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>要继续，请准备好您的已启用了 FIDO2 WebAuthn 的安全钥匙，然后在下一个界面点击 "验证 WebAuthn"。</value>
+    <value>若要继续，请准备好 FIDO2 WebAuthn 兼容的安全钥匙，在下一个界面点击「验证 WebAuthn」，然后遵循说明。</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
     <value>使用 FIDO2 WebAuthn 进行身份验证，您可以使用外部安全钥匙来进行身份验证。</value>
@@ -2151,7 +2155,7 @@
     <value>已锁定</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>已退出账户</value>
+    <value>已注销</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>已切换到下一个可用的账户</value>
@@ -2313,6 +2317,66 @@
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>确定要启用屏幕截图吗？</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>已请求登录</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>您正在尝试登录吗？</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>{0} 在 {1} 上的登录尝试</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>设备类型</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP 地址</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>时间</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>靠近</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>确认登录</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>拒绝登录</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>刚刚</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} 分钟前</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>登录已确认</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>登录被拒绝</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>批准登录请求</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>使用此设备批准其他设备的登录请求。</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>允许通知</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>接收新登录请求的推送通知</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>不了，谢谢</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>确认 {0} 的登录尝试</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>所有通知</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>密码类型</value>
   </data>
@@ -2387,5 +2451,25 @@
   </data>
   <data name="Random" xml:space="preserve">
     <value>随机</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>无障碍服务声明</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden 使用无障碍服务在应用程序和网站中搜索登录字段，当找到与应用程序或网站相匹配的用户名和密码时，建立适当的字段 ID 以输入它们。我们不会通过此服务存储提供给我们的任何信息，也不会尝试控制除凭据文本输入之外的任何屏幕元素。</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>接受</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>拒绝</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>登录请求已过期。</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>登录尝试来自：
+{0}
+您想要切换到此账户吗？</value>
   </data>
 </root>

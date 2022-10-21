@@ -28,6 +28,7 @@ namespace Bit.App.Pages
         private readonly IPolicyService _policyService;
         private readonly ICustomFieldItemFactory _customFieldItemFactory;
         private readonly IClipboardService _clipboardService;
+        private readonly IAutofillHandler _autofillHandler;
 
         private bool _showNotesSeparator;
         private bool _showPassword;
@@ -78,6 +79,7 @@ namespace Bit.App.Pages
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             _customFieldItemFactory = ServiceContainer.Resolve<ICustomFieldItemFactory>("customFieldItemFactory");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
+            _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
 
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
@@ -508,7 +510,7 @@ namespace Bit.App.Pages
                 if (Page is CipherAddEditPage page && page.FromAutofillFramework)
                 {
                     // Close and go back to app
-                    _deviceActionService.CloseAutofill();
+                    _autofillHandler.CloseAutofill();
                 }
                 else
                 {
@@ -605,6 +607,8 @@ namespace Bit.App.Pages
                 return;
             }
 
+            var website = Cipher?.Login?.Uris?.FirstOrDefault()?.Host;
+
             var page = new GeneratorPage(false, async (username) =>
             {
                 try
@@ -617,7 +621,7 @@ namespace Bit.App.Pages
                 {
                     OnGenerateUsernameException(ex);
                 }
-            }, isUsernameGenerator: true, emailWebsite: Cipher?.Name, editMode: true);
+            }, isUsernameGenerator: true, emailWebsite: website, editMode: true);
             await Page.Navigation.PushModalAsync(new NavigationPage(page));
         }
 

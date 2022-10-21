@@ -204,6 +204,9 @@
     <Compile Include="Renderers\CollectionView\CollectionException.cs" />
     <Compile Include="Renderers\CollectionView\ExtendedGroupableItemsViewDelegator.cs" />
     <Compile Include="Effects\NoEmojiKeyboardEffect.cs" />
+    <Compile Include="Services\FileService.cs" />
+    <Compile Include="Utilities\UIViewControllerExtensions.cs" />
+    <Compile Include="Services\AutofillHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">

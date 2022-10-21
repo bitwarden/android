@@ -21,6 +21,7 @@ namespace Bit.App.Pages
         private readonly ICipherService _cipherService;
         private readonly ISearchService _searchService;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IAutofillHandler _autofillHandler;
         private readonly IStateService _stateService;
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly IOrganizationService _organizationService;
@@ -39,6 +40,7 @@ namespace Bit.App.Pages
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _searchService = ServiceContainer.Resolve<ISearchService>("searchService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
             _organizationService = ServiceContainer.Resolve<IOrganizationService>("organizationService");
@@ -199,7 +201,7 @@ namespace Bit.App.Pages
                 }
                 else
                 {
-                    _deviceActionService.Autofill(cipher);
+                    _autofillHandler.Autofill(cipher);
                 }
             }
         }

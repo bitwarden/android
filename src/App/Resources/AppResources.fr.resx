@@ -232,7 +232,7 @@
     <value>Dossier mis à jour.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Visiter le site web</value>
+    <value>Accéder au site Web</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
@@ -276,7 +276,7 @@
     <value>Êtes-vous sûr de vouloir vous déconnecter ?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Retirer le compte</value>
+    <value>Supprimer le compte</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir retirer ce compte ?</value>
@@ -375,7 +375,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} a été copié(e).</value>
+    <value>{0} a été copié.</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -394,7 +394,7 @@
     <value>Voir</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Visiter notre site web</value>
+    <value>Visitez notre site web</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
     <value>Visitez notre site web pour obtenir de l'aide, lire les actualités, nous écrire et/ou apprendre à mieux utiliser Bitwarden.</value>
@@ -425,10 +425,10 @@
     <value>Service de remplissage automatique</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Éviter les caractères ambigus</value>
+    <value>Évitez les caractères ambigus</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Extension de l'application Bitwarden</value>
+    <value>Extension de l'application bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
     <value>Le meilleur moyen d'ajouter de nouveaux sites à votre coffre est d'utiliser l'extension de l'application Bitwarden. Parcourez le menu "Paramètres" pour en apprendre davantage.</value>
@@ -468,7 +468,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Modifier l'élément</value>
+    <value>Modifier l'Élément</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Activer la synchronisation automatique</value>
@@ -647,7 +647,7 @@
     <value>Êtes-vous sûr de vouloir écraser le mot de passe existant ?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden conserve automatiquement votre coffre synchronisé en utilisant des notifications push. Pour la meilleure expérience possible, veuillez choisir "Ok" sur la boîte de dialogue suivante (activation des notifications push).</value>
+    <value>bitwarden conserve automatiquement votre coffre synchronisé en utilisant des notifications push. Pour la meilleure expérience possible, veuillez choisir "Ok" sur la boîte de dialogue suivante (activation des notifications push).</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -660,7 +660,7 @@
     <value>Regénérer un mot de passe</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Saisissez à nouveau le mot de passe maître</value>
+    <value>Saisir à nouveau le mot de passe maître</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Recherche dans le coffre</value>
@@ -796,7 +796,7 @@
     <value>Êtes-vous sûr de vouloir remplir automatiquement cet élément ? Il ne correspond pas complètement à « {0} ».</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Aucun élément correspondant</value>
+    <value>Éléments correspondants</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
     <value>Éléments pouvant correspondre</value>
@@ -827,11 +827,11 @@
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Connexion impossible</value>
+    <value>Identifiant non disponible</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Ce compte utilise l'identification en deux étapes, mais aucun des services d'authentification à double facteurs n'est supporté sur cet appareil. Veuillez utiliser un appareil compatible et/ou ajouter des services supplémentaires qui sont mieux supportés sur les appareils (comme une application d'authentification).</value>
+    <value>Ce compte utilise l'authentification à double facteurs, mais aucun des services d'authentification à double facteurs n'est supporté sur cet appareil. Veuillez utiliser un appareil compatible et/ou ajouter des services supplémentaires qui sont mieux supportés sur les appareils (comme une application d'authentification).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Code de récupération</value>
@@ -846,7 +846,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Options d'identification en deux étapes</value>
+    <value>Options d'identification à double facteurs</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
     <value>Utiliser une autre méthode d'identification en deux étapes</value>
@@ -1575,6 +1575,10 @@ La numérisation se fera automatiquement.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Remplissage automatique des URIs bloqués</value>
   </data>
@@ -1616,7 +1620,7 @@ La numérisation se fera automatiquement.</value>
     <value>Votre session a expiré.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Utilisez une empreinte biométrique pour vous authentifier.</value>
+    <value>Utiliser une empreinte biométrique pour vérifier.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>Empreintes biométriques</value>
@@ -1628,7 +1632,7 @@ La numérisation se fera automatiquement.</value>
     <value>Bitwarden requiert votre attention - Voir "Service d'accessibilité pour le remplissage automatique" dans les paramètres de Bitwarden</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. Dans l'application Paramètres d'Android, rendez-vous sur l'écran dédié à Bitwarden. Sélectionnez "Superposer aux autres applications" (sous "Avancé") et appuyez sur le bouton pour permettre la superposition.</value>
+    <value>3. Sur l'écran des paramètres d'application Android pour Bitwarden, sélectionnez "Superposer aux autres applications" (sous "Avancé") et appuyez sur le bouton pour permettre la superposition.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Permission</value>
@@ -2313,6 +2317,66 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir activer la capture d'écran ?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Identifiant requis</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Essayez-vous de vous connecter ?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Tentative de connexion par {0} le {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Type d'appareil</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>Adresse IP</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Heure</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Proche de</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Confirmer la connexion</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Refuser la connexion</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>À l'instant</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>il y a {0} minutes</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Connexion confirmée</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Connexion refusée</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Approuver les demandes de connexion</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Utiliser cet appareil pour approuver les demandes de connexion faites à partir d'autres appareils.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Autoriser les notifications</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Recevoir des notifications push pour les nouvelles demandes de connexion</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Non merci</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Confirmer la tentative de connexion pour {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Toutes les notifications</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Type de mot de passe</value>
   </data>
@@ -2387,5 +2451,25 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Aléatoire</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Confidentialité du Service d'accessibilité</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden utilise le Service d'Accessibilité pour rechercher des champs de connexion dans les applis et les sites web, puis trouvent les IDs des champs liés pour saisir un nom d'utilisateur et un mot de passe lorsqu'une correspondance pour l'appli ou le site est trouvée. Nous ne stockons aucune information que nous recevons via le service, et nous n'essayons pas de contrôler des éléments qui se superposeraient aux entrées de saisie des identifiants.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Accepter</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Refuser</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>La demande d’identification a déjà expiré.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Tentative de connexion depuis :
+{0}
+Voulez-vous commuter sur ce compte ?</value>
   </data>
 </root>

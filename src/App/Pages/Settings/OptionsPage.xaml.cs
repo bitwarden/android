@@ -1,5 +1,6 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
@@ -9,12 +10,12 @@ namespace Bit.App.Pages
 {
     public partial class OptionsPage : BaseContentPage
     {
-        private readonly IDeviceActionService _deviceActionService;
+        private readonly IAutofillHandler _autofillHandler;
         private readonly OptionsPageViewModel _vm;
 
         public OptionsPage()
         {
-            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
             InitializeComponent();
             _vm = BindingContext as OptionsPageViewModel;
             _vm.Page = this;
@@ -25,7 +26,7 @@ namespace Bit.App.Pages
             if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
-                _vm.ShowAndroidAutofillSettings = _deviceActionService.SupportsAutofillService();
+                _vm.ShowAndroidAutofillSettings = _autofillHandler.SupportsAutofillService();
             }
             else
             {
