@@ -1575,6 +1575,10 @@
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized ダーク</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>自動入力をブロックする URI</value>
   </data>
@@ -2462,5 +2466,10 @@
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>ログインリクエストの有効期限が切れています。</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>ログイン試行がありました:
+{0}
+このアカウントに切り替えますか？</value>
   </data>
 </root>

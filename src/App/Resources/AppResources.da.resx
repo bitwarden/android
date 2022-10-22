@@ -1575,6 +1575,10 @@ Skanning vil ske automatisk.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Autoudfyld blokerede URI'er</value>
   </data>
@@ -2462,5 +2466,10 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>Loginanmodning er allerede udløbet.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Login-forsøg fra:
+{0}
+Vil du skifte til denne konto?</value>
   </data>
 </root>

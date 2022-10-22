@@ -152,11 +152,11 @@
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Копировать пароль</value>
+    <value>Скопировать пароль</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Копировать имя пользователя</value>
+    <value>Скопировать имя пользователя</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -179,7 +179,7 @@
     <value>Изменить</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Редактировать папку</value>
+    <value>Изменить папку</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
@@ -229,7 +229,7 @@
     <value>Папки</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Папка обновлена.</value>
+    <value>Папка сохранена</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Перейти на сайт</value>
@@ -276,13 +276,13 @@
     <value>Вы действительно хотите выйти?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Удалить учетную запись</value>
+    <value>Удалить аккаунт</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
     <value>Вы действительно хотите удалить эту учетную запись?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
-    <value>Учетная запись уже добавлена</value>
+    <value>Аккаунт уже добавлен</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
     <value>Хотите переключиться на нее?</value>
@@ -364,7 +364,7 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Разблокировать по отпечатку пальца</value>
+    <value>Использовать отпечаток пальца для разблокировки</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Имя пользователя</value>
@@ -394,7 +394,7 @@
     <value>Просмотр</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Посетите наш сайт</value>
+    <value>Посетить наш сайт</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
     <value>Посетите наш сайт, чтобы получить помощь, прочесть новости, связаться с нами и/или узнать больше о том, как использовать Bitwarden.</value>
@@ -425,7 +425,7 @@
     <value>Служба автозаполнения</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Избегайте неоднозначных символов</value>
+    <value>Избегать неоднозначных символов</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Расширение Bitwarden</value>
@@ -471,7 +471,7 @@
     <value>Изменение элемента</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Включить автоматическую синхронизацию</value>
+    <value>Разрешить автоматическую синхронизацию</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>Введите email аккаунта для получения подсказки к мастер-паролю.</value>
@@ -587,7 +587,7 @@
     <value>Мастер-пароль должен содержать не менее 8 символов.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Мин. кол-во цифр</value>
+    <value>Минимум цифр</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
@@ -604,7 +604,7 @@
     <value>Никогда</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Новый элемент создан.</value>
+    <value>Элемент добавлен</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>В вашем хранилище нет избранного.</value>
@@ -632,7 +632,7 @@
     <value>Прочее</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Пароль создан.</value>
+    <value>Пароль создан</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Генератор паролей</value>
@@ -657,7 +657,7 @@
     <value>Пожалуйста, подумайте о том, чтобы помочь нам хорошим отзывом!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Придумать другой вариант</value>
+    <value>Создать новый пароль</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
     <value>Введите мастер-пароль повторно</value>
@@ -681,7 +681,7 @@
     <value>Информация об элементе</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Элемент обновлен.</value>
+    <value>Элемент сохранен</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Отправка...</value>
@@ -692,10 +692,10 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Синхронизация завершена.</value>
+    <value>Синхронизация выполнена</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Сбой синхронизации.</value>
+    <value>Ошибка синхронизации</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>Синхронизировать</value>
@@ -708,7 +708,7 @@
     <value>Двухфакторная аутентификация</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Двухфакторная аутентификация делает ваш аккаунт более защищенным, требуя подтверждения входа на другом устройстве, например, ключом безопасности, приложением-аутентификатором, SMS, телефонным звонком или письмом. Двухфакторная аутентификация включается на bitwarden.com. Перейти на сайт сейчас?</value>
+    <value>Двухэтапная аутентификация повышает защиту вашего аккаунта, требуя подтверждения входа на другом устройстве, например, с помощью ключа безопасности, приложения-аутентификатора, SMS, телефонного звонка или email. Двухфакторная аутентификация включается на bitwarden.com. Перейти на сайт сейчас?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Разблокировка {0}</value>
@@ -831,7 +831,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Для этого аккаунта включена двухэтапная аутентификация, но ни один из настроенных вариантов аутентификации не поддерживается на этом устройстве. Используйте поддерживаемое устройство и/или добавьте другие варианты, которые поддерживаются на большинстве устройств (например, приложение-аутентификатор).</value>
+    <value>Для этой учетной записи включена двухфакторная аутентификация, однако ни один из настроенных вариантов аутентификации не поддерживается на этом устройстве. Используйте поддерживаемое устройство и/или добавьте другие варианты, которые поддерживаются на большинстве устройств (например, приложение-аутентификатор).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Код восстановления</value>
@@ -846,7 +846,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Настройки двухэтапной аутентификации</value>
+    <value>Настройки двухфакторной аутентификации</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
     <value>Использовать другой метод двухфакторной аутентификации</value>
@@ -955,10 +955,10 @@
     <value>Вы не можете использовать эту функцию, пока не обновите свой ключ шифрования.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Узнайть больше</value>
+    <value>Узнать больше</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>API URL-адреса сервера</value>
+    <value>URL API сервера</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
     <value>Пользовательское окружение</value>
@@ -967,27 +967,27 @@
     <value>Для опытных пользователей. Можно указать URL отдельно для каждой службы.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>URL-адреса среды сохранены.</value>
+    <value>URL окружения сохранены.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
     <value>{0} это неправильный формат.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>URL-адрес сервера идентификации</value>
+    <value>URL сервера идентификации</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Среда собственного хостинга</value>
+    <value>Окружение собственного хостинга</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Укажите URL-адрес Bitwarden на вашем сервере.</value>
+    <value>Укажите URL Bitwarden на вашем сервере.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>URL-адрес сервера</value>
+    <value>URL сервера</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>URL-адрес сервера веб-хранилища</value>
+    <value>URL сервера веб-хранилища</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>Коснитесь этого уведомления, чтобы посмотреть элементы из вашего хранилища.</value>
@@ -1143,7 +1143,7 @@
     <value>Отображать узнаваемое изображение рядом с каждым логином.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>URL-адрес сервера значков</value>
+    <value>URL сервера значков</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
     <value>Автозаполнение Bitwarden</value>
@@ -1198,7 +1198,7 @@
     <value>Не удалось автоматически открыть меню настроек автозаполнения Android. Вы можете перейти в меню настроек автозаполнения вручную из настроек Android &gt; Система &gt; Языки и ввод &gt; Дополнительно &gt; Служба автозаполнения.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Имя пользовательского поля</value>
+    <value>Название пользовательского поля</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
     <value>Логическое</value>
@@ -1301,7 +1301,7 @@
     <value>Получите доступ к вашему хранилищу прямо с клавиатуры для максимально быстрого автозаполнения.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Чтобы включить автозаполнение паролей на устройстве, выполните следующие действия:</value>
+    <value>Чтобы настроить автозаполнение паролей на вашем устройстве, выполните следующие действия:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Перейдите в 'Настройки' iOS</value>
@@ -1556,7 +1556,7 @@
     <value>Выберите темную тему для использования в случае включения темы по умолчанию (системной) при включенном темном режиме вашего устройства.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Скопировать заметки</value>
+    <value>Скопировать заметку</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Выйти</value>
@@ -1575,6 +1575,10 @@
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Солнечная темная</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Автозаполнение заблокированных URI</value>
   </data>
@@ -1591,7 +1595,7 @@
     <value>При перезапуске приложения</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Автозаполнение упрощает безопасный доступ к хранилищу Bitwarden со сторонних сайтов и приложений. Похоже, вы не включили службу автозаполнения Bitwarden. Это можно сделать в настройках.</value>
+    <value>Автозаполнение упрощает безопасный доступ к вашему хранилищу Bitwarden со сторонних сайтов и приложений. Похоже, вы не включили службу автозаполнения Bitwarden. Это можно сделать в настройках.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Тема будет изменена после перезапуска приложения.</value>
@@ -1625,10 +1629,10 @@
     <value>Использовать биометрию</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden требует внимания - см. раздел 'Служба специальных возможностей автозаполнения' в настройках Bitwarden.</value>
+    <value>Bitwarden требует внимания - см. раздел "Служба специальных возможностей автозаполнения" в настройках программы.</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. На экране настроек приложений Android для Bitwarden перейдите в раздел "Отображение поверх других приложений" (в разделе "Дополнительно") и коснитесь переключателя, чтобы включить поддержку оверлея.</value>
+    <value>3. На экране настроек приложений Android для Bitwarden перейдите в раздел "Отображение поверх других приложений" (в разделе "Дополнительно") и коснитесь переключателя, чтобы включить поддержку наложения.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Разрешения</value>
@@ -1722,7 +1726,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Элемент восстановлен.</value>
+    <value>Элемент восстановлен</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
@@ -1797,7 +1801,7 @@
     <value>Содержать хотя бы один из следующих специальных символов: {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>Некорректный пароль</value>
+    <value>Неверный пароль</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
     <value>Пароль не соответствует требованиям организации. Пожалуйста, проверьте информацию о политике и попробуйте еще раз.</value>
@@ -1827,16 +1831,16 @@
     <value>Встроенное в клавиатуру автозаполнение</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Использовать встроенное в клавиатуру автозаполнение, если выбранный способ ввода его поддерживает. Если ваша система не поддерживается (или опция выключена), будет использоваться обычное наложение.</value>
+    <value>Использовать встроенное автозаполнение, если выбранный способ ввода (клавиатура) его поддерживает. Если ваша конфигурация не поддерживается (или эта опция отключена), будет использоваться автозаполнение наложением по умолчанию.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
     <value>Cпециальные возможности</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>С помощью службы специальных возможностей Bitwarden вы можете автоматически заполнять ваши логины в приложениях и в Интернете. Если эта функция включена, при выборе полей авторизации будет отображаться всплывающее окно.</value>
+    <value>При помощи службы специальных возможностей Bitwarden вы можете автоматически заполнять ваши логины в приложениях и в интернете. Если эта функция включена, при выборе полей авторизации будет отображаться всплывающее окно.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>С помощью службы специальных возможностей Bitwarden вы можете автоматически заполнять логины в приложениях и в Интернете. (Также необходимо включить опцию 'Поверх других приложений'.)</value>
+    <value>При помощи службы специальных возможностей Bitwarden вы можете автоматически заполнять ваши логины в приложениях и в интернете. (Также необходимо включить опцию 'Поверх других приложений')</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
     <value>Используйте службу специальных возможностей Bitwarden для панели быстрого автозаполнения и/или отображения всплывающего окна с помощью опции 'Поверх других приложений' (если она включена).</value>
@@ -1848,13 +1852,13 @@
     <value>Поверх других приложений</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>Если включено, разрешает службе специальных возможностей Bitwarden отображать всплывающую панель при выборе полей авторизации.</value>
+    <value>При включении, разрешает службе специальных возможностей Bitwarden отображать всплывающую панель при выборе полей авторизации.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>Если включено, служба специальных возможностей Bitwarden отобразит всплывающую панель при выборе полей авторизации, чтобы помочь автоматически заполнить учетные данные.</value>
+    <value>При включении, служба специальных возможностей Bitwarden отобразит всплывающую панель при выборе полей авторизации, чтобы помочь автоматически заполнить ваши учетные данные.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>Если включено, служба специальных возможностей отобразит всплывающее сообщение, чтобы вызвать службу автозаполнения для старых приложений, не поддерживающих фреймворк автозаполнения Android.</value>
+    <value>При включении, служба специальных возможностей отобразит всплывающее сообщение, чтобы вызвать службу автозаполнения для старых приложений, не поддерживающих фреймворк автозаполнения Android.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
     <value>В соответствии с корпоративной политикой вам запрещено сохранять элементы в личном хранилище. Измените владельца на организацию и выберите из доступных Коллекций.</value>
@@ -1910,7 +1914,7 @@
     <value>Тип текста не выбран, коснитесь, чтобы выбрать.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
-    <value>Срок удаления</value>
+    <value>Дата удаления</value>
   </data>
   <data name="DeletionTime" xml:space="preserve">
     <value>Время удаления</value>
@@ -1923,7 +1927,7 @@
     <value>Ожидание удаления</value>
   </data>
   <data name="ExpirationDate" xml:space="preserve">
-    <value>Срок истечения</value>
+    <value>Дата истечения</value>
   </data>
   <data name="ExpirationTime" xml:space="preserve">
     <value>Время истечения</value>
@@ -1972,7 +1976,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Отключить эту Send, чтобы никто не мог получить к ней доступ.</value>
+    <value>Отключить эту Send, чтобы никто не мог получить к ней доступ</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -2002,7 +2006,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Добавить Send</value>
+    <value>Новая Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
@@ -2010,15 +2014,15 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Send была удалена.</value>
+    <value>Send удалена</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Send обновлена.</value>
+    <value>Send сохранена</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Новая Send создана.</value>
+    <value>Send создана</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2076,7 +2080,7 @@
     <value>Это действие защищено. Для продолжения введите свой мастер-пароль, чтобы подтвердить свою личность.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Требуется ввод капчи</value>
+    <value>Требуется капча</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
     <value>Ошибка капчи. Попробуйте еще раз.</value>
@@ -2115,7 +2119,7 @@
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>Чтобы продолжить, подготовьте свой ключ безопасности с поддержкой FIDO2 WebAuthn, затем следуйте инструкциям после нажатия кнопки 'Authenticate WebAuthn' на следующем экране.</value>
+    <value>Чтобы продолжить, подготовьте свой ключ безопасности с поддержкой FIDO2 WebAuthn, затем следуйте инструкциям после нажатия кнопки 'Аутентифицировать WebAuthn' на следующем экране.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
     <value>Аутентификация с помощью FIDO2 WebAuthn. Вы можете аутентифицироваться с помощью внешнего ключа безопасности.</value>
@@ -2142,7 +2146,7 @@
     <value>Экспорт вашего личного хранилища запрещен одной или несколькими политиками организации.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Добавить учетную запись</value>
+    <value>Добавить аккаунт</value>
   </data>
   <data name="AccountUnlocked" xml:space="preserve">
     <value>Разблокировано</value>
@@ -2151,7 +2155,7 @@
     <value>Заблокировано</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>Вы вышли из учетной записи</value>
+    <value>Вы вышли из аккаунта</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>Переключено на следующую доступную учетную запись</value>
@@ -2302,7 +2306,7 @@
     <value>При установке опции блокировки на "Никогда" хранилище будет доступно любому, кто имеет доступ к вашему устройству, поэтому убедитесь, что устройство защищено должным образом.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
-    <value>Один или несколько введенных URL-адресов неверны. Пожалуйста, проверьте их и попробуйте сохранить снова.</value>
+    <value>Один или несколько введенных URL неверны. Пожалуйста, проверьте их и попробуйте сохранить снова.</value>
   </data>
   <data name="GenericErrorMessage" xml:space="preserve">
     <value>Нам не удалось обработать ваш запрос. Пожалуйста, попробуйте снова или свяжитесь с нами.</value>
@@ -2386,7 +2390,7 @@
     <value>Субадресованные email</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
-    <value>Catch-all-адрес электронной почты</value>
+    <value>Общий email домена</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
     <value>Псевдоним электронной почты для пересылки</value>
@@ -2440,7 +2444,7 @@
     <value>Используйте возможности субадресации вашей электронной почты</value>
   </data>
   <data name="CatchAllEmailDescription" xml:space="preserve">
-    <value>Использовать настроенную в вашем домене почту catch-all.</value>
+    <value>Использовать общую почту домена.</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
     <value>Создать псевдоним электронной почты для внешней службы пересылки.</value>
@@ -2462,5 +2466,10 @@
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>Запрос на вход истек.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Попытка авторизации с:
+{0}
+Хотите переключиться на этот аккаунт?</value>
   </data>
 </root>
