@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Frame xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Controls.IconLabelButton"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    HorizontalOptions="FillAndExpand"
+    VerticalOptions="Center"
+    Padding="0,0"
+    StyleClass="btn-icon-row"
+    x:Name="_iconLabelButton">
+    <Frame.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding ButtonCommand, Source={x:Reference _iconLabelButton}}" />
+    </Frame.GestureRecognizers>
+    <StackLayout Orientation="Horizontal" 
+            HorizontalOptions="Center">
+        <controls:IconLabel 
+            Text="{Binding Icon, Source={x:Reference _iconLabelButton}}" 
+            Padding="0,15"
+            HorizontalOptions="Center"
+            VerticalTextAlignment="Center" />
+        <Label Text="{Binding Label, Source={x:Reference _iconLabelButton}}"
+            HorizontalOptions="Center"
+            VerticalTextAlignment="Center"/>
+    </StackLayout>
+</Frame>
