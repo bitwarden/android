@@ -42,9 +42,6 @@ namespace Bit.App.Pages
             _vm.Email = email;
             MasterPasswordEntry = _masterPassword;
 
-            _email.ReturnType = ReturnType.Next;
-            _email.ReturnCommand = new Command(() => _masterPassword.Focus());
-
             if (Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(_moreItem);
@@ -85,7 +82,7 @@ namespace Bit.App.Pages
             await _vm.InitAsync();
             if (!_inputFocused)
             {
-                RequestFocus(string.IsNullOrWhiteSpace(_vm.Email) ? _email : _masterPassword);
+                RequestFocus(_masterPassword);
                 _inputFocused = true;
             }
         }

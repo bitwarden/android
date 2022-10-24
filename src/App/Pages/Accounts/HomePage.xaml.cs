@@ -46,6 +46,7 @@ namespace Bit.App.Pages
 
         protected override async void OnAppearing()
         {
+            await _vm.InitAsync();
             base.OnAppearing();
             _mainContent.Content = _mainLayout;
             _accountAvatar?.OnAppearing();
@@ -100,12 +101,13 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                _vm.StartLoginAction();
+                _vm.ShowEmail = true;
             }
         }
 
         private async Task StartLoginAsync()
         {
+            await _vm.SetRememberEmailAsync();
             var page = new LoginPage(null, _appOptions);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
@@ -151,6 +153,22 @@ namespace Bit.App.Pages
             await _accountListOverlay.HideAsync();
             var page = new EnvironmentPage();
             await Navigation.PushModalAsync(new NavigationPage(page));
+        }
+
+        void RememberEmail_Clicked(System.Object sender, System.EventArgs e)
+        {
+            if (DoOnce())
+            {
+                _vm.RememberEmail = !_vm.RememberEmail;
+            }
+        }
+
+        void Continue_Clicked(System.Object sender, System.EventArgs e)
+        {
+            if (DoOnce())
+            {
+                _vm.StartLoginAction();
+            }
         }
     }
 }

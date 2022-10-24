@@ -76,7 +76,11 @@ namespace Bit.App.Pages
         public string Email
         {
             get => _email;
-            set => SetProperty(ref _email, value);
+            set => SetProperty(ref _email, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(LoggingInAsText)
+                });
         }
 
         public string MasterPassword
@@ -104,6 +108,9 @@ namespace Bit.App.Pages
         public Action LogInSuccessAction { get; set; }
         public Action UpdateTempPasswordAction { get; set; }
         public Action CloseAction { get; set; }
+        public string LoggingInAsText => string.Format(AppResources.LoggingInAs, Email);
+        public string LogInWithAnotherDeviceIcon => BitwardenIcons.Device;
+        public string EnterpriseSingleSignOnIcon => BitwardenIcons.Suitcase;
 
         protected override II18nService i18nService => _i18nService;
         protected override IEnvironmentService environmentService => _environmentService;
@@ -170,7 +177,6 @@ namespace Bit.App.Pages
                 }
 
                 var response = await _authService.LogInAsync(Email, MasterPassword, _captchaToken);
-                await _stateService.SetRememberedEmailAsync(Email);
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
 
                 if (response.CaptchaNeeded)
@@ -223,17 +229,22 @@ namespace Bit.App.Pages
 
             if (selection == AppResources.GetPasswordHint)
             {
-                var hintNavigationPage = new NavigationPage(new HintPage());
-                if (IsIosExtension)
-                {
-                    ThemeManager.ApplyResourcesTo(hintNavigationPage);
-                }
-                await Page.Navigation.PushModalAsync(hintNavigationPage);
+                await ShowMasterPasswordHintAsync();
             }
             else if (selection == AppResources.RemoveAccount)
             {
                 await RemoveAccountAsync();
             }
+        }
+
+        public async Task ShowMasterPasswordHintAsync()
+        {
+            var hintNavigationPage = new NavigationPage(new HintPage());
+            if (IsIosExtension)
+            {
+                ThemeManager.ApplyResourcesTo(hintNavigationPage);
+            }
+            await Page.Navigation.PushModalAsync(hintNavigationPage);
         }
 
         public void TogglePassword()
