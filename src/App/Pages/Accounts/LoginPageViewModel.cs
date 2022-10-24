@@ -239,7 +239,7 @@ namespace Bit.App.Pages
 
         public async Task ShowMasterPasswordHintAsync()
         {
-            var hintNavigationPage = new NavigationPage(new HintPage());
+            var hintNavigationPage = new NavigationPage(new HintPage(Email));
             if (IsIosExtension)
             {
                 ThemeManager.ApplyResourcesTo(hintNavigationPage);
