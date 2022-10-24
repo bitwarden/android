@@ -32,7 +32,7 @@ namespace Bit.App.Pages
             _vm.IsUsername = isUsernameGenerator;
             _vm.EmailWebsite = emailWebsite;
             _vm.EditMode = editMode;
-            _vm.IosExtension = appOptions != null && appOptions.IosExtension;
+            _vm.IosExtension = appOptions?.IosExtension ?? false;
             var isIos = Device.RuntimePlatform == Device.iOS;
             if (selectAction != null)
             {

@@ -112,7 +112,7 @@ namespace Bit.iOS.Core.Views
 
                 ContentView.AddConstraints(new NSLayoutConstraint[] {
                     NSLayoutConstraint.Create(TextField, NSLayoutAttribute.Leading, NSLayoutRelation.Equal, ContentView, NSLayoutAttribute.Leading, 1f, leadingConstant),
-                    NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Trailing, NSLayoutRelation.Equal, TextField, NSLayoutAttribute.Trailing, 1f, GetConstantValue(buttonsConfig)),
+                    NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Trailing, NSLayoutRelation.Equal, TextField, NSLayoutAttribute.Trailing, 1f, GetTrailingConstant(buttonsConfig)),
                     NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Bottom, NSLayoutRelation.Equal, TextField, NSLayoutAttribute.Bottom, 1f, 10f)
                 });
 
@@ -166,8 +166,9 @@ namespace Bit.iOS.Core.Views
             }
         }
 
-        public void BuildSecureCell(UIButton button)
+        public void ConfigureToggleSecureTextCell(bool useSecondaryButton = false)
         {
+            var button = useSecondaryButton ? SecondButton : Button;
             button.TitleLabel.Font = UIFont.FromName("bwi-font", 28f);
             button.SetTitle(BitwardenIcons.Eye, UIControlState.Normal);
             button.TouchUpInside += (sender, e) =>
@@ -180,7 +181,6 @@ namespace Bit.iOS.Core.Views
         private void AddButtons(ButtonsConfig buttonsConfig)
         {
             Button = new UIButton(UIButtonType.System);
-            Button.Frame = ContentView.Bounds;
             Button.TranslatesAutoresizingMaskIntoConstraints = false;
             Button.SetTitleColor(ThemeHelpers.PrimaryColor, UIControlState.Normal);
 
@@ -198,7 +198,6 @@ namespace Bit.iOS.Core.Views
                     break;
                 case ButtonsConfig.Two:
                     SecondButton = new UIButton(UIButtonType.System);
-                    SecondButton.Frame = ContentView.Bounds;
                     SecondButton.TranslatesAutoresizingMaskIntoConstraints = false;
                     SecondButton.SetTitleColor(ThemeHelpers.PrimaryColor, UIControlState.Normal);
 
@@ -214,7 +213,7 @@ namespace Bit.iOS.Core.Views
             }
         }
 
-        private float GetConstantValue(ButtonsConfig buttonsConfig)
+        private float GetTrailingConstant(ButtonsConfig buttonsConfig)
         {
             switch (buttonsConfig)
             {
@@ -228,12 +227,12 @@ namespace Bit.iOS.Core.Views
                     throw new ArgumentOutOfRangeException();
             }
         }
-    }
 
-    public enum ButtonsConfig : byte
-    {
-        None = 0,
-        One = 1,
-        Two = 2
+        public enum ButtonsConfig : byte
+        {
+            None = 0,
+            One = 1,
+            Two = 2
+        }
     }
 }

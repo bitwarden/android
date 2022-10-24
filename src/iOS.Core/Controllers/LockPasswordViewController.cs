@@ -51,7 +51,7 @@ namespace Bit.iOS.Core.Controllers
         public abstract Action Cancel { get; }
 
         public FormEntryTableViewCell MasterPasswordCell { get; set; } = new FormEntryTableViewCell(
-            AppResources.MasterPassword, buttonsConfig: ButtonsConfig.One);
+            AppResources.MasterPassword, buttonsConfig: FormEntryTableViewCell.ButtonsConfig.One);
 
         public string BiometricIntegrityKey { get; set; }
 
@@ -154,7 +154,7 @@ namespace Bit.iOS.Core.Controllers
                 {
                     MasterPasswordCell.TextField.KeyboardType = UIKeyboardType.NumberPad;
                 }
-                MasterPasswordCell.BuildSecureCell(MasterPasswordCell.Button);
+                MasterPasswordCell.ConfigureToggleSecureTextCell();
             }
 
             TableView.RowHeight = UITableView.AutomaticDimension;

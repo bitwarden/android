@@ -53,7 +53,6 @@ namespace Bit.App.Pages
         private bool _showAnonAddyApiAccessToken;
         private bool _showSimpleLoginApiKey;
         private bool _editMode;
-        private bool _iosExtension;
 
         public GeneratorPageViewModel()
         {
@@ -93,21 +92,9 @@ namespace Bit.App.Pages
             UsernameTypePromptHelpCommand = new Command(UsernameTypePromptHelp);
             RegenerateCommand = new AsyncCommand(RegenerateAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
             RegenerateUsernameCommand = new AsyncCommand(RegenerateUsernameAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
-            ToggleForwardedEmailHiddenValueCommand = new AsyncCommand(ToggleForwardedEmailHiddenValueAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
-            CopyCommand = new AsyncCommand(CopyAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
-            CloseCommand = new AsyncCommand(CloseAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
-        }
-
-        public async Task CloseAsync()
-        {
-            if (_iosExtension)
-            {
-                _deviceActionService.CloseExtensionPopUp();
-            }
-            else
-            {
-                await Page.Navigation.PopModalAsync();
-            }
+            ToggleForwardedEmailHiddenValueCommand = new AsyncCommand(ToggleForwardedEmailHiddenValueAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
+            CopyCommand = new AsyncCommand(CopyAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
+            CloseCommand = new AsyncCommand(CloseAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
         }
 
         public List<GeneratorType> GeneratorTypeOptions { get; set; }
@@ -158,11 +145,7 @@ namespace Bit.App.Pages
             set => SetProperty(ref _isUsername, value);
         }
 
-        public bool IosExtension
-        {
-            get => _iosExtension;
-            set => SetProperty(ref _iosExtension, value);
-        }
+        public bool IosExtension { get; set; }
 
         public bool ShowTypePicker
         {
@@ -752,6 +735,18 @@ namespace Bit.App.Pages
             {
                 _logger.Value.Exception(ex);
                 Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok);
+            }
+        }
+
+        public async Task CloseAsync()
+        {
+            if (IosExtension)
+            {
+                _deviceActionService.CloseExtensionPopUp();
+            }
+            else
+            {
+                await Page.Navigation.PopModalAsync();
             }
         }
 

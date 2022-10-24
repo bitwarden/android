@@ -34,8 +34,8 @@ namespace Bit.iOS.Core.Controllers
 
         public AppExtensionContext Context { get; set; }
         public FormEntryTableViewCell NameCell { get; set; } = new FormEntryTableViewCell(AppResources.Name);
-        public FormEntryTableViewCell UsernameCell { get; set; } = new FormEntryTableViewCell(AppResources.Username, buttonsConfig: ButtonsConfig.One);
-        public FormEntryTableViewCell PasswordCell { get; set; } = new FormEntryTableViewCell(AppResources.Password, buttonsConfig: ButtonsConfig.Two);
+        public FormEntryTableViewCell UsernameCell { get; set; } = new FormEntryTableViewCell(AppResources.Username, buttonsConfig: FormEntryTableViewCell.ButtonsConfig.One);
+        public FormEntryTableViewCell PasswordCell { get; set; } = new FormEntryTableViewCell(AppResources.Password, buttonsConfig: FormEntryTableViewCell.ButtonsConfig.Two);
         public FormEntryTableViewCell UriCell { get; set; } = new FormEntryTableViewCell(AppResources.URI);
         public SwitchTableViewCell FavoriteCell { get; set; } = new SwitchTableViewCell(AppResources.Favorite);
         public FormEntryTableViewCell NotesCell { get; set; } = new FormEntryTableViewCell(
@@ -91,7 +91,7 @@ namespace Bit.iOS.Core.Controllers
                 PerformSegue("passwordGeneratorSegue", this);
             };
 
-            PasswordCell.BuildSecureCell(PasswordCell.SecondButton);
+            PasswordCell.ConfigureToggleSecureTextCell(true);
             PasswordCell.TextField.ShouldReturn += (UITextField tf) =>
             {
                 UriCell.TextField.BecomeFirstResponder();
