@@ -108,7 +108,7 @@ namespace Bit.App.Pages
         private async Task StartLoginAsync()
         {
             await _vm.SetRememberEmailAsync();
-            var page = new LoginPage(null, _appOptions);
+            var page = new LoginPage(_vm.Email, _appOptions);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
