@@ -154,8 +154,8 @@ namespace Bit.Core.Abstractions
         Task SaveExtensionActiveUserIdToStorageAsync(string userId);
         Task<bool> GetApprovePasswordlessLoginsAsync(string userId = null);
         Task SetApprovePasswordlessLoginsAsync(bool? value, string userId = null);
-        Task<PasswordlessRequestNotification> GetPasswordlessLoginNotificationAsync(string userId = null);
-        Task SetPasswordlessLoginNotificationAsync(PasswordlessRequestNotification value, string userId = null);
+        Task<PasswordlessRequestNotification> GetPasswordlessLoginNotificationAsync();
+        Task SetPasswordlessLoginNotificationAsync(PasswordlessRequestNotification value);
         Task<UsernameGenerationOptions> GetUsernameGenerationOptionsAsync(string userId = null);
         Task SetUsernameGenerationOptionsAsync(UsernameGenerationOptions value, string userId = null);
     }

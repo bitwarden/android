@@ -1575,6 +1575,10 @@ Načtení proběhne automaticky.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Automatické vyplňování blokovaných URI</value>
   </data>
@@ -1898,16 +1902,16 @@ Načtení proběhne automaticky.</value>
     <value>Soubor, který chcete odeslat.</value>
   </data>
   <data name="FileTypeIsSelected" xml:space="preserve">
-    <value>File type is selected.</value>
+    <value>Je vybrán typ souboru.</value>
   </data>
   <data name="FileTypeIsNotSelected" xml:space="preserve">
-    <value>File type is not selected, tap to select.</value>
+    <value>Není vybrán typ souboru, klepněte pro výběr.</value>
   </data>
   <data name="TextTypeIsSelected" xml:space="preserve">
-    <value>Text type is selected.</value>
+    <value>Je vybrán typ textu.</value>
   </data>
   <data name="TextTypeIsNotSelected" xml:space="preserve">
-    <value>Text type is not selected, tap to select.</value>
+    <value>Není vybrán typ textu, klepněte pro výběr.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Datum odstranění</value>
@@ -2109,7 +2113,7 @@ Načtení proběhne automaticky.</value>
     <value>Opustit organizaci</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>Leave {0}?</value>
+    <value>Opustit {0}?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
@@ -2157,13 +2161,13 @@ Načtení proběhne automaticky.</value>
     <value>Přepnuto na další dostupný účet</value>
   </data>
   <data name="AccountLockedSuccessfully" xml:space="preserve">
-    <value>Account locked</value>
+    <value>Účet uzamčen</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
     <value>Odhlášení proběhlo úspěšně</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
-    <value>Account removed successfully</value>
+    <value>Účet byl úspěšně odstraněn</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Odstranit účet</value>
@@ -2214,7 +2218,7 @@ Načtení proběhne automaticky.</value>
     <value>Zadejte ověřovací kód, který byl odeslán na %@</value>
   </data>
   <data name="SubmitCrashLogs" xml:space="preserve">
-    <value>Submit crash logs</value>
+    <value>Odeslat protokoly o pádech</value>
   </data>
   <data name="SubmitCrashLogsDescription" xml:space="preserve">
     <value>Help Bitwarden improve app stability by submitting crash reports.</value>
@@ -2226,19 +2230,19 @@ Načtení proběhne automaticky.</value>
     <value>Options are collapsed, tap to expand.</value>
   </data>
   <data name="UppercaseAtoZ" xml:space="preserve">
-    <value>Uppercase (A to Z)</value>
+    <value>Velká písmena (A-Z)</value>
   </data>
   <data name="LowercaseAtoZ" xml:space="preserve">
-    <value>Lowercase (A to Z)</value>
+    <value>Malá písmena (A-Z)</value>
   </data>
   <data name="NumbersZeroToNine" xml:space="preserve">
-    <value>Numbers (0 to 9)</value>
+    <value>Čísla (0-9)</value>
   </data>
   <data name="SpecialCharacters" xml:space="preserve">
-    <value>Special characters (!@#$%^&amp;*)</value>
+    <value>Speciální znaky (!@#$%^&amp;*)</value>
   </data>
   <data name="TapToGoBack" xml:space="preserve">
-    <value>Tap to go back</value>
+    <value>Klepnutím se vrátíte zpět</value>
   </data>
   <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
     <value>Heslo je viditelné, klepněte pro skrytí</value>
@@ -2308,31 +2312,31 @@ select Add TOTP to store the key safely</value>
     <value>We were unable to process your request. Please try again or contact us.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
-    <value>Allow screen capture</value>
+    <value>Povolit záznam obrazovky</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>Are you sure you want to turn on screen capture?</value>
+    <value>Opravdu chcete zapnout záznam obrazovky?</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
-    <value>Login requested</value>
+    <value>Požadavek k přihlášení</value>
   </data>
   <data name="AreYouTryingToLogIn" xml:space="preserve">
-    <value>Are you trying to log in?</value>
+    <value>Pokoušíte se přihlásit?</value>
   </data>
   <data name="LogInAttemptByXOnY" xml:space="preserve">
-    <value>Login attempt by {0} on {1}</value>
+    <value>Pokus o přihlášení od {0} na {1}</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
-    <value>Device type</value>
+    <value>Typ zařízení</value>
   </data>
   <data name="IpAddress" xml:space="preserve">
-    <value>IP address</value>
+    <value>IP adresa</value>
   </data>
   <data name="Time" xml:space="preserve">
-    <value>Time</value>
+    <value>Čas</value>
   </data>
   <data name="Near" xml:space="preserve">
-    <value>Near</value>
+    <value>Poblíž</value>
   </data>
   <data name="ConfirmLogIn" xml:space="preserve">
     <value>Potvrdit přihlášení</value>
@@ -2356,31 +2360,31 @@ select Add TOTP to store the key safely</value>
     <value>Schválit žádosti o přihlášení</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Use this device to approve login requests made from other devices.</value>
+    <value>Použijte toto zařízení pro schvalování žádostí o přihlášení z jiných zařízení.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Povolit oznámení</value>
   </data>
   <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
-    <value>Receive push notifications for new login requests</value>
+    <value>Dostávat oznámení ohledně nových žádostí o přihlášení</value>
   </data>
   <data name="NoThanks" xml:space="preserve">
-    <value>No thanks</value>
+    <value>Ne, děkuji</value>
   </data>
   <data name="ConfimLogInAttempForX" xml:space="preserve">
-    <value>Confirm login attempt for {0}</value>
+    <value>Potvrdit pokus o přihlášení pro {0}</value>
   </data>
   <data name="AllNotifications" xml:space="preserve">
     <value>Všechna oznámení</value>
   </data>
   <data name="PasswordType" xml:space="preserve">
-    <value>Password type</value>
+    <value>Typ hesla</value>
   </data>
   <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
-    <value>What would you like to generate?</value>
+    <value>Co chcete vygenerovat?</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
-    <value>Username type</value>
+    <value>Typ uživatelského jména</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
     <value>Plus addressed email</value>
@@ -2392,19 +2396,19 @@ select Add TOTP to store the key safely</value>
     <value>Forwarded email alias</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
-    <value>Random word</value>
+    <value>Náhodné slovo</value>
   </data>
   <data name="EmailRequiredParenthesis" xml:space="preserve">
-    <value>Email (required)</value>
+    <value>E-mail (povinný)</value>
   </data>
   <data name="DomainNameRequiredParenthesis" xml:space="preserve">
-    <value>Domain name (required)</value>
+    <value>Název domény (povinný)</value>
   </data>
   <data name="APIKeyRequiredParenthesis" xml:space="preserve">
-    <value>API key (required)</value>
+    <value>API klíč (povinný)</value>
   </data>
   <data name="Service" xml:space="preserve">
-    <value>Service</value>
+    <value>Služba</value>
   </data>
   <data name="AnonAddy" xml:space="preserve">
     <value>AnonAddy</value>
@@ -2419,25 +2423,25 @@ select Add TOTP to store the key safely</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
-    <value>API access token</value>
+    <value>Přístupový token API</value>
   </data>
   <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
-    <value>Are you sure you want to overwrite the current username?</value>
+    <value>Opravdu chcete přepsat aktuální uživatelské jméno?</value>
   </data>
   <data name="GenerateUsername" xml:space="preserve">
-    <value>Generate username</value>
+    <value>Generovat uživatelské jméno</value>
   </data>
   <data name="EmailType" xml:space="preserve">
-    <value>Email Type</value>
+    <value>Typ e-mailu</value>
   </data>
   <data name="WebsiteRequired" xml:space="preserve">
-    <value>Website (required)</value>
+    <value>Webová stránka (povinná)</value>
   </data>
   <data name="UnknownXErrorMessage" xml:space="preserve">
-    <value>Unknown {0} error occurred.</value>
+    <value>Vyskytla se neznámá chyba: {0}.</value>
   </data>
   <data name="PlusAddressedEmailDescription" xml:space="preserve">
-    <value>Use your email provider's subaddress capabilities</value>
+    <value>Použijte funkce podadres Vašeho poskytovatele e-mailu</value>
   </data>
   <data name="CatchAllEmailDescription" xml:space="preserve">
     <value>Use your domain's configured catch-all inbox.</value>
@@ -2446,7 +2450,7 @@ select Add TOTP to store the key safely</value>
     <value>Generate an email alias with an external forwarding service.</value>
   </data>
   <data name="Random" xml:space="preserve">
-    <value>Random</value>
+    <value>Náhodně</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Accessibility Service Disclosure</value>
@@ -2462,5 +2466,10 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>Požadavek na přihlášení již vypršel.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Login attempt from:
+{0}
+Do you want to switch to this account?</value>
   </data>
 </root>

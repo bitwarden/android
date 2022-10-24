@@ -1575,6 +1575,10 @@
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Ауто-попуни клокиране УРЛ</value>
   </data>
@@ -2464,5 +2468,10 @@
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>Захтев за пријаву је већ истекао.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Покушај пријаве са:
+{0}
+Да ли желите да пређете на овај налог?</value>
   </data>
 </root>

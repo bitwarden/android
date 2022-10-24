@@ -375,7 +375,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} скапіявана.</value>
+    <value>{0} скапіяваны</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -1574,6 +1574,10 @@
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Цёмная Solarized</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Аўтазапаўненне заблакіраваных URI</value>
   </data>
@@ -2462,5 +2466,10 @@
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>Запыт на ўваход пратэрмінаваны.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Спроба ўваходу з:
+{0}
+Вы сапраўды хочаце перайсці на гэты ўліковы запіс?</value>
   </data>
 </root>

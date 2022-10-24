@@ -146,7 +146,7 @@ namespace Bit.App.Services
                         return;
                     }
 
-                    await _stateService.Value.SetPasswordlessLoginNotificationAsync(passwordlessLoginMessage, passwordlessLoginMessage?.UserId);
+                    await _stateService.Value.SetPasswordlessLoginNotificationAsync(passwordlessLoginMessage);
                     var userEmail = await _stateService.Value.GetEmailAsync(passwordlessLoginMessage?.UserId);
 
                     var notificationData = new PasswordlessNotificationData()
@@ -247,14 +247,10 @@ namespace Bit.App.Services
             {
                 if (data is PasswordlessNotificationData passwordlessNotificationData)
                 {
-                    var notificationUserId = await _stateService.Value.GetUserIdAsync(passwordlessNotificationData.UserEmail);
-                    if (notificationUserId != null)
+                    var savedNotification = await _stateService.Value.GetPasswordlessLoginNotificationAsync();
+                    if (savedNotification != null)
                     {
-                        var savedNotification = await _stateService.Value.GetPasswordlessLoginNotificationAsync(notificationUserId);
-                        if (savedNotification != null)
-                        {
-                            await _stateService.Value.SetPasswordlessLoginNotificationAsync(null, notificationUserId);
-                        }
+                        await _stateService.Value.SetPasswordlessLoginNotificationAsync(null);
                     }
                 }
             }
