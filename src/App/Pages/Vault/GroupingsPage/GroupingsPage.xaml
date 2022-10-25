@@ -189,7 +189,8 @@
                         SelectionMode="Single"
                         SelectionChanged="RowSelected"
                         StyleClass="list, list-platform"
-                        ExtraDataForLogging="Groupings Page" />
+                        ExtraDataForLogging="Groupings Page"
+                        OnSwipeCommand="{Binding SwipeItemActionCommand}"/>
                 </RefreshView>
             </StackLayout>
         </ResourceDictionary>

@@ -29,9 +29,11 @@ namespace Bit.App.Pages
                     return GroupTemplate;
                 }
 
-                return listItem.Cipher.Type != Core.Enums.CipherType.Identity && SwipeableCipherTemplate != null
-                        ? SwipeableCipherTemplate
-                        : CipherTemplate;
+                return CipherTemplate;
+
+                //return listItem.Cipher.Type != Core.Enums.CipherType.Identity && SwipeableCipherTemplate != null
+                //        ? SwipeableCipherTemplate
+                //        : CipherTemplate;
             }
 
             return null;

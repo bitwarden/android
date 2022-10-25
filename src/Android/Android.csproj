@@ -156,6 +156,8 @@
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\AutofillHandler.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Renderers\CollectionView\ExtendedCollectionViewRenderer.cs" />
+    <Compile Include="Utilities\RecyclerSwipeItemTouchCallback.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\bwi-font.ttf" />
@@ -294,6 +296,7 @@
     <Folder Include="Resources\values-v30\" />
     <Folder Include="Resources\drawable-v26\" />
     <Folder Include="Resources\drawable-night-v26\" />
+    <Folder Include="Renderers\CollectionView\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
