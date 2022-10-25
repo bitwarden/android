@@ -264,5 +264,38 @@ namespace Bit.Core.Utilities
         {
             return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj));
         }
+
+        public static string TextColorFromBgColor(string hexColor, int threshold = 166)
+        {
+            var bgColorHexRgb = hexColor.Substring(0, 1) == "#" ? hexColor.Substring(3, 6) : hexColor.Substring(2, 6);
+            var r = Convert.ToUInt32(bgColorHexRgb.Substring(0, 2), 16);
+            var g = Convert.ToUInt32(bgColorHexRgb.Substring(2, 2), 16);
+            var b = Convert.ToUInt32(bgColorHexRgb.Substring(4, 2), 16);
+            var blackColor = "#ff000000";
+            var whiteColor = "#ffffffff";
+            var comp = r * 0.299 + g * 0.587 + b * 0.114;
+            return r * 0.299 + g * 0.587 + b * 0.114 > threshold ? blackColor : whiteColor;
+        }
+
+        public static string StringToColor(string str)
+        {
+            if (str == null)
+            {
+                return "#33ffffff";
+            }
+            var hash = 0;
+            for (var i = 0; i < str.Length; i++)
+            {
+                hash = str[i] + ((hash << 5) - hash);
+            }
+            var color = "#FF";
+            for (var i = 0; i < 3; i++)
+            {
+                var value = (hash >> (i * 8)) & 0xff;
+                var base16 = "00" + Convert.ToString(value, 16);
+                color += base16.Substring(base16.Length - 2);
+            }
+            return color;
+        }
     }
 }
