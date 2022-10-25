@@ -112,7 +112,7 @@ namespace Bit.iOS.Core.Views
 
                 ContentView.AddConstraints(new NSLayoutConstraint[] {
                     NSLayoutConstraint.Create(TextField, NSLayoutAttribute.Leading, NSLayoutRelation.Equal, ContentView, NSLayoutAttribute.Leading, 1f, leadingConstant),
-                    NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Trailing, NSLayoutRelation.Equal, TextField, NSLayoutAttribute.Trailing, 1f, GetTrailingConstant(buttonsConfig)),
+                    NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Trailing, NSLayoutRelation.Equal, TextField, NSLayoutAttribute.Trailing, 1f, GetTextFieldToContainerTrailingConstant(buttonsConfig)),
                     NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Bottom, NSLayoutRelation.Equal, TextField, NSLayoutAttribute.Bottom, 1f, 10f)
                 });
 
@@ -213,7 +213,7 @@ namespace Bit.iOS.Core.Views
             }
         }
 
-        private float GetTrailingConstant(ButtonsConfig buttonsConfig)
+        private float GetTextFieldToContainerTrailingConstant(ButtonsConfig buttonsConfig)
         {
             switch (buttonsConfig)
             {
