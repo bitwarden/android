@@ -379,5 +379,10 @@ namespace Bit.iOS.Core.Services
             var url = new NSUrl(UIApplication.OpenSettingsUrlString);
             UIApplication.SharedApplication.OpenUrl(url);
         }
+
+        public void CloseExtensionPopUp()
+        {
+            GetPresentedViewController().DismissViewController(true, null);
+        }
     }
 }
