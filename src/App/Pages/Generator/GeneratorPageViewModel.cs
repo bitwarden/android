@@ -606,6 +606,7 @@ namespace Bit.App.Pages
             LoadFromOptions();
 
             _usernameOptions = await _usernameGenerationService.GetOptionsAsync();
+            await _tokenService.PrepareTokenForDecodingAsync();
             _usernameOptions.PlusAddressedEmail = _tokenService.GetEmail();
             _usernameOptions.EmailWebsite = EmailWebsite;
             _usernameOptions.CatchAllEmailType = _usernameOptions.PlusAddressedEmailType = string.IsNullOrWhiteSpace(EmailWebsite) || !EditMode ? UsernameEmailType.Random : UsernameEmailType.Website;
