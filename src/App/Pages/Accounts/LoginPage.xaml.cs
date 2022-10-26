@@ -4,6 +4,7 @@ using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -25,6 +26,7 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
             _vm.LogInSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
+            _vm.LogInSSOCommand = new Command(async () => await StartSsoLoginAsync());
             _vm.UpdateTempPasswordAction =
                 () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.CloseAction = async () =>
@@ -109,6 +111,15 @@ namespace Bit.App.Pages
             if (DoOnce())
             {
                 await _vm.LogInAsync(true, _vm.IsEmailEnabled);
+            }
+        }
+
+        private async Task StartSsoLoginAsync()
+        {
+            if (DoOnce())
+            {
+                var page = new LoginSsoPage(_appOptions);
+                await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }
 

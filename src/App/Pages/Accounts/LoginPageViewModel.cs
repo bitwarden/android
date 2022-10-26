@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
+using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core;
@@ -111,6 +112,7 @@ namespace Bit.App.Pages
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
 
         public Command LogInCommand { get; }
+        public Command LogInSSOCommand { get; set; }
         public Command TogglePasswordCommand { get; }
         public ICommand MoreCommand { get; internal set; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;

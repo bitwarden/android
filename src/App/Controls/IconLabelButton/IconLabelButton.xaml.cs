@@ -71,12 +71,6 @@ namespace Bit.App.Controls
             get { return (Color)GetValue(IconLabelBorderColorProperty); }
             set { SetValue(IconLabelBorderColorProperty, value); }
         }
-
-        protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            base.OnPropertyChanged(propertyName);
-            this.InvalidateLayout();
-        }
     }
 }
 

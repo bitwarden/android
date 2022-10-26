@@ -112,7 +112,7 @@
                         <controls:IconLabelButton
                             Icon="{Binding EnterpriseSingleSignOnIcon}"
                             Label="{u:I18n LogInSso}"
-                            ButtonCommand="{Binding LogInCommand}"/>
+                            ButtonCommand="{Binding LogInSSOCommand}"/>
                         <Label
                             Text="{Binding LoggingInAsText}"
                             StyleClass="text-sm"
