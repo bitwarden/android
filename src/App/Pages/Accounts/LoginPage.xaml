@@ -100,13 +100,15 @@
                         </Grid>
                     </StackLayout>
                     <StackLayout Padding="10, 10">
-                        <Button Text="{u:I18n LogInWithMasterPassword}" 
+                        <Button x:Name="_loginWithMasterPassword"
+                            Text="{u:I18n LogInWithMasterPassword}" 
                                 StyleClass="btn-primary"
                                 Clicked="LogIn_Clicked" />
                         <controls:IconLabelButton
                             Icon="{Binding LogInWithAnotherDeviceIcon}"
                             Label="{u:I18n LogInWithAnotherDevice}"
-                            ButtonCommand="{Binding LogInCommand}"/>
+                            ButtonCommand="{Binding LogInCommand}"
+                            IsVisible="{Binding IsKnownDevice}"/>
                         <controls:IconLabelButton
                             Icon="{Binding EnterpriseSingleSignOnIcon}"
                             Label="{u:I18n LogInSso}"

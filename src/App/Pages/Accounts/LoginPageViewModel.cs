@@ -8,6 +8,7 @@ using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
@@ -25,12 +26,14 @@ namespace Bit.App.Pages
         private readonly II18nService _i18nService;
         private readonly IMessagingService _messagingService;
         private readonly ILogger _logger;
-
+        private readonly IApiService _apiService;
+        private readonly IAppIdService _appIdService;
         private bool _showPassword;
         private bool _showCancelButton;
         private string _email;
         private string _masterPassword;
         private bool _isEmailEnabled;
+        private bool _isKnownDevice;
 
         public LoginPageViewModel()
         {
@@ -43,6 +46,8 @@ namespace Bit.App.Pages
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
+            _apiService = ServiceContainer.Resolve<IApiService>();
+            _appIdService = ServiceContainer.Resolve<IAppIdService>();
 
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -95,6 +100,12 @@ namespace Bit.App.Pages
             set => SetProperty(ref _isEmailEnabled, value);
         }
 
+        public bool IsKnownDevice
+        {
+            get => _isKnownDevice;
+            set => SetProperty(ref _isKnownDevice, value);
+        }
+
         public bool IsIosExtension { get; set; }
 
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
@@ -119,10 +130,14 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
+            await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
             if (string.IsNullOrWhiteSpace(Email))
             {
                 Email = await _stateService.GetRememberedEmailAsync();
             }
+            var deviceIdentifier = await _appIdService.GetAppIdAsync();
+            IsKnownDevice = await _apiService.GetKnownDevice(Email, deviceIdentifier);
+            await _deviceActionService.HideLoadingAsync();
         }
 
         public async Task LogInAsync(bool showLoading = true, bool checkForExistingAccount = false)
