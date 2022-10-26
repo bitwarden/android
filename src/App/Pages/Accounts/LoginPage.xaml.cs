@@ -116,7 +116,7 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                Navigation.PushModalAsync(new NavigationPage(new HintPage()));
+                Navigation.PushModalAsync(new NavigationPage(new HintPage(_vm.Email)));
             }
         }
 
