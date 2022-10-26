@@ -10,6 +10,7 @@ namespace Bit.App.Pages
 {
     public partial class HomePage : BaseContentPage
     {
+        private bool _checkForRememberedEmail;
         private readonly HomeViewModel _vm;
         private readonly AppOptions _appOptions;
         private IBroadcasterService _broadcasterService;
@@ -21,6 +22,7 @@ namespace Bit.App.Pages
             InitializeComponent();
             _vm = BindingContext as HomeViewModel;
             _vm.Page = this;
+            _checkForRememberedEmail = true;
             _vm.StartLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartLoginAsync());
             _vm.StartRegisterAction = () => Device.BeginInvokeOnMainThread(async () => await StartRegisterAsync());
             _vm.StartSsoLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
@@ -65,6 +67,12 @@ namespace Bit.App.Pages
                     });
                 }
             });
+
+            if (_checkForRememberedEmail && _vm.RememberEmail && _vm.ShowEmail)
+            {
+                StartLoginAsync().FireAndForget();
+                _checkForRememberedEmail = false;
+            }
         }
 
         protected override bool OnBackButtonPressed()
