@@ -71,7 +71,7 @@ namespace Bit.App.Controls
                 chars = upperCaseText = _text.ToUpper();
             }
 
-            var bgColor = CoreHelpers.StringToColor(_id ?? upperCaseText,"#33ffffff");
+            var bgColor = CoreHelpers.StringToColor(_id ?? upperCaseText, "#33ffffff");
             var textColor = CoreHelpers.TextColorFromBgColor(bgColor);
             var size = 50;
 
