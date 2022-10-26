@@ -1,11 +1,9 @@
-﻿using Android.Graphics.Drawables;
-using Android.Widget;
+﻿using Android.Widget;
 using Bit.Droid.Effects;
-using Bit.Droid.Utilities;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportEffect(typeof(RemoveFontPaddingEffect), "RemoveFontPaddingEffect")]
+[assembly: ExportEffect(typeof(RemoveFontPaddingEffect), nameof(RemoveFontPaddingEffect))]
 namespace Bit.Droid.Effects
 {
     public class RemoveFontPaddingEffect : PlatformEffect
