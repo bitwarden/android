@@ -63,22 +63,22 @@
                         </VisualStateManager.VisualStateGroups>
                     </Entry>
                     <StackLayout
-                        Orientation="Horizontal">
+                        Orientation="Horizontal"
+                        Margin="0, 16, 0 ,0">
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer
                                 Tapped="RememberEmail_Clicked" />
                         </StackLayout.GestureRecognizers>
-                        <CheckBox
-                            IsChecked="{Binding RememberEmail}"
-                            Margin="-4, 0, 0, 0"
-                            VerticalOptions="Center"
-                            Color="{DynamicResource PrimaryColor}"/>
                         <Label
-                            Text="Remember email" 
-                            Margin="-10, 0, 0, 0"
+                            Text="{u:I18n RememberMe}"
                             StyleClass="text-sm"
+                            HorizontalOptions="FillAndExpand"
                             VerticalOptions="Center"
                             VerticalTextAlignment="Center"/>
+                        <Switch
+                            Scale="0.8"
+                            IsToggled="{Binding RememberEmail}"
+                            VerticalOptions="Center"/>
                     </StackLayout>
                 </StackLayout>
                 <Button Text="{u:I18n LogIn}"
