@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Controls.IconLabelButton"
     xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:effects="clr-namespace:Bit.App.Effects"
     x:Name="_iconLabelButton"
     HorizontalOptions="FillAndExpand"
     VerticalOptions="CenterAndExpand"
@@ -32,7 +33,11 @@
                 HorizontalTextAlignment="Center"
                 FontSize="Large"
                 TextColor="{Binding IconLabelColor, Source={x:Reference _iconLabelButton}}"
-                Text="{Binding Icon, Source={x:Reference _iconLabelButton}}" />
+                Text="{Binding Icon, Source={x:Reference _iconLabelButton}}">
+                <controls:IconLabel.Effects>
+                    <effects:RemoveFontPaddingEffect />
+                </controls:IconLabel.Effects>
+            </controls:IconLabel>
             <Label
                 VerticalOptions="CenterAndExpand"
                 HorizontalTextAlignment="Center"
