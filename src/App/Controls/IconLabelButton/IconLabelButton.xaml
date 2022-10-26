@@ -3,23 +3,42 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Controls.IconLabelButton"
     xmlns:controls="clr-namespace:Bit.App.Controls"
+    x:Name="_iconLabelButton"
     HorizontalOptions="FillAndExpand"
-    VerticalOptions="Center"
-    Padding="0,0"
-    StyleClass="btn-icon-row"
-    x:Name="_iconLabelButton">
+    VerticalOptions="CenterAndExpand"
+    HeightRequest="45"
+    Padding="1"
+    StyleClass="btn-icon-secondary"
+    BackgroundColor="{Binding IconLabelBorderColor, Source={x:Reference _iconLabelButton}}"
+    HasShadow="False">
     <Frame.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding ButtonCommand, Source={x:Reference _iconLabelButton}}" />
     </Frame.GestureRecognizers>
-    <StackLayout Orientation="Horizontal" 
-            HorizontalOptions="Center">
-        <controls:IconLabel 
-            Text="{Binding Icon, Source={x:Reference _iconLabelButton}}" 
-            Padding="0,15"
-            HorizontalOptions="Center"
-            VerticalTextAlignment="Center" />
-        <Label Text="{Binding Label, Source={x:Reference _iconLabelButton}}"
-            HorizontalOptions="Center"
-            VerticalTextAlignment="Center"/>
+    <Frame
+        Margin="0"
+        Padding="0"
+        CornerRadius="{Binding CornerRadius, Source={x:Reference _iconLabelButton}}"
+        BackgroundColor="{Binding IconLabelBackgroundColor, Source={x:Reference _iconLabelButton}}"
+        IsClippedToBounds="True"
+        HorizontalOptions="FillAndExpand"
+        VerticalOptions="FillAndExpand"
+        HasShadow="False">
+        <StackLayout
+            Orientation="Horizontal"
+            HorizontalOptions="CenterAndExpand">
+            <controls:IconLabel
+                IncludeFontPadding="False"
+                VerticalOptions="CenterAndExpand"
+                HorizontalTextAlignment="Center"
+                FontSize="Large"
+                TextColor="{Binding IconLabelColor, Source={x:Reference _iconLabelButton}}"
+                Text="{Binding Icon, Source={x:Reference _iconLabelButton}}" />
+            <Label
+                VerticalOptions="CenterAndExpand"
+                HorizontalTextAlignment="Center"
+                TextColor="{Binding IconLabelColor, Source={x:Reference _iconLabelButton}}"
+                FontSize="Medium"
+                Text="{Binding Label, Source={x:Reference _iconLabelButton}}"/>
     </StackLayout>
+    </Frame>
 </Frame>
