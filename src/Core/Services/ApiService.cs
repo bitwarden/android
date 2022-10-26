@@ -549,7 +549,7 @@ namespace Bit.Core.Services
 
         public Task<bool> GetKnownDevice(string email, string deviceIdentifier)
         {
-            return SendAsync<object, bool>(HttpMethod.Get, $"/devices/knowndevice/${email}/${deviceIdentifier}", null, true, true);
+            return SendAsync<object, bool>(HttpMethod.Get, $"/devices/knowndevice/{email}/{deviceIdentifier}", null, false, true);
         }
 
         #endregion
