@@ -43,6 +43,6 @@
                 TextColor="{Binding IconLabelColor, Source={x:Reference _iconLabelButton}}"
                 FontSize="Medium"
                 Text="{Binding Label, Source={x:Reference _iconLabelButton}}"/>
-    </StackLayout>
+        </StackLayout>
     </Frame>
 </Frame>
