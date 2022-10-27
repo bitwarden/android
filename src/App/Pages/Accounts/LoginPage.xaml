@@ -121,6 +121,7 @@
                         <Label
                             Text="{u:I18n NotYou}"
                             StyleClass="text-md"
+                            HorizontalOptions="Start"
                             TextColor="{DynamicResource HyperlinkColor}">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="Cancel_Clicked" />
