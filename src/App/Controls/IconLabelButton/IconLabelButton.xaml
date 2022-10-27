@@ -33,9 +33,6 @@
                 FontSize="Large"
                 TextColor="{Binding IconLabelColor, Source={x:Reference _iconLabelButton}}"
                 Text="{Binding Icon, Source={x:Reference _iconLabelButton}}">
-                <controls:IconLabel.Effects>
-                    <effects:RemoveFontPaddingEffect />
-                </controls:IconLabel.Effects>
             </controls:IconLabel>
             <Label
                 VerticalOptions="CenterAndExpand"
