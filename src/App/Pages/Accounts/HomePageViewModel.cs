@@ -21,11 +21,13 @@ namespace Bit.App.Pages
         private string _email;
         private bool _isEmailEnabled;
         private bool _canLogin;
+        private IPlatformUtilsService _platformUtilsService;
 
         public HomeViewModel()
         {
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
             var logger = ServiceContainer.Resolve<ILogger>("logger");
 
             PageTitle = AppResources.Bitwarden;
@@ -95,9 +97,23 @@ namespace Bit.App.Pages
             ShowEmail = RememberEmail;
         }
 
-        public async Task SetRememberEmailAsync()
+        public async Task ContinueToLoginStepAsync()
         {
+            if (string.IsNullOrWhiteSpace(Email))
+            {
+                await _platformUtilsService.ShowDialogAsync(
+                    string.Format(AppResources.ValidationFieldRequired, AppResources.EmailAddress),
+                    AppResources.AnErrorHasOccurred, AppResources.Ok);
+                return;
+            }
+            if (!Email.Contains("@"))
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.InvalidEmail, AppResources.AnErrorHasOccurred,
+                    AppResources.Ok);
+                return;
+            }
             await _stateService.SetRememberedEmailAsync(RememberEmail ? Email : null);
+            StartLoginAction();
         }
     }
 }
