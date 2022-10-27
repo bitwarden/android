@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.LoginPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     x:DataType="pages:LoginPageViewModel"
@@ -105,12 +106,12 @@
                                 StyleClass="btn-primary"
                                 Clicked="LogIn_Clicked" />
                         <controls:IconLabelButton
-                            Icon="{Binding LogInWithAnotherDeviceIcon}"
+                            Icon="{Binding Source={x:Static core:BitwardenIcons.Device}}"
                             Label="{u:I18n LogInWithAnotherDevice}"
                             ButtonCommand="{Binding LogInCommand}"
                             IsVisible="{Binding IsKnownDevice}"/>
                         <controls:IconLabelButton
-                            Icon="{Binding EnterpriseSingleSignOnIcon}"
+                            Icon="{Binding Source={x:Static core:BitwardenIcons.Suitcase}}"
                             Label="{u:I18n LogInSso}"
                             ButtonCommand="{Binding LogInSSOCommand}"/>
                         <Label

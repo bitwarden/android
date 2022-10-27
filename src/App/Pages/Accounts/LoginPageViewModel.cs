@@ -122,8 +122,6 @@ namespace Bit.App.Pages
         public Action UpdateTempPasswordAction { get; set; }
         public Action CloseAction { get; set; }
         public string LoggingInAsText => string.Format(AppResources.LoggingInAs, Email);
-        public string LogInWithAnotherDeviceIcon => BitwardenIcons.Device;
-        public string EnterpriseSingleSignOnIcon => BitwardenIcons.Suitcase;
 
         protected override II18nService i18nService => _i18nService;
         protected override IEnvironmentService environmentService => _environmentService;
