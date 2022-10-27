@@ -15,6 +15,7 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IApiService _apiService;
         private readonly ILogger _logger;
+        private string _email;
 
         public HintPageViewModel()
         {
@@ -34,7 +35,12 @@ namespace Bit.App.Pages
         }
 
         public ICommand SubmitCommand { get; }
-        public string Email { get; set; }
+
+        public string Email
+        {
+            get => _email;
+            set => SetProperty(ref _email, value);
+        }
 
         public async Task SubmitAsync()
         {
