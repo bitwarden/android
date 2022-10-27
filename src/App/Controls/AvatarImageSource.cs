@@ -23,13 +23,13 @@ namespace Bit.App.Controls
 
             if (obj is AvatarImageSource avatar)
             {
-                return avatar._text == _text;
+                return avatar._id == _id && avatar._text == _text;
             }
 
             return base.Equals(obj);
         }
 
-        public override int GetHashCode() => _text?.GetHashCode() ?? -1;
+        public override int GetHashCode() => _id?.GetHashCode() ?? _text?.GetHashCode() ?? -1;
 
         public AvatarImageSource(string userId = null, string name = null, string email = null)
         {
