@@ -71,7 +71,7 @@ namespace Bit.App.Pages
                 }
             });
 
-            if (_runInit && _vm.RememberEmail && _vm.ShowEmail)
+            if (_runInit && _vm.RememberEmail)
             {
                 StartLoginAsync().FireAndForget();
             }
@@ -105,14 +105,6 @@ namespace Bit.App.Pages
             if (DoOnce())
             {
                 _vm.CloseAction();
-            }
-        }
-
-        private void LogIn_Clicked(object sender, EventArgs e)
-        {
-            if (DoOnce())
-            {
-                _vm.ShowEmail = true;
             }
         }
 

@@ -42,8 +42,7 @@
                         StyleClass="text-lg"
                         HorizontalTextAlignment="Center"/>
                 <StackLayout
-                    StyleClass="box-row"
-                    IsVisible="{Binding ShowEmail}">
+                    StyleClass="box-row">
                     <Label
                         Text="{u:I18n EmailAddress}"
                         StyleClass="box-label" />
@@ -81,14 +80,8 @@
                             VerticalOptions="Center"/>
                     </StackLayout>
                 </StackLayout>
-                <Button Text="{u:I18n LogIn}"
-                        StyleClass="btn-primary"
-                        IsVisible="{Binding ShowEmail, Converter={StaticResource inverseBool}}"
-                        Clicked="LogIn_Clicked" />
-
                 <Button Text="{u:I18n Continue}"
                         StyleClass="btn-primary"
-                        IsVisible="{Binding ShowEmail}"
                         IsEnabled="{Binding CanContinue}"
                         Clicked="Continue_Clicked" />
                         

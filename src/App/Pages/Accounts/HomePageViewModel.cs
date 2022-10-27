@@ -16,7 +16,6 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
 
         private bool _showCancelButton;
-        private bool _showEmail;
         private bool _rememberEmail;
         private string _email;
         private bool _isEmailEnabled;
@@ -42,12 +41,6 @@ namespace Bit.App.Pages
         {
             get => _showCancelButton;
             set => SetProperty(ref _showCancelButton, value);
-        }
-
-        public bool ShowEmail
-        {
-            get => _showEmail;
-            set => SetProperty(ref _showEmail, value);
         }
 
         public bool RememberEmail
@@ -94,7 +87,6 @@ namespace Bit.App.Pages
         {
             Email = await _stateService.GetRememberedEmailAsync();
             RememberEmail = !string.IsNullOrEmpty(Email);
-            ShowEmail = RememberEmail;
         }
 
         public async Task ContinueToLoginStepAsync()
