@@ -28,7 +28,6 @@
             Orientation="Horizontal"
             HorizontalOptions="CenterAndExpand">
             <controls:IconLabel
-                IncludeFontPadding="False"
                 VerticalOptions="CenterAndExpand"
                 HorizontalTextAlignment="Center"
                 FontSize="Large"
