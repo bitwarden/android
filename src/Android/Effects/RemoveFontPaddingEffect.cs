@@ -10,7 +10,7 @@ namespace Bit.Droid.Effects
     {
         protected override void OnAttached()
         {
-            if (Element is Label label && Control is TextView textView)
+            if (Control is TextView textView)
             {
                 textView.SetIncludeFontPadding(false);
             }
