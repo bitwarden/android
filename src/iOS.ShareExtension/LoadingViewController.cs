@@ -287,13 +287,13 @@ namespace Bit.iOS.ShareExtension
             return _app;
         }
 
-        private void LaunchHomePage()
+        private void LaunchHomePage(bool checkRememberedEmail = true)
         {
-            var homePage = new HomePage();
+            var homePage = new HomePage(checkRememberedEmail: checkRememberedEmail);
             SetupAppAndApplyResources(homePage);
             if (homePage.BindingContext is HomeViewModel vm)
             {
-                vm.StartLoginAction = () => DismissAndLaunch(() => LaunchLoginFlow());
+                vm.StartLoginAction = () => DismissAndLaunch(() => LaunchLoginFlow(vm.Email));
                 vm.StartRegisterAction = () => DismissAndLaunch(() => LaunchRegisterFlow());
                 vm.StartSsoLoginAction = () => DismissAndLaunch(() => LaunchLoginSsoFlow());
                 vm.StartEnvironmentAction = () => DismissAndLaunch(() => LaunchEnvironmentFlow());
@@ -311,8 +311,8 @@ namespace Bit.iOS.ShareExtension
             ThemeManager.ApplyResourcesTo(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
-                vm.SubmitSuccessAction = () => DismissAndLaunch(() => LaunchHomePage());
-                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage());
+                vm.SubmitSuccessAction = () => DismissAndLaunch(() => LaunchHomePage(checkRememberedEmail: false));
+                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage(checkRememberedEmail: false));
             }
 
             NavigateToPage(environmentPage);
@@ -325,7 +325,7 @@ namespace Bit.iOS.ShareExtension
             if (registerPage.BindingContext is RegisterPageViewModel vm)
             {
                 vm.RegistrationSuccess = () => DismissAndLaunch(() => LaunchLoginFlow(vm.Email));
-                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage());
+                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage(checkRememberedEmail: false));
             }
             NavigateToPage(registerPage);
         }
@@ -338,11 +338,12 @@ namespace Bit.iOS.ShareExtension
             {
                 vm.StartTwoFactorAction = () => DismissAndLaunch(() => LaunchTwoFactorFlow(false));
                 vm.UpdateTempPasswordAction = () => DismissAndLaunch(() => LaunchUpdateTempPasswordFlow());
+                vm.StartSsoLoginAction = () => DismissAndLaunch(() => LaunchLoginSsoFlow());
                 vm.LogInSuccessAction = () =>
                 {
                     DismissLockAndContinue();
                 };
-                vm.CloseAction = () => CompleteRequest();
+                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage(checkRememberedEmail: false));
             }
             NavigateToPage(loginPage);
 
@@ -426,7 +427,7 @@ namespace Bit.iOS.ShareExtension
             switch (navTarget)
             {
                 case NavigationTarget.HomeLogin:
-                    ExecuteLaunch(LaunchHomePage);
+                    ExecuteLaunch(() => LaunchHomePage());
                     break;
                 case NavigationTarget.Login:
                     if (navParams is LoginNavigationParams loginParams)

@@ -156,6 +156,7 @@
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\AutofillHandler.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Effects\RemoveFontPaddingEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\bwi-font.ttf" />
