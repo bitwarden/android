@@ -425,7 +425,7 @@
     <value>自動入力サービス</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>あいまいな文字を省く</value>
+    <value>あいまいな文字を避ける</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Bitwarden App Extension</value>
@@ -587,11 +587,11 @@
     <value>マスターパスワードは、少なくとも8文字以上で設定してください。</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>数字の最小数</value>
+    <value>数字の最小個数</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>記号の最小数</value>
+    <value>最低限必要な記号の個数</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -657,7 +657,7 @@
     <value>良いレビューで私たちを助けてください！</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>パスワードの再生成</value>
+    <value>パスワードを再生成</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
     <value>マスターパスワードを再入力</value>
@@ -708,7 +708,7 @@
     <value>2段階認証</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>2段階認証を使うと、ログイン時にセキュリティキーや認証アプリ、SMS、電話やメールでの認証を必要にすることでアカウントをさらに安全に出来ます。2段階認証は Bitwarden ウェブ保管庫で有効化できます。ウェブサイトを開きますか？</value>
+    <value>2段階認証を有効にすると、他の端末でログインする際にセキュリティキー、認証アプリ、SMS、電話、またはメールで認証することが必要となり，アカウントの安全性が高まります。2段階認証を有効にするのはBitwarden.comのウェブ保管庫でできます。ウェブサイトに進みますか？</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>{0}でロック解除</value>
@@ -1252,7 +1252,7 @@
     <value>URI の一致検出方法</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>一致検出方法</value>
+    <value>一致するか検出する方法</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
@@ -1337,7 +1337,7 @@
     <value>ログイン</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>セキュアメモ</value>
+    <value>秘密のメモ</value>
   </data>
   <data name="AllItems" xml:space="preserve">
     <value>すべてのアイテム</value>
@@ -1575,6 +1575,10 @@
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized ダーク</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>自動入力をブロックする URI</value>
   </data>
@@ -1591,7 +1595,7 @@
     <value>アプリ再起動時</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>自動入力を使うと、他のウェブサイトやアプリから Bitwarden 保管庫に、より安全・簡単にアクセスできます。現在 Bitwarden の自動入力サービスを有効にしていないようです。設定画面で自動入力を有効化できます。</value>
+    <value>自動入力を使えば、他のウェブサイトやアプリから Bitwardenの保管庫に簡単に安全にアクセスできます。いまのところ自動入力は有効になっていないようです。自動入力を有効にするには設定画面に行ってください。</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>テーマの変更はアプリを再起動すると反映されます。</value>
@@ -2459,5 +2463,13 @@
   </data>
   <data name="Decline" xml:space="preserve">
     <value>拒否</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>ログインリクエストの有効期限が切れています。</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>ログイン試行がありました:
+{0}
+このアカウントに切り替えますか？</value>
   </data>
 </root>

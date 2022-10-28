@@ -152,11 +152,11 @@
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Kopier passordet</value>
+    <value>Kopier passord</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Kopier brukernavnet</value>
+    <value>Kopier brukernavn</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -190,7 +190,7 @@
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>Send oss E-post</value>
+    <value>Send oss en e-post</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
     <value>Send E-post direkte til oss for å få hjelp eller gi tilbakemeldinger.</value>
@@ -247,11 +247,11 @@
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Internettilkobling er påkrevd</value>
+    <value>Internettilkobling nødvendig</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Ugyldig superpassord. Prøv igjen.</value>
+    <value>Ugyldig hovedpassord. Prøv igjen.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
     <value>Ugyldig PIN-kode. Prøv igjen.</value>
@@ -288,7 +288,7 @@
     <value>Ønsker du å bytte til den nå?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
-    <value>Superpassord</value>
+    <value>Hovedpassord</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
@@ -382,7 +382,7 @@
     <value>Verifiser fingeravtrykket</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Verifiser superpassordet</value>
+    <value>Verifiser hovedpassordet</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>Verifiser PIN-koden</value>
@@ -394,7 +394,7 @@
     <value>Vis</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Besøk nettsidene våre</value>
+    <value>Besøk nettstedet vårt</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
     <value>Besøk vårt nettsted for å få hjelp, nyheter, sende oss E-poster, og/eller lære mer om å bruke Bitwarden.</value>
@@ -425,7 +425,7 @@
     <value>Auto-utfyllingstjeneste</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Unngå forvekslingsbare tegn</value>
+    <value>Unngå tvetydige tegn</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Bitwarden App-utvidelse</value>
@@ -443,7 +443,7 @@
     <value>Bruk Bitwarden sin tilgjengelighetstjeneste for å auto-utfylle dine innlogginger.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Endre E-postadresse</value>
+    <value>Endre e-postadresse</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
     <value>Du kan endre din kontos E-postadresse på bitwarden.net-netthvelvet. Vil du besøke det nettstedet nå?</value>
@@ -461,14 +461,14 @@
     <value>Fortsett</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Opprett en konto</value>
+    <value>Opprett konto</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
     <value>Oppretter konto...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Rediger gjenstanden</value>
+    <value>Rediger elementet</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Aktiver automatisk synkronisering</value>
@@ -514,7 +514,7 @@
     <value>Fingeravtrykk</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>Generer et passord</value>
+    <value>Lag passord</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
     <value>Få et hint om superpassordet</value>
@@ -529,7 +529,7 @@
     <value>Importer raskt dine gjenstander i bunker fra andre passordbehandlingsapper.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>Forrige synkronisering:</value>
+    <value>Siste synkronisering:</value>
   </data>
   <data name="Length" xml:space="preserve">
     <value>Lengde</value>
@@ -578,7 +578,7 @@
     <value>Superpassordet er passordet du bruker for å få tilgang til hvelvet ditt. Det er veldig viktig at du aldri glemmer ditt superpassord. Det er ingen måter å få tilbake passordet på dersom du noensinne skulle klare å glemme det.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Et hint for superpassordet (valgfritt)</value>
+    <value>Et hint for hovedpassordet (valgfritt)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Et hint for superpassordet, kan hjelpe deg å huske på passordet hvis du skulle glemme det.</value>
@@ -587,11 +587,11 @@
     <value>Superpassordet må være ≥8 tegn lang.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minst antall numre</value>
+    <value>Minst antall siffer</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Minst antall spesialtegn</value>
+    <value>Minste antall spesialtegn</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -604,7 +604,7 @@
     <value>Aldri</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>En ny gjenstand er opprettet.</value>
+    <value>Nytt element opprettet.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Det er ingen favoritter i hvelvet ditt.</value>
@@ -657,10 +657,10 @@
     <value>Tenk gjerne på om du vil skrive en anmeldelse om oss!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Omgenerer et passord</value>
+    <value>Generer nytt passord</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Skriv inn superpassordet på nytt</value>
+    <value>Skriv inn hovedpassordet på nytt</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Søk i hvelvet</value>
@@ -678,10 +678,10 @@
     <value>Skriv inn en 4-sifret PIN-kode til å låse opp appen med.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Gjenstandsinformasjon</value>
+    <value>Elementinformasjon</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Gjenstanden er oppdatert.</value>
+    <value>Element oppdatert.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Sender inn...</value>
@@ -724,7 +724,7 @@
     <value>Verifiseringskode</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>Vis gjenstand</value>
+    <value>Vis element</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>Bitwarden Netthvelv</value>
@@ -796,7 +796,7 @@
     <value>Er du sikker på at du vil auto-utfylle dette elementet? Den samsvarer ikke fullstendig med "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Samsvarende gjenstander</value>
+    <value>Samsvarende elementer</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
     <value>Mulig samsvarende elementer</value>
@@ -946,7 +946,7 @@ Skanning skjer automatisk.</value>
     <value>Filens kilde</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Egenskapen er utilgjengelig</value>
+    <value>Funksjon utilgjengelig</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
     <value>Maksimal filstørrelse er 100 MB.</value>
@@ -1017,7 +1017,7 @@ Skanning skjer automatisk.</value>
     <value>Innlogging</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Sikker notis</value>
+    <value>Sikre notater</value>
   </data>
   <data name="Address1" xml:space="preserve">
     <value>Adresse 1</value>
@@ -1083,7 +1083,7 @@ Skanning skjer automatisk.</value>
     <value>Fullt navn</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>Lisensnummer</value>
+    <value>Førerkortnummer</value>
   </data>
   <data name="March" xml:space="preserve">
     <value>Mars</value>
@@ -1110,7 +1110,7 @@ Skanning skjer automatisk.</value>
     <value>Oktober</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Pass-nummer</value>
+    <value>Passnummer</value>
   </data>
   <data name="Phone" xml:space="preserve">
     <value>Telefon</value>
@@ -1278,7 +1278,7 @@ Skanning skjer automatisk.</value>
     <value>Tilgjengelighetstjenesten kan være nyttig å bruke når apper ikke støtter den vanlige autoutfyllingstjenesten.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Passordet ble oppdatert den</value>
+    <value>Passordet oppdatert den</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
@@ -1286,7 +1286,7 @@ Skanning skjer automatisk.</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>Autoutfylling aktivert!</value>
+    <value>Autofyll aktivert!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
     <value>Du må logge deg inn på Bitwarden-hovedappen før du kan bruke autoutfylling.</value>
@@ -1301,7 +1301,7 @@ Skanning skjer automatisk.</value>
     <value>Få tilgang til hvelvet ditt direkte fra tastaturet for å raskt autoutfylle passord.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Følg disse instruksjonene for å aktivere passord-autoutfylling på enheten din:</value>
+    <value>Følg disse instruksjonene for å aktivere passord autofyll på enheten din:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Gå til iOS-appen «Innstillinger»</value>
@@ -1574,6 +1574,10 @@ Skanning skjer automatisk.</value>
   <data name="Nord" xml:space="preserve">
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Auto-utfyll blokkerte URI-er</value>
@@ -2315,64 +2319,64 @@ velg Legg til TOTP for å lagre nøkkelen sikkert</value>
     <value>Er du sikker på at du vil aktivere skjermopptak?</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
-    <value>Login requested</value>
+    <value>Innlogging forespurt</value>
   </data>
   <data name="AreYouTryingToLogIn" xml:space="preserve">
-    <value>Are you trying to log in?</value>
+    <value>Prøver du å logge inn?</value>
   </data>
   <data name="LogInAttemptByXOnY" xml:space="preserve">
-    <value>Login attempt by {0} on {1}</value>
+    <value>Innloggingsforsøk av {0} på {1}</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
-    <value>Device type</value>
+    <value>Enhetstype</value>
   </data>
   <data name="IpAddress" xml:space="preserve">
-    <value>IP address</value>
+    <value>IP-adresse</value>
   </data>
   <data name="Time" xml:space="preserve">
-    <value>Time</value>
+    <value>Tid</value>
   </data>
   <data name="Near" xml:space="preserve">
-    <value>Near</value>
+    <value>I nærheten av</value>
   </data>
   <data name="ConfirmLogIn" xml:space="preserve">
-    <value>Confirm login</value>
+    <value>Bekreft innlogging</value>
   </data>
   <data name="DenyLogIn" xml:space="preserve">
-    <value>Deny login</value>
+    <value>Avslå innlogging</value>
   </data>
   <data name="JustNow" xml:space="preserve">
-    <value>Just now</value>
+    <value>Nå nettopp</value>
   </data>
   <data name="XMinutesAgo" xml:space="preserve">
-    <value>{0} minutes ago</value>
+    <value>{0} minutter siden</value>
   </data>
   <data name="LogInAccepted" xml:space="preserve">
-    <value>Login confirmed</value>
+    <value>Innlogging bekreftet</value>
   </data>
   <data name="LogInDenied" xml:space="preserve">
-    <value>Login denied</value>
+    <value>Innlogging avslått</value>
   </data>
   <data name="ApproveLoginRequests" xml:space="preserve">
-    <value>Approve login requests</value>
+    <value>Godkjenn innloggingsforespørsler</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Use this device to approve login requests made from other devices.</value>
+    <value>Bruk denne enheten til å godkjenne innloggingsforespørsler fra andre enheter.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
-    <value>Allow notifications</value>
+    <value>Tillat varslinger</value>
   </data>
   <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
-    <value>Receive push notifications for new login requests</value>
+    <value>Motta push-varsler for nye innloggingsforespørsler</value>
   </data>
   <data name="NoThanks" xml:space="preserve">
-    <value>No thanks</value>
+    <value>Nei takk</value>
   </data>
   <data name="ConfimLogInAttempForX" xml:space="preserve">
-    <value>Confirm login attempt for {0}</value>
+    <value>Bekreft påloggingsforsøk for {0}</value>
   </data>
   <data name="AllNotifications" xml:space="preserve">
-    <value>All notifications</value>
+    <value>Alle varsler</value>
   </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Passordtype</value>
@@ -2450,15 +2454,23 @@ velg Legg til TOTP for å lagre nøkkelen sikkert</value>
     <value>Tilfeldig</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
-    <value>Accessibility Service Disclosure</value>
+    <value>Opplysninger om tilgjengelighetstjeneste</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
+    <value>Bitwarden bruker Tilgjengelighetstjenesten for å søke etter innloggingsfelt i apper og på nettsteder, deretter finner den de riktige felt-IDene for å skrive inn et brukernavn og passord når en treff for appen eller nettsiden blir funnet. Vi lagrer ikke noen av opplysningene som tjenesten presenterer for oss. Vi gjør heller ikke noen forsøk på å kontrollere elementer på skjermen utenom tekstutfylling av brukernavn og passord.</value>
   </data>
   <data name="Accept" xml:space="preserve">
-    <value>Accept</value>
+    <value>Godta</value>
   </data>
   <data name="Decline" xml:space="preserve">
-    <value>Decline</value>
+    <value>Avslå</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Innloggingsforespørselen har allerede utløpt.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Login attempt from:
+{0}
+Do you want to switch to this account?</value>
   </data>
 </root>

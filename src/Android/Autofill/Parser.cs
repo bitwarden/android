@@ -48,7 +48,7 @@ namespace Bit.Droid.Autofill
                 }
                 else
                 {
-                    _uri = string.Concat(Constants.AndroidAppProtocol, PackageName);
+                    _uri = string.Concat(Core.Constants.AndroidAppProtocol, PackageName);
                 }
                 return _uri;
             }

@@ -247,7 +247,7 @@
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Internetverbinding is vereist</value>
+    <value>Internetverbinding vereist</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item is verwijderd.</value>
+    <value>Item is verwijderd</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -379,7 +379,7 @@
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Vingerafdruk invoeren</value>
+    <value>Vingerafdruk verifiëren</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
     <value>Hoofdwachtwoord invoeren</value>
@@ -681,7 +681,7 @@
     <value>Item</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item is bijgewerkt.</value>
+    <value>Item bijgewerkt.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Opslaan...</value>
@@ -708,7 +708,7 @@
     <value>Tweestapsaanmelding</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Tweestapsaanmelding beschermt je account door je inlogpoging te bevestigen met een ander apparaat zoals een beveiligingscode, authenticatie-app, SMS, spraakoproep of e-mail. Je kunt tweestapsaanmelding inschakelen in de webkluis op bitwarden.com. Wil je de website nu bezoeken?</value>
+    <value>Tweestapsaanmelding beschermt je account door je inlogpoging te bevestigen met een ander apparaat zoals een beveiligingssleutel, authenticatie-app, SMS, spraakoproep of e-mail. Je kunt Tweestapsaanmelding inschakelen in de webkluis op bitwarden.com. Wil je de website nu bezoeken?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Ontgrendelen met {0}</value>
@@ -799,7 +799,7 @@
     <value>Overeenkomstige items</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Mogelijk overeenkomstige items</value>
+    <value>Mogelijke overeenkomstige items</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Zoeken</value>
@@ -887,7 +887,7 @@
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Authenticatiecode (TOTP)</value>
+    <value>Authenticatiesleutel (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
     <value>Verificatiecode (TOTP)</value>
@@ -1575,6 +1575,10 @@ Het scannen gebeurt automatisch.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized donker</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Automatisch invullen geblokkeerde URI's</value>
   </data>
@@ -2214,10 +2218,10 @@ Het scannen gebeurt automatisch.</value>
     <value>Voer de verificatiecode in die we naar je e-mail is gestuurd</value>
   </data>
   <data name="SubmitCrashLogs" xml:space="preserve">
-    <value>Submit crash logs</value>
+    <value>Crashes rapporteren</value>
   </data>
   <data name="SubmitCrashLogsDescription" xml:space="preserve">
-    <value>Help Bitwarden improve app stability by submitting crash reports.</value>
+    <value>Help Bitwarden de app-stabiliteit te verbeteren door crashrapporten te versturen.</value>
   </data>
   <data name="OptionsExpanded" xml:space="preserve">
     <value>Opties zijn uitgebreid, tik om te storten.</value>
@@ -2302,10 +2306,10 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</value>
     <value>De vergrendelingsoptie "Nooit" houdt je kluis beschikbaar voor iedereen met toegang tot je apparaat. Als je deze optie gebruikt, moet je ervoor zorgen dat je je apparaat naar behoren beschermt.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
-    <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
+    <value>Een of meerdere van de ingevoerde URL's zijn ongeldig. Controleer en probeer opnieuw op te slaan.</value>
   </data>
   <data name="GenericErrorMessage" xml:space="preserve">
-    <value>We were unable to process your request. Please try again or contact us.</value>
+    <value>We kunnen uw aanvraag niet verwerken. Probeer het opnieuw of neem contact met ons op.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
     <value>Schermopname toestaan</value>
@@ -2449,15 +2453,23 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</value>
     <value>Willekeurig</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
-    <value>Accessibility Service Disclosure</value>
+    <value>Toegankelijksheidsservice-melding</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
+    <value>Bitwarden gebruikt de toegankelijkheidsservice om inlogvelden in apps en op websites te vinden, de juiste veld ID's te bepalen om de gebruikersnaam en het wachtwoord in te voeren wanneer een bijpassend paar gevonden is voor de app of site. We slaan geen informatie op die de service ons levert, ook controleren we geen elementen op het scherm naast de tekstinvoer van inloggegevens.</value>
   </data>
   <data name="Accept" xml:space="preserve">
-    <value>Accept</value>
+    <value>Accepteren</value>
   </data>
   <data name="Decline" xml:space="preserve">
-    <value>Decline</value>
+    <value>Weigeren</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Inlogverzoek is al verlopen.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Inlogpoging vanaf:
+{0}
+Wilt u naar dit account wisselen?</value>
   </data>
 </root>

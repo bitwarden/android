@@ -179,7 +179,7 @@
     <value>Змінити</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Редагувати теку</value>
+    <value>Редагування</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Е-пошта</value>
@@ -229,7 +229,7 @@
     <value>Теки</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Теку оновлено.</value>
+    <value>Теку збережено</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Перейти на вебсайт</value>
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Запис було видалено.</value>
+    <value>Запис видалено</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -364,7 +364,7 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Розблокування відбитком пальця</value>
+    <value>Розблокуйте відбитком пальця</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Ім'я користувача</value>
@@ -375,14 +375,14 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} скопійовано.</value>
+    <value>{0} скопійовано</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Перевірка відбитку пальця</value>
+    <value>Перевірити фразу відбитка</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Перевірка головного пароля</value>
+    <value>Перевірити головний пароль</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>Перевірка PIN</value>
@@ -443,7 +443,7 @@
     <value>Використовуйте службу спеціальних можливостей Bitwarden, щоб автоматично вводити паролі.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Змінити адресу е-пошти</value>
+    <value>Змінити е-пошту</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
     <value>Ви можете змінити адресу е-пошти в сховищі на bitwarden.com. Хочете перейти на вебсайт зараз?</value>
@@ -468,10 +468,10 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Зміна запису</value>
+    <value>Редагування</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Увімкніть автоматичну синхронізацію</value>
+    <value>Дозволити автоматичну синхронізацію</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>Введіть свою адресу е-пошти, щоб отримати підказку для головного пароля.</value>
@@ -604,7 +604,7 @@
     <value>Ніколи</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Новий запис створено.</value>
+    <value>Запис додано</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>У вашому сховищі немає обраного.</value>
@@ -632,7 +632,7 @@
     <value>Інше</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Пароль згенеровано.</value>
+    <value>Пароль згенеровано</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Генератор паролів</value>
@@ -681,7 +681,7 @@
     <value>Інформація про запис</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Запис оновлено.</value>
+    <value>Запис збережено</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Відправлення...</value>
@@ -692,10 +692,10 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Синхронізацію завершено.</value>
+    <value>Синхронізацію завершено</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Збій синхронізації.</value>
+    <value>Збій синхронізації</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>Синхронізувати зараз</value>
@@ -831,7 +831,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Цей обліковий запис має увімкнену двоетапну перевірку, однак, жоден з підтримуваних провайдерів для цього пристрою не підтримується. Будь ласка, скористайтеся підтримуваним пристроєм та/або додайте інших провайдерів, які мають кращу підтримку різних пристроїв (наприклад, програму авторизації).</value>
+    <value>Цей обліковий запис має увімкнену двоетапну перевірку, однак, жоден із налаштованих провайдерів не підтримується на цьому пристрої. Будь ласка, скористайтеся підтримуваним пристроєм або додайте інших провайдерів, які мають кращу підтримку різних пристроїв (наприклад, програму авторизації).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Код відновлення</value>
@@ -856,7 +856,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Лист для підтвердження надіслано.</value>
+    <value>Лист для підтвердження надіслано</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -922,7 +922,7 @@
     <value>Автоматично копіювати коди TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>Для використання цієї функції необхідний преміум статус.</value>
+    <value>Для використання цієї функції необхідна передплата преміум.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
     <value>Вкладення додано</value>
@@ -958,7 +958,7 @@
     <value>Докладніше</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>URL-адреса API</value>
+    <value>URL-адреса сервера API</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
     <value>Власне середовище</value>
@@ -1461,7 +1461,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Фраза відбитку вашого облікового запису</value>
+    <value>Фраза відбитка вашого облікового запису</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
@@ -1575,6 +1575,10 @@
     <value>Норд</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Поляризована темна</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Заблоковані для автозаповнення URI</value>
   </data>
@@ -1591,7 +1595,7 @@
     <value>Під час перезапуску програми</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Автозаповнення дозволяє безпечно отримувати доступ до вашого сховища Bitwarden з інших вебсайтів та програм. Схоже, що ви не активували функцію автозаповнення Bitwarden. Увімкніть автозаповнення на екрані налаштувань.</value>
+    <value>Автозаповнення дає змогу безпечно отримувати доступ до вашого сховища Bitwarden з інших вебсайтів та програм. Схоже, ви не активували функцію автозаповнення Bitwarden. Увімкніть автозаповнення на екрані налаштувань.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Зміни теми застосуються після перезапуску програми.</value>
@@ -1628,7 +1632,7 @@
     <value>Bitwarden потребує вашої уваги - Див. розділ "Служба спеціальних можливостей автозаповнення" в налаштуваннях Bitwarden</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. В Налаштуваннях Android для Bitwarden перейдіть до "Відображення поверх інших програм" (розділ Розширені) і змініть положення перемикача для активації накладання.</value>
+    <value>3. У налаштуваннях Android для Bitwarden перейдіть до "Накладання інших програм" (розділ Розширені) і змініть положення перемикача для активації накладання.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Дозволи</value>
@@ -1637,7 +1641,7 @@
     <value>Відкрити налаштування дозволів накладання</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. В Налаштуваннях Android для Bitwarden оберіть "Відображення поверх інших програм" (розділ Розширені) і змініть положення перемикача для дозволу накладання.</value>
+    <value>3. У налаштуваннях Android для Bitwarden оберіть "Накладання інших програм" (розділ Розширені) і змініть положення перемикача для дозволу накладання.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Заборонено</value>
@@ -1710,7 +1714,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemSoftDeleted" xml:space="preserve">
-    <value>Запис перенесено до смітника.</value>
+    <value>Запис переміщено до смітника.</value>
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
@@ -1722,7 +1726,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Запис відновлено.</value>
+    <value>Запис відновлено</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
@@ -1752,7 +1756,7 @@
     <value>Біометричне розблокування для автозаповнення вимкнено. Очікується перевірка головного пароля.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Увімкнути синхронізацію жестом</value>
+    <value>Дозволити синхронізацію жестом</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
     <value>Синхронізація сховища жестом Потягнути донизу.</value>
@@ -1998,11 +2002,11 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
-    <value>Змінити відправлення</value>
+    <value>Редагування</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Додати відправлення</value>
+    <value>Нове відправлення</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
@@ -2010,15 +2014,15 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Відправлення було видалено.</value>
+    <value>Відправлення видалено</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Відправлення оновлено.</value>
+    <value>Відправлення збережено</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Створено нове відправлення.</value>
+    <value>Відправлення створено</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2059,7 +2063,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>З безплатним обліковим записом можна відправляти лише текст. Щоб відправляти файли через Send, необхідно передплатити тарифний план.</value>
+    <value>З безплатним обліковим записом можна відправляти лише текст. Щоб відправляти файли через Send, необхідна передплата преміум.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
@@ -2181,7 +2185,7 @@
     <value>Ваш обліковий запис було остаточно видалено</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Недійсний код підтвердження.</value>
+    <value>Недійсний код підтвердження</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
     <value>Запитувати одноразовий пароль</value>
@@ -2419,7 +2423,7 @@
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
-    <value>Токен доступу до АРІ</value>
+    <value>Токен доступу до API</value>
   </data>
   <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
     <value>Ви дійсно бажаєте перезаписати поточне ім'я користувача?</value>
@@ -2459,5 +2463,13 @@
   </data>
   <data name="Decline" xml:space="preserve">
     <value>Відмовитись</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Термін дії запиту на вхід завершився.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Спроба входу в систему з:
+{0}
+Хочете перемкнутися на цей обліковий запис?</value>
   </data>
 </root>

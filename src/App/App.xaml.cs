@@ -11,6 +11,7 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
+using Bit.Core.Models.Response;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
@@ -28,6 +29,7 @@ namespace Bit.App
         private readonly ISyncService _syncService;
         private readonly IAuthService _authService;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IFileService _fileService;
         private readonly IAccountsManager _accountsManager;
         private readonly IPushNotificationService _pushNotificationService;
         private static bool _isResumed;
@@ -49,6 +51,7 @@ namespace Bit.App
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _fileService = ServiceContainer.Resolve<IFileService>();
             _accountsManager = ServiceContainer.Resolve<IAccountsManager>("accountsManager");
             _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
 
@@ -140,7 +143,7 @@ namespace Bit.App
                                 new NavigationPage(new RemoveMasterPasswordPage()));
                         });
                     }
-                    else if (message.Command == "passwordlessLoginRequest" || message.Command == "unlocked")
+                    else if (message.Command == "passwordlessLoginRequest" || message.Command == "unlocked" || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
                     {
                         CheckPasswordlessLoginRequestsAsync().FireAndForget();
                     }
@@ -166,9 +169,13 @@ namespace Bit.App
                 return;
             }
 
-
             var notification = await _stateService.GetPasswordlessLoginNotificationAsync();
             if (notification == null)
+            {
+                return;
+            }
+
+            if (await CheckShouldSwitchActiveUserAsync(notification))
             {
                 return;
             }
@@ -189,7 +196,31 @@ namespace Bit.App
             });
             await _stateService.SetPasswordlessLoginNotificationAsync(null);
             _pushNotificationService.DismissLocalNotification(Constants.PasswordlessNotificationId);
-            await Device.InvokeOnMainThreadAsync(async () => await Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
+            if (loginRequestData.CreationDate.ToUniversalTime().AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) > DateTime.UtcNow)
+            {
+                await Device.InvokeOnMainThreadAsync(() => Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
+            }
+        }
+
+        private async Task<bool> CheckShouldSwitchActiveUserAsync(PasswordlessRequestNotification notification)
+        {
+            var activeUserId = await _stateService.GetActiveUserIdAsync();
+            if (notification.UserId == activeUserId)
+            {
+                return false;
+            }
+
+            var notificationUserEmail = await _stateService.GetEmailAsync(notification.UserId);
+            await Device.InvokeOnMainThreadAsync(async () =>
+            {
+                var result = await _deviceActionService.DisplayAlertAsync(AppResources.LogInRequested, string.Format(AppResources.LoginAttemptFromXDoYouWantToSwitchToThisAccount, notificationUserEmail), AppResources.Cancel, AppResources.Ok);
+                if (result == AppResources.Ok)
+                {
+                    await _stateService.SetActiveUserAsync(notification.UserId);
+                    _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
+                }
+            });
+            return true;
         }
 
         public AppOptions Options { get; private set; }
@@ -298,7 +329,7 @@ namespace Bit.App
             var lastClear = await _stateService.GetLastFileCacheClearAsync();
             if ((DateTime.UtcNow - lastClear.GetValueOrDefault(DateTime.MinValue)).TotalDays >= 1)
             {
-                var task = Task.Run(() => _deviceActionService.ClearCacheAsync());
+                var task = Task.Run(() => _fileService.ClearCacheAsync());
             }
         }
 

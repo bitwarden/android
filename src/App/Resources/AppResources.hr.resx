@@ -647,7 +647,7 @@
     <value>Sigurno želiš prebrisati trenutnu lozinku?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Obzirom Bitwarden automatski sinkronizira tvoj trezor pomoću push obavijesti, za najbolje moguće iskustvo, u sljedećem upitu odobri Bitwardenu slanje push obavijesti.</value>
+    <value>bitwarden automatski sinkronizira vaš trezor pomoću push obavijesti. Za najbolji mogući doživljaj, molimo odaberite "Ok" u sljedećem upitu kada se zatraži da omogućite push obavijesti.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -1553,7 +1553,7 @@ Scanning will happen automatically.</value>
     <value>Default dark theme</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is enabled.</value>
+    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is in use.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopiraj bilješke</value>
@@ -1574,6 +1574,10 @@ Scanning will happen automatically.</value>
   <data name="Nord" xml:space="preserve">
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Auto-fill blocked URIs</value>
@@ -2265,7 +2269,7 @@ Scanning will happen automatically.</value>
     <value>TOTP</value>
   </data>
   <data name="VerificationCodes" xml:space="preserve">
-    <value>Verification Codes</value>
+    <value>Verification codes</value>
   </data>
   <data name="PremiumSubscriptionRequired" xml:space="preserve">
     <value>Premium subscription required</value>
@@ -2280,10 +2284,10 @@ Scanning will happen automatically.</value>
     <value>Cannot scan QR Code? </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Authenticator Key</value>
+    <value>Authenticator key</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Enter Key Manually</value>
+    <value>Enter key manually</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
     <value>Add TOTP</value>
@@ -2311,7 +2315,7 @@ select Add TOTP to store the key safely</value>
     <value>Allow screen capture</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>Are you sure you want to enable Screen Capture?</value>
+    <value>Are you sure you want to turn on screen capture?</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
     <value>Login requested</value>
@@ -2374,34 +2378,34 @@ select Add TOTP to store the key safely</value>
     <value>All notifications</value>
   </data>
   <data name="PasswordType" xml:space="preserve">
-    <value>Password Type</value>
+    <value>Password type</value>
   </data>
   <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
     <value>What would you like to generate?</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
-    <value>Username Type</value>
+    <value>Username type</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Plus Addressed Email</value>
+    <value>Plus addressed email</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
-    <value>Catch-all Email</value>
+    <value>Catch-all email</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
-    <value>Forwarded Email Alias</value>
+    <value>Forwarded email alias</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
-    <value>Random Word</value>
+    <value>Random word</value>
   </data>
   <data name="EmailRequiredParenthesis" xml:space="preserve">
     <value>Email (required)</value>
   </data>
   <data name="DomainNameRequiredParenthesis" xml:space="preserve">
-    <value>Domain Name (required)</value>
+    <value>Domain name (required)</value>
   </data>
   <data name="APIKeyRequiredParenthesis" xml:space="preserve">
-    <value>API Key (required)</value>
+    <value>API key (required)</value>
   </data>
   <data name="Service" xml:space="preserve">
     <value>Service</value>
@@ -2419,13 +2423,13 @@ select Add TOTP to store the key safely</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
-    <value>API Access Token</value>
+    <value>API access token</value>
   </data>
   <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
     <value>Are you sure you want to overwrite the current username?</value>
   </data>
   <data name="GenerateUsername" xml:space="preserve">
-    <value>Generate Username</value>
+    <value>Generate username</value>
   </data>
   <data name="EmailType" xml:space="preserve">
     <value>Email Type</value>
@@ -2459,5 +2463,13 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="Decline" xml:space="preserve">
     <value>Decline</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Login request has already expired.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Login attempt from:
+{0}
+Do you want to switch to this account?</value>
   </data>
 </root>

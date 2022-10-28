@@ -289,7 +289,7 @@
     <value>Θα θέλατε να το αλλάξετε τώρα?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
-    <value>Κύριος Κωδικός</value>
+    <value>Κύριος κωδικός</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
@@ -1575,6 +1575,10 @@
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Αυτόματη συμπλήρωση μπλοκαρισμένων URIs</value>
   </data>
@@ -1610,7 +1614,7 @@
     <value>Κοινοποιήθηκε</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Εναλλαγή Ορατότητας</value>
+    <value>Εναλλαγή ορατότητας</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>Η περίοδος σύνδεσης σας έχει λήξει.</value>
@@ -2314,64 +2318,64 @@
     <value>Είστε βέβαιοι ότι θέλετε να ενεργοποιήσετε την καταγραφή οθόνης;</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
-    <value>Login requested</value>
+    <value>Απαιτείται σύνδεση</value>
   </data>
   <data name="AreYouTryingToLogIn" xml:space="preserve">
-    <value>Are you trying to log in?</value>
+    <value>Προσπαθείτε να συνδεθείτε;</value>
   </data>
   <data name="LogInAttemptByXOnY" xml:space="preserve">
-    <value>Login attempt by {0} on {1}</value>
+    <value>Προσπάθεια σύνδεσης από τον/την {0} στο {1}</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
-    <value>Device type</value>
+    <value>Τύπος συσκευής</value>
   </data>
   <data name="IpAddress" xml:space="preserve">
-    <value>IP address</value>
+    <value>Διεύθυνση IP</value>
   </data>
   <data name="Time" xml:space="preserve">
-    <value>Time</value>
+    <value>Ώρα</value>
   </data>
   <data name="Near" xml:space="preserve">
-    <value>Near</value>
+    <value>Κοντά</value>
   </data>
   <data name="ConfirmLogIn" xml:space="preserve">
-    <value>Confirm login</value>
+    <value>Επιβεβαίωση σύνδεσης</value>
   </data>
   <data name="DenyLogIn" xml:space="preserve">
-    <value>Deny login</value>
+    <value>Άρνηση σύνδεσης</value>
   </data>
   <data name="JustNow" xml:space="preserve">
-    <value>Just now</value>
+    <value>Μόλις τώρα</value>
   </data>
   <data name="XMinutesAgo" xml:space="preserve">
-    <value>{0} minutes ago</value>
+    <value>{0} λεπτά πριν</value>
   </data>
   <data name="LogInAccepted" xml:space="preserve">
-    <value>Login confirmed</value>
+    <value>Η σύνδεση επιβεβαιώθηκε</value>
   </data>
   <data name="LogInDenied" xml:space="preserve">
-    <value>Login denied</value>
+    <value>Η σύνδεση απορρίφθηκε</value>
   </data>
   <data name="ApproveLoginRequests" xml:space="preserve">
-    <value>Approve login requests</value>
+    <value>Έγκριση αιτήσεων σύνδεσης</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Use this device to approve login requests made from other devices.</value>
+    <value>Χρησιμοποιήστε αυτήν τη συσκευή για να εγκρίνετε αιτήματα σύνδεσης από άλλες συσκευές.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
-    <value>Allow notifications</value>
+    <value>Να επιτρέπονται οι ειδοποιήσεις</value>
   </data>
   <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
-    <value>Receive push notifications for new login requests</value>
+    <value>Λάβετε ειδοποιήσεις push για νέα αιτήματα σύνδεσης</value>
   </data>
   <data name="NoThanks" xml:space="preserve">
-    <value>No thanks</value>
+    <value>Όχι ευχαριστώ</value>
   </data>
   <data name="ConfimLogInAttempForX" xml:space="preserve">
-    <value>Confirm login attempt for {0}</value>
+    <value>Επιβεβαίωση προσπάθειας σύνδεσης για {0}</value>
   </data>
   <data name="AllNotifications" xml:space="preserve">
-    <value>All notifications</value>
+    <value>Όλες οι ειδοποιήσεις</value>
   </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Τύπος Κωδικού</value>
@@ -2449,7 +2453,7 @@
     <value>Τυχαίο</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
-    <value>Accessibility Service Disclosure</value>
+    <value>Γνωστοποίηση Υπηρεσίας Προσβασιμότητας</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
     <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
@@ -2459,5 +2463,13 @@
   </data>
   <data name="Decline" xml:space="preserve">
     <value>Decline</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Login request has already expired.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Login attempt from:
+{0}
+Do you want to switch to this account?</value>
   </data>
 </root>

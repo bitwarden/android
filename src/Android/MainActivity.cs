@@ -20,6 +20,8 @@ using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using Bit.Droid.Receivers;
 using Bit.Droid.Utilities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xamarin.Essentials;
 using ZXing.Net.Mobile.Android;
 using FileProvider = AndroidX.Core.Content.FileProvider;
@@ -34,11 +36,13 @@ namespace Bit.Droid
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         private IDeviceActionService _deviceActionService;
+        private IFileService _fileService;        
         private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
         private IStateService _stateService;
         private IAppIdService _appIdService;
         private IEventService _eventService;
+        private IPushNotificationListenerService _pushNotificationListenerService;
         private ILogger _logger;
         private PendingIntent _eventUploadPendingIntent;
         private AppOptions _appOptions;
@@ -56,11 +60,13 @@ namespace Bit.Droid
             StrictMode.SetThreadPolicy(policy);
 
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _fileService = ServiceContainer.Resolve<IFileService>();
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
+            _pushNotificationListenerService = ServiceContainer.Resolve<IPushNotificationListenerService>();
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -145,6 +151,15 @@ namespace Bit.Droid
             AndroidHelpers.SetPreconfiguredRestrictionSettingsAsync(this)
                 .GetAwaiter()
                 .GetResult();
+
+            if (Intent?.GetStringExtra(Core.Constants.NotificationData) is string notificationDataJson)
+            {
+                var notificationType = JToken.Parse(notificationDataJson).SelectToken(Core.Constants.NotificationDataType);
+                if (notificationType.ToString() == PasswordlessNotificationData.TYPE)
+                {
+                    _pushNotificationListenerService.OnNotificationTapped(JsonConvert.DeserializeObject<PasswordlessNotificationData>(notificationDataJson)).FireAndForget();
+                }
+            }
         }
 
         protected override void OnNewIntent(Intent intent)
@@ -198,13 +213,13 @@ namespace Bit.Droid
         public async override void OnRequestPermissionsResult(int requestCode, string[] permissions,
             [GeneratedEnum] Permission[] grantResults)
         {
-            if (requestCode == Constants.SelectFilePermissionRequestCode)
+            if (requestCode == Core.Constants.SelectFilePermissionRequestCode)
             {
                 if (grantResults.Any(r => r != Permission.Granted))
                 {
                     _messagingService.Send("selectFileCameraPermissionDenied");
                 }
-                await _deviceActionService.SelectFileAsync();
+                await _fileService.SelectFileAsync();
             }
             else
             {
@@ -217,7 +232,7 @@ namespace Bit.Droid
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
             if (resultCode == Result.Ok &&
-               (requestCode == Constants.SelectFileRequestCode || requestCode == Constants.SaveFileRequestCode))
+               (requestCode == Core.Constants.SelectFileRequestCode || requestCode == Core.Constants.SaveFileRequestCode))
             {
                 Android.Net.Uri uri = null;
                 string fileName = null;
@@ -239,7 +254,7 @@ namespace Bit.Droid
                     return;
                 }
 
-                if (requestCode == Constants.SaveFileRequestCode)
+                if (requestCode == Core.Constants.SaveFileRequestCode)
                 {
                     _messagingService.Send("selectSaveFileResult",
                         new Tuple<string, string>(uri.ToString(), fileName));
@@ -420,7 +435,7 @@ namespace Bit.Droid
                 return;
             }
 
-            var channel = new NotificationChannel(Constants.AndroidNotificationChannelId, AppResources.AllNotifications, NotificationImportance.Default);
+            var channel = new NotificationChannel(Core.Constants.AndroidNotificationChannelId, AppResources.AllNotifications, NotificationImportance.Default);
             if(GetSystemService(NotificationService) is NotificationManager notificationManager)
             {
                 notificationManager.CreateNotificationChannel(channel);
