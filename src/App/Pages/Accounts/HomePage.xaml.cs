@@ -153,14 +153,6 @@ namespace Bit.App.Pages
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
-        void RememberEmail_Clicked(System.Object sender, System.EventArgs e)
-        {
-            if (DoOnce())
-            {
-                _vm.RememberEmail = !_vm.RememberEmail;
-            }
-        }
-
         void Continue_Clicked(System.Object sender, System.EventArgs e)
         {
             if (DoOnce())
