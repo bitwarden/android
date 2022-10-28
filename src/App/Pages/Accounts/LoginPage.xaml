@@ -106,14 +106,14 @@
                                 StyleClass="btn-primary"
                                 Clicked="LogIn_Clicked" />
                         <controls:IconLabelButton
-                            HorizontalOptions="FillAndExpand"
+                            HorizontalOptions="Fill"
                             VerticalOptions="CenterAndExpand"
                             Icon="{Binding Source={x:Static core:BitwardenIcons.Device}}"
                             Label="{u:I18n LogInWithAnotherDevice}"
                             ButtonCommand="{Binding LogInCommand}"
-                            IsVisible="{Binding IsKnownDevice}"/>
+                            IsVisible="False"/>
                         <controls:IconLabelButton
-                            HorizontalOptions="FillAndExpand"
+                            HorizontalOptions="Fill"
                             VerticalOptions="CenterAndExpand"
                             Icon="{Binding Source={x:Static core:BitwardenIcons.Suitcase}}"
                             Label="{u:I18n LogInSso}">
