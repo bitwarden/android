@@ -60,6 +60,8 @@ namespace Bit.App.Pages
 
         public bool CanContinue => !string.IsNullOrEmpty(Email);
 
+        public bool CheckHasRememberedEmail { get; set; }
+
         public FormattedString CreateAccountText
         {
             get
@@ -90,6 +92,15 @@ namespace Bit.App.Pages
         {
             Email = await _stateService.GetRememberedEmailAsync();
             RememberEmail = !string.IsNullOrEmpty(Email);
+        }
+
+        public void CheckNavigateLoginStep()
+        {
+            if (CheckHasRememberedEmail && RememberEmail)
+            {
+                StartLoginAction();
+            }
+            CheckHasRememberedEmail = false;
         }
 
         public async Task ContinueToLoginStepAsync()
