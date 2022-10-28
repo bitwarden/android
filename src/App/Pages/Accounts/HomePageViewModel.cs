@@ -35,6 +35,8 @@ namespace Bit.App.Pages
             {
                 AllowActiveAccountSelection = true
             };
+
+            InitAsync().FireAndForget();
         }
 
         public bool ShowCancelButton

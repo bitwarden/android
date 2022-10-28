@@ -15,14 +15,14 @@ namespace Bit.App.Pages
         private readonly AppOptions _appOptions;
         private IBroadcasterService _broadcasterService;
 
-        public HomePage(AppOptions appOptions = null)
+        public HomePage(AppOptions appOptions = null, bool checkRememberedEmail = true)
         {
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _appOptions = appOptions;
             InitializeComponent();
             _vm = BindingContext as HomeViewModel;
             _vm.Page = this;
-            _runInit = true;
+            _runInit = checkRememberedEmail;
             _vm.StartLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartLoginAsync());
             _vm.StartRegisterAction = () => Device.BeginInvokeOnMainThread(async () => await StartRegisterAsync());
             _vm.StartSsoLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
@@ -48,10 +48,6 @@ namespace Bit.App.Pages
 
         protected override async void OnAppearing()
         {
-            if (_runInit)
-            {
-                await _vm.InitAsync();
-            }
             base.OnAppearing();
             _mainContent.Content = _mainLayout;
             _accountAvatar?.OnAppearing();
@@ -73,7 +69,7 @@ namespace Bit.App.Pages
 
             if (_runInit && _vm.RememberEmail)
             {
-                StartLoginAsync().FireAndForget();
+                _vm.StartLoginAction();
             }
             _runInit = false;
         }

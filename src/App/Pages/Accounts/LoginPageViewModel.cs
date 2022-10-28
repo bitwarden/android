@@ -112,7 +112,6 @@ namespace Bit.App.Pages
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
 
         public Command LogInCommand { get; }
-        public Command LogInSSOCommand { get; set; }
         public Command TogglePasswordCommand { get; }
         public ICommand MoreCommand { get; internal set; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
@@ -120,6 +119,7 @@ namespace Bit.App.Pages
         public Action StartTwoFactorAction { get; set; }
         public Action LogInSuccessAction { get; set; }
         public Action UpdateTempPasswordAction { get; set; }
+        public Action StartSsoLoginAction { get; set; }
         public Action CloseAction { get; set; }
         public string LoggingInAsText => string.Format(AppResources.LoggingInAs, Email);
 

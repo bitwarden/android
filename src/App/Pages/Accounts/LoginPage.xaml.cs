@@ -26,7 +26,7 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
             _vm.LogInSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
-            _vm.LogInSSOCommand = new Command(async () => await StartSsoLoginAsync());
+            _vm.StartSsoLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
             _vm.UpdateTempPasswordAction =
                 () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.CloseAction = async () =>
@@ -114,20 +114,25 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task StartSsoLoginAsync()
+        private void LogInSSO_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
-                var page = new LoginSsoPage(_appOptions);
-                await Navigation.PushModalAsync(new NavigationPage(page));
+                _vm.StartSsoLoginAction();
             }
+        }
+
+        private async Task StartSsoLoginAsync()
+        {
+            var page = new LoginSsoPage(_appOptions);
+            await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
         private void Hint_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
-                Navigation.PushModalAsync(new NavigationPage(new HintPage(_vm.Email)));
+                _vm.ShowMasterPasswordHintAsync().FireAndForget();
             }
         }
 

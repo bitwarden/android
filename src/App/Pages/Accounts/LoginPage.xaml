@@ -112,8 +112,11 @@
                             IsVisible="{Binding IsKnownDevice}"/>
                         <controls:IconLabelButton
                             Icon="{Binding Source={x:Static core:BitwardenIcons.Suitcase}}"
-                            Label="{u:I18n LogInSso}"
-                            ButtonCommand="{Binding LogInSSOCommand}"/>
+                            Label="{u:I18n LogInSso}">
+                            <controls:IconLabelButton.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="LogInSSO_Clicked" />
+                            </controls:IconLabelButton.GestureRecognizers>
+                        </controls:IconLabelButton>
                         <Label
                             Text="{Binding LoggingInAsText}"
                             StyleClass="text-sm"
