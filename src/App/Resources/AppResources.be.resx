@@ -273,13 +273,13 @@
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>Вы ўпэўнены, што хочаце выйсці?</value>
+    <value>Вы сапраўды хочаце выйсці?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
     <value>Выдаліць уліковы запіс</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Вы ўпэўнены, што хочаце выдаліць уліковы запіс?</value>
+    <value>Вы сапраўды хочаце выдаліць уліковы запіс?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
     <value>Уліковы запіс ужо дададзены</value>
@@ -559,7 +559,7 @@
     <value>Дзеянне пасля заканчэння часу чакання сховішча</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Выхад з сістэмы скасуе ўсе магчымасці доступу да сховішча і запатрабуе аўтэнтыфікацыю праз інтэрнэт пасля завяршэння часу чакання. Вы ўпэўнены, што хочаце выкарыстоўваць гэты параметр?</value>
+    <value>Выхад з сістэмы скасуе ўсе магчымасці доступу да сховішча і запатрабуе аўтэнтыфікацыю праз інтэрнэт пасля завяршэння часу чакання. Вы сапраўды хочаце выкарыстоўваць гэты параметр?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Уваход...</value>
@@ -644,7 +644,7 @@
     <value>Мы адправілі вам на электронную пошту падказку да асноўнага пароля.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Вы ўпэўнены, што хочаце перазапісаць бягучы пароль?</value>
+    <value>Вы сапраўды хочаце перазапісаць бягучы пароль?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
     <value>Bitwarden дазваляе аўтаматычна сінхранізаваць сховішча пры дапамозе push-апавяшчэнняў. Для максімальнай зручнасці, выберыце "Дазволіць" пры з'яўленні прапановы ўключыць push-апавяшчэнні.</value>
@@ -793,7 +793,7 @@
     <value>Вы сапраўды хочаце аўтазапоўніць або паглядзець гэты элемент?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Вы ўпэўнены, што хочаце выкарыстоўваць для аўтазапаўнення гэты элемент? Ён не дакладна адпавядае "{0}".</value>
+    <value>Вы сапраўды хочаце выкарыстоўваць для аўтазапаўнення гэты элемент? Ён не дакладна адпавядае "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>Адпаведныя элементы</value>
@@ -883,7 +883,7 @@
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>Гэта далучэнне мае памер {0}. Вы ўпэўнены, што хочаце спампаваць яго на сваю прыладу?</value>
+    <value>Гэта далучэнне мае памер {0}. Вы сапраўды хочаце спампаваць яго на сваю прыладу?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
@@ -1561,7 +1561,7 @@
     <value>Выхад</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>Вы ўпэўнены, што хочаце выйсці з Bitwarden?</value>
+    <value>Вы сапраўды хочаце выйсці з Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
     <value>Вы сапраўды хочаце, каб пасля перазапуску праграма патрабавала асноўны пароль для разблакіроўкі?</value>
@@ -1963,7 +1963,7 @@
     <value>Выдаліць пароль</value>
   </data>
   <data name="AreYouSureRemoveSendPassword" xml:space="preserve">
-    <value>Вы ўпэўнены, што хочаце выдаліць пароль?</value>
+    <value>Вы сапраўды хочаце выдаліць пароль?</value>
   </data>
   <data name="RemovingSendPassword" xml:space="preserve">
     <value>Выдаленне пароля</value>
@@ -2010,7 +2010,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
-    <value>Вы ўпэўнены, што хочаце выдаліць гэты Send?</value>
+    <value>Вы сапраўды хочаце выдаліць гэты Send?</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
@@ -2176,7 +2176,7 @@
     <value>Выдаленне вашага ўліковага запісу з'яўляецца незваротным дзеяннем</value>
   </data>
   <data name="DeleteAccountExplanation" xml:space="preserve">
-    <value>Ваш уліковы запіс і ўсе даныя сховішча будуць выдалены без магчымасці аднаўлення. Вы ўпэўнены, што хочаце працягнуць?</value>
+    <value>Ваш уліковы запіс і ўсе даныя сховішча будуць выдалены без магчымасці аднаўлення. Вы сапраўды хочаце працягнуць?</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
     <value>Выдаленне вашага ўліковага запісу</value>
@@ -2315,7 +2315,7 @@
     <value>Дазволіць здымкі экрана</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>Вы ўпэўнены, што хочаце дазволіць здымкі экрана?</value>
+    <value>Вы сапраўды хочаце дазволіць здымкі экрана?</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
     <value>Выкананы запыт уваходу</value>
@@ -2426,7 +2426,7 @@
     <value>Токен доступу да API</value>
   </data>
   <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
-    <value>Вы ўпэўнены, што хочаце перазапісаць бягучае імя карыстальніка?</value>
+    <value>Вы сапраўды хочаце перазапісаць бягучае імя карыстальніка?</value>
   </data>
   <data name="GenerateUsername" xml:space="preserve">
     <value>Генерыраваць імя карыстальніка</value>

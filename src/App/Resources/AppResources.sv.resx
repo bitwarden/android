@@ -236,7 +236,7 @@
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
-    <value>Hjälp och återkoppling</value>
+    <value>Hjälp &amp; Feedback</value>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>Dölj</value>
@@ -1308,7 +1308,7 @@ Skanningen sker automatiskt.</value>
     <value>1. Gå till iOS "Inställningar"-app</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tryck på "Lösenord &amp; konton"</value>
+    <value>2. Tryck på "Lösenord"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Tryck på "Autofyll lösenord"</value>
@@ -1996,11 +1996,11 @@ Skanningen sker automatiskt.</value>
     <value>Dela länk</value>
   </data>
   <data name="SendLink" xml:space="preserve">
-    <value>Skicka länk</value>
+    <value>Send link</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
-    <value>Sök blan Sends</value>
+    <value>Search Sends</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">

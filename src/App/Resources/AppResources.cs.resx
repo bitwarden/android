@@ -919,7 +919,7 @@ Načtení proběhne automaticky.</value>
     <value>Zkopírujte si TOTP ověřovací kód do schránky, pokud používáte autentizační klíč k přihlašování, před použitím automatického vyplňování.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
-    <value>Copy TOTP automatically</value>
+    <value>Automaticky kopírovat TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Pro použití této funkce je potřebné prémiové členství.</value>
@@ -1976,7 +1976,7 @@ Načtení proběhne automaticky.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Zakažte tento Send, aby k němu nikdo neměl přístup.</value>
+    <value>Vypnout tento Send, aby k němu nikdo neměl přístup</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -2044,7 +2044,7 @@ Načtení proběhne automaticky.</value>
     <value>Vlastní</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Sdílet tento Send po uložení.</value>
+    <value>Sdílet tento Send po uložení</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2056,7 +2056,7 @@ Načtení proběhne automaticky.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Skrýt mou e-mailovou adresu před příjemci.</value>
+    <value>Skrýt mou e-mailovou adresu před příjemci</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Jedna nebo více zásad organizace ovlivňuje nastavení Send.</value>
@@ -2092,7 +2092,7 @@ Načtení proběhne automaticky.</value>
     <value>Aktualizovat hlavní heslo</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>Administrátor v organizaci nedávno změnil vaše hlavní heslo. Pro přístup k trezoru jej nyní musíte změnit. Pokračování vás odhlásí z vaší aktuální relace a bude nutné se znovu přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
     <value>Aktualizace hesla</value>
@@ -2218,10 +2218,10 @@ Načtení proběhne automaticky.</value>
     <value>Zadejte ověřovací kód, který byl odeslán na %@</value>
   </data>
   <data name="SubmitCrashLogs" xml:space="preserve">
-    <value>Odeslat protokoly o pádech</value>
+    <value>Odesílat záznamy o pádech</value>
   </data>
   <data name="SubmitCrashLogsDescription" xml:space="preserve">
-    <value>Help Bitwarden improve app stability by submitting crash reports.</value>
+    <value>Pomozte zlepšovat stabilitu aplikace odesíláním hlášení o selháních.</value>
   </data>
   <data name="OptionsExpanded" xml:space="preserve">
     <value>Options are expanded, tap to collapse.</value>
@@ -2251,19 +2251,19 @@ Načtení proběhne automaticky.</value>
     <value>Heslo není viditelné, klepněte pro zobrazení.</value>
   </data>
   <data name="FilterByVault" xml:space="preserve">
-    <value>Filter items by vault</value>
+    <value>Filtrovat položky podle trezoru</value>
   </data>
   <data name="AllVaults" xml:space="preserve">
-    <value>All vaults</value>
+    <value>Všechny trezory</value>
   </data>
   <data name="Vaults" xml:space="preserve">
-    <value>Vaults</value>
+    <value>Trezory</value>
   </data>
   <data name="VaultFilterDescription" xml:space="preserve">
-    <value>Vault: {0}</value>
+    <value>Trezor: {0}</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>Všechny</value>
   </data>
   <data name="Totp" xml:space="preserve">
     <value>TOTP</value>
@@ -2290,10 +2290,10 @@ Načtení proběhne automaticky.</value>
     <value>Enter key manually</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
-    <value>Add TOTP</value>
+    <value>Přidat TOTP</value>
   </data>
   <data name="SetupTotp" xml:space="preserve">
-    <value>Set up TOTP</value>
+    <value>Nastavit TOTP</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
     <value>Once the key is successfully entered,
@@ -2303,7 +2303,7 @@ select Add TOTP to store the key safely</value>
     <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
-    <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>
+    <value>Nastavení zámku na „Nikdy“ ponechá váš trezor k dispozici komukoliv s přístupem k vašemu zařízení. Používáte-li tuto možnost, měli byste zajistit, aby vaše zařízení bylo náležitě chráněno.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
     <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
@@ -2387,13 +2387,13 @@ select Add TOTP to store the key safely</value>
     <value>Typ uživatelského jména</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Plus addressed email</value>
+    <value>E-mailová adresa s plusem</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
     <value>Catch-all email</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
-    <value>Forwarded email alias</value>
+    <value>Alias přeposílaného e-mailu</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
     <value>Náhodné slovo</value>
@@ -2447,7 +2447,7 @@ select Add TOTP to store the key safely</value>
     <value>Use your domain's configured catch-all inbox.</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
-    <value>Generate an email alias with an external forwarding service.</value>
+    <value>Vygeneruje alias e-mailu pomocí externí přeposílací služby.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Náhodně</value>
