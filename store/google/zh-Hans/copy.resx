@@ -154,7 +154,7 @@ Bitwarden 的翻译有 40 种语言，而且还在不断增加，感谢我们的
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>安全免费的跨平台密码管理器</value>
+    <value>安全免且费的跨平台密码管理器</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>在一个安全的密码库中管理您所有的登录信息和密码</value>
