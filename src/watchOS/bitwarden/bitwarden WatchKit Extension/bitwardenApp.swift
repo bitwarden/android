@@ -8,11 +8,11 @@
 import SwiftUI
 
 @main
-struct bitwardenApp: App {
+struct bitwardenApp: App {    
     @SceneBuilder var body: some Scene {
         WindowGroup {
             NavigationView {
-                ContentView()
+                CipherListView()
             }
         }
 

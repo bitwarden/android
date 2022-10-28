@@ -15,10 +15,12 @@ using CoreGraphics;
 using Foundation;
 using LocalAuthentication;
 using MobileCoreServices;
+using Newtonsoft.Json;
 using Photos;
 using UIKit;
 using WatchConnectivity;
 using Xamarin.Forms;
+using static Bit.App.Pages.SettingsPageViewModel;
 
 namespace Bit.iOS.Core.Services
 {
@@ -87,12 +89,6 @@ namespace Bit.iOS.Core.Services
                 _toast?.Dispose();
                 _toast = null;
             };
-        }
-
-        public void SendTestMessageToWatch()
-        {
-            WCSessionManager.SharedManager.UpdateApplicationContext(new Dictionary<string, object>() { { "message", $"totp app context test" } });
-            WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() { { "message", $"totp test" } });
         }
 
         public Task ShowLoadingAsync(string text)
@@ -666,6 +662,22 @@ namespace Bit.iOS.Core.Services
         {
             var url = new NSUrl(UIApplication.OpenSettingsUrlString);
             UIApplication.SharedApplication.OpenUrl(url);
+        }
+
+        public void SendTestMessageToWatch()
+        {
+            WCSessionManager.SharedManager.UpdateApplicationContext(new Dictionary<string, object>() { { "message", $"totp app context test" } });
+            WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() { { "message", $"totp test" } });
+        }
+
+        public Task SendDataToWatchAsync(WatchDTO dto)
+        {
+            var serializedData = JsonConvert.SerializeObject(dto);
+
+            WCSessionManager.SharedManager.UpdateApplicationContext(new Dictionary<string, object>() { { "cipherData", serializedData } });
+            //WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() { { "cipherData", "hola como va" } });
+
+            return Task.CompletedTask;
         }
     }
 }

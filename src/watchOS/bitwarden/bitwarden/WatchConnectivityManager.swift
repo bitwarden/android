@@ -16,7 +16,6 @@ struct NotificationMessage: Identifiable {
 final class WatchConnectivityManager: NSObject, ObservableObject {
     static let shared = WatchConnectivityManager()
     @Published var notificationMessage: NotificationMessage? = nil
-    @Published var ciphers = [Cipher]()
     
     private let kMessageKey = "message"
     private let kCipherDataKey = "cipherData"
@@ -44,6 +43,10 @@ final class WatchConnectivityManager: NSObject, ObservableObject {
         }
         #endif
         
+        guard WCSession.default.isReachable else {
+            return
+        }
+        
         WCSession.default.sendMessage([kMessageKey : message], replyHandler: nil) { error in
             print("Cannot send message: \(String(describing: error))")
         }
@@ -52,6 +55,10 @@ final class WatchConnectivityManager: NSObject, ObservableObject {
 
 extension WatchConnectivityManager: WCSessionDelegate {
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+        DispatchQueue.main.async { [weak self] in
+            self?.notificationMessage = NotificationMessage(text: "testing this didReceiveMessage")
+        }
+        
         if let notificationText = message[kMessageKey] as? String {
             DispatchQueue.main.async { [weak self] in
                 self?.notificationMessage = NotificationMessage(text: notificationText)
@@ -60,10 +67,26 @@ extension WatchConnectivityManager: WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
-        if let notificationText = message[kMessageKey] as? String {
-            DispatchQueue.main.async { [weak self] in
-                self?.notificationMessage = NotificationMessage(text: notificationText)
-            }
+        DispatchQueue.main.async { [weak self] in
+            self?.notificationMessage = NotificationMessage(text: "testing this didReceiveMessage")
+        }
+        let returnMessage: [String : Any] = [
+               "key1" : "s"
+            ]
+
+        replyHandler(returnMessage)
+        
+//        if let notificationText = message[kMessageKey] as? String {
+//            DispatchQueue.main.async { [weak self] in
+//                self?.notificationMessage = NotificationMessage(text: notificationText)
+//            }
+//        }
+
+    }
+    
+    func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
+        DispatchQueue.main.async { [weak self] in
+            self?.notificationMessage = NotificationMessage(text: "testing this didReceiveUserInfo")
         }
     }
     
@@ -77,29 +100,34 @@ extension WatchConnectivityManager: WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
-        if let serializedDto = applicationContext[kCipherDataKey] as? String {
+        DispatchQueue.main.async { [weak self] in
+            self?.notificationMessage = NotificationMessage(text: "testing this didReceiveApplicationContext")
+        }
+        if let notificationText = applicationContext[kCipherDataKey] as? String {
             
-            let decoder = JSONDecoder()
-            do {
-                let watchDTO = try decoder.decode(WatchDTO.self, from: serializedDto.data(using: .utf8)!)
-                self.ciphers = watchDTO.ciphers
-                
-                // Save in the database
-                
-                
-                
-//                DispatchQueue.main.async { [weak self] in
-//                    let index1 = notificationText.index(notificationText.startIndex, offsetBy: 0)
-//                    let index2 = notificationText.index(notificationText.startIndex, offsetBy: 6)
-//                    let indexRange = index1...index2
-//                    let subString = notificationText[indexRange] // eil
+//            let decoder = JSONDecoder()
+//            do {
+//                let ciphers = try decoder.decode(Cipher.self, from: notificationText.data(using: .utf8)!)
 //
-//                    self?.notificationMessage = NotificationMessage(text: String(subString))
-//                }
-            }
-            catch {
-                print(error)
-            }
+                DispatchQueue.main.async { [weak self] in
+                    let index1 = notificationText.index(notificationText.startIndex, offsetBy: 0)
+                    let index2 = notificationText.index(notificationText.startIndex, offsetBy: 6)
+                    let indexRange = index1...index2
+                    let subString = notificationText[indexRange] // eil
+
+                    self?.notificationMessage = NotificationMessage(text: String(subString))
+                }
+//            }
+//            catch {
+//                print(error)
+//            }
         }
     }
+    
+    #if os(iOS)
+    func sessionDidBecomeInactive(_ session: WCSession) {}
+    func sessionDidDeactivate(_ session: WCSession) {
+        session.activate()
+    }
+    #endif
 }

@@ -7,15 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B0A1A9E28ECD7C400FF61CD /* WatchConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A1A9D28ECD7C400FF61CD /* WatchConnectivityManager.swift */; };
 		1B15613328B7F3D400610B9B /* bitwardenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15613228B7F3D400610B9B /* bitwardenApp.swift */; };
 		1B15613528B7F3D400610B9B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15613428B7F3D400610B9B /* ContentView.swift */; };
 		1B15613728B7F3D700610B9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B15613628B7F3D700610B9B /* Assets.xcassets */; };
 		1B15613A28B7F3D700610B9B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B15613928B7F3D700610B9B /* Preview Assets.xcassets */; };
-		1B15613E28B7F3D700610B9B /* bitwarden WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 1B15613D28B7F3D700610B9B /* bitwarden WatchKit App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1B15613E28B7F3D700610B9B /* Bitwarden.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 1B15613D28B7F3D700610B9B /* Bitwarden.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1B15614328B7F3D800610B9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B15614228B7F3D800610B9B /* Assets.xcassets */; };
 		1B15614928B7F3D800610B9B /* bitwarden WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 1B15614828B7F3D800610B9B /* bitwarden WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1B15614E28B7F3D800610B9B /* bitwardenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15614D28B7F3D800610B9B /* bitwardenApp.swift */; };
-		1B15615028B7F3D800610B9B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15614F28B7F3D800610B9B /* ContentView.swift */; };
+		1B15615028B7F3D800610B9B /* CipherListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15614F28B7F3D800610B9B /* CipherListView.swift */; };
 		1B15615228B7F3D800610B9B /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15615128B7F3D800610B9B /* NotificationController.swift */; };
 		1B15615428B7F3D800610B9B /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15615328B7F3D800610B9B /* NotificationView.swift */; };
 		1B15615628B7F3D800610B9B /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15615528B7F3D800610B9B /* ComplicationController.swift */; };
@@ -23,6 +24,17 @@
 		1B15615B28B7F3D900610B9B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B15615A28B7F3D900610B9B /* Preview Assets.xcassets */; };
 		1B15616C28B81A2200610B9B /* Cipher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15616B28B81A2200610B9B /* Cipher.swift */; };
 		1B15616E28B81A4300610B9B /* WatchConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15616D28B81A4300610B9B /* WatchConnectivityManager.swift */; };
+		1B59EC5729007DEE00A8718D /* BitwardenDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1B59EC5529007DEE00A8718D /* BitwardenDB.xcdatamodeld */; };
+		1B59EC592900801500A8718D /* StringEncryptionTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59EC582900801500A8718D /* StringEncryptionTransformer.swift */; };
+		1B59EC5C2900BB3400A8718D /* CryptoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59EC5B2900BB3400A8718D /* CryptoService.swift */; };
+		1B59EC612900C48E00A8718D /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59EC602900C48E00A8718D /* KeychainHelper.swift */; };
+		1B59EC632901B1C100A8718D /* LoggerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59EC622901B1C100A8718D /* LoggerHelper.swift */; };
+		1B8453EC290C672E00F921E1 /* CipherEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8453EA290C672E00F921E1 /* CipherEntity+CoreDataClass.swift */; };
+		1B8453ED290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8453EB290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift */; };
+		1BDBFEAC290B4215009C78C7 /* CipherListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEAB290B4215009C78C7 /* CipherListViewModel.swift */; };
+		1BDBFEAF290B45B1009C78C7 /* CipherDataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEAE290B45B1009C78C7 /* CipherDataStorage.swift */; };
+		1BDBFEB1290B5BD3009C78C7 /* DBHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEB0290B5BD3009C78C7 /* DBHelperProtocol.swift */; };
+		1BDBFEB3290B5D07009C78C7 /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEB2290B5D07009C78C7 /* CoreDataHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,7 +72,7 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				1B15613E28B7F3D700610B9B /* bitwarden WatchKit App.app in Embed Watch Content */,
+				1B15613E28B7F3D700610B9B /* Bitwarden.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -68,16 +80,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1B0A1A9D28ECD7C400FF61CD /* WatchConnectivityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchConnectivityManager.swift; sourceTree = "<group>"; };
 		1B15612F28B7F3D400610B9B /* bitwarden.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bitwarden.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B15613228B7F3D400610B9B /* bitwardenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bitwardenApp.swift; sourceTree = "<group>"; };
 		1B15613428B7F3D400610B9B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1B15613628B7F3D700610B9B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1B15613928B7F3D700610B9B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		1B15613D28B7F3D700610B9B /* bitwarden WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "bitwarden WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B15613D28B7F3D700610B9B /* Bitwarden.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bitwarden.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B15614228B7F3D800610B9B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1B15614828B7F3D800610B9B /* bitwarden WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "bitwarden WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B15614D28B7F3D800610B9B /* bitwardenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bitwardenApp.swift; sourceTree = "<group>"; };
-		1B15614F28B7F3D800610B9B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		1B15614F28B7F3D800610B9B /* CipherListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherListView.swift; sourceTree = "<group>"; };
 		1B15615128B7F3D800610B9B /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
 		1B15615328B7F3D800610B9B /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		1B15615528B7F3D800610B9B /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
@@ -87,6 +100,17 @@
 		1B15615D28B7F3D900610B9B /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
 		1B15616B28B81A2200610B9B /* Cipher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cipher.swift; sourceTree = "<group>"; };
 		1B15616D28B81A4300610B9B /* WatchConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnectivityManager.swift; sourceTree = "<group>"; };
+		1B59EC5629007DEE00A8718D /* BitwardenDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BitwardenDB.xcdatamodel; sourceTree = "<group>"; };
+		1B59EC582900801500A8718D /* StringEncryptionTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringEncryptionTransformer.swift; sourceTree = "<group>"; };
+		1B59EC5B2900BB3400A8718D /* CryptoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoService.swift; sourceTree = "<group>"; };
+		1B59EC602900C48E00A8718D /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
+		1B59EC622901B1C100A8718D /* LoggerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerHelper.swift; sourceTree = "<group>"; };
+		1B8453EA290C672E00F921E1 /* CipherEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CipherEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		1B8453EB290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CipherEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		1BDBFEAB290B4215009C78C7 /* CipherListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherListViewModel.swift; sourceTree = "<group>"; };
+		1BDBFEAE290B45B1009C78C7 /* CipherDataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherDataStorage.swift; sourceTree = "<group>"; };
+		1BDBFEB0290B5BD3009C78C7 /* DBHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBHelperProtocol.swift; sourceTree = "<group>"; };
+		1BDBFEB2290B5D07009C78C7 /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +131,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1B0A1A9C28E77F4500FF61CD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1B15616B28B81A2200610B9B /* Cipher.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		1B15612628B7F3D400610B9B = {
 			isa = PBXGroup;
 			children = (
@@ -121,7 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				1B15612F28B7F3D400610B9B /* bitwarden.app */,
-				1B15613D28B7F3D700610B9B /* bitwarden WatchKit App.app */,
+				1B15613D28B7F3D700610B9B /* Bitwarden.app */,
 				1B15614828B7F3D800610B9B /* bitwarden WatchKit Extension.appex */,
 			);
 			name = Products;
@@ -130,6 +162,7 @@
 		1B15613128B7F3D400610B9B /* bitwarden */ = {
 			isa = PBXGroup;
 			children = (
+				1B0A1A9D28ECD7C400FF61CD /* WatchConnectivityManager.swift */,
 				1B15613228B7F3D400610B9B /* bitwardenApp.swift */,
 				1B15613428B7F3D400610B9B /* ContentView.swift */,
 				1B15613628B7F3D700610B9B /* Assets.xcassets */,
@@ -157,8 +190,14 @@
 		1B15614C28B7F3D800610B9B /* bitwarden WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
+				1B59EC5F2900C48300A8718D /* Helpers */,
+				1B59EC5A2900BB2900A8718D /* Services */,
+				1BDBFEAD290B4591009C78C7 /* DataStorage */,
+				1B59EC5429007D7300A8718D /* Entities */,
+				1B0A1A9C28E77F4500FF61CD /* Models */,
+				1BDBFEA9290851AB009C78C7 /* Views */,
+				1BDBFEAA290B41FE009C78C7 /* ViewModels */,
 				1B15614D28B7F3D800610B9B /* bitwardenApp.swift */,
-				1B15614F28B7F3D800610B9B /* ContentView.swift */,
 				1B15615128B7F3D800610B9B /* NotificationController.swift */,
 				1B15615328B7F3D800610B9B /* NotificationView.swift */,
 				1B15615528B7F3D800610B9B /* ComplicationController.swift */,
@@ -166,7 +205,6 @@
 				1B15615C28B7F3D900610B9B /* Info.plist */,
 				1B15615D28B7F3D900610B9B /* PushNotificationPayload.apns */,
 				1B15615928B7F3D900610B9B /* Preview Content */,
-				1B15616B28B81A2200610B9B /* Cipher.swift */,
 				1B15616D28B81A4300610B9B /* WatchConnectivityManager.swift */,
 			);
 			path = "bitwarden WatchKit Extension";
@@ -178,6 +216,60 @@
 				1B15615A28B7F3D900610B9B /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		1B59EC5429007D7300A8718D /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				1B59EC5529007DEE00A8718D /* BitwardenDB.xcdatamodeld */,
+				1B8453EA290C672E00F921E1 /* CipherEntity+CoreDataClass.swift */,
+				1B8453EB290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift */,
+				1B59EC582900801500A8718D /* StringEncryptionTransformer.swift */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		1B59EC5A2900BB2900A8718D /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				1B59EC5B2900BB3400A8718D /* CryptoService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		1B59EC5F2900C48300A8718D /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				1B59EC602900C48E00A8718D /* KeychainHelper.swift */,
+				1B59EC622901B1C100A8718D /* LoggerHelper.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		1BDBFEA9290851AB009C78C7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1B15614F28B7F3D800610B9B /* CipherListView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		1BDBFEAA290B41FE009C78C7 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				1BDBFEAB290B4215009C78C7 /* CipherListViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		1BDBFEAD290B4591009C78C7 /* DataStorage */ = {
+			isa = PBXGroup;
+			children = (
+				1BDBFEAE290B45B1009C78C7 /* CipherDataStorage.swift */,
+				1BDBFEB0290B5BD3009C78C7 /* DBHelperProtocol.swift */,
+				1BDBFEB2290B5D07009C78C7 /* CoreDataHelper.swift */,
+			);
+			path = DataStorage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -216,7 +308,7 @@
 			);
 			name = "bitwarden WatchKit App";
 			productName = "bitwarden WatchKit App";
-			productReference = 1B15613D28B7F3D700610B9B /* bitwarden WatchKit App.app */;
+			productReference = 1B15613D28B7F3D700610B9B /* Bitwarden.app */;
 			productType = "com.apple.product-type.application.watchapp2";
 		};
 		1B15614728B7F3D800610B9B /* bitwarden WatchKit Extension */ = {
@@ -312,6 +404,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B15613528B7F3D400610B9B /* ContentView.swift in Sources */,
+				1B0A1A9E28ECD7C400FF61CD /* WatchConnectivityManager.swift in Sources */,
 				1B15613328B7F3D400610B9B /* bitwardenApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -320,12 +413,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B59EC592900801500A8718D /* StringEncryptionTransformer.swift in Sources */,
+				1BDBFEAC290B4215009C78C7 /* CipherListViewModel.swift in Sources */,
 				1B15616C28B81A2200610B9B /* Cipher.swift in Sources */,
 				1B15615228B7F3D800610B9B /* NotificationController.swift in Sources */,
-				1B15615028B7F3D800610B9B /* ContentView.swift in Sources */,
+				1BDBFEB3290B5D07009C78C7 /* CoreDataHelper.swift in Sources */,
+				1B15615028B7F3D800610B9B /* CipherListView.swift in Sources */,
+				1B59EC632901B1C100A8718D /* LoggerHelper.swift in Sources */,
 				1B15615628B7F3D800610B9B /* ComplicationController.swift in Sources */,
+				1BDBFEAF290B45B1009C78C7 /* CipherDataStorage.swift in Sources */,
 				1B15614E28B7F3D800610B9B /* bitwardenApp.swift in Sources */,
+				1BDBFEB1290B5BD3009C78C7 /* DBHelperProtocol.swift in Sources */,
+				1B8453ED290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift in Sources */,
 				1B15616E28B81A4300610B9B /* WatchConnectivityManager.swift in Sources */,
+				1B59EC612900C48E00A8718D /* KeychainHelper.swift in Sources */,
+				1B59EC5729007DEE00A8718D /* BitwardenDB.xcdatamodeld in Sources */,
+				1B8453EC290C672E00F921E1 /* CipherEntity+CoreDataClass.swift in Sources */,
+				1B59EC5C2900BB3400A8718D /* CryptoService.swift in Sources */,
 				1B15615428B7F3D800610B9B /* NotificationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -466,10 +570,10 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "bitwarden WatchKit Extension/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "bitwarden WatchKit Extension";
-				INFOPLIST_KEY_CLKComplicationPrincipalClass = "$(PRODUCT_MODULE_NAME).ComplicationController";
+				INFOPLIST_KEY_CFBundleDisplayName = Bitwarden;
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = bitwarden_WatchKit_Extension.ComplicationController;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -484,7 +588,7 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				VERSIONING_SYSTEM = "apple-generic";
-				WATCHOS_DEPLOYMENT_TARGET = 8.5;
+				WATCHOS_DEPLOYMENT_TARGET = 7.0;
 			};
 			name = Debug;
 		};
@@ -500,10 +604,10 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "bitwarden WatchKit Extension/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "bitwarden WatchKit Extension";
-				INFOPLIST_KEY_CLKComplicationPrincipalClass = "$(PRODUCT_MODULE_NAME).ComplicationController";
+				INFOPLIST_KEY_CFBundleDisplayName = Bitwarden;
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = bitwarden_WatchKit_Extension.ComplicationController;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -520,7 +624,7 @@
 				TARGETED_DEVICE_FAMILY = 4;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
-				WATCHOS_DEPLOYMENT_TARGET = 8.5;
+				WATCHOS_DEPLOYMENT_TARGET = 7.0;
 			};
 			name = Release;
 		};
@@ -535,19 +639,18 @@
 				DEVELOPMENT_TEAM = LTZ2PFU5D6;
 				GENERATE_INFOPLIST_FILE = YES;
 				IBSC_MODULE = bitwarden_WatchKit_Extension;
-				INFOPLIST_KEY_CFBundleDisplayName = "bitwarden WatchKit App";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.8bit.bitwarden;
 				MARKETING_VERSION = 2022.8.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.8bit.bitwarden.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Bitwarden;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				VERSIONING_SYSTEM = "apple-generic";
-				WATCHOS_DEPLOYMENT_TARGET = 8.5;
+				WATCHOS_DEPLOYMENT_TARGET = 7.0;
 			};
 			name = Debug;
 		};
@@ -563,12 +666,11 @@
 				DEVELOPMENT_TEAM = LTZ2PFU5D6;
 				GENERATE_INFOPLIST_FILE = YES;
 				IBSC_MODULE = bitwarden_WatchKit_Extension;
-				INFOPLIST_KEY_CFBundleDisplayName = "bitwarden WatchKit App";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.8bit.bitwarden;
 				MARKETING_VERSION = 2022.8.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.8bit.bitwarden.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Bitwarden;
 				PROVISIONING_PROFILE_SPECIFIER = "Dist: Bitwarden Watch App";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -577,7 +679,7 @@
 				TARGETED_DEVICE_FAMILY = 4;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
-				WATCHOS_DEPLOYMENT_TARGET = 8.5;
+				WATCHOS_DEPLOYMENT_TARGET = 7.0;
 			};
 			name = Release;
 		};
@@ -690,6 +792,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		1B59EC5529007DEE00A8718D /* BitwardenDB.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				1B59EC5629007DEE00A8718D /* BitwardenDB.xcdatamodel */,
+			);
+			currentVersion = 1B59EC5629007DEE00A8718D /* BitwardenDB.xcdatamodel */;
+			path = BitwardenDB.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 1B15612728B7F3D400610B9B /* Project object */;
 }

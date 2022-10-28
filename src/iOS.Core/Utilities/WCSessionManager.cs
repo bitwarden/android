@@ -3,6 +3,7 @@ using System.Linq;
 using Foundation;
 using Newtonsoft.Json;
 using System;
+using System.Threading.Tasks;
 
 namespace WatchConnectivity
 {
@@ -89,43 +90,77 @@ namespace WatchConnectivity
             // Application context doesnt need the watch to be reachable, it will be received when opened
             if (validSession != null)
             {
-                try
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
-                    var NSValues = applicationContext.Values.Select(x => new NSString(JsonConvert.SerializeObject(x))).ToArray();
-                    var NSKeys = applicationContext.Keys.Select(x => new NSString(x)).ToArray();
-                    var NSApplicationContext = NSDictionary<NSString, NSObject>.FromObjectsAndKeys(NSValues, NSKeys);
-                    NSError error;
-                    var sendSuccessfully = validSession.UpdateApplicationContext(NSApplicationContext, out error);
-                    if (sendSuccessfully)
+                    try
                     {
-                        Console.WriteLine($"Sent App Context from {Device} \nPayLoad: {NSApplicationContext.ToString()} \n");
+                        var NSValues = applicationContext.Values.Select(x => new NSString(JsonConvert.SerializeObject(x))).ToArray();
+                        var NSKeys = applicationContext.Keys.Select(x => new NSString(x)).ToArray();
+                        var NSApplicationContext = NSDictionary<NSString, NSObject>.FromObjectsAndKeys(NSValues, NSKeys, NSKeys.Count());
+                        NSError error;
+
+                        var sendSuccessfully = validSession.UpdateApplicationContext(NSApplicationContext, out error);
+                        if (sendSuccessfully)
+                        {
+                            Console.WriteLine($"Sent App Context from {Device} \nPayLoad: {NSApplicationContext.ToString()} \n");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Error Updating Application Context: {error.LocalizedDescription}");
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        Console.WriteLine($"Error Updating Application Context: {error.LocalizedDescription}");
+                        Console.WriteLine($"Exception Updating Application Context: {ex.Message}");
                     }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Exception Updating Application Context: {ex.Message}");
-                }
+                });
             }
         }
-
+        WCSessionUserInfoTransfer _transf;
         public void SendMessage(Dictionary<string, object> message)
         {
-            if(validSession is null)
+            if(validSession is null || validSession.ActivationState != WCSessionActivationState.Activated)
             {
                 return;
             }
 
+            _transf?.Cancel();
+
             var keys = message.Keys.Select(k => new NSString(k)).ToArray();
-            var values = message.Values.Select(v => JsonConvert.SerializeObject(v)).ToArray();
-            NSDictionary<NSString, NSObject> dic = NSDictionary<NSString, NSObject>.FromObjectsAndKeys(values, keys);
-            session.SendMessage(dic, null, error =>
+            var values = message.Values.Select(v => new NSString(JsonConvert.SerializeObject(v))).ToArray();
+            NSDictionary<NSString, NSObject> dic = NSDictionary<NSString, NSObject>.FromObjectsAndKeys(values, keys, values.Count());
+
+            Console.WriteLine("Started transferring user info");
+
+            _transf = session.TransferUserInfo(dic);
+
+
+            Task.Run(async () =>
             {
-                Console.WriteLine(error?.ToString());
+                try
+                {
+                    while (_transf.Transferring)
+                    {
+                        await Task.Delay(1000);
+                    }
+                    Console.WriteLine("Finished transferring user info");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error transferring user info " + ex);
+                }
             });
+
+            //session.SendMessage(dic,
+            //    (dd) =>
+            //    {
+            //        Console.WriteLine(dd?.ToString());
+            //    },
+            //    error =>
+            //    {
+            //        Console.WriteLine(error?.ToString());
+            //    }
+            //);
         }
 
         public override void DidReceiveApplicationContext(WCSession session, NSDictionary<NSString, NSObject> applicationContext)

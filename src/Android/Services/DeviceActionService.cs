@@ -30,6 +30,7 @@ using Bit.Core.Utilities;
 using Bit.Droid.Autofill;
 using Bit.Droid.Utilities;
 using Plugin.CurrentActivity;
+using static Bit.App.Pages.SettingsPageViewModel;
 
 namespace Bit.Droid.Services
 {
@@ -975,5 +976,7 @@ namespace Bit.Droid.Services
             intent.SetData(uri);
             Application.Context.StartActivity(intent);
         }
+
+        public Task SendDataToWatchAsync(WatchDTO dto) => throw new NotImplementedException();
     }
 }

@@ -7,17 +7,14 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    @StateObject fileprivate var viewModel = CiphersViewModel()
+struct CipherListView: View {
+    @StateObject var viewModel = CipherListViewModel()
     @ObservedObject private var connectivityManager = WatchConnectivityManager.shared
     
     var body: some View {
         VStack{
-            Button("Tap me!", action: {
-              WatchConnectivityManager.shared.send("Hello World!\n\(Date().ISO8601Format())")
-            })
             List(viewModel.ciphers){ cipher in
-                Text("\(cipher.name): \(cipher.login.totp)")
+                Text(cipher.id)
                     .padding()
             }
         }
@@ -28,12 +25,8 @@ struct ContentView: View {
     }
 }
 
-private class CiphersViewModel: ObservableObject {
-  @Published var ciphers: [Cipher] = Cipher.samples
-}
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        CipherListView()
     }
 }

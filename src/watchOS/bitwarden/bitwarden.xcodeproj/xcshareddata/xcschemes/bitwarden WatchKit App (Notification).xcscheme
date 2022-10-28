@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1B15613C28B7F3D700610B9B"
-               BuildableName = "bitwarden WatchKit App.app"
+               BuildableName = "Bitwarden.app"
                BlueprintName = "bitwarden WatchKit App"
                ReferencedContainer = "container:bitwarden.xcodeproj">
             </BuildableReference>
@@ -61,7 +61,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1B15613C28B7F3D700610B9B"
-            BuildableName = "bitwarden WatchKit App.app"
+            BuildableName = "Bitwarden.app"
             BlueprintName = "bitwarden WatchKit App"
             ReferencedContainer = "container:bitwarden.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1B15613C28B7F3D700610B9B"
-            BuildableName = "bitwarden WatchKit App.app"
+            BuildableName = "Bitwarden.app"
             BlueprintName = "bitwarden WatchKit App"
             ReferencedContainer = "container:bitwarden.xcodeproj">
          </BuildableReference>
