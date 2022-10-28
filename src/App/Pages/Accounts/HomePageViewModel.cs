@@ -35,7 +35,7 @@ namespace Bit.App.Pages
             {
                 AllowActiveAccountSelection = true
             };
-
+            RememberEmailCommand = new Command(() => RememberEmail = !RememberEmail);
             InitAsync().FireAndForget();
         }
 
@@ -84,6 +84,7 @@ namespace Bit.App.Pages
         public Action StartSsoLoginAction { get; set; }
         public Action StartEnvironmentAction { get; set; }
         public Action CloseAction { get; set; }
+        public Command RememberEmailCommand { get; set; }
 
         public async Task InitAsync()
         {
