@@ -433,7 +433,7 @@ namespace Bit.iOS.Autofill
             ThemeManager.ApplyResourcesTo(homePage);
             if (homePage.BindingContext is HomeViewModel vm)
             {
-                vm.StartLoginAction = () => DismissViewController(false, () => LaunchLoginFlow());
+                vm.StartLoginAction = () => DismissViewController(false, () => LaunchLoginFlow(vm.Email));
                 vm.StartRegisterAction = () => DismissViewController(false, () => LaunchRegisterFlow());
                 vm.StartSsoLoginAction = () => DismissViewController(false, () => LaunchLoginSsoFlow());
                 vm.StartEnvironmentAction = () => DismissViewController(false, () => LaunchEnvironmentFlow());

@@ -293,7 +293,7 @@ namespace Bit.iOS.ShareExtension
             SetupAppAndApplyResources(homePage);
             if (homePage.BindingContext is HomeViewModel vm)
             {
-                vm.StartLoginAction = () => DismissAndLaunch(() => LaunchLoginFlow());
+                vm.StartLoginAction = () => DismissAndLaunch(() => LaunchLoginFlow(vm.Email));
                 vm.StartRegisterAction = () => DismissAndLaunch(() => LaunchRegisterFlow());
                 vm.StartSsoLoginAction = () => DismissAndLaunch(() => LaunchLoginSsoFlow());
                 vm.StartEnvironmentAction = () => DismissAndLaunch(() => LaunchEnvironmentFlow());
