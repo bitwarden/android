@@ -111,14 +111,6 @@ namespace Bit.App.Pages
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
-        private void Register_Clicked(object sender, EventArgs e)
-        {
-            if (DoOnce())
-            {
-                _vm.StartRegisterAction();
-            }
-        }
-
         private async Task StartRegisterAsync()
         {
             var page = new RegisterPage(this);
@@ -152,14 +144,6 @@ namespace Bit.App.Pages
             await _accountListOverlay.HideAsync();
             var page = new EnvironmentPage();
             await Navigation.PushModalAsync(new NavigationPage(page));
-        }
-
-        void Continue_Clicked(System.Object sender, System.EventArgs e)
-        {
-            if (DoOnce())
-            {
-                _vm.ContinueToLoginStepAsync().FireAndForget();
-            }
         }
     }
 }

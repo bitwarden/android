@@ -39,7 +39,10 @@ namespace Bit.App.Pages
                 AllowActiveAccountSelection = true
             };
             RememberEmailCommand = new Command(() => RememberEmail = !RememberEmail);
-            CloseCommand = new AsyncCommand(async () => await Device.InvokeOnMainThreadAsync(CloseAction),
+            ContinueCommand = new AsyncCommand(ContinueToLoginStepAsync, allowsMultipleExecutions: false);
+            CreateAccountCommand = new AsyncCommand(() => Task.Run(StartRegisterAction),
+                onException: _logger.Exception, allowsMultipleExecutions: false);
+            CloseCommand = new AsyncCommand(()=>Task.Run(CloseAction),
                 onException: _logger.Exception, allowsMultipleExecutions: false);
             InitAsync().FireAndForget();
         }
@@ -92,7 +95,9 @@ namespace Bit.App.Pages
         public Action StartEnvironmentAction { get; set; }
         public Action CloseAction { get; set; }
         public Command RememberEmailCommand { get; set; }
+        public AsyncCommand ContinueCommand { get; }
         public AsyncCommand CloseCommand { get; }
+        public AsyncCommand CreateAccountCommand { get; }
 
         public async Task InitAsync()
         {

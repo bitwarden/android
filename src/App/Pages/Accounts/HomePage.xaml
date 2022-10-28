@@ -84,13 +84,13 @@
                 <Button Text="{u:I18n Continue}"
                         StyleClass="btn-primary"
                         IsEnabled="{Binding CanContinue}"
-                        Clicked="Continue_Clicked" />
+                        Command="{Binding ContinueCommand}" />
                         
                 <Label FormattedText="{Binding CreateAccountText}"
                        Margin="0, 10"
                         StyleClass="box-footer-label">
                     <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Register_Clicked" />
+                        <TapGestureRecognizer Command="{Binding CreateAccountCommand}" />
                     </Label.GestureRecognizers>
                 </Label>
             </StackLayout>
