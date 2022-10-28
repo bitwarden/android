@@ -3,10 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Controls.IconLabelButton"
     xmlns:controls="clr-namespace:Bit.App.Controls"
-    xmlns:effects="clr-namespace:Bit.App.Effects"
     x:Name="_iconLabelButton"
-    HorizontalOptions="FillAndExpand"
-    VerticalOptions="CenterAndExpand"
     HeightRequest="45"
     Padding="1"
     StyleClass="btn-icon-secondary"
@@ -21,21 +18,19 @@
         CornerRadius="{Binding CornerRadius, Source={x:Reference _iconLabelButton}}"
         BackgroundColor="{Binding IconLabelBackgroundColor, Source={x:Reference _iconLabelButton}}"
         IsClippedToBounds="True"
-        HorizontalOptions="FillAndExpand"
-        VerticalOptions="FillAndExpand"
         HasShadow="False">
         <StackLayout
             Orientation="Horizontal"
-            HorizontalOptions="CenterAndExpand">
+            HorizontalOptions="Center">
             <controls:IconLabel
-                VerticalOptions="CenterAndExpand"
+                VerticalOptions="Center"
                 HorizontalTextAlignment="Center"
                 FontSize="Large"
                 TextColor="{Binding IconLabelColor, Source={x:Reference _iconLabelButton}}"
                 Text="{Binding Icon, Source={x:Reference _iconLabelButton}}">
             </controls:IconLabel>
             <Label
-                VerticalOptions="CenterAndExpand"
+                VerticalOptions="Center"
                 HorizontalTextAlignment="Center"
                 TextColor="{Binding IconLabelColor, Source={x:Reference _iconLabelButton}}"
                 FontSize="Medium"
