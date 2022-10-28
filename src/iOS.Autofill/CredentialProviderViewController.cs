@@ -427,8 +427,9 @@ namespace Bit.iOS.Autofill
 
         private void LaunchHomePage(bool checkRememberedEmail = true)
         {
-            var homePage = new HomePage(checkRememberedEmail: checkRememberedEmail);
-            var app = new App.App(new AppOptions { IosExtension = true });
+            var appOptions = new AppOptions { IosExtension = true };
+            var homePage = new HomePage(appOptions, checkRememberedEmail: checkRememberedEmail);
+            var app = new App.App(appOptions);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(homePage);
             if (homePage.BindingContext is HomeViewModel vm)

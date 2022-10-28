@@ -23,6 +23,7 @@ namespace Bit.App.Pages
             _vm = BindingContext as HomeViewModel;
             _vm.Page = this;
             _vm.CheckHasRememberedEmail = checkRememberedEmail;
+            _vm.ShowCancelButton = _appOptions?.IosExtension ?? false;
             _vm.StartLoginAction = async () => await StartLoginAsync();
             _vm.StartRegisterAction = () => Device.BeginInvokeOnMainThread(async () => await StartRegisterAsync());
             _vm.StartSsoLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
@@ -34,11 +35,10 @@ namespace Bit.App.Pages
             };
             UpdateLogo();
 
-            if (_appOptions?.IosExtension ?? false)
+            if (!_vm.ShowCancelButton)
             {
-                _vm.ShowCancelButton = true;
+                ToolbarItems.Remove(_closeButton);
             }
-
             if (_appOptions?.HideAccountSwitcher ?? false)
             {
                 ToolbarItems.Remove(_accountAvatar);

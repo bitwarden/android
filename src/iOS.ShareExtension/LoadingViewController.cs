@@ -289,7 +289,7 @@ namespace Bit.iOS.ShareExtension
 
         private void LaunchHomePage(bool checkRememberedEmail = true)
         {
-            var homePage = new HomePage(checkRememberedEmail: checkRememberedEmail);
+            var homePage = new HomePage(_appOptions.Value, checkRememberedEmail: checkRememberedEmail);
             SetupAppAndApplyResources(homePage);
             if (homePage.BindingContext is HomeViewModel vm)
             {

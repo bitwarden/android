@@ -24,7 +24,7 @@
             UseOriginalImage="True"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n Account}" />
-        <ToolbarItem Text="{u:I18n Close}" Command="{Binding CloseCommand}" Order="Primary" Priority="-1" />
+        <ToolbarItem x:Name="_closeButton" Text="{u:I18n Close}" Command="{Binding CloseCommand}" Order="Primary" Priority="-1"/>
         <ToolbarItem
             Icon="cog_environment.png" Clicked="Environment_Clicked" Order="Primary"
             AutomationProperties.IsInAccessibleTree="True"
