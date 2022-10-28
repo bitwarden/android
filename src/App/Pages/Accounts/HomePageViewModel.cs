@@ -4,6 +4,7 @@ using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -21,17 +22,18 @@ namespace Bit.App.Pages
         private bool _isEmailEnabled;
         private bool _canLogin;
         private IPlatformUtilsService _platformUtilsService;
+        private ILogger _logger;
 
         public HomeViewModel()
         {
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
-            var logger = ServiceContainer.Resolve<ILogger>("logger");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             PageTitle = AppResources.Bitwarden;
 
-            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, logger)
+            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
                 AllowActiveAccountSelection = true
             };
@@ -105,21 +107,29 @@ namespace Bit.App.Pages
 
         public async Task ContinueToLoginStepAsync()
         {
-            if (string.IsNullOrWhiteSpace(Email))
+            try
             {
-                await _platformUtilsService.ShowDialogAsync(
-                    string.Format(AppResources.ValidationFieldRequired, AppResources.EmailAddress),
-                    AppResources.AnErrorHasOccurred, AppResources.Ok);
-                return;
+                if (string.IsNullOrWhiteSpace(Email))
+                {
+                    await _platformUtilsService.ShowDialogAsync(
+                        string.Format(AppResources.ValidationFieldRequired, AppResources.EmailAddress),
+                        AppResources.AnErrorHasOccurred, AppResources.Ok);
+                    return;
+                }
+                if (!Email.Contains("@"))
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.InvalidEmail, AppResources.AnErrorHasOccurred,
+                        AppResources.Ok);
+                    return;
+                }
+                await _stateService.SetRememberedEmailAsync(RememberEmail ? Email : null);
+                StartLoginAction();
             }
-            if (!Email.Contains("@"))
+            catch (Exception ex)
             {
-                await _platformUtilsService.ShowDialogAsync(AppResources.InvalidEmail, AppResources.AnErrorHasOccurred,
-                    AppResources.Ok);
-                return;
+                _logger.Exception(ex);
+                await _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage, AppResources.AnErrorHasOccurred, AppResources.Ok);
             }
-            await _stateService.SetRememberedEmailAsync(RememberEmail ? Email : null);
-            StartLoginAction();
         }
     }
 }
