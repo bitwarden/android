@@ -2319,64 +2319,64 @@
     <value>هل أنت متأكد من أنك تريد تمكين التقاط الشاشة؟</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
-    <value>Login requested</value>
+    <value>طلب تسجيل الدخول</value>
   </data>
   <data name="AreYouTryingToLogIn" xml:space="preserve">
-    <value>Are you trying to log in?</value>
+    <value>هل تحاول تسجيل الدخول؟</value>
   </data>
   <data name="LogInAttemptByXOnY" xml:space="preserve">
-    <value>Login attempt by {0} on {1}</value>
+    <value>محاولة تسجيل الدخول بواسطة {0} في {1}</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
-    <value>Device type</value>
+    <value>نوع الجهاز</value>
   </data>
   <data name="IpAddress" xml:space="preserve">
-    <value>IP address</value>
+    <value>عنوان IP</value>
   </data>
   <data name="Time" xml:space="preserve">
-    <value>Time</value>
+    <value>الوقت</value>
   </data>
   <data name="Near" xml:space="preserve">
-    <value>Near</value>
+    <value>قريب</value>
   </data>
   <data name="ConfirmLogIn" xml:space="preserve">
-    <value>Confirm login</value>
+    <value>تأكيد تسجيل الدخول</value>
   </data>
   <data name="DenyLogIn" xml:space="preserve">
-    <value>Deny login</value>
+    <value>رفض تسجيل الدخول</value>
   </data>
   <data name="JustNow" xml:space="preserve">
-    <value>Just now</value>
+    <value>للتو</value>
   </data>
   <data name="XMinutesAgo" xml:space="preserve">
-    <value>{0} minutes ago</value>
+    <value>منذ {0} دقائق</value>
   </data>
   <data name="LogInAccepted" xml:space="preserve">
-    <value>Login confirmed</value>
+    <value>تم تأكيد تسجيل الدخول</value>
   </data>
   <data name="LogInDenied" xml:space="preserve">
-    <value>Login denied</value>
+    <value>تم رفض تسجيل الدخول</value>
   </data>
   <data name="ApproveLoginRequests" xml:space="preserve">
-    <value>Approve login requests</value>
+    <value>الموافقة على طلبات تسجيل الدخول</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Use this device to approve login requests made from other devices.</value>
+    <value>استخدم هذا الجهاز للموافقة على طلبات تسجيل الدخول من الأجهزة الأخرى.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
-    <value>Allow notifications</value>
+    <value>السماح بالإشعارات</value>
   </data>
   <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
-    <value>Receive push notifications for new login requests</value>
+    <value>تلقي إشعارات دفع لطلبات تسجيل الدخول الجديدة</value>
   </data>
   <data name="NoThanks" xml:space="preserve">
-    <value>No thanks</value>
+    <value>ﻻ، شكرًا</value>
   </data>
   <data name="ConfimLogInAttempForX" xml:space="preserve">
-    <value>Confirm login attempt for {0}</value>
+    <value>تأكيد محاولة تسجيل الدخول لـ {0}</value>
   </data>
   <data name="AllNotifications" xml:space="preserve">
-    <value>All notifications</value>
+    <value>جميع الإشعارات</value>
   </data>
   <data name="PasswordType" xml:space="preserve">
     <value>نوع كلمة المرور</value>
@@ -2454,23 +2454,23 @@
     <value>عشوائي</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
-    <value>Accessibility Service Disclosure</value>
+    <value>كشف خدمة إمكانية الوصول</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
+    <value>Bitwarden يستخدم خدمة إمكانية الوصول للبحث عن حقول تسجيل الدخول في التطبيقات ومواقع الويب، ثم يقوم بإنشاء معرفات الحقل المناسب لإدخال اسم المستخدم وكلمة المرور عند العثور على تطابق للتطبيق أو الموقع. ونحن لا نخزن أيا من المعلومات التي قدمتها لنا الخدمة، كما أننا لا نحاول السيطرة على أي عناصر على الشاشة تتجاوز إدخال نصوص وثائق التفويض.</value>
   </data>
   <data name="Accept" xml:space="preserve">
-    <value>Accept</value>
+    <value>قبول</value>
   </data>
   <data name="Decline" xml:space="preserve">
-    <value>Decline</value>
+    <value>رفض</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
-    <value>Login request has already expired.</value>
+    <value>انتهت صلاحية طلب تسجيل الدخول.</value>
   </data>
   <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
-    <value>Login attempt from:
+    <value>محاولة تسجيل الدخول من:
 {0}
-Do you want to switch to this account?</value>
+هل تريد التبديل إلى هذا الحساب؟</value>
   </data>
 </root>

@@ -1576,7 +1576,7 @@ La numérisation se fera automatiquement.</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
-    <value>Solarized Dark</value>
+    <value>Sombre "Solarized"</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
@@ -2470,6 +2470,6 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
   <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
     <value>Tentative de connexion depuis :
 {0}
-Voulez-vous commuter sur ce compte ?</value>
+Voulez-vous basculer vers ce compte ?</value>
   </data>
 </root>
