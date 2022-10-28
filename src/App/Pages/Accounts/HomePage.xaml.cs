@@ -27,6 +27,11 @@ namespace Bit.App.Pages
             _vm.StartRegisterAction = () => Device.BeginInvokeOnMainThread(async () => await StartRegisterAsync());
             _vm.StartSsoLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
             _vm.StartEnvironmentAction = () => Device.BeginInvokeOnMainThread(async () => await StartEnvironmentAsync());
+            _vm.CloseAction = async () =>
+            {
+                await _accountListOverlay.HideAsync();
+                await Navigation.PopModalAsync();
+            };
             UpdateLogo();
 
             if (_appOptions?.IosExtension ?? false)

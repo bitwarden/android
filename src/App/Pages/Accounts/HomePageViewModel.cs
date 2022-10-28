@@ -6,6 +6,7 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -38,6 +39,8 @@ namespace Bit.App.Pages
                 AllowActiveAccountSelection = true
             };
             RememberEmailCommand = new Command(() => RememberEmail = !RememberEmail);
+            CloseCommand = new AsyncCommand(async () => await Device.InvokeOnMainThreadAsync(CloseAction),
+                onException: _logger.Exception, allowsMultipleExecutions: false);
             InitAsync().FireAndForget();
         }
 
@@ -89,6 +92,7 @@ namespace Bit.App.Pages
         public Action StartEnvironmentAction { get; set; }
         public Action CloseAction { get; set; }
         public Command RememberEmailCommand { get; set; }
+        public AsyncCommand CloseCommand { get; }
 
         public async Task InitAsync()
         {
