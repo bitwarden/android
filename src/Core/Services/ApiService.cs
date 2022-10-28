@@ -547,7 +547,7 @@ namespace Bit.Core.Services
             return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Put, $"/auth-requests/{id}", request, true, true);
         }
 
-        public Task<bool> GetKnownDevice(string email, string deviceIdentifier)
+        public Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier)
         {
             return SendAsync<object, bool>(HttpMethod.Get, $"/devices/knowndevice/{email}/{deviceIdentifier}", null, false, true);
         }

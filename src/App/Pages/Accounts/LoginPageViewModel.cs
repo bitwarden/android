@@ -136,7 +136,7 @@ namespace Bit.App.Pages
                 Email = await _stateService.GetRememberedEmailAsync();
             }
             var deviceIdentifier = await _appIdService.GetAppIdAsync();
-            IsKnownDevice = await _apiService.GetKnownDevice(Email, deviceIdentifier);
+            IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
             await _deviceActionService.HideLoadingAsync();
         }
 
