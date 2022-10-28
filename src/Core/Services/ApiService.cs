@@ -787,6 +787,17 @@ namespace Bit.Core.Services
         private async Task<ErrorResponse> HandleErrorAsync(HttpResponseMessage response, bool tokenError,
             bool authed, bool logoutOnUnauthorized = true)
         {
+            if (authed
+                &&
+                (
+                    (logoutOnUnauthorized && response.StatusCode == HttpStatusCode.Unauthorized)
+                    ||
+                    response.StatusCode == HttpStatusCode.Forbidden
+                ))
+            {
+                await _logoutCallbackAsync(new Tuple<string, bool, bool>(null, false, true));
+                return null;
+            }
             try
             {
                 JObject responseJObject = null;
@@ -796,15 +807,11 @@ namespace Bit.Core.Services
                     responseJObject = JObject.Parse(responseJsonString);
                 }
 
-                if (authed
+                if (authed && tokenError
                     &&
-                    (
-                        (tokenError && response.StatusCode == HttpStatusCode.BadRequest && responseJObject?["error"]?.ToString() == "invalid_grant")
-                        ||
-                        (logoutOnUnauthorized && response.StatusCode == HttpStatusCode.Unauthorized)
-                        ||
-                        response.StatusCode == HttpStatusCode.Forbidden
-                    ))
+                    response.StatusCode == HttpStatusCode.BadRequest
+                    &&
+                    responseJObject?["error"]?.ToString() == "invalid_grant")
                 {
                     await _logoutCallbackAsync(new Tuple<string, bool, bool>(null, false, true));
                     return null;
