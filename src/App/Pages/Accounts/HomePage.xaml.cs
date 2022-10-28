@@ -23,7 +23,7 @@ namespace Bit.App.Pages
             _vm = BindingContext as HomeViewModel;
             _vm.Page = this;
             _vm.CheckHasRememberedEmail = checkRememberedEmail;
-            _vm.StartLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartLoginAsync());
+            _vm.StartLoginAction = async () => await StartLoginAsync();
             _vm.StartRegisterAction = () => Device.BeginInvokeOnMainThread(async () => await StartRegisterAsync());
             _vm.StartSsoLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
             _vm.StartEnvironmentAction = () => Device.BeginInvokeOnMainThread(async () => await StartEnvironmentAsync());

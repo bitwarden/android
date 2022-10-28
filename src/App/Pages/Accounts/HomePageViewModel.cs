@@ -40,9 +40,9 @@ namespace Bit.App.Pages
             };
             RememberEmailCommand = new Command(() => RememberEmail = !RememberEmail);
             ContinueCommand = new AsyncCommand(ContinueToLoginStepAsync, allowsMultipleExecutions: false);
-            CreateAccountCommand = new AsyncCommand(() => Task.Run(StartRegisterAction),
+            CreateAccountCommand = new AsyncCommand(async () => await Device.InvokeOnMainThreadAsync(StartRegisterAction),
                 onException: _logger.Exception, allowsMultipleExecutions: false);
-            CloseCommand = new AsyncCommand(()=>Task.Run(CloseAction),
+            CloseCommand = new AsyncCommand(async () => await Device.InvokeOnMainThreadAsync(CloseAction),
                 onException: _logger.Exception, allowsMultipleExecutions: false);
             InitAsync().FireAndForget();
         }
