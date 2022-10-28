@@ -116,12 +116,12 @@ namespace Bit.App.Pages
         public ICommand MoreCommand { get; internal set; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
+        public string LoggingInAsText => string.Format(AppResources.LoggingInAsX, Email);
         public Action StartTwoFactorAction { get; set; }
         public Action LogInSuccessAction { get; set; }
         public Action UpdateTempPasswordAction { get; set; }
         public Action StartSsoLoginAction { get; set; }
         public Action CloseAction { get; set; }
-        public string LoggingInAsText => string.Format(AppResources.LoggingInAs, Email);
 
         protected override II18nService i18nService => _i18nService;
         protected override IEnvironmentService environmentService => _environmentService;
