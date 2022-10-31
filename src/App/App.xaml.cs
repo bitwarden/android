@@ -242,7 +242,7 @@ namespace Bit.App
             }
             if (_pendingCheckPasswordlessLoginRequests)
             {
-                CheckPasswordlessLoginRequestsAsync().FireAndForget();
+                _messagingService.Send("passwordlessLoginRequest");
             }
             if (Device.RuntimePlatform == Device.Android)
             {
@@ -278,7 +278,7 @@ namespace Bit.App
             _isResumed = true;
             if (_pendingCheckPasswordlessLoginRequests)
             {
-                CheckPasswordlessLoginRequestsAsync().FireAndForget();
+                _messagingService.Send("passwordlessLoginRequest");
             }
             if (Device.RuntimePlatform == Device.Android)
             {
