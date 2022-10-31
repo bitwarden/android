@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using Bit.App.Effects;
+using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
@@ -17,6 +18,8 @@ namespace Bit.App.Controls
                     FontFamily = "bwi-font.ttf#bwi-font";
                     break;
             }
+
+            Effects.Add(new RemoveFontPaddingEffect());
         }
     }
 }

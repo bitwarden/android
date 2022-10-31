@@ -68,7 +68,6 @@ namespace Bit.Core.Services
             _state.ActiveUserId = userId;
 
             // Update pre-auth settings based on now-active user
-            await SetRememberedEmailAsync(await GetEmailAsync());
             await SetRememberedOrgIdentifierAsync(await GetRememberedOrgIdentifierAsync());
             await SetPreAuthEnvironmentUrlsAsync(await GetEnvironmentUrlsAsync());
         }

@@ -2903,6 +2903,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Get master password hint.
+        /// </summary>
+        public static string GetMasterPasswordwordHint {
+            get {
+                return ResourceManager.GetString("GetMasterPasswordwordHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Get your master password hint.
         /// </summary>
         public static string GetPasswordHint {
@@ -3416,6 +3425,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logging in as {0}.
+        /// </summary>
+        public static string LoggingInAsX {
+            get {
+                return ResourceManager.GetString("LoggingInAsX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log In.
         /// </summary>
         public static string LogIn {
@@ -3549,6 +3567,24 @@ namespace Bit.App.Resources {
         public static string LoginUnavailable {
             get {
                 return ResourceManager.GetString("LoginUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log In with another device.
+        /// </summary>
+        public static string LogInWithAnotherDevice {
+            get {
+                return ResourceManager.GetString("LogInWithAnotherDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log In with master password.
+        /// </summary>
+        public static string LogInWithMasterPassword {
+            get {
+                return ResourceManager.GetString("LogInWithMasterPassword", resourceCulture);
             }
         }
         
@@ -3958,6 +3994,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New around here?.
+        /// </summary>
+        public static string NewAroundHere {
+            get {
+                return ResourceManager.GetString("NewAroundHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New custom field.
         /// </summary>
         public static string NewCustomField {
@@ -4188,6 +4233,15 @@ namespace Bit.App.Resources {
         public static string NoTwoStepAvailable {
             get {
                 return ResourceManager.GetString("NoTwoStepAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not you?.
+        /// </summary>
+        public static string NotYou {
+            get {
+                return ResourceManager.GetString("NotYou", resourceCulture);
             }
         }
         

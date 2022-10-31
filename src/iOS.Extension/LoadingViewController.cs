@@ -446,15 +446,16 @@ namespace Bit.iOS.Extension
             });
         }
 
-        private void LaunchHomePage()
+        private void LaunchHomePage(bool checkRememberedEmail = true)
         {
-            var homePage = new HomePage();
-            var app = new App.App(new AppOptions { IosExtension = true });
+            var appOptions = new AppOptions { IosExtension = true };
+            var homePage = new HomePage(appOptions, checkRememberedEmail: checkRememberedEmail);
+            var app = new App.App(appOptions);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(homePage);
             if (homePage.BindingContext is HomeViewModel vm)
             {
-                vm.StartLoginAction = () => DismissViewController(false, () => LaunchLoginFlow());
+                vm.StartLoginAction = () => DismissViewController(false, () => LaunchLoginFlow(vm.Email));
                 vm.StartRegisterAction = () => DismissViewController(false, () => LaunchRegisterFlow());
                 vm.StartSsoLoginAction = () => DismissViewController(false, () => LaunchLoginSsoFlow());
                 vm.StartEnvironmentAction = () => DismissViewController(false, () => LaunchEnvironmentFlow());
@@ -477,8 +478,8 @@ namespace Bit.iOS.Extension
             ThemeManager.ApplyResourcesTo(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
-                vm.SubmitSuccessAction = () => DismissViewController(false, () => LaunchHomePage());
-                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
+                vm.SubmitSuccessAction = () => DismissViewController(false, () => LaunchHomePage(checkRememberedEmail: false));
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage(checkRememberedEmail: false));
             }
 
             var navigationPage = new NavigationPage(environmentPage);
@@ -496,7 +497,7 @@ namespace Bit.iOS.Extension
             if (registerPage.BindingContext is RegisterPageViewModel vm)
             {
                 vm.RegistrationSuccess = () => DismissViewController(false, () => LaunchLoginFlow(vm.Email));
-                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage(checkRememberedEmail: false));
             }
 
             var navigationPage = new NavigationPage(registerPage);
@@ -516,8 +517,9 @@ namespace Bit.iOS.Extension
             {
                 vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow(false));
                 vm.UpdateTempPasswordAction = () => DismissViewController(false, () => LaunchUpdateTempPasswordFlow());
+                vm.StartSsoLoginAction = () => DismissViewController(false, () => LaunchLoginSsoFlow());
                 vm.LogInSuccessAction = () => DismissLockAndContinue();
-                vm.CloseAction = () => CompleteRequest(null, null);
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage(checkRememberedEmail: false));
             }
 
             var navigationPage = new NavigationPage(loginPage);
