@@ -86,5 +86,6 @@ namespace Bit.Core.Abstractions
         Task<PasswordlessLoginResponse> GetAuthRequestAsync(string id);
         Task<PasswordlessLoginResponse> PutAuthRequestAsync(string id, string key, string masterPasswordHash, string deviceIdentifier, bool requestApproved);
         Task<string> GetUsernameFromAsync(ForwardedEmailServiceType service, UsernameGeneratorConfig config);
+        Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier);
     }
 }
