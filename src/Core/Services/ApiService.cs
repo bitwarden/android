@@ -795,8 +795,6 @@ namespace Bit.Core.Services
             if (authed
                 &&
                 (
-                    (tokenError && response.StatusCode == HttpStatusCode.BadRequest)
-                    ||
                     (logoutOnUnauthorized && response.StatusCode == HttpStatusCode.Unauthorized)
                     ||
                     response.StatusCode == HttpStatusCode.Forbidden
@@ -813,6 +811,17 @@ namespace Bit.Core.Services
                     var responseJsonString = await response.Content.ReadAsStringAsync();
                     responseJObject = JObject.Parse(responseJsonString);
                 }
+
+                if (authed && tokenError
+                    &&
+                    response.StatusCode == HttpStatusCode.BadRequest
+                    &&
+                    responseJObject?["error"]?.ToString() == "invalid_grant")
+                {
+                    await _logoutCallbackAsync(new Tuple<string, bool, bool>(null, false, true));
+                    return null;
+                }
+
                 return new ErrorResponse(responseJObject, response.StatusCode, tokenError);
             }
             catch
