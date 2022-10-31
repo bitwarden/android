@@ -1278,11 +1278,11 @@ Koodi luetaan automaattisesti.</value>
     <value>Esteettömyyspalvelu voi olla hyödyllinen sellaisten sovellusten kanssa, jotka eivät tue tavallista automaattisen täytön palvelua.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Salasana vaihdettiin</value>
+    <value>Salasana päivitettiin</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Päivitetty</value>
+    <value>Päivitettiin</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
@@ -1701,7 +1701,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Liitteen tallennuksessa oli ongelma. Jos ongelma jatkuu, voit tehdä tallennuksen verkkoholvin kautta.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
-    <value>Tiedostoliitteen tallennus onnistui</value>
+    <value>Tiedostoliite tallennettiin</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
     <value>Ota "Automaattisen täytön esteettömyyspalvelu" käyttöön Bitwardenin asetuksista käyttääksesi automaattisen täytön pikavalintapalkkia.</value>
@@ -1861,7 +1861,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Jos käytössä, esteettömyyspalvelu näyttää pikavalintapalkin laajentaakseen automaattisen täytön palvelun toiminnan kattamaan myös vanhemmat sovellukset, jotka eivät tue Android Autofill Framework -rajapintaa.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Yrityksen asettaman käytännön johdosta kohteiden tallennus henkilökohtaiseen holviin ei ole mahdollista. Muuta omistusasetus organisaatiolle ja valitse käytettävissä olevista kokoelmista.</value>
+    <value>Yrityskäytännön johdosta kohteiden tallennus henkilökohtaiseen holviin ei ole mahdollista. Muuta omistusasetus organisaatiolle ja valitse käytettävissä olevista kokoelmista.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
     <value>Organisaatiokäytäntö vaikuttaa omistajuusvalintoihisi.</value>
@@ -2048,7 +2048,7 @@ Koodi luetaan automaattisesti.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
-    <value>Yrityksen käytännön vuoksi voit poistaa vain olemassa olevan Sendin.</value>
+    <value>Yrityskäytännön vuoksi voit poistaa vain olemassa olevan Sendin.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
@@ -2086,7 +2086,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Captcha-vahvistus epäonnistui. Yritä uudelleen.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Pääsalasana vaihdettiin</value>
+    <value>Pääsalasana päivitettiin</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
     <value>Vaihda pääsalasana</value>

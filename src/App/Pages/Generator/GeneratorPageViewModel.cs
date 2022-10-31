@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core;
@@ -21,6 +22,7 @@ namespace Bit.App.Pages
         private readonly IClipboardService _clipboardService;
         private readonly IUsernameGenerationService _usernameGenerationService;
         private readonly ITokenService _tokenService;
+        private readonly IDeviceActionService _deviceActionService;
         readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         private PasswordGenerationOptions _options;
@@ -59,6 +61,7 @@ namespace Bit.App.Pages
             _clipboardService = ServiceContainer.Resolve<IClipboardService>();
             _usernameGenerationService = ServiceContainer.Resolve<IUsernameGenerationService>();
             _tokenService = ServiceContainer.Resolve<ITokenService>();
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>();
 
             PageTitle = AppResources.Generator;
             GeneratorTypeOptions = new List<GeneratorType> {
@@ -89,8 +92,9 @@ namespace Bit.App.Pages
             UsernameTypePromptHelpCommand = new Command(UsernameTypePromptHelp);
             RegenerateCommand = new AsyncCommand(RegenerateAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
             RegenerateUsernameCommand = new AsyncCommand(RegenerateUsernameAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
-            ToggleForwardedEmailHiddenValueCommand = new AsyncCommand(ToggleForwardedEmailHiddenValueAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
-            CopyCommand = new AsyncCommand(CopyAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
+            ToggleForwardedEmailHiddenValueCommand = new AsyncCommand(ToggleForwardedEmailHiddenValueAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
+            CopyCommand = new AsyncCommand(CopyAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
+            CloseCommand = new AsyncCommand(CloseAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
         }
 
         public List<GeneratorType> GeneratorTypeOptions { get; set; }
@@ -104,6 +108,7 @@ namespace Bit.App.Pages
         public ICommand RegenerateUsernameCommand { get; set; }
         public ICommand ToggleForwardedEmailHiddenValueCommand { get; set; }
         public ICommand CopyCommand { get; set; }
+        public ICommand CloseCommand { get; set; }
 
         public string Password
         {
@@ -139,6 +144,8 @@ namespace Bit.App.Pages
             get => _isUsername;
             set => SetProperty(ref _isUsername, value);
         }
+
+        public bool IosExtension { get; set; }
 
         public bool ShowTypePicker
         {
@@ -606,6 +613,7 @@ namespace Bit.App.Pages
             LoadFromOptions();
 
             _usernameOptions = await _usernameGenerationService.GetOptionsAsync();
+            await _tokenService.PrepareTokenForDecodingAsync();
             _usernameOptions.PlusAddressedEmail = _tokenService.GetEmail();
             _usernameOptions.EmailWebsite = EmailWebsite;
             _usernameOptions.CatchAllEmailType = _usernameOptions.PlusAddressedEmailType = string.IsNullOrWhiteSpace(EmailWebsite) || !EditMode ? UsernameEmailType.Random : UsernameEmailType.Website;
@@ -681,6 +689,7 @@ namespace Bit.App.Pages
                 return;
             }
 
+            _usernameOptions.EmailWebsite = EmailWebsite;
             await _usernameGenerationService.SaveOptionsAsync(_usernameOptions);
 
             if (regenerate && UsernameTypeSelected != UsernameType.ForwardedEmailAlias)
@@ -729,6 +738,18 @@ namespace Bit.App.Pages
             }
         }
 
+        public async Task CloseAsync()
+        {
+            if (IosExtension)
+            {
+                _deviceActionService.CloseExtensionPopUp();
+            }
+            else
+            {
+                await Page.Navigation.PopModalAsync();
+            }
+        }
+
         private void LoadFromOptions()
         {
             AllowAmbiguousChars = _options.AllowAmbiguousChar.GetValueOrDefault();
@@ -765,6 +786,7 @@ namespace Bit.App.Pages
             TriggerPropertyChanged(nameof(PlusAddressedEmail));
             TriggerPropertyChanged(nameof(GeneratorTypeSelected));
             TriggerPropertyChanged(nameof(UsernameTypeDescriptionLabel));
+            TriggerPropertyChanged(nameof(EmailWebsite));
         }
 
         private void SetOptions()

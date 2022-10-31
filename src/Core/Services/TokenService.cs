@@ -44,6 +44,11 @@ namespace Bit.Core.Services
             return _accessTokenForDecoding;
         }
 
+        public async Task PrepareTokenForDecodingAsync()
+        {
+            _accessTokenForDecoding = await _stateService.GetAccessTokenAsync();
+        }
+
         public async Task SetRefreshTokenAsync(string refreshToken)
         {
             await _stateService.SetRefreshTokenAsync(refreshToken, await SkipTokenStorage());

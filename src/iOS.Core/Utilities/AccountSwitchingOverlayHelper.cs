@@ -32,8 +32,9 @@ namespace Bit.iOS.Core.Utilities
                 {
                     throw new NullReferenceException(nameof(_stateService));
                 }
-                
-                var avatarImageSource = new AvatarImageSource(await _stateService.GetNameAsync(), await _stateService.GetEmailAsync());
+
+                var avatarImageSource = new AvatarImageSource(await _stateService.GetActiveUserIdAsync(),
+                    await _stateService.GetNameAsync(), await _stateService.GetEmailAsync());
                 using (var avatarUIImage = await avatarImageSource.GetNativeImageAsync())
                 {
                     return avatarUIImage?.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal) ?? UIImage.GetSystemImage(DEFAULT_SYSTEM_AVATAR_IMAGE);

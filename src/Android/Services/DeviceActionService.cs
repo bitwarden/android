@@ -520,5 +520,11 @@ namespace Bit.Droid.Services
             intent.SetData(uri);
             Application.Context.StartActivity(intent);
         }
+
+        public void CloseExtensionPopUp()
+        {
+            // only used by iOS
+            throw new NotImplementedException();
+        }
     }
 }

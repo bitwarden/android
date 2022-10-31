@@ -474,7 +474,7 @@
     <value>开启自动同步</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>请输入您账户的 Email 地址来接收主密码提示。</value>
+    <value>请输入您账户的电子邮件地址来接收主密码提示。</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>重新启用应用程序扩展</value>
@@ -708,7 +708,7 @@
     <value>两步登录</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>两步登录要求您从其他设备（例如安全钥匙、验证器应用、短信、电话或者电子邮件）来验证你的登录，这能使您的账户更加安全。两步登录可以在 bitwarden.com 网页版密码库启用。您现在要访问这个网站吗？</value>
+    <value>两步登录要求您从其他设备（例如安全钥匙、验证器应用、短信、电话或者电子邮件）来验证您的登录，这能使您的账户更加安全。两步登录需要在 bitwarden.com 网页版密码中设置。您现在要访问这个网站吗？</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>使用 {0} 解锁</value>
@@ -831,7 +831,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>此账户已启用两步登录，但此设备上不支持任何已配置的两步提供程序。请使用受支持的设备和/或添加其他跨设备支持的提供程序（例如验证器应用）。</value>
+    <value>此账户已设置两步登录，但此设备不支持任何已配置的两步提供程序。请使用受支持的设备和/或添加其他跨设备支持的提供程序（例如验证器应用）。</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>恢复代码</value>
@@ -937,7 +937,7 @@
     <value>文件</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>未选定任何文件</value>
+    <value>未选择文件</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
     <value>没有附件。</value>
@@ -1892,7 +1892,7 @@
     <value>您想要发送的文本。</value>
   </data>
   <data name="HideTextByDefault" xml:space="preserve">
-    <value>访问 Send 时，默认将隐藏文本</value>
+    <value>访问此 Send 时，默认隐藏文本内容</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeFile" xml:space="preserve">
@@ -2006,7 +2006,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>新增 Send</value>
+    <value>创建 Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
@@ -2071,7 +2071,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>重新提示主密码</value>
+    <value>重新询问主密码</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
     <value>确认主密码</value>
@@ -2107,7 +2107,7 @@
     <value>{0} 正在使用客户管理加密的 SSO。继续操作将删除您的账户主密码并要求 SSO 登录。</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>如果您不想移除您的账号主密码，您可以退出这个组织。</value>
+    <value>如果您不想移除您的主密码，您可以退出这个组织。</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
     <value>退出组织</value>
