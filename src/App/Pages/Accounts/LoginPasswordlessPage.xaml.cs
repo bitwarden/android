@@ -14,10 +14,7 @@ namespace Bit.App.Pages
 
             _vm.LoginRequest = loginPasswordlessDetails;
 
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                ToolbarItems.Add(_closeItem);
-            }
+            ToolbarItems.Add(_closeItem);
         }
 
         private async void Close_Clicked(object sender, System.EventArgs e)
