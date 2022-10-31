@@ -149,6 +149,7 @@ namespace Bit.App
                     {
                         lock (_processingLoginRequestLock)
                         {
+                            // lock doesn't allow for async execution
                             CheckPasswordlessLoginRequestsAsync().Wait();
                         }
                     }
