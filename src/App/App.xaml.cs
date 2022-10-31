@@ -145,7 +145,7 @@ namespace Bit.App
                                 new NavigationPage(new RemoveMasterPasswordPage()));
                         });
                     }
-                    else if (message.Command == "passwordlessLoginRequest" || message.Command == "unlocked" || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
+                    else if (message.Command == Constants.PasswordlessLoginRequestKey || message.Command == "unlocked" || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
                     {
                         lock (_processingLoginRequestLock)
                         {
@@ -252,7 +252,7 @@ namespace Bit.App
             }
             if (_pendingCheckPasswordlessLoginRequests)
             {
-                _messagingService.Send("passwordlessLoginRequest");
+                _messagingService.Send(Constants.PasswordlessLoginRequestKey);
             }
             if (Device.RuntimePlatform == Device.Android)
             {
@@ -288,7 +288,7 @@ namespace Bit.App
             _isResumed = true;
             if (_pendingCheckPasswordlessLoginRequests)
             {
-                _messagingService.Send("passwordlessLoginRequest");
+                _messagingService.Send(Constants.PasswordlessLoginRequestKey);
             }
             if (Device.RuntimePlatform == Device.Android)
             {
