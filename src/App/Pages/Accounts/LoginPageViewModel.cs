@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
+using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
@@ -25,12 +27,14 @@ namespace Bit.App.Pages
         private readonly II18nService _i18nService;
         private readonly IMessagingService _messagingService;
         private readonly ILogger _logger;
-
+        private readonly IApiService _apiService;
+        private readonly IAppIdService _appIdService;
         private bool _showPassword;
         private bool _showCancelButton;
         private string _email;
         private string _masterPassword;
         private bool _isEmailEnabled;
+        private bool _isKnownDevice;
 
         public LoginPageViewModel()
         {
@@ -43,6 +47,8 @@ namespace Bit.App.Pages
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
+            _apiService = ServiceContainer.Resolve<IApiService>();
+            _appIdService = ServiceContainer.Resolve<IAppIdService>();
 
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -76,7 +82,11 @@ namespace Bit.App.Pages
         public string Email
         {
             get => _email;
-            set => SetProperty(ref _email, value);
+            set => SetProperty(ref _email, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(LoggingInAsText)
+                });
         }
 
         public string MasterPassword
@@ -91,6 +101,12 @@ namespace Bit.App.Pages
             set => SetProperty(ref _isEmailEnabled, value);
         }
 
+        public bool IsKnownDevice
+        {
+            get => _isKnownDevice;
+            set => SetProperty(ref _isKnownDevice, value);
+        }
+
         public bool IsIosExtension { get; set; }
 
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
@@ -100,9 +116,11 @@ namespace Bit.App.Pages
         public ICommand MoreCommand { get; internal set; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
+        public string LoggingInAsText => string.Format(AppResources.LoggingInAsX, Email);
         public Action StartTwoFactorAction { get; set; }
         public Action LogInSuccessAction { get; set; }
         public Action UpdateTempPasswordAction { get; set; }
+        public Action StartSsoLoginAction { get; set; }
         public Action CloseAction { get; set; }
 
         protected override II18nService i18nService => _i18nService;
@@ -112,10 +130,14 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
+            await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
             if (string.IsNullOrWhiteSpace(Email))
             {
                 Email = await _stateService.GetRememberedEmailAsync();
             }
+            var deviceIdentifier = await _appIdService.GetAppIdAsync();
+            IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
+            await _deviceActionService.HideLoadingAsync();
         }
 
         public async Task LogInAsync(bool showLoading = true, bool checkForExistingAccount = false)
@@ -170,7 +192,6 @@ namespace Bit.App.Pages
                 }
 
                 var response = await _authService.LogInAsync(Email, MasterPassword, _captchaToken);
-                await _stateService.SetRememberedEmailAsync(Email);
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
 
                 if (response.CaptchaNeeded)
@@ -223,17 +244,22 @@ namespace Bit.App.Pages
 
             if (selection == AppResources.GetPasswordHint)
             {
-                var hintNavigationPage = new NavigationPage(new HintPage());
-                if (IsIosExtension)
-                {
-                    ThemeManager.ApplyResourcesTo(hintNavigationPage);
-                }
-                await Page.Navigation.PushModalAsync(hintNavigationPage);
+                await ShowMasterPasswordHintAsync();
             }
             else if (selection == AppResources.RemoveAccount)
             {
                 await RemoveAccountAsync();
             }
+        }
+
+        public async Task ShowMasterPasswordHintAsync()
+        {
+            var hintNavigationPage = new NavigationPage(new HintPage(Email));
+            if (IsIosExtension)
+            {
+                ThemeManager.ApplyResourcesTo(hintNavigationPage);
+            }
+            await Page.Navigation.PushModalAsync(hintNavigationPage);
         }
 
         public void TogglePassword()

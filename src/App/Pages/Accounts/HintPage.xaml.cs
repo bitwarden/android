@@ -6,11 +6,12 @@ namespace Bit.App.Pages
     {
         private HintPageViewModel _vm;
 
-        public HintPage()
+        public HintPage(string email = null)
         {
             InitializeComponent();
             _vm = BindingContext as HintPageViewModel;
             _vm.Page = this;
+            _vm.Email = email;
             if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);

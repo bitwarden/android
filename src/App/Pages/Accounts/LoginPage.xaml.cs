@@ -4,6 +4,7 @@ using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -25,6 +26,7 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
             _vm.LogInSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
+            _vm.StartSsoLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
             _vm.UpdateTempPasswordAction =
                 () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.CloseAction = async () =>
@@ -41,9 +43,6 @@ namespace Bit.App.Pages
             }
             _vm.Email = email;
             MasterPasswordEntry = _masterPassword;
-
-            _email.ReturnType = ReturnType.Next;
-            _email.ReturnCommand = new Command(() => _masterPassword.Focus());
 
             if (Device.RuntimePlatform == Device.iOS)
             {
@@ -85,7 +84,7 @@ namespace Bit.App.Pages
             await _vm.InitAsync();
             if (!_inputFocused)
             {
-                RequestFocus(string.IsNullOrWhiteSpace(_vm.Email) ? _email : _masterPassword);
+                RequestFocus(_masterPassword);
                 _inputFocused = true;
             }
         }
@@ -115,11 +114,25 @@ namespace Bit.App.Pages
             }
         }
 
+        private void LogInSSO_Clicked(object sender, EventArgs e)
+        {
+            if (DoOnce())
+            {
+                _vm.StartSsoLoginAction();
+            }
+        }
+
+        private async Task StartSsoLoginAsync()
+        {
+            var page = new LoginSsoPage(_appOptions);
+            await Navigation.PushModalAsync(new NavigationPage(page));
+        }
+
         private void Hint_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
-                Navigation.PushModalAsync(new NavigationPage(new HintPage()));
+                _vm.ShowMasterPasswordHintAsync().FireAndForget();
             }
         }
 
