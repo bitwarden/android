@@ -17,10 +17,13 @@ abstract record VariantConfig(
     string ApsEnvironment
     );
 
-record Dev(): VariantConfig("Bitwarden Dev", "com.x8bit.bitwarden.dev", "com.8bit.bitwarden.dev", "development");
-record QA(): VariantConfig("Bitwarden QA", "com.x8bit.bitwarden.qa", "com.8bit.bitwarden.qa", "development");
-record Beta(): VariantConfig("Bitwarden Beta", "com.x8bit.bitwarden.beta", "com.8bit.bitwarden.beta", "production");
-record Prod(): VariantConfig("Bitwarden", "com.x8bit.bitwarden", "com.8bit.bitwarden", "production");
+const string BASE_BUNDLE_ID_DROID = "com.x8bit.bitwarden";
+const string BASE_BUNDLE_ID_IOS = "com.8bit.bitwarden";
+
+record Dev(): VariantConfig("Bitwarden Dev", $"{BASE_BUNDLE_ID_DROID}.dev", $"{BASE_BUNDLE_ID_IOS}.dev", "development");
+record QA(): VariantConfig("Bitwarden QA", $"{BASE_BUNDLE_ID_DROID}.qa", $"{BASE_BUNDLE_ID_IOS}.qa", "development");
+record Beta(): VariantConfig("Bitwarden Beta", $"{BASE_BUNDLE_ID_DROID}.beta", $"{BASE_BUNDLE_ID_IOS}.beta", "production");
+record Prod(): VariantConfig("Bitwarden", $"{BASE_BUNDLE_ID_DROID}", $"{BASE_BUNDLE_ID_IOS}", "production");
 
 VariantConfig GetVariant() => variant.ToLower() switch{
     "qa" => new QA(),
@@ -34,7 +37,7 @@ var _slnPath = Path.Combine(""); //base path used to access files. If build.cake
 string _androidPackageName = string.Empty; //will be set by UpdateAndroidManifest task
 string CreateFeatureBranch(string prevVersionName, GitVersion git) => $"{prevVersionName}-{git.BranchName.Replace("/","-")}";
 string GetVersionName(string prevVersionName, VariantConfig buildVariant, GitVersion git) => buildVariant is Prod? prevVersionName : CreateFeatureBranch(prevVersionName, git); 
-int CreateBuildNumber(int previousNumber) => ++previousNumber; //TODO
+int CreateBuildNumber(int previousNumber) => ++previousNumber; 
 
 Task("GetGitInfo")
     .Does(()=> {
@@ -51,7 +54,7 @@ Task("GetGitInfo")
 #region Android
 Task("UpdateAndroidAppIcon")
     .Does(()=>{
-        //TODO
+        //TODO we'll implement variant icons later
         //manifest.ApplicationIcon = "@mipmap/ic_launcher";
         Information($"Updated Androix App Icon with success");
     });
@@ -188,7 +191,7 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
     var prevVersion = int.Parse(plist["CFBundleVersion"]);
     var prevBundleId = plist["CFBundleIdentifier"];
     var prevBundleName = plist["CFBundleName"];
-    var newVersion = CreateBuildNumber(prevVersion).ToString();
+    //var newVersion = CreateBuildNumber(prevVersion).ToString();
     var newVersionName = GetVersionName(prevVersionName, buildVariant, git);
     var newBundleId = GetiOSBundleId(buildVariant, projectType);
     var newBundleName = GetiOSBundleName(buildVariant, projectType);
@@ -238,7 +241,7 @@ private void UpdateiOSEntitlementsPlist(string entitlementsPath, VariantConfig b
 
 Task("UpdateiOSIcon")
     .Does(()=>{
-        //TODO
+        //TODO we'll implement variant icons later
         Information($"Updating IOS App Icon");
     });
 
