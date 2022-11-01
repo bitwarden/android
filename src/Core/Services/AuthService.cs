@@ -24,8 +24,8 @@ namespace Bit.Core.Services
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IMessagingService _messagingService;
         private readonly IKeyConnectorService _keyConnectorService;
+        private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly bool _setCryptoKeys;
-
         private SymmetricCryptoKey _key;
 
         public AuthService(
@@ -40,6 +40,7 @@ namespace Bit.Core.Services
             IMessagingService messagingService,
             IVaultTimeoutService vaultTimeoutService,
             IKeyConnectorService keyConnectorService,
+            IPasswordGenerationService passwordGenerationService,
             bool setCryptoKeys = true)
         {
             _cryptoService = cryptoService;
@@ -53,6 +54,7 @@ namespace Bit.Core.Services
             _messagingService = messagingService;
             _keyConnectorService = keyConnectorService;
             _setCryptoKeys = setCryptoKeys;
+            _passwordGenerationService = passwordGenerationService;
 
             TwoFactorProviders = new Dictionary<TwoFactorProviderType, TwoFactorProvider>();
             TwoFactorProviders.Add(TwoFactorProviderType.Authenticator, new TwoFactorProvider
@@ -476,6 +478,11 @@ namespace Bit.Core.Services
             return await _apiService.GetAuthRequestAsync(id);
         }
 
+        public async Task<PasswordlessLoginResponse> GetPasswordlessLoginResponse(string id, string accessCode)
+        {
+            return await _apiService.GetAuthResonseAsync(id, accessCode);
+        }
+
         public async Task<PasswordlessLoginResponse> PasswordlessLoginAsync(string id, string pubKey, bool requestApproved)
         {
             var publicKey = CoreHelpers.Base64UrlDecode(pubKey);
@@ -484,6 +491,18 @@ namespace Bit.Core.Services
             var encryptedMasterPassword = await _cryptoService.RsaEncryptAsync(Encoding.UTF8.GetBytes(await _stateService.GetKeyHashAsync()), publicKey);
             var deviceId = await _appIdService.GetAppIdAsync();
             return await _apiService.PutAuthRequestAsync(id, encryptedKey.EncryptedString, encryptedMasterPassword.EncryptedString, deviceId, requestApproved);
+        }
+
+        public async Task<PasswordlessLoginResponse> PasswordlessCreateLoginRequestAsync(string email, string publicKey, string deviceIdentifier, string accessCode, AuthRequestType? type, string fingerprintPhrase)
+        {
+            var keyPair = await _cryptoFunctionService.RsaGenerateKeyPairAsync(2048);
+            var generatedFingerprintPhrase = await _cryptoService.GetFingerprintAsync(email, keyPair.Item1);
+            var deviceId = await _appIdService.GetAppIdAsync();
+            var publicB64 = Convert.ToBase64String(keyPair.Item1);
+            var passwordOptions = new PasswordGenerationOptions(true) { Length = 25 };
+            var generatedAccessCode = await _passwordGenerationService.GeneratePasswordAsync(passwordOptions);
+            return await _apiService.PostCreateRequestAsync(email, publicB64, deviceId, generatedAccessCode, AuthRequestType.AuthenticateAndUnlock, String.Join("-", generatedFingerprintPhrase));
+
         }
     }
 }
