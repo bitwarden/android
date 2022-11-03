@@ -119,6 +119,7 @@ namespace Bit.App.Pages
         public string LoggingInAsText => string.Format(AppResources.LoggingInAsX, Email);
         public Action StartTwoFactorAction { get; set; }
         public Action LogInSuccessAction { get; set; }
+        public Action LogInWithDeviceAction { get; set; }
         public Action UpdateTempPasswordAction { get; set; }
         public Action StartSsoLoginAction { get; set; }
         public Action CloseAction { get; set; }

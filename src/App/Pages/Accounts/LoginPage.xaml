@@ -110,8 +110,11 @@
                             VerticalOptions="CenterAndExpand"
                             Icon="{Binding Source={x:Static core:BitwardenIcons.Device}}"
                             Label="{u:I18n LogInWithAnotherDevice}"
-                            ButtonCommand="{Binding LogInCommand}"
-                            IsVisible="False"/>
+                            IsVisible="{Binding IsKnownDevice}">
+                            <controls:IconLabelButton.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="LogInWithDevice_Clicked" />
+                            </controls:IconLabelButton.GestureRecognizers>
+                        </controls:IconLabelButton>
                         <controls:IconLabelButton
                             HorizontalOptions="Fill"
                             VerticalOptions="CenterAndExpand"
