@@ -172,6 +172,55 @@ namespace Bit.Core.Services
             return Task.FromResult(CryptographicEngine.Decrypt(cryptoKey, data));
         }
 
+        public async Task<byte[]> RsaDecryptAsync(string encValue, byte[] privateKey)
+        {
+            var headerPieces = encValue.Split('.');
+            EncryptionType? encType = null;
+            string[] encPieces = null;
+
+            if (headerPieces.Length == 1)
+            {
+                encType = EncryptionType.Rsa2048_OaepSha256_B64;
+                encPieces = new string[] { headerPieces[0] };
+            }
+            else if (headerPieces.Length == 2 && Enum.TryParse(headerPieces[0], out EncryptionType type))
+            {
+                encType = type;
+                encPieces = headerPieces[1].Split('|');
+            }
+
+            if (!encType.HasValue)
+            {
+                throw new Exception("encType unavailable.");
+            }
+            if (encPieces == null || encPieces.Length == 0)
+            {
+                throw new Exception("encPieces unavailable.");
+            }
+
+            var data = Convert.FromBase64String(encPieces[0]);
+            if (privateKey == null)
+            {
+                throw new Exception("No private key.");
+            }
+
+            var alg = CryptoHashAlgorithm.Sha1;
+            switch (encType.Value)
+            {
+                case EncryptionType.Rsa2048_OaepSha256_B64:
+                case EncryptionType.Rsa2048_OaepSha256_HmacSha256_B64:
+                    alg = CryptoHashAlgorithm.Sha256;
+                    break;
+                case EncryptionType.Rsa2048_OaepSha1_B64:
+                case EncryptionType.Rsa2048_OaepSha1_HmacSha256_B64:
+                    break;
+                default:
+                    throw new Exception("encType unavailable.");
+            }
+
+            return await RsaDecryptAsync(data, privateKey, alg);
+        }
+
         public Task<byte[]> RsaExtractPublicKeyAsync(byte[] privateKey)
         {
             // Have to specify some algorithm

@@ -24,6 +24,7 @@ namespace Bit.Core.Abstractions
         Task<byte[]> AesDecryptAsync(byte[] data, byte[] iv, byte[] key);
         Task<byte[]> RsaEncryptAsync(byte[] data, byte[] publicKey, CryptoHashAlgorithm algorithm);
         Task<byte[]> RsaDecryptAsync(byte[] data, byte[] privateKey, CryptoHashAlgorithm algorithm);
+        Task<byte[]> RsaDecryptAsync(string encValue, byte[] privateKey);
         Task<byte[]> RsaExtractPublicKeyAsync(byte[] privateKey);
         Task<Tuple<byte[], byte[]>> RsaGenerateKeyPairAsync(int length);
         Task<byte[]> RandomBytesAsync(int length);
