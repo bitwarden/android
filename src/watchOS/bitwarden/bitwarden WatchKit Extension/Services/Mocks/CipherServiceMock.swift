@@ -1,6 +1,10 @@
 import Foundation
 
 class CipherServiceMock: CipherServiceProtocol{
+    func getCipher(_ id: String) -> Cipher? {
+        return Cipher(id: "1", name: "Site 1", organizationUseTotp: true, login: Login(username: "user1", totp: "555 444"))
+    }
+    
     func deleteAll() {
     }
     
