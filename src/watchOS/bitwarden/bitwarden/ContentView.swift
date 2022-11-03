@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  bitwarden
-//
-//  Created by Federico Andrés Maccaroni on 25/08/2022.
-//
-
 import SwiftUI
 
 struct ContentView: View {

@@ -1,4 +1,5 @@
 import Foundation
+import CoreData
 
 public protocol DBHelperProtocol {
     associatedtype ObjectType
@@ -9,6 +10,7 @@ public protocol DBHelperProtocol {
     func fetch(_ objectType: ObjectType.Type, predicate: PredicateType?, limit: Int?) -> Result<[ObjectType], Error>
     func update(_ object: ObjectType)
     func delete(_ object: ObjectType)
+    func insertBatch(_ entityName: String, items: [Any], itemMapper: @escaping (Any, NSManagedObjectContext) -> [String : Any], completionHandler: @escaping () -> Void)
 }
 
 public extension DBHelperProtocol {

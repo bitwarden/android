@@ -11,10 +11,7 @@ class StringEncryptionTransformer : ValueTransformer {
     
     override func transformedValue(_ value: Any?) -> Any?{
         var toEncrypt: String
-        /*
-        case let aBool as Bool:
-            toEncrypt = aBool.description
-        */
+        
         switch value {
         case let aString as String:
             toEncrypt = aString
@@ -23,15 +20,15 @@ class StringEncryptionTransformer : ValueTransformer {
         }
         
         if let encryptedData = cryptoService.encrypt(toEncrypt) {
-            return String(decoding: encryptedData, as: UTF8.self)
+            return encryptedData
         }
 
         return nil
     }
     
     override func reverseTransformedValue(_ value: Any?) -> Any?{
-        if let encryptedString = value as? String {
-            if let decryptedData = cryptoService.decrypt(encryptedString.data(using: .utf8)!) {
+        if let encryptedData = value as? Data {
+            if let decryptedData = cryptoService.decrypt(encryptedData) {
                 return String(decoding: decryptedData, as: UTF8.self)
             }
         }
@@ -49,4 +46,3 @@ extension StringEncryptionTransformer {
         ValueTransformer.setValueTransformer(transformer, forName: name)
     }
 }
-

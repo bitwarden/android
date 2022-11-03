@@ -102,7 +102,7 @@ namespace Bit.iOS.Core.Utilities
             var stateService = new StateService(mobileStorageService, secureStorageService, messagingService);
             var stateMigrationService =
                 new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
-            var deviceActionService = new DeviceActionService();
+            var deviceActionService = new DeviceActionService(stateService, messagingService);
             var fileService = new FileService(stateService, messagingService);
             var clipboardService = new ClipboardService(stateService);
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, clipboardService,

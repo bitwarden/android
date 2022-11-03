@@ -1,10 +1,3 @@
-//
-//  WatchConnectivityManager.swift
-//  bitwarden WatchKit Extension
-//
-//  Created by Federico Andrés Maccaroni on 25/08/2022.
-//
-
 import Foundation
 import WatchConnectivity
 
@@ -16,7 +9,6 @@ struct NotificationMessage: Identifiable {
 final class WatchConnectivityManager: NSObject, ObservableObject {
     static let shared = WatchConnectivityManager()
     @Published var notificationMessage: NotificationMessage? = nil
-    @Published var ciphers = [Cipher]()
     
     private let kMessageKey = "message"
     private let kCipherDataKey = "cipherData"
@@ -45,7 +37,7 @@ final class WatchConnectivityManager: NSObject, ObservableObject {
         #endif
         
         WCSession.default.sendMessage([kMessageKey : message], replyHandler: nil) { error in
-            print("Cannot send message: \(String(describing: error))")
+            Log.e("Cannot send message: \(String(describing: error))")
         }
     }
 }
@@ -82,23 +74,11 @@ extension WatchConnectivityManager: WCSessionDelegate {
             let decoder = JSONDecoder()
             do {
                 let watchDTO = try decoder.decode(WatchDTO.self, from: serializedDto.data(using: .utf8)!)
-                self.ciphers = watchDTO.ciphers
                 
-                // Save in the database
-                
-                
-                
-//                DispatchQueue.main.async { [weak self] in
-//                    let index1 = notificationText.index(notificationText.startIndex, offsetBy: 0)
-//                    let index2 = notificationText.index(notificationText.startIndex, offsetBy: 6)
-//                    let indexRange = index1...index2
-//                    let subString = notificationText[indexRange] // eil
-//
-//                    self?.notificationMessage = NotificationMessage(text: String(subString))
-//                }
+                CipherService.shared.saveCiphers(watchDTO.ciphers){}
             }
             catch {
-                print(error)
+                Log.e(error)
             }
         }
     }

@@ -8,13 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		1B0A1A9E28ECD7C400FF61CD /* WatchConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A1A9D28ECD7C400FF61CD /* WatchConnectivityManager.swift */; };
+		1B14DF37291186D900EA43F1 /* EmptyStateViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B14DF36291186D900EA43F1 /* EmptyStateViewModifier.swift */; };
 		1B15613328B7F3D400610B9B /* bitwardenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15613228B7F3D400610B9B /* bitwardenApp.swift */; };
 		1B15613528B7F3D400610B9B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15613428B7F3D400610B9B /* ContentView.swift */; };
 		1B15613728B7F3D700610B9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B15613628B7F3D700610B9B /* Assets.xcassets */; };
 		1B15613A28B7F3D700610B9B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B15613928B7F3D700610B9B /* Preview Assets.xcassets */; };
 		1B15613E28B7F3D700610B9B /* Bitwarden.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 1B15613D28B7F3D700610B9B /* Bitwarden.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1B15614328B7F3D800610B9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B15614228B7F3D800610B9B /* Assets.xcassets */; };
-		1B15614928B7F3D800610B9B /* bitwarden WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 1B15614828B7F3D800610B9B /* bitwarden WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1B15614928B7F3D800610B9B /* bitwarden WatchKit Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1B15614828B7F3D800610B9B /* bitwarden WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1B15614E28B7F3D800610B9B /* bitwardenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15614D28B7F3D800610B9B /* bitwardenApp.swift */; };
 		1B15615028B7F3D800610B9B /* CipherListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15614F28B7F3D800610B9B /* CipherListView.swift */; };
 		1B15615228B7F3D800610B9B /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15615128B7F3D800610B9B /* NotificationController.swift */; };
@@ -32,9 +33,10 @@
 		1B8453EC290C672E00F921E1 /* CipherEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8453EA290C672E00F921E1 /* CipherEntity+CoreDataClass.swift */; };
 		1B8453ED290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8453EB290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift */; };
 		1BDBFEAC290B4215009C78C7 /* CipherListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEAB290B4215009C78C7 /* CipherListViewModel.swift */; };
-		1BDBFEAF290B45B1009C78C7 /* CipherDataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEAE290B45B1009C78C7 /* CipherDataStorage.swift */; };
 		1BDBFEB1290B5BD3009C78C7 /* DBHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEB0290B5BD3009C78C7 /* DBHelperProtocol.swift */; };
 		1BDBFEB3290B5D07009C78C7 /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEB2290B5D07009C78C7 /* CoreDataHelper.swift */; };
+		1BF5F6DB29103066002DDC0C /* CipherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF5F6DA29103066002DDC0C /* CipherService.swift */; };
+		1BF5F6DE29103B86002DDC0C /* CipherServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF5F6DD29103B86002DDC0C /* CipherServiceMock.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,15 +57,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		1B15616328B7F3D900610B9B /* Embed App Extensions */ = {
+		1B15616328B7F3D900610B9B /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				1B15614928B7F3D800610B9B /* bitwarden WatchKit Extension.appex in Embed App Extensions */,
+				1B15614928B7F3D800610B9B /* bitwarden WatchKit Extension.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		1B15616728B7F3D900610B9B /* Embed Watch Content */ = {
@@ -81,6 +83,7 @@
 
 /* Begin PBXFileReference section */
 		1B0A1A9D28ECD7C400FF61CD /* WatchConnectivityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchConnectivityManager.swift; sourceTree = "<group>"; };
+		1B14DF36291186D900EA43F1 /* EmptyStateViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateViewModifier.swift; sourceTree = "<group>"; };
 		1B15612F28B7F3D400610B9B /* bitwarden.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bitwarden.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B15613228B7F3D400610B9B /* bitwardenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bitwardenApp.swift; sourceTree = "<group>"; };
 		1B15613428B7F3D400610B9B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -108,9 +111,10 @@
 		1B8453EA290C672E00F921E1 /* CipherEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CipherEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		1B8453EB290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CipherEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		1BDBFEAB290B4215009C78C7 /* CipherListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherListViewModel.swift; sourceTree = "<group>"; };
-		1BDBFEAE290B45B1009C78C7 /* CipherDataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherDataStorage.swift; sourceTree = "<group>"; };
 		1BDBFEB0290B5BD3009C78C7 /* DBHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBHelperProtocol.swift; sourceTree = "<group>"; };
 		1BDBFEB2290B5D07009C78C7 /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
+		1BF5F6DA29103066002DDC0C /* CipherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherService.swift; sourceTree = "<group>"; };
+		1BF5F6DD29103B86002DDC0C /* CipherServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherServiceMock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +141,14 @@
 				1B15616B28B81A2200610B9B /* Cipher.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		1B14DF35291186C300EA43F1 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				1B14DF36291186D900EA43F1 /* EmptyStateViewModifier.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		1B15612628B7F3D400610B9B = {
@@ -197,6 +209,7 @@
 				1B0A1A9C28E77F4500FF61CD /* Models */,
 				1BDBFEA9290851AB009C78C7 /* Views */,
 				1BDBFEAA290B41FE009C78C7 /* ViewModels */,
+				1B14DF35291186C300EA43F1 /* Utilities */,
 				1B15614D28B7F3D800610B9B /* bitwardenApp.swift */,
 				1B15615128B7F3D800610B9B /* NotificationController.swift */,
 				1B15615328B7F3D800610B9B /* NotificationView.swift */,
@@ -232,7 +245,9 @@
 		1B59EC5A2900BB2900A8718D /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				1BF5F6DC29103B5F002DDC0C /* Mocks */,
 				1B59EC5B2900BB3400A8718D /* CryptoService.swift */,
+				1BF5F6DA29103066002DDC0C /* CipherService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -265,11 +280,18 @@
 		1BDBFEAD290B4591009C78C7 /* DataStorage */ = {
 			isa = PBXGroup;
 			children = (
-				1BDBFEAE290B45B1009C78C7 /* CipherDataStorage.swift */,
 				1BDBFEB0290B5BD3009C78C7 /* DBHelperProtocol.swift */,
 				1BDBFEB2290B5D07009C78C7 /* CoreDataHelper.swift */,
 			);
 			path = DataStorage;
+			sourceTree = "<group>";
+		};
+		1BF5F6DC29103B5F002DDC0C /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				1BF5F6DD29103B86002DDC0C /* CipherServiceMock.swift */,
+			);
+			path = Mocks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -299,7 +321,7 @@
 			buildConfigurationList = 1B15616428B7F3D900610B9B /* Build configuration list for PBXNativeTarget "bitwarden WatchKit App" */;
 			buildPhases = (
 				1B15613B28B7F3D700610B9B /* Resources */,
-				1B15616328B7F3D900610B9B /* Embed App Extensions */,
+				1B15616328B7F3D900610B9B /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -336,7 +358,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1330;
-				LastUpgradeCheck = 1330;
+				LastUpgradeCheck = 1400;
 				TargetAttributes = {
 					1B15612E28B7F3D400610B9B = {
 						CreatedOnToolsVersion = 13.3.1;
@@ -415,16 +437,18 @@
 			files = (
 				1B59EC592900801500A8718D /* StringEncryptionTransformer.swift in Sources */,
 				1BDBFEAC290B4215009C78C7 /* CipherListViewModel.swift in Sources */,
+				1BF5F6DB29103066002DDC0C /* CipherService.swift in Sources */,
 				1B15616C28B81A2200610B9B /* Cipher.swift in Sources */,
 				1B15615228B7F3D800610B9B /* NotificationController.swift in Sources */,
 				1BDBFEB3290B5D07009C78C7 /* CoreDataHelper.swift in Sources */,
 				1B15615028B7F3D800610B9B /* CipherListView.swift in Sources */,
 				1B59EC632901B1C100A8718D /* LoggerHelper.swift in Sources */,
 				1B15615628B7F3D800610B9B /* ComplicationController.swift in Sources */,
-				1BDBFEAF290B45B1009C78C7 /* CipherDataStorage.swift in Sources */,
 				1B15614E28B7F3D800610B9B /* bitwardenApp.swift in Sources */,
 				1BDBFEB1290B5BD3009C78C7 /* DBHelperProtocol.swift in Sources */,
+				1BF5F6DE29103B86002DDC0C /* CipherServiceMock.swift in Sources */,
 				1B8453ED290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift in Sources */,
+				1B14DF37291186D900EA43F1 /* EmptyStateViewModifier.swift in Sources */,
 				1B15616E28B81A4300610B9B /* WatchConnectivityManager.swift in Sources */,
 				1B59EC612900C48E00A8718D /* KeychainHelper.swift in Sources */,
 				1B59EC5729007DEE00A8718D /* BitwardenDB.xcdatamodeld in Sources */,
@@ -483,6 +507,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -541,6 +566,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

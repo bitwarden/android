@@ -1,10 +1,3 @@
-//
-//  NotificationController.swift
-//  bitwarden WatchKit Extension
-//
-//  Created by Federico Andrés Maccaroni on 25/08/2022.
-//
-
 import WatchKit
 import SwiftUI
 import UserNotifications

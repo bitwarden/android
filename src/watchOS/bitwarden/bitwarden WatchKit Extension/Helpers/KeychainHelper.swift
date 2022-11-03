@@ -72,8 +72,7 @@ final class KeychainHelper {
 
         
         if status != errSecSuccess {
-            // Print out the error
-            print("Error: \(status)")
+            Log.e("Error: \(status)")
         }
     }
 

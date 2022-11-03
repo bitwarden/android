@@ -48,15 +48,15 @@ class CoreDataHelper: DBHelperProtocol {
         }
     }
     
-    func fetch<T: NSManagedObject>(_ objectType: T.Type, predicate: NSPredicate? = nil, limit: Int? = nil) -> Result<[T], Error> {
-        let request = objectType.fetchRequest()
+    func fetch<T: NSManagedObject>(_ objectType: T.Type, _ entityName: String, predicate: NSPredicate? = nil, limit: Int? = nil) -> Result<[T], Error> {
+        let request = NSFetchRequest<T>(entityName: entityName)
         request.predicate = predicate
         if let limit = limit {
             request.fetchLimit = limit
         }
         do {
             let result = try context.fetch(request)
-            return .success(result as? [T] ?? [])
+            return .success(result as [T])
         } catch {
             return .failure(error)
         }
@@ -82,5 +82,39 @@ class CoreDataHelper: DBHelperProtocol {
     
     func delete(_ object: NSManagedObject) {
         context.delete(object)
+    }
+    
+    func insertBatch(_ entityName: String, items: [Any], itemMapper: @escaping (Any, NSManagedObjectContext) -> [String : Any], completionHandler: @escaping () -> Void) {
+        self.persistentContainer.performBackgroundTask { context in
+            context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+            let objects = items.map { item in
+                itemMapper(item, context)
+            }
+            let batchInsert = NSBatchInsertRequest(entityName: entityName, objects: objects)
+            do {
+                let result = try context.execute(batchInsert) as! NSBatchInsertResult
+                print(result)
+            }
+            catch let nsError as NSError {
+                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            }
+            DispatchQueue.main.async {
+                completionHandler()
+            }
+        }
+    }
+    
+    func deleteAll(_ entityName: String) {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: entityName)
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+
+        self.persistentContainer.performBackgroundTask { context in
+            do {
+                try context.execute(deleteRequest)
+            } catch let nsError as NSError {
+                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            }
+
+        }
     }
 }

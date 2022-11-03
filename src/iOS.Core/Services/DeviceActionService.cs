@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
@@ -23,6 +24,9 @@ namespace Bit.iOS.Core.Services
 {
     public class DeviceActionService : IDeviceActionService
     {
+        private IStateService _stateService;
+        private IMessagingService _messagingService;
+
         private Toast _toast;
         private UIAlertController _progressAlert;
         private string _userAgent;
