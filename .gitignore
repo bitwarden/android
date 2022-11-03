@@ -209,6 +209,7 @@ FakesAssemblies/
 project.lock.json
 .DS_Store
 src/App/Css
+tools
 
 # Created by https://www.toptal.com/developers/gitignore/api/swift,objective-c
 # Edit at https://www.toptal.com/developers/gitignore?templates=swift,objective-c

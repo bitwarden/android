@@ -186,7 +186,7 @@
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>E-Mail Adresse</value>
+    <value>E-Mail-Adresse</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
@@ -229,7 +229,7 @@
     <value>Ordner</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Ordner wurde aktualisiert.</value>
+    <value>Ordner wurde aktualisiert</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Webseite besuchen</value>
@@ -251,7 +251,7 @@
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Ungültiges Masterpasswort. Bitte erneut versuchen.</value>
+    <value>Ungültiges Master-Passwort. Bitte erneut versuchen.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
     <value>Ungültiger PIN. Bitte erneut versuchen.</value>
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Eintrag wurde gelöscht.</value>
+    <value>Eintrag wurde gelöscht</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -375,7 +375,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} wurde kopiert.</value>
+    <value>{0} wurde kopiert</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -394,7 +394,7 @@
     <value>Ansicht</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Besuche unsere Website</value>
+    <value>Besuchen Sie unsere Website</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
     <value>Besuche unsere Webseite um Hilfe zu erhalten, Neuigkeiten zu erfahren, Kontakt aufzunehmen und mehr über die Verwendung von Bitwarden zu lernen.</value>
@@ -431,7 +431,7 @@
     <value>Bitwarden App Erweiterung</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>Die einfachste Möglichkeit, neue Anmeldedaten zu deinemTresor hinzuzufügen, ist die Bitwarden App Erweiterung. Erfahre mehr über die Bitwarden App Erweiterung, indem du zu den "Einstellungen" wechselst.</value>
+    <value>Die einfachste Möglichkeit, neue Anmeldedaten zu Ihrem Tresor hinzuzufügen, ist die Bitwarden App Erweiterung. Erfahren Sie mehr über die Bitwarden App Erweiterung, indem Sie zu dem "Einstellungen"-Bildschirm navigieren.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Nutze Bitwarden in Safari und anderen Apps, um Zugangsdaten automatisch einzufügen.</value>
@@ -566,7 +566,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Du musst dich anmelden oder einen neuen Account erstellen um auf den Tresor zuzugreifen.</value>
+    <value>Melde dich an oder erstelle einen neuen Account, um auf Deinen Tresor zuzugreifen.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Verwalten</value>
@@ -578,7 +578,7 @@
     <value>Das Master-Passwort wird verwendet, um den Tresor zu öffnen. Es ist sehr wichtig, dass du das Passwort nicht vergisst, da es keine Möglichkeit gibt es zurückzusetzen.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Masterpassworthinweis (optional)</value>
+    <value>Master-Passwort-Hinweis (optional)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Ein Hinweis auf dein Master-Passwort kann dir helfen, dich an das Passwort zu erinnern, solltest du es vergessen.</value>
@@ -604,7 +604,7 @@
     <value>Niemals</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Eintrag erstellt.</value>
+    <value>Eintrag erstellt</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Es befinden sich keine Favoriten in deinem Tresor.</value>
@@ -632,7 +632,7 @@
     <value>Sonstige</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Passwort generiert.</value>
+    <value>Passwort generiert</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Passwortgenerator</value>
@@ -660,7 +660,7 @@
     <value>Passwort neu generieren</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Masterpasswort wiederholen</value>
+    <value>Master-Passwort wiederholen</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Tresor durchsuchen</value>
@@ -681,7 +681,7 @@
     <value>Eintrags-Information</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Eintrag aktualisiert.</value>
+    <value>Eintrag aktualisiert</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Wird übermittelt...</value>
@@ -692,10 +692,10 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Synchronisierung abgeschlossen.</value>
+    <value>Synchronisierung abgeschlossen</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Synchronisierung fehlgeschlagen.</value>
+    <value>Synchronisierung fehlgeschlagen</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>Tresor jetzt synchronisieren</value>
@@ -721,7 +721,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Bestätigungscode</value>
+    <value>Verifizierungscode </value>
   </data>
   <data name="ViewItem" xml:space="preserve">
     <value>Eintrag anzeigen</value>
@@ -831,7 +831,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Dieses Konto hat eine aktive Zwei-Faktor Authentifizierung, allerdings wird keiner der konfigurierten Zwei-Faktor Anbieter von diesem Gerät unterstützt. Bitte nutze ein unterstütztes Gerät und / oder füge zusätzliche Anbieter hinzu, die von mehr Geräten unterstützt werden (wie eine Authentifizierungs-App).</value>
+    <value>Dieses Konto hat eine aktive Zwei-Faktor Authentifizierung, allerdings wird keiner der konfigurierten Zwei-Faktor Anbieter von diesem Gerät unterstützt. Bitte nutzen Sie ein unterstütztes Gerät und / oder fügen Sie zusätzliche Anbieter hinzu, die von mehr Geräten unterstützt werden (wie eine Authentifizierungs-App).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Wiederherstellungscode</value>
@@ -856,7 +856,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Bestätigungsmail wurde gesendet.</value>
+    <value>Bestätigungsmail wurde gesendet</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -890,7 +890,7 @@
     <value>Authentifizierungsschlüssel (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Bestätigungscode (TOTP)</value>
+    <value>Verifizierungscode (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
@@ -1443,7 +1443,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Passphrase</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>Trennzeichen</value>
+    <value>Worttrennzeichen</value>
   </data>
   <data name="Clear" xml:space="preserve">
     <value>Leeren</value>
@@ -1575,6 +1575,10 @@ Das Scannen erfolgt automatisch.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Blockierte URIs automatisch ausfüllen</value>
   </data>
@@ -1616,7 +1620,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Deine Sitzung ist abgelaufen.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Biometrische Verifizierung</value>
+    <value>Biometrische Daten zur Verifizierung nutzen.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>Biometrie</value>
@@ -1625,7 +1629,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Biometrische Daten zum Entsperren verwenden</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden braucht Aufmerksamkeit - Siehe "Auto-Ausfüllen-Bedienungshilfe" in den Bitwarden-Einstellungen</value>
+    <value>Bitwarden braucht Aufmerksamkeit - Siehe "Auto-Fill-Bedienungshilfe" in den Bitwarden-Einstellungen</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
     <value>3. Gehe unter Android in den App-Einstellungen für Bitwarden zur Option "Über anderen Apps einblenden" (unter Erweitert) und tippe auf den Schalter, um die Overlay-Unterstützung zu aktivieren.</value>
@@ -1700,7 +1704,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Anhang erfolgreich gespeichert</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Bitte aktiviere "Auto-Ausfüllen-Bedienungshilfe" in den Bitwarden-Einstellungen, um die Auto-Ausfüllen-Kachel zu verwenden.</value>
+    <value>Bitte aktivieren Sie "Auto-Fill-Bedienungshilfe" in den Bitwarden-Einstellungen, um die Auto-Fill-Kachel zu verwenden.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
     <value>Keine Passwortfelder erkannt</value>
@@ -1722,7 +1726,7 @@ Das Scannen erfolgt automatisch.</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Eintrag wurde wiederhergestellt.</value>
+    <value>Eintrag wurde wiederhergestellt</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
@@ -1972,7 +1976,7 @@ Das Scannen erfolgt automatisch.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Dieses Send deaktivieren, damit niemand darauf zugreifen kann.</value>
+    <value>Dieses Send deaktivieren, damit niemand darauf zugreifen kann</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -2010,15 +2014,15 @@ Das Scannen erfolgt automatisch.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Send wurde gelöscht.</value>
+    <value>Send wurde gelöscht</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Send aktualisiert.</value>
+    <value>Send aktualisiert</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Neues Send erstellt.</value>
+    <value>Neues Send erstellt</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2040,7 +2044,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Benutzerdefiniert</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Dieses Send beim Speichern teilen.</value>
+    <value>Dieses Send beim Speichern teilen</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2052,7 +2056,7 @@ Das Scannen erfolgt automatisch.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Meine E-Mail-Adresse vor den Empfängern verstecken.</value>
+    <value>Meine E-Mail-Adresse vor den Empfängern verstecken</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Eine oder mehrere Organisationsrichtlinien beeinflussen deine Send Einstellungen.</value>
@@ -2178,10 +2182,10 @@ Das Scannen erfolgt automatisch.</value>
     <value>Löschen deines Kontos</value>
   </data>
   <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
-    <value>Dein Konto wurde unwiderruflich gelöscht.</value>
+    <value>Dein Konto wurde unwiderruflich gelöscht</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Ungültiger Bestätigungscode.</value>
+    <value>Ungültiger Verifizierungscode</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
     <value>Einmalpasswort anfordern</value>
@@ -2205,7 +2209,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Code erneut senden</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
-    <value>Ein Bestätigungscode wurde an deine E-Mail-Adresse gesendet.</value>
+    <value>Ein Bestätigungscode wurde an deine E-Mail-Adresse gesendet</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
     <value>Beim Senden des Bestätigungscodes an deine E-Mail-Adresse ist ein Fehler aufgetreten. Bitte versuche es erneut</value>
@@ -2312,6 +2316,66 @@ Das Scannen erfolgt automatisch.</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Bist du sicher, dass du die Bildschirmaufnahme aktivieren möchtest?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Zugangsdaten angefordert</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Versuchst du dich anzumelden?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Anmeldeversuch von {0} am {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Gerätetyp</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP-Adresse</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Zeit</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Nahe</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Anmeldung bestätigen</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Anmeldung verweigern</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Gerade eben</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>vor {0} Minute(n)</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Anmeldung bestätigt</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Anmeldung verweigert</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Anmeldeanfragen genehmigen</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Benutze dieses Gerät, um Anmeldeanfragen von anderen Geräten zu genehmigen.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Benachrichtigungen zulassen</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Push-Benachrichtigungen für neue Anmeldeanfragen erhalten</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Nein, danke</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Anmeldeversuch für {0} bestätigen</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Alle Benachrichtigungen</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Passworttyp</value>
   </data>
@@ -2386,5 +2450,25 @@ Das Scannen erfolgt automatisch.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Zufällig</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Bedienungshilfen Offenlegung</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden verwendet die Bedienungshilfen, um nach Anmeldefeldern in Apps und Webseiten zu suchen und legt dann die entsprechenden Feld-IDs fest, um Benutzername und Passwort einzugeben, wenn eine Übereinstimmung mit der App oder der Seite gefunden wird. Wir speichern keine der Informationen, die uns der Dienst zur Verfügung stellt. Ebenso wenig versuchen wir beliebige Elemente auf dem Bildschirm außer der Texteingabe von Anmeldedaten zu kontrollieren.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Akzeptieren</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Ablehnen</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Anmeldeanfrage ist bereits abgelaufen.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Anmeldeversuch von:
+{0}
+Möchtest du zu diesem Konto wechseln?</value>
   </data>
 </root>

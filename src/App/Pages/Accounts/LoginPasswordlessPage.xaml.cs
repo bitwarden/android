@@ -14,10 +14,7 @@ namespace Bit.App.Pages
 
             _vm.LoginRequest = loginPasswordlessDetails;
 
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                ToolbarItems.Add(_closeItem);
-            }
+            ToolbarItems.Add(_closeItem);
         }
 
         private async void Close_Clicked(object sender, System.EventArgs e)
@@ -26,6 +23,18 @@ namespace Bit.App.Pages
             {
                 await Navigation.PopModalAsync();
             }
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _vm.StartRequestTimeUpdater();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _vm.StopRequestTimeUpdater();
         }
     }
 }

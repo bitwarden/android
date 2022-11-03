@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -263,6 +264,37 @@ namespace Bit.Core.Utilities
         public static T Clone<T>(T obj)
         {
             return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj));
+        }
+
+        public static string TextColorFromBgColor(string hexColor, int threshold = 166)
+        {
+            if (new ColorConverter().ConvertFromString(hexColor) is Color bgColor)
+            {
+                var luminance = bgColor.R * 0.299 + bgColor.G * 0.587 + bgColor.B * 0.114;
+                return luminance > threshold ? "#ff000000" : "#ffffffff";
+            }
+
+            return "#ff000000";
+        }
+
+        public static string StringToColor(string str, string fallback)
+        {
+            if (str == null)
+            {
+                return fallback;
+            }
+            var hash = 0;
+            for (var i = 0; i < str.Length; i++)
+            {
+                hash = str[i] + ((hash << 5) - hash);
+            }
+            var color = "#FF";
+            for (var i = 0; i < 3; i++)
+            {
+                var value = (hash >> (i * 8)) & 0xff;
+                color += Convert.ToString(value, 16).PadLeft(2, '0');
+            }
+            return color;
         }
     }
 }

@@ -122,32 +122,35 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>A Bitwarden, Inc. a 8bit Solutions LLC anyavállalata.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+A LEGJOBB JELSZÓKEZELŐ NEVE, A SZEMÉLY, U.S. HÍREK ÉS VILÁGJELENTÉS, CNET ÉS TÖBBEK.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+Korlátlan számú jelszavak kezelése, tárolása, biztonsága és megosztása korlátlan számú eszközön, bárhonnan. A Bitwarden nyílt forráskódú jelszókezelési megoldásokat kínál mindenki számára, legyen szó otthonról, munkahelyről, vagy útközben.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Erős, egyedi és véletlenszerű jelszavak generálása a biztonsági követelmények alapján minden látogatott webhelyhez.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+A Bitwarden Send gyorsan továbbítja a titkosított információkat -- fájlokat és egyszerű szöveget -- közvetlenül bárkinek.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+A Bitwarden Teams és Enterprise csomagokat kínál a vállalatok számára, így biztonságosan megoszthatja jelszavait kollégáival.
 
-Why Choose Bitwarden:
+Miért válassza a Bitwarden-t:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+Világszínvonalú titkosítás
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+A jelszavakat fejlett végpontok közötti titkosítás védi (AES-256 bit, sózott hashtag és PBKDF2 SHA-256), így az adatok biztonságban és privátak maradnak.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+Beépített jelszógenerátor
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
-</value>
+Erős, egyedi és véletlenszerű jelszavakat generál a biztonsági követelmények alapján minden látogatott webhelyhez.
+
+Globális fordítások
+
+A Bitwarden fordítások 40 nyelven léteznek, és a globális közösségünknek köszönhetően növekszik. 
+
+Platformokon átívelő alkalmazások
+
+Biztonságos adatok védelme és megosztása a Bitwarden széfen belül bármely böngészőből, mobileszközről vagy asztali operációs rendszerről, stb.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">

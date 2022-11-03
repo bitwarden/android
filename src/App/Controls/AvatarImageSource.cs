@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Bit.Core.Utilities;
 using SkiaSharp;
 using Xamarin.Forms;
 
@@ -10,7 +11,8 @@ namespace Bit.App.Controls
 {
     public class AvatarImageSource : StreamImageSource
     {
-        private string _data;
+        private readonly string _text;
+        private readonly string _id;
 
         public override bool Equals(object obj)
         {
@@ -21,20 +23,21 @@ namespace Bit.App.Controls
 
             if (obj is AvatarImageSource avatar)
             {
-                return avatar._data == _data;
+                return avatar._id == _id && avatar._text == _text;
             }
 
             return base.Equals(obj);
         }
 
-        public override int GetHashCode() => _data?.GetHashCode() ?? -1;
+        public override int GetHashCode() => _id?.GetHashCode() ?? _text?.GetHashCode() ?? -1;
 
-        public AvatarImageSource(string name = null, string email = null)
+        public AvatarImageSource(string userId = null, string name = null, string email = null)
         {
-            _data = name;
-            if (string.IsNullOrWhiteSpace(_data))
+            _id = userId;
+            _text = name;
+            if (string.IsNullOrWhiteSpace(_text))
             {
-                _data = email;
+                _text = email;
             }
         }
 
@@ -52,24 +55,24 @@ namespace Bit.App.Controls
         private Stream Draw()
         {
             string chars;
-            string upperData = null;
+            string upperCaseText = null;
 
-            if (string.IsNullOrEmpty(_data))
+            if (string.IsNullOrEmpty(_text))
             {
                 chars = "..";
             }
-            else if (_data?.Length > 1)
+            else if (_text?.Length > 1)
             {
-                upperData = _data.ToUpper();
-                chars = GetFirstLetters(upperData, 2);
+                upperCaseText = _text.ToUpper();
+                chars = GetFirstLetters(upperCaseText, 2);
             }
             else
             {
-                chars = upperData = _data.ToUpper();
+                chars = upperCaseText = _text.ToUpper();
             }
 
-            var bgColor = StringToColor(upperData);
-            var textColor = Color.White;
+            var bgColor = CoreHelpers.StringToColor(_id ?? upperCaseText, "#33ffffff");
+            var textColor = CoreHelpers.TextColorFromBgColor(bgColor);
             var size = 50;
 
             using (var bitmap = new SKBitmap(size * 2,
@@ -85,7 +88,7 @@ namespace Bit.App.Controls
                         IsAntialias = true,
                         Style = SKPaintStyle.Fill,
                         StrokeJoin = SKStrokeJoin.Miter,
-                        Color = SKColor.Parse(bgColor.ToHex())
+                        Color = SKColor.Parse(bgColor)
                     })
                     {
                         var midX = canvas.LocalClipBounds.Size.ToSizeI().Width / 2;
@@ -97,7 +100,7 @@ namespace Bit.App.Controls
                             IsAntialias = true,
                             Style = SKPaintStyle.Fill,
                             StrokeJoin = SKStrokeJoin.Miter,
-                            Color = SKColor.Parse(bgColor.ToHex())
+                            Color = SKColor.Parse(bgColor)
                         })
                         {
                             canvas.DrawCircle(midX, midY, radius, circlePaint);
@@ -108,7 +111,7 @@ namespace Bit.App.Controls
                             {
                                 IsAntialias = true,
                                 Style = SKPaintStyle.Fill,
-                                Color = SKColor.Parse(textColor.ToHex()),
+                                Color = SKColor.Parse(textColor),
                                 TextSize = textSize,
                                 TextAlign = SKTextAlign.Center,
                                 Typeface = typeface

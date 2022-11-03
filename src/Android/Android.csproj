@@ -152,6 +152,11 @@
     <Compile Include="Utilities\IntentExtensions.cs" />
     <Compile Include="Renderers\CustomPageRenderer.cs" />
     <Compile Include="Effects\NoEmojiKeyboardEffect.cs" />
+    <Compile Include="Receivers\NotificationDismissReceiver.cs" />
+    <Compile Include="Services\FileService.cs" />
+    <Compile Include="Services\AutofillHandler.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Effects\RemoveFontPaddingEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\bwi-font.ttf" />
@@ -217,6 +222,10 @@
     <AndroidResource Include="Resources\drawable-v26\splash_screen_round.xml" />
     <AndroidResource Include="Resources\drawable\logo_rounded.xml" />
     <AndroidResource Include="Resources\drawable-night-v26\splash_screen_round.xml" />
+    <AndroidResource Include="Resources\drawable\ic_notification.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\splash_screen.xml" />

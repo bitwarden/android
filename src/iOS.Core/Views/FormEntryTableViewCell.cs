@@ -1,7 +1,7 @@
-﻿using Bit.iOS.Core.Controllers;
+﻿using System;
+using Bit.Core;
+using Bit.iOS.Core.Controllers;
 using Bit.iOS.Core.Utilities;
-using System;
-using System.Drawing;
 using UIKit;
 
 namespace Bit.iOS.Core.Views
@@ -12,14 +12,14 @@ namespace Bit.iOS.Core.Views
         public UITextField TextField { get; set; }
         public UITextView TextView { get; set; }
         public UIButton Button { get; set; }
+        public UIButton SecondButton { get; set; }
         public event EventHandler ValueChanged;
-
 
         public FormEntryTableViewCell(
             string labelName = null,
             bool useTextView = false,
             nfloat? height = null,
-            bool useButton = false,
+            ButtonsConfig buttonsConfig = ButtonsConfig.None,
             bool useLabelAsPlaceholder = false,
             float leadingConstant = 15f)
             : base(UITableViewCellStyle.Default, nameof(FormEntryTableViewCell))
@@ -85,7 +85,6 @@ namespace Bit.iOS.Core.Views
                     ValueChanged?.Invoke(sender, e);
                 };
             }
-
             else
             {
                 TextField = new UITextField
@@ -110,9 +109,10 @@ namespace Bit.iOS.Core.Views
                 }
 
                 ContentView.Add(TextField);
+
                 ContentView.AddConstraints(new NSLayoutConstraint[] {
                     NSLayoutConstraint.Create(TextField, NSLayoutAttribute.Leading, NSLayoutRelation.Equal, ContentView, NSLayoutAttribute.Leading, 1f, leadingConstant),
-                    NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Trailing, NSLayoutRelation.Equal, TextField, NSLayoutAttribute.Trailing, 1f, useButton ? 55f : 15f),
+                    NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Trailing, NSLayoutRelation.Equal, TextField, NSLayoutAttribute.Trailing, 1f, GetTextFieldToContainerTrailingConstant(buttonsConfig)),
                     NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Bottom, NSLayoutRelation.Equal, TextField, NSLayoutAttribute.Bottom, 1f, 10f)
                 });
 
@@ -148,18 +148,9 @@ namespace Bit.iOS.Core.Views
                 });
             }
 
-            if (useButton)
+            if(buttonsConfig != ButtonsConfig.None)
             {
-                Button = new UIButton(UIButtonType.System);
-                Button.Frame = ContentView.Bounds;
-                Button.TranslatesAutoresizingMaskIntoConstraints = false;
-                Button.SetTitleColor(ThemeHelpers.PrimaryColor, UIControlState.Normal);
-
-                ContentView.Add(Button);
-
-                ContentView.BottomAnchor.ConstraintEqualTo(Button.BottomAnchor, 10f).Active = true;
-                ContentView.TrailingAnchor.ConstraintEqualTo(Button.TrailingAnchor, 10f).Active = true;
-                Button.LeadingAnchor.ConstraintEqualTo(TextField.TrailingAnchor, 10f).Active = true;
+                AddButtons(buttonsConfig);
             }
         }
 
@@ -173,6 +164,75 @@ namespace Bit.iOS.Core.Views
             {
                 TextField.BecomeFirstResponder();
             }
+        }
+
+        public void ConfigureToggleSecureTextCell(bool useSecondaryButton = false)
+        {
+            var button = useSecondaryButton ? SecondButton : Button;
+            button.TitleLabel.Font = UIFont.FromName("bwi-font", 28f);
+            button.SetTitle(BitwardenIcons.Eye, UIControlState.Normal);
+            button.TouchUpInside += (sender, e) =>
+            {
+                TextField.SecureTextEntry = !TextField.SecureTextEntry;
+                button.SetTitle(TextField.SecureTextEntry ? BitwardenIcons.Eye : BitwardenIcons.EyeSlash, UIControlState.Normal);
+            };
+        }
+
+        private void AddButtons(ButtonsConfig buttonsConfig)
+        {
+            Button = new UIButton(UIButtonType.System);
+            Button.TranslatesAutoresizingMaskIntoConstraints = false;
+            Button.SetTitleColor(ThemeHelpers.PrimaryColor, UIControlState.Normal);
+
+            ContentView.Add(Button);
+
+            ContentView.BottomAnchor.ConstraintEqualTo(Button.BottomAnchor, 10f).Active = true;
+
+            switch (buttonsConfig)
+            {
+                case ButtonsConfig.One:
+                    ContentView.AddConstraints(new NSLayoutConstraint[] {
+                        NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Trailing, NSLayoutRelation.Equal, Button, NSLayoutAttribute.Trailing, 1f, 10f),
+                        NSLayoutConstraint.Create(Button, NSLayoutAttribute.Leading, NSLayoutRelation.Equal, TextField, NSLayoutAttribute.Trailing, 1f, 10f)
+                    });
+                    break;
+                case ButtonsConfig.Two:
+                    SecondButton = new UIButton(UIButtonType.System);
+                    SecondButton.TranslatesAutoresizingMaskIntoConstraints = false;
+                    SecondButton.SetTitleColor(ThemeHelpers.PrimaryColor, UIControlState.Normal);
+
+                    ContentView.Add(SecondButton);
+
+                    ContentView.AddConstraints(new NSLayoutConstraint[] {
+                        NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Bottom, NSLayoutRelation.Equal, SecondButton, NSLayoutAttribute.Bottom, 1f, 10f),
+                        NSLayoutConstraint.Create(SecondButton, NSLayoutAttribute.Leading, NSLayoutRelation.Equal, TextField, NSLayoutAttribute.Trailing, 1f, 9f),
+                        NSLayoutConstraint.Create(Button, NSLayoutAttribute.Leading, NSLayoutRelation.Equal, SecondButton, NSLayoutAttribute.Trailing, 1f, 10f),
+                        NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Trailing, NSLayoutRelation.Equal, Button, NSLayoutAttribute.Trailing, 1f, 10f)
+                    });
+                    break;
+            }
+        }
+
+        private float GetTextFieldToContainerTrailingConstant(ButtonsConfig buttonsConfig)
+        {
+            switch (buttonsConfig)
+            {
+                case ButtonsConfig.None:
+                    return 15f;
+                case ButtonsConfig.One:
+                    return 55f;
+                case ButtonsConfig.Two:
+                    return 95f;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public enum ButtonsConfig : byte
+        {
+            None = 0,
+            One = 1,
+            Two = 2
         }
     }
 }

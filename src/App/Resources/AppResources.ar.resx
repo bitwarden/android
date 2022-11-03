@@ -1575,6 +1575,10 @@
     <value>نورد</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>تعبئة العناوين المحجوبة تلقائياً</value>
   </data>
@@ -2314,6 +2318,66 @@
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>هل أنت متأكد من أنك تريد تمكين التقاط الشاشة؟</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>طلب تسجيل الدخول</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>هل تحاول تسجيل الدخول؟</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>محاولة تسجيل الدخول بواسطة {0} في {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>نوع الجهاز</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>عنوان IP</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>الوقت</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>قريب</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>تأكيد تسجيل الدخول</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>رفض تسجيل الدخول</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>للتو</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>منذ {0} دقائق</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>تم تأكيد تسجيل الدخول</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>تم رفض تسجيل الدخول</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>الموافقة على طلبات تسجيل الدخول</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>استخدم هذا الجهاز للموافقة على طلبات تسجيل الدخول من الأجهزة الأخرى.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>السماح بالإشعارات</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>تلقي إشعارات دفع لطلبات تسجيل الدخول الجديدة</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>ﻻ، شكرًا</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>تأكيد محاولة تسجيل الدخول لـ {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>جميع الإشعارات</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>نوع كلمة المرور</value>
   </data>
@@ -2388,5 +2452,25 @@
   </data>
   <data name="Random" xml:space="preserve">
     <value>عشوائي</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>كشف خدمة إمكانية الوصول</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden يستخدم خدمة إمكانية الوصول للبحث عن حقول تسجيل الدخول في التطبيقات ومواقع الويب، ثم يقوم بإنشاء معرفات الحقل المناسب لإدخال اسم المستخدم وكلمة المرور عند العثور على تطابق للتطبيق أو الموقع. ونحن لا نخزن أيا من المعلومات التي قدمتها لنا الخدمة، كما أننا لا نحاول السيطرة على أي عناصر على الشاشة تتجاوز إدخال نصوص وثائق التفويض.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>قبول</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>رفض</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>انتهت صلاحية طلب تسجيل الدخول.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>محاولة تسجيل الدخول من:
+{0}
+هل تريد التبديل إلى هذا الحساب؟</value>
   </data>
 </root>

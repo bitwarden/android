@@ -18,6 +18,7 @@ namespace Bit.App.Pages
     public class AttachmentsPageViewModel : BaseViewModel
     {
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IFileService _fileService;
         private readonly ICipherService _cipherService;
         private readonly ICryptoService _cryptoService;
         private readonly IStateService _stateService;
@@ -34,6 +35,7 @@ namespace Bit.App.Pages
         public AttachmentsPageViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _fileService = ServiceContainer.Resolve<IFileService>();
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
@@ -156,7 +158,7 @@ namespace Bit.App.Pages
             {
                 _vaultTimeoutService.DelayLockAndLogoutMs = 60000;
             }
-            await _deviceActionService.SelectFileAsync();
+            await _fileService.SelectFileAsync();
         }
 
         private async void DeleteAsync(AttachmentView attachment)

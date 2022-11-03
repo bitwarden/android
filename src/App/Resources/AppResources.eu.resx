@@ -918,7 +918,7 @@
     <value>Saio hasiera batek autentifikazio-gakoa badu, TOTP egiaztatze-kodea arbelean automatikoki kopiatuko da saio hasiera bat auto-betetzean.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
-    <value>Kopiatu TOTO automatikoki</value>
+    <value>Kopiatu TOTP automatikoki</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Premium bazkidetza beharrezkoa da ezaugarri hau erabiltzeko.</value>
@@ -1573,6 +1573,10 @@
   <data name="Nord" xml:space="preserve">
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Auto-bete blokeatutako URI-ak</value>
@@ -2312,6 +2316,66 @@
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Ziur al zaude pantaila-argazkia gaitu nahi duzula?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Saio hasiera eskatu da</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Saioa hasten saiatzen ari zara?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>{0} saioa hasten saiatu da {1}-n</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Gailu mota</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP helbidea</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Ordua</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Gertu</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Berretsi saio hasiera</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Sarrera ukatu</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Oraintxe bertan</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>Orain dela {0} minutu</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Saio hasiera onartua</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Saio hasiera ukatua</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Saio hasiera eskaerak onartu</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Erabili gailu hau beste gailu batzuetatik egindako saio hasiera eskaerak onartzeko.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Baimendu jakinarazpenak</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Jaso push jakinarazpenak saio hasiera eskaera berrietarako</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Ez, eskerrik asko</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Onartu {0}-ren saio hasiera eskaera</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Jakinarazpen guztiak</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Pasahitz mota</value>
   </data>
@@ -2386,5 +2450,25 @@
   </data>
   <data name="Random" xml:space="preserve">
     <value>Ausazkoa</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Zabaldu irisgarritasun zerbitzua</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwardenek irisgarritasun zerbitzua erabiltzen du aplikazioetan eta webguneetan sarbide-eremuak bilatzeko; ondoren, eremu-ID egokiak ezartzen ditu, aplikaziorako edo gunerako eremu bat aurkitzen denean erabiltzaile-izena eta pasahitza sartzeko. Zerbitzuak ematen digun informazioa ez dugu gordeko, eta ez gara saiatuko pantailan kredentzialen testutik haratagoko elementurik zelatatzen.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Onartu</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Baztertu</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Login request has already expired.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Login attempt from:
+{0}
+Do you want to switch to this account?</value>
   </data>
 </root>

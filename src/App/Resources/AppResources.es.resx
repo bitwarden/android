@@ -251,7 +251,7 @@
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Contraseña maestra no válida. Prueba de nuevo.</value>
+    <value>Contraseña maestra no válida. Inténtelo de nuevo.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
     <value>PIN no válido. Prueba de nuevo.</value>
@@ -471,7 +471,7 @@
     <value>Editar elemento</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Habilitar sincronizacion automatica</value>
+    <value>Habilitar sincronización automática</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>Introduce el correo electrónico de tu cuenta para recibir la pista de tu contraseña maestra.</value>
@@ -987,7 +987,7 @@ El escaneo se realizará automáticamente.</value>
     <value>URL del servidor</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>URL del servidor de la caja fuerte web</value>
+    <value>URL del servidor de la bóveda web</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>Pulsa en esta notificación para ver las entradas de tu caja fuerte.</value>
@@ -1574,6 +1574,10 @@ El escaneo se realizará automáticamente.</value>
   <data name="Nord" xml:space="preserve">
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Oscuro Solar</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Autorellenar URIs bloqueadas</value>
@@ -2314,6 +2318,66 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>¿Estás seguro de que quieres activar captura de pantalla?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Inicio de sesión solicitado</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>¿Estás tratando de iniciar sesión?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Intento de inicio de sesión por {0} en {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Tipo de dispositivo</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>Dirección IP</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Hora</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Cerca</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Confirmar inicio de sesión</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Denegar inicio de sesión</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Justo ahora</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>Hace {0} minutos</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Inicio de sesión confirmado</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Inicio de sesión denegado</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Aprobar solicitudes de inicio de sesión</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Use este dispositivo para aprovar solicitudes de incio de sesión realizadas desde otros dispositivos.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Permitir notificaciones</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Recibir notificaciones push para nuevas solicitudes de iniciar sesión</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>No, gracias</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Confirmar intento de inicio de sesión para {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Todas las notificaciones</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Tipo de contraseña</value>
   </data>
@@ -2388,5 +2452,25 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Aleatorio</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Revelación del servicio de accesibilidad</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden utiliza el Servicio de Accesibilidad para buscar campos de inicio de sesión en aplicaciones y sitios web, establecer los identificadores de campo apropiados para introducir un nombre de usuario y contraseña cuando se encuentre una coincidencia para la aplicación o el sitio. No almacenamos ninguna de las informaciones presentadas por el servicio, tampoco intentamos controlar ningún elemento en pantalla más allá de la introducción de credenciales de texto.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Aceptar</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Rechazar</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>La solicitud de acceso ya ha caducado.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Intento de inicio de sesión desde:
+{0}
+¿Desea cambiar a esta cuenta?</value>
   </data>
 </root>

@@ -152,11 +152,11 @@
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Parolayı kopyala</value>
+    <value>Parolayı Kopyala</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Kullanıcı adını kopyala</value>
+    <value>Kullanıcı Adını Kopyala</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -382,7 +382,7 @@
     <value>Parmak İzini Doğrula</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Ana Parolayı Doğrula</value>
+    <value>Ana parolayı doğrula</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>PIN'i doğrula</value>
@@ -663,7 +663,7 @@
     <value>Ana parolayı tekrar yazın</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Kasada ara</value>
+    <value>Kasada Ara</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Güvenlik</value>
@@ -1213,7 +1213,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Metin</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>Yeni özel alan</value>
+    <value>Yeni Özel Alan</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
     <value>Ne tür bir özel alan eklemek istiyorsunuz?</value>
@@ -1252,11 +1252,11 @@ Kod otomatik olarak taranacaktır.</value>
     <value>URI eşleşme tespiti</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Eşleşme tespiti</value>
+    <value>Eşleşme Tespiti</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Evet ve kaydet</value>
+    <value>Evet, Kaydet</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
     <value>Otomatik doldur ve kaydet</value>
@@ -1278,7 +1278,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Erişilebilirlik hizmeti, standart otomatik doldurma hizmetini desteklemeyen uygulamalarda işe yarayabilir.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Parola güncellendi</value>
+    <value>Parola Güncellendi</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
@@ -1480,7 +1480,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Kilidi aç</value>
   </data>
   <data name="UnlockVault" xml:space="preserve">
-    <value>Kasa Kilidini Aç</value>
+    <value>Kasanı Aç</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 dakika</value>
@@ -1556,7 +1556,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Varsayılan (sistem) temayı kullanırken cihazınızın koyu modu açıldığında koyu temaya geçmek için bunu seçin.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Notu kopyala</value>
+    <value>Notları kopyala</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Çıkış</value>
@@ -1574,6 +1574,10 @@ Kod otomatik olarak taranacaktır.</value>
   <data name="Nord" xml:space="preserve">
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Engellenmiş URI'leri otomatik doldur</value>
@@ -1770,7 +1774,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Şu anda SSO ile giriş yapılamıyor</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Ana parolayı belirle</value>
+    <value>Ana Parola Belirleyin</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
     <value>SSO ile girişinizi tamamlamak için lütfen kasanıza erişirken kullanacağınız ana parolayı belirleyin.</value>
@@ -2312,6 +2316,66 @@ Kod otomatik olarak taranacaktır.</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Ekran kaydını etkinleştirmek istediğinizden emin misiniz?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Giriş istendi</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Giriş yapmaya mı çalışıyorsunuz?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Login attempt by {0} on {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Cihaz türü</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP adresi</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Tarih</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Konum</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Girişi onayla</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Girişi reddet</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Az önce</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} dakika önce</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Giriş onaylandı</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Giriş reddedildi</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Giriş isteklerini onayla</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Diğer cihazlardan yapılan giriş isteklerini onaylamak için bu cihazı kullan.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Bildirimlere izin ver</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Yeni giriş istekleri için bildirim al</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Gerek yok</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>{0} girişini onayla</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Tüm bildirimler</value>
+  </data>
   <data name="PasswordType" xml:space="preserve">
     <value>Parola türü</value>
   </data>
@@ -2386,5 +2450,25 @@ Kod otomatik olarak taranacaktır.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Rastgele</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Accessibility Service Disclosure</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Decline</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Giriş isteğinin süresi doldu.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Login attempt from:
+{0}
+Do you want to switch to this account?</value>
   </data>
 </root>

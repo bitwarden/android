@@ -68,7 +68,6 @@ namespace Bit.Core.Services
             _state.ActiveUserId = userId;
 
             // Update pre-auth settings based on now-active user
-            await SetRememberedEmailAsync(await GetEmailAsync());
             await SetRememberedOrgIdentifierAsync(await GetRememberedOrgIdentifierAsync());
             await SetPreAuthEnvironmentUrlsAsync(await GetEnvironmentUrlsAsync());
         }
@@ -1277,20 +1276,18 @@ namespace Bit.Core.Services
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<PasswordlessRequestNotification> GetPasswordlessLoginNotificationAsync(string userId = null)
+        public async Task<PasswordlessRequestNotification> GetPasswordlessLoginNotificationAsync()
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var key = Constants.PasswordlessLoginNofiticationKey(reconciledOptions.UserId);
-            return await GetValueAsync<PasswordlessRequestNotification>(key, reconciledOptions);
+            var options = await GetDefaultStorageOptionsAsync();
+            var key = Constants.PasswordlessLoginNotificationKey;
+            return await GetValueAsync<PasswordlessRequestNotification>(key, options);
         }
 
-        public async Task SetPasswordlessLoginNotificationAsync(PasswordlessRequestNotification value, string userId = null)
+        public async Task SetPasswordlessLoginNotificationAsync(PasswordlessRequestNotification value)
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var key = Constants.PasswordlessLoginNofiticationKey(reconciledOptions.UserId);
-            await SetValueAsync(key, value, reconciledOptions);
+            var options = await GetDefaultStorageOptionsAsync();
+            var key = Constants.PasswordlessLoginNotificationKey;
+            await SetValueAsync(key, value, options);
         }
         // Helpers
 
