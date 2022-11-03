@@ -30,8 +30,6 @@ namespace Bit.iOS.Core.Services
         private Toast _toast;
         private UIAlertController _progressAlert;
         private string _userAgent;
-        private readonly IStateService _stateService;
-        private readonly IMessagingService _messagingService;
 
         public DeviceActionService(
             IStateService stateService,
