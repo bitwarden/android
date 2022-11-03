@@ -139,6 +139,12 @@ namespace Bit.Core.Services
                 null, captchaToken);
         }
 
+        public async Task<AuthResult> LogInPasswordlessAsync(string email, string accessCode, string authRequestId, byte[] key, byte[] localHashedPassword)
+        {
+            return await LogInHelperAsync(email, accessCode, Encoding.UTF8.GetString(localHashedPassword), null, null, null, new SymmetricCryptoKey(key), null, null,
+                null, null, authRequestId: authRequestId);
+        }
+
         public async Task<AuthResult> LogInSsoAsync(string code, string codeVerifier, string redirectUrl, string orgId)
         {
             SelectedTwoFactorProviderType = null;

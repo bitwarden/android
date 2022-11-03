@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
+using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
 
 namespace Bit.Core.Abstractions
@@ -26,6 +27,7 @@ namespace Bit.Core.Abstractions
         Task<AuthResult> LogInSsoAsync(string code, string codeVerifier, string redirectUrl, string orgId);
         Task<AuthResult> LogInCompleteAsync(string email, string masterPassword, TwoFactorProviderType twoFactorProvider, string twoFactorToken, bool? remember = null);
         Task<AuthResult> LogInTwoFactorAsync(TwoFactorProviderType twoFactorProvider, string twoFactorToken, string captchaToken, bool? remember = null);
+        Task<AuthResult> LogInPasswordlessAsync(string email, string accessCode, string authRequestId, byte[] key, byte[] localHashedPassword);
 
         Task<PasswordlessLoginResponse> GetPasswordlessLoginRequestByIdAsync(string id);
         Task<PasswordlessLoginResponse> PasswordlessLoginAsync(string id, string pubKey, bool requestApproved);
