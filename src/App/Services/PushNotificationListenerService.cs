@@ -157,7 +157,7 @@ namespace Bit.App.Services
                     };
 
                     _pushNotificationService.Value.SendLocalNotification(AppResources.LogInRequested, String.Format(AppResources.ConfimLogInAttempForX, userEmail), notificationData);
-                    _messagingService.Value.Send("passwordlessLoginRequest", passwordlessLoginMessage);
+                    _messagingService.Value.Send(Constants.PasswordlessLoginRequestKey, passwordlessLoginMessage);
                     break;
                 default:
                     break;

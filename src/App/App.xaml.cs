@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models;
@@ -33,8 +34,9 @@ namespace Bit.App
         private readonly IAccountsManager _accountsManager;
         private readonly IPushNotificationService _pushNotificationService;
         private static bool _isResumed;
-        // this variable is static because the app is launching new activities on notification click, creating new instances of App. 
+        // these variables are static because the app is launching new activities on notification click, creating new instances of App. 
         private static bool _pendingCheckPasswordlessLoginRequests;
+        private static object _processingLoginRequestLock = new object();
 
         public App(AppOptions appOptions)
         {
@@ -143,9 +145,13 @@ namespace Bit.App
                                 new NavigationPage(new RemoveMasterPasswordPage()));
                         });
                     }
-                    else if (message.Command == "passwordlessLoginRequest" || message.Command == "unlocked" || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
+                    else if (message.Command == Constants.PasswordlessLoginRequestKey || message.Command == "unlocked" || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
                     {
-                        CheckPasswordlessLoginRequestsAsync().FireAndForget();
+                        lock (_processingLoginRequestLock)
+                        {
+                            // lock doesn't allow for async execution
+                            CheckPasswordlessLoginRequestsAsync().Wait();
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -162,7 +168,6 @@ namespace Bit.App
                 _pendingCheckPasswordlessLoginRequests = true;
                 return;
             }
-
             _pendingCheckPasswordlessLoginRequests = false;
             if (await _vaultTimeoutService.IsLockedAsync())
             {
@@ -182,6 +187,11 @@ namespace Bit.App
 
             // Delay to wait for the vault page to appear
             await Task.Delay(2000);
+            // if there is a request modal opened ignore all incoming requests
+            if (App.Current.MainPage.Navigation.ModalStack.Any(p => p is NavigationPage navPage && navPage.CurrentPage is LoginPasswordlessPage))
+            {
+                return;
+            }
             var loginRequestData = await _authService.GetPasswordlessLoginRequestByIdAsync(notification.Id);
             var page = new LoginPasswordlessPage(new LoginPasswordlessDetails()
             {
@@ -242,7 +252,7 @@ namespace Bit.App
             }
             if (_pendingCheckPasswordlessLoginRequests)
             {
-                CheckPasswordlessLoginRequestsAsync().FireAndForget();
+                _messagingService.Send(Constants.PasswordlessLoginRequestKey);
             }
             if (Device.RuntimePlatform == Device.Android)
             {
@@ -278,7 +288,7 @@ namespace Bit.App
             _isResumed = true;
             if (_pendingCheckPasswordlessLoginRequests)
             {
-                CheckPasswordlessLoginRequestsAsync().FireAndForget();
+                _messagingService.Send(Constants.PasswordlessLoginRequestKey);
             }
             if (Device.RuntimePlatform == Device.Android)
             {
