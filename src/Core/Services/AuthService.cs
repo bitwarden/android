@@ -294,7 +294,7 @@ namespace Bit.Core.Services
         private async Task<AuthResult> LogInHelperAsync(string email, string hashedPassword, string localHashedPassword,
             string code, string codeVerifier, string redirectUrl, SymmetricCryptoKey key,
             TwoFactorProviderType? twoFactorProvider = null, string twoFactorToken = null, bool? remember = null,
-            string captchaToken = null, string orgId = null)
+            string captchaToken = null, string orgId = null, string authRequestId = null)
         {
             var storedTwoFactorToken = await _tokenService.GetTwoFactorTokenAsync(email);
             var appId = await _appIdService.GetAppIdAsync();
@@ -323,16 +323,20 @@ namespace Bit.Core.Services
             if (twoFactorToken != null && twoFactorProvider != null)
             {
                 request = new TokenRequest(emailPassword, codeCodeVerifier, twoFactorProvider, twoFactorToken, remember,
-                    captchaToken, deviceRequest);
+                    captchaToken, device: deviceRequest);
             }
             else if (storedTwoFactorToken != null)
             {
                 request = new TokenRequest(emailPassword, codeCodeVerifier, TwoFactorProviderType.Remember,
-                    storedTwoFactorToken, false, captchaToken, deviceRequest);
+                    storedTwoFactorToken, false, captchaToken, device: deviceRequest);
+            }
+            else if (authRequestId != null)
+            {
+                request = new TokenRequest(emailPassword, null, null, null, false, null, authRequestId, deviceRequest);
             }
             else
             {
-                request = new TokenRequest(emailPassword, codeCodeVerifier, null, null, false, captchaToken, deviceRequest);
+                request = new TokenRequest(emailPassword, codeCodeVerifier, null, null, false, captchaToken, device: deviceRequest);
             }
 
             var response = await _apiService.PostIdentityTokenAsync(request);
