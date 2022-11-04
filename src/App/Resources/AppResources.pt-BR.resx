@@ -1576,7 +1576,7 @@ A leitura será feita automaticamente.</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
-    <value>Solarized Dark</value>
+    <value>Escuro Solarizado</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
@@ -2472,5 +2472,23 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</value>
     <value>Tentativa de login de:
 {0}
 Você deseja mudar para esta conta?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Novo por aqui?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Obter dica da senha mestra</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Entrando como {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Não é você?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Entrar com a senha mestra</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Entrar com outro dispositivo</value>
   </data>
 </root>

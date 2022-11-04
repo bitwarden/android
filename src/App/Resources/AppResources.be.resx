@@ -2472,4 +2472,22 @@
 {0}
 Вы сапраўды хочаце перайсці на гэты ўліковы запіс?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Упершыню тут?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Атрымаць падказку да асноўнага пароля</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Увайсці як {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Не вы?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Увайсці з асноўным паролем</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Увайсці з іншай прылады</value>
+  </data>
 </root>

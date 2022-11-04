@@ -2472,4 +2472,22 @@
 {0}
 Хотите переключиться на этот аккаунт?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Вы здесь впервые?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Получить подсказку к мастер-паролю</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Войти как {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Не вы?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Войти с мастер-паролем</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Войти с другого устройства</value>
+  </data>
 </root>

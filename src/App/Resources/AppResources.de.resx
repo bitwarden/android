@@ -2471,4 +2471,22 @@ Das Scannen erfolgt automatisch.</value>
 {0}
 Möchtest du zu diesem Konto wechseln?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Neu hier?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Hinweis zum Master-Passwort erhalten</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Anmelden als {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Nicht du?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Mit Master-Passwort anmelden</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Mit einem anderen Gerät anmelden</value>
+  </data>
 </root>

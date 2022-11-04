@@ -2471,4 +2471,22 @@ Skan prosesi avtomatik baş tutacaq.</value>
 {0}
 Bu hesaba keçmək istəyirsiniz?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Burada yenisiniz?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Ana parol üçün məsləhət alın</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>{0} olaraq giriş edilir</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Siz deyilsiniz?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Ana parolla giriş et</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Başqa cihazla giriş et</value>
+  </data>
 </root>
