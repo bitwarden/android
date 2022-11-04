@@ -1576,7 +1576,7 @@
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
-    <value>Solarized Dark</value>
+    <value>تاریک خورشیدی</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
@@ -2472,5 +2472,23 @@
     <value>تلاش برای ورود از:
 {0}
 آیا می خواهید به این حساب تغییر دهید؟</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>اینجا جدیده؟</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>دریافت راهنمای گذرواژه اصلی</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>در حال ورود به عنوان {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>شما نیستید؟</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>با کلمه عبور اصلی وارد شوید</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>با دستگاه دیگری وارد شوید</value>
   </data>
 </root>

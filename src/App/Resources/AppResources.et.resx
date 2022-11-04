@@ -2472,4 +2472,22 @@ Skaneerimine toimub automaatselt.</value>
 {0}
 Soovid selle konto peale lülituda?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Oled siin uus?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Tuleta ülemparooli vihjega meelde</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Sisselogimas kui {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Pole sina?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Logi sisse ülemparooliga</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Logi sisse läbi teise seadme</value>
+  </data>
 </root>

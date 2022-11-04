@@ -2473,4 +2473,22 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
 {0}
 ¿Desea cambiar a esta cuenta?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>¿Nuevo por aquí?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Obtener pista de contraseña maestra</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Iniciando sesión como {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>¿No eres tú?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Iniciar sesión con contraseña maestra</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Iniciar sesión con otro dispositivo</value>
+  </data>
 </root>

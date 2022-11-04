@@ -2472,4 +2472,22 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
 {0}
 Czy chcesz przełączyć się na to konto?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Jesteś tu nowy(a)?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Uzyskaj podpowiedź hasła głównego</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Logowanie jako {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>To nie Ty?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Logowanie hasłem głównym</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Logowanie innym urządzeniem</value>
+  </data>
 </root>
