@@ -221,7 +221,7 @@ namespace Bit.App
             }
 
             var notificationUserEmail = await _stateService.GetEmailAsync(notification.UserId);
-            await Device.InvokeOnMainThreadAsync(async () =>
+            Device.BeginInvokeOnMainThread(async () =>
             {
                 var result = await _deviceActionService.DisplayAlertAsync(AppResources.LogInRequested, string.Format(AppResources.LoginAttemptFromXDoYouWantToSwitchToThisAccount, notificationUserEmail), AppResources.Cancel, AppResources.Ok);
                 if (result == AppResources.Ok)
