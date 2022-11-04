@@ -2473,4 +2473,22 @@ select Add TOTP to store the key safely</value>
 {0}
 Искате ли да превключите към тази регистрация?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>За пръв път ли сте тук?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Получете подсказване за главната парола</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Вписване като {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Това не сте Вие?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Вписване с главната парола</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Вписване с друго устройство</value>
+  </data>
 </root>

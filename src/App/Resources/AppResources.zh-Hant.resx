@@ -296,7 +296,7 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>密碼庫</value>
+    <value>我的密碼庫</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
@@ -425,7 +425,7 @@
     <value>自動填入服務</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>避免使用易混淆的字元</value>
+    <value>避免易混淆的字元</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Bitwarden App 延伸功能</value>
@@ -461,7 +461,7 @@
     <value>繼續</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>新增帳戶</value>
+    <value>建立帳戶</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
     <value>正在建立帳戶...</value>
@@ -681,7 +681,7 @@
     <value>項目資訊</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>已更新項目。</value>
+    <value>項目已儲存</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>正在送出...</value>
@@ -827,7 +827,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>無法登入</value>
+    <value>登入無法使用</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
@@ -937,7 +937,7 @@
     <value>檔案</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>未選擇檔案</value>
+    <value>未選擇任何檔案</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
     <value>沒有附件。</value>
@@ -1143,7 +1143,7 @@
     <value>在每個登入資料旁顯示一個可辨識的圖片。</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>圖標伺服器 URL</value>
+    <value>圖示伺服器 URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
     <value>使用 Bitwarden 自動填入</value>
@@ -1152,7 +1152,7 @@
     <value>密碼庫已鎖定</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>前往密碼庫</value>
+    <value>前往我的密碼庫</value>
   </data>
   <data name="Collections" xml:space="preserve">
     <value>集合</value>
@@ -1614,7 +1614,7 @@
     <value>共用</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>切換顯示</value>
+    <value>切換可見性</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>您的登入階段已逾期。</value>
@@ -1726,7 +1726,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>已還原項目。</value>
+    <value>項目已還原</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
@@ -2006,7 +2006,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>新增 Send</value>
+    <value>建立新 Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
@@ -2471,5 +2471,23 @@
     <value>登入嘗試來自：
 {0}
 您想要切換至這個帳戶嗎？</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>New around here?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>獲取主密碼提示</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>正登入為 {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>不是您嗎？</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>使用主密碼登入</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>使用其他裝置登入</value>
   </data>
 </root>

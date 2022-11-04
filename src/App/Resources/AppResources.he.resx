@@ -2475,4 +2475,22 @@ select Add TOTP to store the key safely</value>
 {0}
 Do you want to switch to this account?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>New around here?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Get master password hint</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Logging in as {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Not you?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Log In with master password</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Log In with another device</value>
+  </data>
 </root>

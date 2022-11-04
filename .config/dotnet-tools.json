@@ -7,6 +7,12 @@
       "commands": [
         "dotnet-format"
       ]
+    },
+    "cake.tool": {
+      "version": "2.2.0",
+      "commands": [
+        "dotnet-cake"
+      ]
     }
   }
 }

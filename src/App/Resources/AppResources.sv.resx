@@ -229,7 +229,7 @@
     <value>Mappar</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Mapp sparad</value>
+    <value>Mappen uppdaterades</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Gå till webbplats</value>
@@ -279,7 +279,7 @@
     <value>Ta bort konto</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Vill du ta bort kontot?</value>
+    <value>Är du säker på att du vill ta bort detta konto?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
     <value>Kontot har redan lagts till</value>
@@ -428,7 +428,7 @@
     <value>Undvik tvetydiga tecken</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Bitwarden Apptillägg</value>
+    <value>Bitwarden apptillägg</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
     <value>Det enklaste sättet att lägga till nya inloggningar i ditt valv är genom apptillägget. Läs mer om Bitwardens apptillägg genom att navigera till fliken "Inställningar".</value>
@@ -657,7 +657,7 @@
     <value>Överväg gärna att hjälpa oss genom att ge oss en bra recension!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Skapa nytt lösenord</value>
+    <value>Återskapa lösenord</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
     <value>Ange huvudlösenordet igen</value>
@@ -681,7 +681,7 @@
     <value>Objektinformation</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Objekt har sparats</value>
+    <value>Objektet uppdaterades</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Skickar...</value>
@@ -708,7 +708,7 @@
     <value>Tvåfaktorsautentisering</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Tvåstegsverifiering gör ditt konto säkrare genom att kräva att du verifierar din inloggning med en annan enhet, t.ex. en säkerhetsnyckel, autentiseringsapp, SMS, telefonsamtal eller e-post. Tvåstegsverifiering kan aktiveras i Bitwarden.com webbvalv. Vill du besöka webbplatsen nu?</value>
+    <value>Tvåstegsverifiering gör ditt konto säkrare genom att kräva att du verifierar din inloggning med en annan enhet, t.ex. en säkerhetsnyckel, autentiseringsapp, SMS, telefonsamtal eller e-post. Tvåstegsverifiering kan aktiveras i Bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Lås upp med {0}</value>
@@ -857,7 +857,7 @@ Vänligen använd en enhet som stöds och/eller lägg till fler metoder som har 
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>E-postmeddelande för bekräftelse har skickats</value>
+    <value>Verifieringsmeddelande har skickats</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -901,7 +901,7 @@ Vänligen använd en enhet som stöds och/eller lägg till fler metoder som har 
     <value>Kan inte läsa autentiseringsnyckeln.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Peka kameran på QR-koden.
+    <value>Rikta kameran mot QR-koden.
 Skanningen sker automatiskt.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
@@ -1382,10 +1382,10 @@ Skanningen sker automatiskt.</value>
     <value>Sök i samling</value>
   </data>
   <data name="SearchFileSends" xml:space="preserve">
-    <value>Sök i Sends filer</value>
+    <value>Sök bland Sends-filer</value>
   </data>
   <data name="SearchTextSends" xml:space="preserve">
-    <value>Sök i Sends textmeddelanden</value>
+    <value>Sök bland Sends-textmeddelanden</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
     <value>Sök {0}</value>
@@ -1584,7 +1584,7 @@ Skanningen sker automatiskt.</value>
     <value>Fyll automatiskt i blockerade URI:er</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Automatisk fyllning kommer inte att erbjudas för blockerade URI:er. Separera flera URI:er med kommatecken. Till exempel: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Automatisk ifyllnad kommer inte att erbjudas för blockerade URI:er. Separera flera URI:er med kommatecken. Till exempel: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Be om att lägga till inloggning</value>
@@ -1894,7 +1894,7 @@ Skanningen sker automatiskt.</value>
     <value>Texten du vill skicka.</value>
   </data>
   <data name="HideTextByDefault" xml:space="preserve">
-    <value>Dölj först texten när denna Send öppnas</value>
+    <value>Dölj texten som standard när denna Send öppnas</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeFile" xml:space="preserve">
@@ -1935,7 +1935,7 @@ Skanningen sker automatiskt.</value>
     <value>Utgångstid</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
-    <value>Om angiven kommer åtkomst till denna Skicka att upphöra på angivet datum och tid.</value>
+    <value>Om angiven kommer åtkomst till denna Send att upphöra på angivet datum och tid.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
@@ -1945,7 +1945,7 @@ Skanningen sker automatiskt.</value>
     <value>Maximalt antal åtkomster</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>Om angivet kommer användare inte längre kunna komma åt denna Skicka när det maximala antalet åtkomster har uppnåtts.</value>
+    <value>Om angivet kommer användare inte längre kunna komma åt denna Send när det maximala antalet åtkomster har uppnåtts.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
@@ -1958,7 +1958,7 @@ Skanningen sker automatiskt.</value>
     <value>Nytt lösenord</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>Kräv eventuellt lösenord av användare för att komma åt detta Skicka.</value>
+    <value>Kräv valfritt ett lösenord för att användare ska komma åt denna Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
@@ -1978,7 +1978,7 @@ Skanningen sker automatiskt.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Inaktivera detta Skicka så att ingen kan komma åt den</value>
+    <value>Inaktivera denna Send så att ingen kan komma åt den</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1996,11 +1996,11 @@ Skanningen sker automatiskt.</value>
     <value>Dela länk</value>
   </data>
   <data name="SendLink" xml:space="preserve">
-    <value>Send link</value>
+    <value>Send-länk</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
-    <value>Search Sends</value>
+    <value>Sök bland Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
@@ -2008,7 +2008,7 @@ Skanningen sker automatiskt.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Lägg till Send</value>
+    <value>Skapa ny Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
@@ -2050,7 +2050,7 @@ Skanningen sker automatiskt.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
-    <value>På grund av företagspolicy kan du bara ta bort en befintlig Skickning.</value>
+    <value>På grund av en företagspolicy kan du bara radera en befintlig Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
@@ -2121,7 +2121,7 @@ Skanningen sker automatiskt.</value>
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>För att fortsätta, ha din FIDO2 WebAuthn aktiverad säkerhetsnyckel redo, följ sedan instruktionerna efter att du klickat på "Authenticate WebAuthn" på nästa skärm.</value>
+    <value>För att fortsätta, ha din FIDO2 WebAuthn-kompatibla säkerhetsnyckel redo, följ sedan instruktionerna efter att du klickat på "Autentisera WebAuthn" på nästa skärm.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
     <value>Autentisering med FIDO2 WebAuthn, du kan autentisera med en extern säkerhetsnyckel.</value>
@@ -2166,10 +2166,10 @@ Skanningen sker automatiskt.</value>
     <value>Kontot är låst</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
-    <value>Framgångsrikt utloggad</value>
+    <value>Kontot har loggats ut</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
-    <value>Lyckades ta bort konto</value>
+    <value>Kontot har tagits bort</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Radera konto</value>
@@ -2193,7 +2193,7 @@ Skanningen sker automatiskt.</value>
     <value>Begär engångslösenord</value>
   </data>
   <data name="SendCode" xml:space="preserve">
-    <value>Skicka kod</value>
+    <value>Send-kod</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Skickar</value>
@@ -2220,7 +2220,7 @@ Skanningen sker automatiskt.</value>
     <value>Ange verifieringskoden som skickades till din e-postadress</value>
   </data>
   <data name="SubmitCrashLogs" xml:space="preserve">
-    <value>Skicka in fellogg</value>
+    <value>Skicka in kraschloggar</value>
   </data>
   <data name="SubmitCrashLogsDescription" xml:space="preserve">
     <value>Hjälp Bitwarden att förbättra appens stabilitet genom att skicka in kraschrapporter.</value>
@@ -2271,7 +2271,7 @@ Skanningen sker automatiskt.</value>
     <value>TOTP</value>
   </data>
   <data name="VerificationCodes" xml:space="preserve">
-    <value>Bekräftelsekoder</value>
+    <value>Verifieringskoder</value>
   </data>
   <data name="PremiumSubscriptionRequired" xml:space="preserve">
     <value>Premium-prenumeration krävs</value>
@@ -2305,7 +2305,7 @@ välj Lägg till TOTP för att lagra nyckeln på ett säkert sätt</value>
     <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
-    <value>Ställa in dina låsalternativ till “Never” håller ditt valv tillgängligt för alla med tillgång till din enhet. Om du använder det här alternativet bör du se till att du håller din enhet ordentligt skyddad.</value>
+    <value>Att ställa in låsalternativ till “Aldrig” håller ditt valv tillgängligt för alla med tillgång till din enhet. Om du använder det här alternativet bör du se till att du håller din enhet ordentligt skyddad.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
     <value>En eller flera av de angivna webbadresserna är ogiltiga. Vänligen ändra det och försök att spara igen.</value>
@@ -2395,7 +2395,7 @@ välj Lägg till TOTP för att lagra nyckeln på ett säkert sätt</value>
     <value>E-post med catch-all</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
-    <value>Vidarebefordrad e-postalias</value>
+    <value>Vidarebefordrat e-postalias</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
     <value>Slumpmässigt ord</value>
@@ -2458,10 +2458,10 @@ välj Lägg till TOTP för att lagra nyckeln på ett säkert sätt</value>
     <value>Delgivning av tillgänglighetstjänst</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden använder tillgänglighetstjänsten för att söka efter inloggningsfält i appar och på webbplatser. Därefter fastställs lämpliga fältidentifierare för att mata in användarnamn och lösenord när en träff för appen eller webbplatsen hittas. Vi lagrar inte någon av de uppgifter som hittas av tjänsten, Vi gör inte heller några försök att kontrollera några element på skärmen bortom textinmatning av identitetshandlingarna.</value>
+    <value>Bitwarden använder tillgänglighetstjänsten för att söka efter inloggningsfält i appar och på webbplatser. Därefter fastställs lämpliga fältidentifierare för att mata in användarnamn och lösenord när en träff för appen eller webbplatsen hittas. Vi lagrar inte några av de uppgifter som hittas av tjänsten, vi gör inte heller några försök att kontrollera några element på skärmen bortom textinmatning av identitetshandlingarna.</value>
   </data>
   <data name="Accept" xml:space="preserve">
-    <value>Godkänn</value>
+    <value>Acceptera</value>
   </data>
   <data name="Decline" xml:space="preserve">
     <value>Neka</value>
@@ -2473,5 +2473,23 @@ välj Lägg till TOTP för att lagra nyckeln på ett säkert sätt</value>
     <value>Inloggningsförsök från:
 {0}
 Vill du byta till detta konto?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Är du ny här?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Hämta huvudlösenordsledtråd</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Loggar in som {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Är det inte du?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Logga in med huvudlösenord</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Logga in med en annan enhet</value>
   </data>
 </root>

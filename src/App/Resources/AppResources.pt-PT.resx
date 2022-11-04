@@ -2472,4 +2472,22 @@ select Add TOTP to store the key safely</value>
 {0}
 Deseja mudar para esta conta?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Novo por aqui?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Obter dica da palavra-passe mestra</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>A iniciar sessão como {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Utilizador incorreto?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Iniciar sessão com a palavra-passe mestra</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Iniciar sessão com outro dispositivo</value>
+  </data>
 </root>

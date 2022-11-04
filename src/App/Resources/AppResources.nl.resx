@@ -2472,4 +2472,22 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</value>
 {0}
 Wilt u naar dit account wisselen?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Nieuw hier?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Hoofdwachtwoordhint krijgen</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Inloggen als {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Ben jij dit niet?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Inloggen met je hoofdwachtwoord</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Inloggen met een ander apparaat</value>
+  </data>
 </root>

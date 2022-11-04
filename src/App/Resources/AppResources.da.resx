@@ -2472,4 +2472,22 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</value>
 {0}
 Vil du skifte til denne konto?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Ny her?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Få hovedadgangskodetip</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Logger ind som {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Ikke dig?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Log ind med hovedadgangskoden</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Log ind med en anden enhed</value>
+  </data>
 </root>

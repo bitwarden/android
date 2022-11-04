@@ -1152,7 +1152,7 @@
     <value>密码库已锁定</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>转到密码库</value>
+    <value>转到我的密码库</value>
   </data>
   <data name="Collections" xml:space="preserve">
     <value>集合</value>
@@ -2471,5 +2471,23 @@
     <value>登录尝试来自：
 {0}
 您想要切换到此账户吗？</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>新建在这里？</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>获取主密码提示</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>正登录为 {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>不是你？</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>使用主密码登录</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>使用其他设备登录</value>
   </data>
 </root>

@@ -2472,4 +2472,22 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
 {0}
 Voleu canviar a aquest compte?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Nou per ací?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Obteniu la pista de la contrasenya mestra</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Connectat com {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>No sou vosaltres?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Inicia sessió amb la teua contrasenya mestra</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Inicia sessió amb un altre dispositiu</value>
+  </data>
 </root>
