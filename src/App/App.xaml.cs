@@ -223,11 +223,18 @@ namespace Bit.App
             var notificationUserEmail = await _stateService.GetEmailAsync(notification.UserId);
             Device.BeginInvokeOnMainThread(async () =>
             {
-                var result = await _deviceActionService.DisplayAlertAsync(AppResources.LogInRequested, string.Format(AppResources.LoginAttemptFromXDoYouWantToSwitchToThisAccount, notificationUserEmail), AppResources.Cancel, AppResources.Ok);
-                if (result == AppResources.Ok)
+                try
                 {
-                    await _stateService.SetActiveUserAsync(notification.UserId);
-                    _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
+                    var result = await _deviceActionService.DisplayAlertAsync(AppResources.LogInRequested, string.Format(AppResources.LoginAttemptFromXDoYouWantToSwitchToThisAccount, notificationUserEmail), AppResources.Cancel, AppResources.Ok);
+                    if (result == AppResources.Ok)
+                    {
+                        await _stateService.SetActiveUserAsync(notification.UserId);
+                        _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
                 }
             });
             return true;
