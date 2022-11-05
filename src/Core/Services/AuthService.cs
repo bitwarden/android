@@ -24,7 +24,6 @@ namespace Bit.Core.Services
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IMessagingService _messagingService;
         private readonly IKeyConnectorService _keyConnectorService;
-        private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly bool _setCryptoKeys;
         private SymmetricCryptoKey _key;
 
@@ -40,7 +39,6 @@ namespace Bit.Core.Services
             IMessagingService messagingService,
             IVaultTimeoutService vaultTimeoutService,
             IKeyConnectorService keyConnectorService,
-            IPasswordGenerationService passwordGenerationService,
             bool setCryptoKeys = true)
         {
             _cryptoService = cryptoService;
@@ -54,7 +52,6 @@ namespace Bit.Core.Services
             _messagingService = messagingService;
             _keyConnectorService = keyConnectorService;
             _setCryptoKeys = setCryptoKeys;
-            _passwordGenerationService = passwordGenerationService;
 
             TwoFactorProviders = new Dictionary<TwoFactorProviderType, TwoFactorProvider>();
             TwoFactorProviders.Add(TwoFactorProviderType.Authenticator, new TwoFactorProvider
