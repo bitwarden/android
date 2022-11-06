@@ -68,7 +68,8 @@ namespace Bit.App.Pages
 
         public ICommand CreatePasswordlessLoginCommand { get; }
 
-        public string FingerprintPhrase {
+        public string FingerprintPhrase
+        {
             get => _fingerprintPhrase;
             set
             {
