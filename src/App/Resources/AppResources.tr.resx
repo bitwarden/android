@@ -152,11 +152,11 @@
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Parolayı Kopyala</value>
+    <value>Parolayı kopyala</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Kullanıcı Adını Kopyala</value>
+    <value>Kullanıcı adını kopyala</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -229,7 +229,7 @@
     <value>Klasörler</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Klasör güncellendi.</value>
+    <value>Klasör kaydedildi</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Web sitesine git</value>
@@ -247,7 +247,7 @@
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>İnternet Bağlantısı Gerekiyor</value>
+    <value>İnternet bağlantısı gerekli</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Kayıt silindi.</value>
+    <value>Kayıt silindi</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -375,11 +375,11 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} kopyalandı.</value>
+    <value>{0} kopyalandı</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Parmak İzini Doğrula</value>
+    <value>Parmak izini doğrula</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
     <value>Ana parolayı doğrula</value>
@@ -428,7 +428,7 @@
     <value>Okurken karışabilecek karakterleri kullanma</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Bitwarden Uygulama Uzantısı</value>
+    <value>Bitwarden uygulama uzantısı</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
     <value>Kasanıza yeni hesaplar eklemenin en kolay yolu Bitwarden uygulama uzantısıdır. Bitwarden uygulama uzantısı hakkında daha fazla bilgi almak için "Ayarlar" ekranına bakabilirsiniz.</value>
@@ -604,7 +604,7 @@
     <value>Asla</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Yeni kayıt oluşturuldu.</value>
+    <value>Kayıt eklendi</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Kasanızda hiç favoriniz yok.</value>
@@ -632,10 +632,10 @@
     <value>Diğer</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Parola oluşturuldu.</value>
+    <value>Parola oluşturuldu</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Parola Oluşturucu</value>
+    <value>Parola üretici</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Parola ipucu</value>
@@ -663,7 +663,7 @@
     <value>Ana parolayı tekrar yazın</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Kasada Ara</value>
+    <value>Kasada ara</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Güvenlik</value>
@@ -681,7 +681,7 @@
     <value>Hesap Bilgileri</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Hesap güncellendi.</value>
+    <value>Kayıt kaydedildi</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Gönderiliyor...</value>
@@ -692,10 +692,10 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Eşitleme tamamlandı.</value>
+    <value>Eşitleme tamamlandı</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Eşitleme başarısız oldu.</value>
+    <value>Eşitleme başarısız oldu</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>Kasayı şimdi eşitle</value>
@@ -708,7 +708,7 @@
     <value>İki aşamalı giriş</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>İki aşamalı giriş, hesabınıza girererken işlemi bir güvenlik anahtarı, şifrematik uygulaması, SMS, telefon araması veya e-posta gibi ek bir yöntemle doğrulamanızı isteyerek hesabınızın güvenliğini artırır. İki aşamalı giriş özelliğini bitwarden.com web kasası üzerinden etkinleştirebilirsiniz. Şimdi siteye gitmek ister misiniz?</value>
+    <value>İki aşamalı giriş, hesabınıza girererken işlemi bir güvenlik anahtarı, şifrematik uygulaması, SMS, telefon araması veya e-posta gibi ek bir yöntemle doğrulamanızı isteyerek hesabınızın güvenliğini artırır. İki aşamalı giriş özelliğini bitwarden.com web kasası üzerinden ayarlayabilirsiniz. Şimdi siteye gitmek ister misiniz?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Kilidi {0} ile aç</value>
@@ -856,14 +856,14 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Doğrulama e-postası gönderildi.</value>
+    <value>Doğrulama e-postası gönderildi</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
     <value>Devam etmek için YubiKey NEO anahtarınızı cihazınızın arkasına doğru tutun veya YubiKey'i cihazınızın USB portuna takıp düğmesine dokunun.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey Güvenlik Anahtarı</value>
+    <value>YubiKey güvenlik anahtarı</value>
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -1143,7 +1143,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Hesapların yanında tanıdık görseller göster.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Sunucu URL simgeleri</value>
+    <value>Simge sunucusu URL'si</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
     <value>Bitwarden ile otomatik doldur</value>
@@ -1213,7 +1213,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Metin</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>Yeni Özel Alan</value>
+    <value>Yeni özel alan</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
     <value>Ne tür bir özel alan eklemek istiyorsunuz?</value>
@@ -1252,11 +1252,11 @@ Kod otomatik olarak taranacaktır.</value>
     <value>URI eşleşme tespiti</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Eşleşme Tespiti</value>
+    <value>Eşleşme tespiti</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Evet, Kaydet</value>
+    <value>Evet ve kaydet</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
     <value>Otomatik doldur ve kaydet</value>
@@ -1278,7 +1278,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Erişilebilirlik hizmeti, standart otomatik doldurma hizmetini desteklemeyen uygulamalarda işe yarayabilir.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Parola Güncellendi</value>
+    <value>Parola güncellendi</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
@@ -1337,10 +1337,10 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Hesaplar</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>Güvenli Notlar</value>
+    <value>Güvenli notlar</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>Tüm Öğeler</value>
+    <value>Tüm kayıtlar</value>
   </data>
   <data name="URIs" xml:space="preserve">
     <value>URl'ler</value>
@@ -1480,7 +1480,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Kilidi aç</value>
   </data>
   <data name="UnlockVault" xml:space="preserve">
-    <value>Kasanı Aç</value>
+    <value>Kasa kilidini aç</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 dakika</value>
@@ -1556,7 +1556,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Varsayılan (sistem) temayı kullanırken cihazınızın koyu modu açıldığında koyu temaya geçmek için bunu seçin.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Notları kopyala</value>
+    <value>Notu kopyala</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Çıkış</value>
@@ -1595,7 +1595,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Uygulama yeniden başlatılınca</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Otomatik doldurma, web sitelerinden ve uygulamalardan Bitwarden kasanıza güvenle erişmenizi kolaylaştırır. Bitwarden otomatik doldurma hizmetini henüz etkinleştirmemişsiniz. "Ayarlar" ekranından otomatik doldurmayı etkinleştirin.</value>
+    <value>Otomatik doldurma, web sitelerinden ve uygulamalardan Bitwarden kasanıza güvenle erişmenizi kolaylaştırır. Bitwarden otomatik doldurma hizmetini henüz ayarlamamışsınız. "Ayarlar" ekranından otomatik doldurmayı ayarlayın.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Tema değişiklikleriniz uygulama yeniden başlatılınca uygulanacaktır.</value>
@@ -1632,7 +1632,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Bitwarden'la ilgilenmeniz gerekiyor: Bitwarden ayarlarından "Otomatik doldurma erişilebilirlik hizmeti"ne bakın</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. Android'in uygulama ayarları bölümünde Bitwarden'ı bulun ve "diğer uygulamaların üstünde göster" ayarını açın. ("Gelişmiş" altında olabilir.)</value>
+    <value>3. Android'in uygulama ayarları bölümünde Bitwarden'ı bulun ve "Diğer uygulamaların üzerinde görüntüle" ayarını ("Gelişmiş" altında) açın.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>İzin</value>
@@ -1726,7 +1726,7 @@ Kod otomatik olarak taranacaktır.</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Kayıt geri yüklendi.</value>
+    <value>Kayıt geri yüklendi</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
@@ -1756,7 +1756,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Otomatik doldurma için biyometrik kilit açma devre dışı. Ana parolanın doğrulanması bekleniyor.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Yenileme sırasında eşitlemeyi etkinleştir</value>
+    <value>Yenileme sırasında eşitlemeye izin ver</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
     <value>Parmağımla aşağı çektiğimde kasayı eşitle.</value>
@@ -1774,7 +1774,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Şu anda SSO ile giriş yapılamıyor</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Ana Parola Belirleyin</value>
+    <value>Ana parolayı belirle</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
     <value>SSO ile girişinizi tamamlamak için lütfen kasanıza erişirken kullanacağınız ana parolayı belirleyin.</value>
@@ -1831,7 +1831,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Satır içi otomatik doldurmayı kullan</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Seçtiğiniz IME (klavye) destekliyorsa satır içi otomatik doldurmayı kullanabilirsiniz. Yapılandırmanız desteklenmiyorsa (veya bu seçenek devre dışıysa) varsayılan otomatik doldurma kutusu kullanılacaktır.</value>
+    <value>Seçtiğiniz IME (klavye) destekliyorsa satır içi otomatik doldurmayı kullanabilirsiniz. Yapılandırmanız desteklenmiyorsa (veya bu seçenek kapalıysa) varsayılan otomatik doldurma kutusu kullanılacaktır.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
     <value>Erişilebilirliği kullan</value>
@@ -1840,13 +1840,13 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Uygulamalarda ve web'de hesap bilgilerinizi otomatik olarak doldurmak için Bitwarden erişilebilirlik hizmetini kullanabilirsiniz. Bu özelliği açarsanız giriş alanlarını seçtiğinizde bir açılır pencere karşınıza çıkacaktır.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Uygulamalarda ve web'de hesap bilgilerinizi otomatik olarak doldurmak için Bitwarden erişilebilirlik hizmetini kullanın.  ("Üstünde gösterme"nin açılması gerekir.)</value>
+    <value>Uygulamalarda ve web'de hesap bilgilerinizi otomatik olarak doldurmak için Bitwarden erişilebilirlik hizmetini kullanın. ("Üstünde gösterme"nin de açılması gerekir.)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
     <value>Bitwarden erişilebilirlik hizmetini açarak otomatik doldurma hızlı eylem kutusunu kullanabilir ve/veya üstünde gösterme yöntemiyle (bu özellliği açarsanız) açılır pencere açabilirisiniz.</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Otomatik doldurma hızlı eylem kutusunu kullanmak veya üstünde gösterme yöntemiyle (etkinleştirildiyse) otomatik doldurma hizmetini taklit etmek için gereklidir.</value>
+    <value>Otomatik doldurma hızlı eylem kutusunu kullanmak veya üstünde gösterme yöntemiyle (açıldıysa) otomatik doldurma hizmetini taklit etmek için gereklidir.</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
     <value>Üstünde göstermeyi kullan</value>
@@ -1855,13 +1855,13 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Bu seçeneği açarsanız, giriş formları seçildiğinde Bitwarden erişilebilirlik hizmeti bir açılır pencere görüntüleyebilir.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>Bu seçeneği açarsanız, giriş formları seçildiğinde Bitwarden Erişilebilirlik Hizmeti formu otomatik doldurmanızı sağlamak için bir pencere açabilir.</value>
+    <value>Bu seçeneği açarsanız, giriş formları seçildiğinde Bitwarden Erişilebilirlik Hizmeti formu otomatik doldurmanızı sağlamak için bir pencere açar.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
     <value>Bu seçeneği açarsanız, Android'in otomatik doldurma özelliğini desteklemeyen eski uygulamalarda bu özelliği taklit eden bir pencere açılacaktır.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Kurumsal ilkeler nedeniyle kişisel kasanıza hesap kaydetmeniz kısıtlanmış. Sahip seçeneğini bir kuruluş olarak değiştirin ve mevcut koleksiyonlar arasından seçim yapın.</value>
+    <value>Bir kuruluş ilkesi nedeniyle kişisel kasanıza hesap kaydetmeniz kısıtlanmış. Sahip seçeneğini bir kuruluş olarak değiştirin ve mevcut koleksiyonlar arasından seçim yapın.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
     <value>Bir kuruluş ilkesi sahiplik seçeneklerinizi etkiliyor.</value>
@@ -2006,7 +2006,7 @@ Kod otomatik olarak taranacaktır.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Send ekle</value>
+    <value>Yeni Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
@@ -2014,15 +2014,15 @@ Kod otomatik olarak taranacaktır.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Send silindi.</value>
+    <value>Send silindi</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Send güncellendi.</value>
+    <value>Send kaydedildi</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Yeni Send oluşturuldu.</value>
+    <value>Send oluşturuldu</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2185,7 +2185,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Hesabınız kalıcı olarak silinmiştir</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Doğrulama kodu geçersiz.</value>
+    <value>Doğrulama kodu geçersiz</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
     <value>Tek kullanımlık parola iste</value>
@@ -2302,7 +2302,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
-    <value>Kilit seçeneklerinizi "Hiçbir zaman" olarak ayarlamak, kasanızın cihazınıza erişimi olan herkesin kullanımına açık olmasını sağlar. Bu seçeneği kullanırsanız, cihazınızı uygun şekilde koruduğunuzdan emin olmalısınız.</value>
+    <value>Kilit seçeneklerinizi "Asla" olarak ayarlarsanız cihazınıza erişebilen herkes kasanıza da erişebilir. Bu seçeneği kullanırsanız cihazınızı uygun şekilde koruduğunuzdan emin olmalısınız.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
     <value>Girilen adreslerden biri veya birkaçı geçersiz. Lütfen düzeltip yeniden kaydetmeyi deneyin.</value>
@@ -2314,7 +2314,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Ekran kaydına izin ver</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>Ekran kaydını etkinleştirmek istediğinizden emin misiniz?</value>
+    <value>Ekran kaydını açmak istediğinizden emin misiniz?</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
     <value>Giriş istendi</value>
@@ -2323,7 +2323,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Giriş yapmaya mı çalışıyorsunuz?</value>
   </data>
   <data name="LogInAttemptByXOnY" xml:space="preserve">
-    <value>Login attempt by {0} on {1}</value>
+    <value>{0} - {1} giriş denemesi</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
     <value>Cihaz türü</value>
@@ -2452,23 +2452,41 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Rastgele</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
-    <value>Accessibility Service Disclosure</value>
+    <value>Erişilebilirlik Hizmeti Beyanı</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
+    <value>Bitwarden; uygulamalarda ve web sitelerinde giriş alanlarını bulmak ve eşleşme bulunduğunda kullanıcı adı ve parolayı doldurmak için erişilebilirlik hizmetini kullanır. Hizmetin bize sunduğu hiçbir bilgiyi saklamayız ve hesap bilgilerinin girilmesi dışında ekrandaki öğeleri değiştirmek için herhangi bir girişimde bulunmayız.</value>
   </data>
   <data name="Accept" xml:space="preserve">
-    <value>Accept</value>
+    <value>Kabul et</value>
   </data>
   <data name="Decline" xml:space="preserve">
-    <value>Decline</value>
+    <value>Reddet</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>Giriş isteğinin süresi doldu.</value>
   </data>
   <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
-    <value>Login attempt from:
+    <value>Giriş denemesi yapan hesap:
 {0}
-Do you want to switch to this account?</value>
+Bu hesaba geçmek ister misiniz?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Buralarda yeni misiniz?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Ana parola ipucunu al</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>{0} olarak giriş yapılıyor</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Siz değil misiniz?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Ana parola ile giriş yap</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Başka bir cihazla giriş yap</value>
   </data>
 </root>

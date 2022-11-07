@@ -2471,4 +2471,22 @@ TOTP hozzáadása a kulcs biztonságos tárolásához lehetőséget.</value>
 {0}
 Szeretnénk átváltani erre a fiókra?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Új felhasználó vagyunk?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Mesterjelszó emlékeztető kérése</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Bejelentkezve mint {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Ez tévedés?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Bejelentkezés mesterjelszóval</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Bejelentkezés más eszközzel</value>
+  </data>
 </root>

@@ -2472,4 +2472,22 @@
 {0}
 このアカウントに切り替えますか？</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>初めてですか?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>マスターパスワードのヒントを取得する</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>{0} としてログイン</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>あなたではないですか？</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>マスターパスワードでログイン</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>別のデバイスでログイン</value>
+  </data>
 </root>

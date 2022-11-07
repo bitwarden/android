@@ -2472,4 +2472,22 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
 {0}
 Voulez-vous basculer vers ce compte ?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Vous êtes nouveau ici ?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Obtenir l'indice du mot de passe maître</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Connecté en tant que {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Ce n'est pas vous ?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Connectez-vous avec le mot de passe maître</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Connectez-vous avec un autre appareil</value>
+  </data>
 </root>

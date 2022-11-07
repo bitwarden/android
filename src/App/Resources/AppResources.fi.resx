@@ -2324,7 +2324,7 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
     <value>Yritätkö kirjautua sisään?</value>
   </data>
   <data name="LogInAttemptByXOnY" xml:space="preserve">
-    <value>{0} yrittää kirjautua laitteella {1}</value>
+    <value>Kirjautumisyritys tunnuksella {0} laitteella {1}</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
     <value>Laitteen tyyppi</value>
@@ -2471,5 +2471,23 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
     <value>Kirjautumisyritys tunnuksella:
 {0}
 Haluatko vaihtaa tähän tiliin?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Oletko uusi täällä?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Pyydä pääsalasanan vihjettä</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Kirjaudutaan tunnuksella {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Etkö se ole sinä?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Kirjaudu pääsalasanalla</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Kirjaudu toisella laitteella</value>
   </data>
 </root>

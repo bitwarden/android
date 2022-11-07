@@ -2472,4 +2472,22 @@
 {0}
 Хочете перемкнутися на цей обліковий запис?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Виконуєте вхід вперше?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Отримати підказку для головного пароля</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Вхід у систему як {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Не ви?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Увійти з головним паролем</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Увійти з іншого пристрою</value>
+  </data>
 </root>
