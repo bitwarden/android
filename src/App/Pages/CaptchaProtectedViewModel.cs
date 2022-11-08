@@ -21,16 +21,15 @@ namespace Bit.App.Pages
             if (!needsCaptcha)
             {
                 _captchaToken = null;
-                return true;
+                return false;
             }
 
             if(await HandleCaptchaAsync(captchaSiteKey))
             {
                 await onSuccess();
                 _captchaToken = null;
-                return false;
             }
-            return false;
+            return true;
         }
 
         protected async Task<bool> HandleCaptchaAsync(string CaptchaSiteKey)

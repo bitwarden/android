@@ -26,7 +26,7 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
             _vm.LogInSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
-            _vm.LogInWithDeviceAction = async () => await StartLoginWithDeviceAsync();
+            _vm.LogInWithDeviceAction = () => StartLoginWithDeviceAsync().FireAndForget();
             _vm.StartSsoLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
             _vm.UpdateTempPasswordAction = () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.CloseAction = async () =>
@@ -119,13 +119,6 @@ namespace Bit.App.Pages
             if (DoOnce())
             {
                 _vm.StartSsoLoginAction();
-            }
-        }
-        private void LogInWithDevice_Clicked(object sender, EventArgs e)
-        {
-            if (DoOnce())
-            {
-                _vm.LogInWithDeviceAction();
             }
         }
 

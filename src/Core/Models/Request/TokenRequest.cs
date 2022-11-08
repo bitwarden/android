@@ -22,7 +22,7 @@ namespace Bit.Core.Models.Request
         public DeviceRequest Device { get; set; }
 
         public TokenRequest(string[] credentials, string[] codes, TwoFactorProviderType? provider, string token,
-            bool? remember, string captchaToken, string authRequestId = null, DeviceRequest device = null)
+            bool? remember, string captchaToken, DeviceRequest device = null, string authRequestId = null)
         {
             if (credentials != null && credentials.Length > 1)
             {

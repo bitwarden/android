@@ -325,20 +325,20 @@ namespace Bit.Core.Services
             if (twoFactorToken != null && twoFactorProvider != null)
             {
                 request = new TokenRequest(emailPassword, codeCodeVerifier, twoFactorProvider, twoFactorToken, remember,
-                    captchaToken, device: deviceRequest);
+                    captchaToken, deviceRequest);
             }
             else if (storedTwoFactorToken != null)
             {
                 request = new TokenRequest(emailPassword, codeCodeVerifier, TwoFactorProviderType.Remember,
-                    storedTwoFactorToken, false, captchaToken, device: deviceRequest);
+                    storedTwoFactorToken, false, captchaToken, deviceRequest);
             }
             else if (authRequestId != null)
             {
-                request = new TokenRequest(emailPassword, null, null, null, false, null, authRequestId, deviceRequest);
+                request = new TokenRequest(emailPassword, null, null, null, false, null, deviceRequest, authRequestId);
             }
             else
             {
-                request = new TokenRequest(emailPassword, codeCodeVerifier, null, null, false, captchaToken, device: deviceRequest);
+                request = new TokenRequest(emailPassword, codeCodeVerifier, null, null, false, captchaToken, deviceRequest);
             }
 
             var response = await _apiService.PostIdentityTokenAsync(request);
@@ -509,7 +509,7 @@ namespace Bit.Core.Services
         {
             var deviceId = await _appIdService.GetAppIdAsync();
             var keyPair = await _cryptoFunctionService.RsaGenerateKeyPairAsync(2048);
-            var generatedFingerprintPhrase = await _cryptoService.GetFingerprintAsync(Email, keyPair.Item1);
+            var generatedFingerprintPhrase = await _cryptoService.GetFingerprintAsync(email, keyPair.Item1);
             var fingerprintPhrase = string.Join("-", generatedFingerprintPhrase);
             var publicB64 = Convert.ToBase64String(keyPair.Item1);
             var accessCode = await _passwordGenerationService.GeneratePasswordAsync(new PasswordGenerationOptions(true) { Length = 25 });

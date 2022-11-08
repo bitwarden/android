@@ -29,9 +29,6 @@ namespace Bit.App.Pages
         private ISyncService _syncService;
         private II18nService _i18nService;
         private IStateService _stateService;
-        private ICryptoFunctionService _cryptoFunctionService;
-        private ICryptoService _cryptoService;
-        private IPasswordGenerationService _passwordGenerationService;
         private IPlatformUtilsService _platformUtilsService;
         private IEnvironmentService _environmentService;
         private ILogger _logger;
@@ -58,15 +55,16 @@ namespace Bit.App.Pages
             _syncService = ServiceContainer.Resolve<ISyncService>();
             _i18nService = ServiceContainer.Resolve<II18nService>();
             _stateService = ServiceContainer.Resolve<IStateService>();
-            _cryptoFunctionService = ServiceContainer.Resolve<ICryptoFunctionService>();
-            _cryptoService = ServiceContainer.Resolve<ICryptoService>();
-            _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>();
             _logger = ServiceContainer.Resolve<ILogger>();
 
             PageTitle = AppResources.LogInWithAnotherDevice;
 
             CreatePasswordlessLoginCommand = new AsyncCommand(() => Device.InvokeOnMainThreadAsync(CreatePasswordlessLoginAsync),
                 onException: ex => HandleException(ex),
+                allowsMultipleExecutions: false);
+
+            CloseCommand = new AsyncCommand(() => Device.InvokeOnMainThreadAsync(CloseAction),
+                onException: _logger.Exception,
                 allowsMultipleExecutions: false);
         }
 
@@ -76,6 +74,7 @@ namespace Bit.App.Pages
         public Action CloseAction { get; set; }
 
         public ICommand CreatePasswordlessLoginCommand { get; }
+        public ICommand CloseCommand { get; }
 
         public string FingerprintPhrase
         {
@@ -138,12 +137,10 @@ namespace Bit.App.Pages
                 var authResult = await _authService.LogInPasswordlessAsync(Email, _requestAccessCode, _requestId, _requestKeyPair.Item2, response.Key, response.MasterPasswordHash);
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
 
-                if (!await HandleCaptchaAsync(authResult.CaptchaSiteKey, authResult.CaptchaNeeded, CheckLoginRequestStatus))
+                if (await HandleCaptchaAsync(authResult.CaptchaSiteKey, authResult.CaptchaNeeded, CheckLoginRequestStatus))
                 {
                     return;
                 }
-
-                await _deviceActionService.HideLoadingAsync();
 
                 if (authResult.TwoFactor)
                 {
