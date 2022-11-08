@@ -39,14 +39,6 @@ namespace Bit.App.Pages
             _vm.StopCheckLoginRequestStatus();
         }
 
-        private void Close_Clicked(object sender, System.EventArgs e)
-        {
-            if (DoOnce())
-            {
-                _vm.CloseAction();
-            }
-        }
-
         private async Task StartTwoFactorAsync()
         {
             var page = new TwoFactorPage(false, _appOptions);

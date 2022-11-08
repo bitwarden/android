@@ -44,6 +44,7 @@ namespace Bit.App.Pages
         private string _email;
         private string _requestId;
         private string _requestAccessCode;
+        // Item1 publicKey, Item2 privateKey
         private Tuple<byte[], byte[]> _requestKeyPair;
 
         public LoginPasswordlessRequestViewModel()
@@ -59,7 +60,7 @@ namespace Bit.App.Pages
 
             PageTitle = AppResources.LogInWithAnotherDevice;
 
-            CreatePasswordlessLoginCommand = new AsyncCommand(() => Device.InvokeOnMainThreadAsync(CreatePasswordlessLoginAsync),
+            CreatePasswordlessLoginCommand = new AsyncCommand(CreatePasswordlessLoginAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
@@ -165,7 +166,7 @@ namespace Bit.App.Pages
 
         private async Task CreatePasswordlessLoginAsync()
         {
-            await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
+            await Device.InvokeOnMainThreadAsync(async () => await _deviceActionService.ShowLoadingAsync(AppResources.Loading));
 
             var response = await _authService.PasswordlessCreateLoginRequestAsync(_email);
             if (response != null)
