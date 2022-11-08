@@ -44,6 +44,7 @@ namespace Bit.App.Pages
         public Action StartTwoFactorAction { get; set; }
         public Action LogInSuccessAction { get; set; }
         public Action UpdateTempPasswordAction { get; set; }
+        public Action CloseAction { get; set; }
 
         public LoginPasswordlessRequestViewModel()
         {
