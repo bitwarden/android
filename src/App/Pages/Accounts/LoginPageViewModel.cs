@@ -54,6 +54,7 @@ namespace Bit.App.Pages
             TogglePasswordCommand = new Command(TogglePassword);
             LogInCommand = new Command(async () => await LogInAsync());
             MoreCommand = new AsyncCommand(MoreAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
+            LogInWithDeviceCommand = new AsyncCommand(async () => await Device.InvokeOnMainThreadAsync(LogInWithDeviceAction), onException: _logger.Exception, allowsMultipleExecutions: false);
 
             AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
@@ -114,6 +115,7 @@ namespace Bit.App.Pages
         public Command LogInCommand { get; }
         public Command TogglePasswordCommand { get; }
         public ICommand MoreCommand { get; internal set; }
+        public AsyncCommand LogInWithDeviceCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string LoggingInAsText => string.Format(AppResources.LoggingInAsX, Email);
