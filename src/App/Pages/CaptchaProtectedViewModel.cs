@@ -24,7 +24,7 @@ namespace Bit.App.Pages
                 return false;
             }
 
-            if(await HandleCaptchaAsync(captchaSiteKey))
+            if (await HandleCaptchaAsync(captchaSiteKey))
             {
                 await onSuccess();
                 _captchaToken = null;

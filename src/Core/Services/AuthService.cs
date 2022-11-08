@@ -516,7 +516,7 @@ namespace Bit.Core.Services
             var passwordlessCreateLoginRequest = new PasswordlessCreateLoginRequest(email, publicB64, deviceId, accessCode, AuthRequestType.AuthenticateAndUnlock, fingerprintPhrase);
             var response = await _apiService.PostCreateRequestAsync(passwordlessCreateLoginRequest);
 
-            if(response != null)
+            if (response != null)
             {
                 response.RequestKeyPair = keyPair;
                 response.RequestAccessCode = accessCode;
