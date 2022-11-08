@@ -1,10 +1,3 @@
-//
-//  WatchConnectivityManager.swift
-//  bitwarden WatchKit Extension
-//
-//  Created by Federico Andrés Maccaroni on 25/08/2022.
-//
-
 import Foundation
 import WatchConnectivity
 
@@ -18,6 +11,7 @@ final class WatchConnectivityManager: NSObject, ObservableObject {
     @Published var notificationMessage: NotificationMessage? = nil
     
     private let kMessageKey = "message"
+    private let kCipherDataKey = "cipherData"
     
     private override init() {
         super.init()
@@ -43,7 +37,7 @@ final class WatchConnectivityManager: NSObject, ObservableObject {
         #endif
         
         WCSession.default.sendMessage([kMessageKey : message], replyHandler: nil) { error in
-            print("Cannot send message: \(String(describing: error))")
+            Log.e("Cannot send message: \(String(describing: error))")
         }
     }
 }
@@ -57,14 +51,35 @@ extension WatchConnectivityManager: WCSessionDelegate {
         }
     }
     
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
+        if let notificationText = message[kMessageKey] as? String {
+            DispatchQueue.main.async { [weak self] in
+                self?.notificationMessage = NotificationMessage(text: notificationText)
+            }
+        }
+    }
+    
     func session(_ session: WCSession,
                  activationDidCompleteWith activationState: WCSessionActivationState,
-                 error: Error?) {}
-    
-    #if os(iOS)
-    func sessionDidBecomeInactive(_ session: WCSession) {}
-    func sessionDidDeactivate(_ session: WCSession) {
-        session.activate()
+                 error: Error?) {
+        DispatchQueue.main.async { [weak self] in
+            self?.notificationMessage = NotificationMessage(text: "testing this activationDidCompleteWith")
+        }
+        
     }
-    #endif
+    
+    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
+        if let serializedDto = applicationContext[kCipherDataKey] as? String {
+            
+            let decoder = JSONDecoder()
+            do {
+                let watchDTO = try decoder.decode(WatchDTO.self, from: serializedDto.data(using: .utf8)!)
+                
+                CipherService.shared.saveCiphers(watchDTO.ciphers){}
+            }
+            catch {
+                Log.e(error)
+            }
+        }
+    }
 }

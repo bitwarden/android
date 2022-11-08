@@ -18,6 +18,7 @@ using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using Bit.Droid.Utilities;
 using Plugin.CurrentActivity;
+using static Bit.App.Pages.SettingsPageViewModel;
 
 namespace Bit.Droid.Services
 {
@@ -523,6 +524,7 @@ namespace Bit.Droid.Services
             Application.Context.StartActivity(intent);
         }
 
+        public Task SendDataToWatchAsync(WatchDTO dto) => throw new NotImplementedException();
         public void CloseExtensionPopUp()
         {
             // only used by iOS

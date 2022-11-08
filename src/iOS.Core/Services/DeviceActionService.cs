@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
@@ -11,19 +12,24 @@ using Bit.iOS.Core.Views;
 using CoreGraphics;
 using Foundation;
 using LocalAuthentication;
+using MobileCoreServices;
+using Newtonsoft.Json;
+using Photos;
 using UIKit;
 using WatchConnectivity;
 using Xamarin.Forms;
+using static Bit.App.Pages.SettingsPageViewModel;
 
 namespace Bit.iOS.Core.Services
 {
     public class DeviceActionService : IDeviceActionService
     {
+        private IStateService _stateService;
+        private IMessagingService _messagingService;
+
         private Toast _toast;
         private UIAlertController _progressAlert;
         private string _userAgent;
-        private readonly IStateService _stateService;
-        private readonly IMessagingService _messagingService;
 
         public DeviceActionService(
             IStateService stateService,
@@ -82,12 +88,6 @@ namespace Bit.iOS.Core.Services
                 _toast?.Dispose();
                 _toast = null;
             };
-        }
-
-        public void SendTestMessageToWatch()
-        {
-            WCSessionManager.SharedManager.UpdateApplicationContext(new Dictionary<string, object>() { { "message", $"totp app context test" } });
-            WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() { { "message", $"totp test" } });
         }
 
         public Task ShowLoadingAsync(string text)
@@ -409,6 +409,22 @@ namespace Bit.iOS.Core.Services
             UIApplication.SharedApplication.OpenUrl(url);
         }
 
+        public void SendTestMessageToWatch()
+        {
+            WCSessionManager.SharedManager.UpdateApplicationContext(new Dictionary<string, object>() { { "message", $"totp app context test" } });
+            WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() { { "message", $"totp test" } });
+        }
+
+        public Task SendDataToWatchAsync(WatchDTO dto)
+        {
+            var serializedData = JsonConvert.SerializeObject(dto);
+
+            WCSessionManager.SharedManager.UpdateApplicationContext(new Dictionary<string, object>() { { "cipherData", serializedData } });
+            //WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() { { "cipherData", "hola como va" } });
+
+            return Task.CompletedTask;
+        }
+        
         public void CloseExtensionPopUp()
         {
             GetPresentedViewController().DismissViewController(true, null);

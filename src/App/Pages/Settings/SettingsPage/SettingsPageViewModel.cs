@@ -8,6 +8,8 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
+using Bit.Core.Models.View;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
@@ -496,7 +498,8 @@ namespace Bit.App.Pages
                 autofillItems.Add(new SettingsPageListItem
                 {
                     Name = AppResources.ConnectToWatch,
-                    SubLabel = _deviceActionService.IsWatchReachable ? AppResources.On : AppResources.Off
+                    SubLabel = _deviceActionService.IsWatchReachable ? AppResources.On : AppResources.Off,
+                    ExecuteAsync = () => SendDataToWatchAsync()
                 });
 
                 if (_deviceActionService.SystemMajorVersion() >= 12)
@@ -796,6 +799,34 @@ namespace Bit.App.Pages
                 _loggerService.Exception(ex);
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok);
             }
+        }
+
+        private async Task SendDataToWatchAsync()
+        {
+            try
+            {
+                await _deviceActionService.ShowLoadingAsync("Sending data to watch");
+
+                var ciphers = await ServiceContainer.Resolve<ICipherService>("cipherService").GetAllDecryptedAsync();
+                var watchDto = new WatchDTO
+                {
+                    Ciphers = ciphers.Select(c => new SimpleCipherView(c)).ToList()
+                };
+                await _deviceActionService.SendDataToWatchAsync(watchDto);
+
+                await _deviceActionService.HideLoadingAsync();
+
+                _deviceActionService.Toast("Watch data finished sending", true);
+            }
+            finally
+            {
+                await _deviceActionService.HideLoadingAsync();
+            }
+        }
+
+        public class WatchDTO
+        {
+            public List<SimpleCipherView> Ciphers { get; set; }
         }
     }
 }
