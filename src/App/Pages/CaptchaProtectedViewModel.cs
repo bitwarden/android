@@ -16,6 +16,23 @@ namespace Bit.App.Pages
         protected abstract IPlatformUtilsService platformUtilsService { get; }
         protected string _captchaToken = null;
 
+        protected async Task<bool> HandleCaptchaAsync(string captchaSiteKey, bool needsCaptcha, Func<Task> onSuccess)
+        {
+            if (!needsCaptcha)
+            {
+                _captchaToken = null;
+                return true;
+            }
+
+            if(await HandleCaptchaAsync(captchaSiteKey))
+            {
+                await onSuccess();
+                _captchaToken = null;
+                return false;
+            }
+            return false;
+        }
+
         protected async Task<bool> HandleCaptchaAsync(string CaptchaSiteKey)
         {
             var callbackUri = "bitwarden://captcha-callback";

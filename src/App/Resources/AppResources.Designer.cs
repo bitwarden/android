@@ -4735,9 +4735,9 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device..
         /// </summary>
-        public static string PleaseMakeSureYourVaultIsUnlockedAnd {
+        public static string PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice {
             get {
-                return ResourceManager.GetString("PleaseMakeSureYourVaultIsUnlockedAnd", resourceCulture);
+                return ResourceManager.GetString("PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice", resourceCulture);
             }
         }
         

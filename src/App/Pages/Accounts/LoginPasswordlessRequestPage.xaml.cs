@@ -22,11 +22,9 @@ namespace Bit.App.Pages
             _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
             _vm.LogInSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
             _vm.UpdateTempPasswordAction = () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
-            _vm.CloseAction = async () => { await Navigation.PopModalAsync(); };
+            _vm.CloseAction = () => { Navigation.PopModalAsync(); };
 
             _vm.CreatePasswordlessLoginCommand.Execute(null);
-
-            ToolbarItems.Add(_closeItem);
         }
 
         protected override void OnAppearing()

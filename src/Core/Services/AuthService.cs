@@ -24,6 +24,7 @@ namespace Bit.Core.Services
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IMessagingService _messagingService;
         private readonly IKeyConnectorService _keyConnectorService;
+        private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly bool _setCryptoKeys;
         private SymmetricCryptoKey _key;
 
@@ -39,6 +40,7 @@ namespace Bit.Core.Services
             IMessagingService messagingService,
             IVaultTimeoutService vaultTimeoutService,
             IKeyConnectorService keyConnectorService,
+            IPasswordGenerationService passwordGenerationService,
             bool setCryptoKeys = true)
         {
             _cryptoService = cryptoService;
@@ -51,6 +53,7 @@ namespace Bit.Core.Services
             _platformUtilsService = platformUtilsService;
             _messagingService = messagingService;
             _keyConnectorService = keyConnectorService;
+            _passwordGenerationService = passwordGenerationService;
             _setCryptoKeys = setCryptoKeys;
 
             TwoFactorProviders = new Dictionary<TwoFactorProviderType, TwoFactorProvider>();
@@ -136,9 +139,11 @@ namespace Bit.Core.Services
                 null, captchaToken);
         }
 
-        public async Task<AuthResult> LogInPasswordlessAsync(string email, string accessCode, string authRequestId, byte[] key, byte[] localHashedPassword)
+        public async Task<AuthResult> LogInPasswordlessAsync(string email, string accessCode, string authRequestId, byte[] decryptionKey, string userKeyCiphered, string localHashedPasswordCiphered)
         {
-            return await LogInHelperAsync(email, accessCode, Encoding.UTF8.GetString(localHashedPassword), null, null, null, new SymmetricCryptoKey(key), null, null,
+            var decKey = await _cryptoService.RsaDecryptAsync(userKeyCiphered, decryptionKey);
+            var decPasswordHash = await _cryptoService.RsaDecryptAsync(localHashedPasswordCiphered, decryptionKey);
+            return await LogInHelperAsync(email, accessCode, Encoding.UTF8.GetString(decPasswordHash), null, null, null, new SymmetricCryptoKey(decKey), null, null,
                 null, null, authRequestId: authRequestId);
         }
 
@@ -485,7 +490,7 @@ namespace Bit.Core.Services
             return await _apiService.GetAuthRequestAsync(id);
         }
 
-        public async Task<PasswordlessLoginResponse> GetPasswordlessLoginResponse(string id, string accessCode)
+        public async Task<PasswordlessLoginResponse> GetPasswordlessLoginResponseAsync(string id, string accessCode)
         {
             return await _apiService.GetAuthResponseAsync(id, accessCode);
         }
@@ -500,11 +505,24 @@ namespace Bit.Core.Services
             return await _apiService.PutAuthRequestAsync(id, encryptedKey.EncryptedString, encryptedMasterPassword.EncryptedString, deviceId, requestApproved);
         }
 
-        public async Task<PasswordlessLoginResponse> PasswordlessCreateLoginRequestAsync(string email, string publicKey, string accessCode, string fingerprintPhrase)
+        public async Task<PasswordlessLoginResponse> PasswordlessCreateLoginRequestAsync(string email)
         {
             var deviceId = await _appIdService.GetAppIdAsync();
-            return await _apiService.PostCreateRequestAsync(email, publicKey, deviceId, accessCode, AuthRequestType.AuthenticateAndUnlock, fingerprintPhrase);
+            var keyPair = await _cryptoFunctionService.RsaGenerateKeyPairAsync(2048);
+            var generatedFingerprintPhrase = await _cryptoService.GetFingerprintAsync(Email, keyPair.Item1);
+            var fingerprintPhrase = string.Join("-", generatedFingerprintPhrase);
+            var publicB64 = Convert.ToBase64String(keyPair.Item1);
+            var accessCode = await _passwordGenerationService.GeneratePasswordAsync(new PasswordGenerationOptions(true) { Length = 25 });
+            var passwordlessCreateLoginRequest = new PasswordlessCreateLoginRequest(email, publicB64, deviceId, accessCode, AuthRequestType.AuthenticateAndUnlock, fingerprintPhrase);
+            var response = await _apiService.PostCreateRequestAsync(passwordlessCreateLoginRequest);
 
+            if(response != null)
+            {
+                response.RequestKeyPair = keyPair;
+                response.RequestAccessCode = accessCode;
+            }
+
+            return response;
         }
     }
 }

@@ -2497,7 +2497,7 @@ Do you want to switch to this account?</value>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
     <value>A notification has been sent to your device.</value>
   </data>
-  <data name="PleaseMakeSureYourVaultIsUnlockedAnd" xml:space="preserve">
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
     <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
