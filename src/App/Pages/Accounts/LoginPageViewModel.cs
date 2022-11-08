@@ -133,14 +133,21 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
-            if (string.IsNullOrWhiteSpace(Email))
+            try
             {
-                Email = await _stateService.GetRememberedEmailAsync();
+                await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
+                if (string.IsNullOrWhiteSpace(Email))
+                {
+                    Email = await _stateService.GetRememberedEmailAsync();
+                }
+                var deviceIdentifier = await _appIdService.GetAppIdAsync();
+                IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
+                await _deviceActionService.HideLoadingAsync();
             }
-            var deviceIdentifier = await _appIdService.GetAppIdAsync();
-            IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
-            await _deviceActionService.HideLoadingAsync();
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
         }
 
         public async Task LogInAsync(bool showLoading = true, bool checkForExistingAccount = false)
@@ -300,6 +307,16 @@ namespace Bit.App.Pages
                 await _stateService.SetActiveUserAsync(userId);
                 _messagingService.Send("switchedAccount");
             }
+        }
+
+        private void HandleException(Exception ex)
+        {
+            Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                await _deviceActionService.HideLoadingAsync();
+                await _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage);
+            }).FireAndForget();
+            _logger.Exception(ex);
         }
     }
 }
