@@ -166,7 +166,7 @@ namespace Bit.App.Pages
 
         private async Task CreatePasswordlessLoginAsync()
         {
-            await Device.InvokeOnMainThreadAsync(async () => await _deviceActionService.ShowLoadingAsync(AppResources.Loading));
+            await Device.InvokeOnMainThreadAsync(() => _deviceActionService.ShowLoadingAsync(AppResources.Loading));
 
             var response = await _authService.PasswordlessCreateLoginRequestAsync(_email);
             if (response != null)
