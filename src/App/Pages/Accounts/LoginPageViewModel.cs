@@ -37,7 +37,6 @@ namespace Bit.App.Pages
         private string _masterPassword;
         private bool _isEmailEnabled;
         private bool _isKnownDevice;
-        private bool _savedEmail;
 
         public LoginPageViewModel()
         {
@@ -143,7 +142,6 @@ namespace Bit.App.Pages
                 {
                     Email = await _stateService.GetRememberedEmailAsync();
                 }
-
                 var deviceIdentifier = await _appIdService.GetAppIdAsync();
                 IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
                 await _deviceActionService.HideLoadingAsync();
@@ -291,7 +289,6 @@ namespace Bit.App.Pages
             {
                 var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.RemoveAccountConfirmation,
                     AppResources.RemoveAccount, AppResources.Yes, AppResources.Cancel);
-
                 if (confirmed)
                 {
                     _messagingService.Send("logout");
