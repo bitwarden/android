@@ -244,18 +244,12 @@ namespace Bit.App.Pages
 
         private async Task MoreAsync()
         {
-            var buttons = IsEmailEnabled
-                ? new[] { AppResources.GetPasswordHint }
-                : new[] { AppResources.GetPasswordHint, AppResources.RemoveAccount };
+            var buttons = new[] { AppResources.GetPasswordHint };
             var selection = await _deviceActionService.DisplayActionSheetAsync(AppResources.Options, AppResources.Cancel, null, buttons);
 
             if (selection == AppResources.GetPasswordHint)
             {
                 await ShowMasterPasswordHintAsync();
-            }
-            else if (selection == AppResources.RemoveAccount)
-            {
-                await RemoveAccountAsync();
             }
         }
 
