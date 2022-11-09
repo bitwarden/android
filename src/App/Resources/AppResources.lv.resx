@@ -2472,4 +2472,22 @@ jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
 {0}
 Vai pārslēgties uz šo kontu?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Jauns šeit?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Saņemt galvenās paroles norādi</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Pierakstās kā {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Tas neesi Tu?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Pierakstīties ar galveno paroli</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Pierakstīties ar citu ierīci</value>
+  </data>
 </root>

@@ -2472,4 +2472,22 @@ selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</value>
 {0}
 Doriți să comutați la acest cont?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Sunteți nou pe aici?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Obțineți indiciul parolei principale</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Autentificare ca {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Nu sunteți dvs.?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Autentificați-vă cu parola principală</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Autentificați-vă cu un alt dispozitiv</value>
+  </data>
 </root>

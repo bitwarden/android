@@ -2472,4 +2472,22 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</value>
 {0}
 Chcete prepnúť na toto konto?</value>
   </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Ste tu nový?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Získať nápoveď pre hlavné heslo</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Prihlasujete sa ako {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Nie ste to vy?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Prihlásenie pomocou hlavného hesla</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Prihlásenie pomocou iného zariadenia</value>
+  </data>
 </root>

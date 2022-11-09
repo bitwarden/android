@@ -228,7 +228,8 @@ namespace Bit.App.Services
                 if (data is PasswordlessNotificationData passwordlessNotificationData)
                 {
                     var notificationUserId = await _stateService.Value.GetUserIdAsync(passwordlessNotificationData.UserEmail);
-                    if (notificationUserId != null)
+                    var notificationSaved = await _stateService.Value.GetPasswordlessLoginNotificationAsync();
+                    if (notificationUserId != null && notificationSaved != null)
                     {
                         await _stateService.Value.SetActiveUserAsync(notificationUserId);
                         _messagingService.Value.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
