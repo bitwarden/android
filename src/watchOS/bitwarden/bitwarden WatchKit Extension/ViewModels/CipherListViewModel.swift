@@ -15,6 +15,7 @@ class CipherListViewModel : ObservableObject {
         ciphers = cipherService.fetchCiphers()
     }
     
+    /*
     func refreshCiphers(){
         var ciph = [
             Cipher(id: "1", name: "GGG", organizationUseTotp: true, login: Login(username: "user1", totp: "555 444")),
@@ -33,4 +34,5 @@ class CipherListViewModel : ObservableObject {
     func deleteAll(){
         cipherService.deleteAll()
     }
+     */
 }

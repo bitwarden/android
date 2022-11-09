@@ -30,6 +30,8 @@
 		1B59EC5C2900BB3400A8718D /* CryptoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59EC5B2900BB3400A8718D /* CryptoService.swift */; };
 		1B59EC612900C48E00A8718D /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59EC602900C48E00A8718D /* KeychainHelper.swift */; };
 		1B59EC632901B1C100A8718D /* LoggerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59EC622901B1C100A8718D /* LoggerHelper.swift */; };
+		1B5AFF0329196C81004478F9 /* ColorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5AFF0229196C81004478F9 /* ColorUtils.swift */; };
+		1B5AFF0729197822004478F9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1B5AFF0929197822004478F9 /* Localizable.strings */; };
 		1B8453EC290C672E00F921E1 /* CipherEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8453EA290C672E00F921E1 /* CipherEntity+CoreDataClass.swift */; };
 		1B8453ED290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8453EB290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift */; };
 		1BDBFEAC290B4215009C78C7 /* CipherListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEAB290B4215009C78C7 /* CipherListViewModel.swift */; };
@@ -108,6 +110,8 @@
 		1B59EC5B2900BB3400A8718D /* CryptoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoService.swift; sourceTree = "<group>"; };
 		1B59EC602900C48E00A8718D /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		1B59EC622901B1C100A8718D /* LoggerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerHelper.swift; sourceTree = "<group>"; };
+		1B5AFF0229196C81004478F9 /* ColorUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtils.swift; sourceTree = "<group>"; };
+		1B5AFF0829197822004478F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1B8453EA290C672E00F921E1 /* CipherEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CipherEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		1B8453EB290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CipherEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		1BDBFEAB290B4215009C78C7 /* CipherListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherListViewModel.swift; sourceTree = "<group>"; };
@@ -147,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				1B14DF36291186D900EA43F1 /* EmptyStateViewModifier.swift */,
+				1B5AFF0229196C81004478F9 /* ColorUtils.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -202,6 +207,7 @@
 		1B15614C28B7F3D800610B9B /* bitwarden WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
+				1B5AFF0629197809004478F9 /* Localization */,
 				1B59EC5F2900C48300A8718D /* Helpers */,
 				1B59EC5A2900BB2900A8718D /* Services */,
 				1BDBFEAD290B4591009C78C7 /* DataStorage */,
@@ -259,6 +265,14 @@
 				1B59EC622901B1C100A8718D /* LoggerHelper.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		1B5AFF0629197809004478F9 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				1B5AFF0929197822004478F9 /* Localizable.strings */,
+			);
+			path = Localization;
 			sourceTree = "<group>";
 		};
 		1BDBFEA9290851AB009C78C7 /* Views */ = {
@@ -414,6 +428,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B15615B28B7F3D900610B9B /* Preview Assets.xcassets in Resources */,
+				1B5AFF0729197822004478F9 /* Localizable.strings in Resources */,
 				1B15615828B7F3D900610B9B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -450,6 +465,7 @@
 				1B8453ED290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift in Sources */,
 				1B14DF37291186D900EA43F1 /* EmptyStateViewModifier.swift in Sources */,
 				1B15616E28B81A4300610B9B /* WatchConnectivityManager.swift in Sources */,
+				1B5AFF0329196C81004478F9 /* ColorUtils.swift in Sources */,
 				1B59EC612900C48E00A8718D /* KeychainHelper.swift in Sources */,
 				1B59EC5729007DEE00A8718D /* BitwardenDB.xcdatamodeld in Sources */,
 				1B8453EC290C672E00F921E1 /* CipherEntity+CoreDataClass.swift in Sources */,
@@ -472,6 +488,17 @@
 			targetProxy = 1B15614A28B7F3D800610B9B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		1B5AFF0929197822004478F9 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1B5AFF0829197822004478F9 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		1B15615E28B7F3D900610B9B /* Debug */ = {
