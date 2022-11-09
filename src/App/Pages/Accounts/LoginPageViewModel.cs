@@ -111,12 +111,6 @@ namespace Bit.App.Pages
             set => SetProperty(ref _isKnownDevice, value);
         }
 
-        public bool SavedEmail
-        {
-            get => _savedEmail;
-            set => SetProperty(ref _savedEmail, value);
-        }
-
         public bool IsIosExtension { get; set; }
 
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
@@ -149,7 +143,6 @@ namespace Bit.App.Pages
                 {
                     Email = await _stateService.GetRememberedEmailAsync();
                 }
-                SavedEmail = _stateService.AccountViews != null && _stateService.AccountViews.Any(e => e.Email == Email);
 
                 var deviceIdentifier = await _appIdService.GetAppIdAsync();
                 IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
@@ -258,7 +251,8 @@ namespace Bit.App.Pages
 
         private async Task MoreAsync()
         {
-            var buttons = IsEmailEnabled || !SavedEmail
+            var emailExists = _stateService.AccountViews != null && _stateService.AccountViews.Any(e => e.Email == Email);
+            var buttons = IsEmailEnabled || !emailExists
                 ? new[] { AppResources.GetPasswordHint }
                 : new[] { AppResources.GetPasswordHint, AppResources.RemoveAccount };
             var selection = await _deviceActionService.DisplayActionSheetAsync(AppResources.Options, AppResources.Cancel, null, buttons);
@@ -297,8 +291,6 @@ namespace Bit.App.Pages
             {
                 var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.RemoveAccountConfirmation,
                     AppResources.RemoveAccount, AppResources.Yes, AppResources.Cancel);
-
-                SavedEmail = _stateService.AccountViews != null && _stateService.AccountViews.Any(e => e.Email == Email);
 
                 if (confirmed)
                 {
