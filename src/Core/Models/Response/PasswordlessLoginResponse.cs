@@ -15,5 +15,7 @@ namespace Bit.Core.Models.Response
         public DateTime CreationDate { get; set; }
         public bool RequestApproved { get; set; }
         public string Origin { get; set; }
+        public string RequestAccessCode { get; set; }
+        public Tuple<byte[], byte[]> RequestKeyPair { get; set; }
     }
 }

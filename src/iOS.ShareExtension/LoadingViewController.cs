@@ -339,13 +339,27 @@ namespace Bit.iOS.ShareExtension
                 vm.StartTwoFactorAction = () => DismissAndLaunch(() => LaunchTwoFactorFlow(false));
                 vm.UpdateTempPasswordAction = () => DismissAndLaunch(() => LaunchUpdateTempPasswordFlow());
                 vm.StartSsoLoginAction = () => DismissAndLaunch(() => LaunchLoginSsoFlow());
-                vm.LogInSuccessAction = () =>
-                {
-                    DismissLockAndContinue();
-                };
+                vm.LogInWithDeviceAction = () => DismissAndLaunch(() => LaunchLoginWithDevice(email));
+                vm.LogInSuccessAction = () => { DismissLockAndContinue(); };
                 vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage(checkRememberedEmail: false));
             }
             NavigateToPage(loginPage);
+
+            LogoutIfAuthed();
+        }
+
+        private void LaunchLoginWithDevice(string email = null)
+        {
+            var loginWithDevicePage = new LoginPasswordlessRequestPage(email, _appOptions.Value);
+            SetupAppAndApplyResources(loginWithDevicePage);
+            if (loginWithDevicePage.BindingContext is LoginPasswordlessRequestViewModel vm)
+            {
+                vm.StartTwoFactorAction = () => DismissAndLaunch(() => LaunchTwoFactorFlow(false));
+                vm.UpdateTempPasswordAction = () => DismissAndLaunch(() => LaunchUpdateTempPasswordFlow());
+                vm.LogInSuccessAction = () => { DismissLockAndContinue(); };
+                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage());
+            }
+            NavigateToPage(loginWithDevicePage);
 
             LogoutIfAuthed();
         }

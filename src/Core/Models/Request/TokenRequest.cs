@@ -15,13 +15,14 @@ namespace Bit.Core.Models.Request
         public string CodeVerifier { get; set; }
         public string RedirectUri { get; set; }
         public string Token { get; set; }
+        public string AuthRequestId { get; set; }
         public TwoFactorProviderType? Provider { get; set; }
         public bool? Remember { get; set; }
         public string CaptchaToken { get; set; }
         public DeviceRequest Device { get; set; }
 
         public TokenRequest(string[] credentials, string[] codes, TwoFactorProviderType? provider, string token,
-            bool? remember, string captchaToken, DeviceRequest device = null)
+            bool? remember, string captchaToken, DeviceRequest device = null, string authRequestId = null)
         {
             if (credentials != null && credentials.Length > 1)
             {
@@ -39,6 +40,7 @@ namespace Bit.Core.Models.Request
             Remember = remember;
             Device = device;
             CaptchaToken = captchaToken;
+            AuthRequestId = authRequestId;
         }
 
         public Dictionary<string, string> ToIdentityToken(string clientId)
@@ -65,6 +67,11 @@ namespace Bit.Core.Models.Request
             else
             {
                 throw new Exception("must provide credentials or codes");
+            }
+
+            if (AuthRequestId != null)
+            {
+                obj.Add("authRequest", AuthRequestId);
             }
 
             if (Device != null)

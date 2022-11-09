@@ -482,6 +482,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A notification has been sent to your device..
+        /// </summary>
+        public static string ANotificationHasBeenSentToYourDevice {
+            get {
+                return ResourceManager.GetString("ANotificationHasBeenSentToYourDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to API access token.
         /// </summary>
         public static string APIAccessToken {
@@ -3481,6 +3490,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Log in initiated.
+        /// </summary>
+        public static string LogInInitiated {
+            get {
+                return ResourceManager.GetString("LogInInitiated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string LogInNoun {
@@ -3963,6 +3981,15 @@ namespace Bit.App.Resources {
         public static string Near {
             get {
                 return ResourceManager.GetString("Near", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Need another option?.
+        /// </summary>
+        public static string NeedAnotherOption {
+            get {
+                return ResourceManager.GetString("NeedAnotherOption", resourceCulture);
             }
         }
         
@@ -4706,6 +4733,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device..
+        /// </summary>
+        public static string PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice {
+            get {
+                return ResourceManager.GetString("PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Plus addressed email.
         /// </summary>
         public static string PlusAddressedEmail {
@@ -5000,6 +5036,15 @@ namespace Bit.App.Resources {
         public static string ResendCode {
             get {
                 return ResourceManager.GetString("ResendCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resend notification.
+        /// </summary>
+        public static string ResendNotification {
+            get {
+                return ResourceManager.GetString("ResendNotification", resourceCulture);
             }
         }
         
@@ -6539,6 +6584,15 @@ namespace Bit.App.Resources {
         public static string View {
             get {
                 return ResourceManager.GetString("View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View all log in options.
+        /// </summary>
+        public static string ViewAllLoginOptions {
+            get {
+                return ResourceManager.GetString("ViewAllLoginOptions", resourceCulture);
             }
         }
         
