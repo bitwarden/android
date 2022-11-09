@@ -1,5 +1,6 @@
 ---
 name: Release
+run-name: Release ${{ inputs.release_type }}
 
 on:
   workflow_dispatch:
@@ -72,7 +73,7 @@ jobs:
           workflow_conclusion: success
           branch: ${{ steps.branch.outputs.branch-name }}
 
-      - name: Download all artifacts
+      - name: Dry Run - Download all artifacts
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
         uses: dawidd6/action-download-artifact@575b1e4167df67acf7e692af784566618b23c71e  # v2.17.10
         with:
@@ -133,7 +134,7 @@ jobs:
           branch: ${{ needs.release.outputs.branch-name }}
           name: com.x8bit.bitwarden-fdroid.apk
 
-      - name: Download F-Droid .apk artifact
+      - name: Dry Run - Download F-Droid .apk artifact
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
         uses: dawidd6/action-download-artifact@575b1e4167df67acf7e692af784566618b23c71e  # v2.17.10
         with:
