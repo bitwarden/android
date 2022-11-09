@@ -44,15 +44,6 @@ namespace Bit.App.Pages
             _vm.Email = email;
             MasterPasswordEntry = _masterPassword;
 
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                ToolbarItems.Add(_moreItem);
-            }
-            else
-            {
-                ToolbarItems.Add(_getPasswordHint);
-            }
-
             if (_appOptions?.IosExtension ?? false)
             {
                 _vm.ShowCancelButton = true;
@@ -131,33 +122,12 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void RemoveAccount_Clicked(object sender, EventArgs e)
-        {
-            await _accountListOverlay.HideAsync();
-            if (DoOnce())
-            {
-                await _vm.RemoveAccountAsync();
-            }
-        }
 
         private void Cancel_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
                 _vm.CloseAction();
-            }
-        }
-
-        private async void More_Clicked(object sender, EventArgs e)
-        {
-            try
-            {
-                await _accountListOverlay.HideAsync();
-                _vm.MoreCommand.Execute(null);
-            }
-            catch (Exception ex)
-            {
-                _logger.Value.Exception(ex);
             }
         }
 

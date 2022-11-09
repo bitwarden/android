@@ -53,7 +53,6 @@ namespace Bit.App.Pages
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
             LogInCommand = new Command(async () => await LogInAsync());
-            MoreCommand = new AsyncCommand(MoreAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
 
             AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
@@ -113,7 +112,6 @@ namespace Bit.App.Pages
 
         public Command LogInCommand { get; }
         public Command TogglePasswordCommand { get; }
-        public ICommand MoreCommand { get; internal set; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string LoggingInAsText => string.Format(AppResources.LoggingInAsX, Email);
@@ -239,17 +237,6 @@ namespace Bit.App.Pages
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
                         AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
-            }
-        }
-
-        private async Task MoreAsync()
-        {
-            var buttons = new[] { AppResources.GetPasswordHint };
-            var selection = await _deviceActionService.DisplayActionSheetAsync(AppResources.Options, AppResources.Cancel, null, buttons);
-
-            if (selection == AppResources.GetPasswordHint)
-            {
-                await ShowMasterPasswordHintAsync();
             }
         }
 
