@@ -149,8 +149,7 @@ namespace Bit.App.Pages
                 {
                     Email = await _stateService.GetRememberedEmailAsync();
                 }
-                var accountEmails = _stateService.AccountViews != null ? _stateService.AccountViews.Select(a => a.Email).ToList() : new List<string>();
-                SavedEmail = accountEmails.Contains(Email);
+                SavedEmail = _stateService.AccountViews != null && _stateService.AccountViews.Any(e => e.Email == Email);
 
                 var deviceIdentifier = await _appIdService.GetAppIdAsync();
                 IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
@@ -298,8 +297,7 @@ namespace Bit.App.Pages
                 var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.RemoveAccountConfirmation,
                     AppResources.RemoveAccount, AppResources.Yes, AppResources.Cancel);
 
-                var accountEmails = _stateService.AccountViews != null ? _stateService.AccountViews.Select(a => a.Email).ToList() : new List<string>();
-                SavedEmail = accountEmails.Contains(Email);
+                SavedEmail = _stateService.AccountViews != null && _stateService.AccountViews.Any(e => e.Email == Email);
 
                 if (confirmed)
                 {
