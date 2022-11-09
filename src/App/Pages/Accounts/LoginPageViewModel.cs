@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
@@ -35,6 +37,7 @@ namespace Bit.App.Pages
         private string _masterPassword;
         private bool _isEmailEnabled;
         private bool _isKnownDevice;
+        private bool _savedEmail;
 
         public LoginPageViewModel()
         {
@@ -108,6 +111,12 @@ namespace Bit.App.Pages
             set => SetProperty(ref _isKnownDevice, value);
         }
 
+        public bool SavedEmail
+        {
+            get => _savedEmail;
+            set => SetProperty(ref _savedEmail, value);
+        }
+
         public bool IsIosExtension { get; set; }
 
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
@@ -140,6 +149,9 @@ namespace Bit.App.Pages
                 {
                     Email = await _stateService.GetRememberedEmailAsync();
                 }
+                var accountEmails = _stateService.AccountViews != null ? _stateService.AccountViews.Select(a => a.Email).ToList() : new List<string>();
+                SavedEmail = accountEmails.Contains(Email);
+
                 var deviceIdentifier = await _appIdService.GetAppIdAsync();
                 IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
                 await _deviceActionService.HideLoadingAsync();
@@ -247,9 +259,8 @@ namespace Bit.App.Pages
 
         private async Task MoreAsync()
         {
-            var buttons = IsEmailEnabled
-                ? new[] { AppResources.GetPasswordHint }
-                : new[] { AppResources.GetPasswordHint, AppResources.RemoveAccount };
+            var buttons = IsEmailEnabled || !SavedEmail
+                ? new[] { AppResources.GetPasswordHint } : new[] { AppResources.GetPasswordHint, AppResources.RemoveAccount };
             var selection = await _deviceActionService.DisplayActionSheetAsync(AppResources.Options, AppResources.Cancel, null, buttons);
 
             if (selection == AppResources.GetPasswordHint)
@@ -286,6 +297,10 @@ namespace Bit.App.Pages
             {
                 var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.RemoveAccountConfirmation,
                     AppResources.RemoveAccount, AppResources.Yes, AppResources.Cancel);
+
+                var accountEmails = _stateService.AccountViews != null ? _stateService.AccountViews.Select(a => a.Email).ToList() : new List<string>();
+                SavedEmail = accountEmails.Contains(Email);
+
                 if (confirmed)
                 {
                     _messagingService.Send("logout");
