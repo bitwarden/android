@@ -457,7 +457,14 @@ namespace Bit.App
             switch (navTarget)
             {
                 case NavigationTarget.HomeLogin:
-                    Current.MainPage = new NavigationPage(new HomePage(Options));
+                    if (navParams is HomeNavigationParams homeParams)
+                    {
+                        Current.MainPage = new NavigationPage(new HomePage(Options, homeParams.CheckEmail));
+                    }
+                    else
+                    {
+                        Current.MainPage = new NavigationPage(new HomePage(Options));
+                    }
                     break;
                 case NavigationTarget.Login:
                     if (navParams is LoginNavigationParams loginParams)

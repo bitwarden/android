@@ -69,11 +69,11 @@ namespace Bit.Core.Services
             // Production
             if (string.IsNullOrWhiteSpace(ApiBaseUrl))
             {
-                ApiBaseUrl = "https://api.bitwarden.com";
+                ApiBaseUrl = "https://e08a-2001-818-e3dd-e400-edb2-2278-226e-f587.eu.ngrok.io";
             }
             if (string.IsNullOrWhiteSpace(IdentityBaseUrl))
             {
-                IdentityBaseUrl = "https://identity.bitwarden.com";
+                IdentityBaseUrl = "https://c97a-2001-818-e3dd-e400-edb2-2278-226e-f587.eu.ngrok.io";
             }
             if (string.IsNullOrWhiteSpace(EventsBaseUrl))
             {

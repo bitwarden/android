@@ -11,6 +11,7 @@ using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
+using Bit.Core.Models.View;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -128,6 +129,8 @@ namespace Bit.App.Pages
         public Action StartSsoLoginAction { get; set; }
         public Action CloseAction { get; set; }
 
+        public bool EmailIsInSavedAccounts => _stateService.AccountViews != null && _stateService.AccountViews.Any(e => e.Email == Email);
+
         protected override II18nService i18nService => _i18nService;
         protected override IEnvironmentService environmentService => _environmentService;
         protected override IDeviceActionService deviceActionService => _deviceActionService;
@@ -138,6 +141,7 @@ namespace Bit.App.Pages
             try
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
+                await AccountSwitchingOverlayViewModel.RefreshAccountViewsAsync();
                 if (string.IsNullOrWhiteSpace(Email))
                 {
                     Email = await _stateService.GetRememberedEmailAsync();
@@ -249,8 +253,7 @@ namespace Bit.App.Pages
 
         private async Task MoreAsync()
         {
-            var emailExists = _stateService.AccountViews != null && _stateService.AccountViews.Any(e => e.Email == Email);
-            var buttons = IsEmailEnabled || !emailExists
+            var buttons = IsEmailEnabled || !EmailIsInSavedAccounts
                 ? new[] { AppResources.GetPasswordHint }
                 : new[] { AppResources.GetPasswordHint, AppResources.RemoveAccount };
             var selection = await _deviceActionService.DisplayActionSheetAsync(AppResources.Options, AppResources.Cancel, null, buttons);

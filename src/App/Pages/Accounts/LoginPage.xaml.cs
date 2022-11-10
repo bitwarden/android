@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
@@ -77,11 +78,11 @@ namespace Bit.App.Pages
             _mainContent.Content = _mainLayout;
             _accountAvatar?.OnAppearing();
 
+            await _vm.InitAsync();
             if (!_appOptions?.HideAccountSwitcher ?? false)
             {
-                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync(_vm.EmailIsInSavedAccounts);
             }
-            await _vm.InitAsync();
             if (!_inputFocused)
             {
                 RequestFocus(_masterPassword);
