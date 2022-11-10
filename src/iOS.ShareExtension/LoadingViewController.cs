@@ -21,7 +21,6 @@ using Foundation;
 using MobileCoreServices;
 using UIKit;
 using Xamarin.Forms;
-using static Xamarin.Essentials.AppleSignInAuthenticator;
 
 namespace Bit.iOS.ShareExtension
 {
