@@ -21,6 +21,7 @@ using Foundation;
 using MobileCoreServices;
 using UIKit;
 using Xamarin.Forms;
+using static Xamarin.Essentials.AppleSignInAuthenticator;
 
 namespace Bit.iOS.ShareExtension
 {
@@ -441,7 +442,14 @@ namespace Bit.iOS.ShareExtension
             switch (navTarget)
             {
                 case NavigationTarget.HomeLogin:
-                    ExecuteLaunch(() => LaunchHomePage());
+                    if (navParams is HomeNavigationParams homeParams)
+                    {
+                        ExecuteLaunch(() => LaunchHomePage(homeParams.CheckNavigateToLogin));
+                    }
+                    else
+                    {
+                        ExecuteLaunch(() => LaunchHomePage());
+                    }
                     break;
                 case NavigationTarget.Login:
                     if (navParams is LoginNavigationParams loginParams)

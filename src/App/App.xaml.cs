@@ -459,7 +459,7 @@ namespace Bit.App
                 case NavigationTarget.HomeLogin:
                     if (navParams is HomeNavigationParams homeParams)
                     {
-                        Current.MainPage = new NavigationPage(new HomePage(Options, homeParams.CheckEmail));
+                        Current.MainPage = new NavigationPage(new HomePage(Options, homeParams.CheckNavigateToLogin));
                     }
                     else
                     {

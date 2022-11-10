@@ -628,7 +628,14 @@ namespace Bit.iOS.Autofill
             switch (navTarget)
             {
                 case NavigationTarget.HomeLogin:
-                    DismissViewController(false, () => LaunchHomePage());
+                    if (navParams is HomeNavigationParams homeParams)
+                    {
+                        DismissViewController(false, () => LaunchHomePage(homeParams.CheckNavigateToLogin));
+                    }
+                    else
+                    {
+                        DismissViewController(false, () => LaunchHomePage());
+                    }
                     break;
                 case NavigationTarget.Login:
                     if (navParams is LoginNavigationParams loginParams)
