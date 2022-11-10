@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
@@ -247,7 +249,8 @@ namespace Bit.App.Pages
 
         private async Task MoreAsync()
         {
-            var buttons = IsEmailEnabled
+            var emailExists = _stateService.AccountViews != null && _stateService.AccountViews.Any(e => e.Email == Email);
+            var buttons = IsEmailEnabled || !emailExists
                 ? new[] { AppResources.GetPasswordHint }
                 : new[] { AppResources.GetPasswordHint, AppResources.RemoveAccount };
             var selection = await _deviceActionService.DisplayActionSheetAsync(AppResources.Options, AppResources.Cancel, null, buttons);
