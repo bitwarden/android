@@ -223,8 +223,5 @@
       <Version>2.0.3</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Info.plist" />
-  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
