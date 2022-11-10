@@ -59,7 +59,7 @@ namespace Bit.App.Pages
 
             if (!_appOptions?.HideAccountSwitcher ?? false)
             {
-                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync(false);
             }
             _broadcasterService.Subscribe(nameof(HomePage), (message) =>
             {
