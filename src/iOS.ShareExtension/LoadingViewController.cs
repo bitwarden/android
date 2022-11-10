@@ -287,9 +287,9 @@ namespace Bit.iOS.ShareExtension
             return _app;
         }
 
-        private void LaunchHomePage(bool checkRememberedEmail = true)
+        private void LaunchHomePage(bool checkNavigateToLogin = true)
         {
-            var homePage = new HomePage(_appOptions.Value, checkRememberedEmail: checkRememberedEmail);
+            var homePage = new HomePage(_appOptions.Value, checkNavigateToLogin: checkNavigateToLogin);
             SetupAppAndApplyResources(homePage);
             if (homePage.BindingContext is HomeViewModel vm)
             {
@@ -311,8 +311,8 @@ namespace Bit.iOS.ShareExtension
             ThemeManager.ApplyResourcesTo(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
-                vm.SubmitSuccessAction = () => DismissAndLaunch(() => LaunchHomePage(checkRememberedEmail: false));
-                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage(checkRememberedEmail: false));
+                vm.SubmitSuccessAction = () => DismissAndLaunch(() => LaunchHomePage(checkNavigateToLogin: false));
+                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage(checkNavigateToLogin: false));
             }
 
             NavigateToPage(environmentPage);
@@ -325,7 +325,7 @@ namespace Bit.iOS.ShareExtension
             if (registerPage.BindingContext is RegisterPageViewModel vm)
             {
                 vm.RegistrationSuccess = () => DismissAndLaunch(() => LaunchLoginFlow(vm.Email));
-                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage(checkRememberedEmail: false));
+                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage(checkNavigateToLogin: false));
             }
             NavigateToPage(registerPage);
         }
@@ -341,7 +341,7 @@ namespace Bit.iOS.ShareExtension
                 vm.StartSsoLoginAction = () => DismissAndLaunch(() => LaunchLoginSsoFlow());
                 vm.LogInWithDeviceAction = () => DismissAndLaunch(() => LaunchLoginWithDevice(email));
                 vm.LogInSuccessAction = () => { DismissLockAndContinue(); };
-                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage(checkRememberedEmail: false));
+                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage(checkNavigateToLogin: false));
             }
             NavigateToPage(loginPage);
 

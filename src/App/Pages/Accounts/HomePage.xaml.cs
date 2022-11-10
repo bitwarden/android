@@ -15,14 +15,14 @@ namespace Bit.App.Pages
         private readonly AppOptions _appOptions;
         private IBroadcasterService _broadcasterService;
 
-        public HomePage(AppOptions appOptions = null, bool checkRememberedEmail = true)
+        public HomePage(AppOptions appOptions = null, bool checkNavigateToLogin = true)
         {
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _appOptions = appOptions;
             InitializeComponent();
             _vm = BindingContext as HomeViewModel;
             _vm.Page = this;
-            _vm.CheckHasRememberedEmail = checkRememberedEmail;
+            _vm.CheckNavigateToLogin = checkNavigateToLogin;
             _vm.ShowCancelButton = _appOptions?.IosExtension ?? false;
             _vm.StartLoginAction = async () => await StartLoginAsync();
             _vm.StartRegisterAction = () => Device.BeginInvokeOnMainThread(async () => await StartRegisterAsync());
