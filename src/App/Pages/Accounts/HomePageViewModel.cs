@@ -24,13 +24,15 @@ namespace Bit.App.Pages
         private bool _canLogin;
         private IPlatformUtilsService _platformUtilsService;
         private ILogger _logger;
+        private IEnvironmentService _environmentService;
 
         public HomeViewModel()
         {
-            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
-            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _stateService = ServiceContainer.Resolve<IStateService>();
+            _messagingService = ServiceContainer.Resolve<IMessagingService>();
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
-            _logger = ServiceContainer.Resolve<ILogger>("logger");
+            _logger = ServiceContainer.Resolve<ILogger>();
+            _environmentService = ServiceContainer.Resolve<IEnvironmentService>();
 
             PageTitle = AppResources.Bitwarden;
 
@@ -132,12 +134,34 @@ namespace Bit.App.Pages
                     return;
                 }
                 await _stateService.SetRememberedEmailAsync(RememberEmail ? Email : null);
+                var userId = await _stateService.GetUserIdAsync(Email);
+                if (!string.IsNullOrWhiteSpace(userId))
+                {
+                    var userEnvUrls = await _stateService.GetEnvironmentUrlsAsync(userId);
+                    if (userEnvUrls?.Base == _environmentService.BaseUrl)
+                    {
+                        await PromptToSwitchToExistingAccountAsync(userId);
+                        return;
+                    }
+                }
                 StartLoginAction();
             }
             catch (Exception ex)
             {
                 _logger.Exception(ex);
                 await _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage, AppResources.AnErrorHasOccurred, AppResources.Ok);
+            }
+        }
+
+        private async Task PromptToSwitchToExistingAccountAsync(string userId)
+        {
+            var switchToAccount = await _platformUtilsService.ShowDialogAsync(
+                AppResources.SwitchToAlreadyAddedAccountConfirmation,
+                AppResources.AccountAlreadyAdded, AppResources.Yes, AppResources.Cancel);
+            if (switchToAccount)
+            {
+                await _stateService.SetActiveUserAsync(userId);
+                _messagingService.Send("switchedAccount");
             }
         }
     }
