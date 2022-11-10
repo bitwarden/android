@@ -72,7 +72,7 @@ namespace Bit.Core.Services
                 ApiBaseUrl = "https://api.bitwarden.com";
             }
             if (string.IsNullOrWhiteSpace(IdentityBaseUrl))
-            {                
+            {
                 IdentityBaseUrl = "https://identity.bitwarden.com";
             }
             if (string.IsNullOrWhiteSpace(EventsBaseUrl))
