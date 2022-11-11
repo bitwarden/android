@@ -2490,4 +2490,22 @@
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>別のデバイスでログイン</value>
   </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>ログイン開始</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>デバイスに通知を送信しました。</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>保管庫がロックされていることと、パスフレーズが他のデバイスと一致していることを確認してください。</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>通知を再送信する</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>別の選択肢が必要ですか？</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>すべてのログインオプションを表示</value>
+  </data>
 </root>

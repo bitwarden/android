@@ -2482,12 +2482,30 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Kirjaudutaan tunnuksella {0}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
-    <value>Etkö se ole sinä?</value>
+    <value>Etkö se ollut sinä?</value>
   </data>
   <data name="LogInWithMasterPassword" xml:space="preserve">
     <value>Kirjaudu pääsalasanalla</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Kirjaudu toisella laitteella</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Kirjautuminen aloitettu</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Laitteellesi on lähetetty ilmoitus.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Varmista, että holvisi on avattu ja tunnistelauseke täsmää toisella laitteella.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Lähetä ilmoitus uudelleen</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Tarvitsetko toisen vaihtoehdon?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Näytä kaikki kirjautumisvalinnat</value>
   </data>
 </root>

@@ -2490,4 +2490,22 @@ Vai pārslēgties uz šo kontu?</value>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Pierakstīties ar citu ierīci</value>
   </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Uzsākta pierakstīšanās</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Uz ierīci ir nosūtīts paziņojums.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Jāpārliecinās, ka glabātava ir atslēgta un atpazīšanas vārdkopa ir tāda pati arī citā ierīcē.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Atkārtoti nosūtīt paziņojumu</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Nepieciešama cita iespēja?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Apskatīt visas pierakstīšanās iespējas</value>
+  </data>
 </root>

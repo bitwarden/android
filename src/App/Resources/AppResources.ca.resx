@@ -2490,4 +2490,22 @@ Voleu canviar a aquest compte?</value>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Inicia sessió amb un altre dispositiu</value>
   </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>S'ha iniciat la sessió</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>S'ha enviat una notificació al vostre dispositiu.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Assegureu-vos que la vostra caixa forta estiga desbloquejada i que la frase d'empremta digital coincidisca amb l'altre dispositiu.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Torna a enviar la notificació</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Necessiteu una altra opció?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Veure totes les opcions d'inici de sessió</value>
+  </data>
 </root>

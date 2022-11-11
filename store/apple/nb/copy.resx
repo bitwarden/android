@@ -122,31 +122,31 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>Bitwarden, Inc. er morselskapet til 8bit Solutions LLC.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+BESTE PASSORD MANAGER AV VERDIEN, NYHETER og ARBEID RAPPORT, KNET, OG MORES.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+Håndtering, lagring, sikker, og deling av ubegrenset med passord på tvers av ubegrenset antall enheter fra hvor som helst. Bitwarden leverer passordbehandlingsløsninger med åpen kildekode til alle, enten hjemme, på jobb eller på farten.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Generer sterke, unike, og tilfeldige passord basert på sikkerhetskrav for alle nettsteder du hyppiger.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+Bitwarden Sende raskt sender krypterte informasjonsfiler --- og klartekst -- direkte til alle.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+Bitwarden tilbyr Lag og Enterprise planer for firmaer så du kan sikkert dele passord med kolleger.
 
-Why Choose Bitwarden:
+Hvorfor velge Bitwarden:
 
 World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+Passord er beskyttet med avansert ende-til-ende-kryptering (AES-256 bit, Saltet hashtag, og PBKDF2 SHA-256) så dataene dine forblir sikre og private.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Innebygd passordgenerator
+Generer sterke, unike og tilfeldige passord basert på sikkerhetskrav for alle nettsteder du hyppiger.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+Globale oversettelser
+Bitwarden finnes på 40 språk og vokser igjen, takket være vårt globale nettsamfunn.
 
 Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+Secure og del sensitive data i Bitwarden sitt hvelv fra enhver nettleser, mobil enhet eller desktop OS og mer
 </value>
   <comment>Max 4000 characters</comment>
   </data>
