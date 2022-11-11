@@ -46,6 +46,19 @@ namespace Bit.Core.Services
             return activeUserId;
         }
 
+        public async Task<string> GetActiveUserEmailAsync()
+        {
+            await CheckStateAsync();
+
+            var activeUserId = _state?.ActiveUserId;
+            if (activeUserId == null)
+            {
+                var state = await GetStateFromStorageAsync();
+                activeUserId = state?.ActiveUserId;
+            }
+            return await GetEmailAsync(activeUserId);
+        }
+
         public async Task<bool> IsActiveAccountAsync(string userId = null)
         {
             if (userId == null)

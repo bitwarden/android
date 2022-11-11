@@ -443,7 +443,7 @@ namespace Bit.iOS.ShareExtension
                 case NavigationTarget.HomeLogin:
                     if (navParams is HomeNavigationParams homeParams)
                     {
-                        ExecuteLaunch(() => LaunchHomePage(homeParams.CheckNavigateToLogin));
+                        ExecuteLaunch(() => LaunchHomePage(homeParams.ShouldCheckRememberEmail));
                     }
                     else
                     {
