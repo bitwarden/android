@@ -220,5 +220,17 @@ namespace Bit.App.Utilities.AccountManagement
                 _messagingService.Send(AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED);
             });
         }
+
+        public async Task PromptToSwitchToExistingAccountAsync(string userId)
+        {
+            var switchToAccount = await _platformUtilsService.ShowDialogAsync(
+                AppResources.SwitchToAlreadyAddedAccountConfirmation,
+                AppResources.AccountAlreadyAdded, AppResources.Yes, AppResources.Cancel);
+            if (switchToAccount)
+            {
+                await _stateService.SetActiveUserAsync(userId);
+                _messagingService.Send("switchedAccount");
+            }
+        }
     }
 }

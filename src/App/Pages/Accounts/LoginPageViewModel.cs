@@ -8,6 +8,7 @@ using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.App.Utilities.AccountManagement;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
@@ -32,6 +33,7 @@ namespace Bit.App.Pages
         private readonly ILogger _logger;
         private readonly IApiService _apiService;
         private readonly IAppIdService _appIdService;
+        private readonly IAccountsManager _accountManager;
         private bool _showPassword;
         private bool _showCancelButton;
         private string _email;
@@ -52,6 +54,7 @@ namespace Bit.App.Pages
             _logger = ServiceContainer.Resolve<ILogger>("logger");
             _apiService = ServiceContainer.Resolve<IApiService>();
             _appIdService = ServiceContainer.Resolve<IAppIdService>();
+            _accountManager = ServiceContainer.Resolve<IAccountsManager>();
 
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -196,7 +199,7 @@ namespace Bit.App.Pages
                         var userEnvUrls = await _stateService.GetEnvironmentUrlsAsync(userId);
                         if (userEnvUrls?.Base == _environmentService.BaseUrl)
                         {
-                            await PromptToSwitchToExistingAccountAsync(userId);
+                            await _accountManager.PromptToSwitchToExistingAccountAsync(userId);
                             return;
                         }
                     }
@@ -300,18 +303,6 @@ namespace Bit.App.Pages
             catch (Exception e)
             {
                 _logger.Exception(e);
-            }
-        }
-
-        private async Task PromptToSwitchToExistingAccountAsync(string userId)
-        {
-            var switchToAccount = await _platformUtilsService.ShowDialogAsync(
-                AppResources.SwitchToAlreadyAddedAccountConfirmation,
-                AppResources.AccountAlreadyAdded, AppResources.Yes, AppResources.Cancel);
-            if (switchToAccount)
-            {
-                await _stateService.SetActiveUserAsync(userId);
-                _messagingService.Send("switchedAccount");
             }
         }
 

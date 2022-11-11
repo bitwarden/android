@@ -9,5 +9,6 @@ namespace Bit.App.Abstractions
         void Init(Func<AppOptions> getOptionsFunc, IAccountsManagerHost accountsManagerHost);
         Task NavigateOnAccountChangeAsync(bool? isAuthed = null);
         Task LogOutAsync(string userId, bool userInitiated, bool expired);
+        Task PromptToSwitchToExistingAccountAsync(string userId);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.App.Utilities;
@@ -25,6 +26,7 @@ namespace Bit.App.Pages
         private IPlatformUtilsService _platformUtilsService;
         private ILogger _logger;
         private IEnvironmentService _environmentService;
+        private IAccountsManager _accountManager;
 
         public HomeViewModel()
         {
@@ -33,6 +35,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
             _logger = ServiceContainer.Resolve<ILogger>();
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>();
+            _accountManager = ServiceContainer.Resolve<IAccountsManager>();
 
             PageTitle = AppResources.Bitwarden;
 
@@ -70,7 +73,7 @@ namespace Bit.App.Pages
 
         public bool CanContinue => !string.IsNullOrEmpty(Email);
 
-        public bool CheckNavigateToLogin { get; set; }
+        public bool ShouldCheckRememberEmail { get; set; }
 
         public FormattedString CreateAccountText
         {
@@ -109,11 +112,11 @@ namespace Bit.App.Pages
 
         public void CheckNavigateLoginStep()
         {
-            if (CheckNavigateToLogin && RememberEmail)
+            if (ShouldCheckRememberEmail && RememberEmail)
             {
                 StartLoginAction();
             }
-            CheckNavigateToLogin = false;
+            ShouldCheckRememberEmail = false;
         }
 
         public async Task ContinueToLoginStepAsync()
@@ -140,7 +143,7 @@ namespace Bit.App.Pages
                     var userEnvUrls = await _stateService.GetEnvironmentUrlsAsync(userId);
                     if (userEnvUrls?.Base == _environmentService.BaseUrl)
                     {
-                        await PromptToSwitchToExistingAccountAsync(userId);
+                        await _accountManager.PromptToSwitchToExistingAccountAsync(userId);
                         return;
                     }
                 }
@@ -150,18 +153,6 @@ namespace Bit.App.Pages
             {
                 _logger.Exception(ex);
                 await _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage, AppResources.AnErrorHasOccurred, AppResources.Ok);
-            }
-        }
-
-        private async Task PromptToSwitchToExistingAccountAsync(string userId)
-        {
-            var switchToAccount = await _platformUtilsService.ShowDialogAsync(
-                AppResources.SwitchToAlreadyAddedAccountConfirmation,
-                AppResources.AccountAlreadyAdded, AppResources.Yes, AppResources.Cancel);
-            if (switchToAccount)
-            {
-                await _stateService.SetActiveUserAsync(userId);
-                _messagingService.Send("switchedAccount");
             }
         }
     }

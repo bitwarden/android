@@ -630,7 +630,7 @@ namespace Bit.iOS.Autofill
                 case NavigationTarget.HomeLogin:
                     if (navParams is HomeNavigationParams homeParams)
                     {
-                        DismissViewController(false, () => LaunchHomePage(homeParams.CheckNavigateToLogin));
+                        DismissViewController(false, () => LaunchHomePage(homeParams.ShouldCheckRememberEmail));
                     }
                     else
                     {
