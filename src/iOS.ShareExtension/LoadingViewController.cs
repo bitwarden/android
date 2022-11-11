@@ -339,7 +339,6 @@ namespace Bit.iOS.ShareExtension
                 vm.StartTwoFactorAction = () => DismissAndLaunch(() => LaunchTwoFactorFlow(false));
                 vm.UpdateTempPasswordAction = () => DismissAndLaunch(() => LaunchUpdateTempPasswordFlow());
                 vm.StartSsoLoginAction = () => DismissAndLaunch(() => LaunchLoginSsoFlow());
-                vm.LogInWithDeviceAction = () => DismissAndLaunch(() => LaunchLoginWithDevice(email));
                 vm.LogInSuccessAction = () => { DismissLockAndContinue(); };
                 vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage(shouldCheckRememberEmail: false));
             }
