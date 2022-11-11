@@ -1575,7 +1575,7 @@
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
-    <value>Solarized Dark</value>
+    <value>Solarized iluna</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
@@ -2464,29 +2464,47 @@
     <value>Baztertu</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
-    <value>Login request has already expired.</value>
+    <value>Sarbide eskaera iraungi da.</value>
   </data>
   <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
-    <value>Login attempt from:
+    <value>Saio hasiera saiakera hemendik:
 {0}
-Do you want to switch to this account?</value>
+Kontu honetara aldatu nahi duzu?</value>
   </data>
   <data name="NewAroundHere" xml:space="preserve">
-    <value>New around here?</value>
+    <value>Berria hemendik?</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
-    <value>Get master password hint</value>
+    <value>Jaso pasahitz nagusiaren pista</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>{0} bezala hasi saioa</value>
   </data>
   <data name="NotYou" xml:space="preserve">
-    <value>Not you?</value>
+    <value>Ez zara zu?</value>
   </data>
   <data name="LogInWithMasterPassword" xml:space="preserve">
-    <value>Log In with master password</value>
+    <value>Hasi saioa pasahitz nagusiarekin</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Log In with another device</value>
+    <value>Hasi saioa beste gailu batekin</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Saioa hastea martxan da</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Jakinarazpen bat bidali da zure gailura.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Mesedez, ziurtatu kutxa gotorra desblokeatuta dagoela eta hatz-marka digitalaren esaldia bat datorrela beste gailuarekin.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Berbidali jakinarazpena</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Beste aukerarik behar al duzu?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Ikusi erregistro guztiak ezarpenetan</value>
   </data>
 </root>

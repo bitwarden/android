@@ -1762,7 +1762,7 @@
     <value>使用下拉手勢同步密碼庫。</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>企業單一登入</value>
+    <value>企業單一登入（SSO）</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
     <value>若要使用組織的單一登入入口快速登入。請先輸入您的組織識別碼。</value>
@@ -2489,5 +2489,23 @@
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>使用其他裝置登入</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>登入已發起</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>通知已傳送至您的裝置。</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>重新傳送通知</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Need another option?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>檢視所有登入選項</value>
   </data>
 </root>

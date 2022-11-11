@@ -2490,4 +2490,22 @@ Czy chcesz przełączyć się na to konto?</value>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Logowanie innym urządzeniem</value>
   </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Logowanie rozpoczęte</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Powiadomienie zostało wysłane na urządzenie.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Upewnij się, że sejf jest odblokowany, a unikalny identyfikator konta pasuje do drugiego urządzenia.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Wyślij ponownie powiadomienie</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Potrzebujesz innego sposobu?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Zobacz wszystkie sposoby logowania</value>
+  </data>
 </root>

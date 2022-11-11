@@ -2491,4 +2491,22 @@ select Add TOTP to store the key safely</value>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Вписване с друго устройство</value>
   </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Вписването е стартирано</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Към устройството Ви е изпратено известие.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Уверете се, че трезорът Ви е отключен и че Уникалната фраза съвпада с другото устройство.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Повторно изпращане на известието</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Предпочитате друг вариант?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Вижте всички възможности за вписване</value>
+  </data>
 </root>
