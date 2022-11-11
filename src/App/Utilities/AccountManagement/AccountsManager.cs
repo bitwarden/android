@@ -7,6 +7,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities.AccountManagement
@@ -103,7 +104,8 @@ namespace Bit.App.Utilities.AccountManagement
                     // var orgIdentifier = await _stateService.GetOrgIdentifierAsync();
 
                     var email = await _stateService.GetEmailAsync();
-                    _accountsManagerHost.Navigate(NavigationTarget.Login, new LoginNavigationParams(email));
+                    await _stateService.SetRememberedEmailAsync(email);
+                    _accountsManagerHost.Navigate(NavigationTarget.HomeLogin, new HomeNavigationParams(true));
                 }
                 else
                 {
@@ -183,7 +185,7 @@ namespace Bit.App.Utilities.AccountManagement
             await Device.InvokeOnMainThreadAsync(() =>
             {
                 Options.HideAccountSwitcher = false;
-                _accountsManagerHost.Navigate(NavigationTarget.HomeLogin);
+                _accountsManagerHost.Navigate(NavigationTarget.HomeLogin, new HomeNavigationParams(false));
             });
         }
 
@@ -217,6 +219,18 @@ namespace Bit.App.Utilities.AccountManagement
                 await _accountsManagerHost.UpdateThemeAsync();
                 _messagingService.Send(AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED);
             });
+        }
+
+        public async Task PromptToSwitchToExistingAccountAsync(string userId)
+        {
+            var switchToAccount = await _platformUtilsService.ShowDialogAsync(
+                AppResources.SwitchToAlreadyAddedAccountConfirmation,
+                AppResources.AccountAlreadyAdded, AppResources.Yes, AppResources.Cancel);
+            if (switchToAccount)
+            {
+                await _stateService.SetActiveUserAsync(userId);
+                _messagingService.Send("switchedAccount");
+            }
         }
     }
 }
