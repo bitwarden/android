@@ -114,10 +114,7 @@ namespace Bit.App.Pages
             set => SetProperty(ref _isKnownDevice, value);
         }
 
-        public bool IsIosExtension { get; set; }
-
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
-
         public Command LogInCommand { get; }
         public Command TogglePasswordCommand { get; }
         public ICommand MoreCommand { get; internal set; }
@@ -125,6 +122,8 @@ namespace Bit.App.Pages
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string LoggingInAsText => string.Format(AppResources.LoggingInAsX, Email);
+        public bool IsIosExtension { get; set; }
+        public bool CanRemoveAccount { get; set; }
         public Action StartTwoFactorAction { get; set; }
         public Action LogInSuccessAction { get; set; }
         public Action LogInWithDeviceAction { get; set; }
@@ -151,6 +150,7 @@ namespace Bit.App.Pages
                 }
                 var deviceIdentifier = await _appIdService.GetAppIdAsync();
                 IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
+                CanRemoveAccount = await _stateService.GetActiveUserEmailAsync() != Email;
                 await _deviceActionService.HideLoadingAsync();
             }
             catch (Exception ex)
@@ -256,7 +256,7 @@ namespace Bit.App.Pages
 
         private async Task MoreAsync()
         {
-            var buttons = IsEmailEnabled || await _stateService.GetActiveUserEmailAsync() != Email
+            var buttons = IsEmailEnabled || CanRemoveAccount 
                 ? new[] { AppResources.GetPasswordHint }
                 : new[] { AppResources.GetPasswordHint, AppResources.RemoveAccount };
             var selection = await _deviceActionService.DisplayActionSheetAsync(AppResources.Options, AppResources.Cancel, null, buttons);

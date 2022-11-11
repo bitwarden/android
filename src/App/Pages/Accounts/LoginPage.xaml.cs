@@ -54,11 +54,6 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(_getPasswordHint);
             }
 
-            if (Device.RuntimePlatform == Device.Android && !_vm.IsEmailEnabled)
-            {
-                ToolbarItems.Add(_removeAccount);
-            }
-
             if (_appOptions?.IosExtension ?? false)
             {
                 _vm.ShowCancelButton = true;
@@ -87,6 +82,10 @@ namespace Bit.App.Pages
             {
                 RequestFocus(_masterPassword);
                 _inputFocused = true;
+            }
+            if (Device.RuntimePlatform == Device.Android && !_vm.CanRemoveAccount)
+            {
+                ToolbarItems.Add(_removeAccount);
             }
         }
 
