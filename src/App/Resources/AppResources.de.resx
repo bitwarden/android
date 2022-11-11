@@ -2489,4 +2489,22 @@ Möchtest du zu diesem Konto wechseln?</value>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Mit einem anderen Gerät anmelden</value>
   </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Anmeldung initiiert</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Eine Benachrichtigung wurde an dein Gerät gesendet.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Bitte stelle sicher, dass dein Tresor entsperrt ist und die Fingerabdruck-Phrase mit dem anderen Gerät übereinstimmt.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Benachrichtigung erneut senden</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Brauchst du eine andere Option?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Alle Anmelde-Optionen anzeigen</value>
+  </data>
 </root>

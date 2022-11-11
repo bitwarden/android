@@ -1575,7 +1575,7 @@
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
-    <value>Solarized Dark</value>
+    <value>Solarizzato scuro</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
@@ -2468,26 +2468,44 @@ seleziona Aggiungi TOTP per salvare la chiave in modo sicuro</value>
     <value>La richiesta di accesso è già scaduta.</value>
   </data>
   <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
-    <value>Login attempt from:
+    <value>Tentativo di accesso da:
 {0}
-Do you want to switch to this account?</value>
+Vuoi passare a questo account?</value>
   </data>
   <data name="NewAroundHere" xml:space="preserve">
-    <value>New around here?</value>
+    <value>Nuovo da queste parti?</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
-    <value>Get master password hint</value>
+    <value>Ottieni l'indizio della password principale</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>Accesso come {0}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
-    <value>Not you?</value>
+    <value>Non sei tu?</value>
   </data>
   <data name="LogInWithMasterPassword" xml:space="preserve">
-    <value>Log In with master password</value>
+    <value>Accedi con la password principale</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Log In with another device</value>
+    <value>Accedi con un altro dispositivo</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Log in initiated</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>A notification has been sent to your device.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Resend notification</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Need another option?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>View all log in options</value>
   </data>
 </root>

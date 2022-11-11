@@ -349,7 +349,7 @@
     <value>Адправіць</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Сінхранізавана</value>
+    <value>Сінхранізаваць</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
@@ -2489,5 +2489,23 @@
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Увайсці з іншай прылады</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Ініцыяваны ўваход</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Апавяшчэнне было адпраўлена на вашу прыладу.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Пераканайцеся, што ваша сховішча разблакіравана, а фраза адбітка пальца супадае з іншай прыладай.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Адправіць апавяшчэнне паўторна</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Неабходны іншы варыянт?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Паглядзець усе варыянты ўваходу</value>
   </data>
 </root>

@@ -126,31 +126,31 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>Bitwarden, Inc. је матична компанија фирме 8bit Solutions LLC.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+Именован као најбољи управљач лозинкама од стране новинских сајтова као што су THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, и других.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+Управљајте, чувајте, обезбедите, и поделите неограничен број лозинки са неограниченог броја уређаја где год да се налазите. Bitwarden свима доноси решења за управљање лозинкама која су отвореног кода, било да сте код куће, на послу, или на путу.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Генеришите јаке, јединствене, и насумичне лозинке у зависности од безбедносних захтева за сваки сајт који често посећујете.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+Bitwarden Send брзо преноси шифроване информације--- датотеке и обичан текст-- директно и свима.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+Bitwarden нуди планове за компаније и предузећа како бисте могли безбедно да делите лозинке са вашим колегама.
 
-Why Choose Bitwarden:
+Зашто изабрати Bitwarden:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+Шифровање светске класе
+Лозинке су заштићене напредним шифровањем од једног до другог краја (AES-256 bit, salted hashtag, и PBKDF2 SHA-256) како би ваши подаци остали безбедни и приватни.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Уграђен генератор лозинки
+Генеришите јаке, јединствене, и насумичне лозинке у зависности од безбедносних захтева за сваки сајт који често посећујете.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+Глобално преведен
+Bitwarden преводи постоје за 40 језика и стално се унапређују, захваљујући нашој глобалној заједници.
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+Вишеплатформне апликације
+Обезбедите и поделите осетљиве податке у вашем Bitwarden сефу из било ког претраживача, мобилног уређаја, или desktop оперативног система, и других.
 </value>
   <comment>Max 4000 characters</comment>
   </data>
