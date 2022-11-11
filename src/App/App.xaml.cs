@@ -145,7 +145,10 @@ namespace Bit.App
                                 new NavigationPage(new RemoveMasterPasswordPage()));
                         });
                     }
-                    else if (message.Command == Constants.PasswordlessLoginRequestKey || message.Command == "unlocked" || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
+                    else if (message.Command == Constants.PasswordlessLoginRequestKey
+                        || message.Command == "unlocked"
+                        || message.Command == "syncCompleted"
+                        || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
                     {
                         lock (_processingLoginRequestLock)
                         {
