@@ -256,7 +256,7 @@ namespace Bit.App.Pages
 
         private async Task MoreAsync()
         {
-            var buttons = IsEmailEnabled || CanRemoveAccount 
+            var buttons = IsEmailEnabled || CanRemoveAccount
                 ? new[] { AppResources.GetPasswordHint }
                 : new[] { AppResources.GetPasswordHint, AppResources.RemoveAccount };
             var selection = await _deviceActionService.DisplayActionSheetAsync(AppResources.Options, AppResources.Cancel, null, buttons);
