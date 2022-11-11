@@ -4,11 +4,11 @@ namespace Bit.App.Utilities.AccountManagement
 {
     public class HomeNavigationParams : INavigationParams
     {
-        public HomeNavigationParams(bool checkNavigateToLogin)
+        public HomeNavigationParams(bool shouldCheckRememberEmail)
         {
-            CheckNavigateToLogin = checkNavigateToLogin;
+            ShouldCheckRememberEmail = shouldCheckRememberEmail;
         }
 
-        public bool CheckNavigateToLogin { get; }
+        public bool ShouldCheckRememberEmail { get; }
     }
 }
