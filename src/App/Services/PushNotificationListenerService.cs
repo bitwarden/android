@@ -187,10 +187,8 @@ namespace Bit.App.Services
                 Debug.WriteLine($"{TAG} Registered device with server.");
 
                 await _stateService.Value.SetPushLastRegistrationDateAsync(DateTime.UtcNow);
-                if (deviceType == Device.Android)
-                {
-                    await _stateService.Value.SetPushCurrentTokenAsync(token);
-                }
+
+                await _stateService.Value.SetPushCurrentTokenAsync(token);
             }
 #if DEBUG
             catch (ApiException apiEx)
