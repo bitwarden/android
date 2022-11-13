@@ -5,10 +5,11 @@ namespace Bit.Core.Models.Request
 {
     public class DeviceRequest
     {
-        public DeviceRequest(string appId, IPlatformUtilsService platformUtilsService)
+        public DeviceRequest(string appId, string pushToken, IPlatformUtilsService platformUtilsService)
         {
             Type = platformUtilsService.GetDevice();
             Name = platformUtilsService.GetDeviceString();
+            PushToken = pushToken;
             Identifier = appId;
         }
 

@@ -300,7 +300,8 @@ namespace Bit.Core.Services
         {
             var storedTwoFactorToken = await _tokenService.GetTwoFactorTokenAsync(email);
             var appId = await _appIdService.GetAppIdAsync();
-            var deviceRequest = new DeviceRequest(appId, _platformUtilsService);
+            var pushToken = await _stateService.GetPushCurrentTokenAsync();
+            var deviceRequest = new DeviceRequest(appId, pushToken, _platformUtilsService);
 
             string[] emailPassword;
             string[] codeCodeVerifier;
