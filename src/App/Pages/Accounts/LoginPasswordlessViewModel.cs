@@ -116,6 +116,13 @@ namespace Bit.App.Pages
                 await Page.Navigation.PopModalAsync();
                 return;
             }
+            var loginRequestData = await _authService.GetPasswordlessLoginRequestByIdAsync(LoginRequest.Id);
+            if (loginRequestData.RequestApproved.HasValue && loginRequestData.ResponseDate.HasValue)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.ThisRequestIsNoLongerValid);
+                await Page.Navigation.PopModalAsync();
+                return;
+            }
 
             await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
             await _authService.PasswordlessLoginAsync(LoginRequest.Id, LoginRequest.PubKey, approveRequest);
