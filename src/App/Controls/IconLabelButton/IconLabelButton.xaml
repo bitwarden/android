@@ -8,6 +8,7 @@
     Padding="1"
     StyleClass="btn-icon-secondary"
     BackgroundColor="{Binding IconLabelBorderColor, Source={x:Reference _iconLabelButton}}"
+    BorderColor="Transparent"
     HasShadow="False">
     <Frame.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding ButtonCommand, Source={x:Reference _iconLabelButton}}" />
@@ -17,6 +18,7 @@
         Padding="0"
         CornerRadius="{Binding CornerRadius, Source={x:Reference _iconLabelButton}}"
         BackgroundColor="{Binding IconLabelBackgroundColor, Source={x:Reference _iconLabelButton}}"
+        BorderColor="Transparent"
         IsClippedToBounds="True"
         HasShadow="False">
         <StackLayout

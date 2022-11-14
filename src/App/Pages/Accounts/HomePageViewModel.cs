@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.App.Utilities;
@@ -24,13 +25,17 @@ namespace Bit.App.Pages
         private bool _canLogin;
         private IPlatformUtilsService _platformUtilsService;
         private ILogger _logger;
+        private IEnvironmentService _environmentService;
+        private IAccountsManager _accountManager;
 
         public HomeViewModel()
         {
-            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
-            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _stateService = ServiceContainer.Resolve<IStateService>();
+            _messagingService = ServiceContainer.Resolve<IMessagingService>();
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
-            _logger = ServiceContainer.Resolve<ILogger>("logger");
+            _logger = ServiceContainer.Resolve<ILogger>();
+            _environmentService = ServiceContainer.Resolve<IEnvironmentService>();
+            _accountManager = ServiceContainer.Resolve<IAccountsManager>();
 
             PageTitle = AppResources.Bitwarden;
 
@@ -68,7 +73,7 @@ namespace Bit.App.Pages
 
         public bool CanContinue => !string.IsNullOrEmpty(Email);
 
-        public bool CheckHasRememberedEmail { get; set; }
+        public bool ShouldCheckRememberEmail { get; set; }
 
         public FormattedString CreateAccountText
         {
@@ -107,11 +112,11 @@ namespace Bit.App.Pages
 
         public void CheckNavigateLoginStep()
         {
-            if (CheckHasRememberedEmail && RememberEmail)
+            if (ShouldCheckRememberEmail && RememberEmail)
             {
                 StartLoginAction();
             }
-            CheckHasRememberedEmail = false;
+            ShouldCheckRememberEmail = false;
         }
 
         public async Task ContinueToLoginStepAsync()
@@ -132,6 +137,16 @@ namespace Bit.App.Pages
                     return;
                 }
                 await _stateService.SetRememberedEmailAsync(RememberEmail ? Email : null);
+                var userId = await _stateService.GetUserIdAsync(Email);
+                if (!string.IsNullOrWhiteSpace(userId))
+                {
+                    var userEnvUrls = await _stateService.GetEnvironmentUrlsAsync(userId);
+                    if (userEnvUrls?.Base == _environmentService.BaseUrl)
+                    {
+                        await _accountManager.PromptToSwitchToExistingAccountAsync(userId);
+                        return;
+                    }
+                }
                 StartLoginAction();
             }
             catch (Exception ex)

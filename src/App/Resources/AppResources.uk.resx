@@ -708,7 +708,7 @@
     <value>Двоетапна перевірка</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Двоетапна перевірка робить ваш обліковий запис більш захищеним, вимагаючи підтвердження входу з використанням іншого пристрою, наприклад, за допомогою коду безпеки, програми авторизації, SMS, телефонного виклику, або е-пошти. Ви можете увімкнути двоетапну перевірку в сховищі на bitwarden.com. Хочете перейти на вебсайт зараз?</value>
+    <value>Двоетапна перевірка дає змогу надійніше захистити ваш обліковий запис, вимагаючи підтвердження входу з використанням іншого пристрою, наприклад, за допомогою коду безпеки, програми авторизації, SMS, телефонного виклику, або е-пошти. Ви можете налаштувати двоетапну перевірку в сховищі на bitwarden.com. Хочете перейти на вебсайт зараз?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Розблокування з {0}</value>
@@ -2489,5 +2489,23 @@
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Увійти з іншого пристрою</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Ініційовано вхід</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Сповіщення було надіслано на ваш пристрій.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Переконайтеся, що ваше сховище розблоковане, а фраза відбитка збігається з іншим пристроєм.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Надіслати сповіщення ще раз</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Потрібен інший варіант?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Переглянути всі варіанти входу</value>
   </data>
 </root>

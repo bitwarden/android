@@ -32,9 +32,9 @@ final class Base32 {
                 throw Base32Error.invalidFormat
             }
             
-            var byteIndexInt = BASE_32_CHARS.distance(from: BASE_32_CHARS.startIndex, to: byteIndex)
+            let byteIndexInt = BASE_32_CHARS.distance(from: BASE_32_CHARS.startIndex, to: byteIndex)
 
-            var bits = min(5 - bitIndex, 8 - outputBits);
+            let bits = min(5 - bitIndex, 8 - outputBits);
             output[outputIndex] <<= bits;
             output[outputIndex] |= (UInt8)(byteIndexInt >> (5 - (bitIndex + bits)));
 

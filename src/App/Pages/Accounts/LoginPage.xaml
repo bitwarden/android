@@ -110,8 +110,8 @@
                             VerticalOptions="CenterAndExpand"
                             Icon="{Binding Source={x:Static core:BitwardenIcons.Device}}"
                             Label="{u:I18n LogInWithAnotherDevice}"
-                            ButtonCommand="{Binding LogInCommand}"
-                            IsVisible="False"/>
+                            ButtonCommand="{Binding LogInWithDeviceCommand}"
+                            IsVisible="{Binding IsKnownDevice}"/>
                         <controls:IconLabelButton
                             HorizontalOptions="Fill"
                             VerticalOptions="CenterAndExpand"

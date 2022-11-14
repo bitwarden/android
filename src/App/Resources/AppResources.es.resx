@@ -2491,4 +2491,22 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Iniciar sesión con otro dispositivo</value>
   </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Inicio de sesión en proceso</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Se ha enviado una notificación a tu dispositivo.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Por favor, asegúrese de que su bóveda está desbloqueada y la frase de huella dactilar coincide en el otro dispositivo.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Enviar nueva notificación</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>¿Necesitas otra opción?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Ver todas las opciones de inicio de sesión</value>
+  </data>
 </root>

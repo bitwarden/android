@@ -2490,4 +2490,22 @@ Vil du skifte til denne konto?</value>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Log ind med en anden enhed</value>
   </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Indlogning påbegyndt</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>En notifikation er sendt til din enhed.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Sørg for, at din boks er oplåst, samt at Fingeraftrykssætningen på den anden enhed matcher.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Gensend notifikation</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Behov for en anden mulighed?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Vis alle indlogningsmuligheder</value>
+  </data>
 </root>

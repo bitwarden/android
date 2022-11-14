@@ -15,14 +15,14 @@ namespace Bit.App.Pages
         private readonly AppOptions _appOptions;
         private IBroadcasterService _broadcasterService;
 
-        public HomePage(AppOptions appOptions = null, bool checkRememberedEmail = true)
+        public HomePage(AppOptions appOptions = null, bool shouldCheckRememberEmail = true)
         {
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _appOptions = appOptions;
             InitializeComponent();
             _vm = BindingContext as HomeViewModel;
             _vm.Page = this;
-            _vm.CheckHasRememberedEmail = checkRememberedEmail;
+            _vm.ShouldCheckRememberEmail = shouldCheckRememberEmail;
             _vm.ShowCancelButton = _appOptions?.IosExtension ?? false;
             _vm.StartLoginAction = async () => await StartLoginAsync();
             _vm.StartRegisterAction = () => Device.BeginInvokeOnMainThread(async () => await StartRegisterAsync());
@@ -59,7 +59,7 @@ namespace Bit.App.Pages
 
             if (!_appOptions?.HideAccountSwitcher ?? false)
             {
-                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync(false);
             }
             _broadcasterService.Subscribe(nameof(HomePage), (message) =>
             {

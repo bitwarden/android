@@ -723,7 +723,7 @@ namespace Bit.Core.Services
             return await _cryptoFunctionService.AesDecryptAsync(data, iv, theKey.EncKey);
         }
 
-        private async Task<byte[]> RsaDecryptAsync(string encValue)
+        public async Task<byte[]> RsaDecryptAsync(string encValue, byte[] privateKey = null)
         {
             var headerPieces = encValue.Split('.');
             EncryptionType? encType = null;
@@ -750,7 +750,12 @@ namespace Bit.Core.Services
             }
 
             var data = Convert.FromBase64String(encPieces[0]);
-            var privateKey = await GetPrivateKeyAsync();
+
+            if (privateKey is null)
+            {
+                privateKey = await GetPrivateKeyAsync();
+            }
+
             if (privateKey == null)
             {
                 throw new Exception("No private key.");

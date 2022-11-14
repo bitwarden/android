@@ -2489,4 +2489,22 @@ Bu hesaba keçmək istəyirsiniz?</value>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Başqa cihazla giriş et</value>
   </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Giriş etmə başladıldı</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Cihazınıza bir bildiriş göndərildi.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Zəhmət olmasa anbarınızın kilidinin açıq olduğuna və Barmaq izi ifadəsinin digər cihazda uyğun gəldiyinə əmin olun.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Bildirişi təkrar göndər</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Başqa bir seçimə ehtiyacınız var?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Bütün giriş etmə seçimlərinə bax</value>
+  </data>
 </root>

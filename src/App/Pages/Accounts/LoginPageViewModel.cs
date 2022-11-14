@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
@@ -6,9 +8,11 @@ using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.App.Utilities.AccountManagement;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
+using Bit.Core.Models.View;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -29,6 +33,7 @@ namespace Bit.App.Pages
         private readonly ILogger _logger;
         private readonly IApiService _apiService;
         private readonly IAppIdService _appIdService;
+        private readonly IAccountsManager _accountManager;
         private bool _showPassword;
         private bool _showCancelButton;
         private string _email;
@@ -49,11 +54,13 @@ namespace Bit.App.Pages
             _logger = ServiceContainer.Resolve<ILogger>("logger");
             _apiService = ServiceContainer.Resolve<IApiService>();
             _appIdService = ServiceContainer.Resolve<IAppIdService>();
+            _accountManager = ServiceContainer.Resolve<IAccountsManager>();
 
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
             LogInCommand = new Command(async () => await LogInAsync());
             MoreCommand = new AsyncCommand(MoreAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
+            LogInWithDeviceCommand = new AsyncCommand(() => Device.InvokeOnMainThreadAsync(LogInWithDeviceAction), onException: _logger.Exception, allowsMultipleExecutions: false);
 
             AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
@@ -107,21 +114,24 @@ namespace Bit.App.Pages
             set => SetProperty(ref _isKnownDevice, value);
         }
 
-        public bool IsIosExtension { get; set; }
-
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
-
         public Command LogInCommand { get; }
         public Command TogglePasswordCommand { get; }
         public ICommand MoreCommand { get; internal set; }
+        public ICommand LogInWithDeviceCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string LoggingInAsText => string.Format(AppResources.LoggingInAsX, Email);
+        public bool IsIosExtension { get; set; }
+        public bool CanRemoveAccount { get; set; }
         public Action StartTwoFactorAction { get; set; }
         public Action LogInSuccessAction { get; set; }
+        public Action LogInWithDeviceAction { get; set; }
         public Action UpdateTempPasswordAction { get; set; }
         public Action StartSsoLoginAction { get; set; }
         public Action CloseAction { get; set; }
+
+        public bool EmailIsInSavedAccounts => _stateService.AccountViews != null && _stateService.AccountViews.Any(e => e.Email == Email);
 
         protected override II18nService i18nService => _i18nService;
         protected override IEnvironmentService environmentService => _environmentService;
@@ -133,12 +143,14 @@ namespace Bit.App.Pages
             try
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
+                await AccountSwitchingOverlayViewModel.RefreshAccountViewsAsync();
                 if (string.IsNullOrWhiteSpace(Email))
                 {
                     Email = await _stateService.GetRememberedEmailAsync();
                 }
                 var deviceIdentifier = await _appIdService.GetAppIdAsync();
                 IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
+                CanRemoveAccount = await _stateService.GetActiveUserEmailAsync() != Email;
                 await _deviceActionService.HideLoadingAsync();
             }
             catch (Exception ex)
@@ -187,7 +199,7 @@ namespace Bit.App.Pages
                         var userEnvUrls = await _stateService.GetEnvironmentUrlsAsync(userId);
                         if (userEnvUrls?.Base == _environmentService.BaseUrl)
                         {
-                            await PromptToSwitchToExistingAccountAsync(userId);
+                            await _accountManager.PromptToSwitchToExistingAccountAsync(userId);
                             return;
                         }
                     }
@@ -244,7 +256,7 @@ namespace Bit.App.Pages
 
         private async Task MoreAsync()
         {
-            var buttons = IsEmailEnabled
+            var buttons = IsEmailEnabled || CanRemoveAccount
                 ? new[] { AppResources.GetPasswordHint }
                 : new[] { AppResources.GetPasswordHint, AppResources.RemoveAccount };
             var selection = await _deviceActionService.DisplayActionSheetAsync(AppResources.Options, AppResources.Cancel, null, buttons);
@@ -291,18 +303,6 @@ namespace Bit.App.Pages
             catch (Exception e)
             {
                 _logger.Exception(e);
-            }
-        }
-
-        private async Task PromptToSwitchToExistingAccountAsync(string userId)
-        {
-            var switchToAccount = await _platformUtilsService.ShowDialogAsync(
-                AppResources.SwitchToAlreadyAddedAccountConfirmation,
-                AppResources.AccountAlreadyAdded, AppResources.Yes, AppResources.Cancel);
-            if (switchToAccount)
-            {
-                await _stateService.SetActiveUserAsync(userId);
-                _messagingService.Send("switchedAccount");
             }
         }
 

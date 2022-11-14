@@ -1762,7 +1762,7 @@
     <value>使用下拉手势同步密码库。</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>企业单点登录</value>
+    <value>企业单点登录（SSO）</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
     <value>要使用您组织的单点登录门户快速登录。请首先输入您组织的标识符。</value>
@@ -2489,5 +2489,23 @@
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>使用其他设备登录</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>登录已发起</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>通知已发送到您的设备。</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>请确保您的密码库已解锁，并且指纹短语与其他设备上的相匹配。</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>重新发送通知</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Need another option?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>查看所有登录选项</value>
   </data>
 </root>

@@ -126,32 +126,31 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>Bitwarden, Inc. は 8bit Solutions LLC の親会社です。
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+The Verge、U.S. NEWS &amp; WORLD REPORT、CNET などでベスト パスワード マネージャーに選ばれました。
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+どこからでも無制限のデバイスで無制限のパスワードを管理、保存、保護、共有します。 Bitwarden は、自宅、職場、外出先を問わず、オープンソースのパスワード管理ソリューションをすべての人に提供します。
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+頻繁に使用するすべての Web サイトのセキュリティ要件に基づいて、強力で一意のランダムなパスワードを生成します。
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+Bitwarden Send は、暗号化された情報 (ファイルと平文) を迅速に誰にでも直接送信します。
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+Bitwarden は企業向けに Teams および Enterprise プランを提供しているため、パスワードを同僚と安全に共有できます。
 
-Why Choose Bitwarden:
+Bitwarden を選ぶ理由:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+世界クラスの暗号化
+パスワードは高度なエンド ツー エンドの暗号化 (AES-256 ビット、ソルト付きハッシュタグ、PBKDF2 SHA-256) で保護されるため、データは安全かつプライベートに保たれます。
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+組み込みのパスワードジェネレーター
+頻繁に使用するすべての Web サイトのセキュリティ要件に基づいて、強力で一意のランダムなパスワードを生成します。
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+グローバル翻訳
+Bitwarden の翻訳は 40 の言語に存在し、グローバル コミュニティのおかげで成長を続けています。
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
-</value>
+クロスプラットフォーム アプリケーション
+ブラウザ、モバイル デバイス、デスクトップ OS などから Bitwarden Vault 内の機密データを保護して共有します。</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">

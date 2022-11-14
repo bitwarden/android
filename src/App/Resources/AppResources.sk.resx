@@ -1762,7 +1762,7 @@ Skenovanie prebehne automaticky.</value>
     <value>Synchronizácia trezora potiahnutím nadol</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Prihlásenie cez prihlasovací formulár spoločnosti (SSO)</value>
+    <value>Jednotné prihlásenie pre podniky (SSO)</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
     <value>Prihláste sa prostredníctvom prihlasovacieho portálu (SSO) vašej organizácie. Najskôr zadajte identifikátor vašej organizácie.</value>
@@ -2489,5 +2489,23 @@ Chcete prepnúť na toto konto?</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Prihlásenie pomocou iného zariadenia</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Iniciované prihlásenie</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Do vášho zariadenia bolo odoslané upozornenie.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Skontrolujte, či je trezor odomknutý, a či sa fráza odtlačku prsta zhoduje na druhom zariadení.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Znova odoslať upozornenie</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Potrebujete inú možnosť?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Zobraziť všetky možnosti prihlásenia</value>
   </data>
 </root>

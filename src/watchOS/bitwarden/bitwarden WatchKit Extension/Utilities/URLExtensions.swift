@@ -20,7 +20,7 @@ extension URL {
     }
     
     var host:String? {
-        if var components = URLComponents(url: self, resolvingAgainstBaseURL: false){
+        if let components = URLComponents(url: self, resolvingAgainstBaseURL: false){
             return components.host
         }
         return nil

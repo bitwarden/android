@@ -125,6 +125,9 @@
     <Compile Update="Pages\Accounts\LoginPasswordlessPage.xaml.cs">
       <DependentUpon>LoginPasswordlessPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\Accounts\LoginPasswordlessRequestPage.xaml.cs">
+      <DependentUpon>LoginPasswordlessRequestPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

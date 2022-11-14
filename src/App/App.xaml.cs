@@ -145,7 +145,10 @@ namespace Bit.App
                                 new NavigationPage(new RemoveMasterPasswordPage()));
                         });
                     }
-                    else if (message.Command == Constants.PasswordlessLoginRequestKey || message.Command == "unlocked" || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
+                    else if (message.Command == Constants.PasswordlessLoginRequestKey
+                        || message.Command == "unlocked"
+                        || message.Command == "syncCompleted"
+                        || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
                     {
                         lock (_processingLoginRequestLock)
                         {
@@ -457,7 +460,14 @@ namespace Bit.App
             switch (navTarget)
             {
                 case NavigationTarget.HomeLogin:
-                    Current.MainPage = new NavigationPage(new HomePage(Options));
+                    if (navParams is HomeNavigationParams homeParams)
+                    {
+                        Current.MainPage = new NavigationPage(new HomePage(Options, homeParams.ShouldCheckRememberEmail));
+                    }
+                    else
+                    {
+                        Current.MainPage = new NavigationPage(new HomePage(Options));
+                    }
                     break;
                 case NavigationTarget.Login:
                     if (navParams is LoginNavigationParams loginParams)

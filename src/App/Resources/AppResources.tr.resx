@@ -2489,4 +2489,22 @@ Bu hesaba geçmek ister misiniz?</value>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Başka bir cihazla giriş yap</value>
   </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Giriş başlatıldı</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Cihazınıza bir bildirim gönderildi.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Lütfen kasanızın kilidinin açık olduğundan ve parmak izi ifadesinin diğer cihazla eşleştiğinden emin olun.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Bildirimi yeniden gönder</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Başka bir seçeneğe mi ihtiyacınız var?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Tüm giriş seçeneklerini gör</value>
+  </data>
 </root>
