@@ -171,5 +171,9 @@ namespace Bit.App.Pages
         public string DeviceType { get; set; }
 
         public string IpAddress { get; set; }
+
+        public bool? Approved { get; set; }
+
+        public DateTime? ResponseDate { get; set; }
     }
 }

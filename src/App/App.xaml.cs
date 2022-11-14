@@ -206,6 +206,8 @@ namespace Bit.App
                 RequestDate = loginRequestData.CreationDate,
                 DeviceType = loginRequestData.RequestDeviceType,
                 Origin = loginRequestData.Origin,
+                Approved = loginRequestData.RequestApproved,
+                ResponseDate = loginRequestData.ResponseDate
             });
             await _stateService.SetPasswordlessLoginNotificationAsync(null);
             _pushNotificationService.DismissLocalNotification(Constants.PasswordlessNotificationId);
