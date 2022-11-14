@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Content.Res;
 using Android.Nfc;
 using Android.OS;
 using Android.Runtime;
-using AndroidX.Core.Content;
+using Android.Views;
 using Bit.App.Abstractions;
 using Bit.App.Models;
+using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
@@ -18,7 +20,11 @@ using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using Bit.Droid.Receivers;
 using Bit.Droid.Utilities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Xamarin.Essentials;
 using ZXing.Net.Mobile.Android;
+using FileProvider = AndroidX.Core.Content.FileProvider;
 
 namespace Bit.Droid
 {
@@ -30,11 +36,14 @@ namespace Bit.Droid
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         private IDeviceActionService _deviceActionService;
+        private IFileService _fileService;        
         private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
         private IStateService _stateService;
         private IAppIdService _appIdService;
         private IEventService _eventService;
+        private IPushNotificationListenerService _pushNotificationListenerService;
+        private ILogger _logger;
         private PendingIntent _eventUploadPendingIntent;
         private AppOptions _appOptions;
         private string _activityKey = $"{nameof(MainActivity)}_{Java.Lang.JavaSystem.CurrentTimeMillis().ToString()}";
@@ -45,17 +54,20 @@ namespace Bit.Droid
         {
             var eventUploadIntent = new Intent(this, typeof(EventUploadReceiver));
             _eventUploadPendingIntent = PendingIntent.GetBroadcast(this, 0, eventUploadIntent,
-                PendingIntentFlags.UpdateCurrent);
+                AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, false));
 
             var policy = new StrictMode.ThreadPolicy.Builder().PermitAll().Build();
             StrictMode.SetThreadPolicy(policy);
 
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _fileService = ServiceContainer.Resolve<IFileService>();
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
+            _pushNotificationListenerService = ServiceContainer.Resolve<IPushNotificationListenerService>();
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
@@ -70,7 +82,7 @@ namespace Bit.Droid
                 Window.AddFlags(Android.Views.WindowManagerFlags.Secure);
             });
 
-            ServiceContainer.Resolve<ILogger>("logger").InitAsync();
+            _logger.InitAsync();
 
             var toplayout = Window?.DecorView?.RootView;
             if (toplayout != null)
@@ -81,8 +93,9 @@ namespace Bit.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             _appOptions = GetOptions();
+            CreateNotificationChannel();
             LoadApplication(new App.App(_appOptions));
-
+            DisableAndroidFontScale();
 
             _broadcasterService.Subscribe(_activityKey, (message) =>
             {
@@ -138,6 +151,15 @@ namespace Bit.Droid
             AndroidHelpers.SetPreconfiguredRestrictionSettingsAsync(this)
                 .GetAwaiter()
                 .GetResult();
+
+            if (Intent?.GetStringExtra(Core.Constants.NotificationData) is string notificationDataJson)
+            {
+                var notificationType = JToken.Parse(notificationDataJson).SelectToken(Core.Constants.NotificationDataType);
+                if (notificationType.ToString() == PasswordlessNotificationData.TYPE)
+                {
+                    _pushNotificationListenerService.OnNotificationTapped(JsonConvert.DeserializeObject<PasswordlessNotificationData>(notificationDataJson)).FireAndForget();
+                }
+            }
         }
 
         protected override void OnNewIntent(Intent intent)
@@ -191,13 +213,13 @@ namespace Bit.Droid
         public async override void OnRequestPermissionsResult(int requestCode, string[] permissions,
             [GeneratedEnum] Permission[] grantResults)
         {
-            if (requestCode == Constants.SelectFilePermissionRequestCode)
+            if (requestCode == Core.Constants.SelectFilePermissionRequestCode)
             {
                 if (grantResults.Any(r => r != Permission.Granted))
                 {
                     _messagingService.Send("selectFileCameraPermissionDenied");
                 }
-                await _deviceActionService.SelectFileAsync();
+                await _fileService.SelectFileAsync();
             }
             else
             {
@@ -210,7 +232,7 @@ namespace Bit.Droid
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
             if (resultCode == Result.Ok &&
-               (requestCode == Constants.SelectFileRequestCode || requestCode == Constants.SaveFileRequestCode))
+               (requestCode == Core.Constants.SelectFileRequestCode || requestCode == Core.Constants.SaveFileRequestCode))
             {
                 Android.Net.Uri uri = null;
                 string fileName = null;
@@ -232,7 +254,7 @@ namespace Bit.Droid
                     return;
                 }
 
-                if (requestCode == Constants.SaveFileRequestCode)
+                if (requestCode == Core.Constants.SaveFileRequestCode)
                 {
                     _messagingService.Send("selectSaveFileResult",
                         new Tuple<string, string>(uri.ToString(), fileName));
@@ -273,7 +295,7 @@ namespace Bit.Droid
             {
                 var intent = new Intent(this, Class);
                 intent.AddFlags(ActivityFlags.SingleTop);
-                var pendingIntent = PendingIntent.GetActivity(this, 0, intent, 0);
+                var pendingIntent = PendingIntent.GetActivity(this, 0, intent, AndroidHelpers.AddPendingIntentMutabilityFlag(0, true));
                 // register for all NDEF tags starting with http och https
                 var ndef = new IntentFilter(NfcAdapter.ActionNdefDiscovered);
                 ndef.AddDataScheme("http");
@@ -400,6 +422,39 @@ namespace Bit.Droid
             var alarmManager = GetSystemService(AlarmService) as AlarmManager;
             alarmManager.Cancel(_eventUploadPendingIntent);
             await _eventService.UploadEventsAsync();
+        }
+
+        private void CreateNotificationChannel()
+        {
+#if !FDROID
+            if (Build.VERSION.SdkInt < BuildVersionCodes.O)
+            {
+                // Notification channels are new in API 26 (and not a part of the
+                // support library). There is no need to create a notification
+                // channel on older versions of Android.
+                return;
+            }
+
+            var channel = new NotificationChannel(Core.Constants.AndroidNotificationChannelId, AppResources.AllNotifications, NotificationImportance.Default);
+            if(GetSystemService(NotificationService) is NotificationManager notificationManager)
+            {
+                notificationManager.CreateNotificationChannel(channel);
+            }
+#endif
+        }
+
+        private void DisableAndroidFontScale()
+        {
+            try
+            {
+                //As we are using NamedSizes the xamarin will change the font size. So we are disabling the Android scaling.
+                Resources.Configuration.FontScale = 1f;
+                BaseContext.Resources.DisplayMetrics.ScaledDensity = Resources.Configuration.FontScale * (float)DeviceDisplay.MainDisplayInfo.Density;
+            }
+            catch (Exception e)
+            {
+                _logger.Exception(e);
+            }
         }
     }
 }

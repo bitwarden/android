@@ -1575,6 +1575,10 @@ Skenovanie prebehne automaticky.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Tmavá –⁠ Solarized</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Blokované URI pre automatické vypĺňanie</value>
   </data>
@@ -1610,7 +1614,7 @@ Skenovanie prebehne automaticky.</value>
     <value>Zdieľané</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Toggle Visiblity</value>
+    <value>Toggle visibility</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>Platnosť prihlásenia vypršala.</value>
@@ -1758,7 +1762,7 @@ Skenovanie prebehne automaticky.</value>
     <value>Synchronizácia trezora potiahnutím nadol</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Prihlásenie cez prihlasovací formulár spoločnosti (SSO)</value>
+    <value>Jednotné prihlásenie pre podniky (SSO)</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
     <value>Prihláste sa prostredníctvom prihlasovacieho portálu (SSO) vašej organizácie. Najskôr zadajte identifikátor vašej organizácie.</value>
@@ -2312,5 +2316,196 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Naozaj chcete povoliť snímanie obrazovky?</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Požadované prihlásenie</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Snažíte sa prihlásiť?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Pokus o prihlásenie do konta {0} dňa {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Typ zariadenia</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP adresa</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Čas</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>V blízkosti</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Potvrdiť prihlásenie</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Odmietnuť prihlásenie</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Práve teraz</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>Pred {0} minútami</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Prihlásenie potvrdené</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Prihlásenie zamietnuté</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Schvaľovanie žiadostí o prihlásenie</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Použiť toto zariadenie na schvaľovanie požiadaviek na prihlásenie z iných zariadení.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Povoliť upozornenia</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Prijímať push notifikácie o nových požiadavkách na prihlásenie</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Nie, ďakujem</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Potvrdiť pokus o prihlásenie pre {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Všetky upozornenia</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Password Type</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Čo by ste chceli vygenerovať?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Typ používateľského mena</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>E-mail s plusovým aliasom</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Catch-all e-mail</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Alias preposlaného e-mailu</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Náhodné slovo</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-mail (povinné)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Názov domény (povinné)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Kľúč API (povinné)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Služba</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Prístupový token API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Naozaj chcete prepísať aktuálne používateľské meno?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Vygenerovať používateľské meno</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Typ e-mailu</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Webové stránka (povinné)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Nastala neznáma chyba {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Použiť možnosti subadresovania svojho poskytovateľa e-mailu</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Použiť doručenú poštu typu catch-all nastavenú na doméne.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Vytvoriť e-mailový alias pomocou externej služby preposielania.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Náhodné</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Vyhlásenie o prístupnosti</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Služba Bitwarden využíva službu sprístupnenia na vyhľadávanie prihlasovacích polí v aplikáciách a webových lokalitách a potom po nájdení zhody pre aplikáciu alebo lokalitu vytvorí príslušné identifikátory polí na zadanie používateľského mena a hesla. Neukladáme žiadne informácie, ktoré nám služba poskytuje, ani sa nepokúšame kontrolovať žiadne prvky na obrazovke okrem textového zadávania prihlasovacích údajov.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Prijať</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Odmietnuť</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Platnosť žiadosti o prihlásenie už vypršala.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Pokus o prihlásenie z:
+{0}
+Chcete prepnúť na toto konto?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Ste tu nový?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Získať nápoveď pre hlavné heslo</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Prihlasujete sa ako {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Nie ste to vy?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Prihlásenie pomocou hlavného hesla</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Prihlásenie pomocou iného zariadenia</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Iniciované prihlásenie</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Do vášho zariadenia bolo odoslané upozornenie.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Skontrolujte, či je trezor odomknutý, a či sa fráza odtlačku prsta zhoduje na druhom zariadení.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Znova odoslať upozornenie</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Potrebujete inú možnosť?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Zobraziť všetky možnosti prihlásenia</value>
   </data>
 </root>

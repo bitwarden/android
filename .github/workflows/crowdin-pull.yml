@@ -24,10 +24,10 @@ jobs:
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        uses: Azure/get-keyvault-secrets@80ccd3fafe5662407cc2e55f202ee34bfff8c403
+        uses: bitwarden/gh-actions/get-keyvault-secrets@c3b3285993151c5af47cefcb3b9134c28ab479af 
         with:
-          keyvault: "bitwarden-prod-kv"
-          secrets: "crowdin-api-token"
+          keyvault: "bitwarden-prod-kv"               
+          secrets: "crowdin-api-token, github-gpg-private-key, github-gpg-private-key-passphrase"
 
       - name: Download translations
         uses: crowdin/github-action@12143a68c213f3c6d9913c9e5023224f7231face
@@ -40,10 +40,12 @@ jobs:
           upload_sources: false
           upload_translations: false
           download_translations: true
-          github_user_name: "github-actions"
-          github_user_email: "<>"
+          github_user_name: "bitwarden-devops-bot"
+          github_user_email: "106330231+bitwarden-devops-bot@users.noreply.github.com"
           commit_message: "Autosync the updated translations"
           localization_branch_name: crowdin-auto-sync
           create_pull_request: true
           pull_request_title: "Autosync Crowdin Translations"
           pull_request_body: "Autosync the updated translations"
+          gpg_private_key: ${{ steps.retrieve-secrets.outputs.github-gpg-private-key }}
+          gpg_passphrase: ${{ steps.retrieve-secrets.outputs.github-gpg-private-key-passphrase }}   

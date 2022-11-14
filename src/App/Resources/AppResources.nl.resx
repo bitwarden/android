@@ -247,7 +247,7 @@
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Internetverbinding is vereist</value>
+    <value>Internetverbinding vereist</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item is verwijderd.</value>
+    <value>Item is verwijderd</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -379,7 +379,7 @@
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Vingerafdruk invoeren</value>
+    <value>Vingerafdruk verifiëren</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
     <value>Hoofdwachtwoord invoeren</value>
@@ -681,7 +681,7 @@
     <value>Item</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item is bijgewerkt.</value>
+    <value>Item bijgewerkt.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Opslaan...</value>
@@ -708,7 +708,7 @@
     <value>Tweestapsaanmelding</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Tweestapsaanmelding beschermt je account door je inlogpoging te bevestigen met een ander apparaat zoals een beveiligingscode, authenticatie-app, SMS, spraakoproep of e-mail. Je kunt tweestapsaanmelding inschakelen in de webkluis op bitwarden.com. Wil je de website nu bezoeken?</value>
+    <value>Tweestapsaanmelding beschermt je account door je inlogpoging te bevestigen met een ander apparaat zoals een beveiligingssleutel, authenticatie-app, SMS, spraakoproep of e-mail. Je kunt Tweestapsaanmelding inschakelen in de webkluis op bitwarden.com. Wil je de website nu bezoeken?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Ontgrendelen met {0}</value>
@@ -799,7 +799,7 @@
     <value>Overeenkomstige items</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Mogelijk overeenkomstige items</value>
+    <value>Mogelijke overeenkomstige items</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Zoeken</value>
@@ -887,7 +887,7 @@
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Authenticatiecode (TOTP)</value>
+    <value>Authenticatiesleutel (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
     <value>Verificatiecode (TOTP)</value>
@@ -1575,6 +1575,10 @@ Het scannen gebeurt automatisch.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized donker</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Automatisch invullen geblokkeerde URI's</value>
   </data>
@@ -2214,10 +2218,10 @@ Het scannen gebeurt automatisch.</value>
     <value>Voer de verificatiecode in die we naar je e-mail is gestuurd</value>
   </data>
   <data name="SubmitCrashLogs" xml:space="preserve">
-    <value>Submit crash logs</value>
+    <value>Crashes rapporteren</value>
   </data>
   <data name="SubmitCrashLogsDescription" xml:space="preserve">
-    <value>Help Bitwarden improve app stability by submitting crash reports.</value>
+    <value>Help Bitwarden de app-stabiliteit te verbeteren door crashrapporten te versturen.</value>
   </data>
   <data name="OptionsExpanded" xml:space="preserve">
     <value>Opties zijn uitgebreid, tik om te storten.</value>
@@ -2302,15 +2306,206 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</value>
     <value>De vergrendelingsoptie "Nooit" houdt je kluis beschikbaar voor iedereen met toegang tot je apparaat. Als je deze optie gebruikt, moet je ervoor zorgen dat je je apparaat naar behoren beschermt.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
-    <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
+    <value>Een of meerdere van de ingevoerde URL's zijn ongeldig. Controleer en probeer opnieuw op te slaan.</value>
   </data>
   <data name="GenericErrorMessage" xml:space="preserve">
-    <value>We were unable to process your request. Please try again or contact us.</value>
+    <value>We kunnen uw aanvraag niet verwerken. Probeer het opnieuw of neem contact met ons op.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
     <value>Schermopname toestaan</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Weet je zeker dat je schermopname wilt inschakelen?</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Inloggen verzocht</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Probeer je in te loggen?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Inlogpoging door {0} op {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Apparaattype</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP-adres</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Tijd</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Dichtbij</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Inloggen bevestigen</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Inloggen afwijzen</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Zojuist</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} minuten geleden</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Inloggen bevestigd</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Inloggen afgewezen</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Inlogverzoeken goedkeuren</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Gebruik dit apparaat voor het goedkeuren van inlogverzoeken van andere apparaten.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Meldingen toestaan</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Push-meldingen voor nieuwe inlogverzoeken ontvangen</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Nee, bedankt</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Inlogpoging voor {0} bevestigen</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Alle meldingen</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Type wachtwoord</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Wat wil je genereren?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Type gebruikersnaam</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>E-mailadres-met-plus</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Catch-all e-mail</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Doorgestuurd e-mailalias</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Willekeurig woord</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-mailadres (verplicht)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Domeinnaam (verplicht)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API-sleutel (verplicht)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Dienst</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API-toegangstoken</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Weet je zeker dat je de huidige gebruikersnaam wilt overschrijven?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Gebruikersnaam genereren</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Type e-mailadres</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Website (verplicht)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Onbekende {0}-fout opgetreden.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Gebruik de subadressen van je e-mailprovider</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Gebruik de catch-all inbox van je domein.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>E-mailadres genereren met een externe doorstuurdienst.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Willekeurig</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Toegankelijksheidsservice-melding</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden gebruikt de toegankelijkheidsservice om inlogvelden in apps en op websites te vinden, de juiste veld ID's te bepalen om de gebruikersnaam en het wachtwoord in te voeren wanneer een bijpassend paar gevonden is voor de app of site. We slaan geen informatie op die de service ons levert, ook controleren we geen elementen op het scherm naast de tekstinvoer van inloggegevens.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Accepteren</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Weigeren</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Inlogverzoek is al verlopen.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Inlogpoging vanaf:
+{0}
+Wilt u naar dit account wisselen?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Nieuw hier?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Hoofdwachtwoordhint krijgen</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Inloggen als {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Ben jij dit niet?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Inloggen met je hoofdwachtwoord</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Inloggen met een ander apparaat</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Log in initiated</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>A notification has been sent to your device.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Resend notification</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Need another option?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>View all log in options</value>
   </data>
 </root>

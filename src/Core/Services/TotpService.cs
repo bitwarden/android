@@ -24,7 +24,7 @@ namespace Bit.Core.Services
             {
                 return null;
             }
-            var period = 30;
+            var period = Constants.TotpDefaultTimer;
             var alg = CryptoHashAlgorithm.Sha1;
             var digits = 6;
             var keyB32 = key;
@@ -117,7 +117,7 @@ namespace Bit.Core.Services
 
         public int GetTimeInterval(string key)
         {
-            var period = 30;
+            var period = Constants.TotpDefaultTimer;
             if (key != null && key.ToLowerInvariant().StartsWith("otpauth://"))
             {
                 var qsParams = CoreHelpers.GetQueryParams(key);

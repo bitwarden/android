@@ -102,7 +102,8 @@ namespace Bit.iOS.Core.Utilities
             var stateService = new StateService(mobileStorageService, secureStorageService, messagingService);
             var stateMigrationService =
                 new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
-            var deviceActionService = new DeviceActionService(stateService, messagingService);
+            var deviceActionService = new DeviceActionService();
+            var fileService = new FileService(stateService, messagingService);
             var clipboardService = new ClipboardService(stateService);
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, clipboardService,
                 messagingService, broadcasterService);
@@ -121,6 +122,8 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Register<IStateService>("stateService", stateService);
             ServiceContainer.Register<IStateMigrationService>("stateMigrationService", stateMigrationService);
             ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
+            ServiceContainer.Register<IFileService>(fileService);
+            ServiceContainer.Register<IAutofillHandler>(new AutofillHandler());            
             ServiceContainer.Register<IClipboardService>("clipboardService", clipboardService);
             ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
             ServiceContainer.Register<IBiometricService>("biometricService", biometricService);
@@ -199,6 +202,7 @@ namespace Bit.iOS.Core.Utilities
         {
             await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
 
+            InitializeAppSetup();
             // TODO: Update when https://github.com/bitwarden/mobile/pull/1662 gets merged
             var deleteAccountActionFlowExecutioner = new DeleteAccountActionFlowExecutioner(
                 ServiceContainer.Resolve<IApiService>("apiService"),
@@ -221,13 +225,21 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Resolve<IStateService>("stateService"),
                 ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
                 ServiceContainer.Resolve<IAuthService>("authService"),
-                ServiceContainer.Resolve<ILogger>("logger"));
+                ServiceContainer.Resolve<ILogger>("logger"),
+                ServiceContainer.Resolve<IMessagingService>("messagingService"));
             ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
 
             if (postBootstrapFunc != null)
             {
                 await postBootstrapFunc.Invoke();
             }
+        }
+
+        private static void InitializeAppSetup()
+        {
+            var appSetup = new AppSetup();
+            appSetup.InitializeServicesLastChance();
+            ServiceContainer.Register<IAppSetup>("appSetup", appSetup);
         }
     }
 }

@@ -93,6 +93,7 @@
                 Value="{DynamicResource StepperForegroundColor}" />
     </Style>
     <Style TargetType="Frame" 
+           ApplyToDerivedTypes="True"
            Class="btn-icon-row">
         <Setter Property="BackgroundColor"
                 Value="{DynamicResource ButtonBackgroundColor}" />

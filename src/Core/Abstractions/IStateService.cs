@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
+using Bit.Core.Models.Response;
 using Bit.Core.Models.View;
 
 namespace Bit.Core.Abstractions
@@ -12,6 +13,7 @@ namespace Bit.Core.Abstractions
     {
         List<AccountView> AccountViews { get; }
         Task<string> GetActiveUserIdAsync();
+        Task<string> GetActiveUserEmailAsync();
         Task<bool> IsActiveAccountAsync(string userId = null);
         Task SetActiveUserAsync(string userId);
         Task CheckExtensionActiveUserAndSwitchIfNeededAsync();
@@ -151,5 +153,11 @@ namespace Bit.Core.Abstractions
         Task<bool> GetScreenCaptureAllowedAsync(string userId = null);
         Task SetScreenCaptureAllowedAsync(bool value, string userId = null);
         Task SaveExtensionActiveUserIdToStorageAsync(string userId);
+        Task<bool> GetApprovePasswordlessLoginsAsync(string userId = null);
+        Task SetApprovePasswordlessLoginsAsync(bool? value, string userId = null);
+        Task<PasswordlessRequestNotification> GetPasswordlessLoginNotificationAsync();
+        Task SetPasswordlessLoginNotificationAsync(PasswordlessRequestNotification value);
+        Task<UsernameGenerationOptions> GetUsernameGenerationOptionsAsync(string userId = null);
+        Task SetUsernameGenerationOptionsAsync(UsernameGenerationOptions value, string userId = null);
     }
 }

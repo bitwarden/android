@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authenticator</value>
+    <value>المصادقة</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -900,8 +900,8 @@
     <value>لا يمكن قراءة مفتاح المصادقة.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Point your camera at the QR Code.
-Scanning will happen automatically.</value>
+    <value>حدد الكاميرا الخاصة بك على رمز QR.
+سيتم الفحص تلقائيا.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>مسح رمز QR</value>
@@ -1574,6 +1574,10 @@ Scanning will happen automatically.</value>
   <data name="Nord" xml:space="preserve">
     <value>نورد</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>تعبئة العناوين المحجوبة تلقائياً</value>
@@ -2266,35 +2270,35 @@ Scanning will happen automatically.</value>
     <value>TOTP</value>
   </data>
   <data name="VerificationCodes" xml:space="preserve">
-    <value>Verification Codes</value>
+    <value>رموز التحقق</value>
   </data>
   <data name="PremiumSubscriptionRequired" xml:space="preserve">
-    <value>Premium subscription required</value>
+    <value>الاشتراك المميز مطلوب</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
-    <value>Cannot add authenticator key? </value>
+    <value>لا يمكن إضافة مفتاح المصادقة؟ </value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>مسح رمز QR</value>
   </data>
   <data name="CannotScanQRCode" xml:space="preserve">
-    <value>Cannot scan QR Code? </value>
+    <value>لا يمكن مسح رمز QR؟ </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Authenticator Key</value>
+    <value>مفتاح المصادقة</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Enter Key Manually</value>
+    <value>أدخل المفتاح يدوياً</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
-    <value>Add TOTP</value>
+    <value>إضافة TOTP</value>
   </data>
   <data name="SetupTotp" xml:space="preserve">
-    <value>Set up TOTP</value>
+    <value>إعداد TOTP</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
-    <value>Once the key is successfully entered,
-select Add TOTP to store the key safely</value>
+    <value>بمجرد إدخال المفتاح بنجاح،
+حدد إضافة TOTP لتخزين المفتاح بأمان</value>
   </data>
   <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
     <value></value>
@@ -2313,5 +2317,196 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>هل أنت متأكد من أنك تريد تمكين التقاط الشاشة؟</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>طلب تسجيل الدخول</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>هل تحاول تسجيل الدخول؟</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>محاولة تسجيل الدخول بواسطة {0} في {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>نوع الجهاز</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>عنوان IP</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>الوقت</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>قريب</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>تأكيد تسجيل الدخول</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>رفض تسجيل الدخول</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>للتو</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>منذ {0} دقائق</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>تم تأكيد تسجيل الدخول</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>تم رفض تسجيل الدخول</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>الموافقة على طلبات تسجيل الدخول</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>استخدم هذا الجهاز للموافقة على طلبات تسجيل الدخول من الأجهزة الأخرى.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>السماح بالإشعارات</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>تلقي إشعارات دفع لطلبات تسجيل الدخول الجديدة</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>ﻻ، شكرًا</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>تأكيد محاولة تسجيل الدخول لـ {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>جميع الإشعارات</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>نوع كلمة المرور</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>ما الذي ترغب في توليده؟</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>نوع اسم المستخدم</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>بريد إلكتروني موجه أكثر</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>تجميع كل البريد</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>إعادة توجيه الاسم المستعار للبريد الإلكتروني</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>كلمة عشوائية</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>البريد الإلكتروني (مطلوب)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>اسم المجال (مطلوب)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>مفتاح API (مطلوب)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>الخدمة</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>FirefoxRelay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>رمز الوصول API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد الكتابة فوق اسم المستخدم الحالي؟</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>إنشاء اسم المستخدم</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>نوع البريد الإلكتروني</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>الموقع (مطلوب)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>حدث خطأ {0} غير معروف.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>استخدم قدرات العنوان الفرعي لمقدم البريد الإلكتروني الخاص بك</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>استخدم علبة البريد الإلكتروني الشاملة التي تم تكوينها في نطاقك.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>إنشاء بريد إلكتروني مستعار مع خدمة إعادة توجيه خارجية.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>عشوائي</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>كشف خدمة إمكانية الوصول</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden يستخدم خدمة إمكانية الوصول للبحث عن حقول تسجيل الدخول في التطبيقات ومواقع الويب، ثم يقوم بإنشاء معرفات الحقل المناسب لإدخال اسم المستخدم وكلمة المرور عند العثور على تطابق للتطبيق أو الموقع. ونحن لا نخزن أيا من المعلومات التي قدمتها لنا الخدمة، كما أننا لا نحاول السيطرة على أي عناصر على الشاشة تتجاوز إدخال نصوص وثائق التفويض.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>قبول</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>رفض</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>انتهت صلاحية طلب تسجيل الدخول.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>محاولة تسجيل الدخول من:
+{0}
+هل تريد التبديل إلى هذا الحساب؟</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>جديد هنا؟</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>احصل على تلميح كلمة المرور الرئيسية</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>تسجيل الدخول كـ {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>ليس أنت؟</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>تسجيل الدخول باستخدام كلمة المرور الرئيسية</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>تسجيل الدخول باستخدام جهاز آخر</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Log in initiated</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>A notification has been sent to your device.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Resend notification</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Need another option?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>View all log in options</value>
   </data>
 </root>

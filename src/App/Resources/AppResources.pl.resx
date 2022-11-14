@@ -229,7 +229,7 @@
     <value>Foldery</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Folder został zaktualizowany.</value>
+    <value>Folder został zapisany</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Przejdź do strony</value>
@@ -296,11 +296,11 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>Sejf</value>
+    <value>Mój sejf</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Uwierzytelniacz</value>
+    <value>Authenticator</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Element został usunięty.</value>
+    <value>Element został usunięty</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -514,7 +514,7 @@
     <value>Odcisk palca</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>Generuj hasło</value>
+    <value>Wygeneruj hasło</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
     <value>Uzyskaj podpowiedź do hasła głównego</value>
@@ -604,7 +604,7 @@
     <value>Nigdy</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Element został utworzony.</value>
+    <value>Element został dodany</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Brak ulubionych w sejfie.</value>
@@ -657,7 +657,7 @@
     <value>Wesprzyj nas pozytywną opinią!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Wygeneruj hasło ponownie</value>
+    <value>Wygeneruj ponownie hasło</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
     <value>Wpisz ponownie hasło główne</value>
@@ -681,7 +681,7 @@
     <value>Informacje o elemencie</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Element został zaktualizowany.</value>
+    <value>Element został zapisany</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Wysyłanie...</value>
@@ -692,10 +692,10 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Synchronizacja została zakończona.</value>
+    <value>Synchronizacja została zakończona</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Synchronizacja nie powiodła się.</value>
+    <value>Synchronizacja nie powiodła się</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>Synchronizuj sejf</value>
@@ -856,18 +856,18 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Kod weryfikacyjny został wysłany.</value>
+    <value>Kod weryfikacyjny został wysłany</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
     <value>Przyłóż klucz YubiKey NEO z tyłu urządzenia lub włóż klucz do portu USB urządzenia, a następnie dotknij jego przycisku.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>Klucz bezpieczeństwa YubiKey NEO</value>
+    <value>Klucz bezpieczeństwa YubiKey</value>
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Dodaj załącznik</value>
+    <value>Dodaj nowy załącznik</value>
   </data>
   <data name="Attachments" xml:space="preserve">
     <value>Załączniki</value>
@@ -919,7 +919,7 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Jeśli dane logowania posiadają dołączony klucz uwierzytelniający TOTP, kod weryfikacyjny jest automatycznie kopiowany do schowka przy każdym autouzupełnieniu danych logowania.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
-    <value>Kopiuj TOTP automatycznie</value>
+    <value>Kopiuj kod TOTP automatycznie</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Konto Premium jest wymagane, aby skorzystać z tej funkcji.</value>
@@ -996,7 +996,7 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Pola niestandardowe</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Kopiuj numer karty</value>
+    <value>Kopiuj numer</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
     <value>Kopiuj kod zabezpieczający</value>
@@ -1140,7 +1140,7 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Pokaż ikony witryn</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
-    <value>Pokaż rozpoznawalny obraz obok każdych danych logowania.</value>
+    <value>Pokaż rozpoznawalny obraz obok danych logowania.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Adres URL serwera ikon</value>
@@ -1256,7 +1256,7 @@ Skanowanie nastąpi automatycznie.</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Tak i Zapisz</value>
+    <value>Tak i zapisz</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
     <value>Autouzupełnij i zapisz</value>
@@ -1278,7 +1278,7 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Usługa ułatwienia dostępu może być pomocna w sytuacji, gdy aplikacje nie obsługują standardowej usługi autouzupełniania.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Aktualizacja hasła</value>
+    <value>Hasło zostało zaktualizowane</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
@@ -1366,7 +1366,7 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Wartość</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Historia haseł</value>
+    <value>Historia hasła</value>
   </data>
   <data name="Types" xml:space="preserve">
     <value>Rodzaje</value>
@@ -1575,6 +1575,10 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Autouzupełnianie zablokowanych identyfikatorów URI</value>
   </data>
@@ -1722,7 +1726,7 @@ Skanowanie nastąpi automatycznie.</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Element został przywrócony.</value>
+    <value>Element został przywrócony</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
@@ -1898,16 +1902,16 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Plik, który chcesz wysłać.</value>
   </data>
   <data name="FileTypeIsSelected" xml:space="preserve">
-    <value>Wybrano typ pliku.</value>
+    <value>Wybrano rodzaj pliku.</value>
   </data>
   <data name="FileTypeIsNotSelected" xml:space="preserve">
-    <value>Nie wybrano typu pliku, dotknij, aby go wybrać.</value>
+    <value>Nie wybrano rodzaju pliku. Kliknij, aby go wybrać.</value>
   </data>
   <data name="TextTypeIsSelected" xml:space="preserve">
-    <value>Wybrano typ tekstowy.</value>
+    <value>Wybrano rodzaj tekstu.</value>
   </data>
   <data name="TextTypeIsNotSelected" xml:space="preserve">
-    <value>Nie wybrano typu tekstowego, dotknij, aby go wybrać.</value>
+    <value>Nie wybrano rodzaju tekstu. Kliknij, aby go wybrać.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Data usunięcia</value>
@@ -2002,7 +2006,7 @@ Skanowanie nastąpi automatycznie.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Dodaj wysyłkę</value>
+    <value>Nowa wysyłka</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
@@ -2010,15 +2014,15 @@ Skanowanie nastąpi automatycznie.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Wysyłka została usunięta.</value>
+    <value>Wysyłka została usunięta</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Wysyłka została zaktualizowana.</value>
+    <value>Wysyłka została zapisana</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Wysyłka została utworzona.</value>
+    <value>Wysyłka została utworzona</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2181,7 +2185,7 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Konto zostało trwale usunięte</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Kod weryfikacyjny jest nieprawidłowy.</value>
+    <value>Kod weryfikacyjny jest nieprawidłowy</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
     <value>Poproś o jednorazowe hasło</value>
@@ -2238,13 +2242,13 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Znaki specjalne (!@#$%^&amp;*)</value>
   </data>
   <data name="TapToGoBack" xml:space="preserve">
-    <value>Dotknij, aby wrócić</value>
+    <value>Kliknij, aby wrócić</value>
   </data>
   <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
-    <value>Hasło jest widoczne, dotknij, aby je ukryć.</value>
+    <value>Hasło jest widoczne. Kliknij, aby je ukryć.</value>
   </data>
   <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
-    <value>Hasło jest niewidoczne, dotknij, aby je pokazać.</value>
+    <value>Hasło nie jest widoczne. Kliknij, aby je pokazać.</value>
   </data>
   <data name="FilterByVault" xml:space="preserve">
     <value>Filtruj elementy według sejfu</value>
@@ -2283,7 +2287,7 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Klucz uwierzytelniający</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Wprowadź klucz ręcznie</value>
+    <value>Wpisz klucz ręcznie</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
     <value>Dodaj TOTP</value>
@@ -2308,9 +2312,200 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
     <value>Nie mogliśmy przetworzyć żądania. Spróbuj ponownie lub skontaktuj się z nami.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
-    <value>Pozwól na robienie zrzutów ekranu</value>
+    <value>Wykonywanie zrzutów ekranu</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>Jesteś pewien, że chcesz włączyć możliwość robienia zrzutów ekranu?</value>
+    <value>Czy na pewno chcesz zezwolić na wykonywanie zrzutów ekranu?</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Wysłano prośbę o logowanie</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Próbujesz się zalogować?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Próba logowania przez {0} na {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Rodzaj urządzenia</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>Adres IP</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Czas</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Blisko</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Potwierdź logowanie</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Odrzuć logowanie</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Teraz</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} min temu</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Logowanie zostało potwierdzone</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Logowanie zostało odrzucone</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Zatwierdź prośby o logowanie</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Użyj tego urządzenia, aby zatwierdzić prośby o logowanie z innych urządzeń.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Zezwalaj na powiadomienia</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Otrzymuj powiadomienia push dla nowych próśb logowania</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Nie, dziękuję</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Potwierdź próbę logowania dla {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Wszystkie powiadomienia</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Rodzaj hasła</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Co chcesz wygenerować?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Rodzaj nazwy użytkownika</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Adres e-mail z plusem</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Adres catch-all</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Alias przekazywanego e-maila</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Losowe słowo</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-mail (wymagany)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Nazwa domeny (wymagana)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Klucz API (wymagany)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Usługa</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Token dostępu API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Czy na pewno chcesz nadpisać obecną nazwę użytkownika?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Wygeneruj nazwę użytkownika</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Rodzaj adresu</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Strona internetowa (wymagana)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Wystąpił nieznany błąd {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Użyj możliwości dodawania aliasów u swojego dostawcy poczty e-mail</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Użyj skonfigurowanej skrzynki catch-all w swojej domenie.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Wygeneruj alias adresu e-mail z zewnętrznej usługi przekazywania.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Losowy</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Omówienie usługi ułatwień dostępu</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden używa usługi ułatwienia dostępu do wyszukiwania pól logowania w aplikacjach i witrynach internetowych, następnie ustawia odpowiednie identyfikatory polom, aby uzupełnić nazwę użytkownika i hasło, gdy zostaną znalezione dla aplikacji lub witryny. Nie przechowujemy żadnych informacji przedstawionych nam przez usługę, ani nie próbujemy kontrolować żadnych elementów na ekranie poza tekstem danych logowania.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Zaakceptuj</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Odrzuć</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Prośba o logowanie wygasła.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Próba logowania z:
+{0}
+Czy chcesz przełączyć się na to konto?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Jesteś tu nowy(a)?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Uzyskaj podpowiedź hasła głównego</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Logowanie jako {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>To nie Ty?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Logowanie hasłem głównym</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Logowanie innym urządzeniem</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Logowanie rozpoczęte</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Powiadomienie zostało wysłane na urządzenie.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Upewnij się, że sejf jest odblokowany, a unikalny identyfikator konta pasuje do drugiego urządzenia.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Wyślij ponownie powiadomienie</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Potrzebujesz innego sposobu?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Zobacz wszystkie sposoby logowania</value>
   </data>
 </root>

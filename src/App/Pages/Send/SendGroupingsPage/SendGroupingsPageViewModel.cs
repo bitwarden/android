@@ -144,7 +144,7 @@ namespace Bit.App.Pages
             {
                 await LoadDataAsync();
 
-                var uppercaseGroupNames = _deviceActionService.DeviceType == DeviceType.iOS;
+                var uppercaseGroupNames = Device.RuntimePlatform == Device.iOS;
                 if (MainPage)
                 {
                     groupedSends.Add(new SendGroupingsPageListGroup(

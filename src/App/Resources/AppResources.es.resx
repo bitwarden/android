@@ -251,7 +251,7 @@
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Contraseña maestra no válida. Prueba de nuevo.</value>
+    <value>Contraseña maestra no válida. Inténtelo de nuevo.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
     <value>PIN no válido. Prueba de nuevo.</value>
@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authenticator</value>
+    <value>Autenticador</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -471,7 +471,7 @@
     <value>Editar elemento</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Habilitar sincronizacion automatica</value>
+    <value>Habilitar sincronización automática</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>Introduce el correo electrónico de tu cuenta para recibir la pista de tu contraseña maestra.</value>
@@ -775,10 +775,10 @@
     <value>Activado</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Off</value>
+    <value>Apagado</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>Encendido</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Estado</value>
@@ -900,8 +900,8 @@
     <value>No se pudo leer la clave de autenticación.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Point your camera at the QR Code.
-Scanning will happen automatically.</value>
+    <value>Apunte su cámara al código QR.
+El escaneo se realizará automáticamente.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Escanear código QR</value>
@@ -916,10 +916,10 @@ Scanning will happen automatically.</value>
     <value>Copiar código TOTP</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</value>
+    <value>Si un inicio de sesión tiene una clave de autenticador, copie el código de verificación TOTP a su portapapeles cuando autorrellene el inicio de sesión.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
-    <value>Copy TOTP automatically</value>
+    <value>Copiar automáticamente TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Se quiere membrasía Premium para poder utilizar esta característica.</value>
@@ -987,7 +987,7 @@ Scanning will happen automatically.</value>
     <value>URL del servidor</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>URL del servidor de la caja fuerte web</value>
+    <value>URL del servidor de la bóveda web</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>Pulsa en esta notificación para ver las entradas de tu caja fuerte.</value>
@@ -1137,10 +1137,10 @@ Scanning will happen automatically.</value>
     <value>Expiración</value>
   </data>
   <data name="ShowWebsiteIcons" xml:space="preserve">
-    <value>Show website icons</value>
+    <value>Mostrar los iconos del sitio web</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
-    <value>Show a recognizable image next to each login.</value>
+    <value>Mostrar una imagen reconocible junto a cada inicio de sesión.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>URL del servidor de iconos</value>
@@ -1550,10 +1550,10 @@ Scanning will happen automatically.</value>
     <value>Por defecto (Sistema)</value>
   </data>
   <data name="DefaultDarkTheme" xml:space="preserve">
-    <value>Default dark theme</value>
+    <value>Tema oscuro por defecto</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is enabled.</value>
+    <value>Elija el tema oscuro para usar al estar usandose el tema por defecto (Sistema) mientras el modo oscuro de su dispositivo está activado.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copiar notas</value>
@@ -1575,17 +1575,21 @@ Scanning will happen automatically.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Oscuro Solar</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
-    <value>Auto-fill blocked URIs</value>
+    <value>Autorellenar URIs bloqueadas</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Auto-fill will not be offered for blocked URIs. Separate multiple URIs with a comma. For example: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>El autorrelleno no se ofrecerá para URIs bloqueadas. Separe múltiples URIs con una coma. Por ejemplo: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
-    <value>Ask to add login</value>
+    <value>Pedir que se añada el inicio de sesión</value>
   </data>
   <data name="AskToAddLoginDescription" xml:space="preserve">
-    <value>Ask to add an item if one isn't found in your vault.</value>
+    <value>Pedir que se añada un elemento si no se encuentra uno en tu bóveda.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Al reiniciar la aplicación</value>
@@ -2214,10 +2218,10 @@ Scanning will happen automatically.</value>
     <value>Introduce el código de verificación enviado a tu correo electrónico</value>
   </data>
   <data name="SubmitCrashLogs" xml:space="preserve">
-    <value>Submit crash logs</value>
+    <value>Enviar registros de fallos</value>
   </data>
   <data name="SubmitCrashLogsDescription" xml:space="preserve">
-    <value>Help Bitwarden improve app stability by submitting crash reports.</value>
+    <value>Ayuda a Bitwarden a mejorar la estabilidad de la aplicación mediante el envío de informes de error.</value>
   </data>
   <data name="OptionsExpanded" xml:space="preserve">
     <value>Las opciones están expandidas, toque para colapsar.</value>
@@ -2266,52 +2270,243 @@ Scanning will happen automatically.</value>
     <value>TOTP</value>
   </data>
   <data name="VerificationCodes" xml:space="preserve">
-    <value>Verification Codes</value>
+    <value>Códigos de verificación</value>
   </data>
   <data name="PremiumSubscriptionRequired" xml:space="preserve">
-    <value>Premium subscription required</value>
+    <value>Se requiere una Suscripción Premium</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
-    <value>Cannot add authenticator key? </value>
+    <value>¿No se puede agregar la clave del autenticador? </value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>Escanear código QR</value>
   </data>
   <data name="CannotScanQRCode" xml:space="preserve">
-    <value>Cannot scan QR Code? </value>
+    <value>¿No se puede escanear el código QR? </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Authenticator Key</value>
+    <value>Clave de Autenticador</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Enter Key Manually</value>
+    <value>Introducir Clave manualmente</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
-    <value>Add TOTP</value>
+    <value>Añadir TOTP</value>
   </data>
   <data name="SetupTotp" xml:space="preserve">
-    <value>Set up TOTP</value>
+    <value>Configurar TOTP</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
-    <value>Once the key is successfully entered,
-select Add TOTP to store the key safely</value>
+    <value>Una vez que la clave haya sido ingresada con éxito,
+seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   </data>
   <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
     <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
-    <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>
+    <value>Configurar las opciones de bloqueo a "Nunca" mantiene la bóveda disponible para cualquier persona con acceso a su dispositivo. Si utiliza esta opción, debe asegurarse de que mantiene su dispositivo debidamente protegido.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
-    <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
+    <value>Una o más de las URLs introducidas no son válidas. Por favor, revisala e intenta guardar de nuevo.</value>
   </data>
   <data name="GenericErrorMessage" xml:space="preserve">
-    <value>We were unable to process your request. Please try again or contact us.</value>
+    <value>No hemos podido procesar su solicitud. Por favor, inténtelo de nuevo o contáctenos.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
-    <value>Allow screen capture</value>
+    <value>Permitir captura de pantalla</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>Are you sure you want to enable Screen Capture?</value>
+    <value>¿Estás seguro de que quieres activar captura de pantalla?</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Inicio de sesión solicitado</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>¿Estás tratando de iniciar sesión?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Intento de inicio de sesión por {0} en {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Tipo de dispositivo</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>Dirección IP</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Hora</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Cerca</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Confirmar inicio de sesión</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Denegar inicio de sesión</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Justo ahora</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>Hace {0} minutos</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Inicio de sesión confirmado</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Inicio de sesión denegado</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Aprobar solicitudes de inicio de sesión</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Use este dispositivo para aprovar solicitudes de incio de sesión realizadas desde otros dispositivos.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Permitir notificaciones</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Recibir notificaciones push para nuevas solicitudes de iniciar sesión</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>No, gracias</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Confirmar intento de inicio de sesión para {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Todas las notificaciones</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Tipo de contraseña</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>¿Qué desea generar?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Tipo de nombre de usuario</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Dirección adicional de correo electrónico</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Captura todos los correos</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Alias de correo reenviado</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Palabra aleatoria</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Email (obligatorio)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Nombre de dominio (requerido)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Clave API (requerida)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Servicio</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Token de acceso API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>¿Está seguro que desea sobrescribir el nombre de usuario actual?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Generar nombre de usuario</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Tipo de Email</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Sitio web (requerido)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Ha ocurrido un error desconocido {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Utilice las opciones de alias de su proveedor de correo electrónico</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Utilice la bandeja de entrada catch-all configurada por su dominio.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Generar un alias de correo electrónico con un servicio de reenvío externo.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Aleatorio</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Revelación del servicio de accesibilidad</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden utiliza el Servicio de Accesibilidad para buscar campos de inicio de sesión en aplicaciones y sitios web, establecer los identificadores de campo apropiados para introducir un nombre de usuario y contraseña cuando se encuentre una coincidencia para la aplicación o el sitio. No almacenamos ninguna de las informaciones presentadas por el servicio, tampoco intentamos controlar ningún elemento en pantalla más allá de la introducción de credenciales de texto.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Aceptar</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Rechazar</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>La solicitud de acceso ya ha caducado.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Intento de inicio de sesión desde:
+{0}
+¿Desea cambiar a esta cuenta?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>¿Nuevo por aquí?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Obtener pista de contraseña maestra</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Iniciando sesión como {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>¿No eres tú?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Iniciar sesión con contraseña maestra</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Iniciar sesión con otro dispositivo</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Inicio de sesión en proceso</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Se ha enviado una notificación a tu dispositivo.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Por favor, asegúrese de que su bóveda está desbloqueada y la frase de huella dactilar coincide en el otro dispositivo.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Enviar nueva notificación</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>¿Necesitas otra opción?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Ver todas las opciones de inicio de sesión</value>
   </data>
 </root>

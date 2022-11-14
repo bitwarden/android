@@ -46,8 +46,9 @@ namespace Bit.Droid
             {
                 RegisterLocalServices();
                 var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-                ServiceContainer.Init(deviceActionService.DeviceUserAgent, Constants.ClearCiphersCacheKey,
-                    Constants.AndroidAllClearCipherCacheKeys);
+                ServiceContainer.Init(deviceActionService.DeviceUserAgent, Core.Constants.ClearCiphersCacheKey,
+                    Core.Constants.AndroidAllClearCipherCacheKeys);
+                InitializeAppSetup();
 
                 // TODO: Update when https://github.com/bitwarden/mobile/pull/1662 gets merged
                 var deleteAccountActionFlowExecutioner = new DeleteAccountActionFlowExecutioner(
@@ -71,8 +72,9 @@ namespace Bit.Droid
                     ServiceContainer.Resolve<IStateService>("stateService"),
                     ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
                     ServiceContainer.Resolve<IAuthService>("authService"),
-                    ServiceContainer.Resolve<ILogger>("logger"));
-                ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
+                    ServiceContainer.Resolve<ILogger>("logger"),
+                    ServiceContainer.Resolve<IMessagingService>("messagingService"));
+                    ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
             }
 #if !FDROID
             if (Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)
@@ -137,8 +139,9 @@ namespace Bit.Droid
             var stateMigrationService =
                 new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
             var clipboardService = new ClipboardService(stateService);
-            var deviceActionService = new DeviceActionService(clipboardService, stateService, messagingService,
-                broadcasterService, () => ServiceContainer.Resolve<IEventService>("eventService"));
+            var deviceActionService = new DeviceActionService(stateService, messagingService);
+            var fileService = new FileService(stateService, broadcasterService);
+            var autofillHandler = new AutofillHandler(stateService, messagingService, clipboardService, new LazyResolve<IEventService>());
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, clipboardService,
                 messagingService, broadcasterService);
             var biometricService = new BiometricService();
@@ -157,6 +160,8 @@ namespace Bit.Droid
             ServiceContainer.Register<IStateMigrationService>("stateMigrationService", stateMigrationService);
             ServiceContainer.Register<IClipboardService>("clipboardService", clipboardService);
             ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
+            ServiceContainer.Register<IFileService>(fileService);
+            ServiceContainer.Register<IAutofillHandler>(autofillHandler);            
             ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
             ServiceContainer.Register<IBiometricService>("biometricService", biometricService);
             ServiceContainer.Register<ICryptoFunctionService>("cryptoFunctionService", cryptoFunctionService);
@@ -192,6 +197,13 @@ namespace Bit.Droid
         private async Task BootstrapAsync()
         {
             await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
+        }
+
+        private void InitializeAppSetup()
+        {
+            var appSetup = new AppSetup();
+            appSetup.InitializeServicesLastChance();
+            ServiceContainer.Register<IAppSetup>("appSetup", appSetup);
         }
     }
 }

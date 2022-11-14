@@ -819,11 +819,11 @@
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Ievadi 6 ciparu apstiprinājuma kodu no autentificētāja lietotnes!</value>
+    <value>Jāievada 6 ciparu apstiprinājuma kods no autentificētāja lietotnes.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Ievadi 6 ciparu apstiprinājuma kodu, kas tika nosūtīts uz $EMAIL$!</value>
+    <value>Jāievada 6 ciparu apstiprinājuma kods, kas tika nosūtīts uz {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
@@ -1575,6 +1575,10 @@ Nolasīšana notiks automātiski.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Automātiskā aizpilde aizturētajos URI</value>
   </data>
@@ -2312,5 +2316,196 @@ jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Vai tiešām iespējot ekrāna tveršanu?</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Pieprasīta pierakstīšanās</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Vai mēģini pierakstīties?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>{0} pierakstīšanās mēģinājums {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Ierīces veids</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP adrese</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Laiks</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Tuvu</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Apstiprināt pierakstīšanos</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Atteikt pierakstīšanos</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Tikko</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>Pirms {0} minūtēm</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Pierakstīšanās apstiprināta</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Pierakstīšanās atteikta</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Apstiprināt pierakstīšanās pieprasījumus</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Izmantot šo ierīci, lai apstiprināt pierakstīšanās pieprasījumus, kas tiek veikti no citām iekārtām.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Atļaut paziņojumus</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Saņemt uznirstošos paziņojumus par jauniem pierakstīšanās paziņojumiem</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Nē, paldies!</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Apstiprināt pierakstīšanāš mēģinājumu {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Visi paziņojumi</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Paroles veids</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Ko ir nepieciešams izveidot?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Lietotājvārda veids</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>E-pasta adrese ar plusu</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Visu tverošā e-pasta adrese</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Pārvirzīto e-pastu aizstājvārds</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Nejaušs vārds</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-pasta adrese (nepieciešama)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Domēna vārds (nepieciešams)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API atslēga (nepieciešama)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Pakalpojums</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API piekļuves pilnvara</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Vai tiešām pārrakstīt pašreizējo lietotājvārdu?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Izveidot lietotājvārdu</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>E-pasta veids</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Mājaslapa (nepieciešama)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Notika nezināma kļūda {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Izmantot e-pasta pakalpojuma nodrošinātāja apakšadrešu spējas</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Izmantot uzstādīto domēna visu tverošo iesūtni.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Izveidot e-pastu aizstājvārdu ar ārēju pārvirzīšanas pakalpojumu.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Nejauši</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Pieejamības pakalpojuma izmantošanas skaidrojums</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden izmanto pieejamības pakalpojumu, lai meklētu pierakstīšanās laukus lietotnēs un tīmekļa vietnēs, tad noskaidro atbistošus lauku identifikatorus lietotājvārda un paroles ievadīšanai, kad ir atrasta atbilstība lietotnei vai vietnei. Bitwarden neglabā neko no informācijas, ko nodrošina pakalpojums, kā arī nemēģina pārvaldīt ekrānā redzamās daļas, kas nav saistītas ar pierakstīšanās datu ievadi.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Pieņemt</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Noraidīt</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Pierakstīšanās pieprasījuma derīgums jau ir beidzies.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Pierakstīšanās mēģinājums no:
+{0}
+Vai pārslēgties uz šo kontu?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Jauns šeit?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Saņemt galvenās paroles norādi</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Pierakstās kā {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Tas neesi Tu?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Pierakstīties ar galveno paroli</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Pierakstīties ar citu ierīci</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Uzsākta pierakstīšanās</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Uz ierīci ir nosūtīts paziņojums.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Jāpārliecinās, ka glabātava ir atslēgta un atpazīšanas vārdkopa ir tāda pati arī citā ierīcē.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Atkārtoti nosūtīt paziņojumu</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Nepieciešama cita iespēja?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Apskatīt visas pierakstīšanās iespējas</value>
   </data>
 </root>

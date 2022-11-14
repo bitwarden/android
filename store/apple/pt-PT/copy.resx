@@ -122,15 +122,32 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>O Bitwarden é a maneira mais fácil e segura de armazenar todas as suas credenciais e palavras-passe mantendo-as convenientemente sincronizadas entre todos os seus dispositivos. A aplicação da extensão Bitwarden permite-lhe iniciar sessão em qualquer website através do Safari ou Chrome e é suportada por centenas de aplicações populares.
+    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
 
-O furto de palavras-passe é um problema sério. Os websites e aplicações que utiliza estão sob ataque todos os dias. Quebras de segurança ocorrem e as suas palavras-passe são furtadas. Quando reutiliza as mesmas palavras-passe entre aplicações e websites, os hackers podem facilmente aceder ao seu email, banco, e outras contas importantes.
+NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
 
-Os especialistas de segurança recomendam que utilize uma palavra-passe diferente e aleatoriamente gerada para todas as contas que cria. Mas como é que gere todas essas palavras-passe? O Bitwarden torna-lhe fácil criar, armazenar, e aceder às suas palavras-passe.
+Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
 
-O Bitwarden armazena todas as suas credenciais num cofre encriptado que sincroniza entre todos os seus dispositivos. Como são completamente encriptados antes de se quer sair do seu dispositivo, apenas você tem acesso aos seus dados. Nem se quer a equipa do Bitwarden pode ler os seus dados, mesmo se quiséssemos. Os seus dados são selados com encriptação AES-256 bits, salted hashing, e PBKDF2 SHA-256.
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
 
-O Bitwarden é 100% software de código aberto. O código fonte para o Bitwarden está hospedado no GitHub e todos podem revisar, auditar, e contribuir para a base de código do Bitwarden.</value>
+Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+
+Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+
+Why Choose Bitwarden:
+
+World-Class Encryption
+Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+
+Built-in Password Generator
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+
+Global Translations
+Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+
+Cross-Platform Applications
+Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">

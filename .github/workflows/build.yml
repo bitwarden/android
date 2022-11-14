@@ -59,6 +59,10 @@ jobs:
     name: Android
     runs-on: windows-2022
     needs: setup
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: ['prod', 'qa']
     steps:
       - name: Setup NuGet
         uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
@@ -67,7 +71,7 @@ jobs:
 
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ab534842b4bdf384b8aaf93765dc6f721d9f5fab
-
+          
       - name: Work Around for broken Windows 2022 Runner Image
         run: |
           Set-Location "C:\Program Files (x86)\Microsoft Visual Studio\Installer\"
@@ -87,7 +91,6 @@ jobs:
               Write-Host "components were not installed"
               exit 1
           }
-
       - name: Print environment
         run: |
           nuget help | grep Version
@@ -98,7 +101,8 @@ jobs:
 
       - name: Checkout repo
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
-
+        with:
+          fetch-depth: 0
       - name: Decrypt secrets
         env:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
@@ -110,11 +114,16 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output ./src/Android/app_upload-keystore.jks ./.github/secrets/app_upload-keystore.jks.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output $HOME/secrets/play_creds.json ./.github/secrets/play_creds.json.gpg
         shell: bash
-
+      - name: Decrypt secrets - Google Services
+        if: ${{ matrix.variant == 'prod' }}
+        env:
+          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
+        run: |
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
+        shell: bash
       - name: Increment version
         run: |
           BUILD_NUMBER=$((3000 + $GITHUB_RUN_NUMBER))
@@ -142,26 +151,35 @@ jobs:
         run: dotnet test test/Core.Test/Core.Test.csproj
 
       - name: Build Play Store publisher
+        if: ${{ matrix.variant == 'prod' }}
         run: dotnet build ./store/google/Publisher/Publisher.csproj -p:Configuration=Release
 
-      - name: Build for Play Store
+      - name: Setup Android build  (${{ matrix.variant }})
+        run: dotnet cake build.cake --target Android --variant ${{ matrix.variant }}
+
+      - name: Build Android
         run: |
           $configuration = "Release";
 
           Write-Output "########################################"
           Write-Output "##### Build $configuration Configuration"
           Write-Output "########################################"
-
           msbuild "$($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj")" "/p:Configuration=$configuration"
+
         shell: pwsh
 
-      - name: Sign for Play Store
+      - name: Sign Android Build
         env:
           PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
           UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
         run: |
           $androidPath = $($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj");
-
+          $packageName = "com.x8bit.bitwarden";
+          
+          if ("${{ matrix.variant }}" -ne "prod") 
+          {
+            $packageName = "com.x8bit.bitwarden.${{ matrix.variant }}";
+          }
           Write-Output "########################################"
           Write-Output "##### Sign Google Play Bundle Release Configuration"
           Write-Output "########################################"
@@ -175,9 +193,8 @@ jobs:
           Write-Output "##### Copy Google Play Bundle to project root"
           Write-Output "########################################"
 
-          $signedAabPath = $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/com.x8bit.bitwarden-Signed.aab");
-          $signedAabDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden.aab");
-
+          $signedAabPath = $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/$($packageName)-Signed.aab");
+          $signedAabDestPath = $($env:GITHUB_WORKSPACE + "/$($packageName).aab");
           Copy-Item $signedAabPath $signedAabDestPath
 
           Write-Output "########################################"
@@ -193,33 +210,41 @@ jobs:
           Write-Output "##### Copy Release APK to project root"
           Write-Output "########################################"
 
-          $signedApkPath = $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/com.x8bit.bitwarden-Signed.apk");
-          $signedApkDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden.apk");
+          $signedApkPath = $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/$($packageName)-Signed.apk");
+          $signedApkDestPath = $($env:GITHUB_WORKSPACE + "/$($packageName).apk");
 
           Copy-Item $signedApkPath $signedApkDestPath
         shell: pwsh
-
-      - name: Upload Play Store .aab artifact
+      - name: Upload Prod .aab artifact
+        if: ${{ matrix.variant == 'prod' }}
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
           name: com.x8bit.bitwarden.aab
           path: ./com.x8bit.bitwarden.aab
           if-no-files-found: error
 
-      - name: Upload Play Store .apk artifact
+      - name: Upload Prod .apk artifact
+        if: ${{ matrix.variant == 'prod' }}
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
           name: com.x8bit.bitwarden.apk
           path: ./com.x8bit.bitwarden.apk
           if-no-files-found: error
 
+      - name: Upload Other .apk artifact
+        if: ${{ matrix.variant != 'prod' }}
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
+        with:
+          name: com.x8bit.bitwarden.${{ matrix.variant }}.apk
+          path: ./com.x8bit.bitwarden.${{ matrix.variant }}.apk
+          if-no-files-found: error
+
       - name: Deploy to Play Store
-        if: |
-            (github.ref == 'refs/heads/master'
-              && needs.setup.outputs.rc_branch_exists == 0
-              && needs.setup.outputs.hotfix_branch_exists == 0)
-            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix-rc'
+        if: ${{ matrix.variant == 'prod' && (( github.ref == 'refs/heads/master'
+          && needs.setup.outputs.rc_branch_exists == 0
+          && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc' ) }}
         run: |
           PUBLISHER_PATH="$GITHUB_WORKSPACE/store/google/Publisher/bin/Release/netcoreapp3.1/Publisher.dll"
           CREDS_PATH="$HOME/secrets/play_creds.json"
@@ -441,10 +466,17 @@ jobs:
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        uses: Azure/get-keyvault-secrets@b5c723b9ac7870c022b8c35befe620b7009b336f
-        with:
-          keyvault: "bitwarden-prod-kv"
-          secrets: "appcenter-ios-token"
+        env:
+          KEYVAULT: bitwarden-prod-kv
+          SECRETS: |
+            appcenter-ios-token
+        run: |
+          for i in ${SECRETS//,/ }
+          do
+            VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
+            echo "::add-mask::$VALUE"
+            echo "::set-output name=$i::$VALUE"
+          done
 
       - name: Decrypt secrets
         env:
@@ -635,10 +667,17 @@ jobs:
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        uses: Azure/get-keyvault-secrets@b5c723b9ac7870c022b8c35befe620b7009b336f
-        with:
-          keyvault: "bitwarden-prod-kv"
-          secrets: "crowdin-api-token"
+        env:
+          KEYVAULT: bitwarden-prod-kv
+          SECRETS: |
+            crowdin-api-token
+        run: |
+          for i in ${SECRETS//,/ }
+          do
+            VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
+            echo "::add-mask::$VALUE"
+            echo "::set-output name=$i::$VALUE"
+          done
 
       - name: Upload Sources
         uses: crowdin/github-action@9237b4cb361788dfce63feb2e2f15c09e2fe7415
@@ -695,11 +734,18 @@ jobs:
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        uses: Azure/get-keyvault-secrets@b5c723b9ac7870c022b8c35befe620b7009b336f
         if: failure()
-        with:
-          keyvault: "bitwarden-prod-kv"
-          secrets: "devops-alerts-slack-webhook-url"
+        env:
+          KEYVAULT: bitwarden-prod-kv
+          SECRETS: |
+            devops-alerts-slack-webhook-url
+        run: |
+          for i in ${SECRETS//,/ }
+          do
+            VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
+            echo "::add-mask::$VALUE"
+            echo "::set-output name=$i::$VALUE"
+          done
 
       - name: Notify Slack on failure
         uses: act10ns/slack@da3191ebe2e67f49b46880b4633f5591a96d1d33

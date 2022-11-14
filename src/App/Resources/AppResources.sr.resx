@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authenticator</value>
+    <value>Аутентификатор</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -900,8 +900,8 @@
     <value>Не могу да читам верификациони код.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Point your camera at the QR Code.
-Scanning will happen automatically.</value>
+    <value>Усмерите камеру на QR кôд.
+Скенирање ће се десити аутоматски.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Скенирај QR код</value>
@@ -1574,6 +1574,10 @@ Scanning will happen automatically.</value>
   <data name="Nord" xml:space="preserve">
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized црно</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Ауто-попуни клокиране УРЛ</value>
@@ -2264,38 +2268,38 @@ Scanning will happen automatically.</value>
     <value>Све</value>
   </data>
   <data name="Totp" xml:space="preserve">
-    <value>TOTP</value>
+    <value>ТОТП</value>
   </data>
   <data name="VerificationCodes" xml:space="preserve">
-    <value>Verification Codes</value>
+    <value>Верификациони кодови</value>
   </data>
   <data name="PremiumSubscriptionRequired" xml:space="preserve">
-    <value>Premium subscription required</value>
+    <value>Premium претплата је потребна</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
-    <value>Cannot add authenticator key? </value>
+    <value>Не може да се дода верификациони код? </value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>Скенирај QR код</value>
   </data>
   <data name="CannotScanQRCode" xml:space="preserve">
-    <value>Cannot scan QR Code? </value>
+    <value>Не мигу да скенирам QR код? </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Authenticator Key</value>
+    <value>Кључ аутентификатора</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Enter Key Manually</value>
+    <value>Унесите кључ ручно</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
-    <value>Add TOTP</value>
+    <value>Додати ТОТП</value>
   </data>
   <data name="SetupTotp" xml:space="preserve">
-    <value>Set up TOTP</value>
+    <value>Подесити ТОТП</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
-    <value>Once the key is successfully entered,
-select Add TOTP to store the key safely</value>
+    <value>Када се кључ успешно унесе,
+одабрати Додати ТОТП да би сигурносно сачували кључ</value>
   </data>
   <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
     <value></value>
@@ -2314,5 +2318,196 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Да ли сте сигурни да желите да укључите снимање екрана?</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Захтев пријаве</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Да ли покушавате да се пријавите?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>{0} пробао да се пријави на {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Тип уређаја</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>ИП адреса</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Време</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Близу</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Потврди пријављивање</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Одбиј пријављивање</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Управо сада</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>пре {0} минута</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Пријава потврђена</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Пријава одбијена</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Одобравање захтева за пријављивање</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Користите овај уређај за одобравање захтева за пријављивање са других уређаја.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Дозволи обавештавања</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Примајте обавештења за нове захтеве за пријаву</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Не, хвала</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Потврдити пријаву за {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Сва обавештења</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Тип лозинке</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Шта желите да генеришете?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Тип имена</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Плус имејл адресе</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>„Ухвати све“ е-порука</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Прослеђен псеудоним е-поште</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Случајна реч</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Е-пошта (обавезно)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Име домена (обавезно)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API кључ (обавезно)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Сервис</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Приступни АПИ токен</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Сигурно преписати тренутно име?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Генериши име</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Тип имејла</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Вебсајт (обавезно)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Непозната {0} грешка.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Користите могућности подадресе вашег добављача е-поште</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Користите подешено catch-all пријемно сандуче вашег домена.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Генеришите псеудоним е-поште помоћу екстерне услуге прослеђивања.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Случајно</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Откривање услуге приступачности</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Битварден користи услугу приступачности да тражи поља за пријаву у апликацијама и веб локацијама, а затим успоставља одговарајуће ИД-ове поља за уношење корисничког имена и лозинке када се пронађе подударање за апликацију или сајт. Не чувамо ниједну информацију коју нам пружа услуга, нити покушавамо да контролишемо било које елементе на екрану осим уноса текста акредитива.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Прихвати</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Одбиј</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Захтев за пријаву је већ истекао.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Покушај пријаве са:
+{0}
+Да ли желите да пређете на овај налог?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Нов овде?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Добити савет за Главну Лозинку</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Пријављивање као {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Не ти?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Пријавите се са главном лозинком</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Пријавите се са другим уређајем</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Log in initiated</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>A notification has been sent to your device.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Resend notification</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Need another option?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>View all log in options</value>
   </data>
 </root>

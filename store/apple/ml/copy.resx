@@ -122,17 +122,31 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>നിങ്ങളുടെ എല്ലാ ലോഗിനുകളും പാസ്‌വേഡുകളും സംഭരിക്കുന്നതിനുള്ള ഏറ്റവും എളുപ്പവും സുരക്ഷിതവുമായ മാർഗ്ഗമാണ് Bitwarden, ഒപ്പം നിങ്ങളുടെ എല്ലാ ഉപകരണങ്ങളും തമ്മിൽ സമന്വയിപ്പിക്കുകയും ചെയ്യുന്നു.
+    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
 
-പാസ്‌വേഡ് മോഷണം ഗുരുതരമായ പ്രശ്‌നമാണ്. നിങ്ങൾ ഉപയോഗിക്കുന്ന വെബ്‌സൈറ്റുകളും അപ്ലിക്കേഷനുകളും എല്ലാ ദിവസവും ആക്രമണത്തിലാണ്. സുരക്ഷാ ലംഘനങ്ങൾ സംഭവിക്കുകയും നിങ്ങളുടെ പാസ്‌വേഡുകൾ മോഷ്‌ടിക്കപ്പെടുകയും ചെയ്യുന്നു. അപ്ലിക്കേഷനുകളിലും വെബ്‌സൈറ്റുകളിലും ഉടനീളം സമാന പാസ്‌വേഡുകൾ നിങ്ങൾ വീണ്ടും ഉപയോഗിക്കുമ്പോൾ ഹാക്കർമാർക്ക് നിങ്ങളുടെ ഇമെയിൽ, ബാങ്ക്, മറ്റ് പ്രധാനപ്പെട്ട അക്കൗണ്ടുകൾ എന്നിവ എളുപ്പത്തിൽ ആക്‌സസ്സുചെയ്യാനാകും.
+NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
 
-നിങ്ങളുടെ എല്ലാ ഉപകരണങ്ങളിലും സമന്വയിപ്പിക്കുന്ന ഒരു എൻ‌ക്രിപ്റ്റ് ചെയ്ത വാൾട്ടിൽ  Bitwarden  നിങ്ങളുടെ എല്ലാ ലോഗിനുകളും സംഭരിക്കുന്നു. നിങ്ങളുടെ ഉപകരണം വിടുന്നതിനുമുമ്പ് ഇത് പൂർണ്ണമായും എൻ‌ക്രിപ്റ്റ് ചെയ്‌തിരിക്കുന്നതിനാൽ, നിങ്ങളുടെ ഡാറ്റ നിങ്ങൾക്ക് മാത്രമേ ആക്‌സസ് ചെയ്യാൻ കഴിയൂ .  Bitwarden ടീമിന് പോലും നിങ്ങളുടെ ഡാറ്റ വായിക്കാൻ കഴിയില്ല. നിങ്ങളുടെ ഡാറ്റ AES-256 ബിറ്റ് എൻ‌ക്രിപ്ഷൻ, സാൾട്ടിങ് ഹാഷിംഗ്, PBKDF2 SHA-256 എന്നിവ ഉപയോഗിച്ച് അടച്ചിരിക്കുന്നു.
+Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
 
-100% ഓപ്പൺ സോഴ്‌സ് സോഫ്റ്റ്വെയറാണ് Bitwarden . Bitwarden സോഴ്‌സ് കോഡ് GitHub- ൽ ഹോസ്റ്റുചെയ്‌തിരിക്കുന്നു, മാത്രമല്ല എല്ലാവർക്കും ഇത് അവലോകനം ചെയ്യാനും ഓഡിറ്റുചെയ്യാനും ബിറ്റ് വാർഡൻ കോഡ്ബേസിലേക്ക് സംഭാവന ചെയ്യാനും സ്വാതന്ത്ര്യമുണ്ട്.
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
 
+Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
 
+Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
 
+Why Choose Bitwarden:
 
+World-Class Encryption
+Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+
+Built-in Password Generator
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+
+Global Translations
+Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+
+Cross-Platform Applications
+Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
 </value>
   <comment>Max 4000 characters</comment>
   </data>

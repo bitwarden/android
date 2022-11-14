@@ -5,6 +5,7 @@
         public const int MaxAccounts = 5;
         public const string AndroidAppProtocol = "androidapp://";
         public const string iOSAppProtocol = "iosapp://";
+        public const string DefaultUsernameGenerated = "-";
         public static string StateVersionKey = "stateVersion";
         public static string StateKey = "state";
         public static string PreAuthEnvironmentUrlsKey = "preAuthEnvironmentUrls";
@@ -29,9 +30,19 @@
         public static string EventCollectionKey = "eventCollection";
         public static string RememberedEmailKey = "rememberedEmail";
         public static string RememberedOrgIdentifierKey = "rememberedOrgIdentifier";
+        public static string PasswordlessLoginNotificationKey = "passwordlessLoginNotificationKey";
+        public const string PasswordlessNotificationId = "26072022";
+        public const string AndroidNotificationChannelId = "general_notification_channel";
+        public const string iOSNotificationCategoryId = "dismissableCategory";
+        public const string iOSNotificationClearActionId = "Clear";
+        public const string NotificationData = "notificationData";
+        public const string NotificationDataType = "Type";
+        public const string PasswordlessLoginRequestKey = "passwordlessLoginRequest";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;
+        public const int TotpDefaultTimer = 30;
+        public const int PasswordlessNotificationTimeoutInMinutes = 15;
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {
@@ -83,5 +94,7 @@
         public static string ProtectedPinKey(string userId) => $"protectedPin_{userId}";
         public static string LastSyncKey(string userId) => $"lastSync_{userId}";
         public static string BiometricUnlockKey(string userId) => $"biometricUnlock_{userId}";
+        public static string ApprovePasswordlessLoginsKey(string userId) => $"approvePasswordlessLogins_{userId}";
+        public static string UsernameGenOptionsKey(string userId) => $"usernameGenerationOptions_{userId}";
     }
 }

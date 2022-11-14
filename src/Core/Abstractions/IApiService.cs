@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
@@ -82,5 +83,11 @@ namespace Bit.Core.Abstractions
         Task<SendResponse> PutSendAsync(string id, SendRequest request);
         Task<SendResponse> PutSendRemovePasswordAsync(string id);
         Task DeleteSendAsync(string id);
+        Task<PasswordlessLoginResponse> GetAuthRequestAsync(string id);
+        Task<PasswordlessLoginResponse> GetAuthResponseAsync(string id, string accessCode);
+        Task<PasswordlessLoginResponse> PutAuthRequestAsync(string id, string key, string masterPasswordHash, string deviceIdentifier, bool requestApproved);
+        Task<PasswordlessLoginResponse> PostCreateRequestAsync(PasswordlessCreateLoginRequest passwordlessCreateLoginRequest);
+        Task<string> GetUsernameFromAsync(ForwardedEmailServiceType service, UsernameGeneratorConfig config);
+        Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier);
     }
 }
