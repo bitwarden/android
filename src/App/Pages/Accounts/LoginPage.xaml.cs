@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
@@ -26,9 +27,9 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
             _vm.LogInSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
+            _vm.LogInWithDeviceAction = () => StartLoginWithDeviceAsync().FireAndForget();
             _vm.StartSsoLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
-            _vm.UpdateTempPasswordAction =
-                () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
+            _vm.UpdateTempPasswordAction = () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.CloseAction = async () =>
             {
                 await _accountListOverlay.HideAsync();
@@ -53,11 +54,6 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(_getPasswordHint);
             }
 
-            if (Device.RuntimePlatform == Device.Android && !_vm.IsEmailEnabled)
-            {
-                ToolbarItems.Add(_removeAccount);
-            }
-
             if (_appOptions?.IosExtension ?? false)
             {
                 _vm.ShowCancelButton = true;
@@ -77,15 +73,19 @@ namespace Bit.App.Pages
             _mainContent.Content = _mainLayout;
             _accountAvatar?.OnAppearing();
 
+            await _vm.InitAsync();
             if (!_appOptions?.HideAccountSwitcher ?? false)
             {
-                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync(_vm.EmailIsInSavedAccounts);
             }
-            await _vm.InitAsync();
             if (!_inputFocused)
             {
                 RequestFocus(_masterPassword);
                 _inputFocused = true;
+            }
+            if (Device.RuntimePlatform == Device.Android && !_vm.CanRemoveAccount)
+            {
+                ToolbarItems.Add(_removeAccount);
             }
         }
 
@@ -120,6 +120,12 @@ namespace Bit.App.Pages
             {
                 _vm.StartSsoLoginAction();
             }
+        }
+
+        private async Task StartLoginWithDeviceAsync()
+        {
+            var page = new LoginPasswordlessRequestPage(_vm.Email, _appOptions);
+            await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
         private async Task StartSsoLoginAsync()

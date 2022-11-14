@@ -446,10 +446,10 @@ namespace Bit.iOS.Extension
             });
         }
 
-        private void LaunchHomePage(bool checkRememberedEmail = true)
+        private void LaunchHomePage(bool shouldCheckRememberEmail = true)
         {
             var appOptions = new AppOptions { IosExtension = true };
-            var homePage = new HomePage(appOptions, checkRememberedEmail: checkRememberedEmail);
+            var homePage = new HomePage(appOptions, shouldCheckRememberEmail);
             var app = new App.App(appOptions);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(homePage);
@@ -478,8 +478,8 @@ namespace Bit.iOS.Extension
             ThemeManager.ApplyResourcesTo(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
-                vm.SubmitSuccessAction = () => DismissViewController(false, () => LaunchHomePage(checkRememberedEmail: false));
-                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage(checkRememberedEmail: false));
+                vm.SubmitSuccessAction = () => DismissViewController(false, () => LaunchHomePage(shouldCheckRememberEmail: false));
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage(shouldCheckRememberEmail: false));
             }
 
             var navigationPage = new NavigationPage(environmentPage);
@@ -497,7 +497,7 @@ namespace Bit.iOS.Extension
             if (registerPage.BindingContext is RegisterPageViewModel vm)
             {
                 vm.RegistrationSuccess = () => DismissViewController(false, () => LaunchLoginFlow(vm.Email));
-                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage(checkRememberedEmail: false));
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage(shouldCheckRememberEmail: false));
             }
 
             var navigationPage = new NavigationPage(registerPage);
@@ -518,11 +518,35 @@ namespace Bit.iOS.Extension
                 vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow(false));
                 vm.UpdateTempPasswordAction = () => DismissViewController(false, () => LaunchUpdateTempPasswordFlow());
                 vm.StartSsoLoginAction = () => DismissViewController(false, () => LaunchLoginSsoFlow());
+                vm.LogInWithDeviceAction = () => DismissViewController(false, () => LaunchLoginWithDevice(email));
                 vm.LogInSuccessAction = () => DismissLockAndContinue();
-                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage(checkRememberedEmail: false));
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage(shouldCheckRememberEmail: false));
             }
 
             var navigationPage = new NavigationPage(loginPage);
+            var loginController = navigationPage.CreateViewController();
+            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            PresentViewController(loginController, true, null);
+
+            LogoutIfAuthed();
+        }
+
+        private void LaunchLoginWithDevice(string email = null)
+        {
+            var appOptions = new AppOptions { IosExtension = true };
+            var app = new App.App(appOptions);
+            var loginWithDevicePage = new LoginPasswordlessRequestPage(email, appOptions);
+            ThemeManager.SetTheme(app.Resources);
+            ThemeManager.ApplyResourcesTo(loginWithDevicePage);
+            if (loginWithDevicePage.BindingContext is LoginPasswordlessRequestViewModel vm)
+            {
+                vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow(false));
+                vm.UpdateTempPasswordAction = () => DismissViewController(false, () => LaunchUpdateTempPasswordFlow());
+                vm.LogInSuccessAction = () => DismissLockAndContinue();
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
+            }
+
+            var navigationPage = new NavigationPage(loginWithDevicePage);
             var loginController = navigationPage.CreateViewController();
             loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(loginController, true, null);

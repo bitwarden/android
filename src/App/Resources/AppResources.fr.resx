@@ -2490,4 +2490,22 @@ Voulez-vous basculer vers ce compte ?</value>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Connectez-vous avec un autre appareil</value>
   </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Connexion initiée</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Une notification a été envoyée à votre appareil.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Veuillez vous assurer que votre coffre est déverrouillé et que l'empreinte digitale est identique sur l'autre appareil.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Renvoyer la notification</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Besoin d'une autre option ?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Voir toutes les options de connexion</value>
+  </data>
 </root>

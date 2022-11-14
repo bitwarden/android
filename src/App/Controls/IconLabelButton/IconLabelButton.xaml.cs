@@ -19,7 +19,7 @@ namespace Bit.App.Controls
             nameof(Label), typeof(string), typeof(IconLabelButton));
 
         public static readonly BindableProperty ButtonCommandProperty = BindableProperty.Create(
-            nameof(ButtonCommand), typeof(Command), typeof(IconLabelButton));
+            nameof(ButtonCommand), typeof(ICommand), typeof(IconLabelButton));
 
         public static readonly BindableProperty IconLabelColorProperty = BindableProperty.Create(
             nameof(IconLabelColor), typeof(Color), typeof(IconLabelButton), Color.White);

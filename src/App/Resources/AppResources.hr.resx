@@ -657,7 +657,7 @@
     <value>Razmotri da nam pomogneš dobrom recenzijom!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Obnovi lozinku</value>
+    <value>Ponovno generiraj lozinku</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
     <value>Ponovno upiši glavnu lozinku</value>
@@ -1901,7 +1901,7 @@
     <value>Datoteka koju želiš poslati</value>
   </data>
   <data name="FileTypeIsSelected" xml:space="preserve">
-    <value>Odabran je datotečni Send.</value>
+    <value>Odabrana je vrsta datoteke.</value>
   </data>
   <data name="FileTypeIsNotSelected" xml:space="preserve">
     <value>Vrsta datoteke nije odabrana, dodirnite za odabir.</value>
@@ -2062,7 +2062,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>Kod besplatnog računa moguće je dijeljenje samo teksta. Za slanje datoteka potrebno je Premium članstvo.</value>
+    <value>Kod besplatnog računa moguće je dijeljenje samo teksta. Za slanje datoteka potrebno je premium članstvo.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
@@ -2445,7 +2445,7 @@
     <value>Koristi konfigurirani catch-all sandučić svoje domene.</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
-    <value>Kreiraj pseudonim e-pošte s vanjskom uslugom prosljeđivanja.</value>
+    <value>Generiraj pseudonim e-pošte s vanjskom uslugom prosljeđivanja.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Nasumično</value>
@@ -2487,5 +2487,23 @@
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Prijava drugim uređajem</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Prijava pokrenuta</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Obavijest je poslana na tvoj uređaj.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Provjeri je li trezor otključan i slaže li se jedinstvena fraza s drugim uređajem.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Ponovno pošalji obavijest</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Trebaš drugu opciju?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Pogledaj sve mogućnosti prijave</value>
   </data>
 </root>
