@@ -12,7 +12,9 @@ class CipherListViewModel : ObservableObject {
     }
     
     func fetchCiphers() {
-        ciphers = cipherService.fetchCiphers()
+        ciphers = CipherMock.ciphers
+
+        //ciphers = cipherService.fetchCiphers()
     }
     
     /*

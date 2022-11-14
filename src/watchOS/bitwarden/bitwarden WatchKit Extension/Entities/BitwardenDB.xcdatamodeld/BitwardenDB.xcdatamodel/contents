@@ -2,6 +2,7 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21512" systemVersion="22A380" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CipherEntity" representedClassName="CipherEntity" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Transformable" valueTransformerName="StringEncryptionTransformer"/>
+        <attribute name="loginUris" optional="YES" attributeType="Transformable"/>
         <attribute name="name" optional="YES" attributeType="Transformable" valueTransformerName="StringEncryptionTransformer"/>
         <attribute name="organizationUseTotp" optional="YES" attributeType="Boolean" valueTransformerName="EncryptionTransformer" usesScalarValueType="YES"/>
         <attribute name="totp" optional="YES" attributeType="Transformable" valueTransformerName="StringEncryptionTransformer"/>

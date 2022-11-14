@@ -8,7 +8,7 @@ enum DecoderConfigurationError: Error {
 @objc(CipherEntity)
 public class CipherEntity: NSManagedObject, Codable {
     enum CodingKeys: CodingKey {
-        case id, name, organizationUseTotp, username, totp
+        case id, name, organizationUseTotp, username, totp, loginUris
      }
     
     public func encode(to encoder: Encoder) throws {
@@ -18,6 +18,7 @@ public class CipherEntity: NSManagedObject, Codable {
         try container.encode(organizationUseTotp, forKey: .organizationUseTotp)
         try container.encode(username, forKey: .username)
         try container.encode(totp, forKey: .totp)
+        try container.encode(loginUris, forKey: .loginUris)
     }
 
     public required convenience init(from decoder: Decoder) throws {
@@ -33,6 +34,7 @@ public class CipherEntity: NSManagedObject, Codable {
         self.organizationUseTotp = try container.decode(Bool.self, forKey: .organizationUseTotp)
         self.username = try container.decode(String?.self, forKey: .username)
         self.totp = try container.decode(String?.self, forKey: .totp)
+        self.loginUris = try container.decode(String?.self, forKey: .loginUris)
     }
 }
 

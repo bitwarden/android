@@ -8,31 +8,33 @@ struct CipherListView: View {
             VStack{
                 GeometryReader { geometry in
                     List(viewModel.ciphers){ cipher in
-                        VStack(alignment: .leading){
-                            Text(cipher.name ?? "")
-                                .font(.title3)
-                                .fontWeight(.bold)
-                                .lineLimit(1)
-                                .truncationMode(.tail)
-                            
-                            if cipher.login.username != nil {
-                                Text(cipher.login.username! )
-                                    .font(.body)
+                        NavigationLink(destination: CipherDetailsView(cipher: cipher)){
+                            VStack(alignment: .leading){
+                                Text(cipher.name ?? "")
+                                    .font(.title3)
+                                    .fontWeight(.bold)
                                     .lineLimit(1)
                                     .truncationMode(.tail)
-                                    .foregroundColor(Color.ui.darkTextMuted)
+                                
+                                if cipher.login.username != nil {
+                                    Text(cipher.login.username! )
+                                        .font(.body)
+                                        .lineLimit(1)
+                                        .truncationMode(.tail)
+                                        .foregroundColor(Color.ui.darkTextMuted)
+                                }
                             }
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 5)
+                                    .foregroundColor(Color.ui.itemBackground)
+                                    .frame(width: geometry.size.width,
+                                           alignment: .leading)
+                            )
+                            .frame(width: geometry.size.width,
+                                   alignment: .leading)
+                            .listRowInsets(EdgeInsets())
                         }
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 5)
-                                .foregroundColor(Color.ui.itemBackground)
-                                .frame(width: geometry.size.width,
-                                       alignment: .leading)
-                        )
-                        .frame(width: geometry.size.width,
-                               alignment: .leading)
-                        .listRowInsets(EdgeInsets())
                     }
                     .emptyState(viewModel.ciphers.isEmpty, emptyContent: {
                         VStack(alignment: .center) {

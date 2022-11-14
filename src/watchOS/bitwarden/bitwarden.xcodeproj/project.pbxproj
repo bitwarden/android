@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1B0A1A9E28ECD7C400FF61CD /* WatchConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A1A9D28ECD7C400FF61CD /* WatchConnectivityManager.swift */; };
+		1B11C899291BFAB500CE58D8 /* CryptoFunctionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B11C898291BFAB500CE58D8 /* CryptoFunctionService.swift */; };
+		1B11C89B291C587600CE58D8 /* UInt64Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B11C89A291C587600CE58D8 /* UInt64Extensions.swift */; };
 		1B14DF37291186D900EA43F1 /* EmptyStateViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B14DF36291186D900EA43F1 /* EmptyStateViewModifier.swift */; };
 		1B15613328B7F3D400610B9B /* bitwardenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15613228B7F3D400610B9B /* bitwardenApp.swift */; };
 		1B15613528B7F3D400610B9B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15613428B7F3D400610B9B /* ContentView.swift */; };
@@ -34,6 +36,18 @@
 		1B5AFF0729197822004478F9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1B5AFF0929197822004478F9 /* Localizable.strings */; };
 		1B8453EC290C672E00F921E1 /* CipherEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8453EA290C672E00F921E1 /* CipherEntity+CoreDataClass.swift */; };
 		1B8453ED290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8453EB290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift */; };
+		1B8BF90429199BBB006F069E /* CipherDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8BF90329199BBB006F069E /* CipherDetailsView.swift */; };
+		1B8BF90629199EC5006F069E /* CipherDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8BF90529199EC5006F069E /* CipherDetailsViewModel.swift */; };
+		1B8BF9092919A2CC006F069E /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8BF9082919A2CC006F069E /* CircularProgressView.swift */; };
+		1B8BF90B2919AF2A006F069E /* TotpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8BF90A2919AF2A006F069E /* TotpService.swift */; };
+		1B8BF90D2919BED9006F069E /* Base32.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8BF90C2919BED9006F069E /* Base32.swift */; };
+		1B8BF9112919CDBB006F069E /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8BF9102919CDBB006F069E /* DateExtensions.swift */; };
+		1BC1CD6329227D3C006540DA /* EnvironmentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC1CD6229227D3C006540DA /* EnvironmentService.swift */; };
+		1BC1CD6529227F3C006540DA /* IconImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC1CD6429227F3C006540DA /* IconImageHelper.swift */; };
+		1BC1CD672922871A006540DA /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC1CD662922871A006540DA /* URLExtensions.swift */; };
+		1BC1CD6929228CEB006540DA /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC1CD6829228CEB006540DA /* StringExtensions.swift */; };
+		1BC1CD6C29229D1B006540DA /* CipherMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC1CD6B29229D1B006540DA /* CipherMock.swift */; };
+		1BC1CD6E2922B92B006540DA /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC1CD6D2922B92B006540DA /* ImageView.swift */; };
 		1BDBFEAC290B4215009C78C7 /* CipherListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEAB290B4215009C78C7 /* CipherListViewModel.swift */; };
 		1BDBFEB1290B5BD3009C78C7 /* DBHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEB0290B5BD3009C78C7 /* DBHelperProtocol.swift */; };
 		1BDBFEB3290B5D07009C78C7 /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEB2290B5D07009C78C7 /* CoreDataHelper.swift */; };
@@ -85,6 +99,8 @@
 
 /* Begin PBXFileReference section */
 		1B0A1A9D28ECD7C400FF61CD /* WatchConnectivityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchConnectivityManager.swift; sourceTree = "<group>"; };
+		1B11C898291BFAB500CE58D8 /* CryptoFunctionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoFunctionService.swift; sourceTree = "<group>"; };
+		1B11C89A291C587600CE58D8 /* UInt64Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UInt64Extensions.swift; sourceTree = "<group>"; };
 		1B14DF36291186D900EA43F1 /* EmptyStateViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateViewModifier.swift; sourceTree = "<group>"; };
 		1B15612F28B7F3D400610B9B /* bitwarden.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bitwarden.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B15613228B7F3D400610B9B /* bitwardenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bitwardenApp.swift; sourceTree = "<group>"; };
@@ -114,6 +130,18 @@
 		1B5AFF0829197822004478F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1B8453EA290C672E00F921E1 /* CipherEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CipherEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		1B8453EB290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CipherEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		1B8BF90329199BBB006F069E /* CipherDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherDetailsView.swift; sourceTree = "<group>"; };
+		1B8BF90529199EC5006F069E /* CipherDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherDetailsViewModel.swift; sourceTree = "<group>"; };
+		1B8BF9082919A2CC006F069E /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
+		1B8BF90A2919AF2A006F069E /* TotpService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotpService.swift; sourceTree = "<group>"; };
+		1B8BF90C2919BED9006F069E /* Base32.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base32.swift; sourceTree = "<group>"; };
+		1B8BF9102919CDBB006F069E /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
+		1BC1CD6229227D3C006540DA /* EnvironmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentService.swift; sourceTree = "<group>"; };
+		1BC1CD6429227F3C006540DA /* IconImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconImageHelper.swift; sourceTree = "<group>"; };
+		1BC1CD662922871A006540DA /* URLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
+		1BC1CD6829228CEB006540DA /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		1BC1CD6B29229D1B006540DA /* CipherMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherMock.swift; sourceTree = "<group>"; };
+		1BC1CD6D2922B92B006540DA /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		1BDBFEAB290B4215009C78C7 /* CipherListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherListViewModel.swift; sourceTree = "<group>"; };
 		1BDBFEB0290B5BD3009C78C7 /* DBHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBHelperProtocol.swift; sourceTree = "<group>"; };
 		1BDBFEB2290B5D07009C78C7 /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
@@ -142,6 +170,7 @@
 		1B0A1A9C28E77F4500FF61CD /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				1BC1CD6A29229D12006540DA /* Mocks */,
 				1B15616B28B81A2200610B9B /* Cipher.swift */,
 			);
 			path = Models;
@@ -152,6 +181,11 @@
 			children = (
 				1B14DF36291186D900EA43F1 /* EmptyStateViewModifier.swift */,
 				1B5AFF0229196C81004478F9 /* ColorUtils.swift */,
+				1B8BF90C2919BED9006F069E /* Base32.swift */,
+				1B8BF9102919CDBB006F069E /* DateExtensions.swift */,
+				1B11C89A291C587600CE58D8 /* UInt64Extensions.swift */,
+				1BC1CD662922871A006540DA /* URLExtensions.swift */,
+				1BC1CD6829228CEB006540DA /* StringExtensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -207,6 +241,7 @@
 		1B15614C28B7F3D800610B9B /* bitwarden WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
+				1B8BF9072919A2BC006F069E /* Controls */,
 				1B5AFF0629197809004478F9 /* Localization */,
 				1B59EC5F2900C48300A8718D /* Helpers */,
 				1B59EC5A2900BB2900A8718D /* Services */,
@@ -254,6 +289,9 @@
 				1BF5F6DC29103B5F002DDC0C /* Mocks */,
 				1B59EC5B2900BB3400A8718D /* CryptoService.swift */,
 				1BF5F6DA29103066002DDC0C /* CipherService.swift */,
+				1B8BF90A2919AF2A006F069E /* TotpService.swift */,
+				1B11C898291BFAB500CE58D8 /* CryptoFunctionService.swift */,
+				1BC1CD6229227D3C006540DA /* EnvironmentService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -263,6 +301,7 @@
 			children = (
 				1B59EC602900C48E00A8718D /* KeychainHelper.swift */,
 				1B59EC622901B1C100A8718D /* LoggerHelper.swift */,
+				1BC1CD6429227F3C006540DA /* IconImageHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -275,10 +314,28 @@
 			path = Localization;
 			sourceTree = "<group>";
 		};
+		1B8BF9072919A2BC006F069E /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				1B8BF9082919A2CC006F069E /* CircularProgressView.swift */,
+				1BC1CD6D2922B92B006540DA /* ImageView.swift */,
+			);
+			path = Controls;
+			sourceTree = "<group>";
+		};
+		1BC1CD6A29229D12006540DA /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				1BC1CD6B29229D1B006540DA /* CipherMock.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
 		1BDBFEA9290851AB009C78C7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				1B15614F28B7F3D800610B9B /* CipherListView.swift */,
+				1B8BF90329199BBB006F069E /* CipherDetailsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -287,6 +344,7 @@
 			isa = PBXGroup;
 			children = (
 				1BDBFEAB290B4215009C78C7 /* CipherListViewModel.swift */,
+				1B8BF90529199EC5006F069E /* CipherDetailsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -454,23 +512,37 @@
 				1BDBFEAC290B4215009C78C7 /* CipherListViewModel.swift in Sources */,
 				1BF5F6DB29103066002DDC0C /* CipherService.swift in Sources */,
 				1B15616C28B81A2200610B9B /* Cipher.swift in Sources */,
+				1B8BF90429199BBB006F069E /* CipherDetailsView.swift in Sources */,
+				1B8BF9112919CDBB006F069E /* DateExtensions.swift in Sources */,
+				1B11C899291BFAB500CE58D8 /* CryptoFunctionService.swift in Sources */,
+				1BC1CD6C29229D1B006540DA /* CipherMock.swift in Sources */,
 				1B15615228B7F3D800610B9B /* NotificationController.swift in Sources */,
 				1BDBFEB3290B5D07009C78C7 /* CoreDataHelper.swift in Sources */,
 				1B15615028B7F3D800610B9B /* CipherListView.swift in Sources */,
 				1B59EC632901B1C100A8718D /* LoggerHelper.swift in Sources */,
 				1B15615628B7F3D800610B9B /* ComplicationController.swift in Sources */,
+				1BC1CD6329227D3C006540DA /* EnvironmentService.swift in Sources */,
+				1B8BF9092919A2CC006F069E /* CircularProgressView.swift in Sources */,
 				1B15614E28B7F3D800610B9B /* bitwardenApp.swift in Sources */,
+				1BC1CD6929228CEB006540DA /* StringExtensions.swift in Sources */,
 				1BDBFEB1290B5BD3009C78C7 /* DBHelperProtocol.swift in Sources */,
+				1B8BF90629199EC5006F069E /* CipherDetailsViewModel.swift in Sources */,
 				1BF5F6DE29103B86002DDC0C /* CipherServiceMock.swift in Sources */,
+				1BC1CD672922871A006540DA /* URLExtensions.swift in Sources */,
+				1B11C89B291C587600CE58D8 /* UInt64Extensions.swift in Sources */,
 				1B8453ED290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift in Sources */,
+				1BC1CD6E2922B92B006540DA /* ImageView.swift in Sources */,
 				1B14DF37291186D900EA43F1 /* EmptyStateViewModifier.swift in Sources */,
 				1B15616E28B81A4300610B9B /* WatchConnectivityManager.swift in Sources */,
 				1B5AFF0329196C81004478F9 /* ColorUtils.swift in Sources */,
 				1B59EC612900C48E00A8718D /* KeychainHelper.swift in Sources */,
 				1B59EC5729007DEE00A8718D /* BitwardenDB.xcdatamodeld in Sources */,
+				1B8BF90D2919BED9006F069E /* Base32.swift in Sources */,
 				1B8453EC290C672E00F921E1 /* CipherEntity+CoreDataClass.swift in Sources */,
+				1BC1CD6529227F3C006540DA /* IconImageHelper.swift in Sources */,
 				1B59EC5C2900BB3400A8718D /* CryptoService.swift in Sources */,
 				1B15615428B7F3D800610B9B /* NotificationView.swift in Sources */,
+				1B8BF90B2919AF2A006F069E /* TotpService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
