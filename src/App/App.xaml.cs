@@ -169,6 +169,13 @@ namespace Bit.App
 
         private async Task SyncPasswordlessLoginRequestsAsync()
         {
+            var activeUserId = await _stateService.GetActiveUserIdAsync();
+            // if the user has not enabled passwordless logins ignore requests
+            if (!await _stateService.GetApprovePasswordlessLoginsAsync(activeUserId))
+            {
+                return;
+            }
+
             var loginRequests = await _authService.GetPasswordlessLoginRequestsAsync();
             if (loginRequests == null || !loginRequests.Any())
             {
@@ -187,7 +194,7 @@ namespace Bit.App
             await _stateService.SetPasswordlessLoginNotificationAsync(new PasswordlessRequestNotification()
             {
                 Id = validLoginRequest.Id,
-                UserId = await _stateService.GetActiveUserIdAsync()
+                UserId = activeUserId
             });
 
             _messagingService.Send(Constants.PasswordlessLoginRequestKey);
