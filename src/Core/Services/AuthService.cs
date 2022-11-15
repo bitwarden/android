@@ -471,6 +471,11 @@ namespace Bit.Core.Services
             SelectedTwoFactorProviderType = null;
         }
 
+        public async Task<List<PasswordlessLoginResponse>> GetPasswordlessLoginRequestsAsync()
+        {
+            return await _apiService.GetAuthRequestAsync();
+        }
+
         public async Task<PasswordlessLoginResponse> GetPasswordlessLoginRequestByIdAsync(string id)
         {
             return await _apiService.GetAuthRequestAsync(id);
