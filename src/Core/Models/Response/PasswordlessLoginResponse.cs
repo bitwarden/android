@@ -13,7 +13,8 @@ namespace Bit.Core.Models.Response
         public string Key { get; set; }
         public string MasterPasswordHash { get; set; }
         public DateTime CreationDate { get; set; }
-        public bool RequestApproved { get; set; }
+        public DateTime? ResponseDate { get; set; }
+        public bool? RequestApproved { get; set; }
         public string Origin { get; set; }
         public string RequestAccessCode { get; set; }
         public Tuple<byte[], byte[]> RequestKeyPair { get; set; }

@@ -2512,4 +2512,7 @@ Do you want to switch to this account?</value>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>View all log in options</value>
   </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>This request is no longer valid</value>
+  </data>
 </root>

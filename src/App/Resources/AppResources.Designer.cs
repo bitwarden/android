@@ -5886,6 +5886,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This request is no longer valid.
+        /// </summary>
+        public static string ThisRequestIsNoLongerValid {
+            get {
+                return ResourceManager.GetString("ThisRequestIsNoLongerValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 3 days.
         /// </summary>
         public static string ThreeDays {
