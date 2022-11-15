@@ -21,8 +21,7 @@ namespace Bit.Core.Models.Response
         public string RequestAccessCode { get; set; }
         public Tuple<byte[], byte[]> RequestKeyPair { get; set; }
 
-        public bool IsAnswered => RequestApproved != null
-                                    && ResponseDate != null;
+        public bool IsAnswered => RequestApproved != null && ResponseDate != null;
 
         public bool IsExpired => CreationDate.ToUniversalTime().AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) < DateTime.UtcNow;
     }

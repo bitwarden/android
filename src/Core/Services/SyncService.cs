@@ -24,6 +24,7 @@ namespace Bit.Core.Services
         private readonly IPolicyService _policyService;
         private readonly ISendService _sendService;
         private readonly IKeyConnectorService _keyConnectorService;
+        private readonly ILogger _logger;
         private readonly Func<Tuple<string, bool, bool>, Task> _logoutCallbackAsync;
 
         public SyncService(
@@ -39,6 +40,7 @@ namespace Bit.Core.Services
             IPolicyService policyService,
             ISendService sendService,
             IKeyConnectorService keyConnectorService,
+            ILogger logger,
             Func<Tuple<string, bool, bool>, Task> logoutCallbackAsync)
         {
             _stateService = stateService;
@@ -53,6 +55,7 @@ namespace Bit.Core.Services
             _policyService = policyService;
             _sendService = sendService;
             _keyConnectorService = keyConnectorService;
+            _logger = logger;
             _logoutCallbackAsync = logoutCallbackAsync;
         }
 
@@ -419,7 +422,7 @@ namespace Bit.Core.Services
             }
             catch (Exception ex)
             {
-                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                _logger.Exception(ex);
             }
         }
     }
