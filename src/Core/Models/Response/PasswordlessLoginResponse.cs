@@ -20,6 +20,11 @@ namespace Bit.Core.Models.Response
         public string Origin { get; set; }
         public string RequestAccessCode { get; set; }
         public Tuple<byte[], byte[]> RequestKeyPair { get; set; }
+
+        public bool IsAnswered => RequestApproved != null
+                                    && ResponseDate != null;
+
+        public bool IsExpired => CreationDate.ToUniversalTime().AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) < DateTime.UtcNow;
     }
 
     public class PasswordlessLoginsResponse

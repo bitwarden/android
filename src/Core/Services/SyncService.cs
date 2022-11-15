@@ -386,36 +386,41 @@ namespace Bit.Core.Services
 
         private async Task SyncPasswordlessLoginRequestsAsync(string userId)
         {
-            // if the user has not enabled passwordless logins ignore requests
-            if (!await _stateService.GetApprovePasswordlessLoginsAsync(userId))
+            try
             {
-                return;
+                // if the user has not enabled passwordless logins ignore requests
+                if (!await _stateService.GetApprovePasswordlessLoginsAsync(userId))
+                {
+                    return;
+                }
+
+                var loginRequests = await _apiService.GetAuthRequestAsync();
+                if (loginRequests == null || !loginRequests.Any())
+                {
+                    return;
+                }
+
+                var validLoginRequest = loginRequests.Where(l => !l.IsAnswered && !l.IsExpired)
+                                         .OrderByDescending(x => x.CreationDate)
+                                         .FirstOrDefault();
+
+                if (validLoginRequest is null)
+                {
+                    return;
+                }
+
+                await _stateService.SetPasswordlessLoginNotificationAsync(new PasswordlessRequestNotification()
+                {
+                    Id = validLoginRequest.Id,
+                    UserId = userId
+                });
+
+                _messagingService.Send(Constants.PasswordlessLoginRequestKey);
             }
-
-            var loginRequests = await _apiService.GetAuthRequestAsync();
-            if (loginRequests == null || !loginRequests.Any())
+            catch (Exception ex)
             {
-                return;
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
-
-            var validLoginRequest = loginRequests.Where(l => l.RequestApproved == null
-                                                 && l.ResponseDate == null
-                                                 && l.CreationDate.ToUniversalTime().AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) > DateTime.UtcNow)
-                                     .OrderByDescending(x => x.CreationDate)
-                                     .FirstOrDefault();
-
-            if (validLoginRequest is null)
-            {
-                return;
-            }
-
-            await _stateService.SetPasswordlessLoginNotificationAsync(new PasswordlessRequestNotification()
-            {
-                Id = validLoginRequest.Id,
-                UserId = userId
-            });
-
-            _messagingService.Send(Constants.PasswordlessLoginRequestKey);
         }
     }
 }
