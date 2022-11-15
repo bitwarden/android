@@ -15,6 +15,11 @@ struct Cipher:Identifiable,Codable{
 struct Login:Codable{
     var username:String?
     var totp:String?
+    var uris:[LoginUri]?
+}
+
+struct LoginUri:Codable{
+    var uri:String?
 }
 
 extension Cipher{
