@@ -536,9 +536,10 @@ namespace Bit.Core.Services
 
         #region PasswordlessLogin
 
-        public Task<List<PasswordlessLoginResponse>> GetAuthRequestAsync()
+        public async Task<List<PasswordlessLoginResponse>> GetAuthRequestAsync()
         {
-            return SendAsync<object, List<PasswordlessLoginResponse>>(HttpMethod.Get, $"/auth-requests/", null, true, true);
+            var response = await SendAsync<object, PasswordlessLoginsResponse>(HttpMethod.Get, $"/auth-requests/", null, true, true);
+            return response.Data;
         }
 
         public Task<PasswordlessLoginResponse> GetAuthRequestAsync(string id)

@@ -185,7 +185,7 @@ namespace Bit.App
             var validLoginRequests = loginRequests.Where(l => l.RequestApproved == null && l.ResponseDate == null
                 && l.CreationDate.ToUniversalTime().AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) > DateTime.UtcNow).ToList();
 
-            if (validLoginRequests == null)
+            if (validLoginRequests == null || !validLoginRequests.Any())
             {
                 return;
             }

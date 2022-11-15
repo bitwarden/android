@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Bit.Core.Enums;
+using Bit.Core.Models.Data;
 
 namespace Bit.Core.Models.Response
 {
@@ -18,5 +20,10 @@ namespace Bit.Core.Models.Response
         public string Origin { get; set; }
         public string RequestAccessCode { get; set; }
         public Tuple<byte[], byte[]> RequestKeyPair { get; set; }
+    }
+
+    public class PasswordlessLoginsResponse
+    {
+        public List<PasswordlessLoginResponse> Data { get; set; }
     }
 }
