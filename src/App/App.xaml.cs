@@ -155,49 +155,12 @@ namespace Bit.App
                             CheckPasswordlessLoginRequestsAsync().Wait();
                         }
                     }
-                    else if (message.Command == "syncCompleted")
-                    {
-                        await SyncPasswordlessLoginRequestsAsync();
-                    }
                 }
                 catch (Exception ex)
                 {
                     LoggerHelper.LogEvenIfCantBeResolved(ex);
                 }
             });
-        }
-
-        private async Task SyncPasswordlessLoginRequestsAsync()
-        {
-            var activeUserId = await _stateService.GetActiveUserIdAsync();
-            // if the user has not enabled passwordless logins ignore requests
-            if (!await _stateService.GetApprovePasswordlessLoginsAsync(activeUserId))
-            {
-                return;
-            }
-
-            var loginRequests = await _authService.GetPasswordlessLoginRequestsAsync();
-            if (loginRequests == null || !loginRequests.Any())
-            {
-                return;
-            }
-
-            var validLoginRequests = loginRequests.Where(l => l.RequestApproved == null && l.ResponseDate == null
-                && l.CreationDate.ToUniversalTime().AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) > DateTime.UtcNow).ToList();
-
-            if (validLoginRequests == null || !validLoginRequests.Any())
-            {
-                return;
-            }
-
-            var validLoginRequest = validLoginRequests.OrderByDescending(x => x.CreationDate).First();
-            await _stateService.SetPasswordlessLoginNotificationAsync(new PasswordlessRequestNotification()
-            {
-                Id = validLoginRequest.Id,
-                UserId = activeUserId
-            });
-
-            _messagingService.Send(Constants.PasswordlessLoginRequestKey);
         }
 
         private async Task CheckPasswordlessLoginRequestsAsync()
