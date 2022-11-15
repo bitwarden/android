@@ -147,7 +147,6 @@ namespace Bit.App
                     }
                     else if (message.Command == Constants.PasswordlessLoginRequestKey
                         || message.Command == "unlocked"
-                        || message.Command == "syncCompleted"
                         || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
                     {
                         lock (_processingLoginRequestLock)
@@ -156,12 +155,42 @@ namespace Bit.App
                             CheckPasswordlessLoginRequestsAsync().Wait();
                         }
                     }
+                    else if (message.Command == "syncCompleted")
+                    {
+                        await SyncPasswordlessLoginRequestsAsync();
+                    }
                 }
                 catch (Exception ex)
                 {
                     LoggerHelper.LogEvenIfCantBeResolved(ex);
                 }
             });
+        }
+
+        private async Task SyncPasswordlessLoginRequestsAsync()
+        {
+            var loginRequests = await _authService.GetPasswordlessLoginRequestsAsync();
+            if (loginRequests == null || !loginRequests.Any())
+            {
+                return;
+            }
+
+            var validLoginRequests = loginRequests.Where(l => l.RequestApproved == null && l.ResponseDate == null
+                && l.CreationDate.ToUniversalTime().AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) > DateTime.UtcNow).ToList();
+
+            if (validLoginRequests == null)
+            {
+                return;
+            }
+
+            var validLoginRequest = validLoginRequests.OrderByDescending(x => x.CreationDate).First();
+            await _stateService.SetPasswordlessLoginNotificationAsync(new PasswordlessRequestNotification()
+            {
+                Id = validLoginRequest.Id,
+                UserId = await _stateService.GetActiveUserIdAsync()
+            });
+
+            _messagingService.Send(Constants.PasswordlessLoginRequestKey);
         }
 
         private async Task CheckPasswordlessLoginRequestsAsync()
