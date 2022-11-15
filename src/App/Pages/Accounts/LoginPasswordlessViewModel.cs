@@ -116,6 +116,7 @@ namespace Bit.App.Pages
                 await Page.Navigation.PopModalAsync();
                 return;
             }
+
             var loginRequestData = await _authService.GetPasswordlessLoginRequestByIdAsync(LoginRequest.Id);
             if (loginRequestData.RequestApproved.HasValue && loginRequestData.ResponseDate.HasValue)
             {
@@ -178,9 +179,5 @@ namespace Bit.App.Pages
         public string DeviceType { get; set; }
 
         public string IpAddress { get; set; }
-
-        public bool? Approved { get; set; }
-
-        public DateTime? ResponseDate { get; set; }
     }
 }
