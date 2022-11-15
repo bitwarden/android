@@ -29,6 +29,8 @@ namespace Bit.Core.Utilities
             var messagingService = Resolve<IMessagingService>("messagingService");
             var cryptoFunctionService = Resolve<ICryptoFunctionService>("cryptoFunctionService");
             var cryptoService = Resolve<ICryptoService>("cryptoService");
+            var logger = Resolve<ILogger>();
+
             SearchService searchService = null;
 
             var tokenService = new TokenService(stateService);
@@ -67,7 +69,7 @@ namespace Bit.Core.Utilities
                 });
             var syncService = new SyncService(stateService, apiService, settingsService, folderService, cipherService,
                 cryptoService, collectionService, organizationService, messagingService, policyService, sendService,
-                keyConnectorService, (extras) =>
+                keyConnectorService, logger, (extras) =>
                 {
                     messagingService.Send("logout", extras);
                     return Task.CompletedTask;

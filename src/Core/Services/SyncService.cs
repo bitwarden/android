@@ -24,6 +24,7 @@ namespace Bit.Core.Services
         private readonly IPolicyService _policyService;
         private readonly ISendService _sendService;
         private readonly IKeyConnectorService _keyConnectorService;
+        private readonly ILogger _logger;
         private readonly Func<Tuple<string, bool, bool>, Task> _logoutCallbackAsync;
 
         public SyncService(
@@ -39,6 +40,7 @@ namespace Bit.Core.Services
             IPolicyService policyService,
             ISendService sendService,
             IKeyConnectorService keyConnectorService,
+            ILogger logger,
             Func<Tuple<string, bool, bool>, Task> logoutCallbackAsync)
         {
             _stateService = stateService;
@@ -53,6 +55,7 @@ namespace Bit.Core.Services
             _policyService = policyService;
             _sendService = sendService;
             _keyConnectorService = keyConnectorService;
+            _logger = logger;
             _logoutCallbackAsync = logoutCallbackAsync;
         }
 
@@ -108,6 +111,7 @@ namespace Bit.Core.Services
                 await SyncSettingsAsync(userId, response.Domains);
                 await SyncPoliciesAsync(response.Policies);
                 await SyncSendsAsync(userId, response.Sends);
+                await SyncPasswordlessLoginRequestsAsync(userId);
                 await SetLastSyncAsync(now);
                 return SyncCompleted(true);
             }
@@ -381,6 +385,45 @@ namespace Bit.Core.Services
             var sends = response?.ToDictionary(s => s.Id, s => new SendData(s, userId)) ??
                 new Dictionary<string, SendData>();
             await _sendService.ReplaceAsync(sends);
+        }
+
+        private async Task SyncPasswordlessLoginRequestsAsync(string userId)
+        {
+            try
+            {
+                // if the user has not enabled passwordless logins ignore requests
+                if (!await _stateService.GetApprovePasswordlessLoginsAsync(userId))
+                {
+                    return;
+                }
+
+                var loginRequests = await _apiService.GetAuthRequestAsync();
+                if (loginRequests == null || !loginRequests.Any())
+                {
+                    return;
+                }
+
+                var validLoginRequest = loginRequests.Where(l => !l.IsAnswered && !l.IsExpired)
+                                         .OrderByDescending(x => x.CreationDate)
+                                         .FirstOrDefault();
+
+                if (validLoginRequest is null)
+                {
+                    return;
+                }
+
+                await _stateService.SetPasswordlessLoginNotificationAsync(new PasswordlessRequestNotification()
+                {
+                    Id = validLoginRequest.Id,
+                    UserId = userId
+                });
+
+                _messagingService.Send(Constants.PasswordlessLoginRequestKey);
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
         }
     }
 }
