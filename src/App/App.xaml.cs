@@ -205,9 +205,7 @@ namespace Bit.App
                 FingerprintPhrase = loginRequestData.RequestFingerprint,
                 RequestDate = loginRequestData.CreationDate,
                 DeviceType = loginRequestData.RequestDeviceType,
-                Origin = loginRequestData.Origin,
-                Approved = loginRequestData.RequestApproved,
-                ResponseDate = loginRequestData.ResponseDate
+                Origin = loginRequestData.Origin
             });
             await _stateService.SetPasswordlessLoginNotificationAsync(null);
             _pushNotificationService.DismissLocalNotification(Constants.PasswordlessNotificationId);
