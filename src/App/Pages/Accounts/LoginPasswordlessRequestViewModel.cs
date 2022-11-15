@@ -128,7 +128,7 @@ namespace Bit.App.Pages
             {
                 var response = await _authService.GetPasswordlessLoginResponseAsync(_requestId, _requestAccessCode);
 
-                if (!response.RequestApproved)
+                if (response.RequestApproved == null || !response.RequestApproved.Value)
                 {
                     return;
                 }
