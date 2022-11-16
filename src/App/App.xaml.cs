@@ -147,7 +147,6 @@ namespace Bit.App
                     }
                     else if (message.Command == Constants.PasswordlessLoginRequestKey
                         || message.Command == "unlocked"
-                        || message.Command == "syncCompleted"
                         || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
                     {
                         lock (_processingLoginRequestLock)
@@ -209,7 +208,7 @@ namespace Bit.App
             });
             await _stateService.SetPasswordlessLoginNotificationAsync(null);
             _pushNotificationService.DismissLocalNotification(Constants.PasswordlessNotificationId);
-            if (loginRequestData.CreationDate.ToUniversalTime().AddMinutes(Constants.PasswordlessNotificationTimeoutInMinutes) > DateTime.UtcNow)
+            if (!loginRequestData.IsExpired)
             {
                 await Device.InvokeOnMainThreadAsync(() => Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
             }
