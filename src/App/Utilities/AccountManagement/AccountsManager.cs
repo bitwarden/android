@@ -109,7 +109,7 @@ namespace Bit.App.Utilities.AccountManagement
                 }
                 else
                 {
-                    _accountsManagerHost.Navigate(NavigationTarget.HomeLogin);
+                    _accountsManagerHost.Navigate(NavigationTarget.HomeLogin, new HomeNavigationParams(false));
                 }
             }
         }
