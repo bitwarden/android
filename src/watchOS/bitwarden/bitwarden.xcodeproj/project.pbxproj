@@ -48,6 +48,10 @@
 		1BC1CD6929228CEB006540DA /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC1CD6829228CEB006540DA /* StringExtensions.swift */; };
 		1BC1CD6C29229D1B006540DA /* CipherMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC1CD6B29229D1B006540DA /* CipherMock.swift */; };
 		1BC1CD6E2922B92B006540DA /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC1CD6D2922B92B006540DA /* ImageView.swift */; };
+		1BD291B32924043C0004F33F /* BWStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD291B22924043C0004F33F /* BWStateView.swift */; };
+		1BD291B52924047C0004F33F /* BWStateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD291B42924047C0004F33F /* BWStateViewModel.swift */; };
+		1BD291B7292409410004F33F /* BWState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD291B6292409410004F33F /* BWState.swift */; };
+		1BD291B9292438830004F33F /* StateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD291B8292438830004F33F /* StateService.swift */; };
 		1BDBFEAC290B4215009C78C7 /* CipherListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEAB290B4215009C78C7 /* CipherListViewModel.swift */; };
 		1BDBFEB1290B5BD3009C78C7 /* DBHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEB0290B5BD3009C78C7 /* DBHelperProtocol.swift */; };
 		1BDBFEB3290B5D07009C78C7 /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEB2290B5D07009C78C7 /* CoreDataHelper.swift */; };
@@ -142,6 +146,10 @@
 		1BC1CD6829228CEB006540DA /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		1BC1CD6B29229D1B006540DA /* CipherMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherMock.swift; sourceTree = "<group>"; };
 		1BC1CD6D2922B92B006540DA /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
+		1BD291B22924043C0004F33F /* BWStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BWStateView.swift; sourceTree = "<group>"; };
+		1BD291B42924047C0004F33F /* BWStateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BWStateViewModel.swift; sourceTree = "<group>"; };
+		1BD291B6292409410004F33F /* BWState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BWState.swift; sourceTree = "<group>"; };
+		1BD291B8292438830004F33F /* StateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateService.swift; sourceTree = "<group>"; };
 		1BDBFEAB290B4215009C78C7 /* CipherListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherListViewModel.swift; sourceTree = "<group>"; };
 		1BDBFEB0290B5BD3009C78C7 /* DBHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBHelperProtocol.swift; sourceTree = "<group>"; };
 		1BDBFEB2290B5D07009C78C7 /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
@@ -186,6 +194,7 @@
 				1B11C89A291C587600CE58D8 /* UInt64Extensions.swift */,
 				1BC1CD662922871A006540DA /* URLExtensions.swift */,
 				1BC1CD6829228CEB006540DA /* StringExtensions.swift */,
+				1BD291B6292409410004F33F /* BWState.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -292,6 +301,7 @@
 				1B8BF90A2919AF2A006F069E /* TotpService.swift */,
 				1B11C898291BFAB500CE58D8 /* CryptoFunctionService.swift */,
 				1BC1CD6229227D3C006540DA /* EnvironmentService.swift */,
+				1BD291B8292438830004F33F /* StateService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -336,6 +346,7 @@
 			children = (
 				1B15614F28B7F3D800610B9B /* CipherListView.swift */,
 				1B8BF90329199BBB006F069E /* CipherDetailsView.swift */,
+				1BD291B22924043C0004F33F /* BWStateView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -345,6 +356,7 @@
 			children = (
 				1BDBFEAB290B4215009C78C7 /* CipherListViewModel.swift */,
 				1B8BF90529199EC5006F069E /* CipherDetailsViewModel.swift */,
+				1BD291B42924047C0004F33F /* BWStateViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -509,6 +521,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B59EC592900801500A8718D /* StringEncryptionTransformer.swift in Sources */,
+				1BD291B32924043C0004F33F /* BWStateView.swift in Sources */,
 				1BDBFEAC290B4215009C78C7 /* CipherListViewModel.swift in Sources */,
 				1BF5F6DB29103066002DDC0C /* CipherService.swift in Sources */,
 				1B15616C28B81A2200610B9B /* Cipher.swift in Sources */,
@@ -521,8 +534,10 @@
 				1B15615028B7F3D800610B9B /* CipherListView.swift in Sources */,
 				1B59EC632901B1C100A8718D /* LoggerHelper.swift in Sources */,
 				1B15615628B7F3D800610B9B /* ComplicationController.swift in Sources */,
+				1BD291B9292438830004F33F /* StateService.swift in Sources */,
 				1BC1CD6329227D3C006540DA /* EnvironmentService.swift in Sources */,
 				1B8BF9092919A2CC006F069E /* CircularProgressView.swift in Sources */,
+				1BD291B7292409410004F33F /* BWState.swift in Sources */,
 				1B15614E28B7F3D800610B9B /* bitwardenApp.swift in Sources */,
 				1BC1CD6929228CEB006540DA /* StringExtensions.swift in Sources */,
 				1BDBFEB1290B5BD3009C78C7 /* DBHelperProtocol.swift in Sources */,
@@ -533,6 +548,7 @@
 				1B8453ED290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift in Sources */,
 				1BC1CD6E2922B92B006540DA /* ImageView.swift in Sources */,
 				1B14DF37291186D900EA43F1 /* EmptyStateViewModifier.swift in Sources */,
+				1BD291B52924047C0004F33F /* BWStateViewModel.swift in Sources */,
 				1B15616E28B81A4300610B9B /* WatchConnectivityManager.swift in Sources */,
 				1B5AFF0329196C81004478F9 /* ColorUtils.swift in Sources */,
 				1B59EC612900C48E00A8718D /* KeychainHelper.swift in Sources */,

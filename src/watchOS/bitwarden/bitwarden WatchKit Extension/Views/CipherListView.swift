@@ -38,8 +38,7 @@ struct CipherListView: View {
                     }
                     .emptyState(viewModel.ciphers.isEmpty, emptyContent: {
                         VStack(alignment: .center) {
-                            // TODO: Set the correct image
-                            Image(systemName: "doc.text.magnifyingglass")
+                            Image("EmptyListPlaceholder")
                                 .resizable()
                                 .scaledToFit()
                                 .padding(20)
@@ -55,6 +54,9 @@ struct CipherListView: View {
         }
         .onAppear {
             self.viewModel.fetchCiphers()
+        }
+        .fullScreenCover(isPresented: $viewModel.showingSheet) {
+            BWStateView(viewModel.currentState)
         }
         /*.alert(item: $connectivityManager.notificationMessage) { message in
             Alert(title: Text(message.text),
