@@ -1,4 +1,8 @@
-﻿using Bit.App.Controls;
+﻿using Bit.App.Abstractions;
+using System;
+using Bit.App.Controls;
+using Bit.App.Resources;
+using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -22,5 +26,15 @@ namespace Bit.App.Pages
         }
 
         public ContentPage Page { get; set; }
+
+        protected void HandleException(Exception ex, IDeviceActionService deviceActionService, IPlatformUtilsService platformUtilsService, ILogger logger)
+        {
+            Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                await deviceActionService.HideLoadingAsync();
+                await platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage);
+            }).FireAndForget();
+            logger.Exception(ex);
+        }
     }
 }
