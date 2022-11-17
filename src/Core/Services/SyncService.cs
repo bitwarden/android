@@ -111,7 +111,6 @@ namespace Bit.Core.Services
                 await SyncSettingsAsync(userId, response.Domains);
                 await SyncPoliciesAsync(response.Policies);
                 await SyncSendsAsync(userId, response.Sends);
-                await SyncPasswordlessLoginRequestsAsync(userId);
                 await SetLastSyncAsync(now);
                 return SyncCompleted(true);
             }
@@ -387,10 +386,11 @@ namespace Bit.Core.Services
             await _sendService.ReplaceAsync(sends);
         }
 
-        private async Task SyncPasswordlessLoginRequestsAsync(string userId)
+        public async Task SyncPasswordlessLoginRequestsAsync()
         {
             try
             {
+                var userId = await _stateService.GetActiveUserIdAsync();
                 // if the user has not enabled passwordless logins ignore requests
                 if (!await _stateService.GetApprovePasswordlessLoginsAsync(userId))
                 {
