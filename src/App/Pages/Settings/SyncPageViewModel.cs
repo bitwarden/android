@@ -91,6 +91,7 @@ namespace Bit.App.Pages
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.Syncing);
                 var success = await _syncService.FullSyncAsync(true);
+                await _syncService.SyncPasswordlessLoginRequestsAsync();
                 await _deviceActionService.HideLoadingAsync();
                 if (success)
                 {
