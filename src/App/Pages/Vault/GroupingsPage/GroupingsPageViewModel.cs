@@ -189,6 +189,7 @@ namespace Bit.App.Pages
             if (await _stateService.GetSyncOnRefreshAsync() && Refreshing && !SyncRefreshing)
             {
                 SyncRefreshing = true;
+                await _syncService.SyncPasswordlessLoginRequestsAsync();
                 await _syncService.FullSyncAsync(false);
                 return;
             }
