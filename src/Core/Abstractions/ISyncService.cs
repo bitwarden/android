@@ -14,5 +14,7 @@ namespace Bit.Core.Abstractions
         Task<bool> SyncDeleteFolderAsync(SyncFolderNotification notification);
         Task<bool> SyncUpsertCipherAsync(SyncCipherNotification notification, bool isEdit);
         Task<bool> SyncUpsertFolderAsync(SyncFolderNotification notification, bool isEdit);
+        // Passwordless code will be moved to an independent service in future techdept
+        Task SyncPasswordlessLoginRequestsAsync();
     }
 }
