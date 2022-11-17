@@ -189,7 +189,7 @@ namespace Bit.App.Pages
             if (await _stateService.GetSyncOnRefreshAsync() && Refreshing && !SyncRefreshing)
             {
                 SyncRefreshing = true;
-                await _syncService.FullSyncAsync(false);
+                await _syncService.FullSyncAsync(true);
                 return;
             }
 
