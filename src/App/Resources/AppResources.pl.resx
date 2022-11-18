@@ -2508,4 +2508,7 @@ Czy chcesz przełączyć się na to konto?</value>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>Zobacz wszystkie sposoby logowania</value>
   </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Ta prośba nie jest już ważna</value>
+  </data>
 </root>

@@ -2509,4 +2509,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>Ver todas las opciones de inicio de sesión</value>
   </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Esta solicitud ya no es válida</value>
+  </data>
 </root>

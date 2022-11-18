@@ -1622,7 +1622,7 @@
     <value>Біяметрычныя праверка</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Біяметрыяй</value>
+    <value>біяметрыяй</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
     <value>Выкарыстоўваць біяметрычныя даныя для разблакіроўкі</value>
@@ -2507,5 +2507,8 @@
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>Паглядзець усе варыянты ўваходу</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Гэты запыт больш не дзейнічае</value>
   </data>
 </root>

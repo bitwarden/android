@@ -2508,4 +2508,7 @@ Vil du skifte til denne konto?</value>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>Vis alle indlogningsmuligheder</value>
   </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Anmodningen er ikke længere gyldig</value>
+  </data>
 </root>

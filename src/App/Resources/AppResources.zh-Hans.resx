@@ -1762,7 +1762,7 @@
     <value>使用下拉手势同步密码库。</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>企业单点登录（SSO）</value>
+    <value>企业单点登录</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
     <value>要使用您组织的单点登录门户快速登录。请首先输入您组织的标识符。</value>
@@ -2503,9 +2503,12 @@
     <value>重新发送通知</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>需要其他选项吗？</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>查看所有登录选项</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>请求已失效</value>
   </data>
 </root>

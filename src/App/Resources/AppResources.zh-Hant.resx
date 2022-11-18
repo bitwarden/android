@@ -2508,4 +2508,7 @@
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>檢視所有登入選項</value>
   </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>此請求已失效</value>
+  </data>
 </root>
