@@ -2493,21 +2493,24 @@ Vill du byta till detta konto?</value>
     <value>Logga in med en annan enhet</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Log in initiated</value>
+    <value>Inloggning påbörjad</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
-    <value>A notification has been sent to your device.</value>
+    <value>En avisering har skickats till din enhet.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+    <value>Se till att ditt valv är upplåst och att fingeravtrycksfrasen matchar på den andra enheten.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
-    <value>Resend notification</value>
+    <value>Skicka avisering igen</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>Behöver du fler alternativ?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>View all log in options</value>
+    <value>Visa alla inloggningsalternativ</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>This request is no longer valid</value>
   </data>
 </root>

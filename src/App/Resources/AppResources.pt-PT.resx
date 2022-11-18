@@ -2508,4 +2508,7 @@ Deseja mudar para esta conta?</value>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>View all log in options</value>
   </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Este pedido já não é válido</value>
+  </data>
 </root>

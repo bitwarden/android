@@ -2485,7 +2485,7 @@ Voleu canviar a aquest compte?</value>
     <value>No sou vosaltres?</value>
   </data>
   <data name="LogInWithMasterPassword" xml:space="preserve">
-    <value>Inicia sessió amb la teua contrasenya mestra</value>
+    <value>Inicia sessió amb la contrasenya mestra</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Inicia sessió amb un altre dispositiu</value>
@@ -2507,5 +2507,8 @@ Voleu canviar a aquest compte?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>Veure totes les opcions d'inici de sessió</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Aquesta sol·licitud ja no és vàlida</value>
   </data>
 </root>

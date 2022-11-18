@@ -2507,4 +2507,7 @@ Szeretnénk átváltani erre a fiókra?</value>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>Összes bejelentkezési opció megtekintése</value>
   </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>A kérés már nem érvényes.</value>
+  </data>
 </root>

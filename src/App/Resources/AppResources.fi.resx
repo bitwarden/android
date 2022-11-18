@@ -1762,7 +1762,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Synkronoidaan holvi alasveto-eleellä.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Kertakirjautuminen (SSO)</value>
+    <value>Yrityksen kertakirjautuminen (SSO)</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
     <value>Kirjaudu sisään käyttäen organisaatiosi kertakirjautumista (SSO). Syötä organisaatiosi tunniste aloittaaksesi.</value>
@@ -1810,7 +1810,8 @@ Koodi luetaan automaattisesti.</value>
     <value>Ladataan</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>Aktivoimalla tämän valinnan hyväksyt seuraavat: </value>
+    <value>Valitsemalla tämän hyväksyt seuraavat:
+</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
     <value>Palveluehtoja ja tietosuojakäytäntöä ei ole vahvistettu.</value>
@@ -2506,6 +2507,9 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Tarvitsetko toisen vaihtoehdon?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>Näytä kaikki kirjautumisvalinnat</value>
+    <value>Näytä kaikki kirjautumisvaihtoehdot</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Pyyntö ei ole enää voimassa.</value>
   </data>
 </root>
