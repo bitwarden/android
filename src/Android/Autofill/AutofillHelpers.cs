@@ -54,6 +54,7 @@ namespace Bit.Droid.Autofill
         {
             "alook.browser",
             "alook.browser.google",
+            "app.vanadium.browser",
             "com.amazon.cloud9",
             "com.android.browser",
             "com.android.chrome",
