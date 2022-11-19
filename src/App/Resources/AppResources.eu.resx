@@ -2507,4 +2507,7 @@ Kontu honetara aldatu nahi duzu?</value>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>Ikusi erregistro guztiak ezarpenetan</value>
   </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>This request is no longer valid</value>
+  </data>
 </root>

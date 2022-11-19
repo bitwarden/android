@@ -2508,4 +2508,7 @@ Vai pārslēgties uz šo kontu?</value>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>Apskatīt visas pierakstīšanās iespējas</value>
   </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Šis pieprasījums vairs nav derīgs</value>
+  </data>
 </root>

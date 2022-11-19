@@ -2508,4 +2508,7 @@
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>すべてのログインオプションを表示</value>
   </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>このリクエストは無効になりました</value>
+  </data>
 </root>

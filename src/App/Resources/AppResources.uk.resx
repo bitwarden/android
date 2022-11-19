@@ -2508,4 +2508,7 @@
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>Переглянути всі варіанти входу</value>
   </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Цей запит більше недійсний</value>
+  </data>
 </root>
