@@ -41,7 +41,8 @@ namespace Bit.Droid.Services
 
         public async Task<string> GetTokenAsync()
         {
-            return await _stateService.GetPushCurrentTokenAsync();
+            var activeUserId = await _stateService.GetActiveUserIdAsync();
+            return await _stateService.GetPushCurrentTokenAsync(activeUserId);
         }
 
         public async Task RegisterAsync()

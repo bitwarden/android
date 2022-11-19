@@ -147,8 +147,9 @@ namespace Bit.App.Pages
                 _platformUtilsService.GetApplicationVersion(), _deviceActionService.GetBuildNumber());
 
 #if DEBUG
+            var activeUserId = await _stateService.GetActiveUserIdAsync();
             var pushNotificationsRegistered = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService").IsRegisteredForPush;
-            var pnServerRegDate = await _stateService.GetPushLastRegistrationDateAsync();
+            var pnServerRegDate = await _stateService.GetPushLastRegistrationDateAsync(activeUserId);
             var pnServerError = await _stateService.GetPushInstallationRegistrationErrorAsync();
 
             var pnServerRegDateMessage = default(DateTime) == pnServerRegDate ? "-" : $"{pnServerRegDate.GetValueOrDefault().ToShortDateString()}-{pnServerRegDate.GetValueOrDefault().ToShortTimeString()} UTC";
