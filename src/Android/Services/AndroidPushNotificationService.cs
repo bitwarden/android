@@ -39,7 +39,7 @@ namespace Bit.Droid.Services
             return Task.FromResult(IsRegisteredForPush);
         }
 
-        public async Task<string> GetTokenAsync(string userId)
+        public async Task<string> GetTokenAsync()
         {
             var activeUserId = await _stateService.GetActiveUserIdAsync();
             return await _stateService.GetPushCurrentTokenAsync(activeUserId);
