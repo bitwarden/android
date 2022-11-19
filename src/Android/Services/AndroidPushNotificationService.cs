@@ -56,7 +56,7 @@ namespace Bit.Droid.Services
             }
             else
             {
-                await _stateService.SetPushLastRegistrationDateAsync(DateTime.UtcNow, userId);
+                await _stateService.SetPushLastRegistrationDateAsync(DateTime.UtcNow, activeUserId);
             }
         }
 
