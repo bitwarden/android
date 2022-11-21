@@ -563,6 +563,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to decline all pending log in requests?.
+        /// </summary>
+        public static string AreYouSureYouWantToDeclineAllPendingLogInRequests {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToDeclineAllPendingLogInRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to turn on screen capture?.
         /// </summary>
         public static string AreYouSureYouWantToEnableScreenCapture {
@@ -3544,7 +3553,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enterprise Single Sign-On.
+        ///   Looks up a localized string similar to Enterprise single sign-on.
         /// </summary>
         public static string LogInSso {
             get {
@@ -3589,7 +3598,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log In with master password.
+        ///   Looks up a localized string similar to Log in with master password.
         /// </summary>
         public static string LogInWithMasterPassword {
             get {
@@ -4201,6 +4210,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No pending requests.
+        /// </summary>
+        public static string NoPendingRequests {
+            get {
+                return ResourceManager.GetString("NoPendingRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nord.
         /// </summary>
         public static string Nord {
@@ -4679,6 +4697,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pending log in requests.
+        /// </summary>
+        public static string PendingLogInRequests {
+            get {
+                return ResourceManager.GetString("PendingLogInRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An organization policy is affecting your ownership options..
         /// </summary>
         public static string PersonalOwnershipPolicyInEffect {
@@ -5027,6 +5054,15 @@ namespace Bit.App.Resources {
         public static string RequestOTP {
             get {
                 return ResourceManager.GetString("RequestOTP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Requests declined.
+        /// </summary>
+        public static string RequestsDeclined {
+            get {
+                return ResourceManager.GetString("RequestsDeclined", resourceCulture);
             }
         }
         
