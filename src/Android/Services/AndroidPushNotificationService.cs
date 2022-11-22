@@ -41,13 +41,11 @@ namespace Bit.Droid.Services
 
         public async Task<string> GetTokenAsync()
         {
-            var activeUserId = await _stateService.GetActiveUserIdAsync();
-            return await _stateService.GetPushCurrentTokenAsync(activeUserId);
+            return await _stateService.GetPushCurrentTokenAsync();
         }
 
         public async Task RegisterAsync()
         {
-            var activeUserId = await _stateService.GetActiveUserIdAsync();
             var registeredToken = await _stateService.GetPushRegisteredTokenAsync();
             var currentToken = await GetTokenAsync();
             if (!string.IsNullOrWhiteSpace(registeredToken) && registeredToken != currentToken)
@@ -56,7 +54,7 @@ namespace Bit.Droid.Services
             }
             else
             {
-                await _stateService.SetPushLastRegistrationDateAsync(DateTime.UtcNow, activeUserId);
+                await _stateService.SetPushLastRegistrationDateAsync(DateTime.UtcNow);
             }
         }
 

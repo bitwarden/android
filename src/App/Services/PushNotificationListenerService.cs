@@ -174,7 +174,6 @@ namespace Bit.App.Services
                 return;
             }
 
-            var activeUserId = await _stateService.Value.GetActiveUserIdAsync();
             var appId = await _appIdService.Value.GetAppIdAsync();
             try
             {
@@ -187,10 +186,10 @@ namespace Bit.App.Services
 
                 Debug.WriteLine($"{TAG} Registered device with server.");
 
-                await _stateService.Value.SetPushLastRegistrationDateAsync(DateTime.UtcNow, activeUserId);
+                await _stateService.Value.SetPushLastRegistrationDateAsync(DateTime.UtcNow);
                 if (deviceType == Device.Android)
                 {
-                    await _stateService.Value.SetPushCurrentTokenAsync(token, activeUserId);
+                    await _stateService.Value.SetPushCurrentTokenAsync(token);
                 }
             }
 #if DEBUG

@@ -156,8 +156,7 @@ namespace Bit.App.Pages
             }
 
             // Push registration
-            var activeUserId = await _stateService.GetActiveUserIdAsync();
-            var lastPushRegistration = await _stateService.GetPushLastRegistrationDateAsync(activeUserId);
+            var lastPushRegistration = await _stateService.GetPushLastRegistrationDateAsync();
             lastPushRegistration = lastPushRegistration.GetValueOrDefault(DateTime.MinValue);
             if (Device.RuntimePlatform == Device.iOS)
             {
