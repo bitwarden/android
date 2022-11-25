@@ -55,7 +55,7 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            if(_zxing != null)
+            if (_zxing != null)
             {
                 _zxing.IsScanning = true;
 
