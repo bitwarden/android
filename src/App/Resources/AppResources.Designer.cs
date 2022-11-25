@@ -2129,6 +2129,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable camera permissions to use the scanner.
+        /// </summary>
+        public static string EnableCamerPermissionsToUseTheScanner {
+            get {
+                return ResourceManager.GetString("EnableCamerPermissionsToUseTheScanner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enabled.
         /// </summary>
         public static string Enabled {
@@ -3544,7 +3553,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enterprise Single Sign-On.
+        ///   Looks up a localized string similar to Enterprise single sign-on.
         /// </summary>
         public static string LogInSso {
             get {
@@ -3589,7 +3598,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log In with master password.
+        ///   Looks up a localized string similar to Log in with master password.
         /// </summary>
         public static string LogInWithMasterPassword {
             get {

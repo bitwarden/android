@@ -34,16 +34,15 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <zxing:ZXingScannerView
-            x:Name="_zxing"
+        <ContentView 
+            x:Name="_scannerContainer"
             HorizontalOptions="FillAndExpand"
             VerticalOptions="FillAndExpand"
             AutomationId="zxingScannerView"
             IsVisible="{Binding ShowScanner}"
             Grid.Column="0"
             Grid.Row="0"
-            Grid.RowSpan="3"
-            OnScanResult="OnScanResult"/>
+            Grid.RowSpan="3"/>
         <StackLayout
             VerticalOptions="Center"
             HorizontalOptions="FillAndExpand"

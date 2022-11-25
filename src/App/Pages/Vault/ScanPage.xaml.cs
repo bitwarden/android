@@ -8,8 +8,10 @@ using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using ZXing.Net.Mobile.Forms;
 
 namespace Bit.App.Pages
 {
@@ -26,20 +28,17 @@ namespace Bit.App.Pages
         private bool _pageIsActive;
         private bool _qrcodeFound;
         private float _scale;
-
+        private ZXingScannerView _zxing;
         private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
-        public ScanPage(Action<string> callback)
+        public ScanPage(Action<string> callback, bool hasCameraPermission)
         {
-            _callback = callback;
             InitializeComponent();
-            _zxing.Options = new ZXing.Mobile.MobileBarcodeScanningOptions
-            {
-                UseNativeScanning = true,
-                PossibleFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
-                AutoRotate = false,
-                TryInverted = true
-            };
+            _callback = callback;
+            ViewModel.HasCameraPermission = hasCameraPermission;
+            ViewModel.ShowScanner = hasCameraPermission;
+            ViewModel.InitScannerCommand = new Command(() => InitScanner());
+
             if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
@@ -50,64 +49,96 @@ namespace Bit.App.Pages
             _blueSKColor = ThemeManager.GetResourceColor("PrimaryColor").ToSKColor();
             _stopwatch = new Stopwatch();
             _qrcodeFound = false;
+            InitScanner();
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            _zxing.IsScanning = true;
-
-            // Fix for Autofocus, now it's done every 2 seconds so that the user does't have to do it
-            // https://github.com/Redth/ZXing.Net.Mobile/issues/414
-            _autofocusCts?.Cancel();
-            _autofocusCts = new CancellationTokenSource(TimeSpan.FromMinutes(3));
-
-            var autofocusCts = _autofocusCts;
-            // this task is needed to be awaited OnDisappearing to avoid some crashes
-            // when changing the value of _zxing.IsScanning
-            _continuousAutofocusTask = Task.Run(async () =>
+            if(_zxing != null)
             {
-                try
+                _zxing.IsScanning = true;
+
+                // Fix for Autofocus, now it's done every 2 seconds so that the user does't have to do it
+                // https://github.com/Redth/ZXing.Net.Mobile/issues/414
+                _autofocusCts?.Cancel();
+                _autofocusCts = new CancellationTokenSource(TimeSpan.FromMinutes(3));
+
+                var autofocusCts = _autofocusCts;
+                // this task is needed to be awaited OnDisappearing to avoid some crashes
+                // when changing the value of _zxing.IsScanning
+                _continuousAutofocusTask = Task.Run(async () =>
                 {
-                    while (!autofocusCts.IsCancellationRequested)
+                    try
                     {
-                        await Task.Delay(TimeSpan.FromSeconds(2), autofocusCts.Token);
-                        await Device.InvokeOnMainThreadAsync(() =>
+                        while (!autofocusCts.IsCancellationRequested)
                         {
-                            if (!autofocusCts.IsCancellationRequested)
+                            await Task.Delay(TimeSpan.FromSeconds(2), autofocusCts.Token);
+                            await Device.InvokeOnMainThreadAsync(() =>
                             {
-                                try
+                                if (!autofocusCts.IsCancellationRequested)
                                 {
-                                    _zxing.AutoFocus();
+                                    try
+                                    {
+                                        _zxing.AutoFocus();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        _logger.Value.Exception(ex);
+                                    }
                                 }
-                                catch (Exception ex)
-                                {
-                                    _logger.Value.Exception(ex);
-                                }
-                            }
-                        });
+                            });
+                        }
                     }
-                }
-                catch (TaskCanceledException) { }
-                catch (Exception ex)
-                {
-                    _logger.Value.Exception(ex);
-                }
-            }, autofocusCts.Token);
-            _pageIsActive = true;
-            AnimationLoopAsync();
+                    catch (TaskCanceledException) { }
+                    catch (Exception ex)
+                    {
+                        _logger.Value.Exception(ex);
+                    }
+                }, autofocusCts.Token);
+                _pageIsActive = true;
+                AnimationLoopAsync();
+            }
         }
 
         protected override async void OnDisappearing()
         {
-            _autofocusCts?.Cancel();
-            if (_continuousAutofocusTask != null)
+            if (_zxing != null)
             {
-                await _continuousAutofocusTask;
+                _autofocusCts?.Cancel();
+                if (_continuousAutofocusTask != null)
+                {
+                    await _continuousAutofocusTask;
+                }
+                _zxing.IsScanning = false;
+                _pageIsActive = false;
             }
-            _zxing.IsScanning = false;
-            _pageIsActive = false;
             base.OnDisappearing();
+        }
+
+        private void InitScanner()
+        {
+            try
+            {
+                if (ViewModel.HasCameraPermission && ViewModel.ShowScanner && _zxing == null)
+                {
+                    _zxing = new ZXingScannerView();
+                    _zxing.OnScanResult -= OnScanResult;
+                    _zxing.OnScanResult += OnScanResult;
+                    _zxing.Options = new ZXing.Mobile.MobileBarcodeScanningOptions
+                    {
+                        UseNativeScanning = true,
+                        PossibleFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
+                        AutoRotate = false,
+                        TryInverted = true
+                    };
+                    _scannerContainer.Content = _zxing;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger?.Value.Exception(ex);
+            }
         }
 
         private async void OnScanResult(ZXing.Result result)
