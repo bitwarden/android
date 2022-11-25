@@ -2492,24 +2492,24 @@
     <value>با دستگاه دیگری وارد شوید</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Log in initiated</value>
+    <value>ورود به سیستم آغاز شد</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
-    <value>A notification has been sent to your device.</value>
+    <value>یک اعلان به دستگاه شما ارسال شده است.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+    <value>لطفاً مطمئن شوید که قفل صندوق شما باز است و عبارت اثر انگشت با دستگاه دیگر مطابقت دارد.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
-    <value>Resend notification</value>
+    <value>ارسال مجدد اعلان</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>به گزینه دیگری نیاز دارید؟</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>View all log in options</value>
+    <value>مشاهده همه گزینه های ورود به سیستم</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
-    <value>This request is no longer valid</value>
+    <value>این درخواست دیگر معتبر نیست</value>
   </data>
 </root>
