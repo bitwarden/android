@@ -226,7 +226,7 @@ namespace Bit.Core.Services
             return response?.ToList() ?? new List<Cipher>();
         }
 
-        public async Task<List<CipherView>> GetAllDecryptedAsync()
+        public async Task<List<CipherView>> GetAllDecryptedAsync(Func<Cipher, bool> filter = null)
         {
             if (_clearCipherCacheKey != null)
             {
@@ -237,7 +237,7 @@ namespace Bit.Core.Services
                     await _storageService.RemoveAsync(_clearCipherCacheKey);
                 }
             }
-            if (DecryptedCipherCache != null)
+            if (DecryptedCipherCache != null && filter is null)
             {
                 return DecryptedCipherCache;
             }
@@ -261,13 +261,24 @@ namespace Bit.Core.Services
                         decCiphers.Add(c);
                     }
                     var tasks = new List<Task>();
-                    var ciphers = await GetAllAsync();
+                    IEnumerable<Cipher> ciphers = await GetAllAsync();
+                    if (filter != null)
+                    {
+                        ciphers = ciphers.Where(filter);
+                    }
+
                     foreach (var cipher in ciphers)
                     {
                         tasks.Add(decryptAndAddCipherAsync(cipher));
                     }
                     await Task.WhenAll(tasks);
                     decCiphers = decCiphers.OrderBy(c => c, new CipherLocaleComparer(_i18nService)).ToList();
+
+                    if (filter != null)
+                    {
+                        return decCiphers;
+                    }
+
                     DecryptedCipherCache = decCiphers;
                     return DecryptedCipherCache;
                 }
@@ -437,6 +448,11 @@ namespace Bit.Core.Services
             }
             return new Tuple<List<CipherView>, List<CipherView>, List<CipherView>>(
                 matchingLogins, matchingFuzzyLogins, others);
+        }
+
+        public async Task<List<CipherView>> GetAllDecryptedWithTOTPAsync()
+        {
+            return new List<CipherView>();
         }
 
         public async Task<CipherView> GetLastUsedForUrlAsync(string url)

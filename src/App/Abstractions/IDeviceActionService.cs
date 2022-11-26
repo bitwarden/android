@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Bit.Core.Enums;
-using Bit.Core.Models.View;
-using static Bit.App.Pages.SettingsPageViewModel;
+using Bit.Core.Models;
 
 namespace Bit.App.Abstractions
 {
@@ -41,7 +39,6 @@ namespace Bit.App.Abstractions
         Task OnAccountSwitchCompleteAsync();
         Task SetScreenCaptureAllowedAsync();
         void OpenAppSettings();
-        Task SendDataToWatchAsync(WatchDTO dto);
         void CloseExtensionPopUp();
     }
 }

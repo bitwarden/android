@@ -10,7 +10,7 @@ extension CipherEntity {
 
     @NSManaged public var id: String
     @NSManaged public var name: String?
-    @NSManaged public var organizationUseTotp: Bool
+    @NSManaged public var userId: String
     @NSManaged public var totp: String?
     @NSManaged public var type: NSObject?
     @NSManaged public var username: String?
@@ -28,7 +28,7 @@ extension CipherEntity : Identifiable {
         
         return Cipher(id: id,
                       name: name,
-                      organizationUseTotp: organizationUseTotp,
+                      userId: userId,
                       login: Login(username: username, totp: totp, uris: loginUrisArray))
     }
 }

@@ -3,9 +3,9 @@ import CoreData
 
 protocol CipherServiceProtocol {
     func getCipher(_ id: String) -> Cipher?
-    func fetchCiphers() -> [Cipher]
+    func fetchCiphers(_ withUserId: String?) -> [Cipher]
     func saveCiphers(_ ciphers: [Cipher], completionHandler: @escaping () -> Void)
-    func deleteAll()
+    func deleteAll(_ withUserId: String?, completionHandler: @escaping () -> Void)
 }
 
 class CipherService {
@@ -31,8 +31,8 @@ class CipherService {
 
 // MARK: - CipherServiceProtocol
 extension CipherService: CipherServiceProtocol {
-    func fetchCiphers() -> [Cipher] {
-        let result: Result<[CipherEntity], Error> = dbHelper.fetch(CipherEntity.self, "CipherEntity")
+    func fetchCiphers(_ withUserId: String?) -> [Cipher] {
+        let result: Result<[CipherEntity], Error> = dbHelper.fetch(CipherEntity.self, "CipherEntity", predicate: withUserId == nil ? nil : NSPredicate(format: "userId = %@", withUserId!))
         switch result {
         case .success(let success):
             return success.map { entity in entity.toCipher() }
@@ -63,7 +63,8 @@ extension CipherService: CipherServiceProtocol {
         }
     }
     
-    func deleteAll(){
-        dbHelper.deleteAll("CipherEntity")
+    func deleteAll(_ withUserId: String? = nil, completionHandler: @escaping () -> Void) {
+        let predicate = withUserId == nil ? nil : NSPredicate(format: "userId = %@", withUserId!)
+        dbHelper.deleteAll("CipherEntity", predicate: predicate, completionHandler: completionHandler)
     }
 }

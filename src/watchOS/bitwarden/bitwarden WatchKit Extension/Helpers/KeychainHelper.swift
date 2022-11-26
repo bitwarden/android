@@ -48,11 +48,16 @@ final class KeychainHelper {
     }
 
     func save(_ data: Data, _ key: String) {
+        if let _ = read(key) {
+            delete(key)
+        }
+        
         let query = [
             kSecValueData: data,
             kSecClass: kSecClassGenericPassword,
             kSecAttrService: genericService,
             kSecAttrAccount: key,
+            kSecAttrAccessible: kSecAttrAccessibleAfterFirstUnlock
         ] as CFDictionary
         
         let status = SecItemAdd(query, nil)

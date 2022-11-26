@@ -1,14 +1,10 @@
 import Foundation
 import CoreData
 
-struct WatchDTO:Codable{
-    var ciphers:[Cipher]
-}
-
 struct Cipher:Identifiable,Codable{
     var id:String
     var name:String?
-    var organizationUseTotp:Bool
+    var userId:String?
     var login:Login
 }
 
@@ -27,9 +23,14 @@ extension Cipher{
         let entity = CipherEntity(context: moContext)
         entity.id = id        
         entity.name = name
-        entity.organizationUseTotp = organizationUseTotp
+        entity.userId = userId ?? "unknown"
         entity.username = login.username
         entity.totp = login.totp
+        
+        if let uris = login.uris, let encodedData = try? JSONEncoder().encode(uris) {
+            entity.loginUris = String(data: encodedData, encoding: .utf8)
+        }
+        
         return entity
     }
 }

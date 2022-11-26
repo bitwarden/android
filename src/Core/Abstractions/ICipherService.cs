@@ -19,11 +19,12 @@ namespace Bit.Core.Abstractions
         Task DeleteWithServerAsync(string id);
         Task<Cipher> EncryptAsync(CipherView model, SymmetricCryptoKey key = null, Cipher originalCipher = null);
         Task<List<Cipher>> GetAllAsync();
-        Task<List<CipherView>> GetAllDecryptedAsync();
+        Task<List<CipherView>> GetAllDecryptedAsync(Func<Cipher, bool> filter = null);
         Task<Tuple<List<CipherView>, List<CipherView>, List<CipherView>>> GetAllDecryptedByUrlAsync(string url,
             List<CipherType> includeOtherTypes = null);
         Task<List<CipherView>> GetAllDecryptedForGroupingAsync(string groupingId, bool folder = true);
         Task<List<CipherView>> GetAllDecryptedForUrlAsync(string url);
+        Task<List<CipherView>> GetAllDecryptedWithTOTPAsync();
         Task<Cipher> GetAsync(string id);
         Task<CipherView> GetLastUsedForUrlAsync(string url);
         Task ReplaceAsync(Dictionary<string, CipherData> ciphers);

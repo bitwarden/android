@@ -14,6 +14,7 @@ namespace Bit.Core.Abstractions
         List<AccountView> AccountViews { get; }
         Task<string> GetActiveUserIdAsync();
         Task<string> GetActiveUserEmailAsync();
+        Task<T> GetActiveUserCustomDataAsync<T>(Func<Account, T> dataMapper);
         Task<bool> IsActiveAccountAsync(string userId = null);
         Task SetActiveUserAsync(string userId);
         Task CheckExtensionActiveUserAndSwitchIfNeededAsync();
