@@ -132,6 +132,7 @@ Task("UpdateAndroidCodeFiles")
             Path.Combine(_slnPath, "src", "Android", "Receivers", "PackageReplacedReceiver.cs"),
             Path.Combine(_slnPath, "src", "Android", "Receivers", "RestrictionsChangedReceiver.cs"),
             Path.Combine(_slnPath, "src", "Android", "Services", "DeviceActionService.cs"),
+            Path.Combine(_slnPath, "src", "Android", "Services", "FileService.cs"),
             Path.Combine(_slnPath, "src", "Android", "Tiles", "AutofillTileService.cs"),
             Path.Combine(_slnPath, "src", "Android", "Tiles", "GeneratorTileService.cs"),
             Path.Combine(_slnPath, "src", "Android", "Tiles", "MyVaultTileService.cs"),
