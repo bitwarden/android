@@ -2491,21 +2491,24 @@ Soovid selle konto peale lülituda?</value>
     <value>Logi sisse läbi teise seadme</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Log in initiated</value>
+    <value>Sisselogimine on käivitatud</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
-    <value>A notification has been sent to your device.</value>
+    <value>Sinu seadmesse saadeti teavitus.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+    <value>Veendu, et hoidla on lahti lukustatud ja sõrmejälje fraasid seadmete vahel ühtivad.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
-    <value>Resend notification</value>
+    <value>Saada märguanne uuesti</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>Soovid teist valikut kasutada?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>View all log in options</value>
+    <value>Vaata kõiki valikuid</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>See päring ei ole enam kehtiv</value>
   </data>
 </root>

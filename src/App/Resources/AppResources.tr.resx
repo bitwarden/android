@@ -2507,4 +2507,7 @@ Bu hesaba geçmek ister misiniz?</value>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>Tüm giriş seçeneklerini gör</value>
   </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Bu istek artık geçerli değil</value>
+  </data>
 </root>

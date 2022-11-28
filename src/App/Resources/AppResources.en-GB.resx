@@ -471,19 +471,19 @@
     <value>Edit item</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Enable automatic syncing</value>
+    <value>Allow automatic syncing</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>Enter your account email address to receive your master password hint.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Re-enable app extension</value>
+    <value>Reactivate app extension</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Almost done!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Enable app extension</value>
+    <value>Activate app extension</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>In Safari, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
@@ -604,7 +604,7 @@
     <value>Never</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>Item added</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>There are no favourites in your vault.</value>
@@ -632,7 +632,7 @@
     <value>Other</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Password generated.</value>
+    <value>Password generated</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Password generator</value>
@@ -2516,5 +2516,8 @@ Do you want to switch to this account?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>View all log in options</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>This request is no longer valid</value>
   </data>
 </root>

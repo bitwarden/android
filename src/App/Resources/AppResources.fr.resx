@@ -2508,4 +2508,7 @@ Voulez-vous basculer vers ce compte ?</value>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>Voir toutes les options de connexion</value>
   </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Cette demande n'est plus valide</value>
+  </data>
 </root>
