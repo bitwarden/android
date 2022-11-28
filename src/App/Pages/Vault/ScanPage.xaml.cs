@@ -55,64 +55,70 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            if (_zxing != null)
+            if (_zxing == null)
             {
-                _zxing.IsScanning = true;
-
-                // Fix for Autofocus, now it's done every 2 seconds so that the user does't have to do it
-                // https://github.com/Redth/ZXing.Net.Mobile/issues/414
-                _autofocusCts?.Cancel();
-                _autofocusCts = new CancellationTokenSource(TimeSpan.FromMinutes(3));
-
-                var autofocusCts = _autofocusCts;
-                // this task is needed to be awaited OnDisappearing to avoid some crashes
-                // when changing the value of _zxing.IsScanning
-                _continuousAutofocusTask = Task.Run(async () =>
-                {
-                    try
-                    {
-                        while (!autofocusCts.IsCancellationRequested)
-                        {
-                            await Task.Delay(TimeSpan.FromSeconds(2), autofocusCts.Token);
-                            await Device.InvokeOnMainThreadAsync(() =>
-                            {
-                                if (!autofocusCts.IsCancellationRequested)
-                                {
-                                    try
-                                    {
-                                        _zxing.AutoFocus();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        _logger.Value.Exception(ex);
-                                    }
-                                }
-                            });
-                        }
-                    }
-                    catch (TaskCanceledException) { }
-                    catch (Exception ex)
-                    {
-                        _logger.Value.Exception(ex);
-                    }
-                }, autofocusCts.Token);
-                _pageIsActive = true;
-                AnimationLoopAsync();
+                return;
             }
+
+            _zxing.OnScanResult += OnScanResult;
+            _zxing.IsScanning = true;
+
+            // Fix for Autofocus, now it's done every 2 seconds so that the user does't have to do it
+            // https://github.com/Redth/ZXing.Net.Mobile/issues/414
+            _autofocusCts?.Cancel();
+            _autofocusCts = new CancellationTokenSource(TimeSpan.FromMinutes(3));
+
+            var autofocusCts = _autofocusCts;
+            // this task is needed to be awaited OnDisappearing to avoid some crashes
+            // when changing the value of _zxing.IsScanning
+            _continuousAutofocusTask = Task.Run(async () =>
+            {
+                try
+                {
+                    while (!autofocusCts.IsCancellationRequested)
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(2), autofocusCts.Token);
+                        await Device.InvokeOnMainThreadAsync(() =>
+                        {
+                            if (!autofocusCts.IsCancellationRequested)
+                            {
+                                try
+                                {
+                                    _zxing.AutoFocus();
+                                }
+                                catch (Exception ex)
+                                {
+                                    _logger.Value.Exception(ex);
+                                }
+                            }
+                        });
+                    }
+                }
+                catch (TaskCanceledException) { }
+                catch (Exception ex)
+                {
+                    _logger.Value.Exception(ex);
+                }
+            }, autofocusCts.Token);
+            _pageIsActive = true;
+            AnimationLoopAsync();
         }
 
         protected override async void OnDisappearing()
         {
-            if (_zxing != null)
+            if (_zxing == null)
             {
-                _autofocusCts?.Cancel();
-                if (_continuousAutofocusTask != null)
-                {
-                    await _continuousAutofocusTask;
-                }
-                _zxing.IsScanning = false;
-                _pageIsActive = false;
+                base.OnDisappearing();
+                return;
             }
+            _autofocusCts?.Cancel();
+            if (_continuousAutofocusTask != null)
+            {
+                await _continuousAutofocusTask;
+            }
+            _zxing.IsScanning = false;
+            _zxing.OnScanResult -= OnScanResult;
+            _pageIsActive = false;
             base.OnDisappearing();
         }
 
@@ -123,8 +129,6 @@ namespace Bit.App.Pages
                 if (ViewModel.HasCameraPermission && ViewModel.ShowScanner && _zxing == null)
                 {
                     _zxing = new ZXingScannerView();
-                    _zxing.OnScanResult -= OnScanResult;
-                    _zxing.OnScanResult += OnScanResult;
                     _zxing.Options = new ZXing.Mobile.MobileBarcodeScanningOptions
                     {
                         UseNativeScanning = true,
@@ -132,7 +136,6 @@ namespace Bit.App.Pages
                         AutoRotate = false,
                         TryInverted = true
                     };
-                    _scannerContainer.Content = _zxing;
                 }
             }
             catch (Exception ex)
