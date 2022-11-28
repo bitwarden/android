@@ -1635,7 +1635,7 @@
     <value>3. На экране настроек приложений Android для Bitwarden перейдите в раздел "Отображение поверх других приложений" (в разделе "Дополнительно") и коснитесь переключателя, чтобы включить поддержку наложения.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
-    <value>Разрешения</value>
+    <value>Разрешение</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
     <value>Открыть настройки разрешения наложения</value>
@@ -2507,5 +2507,8 @@
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>Посмотреть все варианты авторизации</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Этот запрос больше не действителен</value>
   </data>
 </root>

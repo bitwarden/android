@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authenticator</value>
+    <value>Trình xác thực</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -808,7 +808,7 @@
     <value>Bạn đang tìm kiếm một tự động đăng nhập cho '{0}'.</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Learn about organizations</value>
+    <value>Tìm hiểu về tổ chức</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Không thể mở ứng dụng "{0}".</value>
@@ -900,8 +900,8 @@
     <value>Không thể đọc khoá xác thực.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Point your camera at the QR Code.
-Scanning will happen automatically.</value>
+    <value>Đưa Máy ảnh vào Mã QR.
+Quá trình quét sẽ diễn ra tự động.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Quét mã QR</value>
@@ -916,7 +916,7 @@ Scanning will happen automatically.</value>
     <value>Sao chép TOTP</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</value>
+    <value>Nếu thông tin đăng nhập có khóa xác thực, hãy sao chép mã xác minh TOTP vào khay nhớ tạm của bạn khi bạn tự động điền thông tin đăng nhập.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>Tự động sao chép mã TOTP</value>
@@ -1140,7 +1140,7 @@ Scanning will happen automatically.</value>
     <value>Hiển thị biểu tượng trang web</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
-    <value>Show a recognizable image next to each login.</value>
+    <value>Hiển thị một hình ảnh dễ nhận biết bên cạnh mỗi lần đăng nhập.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Biểu tượng địa chỉ máy chủ</value>
@@ -1381,10 +1381,10 @@ Scanning will happen automatically.</value>
     <value>Tìm kiếm bộ sưu tập</value>
   </data>
   <data name="SearchFileSends" xml:space="preserve">
-    <value>Search file Sends</value>
+    <value>Tìm kiếm tập tin trong Sends</value>
   </data>
   <data name="SearchTextSends" xml:space="preserve">
-    <value>Search text Sends</value>
+    <value>Tìm kiếm văn bản trong Sends</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
     <value>Tìm kiếm {0}</value>
@@ -1434,7 +1434,7 @@ Scanning will happen automatically.</value>
     <value>Không có tổ chức để liệt kê.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
+    <value>Chọn một tổ chức mà bạn muốn chuyển mục này đến. Việc chuyển đến một tổ chức sẽ chuyển quyền sở hữu mục này cho tổ chức đó. Bạn sẽ không còn là chủ sở hữu trực tiếp của mục này khi nó đã được di chuyển.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Số lượng chữ</value>
@@ -1465,7 +1465,7 @@ Scanning will happen automatically.</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault items with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>Bitwarden cho phép bạn chia sẻ các mục trong kho của mình với những người khác bằng cách sử dụng tài khoản tổ chức. Bạn có muốn truy cập trang web bitwarden.com để tìm hiểu thêm không?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Trích xuất kho</value>
@@ -1553,7 +1553,7 @@ Scanning will happen automatically.</value>
     <value>Giao diện tối mặc định</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is in use.</value>
+    <value>Chọn chủ đề tối để sử dụng khi sử dụng chủ đề Mặc định (Hệ thống) trong khi chế độ tối của thiết bị đang được sử dụng.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Sao chép ghi chú</value>
@@ -1576,20 +1576,20 @@ Scanning will happen automatically.</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
-    <value>Solarized Dark</value>
+    <value>Tối</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
-    <value>Auto-fill blocked URIs</value>
+    <value>Tự động điền các URI bị chặn</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Auto-fill will not be offered for blocked URIs. Separate multiple URIs with a comma. For example: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Tính năng tự động điền sẽ không được cung cấp cho các URI bị chặn. Phân tách nhiều URI bằng dấu phẩy. Ví dụ: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
-    <value>Ask to add login</value>
+    <value>Yêu cầu thêm thông tin đăng nhập</value>
   </data>
   <data name="AskToAddLoginDescription" xml:space="preserve">
-    <value>Ask to add an item if one isn't found in your vault.</value>
+    <value>Yêu cầu thêm một mục nếu không tìm thấy một mục trong kho của bạn.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Khi khởi động lại ứng dụng</value>
@@ -1614,7 +1614,7 @@ Scanning will happen automatically.</value>
     <value>Đã chia sẻ</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Toggle visibility</value>
+    <value>Chuyển đổi chế độ hiển thị</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>Phiên đăng nhập của bạn đã hết hạn.</value>
@@ -1662,7 +1662,7 @@ Scanning will happen automatically.</value>
     <value>Đã gửi mã!</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
-    <value>Confirm your identity to continue.</value>
+    <value>Xác nhận danh tính của bạn để tiếp tục.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Bản trích xuất này chứ dữ liệu kho của bạn dưới một định dạng không được mã hóa. Bạn không nên lưu trữ hay gửi tập tin trích xuất thông qua phương thức không an toàn (như email). Xóa nó ngay lập tức khi bạn đã sử dụng xong.</value>
@@ -1883,10 +1883,10 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Text" xml:space="preserve">
-    <value>Text</value>
+    <value>Văn bản</value>
   </data>
   <data name="TypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>Văn bản</value>
   </data>
   <data name="TypeTextInfo" xml:space="preserve">
     <value>Văn bản bạn muốn gửi.</value>
@@ -1927,10 +1927,10 @@ Scanning will happen automatically.</value>
     <value>Đang chờ xóa</value>
   </data>
   <data name="ExpirationDate" xml:space="preserve">
-    <value>Expiration date</value>
+    <value>Ngày hết hạn</value>
   </data>
   <data name="ExpirationTime" xml:space="preserve">
-    <value>Expiration time</value>
+    <value>Thời hạn</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
     <value>Nếu được thiết lập, truy cập vào Send này sẽ hết hạn vào ngày và giờ được chỉ định.</value>
@@ -1984,7 +1984,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Add a Send</value>
+    <value>Thêm vào Gửi</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -1998,7 +1998,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
-    <value>Tìm kiếm Send</value>
+    <value>Tìm kiếm Sends</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
@@ -2014,7 +2014,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Send deleted</value>
+    <value>Gửi đã xóa</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
@@ -2022,7 +2022,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Send created</value>
+    <value>Gửi đã tạo</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2056,14 +2056,14 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Hide my email address from recipients</value>
+    <value>Ẩn địa chỉ email của tôi khỏi người nhận</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>One or more organization policies are affecting your Send options.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</value>
+    <value>Tài khoản miễn phí chỉ được chia sẻ văn bản. Cần có tư cách thành viên Cao Cấp để sử dụng các tệp với Gửi.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
@@ -2110,10 +2110,10 @@ Scanning will happen automatically.</value>
     <value>If you do not want to remove your master password, you may leave this organization.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>Leave organization</value>
+    <value>Rời khỏi tổ chức</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>Leave {0}?</value>
+    <value>Rời khỏi {0}?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
@@ -2164,10 +2164,10 @@ Scanning will happen automatically.</value>
     <value>Đã khoá tài khoản</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
-    <value>Account logged out successfully</value>
+    <value>Đăng xuất tài khoản thành công</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
-    <value>Account removed successfully</value>
+    <value>Đã xóa tài khoản thành công</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Xoá tài khoản</value>
@@ -2200,13 +2200,13 @@ Scanning will happen automatically.</value>
     <value>Copy Send link on save</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
-    <value>Sending code</value>
+    <value>Đang gửi mã…</value>
   </data>
   <data name="Verifying" xml:space="preserve">
-    <value>Verifying</value>
+    <value>Đang xác nhận...</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Resend code</value>
+    <value>Gửi lại Mã</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
     <value>A verification code was sent to your email</value>
@@ -2507,5 +2507,8 @@ Do you want to switch to this account?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>View all log in options</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>This request is no longer valid</value>
   </data>
 </root>

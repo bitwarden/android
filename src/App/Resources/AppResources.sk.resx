@@ -2508,4 +2508,7 @@ Chcete prepnúť na toto konto?</value>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>Zobraziť všetky možnosti prihlásenia</value>
   </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Táto požiadavka už nie je platná</value>
+  </data>
 </root>

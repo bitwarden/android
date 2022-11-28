@@ -2509,4 +2509,7 @@ select Add TOTP to store the key safely</value>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>Вижте всички възможности за вписване</value>
   </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Тази зявка вече не е приложима</value>
+  </data>
 </root>
