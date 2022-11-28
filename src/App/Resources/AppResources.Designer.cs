@@ -2129,11 +2129,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable camera permissions to use the scanner.
+        ///   Looks up a localized string similar to Enable camera permission to use the scanner.
         /// </summary>
-        public static string EnableCamerPermissionsToUseTheScanner {
+        public static string EnableCamerPermissionToUseTheScanner {
             get {
-                return ResourceManager.GetString("EnableCamerPermissionsToUseTheScanner", resourceCulture);
+                return ResourceManager.GetString("EnableCamerPermissionToUseTheScanner", resourceCulture);
             }
         }
         

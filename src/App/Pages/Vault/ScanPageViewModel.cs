@@ -59,7 +59,7 @@ namespace Bit.App.Pages
             HasCameraPermission = cameraPermission == PermissionStatus.Granted;
             if (!HasCameraPermission)
             {
-                var openAppSettingsResult = await _platformUtilsService.ShowDialogAsync(AppResources.EnableCamerPermissionsToUseTheScanner, title: string.Empty, confirmText: AppResources.Settings, cancelText: AppResources.NoThanks);
+                var openAppSettingsResult = await _platformUtilsService.ShowDialogAsync(AppResources.EnableCamerPermissionToUseTheScanner, title: string.Empty, confirmText: AppResources.Settings, cancelText: AppResources.NoThanks);
                 if (openAppSettingsResult)
                 {
                     _deviceActionService.OpenAppSettings();
