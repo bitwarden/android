@@ -1003,14 +1003,14 @@ namespace Bit.Core.Services
 
         public async Task<DateTime?> GetPushLastRegistrationDateAsync(string userId = null)
         {
-            var options = await GetDefaultStorageOptionsAsync();
+            var options = ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync());
             var key = Constants.PushLastRegistrationDateKey(userId);
             return await GetValueAsync<DateTime?>(key, options);
         }
 
         public async Task SetPushLastRegistrationDateAsync(DateTime? value, string userId = null)
         {
-            var options = await GetDefaultStorageOptionsAsync();
+            var options = ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync());
             var key = Constants.PushLastRegistrationDateKey(userId);
             await SetValueAsync(key, value, options);
         }
@@ -1031,14 +1031,14 @@ namespace Bit.Core.Services
 
         public async Task<string> GetPushCurrentTokenAsync(string userId = null)
         {
-            var options = await GetDefaultStorageOptionsAsync();
+            var options = ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync());
             var key = Constants.PushCurrentTokenKey(userId);
             return await GetValueAsync<string>(key, options);
         }
 
         public async Task SetPushCurrentTokenAsync(string value, string userId = null)
         {
-            var options = await GetDefaultStorageOptionsAsync();
+            var options = ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync());
             var key = Constants.PushCurrentTokenKey(userId);
             await SetValueAsync(key, value, options);
         }
