@@ -60,7 +60,7 @@ namespace Bit.App.Services
             {
                 Ciphers = ciphersWithTotp.Select(c => new SimpleCipherView(c)).ToList(),
                 UserData = userData,
-                EnvironmentData= new WatchDTO.EnvironmentUrlDataDto
+                EnvironmentData = new WatchDTO.EnvironmentUrlDataDto
                 {
                     Base = _environmentService.BaseUrl,
                     Icons = _environmentService.IconsUrl
