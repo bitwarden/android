@@ -24,7 +24,6 @@ namespace Bit.Core.Abstractions
             List<CipherType> includeOtherTypes = null);
         Task<List<CipherView>> GetAllDecryptedForGroupingAsync(string groupingId, bool folder = true);
         Task<List<CipherView>> GetAllDecryptedForUrlAsync(string url);
-        Task<List<CipherView>> GetAllDecryptedWithTOTPAsync();
         Task<Cipher> GetAsync(string id);
         Task<CipherView> GetLastUsedForUrlAsync(string url);
         Task ReplaceAsync(Dictionary<string, CipherData> ciphers);

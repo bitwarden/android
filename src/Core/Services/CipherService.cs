@@ -450,11 +450,6 @@ namespace Bit.Core.Services
                 matchingLogins, matchingFuzzyLogins, others);
         }
 
-        public async Task<List<CipherView>> GetAllDecryptedWithTOTPAsync()
-        {
-            return new List<CipherView>();
-        }
-
         public async Task<CipherView> GetLastUsedForUrlAsync(string url)
         {
             var ciphers = await GetAllDecryptedForUrlAsync(url);
