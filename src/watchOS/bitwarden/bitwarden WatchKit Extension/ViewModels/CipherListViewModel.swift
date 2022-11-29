@@ -23,15 +23,21 @@ class CipherListViewModel : ObservableObject {
         }
     }
     
-    func checkStateAndFetch(_ state: BWState? = nil){
+    func checkStateAndFetch(_ state: BWState? = nil) {
+        user = StateService.shared.getUser()
+        
+        guard let _ = user, !watchConnectivityManager.isSessionActivated else {
+            currentState = .needSetup
+            showingSheet = true
+            return
+        }
+        
         currentState = state ?? StateService.shared.currentState
         showingSheet = currentState != .valid
         
         if state != nil {
             return
         }
-        
-        user = StateService.shared.getUser()
         
         guard currentState == .valid else {
             ciphers = []

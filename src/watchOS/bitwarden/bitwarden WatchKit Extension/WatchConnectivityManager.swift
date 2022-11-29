@@ -28,20 +28,19 @@ final class WatchConnectivityManager: NSObject, ObservableObject {
             WCSession.default.activate()
         }
     }
+    
+    var isSessionActivated: Bool {
+        return WCSession.default.isCompanionAppInstalled && WCSession.default.activationState == .activated
+    }
         
     func send(_ message: String) {
         guard WCSession.default.activationState == .activated else {
           return
         }
-        #if os(iOS)
-        guard WCSession.default.isWatchAppInstalled else {
-            return
-        }
-        #else
+        
         guard WCSession.default.isCompanionAppInstalled else {
             return
         }
-        #endif
         
         WCSession.default.sendMessage([kMessageKey : message], replyHandler: nil) { error in
             Log.e("Cannot send message: \(String(describing: error))")
