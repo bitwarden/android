@@ -26,6 +26,18 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
         }
 
+        public async Task InitAsync()
+        {
+            var hasCameraPermission = await PermissionManager.CheckAndRequestPermissionAsync(new Permissions.Camera());
+            HasCameraPermission = hasCameraPermission == PermissionStatus.Granted;
+            ShowScanner = hasCameraPermission == PermissionStatus.Granted;
+            if (!HasCameraPermission)
+            {
+                return;
+            }
+            InitScannerCommand.Execute(null);
+        }
+
         public ICommand ToggleScanModeCommand { get; set; }
         public ICommand InitScannerCommand { get; set; }
 
@@ -63,8 +75,8 @@ namespace Bit.App.Pages
                 if (openAppSettingsResult)
                 {
                     _deviceActionService.OpenAppSettings();
-                    return;
                 }
+                return;
             }
             ShowScanner = !ShowScanner;
             InitScannerCommand.Execute(null);

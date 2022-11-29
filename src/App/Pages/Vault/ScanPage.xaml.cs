@@ -35,8 +35,6 @@ namespace Bit.App.Pages
         {
             InitializeComponent();
             _callback = callback;
-            ViewModel.HasCameraPermission = hasCameraPermission;
-            ViewModel.ShowScanner = hasCameraPermission;
             ViewModel.InitScannerCommand = new Command(() => InitScanner());
 
             if (Device.RuntimePlatform == Device.Android)
@@ -49,12 +47,49 @@ namespace Bit.App.Pages
             _blueSKColor = ThemeManager.GetResourceColor("PrimaryColor").ToSKColor();
             _stopwatch = new Stopwatch();
             _qrcodeFound = false;
-            InitScanner();
+            ViewModel.InitAsync().FireAndForget();
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            StartScanner();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            StopScanner();
+        }
+
+        private void InitScanner()
+        {
+            try
+            {
+                if (!ViewModel.HasCameraPermission || !ViewModel.ShowScanner || _zxing != null)
+                {
+                    return;
+                }
+
+                _zxing = new ZXingScannerView();
+                _zxing.Options = new ZXing.Mobile.MobileBarcodeScanningOptions
+                {
+                    UseNativeScanning = true,
+                    PossibleFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
+                    AutoRotate = false,
+                    TryInverted = true
+                };
+                _scannerContainer.Content = _zxing;
+                StartScanner();
+            }
+            catch (Exception ex)
+            {
+                _logger?.Value.Exception(ex);
+            }
+        }
+
+        private void StartScanner()
+        {
             if (_zxing == null)
             {
                 return;
@@ -104,13 +139,13 @@ namespace Bit.App.Pages
             AnimationLoopAsync();
         }
 
-        protected override async void OnDisappearing()
+        private async Task StopScanner()
         {
             if (_zxing == null)
             {
-                base.OnDisappearing();
                 return;
             }
+
             _autofocusCts?.Cancel();
             if (_continuousAutofocusTask != null)
             {
@@ -119,29 +154,6 @@ namespace Bit.App.Pages
             _zxing.IsScanning = false;
             _zxing.OnScanResult -= OnScanResult;
             _pageIsActive = false;
-            base.OnDisappearing();
-        }
-
-        private void InitScanner()
-        {
-            try
-            {
-                if (ViewModel.HasCameraPermission && ViewModel.ShowScanner && _zxing == null)
-                {
-                    _zxing = new ZXingScannerView();
-                    _zxing.Options = new ZXing.Mobile.MobileBarcodeScanningOptions
-                    {
-                        UseNativeScanning = true,
-                        PossibleFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
-                        AutoRotate = false,
-                        TryInverted = true
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger?.Value.Exception(ex);
-            }
         }
 
         private async void OnScanResult(ZXing.Result result)
