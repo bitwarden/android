@@ -79,7 +79,7 @@ namespace Bit.App.Pages
                     AutoRotate = false,
                     TryInverted = true,
                     DelayBetweenAnalyzingFrames = 5,
-                    DelayBetweenContinuousScans = 5 
+                    DelayBetweenContinuousScans = 5
                 };
                 _scannerContainer.Content = _zxing;
                 StartScanner();
