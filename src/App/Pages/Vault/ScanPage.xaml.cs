@@ -57,10 +57,11 @@ namespace Bit.App.Pages
 
         protected override void OnDisappearing()
         {
-            base.OnDisappearing();
             StopScanner();
+            base.OnDisappearing();
         }
 
+        // Fix known bug with DelayBetweenAnalyzingFrames & DelayBetweenContinuousScans: https://github.com/Redth/ZXing.Net.Mobile/issues/721
         private void InitScanner()
         {
             try
@@ -76,7 +77,9 @@ namespace Bit.App.Pages
                     UseNativeScanning = true,
                     PossibleFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
                     AutoRotate = false,
-                    TryInverted = true
+                    TryInverted = true,
+                    DelayBetweenAnalyzingFrames = 5,
+                    DelayBetweenContinuousScans = 5 
                 };
                 _scannerContainer.Content = _zxing;
                 StartScanner();
@@ -94,6 +97,7 @@ namespace Bit.App.Pages
                 return;
             }
 
+            _zxing.OnScanResult -= OnScanResult;
             _zxing.OnScanResult += OnScanResult;
             _zxing.IsScanning = true;
 
