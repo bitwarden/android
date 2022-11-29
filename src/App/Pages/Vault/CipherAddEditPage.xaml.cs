@@ -263,7 +263,6 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                var cameraPermission = await PermissionManager.CheckAndRequestPermissionAsync(new Permissions.Camera());
                 var page = new ScanPage(key =>
                 {
                     Device.BeginInvokeOnMainThread(async () =>
@@ -271,7 +270,7 @@ namespace Bit.App.Pages
                         await Navigation.PopModalAsync();
                         await _vm.UpdateTotpKeyAsync(key);
                     });
-                }, cameraPermission == PermissionStatus.Granted);
+                });
 
                 await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
             }

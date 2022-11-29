@@ -31,7 +31,7 @@ namespace Bit.App.Pages
         private ZXingScannerView _zxing;
         private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
-        public ScanPage(Action<string> callback, bool hasCameraPermission)
+        public ScanPage(Action<string> callback)
         {
             InitializeComponent();
             _callback = callback;
