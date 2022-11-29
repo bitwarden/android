@@ -23,20 +23,24 @@ namespace Bit.App.Pages
 
         public ScanPageViewModel()
         {
-            ToggleScanModeCommand = new AsyncCommand(ToggleScanMode);
+            ToggleScanModeCommand = new AsyncCommand(ToggleScanMode, onException: HandleException);
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _logger = ServiceContainer.Resolve<ILogger>();
-            Device.InvokeOnMainThreadAsync(InitAsync);
+            InitAsync().FireAndForget();
         }
 
         public async Task InitAsync()
         {
             try
             {
-                var hasCameraPermission = await PermissionManager.CheckAndRequestPermissionAsync(new Permissions.Camera());
-                HasCameraPermission = hasCameraPermission == PermissionStatus.Granted;
-                ShowScanner = hasCameraPermission == PermissionStatus.Granted;
+                await Device.InvokeOnMainThreadAsync(async () =>
+                {
+                    var hasCameraPermission = await PermissionManager.CheckAndRequestPermissionAsync(new Permissions.Camera());
+                    HasCameraPermission = hasCameraPermission == PermissionStatus.Granted;
+                    ShowScanner = hasCameraPermission == PermissionStatus.Granted;
+                });
+
                 if (!HasCameraPermission)
                 {
                     return;
