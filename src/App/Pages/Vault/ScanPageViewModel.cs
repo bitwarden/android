@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
@@ -18,24 +19,34 @@ namespace Bit.App.Pages
         private string _totpAuthenticationKey;
         private IPlatformUtilsService _platformUtilsService;
         private IDeviceActionService _deviceActionService;
+        private ILogger _logger;
 
         public ScanPageViewModel()
         {
             ToggleScanModeCommand = new AsyncCommand(ToggleScanMode);
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _logger = ServiceContainer.Resolve<ILogger>();
+            Device.InvokeOnMainThreadAsync(InitAsync);
         }
 
         public async Task InitAsync()
         {
-            var hasCameraPermission = await PermissionManager.CheckAndRequestPermissionAsync(new Permissions.Camera());
-            HasCameraPermission = hasCameraPermission == PermissionStatus.Granted;
-            ShowScanner = hasCameraPermission == PermissionStatus.Granted;
-            if (!HasCameraPermission)
+            try
             {
-                return;
+                var hasCameraPermission = await PermissionManager.CheckAndRequestPermissionAsync(new Permissions.Camera());
+                HasCameraPermission = hasCameraPermission == PermissionStatus.Granted;
+                ShowScanner = hasCameraPermission == PermissionStatus.Granted;
+                if (!HasCameraPermission)
+                {
+                    return;
+                }
+                InitScannerCommand.Execute(null);
             }
-            InitScannerCommand.Execute(null);
+            catch (System.Exception ex)
+            {
+                HandleException(ex);
+            }
         }
 
         public ICommand ToggleScanModeCommand { get; set; }
@@ -99,6 +110,16 @@ namespace Bit.App.Pages
                 });
                 return fs;
             }
+        }
+
+        private void HandleException(Exception ex)
+        {
+            Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                await _deviceActionService.HideLoadingAsync();
+                await _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage);
+            }).FireAndForget();
+            _logger.Exception(ex);
         }
     }
 }

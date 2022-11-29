@@ -47,7 +47,6 @@ namespace Bit.App.Pages
             _blueSKColor = ThemeManager.GetResourceColor("PrimaryColor").ToSKColor();
             _stopwatch = new Stopwatch();
             _qrcodeFound = false;
-            ViewModel.InitAsync().FireAndForget();
         }
 
         protected override void OnAppearing()
