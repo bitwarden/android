@@ -445,7 +445,11 @@
                                 StyleClass="box-value"
                                 HorizontalOptions="End" 
                                 AutomationProperties.IsInAccessibleTree="True"
-                                AutomationProperties.Name="{u:I18n UppercaseAtoZ}"/>
+                                AutomationProperties.Name="{u:I18n UppercaseAtoZ}">
+                                <Switch.Effects>
+                                    <effects:HintColorSwitchEffect/>
+                                </Switch.Effects>
+                            </Switch>
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-switch">
@@ -462,7 +466,11 @@
                                 StyleClass="box-value"
                                 HorizontalOptions="End"
                                 AutomationProperties.IsInAccessibleTree="True"
-                                AutomationProperties.Name="{u:I18n LowercaseAtoZ}" />
+                                AutomationProperties.Name="{u:I18n LowercaseAtoZ}">
+                                <Switch.Effects>
+                                    <effects:HintColorSwitchEffect/>
+                                </Switch.Effects>
+                            </Switch>
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-switch">
@@ -479,7 +487,11 @@
                                 StyleClass="box-value"
                                 HorizontalOptions="End" 
                                 AutomationProperties.IsInAccessibleTree="True"
-                                AutomationProperties.Name="{u:I18n NumbersZeroToNine}"/>
+                                AutomationProperties.Name="{u:I18n NumbersZeroToNine}">
+                                <Switch.Effects>
+                                    <effects:HintColorSwitchEffect/>
+                                </Switch.Effects>
+                            </Switch>
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-switch">
@@ -496,7 +508,12 @@
                                 StyleClass="box-value"
                                 HorizontalOptions="End"
                                 AutomationProperties.IsInAccessibleTree="True"
-                                AutomationProperties.Name="{u:I18n SpecialCharacters}"/>
+                                AutomationProperties.Name="{u:I18n SpecialCharacters}"
+                                >
+                                <Switch.Effects>
+                                    <effects:HintColorSwitchEffect/>
+                                </Switch.Effects>
+                            </Switch>
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-stepper">
