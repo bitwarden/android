@@ -524,7 +524,6 @@ namespace Bit.Droid.Services
             Application.Context.StartActivity(intent);
         }
 
-        public Task SendDataToWatchAsync(WatchDTO dto) => throw new NotImplementedException();
         public void CloseExtensionPopUp()
         {
             // only used by iOS

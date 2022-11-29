@@ -7,6 +7,7 @@ using Bit.App.Pages.Accounts;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Models;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Services;
@@ -807,12 +808,7 @@ namespace Bit.App.Pages
             {
                 await _deviceActionService.ShowLoadingAsync("Sending data to watch");
 
-                var ciphers = await ServiceContainer.Resolve<ICipherService>("cipherService").GetAllDecryptedAsync();
-                var watchDto = new WatchDTO
-                {
-                    Ciphers = ciphers.Select(c => new SimpleCipherView(c)).ToList()
-                };
-                await _deviceActionService.SendDataToWatchAsync(watchDto);
+                await ServiceContainer.Resolve<IWatchDeviceService>().SyncDataToWatchAsync();
 
                 await _deviceActionService.HideLoadingAsync();
 
@@ -822,11 +818,6 @@ namespace Bit.App.Pages
             {
                 await _deviceActionService.HideLoadingAsync();
             }
-        }
-
-        public class WatchDTO
-        {
-            public List<SimpleCipherView> Ciphers { get; set; }
         }
     }
 }

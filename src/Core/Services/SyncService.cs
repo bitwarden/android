@@ -27,6 +27,8 @@ namespace Bit.Core.Services
         private readonly ILogger _logger;
         private readonly Func<Tuple<string, bool, bool>, Task> _logoutCallbackAsync;
 
+        private readonly LazyResolve<IWatchDeviceService> _watchDeviceService = new LazyResolve<IWatchDeviceService>();
+
         public SyncService(
             IStateService stateService,
             IApiService apiService,
@@ -112,6 +114,8 @@ namespace Bit.Core.Services
                 await SyncPoliciesAsync(response.Policies);
                 await SyncSendsAsync(userId, response.Sends);
                 await SetLastSyncAsync(now);
+                _watchDeviceService.Value.SyncDataToWatchAsync().FireAndForget();
+
                 return SyncCompleted(true);
             }
             catch

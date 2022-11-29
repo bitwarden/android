@@ -91,9 +91,13 @@ class CoreDataHelper: DBHelperProtocol {
                 itemMapper(item, context)
             }
             let batchInsert = NSBatchInsertRequest(entityName: entityName, objects: objects)
+            batchInsert.resultType = NSBatchInsertRequestResultType.objectIDs
             do {
                 let result = try context.execute(batchInsert) as! NSBatchInsertResult
-                print(result)
+                if let objectIDs = result.result as? [NSManagedObjectID], !objectIDs.isEmpty {
+                    let save = [NSInsertedObjectsKey: objectIDs]
+                    NSManagedObjectContext.mergeChanges(fromRemoteContextSave: save, into: [self.context])
+                }
             }
             catch let nsError as NSError {
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
@@ -104,17 +108,20 @@ class CoreDataHelper: DBHelperProtocol {
         }
     }
     
-    func deleteAll(_ entityName: String) {
+    func deleteAll(_ entityName: String, predicate: NSPredicate? = nil, completionHandler: @escaping () -> Void) {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: entityName)
+        fetchRequest.predicate = predicate
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        deleteRequest.resultType = .resultTypeObjectIDs
 
         self.persistentContainer.performBackgroundTask { context in
             do {
                 try context.execute(deleteRequest)
             } catch let nsError as NSError {
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                Log.e("Unresolved error \(nsError), \(nsError.userInfo)")
             }
 
+            completionHandler()
         }
     }
 }

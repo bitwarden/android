@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Bit.Core.Enums;
 
 namespace Bit.Core.Models.View
@@ -10,20 +11,19 @@ namespace Bit.Core.Models.View
             Id = c.Id;
             Name = c.Name;
             Type = c.Type;
-            OrganizationUseTotp = c.OrganizationUseTotp;
             if (c.Login != null)
             {
                 Login = new SimpleLoginView
                 {
                     Username = c.Login.Username,
-                    Totp = c.Login.Totp
+                    Totp = c.Login.Totp,
+                    Uris = c.Login.Uris?.Select(u => new SimpleLoginUriView(u.Uri)).ToList()
                 };
             }
         }
 
         public string Id { get; set; }
         public string Name { get; set; }
-        public bool OrganizationUseTotp { get; set; }
         public CipherType Type { get; set; }
         public SimpleLoginView Login { get; set; }
     }
@@ -32,6 +32,17 @@ namespace Bit.Core.Models.View
     {
         public string Username { get; set; }
         public string Totp { get; set; }
+        public List<SimpleLoginUriView> Uris { get; set; }
+    }
+
+    public class SimpleLoginUriView
+    {
+        public SimpleLoginUriView(string uri)
+        {
+            Uri = uri;
+        }
+
+        public string Uri { get; set; }
     }
 }
 

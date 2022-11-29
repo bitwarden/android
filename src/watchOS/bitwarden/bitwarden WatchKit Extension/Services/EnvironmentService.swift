@@ -10,11 +10,21 @@ class EnvironmentService{
     private init(){}
     
     var baseUrl:String? {
-        guard let urlData = KeychainHelper.standard.read(BASE_URL_KEY) else {
-            return nil
+        get
+        {
+            guard let urlData = KeychainHelper.standard.read(BASE_URL_KEY) else {
+                return nil
+            }
+            
+            return String(decoding: urlData, as: UTF8.self)
         }
-        
-        return String(decoding: urlData, as: UTF8.self)
+        set(newUrl) {
+            guard let url = newUrl else {
+                KeychainHelper.standard.delete(BASE_URL_KEY)
+                return
+            }
+            KeychainHelper.standard.save(url.data(using: .utf8)!, BASE_URL_KEY)
+        }
     }
     
     var iconsUrl:String {
@@ -23,5 +33,13 @@ class EnvironmentService{
         }
         
         return String(decoding: urlData, as: UTF8.self)
+    }
+    
+    func setIconsUrl(url: String?) {
+        guard let url = url else {
+            KeychainHelper.standard.delete(ICONS_URL_KEY)
+            return
+        }
+        KeychainHelper.standard.save(url.data(using: .utf8)!, ICONS_URL_KEY)
     }
 }

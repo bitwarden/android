@@ -1,24 +1,56 @@
-import Foundation
+import Combine
 import CoreData
+import Foundation
 
 class CipherListViewModel : ObservableObject {
     var cipherService: CipherServiceProtocol
+    var watchConnectivityManager = WatchConnectivityManager.shared
     
     @Published var ciphers: [Cipher] = []
     @Published var showingSheet = false
-    @Published var currentState: BWState
+    @Published var currentState = BWState.valid
+    @Published var user: User?
+    
+    private var subscriber: AnyCancellable?
     
     init(_ cipherService: CipherServiceProtocol){
         self.cipherService = cipherService
-        self.currentState = StateService.shared.currentState
-        self.showingSheet = currentState != .valid
+                
+        subscriber = watchConnectivityManager.watchConnectivitySubject.sink { completion in
+                print("WCM subject: \(completion)")
+        } receiveValue: { value in
+            self.checkStateAndFetch(value.state)
+        }
+    }
+    
+    func checkStateAndFetch(_ state: BWState? = nil) {
+        user = StateService.shared.getUser()
+        
+        guard let _ = user, !watchConnectivityManager.isSessionActivated else {
+            currentState = .needSetup
+            showingSheet = true
+            return
+        }
+        
+        currentState = state ?? StateService.shared.currentState
+        showingSheet = currentState != .valid
+        
+        if state != nil {
+            return
+        }
+        
+        guard currentState == .valid else {
+            ciphers = []
+            return
+        }
+        
+        self.fetchCiphers()
     }
     
     func fetchCiphers() {
-        if currentState == .valid {
-            ciphers = CipherMock.ciphers
+        let c = cipherService.fetchCiphers(user?.id)
+        DispatchQueue.main.async {
+            self.ciphers = c
         }
-
-        //ciphers = cipherService.fetchCiphers()
     }
 }

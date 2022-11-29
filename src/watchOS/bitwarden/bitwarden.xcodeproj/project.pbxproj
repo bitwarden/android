@@ -52,6 +52,11 @@
 		1BD291B52924047C0004F33F /* BWStateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD291B42924047C0004F33F /* BWStateViewModel.swift */; };
 		1BD291B7292409410004F33F /* BWState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD291B6292409410004F33F /* BWState.swift */; };
 		1BD291B9292438830004F33F /* StateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD291B8292438830004F33F /* StateService.swift */; };
+		1BD291BB2927E9B50004F33F /* WatchDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD291BA2927E9B50004F33F /* WatchDTO.swift */; };
+		1BD291BD292807240004F33F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD291BC292807240004F33F /* User.swift */; };
+		1BD291BF292D0E6F0004F33F /* JsonDecoderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD291BE292D0E6F0004F33F /* JsonDecoderExtensions.swift */; };
+		1BD291C1292E7E690004F33F /* ErrorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD291C0292E7E690004F33F /* ErrorExtensions.swift */; };
+		1BD291C329311E1C0004F33F /* VaultTimeoutAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD291C229311E1C0004F33F /* VaultTimeoutAction.swift */; };
 		1BDBFEAC290B4215009C78C7 /* CipherListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEAB290B4215009C78C7 /* CipherListViewModel.swift */; };
 		1BDBFEB1290B5BD3009C78C7 /* DBHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEB0290B5BD3009C78C7 /* DBHelperProtocol.swift */; };
 		1BDBFEB3290B5D07009C78C7 /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEB2290B5D07009C78C7 /* CoreDataHelper.swift */; };
@@ -150,6 +155,11 @@
 		1BD291B42924047C0004F33F /* BWStateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BWStateViewModel.swift; sourceTree = "<group>"; };
 		1BD291B6292409410004F33F /* BWState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BWState.swift; sourceTree = "<group>"; };
 		1BD291B8292438830004F33F /* StateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateService.swift; sourceTree = "<group>"; };
+		1BD291BA2927E9B50004F33F /* WatchDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchDTO.swift; sourceTree = "<group>"; };
+		1BD291BC292807240004F33F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		1BD291BE292D0E6F0004F33F /* JsonDecoderExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonDecoderExtensions.swift; sourceTree = "<group>"; };
+		1BD291C0292E7E690004F33F /* ErrorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorExtensions.swift; sourceTree = "<group>"; };
+		1BD291C229311E1C0004F33F /* VaultTimeoutAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultTimeoutAction.swift; sourceTree = "<group>"; };
 		1BDBFEAB290B4215009C78C7 /* CipherListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherListViewModel.swift; sourceTree = "<group>"; };
 		1BDBFEB0290B5BD3009C78C7 /* DBHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBHelperProtocol.swift; sourceTree = "<group>"; };
 		1BDBFEB2290B5D07009C78C7 /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
@@ -180,6 +190,9 @@
 			children = (
 				1BC1CD6A29229D12006540DA /* Mocks */,
 				1B15616B28B81A2200610B9B /* Cipher.swift */,
+				1BD291BA2927E9B50004F33F /* WatchDTO.swift */,
+				1BD291BC292807240004F33F /* User.swift */,
+				1BD291C229311E1C0004F33F /* VaultTimeoutAction.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -195,6 +208,8 @@
 				1BC1CD662922871A006540DA /* URLExtensions.swift */,
 				1BC1CD6829228CEB006540DA /* StringExtensions.swift */,
 				1BD291B6292409410004F33F /* BWState.swift */,
+				1BD291BE292D0E6F0004F33F /* JsonDecoderExtensions.swift */,
+				1BD291C0292E7E690004F33F /* ErrorExtensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -527,12 +542,16 @@
 				1B15616C28B81A2200610B9B /* Cipher.swift in Sources */,
 				1B8BF90429199BBB006F069E /* CipherDetailsView.swift in Sources */,
 				1B8BF9112919CDBB006F069E /* DateExtensions.swift in Sources */,
+				1BD291BB2927E9B50004F33F /* WatchDTO.swift in Sources */,
 				1B11C899291BFAB500CE58D8 /* CryptoFunctionService.swift in Sources */,
 				1BC1CD6C29229D1B006540DA /* CipherMock.swift in Sources */,
 				1B15615228B7F3D800610B9B /* NotificationController.swift in Sources */,
+				1BD291BD292807240004F33F /* User.swift in Sources */,
 				1BDBFEB3290B5D07009C78C7 /* CoreDataHelper.swift in Sources */,
 				1B15615028B7F3D800610B9B /* CipherListView.swift in Sources */,
+				1BD291BF292D0E6F0004F33F /* JsonDecoderExtensions.swift in Sources */,
 				1B59EC632901B1C100A8718D /* LoggerHelper.swift in Sources */,
+				1BD291C329311E1C0004F33F /* VaultTimeoutAction.swift in Sources */,
 				1B15615628B7F3D800610B9B /* ComplicationController.swift in Sources */,
 				1BD291B9292438830004F33F /* StateService.swift in Sources */,
 				1BC1CD6329227D3C006540DA /* EnvironmentService.swift in Sources */,
@@ -547,6 +566,7 @@
 				1B11C89B291C587600CE58D8 /* UInt64Extensions.swift in Sources */,
 				1B8453ED290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift in Sources */,
 				1BC1CD6E2922B92B006540DA /* ImageView.swift in Sources */,
+				1BD291C1292E7E690004F33F /* ErrorExtensions.swift in Sources */,
 				1B14DF37291186D900EA43F1 /* EmptyStateViewModifier.swift in Sources */,
 				1BD291B52924047C0004F33F /* BWStateViewModel.swift in Sources */,
 				1B15616E28B81A4300610B9B /* WatchConnectivityManager.swift in Sources */,

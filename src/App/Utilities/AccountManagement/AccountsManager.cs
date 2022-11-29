@@ -22,6 +22,8 @@ namespace Bit.App.Utilities.AccountManagement
         private readonly IAuthService _authService;
         private readonly ILogger _logger;
         private readonly IMessagingService _messagingService;
+        private readonly IWatchDeviceService _watchDeviceService;
+
         Func<AppOptions> _getOptionsFunc;
         private IAccountsManagerHost _accountsManagerHost;
 
@@ -32,7 +34,8 @@ namespace Bit.App.Utilities.AccountManagement
                                IPlatformUtilsService platformUtilsService,
                                IAuthService authService,
                                ILogger logger,
-                               IMessagingService messagingService)
+                               IMessagingService messagingService,
+                               IWatchDeviceService watchDeviceService)
         {
             _broadcasterService = broadcasterService;
             _vaultTimeoutService = vaultTimeoutService;
@@ -42,6 +45,7 @@ namespace Bit.App.Utilities.AccountManagement
             _authService = authService;
             _logger = logger;
             _messagingService = messagingService;
+            _watchDeviceService = watchDeviceService;
         }
 
         private AppOptions Options => _getOptionsFunc?.Invoke() ?? new AppOptions { IosExtension = true };
@@ -145,6 +149,7 @@ namespace Bit.App.Utilities.AccountManagement
                         break;
                     case AccountsManagerMessageCommands.SWITCHED_ACCOUNT:
                         await SwitchedAccountAsync();
+
                         break;
                 }
             }
@@ -217,6 +222,7 @@ namespace Bit.App.Utilities.AccountManagement
                 }
                 await Task.Delay(50);
                 await _accountsManagerHost.UpdateThemeAsync();
+                _watchDeviceService.SyncDataToWatchAsync().FireAndForget();
                 _messagingService.Send(AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED);
             });
         }
