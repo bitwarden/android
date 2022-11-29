@@ -36,8 +36,6 @@
         </Grid.RowDefinitions>
         <ContentView 
             x:Name="_scannerContainer"
-            HorizontalOptions="FillAndExpand"
-            VerticalOptions="FillAndExpand"
             AutomationId="zxingScannerView"
             IsVisible="{Binding ShowScanner}"
             Grid.Column="0"
