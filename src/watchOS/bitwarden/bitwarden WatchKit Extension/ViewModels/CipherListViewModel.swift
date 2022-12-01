@@ -26,7 +26,7 @@ class CipherListViewModel : ObservableObject {
     func checkStateAndFetch(_ state: BWState? = nil) {
         user = StateService.shared.getUser()
         
-        guard let _ = user, !watchConnectivityManager.isSessionActivated else {
+        if user == nil && !watchConnectivityManager.isSessionActivated {
             currentState = .needSetup
             showingSheet = true
             return

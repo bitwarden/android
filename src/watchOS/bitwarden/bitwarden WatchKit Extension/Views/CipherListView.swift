@@ -6,59 +6,67 @@ struct CipherListView: View {
     
     var body: some View {
         NavigationView {
-                VStack{
-                    GeometryReader { geometry in
-                        List {
-                            ForEach(viewModel.ciphers, id: \.id) { cipher in
-                                NavigationLink(destination: CipherDetailsView(cipher: cipher)){
-                                    VStack(alignment: .leading){
-                                        Text(cipher.name ?? "")
-                                            .font(.title3)
-                                            .fontWeight(.bold)
-                                            .lineLimit(1)
-                                            .truncationMode(.tail)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                        
-                                        if cipher.login.username != nil {
-                                            Text(cipher.login.username! )
-                                                .font(.body)
-                                                .lineLimit(1)
-                                                .truncationMode(.tail)
-                                                .foregroundColor(Color.ui.darkTextMuted)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                        }
-                                    }
-                                    .padding()
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 5)
-                                            .foregroundColor(Color.ui.itemBackground)
-                                            .frame(width: geometry.size.width,
-                                                   alignment: .leading)
-                                    )
-                                    .frame(width: geometry.size.width,
-                                           alignment: .leading)
-                                }
-                                .listRowInsets(EdgeInsets())
-                                .listRowBackground(Color.clear)
-                                .padding(3)
+            GeometryReader { geometry in
+                List {
+                    if viewModel.user?.email != nil {
+                        Section() {
+                            HStack {
+                                AvatarView(viewModel.user)
+                                Text(viewModel.user!.email!)
+                                    .font(.headline)
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
                             }
                         }
-                        .emptyState(viewModel.ciphers.isEmpty, emptyContent: {
-                            VStack(alignment: .center) {
-                                Image("EmptyListPlaceholder")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .padding(20)
-                                Text("ThereAreNoItemsToList")
-                                    .foregroundColor(Color.white)
-                                    .font(.headline)
-                                    .multilineTextAlignment(.center)
-                            }
-                            .frame(width: geometry.size.width, alignment: .center)
-                        })
                     }
-                     
+                    ForEach(viewModel.ciphers, id: \.id) { cipher in
+                        NavigationLink(destination: CipherDetailsView(cipher: cipher)){
+                            VStack(alignment: .leading){
+                                Text(cipher.name ?? "")
+                                    .font(.title3)
+                                    .fontWeight(.bold)
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                if cipher.login.username != nil {
+                                    Text(cipher.login.username! )
+                                        .font(.body)
+                                        .lineLimit(1)
+                                        .truncationMode(.tail)
+                                        .foregroundColor(Color.ui.darkTextMuted)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                }
+                            }
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 5)
+                                    .foregroundColor(Color.ui.itemBackground)
+                                    .frame(width: geometry.size.width,
+                                           alignment: .leading)
+                            )
+                            .frame(width: geometry.size.width,
+                                   alignment: .leading)
+                        }
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
+                        .padding(3)
+                    }
                 }
+                .emptyState(viewModel.ciphers.isEmpty, emptyContent: {
+                    VStack(alignment: .center) {
+                        Image("EmptyListPlaceholder")
+                            .resizable()
+                            .scaledToFit()
+                            .padding(20)
+                        Text("ThereAreNoItemsToList")
+                            .foregroundColor(Color.white)
+                            .font(.headline)
+                            .multilineTextAlignment(.center)
+                    }
+                    .frame(width: geometry.size.width, alignment: .center)
+                })
+            }
         }
         .onAppear {
             self.viewModel.checkStateAndFetch()
@@ -77,6 +85,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         var v = CipherListView()
         v.viewModel = CipherListViewModel(CipherServiceMock())
+        v.viewModel.user = User(id: "zxc", email: "testing@test.com", name: "Tester")
         return v
     }
 }

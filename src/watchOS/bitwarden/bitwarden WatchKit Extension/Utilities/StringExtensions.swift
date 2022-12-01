@@ -16,4 +16,13 @@ extension String {
         
         return s.trimmingCharacters(in: .whitespaces).isEmpty
     }
+    
+    func leftPadding(toLength: Int, withPad character: Character) -> String {
+        let currentLength = self.count
+        if currentLength < toLength {
+            return String(repeatElement(character, count: toLength - currentLength)) + self
+        } else {
+            return String(self.suffix(toLength))
+        }
+    }
 }

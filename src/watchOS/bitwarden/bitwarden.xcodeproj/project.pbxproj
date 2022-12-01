@@ -34,6 +34,7 @@
 		1B59EC632901B1C100A8718D /* LoggerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59EC622901B1C100A8718D /* LoggerHelper.swift */; };
 		1B5AFF0329196C81004478F9 /* ColorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5AFF0229196C81004478F9 /* ColorUtils.swift */; };
 		1B5AFF0729197822004478F9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1B5AFF0929197822004478F9 /* Localizable.strings */; };
+		1B6BD10229364F020041982D /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B6BD10129364F020041982D /* AvatarView.swift */; };
 		1B8453EC290C672E00F921E1 /* CipherEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8453EA290C672E00F921E1 /* CipherEntity+CoreDataClass.swift */; };
 		1B8453ED290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8453EB290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift */; };
 		1B8BF90429199BBB006F069E /* CipherDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8BF90329199BBB006F069E /* CipherDetailsView.swift */; };
@@ -137,6 +138,7 @@
 		1B59EC622901B1C100A8718D /* LoggerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerHelper.swift; sourceTree = "<group>"; };
 		1B5AFF0229196C81004478F9 /* ColorUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtils.swift; sourceTree = "<group>"; };
 		1B5AFF0829197822004478F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1B6BD10129364F020041982D /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		1B8453EA290C672E00F921E1 /* CipherEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CipherEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		1B8453EB290C672E00F921E1 /* CipherEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CipherEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		1B8BF90329199BBB006F069E /* CipherDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherDetailsView.swift; sourceTree = "<group>"; };
@@ -344,6 +346,7 @@
 			children = (
 				1B8BF9082919A2CC006F069E /* CircularProgressView.swift */,
 				1BC1CD6D2922B92B006540DA /* ImageView.swift */,
+				1B6BD10129364F020041982D /* AvatarView.swift */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -578,6 +581,7 @@
 				1BC1CD6529227F3C006540DA /* IconImageHelper.swift in Sources */,
 				1B59EC5C2900BB3400A8718D /* CryptoService.swift in Sources */,
 				1B15615428B7F3D800610B9B /* NotificationView.swift in Sources */,
+				1B6BD10229364F020041982D /* AvatarView.swift in Sources */,
 				1B8BF90B2919AF2A006F069E /* TotpService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
