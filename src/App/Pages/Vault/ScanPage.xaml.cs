@@ -57,7 +57,7 @@ namespace Bit.App.Pages
 
         protected override void OnDisappearing()
         {
-            StopScanner();
+            StopScanner().FireAndForget();
             base.OnDisappearing();
         }
 
@@ -86,7 +86,7 @@ namespace Bit.App.Pages
             }
             catch (Exception ex)
             {
-                _logger?.Value.Exception(ex);
+                _logger.Value.Exception(ex);
             }
         }
 
