@@ -61,7 +61,13 @@ extension WatchConnectivityManager: WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
-        guard let serializedDto = applicationContext[kCipherDataKey] as? String else {
+        // in order for the delivery to be faster the time is added to the key to make each application context update have a different key
+        // and update faster
+        let watchDtoKey = applicationContext.keys.first { k in
+            k.starts(with: kCipherDataKey)
+        }
+        
+        guard let dtoKey = watchDtoKey, let serializedDto = applicationContext[dtoKey] as? String else {
             return
         }
         
@@ -82,7 +88,7 @@ extension WatchConnectivityManager: WCSessionDelegate {
             
             StateService.shared.currentState = watchDTO.state
             StateService.shared.setUser(user: watchDTO.userData)
-            StateService.shared.setVaultTimeout(watchDTO.settingsData?.vaultTimeoutInMinutes, watchDTO.settingsData?.vaultTimeoutAction ?? .lock)
+//            StateService.shared.setVaultTimeout(watchDTO.settingsData?.vaultTimeoutInMinutes, watchDTO.settingsData?.vaultTimeoutAction ?? .lock)
             EnvironmentService.shared.baseUrl = watchDTO.environmentData?.base
             EnvironmentService.shared.setIconsUrl(url: watchDTO.environmentData?.icons)
             

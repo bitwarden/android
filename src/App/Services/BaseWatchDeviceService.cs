@@ -64,12 +64,12 @@ namespace Bit.App.Services
                 {
                     Base = _environmentService.BaseUrl,
                     Icons = _environmentService.IconsUrl
-                },
-                SettingsData = new WatchDTO.SettingsDataDto
-                {
-                    VaultTimeoutInMinutes = await _vaultTimeoutService.GetVaultTimeout(userData?.Id),
-                    VaultTimeoutAction = await _stateService.GetVaultTimeoutActionAsync(userData?.Id) ?? VaultTimeoutAction.Lock
                 }
+                //SettingsData = new WatchDTO.SettingsDataDto
+                //{
+                //    VaultTimeoutInMinutes = await _vaultTimeoutService.GetVaultTimeout(userData?.Id),
+                //    VaultTimeoutAction = await _stateService.GetVaultTimeoutActionAsync(userData?.Id) ?? VaultTimeoutAction.Lock
+                //}
             };
             await SendDataToWatchAsync(watchDto);
         }
@@ -81,11 +81,11 @@ namespace Bit.App.Services
                 return WatchState.NeedLogin;
             }
 
-            if (await _vaultTimeoutService.IsLockedAsync() ||
-                await _vaultTimeoutService.ShouldLockAsync())
-            {
-                return WatchState.NeedUnlock;
-            }
+            //if (await _vaultTimeoutService.IsLockedAsync() ||
+            //    await _vaultTimeoutService.ShouldLockAsync())
+            //{
+            //    return WatchState.NeedUnlock;
+            //}
 
             if (!await _stateService.CanAccessPremiumAsync(userId))
             {

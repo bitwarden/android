@@ -19,7 +19,7 @@ namespace Bit.Core.Models
 
         public EnvironmentUrlDataDto EnvironmentData { get; set; }
 
-        public SettingsDataDto SettingsData { get; set; }
+        //public SettingsDataDto SettingsData { get; set; }
 
         public class UserDataDto
         {
@@ -34,11 +34,11 @@ namespace Bit.Core.Models
             public string Icons { get; set; }
         }
 
-        public class SettingsDataDto
-        {
-            public int? VaultTimeoutInMinutes { get; set; }
+        //public class SettingsDataDto
+        //{
+        //    public int? VaultTimeoutInMinutes { get; set; }
 
-            public VaultTimeoutAction VaultTimeoutAction { get; set; }
-        }
+        //    public VaultTimeoutAction VaultTimeoutAction { get; set; }
+        //}
     }
 }
