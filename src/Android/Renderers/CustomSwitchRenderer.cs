@@ -44,6 +44,7 @@ namespace Bit.Droid.Renderers
             }
             if (Control != null)
             {
+                Control.SetHintTextColor(ThemeHelpers.MutedColor);
                 var t = ResourcesCompat.GetDrawable(Resources, Resource.Drawable.switch_thumb, null);
                 if (t is GradientDrawable thumb)
                 {
