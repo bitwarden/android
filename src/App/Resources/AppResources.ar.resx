@@ -2492,24 +2492,24 @@
     <value>تسجيل الدخول باستخدام جهاز آخر</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Log in initiated</value>
+    <value>بدء تسجيل الدخول</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
-    <value>A notification has been sent to your device.</value>
+    <value>تم إرسال إشعار إلى جهازك.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+    <value>الرجاء التأكد من أن الخزنة الخاصة بك غير مقفلة وأن عبارة بصمة الإصبع تتطابق على الجهاز الآخر.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
-    <value>Resend notification</value>
+    <value>إعادة إرسال الإشعار</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>هل تحتاج إلى خيار آخر؟</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>View all log in options</value>
+    <value>عرض جميع خيارات تسجيل الدخول</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
-    <value>This request is no longer valid</value>
+    <value>هذا الطلب لم يعد صالحًا</value>
   </data>
 </root>

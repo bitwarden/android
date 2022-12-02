@@ -186,7 +186,7 @@
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>نشانی رایانامه</value>
+    <value>آدرس ایمیل</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
@@ -443,7 +443,7 @@
     <value>از قابلیت دسترسی Bitwarden برای تکمیل خودکار ورود به سیستم خود در سراسر برنامه‌ها و وب استفاده کنید.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>تغییر رایانامه</value>
+    <value>تغییر ایمیل</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
     <value>شما می‌توانید آدرس رایانامه را در نسخه وب گاوصندوق bitwarden.com تغییر دهید. می‌خواهید اکنون از سایت بازدید کنید؟</value>
@@ -641,7 +641,7 @@
     <value>راهنمای کلمه عبور</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>ما یک رایانامه همراه با راهنمای کلمه عبور اصلی برایتان ارسال کردیم.</value>
+    <value>ما یک ایمیل همراه با راهنمای گذرواژه اصلی برایتان ارسال کردیم.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
     <value>آیا از بازنویسی بر روی کلمه عبور فعلی مطمئن هستید؟</value>
@@ -708,7 +708,7 @@
     <value>ورود دو مرحله ای</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>ورود دو مرحله‌ای باعث می شود که حساب کاربری شما با استفاده از یک دستگاه دیگر مانند کلید امنیتی، برنامه احراز هویت، پیامک، تماس تلفنی و یا رایانامه، اعتبار خود را با ایمنی بیشتر اثبات کند. ورود دو مرحله‌ای می‌تواند در bitwarden.com فعال شود. آیا می‌خواهید از سایت بازدید کنید؟</value>
+    <value>ورود دو مرحله ای باعث می شود که حساب کاربری شما با استفاده از یک دستگاه دیگر مانند کلید امنیتی، برنامه تأیید هویت، پیامک، تماس تلفنی و یا ایمیل، اعتبار خود را با ایمنی بیشتر اثبات کند. ورود دو مرحله ای می تواند در bitwarden.com فعال شود. آیا میخواهید از سایت بازدید کنید؟</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>باز کردن با {0}</value>
@@ -856,7 +856,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>رایانامه تأیید فرستاده شد</value>
+    <value>ایمیل تأیید فرستاده شد.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
