@@ -2508,6 +2508,6 @@ Kontu honetara aldatu nahi duzu?</value>
     <value>Ikusi erregistro guztiak ezarpenetan</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
-    <value>This request is no longer valid</value>
+    <value>Eskaera jada ez da balekoa.</value>
   </data>
 </root>
