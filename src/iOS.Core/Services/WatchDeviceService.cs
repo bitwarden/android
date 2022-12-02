@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.App.Services;
 using Bit.Core.Abstractions;
@@ -24,7 +25,13 @@ namespace Bit.iOS.Core.Services
         {
             var serializedData = JsonConvert.SerializeObject(watchDto);
 
-            WCSessionManager.SharedManager.SendBackgroundHighPriorityMessage(new Dictionary<string, object>() { { "watchDto", serializedData } });
+            // Add time to the key to make it change on every message sent so it's delivered faster.
+            // If we use the same key then the OS may defer the delivery of the message because of
+            // resources, reachability and other stuff
+            WCSessionManager.SharedManager.SendBackgroundHighPriorityMessage(new Dictionary<string, object>
+            {
+                [$"watchDto-{DateTime.UtcNow.ToLongTimeString()}"] = serializedData
+            });
 
             return Task.CompletedTask;
         }

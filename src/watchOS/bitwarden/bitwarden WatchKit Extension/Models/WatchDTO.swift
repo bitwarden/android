@@ -5,7 +5,7 @@ struct WatchDTO : Codable{
     var ciphers: [Cipher]?
     var userData: User?
     var environmentData: EnvironmentUrlDataDto?
-    var settingsData: SettingsDataDto?
+//    var settingsData: SettingsDataDto?
     
     init(state: BWState) {
       self.state = state
@@ -20,7 +20,7 @@ struct EnvironmentUrlDataDto : Codable {
     var icons: String?
 }
 
-struct SettingsDataDto : Codable {
-    var vaultTimeoutInMinutes: Int?
-    var vaultTimeoutAction: VaultTimeoutAction
-}
+//struct SettingsDataDto : Codable {
+//    var vaultTimeoutInMinutes: Int?
+//    var vaultTimeoutAction: VaultTimeoutAction
+//}

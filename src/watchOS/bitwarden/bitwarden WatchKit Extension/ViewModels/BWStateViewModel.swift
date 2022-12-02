@@ -8,8 +8,8 @@ class BWStateViewModel : ObservableObject{
         switch state {
         case .needLogin:
             text = "LogInToBitwardenOnYourIPhoneToViewVerificationCodes"
-        case .needUnlock:
-            text = "UnlockBitwardenOnYourIPhoneToViewVerificationCodes"
+//        case .needUnlock:
+//            text = "UnlockBitwardenOnYourIPhoneToViewVerificationCodes"
         case .needPremium:
             text = "ToViewVerificationCodesUpgradeToPremium"
         case .needSetup:
