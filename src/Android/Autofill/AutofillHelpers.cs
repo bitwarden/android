@@ -207,7 +207,7 @@ namespace Bit.Droid.Autofill
                         }
                     }
                     var dataset = BuildDataset(parser.ApplicationContext, parser.FieldCollection, items[i], 
-                        inlinePresentationSpec);
+                        true, inlinePresentationSpec);
                     if (dataset != null)
                     {
                         responseBuilder.AddDataset(dataset);
@@ -221,7 +221,7 @@ namespace Bit.Droid.Autofill
         }
 
         public static Dataset BuildDataset(Context context, FieldCollection fields, FilledItem filledItem,
-            InlinePresentationSpec inlinePresentationSpec = null)
+            bool includeAuthIntent, InlinePresentationSpec inlinePresentationSpec = null)
         {
             var overlayPresentation = BuildOverlayPresentation(
                 filledItem.Name,
@@ -241,6 +241,15 @@ namespace Bit.Droid.Autofill
             if (inlinePresentation != null)
             {
                 datasetBuilder.SetInlinePresentation(inlinePresentation);
+            }
+            if (includeAuthIntent)
+            {
+                var intent = new Intent(context, typeof(AutofillExternalSelectionActivity));
+                intent.PutExtra("autofillFramework", true);
+                intent.PutExtra("autofillCipherId", filledItem.Id);
+                var pendingIntent = PendingIntent.GetActivity(context, ++_pendingIntentId, intent,
+                AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.CancelCurrent, true));
+                datasetBuilder.SetAuthentication(pendingIntent?.IntentSender);
             }
             if (filledItem.ApplyToFields(fields, datasetBuilder))
             {
@@ -271,7 +280,8 @@ namespace Bit.Droid.Autofill
                 return null;
             }
             intent.PutExtra("autofillFrameworkUri", uri);
-            var pendingIntent = PendingIntent.GetActivity(context, ++_pendingIntentId, intent, AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.CancelCurrent, true));
+            var pendingIntent = PendingIntent.GetActivity(context, ++_pendingIntentId, intent,
+                AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.CancelCurrent, true));
 
             var overlayPresentation = BuildOverlayPresentation(
                 AppResources.AutofillWithBitwarden,

@@ -6,7 +6,7 @@ namespace Bit.Core.Abstractions
     {
         bool AutofillServicesEnabled();
         bool SupportsAutofillService();
-        void Autofill(CipherView cipher);
+        void Autofill(CipherView cipher, bool isExternalSelection = false);
         void CloseAutofill();
         bool AutofillAccessibilityServiceRunning();
         bool AutofillAccessibilityOverlayPermitted();

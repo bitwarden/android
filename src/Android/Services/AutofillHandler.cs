@@ -71,9 +71,17 @@ namespace Bit.Droid.Services
             }
         }
 
-        public void Autofill(CipherView cipher)
+        public void Autofill(CipherView cipher, bool isExternalSelection = false)
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            Xamarin.Forms.Platform.Android.FormsAppCompatActivity activity;
+            if (isExternalSelection)
+            {
+                activity = (AutofillExternalSelectionActivity)CrossCurrentActivity.Current.Activity;
+            }
+            else
+            {
+                activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            }
             if (activity == null)
             {
                 return;
@@ -103,7 +111,7 @@ namespace Bit.Droid.Services
                     return;
                 }
                 var task = CopyTotpAsync(cipher);
-                var dataset = AutofillHelpers.BuildDataset(activity, parser.FieldCollection, new FilledItem(cipher));
+                var dataset = AutofillHelpers.BuildDataset(activity, parser.FieldCollection, new FilledItem(cipher), false);
                 var replyIntent = new Intent();
                 replyIntent.PutExtra(AutofillManager.ExtraAuthenticationResult, dataset);
                 activity.SetResult(Result.Ok, replyIntent);

@@ -69,14 +69,17 @@ namespace Bit.Droid.Services
 
         public bool LaunchApp(string appName)
         {
+            if ((int)Build.VERSION.SdkInt < 33)
+            {
+                // API 33 required to avoid using wildcard app visibility or dangerous permissions
+                // https://developer.android.com/reference/android/content/pm/PackageManager#getLaunchIntentSenderForPackage(java.lang.String)
+                return false;
+            }
             var activity = CrossCurrentActivity.Current.Activity;
             appName = appName.Replace("androidapp://", string.Empty);
-            var launchIntent = activity.PackageManager.GetLaunchIntentForPackage(appName);
-            if (launchIntent != null)
-            {
-                activity.StartActivity(launchIntent);
-            }
-            return launchIntent != null;
+            var launchIntentSender = activity?.PackageManager?.GetLaunchIntentSenderForPackage(appName);
+            launchIntentSender?.SendIntent(activity, Result.Ok, null, null, null);
+            return launchIntentSender != null;
         }
 
         public async Task ShowLoadingAsync(string text)
