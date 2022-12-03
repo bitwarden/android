@@ -96,5 +96,6 @@
         public static string BiometricUnlockKey(string userId) => $"biometricUnlock_{userId}";
         public static string ApprovePasswordlessLoginsKey(string userId) => $"approvePasswordlessLogins_{userId}";
         public static string UsernameGenOptionsKey(string userId) => $"usernameGenerationOptions_{userId}";
+        public static string ShouldConnectToWatchKey(string userId) => $"shouldConnectToWatch_{userId}";
     }
 }

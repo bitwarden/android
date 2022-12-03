@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core.Enums;
-using Bit.Core.Models;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using CoreGraphics;
 using Foundation;
 using LocalAuthentication;
-using Newtonsoft.Json;
 using UIKit;
-using WatchConnectivity;
 using Xamarin.Forms;
 
 namespace Bit.iOS.Core.Services
@@ -38,8 +34,6 @@ namespace Bit.iOS.Core.Services
         }
 
         public DeviceType DeviceType => DeviceType.iOS;
-
-        public bool IsWatchReachable => WCSessionManager.SharedManager.IsSessionReachable;
 
         public bool LaunchApp(string appName)
         {

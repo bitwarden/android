@@ -11,16 +11,15 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
+using Bit.iOS.Core.Services;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Services;
 using CoreNFC;
 using Foundation;
 using UIKit;
 using WatchConnectivity;
-using UserNotifications;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
-using Bit.iOS.Core.Services;
 
 namespace Bit.iOS
 {
@@ -60,7 +59,7 @@ namespace Bit.iOS
             iOSCoreHelpers.AppearanceAdjustments();
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
 
-            WCSessionManager.SharedManager.StartSession();
+            ConnectToWatchIfNeededAsync().FireAndForget();
 
             _broadcasterService.Subscribe(nameof(AppDelegate), async (message) =>
             {
@@ -402,6 +401,14 @@ namespace Bit.iOS
                     dict.Add(setting.Key.ToString(), setting.Value?.ToString());
                 }
                 await AppHelpers.SetPreconfiguredSettingsAsync(dict);
+            }
+        }
+
+        private async Task ConnectToWatchIfNeededAsync()
+        {
+            if (_stateService != null && await _stateService.GetShouldConnectToWatchAsync())
+            {
+                WCSessionManager.SharedManager.StartSession();
             }
         }
     }

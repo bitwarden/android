@@ -1693,5 +1693,21 @@ namespace Bit.Core.Services
             }
             throw new Exception("User does not exist in account list");
         }
+
+        public async Task<bool> GetShouldConnectToWatchAsync(string userId = null)
+        {
+            var reconciledOptions =
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync());
+            var key = Constants.ShouldConnectToWatchKey(reconciledOptions.UserId);
+            return await GetValueAsync<bool?>(key, reconciledOptions) ?? false;
+        }
+
+        public async Task SetShouldConnectToWatchAsync(bool shouldConnect, string userId = null)
+        {
+            var reconciledOptions =
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync());
+            var key = Constants.ShouldConnectToWatchKey(reconciledOptions.UserId);
+            await SetValueAsync(key, shouldConnect, reconciledOptions);
+        }
     }
 }

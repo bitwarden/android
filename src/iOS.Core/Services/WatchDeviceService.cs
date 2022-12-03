@@ -19,7 +19,11 @@ namespace Bit.iOS.Core.Services
         {
         }
 
+        public override bool IsConnected => WCSessionManager.SharedManager.IsSessionActivated;
+
         protected override bool CanSendData => WCSessionManager.SharedManager.IsValidSession;
+
+        protected override bool IsSupported => WCSession.IsSupported;
 
         protected override Task SendDataToWatchAsync(WatchDTO watchDto)
         {
@@ -34,6 +38,11 @@ namespace Bit.iOS.Core.Services
             });
 
             return Task.CompletedTask;
+        }
+
+        protected override void ConnectToWatch()
+        {
+            WCSessionManager.SharedManager.StartSession();
         }
     }
 }

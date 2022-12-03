@@ -35,6 +35,7 @@ namespace Bit.App.Pages
         private readonly IClipboardService _clipboardService;
         private readonly ILogger _loggerService;
         private readonly IPushNotificationService _pushNotificationService;
+        private readonly IWatchDeviceService _watchDeviceService;
         private const int CustomVaultTimeoutValue = -100;
 
         private bool _supportsBiometric;
@@ -47,6 +48,7 @@ namespace Bit.App.Pages
         private bool _showChangeMasterPassword;
         private bool _reportLoggingEnabled;
         private bool _approvePasswordlessLoginRequests;
+        private bool _shouldConnectToWatch;
 
         private List<KeyValuePair<string, int?>> _vaultTimeouts =
             new List<KeyValuePair<string, int?>>
@@ -90,6 +92,7 @@ namespace Bit.App.Pages
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
             _loggerService = ServiceContainer.Resolve<ILogger>("logger");
             _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
+            _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
 
             GroupedItems = new ObservableRangeCollection<ISettingsPageListItem>();
             PageTitle = AppResources.Settings;
@@ -141,6 +144,9 @@ namespace Bit.App.Pages
                 !await _keyConnectorService.GetUsesKeyConnector();
             _reportLoggingEnabled = await _loggerService.IsEnabled();
             _approvePasswordlessLoginRequests = await _stateService.GetApprovePasswordlessLoginsAsync();
+
+            _shouldConnectToWatch = await _stateService.GetShouldConnectToWatchAsync();
+
             BuildList();
         }
 
@@ -496,13 +502,6 @@ namespace Bit.App.Pages
             }
             else
             {
-                autofillItems.Add(new SettingsPageListItem
-                {
-                    Name = AppResources.ConnectToWatch,
-                    SubLabel = _deviceActionService.IsWatchReachable ? AppResources.On : AppResources.Off,
-                    ExecuteAsync = () => SendDataToWatchAsync()
-                });
-
                 if (_deviceActionService.SystemMajorVersion() >= 12)
                 {
                     autofillItems.Add(new SettingsPageListItem
@@ -611,19 +610,26 @@ namespace Bit.App.Pages
                     ExecuteAsync = () => SetScreenCaptureAllowedAsync()
                 });
             }
-            var accountItems = new List<SettingsPageListItem>
+            var accountItems = new List<SettingsPageListItem>();
+            if (Device.RuntimePlatform == Device.iOS)
             {
-                new SettingsPageListItem
+                accountItems.Add(new SettingsPageListItem
                 {
-                    Name = AppResources.FingerprintPhrase,
-                    ExecuteAsync = () => FingerprintAsync()
-                },
-                new SettingsPageListItem
-                {
-                    Name = AppResources.LogOut,
-                    ExecuteAsync = () => LogOutAsync()
-                }
-            };
+                    Name = AppResources.ConnectToWatch,
+                    SubLabel = _shouldConnectToWatch ? AppResources.On : AppResources.Off,
+                    ExecuteAsync = () => ToggleWatchConnectionAsync()
+                });
+            }
+            accountItems.Add(new SettingsPageListItem
+            {
+                Name = AppResources.FingerprintPhrase,
+                ExecuteAsync = () => FingerprintAsync()
+            });
+            accountItems.Add(new SettingsPageListItem
+            {
+                Name = AppResources.LogOut,
+                ExecuteAsync = () => LogOutAsync()
+            });
             if (_showChangeMasterPassword)
             {
                 accountItems.Insert(0, new SettingsPageListItem
@@ -802,22 +808,12 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task SendDataToWatchAsync()
+        private async Task ToggleWatchConnectionAsync()
         {
-            try
-            {
-                await _deviceActionService.ShowLoadingAsync("Sending data to watch");
+            _shouldConnectToWatch = !_shouldConnectToWatch;
 
-                await ServiceContainer.Resolve<IWatchDeviceService>().SyncDataToWatchAsync();
-
-                await _deviceActionService.HideLoadingAsync();
-
-                _deviceActionService.Toast("Watch data finished sending", true);
-            }
-            finally
-            {
-                await _deviceActionService.HideLoadingAsync();
-            }
+            await _watchDeviceService.SetShouldConnectToWatchAsync(_shouldConnectToWatch);
+            BuildList();
         }
     }
 }

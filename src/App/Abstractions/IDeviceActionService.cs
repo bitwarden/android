@@ -8,7 +8,6 @@ namespace Bit.App.Abstractions
     {
         string DeviceUserAgent { get; }
         DeviceType DeviceType { get; }
-        bool IsWatchReachable { get; }
         int SystemMajorVersion();
         string SystemModel();
         string GetBuildNumber();
