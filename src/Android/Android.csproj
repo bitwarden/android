@@ -103,6 +103,7 @@
     <Compile Include="Accessibility\Browser.cs" />
     <Compile Include="Accessibility\NodeList.cs" />
     <Compile Include="Accessibility\KnownUsernameField.cs" />
+    <Compile Include="Autofill\AutofillConstants.cs" />
     <Compile Include="Autofill\AutofillHelpers.cs" />
     <Compile Include="Autofill\AutofillService.cs" />
     <Compile Include="Autofill\AutofillExternalSelectionActivity.cs" />

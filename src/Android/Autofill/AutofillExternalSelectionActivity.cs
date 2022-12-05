@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿using System.Threading.Tasks;
+using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Bit.Core.Abstractions;
@@ -17,7 +18,7 @@ namespace Bit.Droid.Autofill
             Intent?.Validate();
             base.OnCreate(bundle);
 
-            var cipherId = Intent?.GetStringExtra("autofillCipherId");
+            var cipherId = Intent?.GetStringExtra(AutofillConstants.AutofillFrameworkCipherId);
             if (string.IsNullOrEmpty(cipherId))
             {
                 SetResult(Result.Canceled);
@@ -25,12 +26,17 @@ namespace Bit.Droid.Autofill
                 return;
             }
 
-            var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
-            var cipher = cipherService.GetAsync(cipherId).GetAwaiter().GetResult();
-            var decCipher = cipher?.DecryptAsync().GetAwaiter().GetResult();
+            GetCipherAndPerformAutofillAsync(cipherId).FireAndForget();
+        }
+
+        private async Task GetCipherAndPerformAutofillAsync(string cipherId)
+        {
+            var cipherService = ServiceContainer.Resolve<ICipherService>();
+            var cipher = await cipherService.GetAsync(cipherId);
+            var decCipher = await cipher.DecryptAsync();
 
             var autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
-            autofillHandler.Autofill(decCipher, true);
+            autofillHandler.Autofill(decCipher);
         }
     }
 }

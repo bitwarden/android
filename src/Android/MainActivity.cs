@@ -18,6 +18,7 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
+using Bit.Droid.Autofill;
 using Bit.Droid.Receivers;
 using Bit.Droid.Utilities;
 using Newtonsoft.Json;
@@ -322,13 +323,13 @@ namespace Bit.Droid
         {
             var options = new AppOptions
             {
-                Uri = Intent.GetStringExtra("uri") ?? Intent.GetStringExtra("autofillFrameworkUri"),
+                Uri = Intent.GetStringExtra("uri") ?? Intent.GetStringExtra(AutofillConstants.AutofillFrameworkUri),
                 MyVaultTile = Intent.GetBooleanExtra("myVaultTile", false),
                 GeneratorTile = Intent.GetBooleanExtra("generatorTile", false),
-                FromAutofillFramework = Intent.GetBooleanExtra("autofillFramework", false),
+                FromAutofillFramework = Intent.GetBooleanExtra(AutofillConstants.AutofillFramework, false),
                 CreateSend = GetCreateSendRequest(Intent)
             };
-            var fillType = Intent.GetIntExtra("autofillFrameworkFillType", 0);
+            var fillType = Intent.GetIntExtra(AutofillConstants.AutofillFrameworkFillType, 0);
             if (fillType > 0)
             {
                 options.FillType = (CipherType)fillType;

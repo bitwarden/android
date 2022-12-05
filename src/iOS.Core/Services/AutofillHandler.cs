@@ -11,7 +11,7 @@ namespace Bit.iOS.Core.Services
     {
         public bool SupportsAutofillService() => false;
         public bool AutofillServiceEnabled() => false;
-        public void Autofill(CipherView cipher, bool isExternalSelection = false) => throw new NotImplementedException();
+        public void Autofill(CipherView cipher) => throw new NotImplementedException();
         public bool AutofillAccessibilityOverlayPermitted() => throw new NotImplementedException();
         public bool AutofillAccessibilityServiceRunning() => throw new NotImplementedException();
         public bool AutofillServicesEnabled() => throw new NotImplementedException();

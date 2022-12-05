@@ -245,8 +245,8 @@ namespace Bit.Droid.Autofill
             if (includeAuthIntent)
             {
                 var intent = new Intent(context, typeof(AutofillExternalSelectionActivity));
-                intent.PutExtra("autofillFramework", true);
-                intent.PutExtra("autofillCipherId", filledItem.Id);
+                intent.PutExtra(AutofillConstants.AutofillFramework, true);
+                intent.PutExtra(AutofillConstants.AutofillFrameworkCipherId, filledItem.Id);
                 var pendingIntent = PendingIntent.GetActivity(context, ++_pendingIntentId, intent,
                 AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.CancelCurrent, true));
                 datasetBuilder.SetAuthentication(pendingIntent?.IntentSender);
@@ -262,24 +262,24 @@ namespace Bit.Droid.Autofill
             IList<InlinePresentationSpec> inlinePresentationSpecs = null)
         {
             var intent = new Intent(context, typeof(MainActivity));
-            intent.PutExtra("autofillFramework", true);
+            intent.PutExtra(AutofillConstants.AutofillFramework, true);
             if (fields.FillableForLogin)
             {
-                intent.PutExtra("autofillFrameworkFillType", (int)CipherType.Login);
+                intent.PutExtra(AutofillConstants.AutofillFrameworkFillType, (int)CipherType.Login);
             }
             else if (fields.FillableForCard)
             {
-                intent.PutExtra("autofillFrameworkFillType", (int)CipherType.Card);
+                intent.PutExtra(AutofillConstants.AutofillFrameworkFillType, (int)CipherType.Card);
             }
             else if (fields.FillableForIdentity)
             {
-                intent.PutExtra("autofillFrameworkFillType", (int)CipherType.Identity);
+                intent.PutExtra(AutofillConstants.AutofillFrameworkFillType, (int)CipherType.Identity);
             }
             else
             {
                 return null;
             }
-            intent.PutExtra("autofillFrameworkUri", uri);
+            intent.PutExtra(AutofillConstants.AutofillFrameworkUri, uri);
             var pendingIntent = PendingIntent.GetActivity(context, ++_pendingIntentId, intent,
                 AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.CancelCurrent, true));
 

@@ -71,22 +71,14 @@ namespace Bit.Droid.Services
             }
         }
 
-        public void Autofill(CipherView cipher, bool isExternalSelection = false)
+        public void Autofill(CipherView cipher)
         {
-            Xamarin.Forms.Platform.Android.FormsAppCompatActivity activity;
-            if (isExternalSelection)
-            {
-                activity = (AutofillExternalSelectionActivity)CrossCurrentActivity.Current.Activity;
-            }
-            else
-            {
-                activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-            }
+            var activity = CrossCurrentActivity.Current.Activity as Xamarin.Forms.Platform.Android.FormsAppCompatActivity;
             if (activity == null)
             {
                 return;
             }
-            if (activity.Intent?.GetBooleanExtra("autofillFramework", false) ?? false)
+            if (activity.Intent?.GetBooleanExtra(AutofillConstants.AutofillFramework, false) ?? false)
             {
                 if (cipher == null)
                 {
