@@ -37,8 +37,7 @@ jobs:
           git_commit_gpgsign: true
 
       - name: Create Version Branch
-        run: |
-          git switch -c version_bump_${{ github.event.inputs.version_number }}
+        run: git switch -c version_bump_${{ github.event.inputs.version_number }}
 
       - name: Bump Version - Android XML
         uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
@@ -79,16 +78,15 @@ jobs:
         id: version-changed
         run: |
           if [ -n "$(git status --porcelain)" ]; then
-            echo "::set-output name=changes_to_commit::TRUE"
+            echo "changes_to_commit=TRUE" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=changes_to_commit::FALSE"
+            echo "changes_to_commit=FALSE" >> $GITHUB_OUTPUT
             echo "No changes to commit!";
           fi
 
       - name: Commit files
         if: ${{ steps.version-changed.outputs.changes_to_commit == 'TRUE' }}
-        run: |
-          git commit -m "Bumped version to ${{ github.event.inputs.version_number }}" -a
+        run: git commit -m "Bumped version to ${{ github.event.inputs.version_number }}" -a
 
       - name: Push changes
         if: ${{ steps.version-changed.outputs.changes_to_commit == 'TRUE' }}
