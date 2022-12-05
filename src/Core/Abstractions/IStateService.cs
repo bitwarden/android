@@ -160,5 +160,7 @@ namespace Bit.Core.Abstractions
         Task SetPasswordlessLoginNotificationAsync(PasswordlessRequestNotification value);
         Task<UsernameGenerationOptions> GetUsernameGenerationOptionsAsync(string userId = null);
         Task SetUsernameGenerationOptionsAsync(UsernameGenerationOptions value, string userId = null);
+        Task<bool> GetShouldConnectToWatchAsync(string userId = null);
+        Task SetShouldConnectToWatchAsync(bool shouldConnect, string userId = null);
     }
 }

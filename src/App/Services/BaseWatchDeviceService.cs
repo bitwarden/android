@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -26,10 +27,24 @@ namespace Bit.App.Services
             _vaultTimeoutService = vaultTimeoutService;
         }
 
+        public abstract bool IsConnected { get; }
+
         protected abstract bool CanSendData { get; }
+        protected abstract bool IsSupported { get; }
 
         public async Task SyncDataToWatchAsync()
         {
+            if (!IsSupported)
+            {
+                return;
+            }
+
+            var shouldConnect = await _stateService.GetShouldConnectToWatchAsync();
+            if (shouldConnect && !IsConnected)
+            {
+                ConnectToWatch();
+            }
+
             if (!CanSendData)
             {
                 return;
@@ -41,7 +56,7 @@ namespace Bit.App.Services
                 Name = a.Profile.Name,
                 Email = a.Profile.Email
             });
-            var state = await GetStateAsync(userData?.Id);
+            var state = await GetStateAsync(userData?.Id, shouldConnect);
             if (state != WatchState.Valid)
             {
                 await SendDataToWatchAsync(new WatchDTO(state));
@@ -74,8 +89,13 @@ namespace Bit.App.Services
             await SendDataToWatchAsync(watchDto);
         }
 
-        private async Task<WatchState> GetStateAsync(string userId)
+        private async Task<WatchState> GetStateAsync(string userId, bool shouldConnectToWatch)
         {
+            if (!shouldConnectToWatch)
+            {
+                return WatchState.NeedSetup;
+            }
+
             if (!await _stateService.IsAuthenticatedAsync() || userId is null)
             {
                 return WatchState.NeedLogin;
@@ -95,6 +115,14 @@ namespace Bit.App.Services
             return WatchState.Valid;
         }
 
+        public async Task SetShouldConnectToWatchAsync(bool shouldConnectToWatch)
+        {
+            await _stateService.SetShouldConnectToWatchAsync(shouldConnectToWatch);
+            await SyncDataToWatchAsync();
+        }
+
         protected abstract Task SendDataToWatchAsync(WatchDTO watchDto);
+
+        protected abstract void ConnectToWatch();
     }
 }

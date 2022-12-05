@@ -44,6 +44,8 @@ namespace WatchConnectivity
 
         public bool IsSessionReachable => session.Reachable;
 
+        public bool IsSessionActivated => validSession?.ActivationState == WCSessionActivationState.Activated;
+
         private WCSessionManager() : base() { }
 
         public static WCSessionManager SharedManager
