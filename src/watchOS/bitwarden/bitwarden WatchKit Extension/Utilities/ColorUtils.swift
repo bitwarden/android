@@ -4,6 +4,7 @@ extension Color {
     static let ui = Color.UI()
     
     struct UI {
+        let primary = Color(hex: "#175DDC")
         let itemBackground = Color("ItemBackground")
         let darkTextMuted = Color("DarkTextMuted")
     }

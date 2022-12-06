@@ -2,18 +2,12 @@ import Combine
 import Foundation
 import WatchConnectivity
 
-struct NotificationMessage: Identifiable {
-    let id = UUID()
-    let text: String
-}
-
 struct WatchConnectivityMessage {
     var state: BWState?
 }
 
 final class WatchConnectivityManager: NSObject, ObservableObject {
     static let shared = WatchConnectivityManager()
-    @Published var notificationMessage: NotificationMessage? = nil
     
     let watchConnectivitySubject = CurrentValueSubject<WatchConnectivityMessage, Error>(WatchConnectivityMessage(state: nil))
 
