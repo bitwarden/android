@@ -42,15 +42,15 @@ jobs:
         id: branch-check
         run: |
           if [[ $(git ls-remote --heads origin rc) ]]; then
-            echo "::set-output name=rc_branch_exists::1"
+            echo "rc_branch_exists=1" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=rc_branch_exists::0"
+            echo "rc_branch_exists=0" >> $GITHUB_OUTPUT
           fi
 
           if [[ $(git ls-remote --heads origin hotfix-rc) ]]; then
-            echo "::set-output name=hotfix_branch_exists::1"
+            echo "hotfix_branch_exists=1" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=hotfix_branch_exists::0"
+            echo "hotfix_branch_exists=0" >> $GITHUB_OUTPUT
           fi
         shell: bash
 
@@ -477,7 +477,7 @@ jobs:
           do
             VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
             echo "::add-mask::$VALUE"
-            echo "::set-output name=$i::$VALUE"
+            echo "$i=$VALUE" >> $GITHUB_OUTPUT
           done
 
       - name: Decrypt secrets
@@ -711,7 +711,7 @@ jobs:
           do
             VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
             echo "::add-mask::$VALUE"
-            echo "::set-output name=$i::$VALUE"
+            echo "$i=$VALUE" >> $GITHUB_OUTPUT
           done
 
       - name: Upload Sources
@@ -779,7 +779,7 @@ jobs:
           do
             VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
             echo "::add-mask::$VALUE"
-            echo "::set-output name=$i::$VALUE"
+            echo "$i=$VALUE" >> $GITHUB_OUTPUT
           done
 
       - name: Notify Slack on failure

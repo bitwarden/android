@@ -73,12 +73,12 @@ namespace Bit.Droid.Services
 
         public void Autofill(CipherView cipher)
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var activity = CrossCurrentActivity.Current.Activity as Xamarin.Forms.Platform.Android.FormsAppCompatActivity;
             if (activity == null)
             {
                 return;
             }
-            if (activity.Intent?.GetBooleanExtra("autofillFramework", false) ?? false)
+            if (activity.Intent?.GetBooleanExtra(AutofillConstants.AutofillFramework, false) ?? false)
             {
                 if (cipher == null)
                 {
@@ -103,7 +103,7 @@ namespace Bit.Droid.Services
                     return;
                 }
                 var task = CopyTotpAsync(cipher);
-                var dataset = AutofillHelpers.BuildDataset(activity, parser.FieldCollection, new FilledItem(cipher));
+                var dataset = AutofillHelpers.BuildDataset(activity, parser.FieldCollection, new FilledItem(cipher), false);
                 var replyIntent = new Intent();
                 replyIntent.PutExtra(AutofillManager.ExtraAuthenticationResult, dataset);
                 activity.SetResult(Result.Ok, replyIntent);
