@@ -2,70 +2,79 @@ import SwiftUI
 
 struct CipherListView: View {
     @ObservedObject var viewModel = CipherListViewModel(CipherService.shared)
-    @ObservedObject var watchCM = WatchConnectivityManager.shared
+    
+    let AVATAR_ID: String = "avatarId"
+    @State private var contentOffset = CGFloat(0)
+    @State private var initialOffset = CGFloat(0)
+    
+    var isHeaderVisible: Bool {
+        if !viewModel.searchTerm.isEmpty {
+            return true
+        }
+        
+        let threshold = initialOffset + 15
+        return viewModel.filteredCiphers.count > 1 && contentOffset > threshold
+    }
     
     var body: some View {
         NavigationView {
             GeometryReader { geometry in
-                List {
-                    if viewModel.user?.email != nil {
-                        Section() {
-                            HStack {
-                                AvatarView(viewModel.user)
-                                Text(viewModel.user!.email!)
-                                    .font(.headline)
-                                    .lineLimit(1)
-                                    .truncationMode(.tail)
-                            }
+                ScrollViewReader { scrollProxy in
+                    TrackableWithHeaderListView { offset in
+                        withAnimation {
+                            contentOffset = offset?.y ?? 0
                         }
-                    }
-                    ForEach(viewModel.ciphers, id: \.id) { cipher in
-                        NavigationLink(destination: CipherDetailsView(cipher: cipher)){
-                            VStack(alignment: .leading){
-                                Text(cipher.name ?? "")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                    .lineLimit(1)
-                                    .truncationMode(.tail)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                
-                                if cipher.login.username != nil {
-                                    Text(cipher.login.username! )
-                                        .font(.body)
-                                        .lineLimit(1)
-                                        .truncationMode(.tail)
-                                        .foregroundColor(Color.ui.darkTextMuted)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                }
+                    }  headerContent: {
+                        Section() {
+                            ZStack {
+                                searchContent
+                                    .padding(5)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .foregroundColor(Color.ui.primary)
+                                            .frame(width: geometry.size.width,
+                                                   alignment: .leading)
+                                    )
+                                    .opacity(isHeaderVisible ? 1 : 0)
                             }
-                            .padding()
                             .background(
                                 RoundedRectangle(cornerRadius: 5)
-                                    .foregroundColor(Color.ui.itemBackground)
-                                    .frame(width: geometry.size.width,
-                                           alignment: .leading)
+                                .foregroundColor(Color.black)
+                                .frame(width: geometry.size.width, height: 60)
                             )
-                            .frame(width: geometry.size.width,
-                                   alignment: .leading)
+                            .offset(y:isHeaderVisible ? 0 : 5)
+                            .padding(0)
                         }
-                        .listRowInsets(EdgeInsets())
-                        .listRowBackground(Color.clear)
-                        .padding(3)
+                    } content: {
+                        if viewModel.user?.email != nil {
+                            Section() {
+                                avatarHeader
+                                    .id(AVATAR_ID)
+                            }
+                        }
+                        ForEach(viewModel.filteredCiphers, id: \.id) { cipher in
+                            NavigationLink(destination: CipherDetailsView(cipher: cipher)){
+                                CipherItemView(cipher, geometry.size.width)
+                            }
+                            .listRowInsets(EdgeInsets())
+                            .listRowBackground(Color.clear)
+                            .padding(3)
+                        }
+                    }
+                    .emptyState(viewModel.filteredCiphers.isEmpty, emptyContent: {
+                        emptyContent
+                            .frame(width: geometry.size.width, alignment: .center)
+                    })
+                    .onReceive(self.viewModel.$updateHack) { _ in
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                            scrollProxy.scrollTo(AVATAR_ID, anchor: .top)
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15){
+                                self.initialOffset = self.contentOffset
+                            }
+                        }
                     }
                 }
-                .emptyState(viewModel.ciphers.isEmpty, emptyContent: {
-                    VStack(alignment: .center) {
-                        Image("EmptyListPlaceholder")
-                            .resizable()
-                            .scaledToFit()
-                            .padding(20)
-                        Text("ThereAreNoItemsToList")
-                            .foregroundColor(Color.white)
-                            .font(.headline)
-                            .multilineTextAlignment(.center)
-                    }
-                    .frame(width: geometry.size.width, alignment: .center)
-                })
             }
         }
         .onAppear {
@@ -74,16 +83,50 @@ struct CipherListView: View {
         .fullScreenCover(isPresented: $viewModel.showingSheet) {
             BWStateView(viewModel.currentState)
         }
-        /*.alert(item: $connectivityManager.notificationMessage) { message in
-            Alert(title: Text(message.text),
-                       dismissButton: .default(Text("Dismiss")))
-        }*/
+    }
+    
+    var searchContent: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(Color(.white))
+                .frame(width: 20, height: 30)
+            TextField("", text: $viewModel.searchTerm)
+                .foregroundColor(.white)
+                .frame(width: .infinity, height: 33)
+                .placeholder(when: viewModel.searchTerm.isEmpty) {
+                    Text("Search").foregroundColor(.white)
+                }
+        }
+    }
+    
+    var avatarHeader: some View {
+        HStack {
+            AvatarView(viewModel.user)
+            Text(viewModel.user!.email!)
+                .font(.headline)
+                .lineLimit(1)
+                .truncationMode(.tail)
+        }
+    }
+    
+    var emptyContent: some View {
+        VStack(alignment: .center) {
+            Image("EmptyListPlaceholder")
+                .resizable()
+                .scaledToFit()
+                .padding(20)
+            Text("ThereAreNoItemsToList")
+                .foregroundColor(Color.white)
+                .font(.headline)
+                .multilineTextAlignment(.center)
+        }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         var v = CipherListView()
+        StateService.shared.currentState = .valid
         v.viewModel = CipherListViewModel(CipherServiceMock())
         v.viewModel.user = User(id: "zxc", email: "testing@test.com", name: "Tester")
         return v
