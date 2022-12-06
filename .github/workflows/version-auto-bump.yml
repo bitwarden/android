@@ -29,7 +29,7 @@ jobs:
           NEW_PATCH=$((CURR_PATCH+1))
           NEW_VER=$CURR_MAJOR.$NEW_PATCH
           echo "New Version: $NEW_VER"
-          echo "::set-output name=new-version::$NEW_VER"
+          echo "new-version=$NEW_VER" >> $GITHUB_OUTPUT
 
   trigger_version_bump:
     name: "Trigger version bump workflow"
