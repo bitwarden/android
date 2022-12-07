@@ -18,6 +18,7 @@ using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using Bit.Droid.Utilities;
 using Plugin.CurrentActivity;
+using static Bit.App.Pages.SettingsPageViewModel;
 
 namespace Bit.Droid.Services
 {

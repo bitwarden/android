@@ -29,6 +29,7 @@ namespace Bit.App.Pages
         private readonly ICustomFieldItemFactory _customFieldItemFactory;
         private readonly IClipboardService _clipboardService;
         private readonly IAutofillHandler _autofillHandler;
+        private readonly IWatchDeviceService _watchDeviceService;
 
         private bool _showNotesSeparator;
         private bool _showPassword;
@@ -80,6 +81,7 @@ namespace Bit.App.Pages
             _customFieldItemFactory = ServiceContainer.Resolve<ICustomFieldItemFactory>("customFieldItemFactory");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
             _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
+            _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
 
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
@@ -506,6 +508,8 @@ namespace Bit.App.Pages
                 _platformUtilsService.ShowToast("success", null,
                     EditMode && !CloneMode ? AppResources.ItemUpdated : AppResources.NewItemCreated);
                 _messagingService.Send(EditMode && !CloneMode ? "editedCipher" : "addedCipher", Cipher.Id);
+
+                _watchDeviceService.SyncDataToWatchAsync().FireAndForget();
 
                 if (Page is CipherAddEditPage page && page.FromAutofillFramework)
                 {

@@ -1499,6 +1499,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connect to Watch.
+        /// </summary>
+        public static string ConnectToWatch {
+            get {
+                return ResourceManager.GetString("ConnectToWatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Continue.
         /// </summary>
         public static string Continue {
