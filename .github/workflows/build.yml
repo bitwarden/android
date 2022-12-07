@@ -58,6 +58,7 @@ jobs:
   android:
     name: Android
     runs-on: windows-2022
+    if: github.repository == 'putting here a false condition so that this doesnt run while testing iOS CI'
     needs: setup
     strategy:
       fail-fast: false
@@ -258,6 +259,7 @@ jobs:
   f-droid:
     name: F-Droid Build
     runs-on: windows-2022
+    if: github.repository == 'putting here a false condition so that this doesnt run while testing iOS CI'
     steps:
       - name: Setup NuGet
         uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
@@ -497,6 +499,12 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output $HOME/secrets/dist_share_extension.mobileprovision \
             ./.github/secrets/dist_share_extension.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/dist_watch_app.mobileprovision \
+            ./.github/secrets/dist_watch_app.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/dist_watch_app_extension.mobileprovision \
+            ./.github/secrets/dist_watch_app_extension.mobileprovision.gpg
         shell: bash
 
       - name: Increment version
@@ -511,6 +519,9 @@ jobs:
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Extension/Info.plist
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Autofill/Info.plist
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.ShareExtension/Info.plist
+          cd src/watchOS/bitwarden
+          agvtool new-version -all  $BUILD_NUMBER
+          cd ../../..
         shell: bash
 
       - name: Update Entitlements
@@ -545,6 +556,8 @@ jobs:
           BITWARDEN_PROFILE_PATH=$HOME/secrets/dist_bitwarden.mobileprovision
           EXTENSION_PROFILE_PATH=$HOME/secrets/dist_extension.mobileprovision
           SHARE_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_share_extension.mobileprovision
+          WATCH_APP_PROFILE_PATH=$HOME/secrets/dist_watch_app.mobileprovision
+          WATCH_APP_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_watch_app_extension.mobileprovision
           PROFILES_DIR_PATH=$HOME/Library/MobileDevice/Provisioning\ Profiles
 
           mkdir -p "$PROFILES_DIR_PATH"
@@ -560,6 +573,28 @@ jobs:
 
           SHARE_EXTENSION_UUID=$(grep UUID -A1 -a $SHARE_EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
           cp $SHARE_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$SHARE_EXTENSION_UUID.mobileprovision"
+
+          WATCH_APP_UUID=$(grep UUID -A1 -a $WATCH_APP_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $WATCH_APP_PROFILE_PATH "$PROFILES_DIR_PATH/$WATCH_APP_UUID.mobileprovision"
+
+          WATCH_APP_EXTENSION_UUID=$(grep UUID -A1 -a $WATCH_APP_EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $WATCH_APP_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$WATCH_APP_EXTENSION_UUID.mobileprovision"
+        shell: bash
+
+      - name: Bulid WatchApp
+        run: |
+          echo "########################################"
+          echo "##### Build WatchApp with Release Configuration"
+          echo "########################################"
+          
+          xcodebuild archive -workspace ./src/watchOS/bitwarden/bitwarden.xcodeproj/project.xcworkspace -configuration Release -scheme bitwarden\ WatchKit\ App -archivePath ./src/watchOS/bitwarden
+
+          echo "########################################"
+          echo "##### Done"
+          echo "########################################"
+          cd src/watchOS
+          ls -R
+          cd ../..
         shell: bash
 
       - name: Restore packages

@@ -48,6 +48,12 @@ namespace Bit.iOS.Core.Utilities
                                   clearCipherCacheKey,
                                   Bit.Core.Constants.iOSAllClearCipherCacheKeys);   
             InitLogger();
+
+            ServiceContainer.Register<IWatchDeviceService>(new WatchDeviceService(ServiceContainer.Resolve<ICipherService>(),
+                ServiceContainer.Resolve<IEnvironmentService>(),
+                ServiceContainer.Resolve<IStateService>(),
+                ServiceContainer.Resolve<IVaultTimeoutService>()));
+
             Bootstrap();
 
             var appOptions = new AppOptions { IosExtension = true };
@@ -226,7 +232,8 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
                 ServiceContainer.Resolve<IAuthService>("authService"),
                 ServiceContainer.Resolve<ILogger>("logger"),
-                ServiceContainer.Resolve<IMessagingService>("messagingService"));
+                ServiceContainer.Resolve<IMessagingService>("messagingService"),
+                ServiceContainer.Resolve<IWatchDeviceService>());
             ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
 
             if (postBootstrapFunc != null)
