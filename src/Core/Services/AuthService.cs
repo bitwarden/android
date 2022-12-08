@@ -26,6 +26,8 @@ namespace Bit.Core.Services
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly bool _setCryptoKeys;
+
+        private readonly LazyResolve<IWatchDeviceService> _watchDeviceService = new LazyResolve<IWatchDeviceService>();
         private SymmetricCryptoKey _key;
 
         public AuthService(
@@ -187,6 +189,7 @@ namespace Bit.Core.Services
         {
             callback.Invoke();
             _messagingService.Send(AccountsManagerMessageCommands.LOGGED_OUT);
+            _watchDeviceService.Value.SyncDataToWatchAsync().FireAndForget();
         }
 
         public List<TwoFactorProvider> GetSupportedTwoFactorProviders()

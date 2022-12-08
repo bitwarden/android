@@ -23,6 +23,7 @@ namespace Bit.Droid.Autofill
 
         public FilledItem(CipherView cipher)
         {
+            Id = cipher.Id;
             Name = cipher.Name;
             Type = cipher.Type;
             Subtitle = cipher.SubTitle;
@@ -55,6 +56,7 @@ namespace Bit.Droid.Autofill
             }
         }
 
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Subtitle { get; set; } = string.Empty;
         public int Icon { get; set; } = Resource.Drawable.login;

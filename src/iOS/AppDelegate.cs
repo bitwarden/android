@@ -11,12 +11,13 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
+using Bit.iOS.Core.Services;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Services;
 using CoreNFC;
 using Foundation;
 using UIKit;
-using UserNotifications;
+using WatchConnectivity;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
@@ -57,6 +58,9 @@ namespace Bit.iOS
             LoadApplication(new App.App(null));
             iOSCoreHelpers.AppearanceAdjustments();
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
+
+            ConnectToWatchIfNeededAsync().FireAndForget();
+
             _broadcasterService.Subscribe(nameof(AppDelegate), async (message) =>
             {
                 try
@@ -302,6 +306,12 @@ namespace Bit.iOS
             ServiceContainer.Init(deviceActionService.DeviceUserAgent, Constants.ClearCiphersCacheKey, 
                 Constants.iOSAllClearCipherCacheKeys);
             iOSCoreHelpers.InitLogger();
+
+            ServiceContainer.Register<IWatchDeviceService>(new WatchDeviceService(ServiceContainer.Resolve<ICipherService>(),
+                ServiceContainer.Resolve<IEnvironmentService>(),
+                ServiceContainer.Resolve<IStateService>(),
+                ServiceContainer.Resolve<IVaultTimeoutService>()));
+
             _pushHandler = new iOSPushNotificationHandler(
                 ServiceContainer.Resolve<IPushNotificationListenerService>("pushNotificationListenerService"));
             _nfcDelegate = new Core.NFCReaderDelegate((success, message) =>
@@ -391,6 +401,14 @@ namespace Bit.iOS
                     dict.Add(setting.Key.ToString(), setting.Value?.ToString());
                 }
                 await AppHelpers.SetPreconfiguredSettingsAsync(dict);
+            }
+        }
+
+        private async Task ConnectToWatchIfNeededAsync()
+        {
+            if (_stateService != null && await _stateService.GetShouldConnectToWatchAsync())
+            {
+                WCSessionManager.SharedManager.StartSession();
             }
         }
     }

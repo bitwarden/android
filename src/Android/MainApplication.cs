@@ -45,9 +45,16 @@ namespace Bit.Droid
             if (ServiceContainer.RegisteredServices.Count == 0)
             {
                 RegisterLocalServices();
+
                 var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
                 ServiceContainer.Init(deviceActionService.DeviceUserAgent, Core.Constants.ClearCiphersCacheKey,
                     Core.Constants.AndroidAllClearCipherCacheKeys);
+
+                ServiceContainer.Register<IWatchDeviceService>(new WatchDeviceService(ServiceContainer.Resolve<ICipherService>(),
+                    ServiceContainer.Resolve<IEnvironmentService>(),
+                    ServiceContainer.Resolve<IStateService>(),
+                    ServiceContainer.Resolve<IVaultTimeoutService>()));
+
                 InitializeAppSetup();
 
                 // TODO: Update when https://github.com/bitwarden/mobile/pull/1662 gets merged
@@ -73,8 +80,9 @@ namespace Bit.Droid
                     ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
                     ServiceContainer.Resolve<IAuthService>("authService"),
                     ServiceContainer.Resolve<ILogger>("logger"),
-                    ServiceContainer.Resolve<IMessagingService>("messagingService"));
-                    ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
+                    ServiceContainer.Resolve<IMessagingService>("messagingService"),
+                    ServiceContainer.Resolve<IWatchDeviceService>());
+                ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
             }
 #if !FDROID
             if (Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)

@@ -14,6 +14,7 @@ namespace Bit.Core.Abstractions
         List<AccountView> AccountViews { get; }
         Task<string> GetActiveUserIdAsync();
         Task<string> GetActiveUserEmailAsync();
+        Task<T> GetActiveUserCustomDataAsync<T>(Func<Account, T> dataMapper);
         Task<bool> IsActiveAccountAsync(string userId = null);
         Task SetActiveUserAsync(string userId);
         Task CheckExtensionActiveUserAndSwitchIfNeededAsync();
@@ -159,5 +160,7 @@ namespace Bit.Core.Abstractions
         Task SetPasswordlessLoginNotificationAsync(PasswordlessRequestNotification value);
         Task<UsernameGenerationOptions> GetUsernameGenerationOptionsAsync(string userId = null);
         Task SetUsernameGenerationOptionsAsync(UsernameGenerationOptions value, string userId = null);
+        Task<bool> GetShouldConnectToWatchAsync(string userId = null);
+        Task SetShouldConnectToWatchAsync(bool shouldConnect, string userId = null);
     }
 }
