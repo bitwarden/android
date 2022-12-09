@@ -2336,7 +2336,7 @@
     <value>時間</value>
   </data>
   <data name="Near" xml:space="preserve">
-    <value>Near</value>
+    <value>靠近</value>
   </data>
   <data name="ConfirmLogIn" xml:space="preserve">
     <value>確認登入</value>
@@ -2473,7 +2473,7 @@
 您想要切換至這個帳戶嗎？</value>
   </data>
   <data name="NewAroundHere" xml:space="preserve">
-    <value>New around here?</value>
+    <value>第一次使用？</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>獲取主密碼提示</value>
@@ -2497,18 +2497,21 @@
     <value>通知已傳送至您的裝置。</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+    <value>請確保您的密碼庫已解鎖，並且指紋短語與其他裝置的一致。</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
     <value>重新傳送通知</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>需要另一個選項嗎？</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>檢視所有登入選項</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>此請求已失效</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>啟用相機權限以使用掃描儀</value>
   </data>
 </root>

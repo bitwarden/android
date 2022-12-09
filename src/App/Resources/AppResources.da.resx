@@ -1762,7 +1762,7 @@ Skanning vil ske automatisk.</value>
     <value>Synkronisering af boks med træk nedad-gestus.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Virksomheds Single Sign On</value>
+    <value>Virksomheds Single Sign-On</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
     <value>Log hurtigt ind vha. din organisations single sign-on portal. Angiv din organisations identifikator for at begynde.</value>
@@ -2510,5 +2510,8 @@ Vil du skifte til denne konto?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Anmodningen er ikke længere gyldig</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Tildel kameratilladelse for brug af skanneren</value>
   </data>
 </root>

@@ -2510,4 +2510,7 @@ Bu hesaba keçmək istəyirsiniz?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Bu tələb artıq yararsızdır</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Skaneri istifadə etmək üçün kamera icazəsini fəallaşdırın</value>
+  </data>
 </root>

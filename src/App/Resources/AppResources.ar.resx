@@ -323,14 +323,14 @@
     <comment>Label for a password.</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>تسجيل</value>
+    <value>حفظ</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
     <value>نقل</value>
   </data>
   <data name="Saving" xml:space="preserve">
-    <value>تسجيل ...</value>
+    <value>حفظ...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Settings" xml:space="preserve">
@@ -2511,5 +2511,8 @@
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>هذا الطلب لم يعد صالحًا</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>تمكين إذن الكاميرا لاستخدام الماسح الضوئي</value>
   </data>
 </root>

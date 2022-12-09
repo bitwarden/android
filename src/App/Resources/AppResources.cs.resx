@@ -2511,4 +2511,7 @@ Chcete se přepnout na tento účet?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Tento požadavek již není platný</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Enable camera permission to use the scanner</value>
+  </data>
 </root>

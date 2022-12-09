@@ -2510,4 +2510,7 @@ Szeretnénk átváltani erre a fiókra?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>A kérés már nem érvényes.</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Kamera engedélyezése a lapolvasó használatához</value>
+  </data>
 </root>
