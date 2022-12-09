@@ -2511,4 +2511,7 @@ Voulez-vous basculer vers ce compte ?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Cette demande n'est plus valide</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Enable camera permission to use the scanner</value>
+  </data>
 </root>

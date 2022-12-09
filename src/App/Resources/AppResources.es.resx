@@ -2512,4 +2512,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Esta solicitud ya no es válida</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Habilitar el permiso de la cámara para usar el escáner</value>
+  </data>
 </root>

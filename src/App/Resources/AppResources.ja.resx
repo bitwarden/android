@@ -2511,4 +2511,7 @@
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>このリクエストは無効になりました</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>スキャナを使用できるようカメラ権限を許可する</value>
+  </data>
 </root>

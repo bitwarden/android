@@ -2512,4 +2512,7 @@
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>این درخواست دیگر معتبر نیست</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Enable camera permission to use the scanner</value>
+  </data>
 </root>

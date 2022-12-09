@@ -2511,4 +2511,7 @@ Wilt u naar dit account wisselen?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Dit verzoek is niet langer geldig</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Camera-toestemming inschakelen om de scanner te gebruiken</value>
+  </data>
 </root>

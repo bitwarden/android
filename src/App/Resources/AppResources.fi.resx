@@ -2512,4 +2512,7 @@ Haluatko vaihtaa tähän tiliin?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Pyyntö ei ole enää voimassa.</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Myönnä kameran käyttöoikeus skannerin käyttämiseksi</value>
+  </data>
 </root>

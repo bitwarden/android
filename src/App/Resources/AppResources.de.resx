@@ -2510,4 +2510,7 @@ Möchtest du zu diesem Konto wechseln?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Diese Anfrage ist nicht mehr gültig</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Kamerazugriff aktivieren, um den Scanner zu verwenden</value>
+  </data>
 </root>

@@ -2510,4 +2510,7 @@ Kontu honetara aldatu nahi duzu?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Eskaera jada ez da balekoa.</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Enable camera permission to use the scanner</value>
+  </data>
 </root>

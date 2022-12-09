@@ -2473,7 +2473,7 @@
 您想要切换到此账户吗？</value>
   </data>
   <data name="NewAroundHere" xml:space="preserve">
-    <value>新建在这里？</value>
+    <value>初来乍到吗？</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>获取主密码提示</value>
@@ -2510,5 +2510,8 @@
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>请求已失效</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>启用相机权限以使用扫描器</value>
   </data>
 </root>

@@ -2512,4 +2512,7 @@ select Add TOTP to store the key safely</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Тази зявка вече не е приложима</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Разрешете достъпа до камерата, за да използвате скенера</value>
+  </data>
 </root>

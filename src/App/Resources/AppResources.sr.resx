@@ -2513,4 +2513,7 @@
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Овај захтев више не важи</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Enable camera permission to use the scanner</value>
+  </data>
 </root>
