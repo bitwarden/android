@@ -408,6 +408,7 @@ namespace Bit.iOS.Extension
             ServiceContainer.Init(deviceActionService.DeviceUserAgent, 
                 Bit.Core.Constants.iOSExtensionClearCiphersCacheKey, Bit.Core.Constants.iOSAllClearCipherCacheKeys);
             iOSCoreHelpers.InitLogger();
+            iOSCoreHelpers.RegisterFinallyBeforeBootstrap();
             iOSCoreHelpers.Bootstrap();
             var app = new App.App(new AppOptions { IosExtension = true });
             ThemeManager.SetTheme(app.Resources);

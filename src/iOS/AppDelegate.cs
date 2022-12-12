@@ -306,11 +306,7 @@ namespace Bit.iOS
             ServiceContainer.Init(deviceActionService.DeviceUserAgent, Constants.ClearCiphersCacheKey, 
                 Constants.iOSAllClearCipherCacheKeys);
             iOSCoreHelpers.InitLogger();
-
-            ServiceContainer.Register<IWatchDeviceService>(new WatchDeviceService(ServiceContainer.Resolve<ICipherService>(),
-                ServiceContainer.Resolve<IEnvironmentService>(),
-                ServiceContainer.Resolve<IStateService>(),
-                ServiceContainer.Resolve<IVaultTimeoutService>()));
+            iOSCoreHelpers.RegisterFinallyBeforeBootstrap();
 
             _pushHandler = new iOSPushNotificationHandler(
                 ServiceContainer.Resolve<IPushNotificationListenerService>("pushNotificationListenerService"));
