@@ -70,6 +70,10 @@ public class CryptoService{
         }
         return data
     }
+    
+    static func clearKey() {
+        KeychainHelper.standard.delete(CryptoService.ENCRYPTION_KEY)
+    }
 }
 
 public extension Data {

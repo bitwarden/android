@@ -47,6 +47,8 @@ class CipherListViewModel : ObservableObject {
     }
     
     func checkStateAndFetch(_ state: BWState? = nil) {
+        StateService.shared.checkIntegrity()
+        
         user = StateService.shared.getUser()
         
         if user == nil && !watchConnectivityManager.isSessionActivated {

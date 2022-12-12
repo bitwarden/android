@@ -42,4 +42,9 @@ class EnvironmentService{
         }
         KeychainHelper.standard.save(url.data(using: .utf8)!, ICONS_URL_KEY)
     }
+    
+    func clear() {
+        baseUrl = nil
+        setIconsUrl(url: nil)
+    }
 }
