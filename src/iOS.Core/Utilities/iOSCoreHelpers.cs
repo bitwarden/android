@@ -49,10 +49,7 @@ namespace Bit.iOS.Core.Utilities
                                   Bit.Core.Constants.iOSAllClearCipherCacheKeys);   
             InitLogger();
 
-            ServiceContainer.Register<IWatchDeviceService>(new WatchDeviceService(ServiceContainer.Resolve<ICipherService>(),
-                ServiceContainer.Resolve<IEnvironmentService>(),
-                ServiceContainer.Resolve<IStateService>(),
-                ServiceContainer.Resolve<IVaultTimeoutService>()));
+            RegisterFinallyBeforeBootstrap();
 
             Bootstrap();
 
@@ -137,6 +134,14 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Register<ICryptoService>("cryptoService", cryptoService);
             ServiceContainer.Register<IPasswordRepromptService>("passwordRepromptService", passwordRepromptService);
             ServiceContainer.Register<IAvatarImageSourcePool>("avatarImageSourcePool", new AvatarImageSourcePool());
+        }
+
+        public static void RegisterFinallyBeforeBootstrap()
+        {
+            ServiceContainer.Register<IWatchDeviceService>(new WatchDeviceService(ServiceContainer.Resolve<ICipherService>(),
+                ServiceContainer.Resolve<IEnvironmentService>(),
+                ServiceContainer.Resolve<IStateService>(),
+                ServiceContainer.Resolve<IVaultTimeoutService>()));
         }
 
         public static void Bootstrap(Func<Task> postBootstrapFunc = null)
