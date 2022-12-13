@@ -141,7 +141,8 @@ namespace Bit.App.Services
                     }
 
                     // if there is a request modal opened ignore all incoming requests
-                    if (App.Current.MainPage.Navigation.ModalStack.Any(p => p is NavigationPage navPage && navPage.CurrentPage is LoginPasswordlessPage))
+                    // App.Current can be null if the app is killed
+                    if (App.Current != null && App.Current.MainPage.Navigation.ModalStack.Any(p => p is NavigationPage navPage && navPage.CurrentPage is LoginPasswordlessPage))
                     {
                         return;
                     }
