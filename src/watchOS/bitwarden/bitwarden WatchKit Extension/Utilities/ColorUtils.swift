@@ -7,6 +7,7 @@ extension Color {
         let primary = Color(hex: "#175DDC")
         let itemBackground = Color("ItemBackground")
         let darkTextMuted = Color("DarkTextMuted")
+        let avatarItemBackground = Color("AvatarItemBackground")
     }
     
     init?(hex: String) {

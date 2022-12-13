@@ -6,7 +6,7 @@ struct CipherListView: View {
     let AVATAR_ID: String = "avatarId"
     @State private var contentOffset = CGFloat(0)
     @State private var initialOffset = CGFloat(0)
-    
+        
     var isHeaderVisible: Bool {
         if !viewModel.searchTerm.isEmpty {
             return true
@@ -50,6 +50,12 @@ struct CipherListView: View {
                             Section() {
                                 avatarHeader
                                     .id(AVATAR_ID)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .foregroundColor(Color.ui.avatarItemBackground)
+                                            .frame(width: geometry.size.width + 10, height: 50)
+                                    )
+                                    .padding(0)
                             }
                         }
                         ForEach(viewModel.filteredCiphers, id: \.id) { cipher in
@@ -58,7 +64,7 @@ struct CipherListView: View {
                             }
                             .listRowInsets(EdgeInsets())
                             .listRowBackground(Color.clear)
-                            .padding(3)
+                            .padding(0)
                         }
                     }
                     .emptyState(viewModel.filteredCiphers.isEmpty, emptyContent: {
@@ -77,8 +83,10 @@ struct CipherListView: View {
                 }
             }
         }
+        .navigationTitle("Bitwarden")
+        .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            self.viewModel.checkStateAndFetch()
+            self.viewModel.fetchCiphers()
         }
         .fullScreenCover(isPresented: $viewModel.showingSheet) {
             BWStateView(viewModel.currentState)
