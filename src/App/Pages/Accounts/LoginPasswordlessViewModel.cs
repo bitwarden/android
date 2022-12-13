@@ -148,16 +148,6 @@ namespace Bit.App.Pages
 
             return string.Format(AppResources.XMinutesAgo, DateTime.UtcNow.Minute - requestDate.Value.ToUniversalTime().Minute);
         }
-
-        private void HandleException(Exception ex)
-        {
-            Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                await _deviceActionService.HideLoadingAsync();
-                await _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage);
-            }).FireAndForget();
-            _logger.Exception(ex);
-        }
     }
 
     public class LoginPasswordlessDetails
