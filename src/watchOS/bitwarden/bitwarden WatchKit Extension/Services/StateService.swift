@@ -3,10 +3,13 @@ import Foundation
 class StateService {
     static let shared: StateService = StateService()
     
+    let HAS_RUN_BEFORE_KEY = "has_run_before_key"
     let CURRENT_STATE_KEY = "current_state_key"
     let CURRENT_USER_KEY = "current_user_key"
 //    let TIMEOUT_MINUTES_KEY = "timeout_minutes_key"
 //    let TIMEOUT_ACTION_KEY = "timeout_action_key"
+    
+    var hasRunBefore = false
     
     private init(){}
     
@@ -38,6 +41,29 @@ class StateService {
         }
         
         KeychainHelper.standard.save(user, key: CURRENT_USER_KEY)
+    }
+    
+    /// Checks the state integrity of the app. If the app has been reinstalled then there are some keychain things that need to be reset.
+    func checkIntegrity() {
+        if hasRunBefore {
+            return
+        }
+        
+        let userDefaults = UserDefaults.standard
+        hasRunBefore = userDefaults.bool(forKey: HAS_RUN_BEFORE_KEY)
+        
+        if !hasRunBefore {
+            clear()
+            EnvironmentService.shared.clear()
+            CryptoService.clearKey()
+            
+            userDefaults.set(true, forKey: HAS_RUN_BEFORE_KEY)
+        }
+    }
+    
+    func clear() {
+        currentState = .needSetup
+        setUser(user: nil)
     }
     
 //    var vaultTimeoutInMinutes: Int? {
