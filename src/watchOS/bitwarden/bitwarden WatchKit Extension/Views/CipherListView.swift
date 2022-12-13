@@ -86,7 +86,11 @@ struct CipherListView: View {
         .navigationTitle("Bitwarden")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
+#if targetEnvironment(simulator) // for the preview
             self.viewModel.fetchCiphers()
+#else
+            self.viewModel.checkStateAndFetch()
+#endif
         }
         .fullScreenCover(isPresented: $viewModel.showingSheet) {
             BWStateView(viewModel.currentState)
