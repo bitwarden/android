@@ -87,7 +87,7 @@ namespace Bit.App.Pages
                     Text = string.Format("{0}: ", AppResources.Important),
                     TextColor = Utilities.ThemeManager.GetResourceColor("InfoColor"),
 
-            });
+                });
                 fs.Spans.Add(new Span
                 {
                     Text = AppResources.YourMasterPasswordCannotBeRecoveredIfYouForgetIt8CharacterMinimum,
