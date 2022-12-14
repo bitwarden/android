@@ -41,30 +41,43 @@ extension CipherService: CipherServiceProtocol {
         }
     }
     
-    func saveCiphers(_ ciphers: [Cipher], completionHandler: @escaping () -> Void){
-        dbHelper.insertBatch("CipherEntity", items: ciphers) { item, context in
-            guard let cipher = item as! Cipher? else { return [:] }
-            let c = cipher.toCipherEntity(moContext: context)
-            guard let data = try? JSONEncoder().encode(c) else
-            {
-                Log.e("Error converting to data")
-                return [:]
-            }
-            
-            guard let cipherDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any ] else
-            {
-                Log.e("Error converting json data to dict")
-                return [:]
-            }
-            return cipherDict
+    func saveCiphers(_ ciphers: [Cipher], completionHandler: @escaping () -> Void) {
+        let cipherIds = ciphers.map { $0.id }
+        deleteAll(ciphers[0].userId, notIn: cipherIds) {
+            self.dbHelper.insertBatch("CipherEntity", items: ciphers) { item, context in
+                guard let cipher = item as! Cipher? else { return [:] }
+                let c = cipher.toCipherEntity(moContext: context)
+                guard let data = try? JSONEncoder().encode(c) else
+                {
+                    Log.e("Error converting to data")
+                    return [:]
+                }
+                
+                guard let cipherDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any ] else
+                {
+                    Log.e("Error converting json data to dict")
+                    return [:]
+                }
+                return cipherDict
 
-        } completionHandler: {
-            completionHandler()
+            } completionHandler: {
+                completionHandler()
+            }
         }
     }
     
     func deleteAll(_ withUserId: String? = nil, completionHandler: @escaping () -> Void) {
         let predicate = withUserId == nil ? nil : NSPredicate(format: "userId = %@", withUserId!)
+        dbHelper.deleteAll("CipherEntity", predicate: predicate, completionHandler: completionHandler)
+    }
+    
+    func deleteAll(_ withUserId: String? = nil, notIn: [String], completionHandler: @escaping () -> Void) {
+        var predicateList : [NSPredicate] = []
+        if let userId = withUserId {
+            predicateList.append(NSPredicate(format: "userId = %@", userId))
+        }
+        predicateList.append(NSPredicate(format: "NOT (id in %@)", notIn))
+        let predicate = NSCompoundPredicate(type: .and, subpredicates: predicateList)
         dbHelper.deleteAll("CipherEntity", predicate: predicate, completionHandler: completionHandler)
     }
 }
