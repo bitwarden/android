@@ -11,7 +11,7 @@ namespace Bit.App.Controls
 
         public static readonly BindableProperty PasswordStrengthProperty = BindableProperty.Create(
             nameof(PasswordStrength),
-            typeof(PasswordStrengthValue),
+            typeof(PasswordStrengthCategory),
             typeof(PasswordStrengthProgressBar),
             defaultBindingMode: BindingMode.OneWayToSource);
 
@@ -27,9 +27,9 @@ namespace Bit.App.Controls
             typeof(PasswordStrengthProgressBar),
             string.Empty);
 
-        public PasswordStrengthValue PasswordStrength
+        public PasswordStrengthCategory PasswordStrength
         {
-            get { return (PasswordStrengthValue)GetValue(PasswordStrengthProperty); }
+            get { return (PasswordStrengthCategory)GetValue(PasswordStrengthProperty); }
             set { SetValue(PasswordStrengthProperty, value); }
         }
 
@@ -61,7 +61,7 @@ namespace Bit.App.Controls
             {
                 _viewModel.CalculateMasterPasswordStrength(Password, Email);
                 _passwordBar.ProgressTo(_viewModel.PasswordStrength, 500, Easing.SinOut);
-                PasswordStrength = _viewModel.PasswordStrengthEnum;
+                PasswordStrength = _viewModel.PasswordStrengthCategory;
             }
         }
     }

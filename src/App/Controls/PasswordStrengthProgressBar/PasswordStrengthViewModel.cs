@@ -37,7 +37,7 @@ namespace Bit.App.Controls
             set => SetProperty(ref _passwordStatus, value);
         }
 
-        public PasswordStrengthValue PasswordStrengthEnum { get; set; }
+        public PasswordStrengthCategory PasswordStrengthCategory { get; set; }
 
         public void CalculateMasterPasswordStrength(string password, string email)
         {
@@ -47,7 +47,7 @@ namespace Bit.App.Controls
                 PasswordStrength = 0;
                 PasswordColor = Utilities.ThemeManager.GetResourceColor("DangerColor");
                 PasswordStatus = " ";
-                PasswordStrengthEnum = PasswordStrengthValue.Weak;
+                PasswordStrengthCategory = PasswordStrengthCategory.Weak;
                 return;
             }
 
@@ -56,31 +56,31 @@ namespace Bit.App.Controls
             {
                 PasswordColor = Utilities.ThemeManager.GetResourceColor("DangerColor");
                 PasswordStatus = Resources.AppResources.Weak;
-                PasswordStrengthEnum = PasswordStrengthValue.Weak;
+                PasswordStrengthCategory = PasswordStrengthCategory.Weak;
             }
             else if (PasswordStrength <= 0.4f)
             {
                 PasswordColor = Utilities.ThemeManager.GetResourceColor("DangerColor");
                 PasswordStatus = Resources.AppResources.Weak;
-                PasswordStrengthEnum = PasswordStrengthValue.Weak;
+                PasswordStrengthCategory = PasswordStrengthCategory.Weak;
             }
             else if (PasswordStrength <= 0.6f)
             {
                 PasswordColor = Utilities.ThemeManager.GetResourceColor("WarningColor");
                 PasswordStatus = Resources.AppResources.Weak;
-                PasswordStrengthEnum = PasswordStrengthValue.Weak;
+                PasswordStrengthCategory = PasswordStrengthCategory.Weak;
             }
             else if (PasswordStrength <= 0.8f)
             {
                 PasswordColor = Utilities.ThemeManager.GetResourceColor("PrimaryColor");
                 PasswordStatus = Resources.AppResources.Good;
-                PasswordStrengthEnum = PasswordStrengthValue.Good;
+                PasswordStrengthCategory = PasswordStrengthCategory.Good;
             }
             else if (PasswordStrength <= 1f)
             {
                 PasswordColor = Utilities.ThemeManager.GetResourceColor("SuccessColor");
                 PasswordStatus = Resources.AppResources.Strong;
-                PasswordStrengthEnum = PasswordStrengthValue.Strong;
+                PasswordStrengthCategory = PasswordStrengthCategory.Strong;
             }
         }
 
@@ -98,7 +98,7 @@ namespace Bit.App.Controls
         }
     }
 
-    public enum PasswordStrengthValue
+    public enum PasswordStrengthCategory
     {
         Weak,
         Good,

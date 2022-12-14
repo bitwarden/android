@@ -87,7 +87,7 @@ namespace Bit.App.Pages
                     Text = string.Format("{0}: ", AppResources.Important),
                     TextColor = Utilities.ThemeManager.GetResourceColor("InfoColor"),
 
-                });
+            });
                 fs.Spans.Add(new Span
                 {
                     Text = AppResources.YourMasterPasswordCannotBeRecoveredIfYouForgetIt8CharacterMinimum,
@@ -105,7 +105,7 @@ namespace Bit.App.Pages
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string Name { get; set; }
-        public PasswordStrengthValue MasterPasswordStrength { get; set; }
+        public PasswordStrengthCategory MasterPasswordStrength { get; set; }
         public string ConfirmMasterPassword { get; set; }
         public string Hint { get; set; }
         public Action RegistrationSuccess { get; set; }
@@ -163,7 +163,7 @@ namespace Bit.App.Pages
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
-            if (MasterPasswordStrength == PasswordStrengthValue.Weak)
+            if (MasterPasswordStrength == PasswordStrengthCategory.Weak)
             {
                 var accepted = await _platformUtilsService.ShowDialogAsync(AppResources.WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount,
                     AppResources.WeakMasterPassword, AppResources.Yes, AppResources.No);
