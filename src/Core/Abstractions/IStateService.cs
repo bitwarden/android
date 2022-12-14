@@ -119,12 +119,12 @@ namespace Bit.Core.Abstractions
         Task SetAddSitePromptShownAsync(bool? value, string userId = null);
         Task<bool?> GetPushInitialPromptShownAsync();
         Task SetPushInitialPromptShownAsync(bool? value);
-        Task<DateTime?> GetPushLastRegistrationDateAsync();
-        Task SetPushLastRegistrationDateAsync(DateTime? value);
+        Task<DateTime?> GetPushLastRegistrationDateAsync(string userId = null);
+        Task SetPushLastRegistrationDateAsync(DateTime? value, string userId = null);
         Task<string> GetPushInstallationRegistrationErrorAsync();
         Task SetPushInstallationRegistrationErrorAsync(string value);
-        Task<string> GetPushCurrentTokenAsync();
-        Task SetPushCurrentTokenAsync(string value);
+        Task<string> GetPushCurrentTokenAsync(string userId = null);
+        Task SetPushCurrentTokenAsync(string value, string userId = null);
         Task<List<EventData>> GetEventCollectionAsync();
         Task SetEventCollectionAsync(List<EventData> value);
         Task<Dictionary<string, FolderData>> GetEncryptedFoldersAsync(string userId = null);

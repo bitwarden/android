@@ -305,15 +305,5 @@ namespace Bit.App.Pages
                 _logger.Exception(e);
             }
         }
-
-        private void HandleException(Exception ex)
-        {
-            Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                await _deviceActionService.HideLoadingAsync();
-                await _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage);
-            }).FireAndForget();
-            _logger.Exception(ex);
-        }
     }
 }
