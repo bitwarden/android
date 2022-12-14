@@ -19,6 +19,7 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly II18nService _i18nService;
         private readonly IEnvironmentService _environmentService;
+        private readonly IAuditService _auditService;
         private readonly IApiService _apiService;
         private readonly ICryptoService _cryptoService;
         private readonly IPlatformUtilsService _platformUtilsService;
@@ -26,6 +27,7 @@ namespace Bit.App.Pages
         private string _masterPassword;
         private bool _showPassword;
         private bool _acceptPolicies;
+        private bool _checkExposedMasterPassword;
 
         public RegisterPageViewModel()
         {
@@ -35,6 +37,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+            _auditService = ServiceContainer.Resolve<IAuditService>();
 
             PageTitle = AppResources.CreateAccount;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -63,6 +66,12 @@ namespace Bit.App.Pages
         {
             get => _acceptPolicies;
             set => SetProperty(ref _acceptPolicies, value);
+        }
+
+        public bool CheckExposedMasterPassword
+        {
+            get => _checkExposedMasterPassword;
+            set => SetProperty(ref _checkExposedMasterPassword, value);
         }
 
         public string MasterPassword
@@ -163,15 +172,6 @@ namespace Bit.App.Pages
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
-            if (MasterPasswordStrength == PasswordStrengthCategory.Weak)
-            {
-                var accepted = await _platformUtilsService.ShowDialogAsync(AppResources.WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount,
-                    AppResources.WeakMasterPassword, AppResources.Yes, AppResources.No);
-                if (!accepted)
-                {
-                    return;
-                }
-            }
 
             if (showLoading)
             {
@@ -202,7 +202,42 @@ namespace Bit.App.Pages
                 },
                 CaptchaResponse = _captchaToken,
             };
+
             // TODO: org invite?
+
+            try
+            {
+                var title = string.Empty;
+                var message = string.Empty;
+                var matches = CheckExposedMasterPassword ? await _auditService.PasswordLeakedAsync(MasterPassword) : 0;
+
+                if (matches > 0 && MasterPasswordStrength == PasswordStrengthCategory.Weak)
+                {
+                    title = AppResources.WeakAndExposedMasterPassword;
+                    message = AppResources.WeakPasswordIdentifiedAndFoundInADataBreachUseAStrongAndUniquePasswordToProtectYourAccount;
+                }
+                else if (matches > 0 && MasterPasswordStrength != PasswordStrengthCategory.Weak)
+                {
+                    title = AppResources.ExposedMasterPassword;
+                    message = AppResources.PasswordFoundInADataBreachUseAUniquePasswordToProtectYourAccount;
+                }
+                else if (matches == 0 && MasterPasswordStrength == PasswordStrengthCategory.Weak)
+                {
+                    title = AppResources.WeakMasterPassword;
+                    message = AppResources.WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount;
+                }
+
+                var accepted = await _platformUtilsService.ShowDialogAsync(message, title, AppResources.Yes, AppResources.No);
+                if (!accepted)
+                {
+                    await _deviceActionService.HideLoadingAsync();
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
 
             try
             {

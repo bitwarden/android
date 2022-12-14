@@ -132,6 +132,18 @@
                     StyleClass="box-footer-label" />
             </StackLayout>
             <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row, box-row-switch">
+                    <Switch
+                        IsToggled="{Binding CheckExposedMasterPassword}"
+                        StyleClass="box-value"
+                        HorizontalOptions="Start"
+                        Margin="0, 0, 10, 0"/>
+                    <Label
+                        Text="{u:I18n CheckKnownDataBreachesForThisPassword}"
+                        StyleClass="box-footer-label"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Center"/>
+                </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-switch"
                             IsVisible="{Binding ShowTerms}">
                     <Switch
