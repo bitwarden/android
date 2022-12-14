@@ -2939,6 +2939,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Good.
+        /// </summary>
+        public static string Good {
+            get {
+                return ResourceManager.GetString("Good", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Go to my vault.
         /// </summary>
         public static string GoToMyVault {
@@ -3070,6 +3079,15 @@ namespace Bit.App.Resources {
         public static string Immediately {
             get {
                 return ResourceManager.GetString("Immediately", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Important.
+        /// </summary>
+        public static string Important {
+            get {
+                return ResourceManager.GetString("Important", resourceCulture);
             }
         }
         
@@ -5679,6 +5697,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Strong.
+        /// </summary>
+        public static string Strong {
+            get {
+                return ResourceManager.GetString("Strong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Submit.
         /// </summary>
         public static string Submit {
@@ -6660,6 +6687,33 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Weak.
+        /// </summary>
+        public static string Weak {
+            get {
+                return ResourceManager.GetString("Weak", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weak Master Password.
+        /// </summary>
+        public static string WeakMasterPassword {
+            get {
+                return ResourceManager.GetString("WeakMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weak password identified. Use a strong password to protect your account. Are you sure you want to use a weak password?.
+        /// </summary>
+        public static string WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount {
+            get {
+                return ResourceManager.GetString("WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Website.
         /// </summary>
         public static string Website {
@@ -6773,6 +6827,15 @@ namespace Bit.App.Resources {
         public static string YourAccountsFingerprint {
             get {
                 return ResourceManager.GetString("YourAccountsFingerprint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your master password cannot be recovered if you forget it! 8 character minimum..
+        /// </summary>
+        public static string YourMasterPasswordCannotBeRecoveredIfYouForgetIt8CharacterMinimum {
+            get {
+                return ResourceManager.GetString("YourMasterPasswordCannotBeRecoveredIfYouForgetIt8CharacterMinimum", resourceCulture);
             }
         }
         
