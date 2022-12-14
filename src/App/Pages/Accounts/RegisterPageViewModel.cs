@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
@@ -21,6 +22,8 @@ namespace Bit.App.Pages
         private readonly IApiService _apiService;
         private readonly ICryptoService _cryptoService;
         private readonly IPlatformUtilsService _platformUtilsService;
+        private string _email;
+        private string _masterPassword;
         private bool _showPassword;
         private bool _acceptPolicies;
 
@@ -61,6 +64,40 @@ namespace Bit.App.Pages
             get => _acceptPolicies;
             set => SetProperty(ref _acceptPolicies, value);
         }
+
+        public string MasterPassword
+        {
+            get => _masterPassword;
+            set => SetProperty(ref _masterPassword, value);
+        }
+
+        public string Email
+        {
+            get => _email;
+            set => SetProperty(ref _email, value);
+        }
+
+        public FormattedString MasterPasswordDescription
+        {
+            get
+            {
+                var fs = new FormattedString();
+                fs.Spans.Add(new Span
+                {
+                    Text = string.Format("{0}: ", AppResources.Important),
+                    TextColor = Utilities.ThemeManager.GetResourceColor("InfoColor"),
+
+            });
+                fs.Spans.Add(new Span
+                {
+                    Text = AppResources.YourMasterPasswordCannotBeRecoveredIfYouForgetIt8CharacterMinimum,
+                    TextColor = Utilities.ThemeManager.GetResourceColor("MutedColor"),
+                    FontAttributes = FontAttributes.None
+                });
+                return fs;
+            }
+        }
+
         public bool ShowTerms { get; set; }
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
@@ -68,13 +105,11 @@ namespace Bit.App.Pages
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string Name { get; set; }
-        public string Email { get; set; }
-        public string MasterPassword { get; set; }
+        public PasswordStrengthValue MasterPasswordStrength { get; set; }
         public string ConfirmMasterPassword { get; set; }
         public string Hint { get; set; }
         public Action RegistrationSuccess { get; set; }
         public Action CloseAction { get; set; }
-
         protected override II18nService i18nService => _i18nService;
         protected override IEnvironmentService environmentService => _environmentService;
         protected override IDeviceActionService deviceActionService => _deviceActionService;
@@ -128,8 +163,15 @@ namespace Bit.App.Pages
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
-
-            // TODO: Password strength check?
+            if (MasterPasswordStrength == PasswordStrengthValue.Weak)
+            {
+                var accepted = await _platformUtilsService.ShowDialogAsync(AppResources.WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount,
+                    AppResources.WeakMasterPassword, AppResources.Yes, AppResources.No);
+                if (!accepted)
+                {
+                    return;
+                }
+            }
 
             if (showLoading)
             {

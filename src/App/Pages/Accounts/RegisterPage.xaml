@@ -25,7 +25,7 @@
     </ContentPage.ToolbarItems>
 
     <ScrollView>
-        <StackLayout Spacing="20">
+        <StackLayout Spacing="10">
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row">
                     <Label
@@ -72,8 +72,14 @@
                         AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"/>
                 </Grid>
                 <Label
-                    Text="{u:I18n MasterPasswordDescription}"
-                    StyleClass="box-footer-label" />
+                    StyleClass="box-sub-label"
+                    FormattedText="{Binding MasterPasswordDescription}"
+                    Margin="0,0,0,10"/>
+                <controls:PasswordStrengthProgressBar
+                    Password="{Binding MasterPassword}"
+                    Email="{Binding Email}"
+                    PasswordStrength="{Binding MasterPasswordStrength}"
+                    Margin="0,0"/>
             </StackLayout>
             <StackLayout StyleClass="box">
                 <Grid StyleClass="box-row">
