@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
@@ -50,6 +49,15 @@ namespace Bit.Core.Services
         {
             var activeUserId = await GetActiveUserIdAsync();
             return await GetEmailAsync(activeUserId);
+        }
+
+        public async Task<T> GetActiveUserCustomDataAsync<T>(Func<Account, T> dataMapper)
+        {
+            var userId = await GetActiveUserIdAsync();
+            var account = await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            );
+            return dataMapper(account);
         }
 
         public async Task<bool> IsActiveAccountAsync(string userId = null)
@@ -1684,6 +1692,22 @@ namespace Bit.Core.Services
                 }
             }
             throw new Exception("User does not exist in account list");
+        }
+
+        public async Task<bool> GetShouldConnectToWatchAsync(string userId = null)
+        {
+            var reconciledOptions =
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync());
+            var key = Constants.ShouldConnectToWatchKey(reconciledOptions.UserId);
+            return await GetValueAsync<bool?>(key, reconciledOptions) ?? false;
+        }
+
+        public async Task SetShouldConnectToWatchAsync(bool shouldConnect, string userId = null)
+        {
+            var reconciledOptions =
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync());
+            var key = Constants.ShouldConnectToWatchKey(reconciledOptions.UserId);
+            await SetValueAsync(key, shouldConnect, reconciledOptions);
         }
     }
 }

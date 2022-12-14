@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21512" systemVersion="22A380" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CipherEntity" representedClassName="CipherEntity" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String" valueTransformerName="StringEncryptionTransformer"/>
+        <attribute name="loginUris" optional="YES" attributeType="Transformable" valueTransformerName="StringEncryptionTransformer"/>
+        <attribute name="name" optional="YES" attributeType="Transformable" valueTransformerName="StringEncryptionTransformer"/>
+        <attribute name="totp" optional="YES" attributeType="Transformable" valueTransformerName="StringEncryptionTransformer"/>
+        <attribute name="type" optional="YES" attributeType="Transformable" valueTransformerName="StringEncryptionTransformer"/>
+        <attribute name="userId" optional="YES" attributeType="String" valueTransformerName="StringEncryptionTransformer"/>
+        <attribute name="username" optional="YES" attributeType="Transformable" valueTransformerName="StringEncryptionTransformer"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+</model>

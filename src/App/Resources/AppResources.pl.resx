@@ -2511,4 +2511,7 @@ Czy chcesz przełączyć się na to konto?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Ta prośba nie jest już ważna</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Włącz uprawnienia aparatu do korzystania ze skanera</value>
+  </data>
 </root>

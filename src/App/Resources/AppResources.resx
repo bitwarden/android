@@ -2453,6 +2453,9 @@ select Add TOTP to store the key safely</value>
   <data name="Random" xml:space="preserve">
     <value>Random</value>
   </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
+  </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Accessibility Service Disclosure</value>
   </data>
@@ -2511,5 +2514,8 @@ Do you want to switch to this account?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>This request is no longer valid</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Enable camera permission to use the scanner</value>
   </data>
 </root>

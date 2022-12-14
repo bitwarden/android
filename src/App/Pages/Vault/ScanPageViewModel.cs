@@ -1,6 +1,14 @@
-﻿using Bit.App.Resources;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Bit.App.Abstractions;
+using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
+using Bit.Core.Services;
+using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -9,13 +17,46 @@ namespace Bit.App.Pages
     {
         private bool _showScanner = true;
         private string _totpAuthenticationKey;
+        private IPlatformUtilsService _platformUtilsService;
+        private IDeviceActionService _deviceActionService;
+        private ILogger _logger;
 
         public ScanPageViewModel()
         {
-            ToggleScanModeCommand = new Command(() => ShowScanner = !ShowScanner);
+            ToggleScanModeCommand = new AsyncCommand(ToggleScanMode, onException: HandleException);
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _logger = ServiceContainer.Resolve<ILogger>();
+            InitAsync().FireAndForget();
         }
 
-        public Command ToggleScanModeCommand { get; set; }
+        public async Task InitAsync()
+        {
+            try
+            {
+                await Device.InvokeOnMainThreadAsync(async () =>
+                {
+                    var hasCameraPermission = await PermissionManager.CheckAndRequestPermissionAsync(new Permissions.Camera());
+                    HasCameraPermission = hasCameraPermission == PermissionStatus.Granted;
+                    ShowScanner = hasCameraPermission == PermissionStatus.Granted;
+                });
+
+                if (!HasCameraPermission)
+                {
+                    return;
+                }
+                InitScannerCommand.Execute(null);
+            }
+            catch (System.Exception ex)
+            {
+                HandleException(ex);
+            }
+        }
+
+        public ICommand ToggleScanModeCommand { get; set; }
+        public ICommand InitScannerCommand { get; set; }
+
+        public bool HasCameraPermission { get; set; }
         public string ScanQrPageTitle => ShowScanner ? AppResources.ScanQrTitle : AppResources.AuthenticatorKeyScanner;
         public string CameraInstructionTop => ShowScanner ? AppResources.PointYourCameraAtTheQRCode : AppResources.OnceTheKeyIsSuccessfullyEntered;
         public string TotpAuthenticationKey
@@ -39,6 +80,23 @@ namespace Bit.App.Pages
                 });
         }
 
+        private async Task ToggleScanMode()
+        {
+            var cameraPermission = await PermissionManager.CheckAndRequestPermissionAsync(new Permissions.Camera());
+            HasCameraPermission = cameraPermission == PermissionStatus.Granted;
+            if (!HasCameraPermission)
+            {
+                var openAppSettingsResult = await _platformUtilsService.ShowDialogAsync(AppResources.EnableCamerPermissionToUseTheScanner, title: string.Empty, confirmText: AppResources.Settings, cancelText: AppResources.NoThanks);
+                if (openAppSettingsResult)
+                {
+                    _deviceActionService.OpenAppSettings();
+                }
+                return;
+            }
+            ShowScanner = !ShowScanner;
+            InitScannerCommand.Execute(null);
+        }
+
         public FormattedString ToggleScanModeLabel
         {
             get
@@ -56,6 +114,16 @@ namespace Bit.App.Pages
                 });
                 return fs;
             }
+        }
+
+        private void HandleException(Exception ex)
+        {
+            Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                await _deviceActionService.HideLoadingAsync();
+                await _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage);
+            }).FireAndForget();
+            _logger.Exception(ex);
         }
     }
 }

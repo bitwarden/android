@@ -1762,7 +1762,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Parmağımla aşağı çektiğimde kasayı eşitle.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Kurumsal tek oturum açma (SSO)</value>
+    <value>Kurumsal tek oturum açma</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
     <value>Kuruluşunuzun tek oturum açma portalını kullanarak hızlıca giriş yapabilirsiniz.  Başlamak için lütfen kuruluşunuzun tanımlayıcısını girin.</value>
@@ -2509,5 +2509,8 @@ Bu hesaba geçmek ister misiniz?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Bu istek artık geçerli değil</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Tarayıcıyı kullanmak için kameraya erişim izni verin</value>
   </data>
 </root>

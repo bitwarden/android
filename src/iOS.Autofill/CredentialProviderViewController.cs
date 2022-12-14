@@ -404,6 +404,7 @@ namespace Bit.iOS.Autofill
             ServiceContainer.Init(deviceActionService.DeviceUserAgent, 
                 Bit.Core.Constants.iOSAutoFillClearCiphersCacheKey, Bit.Core.Constants.iOSAllClearCipherCacheKeys);
             iOSCoreHelpers.InitLogger();
+            iOSCoreHelpers.RegisterFinallyBeforeBootstrap();
             iOSCoreHelpers.Bootstrap();
             var appOptions = new AppOptions { IosExtension = true };
             var app = new App.App(appOptions);

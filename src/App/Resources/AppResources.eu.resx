@@ -2508,6 +2508,9 @@ Kontu honetara aldatu nahi duzu?</value>
     <value>Ikusi erregistro guztiak ezarpenetan</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
-    <value>This request is no longer valid</value>
+    <value>Eskaera jada ez da balekoa.</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Enable camera permission to use the scanner</value>
   </data>
 </root>

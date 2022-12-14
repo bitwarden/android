@@ -2511,4 +2511,7 @@ Deseja mudar para esta conta?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Este pedido já não é válido</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Ative a permissão da câmara para usar o digitalizador</value>
+  </data>
 </root>

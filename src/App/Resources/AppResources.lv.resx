@@ -2511,4 +2511,7 @@ Vai pārslēgties uz šo kontu?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Šis pieprasījums vairs nav derīgs</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Nodrošināt atļauju izmantot kameru, lai lietotu nolasītāju</value>
+  </data>
 </root>

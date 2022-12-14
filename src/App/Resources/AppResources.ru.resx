@@ -125,7 +125,7 @@
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>Добавить папку</value>
+    <value>Добавление папки</value>
   </data>
   <data name="AddItem" xml:space="preserve">
     <value>Добавить элемент</value>
@@ -179,7 +179,7 @@
     <value>Изменить</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Изменить папку</value>
+    <value>Изменение папки</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
@@ -535,7 +535,7 @@
     <value>Длина</value>
   </data>
   <data name="Lock" xml:space="preserve">
-    <value>Заблокировать</value>
+    <value>Блокировка</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
     <value>15 минут</value>
@@ -978,7 +978,7 @@
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Окружение собственного хостинга</value>
+    <value>Окружение пользовательского хостинга</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
     <value>Укажите URL Bitwarden на вашем сервере.</value>
@@ -1489,7 +1489,7 @@
     <value>Установите PIN-код для разблокировки Bitwarden. Настройки PIN-кода будут сброшены, если вы когда-либо полностью выйдете из приложения.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Авторизован {0} на {1}.</value>
+    <value>На {1} авторизован {0}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
@@ -1576,7 +1576,7 @@
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
-    <value>Солнечная темная</value>
+    <value>Solarized Dark</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
@@ -2357,7 +2357,7 @@
     <value>Вход запрещен</value>
   </data>
   <data name="ApproveLoginRequests" xml:space="preserve">
-    <value>Одобрить запросы на вход</value>
+    <value>Одобрение запросов на вход</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
     <value>Использовать это устройство для подтверждения запросов на вход, сделанных с других устройств.</value>
@@ -2510,5 +2510,8 @@
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Этот запрос больше не действителен</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Для использования сканера необходимо предоставить разрешение на доступ к камере</value>
   </data>
 </root>

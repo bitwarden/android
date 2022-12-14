@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authenticator</value>
+    <value>การยืนยันตัวตน</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -777,10 +777,10 @@
     <value>เปิดใช้งาน</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Off</value>
+    <value>ปิด</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>เปิด</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>สถานะ</value>
@@ -2518,5 +2518,8 @@ Do you want to switch to this account?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>This request is no longer valid</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Enable camera permission to use the scanner</value>
   </data>
 </root>

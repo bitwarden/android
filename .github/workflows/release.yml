@@ -52,7 +52,7 @@ jobs:
         id: branch
         run: |
           BRANCH_NAME=$(basename ${{ github.ref }})
-          echo "::set-output name=branch-name::$BRANCH_NAME"
+          echo "branch-name=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
       - name: Create GitHub deployment
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}

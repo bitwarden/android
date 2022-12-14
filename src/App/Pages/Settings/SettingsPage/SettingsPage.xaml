@@ -26,7 +26,7 @@
                         Padding="10"
                         HasShadow="False"
                         BackgroundColor="Transparent"
-                        BorderColor="Accent">
+                        BorderColor="{DynamicResource PrimaryColor}">
                         <Label
                             Text="{Binding Name, Mode=OneWay}"
                             StyleClass="text-muted, text-sm, text-bold"
@@ -57,7 +57,7 @@
                         Padding="10"
                         HasShadow="False"
                         BackgroundColor="Transparent"
-                        BorderColor="Accent">
+                        BorderColor="{DynamicResource PrimaryColor}">
                         <Label
                             Text="{Binding Name, Mode=OneWay}"
                             StyleClass="text-muted, text-sm, text-bold"

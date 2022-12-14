@@ -96,7 +96,7 @@
                            Margin="0"
                            HasShadow="False"
                            BackgroundColor="Transparent"
-                           BorderColor="Accent">
+                           BorderColor="{DynamicResource PrimaryColor}">
                         <Label
                             Text="{u:I18n PersonalOwnershipPolicyInEffect}"
                             StyleClass="text-muted, text-sm, text-bold"

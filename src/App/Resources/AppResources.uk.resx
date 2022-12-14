@@ -2511,4 +2511,7 @@
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Цей запит більше недійсний</value>
   </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Увімкніть доступ до камери для використання сканера</value>
+  </data>
 </root>
