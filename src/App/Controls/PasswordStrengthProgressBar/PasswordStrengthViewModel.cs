@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Bit.Core.Abstractions;
+using Bit.Core.Models.Data;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -41,7 +42,7 @@ namespace Bit.App.Controls
 
         public void CalculateMasterPasswordStrength(string password, string email)
         {
-            var passwordStrength = _passwordGenerationService.PasswordStrength(password, GetPasswordStrengthUserInput(email));
+            var passwordStrength = _passwordGenerationService.PasswordStrength(password, email);
             if (string.IsNullOrEmpty(password))
             {
                 PasswordStrength = 0;
@@ -82,19 +83,6 @@ namespace Bit.App.Controls
                 PasswordStatus = Resources.AppResources.Strong;
                 PasswordStrengthCategory = PasswordStrengthCategory.Strong;
             }
-        }
-
-        private List<string> GetPasswordStrengthUserInput(string email)
-        {
-            List<string> userInput = null;
-            var atPosition = email?.IndexOf('@');
-            if (atPosition != null && atPosition > -1)
-            {
-                var rx = new Regex("/[^A-Za-z0-9]/", RegexOptions.Compiled);
-                var data = rx.Split(email.Substring(0, atPosition.Value).Trim().ToLower());
-                userInput = new List<string>(data);
-            }
-            return userInput;
         }
     }
 

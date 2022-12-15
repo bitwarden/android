@@ -137,8 +137,7 @@ namespace Bit.App.Pages
             }
             if (IsPolicyInEffect)
             {
-                var userInput = await GetPasswordStrengthUserInput();
-                var passwordStrength = _passwordGenerationService.PasswordStrength(MasterPassword, userInput);
+                var passwordStrength = _passwordGenerationService.PasswordStrength(MasterPassword, await _stateService.GetEmailAsync());
                 if (!await _policyService.EvaluateMasterPassword(passwordStrength.Score, MasterPassword, Policy))
                 {
                     await Page.DisplayAlert(AppResources.MasterPasswordPolicyValidationTitle,

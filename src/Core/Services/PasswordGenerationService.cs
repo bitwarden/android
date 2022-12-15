@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
@@ -510,6 +511,12 @@ namespace Bit.Core.Services
             return result;
         }
 
+        public Result PasswordStrength(string password, string email)
+        {
+            var userInputs = GetPasswordStrengthUserInput(email);
+            return PasswordStrength(password, userInputs);
+        }
+
         public void NormalizeOptions(PasswordGenerationOptions options,
             PasswordGeneratorPolicyOptions enforcedPolicyOptions)
         {
@@ -737,6 +744,19 @@ namespace Bit.Core.Services
                 options.MinNumber = minNumberCalc;
                 options.MinSpecial = minSpecialCalc;
             }
+        }
+
+        private List<string> GetPasswordStrengthUserInput(string email)
+        {
+            var atPosition = email?.IndexOf('@');
+            if (atPosition is null || atPosition < 0)
+            {
+                return null;
+            }
+            var rx = new Regex("/[^A-Za-z0-9]/", RegexOptions.Compiled);
+            var data = rx.Split(email.Substring(0, atPosition.Value).Trim().ToLower());
+
+            return new List<string>(data); ;
         }
     }
 }
