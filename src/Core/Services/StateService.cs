@@ -85,7 +85,7 @@ namespace Bit.Core.Services
             await SetRememberedOrgIdentifierAsync(await GetRememberedOrgIdentifierAsync());
             await SetPreAuthEnvironmentUrlsAsync(await GetEnvironmentUrlsAsync());
 
-            await UpdateLastUserShouldConnectToWatchAsync();
+            await SetLastUserShouldConnectToWatchAsync();
         }
 
         public async Task CheckExtensionActiveUserAndSwitchIfNeededAsync()
@@ -1710,21 +1710,21 @@ namespace Bit.Core.Services
                 ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync());
             var key = Constants.ShouldConnectToWatchKey(reconciledOptions.UserId);
             await SetValueAsync(key, shouldConnect, reconciledOptions);
-            await UpdateLastUserShouldConnectToWatchAsync(shouldConnect);
+            await SetLastUserShouldConnectToWatchAsync(shouldConnect);
         }
 
         public async Task<bool> GetLastUserShouldConnectToWatchAsync()
         {
-            var reconciledOptions = await GetDefaultStorageOptionsAsync();
+            var options = await GetDefaultStorageOptionsAsync();
             var key = Constants.LastUserShouldConnectToWatchKey;
-            return await GetValueAsync<bool?>(key, reconciledOptions) ?? false;
+            return await GetValueAsync<bool?>(key, options) ?? false;
         }
 
-        public async Task UpdateLastUserShouldConnectToWatchAsync(bool? shouldConnect = null)
+        private async Task SetLastUserShouldConnectToWatchAsync(bool? shouldConnect = null)
         {
-            var reconciledOptions = await GetDefaultStorageOptionsAsync();
+            var options = await GetDefaultStorageOptionsAsync();
             var key = Constants.LastUserShouldConnectToWatchKey;
-            await SetValueAsync(key, shouldConnect ?? await GetShouldConnectToWatchAsync(), reconciledOptions);
+            await SetValueAsync(key, shouldConnect ?? await GetShouldConnectToWatchAsync(), options);
         }
     }
 }
