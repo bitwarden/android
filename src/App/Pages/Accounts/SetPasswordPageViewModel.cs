@@ -147,7 +147,7 @@ namespace Bit.App.Pages
             }
             else
             {
-                if (MasterPassword.Length < 8)
+                if (MasterPassword.Length < Constants.MasterPasswordMinimumChars)
                 {
                     await Page.DisplayAlert(AppResources.MasterPasswordPolicyValidationTitle,
                         AppResources.MasterPasswordLengthValMessage, AppResources.Ok);

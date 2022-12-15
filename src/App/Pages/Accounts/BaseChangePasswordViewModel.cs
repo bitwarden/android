@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
@@ -157,7 +158,7 @@ namespace Bit.App.Pages
             }
             else
             {
-                if (MasterPassword.Length < 8)
+                if (MasterPassword.Length < Constants.MasterPasswordMinimumChars)
                 {
                     await _platformUtilsService.ShowDialogAsync(AppResources.MasterPasswordLengthValMessage,
                         AppResources.MasterPasswordPolicyValidationTitle, AppResources.Ok);

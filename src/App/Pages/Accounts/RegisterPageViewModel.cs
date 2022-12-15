@@ -77,27 +77,8 @@ namespace Bit.App.Pages
             set => SetProperty(ref _email, value);
         }
 
-        public FormattedString MasterPasswordDescription
-        {
-            get
-            {
-                var fs = new FormattedString();
-                fs.Spans.Add(new Span
-                {
-                    Text = string.Format("{0}: ", AppResources.Important),
-                    TextColor = Utilities.ThemeManager.GetResourceColor("InfoColor"),
-
-            });
-                fs.Spans.Add(new Span
-                {
-                    Text = AppResources.YourMasterPasswordCannotBeRecoveredIfYouForgetIt8CharacterMinimum,
-                    TextColor = Utilities.ThemeManager.GetResourceColor("MutedColor"),
-                    FontAttributes = FontAttributes.None
-                });
-                return fs;
-            }
-        }
-
+        public string MasterPasswordMininumCharactersDescription => string.Format(AppResources.YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharacterMinimum,
+                                                                            Constants.MasterPasswordMinimumChars);
         public bool ShowTerms { get; set; }
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
@@ -145,7 +126,7 @@ namespace Bit.App.Pages
                     AppResources.Ok);
                 return;
             }
-            if (MasterPassword.Length < 8)
+            if (MasterPassword.Length < Constants.MasterPasswordMinimumChars)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.MasterPasswordLengthValMessage,
                     AppResources.AnErrorHasOccurred, AppResources.Ok);

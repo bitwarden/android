@@ -42,7 +42,6 @@ namespace Bit.App.Controls
 
         public void CalculateMasterPasswordStrength(string password, string email)
         {
-            var passwordStrength = _passwordGenerationService.PasswordStrength(password, email);
             if (string.IsNullOrEmpty(password))
             {
                 PasswordStrength = 0;
@@ -52,6 +51,7 @@ namespace Bit.App.Controls
                 return;
             }
 
+            var passwordStrength = _passwordGenerationService.PasswordStrength(password, email);
             PasswordStrength = (passwordStrength.Score + 1f) / 5f;
             if (PasswordStrength <= 0.2f)
             {
