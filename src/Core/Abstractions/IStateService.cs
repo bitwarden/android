@@ -162,5 +162,6 @@ namespace Bit.Core.Abstractions
         Task SetUsernameGenerationOptionsAsync(UsernameGenerationOptions value, string userId = null);
         Task<bool> GetShouldConnectToWatchAsync(string userId = null);
         Task SetShouldConnectToWatchAsync(bool shouldConnect, string userId = null);
+        Task<bool> GetLastUserShouldConnectToWatchAsync();
     }
 }
