@@ -51,12 +51,6 @@ class CipherListViewModel : ObservableObject {
         
         user = StateService.shared.getUser()
         
-        if user == nil && !watchConnectivityManager.isSessionActivated {
-            currentState = .needSetup
-            showingSheet = true
-            return
-        }
-        
         currentState = state ?? StateService.shared.currentState
         showingSheet = currentState != .valid
         

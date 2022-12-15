@@ -97,5 +97,10 @@
         public static string PushLastRegistrationDateKey(string userId) => $"pushLastRegistrationDate_{userId}";
         public static string PushCurrentTokenKey(string userId) => $"pushCurrentToken_{userId}";
         public static string ShouldConnectToWatchKey(string userId) => $"shouldConnectToWatch_{userId}";
+        /// <summary>
+        /// This key is used to store the value of "ShouldConnectToWatch" of the last user that had logged in
+        /// which is used to handle Apple Watch state logic
+        /// </summary>
+        public const string LastUserShouldConnectToWatchKey = "lastUserShouldConnectToWatch";
     }
 }

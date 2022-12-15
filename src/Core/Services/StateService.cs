@@ -84,6 +84,8 @@ namespace Bit.Core.Services
             // Update pre-auth settings based on now-active user
             await SetRememberedOrgIdentifierAsync(await GetRememberedOrgIdentifierAsync());
             await SetPreAuthEnvironmentUrlsAsync(await GetEnvironmentUrlsAsync());
+
+            await UpdateLastUserShouldConnectToWatchAsync();
         }
 
         public async Task CheckExtensionActiveUserAndSwitchIfNeededAsync()
@@ -1708,6 +1710,21 @@ namespace Bit.Core.Services
                 ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync());
             var key = Constants.ShouldConnectToWatchKey(reconciledOptions.UserId);
             await SetValueAsync(key, shouldConnect, reconciledOptions);
+            await UpdateLastUserShouldConnectToWatchAsync(shouldConnect);
+        }
+
+        public async Task<bool> GetLastUserShouldConnectToWatchAsync()
+        {
+            var reconciledOptions = await GetDefaultStorageOptionsAsync();
+            var key = Constants.LastUserShouldConnectToWatchKey;
+            return await GetValueAsync<bool?>(key, reconciledOptions) ?? false;
+        }
+
+        public async Task UpdateLastUserShouldConnectToWatchAsync(bool? shouldConnect = null)
+        {
+            var reconciledOptions = await GetDefaultStorageOptionsAsync();
+            var key = Constants.LastUserShouldConnectToWatchKey;
+            await SetValueAsync(key, shouldConnect ?? await GetShouldConnectToWatchAsync(), reconciledOptions);
         }
     }
 }
