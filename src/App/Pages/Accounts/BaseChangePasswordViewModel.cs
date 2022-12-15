@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
@@ -148,7 +149,8 @@ namespace Bit.App.Pages
             }
             if (IsPolicyInEffect)
             {
-                var passwordStrength = _passwordGenerationService.PasswordStrength(MasterPassword, await _stateService.GetEmailAsync());
+                var userInputs = PasswordStrengthHelper.GetPasswordStrengthUserInput(await _stateService.GetEmailAsync());
+                var passwordStrength = _passwordGenerationService.PasswordStrength(MasterPassword, userInputs);
                 if (!await _policyService.EvaluateMasterPassword(passwordStrength.Score, MasterPassword, Policy))
                 {
                     await _platformUtilsService.ShowDialogAsync(AppResources.MasterPasswordPolicyValidationMessage,

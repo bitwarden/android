@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Bit.Core.Abstractions;
-using Bit.Core.Attributes;
 using Bit.Core.Models.Data;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
@@ -14,11 +12,13 @@ namespace Bit.App.Controls
         private readonly IPasswordGenerationService _passwordGenerationService;
         private double _passwordStrength;
         private Color _passwordColor;
-        private PasswordStrengthCategory _passwordStrengthCategory;
+        private PasswordStrengthCategory? _passwordStrengthLevel;
+        IPasswordStrengthable _passwordStrengthable;
 
-        public PasswordStrengthViewModel()
+        public PasswordStrengthViewModel(IPasswordStrengthable passwordStrengthable)
         {
             _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>();
+            _passwordStrengthable = passwordStrengthable;
         }
 
         public double PasswordStrength
@@ -33,57 +33,46 @@ namespace Bit.App.Controls
             set => SetProperty(ref _passwordColor, value);
         }
 
-        public PasswordStrengthCategory PasswordStrengthCategory
+        public PasswordStrengthCategory? PasswordStrengthLevel
         {
-            get => _passwordStrengthCategory;
-            set => SetProperty(ref _passwordStrengthCategory, value);
+            get => _passwordStrengthLevel;
+            set => SetProperty(ref _passwordStrengthLevel, value);
         }
 
-        public void CalculateMasterPasswordStrength(string password, string email)
+        public void CalculatePasswordStrength()
         {
-            if (string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(_passwordStrengthable.Password))
             {
                 PasswordStrength = 0;
                 PasswordColor = Utilities.ThemeManager.GetResourceColor("DangerColor");
-                PasswordStrengthCategory = PasswordStrengthCategory.None;
+                PasswordStrengthLevel = null;
                 return;
             }
 
-            var passwordStrength = _passwordGenerationService.PasswordStrength(password, email);
+            var passwordStrength = _passwordGenerationService.PasswordStrength(_passwordStrengthable.Password, _passwordStrengthable.UserInputs);
+            // The passwordStrength.Score is 0..4, convertion was made to be used as a progress directly by the control 0..1 
             PasswordStrength = (passwordStrength.Score + 1f) / 5f;
             if (PasswordStrength <= 0.4f)
             {
                 PasswordColor = Utilities.ThemeManager.GetResourceColor("DangerColor");
-                PasswordStrengthCategory = PasswordStrengthCategory.Weak;
+                PasswordStrengthLevel = PasswordStrengthCategory.Weak;
             }
             else if (PasswordStrength <= 0.6f)
             {
                 PasswordColor = Utilities.ThemeManager.GetResourceColor("WarningColor");
-                PasswordStrengthCategory = PasswordStrengthCategory.Weak;
+                PasswordStrengthLevel = PasswordStrengthCategory.Weak;
             }
             else if (PasswordStrength <= 0.8f)
             {
                 PasswordColor = Utilities.ThemeManager.GetResourceColor("PrimaryColor");
-                PasswordStrengthCategory = PasswordStrengthCategory.Good;
+                PasswordStrengthLevel = PasswordStrengthCategory.Good;
             }
             else if (PasswordStrength <= 1f)
             {
                 PasswordColor = Utilities.ThemeManager.GetResourceColor("SuccessColor");
-                PasswordStrengthCategory = PasswordStrengthCategory.Strong;
+                PasswordStrengthLevel = PasswordStrengthCategory.Strong;
             }
         }
-    }
-
-    public enum PasswordStrengthCategory
-    {
-        [LocalizableEnum(" ")]
-        None,
-        [LocalizableEnum("Weak")]
-        Weak,
-        [LocalizableEnum("Good")]
-        Good,
-        [LocalizableEnum("Strong")]
-        Strong
     }
 }
 
