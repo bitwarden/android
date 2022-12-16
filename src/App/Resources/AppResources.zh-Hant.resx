@@ -2299,9 +2299,6 @@
     <value>成功輸入金鑰後，
 選擇「新增 TOTP」即可安全地儲存金鑰</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>將鎖定選項設定為「從不」可讓任何能夠存取您的裝置的人都可以使用您的密碼庫。 如果您使用此選項，則應確保您的裝置得到妥善的保護。</value>
   </data>
@@ -2451,6 +2448,9 @@
   </data>
   <data name="Random" xml:space="preserve">
     <value>隨機</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>無障礙服務聲明</value>

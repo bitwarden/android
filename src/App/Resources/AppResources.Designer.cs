@@ -5256,15 +5256,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string SelectAddTotpToStoreTheKeySafely {
-            get {
-                return ResourceManager.GetString("SelectAddTotpToStoreTheKeySafely", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You must select at least one collection..
         /// </summary>
         public static string SelectOneCollection {

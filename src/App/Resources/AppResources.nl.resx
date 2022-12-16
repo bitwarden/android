@@ -2299,9 +2299,6 @@ Het scannen gebeurt automatisch.</value>
     <value>Zodra je de sleutel goed hebt ingevoerd,
 kies je TOTP toevoegen om de sleutel veilig op te slaan</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>De vergrendelingsoptie "Nooit" houdt je kluis beschikbaar voor iedereen met toegang tot je apparaat. Als je deze optie gebruikt, moet je ervoor zorgen dat je je apparaat naar behoren beschermt.</value>
   </data>
@@ -2451,6 +2448,9 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Willekeurig</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Toegankelijksheidsservice-melding</value>

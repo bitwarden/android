@@ -2299,9 +2299,6 @@ Načtení proběhne automaticky.</value>
     <value>Once the key is successfully entered,
 select Add TOTP to store the key safely</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Nastavení zámku na „Nikdy“ ponechá váš trezor k dispozici komukoliv s přístupem k vašemu zařízení. Používáte-li tuto možnost, měli byste zajistit, aby vaše zařízení bylo náležitě chráněno.</value>
   </data>
@@ -2451,6 +2448,9 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Náhodně</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Accessibility Service Disclosure</value>

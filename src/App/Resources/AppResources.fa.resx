@@ -315,7 +315,7 @@
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>تایید</value>
+    <value>تأیید</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
@@ -2300,9 +2300,6 @@
     <value>هنگامی که کلید با موفقیت وارد شد،
 برای ذخیره ایمن کلید، افزودن TOTP را انتخاب کنید</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>با تنظیم گزینه‌های قفل روی «هرگز»، گاوصندوق شما برای هر کسی که به دستگاه شما دسترسی دارد در دسترس نگه داشته می‌شود. اگر از این گزینه استفاده می کنید، باید مطمئن شوید که دستگاه خود را به درستی محافظت می‌کنید.</value>
   </data>
@@ -2453,6 +2450,9 @@
   <data name="Random" xml:space="preserve">
     <value>تصادفی</value>
   </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>اتصال به ساعت</value>
+  </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>افشای سرویس دسترسی</value>
   </data>
@@ -2513,6 +2513,6 @@
     <value>این درخواست دیگر معتبر نیست</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>اجازه دوربین را برای استفاده از اسکنر فعال کنید</value>
   </data>
 </root>

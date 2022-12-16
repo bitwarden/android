@@ -2298,9 +2298,6 @@
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
     <value>Gakoa ondo sartzen duzunean, sakatu Gehitu TOTP-a gakoa modu seguruan gordetzeko</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Zure blokeo aukerak "inoiz ez" bezala ezartzen badituzu, gailura sarbidea duen edonork izango du kutxa gotorra eskuragarri. Aukera hau erabiltzen baduzu, gailua behar bezala babestuta duzula ziurtatu behar duzu.</value>
   </data>
@@ -2451,6 +2448,9 @@
   <data name="Random" xml:space="preserve">
     <value>Ausazkoa</value>
   </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
+  </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Zabaldu irisgarritasun zerbitzua</value>
   </data>
@@ -2511,6 +2511,6 @@ Kontu honetara aldatu nahi duzu?</value>
     <value>Eskaera jada ez da balekoa.</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>Gaitu kameraren baimena eskanerra erabiltzeko</value>
   </data>
 </root>
