@@ -149,7 +149,7 @@ namespace Bit.App.Pages
             }
             if (IsPolicyInEffect)
             {
-                var userInputs = PasswordStrengthHelper.GetPasswordStrengthUserInput(await _stateService.GetEmailAsync());
+                var userInputs = _passwordGenerationService.GetPasswordStrengthUserInput(await _stateService.GetEmailAsync());
                 var passwordStrength = _passwordGenerationService.PasswordStrength(MasterPassword, userInputs);
                 if (!await _policyService.EvaluateMasterPassword(passwordStrength.Score, MasterPassword, Policy))
                 {

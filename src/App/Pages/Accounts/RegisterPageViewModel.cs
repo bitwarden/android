@@ -86,7 +86,7 @@ namespace Bit.App.Pages
         }
 
         public string Password => MasterPassword;
-        public List<string> UserInputs => PasswordStrengthHelper.GetPasswordStrengthUserInput(Email);
+        public List<string> UserInputs => PasswordStrengthViewModel.GetPasswordStrengthUserInput(Email);
         public string MasterPasswordMininumCharactersDescription => string.Format(AppResources.YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharacterMinimum,
                                                                             Constants.MasterPasswordMinimumChars);
         public PasswordStrengthViewModel PasswordStrengthViewModel { get; }
@@ -154,7 +154,7 @@ namespace Bit.App.Pages
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
-            if (PasswordStrengthViewModel.PasswordStrengthLevel == PasswordStrengthCategory.Weak)
+            if (PasswordStrengthViewModel.PasswordStrengthLevel == PasswordStrengthLevel.Weak)
             {
                 var accepted = await _platformUtilsService.ShowDialogAsync(AppResources.WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount,
                     AppResources.WeakMasterPassword, AppResources.Yes, AppResources.No);

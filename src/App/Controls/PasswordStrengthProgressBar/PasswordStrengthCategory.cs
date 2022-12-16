@@ -2,7 +2,7 @@
 
 namespace Bit.App.Controls
 {
-    public enum PasswordStrengthCategory
+    public enum PasswordStrengthLevel
     {
         [LocalizableEnum("Weak")]
         Weak,

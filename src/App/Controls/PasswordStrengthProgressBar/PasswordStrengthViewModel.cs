@@ -1,7 +1,5 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
 using Bit.Core.Abstractions;
-using Bit.Core.Models.Data;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -10,10 +8,10 @@ namespace Bit.App.Controls
     public class PasswordStrengthViewModel : ExtendedViewModel
     {
         private readonly IPasswordGenerationService _passwordGenerationService;
+        private readonly IPasswordStrengthable _passwordStrengthable;
         private double _passwordStrength;
         private Color _passwordColor;
-        private PasswordStrengthCategory? _passwordStrengthLevel;
-        IPasswordStrengthable _passwordStrengthable;
+        private PasswordStrengthLevel? _passwordStrengthLevel;
 
         public PasswordStrengthViewModel(IPasswordStrengthable passwordStrengthable)
         {
@@ -33,11 +31,13 @@ namespace Bit.App.Controls
             set => SetProperty(ref _passwordColor, value);
         }
 
-        public PasswordStrengthCategory? PasswordStrengthLevel
+        public PasswordStrengthLevel? PasswordStrengthLevel
         {
             get => _passwordStrengthLevel;
             set => SetProperty(ref _passwordStrengthLevel, value);
         }
+
+        public List<string> GetPasswordStrengthUserInput(string email) => _passwordGenerationService.GetPasswordStrengthUserInput(email);
 
         public void CalculatePasswordStrength()
         {
@@ -55,22 +55,22 @@ namespace Bit.App.Controls
             if (PasswordStrength <= 0.4f)
             {
                 PasswordColor = Utilities.ThemeManager.GetResourceColor("DangerColor");
-                PasswordStrengthLevel = PasswordStrengthCategory.Weak;
+                PasswordStrengthLevel = Controls.PasswordStrengthLevel.Weak;
             }
             else if (PasswordStrength <= 0.6f)
             {
                 PasswordColor = Utilities.ThemeManager.GetResourceColor("WarningColor");
-                PasswordStrengthLevel = PasswordStrengthCategory.Weak;
+                PasswordStrengthLevel = Controls.PasswordStrengthLevel.Weak;
             }
             else if (PasswordStrength <= 0.8f)
             {
                 PasswordColor = Utilities.ThemeManager.GetResourceColor("PrimaryColor");
-                PasswordStrengthLevel = PasswordStrengthCategory.Good;
+                PasswordStrengthLevel = Controls.PasswordStrengthLevel.Good;
             }
-            else if (PasswordStrength <= 1f)
+            else
             {
                 PasswordColor = Utilities.ThemeManager.GetResourceColor("SuccessColor");
-                PasswordStrengthLevel = PasswordStrengthCategory.Strong;
+                PasswordStrengthLevel = Controls.PasswordStrengthLevel.Strong;
             }
         }
     }

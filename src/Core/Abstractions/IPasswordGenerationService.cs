@@ -20,5 +20,6 @@ namespace Bit.Core.Abstractions
         Result PasswordStrength(string password, List<string> userInputs = null);
         Task SaveOptionsAsync(PasswordGenerationOptions options);
         void NormalizeOptions(PasswordGenerationOptions options, PasswordGeneratorPolicyOptions enforcedPolicyOptions);
+        List<string> GetPasswordStrengthUserInput(string email);
     }
 }

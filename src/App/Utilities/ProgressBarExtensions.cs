@@ -1,9 +1,8 @@
-﻿using System;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace Bit.App.Utilities
 {
-    public static class AttachedProperties
+    public static class ProgressBarExtensions
     {
         public static BindableProperty AnimatedProgressProperty =
            BindableProperty.CreateAttached("AnimatedProgress",
@@ -21,7 +20,6 @@ namespace Bit.App.Utilities
             ViewExtensions.CancelAnimations(progressBar);
             progressBar.ProgressTo(progress, 500, Easing.SinIn);
         }
-
     }
 }
 
