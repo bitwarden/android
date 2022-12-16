@@ -790,7 +790,7 @@
     <value>Automaattinen täyttö</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Haluatko täyttää kohteella automaatisesti vai tarkastella sen tietoja?</value>
+    <value>Täytä kohde automaattisesti tai tarkastrele sen tietoja</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
     <value>Haluatko varmasti täyttää automaattisesti tällä kohteella? Se ei täsmää täysin osoitteen "{0}" kanssa.</value>
@@ -2300,9 +2300,6 @@ Koodi luetaan automaattisesti.</value>
     <value>Kun koodi on syötetty oikein, tallenna avain
 turvallisesti valitsemalla "Lisää TOTP"</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Käyttämällä lukitusasetusta "Ei koskaan"? Tallentuu holvisi salausavain laitteellesi. Jos käytät asetusta, varmista, että laite on suojattu hyvin.</value>
   </data>
@@ -2452,6 +2449,9 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Satunnainen</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Yhdistä kelloon</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Esteettömyyspalvelun kuvaus</value>

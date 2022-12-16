@@ -2299,9 +2299,6 @@ Skanning vil ske automatisk.</value>
     <value>Når nøglen er angivet,
 vælg Tilføj TOTP for at gemme nøglen sikkert</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Sættes låseindstillingen til “Aldrig”, er din boks tilgængelig for alle med adgang til enheden. Bruges denne mulighed, så vær sikker på, at din enhed er ordentligt beskyttet.</value>
   </data>
@@ -2451,6 +2448,9 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Tilfældig</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Opret forbindelse til Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Oplysninger om tilgængelighedstjeneste</value>

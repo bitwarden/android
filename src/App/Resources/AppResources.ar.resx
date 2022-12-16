@@ -2300,9 +2300,6 @@
     <value>بمجرد إدخال المفتاح بنجاح،
 حدد إضافة TOTP لتخزين المفتاح بأمان</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>تعيين خيارات قفل الخاص بك إلى "مطلقا" يبقي خزنتك متاحةً لأي شخص لديه حق الوصول إلى جهازك. إذا كنت تستخدم هذا الخيار، يجب أن تتأكد من الحفاظ على حماية جهازك بشكل صحيح.</value>
   </data>
@@ -2452,6 +2449,9 @@
   </data>
   <data name="Random" xml:space="preserve">
     <value>عشوائي</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>كشف خدمة إمكانية الوصول</value>

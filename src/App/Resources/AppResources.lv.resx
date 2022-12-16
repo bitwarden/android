@@ -2299,9 +2299,6 @@ Nolasīšana notiks automātiski.</value>
     <value>Tiklīdz atslēga ir veiksmīgi ievadīta,
 jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Aizslēgšanas iespējas iestatīšana uz "Nekad" padara glabātavu pieejamu ikvienam, kam ir piekļuve ierīcei. Ja šis iestatījums tiek izmantots, jānodrošina, ka ierīce ir pienācīgi aizsargāta.</value>
   </data>
@@ -2451,6 +2448,9 @@ jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Nejauši</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Pieejamības pakalpojuma izmantošanas skaidrojums</value>

@@ -2299,9 +2299,6 @@
     <value>Пасля таго, як ваш ключ паспяхова ўведзены,
 выберыце "Дадаць TOTP" для надзейнага захавання ключа</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Прызначыўшы параметр блакіравання "Ніколі", ваша сховішча будзе даступна кожнаму, хто мае доступ да вашай прылады. Калі вы выкарыстоўваеце гэты параметр, вы павінны быць упэўнены ў тым, што ваша прылада надзейна абаронена.</value>
   </data>
@@ -2451,6 +2448,9 @@
   </data>
   <data name="Random" xml:space="preserve">
     <value>Выпадкова</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Падлучыцца да гадзінніка</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Апісанне службы спецыяльных магчымасцей</value>

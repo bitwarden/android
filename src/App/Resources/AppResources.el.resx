@@ -2299,9 +2299,6 @@
     <value>Μόλις το κλειδί εισαχθεί με επιτυχία,
 επιλέξτε Προσθήκη TOTP για να αποθηκεύσετε το κλειδί με ασφάλεια</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Ρυθμίζοντας τις επιλογές κλειδώματος σε “Ποτέ” κρατά τη κρύπτη σας διαθέσιμη σε οποιονδήποτε με πρόσβαση στη συσκευή σας. Εάν χρησιμοποιείτε αυτήν την επιλογή, θα πρέπει να διασφαλίσετε ότι διατηρείτε τη συσκευή σας σωστά προστατευμένη.</value>
   </data>
@@ -2451,6 +2448,9 @@
   </data>
   <data name="Random" xml:space="preserve">
     <value>Τυχαίο</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Γνωστοποίηση Υπηρεσίας Προσβασιμότητας</value>

@@ -2299,9 +2299,6 @@
     <value>После успешного ввода ключа
  выберите Добавить TOTP для безопасного сохранения ключа</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>При установке опции блокировки на "Никогда" хранилище будет доступно любому, кто имеет доступ к вашему устройству, поэтому убедитесь, что устройство защищено должным образом.</value>
   </data>
@@ -2451,6 +2448,9 @@
   </data>
   <data name="Random" xml:space="preserve">
     <value>Случайно</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Подключиться к часам</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Раскрытие информации о службе специальных возможностей</value>

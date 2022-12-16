@@ -2299,9 +2299,6 @@ Scanarea se va face automat.</value>
     <value>După ce cheia este introdusă corect,
 selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Setarea opțiunilor de blocare la „Niciodată” face ca seiful dvs. să fie disponibil oricui are acces la acesta. Dacă utilizați această opțiune, trebuie să vă asigurați că vă păstrați dispozitivul protejat corespunzător.</value>
   </data>
@@ -2451,6 +2448,9 @@ selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Aleatoriu</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Dezvăluirea serviciilor de accesibilitate</value>

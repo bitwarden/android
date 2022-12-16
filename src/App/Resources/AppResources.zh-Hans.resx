@@ -900,7 +900,7 @@
     <value>无法读取验证器密钥。</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>将您的摄像头对准二维码。
+    <value>将您的摄像头对准QR码。
 扫描将自动完成。</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
@@ -2278,10 +2278,10 @@
     <value>无法添加验证器密钥？</value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
-    <value>扫描二维码</value>
+    <value>扫描QR码</value>
   </data>
   <data name="CannotScanQRCode" xml:space="preserve">
-    <value>无法扫描二维码？ </value>
+    <value>无法扫描QR码？ </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
     <value>验证器密钥</value>
@@ -2298,9 +2298,6 @@
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
     <value>成功输入密钥后，
 选择「添加 TOTP」即可安全地存储密钥</value>
-  </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>将锁定选项设置为「从不」可让任何能够访问您的设备的人都可以使用您的密码库。如果您使用此选项，则应确保您的设备得到妥善的保护。</value>
@@ -2451,6 +2448,9 @@
   </data>
   <data name="Random" xml:space="preserve">
     <value>随机</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>无障碍服务声明</value>

@@ -2300,9 +2300,6 @@ Skanning skjer automatisk.</value>
     <value>Når nøkkelen er tastet inn,
 velg Legg til TOTP for å lagre nøkkelen sikkert</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Å sette dine låsalternativer til "Aldri" holder hvelvet ditt tilgjengelig for alle med tilgang til din enhet. Dersom du bruker dette alternativet bør du forsikre deg om at enheten er godt beskyttet.</value>
   </data>
@@ -2452,6 +2449,9 @@ velg Legg til TOTP for å lagre nøkkelen sikkert</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Tilfeldig</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Opplysninger om tilgjengelighetstjeneste</value>
