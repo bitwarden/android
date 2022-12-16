@@ -47,15 +47,13 @@ class CipherListViewModel : ObservableObject {
     }
     
     func checkStateAndFetch(_ state: BWState? = nil) {
+        guard checkDeviceOwnerAuth() else {
+            return
+        }
+        
         StateService.shared.checkIntegrity()
         
         user = StateService.shared.getUser()
-        
-        if user == nil && !watchConnectivityManager.isSessionActivated {
-            currentState = .needSetup
-            showingSheet = true
-            return
-        }
         
         currentState = state ?? StateService.shared.currentState
         showingSheet = currentState != .valid
@@ -93,5 +91,21 @@ class CipherListViewModel : ObservableObject {
         }
         
         return false
+    }
+    
+    func checkDeviceOwnerAuth() -> Bool {
+        guard KeychainHelper.standard.hasDeviceOwnerAuth() else {
+            currentState = .needDeviceOwnerAuth
+            showingSheet = true
+            StateService.shared.lackedDeviceOwnerAuthLastTime = true
+            return false
+        }
+        
+        if StateService.shared.lackedDeviceOwnerAuthLastTime {
+            watchConnectivityManager.triggerSync()
+            StateService.shared.lackedDeviceOwnerAuthLastTime = false
+        }
+        
+        return true
     }
 }

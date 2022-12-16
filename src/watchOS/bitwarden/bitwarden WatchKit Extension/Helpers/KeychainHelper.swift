@@ -1,4 +1,5 @@
 import Foundation
+import LocalAuthentication
 
 final class KeychainHelper {
     
@@ -6,6 +7,10 @@ final class KeychainHelper {
     let genericService = "com.8bit.bitwarden.watch.kc"
     
     private init() {}
+    
+    func hasDeviceOwnerAuth() -> Bool {
+        return LAContext().canEvaluatePolicy(LAPolicy.deviceOwnerAuthentication, error: nil)
+    }
     
     func read<T>(_ key: String, _ type: T.Type) -> T? where T : Codable {
         guard let data = read(key) else {
@@ -16,7 +21,7 @@ final class KeychainHelper {
             let item = try JSONDecoder().decode(type, from: data)
             return item
         } catch {
-            assertionFailure("Fail to decode item for keychain: \(error)")
+            Log.e("Fail to decode item for keychain: \(error)")
             return nil
         }
     }
@@ -28,7 +33,7 @@ final class KeychainHelper {
             save(data, key)
             
         } catch {
-            assertionFailure("Fail to encode item for keychain: \(error)")
+            Log.e("Fail to encode item for keychain: \(error)")
         }
     }
 
@@ -57,7 +62,7 @@ final class KeychainHelper {
             kSecClass: kSecClassGenericPassword,
             kSecAttrService: genericService,
             kSecAttrAccount: key,
-            kSecAttrAccessible: kSecAttrAccessibleAfterFirstUnlock
+            kSecAttrAccessible: kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly
         ] as CFDictionary
         
         let status = SecItemAdd(query, nil)
