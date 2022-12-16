@@ -2298,9 +2298,6 @@ Skan prosesi avtomatik baş tutacaq.</value>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
     <value>Açar uğurla daxil edildikdən sonra, açarı güvənli şəkildə saxlamaq üçün "TOTP əlavə et"i seçin</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Kilid seçimlərini "Heç vaxt" olaraq tənzimləmək, anbarınızı cihazınıza müraciəti olan hər kəsə əlçatan edir. Bu seçimi istifadə etsəniz, cihazınızı düzgün qoruduğunuza əmin olmalısınız.</value>
   </data>
@@ -2450,6 +2447,9 @@ Skan prosesi avtomatik baş tutacaq.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Təsadüfi</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Əlçatımlılıq Xidməti açıqlaması</value>

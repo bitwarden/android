@@ -2298,9 +2298,6 @@ Kod otomatik olarak taranacaktır.</value>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
     <value>Anahtar eklendikten sonra anahtarı güvenli bir şekilde depolamak için "TOTP ekle"yi seçin</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Kilit seçeneklerinizi "Asla" olarak ayarlarsanız cihazınıza erişebilen herkes kasanıza da erişebilir. Bu seçeneği kullanırsanız cihazınızı uygun şekilde koruduğunuzdan emin olmalısınız.</value>
   </data>
@@ -2450,6 +2447,9 @@ Kod otomatik olarak taranacaktır.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Rastgele</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Erişilebilirlik Hizmeti Beyanı</value>

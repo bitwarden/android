@@ -2299,9 +2299,6 @@ La numérisation se fera automatiquement.</value>
     <value>Une fois que la clé est entrée avec succès,
 sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Définir vos options de verrouillage sur "Jamais" garde votre coffre ouvert à n'importe qui ayant accès à votre appareil. Si vous utilisez cette option, vous devez vous assurer que votre appareil est bien protégé.</value>
   </data>
@@ -2452,6 +2449,9 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
   <data name="Random" xml:space="preserve">
     <value>Aléatoire</value>
   </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Se connecter à la montre</value>
+  </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Confidentialité du Service d'accessibilité</value>
   </data>
@@ -2512,6 +2512,6 @@ Voulez-vous basculer vers ce compte ?</value>
     <value>Cette demande n'est plus valide</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>Activer la permission de l'appareil photo pour utiliser le scanner</value>
   </data>
 </root>

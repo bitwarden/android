@@ -2299,9 +2299,6 @@
     <value>Una volta inserita la chiave,
 seleziona Aggiungi TOTP per salvare la chiave in modo sicuro</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Impostare le opzioni di blocco su “Mai” fa sì che la tua cassaforte sia a disposizione di chiunque abbia accesso al tuo dispositivo. Se si utilizza questa opzione, è necessario assicurarsi di mantenere il dispositivo adeguatamente protetto.</value>
   </data>
@@ -2451,6 +2448,9 @@ seleziona Aggiungi TOTP per salvare la chiave in modo sicuro</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Casuale</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Maggiori informazioni sul servizio di accessibilità</value>

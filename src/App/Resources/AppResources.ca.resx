@@ -2299,9 +2299,6 @@ L'escaneig es farà automàticament.</value>
     <value>Una vegada introduïda la clau correctament,
 seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Si configureu les opcions de bloqueig a "Mai", la vostra caixa forta està disponible per a qualsevol persona amb accés al vostre dispositiu. Si utilitzeu aquesta opció, hauríeu d'assegurar-vos de mantenir el vostre dispositiu correctament protegit.</value>
   </data>
@@ -2452,6 +2449,9 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
   <data name="Random" xml:space="preserve">
     <value>Aleatori</value>
   </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
+  </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Divulgació del servei d'accessibilitat</value>
   </data>
@@ -2512,6 +2512,6 @@ Voleu canviar a aquest compte?</value>
     <value>Aquesta sol·licitud ja no és vàlida</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Doneu permís de càmera per a escanejar</value>
+    <value>Habilita el permís de la càmera per utilitzar l'escàner</value>
   </data>
 </root>

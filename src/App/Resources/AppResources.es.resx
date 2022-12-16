@@ -2300,9 +2300,6 @@ El escaneo se realizará automáticamente.</value>
     <value>Una vez que la clave haya sido ingresada con éxito,
 seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Configurar las opciones de bloqueo a "Nunca" mantiene la bóveda disponible para cualquier persona con acceso a su dispositivo. Si utiliza esta opción, debe asegurarse de que mantiene su dispositivo debidamente protegido.</value>
   </data>
@@ -2452,6 +2449,9 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Aleatorio</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Conectar al reloj</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Revelación del servicio de accesibilidad</value>

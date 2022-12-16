@@ -2301,9 +2301,6 @@
     <value>Када се кључ успешно унесе,
 одабрати Додати ТОТП да би сигурносно сачували кључ</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Постављањем опција закључавања на „Никад“, ваш сеф остаје доступан свима који имају приступ вашем уређају. Ако користите ову опцију, требало би да будете сигурни да ћете свој уређај правилно заштитити.</value>
   </data>
@@ -2453,6 +2450,9 @@
   </data>
   <data name="Random" xml:space="preserve">
     <value>Случајно</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Откривање услуге приступачности</value>

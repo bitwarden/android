@@ -900,8 +900,8 @@
     <value>Tidak dapat membaca kunci autentikasi.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Point your camera at the QR Code.
-Scanning will happen automatically.</value>
+    <value>Arahkan kamera anda pada kode QR.
+Proses pindai akan terjadi secara otomatis.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Pindai Kode QR</value>
@@ -2299,9 +2299,6 @@ Scanning will happen automatically.</value>
     <value>Once the key is successfully entered,
 select Add TOTP to store the key safely</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>
   </data>
@@ -2451,6 +2448,9 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Random</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Accessibility Service Disclosure</value>
