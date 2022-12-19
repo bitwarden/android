@@ -264,7 +264,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload .apk sha file for other
-        if: ${{ matrix.variant == 'prod' }}
+        if: ${{ matrix.variant != 'prod' }}
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
           name: bw-android-${{ matrix.variant }}-apk-sha256.txt
