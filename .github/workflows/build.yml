@@ -259,8 +259,8 @@ jobs:
         if: ${{ matrix.variant == 'prod' }}
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
-          name: bw-fdroid-apk-sha256.txt
-          path: ./bw-fdroid-apk-sha256.txt
+          name: bw-android-apk-sha256.txt
+          path: ./bw-android-apk-sha256.txt
           if-no-files-found: error
 
       - name: Upload .apk sha file for other
