@@ -71,7 +71,7 @@ jobs:
 
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ab534842b4bdf384b8aaf93765dc6f721d9f5fab
-          
+
       - name: Work Around for broken Windows 2022 Runner Image
         run: |
           Set-Location "C:\Program Files (x86)\Microsoft Visual Studio\Installer\"
@@ -175,8 +175,8 @@ jobs:
         run: |
           $androidPath = $($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj");
           $packageName = "com.x8bit.bitwarden";
-          
-          if ("${{ matrix.variant }}" -ne "prod") 
+
+          if ("${{ matrix.variant }}" -ne "prod")
           {
             $packageName = "com.x8bit.bitwarden.${{ matrix.variant }}";
           }
@@ -237,6 +237,34 @@ jobs:
         with:
           name: com.x8bit.bitwarden.${{ matrix.variant }}.apk
           path: ./com.x8bit.bitwarden.${{ matrix.variant }}.apk
+          if-no-files-found: error
+
+      - name: Create checksum for Prod .apk artifact
+        if: ${{ matrix.variant == 'prod' }}
+        run: |
+          checksum -f="./com.x8bit.bitwarden.apk" `
+            -t sha256 | Out-File -Encoding ASCII ./bw-android-apk-sha256.txt
+
+      - name: Create checksum for Other .apk artifact
+        if: ${{ matrix.variant != 'prod' }}
+        run: |
+          checksum -f="./com.x8bit.bitwarden.${{ matrix.variant }}.apk" `
+            -t sha256 | Out-File -Encoding ASCII ./bw-android-${{ matrix.variant }}-apk-sha256.txt
+
+      - name: Upload .apk sha file for prod
+        if: ${{ matrix.variant == 'prod' }}
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
+        with:
+          name: bw-fdroid-apk-sha256.txt
+          path: ./bw-fdroid-apk-sha256.txt
+          if-no-files-found: error
+
+      - name: Upload .apk sha file for other
+        if: ${{ matrix.variant == 'prod' }}
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
+        with:
+          name: bw-android-${{ matrix.variant }}-apk-sha256.txt
+          path: ./bw-android-${{ matrix.variant }}-apk-sha256.txt
           if-no-files-found: error
 
       - name: Deploy to Play Store
@@ -437,6 +465,18 @@ jobs:
           path: ./com.x8bit.bitwarden-fdroid.apk
           if-no-files-found: error
 
+      - name: Create checksum for F-Droid artifact
+        run: |
+          checksum -f="./com.x8bit.bitwarden-fdroid.apk" `
+            -t sha256 | Out-File -Encoding ASCII ./bw-fdroid-apk-sha256.txt
+
+      - name: Upload F-Droid sha file
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
+        with:
+          name: bw-fdroid-apk-sha256.txt
+          path: ./bw-fdroid-apk-sha256.txt
+          if-no-files-found: error
+
 
   ios:
     name: Apple iOS
@@ -584,7 +624,7 @@ jobs:
           echo "########################################"
           echo "##### Build WatchApp with Release Configuration"
           echo "########################################"
-          
+
           xcodebuild archive -workspace ./src/watchOS/bitwarden/bitwarden.xcodeproj/project.xcworkspace -configuration Release -scheme bitwarden\ WatchKit\ App -archivePath ./src/watchOS/bitwarden
 
           echo "########################################"
