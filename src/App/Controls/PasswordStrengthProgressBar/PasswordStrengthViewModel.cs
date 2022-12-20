@@ -36,15 +36,19 @@ namespace Bit.App.Controls
             get => _passwordStrengthLevel;
             set => SetProperty(ref _passwordStrengthLevel, value);
         }
-
         public List<string> GetPasswordStrengthUserInput(string email) => _passwordGenerationService.GetPasswordStrengthUserInput(email);
+
+        public Color VeryWeakColor { get; set; }
+        public Color WeakColor { get; set; }
+        public Color GoodColor { get; set; }
+        public Color StrongColor { get; set; }
 
         public void CalculatePasswordStrength()
         {
             if (string.IsNullOrEmpty(_passwordStrengthable.Password))
             {
                 PasswordStrength = 0;
-                PasswordColor = Utilities.ThemeManager.GetResourceColor("DangerColor");
+                PasswordColor = VeryWeakColor;
                 PasswordStrengthLevel = null;
                 return;
             }
@@ -54,22 +58,22 @@ namespace Bit.App.Controls
             PasswordStrength = (passwordStrength.Score + 1f) / 5f;
             if (PasswordStrength <= 0.4f)
             {
-                PasswordColor = Utilities.ThemeManager.GetResourceColor("DangerColor");
+                PasswordColor = VeryWeakColor;
                 PasswordStrengthLevel = Controls.PasswordStrengthLevel.Weak;
             }
             else if (PasswordStrength <= 0.6f)
             {
-                PasswordColor = Utilities.ThemeManager.GetResourceColor("WarningColor");
+                PasswordColor = WeakColor;
                 PasswordStrengthLevel = Controls.PasswordStrengthLevel.Weak;
             }
             else if (PasswordStrength <= 0.8f)
             {
-                PasswordColor = Utilities.ThemeManager.GetResourceColor("PrimaryColor");
+                PasswordColor = GoodColor;
                 PasswordStrengthLevel = Controls.PasswordStrengthLevel.Good;
             }
             else
             {
-                PasswordColor = Utilities.ThemeManager.GetResourceColor("SuccessColor");
+                PasswordColor = StrongColor;
                 PasswordStrengthLevel = Controls.PasswordStrengthLevel.Strong;
             }
         }

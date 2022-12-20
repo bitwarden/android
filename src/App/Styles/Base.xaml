@@ -562,4 +562,15 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
+    
+    <Style TargetType="controls:PasswordStrengthProgressBar">
+        <Setter Property="VeryWeakColor"
+                Value="{DynamicResource DangerColor}" />
+        <Setter Property="WeakColor"
+                Value="{DynamicResource WarningColor}" />
+        <Setter Property="GoodColor"
+                Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="StrongColor"
+                Value="{DynamicResource SuccessColor}" />
+    </Style>
 </ResourceDictionary>
