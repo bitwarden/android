@@ -1,35 +1,45 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
     public partial class PasswordStrengthProgressBar : StackLayout
     {
-        private PasswordStrengthViewModel ViewModel => BindingContext as PasswordStrengthViewModel;
+        public static readonly BindableProperty PasswordStrengthLevelProperty = BindableProperty.Create(
+            nameof(PasswordStrengthLevel),
+            typeof(PasswordStrengthLevel),
+            typeof(PasswordStrengthProgressBar),
+            propertyChanged: OnControlPropertyChanged);
 
         public static readonly BindableProperty VeryWeakColorProperty = BindableProperty.Create(
             nameof(VeryWeakColor),
             typeof(Color),
             typeof(PasswordStrengthProgressBar),
-            Utilities.ThemeManager.GetResourceColor("DangerColor"));
+            propertyChanged: OnControlPropertyChanged);
 
         public static readonly BindableProperty WeakColorProperty = BindableProperty.Create(
             nameof(WeakColor),
             typeof(Color),
             typeof(PasswordStrengthProgressBar),
-            Utilities.ThemeManager.GetResourceColor("WarningColor"));
+            propertyChanged: OnControlPropertyChanged);
 
         public static readonly BindableProperty GoodColorProperty = BindableProperty.Create(
             nameof(GoodColor),
             typeof(Color),
             typeof(PasswordStrengthProgressBar),
-            Utilities.ThemeManager.GetResourceColor("PrimaryColor"));
+            propertyChanged: OnControlPropertyChanged);
 
         public static readonly BindableProperty StrongColorProperty = BindableProperty.Create(
             nameof(StrongColor),
             typeof(Color),
             typeof(PasswordStrengthProgressBar),
-            Utilities.ThemeManager.GetResourceColor("SuccessColor"));
+            propertyChanged: OnControlPropertyChanged);
+
+        public PasswordStrengthLevel? PasswordStrengthLevel
+        {
+            get { return (PasswordStrengthLevel?)GetValue(PasswordStrengthLevelProperty); }
+            set { SetValue(PasswordStrengthLevelProperty, value); }
+        }
 
         public Color VeryWeakColor
         {
@@ -58,33 +68,34 @@ namespace Bit.App.Controls
         public PasswordStrengthProgressBar()
         {
             InitializeComponent();
+            SetBinding(PasswordStrengthProgressBar.PasswordStrengthLevelProperty, new Binding() { Path = nameof(PasswordStrengthViewModel.PasswordStrengthLevel) });
         }
 
-        protected override void OnBindingContextChanged()
+        private static void OnControlPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            base.OnBindingContextChanged();
-            UpdateColors();
-        }
-
-        protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            base.OnPropertyChanged(propertyName);
-            if (propertyName == nameof(VeryWeakColor)
-                || propertyName == nameof(WeakColor)
-                || propertyName == nameof(GoodColor)
-                || propertyName == nameof(StrongColor))
+            var control = bindable as PasswordStrengthProgressBar;
+            if (control._progressBar != null && control._progressLabel != null)
             {
-                UpdateColors();
-                ViewModel.CalculatePasswordStrength();
+                control._progressBar.ProgressColor = GetColorForStrength(control);
+                control._progressLabel.TextColor = GetColorForStrength(control);
             }
         }
 
-        private void UpdateColors()
+        private static Color GetColorForStrength(PasswordStrengthProgressBar control)
         {
-            ViewModel.VeryWeakColor = VeryWeakColor;
-            ViewModel.WeakColor = WeakColor;
-            ViewModel.GoodColor = GoodColor;
-            ViewModel.StrongColor = StrongColor;
+            switch (control.PasswordStrengthLevel)
+            {
+                case Controls.PasswordStrengthLevel.VeryWeak:
+                    return control.VeryWeakColor;
+                case Controls.PasswordStrengthLevel.Weak:
+                    return control.WeakColor;
+                case Controls.PasswordStrengthLevel.Good:
+                    return control.GoodColor;
+                case Controls.PasswordStrengthLevel.Strong:
+                    return control.StrongColor;
+                default:
+                    return Color.Transparent;
+            }
         }
     }
 }
