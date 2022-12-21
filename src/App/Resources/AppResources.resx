@@ -2521,8 +2521,8 @@ Do you want to switch to this account?</value>
   <data name="Important" xml:space="preserve">
     <value>Important</value>
   </data>
-  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetIt8CharacterMinimum" xml:space="preserve">
-    <value>Your master password cannot be recovered if you forget it! 8 character minimum.</value>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Your master password cannot be recovered if you forget it! {0} characters minimum.</value>
   </data>
   <data name="WeakMasterPassword" xml:space="preserve">
     <value>Weak Master Password</value>

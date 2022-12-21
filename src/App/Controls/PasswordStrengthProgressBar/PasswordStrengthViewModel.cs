@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
@@ -10,13 +8,15 @@ namespace Bit.App.Controls
     public class PasswordStrengthViewModel : ExtendedViewModel
     {
         private readonly IPasswordGenerationService _passwordGenerationService;
+        private readonly IPasswordStrengthable _passwordStrengthable;
         private double _passwordStrength;
         private Color _passwordColor;
-        private string _passwordStatus;
+        private PasswordStrengthLevel? _passwordStrengthLevel;
 
-        public PasswordStrengthViewModel()
+        public PasswordStrengthViewModel(IPasswordStrengthable passwordStrengthable)
         {
             _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>();
+            _passwordStrengthable = passwordStrengthable;
         }
 
         public double PasswordStrength
@@ -25,84 +25,43 @@ namespace Bit.App.Controls
             set => SetProperty(ref _passwordStrength, value);
         }
 
-        public Color PasswordColor
+        public PasswordStrengthLevel? PasswordStrengthLevel
         {
-            get => _passwordColor;
-            set => SetProperty(ref _passwordColor, value);
+            get => _passwordStrengthLevel;
+            set => SetProperty(ref _passwordStrengthLevel, value);
         }
 
-        public string PasswordStatus
-        {
-            get => _passwordStatus;
-            set => SetProperty(ref _passwordStatus, value);
-        }
+        public List<string> GetPasswordStrengthUserInput(string email) => _passwordGenerationService.GetPasswordStrengthUserInput(email);
 
-        public PasswordStrengthCategory PasswordStrengthCategory { get; set; }
-
-        public void CalculateMasterPasswordStrength(string password, string email)
+        public void CalculatePasswordStrength()
         {
-            var passwordStrength = _passwordGenerationService.PasswordStrength(password, GetPasswordStrengthUserInput(email));
-            if (string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(_passwordStrengthable.Password))
             {
                 PasswordStrength = 0;
-                PasswordColor = Utilities.ThemeManager.GetResourceColor("DangerColor");
-                PasswordStatus = " ";
-                PasswordStrengthCategory = PasswordStrengthCategory.Weak;
+                PasswordStrengthLevel = null;
                 return;
             }
 
+            var passwordStrength = _passwordGenerationService.PasswordStrength(_passwordStrengthable.Password, _passwordStrengthable.UserInputs);
+            // The passwordStrength.Score is 0..4, convertion was made to be used as a progress directly by the control 0..1 
             PasswordStrength = (passwordStrength.Score + 1f) / 5f;
-            if (PasswordStrength <= 0.2f)
+            if (PasswordStrength <= 0.4f)
             {
-                PasswordColor = Utilities.ThemeManager.GetResourceColor("DangerColor");
-                PasswordStatus = Resources.AppResources.Weak;
-                PasswordStrengthCategory = PasswordStrengthCategory.Weak;
-            }
-            else if (PasswordStrength <= 0.4f)
-            {
-                PasswordColor = Utilities.ThemeManager.GetResourceColor("DangerColor");
-                PasswordStatus = Resources.AppResources.Weak;
-                PasswordStrengthCategory = PasswordStrengthCategory.Weak;
+                PasswordStrengthLevel = Controls.PasswordStrengthLevel.VeryWeak;
             }
             else if (PasswordStrength <= 0.6f)
             {
-                PasswordColor = Utilities.ThemeManager.GetResourceColor("WarningColor");
-                PasswordStatus = Resources.AppResources.Weak;
-                PasswordStrengthCategory = PasswordStrengthCategory.Weak;
+                PasswordStrengthLevel = Controls.PasswordStrengthLevel.Weak;
             }
             else if (PasswordStrength <= 0.8f)
             {
-                PasswordColor = Utilities.ThemeManager.GetResourceColor("PrimaryColor");
-                PasswordStatus = Resources.AppResources.Good;
-                PasswordStrengthCategory = PasswordStrengthCategory.Good;
+                PasswordStrengthLevel = Controls.PasswordStrengthLevel.Good;
             }
-            else if (PasswordStrength <= 1f)
+            else
             {
-                PasswordColor = Utilities.ThemeManager.GetResourceColor("SuccessColor");
-                PasswordStatus = Resources.AppResources.Strong;
-                PasswordStrengthCategory = PasswordStrengthCategory.Strong;
+                PasswordStrengthLevel = Controls.PasswordStrengthLevel.Strong;
             }
         }
-
-        private List<string> GetPasswordStrengthUserInput(string email)
-        {
-            List<string> userInput = null;
-            var atPosition = email?.IndexOf('@');
-            if (atPosition != null && atPosition > -1)
-            {
-                var rx = new Regex("/[^A-Za-z0-9]/", RegexOptions.Compiled);
-                var data = rx.Split(email.Substring(0, atPosition.Value).Trim().ToLower());
-                userInput = new List<string>(data);
-            }
-            return userInput;
-        }
-    }
-
-    public enum PasswordStrengthCategory
-    {
-        Weak,
-        Good,
-        Strong
     }
 }
 

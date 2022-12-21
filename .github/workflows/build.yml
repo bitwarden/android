@@ -58,7 +58,6 @@ jobs:
   android:
     name: Android
     runs-on: windows-2022
-    if: github.repository == 'putting here a false condition so that this doesnt run while testing iOS CI'
     needs: setup
     strategy:
       fail-fast: false
@@ -259,7 +258,6 @@ jobs:
   f-droid:
     name: F-Droid Build
     runs-on: windows-2022
-    if: github.repository == 'putting here a false condition so that this doesnt run while testing iOS CI'
     steps:
       - name: Setup NuGet
         uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6

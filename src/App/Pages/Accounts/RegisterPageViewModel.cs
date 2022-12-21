@@ -1,20 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Request;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class RegisterPageViewModel : CaptchaProtectedViewModel
+    public class RegisterPageViewModel : CaptchaProtectedViewModel, IPasswordStrengthable
     {
         private readonly IDeviceActionService _deviceActionService;
         private readonly II18nService _i18nService;
@@ -44,6 +47,7 @@ namespace Bit.App.Pages
             ToggleConfirmPasswordCommand = new Command(ToggleConfirmPassword);
             SubmitCommand = new Command(async () => await SubmitAsync());
             ShowTerms = !_platformUtilsService.IsSelfHost();
+            PasswordStrengthViewModel = new PasswordStrengthViewModel(this);
         }
 
         public ICommand PoliciesClickCommand => new Command<string>((url) =>
@@ -77,7 +81,11 @@ namespace Bit.App.Pages
         public string MasterPassword
         {
             get => _masterPassword;
-            set => SetProperty(ref _masterPassword, value);
+            set
+            {
+                SetProperty(ref _masterPassword, value);
+                PasswordStrengthViewModel.CalculatePasswordStrength();
+            }
         }
 
         public string Email
@@ -86,27 +94,11 @@ namespace Bit.App.Pages
             set => SetProperty(ref _email, value);
         }
 
-        public FormattedString MasterPasswordDescription
-        {
-            get
-            {
-                var fs = new FormattedString();
-                fs.Spans.Add(new Span
-                {
-                    Text = string.Format("{0}: ", AppResources.Important),
-                    TextColor = Utilities.ThemeManager.GetResourceColor("InfoColor"),
-
-                });
-                fs.Spans.Add(new Span
-                {
-                    Text = AppResources.YourMasterPasswordCannotBeRecoveredIfYouForgetIt8CharacterMinimum,
-                    TextColor = Utilities.ThemeManager.GetResourceColor("MutedColor"),
-                    FontAttributes = FontAttributes.None
-                });
-                return fs;
-            }
-        }
-
+        public string Password => MasterPassword;
+        public List<string> UserInputs => PasswordStrengthViewModel.GetPasswordStrengthUserInput(Email);
+        public string MasterPasswordMininumCharactersDescription => string.Format(AppResources.YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum,
+                                                                            Constants.MasterPasswordMinimumChars);
+        public PasswordStrengthViewModel PasswordStrengthViewModel { get; }
         public bool ShowTerms { get; set; }
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
@@ -114,7 +106,6 @@ namespace Bit.App.Pages
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string Name { get; set; }
-        public PasswordStrengthCategory MasterPasswordStrength { get; set; }
         public string ConfirmMasterPassword { get; set; }
         public string Hint { get; set; }
         public Action RegistrationSuccess { get; set; }
@@ -154,7 +145,7 @@ namespace Bit.App.Pages
                     AppResources.Ok);
                 return;
             }
-            if (MasterPassword.Length < 8)
+            if (MasterPassword.Length < Constants.MasterPasswordMinimumChars)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.MasterPasswordLengthValMessage,
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
@@ -211,27 +202,30 @@ namespace Bit.App.Pages
                 var message = string.Empty;
                 var matches = CheckExposedMasterPassword ? await _auditService.PasswordLeakedAsync(MasterPassword) : 0;
 
-                if (matches > 0 && MasterPasswordStrength == PasswordStrengthCategory.Weak)
+                if (matches > 0 && PasswordStrengthViewModel.PasswordStrengthLevel <= PasswordStrengthLevel.Weak)
                 {
                     title = AppResources.WeakAndExposedMasterPassword;
                     message = AppResources.WeakPasswordIdentifiedAndFoundInADataBreachUseAStrongAndUniquePasswordToProtectYourAccount;
                 }
-                else if (matches > 0 && MasterPasswordStrength != PasswordStrengthCategory.Weak)
+                else if (matches > 0 && PasswordStrengthViewModel.PasswordStrengthLevel > PasswordStrengthLevel.Weak)
                 {
                     title = AppResources.ExposedMasterPassword;
                     message = AppResources.PasswordFoundInADataBreachUseAUniquePasswordToProtectYourAccount;
                 }
-                else if (matches == 0 && MasterPasswordStrength == PasswordStrengthCategory.Weak)
+                else if (matches == 0 && PasswordStrengthViewModel.PasswordStrengthLevel <= PasswordStrengthLevel.Weak)
                 {
                     title = AppResources.WeakMasterPassword;
                     message = AppResources.WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount;
                 }
 
-                var accepted = await _platformUtilsService.ShowDialogAsync(message, title, AppResources.Yes, AppResources.No);
-                if (!accepted)
+                if (!string.IsNullOrEmpty(message))
                 {
-                    await _deviceActionService.HideLoadingAsync();
-                    return;
+                    var accepted = await _platformUtilsService.ShowDialogAsync(message, title, AppResources.Yes, AppResources.No);
+                    if (!accepted)
+                    {
+                        await _deviceActionService.HideLoadingAsync();
+                        return;
+                    }
                 }
             }
             catch (Exception ex)

@@ -12,8 +12,6 @@
         public static string LastFileCacheClearKey = "lastFileCacheClear";
         public static string AutofillTileAdded = "autofillTileAdded";
         public static string PushRegisteredTokenKey = "pushRegisteredToken";
-        public static string PushCurrentTokenKey = "pushCurrentToken";
-        public static string PushLastRegistrationDateKey = "pushLastRegistrationDate";
         public static string PushInitialPromptShownKey = "pushInitialPromptShown";
         public static string PushInstallationRegistrationErrorKey = "pushInstallationRegistrationError";
         public static string LastBuildKey = "lastBuild";
@@ -43,6 +41,7 @@
         public const int SaveFileRequestCode = 44;
         public const int TotpDefaultTimer = 30;
         public const int PasswordlessNotificationTimeoutInMinutes = 15;
+        public const int MasterPasswordMinimumChars = 8;
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {
@@ -96,6 +95,8 @@
         public static string BiometricUnlockKey(string userId) => $"biometricUnlock_{userId}";
         public static string ApprovePasswordlessLoginsKey(string userId) => $"approvePasswordlessLogins_{userId}";
         public static string UsernameGenOptionsKey(string userId) => $"usernameGenerationOptions_{userId}";
+        public static string PushLastRegistrationDateKey(string userId) => $"pushLastRegistrationDate_{userId}";
+        public static string PushCurrentTokenKey(string userId) => $"pushCurrentToken_{userId}";
         public static string ShouldConnectToWatchKey(string userId) => $"shouldConnectToWatch_{userId}";
     }
 }
