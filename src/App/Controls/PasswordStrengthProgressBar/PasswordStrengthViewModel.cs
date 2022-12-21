@@ -47,7 +47,7 @@ namespace Bit.App.Controls
             PasswordStrength = (passwordStrength.Score + 1f) / 5f;
             if (PasswordStrength <= 0.4f)
             {
-                PasswordStrengthLevel = Controls.PasswordStrengthLevel.Weak;
+                PasswordStrengthLevel = Controls.PasswordStrengthLevel.VeryWeak;
             }
             else if (PasswordStrength <= 0.6f)
             {

@@ -87,7 +87,7 @@ namespace Bit.App.Pages
 
         public string Password => MasterPassword;
         public List<string> UserInputs => PasswordStrengthViewModel.GetPasswordStrengthUserInput(Email);
-        public string MasterPasswordMininumCharactersDescription => string.Format(AppResources.YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharacterMinimum,
+        public string MasterPasswordMininumCharactersDescription => string.Format(AppResources.YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum,
                                                                             Constants.MasterPasswordMinimumChars);
         public PasswordStrengthViewModel PasswordStrengthViewModel { get; }
         public bool ShowTerms { get; set; }

@@ -6831,11 +6831,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your master password cannot be recovered if you forget it! {0} character minimum..
+        ///   Looks up a localized string similar to Your master password cannot be recovered if you forget it! {0} characters minimum..
         /// </summary>
-        public static string YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharacterMinimum {
+        public static string YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum {
             get {
-                return ResourceManager.GetString("YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharacterMinimum", resourceCulture);
+                return ResourceManager.GetString("YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum", resourceCulture);
             }
         }
         

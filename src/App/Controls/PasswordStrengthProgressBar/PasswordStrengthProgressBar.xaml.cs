@@ -73,12 +73,13 @@ namespace Bit.App.Controls
 
         private static void OnControlPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var control = bindable as PasswordStrengthProgressBar;
-            if (control._progressBar != null && control._progressLabel != null)
-            {
-                control._progressBar.ProgressColor = GetColorForStrength(control);
-                control._progressLabel.TextColor = GetColorForStrength(control);
-            }
+            (bindable as PasswordStrengthProgressBar)?.UpdateColors(bindable as PasswordStrengthProgressBar);
+        }
+
+        public void UpdateColors(PasswordStrengthProgressBar control)
+        {
+            _progressBar.ProgressColor = GetColorForStrength(control);
+            _progressLabel.TextColor = _progressBar.ProgressColor;
         }
 
         private static Color GetColorForStrength(PasswordStrengthProgressBar control)
