@@ -73,27 +73,31 @@ namespace Bit.App.Controls
 
         private static void OnControlPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            (bindable as PasswordStrengthProgressBar)?.UpdateColors(bindable as PasswordStrengthProgressBar);
+            (bindable as PasswordStrengthProgressBar)?.UpdateColors();
         }
 
-        public void UpdateColors(PasswordStrengthProgressBar control)
+        public void UpdateColors()
         {
-            _progressBar.ProgressColor = GetColorForStrength(control);
+            if (_progressBar == null || _progressLabel == null)
+            {
+                return;
+            }
+            _progressBar.ProgressColor = GetColorForStrength();
             _progressLabel.TextColor = _progressBar.ProgressColor;
         }
 
-        private static Color GetColorForStrength(PasswordStrengthProgressBar control)
+        private Color GetColorForStrength()
         {
-            switch (control.PasswordStrengthLevel)
+            switch (PasswordStrengthLevel)
             {
                 case Controls.PasswordStrengthLevel.VeryWeak:
-                    return control.VeryWeakColor;
+                    return VeryWeakColor;
                 case Controls.PasswordStrengthLevel.Weak:
-                    return control.WeakColor;
+                    return WeakColor;
                 case Controls.PasswordStrengthLevel.Good:
-                    return control.GoodColor;
+                    return GoodColor;
                 case Controls.PasswordStrengthLevel.Strong:
-                    return control.StrongColor;
+                    return StrongColor;
                 default:
                     return Color.Transparent;
             }
