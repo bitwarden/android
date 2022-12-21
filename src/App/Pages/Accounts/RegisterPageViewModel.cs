@@ -154,7 +154,7 @@ namespace Bit.App.Pages
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
-            if (PasswordStrengthViewModel.PasswordStrengthLevel == PasswordStrengthLevel.Weak)
+            if (PasswordStrengthViewModel.PasswordStrengthLevel <= PasswordStrengthLevel.Weak)
             {
                 var accepted = await _platformUtilsService.ShowDialogAsync(AppResources.WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount,
                     AppResources.WeakMasterPassword, AppResources.Yes, AppResources.No);
