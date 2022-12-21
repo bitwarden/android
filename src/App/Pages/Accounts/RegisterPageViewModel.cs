@@ -1,19 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Request;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class RegisterPageViewModel : CaptchaProtectedViewModel
+    public class RegisterPageViewModel : CaptchaProtectedViewModel, IPasswordStrengthable
     {
         private readonly IDeviceActionService _deviceActionService;
         private readonly II18nService _i18nService;
@@ -21,6 +25,8 @@ namespace Bit.App.Pages
         private readonly IApiService _apiService;
         private readonly ICryptoService _cryptoService;
         private readonly IPlatformUtilsService _platformUtilsService;
+        private string _email;
+        private string _masterPassword;
         private bool _showPassword;
         private bool _acceptPolicies;
 
@@ -38,6 +44,7 @@ namespace Bit.App.Pages
             ToggleConfirmPasswordCommand = new Command(ToggleConfirmPassword);
             SubmitCommand = new Command(async () => await SubmitAsync());
             ShowTerms = !_platformUtilsService.IsSelfHost();
+            PasswordStrengthViewModel = new PasswordStrengthViewModel(this);
         }
 
         public ICommand PoliciesClickCommand => new Command<string>((url) =>
@@ -61,6 +68,28 @@ namespace Bit.App.Pages
             get => _acceptPolicies;
             set => SetProperty(ref _acceptPolicies, value);
         }
+
+        public string MasterPassword
+        {
+            get => _masterPassword;
+            set
+            {
+                SetProperty(ref _masterPassword, value);
+                PasswordStrengthViewModel.CalculatePasswordStrength();
+            }
+        }
+
+        public string Email
+        {
+            get => _email;
+            set => SetProperty(ref _email, value);
+        }
+
+        public string Password => MasterPassword;
+        public List<string> UserInputs => PasswordStrengthViewModel.GetPasswordStrengthUserInput(Email);
+        public string MasterPasswordMininumCharactersDescription => string.Format(AppResources.YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum,
+                                                                            Constants.MasterPasswordMinimumChars);
+        public PasswordStrengthViewModel PasswordStrengthViewModel { get; }
         public bool ShowTerms { get; set; }
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
@@ -68,13 +97,10 @@ namespace Bit.App.Pages
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string Name { get; set; }
-        public string Email { get; set; }
-        public string MasterPassword { get; set; }
         public string ConfirmMasterPassword { get; set; }
         public string Hint { get; set; }
         public Action RegistrationSuccess { get; set; }
         public Action CloseAction { get; set; }
-
         protected override II18nService i18nService => _i18nService;
         protected override IEnvironmentService environmentService => _environmentService;
         protected override IDeviceActionService deviceActionService => _deviceActionService;
@@ -110,7 +136,7 @@ namespace Bit.App.Pages
                     AppResources.Ok);
                 return;
             }
-            if (MasterPassword.Length < 8)
+            if (MasterPassword.Length < Constants.MasterPasswordMinimumChars)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.MasterPasswordLengthValMessage,
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
@@ -128,8 +154,15 @@ namespace Bit.App.Pages
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
-
-            // TODO: Password strength check?
+            if (PasswordStrengthViewModel.PasswordStrengthLevel <= PasswordStrengthLevel.Weak)
+            {
+                var accepted = await _platformUtilsService.ShowDialogAsync(AppResources.WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount,
+                    AppResources.WeakMasterPassword, AppResources.Yes, AppResources.No);
+                if (!accepted)
+                {
+                    return;
+                }
+            }
 
             if (showLoading)
             {

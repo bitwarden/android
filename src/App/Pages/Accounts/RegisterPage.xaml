@@ -25,7 +25,7 @@
     </ContentPage.ToolbarItems>
 
     <ScrollView>
-        <StackLayout Spacing="20">
+        <StackLayout Spacing="10">
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row">
                     <Label
@@ -72,8 +72,19 @@
                         AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"/>
                 </Grid>
                 <Label
-                    Text="{u:I18n MasterPasswordDescription}"
-                    StyleClass="box-footer-label" />
+                    StyleClass="box-sub-label"
+                    Margin="0,0,0,10">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{u:I18n Important}" TextColor="{DynamicResource InfoColor}"/>
+                                <Span Text=": " TextColor="{DynamicResource InfoColor}"/>
+                                <Span Text="{Binding MasterPasswordMininumCharactersDescription}" TextColor="{DynamicResource MutedColor}"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                </Label>
+                <controls:PasswordStrengthProgressBar
+                    BindingContext="{Binding PasswordStrengthViewModel}"
+                    Margin="0,0"/>
             </StackLayout>
             <StackLayout StyleClass="box">
                 <Grid StyleClass="box-row">
