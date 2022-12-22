@@ -52,7 +52,9 @@ namespace Bit.iOS.Core.Services
 
         private void OnMessagedReceived(WCSession session, Dictionary<string, object> data)
         {
-            if (data?.TryGetValue(ACTION_MESSAGE_KEY, out var action) == true
+            if (data != null
+                &&
+                data.TryGetValue(ACTION_MESSAGE_KEY, out var action)
                 &&
                 action as string == TRIGGER_SYNC_ACTION_KEY)
             {
