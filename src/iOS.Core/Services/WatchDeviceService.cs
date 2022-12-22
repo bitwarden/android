@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Bit.App.Services;
 using Bit.Core.Abstractions;
 using Bit.Core.Models;
+using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using WatchConnectivity;
 
@@ -11,12 +12,16 @@ namespace Bit.iOS.Core.Services
 {
     public class WatchDeviceService : BaseWatchDeviceService
     {
+        const string ACTION_MESSAGE_KEY = "actionMessage";
+        const string TRIGGER_SYNC_ACTION_KEY = "triggerSync";
+
         public WatchDeviceService(ICipherService cipherService,
             IEnvironmentService environmentService,
             IStateService stateService,
             IVaultTimeoutService vaultTimeoutService)
             : base(cipherService, environmentService, stateService, vaultTimeoutService)
         {
+            WCSessionManager.SharedManager.OnMessagedReceived += OnMessagedReceived;
         }
 
         public override bool IsConnected => WCSessionManager.SharedManager.IsSessionActivated;
@@ -43,6 +48,18 @@ namespace Bit.iOS.Core.Services
         protected override void ConnectToWatch()
         {
             WCSessionManager.SharedManager.StartSession();
+        }
+
+        private void OnMessagedReceived(WCSession session, Dictionary<string, object> data)
+        {
+            if (data != null
+                &&
+                data.TryGetValue(ACTION_MESSAGE_KEY, out var action)
+                &&
+                action as string == TRIGGER_SYNC_ACTION_KEY)
+            {
+                SyncDataToWatchAsync().FireAndForget();
+            }
         }
     }
 }

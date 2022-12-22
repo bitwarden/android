@@ -27,6 +27,7 @@
 		1B15615B28B7F3D900610B9B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B15615A28B7F3D900610B9B /* Preview Assets.xcassets */; };
 		1B15616C28B81A2200610B9B /* Cipher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15616B28B81A2200610B9B /* Cipher.swift */; };
 		1B15616E28B81A4300610B9B /* WatchConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15616D28B81A4300610B9B /* WatchConnectivityManager.swift */; };
+		1B5849A7294D1C020055286B /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5849A6294D1C020055286B /* Queue.swift */; };
 		1B59EC5729007DEE00A8718D /* BitwardenDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1B59EC5529007DEE00A8718D /* BitwardenDB.xcdatamodeld */; };
 		1B59EC592900801500A8718D /* StringEncryptionTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59EC582900801500A8718D /* StringEncryptionTransformer.swift */; };
 		1B59EC5C2900BB3400A8718D /* CryptoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59EC5B2900BB3400A8718D /* CryptoService.swift */; };
@@ -134,6 +135,8 @@
 		1B15615D28B7F3D900610B9B /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
 		1B15616B28B81A2200610B9B /* Cipher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cipher.swift; sourceTree = "<group>"; };
 		1B15616D28B81A4300610B9B /* WatchConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnectivityManager.swift; sourceTree = "<group>"; };
+		1B5849A6294D1C020055286B /* Queue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
+		1B5849A92950BC860055286B /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS9.1.sdk/System/Library/Frameworks/LocalAuthentication.framework; sourceTree = DEVELOPER_DIR; };
 		1B59EC5629007DEE00A8718D /* BitwardenDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BitwardenDB.xcdatamodel; sourceTree = "<group>"; };
 		1B59EC582900801500A8718D /* StringEncryptionTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringEncryptionTransformer.swift; sourceTree = "<group>"; };
 		1B59EC5B2900BB3400A8718D /* CryptoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoService.swift; sourceTree = "<group>"; };
@@ -219,6 +222,7 @@
 				1BD291BE292D0E6F0004F33F /* JsonDecoderExtensions.swift */,
 				1BD291C0292E7E690004F33F /* ErrorExtensions.swift */,
 				1B5F5E39293F9D6F009B5FCC /* ViewExtensions.swift */,
+				1B5849A6294D1C020055286B /* Queue.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -230,6 +234,7 @@
 				1B15614128B7F3D700610B9B /* bitwarden WatchKit App */,
 				1B15614C28B7F3D800610B9B /* bitwarden WatchKit Extension */,
 				1B15613028B7F3D400610B9B /* Products */,
+				1B5849A82950BC860055286B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -303,6 +308,14 @@
 				1B15615A28B7F3D900610B9B /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		1B5849A82950BC860055286B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1B5849A92950BC860055286B /* LocalAuthentication.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		1B59EC5429007D7300A8718D /* Entities */ = {
@@ -583,6 +596,7 @@
 				1BD291C1292E7E690004F33F /* ErrorExtensions.swift in Sources */,
 				1B14DF37291186D900EA43F1 /* EmptyStateViewModifier.swift in Sources */,
 				1BD291B52924047C0004F33F /* BWStateViewModel.swift in Sources */,
+				1B5849A7294D1C020055286B /* Queue.swift in Sources */,
 				1B15616E28B81A4300610B9B /* WatchConnectivityManager.swift in Sources */,
 				1B5AFF0329196C81004478F9 /* ColorUtils.swift in Sources */,
 				1B59EC612900C48E00A8718D /* KeychainHelper.swift in Sources */,
