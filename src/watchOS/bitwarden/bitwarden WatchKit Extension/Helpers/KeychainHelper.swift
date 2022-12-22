@@ -1,5 +1,4 @@
 import Foundation
-import LocalAuthentication
 
 final class KeychainHelper {
     
@@ -9,7 +8,34 @@ final class KeychainHelper {
     private init() {}
     
     func hasDeviceOwnerAuth() -> Bool {
-        return LAContext().canEvaluatePolicy(LAPolicy.deviceOwnerAuthentication, error: nil)
+        let query: [String:Any] = [
+            kSecClass as String : kSecClassGenericPassword,
+            kSecAttrAccount as String : UUID().uuidString,
+            kSecAttrAccessible as String: kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
+            kSecValueData as String: "hasPass".data(using: String.Encoding.utf8)!,
+            kSecReturnAttributes as String : kCFBooleanTrue as Any
+        ]
+        
+        var dataTypeRef: AnyObject?
+        var status = withUnsafeMutablePointer(to: &dataTypeRef) {
+            SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
+        }
+        
+        if status == errSecItemNotFound {
+            let createStatus = SecItemAdd(query as CFDictionary, nil)
+            guard createStatus == errSecSuccess else {
+                return false
+            }
+            status = withUnsafeMutablePointer(to: &dataTypeRef) {
+                SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
+            }
+        }
+        
+        guard status == errSecSuccess else {
+            return false
+        }
+        
+        return true
     }
     
     func read<T>(_ key: String, _ type: T.Type) -> T? where T : Codable {

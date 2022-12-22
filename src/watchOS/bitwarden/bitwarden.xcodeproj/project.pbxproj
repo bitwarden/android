@@ -28,8 +28,6 @@
 		1B15616C28B81A2200610B9B /* Cipher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15616B28B81A2200610B9B /* Cipher.swift */; };
 		1B15616E28B81A4300610B9B /* WatchConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B15616D28B81A4300610B9B /* WatchConnectivityManager.swift */; };
 		1B5849A7294D1C020055286B /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5849A6294D1C020055286B /* Queue.swift */; };
-		1B5849AB2950CC430055286B /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B5849A92950BC860055286B /* LocalAuthentication.framework */; };
-		1B5849AC2950CC430055286B /* LocalAuthentication.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1B5849A92950BC860055286B /* LocalAuthentication.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1B59EC5729007DEE00A8718D /* BitwardenDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1B59EC5529007DEE00A8718D /* BitwardenDB.xcdatamodeld */; };
 		1B59EC592900801500A8718D /* StringEncryptionTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59EC582900801500A8718D /* StringEncryptionTransformer.swift */; };
 		1B59EC5C2900BB3400A8718D /* CryptoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59EC5B2900BB3400A8718D /* CryptoService.swift */; };
@@ -109,17 +107,6 @@
 				1B15613E28B7F3D700610B9B /* Bitwarden.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1B5849AD2950CC430055286B /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				1B5849AC2950CC430055286B /* LocalAuthentication.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -203,7 +190,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1B5849AB2950CC430055286B /* LocalAuthentication.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,7 +464,6 @@
 				1B15614428B7F3D800610B9B /* Sources */,
 				1B15614528B7F3D800610B9B /* Frameworks */,
 				1B15614628B7F3D800610B9B /* Resources */,
-				1B5849AD2950CC430055286B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
