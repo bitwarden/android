@@ -163,6 +163,10 @@ namespace Bit.App.Pages
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
+            if (await IsPasswordWeakOrExposed())
+            {
+                return;
+            }
 
             if (showLoading)
             {
@@ -195,43 +199,6 @@ namespace Bit.App.Pages
             };
 
             // TODO: org invite?
-
-            try
-            {
-                var title = string.Empty;
-                var message = string.Empty;
-                var matches = CheckExposedMasterPassword ? await _auditService.PasswordLeakedAsync(MasterPassword) : 0;
-
-                if (matches > 0 && PasswordStrengthViewModel.PasswordStrengthLevel <= PasswordStrengthLevel.Weak)
-                {
-                    title = AppResources.WeakAndExposedMasterPassword;
-                    message = AppResources.WeakPasswordIdentifiedAndFoundInADataBreachUseAStrongAndUniquePasswordToProtectYourAccount;
-                }
-                else if (matches > 0 && PasswordStrengthViewModel.PasswordStrengthLevel > PasswordStrengthLevel.Weak)
-                {
-                    title = AppResources.ExposedMasterPassword;
-                    message = AppResources.PasswordFoundInADataBreachUseAUniquePasswordToProtectYourAccount;
-                }
-                else if (matches == 0 && PasswordStrengthViewModel.PasswordStrengthLevel <= PasswordStrengthLevel.Weak)
-                {
-                    title = AppResources.WeakMasterPassword;
-                    message = AppResources.WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount;
-                }
-
-                if (!string.IsNullOrEmpty(message))
-                {
-                    var accepted = await _platformUtilsService.ShowDialogAsync(message, title, AppResources.Yes, AppResources.No);
-                    if (!accepted)
-                    {
-                        await _deviceActionService.HideLoadingAsync();
-                        return;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-            }
 
             try
             {
@@ -278,6 +245,48 @@ namespace Bit.App.Pages
             var entry = (Page as RegisterPage).ConfirmMasterPasswordEntry;
             entry.Focus();
             entry.CursorPosition = String.IsNullOrEmpty(ConfirmMasterPassword) ? 0 : ConfirmMasterPassword.Length;
+        }
+
+        private async Task<bool> IsPasswordWeakOrExposed()
+        {
+            try
+            {
+                var title = string.Empty;
+                var message = string.Empty;
+                var exposedPassword = CheckExposedMasterPassword ? await _auditService.PasswordLeakedAsync(MasterPassword) > 0 : false;
+                var weakPassword = PasswordStrengthViewModel.PasswordStrengthLevel <= PasswordStrengthLevel.Weak;
+
+                if (exposedPassword && weakPassword)
+                {
+                    title = AppResources.WeakAndExposedMasterPassword;
+                    message = AppResources.WeakPasswordIdentifiedAndFoundInADataBreachUseAStrongAndUniquePasswordToProtectYourAccount;
+                }
+                else if (exposedPassword)
+                {
+                    title = AppResources.ExposedMasterPassword;
+                    message = AppResources.PasswordFoundInADataBreachUseAUniquePasswordToProtectYourAccount;
+                }
+                else if (weakPassword)
+                {
+                    title = AppResources.WeakMasterPassword;
+                    message = AppResources.WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount;
+                }
+
+                if (exposedPassword || weakPassword)
+                {
+                    var accepted = await _platformUtilsService.ShowDialogAsync(message, title, AppResources.Yes, AppResources.No);
+                    if (!accepted)
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
+
+            return false;
         }
     }
 }
