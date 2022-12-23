@@ -376,7 +376,7 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>{0} ha sido copiado.</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Verificar huella dactilar</value>
@@ -778,7 +778,7 @@
     <value>Apagado</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Encendido</value>
+    <value>Activado</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Estado</value>
@@ -1553,7 +1553,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Tema oscuro por defecto</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Elija el tema oscuro para usar al estar usandose el tema por defecto (Sistema) mientras el modo oscuro de su dispositivo está activado.</value>
+    <value>Elija el tema oscuro para usar al estar usándose el tema por defecto (Sistema) mientras el modo oscuro de su dispositivo está activado.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copiar notas</value>
