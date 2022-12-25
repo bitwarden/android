@@ -79,6 +79,7 @@ namespace Bit.Droid.Autofill
             "com.jamal2367.styx",
             "com.kiwibrowser.browser",
             "com.kiwibrowser.browser.dev",
+            "com.lemurbrowser.exts",
             "com.microsoft.emmx",
             "com.microsoft.emmx.beta",
             "com.microsoft.emmx.canary",
