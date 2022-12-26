@@ -22,7 +22,7 @@ namespace Bit.Droid.Services
 
         protected override bool CanSendData => false;
 
-        protected override Task SendDataToWatchAsync(WatchDTO watchDto) => throw new NotImplementedException();
+        protected override Task SendDataToWatchAsync(string serializedData) => throw new NotImplementedException();
 
         protected override void ConnectToWatch() => throw new NotImplementedException();
     }

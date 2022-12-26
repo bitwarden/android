@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.App.Services;
 using Bit.Core.Abstractions;
-using Bit.Core.Models;
 using Bit.Core.Utilities;
-using Newtonsoft.Json;
 using WatchConnectivity;
 
 namespace Bit.iOS.Core.Services
@@ -30,10 +28,8 @@ namespace Bit.iOS.Core.Services
 
         protected override bool IsSupported => WCSession.IsSupported;
 
-        protected override Task SendDataToWatchAsync(WatchDTO watchDto)
+        protected override Task SendDataToWatchAsync(string serializedData)
         {
-            var serializedData = JsonConvert.SerializeObject(watchDto);
-
             // Add time to the key to make it change on every message sent so it's delivered faster.
             // If we use the same key then the OS may defer the delivery of the message because of
             // resources, reachability and other stuff

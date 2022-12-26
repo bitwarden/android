@@ -47,6 +47,7 @@
 		1B8BF90B2919AF2A006F069E /* TotpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8BF90A2919AF2A006F069E /* TotpService.swift */; };
 		1B8BF90D2919BED9006F069E /* Base32.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8BF90C2919BED9006F069E /* Base32.swift */; };
 		1B8BF9112919CDBB006F069E /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8BF9102919CDBB006F069E /* DateExtensions.swift */; };
+		1B9338422955FF67004DC17B /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 1B9338412955FF67004DC17B /* Podfile */; };
 		1BC1CD6329227D3C006540DA /* EnvironmentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC1CD6229227D3C006540DA /* EnvironmentService.swift */; };
 		1BC1CD6529227F3C006540DA /* IconImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC1CD6429227F3C006540DA /* IconImageHelper.swift */; };
 		1BC1CD672922871A006540DA /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC1CD662922871A006540DA /* URLExtensions.swift */; };
@@ -67,6 +68,7 @@
 		1BDBFEB3290B5D07009C78C7 /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEB2290B5D07009C78C7 /* CoreDataHelper.swift */; };
 		1BF5F6DB29103066002DDC0C /* CipherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF5F6DA29103066002DDC0C /* CipherService.swift */; };
 		1BF5F6DE29103B86002DDC0C /* CipherServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF5F6DD29103B86002DDC0C /* CipherServiceMock.swift */; };
+		435563B0D32A9CC4981DC330 /* Pods_bitwarden_WatchKit_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03F1E973DBD7E1859014C128 /* Pods_bitwarden_WatchKit_Extension.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +114,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		03F1E973DBD7E1859014C128 /* Pods_bitwarden_WatchKit_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_bitwarden_WatchKit_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B0A1A9D28ECD7C400FF61CD /* WatchConnectivityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchConnectivityManager.swift; sourceTree = "<group>"; };
 		1B11C898291BFAB500CE58D8 /* CryptoFunctionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoFunctionService.swift; sourceTree = "<group>"; };
 		1B11C89A291C587600CE58D8 /* UInt64Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UInt64Extensions.swift; sourceTree = "<group>"; };
@@ -156,6 +159,7 @@
 		1B8BF90A2919AF2A006F069E /* TotpService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotpService.swift; sourceTree = "<group>"; };
 		1B8BF90C2919BED9006F069E /* Base32.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base32.swift; sourceTree = "<group>"; };
 		1B8BF9102919CDBB006F069E /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
+		1B9338412955FF67004DC17B /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		1BC1CD6229227D3C006540DA /* EnvironmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentService.swift; sourceTree = "<group>"; };
 		1BC1CD6429227F3C006540DA /* IconImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconImageHelper.swift; sourceTree = "<group>"; };
 		1BC1CD662922871A006540DA /* URLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
@@ -176,6 +180,8 @@
 		1BDBFEB2290B5D07009C78C7 /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
 		1BF5F6DA29103066002DDC0C /* CipherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherService.swift; sourceTree = "<group>"; };
 		1BF5F6DD29103B86002DDC0C /* CipherServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherServiceMock.swift; sourceTree = "<group>"; };
+		3265424EA69D4F68677317E5 /* Pods-bitwarden WatchKit Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitwarden WatchKit Extension.debug.xcconfig"; path = "Target Support Files/Pods-bitwarden WatchKit Extension/Pods-bitwarden WatchKit Extension.debug.xcconfig"; sourceTree = "<group>"; };
+		45C5434CDFB28DD0692080EC /* Pods-bitwarden WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitwarden WatchKit Extension.release.xcconfig"; path = "Target Support Files/Pods-bitwarden WatchKit Extension/Pods-bitwarden WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +196,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				435563B0D32A9CC4981DC330 /* Pods_bitwarden_WatchKit_Extension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,11 +237,13 @@
 		1B15612628B7F3D400610B9B = {
 			isa = PBXGroup;
 			children = (
+				1B9338412955FF67004DC17B /* Podfile */,
 				1B15613128B7F3D400610B9B /* bitwarden */,
 				1B15614128B7F3D700610B9B /* bitwarden WatchKit App */,
 				1B15614C28B7F3D800610B9B /* bitwarden WatchKit Extension */,
 				1B15613028B7F3D400610B9B /* Products */,
 				1B5849A82950BC860055286B /* Frameworks */,
+				CEDA998C3D322546216233E7 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -314,6 +323,7 @@
 			isa = PBXGroup;
 			children = (
 				1B5849A92950BC860055286B /* LocalAuthentication.framework */,
+				03F1E973DBD7E1859014C128 /* Pods_bitwarden_WatchKit_Extension.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -418,6 +428,15 @@
 			path = Mocks;
 			sourceTree = "<group>";
 		};
+		CEDA998C3D322546216233E7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3265424EA69D4F68677317E5 /* Pods-bitwarden WatchKit Extension.debug.xcconfig */,
+				45C5434CDFB28DD0692080EC /* Pods-bitwarden WatchKit Extension.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -461,9 +480,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1B15616028B7F3D900610B9B /* Build configuration list for PBXNativeTarget "bitwarden WatchKit Extension" */;
 			buildPhases = (
+				BBD6B225A72CEF9296B2652B /* [CP] Check Pods Manifest.lock */,
 				1B15614428B7F3D800610B9B /* Sources */,
 				1B15614528B7F3D800610B9B /* Frameworks */,
 				1B15614628B7F3D800610B9B /* Resources */,
+				0B6E4FC7329E94C977F4FF4A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -539,11 +560,54 @@
 			files = (
 				1B15615B28B7F3D900610B9B /* Preview Assets.xcassets in Resources */,
 				1B5AFF0729197822004478F9 /* Localizable.strings in Resources */,
+				1B9338422955FF67004DC17B /* Podfile in Resources */,
 				1B15615828B7F3D900610B9B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0B6E4FC7329E94C977F4FF4A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-bitwarden WatchKit Extension/Pods-bitwarden WatchKit Extension-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-bitwarden WatchKit Extension/Pods-bitwarden WatchKit Extension-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-bitwarden WatchKit Extension/Pods-bitwarden WatchKit Extension-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BBD6B225A72CEF9296B2652B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-bitwarden WatchKit Extension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1B15612B28B7F3D400610B9B /* Sources */ = {
@@ -752,6 +816,7 @@
 		};
 		1B15616128B7F3D900610B9B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3265424EA69D4F68677317E5 /* Pods-bitwarden WatchKit Extension.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_STYLE = Automatic;
@@ -785,6 +850,7 @@
 		};
 		1B15616228B7F3D900610B9B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 45C5434CDFB28DD0692080EC /* Pods-bitwarden WatchKit Extension.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_IDENTITY = "Apple Distribution";

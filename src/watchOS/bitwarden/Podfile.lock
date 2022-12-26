@@ -1,0 +1,16 @@
+PODS:
+  - MessagePack.swift (4.0.0)
+
+DEPENDENCIES:
+  - MessagePack.swift (~> 4.0)
+
+SPEC REPOS:
+  trunk:
+    - MessagePack.swift
+
+SPEC CHECKSUMS:
+  MessagePack.swift: 417f6b6e27a86ad4f19a0ee47093b3985cd77323
+
+PODFILE CHECKSUM: b2ac181227be98145745ecb6647c217c8b827072
+
+COCOAPODS: 1.11.3

@@ -1,0 +1,4 @@
+target 'bitwarden WatchKit Extension' do
+  use_frameworks!
+  pod 'MessagePack.swift', '~> 4.0'
+end
