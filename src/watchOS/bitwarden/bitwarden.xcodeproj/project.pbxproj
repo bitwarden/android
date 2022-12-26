@@ -35,6 +35,8 @@
 		1B59EC632901B1C100A8718D /* LoggerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59EC622901B1C100A8718D /* LoggerHelper.swift */; };
 		1B5AFF0329196C81004478F9 /* ColorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5AFF0229196C81004478F9 /* ColorUtils.swift */; };
 		1B5AFF0729197822004478F9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1B5AFF0929197822004478F9 /* Localizable.strings */; };
+		1B5BE451295A08A900E0C323 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 1B5BE450295A08A900E0C323 /* FirebaseCrashlytics */; };
+		1B5BE453295A08C600E0C323 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BE452295A08C600E0C323 /* ExtensionDelegate.swift */; };
 		1B5F5E38293F9CF8009B5FCC /* TrackableWithHeaderListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5F5E37293F9CF8009B5FCC /* TrackableWithHeaderListView.swift */; };
 		1B5F5E3A293F9D6F009B5FCC /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5F5E39293F9D6F009B5FCC /* ViewExtensions.swift */; };
 		1B5F5E3E293FBB17009B5FCC /* CipherItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5F5E3D293FBB17009B5FCC /* CipherItemView.swift */; };
@@ -144,6 +146,7 @@
 		1B59EC622901B1C100A8718D /* LoggerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerHelper.swift; sourceTree = "<group>"; };
 		1B5AFF0229196C81004478F9 /* ColorUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtils.swift; sourceTree = "<group>"; };
 		1B5AFF0829197822004478F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1B5BE452295A08C600E0C323 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		1B5F5E37293F9CF8009B5FCC /* TrackableWithHeaderListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackableWithHeaderListView.swift; sourceTree = "<group>"; };
 		1B5F5E39293F9D6F009B5FCC /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		1B5F5E3D293FBB17009B5FCC /* CipherItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherItemView.swift; sourceTree = "<group>"; };
@@ -190,6 +193,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B5BE451295A08A900E0C323 /* FirebaseCrashlytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,6 +302,7 @@
 				1B15615D28B7F3D900610B9B /* PushNotificationPayload.apns */,
 				1B15615928B7F3D900610B9B /* Preview Content */,
 				1B15616D28B81A4300610B9B /* WatchConnectivityManager.swift */,
+				1B5BE452295A08C600E0C323 /* ExtensionDelegate.swift */,
 			);
 			path = "bitwarden WatchKit Extension";
 			sourceTree = "<group>";
@@ -464,12 +469,16 @@
 				1B15614428B7F3D800610B9B /* Sources */,
 				1B15614528B7F3D800610B9B /* Frameworks */,
 				1B15614628B7F3D800610B9B /* Resources */,
+				1B5BE454295A090F00E0C323 /* Run Crashlytics */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = "bitwarden WatchKit Extension";
+			packageProductDependencies = (
+				1B5BE450295A08A900E0C323 /* FirebaseCrashlytics */,
+			);
 			productName = "bitwarden WatchKit Extension";
 			productReference = 1B15614828B7F3D800610B9B /* bitwarden WatchKit Extension.appex */;
 			productType = "com.apple.product-type.watchkit2-extension";
@@ -504,6 +513,9 @@
 				Base,
 			);
 			mainGroup = 1B15612628B7F3D400610B9B;
+			packageReferences = (
+				1B5BE44F295A08A900E0C323 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 1B15613028B7F3D400610B9B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -544,6 +556,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1B5BE454295A090F00E0C323 /* Run Crashlytics */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Crashlytics";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"${CONFIGURATION}\" != \"Debug\" ]; then\n    \"${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1B15612B28B7F3D400610B9B /* Sources */ = {
@@ -600,6 +633,7 @@
 				1B15616E28B81A4300610B9B /* WatchConnectivityManager.swift in Sources */,
 				1B5AFF0329196C81004478F9 /* ColorUtils.swift in Sources */,
 				1B59EC612900C48E00A8718D /* KeychainHelper.swift in Sources */,
+				1B5BE453295A08C600E0C323 /* ExtensionDelegate.swift in Sources */,
 				1B59EC5729007DEE00A8718D /* BitwardenDB.xcdatamodeld in Sources */,
 				1B8BF90D2919BED9006F069E /* Base32.swift in Sources */,
 				1B8453EC290C672E00F921E1 /* CipherEntity+CoreDataClass.swift in Sources */,
@@ -827,6 +861,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = LTZ2PFU5D6;
 				GENERATE_INFOPLIST_FILE = YES;
 				IBSC_MODULE = bitwarden_WatchKit_Extension;
@@ -983,6 +1018,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1B5BE44F295A08A900E0C323 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = exactVersion;
+				version = 9.6.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1B5BE450295A08A900E0C323 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B5BE44F295A08A900E0C323 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		1B59EC5529007DEE00A8718D /* BitwardenDB.xcdatamodeld */ = {
