@@ -503,6 +503,8 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output $HOME/secrets/dist_watch_app_extension.mobileprovision \
             ./.github/secrets/dist_watch_app_extension.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output ./src/watchOS/bitwarden/GoogleService-Info.plist ./.github/secrets/GoogleService-Info.plist.gpg
         shell: bash
 
       - name: Increment version
@@ -630,7 +632,15 @@ jobs:
           ARCHIVE_DSYMS_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive/dSYMs"
           EXPORT_PATH="./bitwarden-export"
 
+          WATCH_ARCHIVE_DSYMS_PATH="./src/watchOS/bitwarden.xcarchive/dSYMs"
+          WATCH_DSYMS_EXPORT_PATH="$EXPORT_PATH/Watch_dSYMs"
+
+          ls WATCH_ARCHIVE_DSYMS_PATH
+          ls WATCH_DSYMS_EXPORT_PATH
+
           cp -r $ARCHIVE_DSYMS_PATH $EXPORT_PATH
+          mkdir WATCH_DSYMS_EXPORT_PATH
+          cp -r $WATCH_ARCHIVE_DSYMS_PATH "$EXPORT_PATH/Watch_dSYMs"
         shell: bash
 
       - name: Upload App Store .ipa & dSYMs artifacts
@@ -661,6 +671,12 @@ jobs:
         env:
           APPCENTER_IOS_TOKEN: ${{ steps.retrieve-secrets.outputs.appcenter-ios-token }}
         run: appcenter crashes upload-symbols -a bitwarden/bitwarden -s "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
+        shell: bash
+
+      - name: Upload Watch dSYMs to Firebase Crashlytics
+        env:
+          SPM_FOLDER: "$HOME/Library/Developer/Xcode/DerivedData/**/SourcePackages/checkouts"
+        run: "$SPM_FOLDER/firebase-ios-sdk/Crashlytics/upload-symbols" -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/dSYMs/Watch_dSYMs"
         shell: bash
 
       - name: Deploy to App Store

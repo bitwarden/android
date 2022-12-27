@@ -37,6 +37,9 @@
 		1B5AFF0729197822004478F9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1B5AFF0929197822004478F9 /* Localizable.strings */; };
 		1B5BE451295A08A900E0C323 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 1B5BE450295A08A900E0C323 /* FirebaseCrashlytics */; };
 		1B5BE453295A08C600E0C323 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BE452295A08C600E0C323 /* ExtensionDelegate.swift */; };
+		1B5BE45E295B472C00E0C323 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1B5BE45D295B472C00E0C323 /* GoogleService-Info.plist */; };
+		1B5BE45F295B472C00E0C323 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1B5BE45D295B472C00E0C323 /* GoogleService-Info.plist */; };
+		1B5BE460295B472C00E0C323 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1B5BE45D295B472C00E0C323 /* GoogleService-Info.plist */; };
 		1B5F5E38293F9CF8009B5FCC /* TrackableWithHeaderListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5F5E37293F9CF8009B5FCC /* TrackableWithHeaderListView.swift */; };
 		1B5F5E3A293F9D6F009B5FCC /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5F5E39293F9D6F009B5FCC /* ViewExtensions.swift */; };
 		1B5F5E3E293FBB17009B5FCC /* CipherItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5F5E3D293FBB17009B5FCC /* CipherItemView.swift */; };
@@ -147,6 +150,7 @@
 		1B5AFF0229196C81004478F9 /* ColorUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtils.swift; sourceTree = "<group>"; };
 		1B5AFF0829197822004478F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1B5BE452295A08C600E0C323 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		1B5BE45D295B472C00E0C323 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1B5F5E37293F9CF8009B5FCC /* TrackableWithHeaderListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackableWithHeaderListView.swift; sourceTree = "<group>"; };
 		1B5F5E39293F9D6F009B5FCC /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		1B5F5E3D293FBB17009B5FCC /* CipherItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherItemView.swift; sourceTree = "<group>"; };
@@ -234,6 +238,7 @@
 		1B15612628B7F3D400610B9B = {
 			isa = PBXGroup;
 			children = (
+				1B5BE45D295B472C00E0C323 /* GoogleService-Info.plist */,
 				1B15613128B7F3D400610B9B /* bitwarden */,
 				1B15614128B7F3D700610B9B /* bitwarden WatchKit App */,
 				1B15614C28B7F3D800610B9B /* bitwarden WatchKit Extension */,
@@ -534,6 +539,7 @@
 			files = (
 				1B15613A28B7F3D700610B9B /* Preview Assets.xcassets in Resources */,
 				1B15613728B7F3D700610B9B /* Assets.xcassets in Resources */,
+				1B5BE45E295B472C00E0C323 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -542,6 +548,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B15614328B7F3D800610B9B /* Assets.xcassets in Resources */,
+				1B5BE45F295B472C00E0C323 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -550,6 +557,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B15615B28B7F3D900610B9B /* Preview Assets.xcassets in Resources */,
+				1B5BE460295B472C00E0C323 /* GoogleService-Info.plist in Resources */,
 				1B5AFF0729197822004478F9 /* Localizable.strings in Resources */,
 				1B15615828B7F3D900610B9B /* Assets.xcassets in Resources */,
 			);
@@ -574,7 +582,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${CONFIGURATION}\" != \"Debug\" ]; then\n    \"${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\nfi\n";
+			shellScript = "\"${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
