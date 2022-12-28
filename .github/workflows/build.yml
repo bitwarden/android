@@ -59,6 +59,7 @@ jobs:
     name: Android
     runs-on: windows-2022
     needs: setup
+    if: github.ref == 'refs/heads/deletethislinebeforemergingthispr'
     strategy:
       fail-fast: false
       matrix:
@@ -258,6 +259,7 @@ jobs:
   f-droid:
     name: F-Droid Build
     runs-on: windows-2022
+    if: github.ref == 'refs/heads/deletethislinebeforemergingthispr'
     steps:
       - name: Setup NuGet
         uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
@@ -631,6 +633,10 @@ jobs:
         run: |
           ARCHIVE_DSYMS_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive/dSYMs"
           EXPORT_PATH="./bitwarden-export"
+
+          pwd
+          ls
+          ls -R
 
           WATCH_ARCHIVE_DSYMS_PATH="./src/watchOS/bitwarden.xcarchive/dSYMs"
           WATCH_DSYMS_EXPORT_PATH="$EXPORT_PATH/Watch_dSYMs"
