@@ -634,15 +634,11 @@ jobs:
           ARCHIVE_DSYMS_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive/dSYMs"
           EXPORT_PATH="./bitwarden-export"
 
-          pwd
-          ls
-          ls -R
-
           WATCH_ARCHIVE_DSYMS_PATH="./src/watchOS/bitwarden.xcarchive/dSYMs"
           WATCH_DSYMS_EXPORT_PATH="$EXPORT_PATH/Watch_dSYMs"
 
-          ls WATCH_ARCHIVE_DSYMS_PATH
-          ls WATCH_DSYMS_EXPORT_PATH
+          ls $WATCH_ARCHIVE_DSYMS_PATH
+          ls $WATCH_DSYMS_EXPORT_PATH
 
           cp -r $ARCHIVE_DSYMS_PATH $EXPORT_PATH
           mkdir WATCH_DSYMS_EXPORT_PATH
