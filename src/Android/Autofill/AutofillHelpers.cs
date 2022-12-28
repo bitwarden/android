@@ -87,6 +87,7 @@ namespace Bit.Droid.Autofill
             "com.mmbox.xbrowser",
             "com.mycompany.app.soulbrowser",
             "com.naver.whale",
+            "com.neeva.app",
             "com.opera.browser",
             "com.opera.browser.beta",
             "com.opera.gx",
