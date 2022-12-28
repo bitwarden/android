@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
@@ -84,12 +86,19 @@ namespace Bit.Core.Services
                 if (c.Name?.ToLower().Contains(query) ?? false)
                 {
                     matchedCiphers.Add(c);
+                }else if(RemoveDiacritics(c.Name)?.ToLower().Contains(query) ?? false)
+                {
+                    lowPriorityMatchedCiphers.Add(c);
                 }
                 else if (query.Length >= 8 && c.Id.StartsWith(query))
                 {
                     lowPriorityMatchedCiphers.Add(c);
                 }
                 else if (c.SubTitle?.ToLower().Contains(query) ?? false)
+                {
+                    lowPriorityMatchedCiphers.Add(c);
+                }
+                else if (RemoveDiacritics(c.SubTitle)?.ToLower().Contains(query) ?? false)
                 {
                     lowPriorityMatchedCiphers.Add(c);
                 }
@@ -164,6 +173,28 @@ namespace Bit.Core.Services
             ct.ThrowIfCancellationRequested();
             matchedSends.AddRange(lowPriorityMatchSends);
             return matchedSends;
+        }
+
+        private string RemoveDiacritics(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return null;
+            }
+
+            string formD = text.Normalize(NormalizationForm.FormD);
+            StringBuilder sb = new StringBuilder();
+
+            foreach (char ch in formD)
+            {
+                UnicodeCategory uc = CharUnicodeInfo.GetUnicodeCategory(ch);
+                if (uc != UnicodeCategory.NonSpacingMark)
+                {
+                    sb.Append(ch);
+                }
+            }
+
+            return sb.ToString().Normalize(NormalizationForm.FormC);
         }
     }
 }
