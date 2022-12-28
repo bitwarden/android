@@ -86,7 +86,8 @@ namespace Bit.Core.Services
                 if (c.Name?.ToLower().Contains(query) ?? false)
                 {
                     matchedCiphers.Add(c);
-                }else if(RemoveDiacritics(c.Name)?.ToLower().Contains(query) ?? false)
+                }
+                else if (RemoveDiacritics(c.Name)?.ToLower().Contains(query) ?? false)
                 {
                     lowPriorityMatchedCiphers.Add(c);
                 }
