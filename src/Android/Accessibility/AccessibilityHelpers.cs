@@ -91,6 +91,7 @@ namespace Bit.Droid.Accessibility
             new Browser("io.github.forkmaintainers.iceraven", "mozac_browser_toolbar_url_view"),
             new Browser("mark.via", "am,an"),
             new Browser("mark.via.gp", "as"),
+            new Browser("net.dezor.browser", "url_bar"),
             new Browser("net.slions.fulguris.full.download", "search"),
             new Browser("net.slions.fulguris.full.download.debug", "search"),
             new Browser("net.slions.fulguris.full.playstore", "search"),
