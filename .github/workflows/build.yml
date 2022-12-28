@@ -640,7 +640,7 @@ jobs:
           ls $WATCH_ARCHIVE_DSYMS_PATH
 
           cp -r $ARCHIVE_DSYMS_PATH $EXPORT_PATH
-          mkdir WATCH_DSYMS_EXPORT_PATH
+          mkdir $WATCH_DSYMS_EXPORT_PATH
           cp -r $WATCH_ARCHIVE_DSYMS_PATH "$EXPORT_PATH/Watch_dSYMs"
         shell: bash
 
@@ -677,7 +677,25 @@ jobs:
       - name: Upload Watch dSYMs to Firebase Crashlytics
         env:
           SPM_FOLDER: "$HOME/Library/Developer/Xcode/DerivedData/**/SourcePackages/checkouts"
-        run: $SPM_FOLDER/firebase-ios-sdk/Crashlytics/upload-symbols -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/dSYMs/Watch_dSYMs"
+        run: |
+
+          echo "########################################"
+          echo "##### Trying to find upload-symbols location"
+          echo "########################################"
+
+          find "$HOME/Library/Developer" -name "upload-symbols"
+
+          echo "########################################"
+          echo "##### Checking "
+          echo "########################################"
+
+          ls -R $HOME/Library/Developer/Xcode/DerivedData/**/SourcePackages/checkouts
+
+          echo "########################################"
+          echo "##### Uploading Watch dSYMs to Firebase"
+          echo "########################################"
+          
+          $SPM_FOLDER/firebase-ios-sdk/Crashlytics/upload-symbols -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/dSYMs/Watch_dSYMs"
         shell: bash
 
       - name: Deploy to App Store

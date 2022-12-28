@@ -474,7 +474,6 @@
 				1B15614428B7F3D800610B9B /* Sources */,
 				1B15614528B7F3D800610B9B /* Frameworks */,
 				1B15614628B7F3D800610B9B /* Resources */,
-				1B5BE454295A090F00E0C323 /* Run Crashlytics */,
 			);
 			buildRules = (
 			);
@@ -564,27 +563,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		1B5BE454295A090F00E0C323 /* Run Crashlytics */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run Crashlytics";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1B15612B28B7F3D400610B9B /* Sources */ = {
