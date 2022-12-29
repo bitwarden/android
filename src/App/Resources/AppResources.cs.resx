@@ -186,7 +186,7 @@
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>E-mailová adresa</value>
+    <value>Emailová adresa</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Položka byla smazána</value>
+    <value>Položka byla odstraněna.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -376,7 +376,7 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>{0} bylo zkopírováno.</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Ověření otisku prstu</value>
@@ -394,7 +394,7 @@
     <value>Zobrazit</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Navštivit naší webovou stránku</value>
+    <value>Navštívit naší webovou stránku</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
     <value>Navštivte náš web pro získání nápovědy, novinek, kontaktu, nebo návodů, jak používat Bitwarden.</value>
@@ -428,7 +428,7 @@
     <value>Použít nezaměnitelné znaky</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Rozšíření aplikace Bitwarden</value>
+    <value>Rozšíření aplikace bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
     <value>Nejjednodušší způsob přidání nových přihlášení do trezoru je z rozšíření Bitwarden. Další informace o používání rozšíření Bitwarden získáte klepnutím na obrazovku Nastavení.</value>
@@ -443,7 +443,7 @@
     <value>Použijte službu přístupnosti pro automatické vyplňování přihlašovacích údajů.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Změnit e-mail</value>
+    <value>Změnit email</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
     <value>E-mailovou adresu si můžete změnit na webové stránce bitwarden.com. Chcete tuto stránku nyní otevřít?</value>
@@ -604,7 +604,7 @@
     <value>Nikdy</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Položka byla přidána</value>
+    <value>Nová položka byla vytvořena.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Žádné oblíbené přihlašovací údaje.</value>
@@ -647,7 +647,7 @@
     <value>Opravdu chcete přepsat aktuální heslo?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden udržuje váš trezor automaticky synchronizovaný pomocí nabízených oznámení. Pro nejlepší možný zážitek klikněte prosím na následující výzvě na "Ok", pokud budete požádáni o jejich povolení.</value>
+    <value>bitwarden udržuje váš trezor automaticky synchronizovaný pomocí nabízených oznámení. Pro nejlepší možný zážitek klikněte prosím na následující výzvě na "Ok", pokud budete požádáni o jejich povolení.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -708,7 +708,7 @@
     <value>Dvoufázové přihlášení</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Dvoufázové přihlášení činí váš účet mnohem bezpečnějším díky nutnosti po každém úspěšném přihlášení zadat ověřovací kód získaný z aplikace, SMS, e-mailu nebo telefonního hovoru. Dvoufázové přihlášení lze aktivovat na webové stránce bitwarden.com. Chcete tuto stránku nyní otevřít?</value>
+    <value>Dvoufázové přihlášení činí váš účet mnohem bezpečnější díky nutnosti po každém úspěšném přihlášení zadat ověřovací kód získaný z aplikace, SMS, emailu nebo telefonního hovoru. Dvoufázové přihlášení lze aktivovat na webové stránce bitwarden.com. Chcete tuto stránku nyní otevřít?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Odemknout pomocí {0}</value>
@@ -775,10 +775,10 @@
     <value>Povoleno</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Off</value>
+    <value>Vypnuto</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>Zapnuto</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Stav</value>
@@ -900,8 +900,8 @@
     <value>Nelze přečíst ověřovací klíč.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Point your camera at the QR Code.
-Scanning will happen automatically.</value>
+    <value>Nasměrujte kameru na QR Kód.
+Načtení proběhne automaticky.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Načíst QR kód</value>
@@ -916,10 +916,10 @@ Scanning will happen automatically.</value>
     <value>Zkopírovat ověřovací kód (TOTP)</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</value>
+    <value>Zkopírujte si TOTP ověřovací kód do schránky, pokud používáte autentizační klíč k přihlašování, před použitím automatického vyplňování.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
-    <value>Copy TOTP automatically</value>
+    <value>Automaticky kopírovat TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Pro použití této funkce je potřebné prémiové členství.</value>
@@ -958,7 +958,7 @@ Scanning will happen automatically.</value>
     <value>Dozvědět se více</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>URL API serveru</value>
+    <value>URL serveru API</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
     <value>Vlastní prostředí</value>
@@ -1137,10 +1137,10 @@ Scanning will happen automatically.</value>
     <value>Expirace</value>
   </data>
   <data name="ShowWebsiteIcons" xml:space="preserve">
-    <value>Show website icons</value>
+    <value>Zobrazit ikony webových stránek</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
-    <value>Show a recognizable image next to each login.</value>
+    <value>Zobrazí rozeznatelné ikony vedle každého záznamu.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>URL serveru ikonek</value>
@@ -1381,10 +1381,10 @@ Scanning will happen automatically.</value>
     <value>Vyledat v kolekci</value>
   </data>
   <data name="SearchFileSends" xml:space="preserve">
-    <value>Search File Sends</value>
+    <value>Search file Sends</value>
   </data>
   <data name="SearchTextSends" xml:space="preserve">
-    <value>Search Text Sends</value>
+    <value>Search text Sends</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
     <value>Hledat {0}</value>
@@ -1457,11 +1457,11 @@ Scanning will happen automatically.</value>
     <value>Nejsou k dispozici žádné složky k zobrazení.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fráze otisku prstu</value>
+    <value>Fráze otisku účtu</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Fráze otisku prstu vašeho účtu</value>
+    <value>Fráze otisku vašeho účtu</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
@@ -1550,10 +1550,10 @@ Scanning will happen automatically.</value>
     <value>Výchozí (Systémový)</value>
   </data>
   <data name="DefaultDarkTheme" xml:space="preserve">
-    <value>Default dark theme</value>
+    <value>Výchozí tmavý motiv</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is enabled.</value>
+    <value>Zvolte motiv, který se bude zobrazovat po aktivování tmavého motivu v systému.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopírovat poznámky</value>
@@ -1574,6 +1574,10 @@ Scanning will happen automatically.</value>
   <data name="Nord" xml:space="preserve">
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Automatické vyplňování blokovaných URI</value>
@@ -1898,16 +1902,16 @@ Scanning will happen automatically.</value>
     <value>Soubor, který chcete odeslat.</value>
   </data>
   <data name="FileTypeIsSelected" xml:space="preserve">
-    <value>File type is selected.</value>
+    <value>Je vybrán typ souboru.</value>
   </data>
   <data name="FileTypeIsNotSelected" xml:space="preserve">
-    <value>File type is not selected, tap to select.</value>
+    <value>Není vybrán typ souboru, klepněte pro výběr.</value>
   </data>
   <data name="TextTypeIsSelected" xml:space="preserve">
-    <value>Text type is selected.</value>
+    <value>Je vybrán typ textu.</value>
   </data>
   <data name="TextTypeIsNotSelected" xml:space="preserve">
-    <value>Text type is not selected, tap to select.</value>
+    <value>Není vybrán typ textu, klepněte pro výběr.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Datum odstranění</value>
@@ -1972,7 +1976,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Zakažte tento Send, aby k němu nikdo neměl přístup.</value>
+    <value>Vypnout tento Send, aby k němu nikdo neměl přístup</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -2040,7 +2044,7 @@ Scanning will happen automatically.</value>
     <value>Vlastní</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Sdílet tento Send po uložení.</value>
+    <value>Sdílet tento Send po uložení</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2052,7 +2056,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Skrýt mou e-mailovou adresu před příjemci.</value>
+    <value>Skrýt mou e-mailovou adresu před příjemci</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Jedna nebo více zásad organizace ovlivňuje nastavení Send.</value>
@@ -2088,7 +2092,7 @@ Scanning will happen automatically.</value>
     <value>Aktualizovat hlavní heslo</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>Administrátor v organizaci nedávno změnil vaše hlavní heslo. Pro přístup k trezoru jej nyní musíte změnit. Pokračování vás odhlásí z vaší aktuální relace a bude nutné se znovu přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
     <value>Aktualizace hesla</value>
@@ -2100,22 +2104,22 @@ Scanning will happen automatically.</value>
     <value>Odstranit hlavní heslo</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your master password from your account and require SSO to login.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
+    <value>If you do not want to remove your master password, you may leave this organization.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
     <value>Opustit organizaci</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>Leave {0}?</value>
+    <value>Opustit {0}?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>To continue, have your FIDO2 WebAuthn enabled security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
+    <value>To continue, have your FIDO2 WebAuthn compatible security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
     <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
@@ -2133,7 +2137,7 @@ Scanning will happen automatically.</value>
     <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is {0} hour(s) and {1} minute(s)</value>
+    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s)</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Your vault timeout exceeds the restrictions set by your organization.</value>
@@ -2157,13 +2161,13 @@ Scanning will happen automatically.</value>
     <value>Přepnuto na další dostupný účet</value>
   </data>
   <data name="AccountLockedSuccessfully" xml:space="preserve">
-    <value>Account Locked</value>
+    <value>Účet uzamčen</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
     <value>Odhlášení proběhlo úspěšně</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
-    <value>Account removed successfully</value>
+    <value>Účet byl úspěšně odstraněn</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Odstranit účet</value>
@@ -2214,10 +2218,10 @@ Scanning will happen automatically.</value>
     <value>Zadejte ověřovací kód, který byl odeslán na %@</value>
   </data>
   <data name="SubmitCrashLogs" xml:space="preserve">
-    <value>Submit crash logs</value>
+    <value>Odesílat záznamy o pádech</value>
   </data>
   <data name="SubmitCrashLogsDescription" xml:space="preserve">
-    <value>Help Bitwarden improve app stability by submitting crash reports.</value>
+    <value>Pomozte zlepšovat stabilitu aplikace odesíláním hlášení o selháních.</value>
   </data>
   <data name="OptionsExpanded" xml:space="preserve">
     <value>Options are expanded, tap to collapse.</value>
@@ -2226,19 +2230,19 @@ Scanning will happen automatically.</value>
     <value>Options are collapsed, tap to expand.</value>
   </data>
   <data name="UppercaseAtoZ" xml:space="preserve">
-    <value>Uppercase (A to Z)</value>
+    <value>Velká písmena (A-Z)</value>
   </data>
   <data name="LowercaseAtoZ" xml:space="preserve">
-    <value>Lowercase (A to Z)</value>
+    <value>Malá písmena (A-Z)</value>
   </data>
   <data name="NumbersZeroToNine" xml:space="preserve">
-    <value>Numbers (0 to 9)</value>
+    <value>Čísla (0-9)</value>
   </data>
   <data name="SpecialCharacters" xml:space="preserve">
-    <value>Special Characters (!@#$%^&amp;*)</value>
+    <value>Speciální znaky (!@#$%^&amp;*)</value>
   </data>
   <data name="TapToGoBack" xml:space="preserve">
-    <value>Tap to go back</value>
+    <value>Klepnutím se vrátíte zpět</value>
   </data>
   <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
     <value>Heslo je viditelné, klepněte pro skrytí</value>
@@ -2247,59 +2251,56 @@ Scanning will happen automatically.</value>
     <value>Heslo není viditelné, klepněte pro zobrazení.</value>
   </data>
   <data name="FilterByVault" xml:space="preserve">
-    <value>Filter items by vault</value>
+    <value>Filtrovat položky podle trezoru</value>
   </data>
   <data name="AllVaults" xml:space="preserve">
-    <value>All Vaults</value>
+    <value>Všechny trezory</value>
   </data>
   <data name="Vaults" xml:space="preserve">
-    <value>Vaults</value>
+    <value>Trezory</value>
   </data>
   <data name="VaultFilterDescription" xml:space="preserve">
-    <value>Vault: {0}</value>
+    <value>Trezor: {0}</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>Všechny</value>
   </data>
   <data name="Totp" xml:space="preserve">
     <value>TOTP</value>
   </data>
   <data name="VerificationCodes" xml:space="preserve">
-    <value>Verification Codes</value>
+    <value>Ověřovací kódy</value>
   </data>
   <data name="PremiumSubscriptionRequired" xml:space="preserve">
     <value>Premium subscription required</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
-    <value>Cannot add authenticator key? </value>
+    <value>Nelze přidat autentizační klíč? </value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>Načíst QR kód</value>
   </data>
   <data name="CannotScanQRCode" xml:space="preserve">
-    <value>Cannot scan QR Code? </value>
+    <value>Nelze načíst QR Kód? </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Authenticator Key</value>
+    <value>Autentizační klíč</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Enter Key Manually</value>
+    <value>Enter key manually</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
-    <value>Add TOTP</value>
+    <value>Přidat TOTP</value>
   </data>
   <data name="SetupTotp" xml:space="preserve">
-    <value>Set up TOTP</value>
+    <value>Nastavit TOTP</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
     <value>Once the key is successfully entered,
 select Add TOTP to store the key safely</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
-    <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>
+    <value>Nastavení zámku na „Nikdy“ ponechá váš trezor k dispozici komukoliv s přístupem k vašemu zařízení. Používáte-li tuto možnost, měli byste zajistit, aby vaše zařízení bylo náležitě chráněno.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
     <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
@@ -2308,9 +2309,209 @@ select Add TOTP to store the key safely</value>
     <value>We were unable to process your request. Please try again or contact us.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
-    <value>Allow screen capture</value>
+    <value>Povolit záznam obrazovky</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>Are you sure you want to enable Screen Capture?</value>
+    <value>Opravdu chcete zapnout záznam obrazovky?</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Požadavek k přihlášení</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Pokoušíte se přihlásit?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Pokus o přihlášení od {0} na {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Typ zařízení</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP adresa</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Čas</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Poblíž</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Potvrdit přihlášení</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Zamítnout přihlášení</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Právě teď</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>před {0} minutami</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Přihlášení potvrzeno</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Přihlášení zamítnuto</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Schválit žádosti o přihlášení</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Použijte toto zařízení pro schvalování žádostí o přihlášení z jiných zařízení.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Povolit oznámení</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Dostávat oznámení ohledně nových žádostí o přihlášení</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Ne, děkuji</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Potvrdit pokus o přihlášení pro {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Všechna oznámení</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Typ hesla</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Co chcete vygenerovat?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Typ uživatelského jména</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>E-mailová adresa s plusem</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Catch-all email</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Alias přeposílaného e-mailu</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Náhodné slovo</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-mail (povinný)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Název domény (povinný)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API klíč (povinný)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Služba</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Přístupový token API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Opravdu chcete přepsat aktuální uživatelské jméno?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Generovat uživatelské jméno</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Typ e-mailu</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Webová stránka (povinná)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Vyskytla se neznámá chyba: {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Použijte funkce podadres Vašeho poskytovatele e-mailu</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Use your domain's configured catch-all inbox.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Vygeneruje alias e-mailu pomocí externí přeposílací služby.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Náhodně</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Accessibility Service Disclosure</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Potvrdit</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Zamítnout</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Požadavek na přihlášení již vypršel.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Pokus o přihlášení z:
+{0}
+Chcete se přepnout na tento účet?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Jste tu noví?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Získat nápovědu pro hlavní heslo</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Přihlášování jako {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Nejste to vy?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Přihlásit se pomocí hlavního hesla</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Přihlásit se pomocí jiného zařízení</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Přihlášení zahájeno</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Na vaše zařízení bylo odesláno oznámení.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Ujistěte se, že je váš trezor odemčen a fráze otisku prstu se shodují s druhým zařízením.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Odeslat oznámení znovu</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Potřebujete jinou možnost?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Zobrazit všechny možnosti přihlášení</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Tento požadavek již není platný</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Enable camera permission to use the scanner</value>
   </data>
 </root>

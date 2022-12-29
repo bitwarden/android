@@ -8,8 +8,10 @@ using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using ZXing.Net.Mobile.Forms;
 
 namespace Bit.App.Pages
 {
@@ -26,20 +28,15 @@ namespace Bit.App.Pages
         private bool _pageIsActive;
         private bool _qrcodeFound;
         private float _scale;
-
+        private ZXingScannerView _zxing;
         private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         public ScanPage(Action<string> callback)
         {
-            _callback = callback;
             InitializeComponent();
-            _zxing.Options = new ZXing.Mobile.MobileBarcodeScanningOptions
-            {
-                UseNativeScanning = true,
-                PossibleFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
-                AutoRotate = false,
-                TryInverted = true
-            };
+            _callback = callback;
+            ViewModel.InitScannerCommand = new Command(() => InitScanner());
+
             if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
@@ -55,6 +52,53 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            StartScanner();
+        }
+
+        protected override void OnDisappearing()
+        {
+            StopScanner().FireAndForget();
+            base.OnDisappearing();
+        }
+
+        // Fix known bug with DelayBetweenAnalyzingFrames & DelayBetweenContinuousScans: https://github.com/Redth/ZXing.Net.Mobile/issues/721
+        private void InitScanner()
+        {
+            try
+            {
+                if (!ViewModel.HasCameraPermission || !ViewModel.ShowScanner || _zxing != null)
+                {
+                    return;
+                }
+
+                _zxing = new ZXingScannerView();
+                _zxing.Options = new ZXing.Mobile.MobileBarcodeScanningOptions
+                {
+                    UseNativeScanning = true,
+                    PossibleFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
+                    AutoRotate = false,
+                    TryInverted = true,
+                    DelayBetweenAnalyzingFrames = 5,
+                    DelayBetweenContinuousScans = 5
+                };
+                _scannerContainer.Content = _zxing;
+                StartScanner();
+            }
+            catch (Exception ex)
+            {
+                _logger.Value.Exception(ex);
+            }
+        }
+
+        private void StartScanner()
+        {
+            if (_zxing == null)
+            {
+                return;
+            }
+
+            _zxing.OnScanResult -= OnScanResult;
+            _zxing.OnScanResult += OnScanResult;
             _zxing.IsScanning = true;
 
             // Fix for Autofocus, now it's done every 2 seconds so that the user does't have to do it
@@ -98,16 +142,21 @@ namespace Bit.App.Pages
             AnimationLoopAsync();
         }
 
-        protected override async void OnDisappearing()
+        private async Task StopScanner()
         {
+            if (_zxing == null)
+            {
+                return;
+            }
+
             _autofocusCts?.Cancel();
             if (_continuousAutofocusTask != null)
             {
                 await _continuousAutofocusTask;
             }
             _zxing.IsScanning = false;
+            _zxing.OnScanResult -= OnScanResult;
             _pageIsActive = false;
-            base.OnDisappearing();
         }
 
         private async void OnScanResult(ZXing.Result result)
@@ -170,27 +219,10 @@ namespace Bit.App.Pages
 
         private void AddAuthenticationKey_OnClicked(object sender, EventArgs e)
         {
-            var text = ViewModel.TotpAuthenticationKey;
-            if (!string.IsNullOrWhiteSpace(text))
+            if (!string.IsNullOrWhiteSpace(ViewModel.TotpAuthenticationKey))
             {
-                if (text.StartsWith("otpauth://totp"))
-                {
-                    _callback(text);
-                    return;
-                }
-                else if (Uri.TryCreate(text, UriKind.Absolute, out Uri uri) &&
-                         !string.IsNullOrWhiteSpace(uri?.Query))
-                {
-                    var queryParts = uri.Query.Substring(1).ToLowerInvariant().Split('&');
-                    foreach (var part in queryParts)
-                    {
-                        if (part.StartsWith("secret="))
-                        {
-                            _callback(part.Substring(7)?.ToUpperInvariant());
-                            return;
-                        }
-                    }
-                }
+                _callback(ViewModel.TotpAuthenticationKey);
+                return;
             }
             _callback(null);
         }

@@ -376,7 +376,7 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>{0} をコピーしました。</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>指紋の確認</value>
@@ -425,7 +425,7 @@
     <value>自動入力サービス</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>あいまいな文字を省く</value>
+    <value>あいまいな文字を避ける</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Bitwarden App Extension</value>
@@ -587,11 +587,11 @@
     <value>マスターパスワードは、少なくとも8文字以上で設定してください。</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>数字の最小数</value>
+    <value>数字の最小個数</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>記号の最小数</value>
+    <value>最低限必要な記号の個数</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -657,7 +657,7 @@
     <value>良いレビューで私たちを助けてください！</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>パスワードの再生成</value>
+    <value>パスワードを再生成</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
     <value>マスターパスワードを再入力</value>
@@ -708,7 +708,7 @@
     <value>2段階認証</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>2段階認証を使うと、ログイン時にセキュリティキーや認証アプリ、SMS、電話やメールでの認証を必要にすることでアカウントをさらに安全に出来ます。2段階認証は Bitwarden ウェブ保管庫で有効化できます。ウェブサイトを開きますか？</value>
+    <value>2段階認証を有効にすると、他の端末でログインする際にセキュリティキー、認証アプリ、SMS、電話、またはメールで認証することが必要となり，アカウントの安全性が高まります。2段階認証を有効にするのはBitwarden.comのウェブ保管庫でできます。ウェブサイトに進みますか？</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>{0}でロック解除</value>
@@ -1252,7 +1252,7 @@
     <value>URI の一致検出方法</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>一致検出方法</value>
+    <value>一致するか検出する方法</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
@@ -1337,7 +1337,7 @@
     <value>ログイン</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>セキュアメモ</value>
+    <value>秘密のメモ</value>
   </data>
   <data name="AllItems" xml:space="preserve">
     <value>すべてのアイテム</value>
@@ -1575,6 +1575,10 @@
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized ダーク</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>自動入力をブロックする URI</value>
   </data>
@@ -1591,7 +1595,7 @@
     <value>アプリ再起動時</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>自動入力を使うと、他のウェブサイトやアプリから Bitwarden 保管庫に、より安全・簡単にアクセスできます。現在 Bitwarden の自動入力サービスを有効にしていないようです。設定画面で自動入力を有効化できます。</value>
+    <value>自動入力を使えば、他のウェブサイトやアプリから Bitwardenの保管庫に簡単に安全にアクセスできます。いまのところ自動入力は有効になっていないようです。自動入力を有効にするには設定画面に行ってください。</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>テーマの変更はアプリを再起動すると反映されます。</value>
@@ -2295,9 +2299,6 @@
     <value>キーを入力したら、安全に保存するため
 『TOTP を追加』を選択してください。</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>ロックオプションを「なし」に設定すると、あなたのデバイスを操作できる誰もが保管庫を見られます。 このオプションを使用する場合は、デバイスを適切に保護しておく必要があります。</value>
   </data>
@@ -2312,5 +2313,205 @@
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>スクリーンショットを撮影できるようにしてもよろしいですか？</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>ログインリクエスト済み</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>ログインしようとしていますか？</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>{1} への {0} によるログインの試行</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>デバイス種別</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP アドレス</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>時間</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>付近</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>ログインを承認</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>ログインを拒否</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>たった今</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} 分前</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>ログインを承認しました</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>ログインを拒否しました</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>ログインリクエストを承認する</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>このデバイスを使用して、他のデバイスからのログインリクエストを承認します。</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>通知を許可する</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>新しいログインリクエストのプッシュ通知を受け取ります</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>いいえ</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>{0} のログイン試行を承認</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>すべての通知</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>パスワードの種類</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>何を生成しますか？</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>ユーザー名の種類</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>プラス付きのメールアドレス</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>キャッチオールメール</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>転送されたメールエイリアス</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>ランダムな単語</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>メールアドレス（必須）</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>ドメイン名（必須）</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API キー (必須)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>サービス</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API アクセストークン</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>現在のユーザー名を上書きしてもよろしいですか？</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>ユーザー名を生成</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>メールの種類</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>ウェブサイト (必須)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>不明な {0} エラーが発生しました。</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>メールプロバイダのエイリアス機能を使用します。</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>ドメインに設定されたキャッチオール受信トレイを使用します。</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>外部転送サービスを使用してメールエイリアスを生成します。</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>ランダム</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>ウォッチに接続</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>アクセシビリティサービスの開示</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden はアクセシビリティサービスを使ってアプリやウェブサイトのログインフィールドを検索します。 次に、アプリまたはサイトの一致が見つかったときにユーザー名とパスワードを入力するための適切なフィールド ID を確立します。 私たちは、サービスによって私たちに提示された情報のいずれも保存しません。 また、資格情報のテキスト入力以外の画面上の要素を制御しようとすることもありません。</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>同意</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>拒否</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>ログインリクエストの有効期限が切れています。</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>ログイン試行がありました:
+{0}
+このアカウントに切り替えますか？</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>初めてですか?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>マスターパスワードのヒントを取得する</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>{0} としてログイン</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>あなたではないですか？</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>マスターパスワードでログイン</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>別のデバイスでログイン</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>ログイン開始</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>デバイスに通知を送信しました。</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>保管庫がロックされていることと、パスフレーズが他のデバイスと一致していることを確認してください。</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>通知を再送信する</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>別の選択肢が必要ですか？</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>すべてのログインオプションを表示</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>このリクエストは無効になりました</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>スキャナを使用できるようカメラ権限を許可する</value>
   </data>
 </root>

@@ -375,8 +375,8 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} è stato copiato.</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <value>{0} copiata.</value>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Verifica impronta</value>
@@ -529,7 +529,7 @@
     <value>Importa rapidamente i tuoi elementi da altre app di gestione password.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>Ultima Sincronizzazione:</value>
+    <value>Ultima sincronizzazione:</value>
   </data>
   <data name="Length" xml:space="preserve">
     <value>Lunghezza</value>
@@ -695,7 +695,7 @@
     <value>Sincronizzazione completata.</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Sincronizzazione non riuscita.</value>
+    <value>Sincronizzazione fallita.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>Sincronizza la cassaforte</value>
@@ -1574,6 +1574,10 @@
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarizzato scuro</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>URI per cui l'autocompletamento non è permesso</value>
   </data>
@@ -1609,7 +1613,7 @@
     <value>Condiviso</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Mostra/Nascondi</value>
+    <value>Mostra/nascondi</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>La tua sessione è scaduta.</value>
@@ -2103,7 +2107,7 @@
     <value>{0} sta usando SSO con cifratura gestita dal cliente. Continuando la tua password principale sarà rimossa dal tuo profilo e richiederà SSO per accedere.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>Se non desideri rimuovere la tua password principale, potresti lasciare questa organizzazione.</value>
+    <value>Se non vuoi rimuovere la tua password principale, puoi lasciare questa organizzazione.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
     <value>Lascia l'organizzazione</value>
@@ -2202,7 +2206,7 @@
     <value>Verifica</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Invia di nuovo il codice</value>
+    <value>Reinvia codice</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
     <value>Il codice di verifica è stato inviato al tuo indirizzo email</value>
@@ -2295,22 +2299,219 @@
     <value>Una volta inserita la chiave,
 seleziona Aggiungi TOTP per salvare la chiave in modo sicuro</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Impostare le opzioni di blocco su “Mai” fa sì che la tua cassaforte sia a disposizione di chiunque abbia accesso al tuo dispositivo. Se si utilizza questa opzione, è necessario assicurarsi di mantenere il dispositivo adeguatamente protetto.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
-    <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
+    <value>Uno o più degli URL inseriti non sono validi. Si prega di verificare e provare a salvare di nuovo.</value>
   </data>
   <data name="GenericErrorMessage" xml:space="preserve">
-    <value>We were unable to process your request. Please try again or contact us.</value>
+    <value>Non siamo stati in grado di elaborare la tua richiesta. Riprova o contattaci.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
     <value>Permetti cattura dello schermo</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Sei sicuro di voler attivare la cattura dello schermo?</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Accesso richiesto</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Stai cercando di accedere?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Tentativo di accesso di {0} su {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Tipo di dispositivo</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>Indirizzo IP</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Ora</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Vicino</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Conferma accesso</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Nega accesso</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Proprio ora</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} minuti fa</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Accesso confermato</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Accesso negato</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Approva le richieste di accesso</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Usa questo dispositivo per approvare le richieste di accesso fatte da altri dispositivi.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Permetti notifiche</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Ricevi notifiche push per nuove richieste di accesso</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>No, grazie</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Conferma il tentativo di accesso di {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Tutte le notifiche</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Tipo di password</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Cosa vorresti generare?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Tipo di nome utente</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Indirizzo email alternativo</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Email catch-all</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Alias email inoltrata</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Parola casuale</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Email (obbligatoria)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Nome Dominio (obbligatorio)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Chiave API (obbligatoria)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Servizio</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>FirefoxRelay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Token di accesso API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Sei sicuro di voler sovrascrivere il nome utente attuale?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Genera nome utente</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Tipo di email</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Sito web (obbligatorio)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Si è verificato un errore {0} sconosciuto.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Usa le funzionalità di sub-indirizzamento del tuo fornitore di posta elettronica</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Usa la casella di posta catch-all di dominio.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Genera un alias email con un servizio di inoltro esterno.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Casuale</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Maggiori informazioni sul servizio di accessibilità</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden utilizza il servizio di accessibilità per cercare i campi di accesso in applicazioni e siti web, con lo scopo di individuare gli ID di campo appropriati per inserire nome utente e password quando viene trovata una corrispondenza per l'applicazione o il sito. Non memorizziamo nessuna delle informazioni che ci vengono presentate dal servizio, né vengono controllati eventuali altri elementi sullo schermo diversi dall'immissione di credenziali.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Accetta</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Rifiuta</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>La richiesta di accesso è già scaduta.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Tentativo di accesso da:
+{0}
+Vuoi passare a questo account?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Nuovo da queste parti?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Ottieni l'indizio della password principale</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Accesso come {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Non sei tu?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Accedi con la password principale</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Accedi con un altro dispositivo</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Login avviato</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Una notifica è stata inviata al tuo dispositivo.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Assicurati che la tua cassaforte sia sbloccata e che la "frase impronta" corrisponda sull'altro dispositivo.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Invia nuova notifica</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Hai bisogno di un'altra opzione?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Visualizza tutte le opzioni di accesso</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>La richiesta non è più valida</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Enable camera permission to use the scanner</value>
   </data>
 </root>

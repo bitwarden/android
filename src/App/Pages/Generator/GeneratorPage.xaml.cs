@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Styles;
 using Bit.Core.Abstractions;
@@ -18,15 +19,20 @@ namespace Bit.App.Pages
         private readonly Action<string> _selectAction;
         private readonly TabsPage _tabsPage;
 
-        public GeneratorPage(bool fromTabPage, Action<string> selectAction = null, TabsPage tabsPage = null)
+        public GeneratorPage(bool fromTabPage, Action<string> selectAction = null, TabsPage tabsPage = null, bool isUsernameGenerator = false, string emailWebsite = null, bool editMode = false, AppOptions appOptions = null)
         {
             _tabsPage = tabsPage;
             InitializeComponent();
-            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>();
             _vm = BindingContext as GeneratorPageViewModel;
             _vm.Page = this;
             _fromTabPage = fromTabPage;
             _selectAction = selectAction;
+            _vm.ShowTypePicker = fromTabPage;
+            _vm.IsUsername = isUsernameGenerator;
+            _vm.EmailWebsite = emailWebsite;
+            _vm.EditMode = editMode;
+            _vm.IosExtension = appOptions?.IosExtension ?? false;
             var isIos = Device.RuntimePlatform == Device.iOS;
             if (selectAction != null)
             {
@@ -47,10 +53,12 @@ namespace Bit.App.Pages
                     ToolbarItems.Add(_historyItem);
                 }
             }
-            if (isIos)
-            {
-                _typePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
-            }
+            _typePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+            _passwordTypePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+            _usernameTypePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+            _serviceTypePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+            _plusAddressedEmailTypePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+            _catchallEmailTypePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
         }
 
         public async Task InitAsync()
@@ -97,16 +105,6 @@ namespace Bit.App.Pages
             return base.OnBackButtonPressed();
         }
 
-        private async void Regenerate_Clicked(object sender, EventArgs e)
-        {
-            await _vm.RegenerateAsync();
-        }
-
-        private async void Copy_Clicked(object sender, EventArgs e)
-        {
-            await _vm.CopyAsync();
-        }
-
         private async void More_Clicked(object sender, EventArgs e)
         {
             if (!DoOnce())
@@ -124,7 +122,7 @@ namespace Bit.App.Pages
 
         private void Select_Clicked(object sender, EventArgs e)
         {
-            _selectAction?.Invoke(_vm.Password);
+            _selectAction?.Invoke(_vm.IsUsername ? _vm.Username : _vm.Password);
         }
 
         private async void History_Clicked(object sender, EventArgs e)
@@ -138,19 +136,24 @@ namespace Bit.App.Pages
             await _vm.SliderChangedAsync();
         }
 
-        private async void Close_Clicked(object sender, EventArgs e)
-        {
-            if (DoOnce())
-            {
-                await Navigation.PopModalAsync();
-            }
-        }
-
         public override async Task UpdateOnThemeChanged()
         {
             await base.UpdateOnThemeChanged();
 
-            await Device.InvokeOnMainThreadAsync(() => _vm?.RedrawPassword());
+            await Device.InvokeOnMainThreadAsync(() =>
+            {
+                if (_vm != null)
+                {
+                    if (_vm.IsUsername)
+                    {
+                        _vm.RedrawUsername();
+                    }
+                    else
+                    {
+                        _vm.RedrawPassword();
+                    }
+                }
+            });
         }
     }
 }

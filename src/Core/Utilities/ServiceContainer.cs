@@ -29,6 +29,8 @@ namespace Bit.Core.Utilities
             var messagingService = Resolve<IMessagingService>("messagingService");
             var cryptoFunctionService = Resolve<ICryptoFunctionService>("cryptoFunctionService");
             var cryptoService = Resolve<ICryptoService>("cryptoService");
+            var logger = Resolve<ILogger>();
+
             SearchService searchService = null;
 
             var tokenService = new TokenService(stateService);
@@ -67,7 +69,7 @@ namespace Bit.Core.Utilities
                 });
             var syncService = new SyncService(stateService, apiService, settingsService, folderService, cipherService,
                 cryptoService, collectionService, organizationService, messagingService, policyService, sendService,
-                keyConnectorService, (extras) =>
+                keyConnectorService, logger, (extras) =>
                 {
                     messagingService.Send("logout", extras);
                     return Task.CompletedTask;
@@ -77,13 +79,14 @@ namespace Bit.Core.Utilities
             var totpService = new TotpService(cryptoFunctionService);
             var authService = new AuthService(cryptoService, cryptoFunctionService, apiService, stateService,
                 tokenService, appIdService, i18nService, platformUtilsService, messagingService, vaultTimeoutService,
-                keyConnectorService);
+                keyConnectorService, passwordGenerationService);
             var exportService = new ExportService(folderService, cipherService, cryptoService);
             var auditService = new AuditService(cryptoFunctionService, apiService);
             var environmentService = new EnvironmentService(apiService, stateService);
             var eventService = new EventService(apiService, stateService, organizationService, cipherService);
             var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService,
                 cryptoService);
+            var usernameGenerationService = new UsernameGenerationService(cryptoService, apiService, stateService);
 
             Register<ITokenService>("tokenService", tokenService);
             Register<IApiService>("apiService", apiService);
@@ -107,6 +110,7 @@ namespace Bit.Core.Utilities
             Register<IEventService>("eventService", eventService);
             Register<IKeyConnectorService>("keyConnectorService", keyConnectorService);
             Register<IUserVerificationService>("userVerificationService", userVerificationService);
+            Register<IUsernameGenerationService>(usernameGenerationService);
         }
 
         public static void Register<T>(string serviceName, T obj)

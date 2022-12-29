@@ -1,10 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.Core;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -13,11 +20,17 @@ namespace Bit.App.Pages
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IClipboardService _clipboardService;
+        private readonly IUsernameGenerationService _usernameGenerationService;
+        private readonly ITokenService _tokenService;
+        private readonly IDeviceActionService _deviceActionService;
+        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         private PasswordGenerationOptions _options;
+        private UsernameGenerationOptions _usernameOptions;
         private PasswordGeneratorPolicyOptions _enforcedPolicyOptions;
         private string _password;
         private bool _isPassword;
+        private bool _isUsername;
         private bool _uppercase;
         private bool _lowercase;
         private bool _number;
@@ -30,21 +43,72 @@ namespace Bit.App.Pages
         private string _wordSeparator;
         private bool _capitalize;
         private bool _includeNumber;
-        private int _typeSelectedIndex;
+        private string _username;
+        private GeneratorType _generatorTypeSelected;
+        private int _passwordTypeSelectedIndex;
         private bool _doneIniting;
+        private bool _showTypePicker;
+        private string _emailWebsite;
+        private bool _showFirefoxRelayApiAccessToken;
+        private bool _showAnonAddyApiAccessToken;
+        private bool _showSimpleLoginApiKey;
+        private bool _editMode;
 
         public GeneratorPageViewModel()
         {
-            _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
-                "passwordGenerationService");
-            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
+            _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>();
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
+            _clipboardService = ServiceContainer.Resolve<IClipboardService>();
+            _usernameGenerationService = ServiceContainer.Resolve<IUsernameGenerationService>();
+            _tokenService = ServiceContainer.Resolve<ITokenService>();
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>();
 
-            PageTitle = AppResources.PasswordGenerator;
-            TypeOptions = new List<string> { AppResources.Password, AppResources.Passphrase };
+            PageTitle = AppResources.Generator;
+            GeneratorTypeOptions = new List<GeneratorType> {
+                GeneratorType.Password,
+                GeneratorType.Username
+            };
+            PasswordTypeOptions = new List<string> { AppResources.Password, AppResources.Passphrase };
+
+            UsernameTypeOptions = new List<UsernameType> {
+                UsernameType.PlusAddressedEmail,
+                UsernameType.CatchAllEmail,
+                UsernameType.ForwardedEmailAlias,
+                UsernameType.RandomWord
+            };
+
+            ForwardedEmailServiceTypeOptions = new List<ForwardedEmailServiceType> {
+                ForwardedEmailServiceType.AnonAddy,
+                ForwardedEmailServiceType.FirefoxRelay,
+                ForwardedEmailServiceType.SimpleLogin
+            };
+
+            UsernameEmailTypeOptions = new List<UsernameEmailType>
+            {
+                UsernameEmailType.Random,
+                UsernameEmailType.Website
+            };
+
+            UsernameTypePromptHelpCommand = new Command(UsernameTypePromptHelp);
+            RegenerateCommand = new AsyncCommand(RegenerateAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
+            RegenerateUsernameCommand = new AsyncCommand(RegenerateUsernameAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
+            ToggleForwardedEmailHiddenValueCommand = new AsyncCommand(ToggleForwardedEmailHiddenValueAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
+            CopyCommand = new AsyncCommand(CopyAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
+            CloseCommand = new AsyncCommand(CloseAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
         }
 
-        public List<string> TypeOptions { get; set; }
+        public List<GeneratorType> GeneratorTypeOptions { get; set; }
+        public List<string> PasswordTypeOptions { get; set; }
+        public List<UsernameType> UsernameTypeOptions { get; set; }
+        public List<ForwardedEmailServiceType> ForwardedEmailServiceTypeOptions { get; set; }
+        public List<UsernameEmailType> UsernameEmailTypeOptions { get; set; }
+
+        public Command UsernameTypePromptHelpCommand { get; set; }
+        public ICommand RegenerateCommand { get; set; }
+        public ICommand RegenerateUsernameCommand { get; set; }
+        public ICommand ToggleForwardedEmailHiddenValueCommand { get; set; }
+        public ICommand CopyCommand { get; set; }
+        public ICommand CloseCommand { get; set; }
 
         public string Password
         {
@@ -56,12 +120,51 @@ namespace Bit.App.Pages
                 });
         }
 
-        public string ColoredPassword => PasswordFormatter.FormatPassword(Password);
+        public string Username
+        {
+            get => _username;
+            set => SetProperty(ref _username, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ColoredUsername)
+                });
+        }
+
+        public string ColoredPassword => GeneratedValueFormatter.Format(Password);
+        public string ColoredUsername => GeneratedValueFormatter.Format(Username);
 
         public bool IsPassword
         {
             get => _isPassword;
             set => SetProperty(ref _isPassword, value);
+        }
+
+        public bool IsUsername
+        {
+            get => _isUsername;
+            set => SetProperty(ref _isUsername, value);
+        }
+
+        public bool IosExtension { get; set; }
+
+        public bool ShowTypePicker
+        {
+            get => _showTypePicker;
+            set => SetProperty(ref _showTypePicker, value);
+        }
+
+        public bool EditMode
+        {
+            get => _editMode;
+            set => SetProperty(ref _editMode, value, additionalPropertyNames: new string[]
+                    {
+                        nameof(ShowUsernameEmailType)
+                    });
+        }
+
+        public bool ShowUsernameEmailType
+        {
+            get => !string.IsNullOrWhiteSpace(EmailWebsite);
         }
 
         public int Length
@@ -235,6 +338,20 @@ namespace Bit.App.Pages
             }
         }
 
+        public string PlusAddressedEmail
+        {
+            get => _usernameOptions.PlusAddressedEmail;
+            set
+            {
+                if (_usernameOptions.PlusAddressedEmail != value)
+                {
+                    _usernameOptions.PlusAddressedEmail = value;
+                    TriggerPropertyChanged(nameof(PlusAddressedEmail));
+                    SaveUsernameOptionsAsync(false).FireAndForget();
+                }
+            }
+        }
+
         public PasswordGeneratorPolicyOptions EnforcedPolicyOptions
         {
             get => _enforcedPolicyOptions;
@@ -247,24 +364,277 @@ namespace Bit.App.Pages
 
         public bool IsPolicyInEffect => _enforcedPolicyOptions.InEffect();
 
-        public int TypeSelectedIndex
+        public GeneratorType GeneratorTypeSelected
         {
-            get => _typeSelectedIndex;
+            get => _generatorTypeSelected;
             set
             {
-                if (SetProperty(ref _typeSelectedIndex, value))
+                if (SetProperty(ref _generatorTypeSelected, value))
                 {
-                    IsPassword = value == 0;
-                    var task = SaveOptionsAsync();
+                    IsUsername = value == GeneratorType.Username;
+                    TriggerPropertyChanged(nameof(GeneratorTypeSelected));
+                    SaveOptionsAsync().FireAndForget();
+                    SaveUsernameOptionsAsync().FireAndForget();
                 }
             }
+        }
+
+        public int PasswordTypeSelectedIndex
+        {
+            get => _passwordTypeSelectedIndex;
+            set
+            {
+                if (SetProperty(ref _passwordTypeSelectedIndex, value))
+                {
+                    IsPassword = value == 0;
+                    TriggerPropertyChanged(nameof(PasswordTypeSelectedIndex));
+                    SaveOptionsAsync().FireAndForget();
+                    SaveUsernameOptionsAsync().FireAndForget();
+                }
+            }
+        }
+
+        public UsernameType UsernameTypeSelected
+        {
+            get => _usernameOptions.Type;
+            set
+            {
+                if (_usernameOptions.Type != value)
+                {
+                    _usernameOptions.Type = value;
+                    Username = Constants.DefaultUsernameGenerated;
+                    TriggerPropertyChanged(nameof(UsernameTypeSelected), new string[] { nameof(UsernameTypeDescriptionLabel) });
+                    SaveUsernameOptionsAsync().FireAndForget();
+                }
+            }
+        }
+
+        public string UsernameTypeDescriptionLabel => GetUsernameTypeLabelDescription(UsernameTypeSelected);
+
+
+        public ForwardedEmailServiceType ForwardedEmailServiceSelected
+        {
+            get => _usernameOptions.ServiceType;
+            set
+            {
+                if (_usernameOptions.ServiceType != value)
+                {
+                    _usernameOptions.ServiceType = value;
+                    Username = Constants.DefaultUsernameGenerated;
+                    TriggerPropertyChanged(nameof(ForwardedEmailServiceSelected));
+                    SaveUsernameOptionsAsync(false).FireAndForget();
+                }
+            }
+        }
+
+        public string CatchAllEmailDomain
+        {
+            get => _usernameOptions.CatchAllEmailDomain;
+            set
+            {
+                if (_usernameOptions.CatchAllEmailDomain != value)
+                {
+                    _usernameOptions.CatchAllEmailDomain = value;
+                    TriggerPropertyChanged(nameof(CatchAllEmailDomain));
+                    SaveUsernameOptionsAsync(false).FireAndForget();
+                }
+            }
+        }
+
+        public string AnonAddyApiAccessToken
+        {
+            get => _usernameOptions.AnonAddyApiAccessToken;
+            set
+            {
+                if (_usernameOptions.AnonAddyApiAccessToken != value)
+                {
+                    _usernameOptions.AnonAddyApiAccessToken = value;
+                    TriggerPropertyChanged(nameof(AnonAddyApiAccessToken));
+                    SaveUsernameOptionsAsync(false).FireAndForget();
+                }
+            }
+        }
+
+        public bool ShowAnonAddyApiAccessToken
+        {
+            get
+            {
+                return _showAnonAddyApiAccessToken;
+            }
+            set => SetProperty(ref _showAnonAddyApiAccessToken, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowAnonAddyHiddenValueIcon)
+                });
+        }
+
+        public string ShowAnonAddyHiddenValueIcon => _showAnonAddyApiAccessToken ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+
+        public string AnonAddyDomainName
+        {
+            get => _usernameOptions.AnonAddyDomainName;
+            set
+            {
+                if (_usernameOptions.AnonAddyDomainName != value)
+                {
+                    _usernameOptions.AnonAddyDomainName = value;
+                    TriggerPropertyChanged(nameof(AnonAddyDomainName));
+                    SaveUsernameOptionsAsync(false).FireAndForget();
+                }
+            }
+        }
+
+        public string FirefoxRelayApiAccessToken
+        {
+            get => _usernameOptions.FirefoxRelayApiAccessToken;
+            set
+            {
+                if (_usernameOptions.FirefoxRelayApiAccessToken != value)
+                {
+                    _usernameOptions.FirefoxRelayApiAccessToken = value;
+                    TriggerPropertyChanged(nameof(FirefoxRelayApiAccessToken));
+                    SaveUsernameOptionsAsync(false).FireAndForget();
+                }
+            }
+        }
+
+        public bool ShowFirefoxRelayApiAccessToken
+        {
+            get
+            {
+                return _showFirefoxRelayApiAccessToken;
+            }
+            set => SetProperty(ref _showFirefoxRelayApiAccessToken, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowFirefoxRelayHiddenValueIcon)
+                });
+        }
+
+        public string ShowFirefoxRelayHiddenValueIcon => _showFirefoxRelayApiAccessToken ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+
+        public string SimpleLoginApiKey
+        {
+            get => _usernameOptions.SimpleLoginApiKey;
+            set
+            {
+                if (_usernameOptions.SimpleLoginApiKey != value)
+                {
+                    _usernameOptions.SimpleLoginApiKey = value;
+                    TriggerPropertyChanged(nameof(SimpleLoginApiKey));
+                    SaveUsernameOptionsAsync(false).FireAndForget();
+                }
+            }
+        }
+
+        public bool ShowSimpleLoginApiKey
+        {
+            get
+            {
+                return _showSimpleLoginApiKey;
+            }
+            set => SetProperty(ref _showSimpleLoginApiKey, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowSimpleLoginHiddenValueIcon)
+                });
+        }
+
+        public string ShowSimpleLoginHiddenValueIcon => _showSimpleLoginApiKey ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+
+        public bool CapitalizeRandomWordUsername
+        {
+            get => _usernameOptions.CapitalizeRandomWordUsername;
+            set
+            {
+                if (_usernameOptions.CapitalizeRandomWordUsername != value)
+                {
+                    _usernameOptions.CapitalizeRandomWordUsername = value;
+                    TriggerPropertyChanged(nameof(CapitalizeRandomWordUsername));
+                    SaveUsernameOptionsAsync().FireAndForget();
+                }
+            }
+        }
+
+        public bool IncludeNumberRandomWordUsername
+        {
+            get => _usernameOptions.IncludeNumberRandomWordUsername;
+            set
+            {
+                if (_usernameOptions.IncludeNumberRandomWordUsername != value)
+                {
+                    _usernameOptions.IncludeNumberRandomWordUsername = value;
+                    TriggerPropertyChanged(nameof(IncludeNumberRandomWordUsername));
+                    SaveUsernameOptionsAsync().FireAndForget();
+                }
+            }
+        }
+
+        public UsernameEmailType PlusAddressedEmailTypeSelected
+        {
+            get => _usernameOptions.PlusAddressedEmailType;
+            set
+            {
+                if (_usernameOptions.PlusAddressedEmailType != value)
+                {
+                    _usernameOptions.PlusAddressedEmailType = value;
+                    TriggerPropertyChanged(nameof(PlusAddressedEmailTypeSelected));
+                    SaveUsernameOptionsAsync().FireAndForget();
+                }
+            }
+        }
+
+        public UsernameEmailType CatchAllEmailTypeSelected
+        {
+            get => _usernameOptions.CatchAllEmailType;
+            set
+            {
+                if (_usernameOptions.CatchAllEmailType != value)
+                {
+                    _usernameOptions.CatchAllEmailType = value;
+                    TriggerPropertyChanged(nameof(CatchAllEmailTypeSelected));
+                    SaveUsernameOptionsAsync().FireAndForget();
+                }
+            }
+        }
+
+        public string EmailWebsite
+        {
+            get => _emailWebsite;
+            set => SetProperty(ref _emailWebsite, value, additionalPropertyNames: new string[]
+                    {
+                        nameof(ShowUsernameEmailType)
+                    });
         }
 
         public async Task InitAsync()
         {
             (_options, EnforcedPolicyOptions) = await _passwordGenerationService.GetOptionsAsync();
             LoadFromOptions();
-            await RegenerateAsync();
+
+            _usernameOptions = await _usernameGenerationService.GetOptionsAsync();
+            await _tokenService.PrepareTokenForDecodingAsync();
+            _usernameOptions.PlusAddressedEmail = _tokenService.GetEmail();
+            _usernameOptions.EmailWebsite = EmailWebsite;
+            _usernameOptions.CatchAllEmailType = _usernameOptions.PlusAddressedEmailType = string.IsNullOrWhiteSpace(EmailWebsite) || !EditMode ? UsernameEmailType.Random : UsernameEmailType.Website;
+
+            if (!IsUsername)
+            {
+                await RegenerateAsync();
+            }
+            else
+            {
+                if (UsernameTypeSelected != UsernameType.ForwardedEmailAlias)
+                {
+                    await RegenerateUsernameAsync();
+                }
+                else
+                {
+                    Username = Constants.DefaultUsernameGenerated;
+                }
+            }
+            TriggerUsernamePropertiesChanged();
+
             _doneIniting = true;
         }
 
@@ -274,11 +644,24 @@ namespace Bit.App.Pages
             await _passwordGenerationService.AddHistoryAsync(Password);
         }
 
+        public async Task RegenerateUsernameAsync()
+        {
+            Username = await _usernameGenerationService.GenerateAsync(_usernameOptions);
+        }
+
         public void RedrawPassword()
         {
             if (!string.IsNullOrEmpty(_password))
             {
                 TriggerPropertyChanged(nameof(ColoredPassword));
+            }
+        }
+
+        public void RedrawUsername()
+        {
+            if (!string.IsNullOrEmpty(_username))
+            {
+                TriggerPropertyChanged(nameof(ColoredUsername));
             }
         }
 
@@ -291,10 +674,31 @@ namespace Bit.App.Pages
             SetOptions();
             _passwordGenerationService.NormalizeOptions(_options, _enforcedPolicyOptions);
             await _passwordGenerationService.SaveOptionsAsync(_options);
+
             LoadFromOptions();
             if (regenerate)
             {
                 await RegenerateAsync();
+            }
+        }
+
+        public async Task SaveUsernameOptionsAsync(bool regenerate = true)
+        {
+            if (!_doneIniting)
+            {
+                return;
+            }
+
+            _usernameOptions.EmailWebsite = EmailWebsite;
+            await _usernameGenerationService.SaveOptionsAsync(_usernameOptions);
+
+            if (regenerate && UsernameTypeSelected != UsernameType.ForwardedEmailAlias)
+            {
+                await RegenerateUsernameAsync();
+            }
+            else
+            {
+                Username = Constants.DefaultUsernameGenerated;
             }
         }
 
@@ -317,15 +721,40 @@ namespace Bit.App.Pages
 
         public async Task CopyAsync()
         {
-            await _clipboardService.CopyTextAsync(Password);
-            _platformUtilsService.ShowToastForCopiedValue(AppResources.Password);
+            await _clipboardService.CopyTextAsync(IsUsername ? Username : Password);
+            _platformUtilsService.ShowToastForCopiedValue(IsUsername ? AppResources.Username : AppResources.Password);
+        }
+
+        public void UsernameTypePromptHelp()
+        {
+            try
+            {
+                _platformUtilsService.LaunchUri("https://bitwarden.com/help/generator/#username-types");
+            }
+            catch (Exception ex)
+            {
+                _logger.Value.Exception(ex);
+                Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok);
+            }
+        }
+
+        public async Task CloseAsync()
+        {
+            if (IosExtension)
+            {
+                _deviceActionService.CloseExtensionPopUp();
+            }
+            else
+            {
+                await Page.Navigation.PopModalAsync();
+            }
         }
 
         private void LoadFromOptions()
         {
             AllowAmbiguousChars = _options.AllowAmbiguousChar.GetValueOrDefault();
-            TypeSelectedIndex = _options.Type == "passphrase" ? 1 : 0;
-            IsPassword = TypeSelectedIndex == 0;
+            PasswordTypeSelectedIndex = _options.Type == "passphrase" ? 1 : 0;
+            IsPassword = PasswordTypeSelectedIndex == 0;
             MinNumber = _options.MinNumber.GetValueOrDefault();
             MinSpecial = _options.MinSpecial.GetValueOrDefault();
             Special = _options.Special.GetValueOrDefault();
@@ -339,10 +768,31 @@ namespace Bit.App.Pages
             IncludeNumber = _options.IncludeNumber.GetValueOrDefault();
         }
 
+        private void TriggerUsernamePropertiesChanged()
+        {
+            TriggerPropertyChanged(nameof(CatchAllEmailTypeSelected));
+            TriggerPropertyChanged(nameof(PlusAddressedEmailTypeSelected));
+            TriggerPropertyChanged(nameof(IncludeNumberRandomWordUsername));
+            TriggerPropertyChanged(nameof(CapitalizeRandomWordUsername));
+            TriggerPropertyChanged(nameof(SimpleLoginApiKey));
+            TriggerPropertyChanged(nameof(FirefoxRelayApiAccessToken));
+            TriggerPropertyChanged(nameof(AnonAddyDomainName));
+            TriggerPropertyChanged(nameof(AnonAddyApiAccessToken));
+            TriggerPropertyChanged(nameof(CatchAllEmailDomain));
+            TriggerPropertyChanged(nameof(ForwardedEmailServiceSelected));
+            TriggerPropertyChanged(nameof(UsernameTypeSelected));
+            TriggerPropertyChanged(nameof(PasswordTypeSelectedIndex));
+            TriggerPropertyChanged(nameof(GeneratorTypeSelected));
+            TriggerPropertyChanged(nameof(PlusAddressedEmail));
+            TriggerPropertyChanged(nameof(GeneratorTypeSelected));
+            TriggerPropertyChanged(nameof(UsernameTypeDescriptionLabel));
+            TriggerPropertyChanged(nameof(EmailWebsite));
+        }
+
         private void SetOptions()
         {
             _options.AllowAmbiguousChar = AllowAmbiguousChars;
-            _options.Type = TypeSelectedIndex == 1 ? "passphrase" : "password";
+            _options.Type = PasswordTypeSelectedIndex == 1 ? "passphrase" : "password";
             _options.MinNumber = MinNumber;
             _options.MinSpecial = MinSpecial;
             _options.Special = Special;
@@ -354,6 +804,52 @@ namespace Bit.App.Pages
             _options.Length = Length;
             _options.Capitalize = Capitalize;
             _options.IncludeNumber = IncludeNumber;
+        }
+
+        private async void OnSubmitException(Exception ex)
+        {
+            _logger.Value.Exception(ex);
+
+            if (IsUsername && UsernameTypeSelected == UsernameType.ForwardedEmailAlias)
+            {
+                await Device.InvokeOnMainThreadAsync(() => Page.DisplayAlert(
+                    AppResources.AnErrorHasOccurred, string.Format(AppResources.UnknownXErrorMessage, ForwardedEmailServiceSelected), AppResources.Ok));
+            }
+            else
+            {
+                await Device.InvokeOnMainThreadAsync(() => Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok));
+            }
+        }
+
+        private string GetUsernameTypeLabelDescription(UsernameType value)
+        {
+            switch (value)
+            {
+                case UsernameType.PlusAddressedEmail:
+                    return AppResources.PlusAddressedEmailDescription;
+                case UsernameType.CatchAllEmail:
+                    return AppResources.CatchAllEmailDescription;
+                case UsernameType.ForwardedEmailAlias:
+                    return AppResources.ForwardedEmailDescription;
+                default:
+                    return string.Empty;
+            }
+        }
+
+        private async Task ToggleForwardedEmailHiddenValueAsync()
+        {
+            switch (ForwardedEmailServiceSelected)
+            {
+                case ForwardedEmailServiceType.AnonAddy:
+                    ShowAnonAddyApiAccessToken = !ShowAnonAddyApiAccessToken;
+                    break;
+                case ForwardedEmailServiceType.FirefoxRelay:
+                    ShowFirefoxRelayApiAccessToken = !ShowFirefoxRelayApiAccessToken;
+                    break;
+                case ForwardedEmailServiceType.SimpleLogin:
+                    ShowSimpleLoginApiKey = !ShowSimpleLoginApiKey;
+                    break;
+            }
         }
     }
 }

@@ -534,6 +534,42 @@ namespace Bit.Core.Services
 
         #endregion
 
+        #region PasswordlessLogin
+
+        public async Task<List<PasswordlessLoginResponse>> GetAuthRequestAsync()
+        {
+            var response = await SendAsync<object, PasswordlessLoginsResponse>(HttpMethod.Get, $"/auth-requests/", null, true, true);
+            return response.Data;
+        }
+
+        public Task<PasswordlessLoginResponse> GetAuthRequestAsync(string id)
+        {
+            return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Get, $"/auth-requests/{id}", null, true, true);
+        }
+
+        public Task<PasswordlessLoginResponse> GetAuthResponseAsync(string id, string accessCode)
+        {
+            return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Get, $"/auth-requests/{id}/response?code={accessCode}", null, false, true);
+        }
+
+        public Task<PasswordlessLoginResponse> PostCreateRequestAsync(PasswordlessCreateLoginRequest passwordlessCreateLoginRequest)
+        {
+            return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Post, $"/auth-requests", passwordlessCreateLoginRequest, false, true);
+        }
+
+        public Task<PasswordlessLoginResponse> PutAuthRequestAsync(string id, string encKey, string encMasterPasswordHash, string deviceIdentifier, bool requestApproved)
+        {
+            var request = new PasswordlessLoginRequest(encKey, encMasterPasswordHash, deviceIdentifier, requestApproved);
+            return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Put, $"/auth-requests/{id}", request, true, true);
+        }
+
+        public Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier)
+        {
+            return SendAsync<object, bool>(HttpMethod.Get, $"/devices/knowndevice/{email}/{deviceIdentifier}", null, false, true);
+        }
+
+        #endregion
+
         #region Helpers
 
         public async Task<string> GetActiveBearerTokenAsync()
@@ -700,6 +736,66 @@ namespace Bit.Core.Services
             }
         }
 
+        public async Task<string> GetUsernameFromAsync(ForwardedEmailServiceType service, UsernameGeneratorConfig config)
+        {
+            using (var requestMessage = new HttpRequestMessage())
+            {
+                requestMessage.Version = new Version(1, 0);
+                requestMessage.Method = HttpMethod.Post;
+                requestMessage.RequestUri = new Uri(config.Url);
+                requestMessage.Headers.Add("Accept", "application/json");
+
+                switch (service)
+                {
+                    case ForwardedEmailServiceType.AnonAddy:
+                        requestMessage.Headers.Add("Authorization", $"Bearer {config.ApiToken}");
+                        requestMessage.Content = new FormUrlEncodedContent(new Dictionary<string, string>
+                        {
+                            ["domain"] = config.Domain
+                        });
+                        break;
+                    case ForwardedEmailServiceType.FirefoxRelay:
+                        requestMessage.Headers.Add("Authorization", $"Token {config.ApiToken}");
+                        break;
+                    case ForwardedEmailServiceType.SimpleLogin:
+                        requestMessage.Headers.Add("Authentication", config.ApiToken);
+                        break;
+                }
+
+                HttpResponseMessage response;
+                try
+                {
+                    response = await _httpClient.SendAsync(requestMessage);
+                }
+                catch (Exception e)
+                {
+                    throw new ApiException(HandleWebError(e));
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new ApiException(new ErrorResponse
+                    {
+                        StatusCode = response.StatusCode,
+                        Message = $"{service} error: {(int)response.StatusCode} {response.ReasonPhrase}."
+                    });
+                }
+                var responseJsonString = await response.Content.ReadAsStringAsync();
+                var result = JObject.Parse(responseJsonString);
+
+                switch (service)
+                {
+                    case ForwardedEmailServiceType.AnonAddy:
+                        return result["data"]?["email"]?.ToString();
+                    case ForwardedEmailServiceType.FirefoxRelay:
+                        return result["full_address"]?.ToString();
+                    case ForwardedEmailServiceType.SimpleLogin:
+                        return result["alias"]?.ToString();
+                    default:
+                        return string.Empty;
+                }
+            }
+        }
+
         private ErrorResponse HandleWebError(Exception e)
         {
             return new ErrorResponse
@@ -715,8 +811,6 @@ namespace Bit.Core.Services
             if (authed
                 &&
                 (
-                    (tokenError && response.StatusCode == HttpStatusCode.BadRequest)
-                    ||
                     (logoutOnUnauthorized && response.StatusCode == HttpStatusCode.Unauthorized)
                     ||
                     response.StatusCode == HttpStatusCode.Forbidden
@@ -733,6 +827,17 @@ namespace Bit.Core.Services
                     var responseJsonString = await response.Content.ReadAsStringAsync();
                     responseJObject = JObject.Parse(responseJsonString);
                 }
+
+                if (authed && tokenError
+                    &&
+                    response.StatusCode == HttpStatusCode.BadRequest
+                    &&
+                    responseJObject?["error"]?.ToString() == "invalid_grant")
+                {
+                    await _logoutCallbackAsync(new Tuple<string, bool, bool>(null, false, true));
+                    return null;
+                }
+
                 return new ErrorResponse(responseJObject, response.StatusCode, tokenError);
             }
             catch

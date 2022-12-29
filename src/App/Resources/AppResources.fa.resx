@@ -156,7 +156,7 @@
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>رونوشت نام کاربری</value>
+    <value>کپی نام کاربری</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -186,11 +186,11 @@
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>نشانی رایانامه</value>
+    <value>آدرس ایمیل</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>به ما رایانامه بزنید</value>
+    <value>ایمیل ما</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
     <value>برای کمک گرفتن و گذاشتن بازخورد بصورت مستقیم به ما رایانامه ارسال کنید.</value>
@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authenticator</value>
+    <value>احراز هویت</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -315,7 +315,7 @@
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>تایید</value>
+    <value>تأیید</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
@@ -376,13 +376,13 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>{0} رونوشت شد.</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>تایید اثر انگشت</value>
+    <value>تأیید اثر انگشت</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>تایید کلمه عبور اصلی</value>
+    <value>تأیید کلمه عبور اصلی</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>تایید پین</value>
@@ -394,7 +394,7 @@
     <value>مشاهده</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>از وب‌سایت ما دیدن کنید</value>
+    <value>از وب‌ سایت ما دیدن کنید</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
     <value>برای کمک گرفتن، اخبار، رایانامه ما، و یا آموزش بیشتر برای استفاده از Bitwarden از وب سایت ما دیدن کنید.</value>
@@ -425,7 +425,7 @@
     <value>سرویس پر کردن خودکار</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>از کاراکترهای مبهم اجتناب کن</value>
+    <value>از کاراکترهای مبهم اجتناب شود</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>افزونه برنامه Bitwarden</value>
@@ -443,7 +443,7 @@
     <value>از قابلیت دسترسی Bitwarden برای تکمیل خودکار ورود به سیستم خود در سراسر برنامه‌ها و وب استفاده کنید.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>تغییر رایانامه</value>
+    <value>تغییر ایمیل</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
     <value>شما می‌توانید آدرس رایانامه را در نسخه وب گاوصندوق bitwarden.com تغییر دهید. می‌خواهید اکنون از سایت بازدید کنید؟</value>
@@ -635,13 +635,13 @@
     <value>کلمه عبور تولید شد.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>تولید کننده کلمه عبور</value>
+    <value>تولیدکننده کلمه عبور</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>راهنمای کلمه عبور</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>ما یک رایانامه همراه با راهنمای کلمه عبور اصلی برایتان ارسال کردیم.</value>
+    <value>ما یک ایمیل همراه با راهنمای گذرواژه اصلی برایتان ارسال کردیم.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
     <value>آیا از بازنویسی بر روی کلمه عبور فعلی مطمئن هستید؟</value>
@@ -708,7 +708,7 @@
     <value>ورود دو مرحله ای</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>ورود دو مرحله‌ای باعث می شود که حساب کاربری شما با استفاده از یک دستگاه دیگر مانند کلید امنیتی، برنامه احراز هویت، پیامک، تماس تلفنی و یا رایانامه، اعتبار خود را با ایمنی بیشتر اثبات کند. ورود دو مرحله‌ای می‌تواند در bitwarden.com فعال شود. آیا می‌خواهید از سایت بازدید کنید؟</value>
+    <value>ورود دو مرحله ای باعث می شود که حساب کاربری شما با استفاده از یک دستگاه دیگر مانند کلید امنیتی، برنامه تأیید هویت، پیامک، تماس تلفنی و یا ایمیل، اعتبار خود را با ایمنی بیشتر اثبات کند. ورود دو مرحله ای می تواند در bitwarden.com فعال شود. آیا میخواهید از سایت بازدید کنید؟</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>باز کردن با {0}</value>
@@ -856,7 +856,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>رایانامه تایید فرستاده شد.</value>
+    <value>ایمیل تأیید فرستاده شد.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -900,8 +900,8 @@
     <value>کلید تأیید کننده را نمیتوان خواند.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Point your camera at the QR Code.
-Scanning will happen automatically.</value>
+    <value>دوربین دستگاهتان را به سمت کد QR بگیرید.
+اسکن به صورت خودکار انجام می شود.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>اسکن کد QR</value>
@@ -1574,6 +1574,10 @@ Scanning will happen automatically.</value>
   <data name="Nord" xml:space="preserve">
     <value>نُرد</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>تاریک خورشیدی</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>پر کردن خودکار URI های مسدود شده</value>
@@ -2266,38 +2270,35 @@ Scanning will happen automatically.</value>
     <value>TOTP</value>
   </data>
   <data name="VerificationCodes" xml:space="preserve">
-    <value>Verification Codes</value>
+    <value>کدهای تأیید</value>
   </data>
   <data name="PremiumSubscriptionRequired" xml:space="preserve">
-    <value>Premium subscription required</value>
+    <value>اشتراک پرمیوم نیاز است</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
-    <value>Cannot add authenticator key? </value>
+    <value>نمی توانید کلید احراز هویت را اضافه کنید؟</value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>اسکن کد QR</value>
   </data>
   <data name="CannotScanQRCode" xml:space="preserve">
-    <value>Cannot scan QR Code? </value>
+    <value>نمی توانید کد QR را اسکن کنید؟</value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Authenticator Key</value>
+    <value>کلید احراز هویت</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Enter Key Manually</value>
+    <value>کلید را به صورت دستی وارد کنید</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
-    <value>Add TOTP</value>
+    <value>افزودن TOTP</value>
   </data>
   <data name="SetupTotp" xml:space="preserve">
-    <value>Set up TOTP</value>
+    <value>TOTP را راه اندازی کنید</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
-    <value>Once the key is successfully entered,
-select Add TOTP to store the key safely</value>
-  </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
+    <value>هنگامی که کلید با موفقیت وارد شد،
+برای ذخیره ایمن کلید، افزودن TOTP را انتخاب کنید</value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>با تنظیم گزینه‌های قفل روی «هرگز»، گاوصندوق شما برای هر کسی که به دستگاه شما دسترسی دارد در دسترس نگه داشته می‌شود. اگر از این گزینه استفاده می کنید، باید مطمئن شوید که دستگاه خود را به درستی محافظت می‌کنید.</value>
@@ -2313,5 +2314,205 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>آیا مطمئن هستید که می خواهید ضبط صفحه را فعال کنید؟</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>ورود الزامیست</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>آیا در تلاش برای ورود به سیستم هستید؟</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>تلاش برای ورود به سیستم توسط {0} در {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>نوع دستگاه</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>آدرس IP</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>زمان</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>نزدیک</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>تأیید ورود</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>رَدِ ورود</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>همین الان</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} دقيقه پیش</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>ورود تأیید شد</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>ورود رَد شد</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>درخواست های ورود را تأیید کنید</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>از این دستگاه برای تأیید درخواست‌های ورود به سیستم از دستگاه‌های دیگر استفاده کنید.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>اجازه دادن به اعلان‌ها</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>دریافت اعلان‌های پوش برای درخواست‌های ورود جدید</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>نه ممنون</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>تأیید تلاش برای ورود به سیستم برای {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>همه اعلان‌ها</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>نوع گذرواژه</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>چه چیزی دوست دارید تولید کنید؟</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>نوع نام کاربری</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>به علاوه ایمیل آدرس داده شده</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>دریافت همه ایمیل‌ها</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>نام مستعار ایمیل فوروارد شده</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>کلمه تصادفی</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>ایمیل (الزامی)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>نام دامنه (الزامی)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>کلید API (الزامی)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>خدمت</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>رله فایرفاکس</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>ورود ساده</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>توکن دسترسی API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>آیا از بازنویسی نام کاربری فعلی مطمئن هستید؟</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>ایجاد نام کاربری</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>نوع ایمیل</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>وب‌سایت (الزامی)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>خطای ناشناخته {0} رخ داد.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>از قابلیت های آدرس فرعی ارائه دهنده ایمیل خود استفاده کنید</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>از صندوق ورودی پیکربندی شده دامنه خود استفاده کنید.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>یک نام مستعار ایمیل با یک سرویس فروارد خارجی ایجاد کنید.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>تصادفی</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>اتصال به ساعت</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>افشای سرویس دسترسی</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden از سرویس دسترس‌پذیری برای جستجوی فیلدهای ورود در برنامه‌ها و وب‌سایت‌ها استفاده می‌کند، سپس زمانی که مطابقتی با برنامه یا سایت پیدا شد، شناسه‌های فیلد مناسب را برای وارد کردن نام کاربری و رمز عبور ایجاد می‌کند. ما هیچ کدام از اطلاعات ارائه شده توسط سرویس به ما را ذخیره نمی کنیم و هیچ تلاشی برای کنترل عناصر روی صفحه فراتر از ورود متن اعتبارنامه ها انجام نمی دهیم.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>پذیرفتن</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>رَد کردن</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>درخواست ورود قبلاً منقضی شده است.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>تلاش برای ورود از:
+{0}
+آیا می خواهید به این حساب تغییر دهید؟</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>اینجا جدیده؟</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>دریافت راهنمای گذرواژه اصلی</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>در حال ورود به عنوان {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>شما نیستید؟</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>با کلمه عبور اصلی وارد شوید</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>با دستگاه دیگری وارد شوید</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>ورود به سیستم آغاز شد</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>یک اعلان به دستگاه شما ارسال شده است.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>لطفاً مطمئن شوید که قفل صندوق شما باز است و عبارت اثر انگشت با دستگاه دیگر مطابقت دارد.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>ارسال مجدد اعلان</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>به گزینه دیگری نیاز دارید؟</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>مشاهده همه گزینه های ورود به سیستم</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>این درخواست دیگر معتبر نیست</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>اجازه دوربین را برای استفاده از اسکنر فعال کنید</value>
   </data>
 </root>

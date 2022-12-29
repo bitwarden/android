@@ -287,13 +287,13 @@ namespace Bit.iOS.ShareExtension
             return _app;
         }
 
-        private void LaunchHomePage()
+        private void LaunchHomePage(bool shouldCheckRememberEmail = true)
         {
-            var homePage = new HomePage();
+            var homePage = new HomePage(_appOptions.Value, shouldCheckRememberEmail);
             SetupAppAndApplyResources(homePage);
             if (homePage.BindingContext is HomeViewModel vm)
             {
-                vm.StartLoginAction = () => DismissAndLaunch(() => LaunchLoginFlow());
+                vm.StartLoginAction = () => DismissAndLaunch(() => LaunchLoginFlow(vm.Email));
                 vm.StartRegisterAction = () => DismissAndLaunch(() => LaunchRegisterFlow());
                 vm.StartSsoLoginAction = () => DismissAndLaunch(() => LaunchLoginSsoFlow());
                 vm.StartEnvironmentAction = () => DismissAndLaunch(() => LaunchEnvironmentFlow());
@@ -311,8 +311,8 @@ namespace Bit.iOS.ShareExtension
             ThemeManager.ApplyResourcesTo(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
-                vm.SubmitSuccessAction = () => DismissAndLaunch(() => LaunchHomePage());
-                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage());
+                vm.SubmitSuccessAction = () => DismissAndLaunch(() => LaunchHomePage(shouldCheckRememberEmail: false));
+                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage(shouldCheckRememberEmail: false));
             }
 
             NavigateToPage(environmentPage);
@@ -325,7 +325,7 @@ namespace Bit.iOS.ShareExtension
             if (registerPage.BindingContext is RegisterPageViewModel vm)
             {
                 vm.RegistrationSuccess = () => DismissAndLaunch(() => LaunchLoginFlow(vm.Email));
-                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage());
+                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage(shouldCheckRememberEmail: false));
             }
             NavigateToPage(registerPage);
         }
@@ -338,13 +338,28 @@ namespace Bit.iOS.ShareExtension
             {
                 vm.StartTwoFactorAction = () => DismissAndLaunch(() => LaunchTwoFactorFlow(false));
                 vm.UpdateTempPasswordAction = () => DismissAndLaunch(() => LaunchUpdateTempPasswordFlow());
-                vm.LogInSuccessAction = () =>
-                {
-                    DismissLockAndContinue();
-                };
-                vm.CloseAction = () => CompleteRequest();
+                vm.StartSsoLoginAction = () => DismissAndLaunch(() => LaunchLoginSsoFlow());
+                vm.LogInWithDeviceAction = () => DismissAndLaunch(() => LaunchLoginWithDevice(email));
+                vm.LogInSuccessAction = () => { DismissLockAndContinue(); };
+                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage(shouldCheckRememberEmail: false));
             }
             NavigateToPage(loginPage);
+
+            LogoutIfAuthed();
+        }
+
+        private void LaunchLoginWithDevice(string email = null)
+        {
+            var loginWithDevicePage = new LoginPasswordlessRequestPage(email, _appOptions.Value);
+            SetupAppAndApplyResources(loginWithDevicePage);
+            if (loginWithDevicePage.BindingContext is LoginPasswordlessRequestViewModel vm)
+            {
+                vm.StartTwoFactorAction = () => DismissAndLaunch(() => LaunchTwoFactorFlow(false));
+                vm.UpdateTempPasswordAction = () => DismissAndLaunch(() => LaunchUpdateTempPasswordFlow());
+                vm.LogInSuccessAction = () => { DismissLockAndContinue(); };
+                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage());
+            }
+            NavigateToPage(loginWithDevicePage);
 
             LogoutIfAuthed();
         }
@@ -426,7 +441,14 @@ namespace Bit.iOS.ShareExtension
             switch (navTarget)
             {
                 case NavigationTarget.HomeLogin:
-                    ExecuteLaunch(LaunchHomePage);
+                    if (navParams is HomeNavigationParams homeParams)
+                    {
+                        ExecuteLaunch(() => LaunchHomePage(homeParams.ShouldCheckRememberEmail));
+                    }
+                    else
+                    {
+                        ExecuteLaunch(() => LaunchHomePage());
+                    }
                     break;
                 case NavigationTarget.Login:
                     if (navParams is LoginNavigationParams loginParams)

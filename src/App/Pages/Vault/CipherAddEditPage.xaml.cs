@@ -19,6 +19,7 @@ namespace Bit.App.Pages
         private readonly AppOptions _appOptions;
         private readonly IStateService _stateService;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IAutofillHandler _autofillHandler;
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly IKeyConnectorService _keyConnectorService;
 
@@ -40,6 +41,7 @@ namespace Bit.App.Pages
         {
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
 
@@ -261,12 +263,6 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                var cameraPermission = await PermissionManager.CheckAndRequestPermissionAsync(new Permissions.Camera());
-                if (cameraPermission != PermissionStatus.Granted)
-                {
-                    return;
-                }
-
                 var page = new ScanPage(key =>
                 {
                     Device.BeginInvokeOnMainThread(async () =>
@@ -275,6 +271,7 @@ namespace Bit.App.Pages
                         await _vm.UpdateTotpKeyAsync(key);
                     });
                 });
+
                 await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
             }
         }
@@ -350,8 +347,8 @@ namespace Bit.App.Pages
                         }
                     }
                     else if (Device.RuntimePlatform == Device.Android &&
-                        !_deviceActionService.AutofillAccessibilityServiceRunning() &&
-                        !_deviceActionService.AutofillServiceEnabled())
+                        !_autofillHandler.AutofillAccessibilityServiceRunning() &&
+                        !_autofillHandler.AutofillServiceEnabled())
                     {
                         await DisplayAlert(AppResources.BitwardenAutofillService,
                             AppResources.BitwardenAutofillServiceAlert2, AppResources.Ok);

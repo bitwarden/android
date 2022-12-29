@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden - Besplatni upravitelj lozinki</value>
+    <value>Bitwarden - besplatni upravitelj lozinki</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
@@ -130,7 +130,7 @@ Upravljajte, spremajte, osigurajte i dijelite neograničen broj lozinki na neogr
 
 Generirajte jake, jedinstvene i nasumične lozinke bazirane na sigurnosnim zahtjevima za svaku web stranicu koju često posjećujete.
 
-Bitwarden Send omoguzćuje jednostavno i brzo slanje šifriranih podataka --- datoteki ili teksta -- direktno, bilo kome.
+Bitwarden Send omoguzćuje jednostavno i brzo slanje šifriranih podataka --- datoteka ili teksta -- direktno, bilo kome.
 
 Bitwarden nudi Teams i Enterprise planove za tvrtke kako biste sigurno mogli dijeliti lozinke s kolegama na poslu.
 
@@ -146,7 +146,8 @@ Svjetski dostupan
 Bitwarden je, zahvaljujući našoj globalnoj zajednici, dostupan na više od 40 jezika.
 
 Podržani svi OS
-Osigurajte i sigurno dijelite osjetljive podatke sadržane u vašem Bitwarden trezoru iz bilo kojeg preglednika, mobilnog uređaja ili stolnog računala s bilo kojim OS.</value>
+Osigurajte i sigurno dijelite osjetljive podatke sadržane u vašem Bitwarden trezoru iz bilo kojeg preglednika, mobilnog uređaja ili stolnog računala s bilo kojim OS.
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">

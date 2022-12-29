@@ -19,6 +19,7 @@ using AndroidX.AutoFill.Inline;
 using AndroidX.AutoFill.Inline.V1;
 using Bit.Core.Abstractions;
 using SaveFlags = Android.Service.Autofill.SaveFlags;
+using Bit.Droid.Utilities;
 
 namespace Bit.Droid.Autofill
 {
@@ -53,6 +54,7 @@ namespace Bit.Droid.Autofill
         {
             "alook.browser",
             "alook.browser.google",
+            "app.vanadium.browser",
             "com.amazon.cloud9",
             "com.android.browser",
             "com.android.chrome",
@@ -85,6 +87,7 @@ namespace Bit.Droid.Autofill
             "com.mmbox.xbrowser",
             "com.mycompany.app.soulbrowser",
             "com.naver.whale",
+            "com.neeva.app",
             "com.opera.browser",
             "com.opera.browser.beta",
             "com.opera.gx",
@@ -108,6 +111,7 @@ namespace Bit.Droid.Autofill
             "io.github.forkmaintainers.iceraven",
             "mark.via",
             "mark.via.gp",
+            "net.dezor.browser",
             "net.slions.fulguris.full.download",
             "net.slions.fulguris.full.download.debug",            
             "net.slions.fulguris.full.playstore",
@@ -206,7 +210,7 @@ namespace Bit.Droid.Autofill
                         }
                     }
                     var dataset = BuildDataset(parser.ApplicationContext, parser.FieldCollection, items[i], 
-                        inlinePresentationSpec);
+                        true, inlinePresentationSpec);
                     if (dataset != null)
                     {
                         responseBuilder.AddDataset(dataset);
@@ -220,7 +224,7 @@ namespace Bit.Droid.Autofill
         }
 
         public static Dataset BuildDataset(Context context, FieldCollection fields, FilledItem filledItem,
-            InlinePresentationSpec inlinePresentationSpec = null)
+            bool includeAuthIntent, InlinePresentationSpec inlinePresentationSpec = null)
         {
             var overlayPresentation = BuildOverlayPresentation(
                 filledItem.Name,
@@ -241,6 +245,15 @@ namespace Bit.Droid.Autofill
             {
                 datasetBuilder.SetInlinePresentation(inlinePresentation);
             }
+            if (includeAuthIntent)
+            {
+                var intent = new Intent(context, typeof(AutofillExternalSelectionActivity));
+                intent.PutExtra(AutofillConstants.AutofillFramework, true);
+                intent.PutExtra(AutofillConstants.AutofillFrameworkCipherId, filledItem.Id);
+                var pendingIntent = PendingIntent.GetActivity(context, ++_pendingIntentId, intent,
+                AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.CancelCurrent, true));
+                datasetBuilder.SetAuthentication(pendingIntent?.IntentSender);
+            }
             if (filledItem.ApplyToFields(fields, datasetBuilder))
             {
                 return datasetBuilder.Build();
@@ -252,26 +265,26 @@ namespace Bit.Droid.Autofill
             IList<InlinePresentationSpec> inlinePresentationSpecs = null)
         {
             var intent = new Intent(context, typeof(MainActivity));
-            intent.PutExtra("autofillFramework", true);
+            intent.PutExtra(AutofillConstants.AutofillFramework, true);
             if (fields.FillableForLogin)
             {
-                intent.PutExtra("autofillFrameworkFillType", (int)CipherType.Login);
+                intent.PutExtra(AutofillConstants.AutofillFrameworkFillType, (int)CipherType.Login);
             }
             else if (fields.FillableForCard)
             {
-                intent.PutExtra("autofillFrameworkFillType", (int)CipherType.Card);
+                intent.PutExtra(AutofillConstants.AutofillFrameworkFillType, (int)CipherType.Card);
             }
             else if (fields.FillableForIdentity)
             {
-                intent.PutExtra("autofillFrameworkFillType", (int)CipherType.Identity);
+                intent.PutExtra(AutofillConstants.AutofillFrameworkFillType, (int)CipherType.Identity);
             }
             else
             {
                 return null;
             }
-            intent.PutExtra("autofillFrameworkUri", uri);
+            intent.PutExtra(AutofillConstants.AutofillFrameworkUri, uri);
             var pendingIntent = PendingIntent.GetActivity(context, ++_pendingIntentId, intent,
-                PendingIntentFlags.CancelCurrent);
+                AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.CancelCurrent, true));
 
             var overlayPresentation = BuildOverlayPresentation(
                 AppResources.AutofillWithBitwarden,
@@ -324,7 +337,7 @@ namespace Bit.Droid.Autofill
                 // InlinePresentation requires nonNull pending intent (even though we only utilize one for the
                 // "my vault" presentation) so we're including an empty one here
                 pendingIntent = PendingIntent.GetService(context, 0, new Intent(),
-                    PendingIntentFlags.OneShot | PendingIntentFlags.UpdateCurrent);
+                    AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.OneShot | PendingIntentFlags.UpdateCurrent, true));
             }
             var slice = CreateInlinePresentationSlice(
                 inlinePresentationSpec,

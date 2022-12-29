@@ -22,7 +22,7 @@
 
 
 ## Before you submit
-- [ ] I have checked for formatting errors (`dotnet tool run dotnet-format --check`) (required)
-- [ ] I have added **unit tests** where it makes sense to do so (encouraged but not required)
-- [ ] This change requires a **documentation update** (notify the documentation team)
-- [ ] This change has particular **deployment requirements** (notify the DevOps team)
+- Please check for formatting errors (`dotnet format --verify-no-changes`) (required)
+- Please add **unit tests** where it makes sense to do so (encouraged but not required)
+- If this change requires a **documentation update** - notify the documentation team
+- If this change has particular **deployment requirements** - notify the DevOps team

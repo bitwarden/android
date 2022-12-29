@@ -24,6 +24,7 @@
             UseOriginalImage="True"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n Account}" />
+        <ToolbarItem x:Name="_closeButton" Text="{u:I18n Close}" Command="{Binding CloseCommand}" Order="Primary" Priority="-1"/>
         <ToolbarItem
             Icon="cog_environment.png" Clicked="Environment_Clicked" Order="Primary"
             AutomationProperties.IsInAccessibleTree="True"
@@ -32,30 +33,68 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <StackLayout x:Name="_mainLayout" x:Key="mainLayout" Spacing="0" Padding="10, 5">
-                <StackLayout VerticalOptions="CenterAndExpand" Spacing="20">
-                    <Image
-                        x:Name="_logo"
-                        Source="logo.png"
-                        VerticalOptions="Center" />
-                    <Label Text="{u:I18n LoginOrCreateNewAccount}"
-                           StyleClass="text-lg"
-                           HorizontalTextAlignment="Center">
-                    </Label>
-                    <StackLayout Spacing="5">
-                        <Button Text="{u:I18n LogIn}"
-                                StyleClass="btn-primary"
-                                Clicked="LogIn_Clicked" />
-                        <Button Text="{u:I18n CreateAccount}"
-                                Clicked="Register_Clicked" />
-                        <Button Text="{u:I18n LogInSso}"
-                                Clicked="LogInSso_Clicked" />
-                        <Button Text="{u:I18n Cancel}"
-                                IsVisible="{Binding ShowCancelButton}"
-                                Margin="0,10,0,0"
-                                Clicked="Cancel_Clicked" />
+            <u:InverseBoolConverter x:Key="inverseBool" />
+            <StackLayout x:Name="_mainLayout" x:Key="mainLayout" Spacing="30" Padding="20, 50, 20, 0">
+                <Image
+                    x:Name="_logo"
+                    Source="logo.png"
+                    VerticalOptions="Center" />
+                <Label Text="{u:I18n LoginOrCreateNewAccount}"
+                        StyleClass="text-lg"
+                        HorizontalTextAlignment="Center"/>
+                <StackLayout
+                    StyleClass="box-row">
+                    <Label
+                        Text="{u:I18n EmailAddress}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_email"
+                        Text="{Binding Email}"
+                        Keyboard="Email"
+                        StyleClass="box-value"
+                        ReturnType="Go"
+                        ReturnCommand="{Binding ContinueCommand}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Disabled">
+                                    <VisualState.Setters>
+                                        <Setter Property="TextColor" Value="{DynamicResource MutedColor}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Entry>
+                    <StackLayout
+                        Orientation="Horizontal"
+                        Margin="0, 16, 0 ,0">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding RememberEmailCommand}" />
+                        </StackLayout.GestureRecognizers>
+                        <Label
+                            Text="{u:I18n RememberMe}"
+                            StyleClass="text-sm"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"/>
+                        <Switch
+                            Scale="0.8"
+                            IsToggled="{Binding RememberEmail}"
+                            VerticalOptions="Center"/>
                     </StackLayout>
                 </StackLayout>
+                <Button Text="{u:I18n Continue}"
+                        StyleClass="btn-primary"
+                        IsEnabled="{Binding CanContinue}"
+                        Command="{Binding ContinueCommand}" />
+                        
+                <Label FormattedText="{Binding CreateAccountText}"
+                       Margin="0, 10"
+                        StyleClass="box-footer-label">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CreateAccountCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
             </StackLayout>
         </ResourceDictionary>
     </ContentPage.Resources>

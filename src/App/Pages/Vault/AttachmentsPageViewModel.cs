@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
@@ -8,6 +10,7 @@ using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -15,11 +18,13 @@ namespace Bit.App.Pages
     public class AttachmentsPageViewModel : BaseViewModel
     {
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IFileService _fileService;
         private readonly ICipherService _cipherService;
         private readonly ICryptoService _cryptoService;
         private readonly IStateService _stateService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly ILogger _logger;
         private CipherView _cipher;
         private Cipher _cipherDomain;
         private bool _hasAttachments;
@@ -30,13 +35,16 @@ namespace Bit.App.Pages
         public AttachmentsPageViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _fileService = ServiceContainer.Resolve<IFileService>();
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+            _logger = ServiceContainer.Resolve<ILogger>();
             Attachments = new ExtendedObservableCollection<AttachmentView>();
             DeleteAttachmentCommand = new Command<AttachmentView>(DeleteAsync);
+            SubmitAsyncCommand = new AsyncCommand(SubmitAsync, allowsMultipleExecutions: false);
             PageTitle = AppResources.Attachments;
         }
 
@@ -59,6 +67,7 @@ namespace Bit.App.Pages
         }
         public byte[] FileData { get; set; }
         public Command DeleteAttachmentCommand { get; set; }
+        public ICommand SubmitAsyncCommand { get; }
 
         public async Task InitAsync()
         {
@@ -125,12 +134,19 @@ namespace Bit.App.Pages
             }
             catch (ApiException e)
             {
+                _logger.Exception(e);
                 await _deviceActionService.HideLoadingAsync();
                 if (e?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
                         AppResources.AnErrorHasOccurred);
                 }
+            }
+            catch (Exception e)
+            {
+                _logger.Exception(e);
+                await _deviceActionService.HideLoadingAsync();
+                await _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage, AppResources.AnErrorHasOccurred);
             }
             return false;
         }
@@ -142,7 +158,7 @@ namespace Bit.App.Pages
             {
                 _vaultTimeoutService.DelayLockAndLogoutMs = 60000;
             }
-            await _deviceActionService.SelectFileAsync();
+            await _fileService.SelectFileAsync();
         }
 
         private async void DeleteAsync(AttachmentView attachment)

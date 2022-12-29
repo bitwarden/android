@@ -122,16 +122,32 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden es la manera más fácil y segura de guardar todos tus usuarios y contraseñas mientras se mantienen sincronizados entre todos tus dispositivos.
+    <value>Bitwarden, Inc. es la empresa matriz de 8bit Solutions LLC.
 
-El robo de contraseñas es un grave problema. Las páginas web y aplicaciones que usas están bajo ataque cada día. Las brechas de seguridad ocurren y tus contraseñas son robadas. Cuando usas la misma contraseña en diferentes aplicaciones o sitios web, los piratas 
-informáticos pueden acceder fácilmente a tu correo electrónico, cuenta bancaria y otras cuentas importantes.
+NOMBRADO COMO EL MEJOR GESTOR DE CONTRASEÑAS POR THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, ENTRE OTROS.
 
-Expertos en seguridad recomiendan utilizar contraseñas diferentes y generadas aleatoriamente para cada cuenta que crees. ¿Pero cómo puedes gestionar todas esas contraseñas? Bitwarden facilita la creación, el almacenamiento y el acceso a tus contraseñas.
+Gestione, almacene, asegure y comparta contraseñas ilimitadas, a través de dispositivos ilimitados desde cualquier lugar.
 
-Bitwarden guarda todas tus credenciales en una bóveda cifrada sincronizada a través de todos tus dispositivos. Dado que la información está completamente cifrada en tu dispositivo, solo tú tienes acceso a los datos. Ni siquiera el equipo de Bitwarden podría leer tu información aunque quisiera. Tu información está sellada con cifrado AES de 256 bits, con hash y sal, y PBKDF2 SHA-256.
+Genere contraseñas fuertes, únicas y aleatorias, basadas en los requisitos de seguridad para cada página que frecuenta.
 
-Bitwarden se centra en el código abierto. El código fuente de Bitwarden está alojado en GitHub y cualquier persona es libre de revisarlo, auditarlo o contribuir a su base de código.</value>
+Bitwarden Send transmite rápidamente información encriptada --- archivos y texto -- directamente a cualquier persona.
+
+Bitwarden ofrece los planes Teams y Enterprise para que compartas tus contraseñas de una manera segura con tus compañeros.
+
+Razones para elegir a Bitwarden:
+
+Encriptación de clase mundial
+Las contraseñas son protegidas con encriptación avanzada de extremo a extremo (AES-256 bit y PBKDF2 SHA-2) para que tus datos permanezcan seguros y privados.
+
+Generador de contraseñas integrado
+Genere contraseñas fuertes, únicas y aleatorias, basadas en los requisitos de seguridad para cada página que frecuenta.
+
+Traducciones globales
+Bitwarden se encuentra disponible en más de 40 idiomas, gracias a nuestra comunidad global.
+
+Aplicaciones multiplataforma
+Asegure y comparta información sensible dentro de su Bóveda de Bitwarden desde cualquier navegador, dispositivo móvil, o computadora, y más.
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">

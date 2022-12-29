@@ -564,13 +564,15 @@ namespace Bit.App.Utilities
             var sendService = ServiceContainer.Resolve<ISendService>("sendService");
             var passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
                 "passwordGenerationService");
-            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            var fileService = ServiceContainer.Resolve<IFileService>();
             var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             var searchService = ServiceContainer.Resolve<ISearchService>("searchService");
+            var usernameGenerationService = ServiceContainer.Resolve<IUsernameGenerationService>(
+                "usernameGenerationService");
 
             await Task.WhenAll(
                 cipherService.ClearCacheAsync(),
-                deviceActionService.ClearCacheAsync());
+                fileService.ClearCacheAsync());
             tokenService.ClearCache();
             cryptoService.ClearCache();
             settingsService.ClearCache();
@@ -580,6 +582,7 @@ namespace Bit.App.Utilities
             passwordGenerationService.ClearCache();
             policyService.ClearCache();
             searchService.ClearIndex();
+            usernameGenerationService.ClearCache();
         }
     }
 }

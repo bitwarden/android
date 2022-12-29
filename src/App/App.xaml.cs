@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models;
@@ -7,9 +8,11 @@ using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.App.Utilities.AccountManagement;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
+using Bit.Core.Models.Response;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
@@ -25,13 +28,15 @@ namespace Bit.App
         private readonly IStateService _stateService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly ISyncService _syncService;
-        private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuthService _authService;
-        private readonly IStorageService _secureStorageService;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IFileService _fileService;
         private readonly IAccountsManager _accountsManager;
-
+        private readonly IPushNotificationService _pushNotificationService;
         private static bool _isResumed;
+        // these variables are static because the app is launching new activities on notification click, creating new instances of App. 
+        private static bool _pendingCheckPasswordlessLoginRequests;
+        private static object _processingLoginRequestLock = new object();
 
         public App(AppOptions appOptions)
         {
@@ -47,10 +52,10 @@ namespace Bit.App
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
-            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _secureStorageService = ServiceContainer.Resolve<IStorageService>("secureStorageService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _fileService = ServiceContainer.Resolve<IFileService>();
             _accountsManager = ServiceContainer.Resolve<IAccountsManager>("accountsManager");
+            _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
 
             _accountsManager.Init(() => Options, this);
 
@@ -140,6 +145,16 @@ namespace Bit.App
                                 new NavigationPage(new RemoveMasterPasswordPage()));
                         });
                     }
+                    else if (message.Command == Constants.PasswordlessLoginRequestKey
+                        || message.Command == "unlocked"
+                        || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
+                    {
+                        lock (_processingLoginRequestLock)
+                        {
+                            // lock doesn't allow for async execution
+                            CheckPasswordlessLoginRequestsAsync().Wait();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -148,11 +163,91 @@ namespace Bit.App
             });
         }
 
+        private async Task CheckPasswordlessLoginRequestsAsync()
+        {
+            if (!_isResumed)
+            {
+                _pendingCheckPasswordlessLoginRequests = true;
+                return;
+            }
+            _pendingCheckPasswordlessLoginRequests = false;
+            if (await _vaultTimeoutService.IsLockedAsync())
+            {
+                return;
+            }
+
+            var notification = await _stateService.GetPasswordlessLoginNotificationAsync();
+            if (notification == null)
+            {
+                return;
+            }
+
+            if (await CheckShouldSwitchActiveUserAsync(notification))
+            {
+                return;
+            }
+
+            // Delay to wait for the vault page to appear
+            await Task.Delay(2000);
+            // if there is a request modal opened ignore all incoming requests
+            if (App.Current.MainPage.Navigation.ModalStack.Any(p => p is NavigationPage navPage && navPage.CurrentPage is LoginPasswordlessPage))
+            {
+                return;
+            }
+            var loginRequestData = await _authService.GetPasswordlessLoginRequestByIdAsync(notification.Id);
+            var page = new LoginPasswordlessPage(new LoginPasswordlessDetails()
+            {
+                PubKey = loginRequestData.PublicKey,
+                Id = loginRequestData.Id,
+                IpAddress = loginRequestData.RequestIpAddress,
+                Email = await _stateService.GetEmailAsync(),
+                FingerprintPhrase = loginRequestData.RequestFingerprint,
+                RequestDate = loginRequestData.CreationDate,
+                DeviceType = loginRequestData.RequestDeviceType,
+                Origin = loginRequestData.Origin
+            });
+            await _stateService.SetPasswordlessLoginNotificationAsync(null);
+            _pushNotificationService.DismissLocalNotification(Constants.PasswordlessNotificationId);
+            if (!loginRequestData.IsExpired)
+            {
+                await Device.InvokeOnMainThreadAsync(() => Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
+            }
+        }
+
+        private async Task<bool> CheckShouldSwitchActiveUserAsync(PasswordlessRequestNotification notification)
+        {
+            var activeUserId = await _stateService.GetActiveUserIdAsync();
+            if (notification.UserId == activeUserId)
+            {
+                return false;
+            }
+
+            var notificationUserEmail = await _stateService.GetEmailAsync(notification.UserId);
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                try
+                {
+                    var result = await _deviceActionService.DisplayAlertAsync(AppResources.LogInRequested, string.Format(AppResources.LoginAttemptFromXDoYouWantToSwitchToThisAccount, notificationUserEmail), AppResources.Cancel, AppResources.Ok);
+                    if (result == AppResources.Ok)
+                    {
+                        await _stateService.SetActiveUserAsync(notification.UserId);
+                        _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
+                }
+            });
+            return true;
+        }
+
         public AppOptions Options { get; private set; }
 
         protected async override void OnStart()
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnStart");
+            _isResumed = true;
             await ClearCacheIfNeededAsync();
             Prime();
             if (string.IsNullOrWhiteSpace(Options.Uri))
@@ -163,6 +258,10 @@ namespace Bit.App
                 {
                     SyncIfNeeded();
                 }
+            }
+            if (_pendingCheckPasswordlessLoginRequests)
+            {
+                _messagingService.Send(Constants.PasswordlessLoginRequestKey);
             }
             if (Device.RuntimePlatform == Device.Android)
             {
@@ -196,6 +295,10 @@ namespace Bit.App
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnResume");
             _isResumed = true;
+            if (_pendingCheckPasswordlessLoginRequests)
+            {
+                _messagingService.Send(Constants.PasswordlessLoginRequestKey);
+            }
             if (Device.RuntimePlatform == Device.Android)
             {
                 ResumedAsync().FireAndForget();
@@ -245,7 +348,7 @@ namespace Bit.App
             var lastClear = await _stateService.GetLastFileCacheClearAsync();
             if ((DateTime.UtcNow - lastClear.GetValueOrDefault(DateTime.MinValue)).TotalDays >= 1)
             {
-                var task = Task.Run(() => _deviceActionService.ClearCacheAsync());
+                var task = Task.Run(() => _fileService.ClearCacheAsync());
             }
         }
 
@@ -356,7 +459,14 @@ namespace Bit.App
             switch (navTarget)
             {
                 case NavigationTarget.HomeLogin:
-                    Current.MainPage = new NavigationPage(new HomePage(Options));
+                    if (navParams is HomeNavigationParams homeParams)
+                    {
+                        Current.MainPage = new NavigationPage(new HomePage(Options, homeParams.ShouldCheckRememberEmail));
+                    }
+                    else
+                    {
+                        Current.MainPage = new NavigationPage(new HomePage(Options));
+                    }
                     break;
                 case NavigationTarget.Login:
                     if (navParams is LoginNavigationParams loginParams)

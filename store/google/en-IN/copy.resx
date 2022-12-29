@@ -150,8 +150,7 @@ Global Translations
 Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
 
 Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
-</value>
+Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">

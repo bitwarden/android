@@ -189,6 +189,7 @@ namespace Bit.App.Pages
             if (await _stateService.GetSyncOnRefreshAsync() && Refreshing && !SyncRefreshing)
             {
                 SyncRefreshing = true;
+                await _syncService.SyncPasswordlessLoginRequestsAsync();
                 await _syncService.FullSyncAsync(false);
                 return;
             }
@@ -200,7 +201,6 @@ namespace Bit.App.Pages
             {
                 PageTitle = ShowVaultFilter ? AppResources.Vaults : AppResources.MyVault;
             }
-            var canAccessPremium = await _stateService.CanAccessPremiumAsync();
             _doingLoad = true;
             LoadedOnce = true;
             ShowNoData = false;
@@ -221,7 +221,7 @@ namespace Bit.App.Pages
                     NestedFolders = NestedFolders.GetRange(0, NestedFolders.Count - 1);
                 }
 
-                var uppercaseGroupNames = _deviceActionService.DeviceType == DeviceType.iOS;
+                var uppercaseGroupNames = Device.RuntimePlatform == Device.iOS;
                 var hasFavorites = FavoriteCiphers?.Any() ?? false;
                 if (hasFavorites)
                 {
@@ -231,7 +231,7 @@ namespace Bit.App.Pages
                 }
                 if (MainPage)
                 {
-                    AddTotpGroupItem(canAccessPremium, groupedItems, uppercaseGroupNames);
+                    AddTotpGroupItem(groupedItems, uppercaseGroupNames);
 
                     groupedItems.Add(new GroupingsPageListGroup(
                         AppResources.Types, 4, uppercaseGroupNames, !hasFavorites)
@@ -382,9 +382,9 @@ namespace Bit.App.Pages
             }
         }
 
-        private void AddTotpGroupItem(bool canAccessPremium, List<GroupingsPageListGroup> groupedItems, bool uppercaseGroupNames)
+        private void AddTotpGroupItem(List<GroupingsPageListGroup> groupedItems, bool uppercaseGroupNames)
         {
-            if (canAccessPremium && TOTPCiphers?.Any() == true)
+            if (TOTPCiphers?.Any() == true)
             {
                 groupedItems.Insert(0, new GroupingsPageListGroup(
                     AppResources.Totp, 1, uppercaseGroupNames, false)
@@ -401,7 +401,7 @@ namespace Bit.App.Pages
 
         private void CreateCipherGroupedItems(List<GroupingsPageListGroup> groupedItems)
         {
-            var uppercaseGroupNames = _deviceActionService.DeviceType == DeviceType.iOS;
+            var uppercaseGroupNames = Device.RuntimePlatform == Device.iOS;
             _totpTickCts?.Cancel();
             if (ShowTotp)
             {
@@ -537,10 +537,11 @@ namespace Bit.App.Pages
 
         private async Task LoadDataAsync()
         {
+            var canAccessPremium = await _stateService.CanAccessPremiumAsync();
             NoDataText = AppResources.NoItems;
             _allCiphers = await GetAllCiphersAsync();
             HasCiphers = _allCiphers.Any();
-            TOTPCiphers = _allCiphers.Where(c => c.IsDeleted == Deleted && c.Type == CipherType.Login && !string.IsNullOrEmpty(c.Login?.Totp)).ToList();
+            TOTPCiphers = _allCiphers.Where(c => c.IsDeleted == Deleted && c.Type == CipherType.Login && !string.IsNullOrEmpty(c.Login?.Totp) && (c.OrganizationUseTotp || canAccessPremium)).ToList();
             FavoriteCiphers?.Clear();
             NoFolderCiphers?.Clear();
             _folderCounts.Clear();

@@ -122,13 +122,32 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden er den enkleste og tryggeste måten å lagre alle dine innlogginger og passord mens de blir praktisk synkronisert mellom alle dine PCer og mobiler. Bitwarden-apputvidelsen tillater deg å raskt logge på ethvert nettsted gjennom Safari eller Chrome, og støttes også av hundrevis av andre populære apper.
+    <value>Bitwarden, Inc. er morselskapet til 8bit Solutions LLC.
 
-Passordtyveri er et seriøst problem. Nettstedene og appene som du bruker er under angrep hver eneste dag. Sikkerhetsbrudd forekommer, og dine passord blir stjålet. Når du bruker de samme passordene over flere apper og nettsteder, kan hackere lett få tilgang til din E-post, bankkonto, og andre viktige kontoer.
+BESTE PASSORD MANAGER AV VERDIEN, NYHETER og ARBEID RAPPORT, KNET, OG MORES.
 
-Sikkerhetseksperter anbefaler at du bruker forskjellig og tilfeldig genererte passord for hver konto du lager. Men hvordan behandler du alle de passordene? Bitwarden gjør det lett for deg å lage, lagre, og få tilgang til dine passord.
+Håndtering, lagring, sikker, og deling av ubegrenset med passord på tvers av ubegrenset antall enheter fra hvor som helst. Bitwarden leverer passordbehandlingsløsninger med åpen kildekode til alle, enten hjemme, på jobb eller på farten.
 
-Bitwarden lagrer alle dine innlogginger i et kryptert hvelv som synkroniseres mellom alle dine PCer og mobiler. Siden den er fullt kryptert før den noensinne forlater din enhet, har bare du tilgang til dine dataer. Selv ikke arbeiderne hos bitwarden kan lese dine dataer, om vi så ville det. Dine dataer er forseglet med AES 256-bitkryptering, saltet kodifisering, og PBKDF2 SHA-256.</value>
+Generer sterke, unike, og tilfeldige passord basert på sikkerhetskrav for alle nettsteder du hyppiger.
+
+Bitwarden Sende raskt sender krypterte informasjonsfiler --- og klartekst -- direkte til alle.
+
+Bitwarden tilbyr Lag og Enterprise planer for firmaer så du kan sikkert dele passord med kolleger.
+
+Hvorfor velge Bitwarden:
+
+World-Class Encryption
+Passord er beskyttet med avansert ende-til-ende-kryptering (AES-256 bit, Saltet hashtag, og PBKDF2 SHA-256) så dataene dine forblir sikre og private.
+
+Innebygd passordgenerator
+Generer sterke, unike og tilfeldige passord basert på sikkerhetskrav for alle nettsteder du hyppiger.
+
+Globale oversettelser
+Bitwarden finnes på 40 språk og vokser igjen, takket være vårt globale nettsamfunn.
+
+Cross-Platform Applications
+Secure og del sensitive data i Bitwarden sitt hvelv fra enhver nettleser, mobil enhet eller desktop OS og mer
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">

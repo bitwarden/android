@@ -276,13 +276,13 @@
     <value>Are you sure you want to log out?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Remove Account</value>
+    <value>Remove account</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
     <value>Are you sure you want to remove this account?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
-    <value>Account Already Added</value>
+    <value>Account already added</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
     <value>Would you like to switch to it now?</value>
@@ -376,7 +376,7 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>{0} has been copied.</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Verify fingerprint</value>
@@ -808,7 +808,7 @@
     <value>You are searching for an auto-fill item for "{0}".</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Learn about organizations</value>
+    <value>Learn about organisations</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Cannot open the app "{0}".</value>
@@ -1080,7 +1080,7 @@ Scanning will happen automatically.</value>
     <value>Last name</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Full Name</value>
+    <value>Full name</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Licence number</value>
@@ -1381,10 +1381,10 @@ Scanning will happen automatically.</value>
     <value>Search collection</value>
   </data>
   <data name="SearchFileSends" xml:space="preserve">
-    <value>Search File Sends</value>
+    <value>Search file Sends</value>
   </data>
   <data name="SearchTextSends" xml:space="preserve">
-    <value>Search Text Sends</value>
+    <value>Search text Sends</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
     <value>Search {0}</value>
@@ -1428,13 +1428,13 @@ Scanning will happen automatically.</value>
     <value>Share item</value>
   </data>
   <data name="MoveToOrganization" xml:space="preserve">
-    <value>Move to Organization</value>
+    <value>Move to Organisation</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>No organisations to list.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
+    <value>Choose an organisation that you wish to move this item to. Moving to an organisation transfers ownership of the item to that organisation. You will no longer be the direct owner of this item once it has been moved.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Number of words</value>
@@ -1465,7 +1465,7 @@ Scanning will happen automatically.</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault items with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>Bitwarden allows you to share your vault items with others by using an organisation account. Would you like to visit the bitwarden.com website to learn more?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Export vault</value>
@@ -1480,7 +1480,7 @@ Scanning will happen automatically.</value>
     <value>Unlock</value>
   </data>
   <data name="UnlockVault" xml:space="preserve">
-    <value>Unlock Vault</value>
+    <value>Unlock vault</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minutes</value>
@@ -1553,7 +1553,7 @@ Scanning will happen automatically.</value>
     <value>Default dark theme</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is enabled.</value>
+    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is in use.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copy notes</value>
@@ -1574,6 +1574,10 @@ Scanning will happen automatically.</value>
   <data name="Nord" xml:space="preserve">
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Auto-fill blocked URIs</value>
@@ -1655,7 +1659,7 @@ Scanning will happen automatically.</value>
     <value>Send a verification code to your email</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
-    <value>Code Sent!</value>
+    <value>Code sent!</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
     <value>Confirm your identity to continue.</value>
@@ -2090,37 +2094,37 @@ Scanning will happen automatically.</value>
     <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Captcha Required</value>
+    <value>Captcha required</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>Captcha Failed. Please try again.</value>
+    <value>Captcha failed. Please try again.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Updated Master Password</value>
+    <value>Updated master password</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Update Master Password</value>
+    <value>Update master password</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
-    <value>Updating Password</value>
+    <value>Updating password</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Currently unable to update password</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>Remove Master Password</value>
+    <value>Remove master password</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your master password from your account and require SSO to login.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
+    <value>If you do not want to remove your master password, you may leave this organization.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>Leave Organization</value>
+    <value>Leave organization</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
     <value>Leave {0}?</value>
@@ -2129,7 +2133,7 @@ Scanning will happen automatically.</value>
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>To continue, have your FIDO2 WebAuthn enabled security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
+    <value>To continue, have your FIDO2 WebAuthn compatible security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
     <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
@@ -2138,7 +2142,7 @@ Scanning will happen automatically.</value>
     <value>Authenticate WebAuthn</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
-    <value>Return to App</value>
+    <value>Return to app</value>
   </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
     <value>Please make sure your default browser supports WebAuthn and try again.</value>
@@ -2147,16 +2151,16 @@ Scanning will happen automatically.</value>
     <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is {0} hour(s) and {1} minute(s)</value>
+    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s)</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Your vault timeout exceeds the restrictions set by your organization.</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
-    <value>One or more organization policies prevents your from exporting your personal vault.</value>
+    <value>One or more organization policies prevents your from exporting your individual vault.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Add Account</value>
+    <value>Add account</value>
   </data>
   <data name="AccountUnlocked" xml:space="preserve">
     <value>Unlocked</value>
@@ -2165,13 +2169,13 @@ Scanning will happen automatically.</value>
     <value>Locked</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>Logged Out</value>
+    <value>Logged out</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>Switched to next available account</value>
   </data>
   <data name="AccountLockedSuccessfully" xml:space="preserve">
-    <value>Account Locked</value>
+    <value>Account locked</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
     <value>Account logged out successfully</value>
@@ -2195,13 +2199,13 @@ Scanning will happen automatically.</value>
     <value>Your account has been permanently deleted</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Invalid Verification Code.</value>
+    <value>Invalid verification code</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
     <value>Request one-time password</value>
   </data>
   <data name="SendCode" xml:space="preserve">
-    <value>Send Code</value>
+    <value>Send code</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Sending</value>
@@ -2216,7 +2220,7 @@ Scanning will happen automatically.</value>
     <value>Verifying</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Resend Code</value>
+    <value>Resend code</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
     <value>A verification code was sent to your email</value>
@@ -2249,7 +2253,7 @@ Scanning will happen automatically.</value>
     <value>Numbers (0 to 9)</value>
   </data>
   <data name="SpecialCharacters" xml:space="preserve">
-    <value>Special Characters (!@#$%^&amp;*)</value>
+    <value>Special characters (!@#$%^&amp;*)</value>
   </data>
   <data name="TapToGoBack" xml:space="preserve">
     <value>Tap to go back</value>
@@ -2264,7 +2268,7 @@ Scanning will happen automatically.</value>
     <value>Filter items by vault</value>
   </data>
   <data name="AllVaults" xml:space="preserve">
-    <value>All Vaults</value>
+    <value>All vaults</value>
   </data>
   <data name="Vaults" xml:space="preserve">
     <value>Vaults</value>
@@ -2279,7 +2283,7 @@ Scanning will happen automatically.</value>
     <value>TOTP</value>
   </data>
   <data name="VerificationCodes" xml:space="preserve">
-    <value>Verification Codes</value>
+    <value>Verification codes</value>
   </data>
   <data name="PremiumSubscriptionRequired" xml:space="preserve">
     <value>Premium subscription required</value>
@@ -2294,10 +2298,10 @@ Scanning will happen automatically.</value>
     <value>Cannot scan QR Code? </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Authenticator Key</value>
+    <value>Authenticator key</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Enter Key Manually</value>
+    <value>Enter key manually</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
     <value>Add TOTP</value>
@@ -2308,9 +2312,6 @@ Scanning will happen automatically.</value>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
     <value>Once the key is successfully entered,
 select Add TOTP to store the key safely</value>
-  </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>
@@ -2325,6 +2326,206 @@ select Add TOTP to store the key safely</value>
     <value>Allow screen capture</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>Are you sure you want to enable Screen Capture?</value>
+    <value>Are you sure you want to turn on screen capture?</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Login requested</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Are you trying to log in?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Login attempt by {0} on {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Device type</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP address</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Near</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Confirm login</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Deny login</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Just now</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} minutes ago</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Login confirmed</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Login denied</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Approve login requests</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Use this device to approve login requests made from other devices.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Allow notifications</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Receive push notifications for new login requests</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>No thanks</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Confirm login attempt for {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>All notifications</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Password type</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>What would you like to generate?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Username type</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Plus addressed email</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Catch-all email</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Forwarded email alias</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Random word</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Email (required)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Domain name (required)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API key (required)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Service</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API access token</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Are you sure you want to overwrite the current username?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Generate username</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Email Type</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Website (required)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Unknown {0} error occurred.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Use your email provider's subaddress capabilities</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Use your domain's configured catch-all inbox.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Generate an email alias with an external forwarding service.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Random</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Accessibility Service Disclosure</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Decline</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Login request has already expired.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Login attempt from:
+{0}
+Do you want to switch to this account?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>New around here?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Get master password hint</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Logging in as {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Not you?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Log in with master password</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Log In with another device</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Log in initiated</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>A notification has been sent to your device.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Resend notification</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Need another option?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>View all log in options</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>This request is no longer valid</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Enable camera permission to use the scanner</value>
   </data>
 </root>

@@ -7,6 +7,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities.AccountManagement
@@ -20,6 +21,8 @@ namespace Bit.App.Utilities.AccountManagement
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuthService _authService;
         private readonly ILogger _logger;
+        private readonly IMessagingService _messagingService;
+        private readonly IWatchDeviceService _watchDeviceService;
 
         Func<AppOptions> _getOptionsFunc;
         private IAccountsManagerHost _accountsManagerHost;
@@ -30,7 +33,9 @@ namespace Bit.App.Utilities.AccountManagement
                                IStateService stateService,
                                IPlatformUtilsService platformUtilsService,
                                IAuthService authService,
-                               ILogger logger)
+                               ILogger logger,
+                               IMessagingService messagingService,
+                               IWatchDeviceService watchDeviceService)
         {
             _broadcasterService = broadcasterService;
             _vaultTimeoutService = vaultTimeoutService;
@@ -39,6 +44,8 @@ namespace Bit.App.Utilities.AccountManagement
             _platformUtilsService = platformUtilsService;
             _authService = authService;
             _logger = logger;
+            _messagingService = messagingService;
+            _watchDeviceService = watchDeviceService;
         }
 
         private AppOptions Options => _getOptionsFunc?.Invoke() ?? new AppOptions { IosExtension = true };
@@ -101,11 +108,12 @@ namespace Bit.App.Utilities.AccountManagement
                     // var orgIdentifier = await _stateService.GetOrgIdentifierAsync();
 
                     var email = await _stateService.GetEmailAsync();
-                    _accountsManagerHost.Navigate(NavigationTarget.Login, new LoginNavigationParams(email));
+                    await _stateService.SetRememberedEmailAsync(email);
+                    _accountsManagerHost.Navigate(NavigationTarget.HomeLogin, new HomeNavigationParams(true));
                 }
                 else
                 {
-                    _accountsManagerHost.Navigate(NavigationTarget.HomeLogin);
+                    _accountsManagerHost.Navigate(NavigationTarget.HomeLogin, new HomeNavigationParams(false));
                 }
             }
         }
@@ -141,6 +149,7 @@ namespace Bit.App.Utilities.AccountManagement
                         break;
                     case AccountsManagerMessageCommands.SWITCHED_ACCOUNT:
                         await SwitchedAccountAsync();
+
                         break;
                 }
             }
@@ -181,7 +190,7 @@ namespace Bit.App.Utilities.AccountManagement
             await Device.InvokeOnMainThreadAsync(() =>
             {
                 Options.HideAccountSwitcher = false;
-                _accountsManagerHost.Navigate(NavigationTarget.HomeLogin);
+                _accountsManagerHost.Navigate(NavigationTarget.HomeLogin, new HomeNavigationParams(false));
             });
         }
 
@@ -213,7 +222,21 @@ namespace Bit.App.Utilities.AccountManagement
                 }
                 await Task.Delay(50);
                 await _accountsManagerHost.UpdateThemeAsync();
+                _watchDeviceService.SyncDataToWatchAsync().FireAndForget();
+                _messagingService.Send(AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED);
             });
+        }
+
+        public async Task PromptToSwitchToExistingAccountAsync(string userId)
+        {
+            var switchToAccount = await _platformUtilsService.ShowDialogAsync(
+                AppResources.SwitchToAlreadyAddedAccountConfirmation,
+                AppResources.AccountAlreadyAdded, AppResources.Yes, AppResources.Cancel);
+            if (switchToAccount)
+            {
+                await _stateService.SetActiveUserAsync(userId);
+                _messagingService.Send("switchedAccount");
+            }
         }
     }
 }

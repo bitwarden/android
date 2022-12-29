@@ -186,11 +186,11 @@
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>E-mail cím</value>
+    <value>E-mail-cím</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>Küldj e-mailt nekünk</value>
+    <value>Írjon nekünk emailt</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
     <value>Írjon nekünk E-mailt közvetlenül a segítség kéréshez vagy visszajelzés beküldéséhez.</value>
@@ -203,7 +203,7 @@
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>Hiba jelentése</value>
+    <value>Hibabejelentés</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
     <value>Nyiss egy Issuet a mi Gthub repositorynkban.</value>
@@ -229,10 +229,10 @@
     <value>Mappák</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Mappa frissítve.</value>
+    <value>A mappa mentésre került.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Menj a weboldalra</value>
+    <value>Weboldal megnyitása</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
@@ -247,11 +247,11 @@
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Internet kapcsolat szükséges</value>
+    <value>Internetkapcsolat szükséges</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>A mesterjelszó érvénytelen. Próbáljuk újra.</value>
+    <value>A mesterjelszó érvénytelen. Próbálkozz újra.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
     <value>A pinkód érvénytelen. Próbáljuk újra.</value>
@@ -296,11 +296,11 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>Széfem</value>
+    <value>Saját széf</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Hitelesítés</value>
+    <value>Hitelesítő</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -353,7 +353,7 @@
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>Köszönjük</value>
+    <value>Köszönjük!</value>
   </data>
   <data name="Tools" xml:space="preserve">
     <value>Eszközök</value>
@@ -375,14 +375,14 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} a vágólapra másolva.</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <value>{0} a vágólapra került.</value>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Ujjlenyomat megerősítése</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Mester jelszó megerősítése</value>
+    <value>Mesterjelszó megerősítése</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>PIN megerősítése</value>
@@ -394,7 +394,7 @@
     <value>Megtekintés</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Látogasd meg a weboldalunkat</value>
+    <value>Fejlesztői webhely felkeresése</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
     <value>A fejlesztői webhely felkeresése segítségért, hírekért, email küldése a fejlesztőknek és/vagy további információk a Bitwarden használatáról.</value>
@@ -416,7 +416,7 @@
     <value>Elem hozzáadása</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
-    <value>Alkalmazáskiegészítő</value>
+    <value>App kiterjesztés</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
     <value>A Bitwarden kisegítő szolgáltatás használata bejelentkezések automatikus kitöltéséhez alkalmazásból és weben.</value>
@@ -428,10 +428,10 @@
     <value>Félreérthető karakterek mellőzése</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Bitwarden alkalmazás bővítmény</value>
+    <value>Bitwarden alkalmazáskiegészítő</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>A legkönnyebb módja új bejelentkezések széfbe helyezéséhez a Bitwarden alkalmazás kiegészítőből. További információ olvasható a Bitwarden alkalmazás kiegészítő használatáról a  "Beállítások" képernyőn.</value>
+    <value>A legegyszerűbben a Bitwarden alkalmazás bővítményből adhatunk hozzá új bejelentkezéseket a séfhez. Ha többet szeretnénk megtudni a Bitwarden alkalmazás bővítmény használatáról, lépjünk a "Beállítások" képernyőre.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>A Bitwarden használata Safariban és más alkalmazásokban a bejelentkezések automatikus kitöltéséhez.</value>
@@ -443,7 +443,7 @@
     <value>A Bitwarden kisegítő szolgáltatás használata bejelentkezések automatikus kitöltéséhez.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>E-mail cím módosítása</value>
+    <value>Email cím megváltoztatása</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
     <value>E-mail címedet a bitwarden.com webes széfében tudod megváltoztatni. Szeretnéd meglátogatni most a weboldalt?</value>
@@ -578,7 +578,7 @@
     <value>A mesterjelszó az a jelszó amit a széfed eléréséhez fogsz használni. Nagyon fontos, hogy ne felejtsd el a mesterjelszavad, mert nincs lehetőséged visszaállítani ha elfelejtetted.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Mesterjelszó emlékeztető (nem kötelező)</value>
+    <value>Mesterjelszó-emlékeztető (nem kötelező)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>A mesterjelszó emlékeztető segíthet emlékezni a jelszavadra ha elfejetetted volna.</value>
@@ -587,11 +587,11 @@
     <value>Mesterjelszónak legalább 8 karakter hosszúnak kell lennie.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Kevesebb szám</value>
+    <value>Legalább ennyi szám</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Kevesebb különleges karakter</value>
+    <value>Legalább ennyi speciális karakter</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -635,10 +635,10 @@
     <value>Jelszó generálva.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Jelszó generátor</value>
+    <value>Jelszógenerátor</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>Jelszó emlékeztető</value>
+    <value>Jelszó-emlékeztető</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
     <value>Elküldtünk neked egy E-mailt mely tartalmazza a mesterjelszó emlékeztetődet.</value>
@@ -647,7 +647,7 @@
     <value>Biztosan felül akarod írni a jelenlegi jelszót?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>A Bitwarden push-értesítések használatával gondoskodik a széf automatikus szinkronizálásáról. A funkció előnyeinek kihasználásához a push-értesítések engedélyezésére vonatkozó kérdés megjelenésekor válasszuk az "Engedélyezés" lehetőséget.</value>
+    <value>A Bitwarden push-értesítések használatával gondoskodik a széfed automatikus szinkronizálásáról. A funkció előnyeinek kihasználásához a push-értesítések engedélyezésére vonatkozó kérdés megjelenésekor válaszd az Engedélyezés lehetőséget.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -678,7 +678,7 @@
     <value>Egy 4 számjegyű PIN-kód beállítása az alkalmazás kinyitásához.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Elem információ</value>
+    <value>Elem adatai</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
     <value>Az elem frissítésre került.</value>
@@ -692,10 +692,10 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Szinkronizálás befejezve.</value>
+    <value>A szinkronizálás kész.</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Szinkronizáció sikertelen.</value>
+    <value>A szinkronizálás nem sikerült.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>Széf szinkronizálása most</value>
@@ -708,7 +708,7 @@
     <value>Kétlépcsős bejelentkezés</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>A kétlépcsős bejelentkezés biztonságosabbá teszi a fiókodat azáltal, hogy meg kell erősítened a bejelentkezésedet egy másik eszközzel mint például biztonsági kulcs, hitelesítő alkalmazás, SMS, telefon hívás vagy e-mail. Kétlépcsős bejelentkezést a bitwarden.com webes széfében tudod megváltoztatni. Szeretnéd meglátogatni most a weboldalt?</value>
+    <value>A kétlépcsős bejelentkezés biztonságosabbá teszi a fiókodat, mert egy másik eszközzel, például biztonsági kulccsal, hitelesítőalkalmazással, sms-sel, telefonhívással vagy e-maillel is jóvá kell hagynod a bejelentkezést. A kétlépcsős bejelentkezést a bitwarden.com webes széfjében kapcsolhatod be. Megnyitod most a weboldalt?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Kinyitás ezzel: {0}</value>
@@ -721,7 +721,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Hitelesítő kód</value>
+    <value>Ellenőrzőkód</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
     <value>Elem megtekintése</value>
@@ -796,7 +796,7 @@
     <value>Biztos, hogy automatikusan kitöltésre kerüljön ez az elem? Nem teljesen egyezik: {0}.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Megegyező elemek</value>
+    <value>Talált elemek</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
     <value>Lehetséges találatok</value>
@@ -815,7 +815,7 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Hitelesítő alkalmazás</value>
+    <value>Hitelesítőalkalmazás</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
@@ -827,11 +827,11 @@
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Bejelentkezés nem érhető el</value>
+    <value>Nem érhető el bejelentkezés</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Ennél a fióknál a kétlépcsős bejelentkezés engedélyezve lett, azonban a beállított kétlépcsős szolgáltatók egyike sem támogatott ezen az eszközön. Használj támogatott eszközt és/vagy olyan szolgáltatókat, amelyek jobb támogatást élveznek az eszközökön (például egy hitelesítő alkalmazás).</value>
+    <value>Ennél a fióknál engedélyezett a kétlépcsős bejelentkezés, de a beállított kétlépcsős bejelentkezési szolgáltatók egyike sem támogatott ezen az eszközön. Használj támogatott eszközt és/vagy olyan szolgáltatókat, amelyek jobban támogatják a több eszközzel történő használatot (ilyenek például a hitelesítőalkalmazások).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Helyreállító kód</value>
@@ -846,7 +846,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Kétlépcsős bejelentkezés opciók</value>
+    <value>Kétlépcsős bejelentkezés beállításai</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
     <value>Más kétlépcsős bejelentkezés használata</value>
@@ -856,7 +856,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Megerősítő e-mail elküldve.</value>
+    <value>Az ellenőrzőkódot tartalmazó e-mail elküldve.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -887,10 +887,10 @@
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Hitelesítő kulcs (egyszeri-idő alapú)</value>
+    <value>Igazolókód (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Ellenőrző kód (egyszeri-idő alapú)</value>
+    <value>Ellenőrzőkód (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
@@ -954,10 +954,10 @@
     <value>Ez a funkció nem használható, amíg nem frissíted a titkosítási kulcsodat.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Tudj meg többet</value>
+    <value>További információ</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>API szerver URL</value>
+    <value>API-szerver URL-címe</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
     <value>Egyéni környezet</value>
@@ -973,7 +973,7 @@
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Identitás szerver URL</value>
+    <value>Identitásszerver URL-címe</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
@@ -986,13 +986,13 @@
     <value>Szerver URL</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Webes széf szerver URL</value>
+    <value>Webes széf szerverének URL-címe</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>Koppintunk erre az értesítésre a széfben tárolt elemek megtekintéséhez.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>Egyedi mezők</value>
+    <value>Egyéni mezők</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
     <value>Szám másolása</value>
@@ -1016,7 +1016,7 @@
     <value>Bejelentkezés</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Biztonságos jegyzet</value>
+    <value>Védett jegyzet</value>
   </data>
   <data name="Address1" xml:space="preserve">
     <value>Cím 1</value>
@@ -1064,7 +1064,7 @@
     <value>február</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>Személynév</value>
+    <value>Utónév</value>
   </data>
   <data name="January" xml:space="preserve">
     <value>január</value>
@@ -1197,7 +1197,7 @@
     <value>Nem sikerült automatikusan megnyitni az Android automatikus kitöltés beállításai menüt. A beállítás megnyitásához nyitssuk meg a Beállítások &gt; Rendszer &gt; Nyelv és bevitel &gt; Speciális &gt; Automatikus kitöltés menüpontot.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Egyedi mezőnév</value>
+    <value>Egyéni mezőnév</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
     <value>Logikai</value>
@@ -1212,7 +1212,7 @@
     <value>Szöveg</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>Új egyedi mező</value>
+    <value>Új egyéni mező</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
     <value>Milyen típusú egyéni mező legyen hozzáadva?</value>
@@ -1248,14 +1248,14 @@
     <value>Ezzel kezdődik</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI találatfelismerés</value>
+    <value>URI-egyezés felismerése</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Találatfelismerés</value>
+    <value>Egyezés felismerése</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Igen, és mentés</value>
+    <value>Igen és mentés</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
     <value>Automatikus kitöltés és mentés</value>
@@ -1277,7 +1277,7 @@
     <value>A kisegítő szolgáltatás használata hasznos lehet, ha az alkalmazások nem támogatják a szabványos automatikus kitöltési szolgáltatást.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>A jelszó frissítésre került.</value>
+    <value>A jelszó frissítve</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
@@ -1285,7 +1285,7 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>Az automatikus kitöltés bekapcsolásra került.</value>
+    <value>Az automatikus kitöltés aktiválva.</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
     <value>Az automatikus kitöltő szolgáltatás használata előtt be kell jelentkezni a fő Bitwarden alkalmazásba.</value>
@@ -1300,7 +1300,7 @@
     <value>A széf közvetlenül a billentyűzetről érhető el a jelszavak gyors kitöltéséhez.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>A jelszó automatikus kitöltés szolgáltatás engedélyezéséhez kövessük az alábbi utasításokat:</value>
+    <value>A következő lépésekkel engedélyezheted a jelszó automatikus kitöltését:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Lépjünk be az iOS "Beállítások" alkalmazásba</value>
@@ -1336,10 +1336,10 @@
     <value>Bejelentkezések</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>Biztonságos jegyzetek</value>
+    <value>Védett jegyzetek</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>Összes elem</value>
+    <value>Minden elem</value>
   </data>
   <data name="URIs" xml:space="preserve">
     <value>URI elemek</value>
@@ -1359,13 +1359,13 @@
     <value>Ez a jelszó nem érintett egyetlen ismert adatszivárgásban sem. Biztonságos a használata.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
-    <value>Azonosság név</value>
+    <value>Identitásnév</value>
   </data>
   <data name="Value" xml:space="preserve">
     <value>Érték</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Jelszó előzmények</value>
+    <value>Korábbi jelszavak</value>
   </data>
   <data name="Types" xml:space="preserve">
     <value>Típusok</value>
@@ -1393,7 +1393,7 @@
     <value>Típus</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Lefelé mozgatás</value>
+    <value>Lejjebb</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
     <value>Felfelé mozgatás</value>
@@ -1442,7 +1442,7 @@
     <value>Kulcsszó</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>Szó elválasztó</value>
+    <value>Szóelválasztó</value>
   </data>
   <data name="Clear" xml:space="preserve">
     <value>Törlés</value>
@@ -1574,6 +1574,10 @@
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Szolarizált sötét</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Automatikus kitöltés elől blokkolt URI elemek</value>
   </data>
@@ -1590,7 +1594,7 @@
     <value>Újraindításkor</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Az automatikus kitöltés megkönnyíti a Bitwarden széf biztonságos elérését más webhelyekről és alkalmazásokból. Úgy tűnik, hogy nem engedélyezett az automatikus kitöltés a Bitwardennél. Az automatikus kitöltés a Bitwardennél a "Beállítások" képernyőn engedélyezhető.</value>
+    <value>Az automatikus kitöltés megkönnyíti a Bitwarden széf biztonságos elérését más webhelyekről és alkalmazásokból. Úgy tűnik, hogy nem engedélyezett az automatikus kitöltés a Bitwardenből. Az automatikus kitöltést a Beállítások képernyőn engedélyezheted.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>A témaváltás az alkalmazás újraindítása után lép életbe.</value>
@@ -1609,13 +1613,13 @@
     <value>Megosztott</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Láthatóság váltás</value>
+    <value>Láthatóság váltása</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>A bejelentkezési munkamenet lejárt.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>A biometrikus ellenőrzés használata.</value>
+    <value>Biometrikus ellenőrzés</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>Biometria</value>
@@ -1624,10 +1628,10 @@
     <value>Biometria használata a feloldáshoz</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>A Bitwarden figyelmet igényel - Információ az "Automatikus kitöltés elérési szolgáltatás" elemnél a Bitwarden beállításaiban</value>
+    <value>A Bitwarden figyelmet igényel - nyisd meg az "Automatikus kitöltés akadálymentesítő szolgáltatás" szakaszt a Bitwarden beállításaiban</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. Az Android Alkalmazás beállítások képernyőn a "Megjelenítés más alkalmazások felett" opcióknál (a Bővített alatt) koppintsunk az átfedés támogatást engedélyező váltóra.</value>
+    <value>3. Az Android Alkalmazásbeállítások képernyőjén nyisd meg a "Megjelenítés más alkalmazások felett" szakaszt (a Speciális alatt), és a kapcsolóval engedélyezd az átfedéstámogatást.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Jogosultság</value>
@@ -1645,7 +1649,7 @@
     <value>Engedélyezve</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
-    <value>Fájl formátum</value>
+    <value>Fájlformátum</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>A mesterjelszó megadása a széfadatok exportálásához.</value>
@@ -1669,7 +1673,7 @@
     <value>A fiók titkosítási kulcsai minden Bitwarden felhasználói fiókhoz egyediek, ezért nem importálhatunk titkosított exportálást egy másik fiókba.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Széf export megerősítése</value>
+    <value>Széfexportálás megerősítése</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1699,7 +1703,7 @@
     <value>A melléklet sikeresen mentésre került.</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Engedélyezzük az "Automatikus kitöltés elérés szolgáltatás" lehetőséget a Bitwarden beállításainál az automatikus kitöltés engedélyezéséhez.</value>
+    <value>Az Automatikus kitöltés csempe használatához engedélyezd az "Automatikus kitöltés akadálymentesítő szolgáltatás" funkciót a Bitwarden beállításaiban.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
     <value>Nincs érzékelt jelszó mező.</value>
@@ -1721,7 +1725,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Az elem visszaállításra került.</value>
+    <value>Az elem visszaállítva.</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
@@ -1757,7 +1761,7 @@
     <value>A széf szinkronizálása lehúzó művelettel.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Vállalati önálló bejelentkezés</value>
+    <value>Vállalati egyszeri bejelentkezés</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
     <value>Gyors bejelentkezés a szervezeti önálló bejelentkező portálba. A kezdéshez meg kell adni a szervezeti azonosítót.</value>
@@ -1796,7 +1800,7 @@
     <value>{0} speciális karakterekből egyet vagy többet tartalmaz</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>Érvénytelen jelszó.</value>
+    <value>Érvénytelen jelszó</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
     <value>A jelszó nem egyezik a szervezeti követelményekhez. Ellenőrizzük a szabály információt és próbáljuk újra.</value>
@@ -1817,7 +1821,7 @@
     <value>Adatvédelmi Irányelvek</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>A Bitwarden figyelmet igényel - Engedélyezzük Bitwarden beállításokban a  "Felülrajzolás" opciót az "Automatikus kitöltési szolgáltatások" résznél.</value>
+    <value>A Bitwarden figyelmet igényel - engedélyezd az Átfedő megjelenítés beállítást a Bitwarden beállításainak "Automatikus kitöltési szolgáltatások" szakaszában.</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Automatikus kitöltési szolgáltatások</value>
@@ -1826,37 +1830,37 @@
     <value>Szövegközi automatikus kitöltés használata</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Használjuk a szövegközi automatikus kitöltést, ha azt a kiválasztott IME (billentyűzet) támogatja. Ha a konfiguráció nem támogatott (vagy ez az opció le van tiltva), akkor az alapértelmezett automatikus kitöltési átfedőréteg kerül használatba.</value>
+    <value>Akkor használhatod a szövegközi automatikus kitöltést, ha a kiválasztott IME (billentyűzet) támogatja. Ha a konfiguráció nem támogatott (vagy ez a beállítás nincs engedélyezve), akkor az alapértelmezett automatikus kitöltési átfedőréteg lesz alkalmazva.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
     <value>Akadálymentes használat</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Használjuk a Bitwarden Kisegítő Szolgáltatást a bejelentkezések automatikus kitöltéséhez az alkalmazásokban és az interneten. Ha engedélyezve van, akkor a bejelentkezési mezők kiválasztásakor megjelenik egy felbukkanó ablak.</value>
+    <value>A Bitwarden akadálymentesítő szolgáltatásával automatikus kitöltheted a bejelentkezési adataidat az alkalmazásokban és a weben. Ha engedélyezett, akkor előugró ablak fog megjelenni, amikor egy bejelentkezési mezőre lépsz.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Használjuk a Bitwarden Kisegítő Szolgáltatást a bejelentkezések automatikus kitöltéséhez az alkalmazásokban és az interneten. (Megköveteli a Felülrajzolás engedélyezését is)</value>
+    <value>A Bitwarden akadálymentesítő szolgáltatásával automatikus kitöltheted a bejelentkezési adataidat az alkalmazásokban és a weben. (Ehhez engedélyezni kell az Átfedő megjelenítés beállítást is.)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Használjuk a Bitwarden Kisegítő Szolgáltatást az Automatikus kitöltés gyorsműveleti csempe használatához és/vagy egy felugró ablak megjelenítéséhez a Felülrajzolás használatával (ha engedélyezve van).</value>
+    <value>A Bitwarden akadálymentesítő szolgáltatásával használhatod az Automatikus kitöltés gyorsműveleti csempt, és/vagy egy előugró ablakot jeleníthetsz meg az Átfedő megjelenítés használatával (ha engedélyezve van).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Szükséges az Automatikus kitöltés gyorsműveleti csempe használatához, vagy az automatikus kitöltési szolgáltatás bővítéséhez a Felülrajzolás használatával (ha engedélyezve van).</value>
+    <value>Szükséges az Automatikus kitöltés gyorsműveleti csempe használatához, vagy az automatikus kitöltési szolgáltatás kiterjesztéséhez az Átfedő megjelenítés használatával (ha engedélyezve van).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
     <value>Átfedő megjelenítés használata</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>Engedélyezve a Bitwarden Akadálymentes Szolgáltatás egy felbukkanó ablakot jelenít meg, amikor a bejelentkezési mezők kiválasztottak.</value>
+    <value>Ha engedélyezett, akkor a Bitwarden akadálymentesítő szolgáltatása előugró ablakot jelenít meg, amikor bejelentkezési mezőre lépsz.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>Engedélyezve a Bitwarden Kisegítő Szolgáltatás egy felbukkanó ablakot jelenít meg a bejelentkezések automatikus kitöltéséhez, amikor a bejelentkezési mezők kiválasztottak.</value>
+    <value>Ha engedélyezett, akkor a Bitwarden akadálymentesítő szolgáltatása előugró ablakot jelenít meg, amikor bejelentkezési mezőre lépsz, hogy segítsen az adatok automatikus kitöltésében.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>Engedélyezve a a Kisegítő felbukkanó ablakot jelenít meg az Automatikus Kitöltési Szolgáltatás kibővítéséhez olyan régebbi alkalmazások számára, amelyek nem támogatják az Android automatikus kitöltés keretrendszerét.</value>
+    <value>Ha engedélyezett, akkor az akadálymentesítő szolgáltatás előugró ablakot jelenít meg, hogy olyan régebbi alkalmazásokban is használhasd az automatikus kiegészítési szolgáltatást, ami nem támogatja az Android automatikus kitöltési keretrendszerét.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Egy vállalati házirend miatt korlátozható az elemek személyes tárolóba történő mentése. Módosítsuk a Tulajdon opciót egy szervezetre és válasszunk az elérhető gyűjtemények közül.</value>
+    <value>A vállalat szabályai korlátozzák a személyes széfbe menthető elemeket. Adj meg egy szervezetet a Tulajdonjog beállításban, és válassz az elérhető gyűjtemények közül.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
     <value>Egy szervezeti házirend befolyásolja a tulajdonjog beállításait.</value>
@@ -2099,13 +2103,13 @@
     <value>Mesterjelszó eltávolítása</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} SSO szolgáltatást használ ügyfél által kezelt titkosítással. A folytatással eltávolító a mesterjelszó a fiókból és egyszeri bejelentkezés szükséges a bejelentkezéshez.</value>
+    <value>A(z) {0} SSO-t használ ügyfél által kezelt titkosítással. Ha folytatod, akkor eltávolítod a mesterjelszót a fiókodból, és SSO-ra lesz szükség a bejelentkezéshez.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>Ha nem szeretnénk eltávolítani a mesterjelszót, kiléphetünk ebből a szervezetből.</value>
+    <value>Ha nem szeretnéd eltávolítani a mesterjelszót, kiléphetsz ebből a szervezetből.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>Szervezet elhagyása</value>
+    <value>Kilépés a szervezetből</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
     <value>Elhagyjuk {0} szervezetet?</value>
@@ -2180,7 +2184,7 @@
     <value>A fiók véglegesen törlésre került.</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Az ellenőrző kód érvénytelen.</value>
+    <value>Az ellenőrzőkód érvénytelen.</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
     <value>Egyszeri jelszó kérése</value>
@@ -2270,7 +2274,7 @@
     <value>Prémium előfizetés szükséges</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
-    <value>Cannot add authenticator key? </value>
+    <value>Nem lehet hozzáadni a hitelesítő kulcsot.</value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
     <value>QR kód beolvasása</value>
@@ -2279,7 +2283,7 @@
     <value>Nem sikerül beolvasni a QR kódot? </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Authenticator Key</value>
+    <value>Hitelesítő kulcs</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
     <value>Kód megadása manuálisan</value>
@@ -2291,11 +2295,8 @@
     <value>TOTP beállítása</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
-    <value>Once the key is successfully entered,
-select Add TOTP to store the key safely</value>
-  </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
+    <value>A kulcs sikeres megadása után válasszuk ki a 
+TOTP hozzáadása a kulcs biztonságos tárolásához lehetőséget.</value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Ha a zárolási lehetőségeket "Soha” értékre állítjuk, akkor a széf bárki számára elérhető lesz, aki hozzáfér az eszközhöz. Ha ezt az opciót használjuk, akkor gondoskodni kell arról, hogy az eszköz megfelelően védett legyen.</value>
@@ -2311,5 +2312,205 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Biztosan engedélyzni szeretnénk a képernyőrögzítést?</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Bejelentkezés megkérve</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Megpróbálunk bejelentkezni?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Bejelentlezési kísérlet {0} - {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Eszköz típus</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP cím</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Időpont</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Közelében</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Bejelentkezés megerősítése</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Bejelentkezés megtagadása</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Éppen most</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} perce</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>A bejelentkezés megerősítésre került.</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>A bejelentkezés megtagadásra került.</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Bejelentkezési kérelmek jóváhagyása</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Ezen eszköz használata a más eszközökről történő bejelentkezési kérések jóváhagyására.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Értesítések engedélyezése</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Leküldéses értesítések fogadása az új bejelentkezési kérésekhez</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Nem, köszönöm</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Bejelentkezési kísérlet megerősítése: {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Összes értesítés</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Jelszótípus</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Mit szeretnénk generálni?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Felhasználónév típusa</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>További címzési email cím</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Összes email cím begyűjtése</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Továbbított email álnevek</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Véletlenszerű szó</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Email cím (kötelező)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Domain név (kötelező)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API kulcs (kötelező)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Szolgáltatás</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API hozzáférési vezérjel</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Biztosan felülírásra kerüljön az aktuális felhasználónév?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Felhasználónév generálása</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Email típus</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Webhely (kötelező)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Ismeretlen {0} hiba történt.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Használjuk az email cím szolgáltató alcímzési képességeit.</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Használjuk a domain konfigurált összes befogási bejövő postaládát.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Email álnév generálása külső továbbító szolgáltatással.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Véletlen</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Kapcsolódás a Watch-hoz</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Kisegítő lehetőségek szolgáltatás publikálása</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>A Bitwarden az akadálymentesítési szolgáltatást használja a bejelentkezési mezők megkeresésére az alkalmazásokban és webhelyeken, majd létrehozza a megfelelő mezőazonosítókat a felhasználónév és jelszó megadásához, ha talál egyezést az alkalmazáshoz vagy webhelyhez. A szolgáltatás által rendelkezésünkre bocsátott információk nem kerülnek tárolásra és nincs kísérlet a képernyőn megjelenő elemek vezérlésére a hitelesítő adatok szöveges bevitelén túl.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Elfogadás</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Elutasítás</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>A bejelentkezési kérés már lejárt.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Bejelentkezési kísérlet történt:
+{0}
+Szeretnénk átváltani erre a fiókra?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Új felhasználó vagyunk?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Mesterjelszó emlékeztető kérése</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Bejelentkezve mint {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Ez tévedés?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Bejelentkezés mesterjelszóval</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Bejelentkezés más eszközzel</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>A bejelentkezés elindításra került.</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>A rendszer értesítést küldött az eszközre.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Ellenőrizzük, hogy a széf feloldásra került és az Ujjlenyomat kifejezés egyezik a másik eszközön levővel.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Értesítés újraküldése</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Másik opció szükséges?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Összes bejelentkezési opció megtekintése</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>A kérés már nem érvényes.</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Kamera engedélyezése a lapolvasó használatához</value>
   </data>
 </root>

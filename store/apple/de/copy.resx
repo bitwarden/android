@@ -124,9 +124,9 @@
   <data name="Description" xml:space="preserve">
     <value>Bitwarden, Inc. ist die Muttergesellschaft von 8bit Solutions LLC.
 
-AUSGEZEICHNET ALS BESTER PASSWORTMANAGER VON THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, UND WEITEREN.
+AUSGEZEICHNET ALS BESTER PASSWORTMANAGER VON THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET UND WEITEREN.
 
-Verwalte, speichere, sichere und teile von überall aus eine unbegrenzte Anzahl von Passwörtern auf beliebig vielen Geräten. Bitwarden bietet Open-Source-Passwortverwaltung für alle, egal ob zu Hause, bei der Arbeit oder unterwegs.
+Verwalte, speichere, sichere und teile von überall und auf beliebig vielen Geräten eine unbegrenzte Anzahl von Passwörtern. Bitwarden bietet Open-Source-Passwortverwaltung für alle, egal ob zu Hause, bei der Arbeit oder unterwegs.
 
 Generiere sichere, einzigartige und zufällige Passwörter basierend auf den Sicherheitsanforderungen jeder Website, die du besuchst.
 
@@ -140,13 +140,13 @@ Weltklasse Verschlüsselung
 Passwörter werden mit erweiterter Ende-zu-Ende-Verschlüsselung (AES-256 bit, salted hashtag, und PBKDF2 SHA-256) geschützt, so dass Deine Daten sicher und vertraulich bleiben.
 
 Integrierter Passwort-Generator
-Generiere sichere, eindeutige und zufällige Passwörter auf der Grundlage der jeweiligen Sicherheitsanforderungen für jede von Dir besuchte Website.
+Generiere sichere, einzigartige und zufällige Passwörter auf der Grundlage der jeweiligen Sicherheitsanforderungen für jede von Dir besuchte Website.
 
 Globale Übersetzungen
-Bitwarden-Übersetzungen gibt es in 40 Sprachen und es werden immer mehr, dank unserer globalen Gemeinschaft.
+Bitwarden gibt es in 40 Sprachen und es werden immer mehr, dank unserer globalen Community.
 
 Plattformübergreifende Anwendungen
-Sichere und teile sensible Daten innerhalb deines Bitwarden Vaults in jedem Browser, mobilem Gerät, Desktop Betriebssystem und vielen weiteren Anwendungen.
+Sichere und teile sensible Daten innerhalb deines Bitwarden Tresors in jedem Browser, mobilem Gerät, Desktop Betriebssystem und vielen weiteren Anwendungen.
 </value>
   <comment>Max 4000 characters</comment>
   </data>

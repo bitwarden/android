@@ -2,39 +2,38 @@
 name: Version Auto Bump
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - v**
 
 jobs:
-
   setup:
     name: "Setup"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     outputs:
       version_number: ${{ steps.version.outputs.new-version }}
     steps:
       - name: Checkout Branch
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
 
-      - name: Get version to bump
+      - name: Calculate bumped version
         id: version
         env:
-          RELEASE_TAG: ${{ github.event.release.tag }}
+          RELEASE_TAG: ${{ github.ref }}
         run: |
-          CURR_MAJOR=$(echo $RELEASE_TAG | sed -r 's/v([0-9]{4}\.[0-9]\.)([0-9])/\1/')
-          CURR_VER=$(echo $RELEASE_TAG | sed -r 's/v([0-9]{4}\.[0-9]\.)([0-9])/\2/')
-          echo $CURR_VER
+          CURR_MAJOR=$(echo $RELEASE_TAG | sed -r 's/v([0-9]{4}\.[0-9]{1,2})\.([0-9]{1,2})/\1/')
+          CURR_PATCH=$(echo $RELEASE_TAG | sed -r 's/v([0-9]{4}\.[0-9]{1,2})\.([0-9]{1,2})/\2/')
+          echo "Current Major: $CURR_MAJOR"
+          echo "Current Patch: $CURR_PATCH"
 
-          ((CURR_VER++))
-          NEW_VER=$CURR_MAJOR$CURR_VER
-
-          echo $NEW_VER
-
-          echo "::set-output name=new-version::$NEW_VER"
+          NEW_PATCH=$((CURR_PATCH+1))
+          NEW_VER=$CURR_MAJOR.$NEW_PATCH
+          echo "New Version: $NEW_VER"
+          echo "new-version=$NEW_VER" >> $GITHUB_OUTPUT
 
   trigger_version_bump:
     name: "Trigger version bump workflow"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs:
       - setup
     steps:
@@ -45,13 +44,10 @@ jobs:
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        env:
-          KEYVAULT: bitwarden-prod-kv
-          SECRET: "github-pat-bitwarden-devops-bot-repo-scope"
-        run: |
-          VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $SECRET --query value --output tsv)
-          echo "::add-mask::$VALUE"
-          echo "::set-output name=$SECRET::$VALUE"
+        uses: bitwarden/gh-actions/get-keyvault-secrets@c3b3285993151c5af47cefcb3b9134c28ab479af
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "github-pat-bitwarden-devops-bot-repo-scope"
 
       - name: Call GitHub API to trigger workflow bump
         env:

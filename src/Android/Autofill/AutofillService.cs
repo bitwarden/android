@@ -15,7 +15,7 @@ using Bit.Core.Utilities;
 
 namespace Bit.Droid.Autofill
 {
-    [Service(Permission = Manifest.Permission.BindAutofillService, Label = "Bitwarden")]
+    [Service(Permission = Manifest.Permission.BindAutofillService, Label = "Bitwarden", Exported = true)]
     [IntentFilter(new string[] { "android.service.autofill.AutofillService" })]
     [MetaData("android.autofill", Resource = "@xml/autofillservice")]
     [Register("com.x8bit.bitwarden.Autofill.AutofillService")]
@@ -134,7 +134,7 @@ namespace Bit.Droid.Autofill
                 {
                     case CipherType.Login:
                         intent.PutExtra("autofillFrameworkName", parser.Uri
-                            .Replace(Constants.AndroidAppProtocol, string.Empty)
+                            .Replace(Core.Constants.AndroidAppProtocol, string.Empty)
                             .Replace("https://", string.Empty)
                             .Replace("http://", string.Empty));
                         intent.PutExtra("autofillFrameworkUri", parser.Uri);

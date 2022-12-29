@@ -203,7 +203,7 @@
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>Presenta un informe d'error</value>
+    <value>Envieu un informe d'error</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
     <value>Obri una incidéncia al nostre dipòsit de GitHub.</value>
@@ -229,7 +229,7 @@
     <value>Carpetes</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Carpeta actualitzada.</value>
+    <value>Carpeta guardada</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Vés al lloc web</value>
@@ -296,7 +296,7 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>La meua caixa forta</value>
+    <value>Caixa forta</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
@@ -376,7 +376,7 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>S'ha copiat '{0}'.</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Verifica empremta digital</value>
@@ -587,7 +587,7 @@
     <value>La contrasenya ha de contenir almenys 8 caràcters.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Mínim de caràcters númerics</value>
+    <value>Mínim de caràcters numèrics</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
@@ -604,7 +604,7 @@
     <value>Mai</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>S'ha creat un element nou.</value>
+    <value>S'ha afegit un element</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>No hi ha cap preferit a la vostra caixa forta.</value>
@@ -681,7 +681,7 @@
     <value>Informació de l'element</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Element actualitzat.</value>
+    <value>Element guardat</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>S'està enviant...</value>
@@ -769,16 +769,16 @@
     <value>2. Activeu el commutador i premeu d'acord per acceptar.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>Deshabilitat</value>
+    <value>No</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>Habilitat</value>
+    <value>Sí</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Desactivat</value>
+    <value>No</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Activat</value>
+    <value>Sí</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Estat</value>
@@ -856,7 +856,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Correu de verificació enviat.</value>
+    <value>Correu de verificació enviat</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -1256,7 +1256,7 @@ L'escaneig es farà automàticament.</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Si, i guarda</value>
+    <value>Sí, i guarda</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
     <value>Ompli automàticament i guarda</value>
@@ -1575,6 +1575,10 @@ L'escaneig es farà automàticament.</value>
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solaritzat fosc</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Emplena automàticament els URI bloquejats</value>
   </data>
@@ -1616,13 +1620,13 @@ L'escaneig es farà automàticament.</value>
     <value>La vostra sessió ha caducat.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Utilitzeu dades biomètriques per verificar.</value>
+    <value>Desbloqueja amb biometria</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>Dades biomètriques</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Utilitzeu dades biomètriques per desbloquejar</value>
+    <value>Desbloqueja amb biometria</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
     <value>Bitwarden necessita atenció: vegeu "Servei d'accessibilitat d'emplenament automàtic" de la configuració de Bitwarden</value>
@@ -1722,7 +1726,7 @@ L'escaneig es farà automàticament.</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>L'element s'ha restaurat.</value>
+    <value>L'element s'ha restaurat</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
@@ -1824,7 +1828,7 @@ L'escaneig es farà automàticament.</value>
     <value>Serveis d'emplenament automàtic</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Utilitza l'emplenament automàtic en línia</value>
+    <value>Utilitza l'emplenament automàtic integrat</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
     <value>Utilitzeu l'emplenament automàtic en línia si l'IME (teclat) seleccionat l'admet. Si la vostra configuració no és compatible (o aquesta opció està desactivada), s'utilitzarà la superposició d'emplenament automàtic per defecte.</value>
@@ -1836,7 +1840,7 @@ L'escaneig es farà automàticament.</value>
     <value>Utilitzeu el servei d’accessibilitat Bitwarden per omplir els vostres inicis de sessió automàticament a través d’aplicacions i del web. Quan estiga activat, mostrarem una finestra emergent quan se seleccionen els camps d'inici de sessió.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Utilitzeu el servei d’accessibilitat Bitwarden per omplir els vostres inicis de sessió automàticament a través d’aplicacions i del web. (Cal que també estigui habilitat el Dibuixa-sobre)</value>
+    <value>Utilitzeu el servei d’accessibilitat Bitwarden per omplir els vostres inicis de sessió automàticament a través d’aplicacions i del web. (Cal que també estiga habilitat el Dibuixa-sobre)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
     <value>Utilitzeu el servei d’accessibilitat Bitwarden per utilitzar el mosaic d’acció ràpida d’emplenament automàtic o mostrar una finestra emergent mitjançant Dibuixa-sobre (si està activat).</value>
@@ -1972,7 +1976,7 @@ L'escaneig es farà automàticament.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Deshabiliteu aquest Send perquè ningú no hi puga accedir.</value>
+    <value>Deshabiliteu aquest Send perquè ningú no hi puga accedir</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -2014,11 +2018,11 @@ L'escaneig es farà automàticament.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>S'ha actualitzat el Send</value>
+    <value>S'ha guardat el Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>S'ha creat un enviament nou.</value>
+    <value>S'ha creat un Send nou</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2124,7 +2128,7 @@ L'escaneig es farà automàticament.</value>
     <value>Autentica WebAuthn</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
-    <value>Tornar a l'aplicació</value>
+    <value>Torna a l'aplicació</value>
   </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
     <value>Assegureu-vos que el vostre navegador predeterminat admeta WebAuthn i torneu-ho a provar.</value>
@@ -2133,7 +2137,7 @@ L'escaneig es farà automàticament.</value>
     <value>Aquesta organització té una política empresarial que us inscriurà automàticament al restabliment de la contrasenya. La inscripció permetrà als administradors de l’organització canviar la vostra contrasenya mestra.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Les polítiques de l'organització afecten el temps d'espera de la caixa forta. El temps d'espera màxim permès d'aquesta és de $HOURS$ hores i $MINUTES$ minuts</value>
+    <value>Les polítiques de la vostra organització afecten el temps d'espera de la vostra caixa forta. El temps d'espera màxim permès de la caixa forta és de {0} hores i {1} minuts</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>El temps d'espera de la caixa forta supera les restriccions establertes per la vostra organització.</value>
@@ -2151,7 +2155,7 @@ L'escaneig es farà automàticament.</value>
     <value>Bloquejat</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>Sessió tancada</value>
+    <value>S'ha tancat sessió</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>S'ha canviat al següent compte disponible</value>
@@ -2295,9 +2299,6 @@ L'escaneig es farà automàticament.</value>
     <value>Una vegada introduïda la clau correctament,
 seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Si configureu les opcions de bloqueig a "Mai", la vostra caixa forta està disponible per a qualsevol persona amb accés al vostre dispositiu. Si utilitzeu aquesta opció, hauríeu d'assegurar-vos de mantenir el vostre dispositiu correctament protegit.</value>
   </data>
@@ -2312,5 +2313,205 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Segur que voleu activar la captura de pantalla?</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>S'ha sol·licitat inici de sessió</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Esteu intentant iniciar sessió?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Intent d'inici de sessió de {0} en {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Tipus de dispositiu</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>Adreça IP</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Hora</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>A prop</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Confirmeu l'inici de sessió</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Denegueu l'inici de sessió</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Ara mateix</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>Fa {0} minuts</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>S'ha confirmat l'inici de sessió</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>S'ha denegat l'inici de sessió</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Aprova les sol·licituds d'inici de sessió</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Utilitzeu aquest dispositiu per aprovar les sol·licituds d'inici de sessió fetes des d'altres dispositius.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Permet notificacions</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Rebeu notificacions push per a noves sol·licituds d'inici de sessió</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>No, gràcies</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Confirmeu l'intent d'inici de sessió per a {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Totes les notificacions</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Tipus de contrasenya</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Què voleu generar?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Tipus de nom d'usuari</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Adreça amb sufix</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Captura tot el correu electrònic</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Àlies de correu electrònic reenviat</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Paraula aleatòria</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Correu electrònic (obligatori)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Nom de domini (obligatori)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Clau API (obligatòria)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Servei</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Token d'accés a l'API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Segur que voleu sobreescriure el nom d'usuari actual?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Genera un nom d'usuari</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Tipus de correu electrònic</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Pàgina web (obligatòria)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>S'ha produït un error {0} desconegut.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Utilitzeu les capacitats de subadreçament del vostre proveïdor de correu electrònic</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Utilitzeu la safata d'entrada global configurada del vostre domini.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Genera un àlies de correu electrònic amb un servei de reenviament extern.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Aleatori</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Divulgació del servei d'accessibilitat</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden utilitza el Servei d'Accessibilitat per cercar camps d'inici de sessió en aplicacions i llocs web i, a continuació, establir els ID de camp adequats per introduir un nom d'usuari i una contrasenya quan es trobe una coincidència per a l'aplicació o el lloc. No emmagatzemem cap de la informació que ens presenta el servei, ni intentem controlar cap element de la pantalla més enllà de l'entrada de text de les credencials.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Accepta</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Rebutja</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>La sol·licitud d'inici de sessió ja ha caducat.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Intent d'inici de sessió des de:
+{0}
+Voleu canviar a aquest compte?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Nou per ací?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Obteniu la pista de la contrasenya mestra</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Connectat com {0}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>No sou vosaltres?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Inicia sessió amb la contrasenya mestra</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Inicia sessió amb un altre dispositiu</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>S'ha iniciat la sessió</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>S'ha enviat una notificació al vostre dispositiu.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Assegureu-vos que la vostra caixa forta estiga desbloquejada i que la frase d'empremta digital coincidisca amb l'altre dispositiu.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Torna a enviar la notificació</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Necessiteu una altra opció?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Veure totes les opcions d'inici de sessió</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Aquesta sol·licitud ja no és vàlida</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Habilita el permís de la càmera per utilitzar l'escàner</value>
   </data>
 </root>

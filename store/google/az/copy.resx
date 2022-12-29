@@ -132,7 +132,7 @@ THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET VƏ BİR ÇOXUNA GÖRƏ ƏN YAXŞI
 
 Hər yerdən limitsiz cihazda limitsiz parolu idarə edin, saxlayın, qoruyun və paylaşın. Bitwarden evdə, işdə və ya yolda hər kəsə açıq mənbəli parol idarəetmə həllərini təqdim edir.
 
-Çox istifadə etdiyiniz hər veb sayt üçün təhlükəsizlik tələblərinə görə güclü, unikal və təsadüfi parollar yaradın.
+Çox istifadə etdiyiniz hər veb sayt üçün güvənlik tələblərinə görə güclü, unikal və təsadüfi parollar yaradın.
 
 Bitwarden Send şifrələnmiş məlumatların (fayl və sadə mətnləri) birbaşa və sürətli göndərilməsini təmin edir.
 
@@ -141,32 +141,33 @@ Bitwarden, parolları iş yoldaşlarınızla təhlükəsiz paylaşa bilməyiniz 
 Nəyə görə Bitwarden-i seçməliyik:
 
 Yüksək səviyyə şifrələmə
-Şifrələriniz qabaqcıl ucdan-uca şifrələmə (AES-256 bit, salted hashtag və PBKDF2 SHA-256) ilə qorunur, beləcə verilənlərinizin təhlükəsiz və gizli qalmasını təmin edir.
+Şifrələriniz qabaqcıl bir ucdan digərinə kimi şifrələmə (AES-256 bit, salted hashtag və PBKDF2 SHA-256) ilə qorunur, beləcə verilənlərinizin təhlükəsiz və gizli qalmasını təmin edir.
 
 Daxili parol yaradıcı
-Çox istifadə etdiyiniz hər veb sayt üçün təhlükəsizlik tələblərinə görə güclü, unikal və təsadüfi parollar yaradın.
+Çox istifadə etdiyiniz hər veb sayt üçün güvənlik tələblərinə görə güclü, unikal və təsadüfi parollar yaradın.
 
 Qlobal tərcümələr
 Bitwarden tərcümələri 40 dildə mövcuddur və qlobal cəmiyyətimiz sayəsində böyüməyə davam edir.
 
 Çarpaz platform tətbiqləri
-Bitwarden anbarındakı həssas verilənləri, istənilən səyyahdan, mobil cihazdan və ya masaüstü əməliyyat sistemindən və daha çoxundan qoruyub paylaşın.</value>
+Bitwarden anbarındakı həssas verilənləri, istənilən brauzerdən, mobil cihazdan və ya masaüstü əməliyyat sistemindən və daha çoxundan qoruyub paylaşın.
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>Bütün cihazlarınız üçün təhlükəsiz və ödənişsiz bir parol meneceri</value>
+    <value>Bütün cihazlarınız üçün güvənli və ödənişsiz bir parol meneceri</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Bütün giriş məlumatlarınızı və parollarınızı təhlükəsiz bir anbardan idarə edin</value>
+    <value>Bütün giriş məlumatlarınızı və parollarınızı güvənli bir anbardan idarə edin</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Güclü, təsadüfi və etibarlı parolların avtomatik yaradılması</value>
+    <value>Güclü, təsadüfi və güvənli parolların avtomatik yaradılması</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
     <value>Anbarınızı barmaq izi, PIN kod və ana parol ilə qoruyun</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Səyyahınızda və digər tətbiqlərdəki giriş sahələrinin cəld avto-doldurulması</value>
+    <value>Brauzerinizdə və digər tətbiqlərdəki giriş sahələrinin cəld avto-doldurulması</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Anbarınıza bir neçə cihazdan eyniləşdirərək müraciət edin

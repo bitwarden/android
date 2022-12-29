@@ -33,6 +33,7 @@ namespace Bit.Droid.Accessibility
             //   - Resources/xml/autofillservice.xml
             new Browser("alook.browser", "search_fragment_input_view"),
             new Browser("alook.browser.google", "search_fragment_input_view"),
+            new Browser("app.vanadium.browser", "url_bar"),
             new Browser("com.amazon.cloud9", "url"),
             new Browser("com.android.browser", "url"),
             new Browser("com.android.chrome", "url_bar"),
@@ -66,6 +67,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.mmbox.xbrowser", "search_box"),
             new Browser("com.mycompany.app.soulbrowser", "edit_text"),
             new Browser("com.naver.whale", "url_bar"),
+            new Browser("com.neeva.app", "full_url_text_view"),
             new Browser("com.opera.browser", "url_field"),
             new Browser("com.opera.browser.beta", "url_field"),
             new Browser("com.opera.gx", "addressbarEdit"),
@@ -90,6 +92,7 @@ namespace Bit.Droid.Accessibility
             new Browser("io.github.forkmaintainers.iceraven", "mozac_browser_toolbar_url_view"),
             new Browser("mark.via", "am,an"),
             new Browser("mark.via.gp", "as"),
+            new Browser("net.dezor.browser", "url_bar"),
             new Browser("net.slions.fulguris.full.download", "search"),
             new Browser("net.slions.fulguris.full.download.debug", "search"),
             new Browser("net.slions.fulguris.full.playstore", "search"),
@@ -367,7 +370,7 @@ namespace Bit.Droid.Accessibility
 
         public static string GetUri(AccessibilityNodeInfo root)
         {
-            var uri = string.Concat(Constants.AndroidAppProtocol, root.PackageName);
+            var uri = string.Concat(Core.Constants.AndroidAppProtocol, root.PackageName);
             if (SupportedBrowsers.ContainsKey(root.PackageName))
             {
                 var browser = SupportedBrowsers[root.PackageName];

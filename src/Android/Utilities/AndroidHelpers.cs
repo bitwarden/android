@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Android.App;
 using Android.Content;
+using Android.OS;
 using Android.Provider;
 using Bit.App.Utilities;
 
@@ -46,6 +48,23 @@ namespace Bit.Droid.Utilities
             {
                 await AppHelpers.SetPreconfiguredSettingsAsync(dict);
             }
+        }
+
+        public static PendingIntentFlags AddPendingIntentMutabilityFlag(PendingIntentFlags pendingIntentFlags, bool isMutable)
+        {
+            //Mutable flag was added on API level 31
+            if (isMutable && Build.VERSION.SdkInt >= BuildVersionCodes.S)
+            {
+                return pendingIntentFlags | PendingIntentFlags.Mutable;
+            }
+
+            //Immutable flag was added on API level 23
+            if (!isMutable && Build.VERSION.SdkInt >= BuildVersionCodes.M)
+            {
+                return pendingIntentFlags | PendingIntentFlags.Immutable;
+            }
+
+            return pendingIntentFlags;
         }
     }
 }

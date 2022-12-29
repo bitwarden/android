@@ -126,13 +126,36 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>A Bitwarden a legegyszerűbb és legbiztonságosabb módja a bejelentkezések és jelszavak tárolására, miközben kényelmet nyújtva tartja szinkronizálva az adatokat az összes eszköz között.
+    <value>A Bitwarden, Inc. a 8bit Solutions LLC anyavállalata.
 
-Manapság a jelszó lopás a legnagyobb gond. A webhelyek és alkalmazások minden pillanatban támadások alatt állnak. Egy biztonsági rés és a jelszót máris ellopták. Ha ugyanazokat a belépési adatokat használjuk a böngészőben, vagy alkalmazásokban, a tolvajok dolgát megkönnyíted és könnyedén hozzáférhetnek az email fiókodhoz, az internetbankárhoz, a legfontosabb adatokhoz.
+A LEGJOBB JELSZÓKEZELŐ NEVE, A SZEMÉLY, U.S. HÍREK ÉS VILÁGJELENTÉS, CNET ÉS TÖBBEK.
 
-A biztonsági szakemberek azt javasolják, hogy mindig használjunk eltérő, véletlenszerűen generált jelszót minden fiókhoz. De hogyan kezelhetők ezek a jelszavak? A Bitwarden segítségével könnyedén lehet létrehozni, tárolni jelszavakat és könnyű hozzáférést biztosít a tárolt jelszavakhoz.
+Korlátlan számú jelszavak kezelése, tárolása, biztonsága és megosztása korlátlan számú eszközön, bárhonnan. A Bitwarden nyílt forráskódú jelszókezelési megoldásokat kínál mindenki számára, legyen szó otthonról, munkahelyről, vagy útközben.
 
-A Bitwaren minden bejelentkezési adatot titkosított széfben tárolja és titkosítva szinkronizálja eszközök között. Mivel teljesen titkosított, csak a tulajdonos férhet hozzá az adatokhoz. Még a Bitwarden csapata sem tudja olvasni az adatolat. Az adatok AES 256 bites titkosítással és SHA-256 PBKDF2-vel zárjuk le.</value>
+Erős, egyedi és véletlenszerű jelszavak generálása a biztonsági követelmények alapján minden látogatott webhelyhez.
+
+A Bitwarden Send gyorsan továbbítja a titkosított információkat -- fájlokat és egyszerű szöveget -- közvetlenül bárkinek.
+
+A Bitwarden Teams és Enterprise csomagokat kínál a vállalatok számára, így biztonságosan megoszthatja jelszavait kollégáival.
+
+Miért válassza a Bitwarden-t:
+
+Világszínvonalú titkosítás
+
+A jelszavakat fejlett végpontok közötti titkosítás védi (AES-256 bit, sózott hashtag és PBKDF2 SHA-256), így az adatok biztonságban és privátak maradnak.
+
+Beépített jelszógenerátor
+
+Erős, egyedi és véletlenszerű jelszavakat generál a biztonsági követelmények alapján minden látogatott webhelyhez.
+
+Globális fordítások
+
+A Bitwarden fordítások 40 nyelven léteznek, és a globális közösségünknek köszönhetően növekszik. 
+
+Platformokon átívelő alkalmazások
+
+Biztonságos adatok védelme és megosztása a Bitwarden széfen belül bármely böngészőből, mobileszközről vagy asztali operációs rendszerről, stb.
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
