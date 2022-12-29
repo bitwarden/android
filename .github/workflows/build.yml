@@ -681,7 +681,7 @@ jobs:
           echo "##### Uploading Watch dSYMs to Firebase"
           echo "########################################"
 
-          find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/dSYMs/Watch_dSYMs"
+          find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/dSYMs/Watch_dSYMs" \;
         shell: bash
 
       - name: Deploy to App Store
