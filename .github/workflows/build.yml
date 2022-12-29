@@ -634,14 +634,16 @@ jobs:
           ARCHIVE_DSYMS_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive/dSYMs"
           EXPORT_PATH="./bitwarden-export"
 
-          WATCH_ARCHIVE_DSYMS_PATH="./src/watchOS/bitwarden.xcarchive/dSYMs"
+          WATCH_ARCHIVE_DSYMS_PATH="./src/watchOS/bitwarden.xcarchive/dSYMs/"
           WATCH_DSYMS_EXPORT_PATH="$EXPORT_PATH/Watch_dSYMs"
 
           ls $WATCH_ARCHIVE_DSYMS_PATH
 
-          cp -r $ARCHIVE_DSYMS_PATH $EXPORT_PATH
+          cp -r -v $ARCHIVE_DSYMS_PATH $EXPORT_PATH
           mkdir $WATCH_DSYMS_EXPORT_PATH
-          cp -r $WATCH_ARCHIVE_DSYMS_PATH "$EXPORT_PATH/Watch_dSYMs"
+          cp -r -v $WATCH_ARCHIVE_DSYMS_PATH $WATCH_DSYMS_EXPORT_PATH
+
+          ls -r $WATCH_DSYMS_EXPORT_PATH
         shell: bash
 
       - name: Upload App Store .ipa & dSYMs artifacts
@@ -681,7 +683,7 @@ jobs:
           echo "##### Uploading Watch dSYMs to Firebase"
           echo "########################################"
 
-          find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/dSYMs/Watch_dSYMs" \;
+          find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/Watch_dSYMs" \;
         shell: bash
 
       - name: Deploy to App Store
