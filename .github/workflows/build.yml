@@ -59,7 +59,6 @@ jobs:
     name: Android
     runs-on: windows-2022
     needs: setup
-    if: github.ref == 'refs/heads/deletethislinebeforemergingthispr'
     strategy:
       fail-fast: false
       matrix:
@@ -259,7 +258,6 @@ jobs:
   f-droid:
     name: F-Droid Build
     runs-on: windows-2022
-    if: github.ref == 'refs/heads/deletethislinebeforemergingthispr'
     steps:
       - name: Setup NuGet
         uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
@@ -594,9 +592,6 @@ jobs:
           echo "########################################"
           echo "##### Done"
           echo "########################################"
-          cd src/watchOS
-          ls -R
-          cd ../..
         shell: bash
 
       - name: Restore packages
@@ -637,13 +632,9 @@ jobs:
           WATCH_ARCHIVE_DSYMS_PATH="./src/watchOS/bitwarden.xcarchive/dSYMs/"
           WATCH_DSYMS_EXPORT_PATH="$EXPORT_PATH/Watch_dSYMs"
 
-          ls $WATCH_ARCHIVE_DSYMS_PATH
-
           cp -r -v $ARCHIVE_DSYMS_PATH $EXPORT_PATH
           mkdir $WATCH_DSYMS_EXPORT_PATH
           cp -r -v $WATCH_ARCHIVE_DSYMS_PATH $WATCH_DSYMS_EXPORT_PATH
-
-          ls -r $WATCH_DSYMS_EXPORT_PATH
         shell: bash
 
       - name: Upload App Store .ipa & dSYMs artifacts
@@ -677,6 +668,12 @@ jobs:
         shell: bash
 
       - name: Upload Watch dSYMs to Firebase Crashlytics
+        if: |
+            (github.ref == 'refs/heads/master'
+              && needs.setup.outputs.rc_branch_exists == 0
+              && needs.setup.outputs.hotfix_branch_exists == 0)
+            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+            || github.ref == 'refs/heads/hotfix-rc'
         run: |
 
           echo "########################################"
