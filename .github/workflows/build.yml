@@ -675,27 +675,13 @@ jobs:
         shell: bash
 
       - name: Upload Watch dSYMs to Firebase Crashlytics
-        env:
-          SPM_FOLDER: "$HOME/Library/Developer/Xcode/DerivedData/**/SourcePackages/checkouts"
         run: |
-
-          echo "########################################"
-          echo "##### Trying to find upload-symbols location"
-          echo "########################################"
-
-          find "$HOME/Library/Developer" -name "upload-symbols"
-
-          echo "########################################"
-          echo "##### Checking "
-          echo "########################################"
-
-          ls -R $HOME/Library/Developer/Xcode/DerivedData/**/SourcePackages/checkouts
 
           echo "########################################"
           echo "##### Uploading Watch dSYMs to Firebase"
           echo "########################################"
-          
-          $SPM_FOLDER/firebase-ios-sdk/Crashlytics/upload-symbols -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/dSYMs/Watch_dSYMs"
+
+          find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/dSYMs/Watch_dSYMs"
         shell: bash
 
       - name: Deploy to App Store
