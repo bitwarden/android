@@ -2452,7 +2452,7 @@ välj Lägg till TOTP för att lagra nyckeln på ett säkert sätt</value>
     <value>Slumpmässig</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connect to Watch</value>
+    <value>Anslut till Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Delgivning av tillgänglighetstjänst</value>
@@ -2514,6 +2514,6 @@ Vill du byta till detta konto?</value>
     <value>Denna förfrågan är inte längre giltig</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>Bevilja kamerabehörighet för att använda skannern</value>
   </data>
 </root>
