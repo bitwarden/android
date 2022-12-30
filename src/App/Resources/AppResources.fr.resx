@@ -425,10 +425,10 @@
     <value>Service de remplissage automatique</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Évitez les caractères ambigus</value>
+    <value>Éviter les caractères ambigus</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Extension de l'application bitwarden</value>
+    <value>Extension de l'application Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
     <value>Le meilleur moyen d'ajouter de nouveaux sites à votre coffre est d'utiliser l'extension de l'application Bitwarden. Parcourez le menu "Paramètres" pour en apprendre davantage.</value>
@@ -468,7 +468,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Modifier l'Élément</value>
+    <value>Modifier l'élément</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Activer la synchronisation automatique</value>
@@ -692,10 +692,10 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Synchronisation terminée.</value>
+    <value>Synchronisation terminée</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Échec de la synchronisation.</value>
+    <value>Échec de la synchronisation</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>Synchroniser le coffre maintenant</value>

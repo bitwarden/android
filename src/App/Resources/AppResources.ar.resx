@@ -118,17 +118,17 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>حول</value>
+    <value>عن التطبيق</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>إضافة</value>
+    <value>أضِف</value>
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>إضافة مجلد</value>
+    <value>مجلد مضاف</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>إضافة عنصر</value>
+    <value>تمت إضافة العنصر</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -2451,7 +2451,7 @@
     <value>عشوائي</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connect to Watch</value>
+    <value>متّصل بالسّاعة</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>كشف خدمة إمكانية الوصول</value>
