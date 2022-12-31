@@ -76,6 +76,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.opera.touch", "addressbarEdit"),
             new Browser("com.qflair.browserq", "url"),
             new Browser("com.qwant.liberty", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy (before v4)
+            new Browser("com.rainsee.create", "search_box"),
             new Browser("com.sec.android.app.sbrowser", "location_bar_edit_text"),
             new Browser("com.sec.android.app.sbrowser.beta", "location_bar_edit_text"),
             new Browser("com.stoutner.privacybrowser.free", "url_edittext"),
@@ -85,6 +86,9 @@ namespace Bit.Droid.Accessibility
             new Browser("com.vivaldi.browser.sopranos", "url_bar"),
             new Browser("com.yandex.browser", "bro_omnibar_address_title_text,bro_omnibox_collapsed_title",
                 (s) => s.Split(new char[]{' ', ' '}).FirstOrDefault()), // 0 = Regular Space, 1 = No-break space (00A0)
+            new Browser("com.yjllq.internet", "search_box"),
+            new Browser("com.yjllq.kito", "search_box"),
+            new Browser("com.yujian.ResideMenuDemo", "search_box"),
             new Browser("com.z28j.feel", "g2"),
             new Browser("idm.internet.download.manager", "search"),
             new Browser("idm.internet.download.manager.adm.lite", "search"),
