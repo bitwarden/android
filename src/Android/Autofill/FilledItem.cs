@@ -72,11 +72,11 @@ namespace Bit.Droid.Autofill
             var setValues = false;
             if (Type == CipherType.Login)
             {
-                if (fieldCollection.PasswordFields.Any() && !string.IsNullOrWhiteSpace(_password))
+if (fieldCollection.UsernameFields.Any() && !string.IsNullOrWhiteSpace(Subtitle))
                 {
-                    foreach (var f in fieldCollection.PasswordFields)
+                    foreach (var f in fieldCollection.UsernameFields)
                     {
-                        var val = ApplyValue(f, _password);
+                        var val = ApplyValue(f, Subtitle);
                         if (val != null)
                         {
                             setValues = true;
@@ -84,11 +84,11 @@ namespace Bit.Droid.Autofill
                         }
                     }
                 }
-                if (fieldCollection.UsernameFields.Any() && !string.IsNullOrWhiteSpace(Subtitle))
+                if (fieldCollection.PasswordFields.Any() && !string.IsNullOrWhiteSpace(_password))
                 {
-                    foreach (var f in fieldCollection.UsernameFields)
+                    foreach (var f in fieldCollection.PasswordFields)
                     {
-                        var val = ApplyValue(f, Subtitle);
+                        var val = ApplyValue(f, _password);
                         if (val != null)
                         {
                             setValues = true;
