@@ -259,12 +259,12 @@ namespace Bit.App.Pages
                 if (exposedPassword && weakPassword)
                 {
                     title = AppResources.WeakAndExposedMasterPassword;
-                    message = AppResources.WeakPasswordIdentifiedAndFoundInADataBreachUseAStrongAndUniquePasswordToProtectYourAccount;
+                    message = AppResources.WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription;
                 }
                 else if (exposedPassword)
                 {
                     title = AppResources.ExposedMasterPassword;
-                    message = AppResources.PasswordFoundInADataBreachUseAUniquePasswordToProtectYourAccount;
+                    message = AppResources.PasswordFoundInADataBreachAlertDescription;
                 }
                 else if (weakPassword)
                 {
@@ -274,11 +274,7 @@ namespace Bit.App.Pages
 
                 if (exposedPassword || weakPassword)
                 {
-                    var accepted = await _platformUtilsService.ShowDialogAsync(message, title, AppResources.Yes, AppResources.No);
-                    if (!accepted)
-                    {
-                        return true;
-                    }
+                    return !await _platformUtilsService.ShowDialogAsync(message, title, AppResources.Yes, AppResources.No);
                 }
             }
             catch (Exception ex)

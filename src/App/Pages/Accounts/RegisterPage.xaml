@@ -146,7 +146,6 @@
                     <Label
                         Text="{u:I18n CheckKnownDataBreachesForThisPassword}"
                         StyleClass="box-footer-label"
-                        HorizontalOptions="Fill"
                         VerticalOptions="Center"/>
                 </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-switch"

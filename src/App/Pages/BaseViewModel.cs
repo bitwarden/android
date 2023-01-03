@@ -34,7 +34,7 @@ namespace Bit.App.Pages
 
         protected void HandleException(Exception ex, string message = null)
         {
-            if (ex is ApiException apiException && apiException?.Error != null)
+            if (ex is ApiException apiException && apiException.Error != null)
             {
                 message = apiException.Error.GetSingleMessage();
             }

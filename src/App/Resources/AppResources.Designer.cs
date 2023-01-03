@@ -4609,9 +4609,9 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?.
         /// </summary>
-        public static string PasswordFoundInADataBreachUseAUniquePasswordToProtectYourAccount {
+        public static string PasswordFoundInADataBreachAlertDescription {
             get {
-                return ResourceManager.GetString("PasswordFoundInADataBreachUseAUniquePasswordToProtectYourAccount", resourceCulture);
+                return ResourceManager.GetString("PasswordFoundInADataBreachAlertDescription", resourceCulture);
             }
         }
         
@@ -6743,10 +6743,9 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?.
         /// </summary>
-        public static string WeakPasswordIdentifiedAndFoundInADataBreachUseAStrongAndUniquePasswordToProtectYourAccount {
+        public static string WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription {
             get {
-                return ResourceManager.GetString("WeakPasswordIdentifiedAndFoundInADataBreachUseAStrongAndUniquePasswordToProtectYo" +
-                        "urAccount", resourceCulture);
+                return ResourceManager.GetString("WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription", resourceCulture);
             }
         }
         
