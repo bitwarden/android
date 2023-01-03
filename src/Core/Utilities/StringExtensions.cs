@@ -6,8 +6,13 @@ namespace Bit.Core.Utilities
 {
     public static class StringExtensions
     {
-        public static string RemoveDiacritics(this String text)
+        public static string RemoveDiacritics(this string text)
         {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return text;
+            }
+
             var normalizedString = text.Normalize(NormalizationForm.FormD);
             var stringBuilder = new StringBuilder(capacity: normalizedString.Length);
 
@@ -20,14 +25,10 @@ namespace Bit.Core.Utilities
                     stringBuilder.Append(c);
                 }
             }
-            Console.Write(stringBuilder.Length);
-            Console.WriteLine(stringBuilder.ToString().Normalize(NormalizationForm.FormC));
-
 
             return stringBuilder
                 .ToString()
                 .Normalize(NormalizationForm.FormC);
-
         }
     }
 }

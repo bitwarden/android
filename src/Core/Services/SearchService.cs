@@ -77,7 +77,7 @@ namespace Bit.Core.Services
             ct.ThrowIfCancellationRequested();
             var matchedCiphers = new List<CipherView>();
             var lowPriorityMatchedCiphers = new List<CipherView>();
-            query = (query.Trim().ToLower().RemoveDiacritics());
+            query = query.Trim().ToLower().RemoveDiacritics();
 
             foreach (var c in ciphers)
             {
