@@ -122,7 +122,7 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden on käyttäjätunnusten ja salasanojen hallintapalvelu, joka auttaa suojaamaan sinua verkossa.</value>
+    <value>Bitwarden on tunnusten ja salasanojen hallinta, joka suojaa sinua verkossa.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">

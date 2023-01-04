@@ -141,7 +141,8 @@ namespace Bit.App.Services
                     }
 
                     // if there is a request modal opened ignore all incoming requests
-                    if (App.Current.MainPage.Navigation.ModalStack.Any(p => p is NavigationPage navPage && navPage.CurrentPage is LoginPasswordlessPage))
+                    // App.Current can be null if the app is killed
+                    if (App.Current != null && App.Current.MainPage.Navigation.ModalStack.Any(p => p is NavigationPage navPage && navPage.CurrentPage is LoginPasswordlessPage))
                     {
                         return;
                     }
@@ -228,8 +229,9 @@ namespace Bit.App.Services
                 if (data is PasswordlessNotificationData passwordlessNotificationData)
                 {
                     var notificationUserId = await _stateService.Value.GetUserIdAsync(passwordlessNotificationData.UserEmail);
+                    var activeUserEmail = await _stateService.Value.GetActiveUserEmailAsync();
                     var notificationSaved = await _stateService.Value.GetPasswordlessLoginNotificationAsync();
-                    if (notificationUserId != null && notificationSaved != null)
+                    if (activeUserEmail != passwordlessNotificationData.UserEmail && notificationUserId != null && notificationSaved != null)
                     {
                         await _stateService.Value.SetActiveUserAsync(notificationUserId);
                         _messagingService.Value.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);

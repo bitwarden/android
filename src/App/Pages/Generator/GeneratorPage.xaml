@@ -66,7 +66,7 @@
                             Margin="0"
                             HasShadow="False"
                             BackgroundColor="Transparent"
-                            BorderColor="Accent">
+                            BorderColor="{DynamicResource PrimaryColor}">
                         <Label
                             Text="{u:I18n PasswordGeneratorPolicyInEffect}"
                             StyleClass="text-muted, text-sm, text-bold"
@@ -462,7 +462,7 @@
                                 StyleClass="box-value"
                                 HorizontalOptions="End"
                                 AutomationProperties.IsInAccessibleTree="True"
-                                AutomationProperties.Name="{u:I18n LowercaseAtoZ}" />
+                                AutomationProperties.Name="{u:I18n LowercaseAtoZ}"/>
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-switch">

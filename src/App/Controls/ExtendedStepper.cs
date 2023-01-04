@@ -5,10 +5,10 @@ namespace Bit.App.Controls
     public class ExtendedStepper : Stepper
     {
         public static readonly BindableProperty StepperBackgroundColorProperty = BindableProperty.Create(
-            nameof(StepperBackgroundColor), typeof(Color), typeof(ExtendedStepper), Color.Default);
+            nameof(StepperBackgroundColor), typeof(Color), typeof(ExtendedStepper), Color.White);
 
         public static readonly BindableProperty StepperForegroundColorProperty = BindableProperty.Create(
-            nameof(StepperForegroundColor), typeof(Color), typeof(ExtendedStepper), Color.Default);
+            nameof(StepperForegroundColor), typeof(Color), typeof(ExtendedStepper), Color.Black);
 
         public Color StepperBackgroundColor
         {

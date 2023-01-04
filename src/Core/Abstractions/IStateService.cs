@@ -14,6 +14,7 @@ namespace Bit.Core.Abstractions
         List<AccountView> AccountViews { get; }
         Task<string> GetActiveUserIdAsync();
         Task<string> GetActiveUserEmailAsync();
+        Task<T> GetActiveUserCustomDataAsync<T>(Func<Account, T> dataMapper);
         Task<bool> IsActiveAccountAsync(string userId = null);
         Task SetActiveUserAsync(string userId);
         Task CheckExtensionActiveUserAndSwitchIfNeededAsync();
@@ -118,12 +119,12 @@ namespace Bit.Core.Abstractions
         Task SetAddSitePromptShownAsync(bool? value, string userId = null);
         Task<bool?> GetPushInitialPromptShownAsync();
         Task SetPushInitialPromptShownAsync(bool? value);
-        Task<DateTime?> GetPushLastRegistrationDateAsync();
-        Task SetPushLastRegistrationDateAsync(DateTime? value);
+        Task<DateTime?> GetPushLastRegistrationDateAsync(string userId = null);
+        Task SetPushLastRegistrationDateAsync(DateTime? value, string userId = null);
         Task<string> GetPushInstallationRegistrationErrorAsync();
         Task SetPushInstallationRegistrationErrorAsync(string value);
-        Task<string> GetPushCurrentTokenAsync();
-        Task SetPushCurrentTokenAsync(string value);
+        Task<string> GetPushCurrentTokenAsync(string userId = null);
+        Task SetPushCurrentTokenAsync(string value, string userId = null);
         Task<List<EventData>> GetEventCollectionAsync();
         Task SetEventCollectionAsync(List<EventData> value);
         Task<Dictionary<string, FolderData>> GetEncryptedFoldersAsync(string userId = null);
@@ -159,5 +160,8 @@ namespace Bit.Core.Abstractions
         Task SetPasswordlessLoginNotificationAsync(PasswordlessRequestNotification value);
         Task<UsernameGenerationOptions> GetUsernameGenerationOptionsAsync(string userId = null);
         Task SetUsernameGenerationOptionsAsync(UsernameGenerationOptions value, string userId = null);
+        Task<bool> GetShouldConnectToWatchAsync(string userId = null);
+        Task SetShouldConnectToWatchAsync(bool shouldConnect, string userId = null);
+        Task<bool> GetLastUserShouldConnectToWatchAsync();
     }
 }

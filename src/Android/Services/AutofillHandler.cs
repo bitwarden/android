@@ -6,6 +6,7 @@ using Android.Content;
 using Android.OS;
 using Android.Provider;
 using Android.Views.Autofill;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
@@ -20,16 +21,19 @@ namespace Bit.Droid.Services
         private readonly IStateService _stateService;
         private readonly IMessagingService _messagingService;
         private readonly IClipboardService _clipboardService;
+        private readonly IPlatformUtilsService _platformUtilsService;
         private readonly LazyResolve<IEventService> _eventService;
 
         public AutofillHandler(IStateService stateService,
             IMessagingService messagingService,
             IClipboardService clipboardService,
+            IPlatformUtilsService platformUtilsService,
             LazyResolve<IEventService> eventService)
         {
             _stateService = stateService;
             _messagingService = messagingService;
             _clipboardService = clipboardService;
+            _platformUtilsService = platformUtilsService;
             _eventService = eventService;
         }
 
@@ -73,12 +77,12 @@ namespace Bit.Droid.Services
 
         public void Autofill(CipherView cipher)
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var activity = CrossCurrentActivity.Current.Activity as Xamarin.Forms.Platform.Android.FormsAppCompatActivity;
             if (activity == null)
             {
                 return;
             }
-            if (activity.Intent?.GetBooleanExtra("autofillFramework", false) ?? false)
+            if (activity.Intent?.GetBooleanExtra(AutofillConstants.AutofillFramework, false) ?? false)
             {
                 if (cipher == null)
                 {
@@ -103,7 +107,7 @@ namespace Bit.Droid.Services
                     return;
                 }
                 var task = CopyTotpAsync(cipher);
-                var dataset = AutofillHelpers.BuildDataset(activity, parser.FieldCollection, new FilledItem(cipher));
+                var dataset = AutofillHelpers.BuildDataset(activity, parser.FieldCollection, new FilledItem(cipher), false);
                 var replyIntent = new Intent();
                 replyIntent.PutExtra(AutofillManager.ExtraAuthenticationResult, dataset);
                 activity.SetResult(Result.Ok, replyIntent);
@@ -202,6 +206,7 @@ namespace Bit.Droid.Services
                     if (totp != null)
                     {
                         await _clipboardService.CopyTextAsync(totp);
+                        _platformUtilsService.ShowToastForCopiedValue(AppResources.VerificationCodeTotp);
                     }
                 }
             }

@@ -108,7 +108,7 @@
                         Margin="0, 12, 0, 6"
                         HasShadow="False"
                         BackgroundColor="Transparent"
-                        BorderColor="Accent">
+                        BorderColor="{DynamicResource PrimaryColor}">
                         <Label
                             Text="{u:I18n SendDisabledWarning}"
                             StyleClass="text-muted, text-sm, text-bold"

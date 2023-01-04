@@ -62,7 +62,7 @@ namespace Bit.Droid.Utilities
                 theme = ThemeManager.Dark;
             }
 
-            if (theme == ThemeManager.Dark || theme == ThemeManager.Black || theme == ThemeManager.Nord)
+            if (theme == ThemeManager.Dark || theme == ThemeManager.Black || theme == ThemeManager.Nord || theme == ThemeManager.SolarizedDark)
             {
                 LightTheme = false;
             }

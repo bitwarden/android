@@ -377,7 +377,7 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>{0} έχει αντιγραφεί.</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Επαλήθευση Δακτυλικού Αποτυπώματος</value>
@@ -2299,9 +2299,6 @@
     <value>Μόλις το κλειδί εισαχθεί με επιτυχία,
 επιλέξτε Προσθήκη TOTP για να αποθηκεύσετε το κλειδί με ασφάλεια</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Ρυθμίζοντας τις επιλογές κλειδώματος σε “Ποτέ” κρατά τη κρύπτη σας διαθέσιμη σε οποιονδήποτε με πρόσβαση στη συσκευή σας. Εάν χρησιμοποιείτε αυτήν την επιλογή, θα πρέπει να διασφαλίσετε ότι διατηρείτε τη συσκευή σας σωστά προστατευμένη.</value>
   </data>
@@ -2452,6 +2449,9 @@
   <data name="Random" xml:space="preserve">
     <value>Τυχαίο</value>
   </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
+  </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Γνωστοποίηση Υπηρεσίας Προσβασιμότητας</value>
   </data>
@@ -2507,5 +2507,11 @@ Do you want to switch to this account?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>View all log in options</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>This request is no longer valid</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Enable camera permission to use the scanner</value>
   </data>
 </root>

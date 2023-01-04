@@ -1508,6 +1508,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connect to Watch.
+        /// </summary>
+        public static string ConnectToWatch {
+            get {
+                return ResourceManager.GetString("ConnectToWatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Continue.
         /// </summary>
         public static string Continue {
@@ -2134,6 +2143,15 @@ namespace Bit.App.Resources {
         public static string EnableAutomaticSyncing {
             get {
                 return ResourceManager.GetString("EnableAutomaticSyncing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable camera permission to use the scanner.
+        /// </summary>
+        public static string EnableCamerPermissionToUseTheScanner {
+            get {
+                return ResourceManager.GetString("EnableCamerPermissionToUseTheScanner", resourceCulture);
             }
         }
         
@@ -5270,15 +5288,6 @@ namespace Bit.App.Resources {
         public static string Select {
             get {
                 return ResourceManager.GetString("Select", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string SelectAddTotpToStoreTheKeySafely {
-            get {
-                return ResourceManager.GetString("SelectAddTotpToStoreTheKeySafely", resourceCulture);
             }
         }
         

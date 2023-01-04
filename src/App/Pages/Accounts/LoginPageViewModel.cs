@@ -149,7 +149,8 @@ namespace Bit.App.Pages
                     Email = await _stateService.GetRememberedEmailAsync();
                 }
                 var deviceIdentifier = await _appIdService.GetAppIdAsync();
-                IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
+                // TODO uncomment to enable login with device
+                //IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
                 CanRemoveAccount = await _stateService.GetActiveUserEmailAsync() != Email;
                 await _deviceActionService.HideLoadingAsync();
             }
@@ -304,16 +305,6 @@ namespace Bit.App.Pages
             {
                 _logger.Exception(e);
             }
-        }
-
-        private void HandleException(Exception ex)
-        {
-            Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                await _deviceActionService.HideLoadingAsync();
-                await _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage);
-            }).FireAndForget();
-            _logger.Exception(ex);
         }
     }
 }

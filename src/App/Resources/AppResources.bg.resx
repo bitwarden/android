@@ -376,7 +376,7 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>{0} беше копирано.</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Потвърждаване на пръстовия отпечатък</value>
@@ -2300,9 +2300,6 @@
     <value>Once the key is successfully entered,
 select Add TOTP to store the key safely</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Ако изберете „Никога“ като настройка за заключването, трезорът Ви ще бъде достъпен за всеки, който има досег с устройството. Ако използвате тази настройка, трябва да се уверите, че устройството Ви е удачно защитено.</value>
   </data>
@@ -2453,6 +2450,9 @@ select Add TOTP to store the key safely</value>
   <data name="Random" xml:space="preserve">
     <value>Произволно</value>
   </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Свързване към часовник</value>
+  </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Използване на услугата за достъпност</value>
   </data>
@@ -2508,5 +2508,11 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>Вижте всички възможности за вписване</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Тази зявка вече не е приложима</value>
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Разрешете достъпа до камерата, за да използвате скенера</value>
   </data>
 </root>

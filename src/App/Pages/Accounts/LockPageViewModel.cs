@@ -28,6 +28,7 @@ namespace Bit.App.Pages
         private readonly IBiometricService _biometricService;
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly ILogger _logger;
+        private readonly IWatchDeviceService _watchDeviceService;
         private readonly WeakEventManager<int?> _secretEntryFocusWeakEventManager = new WeakEventManager<int?>();
 
         private string _email;
@@ -56,6 +57,7 @@ namespace Bit.App.Pages
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
+            _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
 
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -387,6 +389,7 @@ namespace Bit.App.Pages
         private async Task DoContinueAsync()
         {
             await _stateService.SetBiometricLockedAsync(false);
+            _watchDeviceService.SyncDataToWatchAsync().FireAndForget();
             _messagingService.Send("unlocked");
             UnlockedAction?.Invoke();
         }

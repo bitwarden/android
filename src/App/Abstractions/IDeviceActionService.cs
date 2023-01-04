@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Bit.Core.Enums;
+using Bit.Core.Models;
 
 namespace Bit.App.Abstractions
 {

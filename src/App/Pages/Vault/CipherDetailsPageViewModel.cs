@@ -31,6 +31,7 @@ namespace Bit.App.Pages
         private readonly ILocalizeService _localizeService;
         private readonly ICustomFieldItemFactory _customFieldItemFactory;
         private readonly IClipboardService _clipboardService;
+        private readonly IWatchDeviceService _watchDeviceService;
 
         private List<ICustomFieldItemViewModel> _fields;
         private bool _canAccessPremium;
@@ -62,6 +63,7 @@ namespace Bit.App.Pages
             _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
             _customFieldItemFactory = ServiceContainer.Resolve<ICustomFieldItemFactory>("customFieldItemFactory");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
+            _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
 
             CopyCommand = new AsyncCommand<string>((id) => CopyAsync(id, null), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
             CopyUriCommand = new AsyncCommand<LoginUriView>(uriView => CopyAsync("LoginUri", uriView.Uri), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
@@ -371,6 +373,9 @@ namespace Bit.App.Pages
                     await _cipherService.SoftDeleteWithServerAsync(Cipher.Id);
                 }
                 await _deviceActionService.HideLoadingAsync();
+
+                _watchDeviceService.SyncDataToWatchAsync().FireAndForget();
+
                 _platformUtilsService.ShowToast("success", null,
                     Cipher.IsDeleted ? AppResources.ItemDeleted : AppResources.ItemSoftDeleted);
                 _messagingService.Send(Cipher.IsDeleted ? "deletedCipher" : "softDeletedCipher", Cipher);

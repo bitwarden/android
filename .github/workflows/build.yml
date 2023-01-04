@@ -42,15 +42,15 @@ jobs:
         id: branch-check
         run: |
           if [[ $(git ls-remote --heads origin rc) ]]; then
-            echo "::set-output name=rc_branch_exists::1"
+            echo "rc_branch_exists=1" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=rc_branch_exists::0"
+            echo "rc_branch_exists=0" >> $GITHUB_OUTPUT
           fi
 
           if [[ $(git ls-remote --heads origin hotfix-rc) ]]; then
-            echo "::set-output name=hotfix_branch_exists::1"
+            echo "hotfix_branch_exists=1" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=hotfix_branch_exists::0"
+            echo "hotfix_branch_exists=0" >> $GITHUB_OUTPUT
           fi
         shell: bash
 
@@ -440,7 +440,7 @@ jobs:
 
   ios:
     name: Apple iOS
-    runs-on: macos-11
+    runs-on: macos-12
     needs: setup
     steps:
       - name: Setup NuGet
@@ -475,7 +475,7 @@ jobs:
           do
             VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
             echo "::add-mask::$VALUE"
-            echo "::set-output name=$i::$VALUE"
+            echo "$i=$VALUE" >> $GITHUB_OUTPUT
           done
 
       - name: Decrypt secrets
@@ -497,6 +497,14 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output $HOME/secrets/dist_share_extension.mobileprovision \
             ./.github/secrets/dist_share_extension.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/dist_watch_app.mobileprovision \
+            ./.github/secrets/dist_watch_app.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/dist_watch_app_extension.mobileprovision \
+            ./.github/secrets/dist_watch_app_extension.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output ./src/watchOS/bitwarden/GoogleService-Info.plist ./.github/secrets/GoogleService-Info.plist.gpg
         shell: bash
 
       - name: Increment version
@@ -511,6 +519,9 @@ jobs:
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Extension/Info.plist
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Autofill/Info.plist
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.ShareExtension/Info.plist
+          cd src/watchOS/bitwarden
+          agvtool new-version -all  $BUILD_NUMBER
+          cd ../../..
         shell: bash
 
       - name: Update Entitlements
@@ -545,6 +556,8 @@ jobs:
           BITWARDEN_PROFILE_PATH=$HOME/secrets/dist_bitwarden.mobileprovision
           EXTENSION_PROFILE_PATH=$HOME/secrets/dist_extension.mobileprovision
           SHARE_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_share_extension.mobileprovision
+          WATCH_APP_PROFILE_PATH=$HOME/secrets/dist_watch_app.mobileprovision
+          WATCH_APP_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_watch_app_extension.mobileprovision
           PROFILES_DIR_PATH=$HOME/Library/MobileDevice/Provisioning\ Profiles
 
           mkdir -p "$PROFILES_DIR_PATH"
@@ -560,6 +573,25 @@ jobs:
 
           SHARE_EXTENSION_UUID=$(grep UUID -A1 -a $SHARE_EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
           cp $SHARE_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$SHARE_EXTENSION_UUID.mobileprovision"
+
+          WATCH_APP_UUID=$(grep UUID -A1 -a $WATCH_APP_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $WATCH_APP_PROFILE_PATH "$PROFILES_DIR_PATH/$WATCH_APP_UUID.mobileprovision"
+
+          WATCH_APP_EXTENSION_UUID=$(grep UUID -A1 -a $WATCH_APP_EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $WATCH_APP_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$WATCH_APP_EXTENSION_UUID.mobileprovision"
+        shell: bash
+
+      - name: Bulid WatchApp
+        run: |
+          echo "########################################"
+          echo "##### Build WatchApp with Release Configuration"
+          echo "########################################"
+          
+          xcodebuild archive -workspace ./src/watchOS/bitwarden/bitwarden.xcodeproj/project.xcworkspace -configuration Release -scheme bitwarden\ WatchKit\ App -archivePath ./src/watchOS/bitwarden
+
+          echo "########################################"
+          echo "##### Done"
+          echo "########################################"
         shell: bash
 
       - name: Restore packages
@@ -597,7 +629,12 @@ jobs:
           ARCHIVE_DSYMS_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive/dSYMs"
           EXPORT_PATH="./bitwarden-export"
 
-          cp -r $ARCHIVE_DSYMS_PATH $EXPORT_PATH
+          WATCH_ARCHIVE_DSYMS_PATH="./src/watchOS/bitwarden.xcarchive/dSYMs/"
+          WATCH_DSYMS_EXPORT_PATH="$EXPORT_PATH/Watch_dSYMs"
+
+          cp -r -v $ARCHIVE_DSYMS_PATH $EXPORT_PATH
+          mkdir $WATCH_DSYMS_EXPORT_PATH
+          cp -r -v $WATCH_ARCHIVE_DSYMS_PATH $WATCH_DSYMS_EXPORT_PATH
         shell: bash
 
       - name: Upload App Store .ipa & dSYMs artifacts
@@ -628,6 +665,22 @@ jobs:
         env:
           APPCENTER_IOS_TOKEN: ${{ steps.retrieve-secrets.outputs.appcenter-ios-token }}
         run: appcenter crashes upload-symbols -a bitwarden/bitwarden -s "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
+        shell: bash
+
+      - name: Upload Watch dSYMs to Firebase Crashlytics
+        if: |
+            (github.ref == 'refs/heads/master'
+              && needs.setup.outputs.rc_branch_exists == 0
+              && needs.setup.outputs.hotfix_branch_exists == 0)
+            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+            || github.ref == 'refs/heads/hotfix-rc'
+        run: |
+
+          echo "########################################"
+          echo "##### Uploading Watch dSYMs to Firebase"
+          echo "########################################"
+
+          find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/Watch_dSYMs" \;
         shell: bash
 
       - name: Deploy to App Store
@@ -676,7 +729,7 @@ jobs:
           do
             VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
             echo "::add-mask::$VALUE"
-            echo "::set-output name=$i::$VALUE"
+            echo "$i=$VALUE" >> $GITHUB_OUTPUT
           done
 
       - name: Upload Sources
@@ -744,7 +797,7 @@ jobs:
           do
             VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
             echo "::add-mask::$VALUE"
-            echo "::set-output name=$i::$VALUE"
+            echo "$i=$VALUE" >> $GITHUB_OUTPUT
           done
 
       - name: Notify Slack on failure

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
@@ -52,6 +51,15 @@ namespace Bit.Core.Services
             return await GetEmailAsync(activeUserId);
         }
 
+        public async Task<T> GetActiveUserCustomDataAsync<T>(Func<Account, T> dataMapper)
+        {
+            var userId = await GetActiveUserIdAsync();
+            var account = await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            );
+            return dataMapper(account);
+        }
+
         public async Task<bool> IsActiveAccountAsync(string userId = null)
         {
             if (userId == null)
@@ -76,6 +84,8 @@ namespace Bit.Core.Services
             // Update pre-auth settings based on now-active user
             await SetRememberedOrgIdentifierAsync(await GetRememberedOrgIdentifierAsync());
             await SetPreAuthEnvironmentUrlsAsync(await GetEnvironmentUrlsAsync());
+
+            await SetLastUserShouldConnectToWatchAsync();
         }
 
         public async Task CheckExtensionActiveUserAndSwitchIfNeededAsync()
@@ -1001,18 +1011,18 @@ namespace Bit.Core.Services
             await SetValueAsync(key, value, options);
         }
 
-        public async Task<DateTime?> GetPushLastRegistrationDateAsync()
+        public async Task<DateTime?> GetPushLastRegistrationDateAsync(string userId = null)
         {
-            var options = await GetDefaultStorageOptionsAsync();
-            var key = Constants.PushLastRegistrationDateKey;
-            return await GetValueAsync<DateTime?>(key, options);
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync());
+            var key = Constants.PushLastRegistrationDateKey(reconciledOptions.UserId);
+            return await GetValueAsync<DateTime?>(key, reconciledOptions);
         }
 
-        public async Task SetPushLastRegistrationDateAsync(DateTime? value)
+        public async Task SetPushLastRegistrationDateAsync(DateTime? value, string userId = null)
         {
-            var options = await GetDefaultStorageOptionsAsync();
-            var key = Constants.PushLastRegistrationDateKey;
-            await SetValueAsync(key, value, options);
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync());
+            var key = Constants.PushLastRegistrationDateKey(reconciledOptions.UserId);
+            await SetValueAsync(key, value, reconciledOptions);
         }
 
         public async Task<string> GetPushInstallationRegistrationErrorAsync()
@@ -1029,18 +1039,18 @@ namespace Bit.Core.Services
             await SetValueAsync(key, value, options);
         }
 
-        public async Task<string> GetPushCurrentTokenAsync()
+        public async Task<string> GetPushCurrentTokenAsync(string userId = null)
         {
-            var options = await GetDefaultStorageOptionsAsync();
-            var key = Constants.PushCurrentTokenKey;
-            return await GetValueAsync<string>(key, options);
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync());
+            var key = Constants.PushCurrentTokenKey(reconciledOptions.UserId);
+            return await GetValueAsync<string>(key, reconciledOptions);
         }
 
-        public async Task SetPushCurrentTokenAsync(string value)
+        public async Task SetPushCurrentTokenAsync(string value, string userId = null)
         {
-            var options = await GetDefaultStorageOptionsAsync();
-            var key = Constants.PushCurrentTokenKey;
-            await SetValueAsync(key, value, options);
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync());
+            var key = Constants.PushCurrentTokenKey(reconciledOptions.UserId);
+            await SetValueAsync(key, value, reconciledOptions);
         }
 
         public async Task<List<EventData>> GetEventCollectionAsync()
@@ -1684,6 +1694,37 @@ namespace Bit.Core.Services
                 }
             }
             throw new Exception("User does not exist in account list");
+        }
+
+        public async Task<bool> GetShouldConnectToWatchAsync(string userId = null)
+        {
+            var reconciledOptions =
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync());
+            var key = Constants.ShouldConnectToWatchKey(reconciledOptions.UserId);
+            return await GetValueAsync<bool?>(key, reconciledOptions) ?? false;
+        }
+
+        public async Task SetShouldConnectToWatchAsync(bool shouldConnect, string userId = null)
+        {
+            var reconciledOptions =
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync());
+            var key = Constants.ShouldConnectToWatchKey(reconciledOptions.UserId);
+            await SetValueAsync(key, shouldConnect, reconciledOptions);
+            await SetLastUserShouldConnectToWatchAsync(shouldConnect);
+        }
+
+        public async Task<bool> GetLastUserShouldConnectToWatchAsync()
+        {
+            var options = await GetDefaultStorageOptionsAsync();
+            var key = Constants.LastUserShouldConnectToWatchKey;
+            return await GetValueAsync<bool?>(key, options) ?? false;
+        }
+
+        private async Task SetLastUserShouldConnectToWatchAsync(bool? shouldConnect = null)
+        {
+            var options = await GetDefaultStorageOptionsAsync();
+            var key = Constants.LastUserShouldConnectToWatchKey;
+            await SetValueAsync(key, shouldConnect ?? await GetShouldConnectToWatchAsync(), options);
         }
     }
 }
