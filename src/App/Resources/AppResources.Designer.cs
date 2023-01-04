@@ -1373,6 +1373,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check known data breaches for this password.
+        /// </summary>
+        public static string CheckKnownDataBreachesForThisPassword {
+            get {
+                return ResourceManager.GetString("CheckKnownDataBreachesForThisPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check if password has been exposed..
         /// </summary>
         public static string CheckPassword {
@@ -2413,6 +2422,15 @@ namespace Bit.App.Resources {
         public static string ExportVaultWarning {
             get {
                 return ResourceManager.GetString("ExportVaultWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exposed Master Password.
+        /// </summary>
+        public static string ExposedMasterPassword {
+            get {
+                return ResourceManager.GetString("ExposedMasterPassword", resourceCulture);
             }
         }
         
@@ -4589,6 +4607,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?.
+        /// </summary>
+        public static string PasswordFoundInADataBreachAlertDescription {
+            get {
+                return ResourceManager.GetString("PasswordFoundInADataBreachAlertDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password generated.
         /// </summary>
         public static string PasswordGenerated {
@@ -6696,11 +6723,29 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Weak and Exposed Master Password.
+        /// </summary>
+        public static string WeakAndExposedMasterPassword {
+            get {
+                return ResourceManager.GetString("WeakAndExposedMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Weak Master Password.
         /// </summary>
         public static string WeakMasterPassword {
             get {
                 return ResourceManager.GetString("WeakMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?.
+        /// </summary>
+        public static string WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription {
+            get {
+                return ResourceManager.GetString("WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription", resourceCulture);
             }
         }
         
