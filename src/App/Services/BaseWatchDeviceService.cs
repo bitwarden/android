@@ -91,14 +91,17 @@ namespace Bit.App.Services
 
         private async Task<WatchState> GetStateAsync(string userId, bool shouldConnectToWatch)
         {
+            if (await _stateService.GetLastUserShouldConnectToWatchAsync()
+                &&
+                (userId is null || !await _stateService.IsAuthenticatedAsync()))
+            {
+                // if the last user had "Connect to Watch" enabled and there's no user authenticated
+                return WatchState.NeedLogin;
+            }
+
             if (!shouldConnectToWatch)
             {
                 return WatchState.NeedSetup;
-            }
-
-            if (!await _stateService.IsAuthenticatedAsync() || userId is null)
-            {
-                return WatchState.NeedLogin;
             }
 
             //if (await _vaultTimeoutService.IsLockedAsync() ||

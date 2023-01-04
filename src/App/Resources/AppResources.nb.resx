@@ -179,7 +179,7 @@
     <value>Rediger</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Rediger mappen</value>
+    <value>Rediger mappe</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>E-post</value>
@@ -229,10 +229,10 @@
     <value>Mapper</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Mappen er oppdatert.</value>
+    <value>Mappen er lagret</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Gå til nettstedet</value>
+    <value>Åpne nettside</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Autentikator</value>
+    <value>Authenticator</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -375,8 +375,8 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} har blitt kopiert.</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <value>{0} har blitt kopiert</value>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Verifiser fingeravtrykket</value>
@@ -1286,7 +1286,7 @@ Skanning skjer automatisk.</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>Autofyll aktivert!</value>
+    <value>Autoutfylling aktivert!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
     <value>Du må logge deg inn på Bitwarden-hovedappen før du kan bruke autoutfylling.</value>
@@ -2300,9 +2300,6 @@ Skanning skjer automatisk.</value>
     <value>Når nøkkelen er tastet inn,
 velg Legg til TOTP for å lagre nøkkelen sikkert</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Å sette dine låsalternativer til "Aldri" holder hvelvet ditt tilgjengelig for alle med tilgang til din enhet. Dersom du bruker dette alternativet bør du forsikre deg om at enheten er godt beskyttet.</value>
   </data>
@@ -2453,6 +2450,9 @@ velg Legg til TOTP for å lagre nøkkelen sikkert</value>
   <data name="Random" xml:space="preserve">
     <value>Tilfeldig</value>
   </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Koble til klokke</value>
+  </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Opplysninger om tilgjengelighetstjeneste</value>
   </data>
@@ -2492,27 +2492,27 @@ Vil du bytte til denne kontoen?</value>
     <value>Logg inn med en annen enhet</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Log in initiated</value>
+    <value>Pålogging startet</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
-    <value>A notification has been sent to your device.</value>
+    <value>Et varsel har blitt sendt til enheten din.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+    <value>Kontroller at hvelvet ditt er låst opp, og at fingeravtrykksfrasen samsvarer på den andre enheten.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
-    <value>Resend notification</value>
+    <value>Send varsel på nytt</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>Trenger du et annet alternativ?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>View all log in options</value>
+    <value>Vis alle påloggingsalternativer</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
-    <value>This request is no longer valid</value>
+    <value>Invitasjonen er ikke lenger gyldig</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>Aktiver kameratillatelse for å bruke skanner</value>
   </data>
 </root>

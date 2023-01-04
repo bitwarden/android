@@ -6,6 +6,7 @@ class StateService {
     let HAS_RUN_BEFORE_KEY = "has_run_before_key"
     let CURRENT_STATE_KEY = "current_state_key"
     let CURRENT_USER_KEY = "current_user_key"
+    let LACKED_DEVICE_OWNER_AUTH_LAST_TIME_KEY = "lacked_device_owner_auth_last_time_key"
 //    let TIMEOUT_MINUTES_KEY = "timeout_minutes_key"
 //    let TIMEOUT_ACTION_KEY = "timeout_action_key"
     
@@ -64,6 +65,15 @@ class StateService {
     func clear() {
         currentState = .needSetup
         setUser(user: nil)
+    }
+    
+    var lackedDeviceOwnerAuthLastTime : Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: LACKED_DEVICE_OWNER_AUTH_LAST_TIME_KEY)
+        }
+        set(newValue) {
+            UserDefaults.standard.set(newValue, forKey: LACKED_DEVICE_OWNER_AUTH_LAST_TIME_KEY)
+        }
     }
     
 //    var vaultTimeoutInMinutes: Int? {

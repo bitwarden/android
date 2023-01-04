@@ -4,48 +4,21 @@ struct CipherListView: View {
     @ObservedObject var viewModel = CipherListViewModel(CipherService.shared)
     
     let AVATAR_ID: String = "avatarId"
-    @State private var contentOffset = CGFloat(0)
-    @State private var initialOffset = CGFloat(0)
         
     var isHeaderVisible: Bool {
-        if !viewModel.searchTerm.isEmpty {
-            return true
-        }
-        
-        let threshold = initialOffset + 15
-        return viewModel.filteredCiphers.count > 1 && contentOffset > threshold
+        return !viewModel.searchTerm.isEmpty || viewModel.filteredCiphers.count > 1
     }
     
     var body: some View {
         NavigationView {
             GeometryReader { geometry in
                 ScrollViewReader { scrollProxy in
-                    TrackableWithHeaderListView { offset in
-                        withAnimation {
-                            contentOffset = offset?.y ?? 0
-                        }
-                    }  headerContent: {
-                        Section() {
-                            ZStack {
-                                searchContent
-                                    .padding(5)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 5)
-                                            .foregroundColor(Color.ui.primary)
-                                            .frame(width: geometry.size.width,
-                                                   alignment: .leading)
-                                    )
-                                    .opacity(isHeaderVisible ? 1 : 0)
+                    List {
+                        if isHeaderVisible {
+                            Section() {
+                                getSearchSection(geometry.size.width)
                             }
-                            .background(
-                                RoundedRectangle(cornerRadius: 5)
-                                .foregroundColor(Color.black)
-                                .frame(width: geometry.size.width, height: 60)
-                            )
-                            .offset(y:isHeaderVisible ? 0 : 5)
-                            .padding(0)
                         }
-                    } content: {
                         if viewModel.user?.email != nil {
                             Section() {
                                 avatarHeader
@@ -74,10 +47,6 @@ struct CipherListView: View {
                     .onReceive(self.viewModel.$updateHack) { _ in
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
                             scrollProxy.scrollTo(AVATAR_ID, anchor: .top)
-                            
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15){
-                                self.initialOffset = self.contentOffset
-                            }
                         }
                     }
                 }
@@ -132,6 +101,25 @@ struct CipherListView: View {
                 .font(.headline)
                 .multilineTextAlignment(.center)
         }
+    }
+    
+    func getSearchSection(_ maxWidth:CGFloat) -> some View {
+        return ZStack {
+            searchContent
+                .padding(5)
+                .background(
+                    RoundedRectangle(cornerRadius: 5)
+                        .foregroundColor(Color.ui.primary)
+                        .frame(width: maxWidth,
+                               alignment: .leading)
+                )
+        }
+        .background(
+            RoundedRectangle(cornerRadius: 5)
+                .foregroundColor(Color.black)
+                .frame(width: maxWidth, height: 60)
+        )
+        .padding(0)
     }
 }
 

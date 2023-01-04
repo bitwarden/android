@@ -10,9 +10,12 @@ final class WatchConnectivityManager: NSObject, ObservableObject {
     static let shared = WatchConnectivityManager()
     
     let watchConnectivitySubject = CurrentValueSubject<WatchConnectivityMessage, Error>(WatchConnectivityMessage(state: nil))
-
-    private let kMessageKey = "message"
-    private let kCipherDataKey = "watchDto"
+    
+    private let WATCH_DTO_APP_CONTEXT_KEY = "watchDto"
+    private let TRIGGER_SYNC_ACTION_KEY = "triggerSync"
+    private let ACTION_MESSAGE_KEY = "actionMessage"
+    
+    var messageQueue = ArrayQueue<[String : Any]>()
     
     private override init() {
         super.init()
@@ -26,17 +29,22 @@ final class WatchConnectivityManager: NSObject, ObservableObject {
     var isSessionActivated: Bool {
         return WCSession.default.isCompanionAppInstalled && WCSession.default.activationState == .activated
     }
+    
+    func triggerSync() {
+        send([ACTION_MESSAGE_KEY : TRIGGER_SYNC_ACTION_KEY])
+    }
         
-    func send(_ message: String) {
+    func send(_ message: [String : Any]) {
         guard WCSession.default.activationState == .activated else {
-          return
+            messageQueue.enqueue(message)
+            return
         }
         
         guard WCSession.default.isCompanionAppInstalled else {
             return
         }
         
-        WCSession.default.sendMessage([kMessageKey : message], replyHandler: nil) { error in
+        WCSession.default.sendMessage(message) { error in
             Log.e("Cannot send message: \(String(describing: error))")
         }
     }
@@ -52,16 +60,27 @@ extension WatchConnectivityManager: WCSessionDelegate {
     func session(_ session: WCSession,
                  activationDidCompleteWith activationState: WCSessionActivationState,
                  error: Error?) {
+        guard !messageQueue.isEmpty, activationState == .activated else {
+            return
+        }
+        
+        repeat {
+            send(messageQueue.dequeue()!)
+        } while !messageQueue.isEmpty
     }
     
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
         // in order for the delivery to be faster the time is added to the key to make each application context update have a different key
         // and update faster
         let watchDtoKey = applicationContext.keys.first { k in
-            k.starts(with: kCipherDataKey)
+            k.starts(with: WATCH_DTO_APP_CONTEXT_KEY)
         }
         
         guard let dtoKey = watchDtoKey, let serializedDto = applicationContext[dtoKey] as? String else {
+            return
+        }
+        
+        guard KeychainHelper.standard.hasDeviceOwnerAuth() else {
             return
         }
         

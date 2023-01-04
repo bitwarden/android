@@ -376,7 +376,7 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>{0} wurde kopiert</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Fingerabdruck überprüfen</value>
@@ -2298,9 +2298,6 @@ Das Scannen erfolgt automatisch.</value>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
     <value>Sobald der Schlüssel erfolgreich eingegeben wurde, wähle TOTP hinzufügen, um den Schlüssel sicher abzuspeichern</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Wenn du deine Sperroptionen auf „Nie“ einstellst, bleibt dein Tresor für jeden zugänglich, der Zugriff auf dein Gerät hat. Wenn du diese Option verwendest, solltest du sicherstellen, dass du dein Gerät angemessen schützt.</value>
   </data>
@@ -2450,6 +2447,9 @@ Das Scannen erfolgt automatisch.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Zufällig</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Mit Uhr verbinden</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Bedienungshilfen Offenlegung</value>
