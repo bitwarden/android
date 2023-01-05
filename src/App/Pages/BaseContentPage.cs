@@ -130,7 +130,7 @@ namespace Bit.App.Pages
             if (useCurrentActiveAccount)
             {
                 return new AvatarImageSource(await _stateService.GetActiveUserIdAsync(),
-                    await _stateService.GetNameAsync(), await _stateService.GetEmailAsync());
+                    await _stateService.GetNameAsync(), await _stateService.GetEmailAsync(), await _stateService.GetAvatarColorAsync());
             }
             return new AvatarImageSource();
         }
