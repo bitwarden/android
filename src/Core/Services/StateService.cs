@@ -1724,16 +1724,16 @@ namespace Bit.Core.Services
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-            account.Profile.AvatarColor = value;
-            await SaveAccountAsync(account, reconciledOptions);
+            var key = Constants.AvatarColorKey;
+            await SetValueAsync(key, value, reconciledOptions);
         }
 
         public async Task<string> GetAvatarColorAsync(string userId = null)
         {
-            return (await GetAccountAsync(
-                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
-            ))?.Profile?.AvatarColor;
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var key = Constants.AvatarColorKey;
+            return await GetValueAsync<string>(key, reconciledOptions);
         }
 
         private async Task SetLastUserShouldConnectToWatchAsync(bool? shouldConnect = null)
