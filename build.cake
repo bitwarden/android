@@ -4,6 +4,7 @@
 #addin nuget:?package=Cake.Incubator&version=7.0.0
 #tool dotnet:?package=GitVersion.Tool&version=5.10.3
 using Path = System.IO.Path;
+using System.Text.RegularExpressions;
 
 var debugScript = Argument<bool>("debugScript", false);
 var target = Argument("target", "Default");
@@ -163,7 +164,8 @@ enum iOSProjectType
     MainApp,
     Autofill,
     Extension,
-    ShareExtension
+    ShareExtension,
+    WatchApp
 }
 
 string GetiOSBundleId(VariantConfig buildVariant, iOSProjectType projectType) => projectType switch
@@ -171,6 +173,7 @@ string GetiOSBundleId(VariantConfig buildVariant, iOSProjectType projectType) =>
     iOSProjectType.Autofill => $"{buildVariant.iOSBundleId}.autofill",
     iOSProjectType.Extension => $"{buildVariant.iOSBundleId}.find-login-action-extension",
     iOSProjectType.ShareExtension => $"{buildVariant.iOSBundleId}.share-extension",
+    iOSProjectType.WatchApp => $"{buildVariant.iOSBundleId}.watchkitapp",
     _ => buildVariant.iOSBundleId
 };
 
@@ -240,6 +243,43 @@ private void UpdateiOSEntitlementsPlist(string entitlementsPath, VariantConfig b
     Information($"{entitlementsPath} updated with success!");
 }
 
+private void UpdateWatchKitAppInfoPlist(string plistPath, VariantConfig buildVariant)
+{
+    var plistFile = File(plistPath);
+    dynamic plist = DeserializePlist(plistFile);
+
+    var prevBundleId = plist["NSExtension"]["NSExtensionAttributes"]["WKAppBundleIdentifier"];
+    var newBundleId = GetiOSBundleId(buildVariant, iOSProjectType.WatchApp);
+
+    plist["NSExtension"]["NSExtensionAttributes"]["WKAppBundleIdentifier"] = newBundleId;
+
+    SerializePlist(plistFile, plist);
+
+    Information($"Changed Bundle Identifier from {prevBundleId} to {newBundleId}");
+    Information($"{plistPath} updated with success!");
+}
+
+private void UpdateWatchPbxproj(string pbxprojPath, GitVersion git)
+{
+    var fileText = FileReadText(pbxprojPath);
+    if (string.IsNullOrEmpty(fileText))
+    {
+        throw new Exception($"Couldn't find {pbxprojPath}");
+    }
+
+    const string pattern = @"MARKETING_VERSION = [^;]*;";
+
+    var plistFile = File(Path.Combine(_slnPath, "src", "iOS", "Info.plist"));
+    dynamic plist = DeserializePlist(plistFile);
+
+    var newVersionName = plist["CFBundleShortVersionString"];
+
+    fileText = Regex.Replace(fileText, pattern, $"MARKETING_VERSION = {newVersionName};");
+
+    FileWriteText(pbxprojPath, fileText);
+    Information($"{pbxprojPath} modified successfully.");
+}
+
 Task("UpdateiOSIcon")
     .Does(()=>{
         //TODO we'll implement variant icons later
@@ -296,14 +336,30 @@ Task("UpdateiOSCodeFiles")
         var fileList = new string[] {
             Path.Combine(_slnPath, "src", "iOS.Core", "Utilities", "iOSCoreHelpers.cs"),
             Path.Combine(_slnPath, "src", "iOS.Core", "Constants.cs"),
+            Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden.xcodeproj", "project.pbxproj"),
+            Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden WatchKit Extension", "Helpers", "KeychainHelper.swift"),
             Path.Combine(".github", "resources", "export-options-ad-hoc.plist"),
-            Path.Combine(".github", "resources", "export-options-app-store.plist"),
+            Path.Combine(".github", "resources", "export-options-app-store.plist")
         };
 
         foreach(string path in fileList)
         {
             ReplaceInFile(path, "com.8bit.bitwarden", buildVariant.iOSBundleId);
         }
+    });
+
+Task("UpdateWatchProject")
+    .IsDependentOn("UpdateiOSPlist")
+    .Does(()=> {
+        var watchProjectPath = Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden.xcodeproj", "project.pbxproj");
+        UpdateWatchPbxproj(watchProjectPath, _gitVersion);
+    });
+
+Task("UpdateWatchKitAppInfoPlist")
+    .Does(()=> {
+        var buildVariant = GetVariant();
+        var infoPath = Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden WatchKit Extension", "Info.plist");
+        UpdateWatchKitAppInfoPlist(infoPath, buildVariant);
     });
 #endregion iOS
 
@@ -324,6 +380,8 @@ Task("iOS")
     .IsDependentOn("UpdateiOSExtensionPlist")
     .IsDependentOn("UpdateiOSShareExtensionPlist")
     .IsDependentOn("UpdateiOSCodeFiles")
+    .IsDependentOn("UpdateWatchProject")
+    .IsDependentOn("UpdateWatchKitAppInfoPlist")
     .Does(()=>
     {
         Information("iOS app updated");
