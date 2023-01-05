@@ -41,7 +41,6 @@
         /// which is used to handle Apple Watch state logic
         /// </summary>
         public const string LastUserShouldConnectToWatchKey = "lastUserShouldConnectToWatch";
-        public const string AvatarColorKey = "avatarColor";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;
@@ -103,5 +102,6 @@
         public static string PushLastRegistrationDateKey(string userId) => $"pushLastRegistrationDate_{userId}";
         public static string PushCurrentTokenKey(string userId) => $"pushCurrentToken_{userId}";
         public static string ShouldConnectToWatchKey(string userId) => $"shouldConnectToWatch_{userId}";
+        public static string AvatarColorKey(string userId) => $"avatarColor_{userId}";
     }
 }

@@ -1724,7 +1724,7 @@ namespace Bit.Core.Services
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
-            var key = Constants.AvatarColorKey;
+            var key = Constants.AvatarColorKey(userId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
@@ -1732,7 +1732,7 @@ namespace Bit.Core.Services
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
-            var key = Constants.AvatarColorKey;
+            var key = Constants.AvatarColorKey(userId);
             return await GetValueAsync<string>(key, reconciledOptions);
         }
 
