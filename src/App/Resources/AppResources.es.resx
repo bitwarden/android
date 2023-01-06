@@ -1486,7 +1486,7 @@ El escaneo se realizará automáticamente.</value>
     <value>30 minutos</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Establece su código PIN para desbloquear Bitwarden. Sus ajustes de PIN se reiniciarán si alguna vez cierra su sesión completamente de la aplicación.</value>
+    <value>Establezca su código PIN para desbloquear Bitwarden. Sus ajustes de PIN se reiniciarán si alguna vez cierra su sesión completamente de la aplicación.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
     <value>Iniciado como {0} en {1}.</value>
@@ -2358,7 +2358,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Aprobar solicitudes de inicio de sesión</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Use este dispositivo para aprovar solicitudes de incio de sesión realizadas desde otros dispositivos.</value>
+    <value>Use este dispositivo para aprobar solicitudes de inicio de sesión realizadas desde otros dispositivos.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Permitir notificaciones</value>
