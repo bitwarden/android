@@ -1576,7 +1576,7 @@ Skandering gebeur outomaties.</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
-    <value>Solarized Dark</value>
+    <value>'Solarized' Donker</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
@@ -2450,7 +2450,7 @@ kies u Voeg TOTP toe om die sleutel veilig te bewaar</value>
     <value>Lukraak</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connect to Watch</value>
+    <value>Koppel aan horlosie</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Toeganklikheidsdiensopenbaarmaking</value>
@@ -2468,50 +2468,50 @@ kies u Voeg TOTP toe om die sleutel veilig te bewaar</value>
     <value>Aantekenversoek het reeds verstryk.</value>
   </data>
   <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
-    <value>Login attempt from:
+    <value>Teken Aan probeerslag van:
 {0}
-Do you want to switch to this account?</value>
+Wil u na die rekening omskakel?</value>
   </data>
   <data name="NewAroundHere" xml:space="preserve">
-    <value>New around here?</value>
+    <value>Nuut hier?</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
-    <value>Get master password hint</value>
+    <value>Kry hoofwagwoord wenk</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>Teken in as {0}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
-    <value>Not you?</value>
+    <value>Nie jy nie?</value>
   </data>
   <data name="LogInWithMasterPassword" xml:space="preserve">
-    <value>Log in with master password</value>
+    <value>Teken aan met hoofwagwoord</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Log In with another device</value>
+    <value>Teken Aan met 'n ander toestel</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Log in initiated</value>
+    <value>Aanmelding begin</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
-    <value>A notification has been sent to your device.</value>
+    <value>'n Kennisgewing was gestuur na u toestel.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+    <value>Asseblief maak seker jou kluis is oopgesluit en die vingerafdruk frase stem ooreen op die ander toestel.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
-    <value>Resend notification</value>
+    <value>Stuur kennisgewing weer</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>Is daar nog 'n opsie nodig?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>View all log in options</value>
+    <value>Wys alle aanmeldings opsies</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
-    <value>This request is no longer valid</value>
+    <value>Hierdie versoek is nie langer gelding nie</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>Laat die kamera versoek toe om die skandeerder te gebruik</value>
   </data>
 </root>

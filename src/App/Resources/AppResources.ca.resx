@@ -2450,7 +2450,7 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
     <value>Aleatori</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connect to Watch</value>
+    <value>Connecta't a Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Divulgació del servei d'accessibilitat</value>
