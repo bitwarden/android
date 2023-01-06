@@ -269,6 +269,10 @@ namespace Bit.App.Pages
         {
             await _accountListOverlay.HideAsync();
             await _vm.SyncAsync();
+            if (_vm.MainPage)
+            {
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+            }
         }
 
         private async void Lock_Clicked(object sender, EventArgs e)
