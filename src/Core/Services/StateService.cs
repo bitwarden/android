@@ -161,6 +161,8 @@ namespace Bit.Core.Services
                 var isActiveAccount = account.Profile.UserId == _state.ActiveUserId;
                 var accountView = new AccountView(account, isActiveAccount);
 
+                accountView.AvatarColor = await GetAvatarColorAsync(accountView.UserId);
+
                 if (await vaultTimeoutService.IsLoggedOutByTimeoutAsync(accountView.UserId) ||
                     await vaultTimeoutService.ShouldLogOutByTimeoutAsync(accountView.UserId))
                 {
@@ -1724,7 +1726,7 @@ namespace Bit.Core.Services
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
-            var key = Constants.AvatarColorKey(userId);
+            var key = Constants.AvatarColorKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
@@ -1732,7 +1734,7 @@ namespace Bit.Core.Services
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
-            var key = Constants.AvatarColorKey(userId);
+            var key = Constants.AvatarColorKey(reconciledOptions.UserId);
             return await GetValueAsync<string>(key, reconciledOptions);
         }
 
