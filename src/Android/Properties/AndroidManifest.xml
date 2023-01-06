@@ -40,4 +40,16 @@
 			</intent-filter>
 		</activity>
 	</application>
+	<!-- Support for Xamarin.Essentials.Browser.OpenAsync  (for Android > 11) -->
+	<!-- Related docs: https://learn.microsoft.com/en-us/xamarin/essentials/open-browser?tabs=android -->
+	<queries>
+		<intent>
+			<action android:name="android.intent.action.VIEW" />
+			<data android:scheme="http"/>
+		</intent>
+		<intent>
+			<action android:name="android.intent.action.VIEW" />
+			<data android:scheme="https"/>
+		</intent>
+	</queries>
 </manifest>
