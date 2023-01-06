@@ -108,6 +108,10 @@ namespace Bit.App.Pages
                     else if (message.Command == "syncCompleted")
                     {
                         await Task.Delay(500);
+                        if (_vm.MainPage)
+                        {
+                            _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+                        }
                         Device.BeginInvokeOnMainThread(() =>
                         {
                             IsBusy = false;
@@ -269,10 +273,6 @@ namespace Bit.App.Pages
         {
             await _accountListOverlay.HideAsync();
             await _vm.SyncAsync();
-            if (_vm.MainPage)
-            {
-                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
-            }
         }
 
         private async void Lock_Clicked(object sender, EventArgs e)
