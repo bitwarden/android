@@ -102,6 +102,5 @@
         public static string PushLastRegistrationDateKey(string userId) => $"pushLastRegistrationDate_{userId}";
         public static string PushCurrentTokenKey(string userId) => $"pushCurrentToken_{userId}";
         public static string ShouldConnectToWatchKey(string userId) => $"shouldConnectToWatch_{userId}";
-        public static string AvatarColorKey(string userId) => $"avatarColor_{userId}";
     }
 }
