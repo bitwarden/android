@@ -1305,6 +1305,23 @@ namespace Bit.Core.Services
             var key = Constants.PasswordlessLoginNotificationKey;
             await SetValueAsync(key, value, options);
         }
+
+        public async Task SetAvatarColorAsync(string value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+            account.Profile.AvatarColor = value;
+            await SaveAccountAsync(account, reconciledOptions);
+        }
+
+        public async Task<string> GetAvatarColorAsync(string userId = null)
+        {
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            ))?.Profile?.AvatarColor;
+        }
+
         // Helpers
 
         private async Task<T> GetValueAsync<T>(string key, StorageOptions options)

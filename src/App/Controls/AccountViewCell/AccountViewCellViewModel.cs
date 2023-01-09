@@ -14,7 +14,7 @@ namespace Bit.App.Controls
         {
             AccountView = accountView;
             AvatarImageSource = ServiceContainer.Resolve<IAvatarImageSourcePool>("avatarImageSourcePool")
-                ?.GetOrCreateAvatar(AccountView.UserId, AccountView.Name, AccountView.Email);
+                ?.GetOrCreateAvatar(AccountView.UserId, AccountView.Name, AccountView.Email, AccountView.AvatarColor);
         }
 
         public AccountView AccountView
