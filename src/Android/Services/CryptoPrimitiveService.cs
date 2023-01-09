@@ -33,5 +33,10 @@ namespace Bit.Droid.Services
             generator.Init(password, salt, iterations);
             return ((KeyParameter)generator.GenerateDerivedMacParameters(keySize)).GetKey();
         }
+
+        public byte[] Scrypt(byte[] password, byte[] salt, int N, int r, int p, int dkLen)
+        {
+            return SCrypt.Generate(password, salt, N, r, p, dkLen);
+        }
     }
 }

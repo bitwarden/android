@@ -3,6 +3,7 @@ using Bit.Core.Enums;
 using Foundation;
 using System;
 using System.Runtime.InteropServices;
+using Org.BouncyCastle.Crypto.Generators;
 
 namespace Bit.iOS.Core.Services
 {
@@ -43,5 +44,10 @@ namespace Bit.iOS.Core.Services
         [DllImport(ObjCRuntime.Constants.libSystemLibrary, EntryPoint = "CCKeyDerivationPBKDF")]
         private extern static int CCKeyCerivationPBKDF(uint algorithm, IntPtr password, nuint passwordLen,
             IntPtr salt, nuint saltLen, uint prf, nuint rounds, IntPtr derivedKey, nuint derivedKeyLength);
+            
+        public byte[] Scrypt(byte[] password, byte[] salt, int N, int r, int p, int dkLen)
+        {
+            return SCrypt.Generate(password, salt, N, r, p, dkLen);
+        }
     }
 }

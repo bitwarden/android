@@ -10,6 +10,10 @@ namespace Bit.Core.Abstractions
         Task<byte[]> Pbkdf2Async(byte[] password, string salt, CryptoHashAlgorithm algorithm, int iterations);
         Task<byte[]> Pbkdf2Async(string password, byte[] salt, CryptoHashAlgorithm algorithm, int iterations);
         Task<byte[]> Pbkdf2Async(byte[] password, byte[] salt, CryptoHashAlgorithm algorithm, int iterations);
+        Task<byte[]> ScryptAsync(string password, string salt, int N, int r, int p, int dkLen);
+        Task<byte[]> ScryptAsync(byte[] password, string salt, int N, int r, int p, int dkLen);
+        Task<byte[]> ScryptAsync(string password, byte[] salt, int N, int r, int p, int dkLen);
+        Task<byte[]> ScryptAsync(byte[] password, byte[] salt, int N, int r, int p, int dkLen);
         Task<byte[]> HkdfAsync(byte[] ikm, string salt, string info, int outputByteSize, HkdfAlgorithm algorithm);
         Task<byte[]> HkdfAsync(byte[] ikm, byte[] salt, string info, int outputByteSize, HkdfAlgorithm algorithm);
         Task<byte[]> HkdfAsync(byte[] ikm, string salt, byte[] info, int outputByteSize, HkdfAlgorithm algorithm);

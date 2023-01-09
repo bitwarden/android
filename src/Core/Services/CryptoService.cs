@@ -406,6 +406,25 @@ namespace Bit.Core.Services
                 key = await _cryptoFunctionService.Pbkdf2Async(password, salt,
                     CryptoHashAlgorithm.Sha256, kdfIterations.Value);
             }
+            else if (kdf == KdfType.SCRYPT)
+            {
+                if (kdfIterations == 0)
+                {
+                    kdfIterations = 65536;
+                }
+                if (kdfIterations < 32768)
+                {
+                    throw new Exception("SCRYPT work factor minimum is 2^15.");
+                }
+
+                // parameters selected according to https://words.filippo.io/the-scrypt-parameters/
+                const int dkLen = 32; // output length in bytes, i.e 256 bits
+                const int p = 1; // parallelization factor leads to a tradeoff between memory and CPU
+                const int r = 8; // r is the block width, which scales linearly with memory usage
+                var n = kdfIterations.Value; // n is the CPU/memory cost parameter, it needs to be a power of two
+
+                key = await _cryptoFunctionService.ScryptAsync(password, salt, n, r, p, dkLen);
+            }
             else
             {
                 throw new Exception("Unknown kdf.");
