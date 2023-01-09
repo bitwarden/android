@@ -1976,7 +1976,7 @@ Het scannen gebeurt automatisch.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Schakel deze Send uit zodat niemand hem kan benaderen.</value>
+    <value>Schakel deze Send uit zodat niemand hem kan benaderen</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -2044,7 +2044,7 @@ Het scannen gebeurt automatisch.</value>
     <value>Aangepast</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Deze Send bij het opslaan delen.</value>
+    <value>Deze Send bij het opslaan delen</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2056,7 +2056,7 @@ Het scannen gebeurt automatisch.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Verberg mijn e-mailadres voor ontvangers.</value>
+    <value>Verberg mijn e-mailadres voor ontvangers</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Een of meer organisatiebeleidseisen heeft invloed op de mogelijkheden van je Send.</value>
