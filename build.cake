@@ -36,6 +36,7 @@ VariantConfig GetVariant() => variant.ToLower() switch{
 GitVersion _gitVersion; //will be set by GetGitInfo task
 var _slnPath = Path.Combine(""); //base path used to access files. If build.cake file is moved, just update this
 string _androidPackageName = string.Empty; //will be set by UpdateAndroidManifest task
+string _iOSVersionName = string.Empty;  //will be set by UpdateiOSPlist task
 string CreateFeatureBranch(string prevVersionName, GitVersion git) => $"{prevVersionName}-{git.BranchName.Replace("/","-")}";
 string GetVersionName(string prevVersionName, VariantConfig buildVariant, GitVersion git) => buildVariant is Prod? prevVersionName : CreateFeatureBranch(prevVersionName, git); 
 int CreateBuildNumber(int previousNumber) => ++previousNumber; 
@@ -208,6 +209,7 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
 
     if(projectType == iOSProjectType.MainApp)
     {
+        _iOSVersionName = newVersionName
         plist["CFBundleURLTypes"][0]["CFBundleURLName"] = $"{buildVariant.iOSBundleId}.url";
     }
 
@@ -259,7 +261,7 @@ private void UpdateWatchKitAppInfoPlist(string plistPath, VariantConfig buildVar
     Information($"{plistPath} updated with success!");
 }
 
-private void UpdateWatchPbxproj(string pbxprojPath, GitVersion git)
+private void UpdateWatchPbxproj(string pbxprojPath, string newVersion)
 {
     var fileText = FileReadText(pbxprojPath);
     if (string.IsNullOrEmpty(fileText))
@@ -269,12 +271,7 @@ private void UpdateWatchPbxproj(string pbxprojPath, GitVersion git)
 
     const string pattern = @"MARKETING_VERSION = [^;]*;";
 
-    var plistFile = File(Path.Combine(_slnPath, "src", "iOS", "Info.plist"));
-    dynamic plist = DeserializePlist(plistFile);
-
-    var newVersionName = plist["CFBundleShortVersionString"];
-
-    fileText = Regex.Replace(fileText, pattern, $"MARKETING_VERSION = {newVersionName};");
+    fileText = Regex.Replace(fileText, pattern, $"MARKETING_VERSION = {newVersion};");
 
     FileWriteText(pbxprojPath, fileText);
     Information($"{pbxprojPath} modified successfully.");
@@ -350,9 +347,10 @@ Task("UpdateiOSCodeFiles")
 
 Task("UpdateWatchProject")
     .IsDependentOn("UpdateiOSPlist")
+    .WithCriteria(!string.IsNullOrEmpty(_iOSVersionName))
     .Does(()=> {
         var watchProjectPath = Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden.xcodeproj", "project.pbxproj");
-        UpdateWatchPbxproj(watchProjectPath, _gitVersion);
+        UpdateWatchPbxproj(watchProjectPath, _iOSVersionName);
     });
 
 Task("UpdateWatchKitAppInfoPlist")
