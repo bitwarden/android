@@ -209,7 +209,7 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
 
     if(projectType == iOSProjectType.MainApp)
     {
-        _iOSVersionName = newVersionName
+        _iOSVersionName = newVersionName;
         plist["CFBundleURLTypes"][0]["CFBundleURLName"] = $"{buildVariant.iOSBundleId}.url";
     }
 
@@ -347,7 +347,7 @@ Task("UpdateiOSCodeFiles")
 
 Task("UpdateWatchProject")
     .IsDependentOn("UpdateiOSPlist")
-    .WithCriteria(!string.IsNullOrEmpty(_iOSVersionName))
+    .WithCriteria(() => !string.IsNullOrEmpty(_iOSVersionName))
     .Does(()=> {
         var watchProjectPath = Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden.xcodeproj", "project.pbxproj");
         UpdateWatchPbxproj(watchProjectPath, _iOSVersionName);
