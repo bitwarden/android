@@ -4,10 +4,10 @@ name: Build
 on:
   push:
     branches-ignore:
-      - 'l10n_master'
-      - 'gh-pages'
+      - "l10n_master"
+      - "gh-pages"
     paths-ignore:
-      - '.github/workflows/**'
+      - ".github/workflows/**"
   workflow_dispatch:
     inputs: {}
 
@@ -62,16 +62,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: ['prod', 'qa']
+        variant: ["prod", "qa"]
     steps:
       - name: Setup NuGet
-        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
+        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa # v1.0.6
         with:
           nuget-version: 5.9.0
 
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ab534842b4bdf384b8aaf93765dc6f721d9f5fab
-          
+
       - name: Work Around for broken Windows 2022 Runner Image
         run: |
           Set-Location "C:\Program Files (x86)\Microsoft Visual Studio\Installer\"
@@ -148,7 +148,17 @@ jobs:
         shell: pwsh
 
       - name: Run Core tests
-        run: dotnet test test/Core.Test/Core.Test.csproj
+        run: dotnet test test/Core.Test/Core.Test.csproj --logger "trx;LogFileName=test-results.trx" || true
+        shell: pwsh
+
+      - name: Report test results
+        uses: dorny/test-reporter@c9b3d0e2bd2a4e96aaf424dbaa31c46b42318226
+        if: always()
+        with:
+          name: Test Results
+          path: "**/test-results.trx"
+          reporter: dotnet-trx
+          fail-on-error: true
 
       - name: Build Play Store publisher
         if: ${{ matrix.variant == 'prod' }}
@@ -175,7 +185,7 @@ jobs:
         run: |
           $androidPath = $($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj");
           $packageName = "com.x8bit.bitwarden";
-          
+
           if ("${{ matrix.variant }}" -ne "prod") 
           {
             $packageName = "com.x8bit.bitwarden.${{ matrix.variant }}";
@@ -260,7 +270,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Setup NuGet
-        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
+        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa # v1.0.6
         with:
           nuget-version: 5.9.0
 
@@ -444,7 +454,7 @@ jobs:
     needs: setup
     steps:
       - name: Setup NuGet
-        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
+        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa # v1.0.6
         with:
           nuget-version: 5.9.0
 
@@ -586,7 +596,7 @@ jobs:
           echo "########################################"
           echo "##### Build WatchApp with Release Configuration"
           echo "########################################"
-          
+
           xcodebuild archive -workspace ./src/watchOS/bitwarden/bitwarden.xcodeproj/project.xcworkspace -configuration Release -scheme bitwarden\ WatchKit\ App -archivePath ./src/watchOS/bitwarden
 
           echo "########################################"
@@ -657,11 +667,11 @@ jobs:
 
       - name: Upload dSYMs to App Center
         if: |
-            (github.ref == 'refs/heads/master'
-              && needs.setup.outputs.rc_branch_exists == 0
-              && needs.setup.outputs.hotfix_branch_exists == 0)
-            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix-rc'
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
         env:
           APPCENTER_IOS_TOKEN: ${{ steps.retrieve-secrets.outputs.appcenter-ios-token }}
         run: appcenter crashes upload-symbols -a bitwarden/bitwarden -s "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
@@ -669,11 +679,11 @@ jobs:
 
       - name: Upload Watch dSYMs to Firebase Crashlytics
         if: |
-            (github.ref == 'refs/heads/master'
-              && needs.setup.outputs.rc_branch_exists == 0
-              && needs.setup.outputs.hotfix_branch_exists == 0)
-            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix-rc'
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
         run: |
 
           echo "########################################"
@@ -685,11 +695,11 @@ jobs:
 
       - name: Deploy to App Store
         if: |
-            (github.ref == 'refs/heads/master'
-              && needs.setup.outputs.rc_branch_exists == 0
-              && needs.setup.outputs.hotfix_branch_exists == 0)
-            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix-rc'
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
         env:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
@@ -757,9 +767,9 @@ jobs:
     steps:
       - name: Check if any job failed
         if: |
-            (github.ref == 'refs/heads/master')
-            || (github.ref == 'refs/heads/rc')
-            || (github.ref == 'refs/heads/hotfix-rc')
+          (github.ref == 'refs/heads/master')
+          || (github.ref == 'refs/heads/rc')
+          || (github.ref == 'refs/heads/hotfix-rc')
         env:
           CLOC_STATUS: ${{ needs.cloc.result }}
           ANDROID_STATUS: ${{ needs.android.result }}
