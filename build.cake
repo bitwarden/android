@@ -277,10 +277,47 @@ private void UpdateWatchPbxproj(string pbxprojPath, string newVersion)
     Information($"{pbxprojPath} modified successfully.");
 }
 
-Task("UpdateiOSIcon")
+/// <summary>
+/// Updates the target icons on the given appiconset target
+/// taking as source the icon in appIcons/iOS folder for the giving variant
+/// </summary>
+/// <param name="target">It can be <ios|watch|complication|macos></param>
+/// <param name="appiconsetTarget">Folder to copy the generated icons to</param>
+private void UpdateAppleIcons(string target, string appiconsetTarget)
+{
+    Information($"Updating {target} App Icons");
+
+    var iconsTempDirPath = Path.Combine(_slnPath, "appIcons", "temp");
+    CreateDirectory(iconsTempDirPath);
+
+    var arguments = new ProcessArgumentBuilder();
+    arguments.Append(target);
+    arguments.Append(Path.Combine(_slnPath, "appIcons", "iOS", $"{variant}.png"));
+    arguments.Append(iconsTempDirPath);
+
+    using(var process = StartAndReturnProcess(Path.Combine(_slnPath, "appIcons", "icongen.sh"), 
+        new ProcessSettings { Arguments = arguments }))
+    {
+        process.WaitForExit();
+        Information("Exit code: {0}", process.GetExitCode());
+    }
+
+    var generatedIconsPath = Path.Combine(iconsTempDirPath, "*.png");
+    CopyFiles(generatedIconsPath, appiconsetTarget);        
+
+    DeleteDirectory(iconsTempDirPath, new DeleteDirectorySettings {
+        Recursive = true,
+        Force = true
+    });
+
+    Information($"{target} App Icons have been updated");
+}
+
+Task("UpdateiOSIcons")
     .Does(()=>{
-        //TODO we'll implement variant icons later
-        Information($"Updating IOS App Icon");
+        UpdateAppleIcons("ios", Path.Combine(_slnPath, "src", "iOS", "Resources", "Assets.xcassets", "AppIcons.appiconset"));
+        UpdateAppleIcons("watch", Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden WatchKit App", "Assets.xcassets", "AppIcon.appiconset"));
+        // TODO: Update complication icons when they start working
     });
 
 Task("UpdateiOSPlist")
@@ -359,6 +396,7 @@ Task("UpdateWatchKitAppInfoPlist")
         var infoPath = Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden WatchKit Extension", "Info.plist");
         UpdateWatchKitAppInfoPlist(infoPath, buildVariant);
     });
+
 #endregion iOS
 
 #region Main Tasks
@@ -372,7 +410,7 @@ Task("Android")
     });
 
 Task("iOS")
-    //.IsDependentOn("UpdateiOSIcon")
+    .IsDependentOn("UpdateiOSIcons")
     .IsDependentOn("UpdateiOSPlist")
     .IsDependentOn("UpdateiOSAutofillPlist")
     .IsDependentOn("UpdateiOSExtensionPlist")
