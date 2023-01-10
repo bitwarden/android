@@ -34,23 +34,6 @@ namespace Bit.App.Pages
                 await Navigation.PopModalAsync();
             }
         }
-
-        private async void RowSelected(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (!(e.CurrentSelection?.FirstOrDefault() is PasswordlessLoginResponse item))
-                {
-                    return;
-                }
-
-                _vm.AnswerRequestCommand.ExecuteAsync(item);
-            }
-            catch (Exception ex)
-            {
-                _logger?.Value.Exception(ex);
-            }
-        }
     }
 }
 

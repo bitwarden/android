@@ -563,7 +563,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to decline all pending log in requests?.
+        ///   Looks up a localized string similar to Are you sure you want to decline all pending login requests?.
         /// </summary>
         public static string AreYouSureYouWantToDeclineAllPendingLogInRequests {
             get {
@@ -1756,6 +1756,15 @@ namespace Bit.App.Resources {
         public static string Decline {
             get {
                 return ResourceManager.GetString("Decline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Decline all requests.
+        /// </summary>
+        public static string DeclineAllRequests {
+            get {
+                return ResourceManager.GetString("DeclineAllRequests", resourceCulture);
             }
         }
         
@@ -4715,7 +4724,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pending log in requests.
+        ///   Looks up a localized string similar to Pending login requests.
         /// </summary>
         public static string PendingLogInRequests {
             get {

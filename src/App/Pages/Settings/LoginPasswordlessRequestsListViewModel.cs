@@ -34,8 +34,9 @@ namespace Bit.App.Pages
             PageTitle = AppResources.PendingLogInRequests;
             LoginRequestsList = new ObservableRangeCollection<PasswordlessLoginResponse>();
 
-            AnswerRequestCommand = new AsyncCommand<PasswordlessLoginResponse>((request) => PasswordlessLoginAsync(request),
-               onException: ex => HandleException(ex));
+            AnswerRequestCommand = new AsyncCommand<PasswordlessLoginResponse>(PasswordlessLoginAsync,
+               onException: ex => HandleException(ex),
+                allowsMultipleExecutions: false);
 
             DeclineAllRequestsCommand = new AsyncCommand(DeclineAllRequestsAsync,
                 onException: ex => HandleException(ex),

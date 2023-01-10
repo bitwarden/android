@@ -2513,10 +2513,13 @@ Do you want to switch to this account?</value>
     <value>This request is no longer valid</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Pending log in requests</value>
+    <value>Pending login requests</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Decline all requests</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>Are you sure you want to decline all pending log in requests?</value>
+    <value>Are you sure you want to decline all pending login requests?</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
     <value>Requests declined</value>
