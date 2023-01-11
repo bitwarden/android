@@ -17,7 +17,7 @@ namespace Bit.App.Controls
             {
                 return null;
             }
-            return value!.CurrentSelection.FirstOrDefault();
+            return value?.CurrentSelection.FirstOrDefault();
         }
     }
 
