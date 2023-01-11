@@ -70,7 +70,7 @@ namespace Bit.Core.Models.Response
 
         public string GetFullMessage()
         {
-            string GetDefaultMessage() => $"S: {StatusCode}, M: {Message}";
+            string GetDefaultMessage() => $"{(int)StatusCode} {StatusCode}. {Message}";
 
             if (ValidationErrors is null)
             {
