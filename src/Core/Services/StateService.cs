@@ -296,8 +296,7 @@ namespace Bit.Core.Services
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
-
-            if(account?.Profile == null)
+            if (account?.Profile == null || account.Profile.HasPremiumPersonally.GetValueOrDefault() == value)
             {
                 return;
             }
