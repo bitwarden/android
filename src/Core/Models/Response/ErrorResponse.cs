@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using Newtonsoft.Json.Linq;
 
 namespace Bit.Core.Models.Response
@@ -65,6 +66,32 @@ namespace Bit.Core.Models.Response
                 }
             }
             return Message;
+        }
+
+        public string GetFullMessage()
+        {
+            string GetDefaultMessage() => $"{(int)StatusCode} {StatusCode}. {Message}";
+
+            if (ValidationErrors is null)
+            {
+                return GetDefaultMessage();
+            }
+
+            var valErrors = ValidationErrors.Where(e => e.Value != null && e.Value.Any()).ToList();
+            if (!valErrors.Any())
+            {
+                return GetDefaultMessage();
+            }
+
+            string GetFullError(string key, List<string> errors)
+            {
+                return new StringBuilder()
+                    .Append($"[{key}]: ")
+                    .Append(string.Join("; ", errors))
+                    .ToString();
+            };
+
+            return $"{(int)StatusCode} {StatusCode}. {string.Join(Environment.NewLine, valErrors.Select(ve => GetFullError(ve.Key, ve.Value)))}";
         }
 
         private class ErrorModel

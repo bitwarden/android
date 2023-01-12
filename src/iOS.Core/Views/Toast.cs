@@ -1,6 +1,7 @@
 ﻿using Bit.App.Utilities;
 using Foundation;
 using System;
+using System.Diagnostics;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
@@ -110,7 +111,7 @@ namespace Bit.iOS.Core.Views
             }
             else
             {
-                Console.WriteLine("Toast needs a keyWindows to display.");
+                Debug.WriteLine("Toast needs a keyWindows to display.");
             }
         }
 

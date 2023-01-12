@@ -5,11 +5,13 @@
       "scale" : "2x"
     },
     {
+      "filename" : "GraphicUtilitarian38mm2x.png",
       "idiom" : "watch",
       "scale" : "2x",
       "screen-width" : "<=145"
     },
     {
+      "filename" : "GraphicUtilitarian44mm2x.png",
       "idiom" : "watch",
       "scale" : "2x",
       "screen-width" : ">183"
