@@ -149,8 +149,7 @@ namespace Bit.App.Pages
                     Email = await _stateService.GetRememberedEmailAsync();
                 }
                 var deviceIdentifier = await _appIdService.GetAppIdAsync();
-                // TODO uncomment to enable login with device
-                //IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
+                IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
                 CanRemoveAccount = await _stateService.GetActiveUserEmailAsync() != Email;
                 await _deviceActionService.HideLoadingAsync();
             }
