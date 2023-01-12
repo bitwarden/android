@@ -69,9 +69,7 @@ namespace Bit.App.Pages
         {
             try
             {
-                await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
                 LoginRequestsList.ReplaceRange(await _authService.GetActivePasswordlessLoginRequestsAsync());
-                await _deviceActionService.HideLoadingAsync();
 
                 if (!LoginRequestsList.Any())
                 {
@@ -131,8 +129,8 @@ namespace Bit.App.Pages
                     taskList.Add(_authService.PasswordlessLoginAsync(request.Id, request.PublicKey, false));
                 }
                 await Task.WhenAll(taskList);
+                await RefreshAsync();
                 await _deviceActionService.HideLoadingAsync();
-                RefreshCommand.Execute(null);
                 _platformUtilsService.ShowToast("info", null, AppResources.RequestsDeclined);
             }
             catch (Exception ex)
