@@ -291,6 +291,21 @@ namespace Bit.Core.Services
             return organizations?.Any(o => o.UsersGetPremium && o.Enabled) ?? false;
         }
 
+        public async Task SetPremiumAsync(bool value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+
+            if(account?.Profile == null)
+            {
+                return;
+            }
+
+            account.Profile.HasPremiumPersonally = value;
+            await SaveAccountAsync(account, reconciledOptions);
+        }
+
         public async Task<string> GetProtectedPinAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
