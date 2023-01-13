@@ -126,31 +126,31 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>„Bitwarden, Inc.“ е компанията-майка на „8bit Solutions LLC“.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+ОПРЕДЕЛЕН КАТО НАЙ-ДОБРИЯТ УПРАВИТЕЛ НА ПАРОЛИ ОТ „THE VERGE“, „U.S. NEWS &amp; WORLD REPORT“, „CNET“ И ОЩЕ.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+Управлявайте, съхранявайте, защитавайте и споделяйте неограничен брой пароли на неограничен брой устройства  от всяка точка на света. Битуорден предоставя решение за управление на паролите с отворен код, от което може да се възползва всеки, било то у дома, на работа или на път.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Създавайте сигурни, уникални и случайни пароли според изискванията за сигурност на всеки уеб сайт, който посещавате.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+С Изпращанията на Битуорден можете незабавно да предавате шифрована информация под формата на файлове и обикновен текст – директно и с всекиго.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+Битуорден предлага планове за екипи и големи фирми, така че служителите в компаниите да могат безопасно да споделят пароли помежду си.
 
-Why Choose Bitwarden:
+Защо да изберете Битуорден:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+Шифроване от най-висока класа
+Паролите са защитени със сложен шифър „от край до край“ (AES-256 bit, salted hashtag и PBKDF2 SHA-256), така че данните Ви остават да са защитени и неприкосновени.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Вграден генератор на пароли
+Създавайте сигурни, уникални и случайни пароли според изискванията за сигурност на всеки уеб сайт, който посещавате.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+Глобални преводи
+Битуорден е преведен на 40 езика и този брой не спира да расте, благодарение на нашата глобална общност.
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+Приложения за всяка система
+Защитете и споделяйте поверителните данни от своя трезор в Битуорден от всеки браузър, мобилно устройство или компютър.
 </value>
   <comment>Max 4000 characters</comment>
   </data>

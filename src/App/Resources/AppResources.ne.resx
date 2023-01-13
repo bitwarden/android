@@ -118,25 +118,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>Om</value>
+    <value>About</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Legg til</value>
+    <value>Add</value>
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>Legg til en mappe</value>
+    <value>Add Folder</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Legg til gjenstand</value>
+    <value>Add Item</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
-    <value>En feil har oppstått.</value>
+    <value>An error has occurred.</value>
     <comment>Alert title when something goes wrong.</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Tilbake</value>
+    <value>Back</value>
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
@@ -144,159 +144,159 @@
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Lukk</value>
+    <value>Cancel</value>
     <comment>Cancel an operation.</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Kopier</value>
+    <value>Copy</value>
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Kopier passord</value>
+    <value>Copy password</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Kopier brukernavn</value>
+    <value>Copy username</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
-    <value>Krediteringer</value>
+    <value>Credits</value>
     <comment>Title for page that we use to give credit to resources that we use.</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Slett</value>
+    <value>Delete</value>
     <comment>Delete an entity (verb).</comment>
   </data>
   <data name="Deleting" xml:space="preserve">
-    <value>Sletter...</value>
+    <value>Deleting...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Vil du virkelig slette den? Dette kan ikke angres på.</value>
+    <value>Do you really want to delete? This cannot be undone.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Rediger</value>
+    <value>Edit</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Rediger mappe</value>
+    <value>Edit folder</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>E-post</value>
+    <value>Email</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>E-postadresse</value>
+    <value>Email address</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>Send oss en e-post</value>
+    <value>Email us</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Send E-post direkte til oss for å få hjelp eller gi tilbakemeldinger.</value>
+    <value>Email us directly to get help or leave feedback.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>Tast inn din PIN-kode.</value>
+    <value>Enter your PIN code.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
-    <value>Favoritter</value>
+    <value>Favorites</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>Legg inn feilrapport</value>
+    <value>File a bug report</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>Åpne en sak (Issue) på vårt GitHub-lager.</value>
+    <value>Open an issue at our GitHub repository.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Bruk ditt fingeravtrykk for å verifisere.</value>
+    <value>Use your fingerprint to verify.</value>
   </data>
   <data name="Folder" xml:space="preserve">
-    <value>Mappe</value>
+    <value>Folder</value>
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>En ny mappe er opprettet.</value>
+    <value>New folder created.</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
-    <value>Mappen er slettet.</value>
+    <value>Folder deleted.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>Ingen mappe</value>
+    <value>No Folder</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>Mapper</value>
+    <value>Folders</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Mappen er lagret</value>
+    <value>Folder saved</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Åpne nettside</value>
+    <value>Go to website</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
-    <value>Hjelp og tilbakemelding</value>
+    <value>Help and feedback</value>
   </data>
   <data name="Hide" xml:space="preserve">
-    <value>Skjul</value>
+    <value>Hide</value>
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Vennligst koble deg til internett før du fortsetter.</value>
+    <value>Please connect to the internet before continuing.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Internettilkobling nødvendig</value>
+    <value>Internet connection required</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Ugyldig hovedpassord. Prøv igjen.</value>
+    <value>Invalid master password. Try again.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
-    <value>Ugyldig PIN-kode. Prøv igjen.</value>
+    <value>Invalid PIN. Try again.</value>
   </data>
   <data name="Launch" xml:space="preserve">
-    <value>Åpne</value>
+    <value>Launch</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>Logg på</value>
+    <value>Log In</value>
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Innlogging</value>
+    <value>Login</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Logg av</value>
+    <value>Log out</value>
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>Er du sikker på at du vil logge av?</value>
+    <value>Are you sure you want to log out?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Fjern konto</value>
+    <value>Remove account</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Er du sikker på at du vil fjerne denne kontoen?</value>
+    <value>Are you sure you want to remove this account?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
-    <value>Kontoen er allerede lagt til</value>
+    <value>Account already added</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value>Ønsker du å bytte til den nå?</value>
+    <value>Would you like to switch to it now?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
-    <value>Hovedpassord</value>
+    <value>Master password</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
-    <value>Mer</value>
+    <value>More</value>
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>Mitt hvelv</value>
+    <value>My vault</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
@@ -304,59 +304,59 @@
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Navn</value>
+    <value>Name</value>
     <comment>Label for an entity name.</comment>
   </data>
   <data name="No" xml:space="preserve">
-    <value>Nei</value>
+    <value>No</value>
   </data>
   <data name="Notes" xml:space="preserve">
-    <value>Notater</value>
+    <value>Notes</value>
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>OK</value>
+    <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Passord</value>
+    <value>Password</value>
     <comment>Label for a password.</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Lagre</value>
+    <value>Save</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Flytt</value>
+    <value>Move</value>
   </data>
   <data name="Saving" xml:space="preserve">
-    <value>Lagrer...</value>
+    <value>Saving...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Innstillinger</value>
+    <value>Settings</value>
     <comment>The title for the settings page.</comment>
   </data>
   <data name="Show" xml:space="preserve">
-    <value>Vis</value>
+    <value>Show</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Elementet har blitt slettet.</value>
+    <value>Item deleted</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
-    <value>Send inn</value>
+    <value>Submit</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Synkroniser</value>
+    <value>Sync</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>Tusen takk</value>
+    <value>Thank you</value>
   </data>
   <data name="Tools" xml:space="preserve">
-    <value>Verktøy</value>
+    <value>Tools</value>
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
@@ -364,669 +364,669 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Bruk fingeravtrykk for å låse opp</value>
+    <value>Use fingerprint to unlock</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Brukernavn</value>
+    <value>Username</value>
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>{0}-feltet er påkrevd.</value>
+    <value>The {0} field is required.</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} har blitt kopiert</value>
+    <value>{0} copied</value>
     <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Verifiser fingeravtrykket</value>
+    <value>Verify fingerprint</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Verifiser hovedpassordet</value>
+    <value>Verify master password</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
-    <value>Verifiser PIN-koden</value>
+    <value>Verify PIN</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Versjon</value>
+    <value>Version</value>
   </data>
   <data name="View" xml:space="preserve">
-    <value>Vis</value>
+    <value>View</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Besøk nettstedet vårt</value>
+    <value>Visit our website</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Besøk vårt nettsted for å få hjelp, nyheter, sende oss E-poster, og/eller lære mer om å bruke Bitwarden.</value>
+    <value>Visit our website to get help, news, email us, and/or learn more about how to use Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
-    <value>Nettsted</value>
+    <value>Website</value>
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Ja</value>
+    <value>Yes</value>
   </data>
   <data name="Account" xml:space="preserve">
-    <value>Konto</value>
+    <value>Account</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Din nye konto har blitt opprettet! Du kan nå logge på.</value>
+    <value>Your new account has been created! You may now log in.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Legg til gjenstand</value>
+    <value>Add an Item</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
-    <value>App-utvidelse</value>
+    <value>App extension</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Bruk Bitwarden sin tilgjengelighetstjeneste for å auto-utfylle dine innlogginger på apper og på nettet.</value>
+    <value>Use the Bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Auto-utfyllingstjeneste</value>
+    <value>Auto-fill service</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Unngå tvetydige tegn</value>
+    <value>Avoid ambiguous characters</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Bitwarden App-utvidelse</value>
+    <value>Bitwarden app extension</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>Den enkleste måten å legge til nye innlogginger i hvelvet ditt er fra Bitwardens apputvidelse. Lær mer om å bruke Bitwarden-apputvidelsen ved å navigere til "Innstillinger".</value>
+    <value>The easiest way to add new logins to your vault is from the Bitwarden app extension. Learn more about using the Bitwarden app extension by navigating to the "Settings" screen.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Bruk Bitwarden i Safari og i andre apper for å auto-utfylle dine innlogginger.</value>
+    <value>Use Bitwarden in Safari and other apps to auto-fill your logins.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Bitwarden Auto-utfyllingstjeneste</value>
+    <value>Bitwarden Auto-fill Service</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Bruk Bitwarden sin tilgjengelighetstjeneste for å auto-utfylle dine innlogginger.</value>
+    <value>Use the Bitwarden accessibility service to auto-fill your logins.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Endre e-postadresse</value>
+    <value>Change email</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>Du kan endre din kontos E-postadresse på bitwarden.net-netthvelvet. Vil du besøke det nettstedet nå?</value>
+    <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Endre hovedpassord</value>
+    <value>Change master password</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Du kan endre hovedpassordet ditt på bitwarden.com-netthvelvet. Vil du besøke nettstedet nå?</value>
+    <value>You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Lukk</value>
+    <value>Close</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Fortsett</value>
+    <value>Continue</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Opprett konto</value>
+    <value>Create account</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
-    <value>Oppretter konto...</value>
+    <value>Creating account...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Rediger elementet</value>
+    <value>Edit item</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Aktiver automatisk synkronisering</value>
+    <value>Allow automatic syncing</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Skriv inn kontoens e-postadresse for å motta hint om hovedpassordet ditt.</value>
+    <value>Enter your account email address to receive your master password hint.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Aktiver apputvidelsen på nytt</value>
+    <value>Reactivate app extension</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
-    <value>Nesten ferdig!</value>
+    <value>Almost done!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Aktiver apputvidelsen</value>
+    <value>Activate app extension</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>I Safari, finn Bitwarden ved å bruke deleikonet (Hint: Skroll til høyre på menyens bunnrekke).</value>
+    <value>In Safari, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>Få umiddelbar tilgang til dine passord!</value>
+    <value>Get instant access to your passwords!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>Du er klar til å logge på!</value>
+    <value>You're ready to log in!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Dine innlogginger er nå lett tilgjengelige fra Safari, Chrome, og mange andre støttede apper.</value>
+    <value>Your logins are now easily accessible from Safari, Chrome, and other supported apps.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>I Safari og Chrome, finn Bitwarden ved å bruke deleikonet (Hint: Skroll til høyre på delemenyens bunnrekke).</value>
+    <value>In Safari and Chrome, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Tast på Bitwarden-ikonet i menyen for å starte utvidelsen.</value>
+    <value>Tap the Bitwarden icon in the menu to launch the extension.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>For å skru på Bitwarden i Safari og i andre apper, trykk på "Mer"-ikonet på bunnrekken i menyen.</value>
+    <value>To turn on Bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
-    <value>Favoritt</value>
+    <value>Favorite</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>Fingeravtrykk</value>
+    <value>Fingerprint</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>Lag passord</value>
+    <value>Generate password</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>Få et hint om hovedpassordet</value>
+    <value>Get your master password hint</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Importer elementer</value>
+    <value>Import items</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>Du kan importere gjenstander i bunker på bitwarden.net-netthvelvet. Vil du besøke det nettstedet nå?</value>
+    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Importer raskt dine gjenstander i bunker fra andre passordbehandlingsapper.</value>
+    <value>Quickly bulk import your items from other password management apps.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>Siste synkronisering:</value>
+    <value>Last sync:</value>
   </data>
   <data name="Length" xml:space="preserve">
-    <value>Lengde</value>
+    <value>Length</value>
   </data>
   <data name="Lock" xml:space="preserve">
-    <value>Lås</value>
+    <value>Lock</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 minutter</value>
+    <value>15 minutes</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 time</value>
+    <value>1 hour</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
-    <value>1 minutt</value>
+    <value>1 minute</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 timer</value>
+    <value>4 hours</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Umiddelbart</value>
+    <value>Immediately</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Tidsavbrudd for hvelvet</value>
+    <value>Vault timeout</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Hendelse ved tidsavbrudd for hvelvet</value>
+    <value>Vault timeout action</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Dersom du logger ut vil all tilgang til hvelvet fjernes og du må autentisere online etter tidsavbruddet. Er du sikker på at du vil bruke denne innstillingen?</value>
+    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>Logger på...</value>
+    <value>Logging in...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Logg på eller opprett en konto for å få tilgang til ditt sikre hvelv.</value>
+    <value>Log in or create a new account to access your secure vault.</value>
   </data>
   <data name="Manage" xml:space="preserve">
-    <value>Behandle</value>
+    <value>Manage</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
-    <value>Passordbekreftelsen er ikke riktig.</value>
+    <value>Password confirmation is not correct.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Hovedpassordet er passordet du bruker for å få tilgang til hvelvet ditt. Det er svært viktig at du aldri glemmer hovedpassordet. Det er ikke mulig å gjenopprette passordet dersom du glemmer det.</value>
+    <value>The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Et hint for hovedpassordet (valgfritt)</value>
+    <value>Master password hint (optional)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>Et hint om hovedpassordet kan hjelpe deg å huske passordet om du skulle glemme det.</value>
+    <value>A master password hint can help you remember your password if you forget it.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Hovedpassordet må være minst 8 tegn.</value>
+    <value>Master password must be at least 8 characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minst antall siffer</value>
+    <value>Minimum numbers</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Minste antall spesialtegn</value>
+    <value>Minimum special</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
-    <value>Flere innstillinger</value>
+    <value>More settings</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Du må logge inn på Bitwarden sin hovedapp før du kan bruke utvidelsen.</value>
+    <value>You must log into the main Bitwarden app before you can use the extension.</value>
   </data>
   <data name="Never" xml:space="preserve">
-    <value>Aldri</value>
+    <value>Never</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Nytt element opprettet.</value>
+    <value>Item added</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>Det er ingen favoritter i hvelvet ditt.</value>
+    <value>There are no favorites in your vault.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>Det er ingen gjenstander i hvelvet ditt.</value>
+    <value>There are no items in your vault.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Det er ingen oppføringer i ditt hvelv for dette nettstedet. Trykk for å legge til en.</value>
+    <value>There are no items in your vault for this website/app. Tap to add one.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>Denne innloggingen har verken et brukernavn eller passord satt opp.</value>
+    <value>This login does not have a username or password configured.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
-    <value>OK, skjønner!</value>
+    <value>Ok, got it!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Alternativenes standardvalg er bestemt av passordgeneratorverktøyet til Bitwarden sin hovedapp.</value>
+    <value>Option defaults are set from the main Bitwarden app's password generator tool.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Alternativer</value>
+    <value>Options</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>Annet</value>
+    <value>Other</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Passord er generert.</value>
+    <value>Password generated</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Passordgenerator</value>
+    <value>Password generator</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>Passordhint</value>
+    <value>Password hint</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>Vi har sendt deg en e-post med hint om hovedpassord.</value>
+    <value>We've sent you an email with your master password hint.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Er du sikker på at du vil overskrive det nåværende passordet?</value>
+    <value>Are you sure you want to overwrite the current password?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden holder ditt hvelv automatisk synkronisert ved å bruke push-beskjeder. For den beste opplevelsen, vennligst velg "Tillat" på den følgende oppspretten når du blir bedt om å aktivere push-beskjeder.</value>
+    <value>Bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Allow" on the following prompt when asked to allow push notifications.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Vurder denne appen</value>
+    <value>Rate the app</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Tenk gjerne på om du vil skrive en anmeldelse om oss!</value>
+    <value>Please consider helping us out with a good review!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Generer nytt passord</value>
+    <value>Regenerate password</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Skriv inn hovedpassordet på nytt</value>
+    <value>Re-type master password</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Søk i hvelvet</value>
+    <value>Search vault</value>
   </data>
   <data name="Security" xml:space="preserve">
-    <value>Sikkerhet</value>
+    <value>Security</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>Velg</value>
+    <value>Select</value>
   </data>
   <data name="SetPIN" xml:space="preserve">
-    <value>Velg PIN</value>
+    <value>Set PIN</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Skriv inn en 4-sifret PIN-kode til å låse opp appen med.</value>
+    <value>Enter a 4 digit PIN code to unlock the app with.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Elementinformasjon</value>
+    <value>Item information</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Element oppdatert.</value>
+    <value>Item saved</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Sender inn...</value>
+    <value>Submitting...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>Synkroniserer...</value>
+    <value>Syncing...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Synkronisering fullført.</value>
+    <value>Syncing complete</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Synkronisering mislyktes.</value>
+    <value>Syncing failed</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Synkroniser hvelvet nå</value>
+    <value>Sync vault now</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>2-trinnsinnlogging</value>
+    <value>Two-step login</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>2-trinnsinnlogging gjør kontoen din mer sikker, ved å kreve at du verifiserer din innlogging med en annen enhet, f.eks. en autentiseringsapp, SMS, E-post, telefonsamtale, eller sikkerhetsnøkkel. 2-trinnsinnlogging kan aktiveres på bitwarden.com-netthvelvet. Vil du besøke den nettsiden nå?</value>
+    <value>Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be set up on the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Lås opp med {0}</value>
+    <value>Unlock with {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>Lås opp med PIN-kode</value>
+    <value>Unlock with PIN code</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>Validerer</value>
+    <value>Validating</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Verifiseringskode</value>
+    <value>Verification code</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>Vis element</value>
+    <value>View item</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Bitwarden Netthvelv</value>
+    <value>Bitwarden web vault</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>Har du mistet din autentiseringsapp?</value>
+    <value>Lost authenticator app?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Gjenstander</value>
+    <value>Items</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Utvidelsen er aktivert!</value>
+    <value>Extension activated!</value>
   </data>
   <data name="Icons" xml:space="preserve">
-    <value>Ikoner</value>
+    <value>Icons</value>
   </data>
   <data name="Translations" xml:space="preserve">
-    <value>Oversettelser</value>
+    <value>Translations</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Gjenstander for {0}</value>
+    <value>Items for {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>Det er ingen gjenstander i hvelvet ditt for {0}.</value>
+    <value>There are no items in your vault for {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>Når du velger et inntastingsfelt og ser Bitwardens autofylltjeneste, kan du trykke på den for å starte autofylltjenesten.</value>
+    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Trykk på denne beskjeden for å auto-utfylle en gjenstand fra ditt hvelv.</value>
+    <value>Tap this notification to auto-fill an item from your vault.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Åpne tilgjengelighetsinnstillinger</value>
+    <value>Open Accessibility Settings</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1) På Android sin meny for tilgjengelighetsinnstillinger, trykk på "Bitwarden" i Tjenester-listen.</value>
+    <value>1. On the Android Accessibility Settings screen, touch "Bitwarden" under the Services heading.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2) Skru på bryteren, og trykk på OK for å akseptere.</value>
+    <value>2. Switch on the toggle and press OK to accept.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>Deaktivert</value>
+    <value>Disabled</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>Aktivert</value>
+    <value>Enabled</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Av</value>
+    <value>Off</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>På</value>
+    <value>On</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Den enkleste måten å legge til nye innlogginger i hvelvet ditt, er fra Bitwarden sin autofylltjeneste. Lær mer om å bruke Bitwarden sin autofylltjeneste ved å navigere til "Innstillinger".</value>
+    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Auto-utfylling</value>
+    <value>Auto-fill</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Vil du auto-utfylle eller vise denne gjenstanden?</value>
+    <value>Do you want to auto-fill or view this item?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Er du sikker på at du vil auto-utfylle dette elementet? Den samsvarer ikke fullstendig med "{0}".</value>
+    <value>Are you sure you want to auto-fill this item? It is not a complete match for "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Samsvarende elementer</value>
+    <value>Matching items</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Mulig samsvarende elementer</value>
+    <value>Possible matching items</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Søk</value>
+    <value>Search</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>Du søker etter en auto-utfyllingsgjenstand for "{0}".</value>
+    <value>You are searching for an auto-fill item for "{0}".</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Lær om organisasjoner</value>
+    <value>Learn about organizations</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Kan ikke åpne appen "{0}".</value>
+    <value>Cannot open the app "{0}".</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Autentiseringsapp</value>
+    <value>Authenticator app</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Skriv inn den 6-sifrede verifiseringskoden som står på din autentiseringsapp.</value>
+    <value>Enter the 6 digit verification code from your authenticator app.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Skriv inn den 6-sifrede verifiseringskoden som ble sendt til {0}.</value>
+    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Innloggingen er utilgjengelig</value>
+    <value>Login unavailable</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Denne kontoen har 2-trinnsinnlogging aktivert, men ingen av de oppsatte 2-trinnsleverandørene er støttet på denne enheten. Vennligst bruk en støttet enhet og/eller legg til flere leverandører som er bedre støttet på flere enheter (slik som en autentiseringsapp).</value>
+    <value>This account has two-step login set up, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>Gjenopprettingskode</value>
+    <value>Recovery code</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Husk på meg</value>
+    <value>Remember me</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Send E-posten med verifiseringskoden på nytt</value>
+    <value>Send verification code email again</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>2-trinnsinnloggingsalternativer</value>
+    <value>Two-step login options</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Bruk en annen 2-trinnsinnloggingsmetode</value>
+    <value>Use another two-step login method</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Kunne ikke sende verifiserings-E-posten. Prøv igjen.</value>
+    <value>Could not send verification email. Try again.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verifiserings-E-posten er sendt.</value>
+    <value>Verification email sent</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>For å fortsette, hold din YubiKey NEO opp mot baksiden av enheten din, eller sett inn din YubiKey i din enhets USB-inntak, og så trykk på dens knapp.</value>
+    <value>To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device's USB port, then touch its button.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey-sikkerhetsnøkkel</value>
+    <value>YubiKey security key</value>
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Legg til et nytt vedlegg</value>
+    <value>Add new attachment</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Vedlegg</value>
+    <value>Attachments</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Kunne ikke laste ned filen.</value>
+    <value>Unable to download file.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Enheten din kan ikke åpne denne filtypen.</value>
+    <value>Your device cannot open this type of file.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>Laster ned...</value>
+    <value>Downloading...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>Dette vedlegget er {0} stort. Er du sikker på at du vil laste det ned til enheten din?</value>
+    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Autentiseringsnøkkel (TOTP)</value>
+    <value>Authenticator key (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Verifiseringskode (TOTP)</value>
+    <value>Verification code (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Autentiseringsnøkkel er lagt til.</value>
+    <value>Authenticator key added.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Kan ikke lese autentiseringsnøkkelen.</value>
+    <value>Cannot read authenticator key.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Pek kameraet ditt på QR-koden.
-Skanning skjer automatisk.</value>
+    <value>Point your camera at the QR Code.
+Scanning will happen automatically.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>Skann QR-koden</value>
+    <value>Scan QR Code</value>
   </data>
   <data name="Camera" xml:space="preserve">
-    <value>Kamera</value>
+    <value>Camera</value>
   </data>
   <data name="Photos" xml:space="preserve">
-    <value>Bilder</value>
+    <value>Photos</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Kopier TOTP-en</value>
+    <value>Copy TOTP</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>Hvis en innlogging har en autentiseringsnøkkel, kopier TOTP-verifiseringskoden til utklippstavlen din når du auto-utfyller innloggingen.</value>
+    <value>If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
-    <value>Kopier TOTP-en automatisk</value>
+    <value>Copy TOTP automatically</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>Et Premium-medlemskap er påkrevd for å bruke denne funksjonen.</value>
+    <value>A premium membership is required to use this feature.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Vedlegget er lagt til</value>
+    <value>Attachment added</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Vedlegget er slettet</value>
+    <value>Attachment deleted</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>Velg fil</value>
+    <value>Choose file</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>Fil</value>
+    <value>File</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>Ingen fil er valgt</value>
+    <value>No file chosen</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>Det er ingen vedlegg.</value>
+    <value>There are no attachments.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>Filens kilde</value>
+    <value>File Source</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Funksjon utilgjengelig</value>
+    <value>Feature unavailable</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>Maksimal filstørrelse er 100 MB.</value>
+    <value>Maximum file size is 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>Du kan ikke bruke denne funksjonen før du oppdaterer krypteringsnøkkelen din.</value>
+    <value>You cannot use this feature until you update your encryption key.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Lær mer</value>
+    <value>Learn more</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>API-tjenernettadresse</value>
+    <value>API server URL</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
-    <value>Tilpasset miljø</value>
+    <value>Custom environment</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>For avanserte brukere. Du kan bestemme grunn-nettadressen til hver tjeneste separat.</value>
+    <value>For advanced users. You can specify the base URL of each service independently.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>Miljø-nettadressene har blitt lagret.</value>
+    <value>The environment URLs have been saved.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} er ikke riktig formattert.</value>
+    <value>{0} is not correctly formatted.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Identitetstjenerens nettadresse</value>
+    <value>Identity server URL</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Selvbetjent miljø</value>
+    <value>Self-hosted environment</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Spesifiser grunn-nettadressen til din selvbetjente Bitwarden-installasjon.</value>
+    <value>Specify the base URL of your on-premise hosted Bitwarden installation.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>Tjener-nettadresse</value>
+    <value>Server URL</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Netthvelvets tjenernettadresse</value>
+    <value>Web vault server URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Trykk på denne beskjeden for å se gjenstander fra ditt hvelv.</value>
+    <value>Tap this notification to view items from your vault.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>Tilpassede felter</value>
+    <value>Custom fields</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Kopier nummeret</value>
+    <value>Copy number</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Kopier sikkerhetskoden</value>
+    <value>Copy security code</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Nummer</value>
+    <value>Number</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Sikkerhetskode</value>
+    <value>Security code</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Kort</value>
+    <value>Card</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identitet</value>
+    <value>Identity</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Innlogging</value>
+    <value>Login</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Sikre notater</value>
+    <value>Secure note</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Adresse 1</value>
+    <value>Address 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Adresse 2</value>
+    <value>Address 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Adresse 3</value>
+    <value>Address 3</value>
   </data>
   <data name="April" xml:space="preserve">
     <value>April</value>
@@ -1035,418 +1035,418 @@ Skanning skjer automatisk.</value>
     <value>August</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Merke</value>
+    <value>Brand</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Kortholderens navn</value>
+    <value>Cardholder name</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>By / Tettsted</value>
+    <value>City / Town</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Firma</value>
+    <value>Company</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Land</value>
+    <value>Country</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>Desember</value>
+    <value>December</value>
   </data>
   <data name="Dr" xml:space="preserve">
-    <value>Dr.</value>
+    <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Utløpsmåned</value>
+    <value>Expiration month</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Utløpsår</value>
+    <value>Expiration year</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>Februar</value>
+    <value>February</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>Fornavn</value>
+    <value>First name</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>Januar</value>
+    <value>January</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>Juli</value>
+    <value>July</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>Juni</value>
+    <value>June</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Etternavn</value>
+    <value>Last name</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Fullt navn</value>
+    <value>Full name</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>Førerkortnummer</value>
+    <value>License number</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>Mars</value>
+    <value>March</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>Mai</value>
+    <value>May</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Mellomnavn</value>
+    <value>Middle name</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Herr</value>
+    <value>Mr</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Fru</value>
+    <value>Mrs</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Frøken</value>
+    <value>Ms</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>Oktober</value>
+    <value>October</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passnummer</value>
+    <value>Passport number</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Telefon</value>
+    <value>Phone</value>
   </data>
   <data name="September" xml:space="preserve">
     <value>September</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Fødselsnummer</value>
+    <value>Social Security number</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>Fylke / Region</value>
+    <value>State / Province</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Tittel</value>
+    <value>Title</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Postnummer</value>
+    <value>Zip / Postal code</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Adresse</value>
+    <value>Address</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Utløp</value>
+    <value>Expiration</value>
   </data>
   <data name="ShowWebsiteIcons" xml:space="preserve">
-    <value>Vis nettsideikoner</value>
+    <value>Show website icons</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
-    <value>Vis et gjenkjennelig bilde ved siden av hver innlogging.</value>
+    <value>Show a recognizable image next to each login.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Ikonenes tjenernettadresse</value>
+    <value>Icons server URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-utfyll med Bitwarden</value>
+    <value>Auto-fill with Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Hvelvet er låst</value>
+    <value>Vault is locked</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Gå til hvelvet mitt</value>
+    <value>Go to my vault</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Samlinger</value>
+    <value>Collections</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>Det er ingen gjenstander i denne samlingen.</value>
+    <value>There are no items in this collection.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>Det er ingen gjenstander i denne mappen.</value>
+    <value>There are no items in this folder.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
-    <value>Det er ingen elementer i papirkurven.</value>
+    <value>There are no items in the trash.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-utfyllingstilgjengelighetstjeneste</value>
+    <value>Auto-fill Accessibility Service</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden sin autofylltjeneste bruker Android Autofill Framework for å fylle inn innlogginger, bankkort og identifikasjonsinfo inn i andre apper på din enhet.</value>
+    <value>The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling login information into other apps on your device.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Bruk Bitwarden sin autofylltjeneste for å fylle ut innlogginger, bankkort og identifikasjonsinfo i andre apper.</value>
+    <value>Use the Bitwarden auto-fill service to fill login information into other apps.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Åpne auto-utfyllingsinnstillingene</value>
+    <value>Open Autofill Settings</value>
   </data>
   <data name="FaceID" xml:space="preserve">
     <value>Face ID</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Bruk Face ID for å verifisere.</value>
+    <value>Use Face ID to verify.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Bruk Face ID til å låse opp</value>
+    <value>Use Face ID To Unlock</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verifiser din Face ID</value>
+    <value>Verify Face ID</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>Vi klarte ikke å automatisk åpne Android sine auto-utfyllingsinnstilinger for deg. Du kan bla manuelt til auto-utfyllingsinnstillingsmenyen fra Android-innstillinger → System → Språk og inndata → Avansert → Auto-utfyllingstjeneste.</value>
+    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Navn på spesifikt felt</value>
+    <value>Custom field name</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
-    <value>Boolsk verdi</value>
+    <value>Boolean</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>Skjult</value>
+    <value>Hidden</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Koblet</value>
+    <value>Linked</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
-    <value>Tekst</value>
+    <value>Text</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>Nytt egendefinert felt</value>
+    <value>New custom field</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>Hvilken type spesifikt felt vil du legge til?</value>
+    <value>What type of custom field do you want to add?</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Fjern</value>
+    <value>Remove</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>Ny URI</value>
+    <value>New URI</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
     <value>URI {0}</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Grunndomene</value>
+    <value>Base domain</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Standard</value>
+    <value>Default</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>Nøyaktig</value>
+    <value>Exact</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Vert</value>
+    <value>Host</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regulært uttrykk</value>
+    <value>Regular expression</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>Starter med</value>
+    <value>Starts with</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI-matchgjenkjenning</value>
+    <value>URI match detection</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Match-gjenkjenning</value>
+    <value>Match detection</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Ja, og lagre</value>
+    <value>Yes, and save</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Autofyll og lagre</value>
+    <value>Auto-fill and save</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>Organisasjon</value>
+    <value>Organization</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hold din Yubikey nær toppen av enheten.</value>
+    <value>Hold your Yubikey near the top of the device.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Prøv på nytt</value>
+    <value>Try again</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>For å fortsette, hold din YubiKey NEO mot baksiden av enheten.</value>
+    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>Tilgjengelighetstjenesten kan være nyttig å bruke når apper ikke støtter den vanlige autoutfyllingstjenesten.</value>
+    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Passordet oppdatert den</value>
+    <value>Password updated</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Oppdatert den</value>
+    <value>Updated</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>Autoutfylling aktivert!</value>
+    <value>AutoFill activated!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>Du må logge deg inn på Bitwarden-hovedappen før du kan bruke autoutfylling.</value>
+    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Innloggingene dine er nå lett tilgjengelige fra tastaturet når du skal logge deg inn på apper og nettsteder.</value>
+    <value>Your logins are now easily accessible right from your keyboard while logging into apps and websites.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>Vi anbefaler å deaktivere alle andre autoutfyllingsapper i Innstillinger dersom du ikke har tenkt å bruke dem.</value>
+    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Få tilgang til hvelvet ditt direkte fra tastaturet for å raskt autoutfylle passord.</value>
+    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Følg disse instruksjonene for å aktivere passord autofyll på enheten din:</value>
+    <value>To set up password auto-fill on your device, follow these instructions:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Gå til iOS-appen «Innstillinger»</value>
+    <value>1. Go to the iOS "Settings" app</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Trykk på "Passord og kontoer"</value>
+    <value>2. Tap "Passwords"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Trykk «Autoutfyll passord»</value>
+    <value>3. Tap "AutoFill Passwords"</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Slå på Autoutfyll</value>
+    <value>4. Turn on AutoFill</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Velg «Bitwarden»</value>
+    <value>5. Select "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Passord Autofyll</value>
+    <value>Password auto-fill</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>Den enkleste måten å legge til nye innlogginger i hvelvet ditt, er å bruke «Bitwarden-passordautoutfylling»-utvidelsen. Lær mer om «Bitwarden-passordautoutfylling»-utvidelsen ved å gå til «Innstillinger».</value>
+    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Ugyldig e-postadresse.</value>
+    <value>Invalid email address.</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Kort</value>
+    <value>Cards</value>
   </data>
   <data name="Identities" xml:space="preserve">
-    <value>Identiteter</value>
+    <value>Identities</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Innlogginger</value>
+    <value>Logins</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>Sikre notater</value>
+    <value>Secure notes</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>Alle elementer</value>
+    <value>All items</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>URI-er</value>
+    <value>URIs</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>Sjekker passord ...</value>
+    <value>Checking password...</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>Sjekk om passordet har blitt eksponert.</value>
+    <value>Check if password has been exposed.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>Dette passordet har blitt eksponert {0} gang(er) i datalekkasjer. Du bør endre det.</value>
+    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>Dette passordet ble ikke funnet i noen kjente datalekkasjer. Det bør være trygt å bruke.</value>
+    <value>This password was not found in any known data breaches. It should be safe to use.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
-    <value>Identitetsnavn</value>
+    <value>Identity name</value>
   </data>
   <data name="Value" xml:space="preserve">
-    <value>Verdi</value>
+    <value>Value</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Passordhistorikk</value>
+    <value>Password history</value>
   </data>
   <data name="Types" xml:space="preserve">
-    <value>Typer</value>
+    <value>Types</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>Det er ingen passord å vise</value>
+    <value>No passwords to list.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>Det er ingen elementer å vise.</value>
+    <value>There are no items to list.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>Søk i samling</value>
+    <value>Search collection</value>
   </data>
   <data name="SearchFileSends" xml:space="preserve">
-    <value>Søk i Sends-filer</value>
+    <value>Search file Sends</value>
   </data>
   <data name="SearchTextSends" xml:space="preserve">
-    <value>Søk i Sends-tekster</value>
+    <value>Search text Sends</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
-    <value>Søk {0}</value>
+    <value>Search {0}</value>
     <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Type</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Flytt ned</value>
+    <value>Move down</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
-    <value>Flytt opp</value>
+    <value>Move Up</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
-    <value>Diverse</value>
+    <value>Miscellaneous</value>
   </data>
   <data name="Ownership" xml:space="preserve">
-    <value>Eierskap</value>
+    <value>Ownership</value>
   </data>
   <data name="WhoOwnsThisItem" xml:space="preserve">
-    <value>Hvem eier dette elementet?</value>
+    <value>Who owns this item?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>Det er ingen samlinger å vise.</value>
+    <value>There are no collections to list.</value>
   </data>
   <data name="MovedItemToOrg" xml:space="preserve">
-    <value>{0} flyttet til {1}.</value>
+    <value>{0} moved to {1}.</value>
     <comment>ex: Item moved to Organization.</comment>
   </data>
   <data name="ItemShared" xml:space="preserve">
-    <value>Elementet har blitt delt.</value>
+    <value>Item has been shared.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
-    <value>Du må velge minst én samling.</value>
+    <value>You must select at least one collection.</value>
   </data>
   <data name="Share" xml:space="preserve">
-    <value>Del</value>
+    <value>Share</value>
   </data>
   <data name="ShareItem" xml:space="preserve">
-    <value>Del element</value>
+    <value>Share Item</value>
   </data>
   <data name="MoveToOrganization" xml:space="preserve">
-    <value>Flytt til organisasjon</value>
+    <value>Move to Organization</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>Det er ingen organisasjoner å vise.</value>
+    <value>No organizations to list.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>Velg en organisasjon som du ønsker å flytte dette elementet til. Flytting til en organisasjon overfører eierskap til den aktuelle organisasjonen. Du vil ikke lenger være eier av dette elementet etter det er flyttet.</value>
+    <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
-    <value>Antall ord</value>
+    <value>Number of words</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Passfrase</value>
+    <value>Passphrase</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>Orddeler</value>
+    <value>Word separator</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Tøm</value>
+    <value>Clear</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
@@ -1454,121 +1454,121 @@ Skanning skjer automatisk.</value>
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>Det er ingen mapper å vise</value>
+    <value>There are no folders to list.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fingeravtrykksfrase</value>
+    <value>Fingerprint phrase</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Din kontos fingeravtrykksfrase</value>
+    <value>Your account's fingerprint phrase</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwarden lar deg dele dine hvelvelementer med andre ved å bruke en organisasjonskonto. Vil du besøke bitwarden.com for å lære mer?</value>
+    <value>Bitwarden allows you to share your vault items with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Eksporter hvelvet</value>
+    <value>Export vault</value>
   </data>
   <data name="LockNow" xml:space="preserve">
-    <value>Lås nå</value>
+    <value>Lock now</value>
   </data>
   <data name="PIN" xml:space="preserve">
     <value>PIN</value>
   </data>
   <data name="Unlock" xml:space="preserve">
-    <value>Lås opp</value>
+    <value>Unlock</value>
   </data>
   <data name="UnlockVault" xml:space="preserve">
-    <value>Lås opp hvelvet</value>
+    <value>Unlock vault</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
-    <value>30 minutter</value>
+    <value>30 minutes</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Angi PIN-koden for å låse opp Bitwarden. PIN-innstillingene dine blir tilbakestilt hvis du logger deg ut av applikasjonen.</value>
+    <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Logget på som {0} på {1}.</value>
+    <value>Logged in as {0} on {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Hvelvet ditt er låst. Kontroller hovedpassordet ditt for å fortsette.</value>
+    <value>Your vault is locked. Verify your master password to continue.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Hvelvet ditt er låst. Kontroller PIN-koden din for å fortsette.</value>
+    <value>Your vault is locked. Verify your PIN code to continue.</value>
   </data>
   <data name="VaultLockedIdentity" xml:space="preserve">
-    <value>Hvelvet ditt er låst. Bekreft identiteten din for å fortsette.</value>
+    <value>Your vault is locked. Verify your identity to continue.</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Mørk</value>
+    <value>Dark</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Lys</value>
+    <value>Light</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
-    <value>5 minutter</value>
+    <value>5 minutes</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
-    <value>10 sekunder</value>
+    <value>10 seconds</value>
   </data>
   <data name="ThirtySeconds" xml:space="preserve">
-    <value>30 sekunder</value>
+    <value>30 seconds</value>
   </data>
   <data name="TwentySeconds" xml:space="preserve">
-    <value>20 sekunder</value>
+    <value>20 seconds</value>
   </data>
   <data name="TwoMinutes" xml:space="preserve">
-    <value>2 minutter</value>
+    <value>2 minutes</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Tøm utklippstavlen</value>
+    <value>Clear clipboard</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Slett kopierte verdier fra utklippstavlen automatisk.</value>
+    <value>Automatically clear copied values from your clipboard.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Standard URI-samsvarsgjenkjenning</value>
+    <value>Default URI match detection</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Velg standardmåten for å håndtere URI-samsvarsgjenkjenning for pålogginger ved f.eks. auto-utfylling.</value>
+    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Tema</value>
+    <value>Theme</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>Endre appens fargetema.</value>
+    <value>Change the application's color theme.</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
-    <value>Standard (System)</value>
+    <value>Default (System)</value>
   </data>
   <data name="DefaultDarkTheme" xml:space="preserve">
-    <value>Standard mørkt tema</value>
+    <value>Default dark theme</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Velg mørkt tema som skal brukes når du bruker standard (System) tema når din enhets mørke modus er aktivert</value>
+    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is in use.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Kopier notater</value>
+    <value>Copy note</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Avslutt</value>
+    <value>Exit</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>Er du sikker på at du vil avslutte Bitwarden?</value>
+    <value>Are you sure you want to exit Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Ønsker du å låse opp ved å bruke hovedpassordet når applikasjonen startes på nytt?</value>
+    <value>Do you want to require unlocking with your master password when the application is restarted?</value>
   </data>
   <data name="Black" xml:space="preserve">
-    <value>Svart</value>
+    <value>Black</value>
     <comment>The color black</comment>
   </data>
   <data name="Nord" xml:space="preserve">
@@ -1576,303 +1576,303 @@ Skanning skjer automatisk.</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
-    <value>Solarisert mørk</value>
+    <value>Solarized Dark</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
-    <value>Auto-utfyll blokkerte URI-er</value>
+    <value>Auto-fill blocked URIs</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Auto-utfyll vil ikke bli tilbudt for blokkerte URI-er. Separer flere URI-er med komma. For eksempel: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Auto-fill will not be offered for blocked URIs. Separate multiple URIs with a comma. For example: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
-    <value>Spør om å legge til innlogging</value>
+    <value>Ask to add login</value>
   </data>
   <data name="AskToAddLoginDescription" xml:space="preserve">
-    <value>Spør om å legge til et element hvis det ikke finnes i hvelvet ditt.</value>
+    <value>Ask to add an item if one isn't found in your vault.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>Ved omstart av appen</value>
+    <value>On app restart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-utfylling gjør det lett å få sikker tilgang til Bitwarden-hvelvet ditt fra andre nettsteder og apper. Det ser ut til at du ikke har skrudd på noen auto-utfyllingstjenester for Bitwarden. Du kan skru på auto-utfylling for Bitwarden i «Innstillinger»-menyen.</value>
+    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not set up an auto-fill service for Bitwarden. Set up auto-fill for Bitwarden from the "Settings" screen.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Temaendringene dine vil gjelde når appen startes på nytt.</value>
+    <value>Your theme changes will apply when the app is restarted.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Stor forbokstav</value>
+    <value>Capitalize</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Inkluder siffer</value>
+    <value>Include number</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Last ned</value>
+    <value>Download</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>Delt</value>
+    <value>Shared</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Slå synlighet av/på</value>
+    <value>Toggle visibility</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Økten din har utløpt.</value>
+    <value>Your login session has expired.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Biometrisk verifisering</value>
+    <value>Biometric verification</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometri</value>
+    <value>Biometrics</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Bruk biometri for å låse opp</value>
+    <value>Use biometrics to unlock</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden trenger oppmerksomhet: Se "Auto-utfyllingstjenester" fra Bitwarden-innstillinger</value>
+    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden settings</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. På Android App Innstillinger for Bitwarden, gå til "Vis over andre apper" alternativer (under avansert) og trykk på bryteren for å aktivere overleggstøtte.</value>
+    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to allow overlay support.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
-    <value>Tillatelse</value>
+    <value>Permission</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Åpne innstillinger for overleggstillatelse</value>
+    <value>Open Overlay Permission Settings</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. På Android App Innstillinger for Bitwarden, velg "Vis over andre apper" (under "Avansert") og slå på bryteren for å tillate overlegg.</value>
+    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>Avvist</value>
+    <value>Denied</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>Innvilget</value>
+    <value>Granted</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
-    <value>Filformat</value>
+    <value>File format</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Skriv inn hovedpassordet for å eksportere hvelvdataene.</value>
+    <value>Enter your master password to export your vault data.</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
-    <value>Send en verifiseringskode til e-posten din</value>
+    <value>Send a verification code to your email</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
-    <value>Kode sendt!</value>
+    <value>Code sent!</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
-    <value>Bekreft din identitet for å fortsette.</value>
+    <value>Confirm your identity to continue.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>Denne eksporten inneholder hvelvdataene dine i et ukryptert format. Du bør ikke lagre eller sende den eksporterte filen over usikre kanaler (for eksempel e-post). Slett den umiddelbart etter at du er ferdig med å bruke den.</value>
+    <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
-    <value>Denne eksporten krypterer dataene dine ved hjelp av kontoen din sin krypteringsnøkkel. Hvis du noen gang endrer krypteringsnøkkelen til kontoen din, bør du eksportere dataene igjen, ettersom du da ikke vil kunne dekryptere denne eksportfilen.</value>
+    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
-    <value>Kontokrypteringsnøkler er unike for hver eneste Bitwarden brukerkonto, så du kan ikke importere en kryptert eksport til en annen konto.</value>
+    <value>Account encryption keys are unique to each Bitwarden user account, so you can't import an encrypted export into a different account.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Bekreft eksport av hvelvet</value>
+    <value>Confirm vault export</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Advarsel</value>
+    <value>Warning</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>Det oppsto et problem med å eksportere hvelvet. Hvis problemet vedvarer, må du eksportere fra netthvelvet.</value>
+    <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
-    <value>Hvelvet ble eksportert</value>
+    <value>Vault exported successfully</value>
   </data>
   <data name="Clone" xml:space="preserve">
-    <value>Klon</value>
+    <value>Clone</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>En eller flere av organisasjonens vilkår påvirker generatorinnstillingene dine</value>
+    <value>One or more organization policies are affecting your generator settings</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Åpne</value>
+    <value>Open</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>Det oppsto et problem med å lagre dette vedlegget. Hvis problemet vedvarer, kan du lagre det fra netthvelvet.</value>
+    <value>There was a problem saving this attachment. If the problem persists, you can save it from the web vault.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
-    <value>Vedlegget ble lagret</value>
+    <value>Attachment saved successfully</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Aktiver "Auto-utfyllingstjenester" fra Bitwarden-innstillingene for å bruke auto-utfyllingsflisen.</value>
+    <value>Please turn on "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
-    <value>Ingen passordfelt oppdaget</value>
+    <value>No password fields detected</value>
   </data>
   <data name="SoftDeleting" xml:space="preserve">
-    <value>Sender til papirkurv...</value>
+    <value>Sending to trash...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemSoftDeleted" xml:space="preserve">
-    <value>Elementet ble sendt til papirkurven.</value>
+    <value>Item has been sent to trash.</value>
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Gjenopprett</value>
+    <value>Restore</value>
     <comment>Restores an entity (verb).</comment>
   </data>
   <data name="Restoring" xml:space="preserve">
-    <value>Gjenoppretter...</value>
+    <value>Restoring...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Elementet har blitt gjenopprettet.</value>
+    <value>Item restored</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>Papirkurv</value>
+    <value>Trash</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
-    <value>Søk i papirkurven</value>
+    <value>Search trash</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
-    <value>Vil du virkelig slette denne permanent? Dette kan ikke angres.</value>
+    <value>Do you really want to permanently delete? This cannot be undone.</value>
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
-    <value>Vil du virkelig gjenopprette dette elementet?</value>
+    <value>Do you really want to restore this item?</value>
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>Vil du virkelig sende til papirkurven?</value>
+    <value>Do you really want to send to the trash?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometrisk opplåsing er deaktivert under påvente av hovedpassord.</value>
+    <value>Biometric unlock disabled pending verification of master password.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometrisk opplåsing for autofyll deaktivert i påvente av verifisering av hovedpassord.</value>
+    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Aktiver synkronisering ved oppdatering</value>
+    <value>Allow sync on refresh</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Synkroniser hvelvet med nedtrekksbevegelse.</value>
+    <value>Syncing vault with pull down gesture.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Bedriftsinnlogging (SSO)</value>
+    <value>Enterprise single sign-on</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Logg raskt inn med din organisasjons enkelte  logg-på portal. Angi din organisasjons identifikator for å begynne.</value>
+    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
-    <value>Organisasjons identifikator</value>
+    <value>Organization identifier</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Kan ikke logge inn med SSO</value>
+    <value>Currently unable to login with SSO</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Angi hovedpassord</value>
+    <value>Set master password</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>For å fullføre innloggingen med SSO, angi et hovedpassord for å få tilgang til og beskytte hvelvet ditt.</value>
+    <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>En eller flere av organisasjonens vilkår krever hovedpassordet ditt for å oppfylle følgende krav:</value>
+    <value>One or more organization policies require your master password to meet the following requirements:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Minimum kompleksitetsskår på {0}</value>
+    <value>Minimum complexity score of {0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
-    <value>Minste lengde på {0}</value>
+    <value>Minimum length of {0}</value>
   </data>
   <data name="PolicyInEffectUppercase" xml:space="preserve">
-    <value>Inneholder én eller flere store bokstaver</value>
+    <value>Contain one or more uppercase characters</value>
   </data>
   <data name="PolicyInEffectLowercase" xml:space="preserve">
-    <value>Inneholder én eller flere små bokstaver</value>
+    <value>Contain one or more lowercase characters</value>
   </data>
   <data name="PolicyInEffectNumbers" xml:space="preserve">
-    <value>Inneholde ett eller flere siffer</value>
+    <value>Contain one or more numbers</value>
   </data>
   <data name="PolicyInEffectSpecial" xml:space="preserve">
-    <value>Inneholder ett eller flere av de følgende spesialtegn: {0}</value>
+    <value>Contain one or more of the following special characters: {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>Ugyldig passord</value>
+    <value>Invalid password</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>Passordet oppfyller ikke organisasjonens krav. Kontroller organisasjonens vilkår og prøv på nytt.</value>
+    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Laster</value>
+    <value>Loading</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>Ved å aktivere denne bryteren samtykker du til følgende:
+    <value>By activating this switch you agree to the following:
 </value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Vilkårene for tjeneste og personvernerklæring er ikke akseptert.</value>
+    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Tjenestevilkår</value>
+    <value>Terms of Service</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Personvernsretningslinjer</value>
+    <value>Privacy Policy</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden trenger oppmerksomhet – Aktiver "Draw-Over" i "Auto-utfyllingstjenester" fra Bitwarden-innstillinger</value>
+    <value>Bitwarden needs attention - Turn on "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-utfyllingstjenester</value>
+    <value>Auto-fill services</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Bruk innebygd Autofyll</value>
+    <value>Use inline autofill</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Bruk innebygd autoutfyll hvis ditt valgte IME (tastatur) støtter den. Dersom konfigurasjonen din ikke støttes (eller dette alternativet er deaktivert), vil standard autofyll overlegg bli brukt.</value>
+    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is turned off), the default Autofill overlay will be used.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
-    <value>Bruk tilgjengelighet</value>
+    <value>Use accessibility</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Bruk Bitwarden sin tilgjengelighetstjeneste for å auto-utfylle dine innlogginger på apper og på nettet. Når det er aktivert, vil vi vise en popup når innloggingsfelt er valgt.</value>
+    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When set up, we'll display a popup when login fields are selected.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Bruk Bitwarden sin tilgjengelighetstjeneste for å auto-utfylle dine innlogginger på apper og på nettet. (Krever Draw-Over for å også aktiveres)</value>
+    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be turned on as well)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Bruk Bitwarden sin tilgjengelighetstjeneste for å bruke Autofill Quick-Action Tile, og/eller vis et popup ved å bruke Draw-Over (hvis aktivert).</value>
+    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if turned on).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Påkrevd for å bruke Autofill Quick-Action Tile, eller for å utvide Autofill Service ved å bruke Draw-Over (hvis aktivert).</value>
+    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if turned on).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Bruk Draw-Ower</value>
+    <value>Use draw-over</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>Når dette er aktivert, tillater Bitwarden å vise et sprettoppvindu når innloggingsfelt velges.</value>
+    <value>Allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>Dersom det er aktivert, vil Bitwarden sin tilgjengelighetstjeneste vise en popup når innloggingsfelt er valgt for å hjelpe deg med automatisk utfylling av dine innlogginger.</value>
+    <value>If turned on, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>Hvis aktivert, vil tilgjengelighet vise en popup for å forsterke Autofill Service for eldre apper som ikke støtter Android Autofill Framework.</value>
+    <value>If turned on, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>På grunn av virksomhetsvilkår er du begrenset fra å lagre elementer til ditt personlige hvelv. Endre alternativ for eierskap til en organisasjon og velg blant tilgjengelige samlinger.</value>
+    <value>Due to an enterprise policy, you are restricted from saving items to your individual vault. Change the ownership option to an organization and choose from available collections.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
-    <value>Organisasjonsvilkår påvirker dine eierskapsinnstillinger.</value>
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
   <data name="Send" xml:space="preserve">
     <value>Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AllSends" xml:space="preserve">
-    <value>Alle Sends</value>
+    <value>All Sends</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
@@ -1880,533 +1880,533 @@ Skanning skjer automatisk.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NameInfo" xml:space="preserve">
-    <value>Kort navn for å beskrive denne Send-en.</value>
+    <value>A friendly name to describe this Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Text" xml:space="preserve">
-    <value>Tekst</value>
+    <value>Text</value>
   </data>
   <data name="TypeText" xml:space="preserve">
-    <value>Tekst</value>
+    <value>Text</value>
   </data>
   <data name="TypeTextInfo" xml:space="preserve">
-    <value>Teksten du ønsker å sende.</value>
+    <value>The text you want to send.</value>
   </data>
   <data name="HideTextByDefault" xml:space="preserve">
-    <value>Når du åpner Send-en, skjul teksten som standard</value>
+    <value>When accessing the Send, hide the text by default</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeFile" xml:space="preserve">
-    <value>Fil</value>
+    <value>File</value>
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
-    <value>Filen du vil sende.</value>
+    <value>The file you want to send.</value>
   </data>
   <data name="FileTypeIsSelected" xml:space="preserve">
-    <value>Filtype er valgt.</value>
+    <value>File type is selected.</value>
   </data>
   <data name="FileTypeIsNotSelected" xml:space="preserve">
-    <value>Filtype er ikke valgt, trykk for å velge.</value>
+    <value>File type is not selected, tap to select.</value>
   </data>
   <data name="TextTypeIsSelected" xml:space="preserve">
-    <value>Teksttype er valgt.</value>
+    <value>Text type is selected.</value>
   </data>
   <data name="TextTypeIsNotSelected" xml:space="preserve">
-    <value>Teksttype er ikke valgt, trykk for å velge.</value>
+    <value>Text type is not selected, tap to select.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
-    <value>Dato for sletting</value>
+    <value>Deletion date</value>
   </data>
   <data name="DeletionTime" xml:space="preserve">
-    <value>Slettetidspunkt</value>
+    <value>Deletion time</value>
   </data>
   <data name="DeletionDateInfo" xml:space="preserve">
-    <value>Send-en vil bli permanent slettet på angitte dato og klokkeslett.</value>
+    <value>The Send will be permanently deleted on the specified date and time.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PendingDelete" xml:space="preserve">
-    <value>Venter på sletting</value>
+    <value>Pending deletion</value>
   </data>
   <data name="ExpirationDate" xml:space="preserve">
-    <value>Utløpsdato</value>
+    <value>Expiration date</value>
   </data>
   <data name="ExpirationTime" xml:space="preserve">
-    <value>Gyldig til</value>
+    <value>Expiration time</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
-    <value>Hvis satt, vil tilgang til denne Send-en gå ut på angitt dato og klokkeslett.</value>
+    <value>If set, access to this Send will expire on the specified date and time.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
-    <value>Utløpt</value>
+    <value>Expired</value>
   </data>
   <data name="MaximumAccessCount" xml:space="preserve">
-    <value>Maksimalt antall tilganger</value>
+    <value>Maximum access count</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>Hvis satt, vil brukere ikke lenger ha tilgang til dette send når maksimal antall tilgang er nådd.</value>
+    <value>If set, users will no longer be able to access this Send once the maximum access count is reached.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
-    <value>Maksimalt antall tilganger nådd</value>
+    <value>Max access count reached</value>
   </data>
   <data name="CurrentAccessCount" xml:space="preserve">
-    <value>Antall nåværende tilganger</value>
+    <value>Current access count</value>
   </data>
   <data name="NewPassword" xml:space="preserve">
-    <value>Nytt passord</value>
+    <value>New password</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>Valgfritt passordkrav å få tilgang til denne Send-en.</value>
+    <value>Optionally require a password for users to access this Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
-    <value>Fjern passord</value>
+    <value>Remove password</value>
   </data>
   <data name="AreYouSureRemoveSendPassword" xml:space="preserve">
-    <value>Er du sikker på at du vil fjerne passordet?</value>
+    <value>Are you sure you want to remove the password?</value>
   </data>
   <data name="RemovingSendPassword" xml:space="preserve">
-    <value>Fjerner passord</value>
+    <value>Removing password</value>
   </data>
   <data name="SendPasswordRemoved" xml:space="preserve">
-    <value>Passordet er fjernet.</value>
+    <value>Password has been removed.</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
-    <value>Private notater om denne Send-en.</value>
+    <value>Private notes about this Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Deaktiver denne Send-en, slik at ingen får tilgang til den.</value>
+    <value>Deactivate this Send so that no one can access it</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
-    <value>Det er ingen Send-er i kontoen din.</value>
+    <value>There are no Sends in your account.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Legg til en Send</value>
+    <value>Add a Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
-    <value>Kopier lenke</value>
+    <value>Copy link</value>
   </data>
   <data name="ShareLink" xml:space="preserve">
-    <value>Del lenke</value>
+    <value>Share link</value>
   </data>
   <data name="SendLink" xml:space="preserve">
-    <value>Send lenke</value>
+    <value>Send link</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
-    <value>Søk i Send-ene</value>
+    <value>Search Sends</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
-    <value>Rediger Send</value>
+    <value>Edit Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Legg til Send</value>
+    <value>New Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
-    <value>Er du sikker på at du vil slette denne Send-en?</value>
+    <value>Are you sure you want to delete this Send?</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Send-en har blitt slettet.</value>
+    <value>Send deleted</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Send-en er oppdatert.</value>
+    <value>Send saved</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Ny send opprettet.</value>
+    <value>Send created</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
-    <value>1 dag</value>
+    <value>1 day</value>
   </data>
   <data name="TwoDays" xml:space="preserve">
-    <value>2 dager</value>
+    <value>2 days</value>
   </data>
   <data name="ThreeDays" xml:space="preserve">
-    <value>3 dager</value>
+    <value>3 days</value>
   </data>
   <data name="SevenDays" xml:space="preserve">
-    <value>7 dager</value>
+    <value>7 days</value>
   </data>
   <data name="ThirtyDays" xml:space="preserve">
-    <value>30 dager</value>
+    <value>30 days</value>
   </data>
   <data name="Custom" xml:space="preserve">
-    <value>Egendefinert</value>
+    <value>Custom</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Del denne Send-en ved lagring.</value>
+    <value>Share this Send upon save</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
-    <value>På grunn av virksomhetsvilkår kan du kun slette en eksisterende Send.</value>
+    <value>Due to an enterprise policy, you are only able to delete an existing Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
-    <value>Om Send</value>
+    <value>About Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Skjul min e-postadresse fra mottakere.</value>
+    <value>Hide my email address from recipients</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
-    <value>En eller flere av organisasjons vilkår påvirker generatorinnstillingene dine.</value>
+    <value>One or more organization policies are affecting your Send options.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>Gratiskontoer kan kun dele tekst. Et premiummedlemskap kreves for å bruke filer med Send.</value>
+    <value>Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Du må bekrefte e-posten din for å bruke filer med Send. Du kan bekrefte e-postadressen din i netthvelvet.</value>
+    <value>You must verify your email to use files with Send. You can verify your email in the web vault.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Forespørsel om hovedpassord på nytt</value>
+    <value>Master password re-prompt</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
-    <value>Hovedpassord bekreftelse</value>
+    <value>Master password confirmation</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>Denne handlingen er beskyttet, for å fortsette å skrive inn hovedpassordet på nytt for å verifisere din identitet.</value>
+    <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Captcha kreves</value>
+    <value>Captcha required</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>Captcha feilet. Prøv på nytt.</value>
+    <value>Captcha failed. Please try again.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Oppdaterte hovedpassordet</value>
+    <value>Updated master password</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Oppdater hovedpassord</value>
+    <value>Update master password</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Hovedpassordet ditt ble nylig endret av en administrator i organisasjonen din. For å få tilgang til hvelvet, må du oppdatere hovedpassordet ditt nå. Hvis du fortsetter, logges du ut av den nåværende økten, og du må logge på igjen. Aktive økter på andre enheter kan fortsette å være aktive i opptil én time.</value>
+    <value>Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
-    <value>Oppdaterer passord</value>
+    <value>Updating password</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
-    <value>Kan for øyeblikket ikke oppdatere passord</value>
+    <value>Currently unable to update password</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>Fjern hovedpassord</value>
+    <value>Remove master password</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} bruker SSO med kundeadministrert kryptering. Hvis du fortsetter, fjernes hovedpassordet ditt fra kontoen din, og SSO kreves for å logge på.</value>
+    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your master password from your account and require SSO to login.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>Hvis du ikke vil fjerne hovedpassordet ditt, kan du forlate denne organisasjonen.</value>
+    <value>If you do not want to remove your master password, you may leave this organization.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>Forlat organisasjonen</value>
+    <value>Leave organization</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>Vil du forlate {0}?</value>
+    <value>Leave {0}?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>For å fortsette, ha din FIDO2 WebAuthn-aktiverte sikkerhetsnøkkel klar, og følg deretter instruksjonene etter å ha klikket på 'Autentiser WebAuthn' på den neste skjermen.</value>
+    <value>To continue, have your FIDO2 WebAuthn compatible security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>Autentisering med FIDO2 WebAuthn, du kan autentisere med en ekstern sikkerhetsnøkkel.</value>
+    <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>Autentiser WebAuthn</value>
+    <value>Authenticate WebAuthn</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
-    <value>Gå tilbake til appen</value>
+    <value>Return to app</value>
   </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
-    <value>Sørg for at standardnettleseren din støtter WebAuthn og prøv igjen.</value>
+    <value>Please make sure your default browser supports WebAuthn and try again.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>Denne organisasjonen har en virksomhetsvilkår som automatisk innrullerer deg i tilbakestilling av passord. Registrering vil tillate organisasjonsadministratorer å endre hovedpassordet ditt.</value>
+    <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Din organisasjons vikår påvirker tidsavbruddet for hvelvet. Maksimalt tillatt tidsavbrudd for hvelv er {0} time(r) og {1} minutt(er)</value>
+    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s)</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
-    <value>Tidsavbruddet ditt for hvelvet overstiger begrensningene som er satt av organisasjonen din.</value>
+    <value>Your vault timeout exceeds the restrictions set by your organization.</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
-    <value>En eller flere organisasjonvilkår hindrer deg i å eksportere ditt personlige hvelv.</value>
+    <value>One or more organization policies prevents your from exporting your individual vault.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Legg til konto</value>
+    <value>Add account</value>
   </data>
   <data name="AccountUnlocked" xml:space="preserve">
-    <value>Ulåst</value>
+    <value>Unlocked</value>
   </data>
   <data name="AccountLocked" xml:space="preserve">
-    <value>Låst</value>
+    <value>Locked</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>Logget av</value>
+    <value>Logged out</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
-    <value>Byttet til neste tilgjengelige konto</value>
+    <value>Switched to next available account</value>
   </data>
   <data name="AccountLockedSuccessfully" xml:space="preserve">
-    <value>Konto låst</value>
+    <value>Account locked</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
-    <value>Kontoen er logget av</value>
+    <value>Account logged out successfully</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
-    <value>Kontoen er fjernet</value>
+    <value>Account removed successfully</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
-    <value>Slett konto</value>
+    <value>Delete account</value>
   </data>
   <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
-    <value>Sletting av kontoen din er permanent</value>
+    <value>Deleting your account is permanent</value>
   </data>
   <data name="DeleteAccountExplanation" xml:space="preserve">
-    <value>Kontoen din og alle tilknyttede data vil bli slettet og uopprettelig. Er du sikker på at du vil fortsette?</value>
+    <value>Your account and all vault data will be erased and unrecoverable. Are you sure you want to continue?</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
-    <value>Sletter kontoen din</value>
+    <value>Deleting your account</value>
   </data>
   <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
-    <value>Kontoen din er slettet permanent</value>
+    <value>Your account has been permanently deleted</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Ugyldig verifiseringskode.</value>
+    <value>Invalid verification code</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>Be om éngangspassord</value>
+    <value>Request one-time password</value>
   </data>
   <data name="SendCode" xml:space="preserve">
-    <value>Send kode</value>
+    <value>Send code</value>
   </data>
   <data name="Sending" xml:space="preserve">
-    <value>Sender</value>
+    <value>Sending</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Kopier Send-lenke ved lagring</value>
+    <value>Copy Send link on save</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
-    <value>Sender kode</value>
+    <value>Sending code</value>
   </data>
   <data name="Verifying" xml:space="preserve">
-    <value>Bekrefter</value>
+    <value>Verifying</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Send på nytt</value>
+    <value>Resend code</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
-    <value>En verifiseringskode er sendt til din e-post</value>
+    <value>A verification code was sent to your email</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>En feil oppstod ved sending av verifiseringskode til e-posten. Vennligst prøv igjen</value>
+    <value>An error occurred while sending a verification code to your email. Please try again</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
-    <value>Skriv inn verifiseringskoden som ble sendt til din e-post</value>
+    <value>Enter the verification code that was sent to your email</value>
   </data>
   <data name="SubmitCrashLogs" xml:space="preserve">
-    <value>Send krasjlogger</value>
+    <value>Submit crash logs</value>
   </data>
   <data name="SubmitCrashLogsDescription" xml:space="preserve">
-    <value>Hjelp Bitwarden med å forbedre appens stabilitet ved å sende krasjrapporter.</value>
+    <value>Help Bitwarden improve app stability by submitting crash reports.</value>
   </data>
   <data name="OptionsExpanded" xml:space="preserve">
-    <value>Alternativer er utvidet, trykk for å skjule.</value>
+    <value>Options are expanded, tap to collapse.</value>
   </data>
   <data name="OptionsCollapsed" xml:space="preserve">
-    <value>Instillinger er kollapset, trykk for å vise.</value>
+    <value>Options are collapsed, tap to expand.</value>
   </data>
   <data name="UppercaseAtoZ" xml:space="preserve">
-    <value>Store bokstaver (A til Z)</value>
+    <value>Uppercase (A to Z)</value>
   </data>
   <data name="LowercaseAtoZ" xml:space="preserve">
-    <value>Små bokstaver (A til Z)</value>
+    <value>Lowercase (A to Z)</value>
   </data>
   <data name="NumbersZeroToNine" xml:space="preserve">
-    <value>Siffer (0 til 9)</value>
+    <value>Numbers (0 to 9)</value>
   </data>
   <data name="SpecialCharacters" xml:space="preserve">
-    <value>Spesialtegn (!@#$%^&amp;*)</value>
+    <value>Special characters (!@#$%^&amp;*)</value>
   </data>
   <data name="TapToGoBack" xml:space="preserve">
-    <value>Trykk for å gå tilbake</value>
+    <value>Tap to go back</value>
   </data>
   <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
-    <value>Passordet er synlig, trykk for å skjule.</value>
+    <value>Password is visible, tap to hide.</value>
   </data>
   <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
-    <value>Passordet er ikke synlig, trykk for å vise.</value>
+    <value>Password is not visible, tap to show.</value>
   </data>
   <data name="FilterByVault" xml:space="preserve">
-    <value>Filtrer elementer etter hvelv</value>
+    <value>Filter items by vault</value>
   </data>
   <data name="AllVaults" xml:space="preserve">
-    <value>Alle hvelv</value>
+    <value>All vaults</value>
   </data>
   <data name="Vaults" xml:space="preserve">
-    <value>Hvelv</value>
+    <value>Vaults</value>
   </data>
   <data name="VaultFilterDescription" xml:space="preserve">
-    <value>Hvelv: {0}</value>
+    <value>Vault: {0}</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>Alle</value>
+    <value>All</value>
   </data>
   <data name="Totp" xml:space="preserve">
     <value>TOTP</value>
   </data>
   <data name="VerificationCodes" xml:space="preserve">
-    <value>Verifiseringskode</value>
+    <value>Verification codes</value>
   </data>
   <data name="PremiumSubscriptionRequired" xml:space="preserve">
-    <value>Premium abonnement kreves</value>
+    <value>Premium subscription required</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
-    <value>Kan ikke legge til autentiseringsnøkkel? </value>
+    <value>Cannot add authenticator key? </value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
-    <value>Skann QR-kode</value>
+    <value>Scan QR Code</value>
   </data>
   <data name="CannotScanQRCode" xml:space="preserve">
-    <value>Kan ikke skanne QR-kode? </value>
+    <value>Cannot scan QR Code? </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Autentiseringsnøkkel</value>
+    <value>Authenticator key</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Skriv inn nøkkel manuelt</value>
+    <value>Enter key manually</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
-    <value>Legg til TOTP</value>
+    <value>Add TOTP</value>
   </data>
   <data name="SetupTotp" xml:space="preserve">
-    <value>Sett opp TOTP</value>
+    <value>Set up TOTP</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
-    <value>Når nøkkelen er tastet inn,
-velg Legg til TOTP for å lagre nøkkelen sikkert</value>
+    <value>Once the key is successfully entered,
+select Add TOTP to store the key safely</value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
-    <value>Å sette dine låsalternativer til "Aldri" holder hvelvet ditt tilgjengelig for alle med tilgang til din enhet. Dersom du bruker dette alternativet bør du forsikre deg om at enheten er godt beskyttet.</value>
+    <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
-    <value>En eller flere av de angitte nettadressene er ugyldige. Vennligst revider og prøv å lagre på nytt.</value>
+    <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
   </data>
   <data name="GenericErrorMessage" xml:space="preserve">
-    <value>Vi kunne ikke behandle forespørselen. Prøv på nytt eller kontakt oss.</value>
+    <value>We were unable to process your request. Please try again or contact us.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
-    <value>Tillat skjermopptak</value>
+    <value>Allow screen capture</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>Er du sikker på at du vil aktivere skjermopptak?</value>
+    <value>Are you sure you want to turn on screen capture?</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
-    <value>Innlogging forespurt</value>
+    <value>Login requested</value>
   </data>
   <data name="AreYouTryingToLogIn" xml:space="preserve">
-    <value>Prøver du å logge inn?</value>
+    <value>Are you trying to log in?</value>
   </data>
   <data name="LogInAttemptByXOnY" xml:space="preserve">
-    <value>Innloggingsforsøk av {0} på {1}</value>
+    <value>Login attempt by {0} on {1}</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
-    <value>Enhetstype</value>
+    <value>Device type</value>
   </data>
   <data name="IpAddress" xml:space="preserve">
-    <value>IP-adresse</value>
+    <value>IP address</value>
   </data>
   <data name="Time" xml:space="preserve">
-    <value>Tid</value>
+    <value>Time</value>
   </data>
   <data name="Near" xml:space="preserve">
-    <value>I nærheten av</value>
+    <value>Near</value>
   </data>
   <data name="ConfirmLogIn" xml:space="preserve">
-    <value>Bekreft innlogging</value>
+    <value>Confirm login</value>
   </data>
   <data name="DenyLogIn" xml:space="preserve">
-    <value>Avslå innlogging</value>
+    <value>Deny login</value>
   </data>
   <data name="JustNow" xml:space="preserve">
-    <value>Nå nettopp</value>
+    <value>Just now</value>
   </data>
   <data name="XMinutesAgo" xml:space="preserve">
-    <value>{0} minutter siden</value>
+    <value>{0} minutes ago</value>
   </data>
   <data name="LogInAccepted" xml:space="preserve">
-    <value>Innlogging bekreftet</value>
+    <value>Login confirmed</value>
   </data>
   <data name="LogInDenied" xml:space="preserve">
-    <value>Innlogging avslått</value>
+    <value>Login denied</value>
   </data>
   <data name="ApproveLoginRequests" xml:space="preserve">
-    <value>Godkjenn innloggingsforespørsler</value>
+    <value>Approve login requests</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Bruk denne enheten til å godkjenne innloggingsforespørsler fra andre enheter.</value>
+    <value>Use this device to approve login requests made from other devices.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
-    <value>Tillat varslinger</value>
+    <value>Allow notifications</value>
   </data>
   <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
-    <value>Motta push-varsler for nye innloggingsforespørsler</value>
+    <value>Receive push notifications for new login requests</value>
   </data>
   <data name="NoThanks" xml:space="preserve">
-    <value>Nei takk</value>
+    <value>No thanks</value>
   </data>
   <data name="ConfimLogInAttempForX" xml:space="preserve">
-    <value>Bekreft påloggingsforsøk for {0}</value>
+    <value>Confirm login attempt for {0}</value>
   </data>
   <data name="AllNotifications" xml:space="preserve">
-    <value>Alle varsler</value>
+    <value>All notifications</value>
   </data>
   <data name="PasswordType" xml:space="preserve">
-    <value>Passordtype</value>
+    <value>Password type</value>
   </data>
   <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
-    <value>Hva vil du generere?</value>
+    <value>What would you like to generate?</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
-    <value>Brukernavntype</value>
+    <value>Username type</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Pluss-adressert e-post</value>
+    <value>Plus addressed email</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
-    <value>Catch-all e-post</value>
+    <value>Catch-all email</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
-    <value>Alias for videresendt e-post</value>
+    <value>Forwarded email alias</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
-    <value>Tilfeldig ord</value>
+    <value>Random word</value>
   </data>
   <data name="EmailRequiredParenthesis" xml:space="preserve">
-    <value>E-post (obligatorisk)</value>
+    <value>Email (required)</value>
   </data>
   <data name="DomainNameRequiredParenthesis" xml:space="preserve">
-    <value>Domenenavn (obligatorisk)</value>
+    <value>Domain name (required)</value>
   </data>
   <data name="APIKeyRequiredParenthesis" xml:space="preserve">
-    <value>API-nøkkel (obligatorisk)</value>
+    <value>API key (required)</value>
   </data>
   <data name="Service" xml:space="preserve">
-    <value>Tjeneste</value>
+    <value>Service</value>
   </data>
   <data name="AnonAddy" xml:space="preserve">
     <value>AnonAddy</value>
@@ -2421,98 +2421,98 @@ velg Legg til TOTP for å lagre nøkkelen sikkert</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
-    <value>API tilgangstoken</value>
+    <value>API access token</value>
   </data>
   <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
-    <value>Er du sikker på at du vil overskrive det nåværende brukernavnet?</value>
+    <value>Are you sure you want to overwrite the current username?</value>
   </data>
   <data name="GenerateUsername" xml:space="preserve">
-    <value>Generer brukernavn</value>
+    <value>Generate username</value>
   </data>
   <data name="EmailType" xml:space="preserve">
-    <value>E-post Type</value>
+    <value>Email Type</value>
   </data>
   <data name="WebsiteRequired" xml:space="preserve">
-    <value>Nettsted (obligatorisk)</value>
+    <value>Website (required)</value>
   </data>
   <data name="UnknownXErrorMessage" xml:space="preserve">
-    <value>Ukjent {0}-feil oppstod.</value>
+    <value>Unknown {0} error occurred.</value>
   </data>
   <data name="PlusAddressedEmailDescription" xml:space="preserve">
-    <value>Bruk sub-adresseringsfunksjonaliteten til din e-postleverandør</value>
+    <value>Use your email provider's subaddress capabilities</value>
   </data>
   <data name="CatchAllEmailDescription" xml:space="preserve">
-    <value>Bruk domenets konfigurerte catch-all innboks.</value>
+    <value>Use your domain's configured catch-all inbox.</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
-    <value>Generer et e-postalias hos en ekstern videresendingstjeneste.</value>
+    <value>Generate an email alias with an external forwarding service.</value>
   </data>
   <data name="Random" xml:space="preserve">
-    <value>Tilfeldig</value>
+    <value>Random</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Koble til klokke</value>
+    <value>Connect to Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
-    <value>Opplysninger om tilgjengelighetstjeneste</value>
+    <value>Accessibility Service Disclosure</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden bruker Tilgjengelighetstjenesten for å søke etter innloggingsfelt i apper og på nettsteder, deretter finner den de riktige felt-IDene for å skrive inn et brukernavn og passord når en treff for appen eller nettsiden blir funnet. Vi lagrer ikke noen av opplysningene som tjenesten presenterer for oss. Vi gjør heller ikke noen forsøk på å kontrollere elementer på skjermen utenom tekstutfylling av brukernavn og passord.</value>
+    <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
   </data>
   <data name="Accept" xml:space="preserve">
-    <value>Godta</value>
+    <value>Accept</value>
   </data>
   <data name="Decline" xml:space="preserve">
-    <value>Avslå</value>
+    <value>Decline</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
-    <value>Innloggingsforespørselen har allerede utløpt.</value>
+    <value>Login request has already expired.</value>
   </data>
   <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
-    <value>Innloggingsforsøk:
+    <value>Login attempt from:
 {0}
-Vil du bytte til denne kontoen?</value>
+Do you want to switch to this account?</value>
   </data>
   <data name="NewAroundHere" xml:space="preserve">
-    <value>Nytt rundt her?</value>
+    <value>New around here?</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
-    <value>Få et hint om hovedpassordet</value>
+    <value>Get master password hint</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logger inn som {0}</value>
+    <value>Logging in as {0}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
-    <value>Ikke du?</value>
+    <value>Not you?</value>
   </data>
   <data name="LogInWithMasterPassword" xml:space="preserve">
-    <value>Logg inn med hovedpassord</value>
+    <value>Log in with master password</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Logg inn med en annen enhet</value>
+    <value>Log In with another device</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Pålogging startet</value>
+    <value>Log in initiated</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
-    <value>Et varsel har blitt sendt til enheten din.</value>
+    <value>A notification has been sent to your device.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Kontroller at hvelvet ditt er låst opp, og at fingeravtrykksfrasen samsvarer på den andre enheten.</value>
+    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
-    <value>Send varsel på nytt</value>
+    <value>Resend notification</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Trenger du et annet alternativ?</value>
+    <value>Need another option?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>Vis alle påloggingsalternativer</value>
+    <value>View all log in options</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
-    <value>Invitasjonen er ikke lenger gyldig</value>
+    <value>This request is no longer valid</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Aktiver kameratillatelse for å bruke skanner</value>
+    <value>Enable camera permission to use the scanner</value>
   </data>
 </root>

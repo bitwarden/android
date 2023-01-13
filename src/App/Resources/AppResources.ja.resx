@@ -477,13 +477,13 @@
     <value>マスターパスワードのヒントを受信するため、アカウントのメールアドレスを入力してください。</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>アプリの拡張機能を再度有効化</value>
+    <value>App Extension を再度有効化</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>ほぼ完了！</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>アプリの拡張機能を有効化</value>
+    <value>App Extension を有効化</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>Safari では、共有アイコンを使って Bitwarden を見つけてください（ヒント：メニューの一番下の行を右側にスクロール）</value>
@@ -1457,7 +1457,7 @@
     <value>表示するフォルダーがありません。</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>指紋句</value>
+    <value>パスフレーズ</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">

@@ -2450,7 +2450,7 @@ selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</value>
     <value>Aleatoriu</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connect to Watch</value>
+    <value>Conectează-te pentru a urmări</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Dezvăluirea serviciilor de accesibilitate</value>
@@ -2491,27 +2491,27 @@ Doriți să comutați la acest cont?</value>
     <value>Autentificați-vă cu un alt dispozitiv</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Log in initiated</value>
+    <value>Autentificare inițiată</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
-    <value>A notification has been sent to your device.</value>
+    <value>O notificare a fost trimisă pe dispozitivul dvs.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+    <value>Asigurați-vă că seiful dvs. este deblocat și că fraza amprentă corespunde cu cea a celuilalt dispozitiv.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
-    <value>Resend notification</value>
+    <value>Retrimitere notificare</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>Selectezi o altă opțiune?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>View all log in options</value>
+    <value>Vedeți toate opțiunile de autentificare</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
-    <value>This request is no longer valid</value>
+    <value>Această cerere nu mai este valabilă</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>Permite accesul camerei foto pentru a utiliza scanerul</value>
   </data>
 </root>
