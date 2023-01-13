@@ -406,6 +406,14 @@ namespace Bit.Core.Services
                 key = await _cryptoFunctionService.Pbkdf2Async(password, salt,
                     CryptoHashAlgorithm.Sha256, kdfIterations.Value);
             }
+            else if (kdf == KdfType.ARGON2id)
+            {
+                const int iterations = 2;
+                const int parallelism = 1;
+                var memory = kdfIterations.Value;
+
+                key = await _cryptoFunctionService.Argon2Async(password, salt, iterations, memory, parallelism);
+            }
             else
             {
                 throw new Exception("Unknown kdf.");

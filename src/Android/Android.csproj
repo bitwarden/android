@@ -71,6 +71,9 @@
     <Reference Include="System.Net.Http" Condition="'$(Configuration)'=='FDroid'" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Isopoh.Cryptography.Argon2">
+      <Version>1.1.12</Version>
+    </PackageReference>
     <PackageReference Include="Plugin.CurrentActivity">
       <Version>2.1.0.4</Version>
     </PackageReference>

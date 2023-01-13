@@ -194,6 +194,9 @@
     <PackageReference Include="Xamarin.Essentials">
       <Version>1.7.3</Version>
     </PackageReference>
+    <PackageReference Include="Isopoh.Cryptography.Argon2">
+      <Version>1.1.12</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>

@@ -3,6 +3,7 @@ using Bit.Core.Enums;
 using Foundation;
 using System;
 using System.Runtime.InteropServices;
+using Org.BouncyCastle.Crypto.Generators;
 
 namespace Bit.iOS.Core.Services
 {
