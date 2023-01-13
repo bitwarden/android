@@ -5,6 +5,6 @@ namespace Bit.Core.Abstractions
     public interface ICryptoPrimitiveService
     {
         byte[] Pbkdf2(byte[] password, byte[] salt, CryptoHashAlgorithm algorithm, int iterations);
-        byte[] Scrypt(byte[] password, byte[] salt, int N, int r, int p, int dkLen);
+        byte[] Scrypt(byte[] password, byte[] salt, int N);
     }
 }

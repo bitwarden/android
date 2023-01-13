@@ -44,26 +44,26 @@ namespace Bit.Core.Services
             return Task.FromResult(_cryptoPrimitiveService.Pbkdf2(password, salt, algorithm, iterations));
         }
 
-        public Task<byte[]> ScryptAsync(string password, string salt, int N, int r, int p, int dkLen)
+        public Task<byte[]> ScryptAsync(string password, string salt, int N)
         {
             password = NormalizePassword(password);
-            return ScryptAsync(Encoding.UTF8.GetBytes(password), Encoding.UTF8.GetBytes(salt), N, r, p, dkLen);
+            return ScryptAsync(Encoding.UTF8.GetBytes(password), Encoding.UTF8.GetBytes(salt), N);
         }
 
-        public Task<byte[]> ScryptAsync(byte[] password, string salt, int N, int r, int p, int dkLen)
+        public Task<byte[]> ScryptAsync(byte[] password, string salt, int N)
         {
-            return ScryptAsync(password, Encoding.UTF8.GetBytes(salt), N, r, p, dkLen);
+            return ScryptAsync(password, Encoding.UTF8.GetBytes(salt), N);
         }
 
-        public Task<byte[]> ScryptAsync(string password, byte[] salt, int N, int r, int p, int dkLen)
+        public Task<byte[]> ScryptAsync(string password, byte[] salt, int N)
         {
             password = NormalizePassword(password);
-            return ScryptAsync(Encoding.UTF8.GetBytes(password), salt, N, r, p, dkLen);
+            return ScryptAsync(Encoding.UTF8.GetBytes(password), salt, N);
         }
 
-        public Task<byte[]> ScryptAsync(byte[] password, byte[] salt, int N, int r, int p, int dkLen)
+        public Task<byte[]> ScryptAsync(byte[] password, byte[] salt, int N)
         {
-            return Task.FromResult(_cryptoPrimitiveService.Scrypt(password, salt, N, r, p, dkLen));
+            return Task.FromResult(_cryptoPrimitiveService.Scrypt(password, salt, N));
         }
 
         public async Task<byte[]> HkdfAsync(byte[] ikm, string salt, string info, int outputByteSize, HkdfAlgorithm algorithm) =>
