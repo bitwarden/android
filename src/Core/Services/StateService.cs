@@ -291,7 +291,7 @@ namespace Bit.Core.Services
             return organizations?.Any(o => o.UsersGetPremium && o.Enabled) ?? false;
         }
 
-        public async Task SetPremiumAsync(bool value, string userId = null)
+        public async Task SetPersonalPremiumAsync(bool value, string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
