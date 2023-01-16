@@ -336,6 +336,7 @@ namespace Bit.Core.Services
             await _stateService.SetEmailVerifiedAsync(response.EmailVerified);
             await _stateService.SetNameAsync(response.Name);
             await _stateService.SetPersonalPremiumAsync(response.Premium);
+            await _stateService.SetAvatarColorAsync(response.AvatarColor);
             await _keyConnectorService.SetUsesKeyConnector(response.UsesKeyConnector);
         }
 

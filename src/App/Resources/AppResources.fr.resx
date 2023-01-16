@@ -179,7 +179,7 @@
     <value>Modifier</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Modifier le dossier</value>
+    <value>Éditer le dossier</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>E-mail</value>
@@ -209,7 +209,7 @@
     <value>Ouvrir un ticket dans notre dépôt Github.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Utilisez votre empreinte pour vous authentifier.</value>
+    <value>Utilisez votre empreinte pour vérifier.</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Dossier</value>
@@ -229,7 +229,7 @@
     <value>Dossiers</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Dossier mis à jour.</value>
+    <value>Dossier sauvegardé</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Accéder au site Web</value>
@@ -251,7 +251,7 @@
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Mot de passe maître invalide. Veuillez réessayer.</value>
+    <value>Mot de passe principal invalide. Essayez à nouveau.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
     <value>Code PIN invalide. Veuillez réessayer.</value>
@@ -269,7 +269,7 @@
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Déconnexion</value>
+    <value>Se déconnecter</value>
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
@@ -288,7 +288,7 @@
     <value>Souhaitez-vous y passer maintenant ?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
-    <value>Mot de passe maître</value>
+    <value>Mot de passe principal</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>L'élément a été supprimé.</value>
+    <value>Élément supprimé</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -364,7 +364,7 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Utiliser votre empreinte pour déverrouiller</value>
+    <value>Utiliser l'empreinte pour déverrouiller</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Nom d'utilisateur</value>
@@ -375,14 +375,14 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} a été copié.</value>
+    <value>{0} copié</value>
     <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>S'authentifier avec l'empreinte</value>
+    <value>Vérifier l'empreinte digitale</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>S'authentifier avec le mot de passe maître</value>
+    <value>Vérifier le mot de passe principal</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>S'authentifier avec un code PIN</value>
@@ -449,10 +449,10 @@
     <value>Vous pouvez changer votre adresse e-mail depuis le coffre web sur bitwarden.com. Voulez-vous visiter le site web maintenant ?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Changer le mot de passe maître</value>
+    <value>Changer le mot de passe principal</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Vous pouvez modifier votre mot de passe maître depuis le coffre web sur bitwarden.com. Souhaitez-vous visiter le site maintenant ?</value>
+    <value>Vous pouvez changer votre mot de passe principal depuis le coffre web de bitwarden.com. Voulez-vous visiter le site web maintenant ?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Fermer</value>
@@ -468,13 +468,13 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Modifier l'élément</value>
+    <value>Éditer l'élément</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Activer la synchronisation automatique</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Saisissez l'adresse e-mail de votre compte pour recevoir l'indice de votre mot de passe maître.</value>
+    <value>Saisissez l'adresse électronique de votre compte pour recevoir l'indice de votre mot de passe principal.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Activez à nouveau l'extension de l'application</value>
@@ -511,13 +511,13 @@
     <value>Favori</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>Empreinte</value>
+    <value>Empreinte digitale</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
     <value>Générer un mot de passe</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>Obtenir votre indice de mot de passe maître</value>
+    <value>Obtenez votre indice de mot de passe principal</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
     <value>Importer des éléments</value>
@@ -556,10 +556,10 @@
     <value>Délai d'expiration du coffre</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Action lors de l'expiration du délai du coffre</value>
+    <value>Après délai d'expiration du coffre</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>La déconnexion supprimera tous les accès à votre coffre et nécessite une authentification en ligne après la période d'expiration. Êtes-vous sûr de vouloir utiliser ce paramètre ?</value>
+    <value>La déconnexion supprimera tout accès à votre coffre et nécessitera une authentification en ligne après la période d'expiration. Êtes-vous sûr de vouloir utiliser ce paramètre ?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Identification...</value>
@@ -575,23 +575,23 @@
     <value>La confirmation du mot de passe est erronée.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Le mot de passe maître correspond au mot de passe utilisé pour accéder à votre coffre. Il est très important de ne pas l'oublier. Il n'existe aucun moyen de le retrouver en cas d'oubli.</value>
+    <value>Le mot de passe principal est le mot de passe que vous utilisez pour accéder à votre coffre. Il est très important de ne pas oublier votre mot de passe principal. Il n'existe aucun moyen de récupérer le mot de passe si vous l'oubliez.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Indice de mot de passe maître (facultatif)</value>
+    <value>Indice du mot de passe principal (facultatif)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>Un indice de mot de passe maître peut vous aider à vous rappeler de votre mot de passe en cas d'oubli.</value>
+    <value>Un indice de mot de passe principal peut vous aider à vous souvenir de votre mot de passe si vous l'oubliez.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Le mot de passe maître doit faire plus de 8 caractères.</value>
+    <value>Le mot de passe principal doit comporter au moins 8 caractères.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Nombre minimum de chiffres</value>
+    <value>Min. de chiffres</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Nombre minimum de caractères spéciaux</value>
+    <value>Min. de caractères spéciaux</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -613,7 +613,7 @@
     <value>Il n’y a aucun élément dans votre coffre.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Il n’y a aucun élément dans votre coffre pour ce site. Appuyer pour en ajouter un.</value>
+    <value>Il n’y a aucun élément dans votre coffre pour ce site web/app. Appuyer pour en ajouter un.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Cet identifiant n'a aucun nom d'utilisateur ou mot de passe associé.</value>
@@ -660,7 +660,7 @@
     <value>Regénérer un mot de passe</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Saisir à nouveau le mot de passe maître</value>
+    <value>Ressaisir le mot de passe principal</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Recherche dans le coffre</value>
@@ -681,7 +681,7 @@
     <value>Informations sur l'élément</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Élément mis à jour.</value>
+    <value>Élément sauvegardé</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Soumission...</value>
@@ -705,10 +705,10 @@
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Identification en deux étapes</value>
+    <value>Authentification à deux facteurs</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>L'authentification en deux étapes sécurise davantage votre compte en exigeant que chaque connexion soit confirmée par un autre dispositif tel qu'une clé de sécurité, une application d'authentification, un SMS, un appel téléphonique ou un courriel. Cette option peut être activée depuis le coffre web sur bitwarden.com. Voulez-vous y accéder maintenant ?</value>
+    <value>L'authentification à deux facteurs rend votre compte plus sûr en vous demandant de vérifier votre connexion avec un autre dispositif tel qu'une clé de sécurité, une application d'authentification, un SMS, un appel téléphonique ou un courriel. L'authentification à deux facteurs peut être configurée sur le coffre web de bitwarden.com. Voulez-vous visiter le site web maintenant ?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Déverrouiller avec {0}</value>
@@ -769,10 +769,10 @@
     <value>2. Activez l'option et appuyez sur OK pour accepter.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>Désactivé</value>
+    <value>Non</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>Activé</value>
+    <value>Oui</value>
   </data>
   <data name="Off" xml:space="preserve">
     <value>Désactivé</value>
@@ -831,14 +831,14 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Ce compte utilise l'authentification à double facteurs, mais aucun des services d'authentification à double facteurs n'est supporté sur cet appareil. Veuillez utiliser un appareil compatible et/ou ajouter des services supplémentaires qui sont mieux supportés sur les appareils (comme une application d'authentification).</value>
+    <value>Ce compte a une authentification à deux facteurs configurée, mais aucun des fournisseurs d'authentification à deux facteurs configurés ne sont pris en charge sur cet appareil. Veuillez utiliser un appareil pris en charge et/ou ajouter des fournisseurs supplémentaires qui sont mieux pris en charge par les appareils (comme une application d'authentification).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Code de récupération</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Rester connecté</value>
+    <value>Se souvenir de moi</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
@@ -846,10 +846,10 @@
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Options d'identification à double facteurs</value>
+    <value>Options d'authentification à deux facteurs</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Utiliser une autre méthode d'identification en deux étapes</value>
+    <value>Utiliser une autre méthode d'authentification à deux facteurs</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
     <value>Impossible d'envoyer l'e-mail de vérification. Essayez à nouveau.</value>
@@ -922,7 +922,7 @@ La numérisation se fera automatiquement.</value>
     <value>Copier le code TOTP automatiquement</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>Une adhésion premium est requise pour utiliser cette fonctionnalité.</value>
+    <value>Une adhésion Premium est requise pour utiliser cette fonctionnalité.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
     <value>Pièce jointe ajoutée</value>
@@ -1366,7 +1366,7 @@ La numérisation se fera automatiquement.</value>
     <value>Valeur</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Historique des mots de passe</value>
+    <value>Historique du mot de passe</value>
   </data>
   <data name="Types" xml:space="preserve">
     <value>Types</value>
@@ -1493,10 +1493,10 @@ La numérisation se fera automatiquement.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Votre coffre est verrouillé. Saisissez votre mot de passe maître pour continuer.</value>
+    <value>Votre coffre est verrouillé. Vérifiez votre mot de passe principal pour continuer.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Votre coffre est verrouillé. Saisissez votre code PIN pour continuer.</value>
+    <value>Votre coffre est verrouillé. Vérifiez votre code PIN pour continuer.</value>
   </data>
   <data name="VaultLockedIdentity" xml:space="preserve">
     <value>Votre coffre est verrouillé. Vérifiez votre identité pour continuer.</value>
@@ -1565,7 +1565,7 @@ La numérisation se fera automatiquement.</value>
     <value>Êtes-vous sûr de vouloir quitter Bitwarden ?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Voulez-vous avoir à déverrouiller avec votre mot de passe maître lorsque l'application est redémarrée ?</value>
+    <value>Voulez-vous exiger le déverrouillage avec votre mot de passe principal lorsque l'application est redémarrée ?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Noir</value>
@@ -1601,7 +1601,7 @@ La numérisation se fera automatiquement.</value>
     <value>Vos modifications de thème s'appliqueront lorsque l'application sera redémarrée.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Mettre la première lettre de chaque mot en majuscule</value>
+    <value>Mettre une majuscule</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
@@ -1620,13 +1620,13 @@ La numérisation se fera automatiquement.</value>
     <value>Votre session a expiré.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Utiliser une empreinte biométrique pour vérifier.</value>
+    <value>Vérification biométrique</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Empreintes biométriques</value>
+    <value>Biométrie</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Utiliser une empreinte biométrique pour déverrouiller</value>
+    <value>Utiliser la biométrie pour déverrouiller</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
     <value>Bitwarden requiert votre attention - Voir "Service d'accessibilité pour le remplissage automatique" dans les paramètres de Bitwarden</value>
@@ -1653,7 +1653,7 @@ La numérisation se fera automatiquement.</value>
     <value>Format de fichier</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Saisissez votre mot de passe maître pour exporter les données de votre coffre.</value>
+    <value>Saisissez votre mot de passe principal pour exporter les données de votre coffre.</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
     <value>Envoyer un code de vérification à votre adresse email</value>
@@ -1750,10 +1750,10 @@ La numérisation se fera automatiquement.</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Le déverrouillage biométrique est désactivé en attendant la vérification du mot de passe maître.</value>
+    <value>Déverrouillage biométrique désactivé dans l'attente de vérification du mot de passe principal.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Le déverrouillage biométrique pour le remplissage automatique est désactivé en attendant la vérification du mot de passe maître.</value>
+    <value>Déverrouillage biométrique pour la saisie automatique désactivé dans l'attente de vérification du mot de passe principal.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Activer la synchronisation lors de l'actualisation</value>
@@ -1774,13 +1774,13 @@ La numérisation se fera automatiquement.</value>
     <value>Impossible de se connecter avec SSO pour le moment</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Définir le mot de passe maître</value>
+    <value>Définir le mot de passe principal</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>Afin de terminer la connexion avec SSO, veuillez définir un mot de passe maître pour accéder à votre coffre et le protéger.</value>
+    <value>Afin de finaliser la connexion avec SSO, veuillez définir un mot de passe principal pour accéder et protéger votre coffre.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>Une ou plusieurs politiques de l'organisation exigent que votre mot de passe maître réponde aux exigences suivantes :</value>
+    <value>Une ou plusieurs politiques de l'organisation exigent que votre mot de passe principal réponde aux exigences suivantes :</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
     <value>Score de complexité minimum de {0}</value>
@@ -2018,7 +2018,7 @@ La numérisation se fera automatiquement.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Send mis à jour.</value>
+    <value>Send sauvegardé</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
@@ -2063,7 +2063,7 @@ La numérisation se fera automatiquement.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>Les comptes gratuits sont limités au partage de texte. Un abonnement premium est requis pour utiliser les fichiers avec Send.</value>
+    <value>Les comptes gratuits sont limités au partage de texte uniquement. Une adhésion Premium est requise pour utiliser les fichiers avec Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
@@ -2071,13 +2071,13 @@ La numérisation se fera automatiquement.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Ressaisie du mot de passe maître</value>
+    <value>Ressaisir le mot de passe principal</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
-    <value>Confirmation du mot de passe maître</value>
+    <value>Confirmation du mot de passe principal</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>Cette action est protégée. Pour continuer, veuillez ressaisir votre mot de passe maître pour vérifier votre identité.</value>
+    <value>Cette action est protégée, pour continuer veuillez entrer à nouveau votre mot de passe principal pour vérifier votre identité.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
     <value>Captcha obligatoire</value>
@@ -2086,13 +2086,13 @@ La numérisation se fera automatiquement.</value>
     <value>Le captcha a échoué. Veuillez réessayer.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Mot de passe maître mis à jour</value>
+    <value>Mot de passe principal mis à jour</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Mettre à jour le mot de passe maître</value>
+    <value>Mettre à jour le mot de passe principal</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Votre mot de passe maître a récemment été modifié par un administrateur de votre organisation. Pour accéder au coffre, vous devez mettre à jour votre mot de passe maître dès maintenant. Cette action va vous déconnecter et vous obligera à vous reconnecter. Les sessions actives sur d'autres appareils peuvent rester actives jusqu'à une heure.</value>
+    <value>Votre mot de passe principal a été récemment changé par un administrateur de votre organisation. Pour pouvoir accéder au coffre, vous devez mettre à jour votre mot de passe principal maintenant. En poursuivant, vous serez déconnecté de votre session actuelle et vous devrez vous reconnecter. Les sessions actives sur d'autres appareils peuvent rester actives pendant encore une heure.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
     <value>Mise à jour du mot de passe</value>
@@ -2101,13 +2101,13 @@ La numérisation se fera automatiquement.</value>
     <value>Impossible de mettre à jour le mot de passe pour le moment</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>Supprimer le mot de passe maître</value>
+    <value>Supprimer le mot de passe principal</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} utilise le SSO avec un chiffrement géré par le client. En continuant, votre mot de passe maître sera supprimé de votre compte et vous devrez utiliser le SSO pour vous connecter.</value>
+    <value>{0} utilise le SSO avec un chiffrement géré par le client. La poursuite supprimera votre mot de passe principal de votre compte et exigera le SSO pour la connexion.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>Si vous ne souhaitez pas supprimer votre mot de passe maître actuel, vous pouvez quitter cette organisation. </value>
+    <value>Si vous ne voulez pas supprimer votre mot de passe principal, vous pouvez quitter cette organisation.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
     <value>Quitter l’organisation</value>
@@ -2134,7 +2134,7 @@ La numérisation se fera automatiquement.</value>
     <value>Assurez-vous que votre navigateur par défaut prend en charge WebAuthn et réessayez.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>Cette organisation a une politique d'entreprise qui vous inscrira automatiquement à la réinitialisation du mot de passe. L'inscription permettra aux administrateurs de l'organisation de changer votre mot de passe maître.</value>
+    <value>Cette organisation dispose d'une politique d'entreprise qui vous inscrira automatiquement à la réinitialisation du mot de passe. L'inscription permettra aux administrateurs de l'organisation de changer votre mot de passe principal.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Les politiques de votre organisation affectent le délai d'expiration de votre coffre-fort. Le délai d'expiration maximal autorisé est de {0} heure(s) et {1} minute(s)</value>
@@ -2218,7 +2218,7 @@ La numérisation se fera automatiquement.</value>
     <value>Saisissez le code de vérification que nous avons envoyé votre adresse e-mail</value>
   </data>
   <data name="SubmitCrashLogs" xml:space="preserve">
-    <value>Envoyer le journal d'erreurs</value>
+    <value>Envoyer les journaux de plantage</value>
   </data>
   <data name="SubmitCrashLogsDescription" xml:space="preserve">
     <value>Aidez Bitwarden à améliorer la stabilité de l'application en autorisant les rapports d'erreurs.</value>
@@ -2293,7 +2293,7 @@ La numérisation se fera automatiquement.</value>
     <value>Ajouter un TOTP</value>
   </data>
   <data name="SetupTotp" xml:space="preserve">
-    <value>Configurer le TOTP</value>
+    <value>Configurer TOTP</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
     <value>Une fois que la clé est entrée avec succès,
@@ -2381,22 +2381,22 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
     <value>Que souhaitez-vous générer ?</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
-    <value>Type de Nom d'Utilisateur</value>
+    <value>Type de nom d'utilisateur</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Email prenant en charge le "plus-addressing"</value>
+    <value>Courriel sous-adressé</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
-    <value>Collecteur d'e-mail</value>
+    <value>Courriel "catch-all"</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
-    <value>Alias d'email transféré</value>
+    <value>Alias de courriel transféré</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
     <value>Mot aléatoire</value>
   </data>
   <data name="EmailRequiredParenthesis" xml:space="preserve">
-    <value>E-mail (requis)</value>
+    <value>Courriel (requis)</value>
   </data>
   <data name="DomainNameRequiredParenthesis" xml:space="preserve">
     <value>Nom de domaine (requis)</value>
@@ -2438,13 +2438,13 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
     <value>L'erreur {0} inconnue est survenue.</value>
   </data>
   <data name="PlusAddressedEmailDescription" xml:space="preserve">
-    <value>Utilisez les capacités de sous-adressage de votre fournisseur de messagerie</value>
+    <value>Utilisez les capacités de sous-adresse de votre fournisseur de messagerie électronique</value>
   </data>
   <data name="CatchAllEmailDescription" xml:space="preserve">
-    <value>Utilisez la boîte de réception de votre email collecteur/attrape-tout (catch-all).</value>
+    <value>Utilisez la boîte de réception "catch-all" configurée sur votre domaine.</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
-    <value>Générer un alias d'email avec un service de transfert externe.</value>
+    <value>Générer un alias de courriel avec un service de transfert externe.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Aléatoire</value>
@@ -2476,7 +2476,7 @@ Voulez-vous basculer vers ce compte ?</value>
     <value>Vous êtes nouveau ici ?</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
-    <value>Obtenir l'indice du mot de passe maître</value>
+    <value>Obtenir l'indice du mot de passe principal</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
     <value>Connecté en tant que {0}</value>
@@ -2485,7 +2485,7 @@ Voulez-vous basculer vers ce compte ?</value>
     <value>Ce n'est pas vous ?</value>
   </data>
   <data name="LogInWithMasterPassword" xml:space="preserve">
-    <value>Connectez-vous avec le mot de passe maître</value>
+    <value>Se connecter avec le mot de passe principal</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>Connectez-vous avec un autre appareil</value>
@@ -2497,7 +2497,7 @@ Voulez-vous basculer vers ce compte ?</value>
     <value>Une notification a été envoyée à votre appareil.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Veuillez vous assurer que votre coffre est déverrouillé et que l'empreinte digitale est identique sur l'autre appareil.</value>
+    <value>Veuillez vous assurer que votre coffre est déverrouillé et que la phrase d'empreinte correspond à celle de l'autre appareil.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
     <value>Renvoyer la notification</value>

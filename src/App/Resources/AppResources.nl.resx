@@ -2450,7 +2450,7 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</value>
     <value>Willekeurig</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connect to Watch</value>
+    <value>Verbinding maken met horloge</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Toegankelijksheidsservice-melding</value>
@@ -2491,22 +2491,22 @@ Wilt u naar dit account wisselen?</value>
     <value>Inloggen met een ander apparaat</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Log in initiated</value>
+    <value>Inloggen gestart</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
-    <value>A notification has been sent to your device.</value>
+    <value>Er is een bericht naar je apparaat verstuurd.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+    <value>Zorg ervoor dat je kluis is ontgrendeld en dat de Vingerafdrukzin overeenkomt met het andere apparaat.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
-    <value>Resend notification</value>
+    <value>Bericht opnieuw verzenden</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>Nog een optie nodig?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>View all log in options</value>
+    <value>Alle loginopties bekijken</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Dit verzoek is niet langer geldig</value>

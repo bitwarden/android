@@ -117,64 +117,56 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Title" xml:space="preserve">
-    <value>Bitwarden - Gestionnaire de mots de passe</value>
+  <data name="Name" xml:space="preserve">
+    <value>Bitwarden Password Manager</value>
     <comment>Max 30 characters</comment>
   </data>
-  <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden est un gestionnaire de mots de passe qui vous protège en ligne.</value>
-    <comment>Max 80 characters</comment>
-  </data>
-  <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, Inc. est la société mère de 8bit Solutions LLC.
+  <data name="Description" xml:space="preserve">
+    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
 
-NOMMÉ MEILLEUR GESTIONNAIRE DE MOTS DE PASSE PAR THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, ET PLUS ENCORE.
+NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
 
-Gérez, stockez, sécurisez et partagez un nombre illimité de mots de passe sur un nombre illimité d'appareils, où que vous soyez. Bitwarden fournit des solutions de gestion de mots de passe open source à tout le monde, que ce soit chez soi, au travail ou en déplacement.
+Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
 
-Générez des mots de passe robustes, uniques et aléatoires basés sur des exigences de sécurité pour chaque site web que vous fréquentez.
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
 
-Bitwarden Send transmet rapidement des informations chiffrées --- fichiers et texte --- directement à quiconque.
+Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
 
-Bitwarden propose des plans Teams et Enterprise pour les sociétés afin que vous puissiez partager des mots de passe en toute sécurité avec vos collègues.
+Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
 
-Pourquoi choisir Bitwarden :
+Why Choose Bitwarden:
 
-Un chiffrement de classe internationale
-Les mots de passe sont protégés par un cryptage avancé de bout en bout (AES-256 bit, hachage salé et PBKDF2 SHA-256) afin que vos données restent sécurisées et privées.
+World-Class Encryption
+Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
 
-Générateur de mots de passe intégré
-Générez des mots de passe forts, uniques et aléatoires en fonction des exigences de sécurité pour chaque site web que vous fréquentez.
+Built-in Password Generator
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
 
-Traductions internationales 
-Les traductions de Bitwarden existent dans 40 langues et ne cessent de croître, grâce à notre communauté globale.
+Global Translations
+Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
 
-Applications multiplateformes 
-Sécurisez et partagez des données sensibles dans votre coffre Bitwarden à partir de n'importe quel navigateur, appareil mobile ou système d'exploitation de bureau, et plus encore.
+Cross-Platform Applications
+Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
 </value>
   <comment>Max 4000 characters</comment>
   </data>
-  <data name="FeatureGraphic" xml:space="preserve">
-    <value>Un gestionnaire de mots de passe sécurisé et gratuit pour tous vos appareils</value>
+  <data name="Keywords" xml:space="preserve">
+    <value>bit warden,8bit,password,free password manager,password manager,login manager</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Gérer tous vos identifiants et mots de passe depuis un coffre sécurisé</value>
+    <value>Manage all your logins and passwords from a secure vault</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Générer automatiquement des mots de passe robustes, aléatoires et sécurisés</value>
+    <value>Automatically generate strong, random, and secure passwords</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protéger votre coffre avec une empreinte digitale, un code PIN ou un mot de passe principal</value>
+    <value>Protect your vault with Touch ID, PIN code, or master password</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Remplir automatiquement et rapidement les formulaires de connexion à partir de votre navigateur Web et d'autres applications</value>
+    <value>Auto-fill logins from Safari, Chrome, and hundreds of other apps</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Synchroniser et accéder à votre coffre à partir de plusieurs appareils
-
-- Téléphone
-- Tablette
-- Ordinateur
-- Web</value>
+    <value>Sync and access your vault from multiple devices</value>
   </data>
 </root>
