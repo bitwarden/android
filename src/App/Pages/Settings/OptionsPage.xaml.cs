@@ -34,6 +34,7 @@ namespace Bit.App.Pages
                 _autoDarkThemePicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
                 _uriMatchPicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
                 _clearClipboardPicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+                _languagePicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
             }
         }
 

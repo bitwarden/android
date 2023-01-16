@@ -165,7 +165,5 @@ namespace Bit.Core.Abstractions
         Task<bool> GetLastUserShouldConnectToWatchAsync();
         Task SetAvatarColorAsync(string value, string userId = null);
         Task<string> GetAvatarColorAsync(string userId = null);
-
-
     }
 }

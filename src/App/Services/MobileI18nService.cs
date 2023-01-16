@@ -51,32 +51,32 @@ namespace Bit.App.Services
                         ["bg"] = "български",
                         ["ca"] = "català",
                         ["cs"] = "čeština",
-                        ["da"] = "dansk",
+                        ["da"] = "Dansk",
                         ["de"] = "Deutsch",
                         ["el"] = "Ελληνικά",
                         ["en"] = "English",
                         ["en-GB"] = "English (British)",
                         ["eo"] = "Esperanto",
-                        ["es"] = "español",
+                        ["es"] = "Español",
                         ["et"] = "eesti",
                         ["fa"] = "فارسی",
                         ["fi"] = "suomi",
-                        ["fr"] = "français",
+                        ["fr"] = "Français",
                         ["he"] = "עברית",
                         ["hi"] = "हिन्दी",
                         ["hr"] = "hrvatski",
                         ["hu"] = "magyar",
                         ["id"] = "Bahasa Indonesia",
-                        ["it"] = "italiano",
+                        ["it"] = "Italiano",
                         ["ja"] = "日本語",
                         ["ko"] = "한국어",
                         ["lv"] = "Latvietis",
                         ["ml"] = "മലയാളം",
                         ["nb"] = "norsk (bokmål)",
                         ["nl"] = "Nederlands",
-                        ["pl"] = "polski",
-                        ["pt-BR"] = "português do Brasil",
-                        ["pt-PT"] = "português",
+                        ["pl"] = "Polski",
+                        ["pt-BR"] = "Português do Brasil",
+                        ["pt-PT"] = "Português",
                         ["ro"] = "română",
                         ["ru"] = "русский",
                         ["sk"] = "slovenčina",
@@ -100,10 +100,16 @@ namespace Bit.App.Services
                 throw new Exception("I18n already inited.");
             }
             _inited = true;
+            SetCurrentCulture(culture);
+        }
+
+        public void SetCurrentCulture(CultureInfo culture)
+        {
             if (culture != null)
             {
                 Culture = culture;
             }
+
             AppResources.Culture = Culture;
             Thread.CurrentThread.CurrentCulture = Culture;
             Thread.CurrentThread.CurrentUICulture = Culture;

@@ -158,6 +158,7 @@ namespace Bit.Droid
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
 
+            ServiceContainer.Register<IPreferencesStorageService>(preferencesStorage);
             ServiceContainer.Register<IBroadcasterService>("broadcasterService", broadcasterService);
             ServiceContainer.Register<IMessagingService>("messagingService", messagingService);
             ServiceContainer.Register<ILocalizeService>("localizeService", localizeService);
@@ -197,7 +198,9 @@ namespace Bit.Droid
 
         private void Bootstrap()
         {
-            (ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService).Init();
+            var locale = ServiceContainer.Resolve<IPreferencesStorageService>().Get<string>(Bit.Core.Constants.AppLocaleKey);
+            (ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService)
+                .Init(locale != null ? new System.Globalization.CultureInfo(locale) : null);
             ServiceContainer.Resolve<IAuthService>("authService").Init();
             // Note: This is not awaited
             var bootstrapTask = BootstrapAsync();
