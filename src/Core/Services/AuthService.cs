@@ -106,6 +106,7 @@ namespace Bit.Core.Services
         public string CaptchaToken { get; set; }
         public string MasterPasswordHash { get; set; }
         public string LocalMasterPasswordHash { get; set; }
+        public string AuthRequestId { get; set; }
         public string Code { get; set; }
         public string CodeVerifier { get; set; }
         public string SsoRedirectUrl { get; set; }
@@ -163,7 +164,7 @@ namespace Bit.Core.Services
                 CaptchaToken = captchaToken;
             }
             return LogInHelperAsync(Email, MasterPasswordHash, LocalMasterPasswordHash, Code, CodeVerifier, SsoRedirectUrl, _key,
-                twoFactorProvider, twoFactorToken, remember, CaptchaToken);
+                twoFactorProvider, twoFactorToken, remember, CaptchaToken, authRequestId: AuthRequestId);
         }
 
         public async Task<AuthResult> LogInCompleteAsync(string email, string masterPassword,
@@ -328,12 +329,12 @@ namespace Bit.Core.Services
             if (twoFactorToken != null && twoFactorProvider != null)
             {
                 request = new TokenRequest(emailPassword, codeCodeVerifier, twoFactorProvider, twoFactorToken, remember,
-                    captchaToken, deviceRequest);
+                    captchaToken, deviceRequest, authRequestId);
             }
             else if (storedTwoFactorToken != null)
             {
                 request = new TokenRequest(emailPassword, codeCodeVerifier, TwoFactorProviderType.Remember,
-                    storedTwoFactorToken, false, captchaToken, deviceRequest);
+                    storedTwoFactorToken, false, captchaToken, deviceRequest, authRequestId);
             }
             else if (authRequestId != null)
             {
@@ -359,6 +360,7 @@ namespace Bit.Core.Services
                 Email = email;
                 MasterPasswordHash = hashedPassword;
                 LocalMasterPasswordHash = localHashedPassword;
+                AuthRequestId = authRequestId;
                 Code = code;
                 CodeVerifier = codeVerifier;
                 SsoRedirectUrl = redirectUrl;
@@ -481,6 +483,7 @@ namespace Bit.Core.Services
             Email = null;
             CaptchaToken = null;
             MasterPasswordHash = null;
+            AuthRequestId = null;
             Code = null;
             CodeVerifier = null;
             SsoRedirectUrl = null;
