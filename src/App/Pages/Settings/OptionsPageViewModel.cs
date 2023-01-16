@@ -145,7 +145,7 @@ namespace Bit.App.Pages
                 }
             }
         }
-        
+
         public KeyValuePair<string, string> SelectedLocale
         {
             get => _selectedLocale;
