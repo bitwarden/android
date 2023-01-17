@@ -306,6 +306,27 @@
                                 Grid.Row="1"
                                 Grid.Column="1"/>
                         </Grid>
+                        <!--DUCKDUCKGO RELAY OPTIONS-->
+                        <Grid StyleClass="box-row, box-row-input"
+                              IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.DuckDuckGo}}"
+                              Grid.RowDefinitions="Auto,*"
+                              Grid.ColumnDefinitions="*,Auto">
+                            <Label
+                                Text="{u:I18n APIKeyRequiredParenthesis}"
+                                StyleClass="box-label"/>
+                            <Entry
+                                x:Name="_duckDuckGoApiAccessTokenEntry"
+                                Text="{Binding DuckDuckGoApiKey}"
+                                StyleClass="box-value"
+                                Grid.Row="1"
+                                IsPassword="{Binding ShowDuckDuckGoApiKey, Converter={StaticResource inverseBool}}"/>
+                            <controls:IconButton
+                                StyleClass="box-row-button, box-row-button-platform"
+                                Text="{Binding ShowDuckDuckGoHiddenValueIcon}"
+                                Command="{Binding ToggleForwardedEmailHiddenValueCommand}"
+                                Grid.Row="1"
+                                Grid.Column="1"/>
+                        </Grid>
                     </StackLayout>                    
                     <!--RANDOM WORD OPTIONS-->
                     <Grid IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.RandomWord}}">

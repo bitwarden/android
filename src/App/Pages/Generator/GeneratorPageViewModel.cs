@@ -52,6 +52,7 @@ namespace Bit.App.Pages
         private bool _showFirefoxRelayApiAccessToken;
         private bool _showAnonAddyApiAccessToken;
         private bool _showSimpleLoginApiKey;
+        private bool _showDuckDuckGoApiKey;
         private bool _editMode;
 
         public GeneratorPageViewModel()
@@ -80,7 +81,9 @@ namespace Bit.App.Pages
             ForwardedEmailServiceTypeOptions = new List<ForwardedEmailServiceType> {
                 ForwardedEmailServiceType.AnonAddy,
                 ForwardedEmailServiceType.FirefoxRelay,
-                ForwardedEmailServiceType.SimpleLogin
+                ForwardedEmailServiceType.SimpleLogin,
+                ForwardedEmailServiceType.FastMail,
+                ForwardedEmailServiceType.DuckDuckGo
             };
 
             UsernameEmailTypeOptions = new List<UsernameEmailType>
@@ -541,6 +544,35 @@ namespace Bit.App.Pages
         }
 
         public string ShowSimpleLoginHiddenValueIcon => _showSimpleLoginApiKey ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+
+        public string DuckDuckGoApiKey
+        {
+            get => _usernameOptions.DuckDuckGoApiKey;
+            set
+            {
+                if (_usernameOptions.DuckDuckGoApiKey != value)
+                {
+                    _usernameOptions.DuckDuckGoApiKey = value;
+                    TriggerPropertyChanged(nameof(DuckDuckGoApiKey));
+                    SaveUsernameOptionsAsync(false).FireAndForget();
+                }
+            }
+        }
+
+        public bool ShowDuckDuckGoApiKey
+        {
+            get
+            {
+                return _showDuckDuckGoApiKey;
+            }
+            set => SetProperty(ref _showDuckDuckGoApiKey, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowDuckDuckGoHiddenValueIcon)
+                });
+        }
+
+        public string ShowDuckDuckGoHiddenValueIcon => _showDuckDuckGoApiKey ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
 
         public bool CapitalizeRandomWordUsername
         {

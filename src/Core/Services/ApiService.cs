@@ -760,6 +760,9 @@ namespace Bit.Core.Services
                     case ForwardedEmailServiceType.SimpleLogin:
                         requestMessage.Headers.Add("Authentication", config.ApiToken);
                         break;
+                    case ForwardedEmailServiceType.DuckDuckGo:
+                        requestMessage.Headers.Add("authorization", $"Bearer {config.ApiToken}");
+                        break;
                 }
 
                 HttpResponseMessage response;
@@ -790,6 +793,8 @@ namespace Bit.Core.Services
                         return result["full_address"]?.ToString();
                     case ForwardedEmailServiceType.SimpleLogin:
                         return result["alias"]?.ToString();
+                    case ForwardedEmailServiceType.DuckDuckGo:
+                        return $"{result["address"]?.ToString()}@duck.com";
                     default:
                         return string.Empty;
                 }

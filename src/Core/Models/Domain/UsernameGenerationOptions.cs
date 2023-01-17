@@ -16,6 +16,7 @@ namespace Bit.Core.Models.Domain
         public string CatchAllEmailDomain { get; set; }
         public string FirefoxRelayApiAccessToken { get; set; }
         public string SimpleLoginApiKey { get; set; }
+        public string DuckDuckGoApiKey { get; set; }
         public string AnonAddyApiAccessToken { get; set; }
         public string AnonAddyDomainName { get; set; }
         public string EmailWebsite { get; set; }

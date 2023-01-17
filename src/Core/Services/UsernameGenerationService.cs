@@ -171,6 +171,17 @@ namespace Bit.Core.Services
                             ApiToken = options.SimpleLoginApiKey,
                             Url = "https://app.simplelogin.io/api/alias/random/new"
                         });
+                case ForwardedEmailServiceType.DuckDuckGo:
+                    if (string.IsNullOrWhiteSpace(options.DuckDuckGoApiKey))
+                    {
+                        return Constants.DefaultUsernameGenerated;
+                    }
+                    return await _apiService.GetUsernameFromAsync(ForwardedEmailServiceType.DuckDuckGo,
+                        new UsernameGeneratorConfig()
+                        {
+                            ApiToken = options.DuckDuckGoApiKey,
+                            Url = "https://quack.duckduckgo.com/api/email/addresses"
+                        });
                 default:
                     _logger.Value.Error($"Error UsernameGenerationService: ForwardedEmailServiceType {options.ServiceType} not implemented.");
                     return Constants.DefaultUsernameGenerated;

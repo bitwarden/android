@@ -10,5 +10,9 @@ namespace Bit.Core.Enums
         FirefoxRelay = 1,
         [LocalizableEnum("SimpleLogin")]
         SimpleLogin = 2,
+        [LocalizableEnum("FastMail")]
+        FastMail = 3,
+        [LocalizableEnum("DuckDuckGo")]
+        DuckDuckGo = 4,
     }
 }
