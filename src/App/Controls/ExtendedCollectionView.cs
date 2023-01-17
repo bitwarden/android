@@ -13,10 +13,6 @@ namespace Bit.App.Controls
     {
         public override object? ConvertFrom(SelectionChangedEventArgs? value)
         {
-            if (value == null)
-            {
-                return null;
-            }
             return value?.CurrentSelection.FirstOrDefault();
         }
     }

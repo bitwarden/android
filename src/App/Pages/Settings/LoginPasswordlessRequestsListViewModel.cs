@@ -20,7 +20,6 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly ILogger _logger;
-        private ObservableRangeCollection<PasswordlessLoginResponse> _loginRequestsList;
         private bool _isRefreshing;
 
         public LoginPasswordlessRequestsListViewModel()
@@ -32,7 +31,7 @@ namespace Bit.App.Pages
             _logger = ServiceContainer.Resolve<ILogger>();
 
             PageTitle = AppResources.PendingLogInRequests;
-            LoginRequestsList = new ObservableRangeCollection<PasswordlessLoginResponse>();
+            LoginRequests = new ObservableRangeCollection<PasswordlessLoginResponse>();
 
             AnswerRequestCommand = new AsyncCommand<PasswordlessLoginResponse>(PasswordlessLoginAsync,
                 onException: ex => HandleException(ex),
@@ -42,9 +41,7 @@ namespace Bit.App.Pages
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            RefreshCommand = new AsyncCommand(RefreshAsync,
-                onException: ex => HandleException(ex),
-                allowsMultipleExecutions: false);
+            RefreshCommand = new Command( async ( ) => await RefreshAsync());
         }
 
         public ICommand RefreshCommand { get; }
@@ -53,11 +50,7 @@ namespace Bit.App.Pages
 
         public AsyncCommand DeclineAllRequestsCommand { get; }
 
-        public ObservableRangeCollection<PasswordlessLoginResponse> LoginRequestsList
-        {
-            get => _loginRequestsList;
-            set => SetProperty(ref _loginRequestsList, value);
-        }
+        public ObservableRangeCollection<PasswordlessLoginResponse> LoginRequests { get; }
 
         public bool IsRefreshing
         {
@@ -69,9 +62,9 @@ namespace Bit.App.Pages
         {
             try
             {
-                LoginRequestsList.ReplaceRange(await _authService.GetActivePasswordlessLoginRequestsAsync());
-
-                if (!LoginRequestsList.Any())
+                IsRefreshing = true;
+                LoginRequests.ReplaceRange(await _authService.GetActivePasswordlessLoginRequestsAsync());
+                if (!LoginRequests.Any())
                 {
                     Page.Navigation.PopModalAsync().FireAndForget();
                 }
@@ -79,6 +72,10 @@ namespace Bit.App.Pages
             catch (Exception ex)
             {
                 HandleException(ex);
+            }
+            finally
+            {
+                IsRefreshing = false;
             }
         }
 
@@ -124,18 +121,19 @@ namespace Bit.App.Pages
 
                 await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
                 var taskList = new List<Task>();
-                foreach (var request in LoginRequestsList)
+                foreach (var request in LoginRequests)
                 {
                     taskList.Add(_authService.PasswordlessLoginAsync(request.Id, request.PublicKey, false));
                 }
                 await Task.WhenAll(taskList);
-                await RefreshAsync();
                 await _deviceActionService.HideLoadingAsync();
+                await RefreshAsync();
                 _platformUtilsService.ShowToast("info", null, AppResources.RequestsDeclined);
             }
             catch (Exception ex)
             {
                 HandleException(ex);
+                RefreshAsync().FireAndForget();
             }
         }
     }

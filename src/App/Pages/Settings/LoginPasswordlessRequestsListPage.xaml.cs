@@ -12,8 +12,6 @@ namespace Bit.App.Pages
     {
         private LoginPasswordlessRequestsListViewModel _vm;
 
-        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
-
         public LoginPasswordlessRequestsListPage()
         {
             InitializeComponent();
