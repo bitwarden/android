@@ -2424,9 +2424,9 @@ select Add TOTP to store the key safely</value>
     <value>DuckDuckGo</value>
     <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
   </data>
-  <data name="FastMail" xml:space="preserve">
-    <value>FastMail</value>
-    <comment>"FastMail" is the product name and should not be translated.</comment>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API access token</value>

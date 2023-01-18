@@ -306,7 +306,7 @@
                                 Grid.Row="1"
                                 Grid.Column="1"/>
                         </Grid>
-                        <!--DUCKDUCKGO RELAY OPTIONS-->
+                        <!--DUCKDUCKGO OPTIONS-->
                         <Grid StyleClass="box-row, box-row-input"
                               IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.DuckDuckGo}}"
                               Grid.RowDefinitions="Auto,*"
@@ -323,6 +323,27 @@
                             <controls:IconButton
                                 StyleClass="box-row-button, box-row-button-platform"
                                 Text="{Binding ShowDuckDuckGoHiddenValueIcon}"
+                                Command="{Binding ToggleForwardedEmailHiddenValueCommand}"
+                                Grid.Row="1"
+                                Grid.Column="1"/>
+                        </Grid>
+                        <!--FASTMAIL OPTIONS-->
+                        <Grid StyleClass="box-row, box-row-input"
+                              IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.Fastmail}}"
+                              Grid.RowDefinitions="Auto,*"
+                              Grid.ColumnDefinitions="*,Auto">
+                            <Label
+                                Text="{u:I18n APIKeyRequiredParenthesis}"
+                                StyleClass="box-label"/>
+                            <Entry
+                                x:Name="_fastmailApiAccessTokenEntry"
+                                Text="{Binding FastmailApiKey}"
+                                StyleClass="box-value"
+                                Grid.Row="1"
+                                IsPassword="{Binding ShowFastmailApiKey, Converter={StaticResource inverseBool}}"/>
+                            <controls:IconButton
+                                StyleClass="box-row-button, box-row-button-platform"
+                                Text="{Binding ShowFastmailHiddenValueIcon}"
                                 Command="{Binding ToggleForwardedEmailHiddenValueCommand}"
                                 Grid.Row="1"
                                 Grid.Column="1"/>

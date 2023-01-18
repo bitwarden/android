@@ -2534,11 +2534,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to FastMail.
+        ///   Looks up a localized string similar to Fastmail.
         /// </summary>
-        public static string FastMail {
+        public static string Fastmail {
             get {
-                return ResourceManager.GetString("FastMail", resourceCulture);
+                return ResourceManager.GetString("Fastmail", resourceCulture);
             }
         }
         

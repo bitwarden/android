@@ -53,6 +53,7 @@ namespace Bit.App.Pages
         private bool _showAnonAddyApiAccessToken;
         private bool _showSimpleLoginApiKey;
         private bool _showDuckDuckGoApiKey;
+        private bool _showFastmailApiKey;
         private bool _editMode;
 
         public GeneratorPageViewModel()
@@ -82,7 +83,7 @@ namespace Bit.App.Pages
                 ForwardedEmailServiceType.AnonAddy,
                 ForwardedEmailServiceType.FirefoxRelay,
                 ForwardedEmailServiceType.SimpleLogin,
-                ForwardedEmailServiceType.FastMail,
+                ForwardedEmailServiceType.Fastmail,
                 ForwardedEmailServiceType.DuckDuckGo
             };
 
@@ -574,6 +575,35 @@ namespace Bit.App.Pages
 
         public string ShowDuckDuckGoHiddenValueIcon => _showDuckDuckGoApiKey ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
 
+        public string FastmailApiKey
+        {
+            get => _usernameOptions.FastMailApiKey;
+            set
+            {
+                if (_usernameOptions.FastMailApiKey != value)
+                {
+                    _usernameOptions.FastMailApiKey = value;
+                    TriggerPropertyChanged(nameof(FastmailApiKey));
+                    SaveUsernameOptionsAsync(false).FireAndForget();
+                }
+            }
+        }
+
+        public bool ShowFastmailApiKey
+        {
+            get
+            {
+                return _showFastmailApiKey;
+            }
+            set => SetProperty(ref _showFastmailApiKey, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowFastmailHiddenValueIcon)
+                });
+        }
+
+        public string ShowFastmailHiddenValueIcon => _showFastmailApiKey ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+
         public bool CapitalizeRandomWordUsername
         {
             get => _usernameOptions.CapitalizeRandomWordUsername;
@@ -880,6 +910,12 @@ namespace Bit.App.Pages
                     break;
                 case ForwardedEmailServiceType.SimpleLogin:
                     ShowSimpleLoginApiKey = !ShowSimpleLoginApiKey;
+                    break;
+                case ForwardedEmailServiceType.DuckDuckGo:
+                    ShowDuckDuckGoApiKey = !ShowDuckDuckGoApiKey;
+                    break;
+                case ForwardedEmailServiceType.Fastmail:
+                    ShowFastmailApiKey = !ShowFastmailApiKey;
                     break;
             }
         }
