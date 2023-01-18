@@ -41,7 +41,7 @@ namespace Bit.App.Pages
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            RefreshCommand = new Command( async ( ) => await RefreshAsync());
+            RefreshCommand = new Command(async () => await RefreshAsync());
         }
 
         public ICommand RefreshCommand { get; }
