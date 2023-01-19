@@ -840,6 +840,8 @@ namespace Bit.App.Pages
             TriggerPropertyChanged(nameof(FirefoxRelayApiAccessToken));
             TriggerPropertyChanged(nameof(AnonAddyDomainName));
             TriggerPropertyChanged(nameof(AnonAddyApiAccessToken));
+            TriggerPropertyChanged(nameof(DuckDuckGoApiKey));
+            TriggerPropertyChanged(nameof(FastmailApiKey));
             TriggerPropertyChanged(nameof(CatchAllEmailDomain));
             TriggerPropertyChanged(nameof(ForwardedEmailServiceSelected));
             TriggerPropertyChanged(nameof(UsernameTypeSelected));

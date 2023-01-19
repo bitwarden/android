@@ -4,15 +4,16 @@ namespace Bit.Core.Enums
 {
     public enum ForwardedEmailServiceType
     {
+        None = 0,
         [LocalizableEnum("AnonAddy")]
-        AnonAddy = 0,
-        [LocalizableEnum("FirefoxRelay")]
-        FirefoxRelay = 1,
-        [LocalizableEnum("SimpleLogin")]
-        SimpleLogin = 2,
+        AnonAddy = 1,
+        [LocalizableEnum("DuckDuckGo")]
+        DuckDuckGo = 2,
         [LocalizableEnum("Fastmail")]
         Fastmail = 3,
-        [LocalizableEnum("DuckDuckGo")]
-        DuckDuckGo = 4,
+        [LocalizableEnum("FirefoxRelay")]
+        FirefoxRelay = 4,
+        [LocalizableEnum("SimpleLogin")]
+        SimpleLogin = 5
     }
 }
