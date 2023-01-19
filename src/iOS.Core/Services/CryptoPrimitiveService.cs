@@ -42,7 +42,7 @@ namespace Bit.iOS.Core.Services
         public byte[] Argon2id(byte[] password, byte[] salt, int iterations, int memory, int parallelism)
         {
             // TODO: Do we need to pass this in somehow like PBKDF2 based on an algorithm
-            int keySize = 32;
+            uint keySize = 32;
             var keyData = new NSMutableData();
             keyData.Length = keySize;
 
@@ -64,6 +64,6 @@ namespace Bit.iOS.Core.Services
 
         [DllImport("__Internal", EntryPoint = "argon2id_hash_raw")]
         internal static extern int argon2id_hash_raw(int timeCost, int memoryCost, int parallelism, IntPtr pwd,
-            int pwdlen, IntPtr salt, int saltlen, IntPtr hash, int hashlen);
+            nuint pwdlen, IntPtr salt, nuint saltlen, IntPtr hash, nuint hashlen);
     }
 }
