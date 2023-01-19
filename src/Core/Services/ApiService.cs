@@ -765,8 +765,8 @@ namespace Bit.Core.Services
                         break;
                     case ForwardedEmailServiceType.Fastmail:
                         requestMessage.Headers.Add("Authorization", $"Bearer {config.ApiToken}");
-                        var requestJson = CreateFastmailRequest(await GetFastmailAccountId(config.ApiToken));
-                        requestMessage.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+                        requestMessage.Content = new StringContent(await CreateFastmailRequest(config.ApiToken),
+                            Encoding.UTF8, "application/json");
                         break;
                 }
 
@@ -801,91 +801,97 @@ namespace Bit.Core.Services
                     case ForwardedEmailServiceType.DuckDuckGo:
                         return $"{result["address"]?.ToString()}@duck.com";
                     case ForwardedEmailServiceType.Fastmail:
-                        if (result["methodResponses"] != null && result["methodResponses"].HasValues && result["methodResponses"][0].HasValues)
-                        {
-                            if (result["methodResponses"][0][0].ToString() == "MaskedEmail/set")
-                            {
-                                if (result["methodResponses"][0][1]?["created"]?["new-masked-email"] != null)
-                                {
-                                    return result["methodResponses"][0][1]?["created"]?["new-masked-email"]?["email"].ToString();
-                                }
-                                if (result["methodResponses"][0][1]?["notCreated"]?["new-masked-email"] != null)
-                                {
-                                    throw new Exception("Fastmail error: " +
-                                        result["methodResponses"][0][1]?["created"]?["new-masked-email"]?["description"].ToString());
-                                }
-                            }
-                            else if (result["methodResponses"][0][0].ToString() == "error")
-                            {
-                                throw new Exception("Fastmail error: " + result["methodResponses"][0][1]?["description"].ToString());
-                            }
-                        }
-                        throw new Exception("Fastmail error: could not parse response.");
+                        return HandleFastMailResponse(result);
                     default:
                         return string.Empty;
                 }
             }
         }
 
-        private string CreateFastmailRequest(string accountId)
+        private string HandleFastMailResponse(JObject result)
         {
-            var requestJObj = new JObject
+            if (result["methodResponses"] == null || !result["methodResponses"].HasValues ||
+                !result["methodResponses"][0].HasValues)
             {
-                new JProperty("using" , new JArray {
-                        "https://www.fastmail.com/dev/maskedemail",
-                        "urn:ietf:params:jmap:core"
-                    }),
-                new JProperty("methodCalls" , new JArray { new JArray{
-                    "MaskedEmail/set",
-                    new JObject
-                    {
-                        ["accountId"] = accountId,
-                        ["create"] = new JObject
-                        {
-                            ["new-masked-email"] = new JObject
-                            {
-                                ["state"] = "enabled",
-                                ["description"] = "",
-                                ["url"] = "",
-                                ["emailPrefix"] = ""
-                            }
-                        }
-                    },
-                    "0" } })
-            };
-            return requestJObj.ToString();
+                throw new Exception("Fastmail error: could not parse response.");
+            }
+            if (result["methodResponses"][0][0].ToString() == "MaskedEmail/set")
+            {
+                if (result["methodResponses"][0][1]?["created"]?["new-masked-email"] != null)
+                {
+                    return result["methodResponses"][0][1]?["created"]?["new-masked-email"]?["email"].ToString();
+                }
+                if (result["methodResponses"][0][1]?["notCreated"]?["new-masked-email"] != null)
+                {
+                    throw new Exception("Fastmail error: " +
+                                        result["methodResponses"][0][1]?["created"]?["new-masked-email"]?["description"].ToString());
+                }
+            }
+            else if (result["methodResponses"][0][0].ToString() == "error")
+            {
+                throw new Exception("Fastmail error: " + result["methodResponses"][0][1]?["description"].ToString());
+            }
+            throw new Exception("Fastmail error: could not parse response.");
         }
 
-        private async Task<string> GetFastmailAccountId(string apiKey)
+        private async Task<string> CreateFastmailRequest(string apiKey)
         {
             using (var httpclient = new HttpClient())
             {
-                    HttpResponseMessage response;
-                    try
+                HttpResponseMessage response;
+                try
+                {
+                    httpclient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
+                    httpclient.DefaultRequestHeaders.Add("Accept", "application/json");
+                    response = await httpclient.GetAsync(new Uri("https://api.fastmail.com/jmap/session"));
+                }
+                catch (Exception e)
+                {
+                    throw new ApiException(HandleWebError(e));
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new ApiException(new ErrorResponse
                     {
-                        httpclient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
-                        httpclient.DefaultRequestHeaders.Add("Accept", "application/json");
-                        response = await httpclient.GetAsync(new Uri("https://api.fastmail.com/jmap/session"));
-                    }
-                    catch (Exception e)
-                    {
-                        throw new ApiException(HandleWebError(e));
-                    }
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        throw new ApiException(new ErrorResponse
+                        StatusCode = response.StatusCode,
+                        Message = $"Fastmail error: {(int)response.StatusCode} {response.ReasonPhrase}."
+                    });
+                }
+                var result = JObject.Parse(await response.Content.ReadAsStringAsync());
+                var accountId = result["primaryAccounts"]?["https://www.fastmail.com/dev/maskedemail"]?.ToString();
+                var requestJObj = new JObject
+                {
+                    new JProperty("using",
+                        new JArray { "https://www.fastmail.com/dev/maskedemail", "urn:ietf:params:jmap:core" }),
+                    new JProperty("methodCalls",
+                        new JArray
                         {
-                            StatusCode = response.StatusCode,
-                            Message = $"Fastmail error: {(int)response.StatusCode} {response.ReasonPhrase}."
-                        });
-                    }
-                    var responseJsonString = await response.Content.ReadAsStringAsync();
-                    var result = JObject.Parse(responseJsonString);
-                    return result["primaryAccounts"]?["https://www.fastmail.com/dev/maskedemail"]?.ToString();
-                
+                            new JArray
+                            {
+                                "MaskedEmail/set",
+                                new JObject
+                                {
+                                    ["accountId"] = accountId,
+                                    ["create"] = new JObject
+                                    {
+                                        ["new-masked-email"] = new JObject
+                                        {
+                                            ["state"] = "enabled",
+                                            ["description"] = "",
+                                            ["url"] = "",
+                                            ["emailPrefix"] = ""
+                                        }
+                                    }
+                                },
+                                "0"
+                            }
+                        })
+                };
+                return requestJObj.ToString();
             }
-        }
 
+
+        }
         private ErrorResponse HandleWebError(Exception e)
         {
             return new ErrorResponse
