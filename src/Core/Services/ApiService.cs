@@ -889,9 +889,8 @@ namespace Bit.Core.Services
                 };
                 return requestJObj.ToString();
             }
-
-
         }
+
         private ErrorResponse HandleWebError(Exception e)
         {
             return new ErrorResponse
