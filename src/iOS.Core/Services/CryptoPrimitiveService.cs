@@ -39,9 +39,31 @@ namespace Bit.iOS.Core.Services
             return keyBytes;
         }
 
+        public byte[] Argon2id(byte[] password, byte[] salt, int iterations, int memory, int parallelism)
+        {
+            // TODO: Do we need to pass this in somehow like PBKDF2 based on an algorithm
+            int keySize = 32;
+            var keyData = new NSMutableData();
+            keyData.Length = keySize;
+
+            var passwordData = NSData.FromArray(password);
+            var saltData = NSData.FromArray(salt);
+
+            argon2id_hash_raw(iterations, memory, parallelism, passwordData.Bytes, passwordData.Length,
+                saltData.Bytes, saltData.Length,  keyData.MutableBytes, keyData.Length);
+            
+            var keyBytes = new byte[keyData.Length];
+            Marshal.Copy(keyData.Bytes, keyBytes, 0, Convert.ToInt32(keyData.Length));
+            return keyBytes;
+        }
+
         // ref: http://opensource.apple.com/source/CommonCrypto/CommonCrypto-55010/CommonCrypto/CommonKeyDerivation.h
         [DllImport(ObjCRuntime.Constants.libSystemLibrary, EntryPoint = "CCKeyDerivationPBKDF")]
         private extern static int CCKeyCerivationPBKDF(uint algorithm, IntPtr password, nuint passwordLen,
             IntPtr salt, nuint saltLen, uint prf, nuint rounds, IntPtr derivedKey, nuint derivedKeyLength);
+
+        [DllImport("__Internal", EntryPoint = "argon2id_hash_raw")]
+        internal static extern int argon2id_hash_raw(int timeCost, int memoryCost, int parallelism, IntPtr pwd,
+            int pwdlen, IntPtr salt, int saltlen, IntPtr hash, int hashlen);
     }
 }
