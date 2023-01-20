@@ -1783,7 +1783,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Vienā vai vairākos apvienības nosacījumos ir norādīts, ka galvenajai parolei ir jāatbilst šādām prasībām:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Mazākais pieļaujamais sarežģītības novērtējums ir $SCORE$</value>
+    <value>Minimum complexity score of {0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
     <value>Mazākais pieļaujamais garums ir {0}</value>

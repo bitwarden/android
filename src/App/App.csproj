@@ -144,6 +144,7 @@
     <Folder Include="Utilities\AccountManagement\" />
     <Folder Include="Controls\DateTime\" />
     <Folder Include="Controls\IconLabelButton\" />
+    <Folder Include="Controls\PasswordStrengthProgressBar\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -438,5 +439,6 @@
     <None Remove="Controls\IconLabelButton\" />
     <None Remove="MessagePack" />
     <None Remove="MessagePack.MSBuild.Tasks" />
+    <None Remove="Controls\PasswordStrengthProgressBar\" />
   </ItemGroup>
 </Project>

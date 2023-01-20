@@ -16,5 +16,7 @@ namespace Bit.Core.Exceptions
         }
 
         public ErrorResponse Error { get; set; }
+
+        public override string Message => Error?.GetFullMessage() ?? base.Message;
     }
 }

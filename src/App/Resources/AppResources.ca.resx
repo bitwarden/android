@@ -556,7 +556,7 @@
     <value>Temps d'espera de la caixa forta</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Acció del temps d'espera de la caixa forta</value>
+    <value>Acció quan acabe el temps d'espera de la caixa forta</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
     <value>En tancar la sessió s'eliminarà tot l'accés a la vostra caixa forta i es requerirà una autenticació en línia després del període de temps d'espera. Esteu segur que voleu utilitzar aquesta configuració?</value>
@@ -2450,7 +2450,7 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
     <value>Aleatori</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connect to Watch</value>
+    <value>Connecta't a Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Divulgació del servei d'accessibilitat</value>

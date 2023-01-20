@@ -285,7 +285,7 @@
     <value>Račun je že bil dodan</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value>Would you like to switch to it now?</value>
+    <value>Želite zdaj preklopiti na ta račun?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Glavno geslo</value>
@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authenticator</value>
+    <value>Avtentikator</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -775,10 +775,10 @@
     <value>Omogočeno</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Off</value>
+    <value>Ne</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>Da</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Stanje</value>
@@ -1354,7 +1354,7 @@ Scanning will happen automatically.</value>
     <value>Preveri ali je bilo geslo izpostavljeno.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>To geslo je bilo med ukradenimi podatki izpostavljeno $VALUE$ krat. Morali bi ga zamenjati.</value>
+    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
     <value>To geslo ni bilo najdeno med do sedaj znanimi krajami podatkov. Njegova uporaba bi morala biti varna.</value>

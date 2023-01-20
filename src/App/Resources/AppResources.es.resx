@@ -1486,7 +1486,7 @@ El escaneo se realizará automáticamente.</value>
     <value>30 minutos</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Establece su código PIN para desbloquear Bitwarden. Sus ajustes de PIN se reiniciarán si alguna vez cierra su sesión completamente de la aplicación.</value>
+    <value>Establezca su código PIN para desbloquear Bitwarden. Sus ajustes de PIN se reiniciarán si alguna vez cierra su sesión completamente de la aplicación.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
     <value>Iniciado como {0} en {1}.</value>
@@ -1783,7 +1783,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Una o más políticas de la organización requieren que su contraseña maestra cumpla con los siguientes requisitos:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Puntuación mínima de complejidad de $SCORE$</value>
+    <value>Minimum complexity score of {0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
     <value>Longitud mínima de {0}</value>
@@ -1798,7 +1798,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Contiene uno o más números</value>
   </data>
   <data name="PolicyInEffectSpecial" xml:space="preserve">
-    <value>Contiene uno o más de los siguientes caracteres especiales $CHARS$</value>
+    <value>Contain one or more of the following special characters: {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
     <value>Contraseña no válida</value>
@@ -2358,7 +2358,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Aprobar solicitudes de inicio de sesión</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Use este dispositivo para aprovar solicitudes de incio de sesión realizadas desde otros dispositivos.</value>
+    <value>Use este dispositivo para aprobar solicitudes de inicio de sesión realizadas desde otros dispositivos.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Permitir notificaciones</value>

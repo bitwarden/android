@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden</value>
+    <value>Bitwarden - Gestionnaire de mots de passe</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
@@ -126,27 +126,28 @@
 
 NOMMÉ MEILLEUR GESTIONNAIRE DE MOTS DE PASSE PAR THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, ET PLUS ENCORE.
 
-Gérez, stockez, sécurisez et partagez un nombre illimité de mots de passe sur un nombre illimité d'appareils, où que vous soyez. Bitwarden fournit des solutions de gestion de mots de passe open source à tout le monde, que ce soit à la maison, au travail ou en déplacement.
+Gérez, stockez, sécurisez et partagez un nombre illimité de mots de passe sur un nombre illimité d'appareils, où que vous soyez. Bitwarden fournit des solutions de gestion de mots de passe open source à tout le monde, que ce soit chez soi, au travail ou en déplacement.
 
-Générez des mots de passe forts, uniques et aléatoires basés sur des exigences de sécurité pour chaque site web que vous fréquentez.
+Générez des mots de passe robustes, uniques et aléatoires basés sur des exigences de sécurité pour chaque site web que vous fréquentez.
 
 Bitwarden Send transmet rapidement des informations chiffrées --- fichiers et texte --- directement à quiconque.
 
-Bitwarden propose les plans Teams et Enterprise pour les entreprises afin que vous puissiez partager des mots de passe en toute sécurité avec vos collègues.
+Bitwarden propose des plans Teams et Enterprise pour les sociétés afin que vous puissiez partager des mots de passe en toute sécurité avec vos collègues.
 
 Pourquoi choisir Bitwarden :
 
 Un chiffrement de classe internationale
-Les mots de passe sont protégés par un chiffrement avancé de bout en bout (AES-256 bit, salted hashtag, et PBKDF2 SHA-256) afin que vos données restent sécurisées et privées.
+Les mots de passe sont protégés par un cryptage avancé de bout en bout (AES-256 bit, hachage salé et PBKDF2 SHA-256) afin que vos données restent sécurisées et privées.
 
 Générateur de mots de passe intégré
 Générez des mots de passe forts, uniques et aléatoires en fonction des exigences de sécurité pour chaque site web que vous fréquentez.
 
-Traductions mondiales
-Les traductions de Bitwarden existent dans 40 langues et ne cessent de croître, grâce à notre communauté mondiale.
+Traductions internationales 
+Les traductions de Bitwarden existent dans 40 langues et ne cessent de croître, grâce à notre communauté globale.
 
-Applications multiplateformes
-Sécurisez et partagez des données sensibles dans votre coffre-fort Bitwarden à partir de n'importe quel navigateur, appareil mobile ou système d'exploitation de bureau, et plus encore.</value>
+Applications multiplateformes 
+Sécurisez et partagez des données sensibles dans votre coffre Bitwarden à partir de n'importe quel navigateur, appareil mobile ou système d'exploitation de bureau, et plus encore.
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
@@ -157,13 +158,13 @@ Sécurisez et partagez des données sensibles dans votre coffre-fort Bitwarden �
     <value>Gérer tous vos identifiants et mots de passe depuis un coffre sécurisé</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Générer automatiquement des mots de passe forts, aléatoires et sécurisés</value>
+    <value>Générer automatiquement des mots de passe robustes, aléatoires et sécurisés</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protéger votre coffre avec Touch ID, un code PIN, ou un mot de passe maître</value>
+    <value>Protéger votre coffre avec Touch ID, un code PIN ou un mot de passe principal</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Remplissage automatique des identifiants depuis Safari, Chrome et des centaines d'autres applications</value>
+    <value>Saisie automatique des identifiants depuis Safari, Chrome et des centaines d'autres applications</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Synchroniser et accéder à votre coffre depuis plusieurs appareils</value>

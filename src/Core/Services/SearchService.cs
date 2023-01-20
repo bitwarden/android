@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
+using Bit.Core.Utilities;
 
 namespace Bit.Core.Services
 {
@@ -76,12 +77,12 @@ namespace Bit.Core.Services
             ct.ThrowIfCancellationRequested();
             var matchedCiphers = new List<CipherView>();
             var lowPriorityMatchedCiphers = new List<CipherView>();
-            query = query.Trim().ToLower();
+            query = query.Trim().ToLower().RemoveDiacritics();
 
             foreach (var c in ciphers)
             {
                 ct.ThrowIfCancellationRequested();
-                if (c.Name?.ToLower().Contains(query) ?? false)
+                if (c.Name?.ToLower().RemoveDiacritics().Contains(query) ?? false)
                 {
                     matchedCiphers.Add(c);
                 }
@@ -89,7 +90,7 @@ namespace Bit.Core.Services
                 {
                     lowPriorityMatchedCiphers.Add(c);
                 }
-                else if (c.SubTitle?.ToLower().Contains(query) ?? false)
+                else if (c.SubTitle?.ToLower().RemoveDiacritics().Contains(query) ?? false)
                 {
                     lowPriorityMatchedCiphers.Add(c);
                 }
