@@ -1412,7 +1412,7 @@ Scanning will happen automatically.</value>
     <value>Nema kolekcija za prikazati.</value>
   </data>
   <data name="MovedItemToOrg" xml:space="preserve">
-    <value>premješteno u</value>
+    <value>{0} moved to {1}.</value>
     <comment>ex: Item moved to Organization.</comment>
   </data>
   <data name="ItemShared" xml:space="preserve">

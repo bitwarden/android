@@ -1354,7 +1354,7 @@ Scanning will happen automatically.</value>
     <value>Preveri ali je bilo geslo izpostavljeno.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>To geslo je bilo med ukradenimi podatki izpostavljeno $VALUE$ krat. Morali bi ga zamenjati.</value>
+    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
     <value>To geslo ni bilo najdeno med do sedaj znanimi krajami podatkov. Njegova uporaba bi morala biti varna.</value>
