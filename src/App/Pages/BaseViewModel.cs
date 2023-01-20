@@ -3,6 +3,7 @@ using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
+using Bit.Core.Exceptions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
@@ -33,6 +34,11 @@ namespace Bit.App.Pages
 
         protected void HandleException(Exception ex, string message = null)
         {
+            if (ex is ApiException apiException && apiException.Error != null)
+            {
+                message = apiException.Error.GetSingleMessage();
+            }
+
             Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 await _deviceActionService.Value.HideLoadingAsync();

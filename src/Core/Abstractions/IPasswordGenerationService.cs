@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Models.Domain;
+using Zxcvbn;
 
 namespace Bit.Core.Abstractions
 {
@@ -16,8 +17,9 @@ namespace Bit.Core.Abstractions
         Task<(PasswordGenerationOptions, PasswordGeneratorPolicyOptions)> GetOptionsAsync();
         Task<(PasswordGenerationOptions, PasswordGeneratorPolicyOptions)>
             EnforcePasswordGeneratorPoliciesOnOptionsAsync(PasswordGenerationOptions options);
-        Zxcvbn.Result PasswordStrength(string password, List<string> userInputs = null);
+        Result PasswordStrength(string password, List<string> userInputs = null);
         Task SaveOptionsAsync(PasswordGenerationOptions options);
         void NormalizeOptions(PasswordGenerationOptions options, PasswordGeneratorPolicyOptions enforcedPolicyOptions);
+        List<string> GetPasswordStrengthUserInput(string email);
     }
 }
