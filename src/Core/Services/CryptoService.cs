@@ -408,9 +408,9 @@ namespace Bit.Core.Services
             }
             else if (kdf == KdfType.Argon2id)
             {
-                const int iterations = 2;
+                var iterations = kdfIterations.Value;
                 const int parallelism = 1;
-                var memory = kdfIterations.Value;
+                const int memory = 1024 * 16; // 16 MiB
 
                 key = await _cryptoFunctionService.Argon2Async(password, salt, iterations, memory, parallelism);
             }
