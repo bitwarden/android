@@ -2390,7 +2390,7 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
     <value>Adres catch-all</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
-    <value>Alias przekazywanego adresu</value>
+    <value>Alias przekierowania</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
     <value>Losowe słowo</value>
@@ -2444,7 +2444,7 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
     <value>Użyj skonfigurowanej skrzynki catch-all w swojej domenie.</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
-    <value>Wygeneruj alias adresu e-mail z zewnętrznej usługi przekazywania.</value>
+    <value>Wygeneruj alias adresu e-mail z zewnętrznej usługi przekierowania.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Losowy</value>

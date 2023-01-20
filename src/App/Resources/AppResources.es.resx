@@ -1783,7 +1783,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Una o más políticas de la organización requieren que su contraseña maestra cumpla con los siguientes requisitos:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Puntuación mínima de complejidad de $SCORE$</value>
+    <value>Minimum complexity score of {0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
     <value>Longitud mínima de {0}</value>
@@ -1798,7 +1798,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Contiene uno o más números</value>
   </data>
   <data name="PolicyInEffectSpecial" xml:space="preserve">
-    <value>Contiene uno o más de los siguientes caracteres especiales $CHARS$</value>
+    <value>Contain one or more of the following special characters: {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
     <value>Contraseña no válida</value>
