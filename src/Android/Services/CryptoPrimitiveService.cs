@@ -35,15 +35,20 @@ namespace Bit.Droid.Services
             generator.Init(password, salt, iterations);
             return ((KeyParameter)generator.GenerateDerivedMacParameters(keySize)).GetKey();
         }
+
         public byte[] Argon2id(byte[] password, byte[] salt, int iterations, int memory, int parallelism)
         {
             JavaSystem.LoadLibrary("argon2");
-            var hash = new byte[32];
-            argon2id_hash_raw(iterations, memory, parallelism, password, password.Length, password, salt.Length, hash, 32);
-            return hash.ToArray();
+            // TODO: Do we need to pass this in somehow like PBKDF2, based on an algorithm?
+            int keySize = 32;
+            var key = new byte[keySize];
+            argon2id_hash_raw(iterations, memory, parallelism,
+                password, password.Length, password, salt.Length, key, key.Length);
+            return key;
         }
 
         [DllImport("argon2", EntryPoint = "argon2id_hash_raw")]
-        internal static extern int argon2id_hash_raw(int timeCost, int memoryCost, int parallelism, byte[] pwd, int pwdlen, byte[] salt, int saltlen, ref byte hash, int hashlen);
+        private static extern int argon2id_hash_raw(int timeCost, int memoryCost, int parallelism,
+            byte[] pwd, int pwdlen, byte[] salt, int saltlen, byte[] hash, int hashlen);
     }
 }

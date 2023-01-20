@@ -63,7 +63,7 @@ namespace Bit.iOS.Core.Services
             IntPtr salt, nuint saltLen, uint prf, nuint rounds, IntPtr derivedKey, nuint derivedKeyLength);
 
         [DllImport("__Internal", EntryPoint = "argon2id_hash_raw")]
-        internal static extern int argon2id_hash_raw(int timeCost, int memoryCost, int parallelism, IntPtr pwd,
+        private static extern int argon2id_hash_raw(int timeCost, int memoryCost, int parallelism, IntPtr pwd,
             nuint pwdlen, IntPtr salt, nuint saltlen, IntPtr hash, nuint hashlen);
     }
 }
