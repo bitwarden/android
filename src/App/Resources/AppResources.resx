@@ -1103,6 +1103,9 @@ Scanning will happen automatically.</value>
   <data name="Ms" xml:space="preserve">
     <value>Ms</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
   </data>
