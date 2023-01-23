@@ -4,7 +4,10 @@ namespace Bit.Core.Models.Domain
 {
     public class UsernameGenerationOptions
     {
-        public UsernameGenerationOptions() { }
+        public UsernameGenerationOptions()
+        {
+            ServiceType = ForwardedEmailServiceType.None;
+        }
 
         public UsernameType Type { get; set; }
         public ForwardedEmailServiceType ServiceType { get; set; }

@@ -81,10 +81,10 @@ namespace Bit.App.Pages
 
             ForwardedEmailServiceTypeOptions = new List<ForwardedEmailServiceType> {
                 ForwardedEmailServiceType.AnonAddy,
-                ForwardedEmailServiceType.FirefoxRelay,
-                ForwardedEmailServiceType.SimpleLogin,
+                ForwardedEmailServiceType.DuckDuckGo,
                 ForwardedEmailServiceType.Fastmail,
-                ForwardedEmailServiceType.DuckDuckGo
+                ForwardedEmailServiceType.FirefoxRelay,
+                ForwardedEmailServiceType.SimpleLogin
             };
 
             UsernameEmailTypeOptions = new List<UsernameEmailType>
