@@ -41,6 +41,10 @@ namespace Bit.Core.Abstractions
         Task SetKdfTypeAsync(KdfType? value, string userId = null);
         Task<int?> GetKdfIterationsAsync(string userId = null);
         Task SetKdfIterationsAsync(int? value, string userId = null);
+        Task<int?> GetKdfMemoryAsync(string userId = null);
+        Task SetKdfMemoryAsync(int? value, string userId = null);
+        Task<int?> GetKdfParallelismAsync(string userId = null);
+        Task SetKdfParallelismAsync(int? value, string userId = null);
         Task<string> GetKeyEncryptedAsync(string userId = null);
         Task SetKeyEncryptedAsync(string value, string userId = null);
         Task<SymmetricCryptoKey> GetKeyDecryptedAsync(string userId = null);

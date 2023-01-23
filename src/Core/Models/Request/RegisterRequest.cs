@@ -15,6 +15,8 @@ namespace Bit.Core.Models.Request
         public Guid? OrganizationUserId { get; set; }
         public KdfType? Kdf { get; set; }
         public int? KdfIterations { get; set; }
+        public int? KdfMemory { get; set; }
+        public int? KdfParallelism { get; set; }
         public string CaptchaResponse { get; set; }
     }
 }

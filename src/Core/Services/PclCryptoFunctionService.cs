@@ -49,18 +49,15 @@ namespace Bit.Core.Services
             password = NormalizePassword(password);
             return Argon2Async(Encoding.UTF8.GetBytes(password), Encoding.UTF8.GetBytes(salt), iterations, memory, parallelism);
         }
-
         public Task<byte[]> Argon2Async(byte[] password, string salt, int iterations, int memory, int parallelism)
         {
             return Argon2Async(password, Encoding.UTF8.GetBytes(salt), iterations, memory, parallelism);
         }
-
         public Task<byte[]> Argon2Async(string password, byte[] salt, int iterations, int memory, int parallelism)
         {
             password = NormalizePassword(password);
             return Argon2Async(Encoding.UTF8.GetBytes(password), salt, iterations, memory, parallelism);
         }
-
         public Task<byte[]> Argon2Async(byte[] password, byte[] salt, int iterations, int memory, int parallelism)
         {
             return Task.FromResult(_cryptoPrimitiveService.Argon2id(password, salt, iterations, memory, parallelism));

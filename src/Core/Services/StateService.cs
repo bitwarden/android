@@ -371,6 +371,38 @@ namespace Bit.Core.Services
             await SaveAccountAsync(account, reconciledOptions);
         }
 
+        public async Task SetKdfMemoryAsync(int? value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+            account.Profile.KdfMemory = value;
+            await SaveAccountAsync(account, reconciledOptions);
+        }
+
+        public async Task<int?> GetKdfMemoryAsync(string userId = null)
+        {
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            ))?.Profile?.KdfMemory;
+        }
+
+        public async Task<int?> GetKdfParallelismAsync(string userId = null)
+        {
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            ))?.Profile?.KdfParallelism;
+        }
+
+        public async Task SetKdfParallelismAsync(int? value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+            account.Profile.KdfParallelism = value;
+            await SaveAccountAsync(account, reconciledOptions);
+        }
+
         public async Task<string> GetKeyEncryptedAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },

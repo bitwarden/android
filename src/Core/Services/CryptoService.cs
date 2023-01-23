@@ -9,6 +9,7 @@ using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Response;
 using Bit.Core.Utilities;
+using static System.Net.WebRequestMethods;
 
 namespace Bit.Core.Services
 {
@@ -390,7 +391,7 @@ namespace Bit.Core.Services
         }
 
         public async Task<SymmetricCryptoKey> MakeKeyAsync(string password, string salt,
-            KdfType? kdf, int? kdfIterations)
+            KdfType? kdf, int? kdfIterations, int? kdfMemory, int? kdfParallelism)
         {
             byte[] key = null;
             if (kdf == null || kdf == KdfType.PBKDF2_SHA256)
@@ -409,8 +410,8 @@ namespace Bit.Core.Services
             else if (kdf == KdfType.Argon2id)
             {
                 var iterations = kdfIterations.Value;
-                const int parallelism = 1;
-                const int memory = 1024 * 16; // 16 MiB
+                var memory = kdfMemory.GetValueOrDefault(16) * 1024;
+                var parallelism = kdfParallelism.GetValueOrDefault(2);
 
                 key = await _cryptoFunctionService.Argon2Async(password, salt, iterations, memory, parallelism);
             }
@@ -422,7 +423,7 @@ namespace Bit.Core.Services
         }
 
         public async Task<SymmetricCryptoKey> MakeKeyFromPinAsync(string pin, string salt,
-            KdfType kdf, int kdfIterations, EncString protectedKeyCs = null)
+            KdfType kdf, int kdfIterations, int? kdfMemory, int? kdfParallelism, EncString protectedKeyCs = null)
         {
             if (protectedKeyCs == null)
             {
@@ -433,7 +434,7 @@ namespace Bit.Core.Services
                 }
                 protectedKeyCs = new EncString(pinProtectedKey);
             }
-            var pinKey = await MakePinKeyAysnc(pin, salt, kdf, kdfIterations);
+            var pinKey = await MakePinKeyAysnc(pin, salt, kdf, kdfIterations, kdfMemory, kdfParallelism);
             var decKey = await DecryptToBytesAsync(protectedKeyCs, pinKey);
             return new SymmetricCryptoKey(decKey);
         }
@@ -454,9 +455,9 @@ namespace Bit.Core.Services
             return new Tuple<string, EncString>(publicB64, privateEnc);
         }
 
-        public async Task<SymmetricCryptoKey> MakePinKeyAysnc(string pin, string salt, KdfType kdf, int kdfIterations)
+        public async Task<SymmetricCryptoKey> MakePinKeyAysnc(string pin, string salt, KdfType kdf, int kdfIterations, int? kdfMemory, int? kdfParallelism)
         {
-            var pinKey = await MakeKeyAsync(pin, salt, kdf, kdfIterations);
+            var pinKey = await MakeKeyAsync(pin, salt, kdf, kdfIterations, kdfMemory, kdfParallelism);
             return await StretchKeyAsync(pinKey);
         }
 

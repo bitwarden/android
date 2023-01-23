@@ -115,6 +115,8 @@ namespace Bit.Core.Services
             internal const string Keys_Stamp = "securityStamp";
             internal const string Keys_Kdf = "kdf";
             internal const string Keys_KdfIterations = "kdfIterations";
+            internal const string Keys_KdfMemory = "kdfMemory";
+            internal const string Keys_KdfParallelism = "kdfParallelis";
             internal const string Keys_EmailVerified = "emailVerified";
             internal const string Keys_ForcePasswordReset = "forcePasswordReset";
             internal const string Keys_AccessToken = "accessToken";
@@ -162,6 +164,8 @@ namespace Bit.Core.Services
 
             var kdfType = await GetValueAsync<int?>(Storage.LiteDb, V2Keys.Keys_Kdf);
             var kdfIterations = await GetValueAsync<int?>(Storage.LiteDb, V2Keys.Keys_KdfIterations);
+            var kdfMemory = await GetValueAsync<int?>(Storage.LiteDb, V2Keys.Keys_KdfMemory);
+            var kdfParallelism = await GetValueAsync<int?>(Storage.LiteDb, V2Keys.Keys_KdfParallelism);
             var stamp = await GetValueAsync<string>(Storage.LiteDb, V2Keys.Keys_Stamp);
             var emailVerified = await GetValueAsync<bool?>(Storage.LiteDb, V2Keys.Keys_EmailVerified);
             var refreshToken = await GetValueAsync<string>(Storage.LiteDb, V2Keys.Keys_RefreshToken);
@@ -174,6 +178,8 @@ namespace Bit.Core.Services
                     Stamp = stamp,
                     KdfType = (KdfType?)kdfType,
                     KdfIterations = kdfIterations,
+                    KdfMemory = kdfMemory,
+                    KdfParallelism = kdfParallelism,
                     EmailVerified = emailVerified,
                     HasPremiumPersonally = hasPremiumPersonally,
                 },
@@ -276,6 +282,8 @@ namespace Bit.Core.Services
             await RemoveValueAsync(Storage.LiteDb, V2Keys.Keys_RefreshToken);
             await RemoveValueAsync(Storage.LiteDb, V2Keys.Keys_Kdf);
             await RemoveValueAsync(Storage.LiteDb, V2Keys.Keys_KdfIterations);
+            await RemoveValueAsync(Storage.LiteDb, V2Keys.Keys_KdfMemory);
+            await RemoveValueAsync(Storage.LiteDb, V2Keys.Keys_KdfParallelism);
             await RemoveValueAsync(Storage.LiteDb, V2Keys.Keys_Stamp);
             await RemoveValueAsync(Storage.LiteDb, V2Keys.Keys_EmailVerified);
             await RemoveValueAsync(Storage.LiteDb, V2Keys.Keys_ForcePasswordReset);

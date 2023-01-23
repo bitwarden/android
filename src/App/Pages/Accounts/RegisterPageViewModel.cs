@@ -177,7 +177,9 @@ namespace Bit.App.Pages
             Email = Email.Trim().ToLower();
             var kdf = KdfType.PBKDF2_SHA256;
             var kdfIterations = 100_000;
-            var key = await _cryptoService.MakeKeyAsync(MasterPassword, Email, kdf, kdfIterations);
+            int? kdfMemory = null;
+            int? kdfParallelism = null;
+            var key = await _cryptoService.MakeKeyAsync(MasterPassword, Email, kdf, kdfIterations, kdfMemory, kdfParallelism);
             var encKey = await _cryptoService.MakeEncKeyAsync(key);
             var hashedPassword = await _cryptoService.HashPasswordAsync(MasterPassword, key);
             var keys = await _cryptoService.MakeKeyPairAsync(encKey.Item1);

@@ -424,10 +424,12 @@ namespace Bit.App.Pages
 
                     var kdf = await _stateService.GetKdfTypeAsync();
                     var kdfIterations = await _stateService.GetKdfIterationsAsync();
+                    var kdfMemory = await _stateService.GetKdfMemoryAsync();
+                    var kdfParallelism = await _stateService.GetKdfParallelismAsync();
                     var email = await _stateService.GetEmailAsync();
                     var pinKey = await _cryptoService.MakePinKeyAysnc(pin, email,
                         kdf.GetValueOrDefault(Core.Enums.KdfType.PBKDF2_SHA256),
-                        kdfIterations.GetValueOrDefault(5000));
+                        kdfIterations.GetValueOrDefault(5000), kdfMemory, kdfParallelism);
                     var key = await _cryptoService.GetKeyAsync();
                     var pinProtectedKey = await _cryptoService.EncryptAsync(key.Key, pinKey);
 
