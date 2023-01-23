@@ -465,14 +465,8 @@ namespace Bit.App.Pages
             {
                 return _showAnonAddyApiAccessToken;
             }
-            set => SetProperty(ref _showAnonAddyApiAccessToken, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ShowAnonAddyHiddenValueIcon)
-                });
+            set => SetProperty(ref _showAnonAddyApiAccessToken, value);
         }
-
-        public string ShowAnonAddyHiddenValueIcon => _showAnonAddyApiAccessToken ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
 
         public string AnonAddyDomainName
         {
@@ -508,14 +502,8 @@ namespace Bit.App.Pages
             {
                 return _showFirefoxRelayApiAccessToken;
             }
-            set => SetProperty(ref _showFirefoxRelayApiAccessToken, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ShowFirefoxRelayHiddenValueIcon)
-                });
+            set => SetProperty(ref _showFirefoxRelayApiAccessToken, value);
         }
-
-        public string ShowFirefoxRelayHiddenValueIcon => _showFirefoxRelayApiAccessToken ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
 
         public string SimpleLoginApiKey
         {
@@ -537,14 +525,8 @@ namespace Bit.App.Pages
             {
                 return _showSimpleLoginApiKey;
             }
-            set => SetProperty(ref _showSimpleLoginApiKey, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ShowSimpleLoginHiddenValueIcon)
-                });
+            set => SetProperty(ref _showSimpleLoginApiKey, value);
         }
-
-        public string ShowSimpleLoginHiddenValueIcon => _showSimpleLoginApiKey ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
 
         public string DuckDuckGoApiKey
         {
@@ -566,14 +548,9 @@ namespace Bit.App.Pages
             {
                 return _showDuckDuckGoApiKey;
             }
-            set => SetProperty(ref _showDuckDuckGoApiKey, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ShowDuckDuckGoHiddenValueIcon)
-                });
+            set => SetProperty(ref _showDuckDuckGoApiKey, value);
         }
 
-        public string ShowDuckDuckGoHiddenValueIcon => _showDuckDuckGoApiKey ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
 
         public string FastmailApiKey
         {
@@ -595,14 +572,8 @@ namespace Bit.App.Pages
             {
                 return _showFastmailApiKey;
             }
-            set => SetProperty(ref _showFastmailApiKey, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ShowFastmailHiddenValueIcon)
-                });
+            set => SetProperty(ref _showFastmailApiKey, value);
         }
-
-        public string ShowFastmailHiddenValueIcon => _showFastmailApiKey ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
 
         public bool CapitalizeRandomWordUsername
         {
