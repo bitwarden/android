@@ -3983,7 +3983,18 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("Ms", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Mx.
+        /// </summary>
+        public static string Mx
+        {
+            get
+            {
+                return ResourceManager.GetString("Mx", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to You must log into the main Bitwarden app before you can use the extension..
         /// </summary>
