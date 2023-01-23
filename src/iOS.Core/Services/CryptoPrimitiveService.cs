@@ -41,7 +41,6 @@ namespace Bit.iOS.Core.Services
 
         public byte[] Argon2id(byte[] password, byte[] salt, int iterations, int memory, int parallelism)
         {
-            // TODO: Do we need to pass this in somehow like PBKDF2, based on an algorithm?
             uint keySize = 32;
             var keyData = new NSMutableData();
             keyData.Length = keySize;
