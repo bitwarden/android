@@ -46,6 +46,7 @@
         public const int SaveFileRequestCode = 44;
         public const int TotpDefaultTimer = 30;
         public const int PasswordlessNotificationTimeoutInMinutes = 15;
+        public const int KdfIterations = 600000;
         public const int MasterPasswordMinimumChars = 8;
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
