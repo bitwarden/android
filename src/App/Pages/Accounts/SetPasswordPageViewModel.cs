@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -137,8 +138,8 @@ namespace Bit.App.Pages
             }
             if (IsPolicyInEffect)
             {
-                var userInput = await GetPasswordStrengthUserInput();
-                var passwordStrength = _passwordGenerationService.PasswordStrength(MasterPassword, userInput);
+                var userInputs = _passwordGenerationService.GetPasswordStrengthUserInput(await _stateService.GetEmailAsync());
+                var passwordStrength = _passwordGenerationService.PasswordStrength(MasterPassword, userInputs);
                 if (!await _policyService.EvaluateMasterPassword(passwordStrength.Score, MasterPassword, Policy))
                 {
                     await Page.DisplayAlert(AppResources.MasterPasswordPolicyValidationTitle,
@@ -148,7 +149,7 @@ namespace Bit.App.Pages
             }
             else
             {
-                if (MasterPassword.Length < 8)
+                if (MasterPassword.Length < Constants.MasterPasswordMinimumChars)
                 {
                     await Page.DisplayAlert(AppResources.MasterPasswordPolicyValidationTitle,
                         AppResources.MasterPasswordLengthValMessage, AppResources.Ok);

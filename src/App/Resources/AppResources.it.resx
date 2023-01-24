@@ -2137,7 +2137,7 @@
     <value>Questa organizzazione ha una politica aziendale che ti iscriverà automaticamente al ripristino della password. Ciò permetterà agli amministratori dell'organizzazione di cambiare la tua password principale.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Le policy dell'organizzazione controllano il timeout della tua cassaforte. Il tempo massimo consentito è di $HOURS$ ore e $MINUTES$ minuti</value>
+    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s)</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Il timeout della tua cassaforte supera i limiti impostati dalla tua organizzazione.</value>
@@ -2450,7 +2450,7 @@ seleziona Aggiungi TOTP per salvare la chiave in modo sicuro</value>
     <value>Casuale</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connect to Watch</value>
+    <value>Connetti a Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Maggiori informazioni sul servizio di accessibilità</value>
@@ -2512,6 +2512,6 @@ Vuoi passare a questo account?</value>
     <value>La richiesta non è più valida</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>Abilita i permessi della fotocamera per usare lo scanner</value>
   </data>
 </root>

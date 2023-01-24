@@ -118,63 +118,63 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Bitwarden Password Manager</value>
+    <value>"Bitwarden" Slaptažodžių Tvarkyklė</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden is a login and password manager that helps keep you safe while online.</value>
+    <value>"Bitwarden" yra prisijungimų ir slaptažodžių tvarkyklė padedanti jums išlikti saugiems internete.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>Bitwarden, Inc. yra pagrindinė 8bit Solutions LLC įmonė.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+ĮVARDINTA GERIAUSIU SLAPTAŽODŽIŲ TVARKYTOJU.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+Tvarkykite, saugokite, saugokite ir bendrinkite neribotą skaičių slaptažodžių neribotuose įrenginiuose iš bet kurios vietos. „Bitwarden“ teikia atvirojo kodo slaptažodžių valdymo sprendimus visiems – tiek namuose, tiek darbe, tiek keliaujant.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Generuokite stiprius, unikalius ir atsitiktinius slaptažodžius pagal saugos reikalavimus kiekvienai lankomai svetainei.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+„Bitwarden Send“ greitai perduoda užšifruotą informaciją – failus ir paprastą tekstą – tiesiogiai bet kam.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+Bitwarden siūlo komandų ir įmonių planus įmonėms, kad galėtumėte saugiai dalytis slaptažodžiais su kolegomis.
 
-Why Choose Bitwarden:
+Kodėl verta rinktis „Bitwarden“:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+Pasaulinės klasės šifravimas
+Slaptažodžiai yra apsaugoti naudojant pažangų šifravimą nuo galo iki galo (AES-256 bitai, žyma su grotelėmis ir PBKDF2 SHA-256), todėl jūsų duomenys išliks saugūs ir privatūs.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Integruotas slaptažodžių generatorius
+Generuokite stiprius, unikalius ir atsitiktinius slaptažodžius pagal saugos reikalavimus kiekvienai lankomai svetainei.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+Pasauliniai vertimai
+„Bitwarden“ vertimai egzistuoja 40 kalbų ir mūsų pasaulinės bendruomenės dėka auga.
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+Kelių platformų programos
+Apsaugokite ir bendrinkite neskelbtinus duomenis savo „Bitwarden Vault“ iš bet kurios naršyklės, mobiliojo įrenginio ar stalinio kompiuterio OS ir kt.
 </value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>A secure and free password manager for all of your devices</value>
+    <value>Saugi ir nemokama slaptažodžių tvarkyklė visiems įrenginiams</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Tvarkykite savo prisijungimus ir slaptažodžius iš saugios saugyklos</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Automatiškai generuokite stiprius, atsitiktinius ir saugius slaptažodžius</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with fingerprint, PIN code, or master password</value>
+    <value>Apsaugokite savo tvarkyklę pirštų antspaudais, PIN kodu arba pagrindiniu slaptažodžiu</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>Automatiškai pildykite prisijungimus iš naršyklės arba aplikacijos</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices
+    <value>Sinchronizuokite prisijungimus prie tvarkyklės 
 
-- Phone
-- Tablet
-- Desktop
-- Web</value>
+- Telefonu
+- Planšete
+- Staliniu kompiuteriu
+- Interneto naršykle</value>
   </data>
 </root>

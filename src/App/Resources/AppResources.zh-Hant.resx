@@ -2450,7 +2450,7 @@
     <value>隨機</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>連線至手錶</value>
+    <value>連線至 Apple Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>無障礙服務聲明</value>
@@ -2512,6 +2512,6 @@
     <value>此請求已失效</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>啟用相機權限以使用掃描儀</value>
+    <value>允許相機權限以使用掃描功能</value>
   </data>
 </root>

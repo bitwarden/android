@@ -47,6 +47,7 @@
         public const int TotpDefaultTimer = 30;
         public const int PasswordlessNotificationTimeoutInMinutes = 15;
         public const int KdfIterations = 350000;
+        public const int MasterPasswordMinimumChars = 8;
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {

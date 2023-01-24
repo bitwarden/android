@@ -243,7 +243,7 @@
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Veuillez vous connecter à Internet avant de poursuivre.</value>
+    <value>Veuillez vous connecter à internet avant de continuer.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
@@ -279,7 +279,7 @@
     <value>Supprimer le compte</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir retirer ce compte ?</value>
+    <value>Êtes-vous sûr de vouloir supprimer ce compte ?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
     <value>Le compte a déjà été ajouté</value>
@@ -1771,7 +1771,7 @@ La numérisation se fera automatiquement.</value>
     <value>Identifiant de l'organisation</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Impossible de se connecter avec SSO pour le moment</value>
+    <value>Actuellement impossible de se connecter avec le SSO</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
     <value>Définir le mot de passe principal</value>
@@ -2104,7 +2104,7 @@ La numérisation se fera automatiquement.</value>
     <value>Supprimer le mot de passe principal</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} utilise le SSO avec un chiffrement géré par le client. La poursuite supprimera votre mot de passe principal de votre compte et exigera le SSO pour la connexion.</value>
+    <value>{0} utilise le SSO avec un chiffrement géré par le client. En continuant cela supprimera votre mot de passe principal de votre compte et exigera le SSO pour la connexion.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
     <value>Si vous ne voulez pas supprimer votre mot de passe principal, vous pouvez quitter cette organisation.</value>
@@ -2254,7 +2254,7 @@ La numérisation se fera automatiquement.</value>
     <value>Filtrer les éléments par coffre</value>
   </data>
   <data name="AllVaults" xml:space="preserve">
-    <value>Tous les Coffres</value>
+    <value>Tous les coffres</value>
   </data>
   <data name="Vaults" xml:space="preserve">
     <value>Coffres</value>
