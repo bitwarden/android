@@ -19,7 +19,6 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IPlatformUtilsService _platformUtilsService;
-        private readonly ILogger _logger;
         private bool _isRefreshing;
 
         public LoginPasswordlessRequestsListViewModel()
@@ -28,7 +27,6 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>();
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>();
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
-            _logger = ServiceContainer.Resolve<ILogger>();
 
             PageTitle = AppResources.PendingLogInRequests;
             LoginRequests = new ObservableRangeCollection<PasswordlessLoginResponse>();
