@@ -39,11 +39,10 @@ namespace Bit.Droid.Services
         public byte[] Argon2id(byte[] password, byte[] salt, int iterations, int memory, int parallelism)
         {
             JavaSystem.LoadLibrary("argon2");
-            // TODO: Do we need to pass this in somehow like PBKDF2, based on an algorithm?
             int keySize = 32;
             var key = new byte[keySize];
             argon2id_hash_raw(iterations, memory, parallelism,
-                password, password.Length, password, salt.Length, key, key.Length);
+                password, password.Length, salt, salt.Length, key, key.Length);
             return key;
         }
 
