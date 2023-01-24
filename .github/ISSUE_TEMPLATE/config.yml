@@ -1,6 +1,6 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Report mobile autofill failure
+  - name: Report mobile AUTOFILL failure
     url: https://docs.google.com/forms/d/e/1FAIpQLScMopHyN7KGJs8hW562VTzbIGL4KcFnx0wJcsW0GYE1BnPiGA/viewform
     about: We are aware of some situations where the Bitwarden mobile app will not autofill information correctly. This is something the Bitwarden team is actively working on but need your help as a community and active Bitwarden users!
   - name: Feature Requests
