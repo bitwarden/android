@@ -23,7 +23,7 @@
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
-    <MtouchExtraArgs>--nodevcodeshare --http-message-handler=NSUrlSessionHandler</MtouchExtraArgs>
+    <MtouchExtraArgs>--nodevcodeshare --http-message-handler=NSUrlSessionHandler -gcc_flags "-L${ProjectDir}/../../lib/ios -largon2 -force_load ${ProjectDir}/../../lib/ios/libargon2.a"</MtouchExtraArgs>
     <OptimizePNGs>true</OptimizePNGs>
     <MtouchFastDev>false</MtouchFastDev>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
@@ -41,7 +41,7 @@
     <ConsolePause>false</ConsolePause>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension</MtouchExtraArgs>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension -gcc_flags "-L${ProjectDir}/../../lib/ios -largon2 -force_load ${ProjectDir}/../../lib/ios/libargon2.a"</MtouchExtraArgs>
     <OptimizePNGs>true</OptimizePNGs>
     <CodesignKey>iPhone Distribution</CodesignKey>
     <CodesignProvision>Dist: Autofill</CodesignProvision>
@@ -61,7 +61,7 @@
     <MtouchDebug>true</MtouchDebug>
     <MtouchLink>None</MtouchLink>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <MtouchExtraArgs>--nodevcodeshare --http-message-handler=NSUrlSessionHandler</MtouchExtraArgs>
+    <MtouchExtraArgs>--nodevcodeshare --http-message-handler=NSUrlSessionHandler -gcc_flags "-L${ProjectDir}/../../lib/ios -largon2 -force_load ${ProjectDir}/../../lib/ios/libargon2.a"</MtouchExtraArgs>
     <OptimizePNGs>true</OptimizePNGs>
     <MtouchSdkVersion>
     </MtouchSdkVersion>
@@ -79,7 +79,7 @@
     <MtouchLink>Full</MtouchLink>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <OptimizePNGs>true</OptimizePNGs>
-    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension</MtouchExtraArgs>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension -gcc_flags "-L${ProjectDir}/../../lib/ios -largon2 -force_load ${ProjectDir}/../../lib/ios/libargon2.a"</MtouchExtraArgs>
     <CodesignProvision>Dist: Autofill</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
@@ -93,7 +93,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension</MtouchExtraArgs>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension -gcc_flags "-L${ProjectDir}/../../lib/ios -largon2 -force_load ${ProjectDir}/../../lib/ios/libargon2.a"</MtouchExtraArgs>
     <OptimizePNGs>true</OptimizePNGs>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <MtouchLink>Full</MtouchLink>
@@ -112,7 +112,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <MtouchLink>Full</MtouchLink>
-    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension</MtouchExtraArgs>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension -gcc_flags "-L${ProjectDir}/../../lib/ios -largon2 -force_load ${ProjectDir}/../../lib/ios/libargon2.a"</MtouchExtraArgs>
     <OptimizePNGs>true</OptimizePNGs>
     <MtouchArch>ARM64</MtouchArch>
     <MtouchSdkVersion>10.2</MtouchSdkVersion>
@@ -128,7 +128,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension</MtouchExtraArgs>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension -gcc_flags "-L${ProjectDir}/../../lib/ios -largon2 -force_load ${ProjectDir}/../../lib/ios/libargon2.a"</MtouchExtraArgs>
     <OptimizePNGs>true</OptimizePNGs>
     <MtouchLink>Full</MtouchLink>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
@@ -149,7 +149,7 @@
     <MtouchArch>ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <MtouchLink>Full</MtouchLink>
-    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension</MtouchExtraArgs>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension -gcc_flags "-L${ProjectDir}/../../lib/ios -largon2 -force_load ${ProjectDir}/../../lib/ios/libargon2.a"</MtouchExtraArgs>
     <OptimizePNGs>true</OptimizePNGs>
     <CodesignKey>iPhone Distribution</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
