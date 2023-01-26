@@ -13,15 +13,14 @@ namespace Bit.Core.Models.Request
         public int? KdfParallelism { get; set; }
         public string OrgIdentifier { get; set; }
 
-        public SetKeyConnectorKeyRequest(string key, KeysRequest keys,
-            KdfType kdf, int? kdfIterations, int? kdfMemory, int? kdfParallelism, string orgIdentifier)
+        public SetKeyConnectorKeyRequest(string key, KeysRequest keys, KdfConfig kdfConfig, string orgIdentifier)
         {
             this.Key = key;
             this.Keys = keys;
-            this.Kdf = kdf;
-            this.KdfIterations = kdfIterations;
-            this.KdfMemory = kdfMemory;
-            this.KdfParallelism = kdfParallelism;
+            this.Kdf = kdfConfig.Type.GetValueOrDefault(KdfType.PBKDF2_SHA256);
+            this.KdfIterations = kdfConfig.Iterations;
+            this.KdfMemory = kdfConfig.Memory;
+            this.KdfParallelism = kdfConfig.Parallelism;
             this.OrgIdentifier = orgIdentifier;
         }
     }

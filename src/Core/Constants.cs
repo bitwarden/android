@@ -47,6 +47,9 @@
         public const int TotpDefaultTimer = 30;
         public const int PasswordlessNotificationTimeoutInMinutes = 15;
         public const int KdfIterations = 600000;
+        public const int Argon2Iterations = 2;
+        public const int Argon2Memory = 19;
+        public const int Argon2Parallelism = 1;
         public const int MasterPasswordMinimumChars = 8;
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =

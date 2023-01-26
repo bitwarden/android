@@ -339,67 +339,15 @@ namespace Bit.Core.Services
             await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<KdfType?> GetKdfTypeAsync(string userId = null)
-        {
-            return (await GetAccountAsync(
-                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
-            ))?.Profile?.KdfType;
-        }
-
-        public async Task SetKdfTypeAsync(KdfType? value, string userId = null)
+        public async Task SetKdfConfigurationAsync(KdfConfig config, string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
-            account.Profile.KdfType = value;
-            await SaveAccountAsync(account, reconciledOptions);
-        }
-
-        public async Task<int?> GetKdfIterationsAsync(string userId = null)
-        {
-            return (await GetAccountAsync(
-                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
-            ))?.Profile?.KdfIterations;
-        }
-
-        public async Task SetKdfIterationsAsync(int? value, string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-            account.Profile.KdfIterations = value;
-            await SaveAccountAsync(account, reconciledOptions);
-        }
-
-        public async Task SetKdfMemoryAsync(int? value, string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-            account.Profile.KdfMemory = value;
-            await SaveAccountAsync(account, reconciledOptions);
-        }
-
-        public async Task<int?> GetKdfMemoryAsync(string userId = null)
-        {
-            return (await GetAccountAsync(
-                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
-            ))?.Profile?.KdfMemory;
-        }
-
-        public async Task<int?> GetKdfParallelismAsync(string userId = null)
-        {
-            return (await GetAccountAsync(
-                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
-            ))?.Profile?.KdfParallelism;
-        }
-
-        public async Task SetKdfParallelismAsync(int? value, string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-            account.Profile.KdfParallelism = value;
+            account.Profile.KdfType = config.Type;
+            account.Profile.KdfIterations = config.Iterations;
+            account.Profile.KdfMemory = config.Memory;
+            account.Profile.KdfParallelism = config.Parallelism;
             await SaveAccountAsync(account, reconciledOptions);
         }
 
