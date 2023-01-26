@@ -9,7 +9,6 @@ using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Response;
 using Bit.Core.Utilities;
-using static System.Net.WebRequestMethods;
 
 namespace Bit.Core.Services
 {
