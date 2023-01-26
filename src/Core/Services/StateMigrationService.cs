@@ -115,8 +115,6 @@ namespace Bit.Core.Services
             internal const string Keys_Stamp = "securityStamp";
             internal const string Keys_Kdf = "kdf";
             internal const string Keys_KdfIterations = "kdfIterations";
-            internal const string Keys_KdfMemory = "kdfMemory";
-            internal const string Keys_KdfParallelism = "kdfParallelis";
             internal const string Keys_EmailVerified = "emailVerified";
             internal const string Keys_ForcePasswordReset = "forcePasswordReset";
             internal const string Keys_AccessToken = "accessToken";
