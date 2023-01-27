@@ -59,7 +59,7 @@ namespace Bit.Core.Services
         {
             try
             {
-                var response = await _apiService.GetSso(userEmail);
+                var response = await _apiService.GetOrgDomainSsoDetails(userEmail);
                 return response.OrganizationIdentifier;
             }
             catch (System.Exception ex)
