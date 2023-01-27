@@ -1,5 +1,6 @@
 ﻿using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
+
 public struct KdfConfig
 {
     public KdfConfig(KdfType? type, int? iterations, int? memory, int? parallelism)
