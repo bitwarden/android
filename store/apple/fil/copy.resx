@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden Password Manager</value>
+    <value>Bitwarden Password Manager Tagapamahala ng Password</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
@@ -147,26 +147,55 @@ Bitwarden translations exist in 40 languages and are growing, thanks to our glob
 
 Cross-Platform Applications
 Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+
+Additional features of Bitwarden include:
+
+Two-factor authentication for added security
+Automatic syncing across all devices
+Customizable folders and tags for organization
+Secure notes for storing sensitive information
+Secure sharing options for sharing password and other sensitive data with trusted parties
+Self-hosting options for companies that want to host their own password management solution
+Bitwarden ay may mga karagdagang tampok na kinabibilangan ng:
+
+Two-factor authentication para sa karagdagang seguridad
+Automatic syncing sa lahat ng mga device
+Customizable folders at tags para sa pag-organisa
+Secure notes para sa pag-iimbak ng sensitibong impormasyon
+Secure sharing options para sa pagbabahagi ng password at iba pang sensitibong data sa mga trusted parties
+Self-hosting options para sa mga kumpanya na gustong mag-host ng kanilang sariling solusyon sa password management.
+
+In summary, Bitwarden is a password manager that helps you manage, store, secure, and share unlimited passwords across unlimited devices. It offers advanced encryption, a built-in password generator, global translations, and cross-platform applications. Bitwarden also has additional features such as two-factor authentication, automatic syncing, customizable folders and tags, secure notes, and secure sharing options. It also offers plans for teams and enterprises, as well as self-hosting options for companies that want to host their own password management solution.
+
+
+
+
+kristin.powell@gmail.com.
 </value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bit warden,8bit,password,free password manager,password manager,login manager</value>
+    <value>bit Warden - Bit Warden
+8bit - 8bit
+Password - Password
+Free Password Manager - Libreng Password Manager
+Password Manager - Password Manager
+Login Manager - Login Manager</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Pamahalaan ang lahat ng iyong logins at passwords mula sa isang secure vault</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Awtomatikong gumawa ng mga malakas, random, at ligtas na password</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with Touch ID, PIN code, or master password</value>
+    <value>Protektahan ang iyong vault gamit ang Touch ID, PIN code, o master password</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Auto-fill logins from Safari, Chrome, and hundreds of other apps</value>
+    <value>Magsaalang-alang ng pag-login mula sa Safari, Chrome, at iba pang mga app na daan-daang</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices</value>
+    <value>I-sync at i-access ang iyong kahadeyero mula sa maraming mga aparato</value>
   </data>
 </root>

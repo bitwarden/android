@@ -1103,6 +1103,9 @@ A leitura será feita automaticamente.</value>
   <data name="Ms" xml:space="preserve">
     <value>Sra</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>Novembro</value>
   </data>
@@ -2514,5 +2517,41 @@ Você deseja mudar para esta conta?</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Conceda permissão de uso da câmera para usar o scanner</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Importante</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Sua senha mestra não pode ser recuperada se você esquecê-la! Mínimo de {0} caracteres.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Senha Mestra Fraca</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Senha fraca identificada. Use uma senha forte para proteger a sua conta. Você tem certeza que deseja usar uma senha fraca?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Fraca</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Boa</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Forte</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Verifique vazamento de dados conhecidos para esta senha</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Senha Mestra Comprometida</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>A senha foi encontrada em um vazamento de dados. Use uma senha única e forte para proteger sua conta. Tem certeza de que deseja usar uma senha comprometida?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Senha Mestra Fraca e Comprometida</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Uma senha foi identificada como fraca e foi encontrada em um vazamento de dados. Use uma senha única e forte para proteger sua conta. Quer mesmo usar essa senha?</value>
   </data>
 </root>
