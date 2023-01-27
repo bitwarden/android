@@ -1103,6 +1103,9 @@
   <data name="Ms" xml:space="preserve">
     <value>بانو</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>عنوان</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>نوامبر</value>
   </data>
@@ -2514,5 +2517,41 @@
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>اجازه دوربین را برای استفاده از اسکنر فعال کنید</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>مهم</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>کلمه عبور اصلی شما در صورت فراموشی قابل بازیابی نیست! حداقل {0} کاراکتر.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>کلمه عبور اصلی ضعیف</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>کلمه عبور ضعیف شناسایی شد. از یک کلمه عبور قوی برای محافظت از حساب خود استفاده کنید. آیا مطمئنید که می‌خواهید از یک کلمه عبور ضعیف استفاده کنید؟</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>ضعیف</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>خوب</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>قوی</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>نقض اطلاعات شناخته شده برای این کلمه عبور را بررسی کنید</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>کلمه عبور اصلی افشا شده</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>کلمه عبور در نقض داده پیدا شد. از یک کلمه عبور منحصر به فرد برای محافظت از حساب خود استفاده کنید. آیا مطمئنید که می‌خواهید از یک کلمه عبور افشا شده استفاده کنید؟</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>کلمه عبور اصلی ضعیف و افشا شده</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>کلمه عبور ضعیف شناسایی و در یک نقض داده پیدا شد. از یک کلمه عبور قوی و منحصر به فرد برای محافظت از حساب خود استفاده کنید. آیا مطمئنید که می‌خواهید از این کلمه عبور استفاده کنید؟</value>
   </data>
 </root>

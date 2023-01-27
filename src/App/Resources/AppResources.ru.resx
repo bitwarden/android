@@ -1103,6 +1103,9 @@
   <data name="Ms" xml:space="preserve">
     <value>Проф.</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>Ноябрь</value>
   </data>
@@ -2513,5 +2516,41 @@
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Для использования сканера необходимо предоставить разрешение на доступ к камере</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Важно</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Ваш мастер-пароль невозможно восстановить, если вы его забудете! Минимум символов - {0}.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Слабый мастер-пароль</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Обнаружен слабый пароль. Для защиты аккаунта следует установить надежный пароль. Вы уверены, что хотите использовать слабый пароль?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Слабый</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Хороший</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Сильный</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Проверьте известные случаи утечки данных для этого пароля</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Мастер-пароль скомпрометирован</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Пароль найден в утечке данных. Используйте уникальный пароль для защиты вашего аккаунта. Вы уверены, что хотите использовать скомпрометированный пароль?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Слабый и скомпрометированный мастер-пароль</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Обнаружен слабый пароль, найденный в утечке данных. Используйте надежный и уникальный пароль для защиты вашего аккаунта. Вы уверены, что хотите использовать этот пароль?</value>
   </data>
 </root>

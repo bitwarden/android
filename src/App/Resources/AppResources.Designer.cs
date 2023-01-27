@@ -2048,6 +2048,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DuckDuckGo.
+        /// </summary>
+        public static string DuckDuckGo {
+            get {
+                return ResourceManager.GetString("DuckDuckGo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit.
         /// </summary>
         public static string Edit {
@@ -2539,6 +2548,15 @@ namespace Bit.App.Resources {
         public static string FaceIDDirection {
             get {
                 return ResourceManager.GetString("FaceIDDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fastmail.
+        /// </summary>
+        public static string Fastmail {
+            get {
+                return ResourceManager.GetString("Fastmail", resourceCulture);
             }
         }
         
