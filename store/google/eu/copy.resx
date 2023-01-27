@@ -118,11 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Bitwarden - Pasahitz kudeatzailea</value>
+    <value>Bitwarden pasahitz kudeatzailea</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden sarrera eta pasahitz administratzailea da, eta seguru mantentzen laguntzen dizu linean zauden bitartean.</value>
+    <value>Bitwarden sarrera eta pasahitz kudeatzailea da, linean zauden bitaertean seguru mantentzen laguntzen dizuna.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
@@ -155,7 +155,7 @@ Babestu eta partekatu zure Bitwarden kutxa gotorraren informazio konfidentziala 
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>Zure gailu guztietarako pasahitzen kudeatzaile seguru eta doakoa</value>
+    <value>Zure gailu guztietarako pasahitz-kudeatzaile seguru eta doakoa</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Kudeatu zure erabiltzaile eta pasahitz guztiak kutxa gotor seguru batetik</value>

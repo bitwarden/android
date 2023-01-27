@@ -1103,6 +1103,9 @@ Skaneerimine toimub automaatselt.</value>
   <data name="Ms" xml:space="preserve">
     <value>Pr</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
   </data>
@@ -2513,5 +2516,41 @@ Soovid selle konto peale lülituda?</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Kaamera kasutamiseks luba ligipääs kaamerale</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Tähtis</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Ülemparooli ei saa kuidagi taastada! Nõutud on vähemalt {0} tähemärki.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Nõrk ülemparool</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Tuvastati nõrk ülemparool. Kasuta konto paremaks turvamiseks tugevamat parooli. Oled kindel, et soovid nõrga parooliga jätkata?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Nõrk</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Hea</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Tugev</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Otsi seda parooli teadaolevatest andmeleketest</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Ülemparool on haavatav</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Ülemparool on varasemalt lekkinud. Kasuta konto kaitsmiseks unikaalset parooli. Oled kindel, et soovid kasutada varem lekkinud parooli?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Nõrk ja haavatav ülemparool</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Tuvastati nõrk ning andmelekkes lekkinud ülemparool. Kasuta konto paremaks turvamiseks tugevamat parooli. Oled kindel, et soovid nõrga parooliga jätkata?</value>
   </data>
 </root>
