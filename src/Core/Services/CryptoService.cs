@@ -407,6 +407,36 @@ namespace Bit.Core.Services
             }
             else if (kdfConfig.Type == KdfType.Argon2id)
             {
+                if (kdfConfig.Iterations == null)
+                {
+                    kdfConfig.Iterations = Constants.Argon2Iterations;
+                }
+                if (kdfConfig.Iterations < 2)
+                {
+                    throw new Exception("Argon2 iterations minimum is 2");
+                }
+
+                if (kdfConfig.Memory == null)
+                {
+                    kdfConfig.Memory = Constants.Argon2Memory;
+                }
+                if (kdfConfig.Memory < 16)
+                {
+                    throw new Exception("Argon2 memory minimum is 16 MB");
+                } else if (kdfConfig.Memory > 1024)
+                {
+                    throw new Exception("Argon2 memory maximum is 1024 MB");
+                }
+
+                if (kdfConfig.Parallelism == null)
+                {
+                    kdfConfig.Parallelism = Constants.Argon2Parallelism;
+                } 
+                else if (kdfConfig.Parallelism < 1)
+                {
+                    throw new Exception("Argon2 parallelism minimum is 1");
+                }
+
                 var iterations = kdfConfig.Iterations.GetValueOrDefault(Constants.Argon2Iterations);
                 var memory = kdfConfig.Memory.GetValueOrDefault(Constants.Argon2Memory) * 1024;
                 var parallelism = kdfConfig.Parallelism.GetValueOrDefault(Constants.Argon2Parallelism);
