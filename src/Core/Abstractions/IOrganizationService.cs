@@ -12,5 +12,6 @@ namespace Bit.Core.Abstractions
         Task<List<Organization>> GetAllAsync(string userId = null);
         Task ReplaceAsync(Dictionary<string, OrganizationData> organizations);
         Task ClearAllAsync(string userId);
+        Task<string> GetClaimedOrganizationDomainAsync(string userEmail);
     }
 }

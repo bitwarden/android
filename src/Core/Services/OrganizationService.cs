@@ -4,16 +4,19 @@ using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
+using Bit.Core.Models.Request;
 
 namespace Bit.Core.Services
 {
     public class OrganizationService : IOrganizationService
     {
         private readonly IStateService _stateService;
+        private readonly IApiService _apiService;
 
-        public OrganizationService(IStateService stateService)
+        public OrganizationService(IStateService stateService, IApiService apiService)
         {
             _stateService = stateService;
+            _apiService = apiService;
         }
 
         public async Task<Organization> GetAsync(string id)
@@ -50,6 +53,20 @@ namespace Bit.Core.Services
         public async Task ClearAllAsync(string userId)
         {
             await _stateService.SetOrganizationsAsync(null, userId);
+        }
+
+        public async Task<string> GetClaimedOrganizationDomainAsync(string userEmail)
+        {
+            try
+            {
+                var response = await _apiService.GetSso(userEmail);
+                return response.OrganizationIdentifier;
+            }
+            catch (System.Exception ex)
+            {
+                // api throws 404 if there is no domain claimed
+                return string.Empty;
+            }
         }
     }
 }

@@ -27,6 +27,7 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IStateService _stateService;
         private readonly ILogger _logger;
+        private readonly IOrganizationService _organizationService;
 
         private string _orgIdentifier;
 
@@ -42,6 +43,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
+            _organizationService = ServiceContainer.Resolve<IOrganizationService>();
 
 
             PageTitle = AppResources.Bitwarden;
@@ -63,9 +65,26 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            if (string.IsNullOrWhiteSpace(OrgIdentifier))
+            try
             {
-                OrgIdentifier = await _stateService.GetRememberedOrgIdentifierAsync();
+                await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
+                if (await TryClaimedDomainLogin())
+                {
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(OrgIdentifier))
+                {
+                    OrgIdentifier = await _stateService.GetRememberedOrgIdentifierAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
+            finally
+            {
+                await _deviceActionService.HideLoadingAsync();
             }
         }
 
@@ -206,6 +225,20 @@ namespace Bit.App.Pages
                 await _platformUtilsService.ShowDialogAsync(AppResources.LoginSsoError,
                     AppResources.AnErrorHasOccurred);
             }
+        }
+
+        private async Task<bool> TryClaimedDomainLogin()
+        {
+            var userEmail = await _stateService.GetRememberedEmailAsync();
+            var claimedDomainOrg = await _organizationService.GetClaimedOrganizationDomainAsync(userEmail);
+            if (!string.IsNullOrEmpty(claimedDomainOrg))
+            {
+                OrgIdentifier = claimedDomainOrg;
+                await LogInAsync();
+                return true;
+            }
+
+            return false;
         }
     }
 }

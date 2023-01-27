@@ -40,7 +40,7 @@ namespace Bit.Core.Utilities
                 return Task.CompletedTask;
             }, customUserAgent);
             var appIdService = new AppIdService(storageService);
-            var organizationService = new OrganizationService(stateService);
+            var organizationService = new OrganizationService(stateService, apiService);
             var settingsService = new SettingsService(stateService);
             var fileUploadService = new FileUploadService(apiService);
             var cipherService = new CipherService(cryptoService, stateService, settingsService, apiService,

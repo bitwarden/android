@@ -457,6 +457,11 @@ namespace Bit.Core.Services
             return SendAsync<object, object>(HttpMethod.Post, $"/organizations/{id}/leave", null, true, false);
         }
 
+
+        public Task<OrganizationDomainSsoDetailsResponse> GetSso(string userEmail)
+        {
+            return SendAsync<OrganizationSsoDomainDetailsRequest, OrganizationDomainSsoDetailsResponse>(HttpMethod.Post, $"/organizations/sso/details", new OrganizationSsoDomainDetailsRequest { Email = userEmail}, false, true);
+        }
         #endregion
 
         #region Organization User APIs
