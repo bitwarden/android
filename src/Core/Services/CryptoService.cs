@@ -418,7 +418,7 @@ namespace Bit.Core.Services
 
                 if (kdfConfig.Memory == null)
                 {
-                    kdfConfig.Memory = Constants.Argon2Memory;
+                    kdfConfig.Memory = Constants.Argon2MemoryInMB;
                 }
                 if (kdfConfig.Memory < 16)
                 {
@@ -438,7 +438,7 @@ namespace Bit.Core.Services
                 }
 
                 var iterations = kdfConfig.Iterations.GetValueOrDefault(Constants.Argon2Iterations);
-                var memory = kdfConfig.Memory.GetValueOrDefault(Constants.Argon2Memory) * 1024;
+                var memory = kdfConfig.Memory.GetValueOrDefault(Constants.Argon2MemoryInMB) * 1024;
                 var parallelism = kdfConfig.Parallelism.GetValueOrDefault(Constants.Argon2Parallelism);
 
                 key = await _cryptoFunctionService.Argon2Async(password, salt, iterations, memory, parallelism);

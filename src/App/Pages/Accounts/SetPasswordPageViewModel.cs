@@ -163,7 +163,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var kdfConfig = new KdfConfig(KdfType.PBKDF2_SHA256, Constants.KdfIterations, null, null);
+            var kdfConfig = new KdfConfig(KdfType.PBKDF2_SHA256, Constants.Pbkdf2Iterations, null, null);
             var email = await _stateService.GetEmailAsync();
             var key = await _cryptoService.MakeKeyAsync(MasterPassword, email, kdfConfig);
             var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.ServerAuthorization);
@@ -187,7 +187,7 @@ namespace Bit.App.Pages
                 Key = encKey.Item2.EncryptedString,
                 MasterPasswordHint = Hint,
                 Kdf = kdfConfig.Type.GetValueOrDefault(KdfType.PBKDF2_SHA256),
-                KdfIterations = kdfConfig.Iterations.GetValueOrDefault(Constants.KdfIterations),
+                KdfIterations = kdfConfig.Iterations.GetValueOrDefault(Constants.Pbkdf2Iterations),
                 KdfMemory = kdfConfig.Memory,
                 KdfParallelism = kdfConfig.Parallelism,
                 OrgIdentifier = OrgIdentifier,
