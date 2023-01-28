@@ -24,5 +24,7 @@ namespace Bit.Core.Models.Response
         public int? KdfParallelism { get; set; }
         public bool ForcePasswordReset { get; set; }
         public string KeyConnectorUrl { get; set; }
+        [JsonIgnore]
+        public KdfConfig KdfConfig => new KdfConfig(Kdf, KdfIterations, KdfMemory, KdfParallelism);
     }
 }

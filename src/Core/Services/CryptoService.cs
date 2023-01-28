@@ -394,16 +394,13 @@ namespace Bit.Core.Services
             byte[] key = null;
             if (kdfConfig.Type == null || kdfConfig.Type == KdfType.PBKDF2_SHA256)
             {
-                if (kdfConfig.Iterations == null)
-                {
-                    kdfConfig.Iterations = 5000;
-                }
-                if (kdfConfig.Iterations < 5000)
+                var iterations = kdfConfig.Iterations.GetValueOrDefault(5000);
+                if (iterations < 5000)
                 {
                     throw new Exception("PBKDF2 iteration minimum is 5000.");
                 }
                 key = await _cryptoFunctionService.Pbkdf2Async(password, salt,
-                    CryptoHashAlgorithm.Sha256, kdfConfig.Iterations.Value);
+                    CryptoHashAlgorithm.Sha256, iterations);
             }
             else if (kdfConfig.Type == KdfType.Argon2id)
             {
@@ -430,7 +427,8 @@ namespace Bit.Core.Services
                     throw new Exception("Argon2 parallelism minimum is 1");
                 }
 
-                key = await _cryptoFunctionService.Argon2Async(password, salt, iterations, memory, parallelism);
+                var saltHash = await _cryptoFunctionService.HashAsync(salt, CryptoHashAlgorithm.Sha256);
+                key = await _cryptoFunctionService.Argon2Async(password, saltHash, iterations, memory, parallelism);
             }
             else
             {

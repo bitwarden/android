@@ -282,7 +282,7 @@ namespace Bit.Core.Services
                 var preloginResponse = await _apiService.PostPreloginAsync(new PreloginRequest { Email = email });
                 if (preloginResponse != null)
                 {
-                    kdfConfig = new KdfConfig(preloginResponse.Kdf, preloginResponse.KdfIterations, preloginResponse.KdfMemory, preloginResponse.KdfParallelism);
+                    kdfConfig = preloginResponse.KdfConfig;
                 }
             }
             catch (ApiException e)
@@ -440,8 +440,7 @@ namespace Bit.Core.Services
                 {
                     // SSO Key Connector Onboarding
                     var password = await _cryptoFunctionService.RandomBytesAsync(64);
-                    var kdfConfig = new KdfConfig(tokenResponse.Kdf, tokenResponse.KdfIterations, tokenResponse.KdfMemory, tokenResponse.KdfParallelism);
-                    var k = await _cryptoService.MakeKeyAsync(Convert.ToBase64String(password), _tokenService.GetEmail(), kdfConfig);
+                    var k = await _cryptoService.MakeKeyAsync(Convert.ToBase64String(password), _tokenService.GetEmail(), tokenResponse.KdfConfig);
                     var keyConnectorRequest = new KeyConnectorUserKeyRequest(k.EncKeyB64);
                     await _cryptoService.SetKeyAsync(k);
 
@@ -464,7 +463,7 @@ namespace Bit.Core.Services
                         EncryptedPrivateKey = keyPair.Item2.EncryptedString
                     };
                     var setPasswordRequest = new SetKeyConnectorKeyRequest(
-                        encKey.Item2.EncryptedString, keys, kdfConfig, orgId
+                        encKey.Item2.EncryptedString, keys, tokenResponse.KdfConfig, orgId
                     );
                     await _apiService.PostSetKeyConnectorKey(setPasswordRequest);
                 }

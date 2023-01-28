@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Enums;
+using Newtonsoft.Json;
 
 namespace Bit.Core.Models.Response
 {
@@ -8,5 +9,7 @@ namespace Bit.Core.Models.Response
         public int KdfIterations { get; set; }
         public int? KdfMemory { get; set; }
         public int? KdfParallelism { get; set; }
+        [JsonIgnore]
+        public KdfConfig KdfConfig => new KdfConfig(Kdf, KdfIterations, KdfMemory, KdfParallelism);
     }
 }
