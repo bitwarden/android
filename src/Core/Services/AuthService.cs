@@ -276,7 +276,7 @@ namespace Bit.Core.Services
         private async Task<SymmetricCryptoKey> MakePreloginKeyAsync(string masterPassword, string email)
         {
             email = email.Trim().ToLower();
-            KdfConfig? kdfConfig = null;
+            KdfConfig kdfConfig = KdfConfig.Default;
             try
             {
                 var preloginResponse = await _apiService.PostPreloginAsync(new PreloginRequest { Email = email });
@@ -292,7 +292,7 @@ namespace Bit.Core.Services
                     throw;
                 }
             }
-            return await _cryptoService.MakeKeyAsync(masterPassword, email, kdfConfig.GetValueOrDefault(new KdfConfig(KdfType.PBKDF2_SHA256, 5000, null, null)));
+            return await _cryptoService.MakeKeyAsync(masterPassword, email, kdfConfig);
         }
 
         private async Task<AuthResult> LogInHelperAsync(string email, string hashedPassword, string localHashedPassword,
