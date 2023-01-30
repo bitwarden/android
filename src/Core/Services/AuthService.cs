@@ -276,15 +276,13 @@ namespace Bit.Core.Services
         private async Task<SymmetricCryptoKey> MakePreloginKeyAsync(string masterPassword, string email)
         {
             email = email.Trim().ToLower();
-            KdfType? kdf = null;
-            int? kdfIterations = null;
+            KdfConfig kdfConfig = KdfConfig.Default;
             try
             {
                 var preloginResponse = await _apiService.PostPreloginAsync(new PreloginRequest { Email = email });
                 if (preloginResponse != null)
                 {
-                    kdf = preloginResponse.Kdf;
-                    kdfIterations = preloginResponse.KdfIterations;
+                    kdfConfig = preloginResponse.KdfConfig;
                 }
             }
             catch (ApiException e)
@@ -294,7 +292,7 @@ namespace Bit.Core.Services
                     throw;
                 }
             }
-            return await _cryptoService.MakeKeyAsync(masterPassword, email, kdf, kdfIterations);
+            return await _cryptoService.MakeKeyAsync(masterPassword, email, kdfConfig);
         }
 
         private async Task<AuthResult> LogInHelperAsync(string email, string hashedPassword, string localHashedPassword,
@@ -442,7 +440,7 @@ namespace Bit.Core.Services
                 {
                     // SSO Key Connector Onboarding
                     var password = await _cryptoFunctionService.RandomBytesAsync(64);
-                    var k = await _cryptoService.MakeKeyAsync(Convert.ToBase64String(password), _tokenService.GetEmail(), tokenResponse.Kdf, tokenResponse.KdfIterations);
+                    var k = await _cryptoService.MakeKeyAsync(Convert.ToBase64String(password), _tokenService.GetEmail(), tokenResponse.KdfConfig);
                     var keyConnectorRequest = new KeyConnectorUserKeyRequest(k.EncKeyB64);
                     await _cryptoService.SetKeyAsync(k);
 
@@ -465,7 +463,7 @@ namespace Bit.Core.Services
                         EncryptedPrivateKey = keyPair.Item2.EncryptedString
                     };
                     var setPasswordRequest = new SetKeyConnectorKeyRequest(
-                        encKey.Item2.EncryptedString, keys, tokenResponse.Kdf, tokenResponse.KdfIterations, orgId
+                        encKey.Item2.EncryptedString, keys, tokenResponse.KdfConfig, orgId
                     );
                     await _apiService.PostSetKeyConnectorKey(setPasswordRequest);
                 }
