@@ -231,14 +231,14 @@ namespace Bit.App.Pages
         {
             var userEmail = await _stateService.GetRememberedEmailAsync();
             var claimedDomainOrg = await _organizationService.GetClaimedOrganizationDomainAsync(userEmail);
-            if (!string.IsNullOrEmpty(claimedDomainOrg))
+            if (string.IsNullOrEmpty(claimedDomainOrg))
             {
-                OrgIdentifier = claimedDomainOrg;
-                await LogInAsync();
-                return true;
+                return false;
             }
 
-            return false;
+            OrgIdentifier = claimedDomainOrg;
+            await LogInAsync();
+            return true;
         }
     }
 }

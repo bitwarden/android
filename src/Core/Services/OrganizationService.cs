@@ -5,6 +5,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
+using Bit.Core.Utilities;
 
 namespace Bit.Core.Services
 {
@@ -12,6 +13,7 @@ namespace Bit.Core.Services
     {
         private readonly IStateService _stateService;
         private readonly IApiService _apiService;
+        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         public OrganizationService(IStateService stateService, IApiService apiService)
         {
@@ -59,12 +61,13 @@ namespace Bit.Core.Services
         {
             try
             {
-                var response = await _apiService.GetOrgDomainSsoDetails(userEmail);
+                var response = await _apiService.GetOrgDomainSsoDetailsAsync(userEmail);
                 return response.OrganizationIdentifier;
             }
             catch (System.Exception ex)
             {
                 // api throws 404 if there is no domain claimed
+                _logger.Value.Exception(ex);
                 return string.Empty;
             }
         }

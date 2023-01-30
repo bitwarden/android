@@ -458,7 +458,7 @@ namespace Bit.Core.Services
         }
 
 
-        public Task<OrganizationDomainSsoDetailsResponse> GetOrgDomainSsoDetails(string userEmail)
+        public Task<OrganizationDomainSsoDetailsResponse> GetOrgDomainSsoDetailsAsync(string userEmail)
         {
             return SendAsync<OrganizationDomainSsoDetailsRequest, OrganizationDomainSsoDetailsResponse>(HttpMethod.Post, $"/domain/sso/details", new OrganizationDomainSsoDetailsRequest { Email = userEmail }, false, true);
         }
