@@ -13,7 +13,7 @@ namespace Bit.Core.Services
     {
         private readonly IStateService _stateService;
         private readonly IApiService _apiService;
-        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
+        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
 
         public OrganizationService(IStateService stateService, IApiService apiService)
         {
