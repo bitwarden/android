@@ -175,8 +175,8 @@ namespace Bit.App.Pages
 
             Name = string.IsNullOrWhiteSpace(Name) ? null : Name;
             Email = Email.Trim().ToLower();
-            var kdf = KdfType.PBKDF2_SHA256;
-            var key = await _cryptoService.MakeKeyAsync(MasterPassword, Email, kdf, Constants.KdfIterations);
+            var kdfConfig = new KdfConfig(KdfType.PBKDF2_SHA256, Constants.Pbkdf2Iterations, null, null);
+            var key = await _cryptoService.MakeKeyAsync(MasterPassword, Email, kdfConfig);
             var encKey = await _cryptoService.MakeEncKeyAsync(key);
             var hashedPassword = await _cryptoService.HashPasswordAsync(MasterPassword, key);
             var keys = await _cryptoService.MakeKeyPairAsync(encKey.Item1);
@@ -187,8 +187,10 @@ namespace Bit.App.Pages
                 MasterPasswordHash = hashedPassword,
                 MasterPasswordHint = Hint,
                 Key = encKey.Item2.EncryptedString,
-                Kdf = kdf,
-                KdfIterations = Constants.KdfIterations,
+                Kdf = kdfConfig.Type,
+                KdfIterations = kdfConfig.Iterations,
+                KdfMemory = kdfConfig.Memory,
+                KdfParallelism = kdfConfig.Parallelism,
                 Keys = new KeysRequest
                 {
                     PublicKey = keys.Item1,
