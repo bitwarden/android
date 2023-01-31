@@ -109,11 +109,11 @@ namespace Bit.App.Utilities.AccountManagement
 
                     var email = await _stateService.GetEmailAsync();
                     await _stateService.SetRememberedEmailAsync(email);
-                    _accountsManagerHost.Navigate(NavigationTarget.HomeLogin, new HomeNavigationParams(true));
+                    _accountsManagerHost.Navigate(NavigationTarget.HomeLogin);
                 }
                 else
                 {
-                    _accountsManagerHost.Navigate(NavigationTarget.HomeLogin, new HomeNavigationParams(false));
+                    _accountsManagerHost.Navigate(NavigationTarget.HomeLogin);
                 }
             }
         }
@@ -190,7 +190,7 @@ namespace Bit.App.Utilities.AccountManagement
             await Device.InvokeOnMainThreadAsync(() =>
             {
                 Options.HideAccountSwitcher = false;
-                _accountsManagerHost.Navigate(NavigationTarget.HomeLogin, new HomeNavigationParams(false));
+                _accountsManagerHost.Navigate(NavigationTarget.HomeLogin);
             });
         }
 

@@ -447,10 +447,10 @@ namespace Bit.iOS.Extension
             });
         }
 
-        private void LaunchHomePage(bool shouldCheckRememberEmail = true)
+        private void LaunchHomePage()
         {
             var appOptions = new AppOptions { IosExtension = true };
-            var homePage = new HomePage(appOptions, shouldCheckRememberEmail);
+            var homePage = new HomePage(appOptions);
             var app = new App.App(appOptions);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(homePage);
@@ -479,8 +479,8 @@ namespace Bit.iOS.Extension
             ThemeManager.ApplyResourcesTo(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
-                vm.SubmitSuccessAction = () => DismissViewController(false, () => LaunchHomePage(shouldCheckRememberEmail: false));
-                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage(shouldCheckRememberEmail: false));
+                vm.SubmitSuccessAction = () => DismissViewController(false, () => LaunchHomePage());
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
             var navigationPage = new NavigationPage(environmentPage);
@@ -498,7 +498,7 @@ namespace Bit.iOS.Extension
             if (registerPage.BindingContext is RegisterPageViewModel vm)
             {
                 vm.RegistrationSuccess = () => DismissViewController(false, () => LaunchLoginFlow(vm.Email));
-                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage(shouldCheckRememberEmail: false));
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
             var navigationPage = new NavigationPage(registerPage);
@@ -521,7 +521,7 @@ namespace Bit.iOS.Extension
                 vm.StartSsoLoginAction = () => DismissViewController(false, () => LaunchLoginSsoFlow());
                 vm.LogInWithDeviceAction = () => DismissViewController(false, () => LaunchLoginWithDevice(email));
                 vm.LogInSuccessAction = () => DismissLockAndContinue();
-                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage(shouldCheckRememberEmail: false));
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
             var navigationPage = new NavigationPage(loginPage);
