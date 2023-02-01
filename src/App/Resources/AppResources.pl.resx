@@ -1103,6 +1103,9 @@ Skanowanie nastąpi automatycznie.</value>
   <data name="Ms" xml:space="preserve">
     <value>Pani</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Pan(i)</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>Listopad</value>
   </data>
@@ -2390,7 +2393,7 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
     <value>Adres catch-all</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
-    <value>Alias przekazywanego adresu</value>
+    <value>Alias przekierowania</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
     <value>Losowe słowo</value>
@@ -2444,7 +2447,7 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
     <value>Użyj skonfigurowanej skrzynki catch-all w swojej domenie.</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
-    <value>Wygeneruj alias adresu e-mail z zewnętrznej usługi przekazywania.</value>
+    <value>Wygeneruj alias adresu e-mail z zewnętrznej usługi przekierowania.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Losowy</value>
@@ -2513,5 +2516,41 @@ Czy chcesz przełączyć się na to konto?</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Włącz uprawnienia aparatu do korzystania ze skanera</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Ważne</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Twoje hasło główne nie może zostać odzyskane, jeśli je zapomnisz! Minimum znaków: {0}.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Słabe hasło główne</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Zidentyfikowano słabe hasło. Użyj silnego hasła, aby chronić swoje konto. Czy na pewno chcesz użyć słabego hasła?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Słabe</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Dobre</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Silne</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Sprawdź znane naruszenia ochrony danych tego hasła</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Ujawnione hasło główne</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Hasło ujawnione w wyniku naruszenia ochrony danych. Użyj unikalnego hasła, aby chronić swoje konto. Czy na pewno chcesz użyć ujawnionego hasła?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Słabe i ujawnione hasło główne</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Słabe hasło ujawnione w wyniku naruszenia ochrony danych. Użyj silnego i unikalnego hasła, aby chronić swoje konto. Czy na pewno chcesz użyć tego hasła?</value>
   </data>
 </root>

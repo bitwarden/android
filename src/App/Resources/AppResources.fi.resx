@@ -1103,6 +1103,9 @@ Koodi luetaan automaattisesti.</value>
   <data name="Ms" xml:space="preserve">
     <value>Nti</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Neutraali</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>Marraskuu</value>
   </data>
@@ -1387,7 +1390,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Etsi teksti-Sendeistä</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
-    <value>Hae - {0}</value>
+    <value>Etsi - {0}</value>
     <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
@@ -2349,7 +2352,7 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
     <value>{0} minuuttia sitten</value>
   </data>
   <data name="LogInAccepted" xml:space="preserve">
-    <value>Kirjautuminen vahvistettu</value>
+    <value>Kirjautuminen vahvistettiin</value>
   </data>
   <data name="LogInDenied" xml:space="preserve">
     <value>Kirjautuminen estetty</value>
@@ -2370,7 +2373,7 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
     <value>Ei kiitos</value>
   </data>
   <data name="ConfimLogInAttempForX" xml:space="preserve">
-    <value>Vahvista kirjautuminen kohteessa {0}</value>
+    <value>Vahvista kirjautuminen tunnuksella {0}</value>
   </data>
   <data name="AllNotifications" xml:space="preserve">
     <value>Kaikki ilmoitukset</value>
@@ -2514,5 +2517,41 @@ Haluatko vaihtaa tähän tiliin?</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Myönnä kameran käyttöoikeus skannerin käyttämiseksi</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Tärkeää</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Pääsalasanasi palautus ei ole mahdollista, jos unohdat sen! Vähintään {0} merkkiä.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Heikko pääsalasana</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Tunnistettiin heikko salasana. Sinun tulisi suojata tilisi vahvalla salasanalla. Haluatko varmasti käyttää heikkoa salasanaa?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Heikko</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Hyvä</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Vahva</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Tarkasta esiintyykö salasanaa tunnetuissa tietovuodoissa</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Paljastunut pääsalasana</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Salasana löytyi tietovuodosta. Sinun tulisi suojata tilisi ainutlaatuisella salasanalla. Haluatko varmasti käyttää paljastunutta salasanaa?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Heikko ja paljastunut pääsalasana</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Havaittiin heikko ja tietovuodosta löytynyt salasana. Sinun tulisi suojata tilisi vahvalla ja ainutlaatuisella salasanalla. Haluatko varmasti käyttää tätä salasanaa?</value>
   </data>
 </root>

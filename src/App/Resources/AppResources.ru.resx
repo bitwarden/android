@@ -243,7 +243,7 @@
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Пожалуйста, подключитесь к интернету чтобы продолжить.</value>
+    <value>Подключитесь к интернету чтобы продолжить.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
@@ -279,20 +279,20 @@
     <value>Удалить аккаунт</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Вы действительно хотите удалить эту учетную запись?</value>
+    <value>Вы действительно хотите удалить этот аккаунт?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
     <value>Аккаунт уже добавлен</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value>Хотите переключиться на нее?</value>
+    <value>Хотите переключиться на него?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Мастер-пароль</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
-    <value>Больше</value>
+    <value>Еще</value>
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
@@ -315,7 +315,7 @@
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+    <value>OK</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
@@ -440,7 +440,7 @@
     <value>Служба автозаполнения Bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Используйте службу специальных возможностей Bitwarden для автоматического заполнения ваших логинов.</value>
+    <value>Используйте службу специальных возможностей Bitwarden для автоматического заполнения логинов.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Изменить email</value>
@@ -511,7 +511,7 @@
     <value>Избранный</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>отпечатком</value>
+    <value>Отпечаток</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
     <value>Сгенерировать пароль</value>
@@ -523,10 +523,10 @@
     <value>Импорт элементов</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>Вы можете импортировать элементы в свое веб-хранилище на bitwarden.com. Перейти на сайт сейчас?</value>
+    <value>Вы можете массово импортировать свои элементы из веб-хранилища на bitwarden.com. Перейти на сайт сейчас?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Быстрый импорт ваших элементов из других менеджеров паролей.</value>
+    <value>Быстрый массовый импорт записей из других менеджеров паролей.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Последняя синхронизация:</value>
@@ -860,7 +860,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Для продолжения приложите ваш YubiKey NEO к задней панели устройства или вставьте его в USB-порт и нажмите его кнопку.</value>
+    <value>Для продолжения приложите ваш YubiKey NEO к задней панели устройства или вставьте в USB-порт и нажмите его кнопку.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>Ключ безопасности YubiKey</value>
@@ -876,14 +876,14 @@
     <value>Не удается загрузить файл.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Устройство не может открыть этот тип файла.</value>
+    <value>Устройство не может открыть файл этого типа.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
     <value>Загрузка...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>Это вложение имеет размер {0}. Вы действительно хотите загрузить его на устройство?</value>
+    <value>Размер этого вложения - {0}. Вы действительно хотите загрузить его на устройство?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
@@ -1102,6 +1102,9 @@
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Проф.</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Ноябрь</value>
@@ -2513,5 +2516,41 @@
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Для использования сканера необходимо предоставить разрешение на доступ к камере</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Важно</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Ваш мастер-пароль невозможно восстановить, если вы его забудете! Минимум символов - {0}.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Слабый мастер-пароль</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Обнаружен слабый пароль. Для защиты аккаунта следует установить надежный пароль. Вы уверены, что хотите использовать слабый пароль?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Слабый</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Хороший</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Сильный</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Проверьте известные случаи утечки данных для этого пароля</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Мастер-пароль скомпрометирован</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Пароль найден в утечке данных. Используйте уникальный пароль для защиты вашего аккаунта. Вы уверены, что хотите использовать скомпрометированный пароль?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Слабый и скомпрометированный мастер-пароль</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Обнаружен слабый пароль, найденный в утечке данных. Используйте надежный и уникальный пароль для защиты вашего аккаунта. Вы уверены, что хотите использовать этот пароль?</value>
   </data>
 </root>

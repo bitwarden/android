@@ -1102,6 +1102,9 @@
   <data name="Ms" xml:space="preserve">
     <value>Sig.na</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>Novembre</value>
   </data>
@@ -2137,7 +2140,7 @@
     <value>Questa organizzazione ha una politica aziendale che ti iscriverà automaticamente al ripristino della password. Ciò permetterà agli amministratori dell'organizzazione di cambiare la tua password principale.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Le policy dell'organizzazione controllano il timeout della tua cassaforte. Il tempo massimo consentito è di $HOURS$ ore e $MINUTES$ minuti</value>
+    <value>Le tue politiche organizzative stanno influenzando il timeout della tua cassaforte. Il timeout massimo consentito della cassaforte è di {0} ora(e) e {1} minuto(i)</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Il timeout della tua cassaforte supera i limiti impostati dalla tua organizzazione.</value>
@@ -2450,7 +2453,7 @@ seleziona Aggiungi TOTP per salvare la chiave in modo sicuro</value>
     <value>Casuale</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connect to Watch</value>
+    <value>Connetti a watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Maggiori informazioni sul servizio di accessibilità</value>
@@ -2512,6 +2515,42 @@ Vuoi passare a questo account?</value>
     <value>La richiesta non è più valida</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>Abilita i permessi della fotocamera per usare lo scanner</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Importante</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>La tua password principale non può essere recuperata se la dimentichi! {0} caratteri minimi.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Password principale debole</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Password debole identificata. Usa una password forte per proteggere il tuo account. Sei sicuro di voler usare una password debole?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Debole</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Buona</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Forte</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Controlla se la tua password è presente nei database dei data breach noti</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Password principale violata</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Password trovata in un database di data breach noto. Usa una password esclusiva per proteggere il tuo account. Sei sicuro di voler usare una password violata?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Password principale debole e violata</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Password debole trovata in un database di data breach noto. Usa una password forte ed esclusiva per proteggere il tuo account. Sei sicuro di voler utilizzare questa password?</value>
   </data>
 </root>

@@ -46,8 +46,11 @@ namespace Bit.Core.Models.Domain
                 OrgIdentifier = copy.OrgIdentifier;
                 KdfType = copy.KdfType;
                 KdfIterations = copy.KdfIterations;
+                KdfMemory = copy.KdfMemory;
+                KdfParallelism = copy.KdfParallelism;
                 EmailVerified = copy.EmailVerified;
                 HasPremiumPersonally = copy.HasPremiumPersonally;
+                AvatarColor = copy.AvatarColor;
             }
 
             public string UserId;
@@ -55,8 +58,11 @@ namespace Bit.Core.Models.Domain
             public string Name;
             public string Stamp;
             public string OrgIdentifier;
+            public string AvatarColor;
             public KdfType? KdfType;
             public int? KdfIterations;
+            public int? KdfMemory;
+            public int? KdfParallelism;
             public bool? EmailVerified;
             public bool? HasPremiumPersonally;
         }

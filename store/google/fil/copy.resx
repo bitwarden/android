@@ -118,11 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Bitwarden Password Manager</value>
+    <value>Bitwarden Password Manager Tagapamahala ng Password</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden is a login and password manager that helps keep you safe while online.</value>
+    <value>. 8bit ay isang uri ng pangunahing talaarawan ng data na gumagamit ng 8 bit na bilang para sa mga byte. Ang password ay isang string ng mga character na ginagamit upang makapasok sa isang account. Ang Free Password Manager ay isang software na tumutulong sa pag-secure ng mga password at login sa pamamagitan ng paglikha ng mga encrypted na file. Ang Password Manager ay isang software na tumutulong sa pag-manage ng mga password at login sa mga site na ginagamit. Ang Login Manager ay isang software na tumutulong sa pag-manage ng mga login sa mga website na ginagamit.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
@@ -155,26 +155,25 @@ Secure and share sensitive data within your Bitwarden Vault from any browser, mo
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>A secure and free password manager for all of your devices</value>
+    <value>Isang ligtas at libreng password manager para sa lahat ng iyong mga aparato</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Pamahalaan ang lahat ng iyong logins at passwords mula sa isang secure vault</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Awtomatikong gumawa ng mga malakas, random, at ligtas na password</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with fingerprint, PIN code, or master password</value>
+    <value>Proteksiyunan ang iyong vault gamit ang fingerprint, PIN code, o master password</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>Mabilis na punan ang mga login mula sa loob ng iyong web browser at ibang apps</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices
-
-- Phone
-- Tablet
-- Desktop
+    <value>I-sync at i-access ang iyong vault mula sa maraming mga device 
+- Telepono 
+- Tablet 
+- Desktop 
 - Web</value>
   </data>
 </root>

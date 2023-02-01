@@ -13,6 +13,7 @@ namespace Bit.App.Controls
     {
         private readonly string _text;
         private readonly string _id;
+        private readonly string _color;
 
         public override bool Equals(object obj)
         {
@@ -23,7 +24,7 @@ namespace Bit.App.Controls
 
             if (obj is AvatarImageSource avatar)
             {
-                return avatar._id == _id && avatar._text == _text;
+                return avatar._id == _id && avatar._text == _text && avatar._color == _color;
             }
 
             return base.Equals(obj);
@@ -31,7 +32,7 @@ namespace Bit.App.Controls
 
         public override int GetHashCode() => _id?.GetHashCode() ?? _text?.GetHashCode() ?? -1;
 
-        public AvatarImageSource(string userId = null, string name = null, string email = null)
+        public AvatarImageSource(string userId = null, string name = null, string email = null, string color = null)
         {
             _id = userId;
             _text = name;
@@ -39,6 +40,7 @@ namespace Bit.App.Controls
             {
                 _text = email;
             }
+            _color = color;
         }
 
         public override Func<CancellationToken, Task<Stream>> Stream => GetStreamAsync;
@@ -71,7 +73,7 @@ namespace Bit.App.Controls
                 chars = upperCaseText = _text.ToUpper();
             }
 
-            var bgColor = CoreHelpers.StringToColor(_id ?? upperCaseText, "#33ffffff");
+            var bgColor = _color ?? CoreHelpers.StringToColor(_id ?? upperCaseText, "#33ffffff");
             var textColor = CoreHelpers.TextColorFromBgColor(bgColor);
             var size = 50;
 

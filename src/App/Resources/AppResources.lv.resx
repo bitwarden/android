@@ -1103,6 +1103,9 @@ Nolasīšana notiks automātiski.</value>
   <data name="Ms" xml:space="preserve">
     <value>Jk-dze</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>Novembris</value>
   </data>
@@ -1783,7 +1786,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Vienā vai vairākos apvienības nosacījumos ir norādīts, ka galvenajai parolei ir jāatbilst šādām prasībām:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Mazākais pieļaujamais sarežģītības novērtējums ir $SCORE$</value>
+    <value>Minimālais sarežģītības rādītājs {0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
     <value>Mazākais pieļaujamais garums ir {0}</value>
@@ -2513,5 +2516,41 @@ Vai pārslēgties uz šo kontu?</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Nodrošināt atļauju izmantot kameru, lai lietotu nolasītāju</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Svarīgi</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Galveno paroli nevarēs atgūt, ja tā tiks aizmirsta. Vismaz {0} rakstzīmes.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Vāja galvenā parole</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Noteikta vāja parole. Jāizmanto spēcīga parole, lai aizsargātu savu kontu. Vai tiešām izmantot vāju paroli?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Vāja</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Laba</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Spēcīga</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Pārbaudīt šo paroli pret zināmiem datu pārkāpumiem</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Noplūdusi galvenā parole</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Parole ir atrasta datu noplūdē. Jāizmanto spēcīga parole, lai aizsargātu savu kontu. Vai tiešām izmantot noplūdušu paroli?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Vāja un noplūdusi galvenā parole</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Noteikta vāja parole, un tā ir atrasta datu noplūdē. Jāizmanto spēcīga parole, lai aizsargātu savu kontu. Vai tiešām izmantot šo paroli?</value>
   </data>
 </root>

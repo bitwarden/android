@@ -21,8 +21,8 @@ jobs:
         env:
           RELEASE_TAG: ${{ github.ref }}
         run: |
-          CURR_MAJOR=$(echo $RELEASE_TAG | sed -r 's/v([0-9]{4}\.[0-9]{1,2})\.([0-9]{1,2})/\1/')
-          CURR_PATCH=$(echo $RELEASE_TAG | sed -r 's/v([0-9]{4}\.[0-9]{1,2})\.([0-9]{1,2})/\2/')
+          CURR_MAJOR=$(echo $RELEASE_TAG | sed -r 's/refs\/tags\/v([0-9]{4}\.[0-9]{1,2})\.([0-9]{1,2})/\1/')
+          CURR_PATCH=$(echo $RELEASE_TAG | sed -r 's/refs\/tags\/v([0-9]{4}\.[0-9]{1,2})\.([0-9]{1,2})/\2/')
           echo "Current Major: $CURR_MAJOR"
           echo "Current Patch: $CURR_PATCH"
 

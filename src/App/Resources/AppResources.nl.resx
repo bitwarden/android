@@ -229,7 +229,7 @@
     <value>Mappen</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Map is bijgewerkt.</value>
+    <value>Map bijgewerkt</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Ga naar website</value>
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item is verwijderd</value>
+    <value>Item verwijderd</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -632,7 +632,7 @@
     <value>Overig</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Wachtwoord gegenereerd.</value>
+    <value>Wachtwoord gegenereerd</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Wachtwoordgenerator</value>
@@ -681,7 +681,7 @@
     <value>Item</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item bijgewerkt.</value>
+    <value>Item bijgewerkt</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Opslaan...</value>
@@ -692,10 +692,10 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Synchronisatie voltooid.</value>
+    <value>Synchronisatie voltooid</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Synchronisatie mislukt.</value>
+    <value>Synchronisatie mislukt</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>Kluis nu synchroniseren</value>
@@ -849,7 +849,7 @@
     <value>Opties voor tweestapsaanmelding</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Gebruik een andere methode voor tweestapsaanmelding</value>
+    <value>Gebruik een andere tweestapsaanmelding</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
     <value>Kon de verificatie-e-mail niet versturen. Probeer het opnieuw.</value>
@@ -1102,6 +1102,9 @@ Het scannen gebeurt automatisch.</value>
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Mej.</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>november</value>
@@ -2137,7 +2140,7 @@ Het scannen gebeurt automatisch.</value>
     <value>Deze organisatie heeft een ondernemingsbeleid dat je automatisch inschrijft bij het resetten van je wachtwoord. Inschrijving stelt organisatiebeheerders in staat om je hoofdwachtwoord te wijzigen.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Het beleid van je organisatie heeft invloed op de time-out van je kluis. De maximaal toegestane Kluis Time-out is $HOURS$ uur en $MINUTES$ minuten</value>
+    <value>Het beleid van je organisatie heeft invloed op de time-out van je kluis. De maximaal toegestane kluis time-out is {0} uur en {1} minuten</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Je kluis time-out is hoger dan het maximum van jouw organisatie.</value>
@@ -2450,7 +2453,7 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</value>
     <value>Willekeurig</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connect to Watch</value>
+    <value>Verbinding maken met horloge</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Toegankelijksheidsservice-melding</value>
@@ -2491,27 +2494,63 @@ Wilt u naar dit account wisselen?</value>
     <value>Inloggen met een ander apparaat</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Log in initiated</value>
+    <value>Inloggen gestart</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
-    <value>A notification has been sent to your device.</value>
+    <value>Er is een bericht naar je apparaat verstuurd.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+    <value>Zorg ervoor dat je kluis is ontgrendeld en dat de Vingerafdrukzin overeenkomt met het andere apparaat.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
-    <value>Resend notification</value>
+    <value>Bericht opnieuw verzenden</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>Nog een optie nodig?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>View all log in options</value>
+    <value>Alle loginopties bekijken</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Dit verzoek is niet langer geldig</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Camera-toestemming inschakelen om de scanner te gebruiken</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Belangrijk</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Je hoofdwachtwoord kan niet worden hersteld als je het vergeet! Minimaal {0} tekens.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Zwak hoofdwachtwoord</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Zwakke wachtwoord geïdentificeerd. Gebruik een sterk wachtwoord om uw account te beschermen. Weet u zeker dat u een zwak wachtwoord wilt gebruiken?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Zwak</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Goed</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Sterk</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Controleer bekende datalekken voor dit wachtwoord</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Gelekt hoofdwachtwoord</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Wachtwoord gevonden in een datalek. Gebruik een uniek wachtwoord om uw account te beschermen. Weet u zeker dat u een gelekt wachtwoord wilt gebruiken?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Zwak en gelekt hoofdwachtwoord</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Zwak wachtwoord geïdentificeerd en gevonden in een datalek. Gebruik een sterk en uniek wachtwoord om uw account te beschermen. Weet u zeker dat u dit wachtwoord wilt gebruiken?</value>
   </data>
 </root>

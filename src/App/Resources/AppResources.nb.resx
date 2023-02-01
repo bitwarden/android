@@ -452,7 +452,7 @@
     <value>Endre hovedpassord</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Du kan endre superpassordet ditt på bitwarden.net-netthvelvet. Vil du besøke det nettstedet nå?</value>
+    <value>Du kan endre hovedpassordet ditt på bitwarden.com-netthvelvet. Vil du besøke nettstedet nå?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Lukk</value>
@@ -474,7 +474,7 @@
     <value>Aktiver automatisk synkronisering</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Skriv inn din kontos E-postadresse for å motta hintet til ditt superpassord.</value>
+    <value>Skriv inn kontoens e-postadresse for å motta hint om hovedpassordet ditt.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Aktiver apputvidelsen på nytt</value>
@@ -517,7 +517,7 @@
     <value>Lag passord</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>Få et hint om superpassordet</value>
+    <value>Få et hint om hovedpassordet</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
     <value>Importer elementer</value>
@@ -575,16 +575,16 @@
     <value>Passordbekreftelsen er ikke riktig.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Superpassordet er passordet du bruker for å få tilgang til hvelvet ditt. Det er veldig viktig at du aldri glemmer ditt superpassord. Det er ingen måter å få tilbake passordet på dersom du noensinne skulle klare å glemme det.</value>
+    <value>Hovedpassordet er passordet du bruker for å få tilgang til hvelvet ditt. Det er svært viktig at du aldri glemmer hovedpassordet. Det er ikke mulig å gjenopprette passordet dersom du glemmer det.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
     <value>Et hint for hovedpassordet (valgfritt)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>Et hint for superpassordet, kan hjelpe deg å huske på passordet hvis du skulle glemme det.</value>
+    <value>Et hint om hovedpassordet kan hjelpe deg å huske passordet om du skulle glemme det.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Superpassordet må være ≥8 tegn lang.</value>
+    <value>Hovedpassordet må være minst 8 tegn.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minst antall siffer</value>
@@ -641,7 +641,7 @@
     <value>Passordhint</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>Vi har sendt deg en E-post med hintet til superpassordet.</value>
+    <value>Vi har sendt deg en e-post med hint om hovedpassord.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
     <value>Er du sikker på at du vil overskrive det nåværende passordet?</value>
@@ -1103,6 +1103,9 @@ Skanning skjer automatisk.</value>
   <data name="Ms" xml:space="preserve">
     <value>Frøken</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
   </data>
@@ -1493,7 +1496,7 @@ Skanning skjer automatisk.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Hvelvet ditt er låst. Kontroller superpassordet ditt for å fortsette.</value>
+    <value>Hvelvet ditt er låst. Kontroller hovedpassordet ditt for å fortsette.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Hvelvet ditt er låst. Kontroller PIN-koden din for å fortsette.</value>
@@ -2477,7 +2480,7 @@ Vil du bytte til denne kontoen?</value>
     <value>Nytt rundt her?</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
-    <value>Få et hint om superpassordet</value>
+    <value>Få et hint om hovedpassordet</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
     <value>Logger inn som {0}</value>
@@ -2514,5 +2517,41 @@ Vil du bytte til denne kontoen?</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Aktiver kameratillatelse for å bruke skanner</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Viktig</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Hovedpassordet ditt kan ikke gjenopprettes hvis du glemmer det! Minst {0} tegn.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Svakt hovedpassord</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Svakt passord er identifisert. Bruk et sterkt passord for å beskytte kontoen din. Er du sikker på at du vil bruke et svakt passord?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Svakt</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Bra</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Sterkt</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Sjekk kjente databrudd for dette passordet</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Eksponert hovedpassord</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Passord funnet i et databrudd. Bruk et unikt passord for å beskytte kontoen din. Er du sikker på at du vil bruke et eksponert passord?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Svakt og eksponert hovedpassord</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Svakt passord identifisert og funnet i et databrudd. Bruk et sterkt og unikt passord for å beskytte kontoen din. Er du sikker på at du vil bruke dette passordet?</value>
   </data>
 </root>

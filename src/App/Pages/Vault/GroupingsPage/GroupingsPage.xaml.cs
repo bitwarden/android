@@ -108,6 +108,10 @@ namespace Bit.App.Pages
                     else if (message.Command == "syncCompleted")
                     {
                         await Task.Delay(500);
+                        if (_vm.MainPage)
+                        {
+                            _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+                        }
                         Device.BeginInvokeOnMainThread(() =>
                         {
                             IsBusy = false;

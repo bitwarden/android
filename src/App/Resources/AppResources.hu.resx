@@ -1102,6 +1102,9 @@
   <data name="Ms" xml:space="preserve">
     <value>Kisasszony</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>november</value>
   </data>
@@ -2512,5 +2515,41 @@ Szeretnénk átváltani erre a fiókra?</value>
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Kamera engedélyezése a lapolvasó használatához</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Fontos</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>A fő jelszót nem lehet visszaállítani, ha elfelejtjük! Legalább {0} karakter.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Gyenge mesterjelszó</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Gyenge jelszó lett azonosítva. A fiók védelme érdekében használjunk erős jelszót. Biztos, hogy gyenge jelszót akarunk használni?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Gyenge</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Jó</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Erős</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Az ehhez a jelszóhoz tartozó ismert adatvédelmi incidensek ellenőrzése</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Kitett mesterjelszó</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>A jelszó megtalálható egy adatvédelmi incidensben. A fiók védelméhez használjunk egyedi jelszót. Biztos, hogy kitett jelszót szeretnénk használni?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Gyenge vagy kitett mesterjelszó</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Gyenge jelszó lett azonosítva és megtalálva egy adatvédelmi incidens során. A fók védelme érdekében használjunk erős és egyedi jelszót. Biztosan használni szeretnénk ezt a jelszót?</value>
   </data>
 </root>

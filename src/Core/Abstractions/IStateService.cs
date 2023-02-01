@@ -37,10 +37,7 @@ namespace Bit.Core.Abstractions
         Task SetPinProtectedAsync(string value, string userId = null);
         Task<EncString> GetPinProtectedKeyAsync(string userId = null);
         Task SetPinProtectedKeyAsync(EncString value, string userId = null);
-        Task<KdfType?> GetKdfTypeAsync(string userId = null);
-        Task SetKdfTypeAsync(KdfType? value, string userId = null);
-        Task<int?> GetKdfIterationsAsync(string userId = null);
-        Task SetKdfIterationsAsync(int? value, string userId = null);
+        Task SetKdfConfigurationAsync(KdfConfig config, string userId = null);
         Task<string> GetKeyEncryptedAsync(string userId = null);
         Task SetKeyEncryptedAsync(string value, string userId = null);
         Task<SymmetricCryptoKey> GetKeyDecryptedAsync(string userId = null);
@@ -163,5 +160,9 @@ namespace Bit.Core.Abstractions
         Task<bool> GetShouldConnectToWatchAsync(string userId = null);
         Task SetShouldConnectToWatchAsync(bool shouldConnect, string userId = null);
         Task<bool> GetLastUserShouldConnectToWatchAsync();
+        Task SetAvatarColorAsync(string value, string userId = null);
+        Task<string> GetAvatarColorAsync(string userId = null);
+
+
     }
 }
