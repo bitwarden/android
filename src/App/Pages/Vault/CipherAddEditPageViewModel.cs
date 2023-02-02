@@ -464,16 +464,6 @@ namespace Bit.App.Pages
 
             Cipher.Fields = Fields != null && Fields.Any() ?
                 Fields.Where(f => f != null).Select(f => f.Field).ToList() : null;
-            if (Cipher.Login != null)
-            {
-                Cipher.Login.Uris = Uris?.ToList();
-                if ((!EditMode || CloneMode) && Cipher.Type == CipherType.Login && Cipher.Login.Uris != null &&
-                   Cipher.Login.Uris.Count == 1 && string.IsNullOrWhiteSpace(Cipher.Login.Uris[0].Uri))
-                {
-                    Cipher.Login.Uris = null;
-                }
-            }
-
             if ((!EditMode || CloneMode) && Cipher.OrganizationId != null)
             {
                 if (Collections == null || !Collections.Any(c => c != null && c.Checked))
