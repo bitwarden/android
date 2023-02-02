@@ -388,6 +388,8 @@ namespace Bit.Core.Services
                         Name = _tokenService.GetName(),
                         KdfType = tokenResponse.Kdf,
                         KdfIterations = tokenResponse.KdfIterations,
+                        KdfMemory = tokenResponse.KdfMemory,
+                        KdfParallelism = tokenResponse.KdfParallelism,
                         HasPremiumPersonally = _tokenService.GetPremium(),
                     },
                     new Account.AccountTokens()
