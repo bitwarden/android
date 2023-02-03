@@ -2422,6 +2422,14 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Prístupový token API</value>
   </data>
@@ -2513,6 +2521,21 @@ Chcete prepnúť na toto konto?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Táto požiadavka už nie je platná</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Čakajúce požiadavky o prihlásenie</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Odmietnuť všetky žiadosti</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Naozaj chcete odmietnuť všetky čakajúce požiadavky o prihlásenie?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Požiadavky odmietnuté</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Žiadne čakajúce požiadavky</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Pre použitie skenera povoľte prístup ku kamere</value>

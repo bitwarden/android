@@ -2422,6 +2422,14 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API-adgangstoken</value>
   </data>
@@ -2513,6 +2521,21 @@ Vil du skifte til denne konto?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Anmodningen er ikke længere gyldig</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Afventende login-anmodninger</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Afvis alle anmodninger</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Sikker på, at alle afventende login-anmodninger skal afvises?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Anmodninger afvist</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Ingen afventende anmodninger</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Tildel kameratilladelse for brug af skanneren</value>

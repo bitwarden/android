@@ -2421,6 +2421,14 @@ Das Scannen erfolgt automatisch.</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API-Zugangs-Token</value>
   </data>
@@ -2512,6 +2520,21 @@ Möchtest du zu diesem Konto wechseln?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Diese Anfrage ist nicht mehr gültig</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Ausstehende Anmeldeanfragen</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Alle Anfragen ablehnen</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Bist du sicher, dass du alle ausstehenden Anmeldeanfragen ablehnen möchtest?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Anfragen abgelehnt</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Keine ausstehenden Anfragen</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Kamerazugriff aktivieren, um den Scanner zu verwenden</value>

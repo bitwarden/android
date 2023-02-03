@@ -692,7 +692,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Sinhronizēšana pabeigta.</value>
+    <value>Sinhronizācija pabeigta</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
     <value>Sinhronizēšana neizdevās.</value>
@@ -2422,6 +2422,14 @@ jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API piekļuves pilnvara</value>
   </data>
@@ -2513,6 +2521,21 @@ Vai pārslēgties uz šo kontu?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Šis pieprasījums vairs nav derīgs</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Neapstiprinātie pieteikšanās pieprasījumi</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Noraidīt visus pieprasījumus</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Vai tiešām noraidīt visus neapstiprinātos pieteikšanās pieprasījumus?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Pieprasījumi noraidīti</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Nav neapstiprinātu pieprasījumu</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Nodrošināt atļauju izmantot kameru, lai lietotu nolasītāju</value>

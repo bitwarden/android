@@ -2424,6 +2424,14 @@
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Приступни АПИ токен</value>
   </data>
@@ -2515,6 +2523,21 @@
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Овај захтев више не важи</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Захтеви за пријаву на чекању</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Одбиј све захтеве</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Да ли сте сигурни да желите да одбијете све захтеве за пријављивање на чекању?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Захтеви одбијени</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Нема захтева на чекању</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Омогућите дозволу камере за коришћење скенера</value>

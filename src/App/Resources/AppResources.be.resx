@@ -2422,6 +2422,14 @@
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Токен доступу да API</value>
   </data>
@@ -2513,6 +2521,21 @@
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Гэты запыт больш не дзейнічае</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Чаканне запыту на ўваход</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Адхіліць усе запыты</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Вы сапраўды хочаце адхіліць усе запыты, якія чакаюць уваходу?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Запыты адхілены</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Няма запытаў, якія чакаюць уваходу</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Каб выкарыстоўваць сканер дайце дазвол на выкарыстанне камеры</value>

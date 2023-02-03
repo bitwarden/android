@@ -2422,6 +2422,14 @@ seleziona Aggiungi TOTP per salvare la chiave in modo sicuro</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token di accesso API</value>
   </data>
@@ -2513,6 +2521,21 @@ Vuoi passare a questo account?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>La richiesta non è più valida</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Richieste d'accesso in sospeso</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Rifiuta tutte le richieste</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Sei sicuro di voler rifiutare tutte le richieste d'accesso in sospeso?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Richieste rifiutate</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Nessuna richiesta in sospeso</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Abilita i permessi della fotocamera per usare lo scanner</value>
