@@ -126,27 +126,27 @@
 
 THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET UN CITI ATZINA PAR LABĀKO PAROĻU PĀRVALDNIEKU.
 
-Pārvaldi, uzglabā, aizsargā un kopīgo neierobežotu skaitu paroļu neierobežotā skaitā ierīču no jebkuras vietas. Bitwarden piedāvā atvērtā koda paroļu pārvaldības risinājumus ikvienam - gan mājās, gan darbā, gan ceļā.
+Pārvaldi, uzglabā, aizsargā un kopīgo neierobežotu skaitu paroļu neierobežotā skaitā ierīču no jebkuras vietas! Bitwarden piedāvā atvērtā koda paroļu pārvaldības risinājumus ikvienam gan mājās, gan darbā, gan ceļā.
 
-Ģenerē spēcīgas, unikālas un nejaušas paroles, pamatojoties uz drošības prasībām, katrai bieži apmeklētai vietnei.
+Veido spēcīgas, neatkārtojamas un nejaušas paroles atbilstoši drošības prasībām ikkatrai bieži apmeklētai vietnei.
 
-Bitwarden Send ātri pārsūta šifrētu informāciju - failus un atklātu tekstu - tieši jebkuram.
+Bitwarden Send ātri pārsūta šifrētu informāciju - datnes un vienkāršu tekstu - ikvienam.
 
-Bitwarden piedāvā Teams un Enterprise plānus uzņēmumiem, lai tu varētu droši kopīgot paroles ar kolēģiem.
+Bitwarden piedāvā Teams un Enterprise plānus uzņēmumiem, lai Tu varētu droši kopīgot paroles ar darbabiedriem.
 
 Kāpēc izvēlēties Bitwarden:
 
-Pasaules klases šifrēšana
-Paroles tiek aizsargātas ar modernu end-to-end šifrēšanu (AES-256 bitu, sālītu šifrēšanu un PBKDF2 SHA-256), lai tavi dati paliktu droši un privāti.
+Pasaules mēroga šifrēšana
+Paroles tiek aizsargātas ar mūsdienīgu un nepārtrauktu šifrēšanu (AES-256 bitu, "sāls" jaucējalgoritms un PBKDF2 SHA-256), lai Tavi dati būtu droši un neatklāti.
 
-Iebūvēts paroļu ģenerators
-Ģenerē spēcīgas, unikālas un nejaušas paroles, pamatojoties uz drošības prasībām katrai bieži apmeklētai vietnei.
+Iebūvēts paroļu veidotājs
+Veido spēcīgas, neatkārtojamas un nejaušas paroles atbilstoši drošības prasībām ikkatrai bieži apmeklētai vietnei.
 
-Globālie tulkojumi
-Bitwarden tulkojumi ir pieejami 40 valodās, un to skaits turpina pieaugt, pateicoties mūsu globālajai kopienai.
+Vispasaules tulkojumi
+Bitwarden tulkojumi ir pieejami 40 valodās, un to skaits turpina pieaugt, pateicoties mūsu vispasaules kopienai.
 
-Starpplatformu lietojumprogrammas
-Nodrošini un kopīgo sensitīvus datus savā Bitwarden Seifā no jebkuras pārlūkprogrammas, mobilās ierīces vai darbvirsmas operētājsistēmas un daudz ko citu.
+Starpplatformu lietotnes
+Nodrošini un kopīgo sensitīvus datus savā Bitwarden glabātavā no jebkura pārlūka, mobilās ierīces vai darbvirsmas operētājsistēmas un daudz ko citu!
 </value>
   <comment>Max 4000 characters</comment>
   </data>
@@ -155,13 +155,13 @@ Nodrošini un kopīgo sensitīvus datus savā Bitwarden Seifā no jebkuras pārl
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Pārvaldi visus savus pierakstīšanās vienumus un paroles no drošas glabātavas</value>
+    <value>Pārvaldi visus savus kontus un paroles no droša seifa</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automātiski veido spēcīgas, sarežģītas un drošas paroles</value>
+    <value>Automātiski ģenerē stipras, sarežģītas un drošas paroles</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Aizsargā savu seifu ar Touch ID, PIN kodu vai galveno paroli</value>
+    <value>Aizsargā savu glabātavu ar Touch ID, PIN kodu vai galveno paroli</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
     <value>Automātiski aizpildi pierakstīšanās veidnes Safari, Chrome un simtos citu lietotņu</value>

@@ -122,7 +122,7 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden ir pierakstīšanās datu un paroļu pārvaldnieks, kas palīdz uzturēt Tavu drošību tiešsaistē.</value>
+    <value>Bitwarden ir pieteikšanās un paroļu pārvaldnieks, kas palīdz nodrošināt drošību tiešsaistē.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
@@ -130,27 +130,27 @@
 
 THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET UN CITI ATZINA PAR LABĀKO PAROĻU PĀRVALDNIEKU.
 
-Pārvaldi, uzglabā, aizsargā un kopīgo neierobežotu skaitu paroļu neierobežotā skaitā ierīču no jebkuras vietas. Bitwarden piedāvā atvērtā koda paroļu pārvaldības risinājumus ikvienam - gan mājās, gan darbā, gan ceļā.
+Pārvaldi, uzglabā, aizsargā un kopīgo neierobežotu skaitu paroļu neierobežotā skaitā ierīču no jebkuras vietas! Bitwarden piedāvā atvērtā koda paroļu pārvaldības risinājumus ikvienam gan mājās, gan darbā, gan ceļā.
 
-Ģenerē spēcīgas, unikālas un nejaušas paroles, pamatojoties uz drošības prasībām, katrai bieži apmeklētai vietnei.
+Veido spēcīgas, neatkārtojamas un nejaušas paroles atbilstoši drošības prasībām ikkatrai bieži apmeklētai vietnei.
 
-Bitwarden Send ātri pārsūta šifrētu informāciju - failus un atklātu tekstu - tieši jebkuram.
+Bitwarden Send ātri pārsūta šifrētu informāciju - datnes un vienkāršu tekstu - ikvienam.
 
-Bitwarden piedāvā Teams un Enterprise plānus uzņēmumiem, lai tu varētu droši kopīgot paroles ar kolēģiem.
+Bitwarden piedāvā Teams un Enterprise plānus uzņēmumiem, lai Tu varētu droši kopīgot paroles ar darbabiedriem.
 
 Kāpēc izvēlēties Bitwarden:
 
-Pasaules klases šifrēšana
-Paroles tiek aizsargātas ar modernu end-to-end šifrēšanu (AES-256 bitu, sālītu šifrēšanu un PBKDF2 SHA-256), lai tavi dati paliktu droši un privāti.
+Pasaules mēroga šifrēšana
+Paroles tiek aizsargātas ar mūsdienīgu un nepārtrauktu šifrēšanu (AES-256 bitu, "sāls" jaucējalgoritms un PBKDF2 SHA-256), lai Tavi dati būtu droši un neatklāti.
 
-Iebūvēts paroļu ģenerators
-Ģenerē spēcīgas, unikālas un nejaušas paroles, pamatojoties uz drošības prasībām katrai bieži apmeklētai vietnei.
+Iebūvēts paroļu veidotājs
+Veido spēcīgas, neatkārtojamas un nejaušas paroles atbilstoši drošības prasībām ikkatrai bieži apmeklētai vietnei.
 
-Globālie tulkojumi
-Bitwarden tulkojumi ir pieejami 40 valodās, un to skaits turpina pieaugt, pateicoties mūsu globālajai kopienai.
+Vispasaules tulkojumi
+Bitwarden tulkojumi ir pieejami 40 valodās, un to skaits turpina pieaugt, pateicoties mūsu vispasaules kopienai.
 
-Starpplatformu lietojumprogrammas
-Nodrošini un kopīgo sensitīvus datus savā Bitwarden Seifā no jebkuras pārlūkprogrammas, mobilās ierīces vai darbvirsmas operētājsistēmas un daudz ko citu.
+Starpplatformu lietotnes
+Nodrošini un kopīgo sensitīvus datus savā Bitwarden glabātavā no jebkura pārlūka, mobilās ierīces vai darbvirsmas operētājsistēmas un daudz ko citu!
 </value>
   <comment>Max 4000 characters</comment>
   </data>
