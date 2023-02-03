@@ -426,10 +426,10 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        private void LaunchHomePage(bool shouldCheckRememberEmail = true)
+        private void LaunchHomePage()
         {
             var appOptions = new AppOptions { IosExtension = true };
-            var homePage = new HomePage(appOptions, shouldCheckRememberEmail);
+            var homePage = new HomePage(appOptions);
             var app = new App.App(appOptions);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(homePage);
@@ -458,8 +458,8 @@ namespace Bit.iOS.Autofill
             ThemeManager.ApplyResourcesTo(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
-                vm.SubmitSuccessAction = () => DismissViewController(false, () => LaunchHomePage(shouldCheckRememberEmail: false));
-                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage(shouldCheckRememberEmail: false));
+                vm.SubmitSuccessAction = () => DismissViewController(false, () => LaunchHomePage());
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
             var navigationPage = new NavigationPage(environmentPage);
@@ -477,7 +477,7 @@ namespace Bit.iOS.Autofill
             if (registerPage.BindingContext is RegisterPageViewModel vm)
             {
                 vm.RegistrationSuccess = () => DismissViewController(false, () => LaunchLoginFlow(vm.Email));
-                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage(shouldCheckRememberEmail: false));
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
             var navigationPage = new NavigationPage(registerPage);
@@ -500,7 +500,7 @@ namespace Bit.iOS.Autofill
                 vm.StartSsoLoginAction = () => DismissViewController(false, () => LaunchLoginSsoFlow());
                 vm.LogInWithDeviceAction = () => DismissViewController(false, () => LaunchLoginWithDevice(email));
                 vm.LogInSuccessAction = () => DismissLockAndContinue();
-                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage(shouldCheckRememberEmail: false));
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
             var navigationPage = new NavigationPage(loginPage);
@@ -629,14 +629,7 @@ namespace Bit.iOS.Autofill
             switch (navTarget)
             {
                 case NavigationTarget.HomeLogin:
-                    if (navParams is HomeNavigationParams homeParams)
-                    {
-                        DismissViewController(false, () => LaunchHomePage(homeParams.ShouldCheckRememberEmail));
-                    }
-                    else
-                    {
-                        DismissViewController(false, () => LaunchHomePage());
-                    }
+                    DismissViewController(false, () => LaunchHomePage());
                     break;
                 case NavigationTarget.Login:
                     if (navParams is LoginNavigationParams loginParams)
