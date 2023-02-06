@@ -2317,7 +2317,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Bist du sicher, dass du die Bildschirmaufnahme aktivieren möchtest?</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
-    <value>Zugangsdaten angefordert</value>
+    <value>Anmeldung angefordert</value>
   </data>
   <data name="AreYouTryingToLogIn" xml:space="preserve">
     <value>Versuchst du dich anzumelden?</value>

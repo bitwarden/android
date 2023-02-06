@@ -1617,7 +1617,7 @@ Skenovanie prebehne automaticky.</value>
     <value>Zdieľané</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Toggle visibility</value>
+    <value>Prepnúť viditeľnosť</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>Platnosť prihlásenia vypršala.</value>

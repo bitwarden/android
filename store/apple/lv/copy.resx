@@ -155,10 +155,10 @@ Nodrošini un kopīgo sensitīvus datus savā Bitwarden glabātavā no jebkura p
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Pārvaldi visus savus kontus un paroles no droša seifa</value>
+    <value>Pārvaldiet visus savus pieteikumvārdus un paroles no drošas glabātuves</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automātiski ģenerē stipras, sarežģītas un drošas paroles</value>
+    <value>Automātiski ģenerējiet spēcīgas, nejaušas un drošas paroles</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
     <value>Aizsargā savu glabātavu ar Touch ID, PIN kodu vai galveno paroli</value>
