@@ -952,7 +952,7 @@
     <value>Ang maximum na laki ng file ay 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>You cannot use this feature until you update your encryption key.</value>
+    <value>Hindi mo maari gamitin ang tampok na ito hanggang hindi mo iupdate ang iyong encryption key.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Matuto nang higit pa</value>
@@ -1131,7 +1131,7 @@
     <value>Pamagat</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal code</value>
+    <value>Código ng Zip / Postal</value>
   </data>
   <data name="Address" xml:space="preserve">
     <value>Address</value>
@@ -1394,7 +1394,7 @@
     <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>Uri</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
     <value>Ilipat pababa</value>
@@ -2390,10 +2390,10 @@ piliin ang Magdagdag ng TOTP upang ligtas na maiimbak ang susi</value>
     <value>Uri ng username</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Plus addressed email</value>
+    <value>Plus na naka-address na email</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
-    <value>Catch-all email</value>
+    <value>Catch-all na email</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
     <value>Ipinasa ang alias ng email</value>
