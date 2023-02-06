@@ -708,7 +708,7 @@
     <value>Kaksivaiheinen kirjautuminen</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Kaksivaiheinen kirjautuminen tekee tilistäsi turvallisemman edellyttämällä salasanan lisäksi kirjautumisen lisätodennusta todennuslaitteen, ‑sovelluksen, tekstiviestin, puhelun tai sähköpostin avulla. Voit ottaa kaksivaiheisen kirjautumisen käyttöön bitwarden.com‑verkkoholvista. Haluatko avata sivuston nyt?</value>
+    <value>Kaksivaiheinen kirjautuminen parantaa tilisi suojausta vaatimalla kirjautumisen vahvistuksen salasanan lisäksi todennuslaitteen, ‑sovelluksen, tekstiviestin, puhelun tai sähköpostin avulla. Voit ottaa kaksivaiheisen kirjautumisen käyttöön bitwarden.com‑verkkoholvissa. Haluatko avata sen nyt?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Avaustapa: {0}</value>
@@ -2096,7 +2096,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Vaihda pääsalasana</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Organisaatiosi ylläpito on hiljattain vaihtanut pääsalasanasi. Käyttääksesi holvia, sinun on vaihdettava se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan.</value>
+    <value>Organisaatiosi ylläpito on hiljattain vaihtanut pääsalasanasi. Käyttääksesi holvia sinun on päivitettävä pääsalasanasi nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
     <value>Salasanaa vaihdetaan</value>
@@ -2361,7 +2361,7 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
     <value>Hyväksy kirjautumispyyntöjä</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Hyväksy muiden laitteiden kirjautumispyyntöjä tällä laitteelta.</value>
+    <value>Hyväksy muiden laitteiden kirjautumispyynnöt tältä laitteelta.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Salli ilmoitukset</value>
@@ -2500,7 +2500,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Kirjaudu pääsalasanalla</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Kirjaudu toisella laitteella</value>
+    <value>Laitteella kirjautuminen</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>Kirjautuminen aloitettu</value>

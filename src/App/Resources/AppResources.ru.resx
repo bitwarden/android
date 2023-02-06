@@ -1104,7 +1104,7 @@
     <value>Проф.</value>
   </data>
   <data name="Mx" xml:space="preserve">
-    <value>Mx</value>
+    <value>Микстер</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Ноябрь</value>
@@ -2499,7 +2499,7 @@
     <value>Войти с мастер-паролем</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Войти с другого устройства</value>
+    <value>Войти с помощью устройства</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>Вход инициирован</value>
@@ -2508,7 +2508,7 @@
     <value>На ваше устройство отправлено уведомление.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Убедитесь, что ваше хранилище разблокировано, а фраза отпечатка соответствует другому устройству.</value>
+    <value>Убедитесь, что ваше хранилище разблокировано и фраза отпечатка пальца совпадает на другом устройстве.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
     <value>Отправить уведомление повторно</value>
@@ -2523,19 +2523,19 @@
     <value>Этот запрос больше не действителен</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Pending login requests</value>
+    <value>Ожидающие запросы на авторизацию</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
-    <value>Decline all requests</value>
+    <value>Отклонить все запросы</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>Are you sure you want to decline all pending login requests?</value>
+    <value>Вы действительно хотите отклонить все ожидающие запросы на авторизацию?</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
-    <value>Requests declined</value>
+    <value>Запросы отклонены</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>No pending requests</value>  
+    <value>Нет ожидающих запросов</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Для использования сканера необходимо предоставить разрешение на доступ к камере</value>

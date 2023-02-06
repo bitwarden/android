@@ -155,7 +155,7 @@ Nodrošini un kopīgo sensitīvus datus savā Bitwarden glabātavā no jebkura p
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>Drošs bezmaksas paroļu pārvaldnieks visām Tavām ierīcēm</value>
+    <value>Drošs bezmaksas paroļu pārvaldnieks visām jūsu ierīcēm</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Pārvaldi visus savus pierakstīšanās vienumus un paroles no drošas glabātavas</value>
@@ -167,14 +167,14 @@ Nodrošini un kopīgo sensitīvus datus savā Bitwarden glabātavā no jebkura p
     <value>Aizsargā savu glabātavu ar pirkstu nospiedumu, PIN kodu vai galveno paroli</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Pierakstīšanās veidņu ātra automātiskā aizpilde tīmekļa pārlūkā un citās lietotnēs</value>
+    <value>Ātri automātiski aizpildiet pieteikšanās datus no tīmekļa pārlūkprogrammas un citām lietotnēm</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sinhronizē un piekļūsti savai glabātavai vairākās ierīcēs:
+    <value>Sinhronizējiet un piekļūstiet glabātuvei no vairākām ierīcēm
 
-- tālrunī
-- planšetē
-- darbvirsmā
-- tīmeklī</value>
+- Tālrunis
+- Planšetdators
+- Darbvirsma
+- Tīmeklis</value>
   </data>
 </root>

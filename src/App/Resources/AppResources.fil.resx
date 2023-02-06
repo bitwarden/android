@@ -556,7 +556,7 @@
     <value>Vault timeout</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault timeout action</value>
+    <value>Aksyon sa Vault timeout</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
     <value>Sigurado ka bang gusto mong gamitin ang setting na ito? Pagsasara ay magtatanggal ng lahat ng access sa iyong vault at nangangailangan ng online authentication pagkatapos ng timeout period?</value>
@@ -952,7 +952,7 @@
     <value>Ang maximum na laki ng file ay 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>Hindi mo magagamit ang tampok na ito hangga't hindi mo ina update ang iyong key sa pag encrypt. - Hindi mo maari gamitin ang tampok na ito hanggang hindi mo iupdate ang iyong encryption key.</value>
+    <value>You cannot use this feature until you update your encryption key.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Matuto nang higit pa</value>
@@ -974,7 +974,7 @@
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Identity server URL</value>
+    <value>Identity server URL - URL ng Server ng Identity</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
@@ -987,7 +987,7 @@
     <value>URL ng Server</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Web vault server URL</value>
+    <value>Web vault server URL - URL ng Server ng Web vault</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>I-tap ang notification na ito para tingnan ang mga item mula sa iyong vault.</value>
@@ -1008,16 +1008,16 @@
     <value>Kodigo ng Seguridad</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>Karta</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>Pagkakakilanlan</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
     <value>Mag-login</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure na tala - Segurong Nota</value>
+    <value>Secure na tala</value>
   </data>
   <data name="Address1" xml:space="preserve">
     <value>Address 1</value>
@@ -1083,7 +1083,7 @@
     <value>Buong Pangalan</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License number</value>
+    <value>Numero ng Lisensya</value>
   </data>
   <data name="March" xml:space="preserve">
     <value>Marso</value>
@@ -1122,7 +1122,7 @@
     <value>Setyembre</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security number</value>
+    <value>Numero ng Seguridad Sosyal</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
     <value>Estado/Probinsya</value>
@@ -1146,7 +1146,7 @@
     <value>Ipakita ang isang kilalang larawan sa tabi ng bawat login.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons server URL</value>
+    <value>Icons server URL - URL ng Server ng Mga Icon</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
     <value>Awtomatikong punan gamit ang Bitwarden</value>
@@ -1245,7 +1245,7 @@
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regular expression</value>
+    <value>Regular Expression - Regular na Pagpapahayag</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
@@ -1255,7 +1255,7 @@
     <value>URI pagtuklas ng tugma</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Match detection</value>
+    <value>Match Detection - Pagtuklas ng Pares</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
@@ -1281,11 +1281,11 @@
     <value>Maaaring makatulong ang serbisyo ng accessibility na gamitin kapag hindi sinusuportahan ng mga app ang karaniwang serbisyo ng auto fill.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Password updated</value>
+    <value>Na-update ang password</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Updated</value>
+    <value>Na-update</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
@@ -1369,7 +1369,7 @@
     <value>Halaga</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Password history</value>
+    <value>Kasaysayan ng Password</value>
   </data>
   <data name="Types" xml:space="preserve">
     <value>Mga uri</value>
@@ -1735,11 +1735,11 @@ mga salita</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>Trash</value>
+    <value>Basurahan</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
-    <value>Maghanap ng basura - Maghanap ng basurahan</value>
+    <value>Maghanap ng basurahan</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
@@ -2092,13 +2092,13 @@ mga salita</value>
     <value>Nabigo ang captcha. Try mo na lang ulit.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Updated master password</value>
+    <value>I-update ang master password</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Update master password</value>
+    <value>I-update ang master password</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>Ang iyong master password ay kamakailan lamang na binago ng isang administrator sa iyong organisasyon. Upang makapunta sa vault, kailangan mong i-update ito ngayon. Ang pagpapatuloy ay maglilipat ka sa iyong kasalukuyang sesyon, na nangangailangan sa iyo na mag-log in muli. Ang mga aktibong sesyon sa iba pang mga device ay maaaring magpatuloy na aktibo hanggang sa isang oras.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
     <value>Nag-update ng password</value>
@@ -2387,7 +2387,7 @@ piliin ang Magdagdag ng TOTP upang ligtas na maiimbak ang susi</value>
     <value>Ano ang nais mong bumuo?</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
-    <value>Username type</value>
+    <value>Uri ng username</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
     <value>Plus addressed email</value>
@@ -2440,7 +2440,7 @@ piliin ang Magdagdag ng TOTP upang ligtas na maiimbak ang susi</value>
     <value>Sigurado ka bang gusto mong palitan ang kasalukuyang username?</value>
   </data>
   <data name="GenerateUsername" xml:space="preserve">
-    <value>Generate username</value>
+    <value>Lumikha ng username</value>
   </data>
   <data name="EmailType" xml:space="preserve">
     <value>Uri ng Email</value>

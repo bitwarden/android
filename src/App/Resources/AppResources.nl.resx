@@ -2523,19 +2523,19 @@ Wilt u naar dit account wisselen?</value>
     <value>Dit verzoek is niet langer geldig</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Pending login requests</value>
+    <value>Inlogverzoeken in behandeling</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
-    <value>Decline all requests</value>
+    <value>Alle aanvragen afwijzen</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>Are you sure you want to decline all pending login requests?</value>
+    <value>Weet je zeker dat je alle in behandeling zijnde inlogverzoeken wilt afwijzen?</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
-    <value>Requests declined</value>
+    <value>Afgewezen aanvragen</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>No pending requests</value>  
+    <value>Geen verzoeken in behandeling</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Camera-toestemming inschakelen om de scanner te gebruiken</value>
@@ -2562,7 +2562,7 @@ Wilt u naar dit account wisselen?</value>
     <value>Sterk</value>
   </data>
   <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
-    <value>Controleer bekende datalekken voor dit wachtwoord</value>
+    <value>Bekende datalekken voor dit wachtwoord controleren</value>
   </data>
   <data name="ExposedMasterPassword" xml:space="preserve">
     <value>Gelekt hoofdwachtwoord</value>
