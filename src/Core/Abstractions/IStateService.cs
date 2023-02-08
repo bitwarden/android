@@ -31,6 +31,7 @@ namespace Bit.Core.Abstractions
         Task<bool> GetBiometricLockedAsync(string userId = null);
         Task SetBiometricLockedAsync(bool value, string userId = null);
         Task<bool> CanAccessPremiumAsync(string userId = null);
+        Task SetPersonalPremiumAsync(bool value, string userId = null);
         Task<string> GetProtectedPinAsync(string userId = null);
         Task SetProtectedPinAsync(string value, string userId = null);
         Task<string> GetPinProtectedAsync(string userId = null);
