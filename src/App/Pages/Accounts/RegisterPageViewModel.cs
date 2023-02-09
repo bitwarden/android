@@ -48,6 +48,7 @@ namespace Bit.App.Pages
             SubmitCommand = new Command(async () => await SubmitAsync());
             ShowTerms = !_platformUtilsService.IsSelfHost();
             PasswordStrengthViewModel = new PasswordStrengthViewModel(this);
+            CheckExposedMasterPassword = true;
         }
 
         public ICommand PoliciesClickCommand => new Command<string>((url) =>
