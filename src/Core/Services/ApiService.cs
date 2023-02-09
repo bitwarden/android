@@ -566,7 +566,7 @@ namespace Bit.Core.Services
         public Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier)
         {
             var path = $"/devices/knowndevice?email={WebUtility.UrlEncode(email)}&identifier={deviceIdentifier}";
-            return SendAsync<object, bool>(HttpMethod.Get, path, null, false, true);
+            return SendAsync<object, bool>(HttpMethod.Post, path, null, false, true);
         }
 
         #endregion
