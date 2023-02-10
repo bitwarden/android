@@ -10,6 +10,7 @@ using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
+using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -568,7 +569,7 @@ namespace Bit.Core.Services
             return SendAsync<object, bool>(HttpMethod.Get, "/devices/knowndevice", null, false, true, (message) =>
             {
                 message.Headers.Add("X-Device-Identifier", deviceIdentifier);
-                message.Headers.Add("X-Request-Email", email);
+                message.Headers.Add("X-Request-Email", CoreHelpers.Base64UrlEncode(Encoding.UTF8.GetBytes(email)));
             });
         }
 
