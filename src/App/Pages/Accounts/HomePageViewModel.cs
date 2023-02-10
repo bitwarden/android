@@ -125,16 +125,16 @@ namespace Bit.App.Pages
                         AppResources.Ok);
                     return;
                 }
+
                 await _stateService.SetRememberedEmailAsync(RememberEmail ? Email : null);
                 var userId = await _stateService.GetUserIdAsync(Email);
-                if (!string.IsNullOrWhiteSpace(userId))
+
+                if (!string.IsNullOrWhiteSpace(userId) &&
+                    (await _stateService.GetEnvironmentUrlsAsync(userId))?.Base == _environmentService.BaseUrl &&
+                    await _stateService.IsAuthenticatedAsync(userId))
                 {
-                    var userEnvUrls = await _stateService.GetEnvironmentUrlsAsync(userId);
-                    if (userEnvUrls?.Base == _environmentService.BaseUrl)
-                    {
-                        await _accountManager.PromptToSwitchToExistingAccountAsync(userId);
-                        return;
-                    }
+                    await _accountManager.PromptToSwitchToExistingAccountAsync(userId);
+                    return;
                 }
                 StartLoginAction();
             }
