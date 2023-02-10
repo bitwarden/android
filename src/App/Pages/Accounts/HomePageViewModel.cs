@@ -134,11 +134,9 @@ namespace Bit.App.Pages
                     await _stateService.IsAuthenticatedAsync(userId))
                 {
                     await _accountManager.PromptToSwitchToExistingAccountAsync(userId);
+                    return;
                 }
-                else
-                {
-                    StartLoginAction();
-                }
+                StartLoginAction();
             }
             catch (Exception ex)
             {
