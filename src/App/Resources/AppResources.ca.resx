@@ -2499,7 +2499,7 @@ Voleu canviar a aquest compte?</value>
     <value>Inicia sessió amb la contrasenya mestra</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Inicia sessió amb un altre dispositiu</value>
+    <value>Inici de sessió amb un altre dispositiu</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>S'ha iniciat la sessió</value>

@@ -1104,7 +1104,7 @@ Skanning skjer automatisk.</value>
     <value>Frøken</value>
   </data>
   <data name="Mx" xml:space="preserve">
-    <value>Mx</value>
+    <value>Nøytral</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
@@ -2524,19 +2524,19 @@ Vil du bytte til denne kontoen?</value>
     <value>Invitasjonen er ikke lenger gyldig</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Pending login requests</value>
+    <value>Avventende innloggingsforespørsler</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
-    <value>Decline all requests</value>
+    <value>Avvis alle forespørsler</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>Are you sure you want to decline all pending login requests?</value>
+    <value>Er du sikker på at du vil avvise alle avventende innloggingsforespørsler?</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
-    <value>Requests declined</value>
+    <value>Forespørsler avvist</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>No pending requests</value>  
+    <value>Ingen ventende forespørsler</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Aktiver kameratillatelse for å bruke skanner</value>
