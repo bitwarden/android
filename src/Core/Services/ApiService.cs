@@ -183,13 +183,13 @@ namespace Bit.Core.Services
 
         public Task PostAccountRequestOTP()
         {
-            return SendAsync<object, object>(HttpMethod.Post, "/accounts/request-otp", null, true, false, false);
+            return SendAsync<object, object>(HttpMethod.Post, "/accounts/request-otp", null, true, false, null, false);
         }
 
         public Task PostAccountVerifyOTPAsync(VerifyOTPRequest request)
         {
             return SendAsync<VerifyOTPRequest, object>(HttpMethod.Post, "/accounts/verify-otp", request,
-                true, false, false);
+                true, false, null, false);
         }
 
         public Task PutUpdateTempPasswordAsync(UpdateTempPasswordRequest request)
@@ -565,8 +565,11 @@ namespace Bit.Core.Services
 
         public Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier)
         {
-            var path = $"/devices/knowndevice?email={WebUtility.UrlEncode(email)}&identifier={deviceIdentifier}";
-            return SendAsync<object, bool>(HttpMethod.Post, path, null, false, true);
+            return SendAsync<object, bool>(HttpMethod.Get, "/devices/knowndevice", null, false, true, (message) =>
+            {
+                message.Headers.Add("X-Device-Identifier", deviceIdentifier);
+                message.Headers.Add("X-Request-Email", email);
+            });
         }
 
         #endregion
@@ -620,7 +623,7 @@ namespace Bit.Core.Services
         public Task<TResponse> SendAsync<TResponse>(HttpMethod method, string path, bool authed) =>
             SendAsync<object, TResponse>(method, path, null, authed, true);
         public async Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path, TRequest body,
-            bool authed, bool hasResponse, bool logoutOnUnauthorized = true)
+            bool authed, bool hasResponse, Action<HttpRequestMessage> alterRequest = null, bool logoutOnUnauthorized = true)
         {
             using (var requestMessage = new HttpRequestMessage())
             {
@@ -667,6 +670,7 @@ namespace Bit.Core.Services
                 {
                     requestMessage.Headers.Add("Accept", "application/json");
                 }
+                alterRequest?.Invoke(requestMessage);
 
                 HttpResponseMessage response;
                 try
