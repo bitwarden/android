@@ -102,7 +102,7 @@ namespace Bit.Droid.Autofill
 
                     if (!_usernameFields.Any())
                     {
-                        _usernameFields = Fields.Where(f => FieldHasUsernameTerms(f)).ToList();
+                        _usernameFields = Fields.Where(f => FieldIsUsername(f)).ToList();
                     }
                 }
                 return _usernameFields;
@@ -327,12 +327,17 @@ namespace Bit.Droid.Autofill
             }
 
             return inputTypePassword && !ValueContainsAnyTerms(f.IdEntry, _ignoreSearchTerms) &&
-                !ValueContainsAnyTerms(f.Hint, _ignoreSearchTerms) && !FieldHasUsernameTerms(f);
+                !ValueContainsAnyTerms(f.Hint, _ignoreSearchTerms) && !FieldIsUsername(f);
         }
 
         private bool FieldHasPasswordTerms(Field f)
         {
             return ValueContainsAnyTerms(f.IdEntry, _passwordTerms) || ValueContainsAnyTerms(f.Hint, _passwordTerms);
+        }
+        
+        private bool FieldIsUsername(Field f)
+        {
+            return f.InputType.HasFlag(InputTypes.TextVariationWebEmailAddress) || FieldHasUsernameTerms(f);
         }
 
         private bool FieldHasUsernameTerms(Field f)
