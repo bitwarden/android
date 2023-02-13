@@ -6,7 +6,6 @@ using Bit.Core.Models;
 using Bit.Core.Models.View;
 using MessagePack;
 using MessagePack.Resolvers;
-using Newtonsoft.Json;
 
 namespace Bit.App.Services
 {
@@ -127,25 +126,16 @@ namespace Bit.App.Services
 
         protected async Task SendDataToWatchAsync(WatchDTO watchDto)
         {
-            var serializedData = JsonConvert.SerializeObject(watchDto);
-
             var options = MessagePackSerializerOptions.Standard
-                                //.WithCompression(MessagePackCompression.Lz4BlockArray)
                                 .WithResolver(CompositeResolver.Create(
                                     GeneratedResolver.Instance,
                                     StandardResolver.Instance
                                 ));
 
-            var serializedBytes = MessagePackSerializer.Serialize(watchDto, options);
-            var data = MessagePackSerializer.ConvertToJson(serializedBytes);
-
-            var jsonCount = serializedData.Length;
-            var msgPackC = data.Length;
-
-            await SendDataToWatchAsync(data);
+            await SendDataToWatchAsync(MessagePackSerializer.Serialize(watchDto, options));
         }
 
-        protected abstract Task SendDataToWatchAsync(string serializedData);
+        protected abstract Task SendDataToWatchAsync(byte[] rawData);
 
         protected abstract void ConnectToWatch();
     }

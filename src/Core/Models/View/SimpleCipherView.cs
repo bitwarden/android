@@ -27,14 +27,14 @@ namespace Bit.Core.Models.View
                 };
             }
         }
-            
+
         [Key(0)]
         public string Id { get; set; }
         [Key(1)]
         public string Name { get; set; }
+        [IgnoreMember]
+        public CipherType Type { get; set; } // ignoring on serialization for now, given that all are going to be of type Login
         [Key(2)]
-        public CipherType Type { get; set; }
-        [Key(3)]
         public SimpleLoginView Login { get; set; }
     }
 

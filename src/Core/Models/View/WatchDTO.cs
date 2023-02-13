@@ -36,8 +36,10 @@ namespace Bit.Core.Models
         {
             [Key(0)]
             public string Id { get; set; }
+
             [Key(1)]
             public string Email { get; set; }
+
             [Key(2)]
             public string Name { get; set; }
         }
@@ -47,6 +49,7 @@ namespace Bit.Core.Models
         {
             [Key(0)]
             public string Base { get; set; }
+
             [Key(1)]
             public string Icons { get; set; }
         }

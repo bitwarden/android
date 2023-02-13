@@ -45,11 +45,11 @@
 	<queries>
 		<intent>
 			<action android:name="android.intent.action.VIEW" />
-			<data android:scheme="http"/>
+			<data android:scheme="http" />
 		</intent>
 		<intent>
 			<action android:name="android.intent.action.VIEW" />
-			<data android:scheme="https"/>
+			<data android:scheme="https" />
 		</intent>
 	</queries>
 </manifest>

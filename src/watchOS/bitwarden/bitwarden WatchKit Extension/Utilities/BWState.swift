@@ -9,6 +9,7 @@ enum BWState : Int, Codable {
     case syncing = 5
     //    case needUnlock = 6
     case needDeviceOwnerAuth = 7
+    case debug = 255
     
     var isDestructive: Bool {
         return self == .needSetup || self == .needLogin || self == .needPremium || self == .need2FAItem
