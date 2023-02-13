@@ -73,8 +73,8 @@ namespace Bit.Core.Abstractions
         Task SetInvalidUnlockAttemptsAsync(int? value, string userId = null);
         Task<string> GetLastBuildAsync();
         Task SetLastBuildAsync(string value);
-        Task<bool?> GetDisableFaviconAsync(string userId = null);
-        Task SetDisableFaviconAsync(bool? value, string userId = null);
+        Task<bool?> GetDisableFaviconAsync();
+        Task SetDisableFaviconAsync(bool? value);
         Task<bool?> GetDisableAutoTotpCopyAsync(string userId = null);
         Task SetDisableAutoTotpCopyAsync(bool? value, string userId = null);
         Task<bool?> GetInlineAutofillEnabledAsync(string userId = null);
@@ -109,10 +109,10 @@ namespace Bit.Core.Abstractions
         Task SetRememberedEmailAsync(string value);
         Task<string> GetRememberedOrgIdentifierAsync();
         Task SetRememberedOrgIdentifierAsync(string value);
-        Task<string> GetThemeAsync(string userId = null);
-        Task SetThemeAsync(string value, string userId = null);
-        Task<string> GetAutoDarkThemeAsync(string userId = null);
-        Task SetAutoDarkThemeAsync(string value, string userId = null);
+        Task<string> GetThemeAsync();
+        Task SetThemeAsync(string value);
+        Task<string> GetAutoDarkThemeAsync();
+        Task SetAutoDarkThemeAsync(string value);
         Task<bool?> GetAddSitePromptShownAsync(string userId = null);
         Task SetAddSitePromptShownAsync(bool? value, string userId = null);
         Task<bool?> GetPushInitialPromptShownAsync();
