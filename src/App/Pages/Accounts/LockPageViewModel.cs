@@ -228,8 +228,7 @@ namespace Bit.App.Pages
             }
 
             ShowPassword = false;
-            var kdf = await _stateService.GetKdfTypeAsync();
-            var kdfIterations = await _stateService.GetKdfIterationsAsync();
+            var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
 
             if (PinLock)
             {
@@ -239,7 +238,7 @@ namespace Bit.App.Pages
                     if (_isPinProtected)
                     {
                         var key = await _cryptoService.MakeKeyFromPinAsync(Pin, _email,
-                            kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000),
+                            kdfConfig,
                             await _stateService.GetPinProtectedKeyAsync());
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
                         var protectedPin = await _stateService.GetProtectedPinAsync();
@@ -254,8 +253,7 @@ namespace Bit.App.Pages
                     }
                     else
                     {
-                        var key = await _cryptoService.MakeKeyFromPinAsync(Pin, _email,
-                            kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
+                        var key = await _cryptoService.MakeKeyFromPinAsync(Pin, _email, kdfConfig);
                         failed = false;
                         Pin = string.Empty;
                         await AppHelpers.ResetInvalidUnlockAttemptsAsync();
@@ -280,7 +278,7 @@ namespace Bit.App.Pages
             }
             else
             {
-                var key = await _cryptoService.MakeKeyAsync(MasterPassword, _email, kdf, kdfIterations);
+                var key = await _cryptoService.MakeKeyAsync(MasterPassword, _email, kdfConfig);
                 var storedKeyHash = await _cryptoService.GetKeyHashAsync();
                 var passwordValid = false;
 
@@ -314,8 +312,7 @@ namespace Bit.App.Pages
                         var protectedPin = await _stateService.GetProtectedPinAsync();
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
                         var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
-                        var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, _email,
-                            kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
+                        var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, _email, kdfConfig);
                         await _stateService.SetPinProtectedKeyAsync(await _cryptoService.EncryptAsync(key.Key, pinKey));
                     }
                     MasterPassword = string.Empty;

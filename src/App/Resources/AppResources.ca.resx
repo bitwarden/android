@@ -1103,6 +1103,9 @@ L'escaneig es farà automàticament.</value>
   <data name="Ms" xml:space="preserve">
     <value>Srta.</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>Novembre</value>
   </data>
@@ -2419,6 +2422,14 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token d'accés a l'API</value>
   </data>
@@ -2488,7 +2499,7 @@ Voleu canviar a aquest compte?</value>
     <value>Inicia sessió amb la contrasenya mestra</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Inicia sessió amb un altre dispositiu</value>
+    <value>Inici de sessió amb un altre dispositiu</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>S'ha iniciat la sessió</value>
@@ -2511,7 +2522,58 @@ Voleu canviar a aquest compte?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Aquesta sol·licitud ja no és vàlida</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Sol·licituds d'inici de sessió pendents</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Rebutja totes les sol·licituds</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Esteu segur que voleu rebutjar totes les sol·licituds d'inici de sessió pendents?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Sol·licituds rebutjades</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Cap sol·licitud pendent</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Habilita el permís de la càmera per utilitzar l'escàner</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Important</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>La vostra contrasenya mestra no es pot recuperar si l'oblideu! {0} caràcters com a mínim.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Contrasenya mestra poc segura</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>S'ha identificat una contrasenya feble. Utilitzeu una contrasenya segura per protegir el vostre compte. Esteu segur que voleu utilitzar una contrasenya feble?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Poc segura</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Bona</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Forta</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Comproveu les infraccions de dades conegudes per a aquesta contrasenya</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Contrasenya mestra exposada</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>S'ha trobat la contrasenya en una filtració de dades. Utilitzeu una contrasenya única per protegir el vostre compte. Esteu segur que voleu utilitzar una contrasenya exposada?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Contrasenya mestra exposada i poc segura</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Contrasenya feble identificada i trobada en una filtració de dades. Utilitzeu una contrasenya única i segura per protegir el vostre compte. Esteu segur que voleu utilitzar aquesta contrasenya?</value>
   </data>
 </root>

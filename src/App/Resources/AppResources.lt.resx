@@ -1103,6 +1103,9 @@ Scanning will happen automatically.</value>
   <data name="Ms" xml:space="preserve">
     <value>Panelė</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>Lapkritis</value>
   </data>
@@ -1155,7 +1158,7 @@ Scanning will happen automatically.</value>
     <value>Go to my vault</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>Rinkinys</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>There are no items in this collection.</value>
@@ -1198,31 +1201,31 @@ Scanning will happen automatically.</value>
     <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Custom field name</value>
+    <value>Pasirinktinio lauko pavadinimas</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
-    <value>Boolean</value>
+    <value>Dvejetainiai veiksmai</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>Paslėpta</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Linked</value>
+    <value>Susieta</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>Tekstas</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>New custom field</value>
+    <value>Naujas pasirinktis laukelis</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
     <value>What type of custom field do you want to add?</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Pašalinti</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>New URI</value>
+    <value>Naujas URI</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
     <value>URI {0}</value>
@@ -1232,21 +1235,21 @@ Scanning will happen automatically.</value>
     <value>Base domain</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Numatyta</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>Exact</value>
+    <value>Tikslus</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Host</value>
+    <value>Serveris</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regular expression</value>
+    <value>Reguliari išraiška</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>Starts with</value>
+    <value>Prasideda su</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
     <value>URI match detection</value>
@@ -1259,10 +1262,10 @@ Scanning will happen automatically.</value>
     <value>Yes, and save</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Auto-fill and save</value>
+    <value>Automatiškai užpildyti ir išsaugoti</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>Organization</value>
+    <value>Organizacija</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
@@ -1340,14 +1343,14 @@ Scanning will happen automatically.</value>
     <value>Saugūs įrašai</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>All items</value>
+    <value>Visi elementai</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>URIs</value>
+    <value>URI - "nuoroda"</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>Checking password...</value>
+    <value>Tikrinamas slaptažodis...</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
@@ -2420,6 +2423,14 @@ select Add TOTP to store the key safely</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API access token</value>
   </data>
@@ -2489,7 +2500,7 @@ Do you want to switch to this account?</value>
     <value>Log in with master password</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Log In with another device</value>
+    <value>Log in with device</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>Log in initiated</value>
@@ -2512,7 +2523,58 @@ Do you want to switch to this account?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>This request is no longer valid</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Pending login requests</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Decline all requests</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Are you sure you want to decline all pending login requests?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Requests declined</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>No pending requests</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Enable camera permission to use the scanner</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Important</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Your master password cannot be recovered if you forget it! {0} characters minimum.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Weak Master Password</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Weak password identified. Use a strong password to protect your account. Are you sure you want to use a weak password?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Weak</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Good</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Strong</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Check known data breaches for this password</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Exposed Master Password</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Weak and Exposed Master Password</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
   </data>
 </root>

@@ -182,18 +182,18 @@
     <value>Éditer le dossier</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>E-mail</value>
+    <value>Courriel</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>Adresse e-mail</value>
+    <value>Adresse électronique</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
     <value>Nous contacter</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Contactez-nous directement pour obtenir de l'aide ou pour nous faire part d'un commentaire.</value>
+    <value>Envoyez-nous un courriel directement pour obtenir de l'aide ou laisser un commentaire.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
     <value>Saisissez votre code PIN.</value>
@@ -265,7 +265,7 @@
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Nom d'utilisateur</value>
+    <value>Identifiant</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
@@ -419,10 +419,10 @@
     <value>Extension de l'application</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Utiliser le service d'accessibilité de Bitwarden pour remplir automatiquement vos identifiants sur les applis et le web.</value>
+    <value>Utilisez le service d'accessibilité Bitwarden pour saisir automatiquement vos identifiants sur les applications et le web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Service de remplissage automatique</value>
+    <value>Service de saisie automatique</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Éviter les caractères ambigus</value>
@@ -434,19 +434,19 @@
     <value>Le meilleur moyen d'ajouter de nouveaux sites à votre coffre est d'utiliser l'extension de l'application Bitwarden. Parcourez le menu "Paramètres" pour en apprendre davantage.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Utilisez Bitwarden dans Safari et d'autres applications pour le remplissage automatique de vos identifiants.</value>
+    <value>Utilisez Bitwarden dans Safari et d'autres applications pour saisir automatiquement vos identifiants.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Service de remplissage automatique Bitwarden</value>
+    <value>Service de saisie automatique Bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Utilisez le service d'accessibilité de Bitwarden pour remplir automatiquement vos identifiants.</value>
+    <value>Utilisez le service d'accessibilité Bitwarden pour saisir automatiquement vos identifiants.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Changer d'e-mail</value>
+    <value>Changer le courriel</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>Vous pouvez changer votre adresse e-mail depuis le coffre web sur bitwarden.com. Voulez-vous visiter le site web maintenant ?</value>
+    <value>Vous pouvez changer votre adresse électronique sur le coffre web de bitwarden.com. Voulez-vous visiter le site web maintenant ?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Changer le mot de passe principal</value>
@@ -556,7 +556,7 @@
     <value>Délai d'expiration du coffre</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Après délai d'expiration du coffre</value>
+    <value>Action après délai d'expiration du coffre</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
     <value>La déconnexion supprimera tout accès à votre coffre et nécessitera une authentification en ligne après la période d'expiration. Êtes-vous sûr de vouloir utiliser ce paramètre ?</value>
@@ -587,11 +587,11 @@
     <value>Le mot de passe principal doit comporter au moins 8 caractères.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Min. de chiffres</value>
+    <value>Chiffres minimum</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Min. de caractères spéciaux</value>
+    <value>Caractères spéciaux minimum</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -604,19 +604,19 @@
     <value>Jamais</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Nouvel élément créé.</value>
+    <value>Élément ajouté</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>Aucun favori dans votre coffre.</value>
+    <value>Il n'y a aucun favori dans votre coffre.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>Il n’y a aucun élément dans votre coffre.</value>
+    <value>Il n'y a aucun élément dans votre coffre.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Il n’y a aucun élément dans votre coffre pour ce site web/app. Appuyer pour en ajouter un.</value>
+    <value>Il n'y a aucun élément dans votre coffre pour ce site web/app. Appuyez pour en ajouter un.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>Cet identifiant n'a aucun nom d'utilisateur ou mot de passe associé.</value>
+    <value>Cet identifiant n'a pas de nom d'utilisateur ou de mot de passe configuré.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Ok, compris !</value>
@@ -641,7 +641,7 @@
     <value>Indice du mot de passe</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>Nous vous avons envoyé un e-mail avec l'indice de votre mot de passe.</value>
+    <value>Nous vous avons envoyé un courriel avec votre indice de mot de passe principal.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir écraser le mot de passe existant ?</value>
@@ -663,7 +663,7 @@
     <value>Ressaisir le mot de passe principal</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Recherche dans le coffre</value>
+    <value>Rechercher dans le coffre</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Sécurité</value>
@@ -714,7 +714,7 @@
     <value>Déverrouiller avec {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>Déverrouiller avec un code PIN</value>
+    <value>Déverrouiller avec code PIN</value>
   </data>
   <data name="Validating" xml:space="preserve">
     <value>Validation</value>
@@ -750,14 +750,14 @@
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>Il n’y a aucun élément dans votre coffre pour {0}.</value>
+    <value>Il n'y a aucun élément dans votre coffre pour {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>Lorsque vous sélectionnez un champ de saisie et que vous voyez une proposition de remplissage automatique de Bitwarden, vous pouvez appuyer dessus pour lancer le service de remplissage automatique.</value>
+    <value>Lorsque vous sélectionnez un champ de saisie et que vous voyez une superposition de saisie automatique Bitwarden, vous pouvez le toucher pour lancer le service de saisie automatique.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Touchez cette notification pour remplir automatiquement vos informations de connexion à partir de votre coffre.</value>
+    <value>Touchez cette notification pour saisir automatiquement un élément depuis votre coffre.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Ouvrir les paramètres d'accessibilité</value>
@@ -784,16 +784,16 @@
     <value>État</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Le meilleur moyen d'ajouter de nouveaux sites à votre coffre est d'utiliser le service de remplissage automatique de Bitwarden. Parcourez le menu "Paramètres" pour en apprendre davantage.</value>
+    <value>Le moyen le plus simple d'ajouter de nouveaux identifiants à votre coffre est d'utiliser le service de saisie automatique Bitwarden. Pour en savoir davantage sur l'utilisation du service de saisie automatique Bitwarden, naviguez jusqu'à l'écran "Paramètres".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Remplissage automatique</value>
+    <value>Saisir automatiquement</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Voulez-vous remplir automatiquement ou afficher cet élément ?</value>
+    <value>Voulez-vous saisir automatiquement ou afficher cet élément ?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir remplir automatiquement cet élément ? Il ne correspond pas complètement à « {0} ».</value>
+    <value>Êtes-vous sûr de vouloir saisir automatiquement cet élément ? Ce n'est pas une correspondance complète pour "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>Éléments correspondants</value>
@@ -805,7 +805,7 @@
     <value>Rechercher</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>Vous recherchez un élément pour remplir automatiquement « {0} ».</value>
+    <value>Vous recherchez un élément de saisie automatique pour "{0}".</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
     <value>En savoir plus sur les organisations</value>
@@ -823,7 +823,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Saisissez le code de vérification à 6 chiffres qui vous a été envoyé par e-mail à {0}.</value>
+    <value>Saisissez le code de vérification à 6 chiffres qui a été envoyé par courriel à {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
@@ -842,7 +842,7 @@
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Envoyer à nouveau l'e-mail du code de vérification</value>
+    <value>Envoyer à nouveau le courriel de code de vérification</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
@@ -852,11 +852,11 @@
     <value>Utiliser une autre méthode d'authentification à deux facteurs</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Impossible d'envoyer l'e-mail de vérification. Essayez à nouveau.</value>
+    <value>Impossible d'envoyer le courriel de vérification. Essayez à nouveau.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>L'e-mail de vérification a été envoyé.</value>
+    <value>Courriel de vérification envoyé</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -916,7 +916,7 @@ La numérisation se fera automatiquement.</value>
     <value>Copier le TOTP</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>Si un identifiant a une clé d'authentification, copier le code de vérification TOTP dans votre presse-papier quand vous remplissez automatiquement l'identifiant.</value>
+    <value>Si un identifiant possède une clé d'authentification, copiez le code de vérification TOTP dans votre presse-papiers lorsque vous saisissez automatiquement l'identifiant.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>Copier le code TOTP automatiquement</value>
@@ -940,7 +940,7 @@ La numérisation se fera automatiquement.</value>
     <value>Aucun fichier choisi</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>Il n'y a pas de pièces jointes.</value>
+    <value>Il n'y a aucune pièce jointe.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
     <value>Source du fichier</value>
@@ -990,7 +990,7 @@ La numérisation se fera automatiquement.</value>
     <value>URL du serveur du coffre web</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Touchez cette notification pour voir les éléments de votre coffre.</value>
+    <value>Appuyez sur cette notification pour afficher les éléments depuis votre coffre.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Champs personnalisés</value>
@@ -1103,6 +1103,9 @@ La numérisation se fera automatiquement.</value>
   <data name="Ms" xml:space="preserve">
     <value>Mlle</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>Novembre</value>
   </data>
@@ -1146,7 +1149,7 @@ La numérisation se fera automatiquement.</value>
     <value>URL du serveur d’icônes</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Remplissage automatique avec Bitwarden</value>
+    <value>Saisie automatique avec Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Le coffre est verrouillé</value>
@@ -1158,22 +1161,22 @@ La numérisation se fera automatiquement.</value>
     <value>Collections</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>Aucun élément dans cette collection.</value>
+    <value>Il n'y a aucun élément dans cette collection.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>Aucun élément dans ce dossier.</value>
+    <value>Il n'y a aucun élément dans ce dossier.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
     <value>Il n'y a aucun élément dans la corbeille.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Service d'accessibilité pour le remplissage automatique</value>
+    <value>Service d'accessibilité de saisie automatique</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Le service de remplissage automatique de Bitwarden utilise l'outil de remplissage automatique d'Android pour aider à saisir les identifiants, les cartes de crédit et les informations d'identité dans d'autres applications sur votre appareil.</value>
+    <value>Le service de saisie automatique Bitwarden utilise Android Autofill Framework pour aider à la saisie des informations de connexion dans d'autres applications sur votre appareil.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Utilisez le service de remplissage automatique de Bitwarden pour remplir les informations de connexion dans d'autres applications.</value>
+    <value>Utilisez le service de saisie automatique Bitwarden pour remplir les informations de connexion dans d'autres applications.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Ouvrir les paramètres de remplissage automatique</value>
@@ -1259,7 +1262,7 @@ La numérisation se fera automatiquement.</value>
     <value>Oui et enregistrer</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Remplir automatiquement et enregistrer</value>
+    <value>Saisir automatiquement et sauvegarder</value>
   </data>
   <data name="Organization" xml:space="preserve">
     <value>Organisation</value>
@@ -1286,7 +1289,7 @@ La numérisation se fera automatiquement.</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>Remplissage automatique activé !</value>
+    <value>Saisie automatique activée !</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
     <value>Vous devez vous identifier sur l'application principale Bitwarden avant d'utiliser le remplissage automatique des mots de passe.</value>
@@ -1301,7 +1304,7 @@ La numérisation se fera automatiquement.</value>
     <value>Accédez à votre coffre directement à partir de votre clavier pour remplir automatiquement et rapidement les mots de passe.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Pour activer le remplissage automatique des mots de passe sur votre appareil, suivez ces instructions :</value>
+    <value>Pour configurer la saisie automatique des mots de passe sur votre appareil, suivez ces instructions :</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Allez dans l'application "Réglages" d'iOS</value>
@@ -1319,13 +1322,13 @@ La numérisation se fera automatiquement.</value>
     <value>5. Sélectionnez "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Remplissage automatique des mots de passe</value>
+    <value>Saisie automatique des mots de passe</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
     <value>Le meilleur moyen d'ajouter de nouveaux sites à votre coffre est d'utiliser l'extension de remplissage automatique de mots de passe de Bitwarden. Parcourez le menu "Paramètres" pour en apprendre davantage.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Adresse e-mail invalide.</value>
+    <value>Adresse électronique invalide.</value>
   </data>
   <data name="Cards" xml:space="preserve">
     <value>Cartes</value>
@@ -1372,10 +1375,10 @@ La numérisation se fera automatiquement.</value>
     <value>Types</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>Aucun mot de passe à afficher.</value>
+    <value>Aucun mot de passe à lister.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>Aucun élément à afficher.</value>
+    <value>Il n'y a aucun élément à lister.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
     <value>Rechercher dans la collection</value>
@@ -1409,7 +1412,7 @@ La numérisation se fera automatiquement.</value>
     <value>À qui appartient cet élément ?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>Aucune collection à afficher.</value>
+    <value>Il n'y a aucune collection à lister.</value>
   </data>
   <data name="MovedItemToOrg" xml:space="preserve">
     <value>{0} déplacé vers {1}</value>
@@ -1431,7 +1434,7 @@ La numérisation se fera automatiquement.</value>
     <value>Déplacer vers l'organisation</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>Aucune organisation à afficher.</value>
+    <value>Aucune organisation à lister.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
     <value>Choisissez une organisation vers laquelle vous souhaitez déplacer cet élément. Déplacer un élément vers une organisation transfère la propriété de l'élément à cette organisation. Vous ne serez plus le propriétaire direct de cet élément une fois qu'il aura été déplacé.</value>
@@ -1454,7 +1457,7 @@ La numérisation se fera automatiquement.</value>
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>Aucun dossier à afficher.</value>
+    <value>Il n'y a aucun dossier à lister.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
     <value>Phrase d'empreinte</value>
@@ -1537,7 +1540,7 @@ La numérisation se fera automatiquement.</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Choisissez la manière par défaut dont la détection de correspondance URI est gérée pour les connexions lors de l'exécution d'actions telles que le remplissage automatique.</value>
+    <value>Choisissez la manière de gestion par défaut de la détection de correspondance URI pour les identifiants lors de l'exécution d'actions telles que la saisie automatique.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Thème</value>
@@ -1556,7 +1559,7 @@ La numérisation se fera automatiquement.</value>
     <value>Si le mode sombre de l'appareil et le thème par défaut (système) sont activés, choisissez votre thème sombre préféré</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Copier les notes</value>
+    <value>Copier la note</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Quitter</value>
@@ -1580,10 +1583,10 @@ La numérisation se fera automatiquement.</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
-    <value>Remplissage automatique des URIs bloqués</value>
+    <value>Saisie automatique des URIs bloqués</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Le remplissage automatique ne sera pas proposé pour les URIs bloqués. Séparez les URIs multiples par une virgule. Par exemple : "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>La saisie automatique ne sera pas proposée pour les URI bloqués. Séparez plusieurs URI par une virgule. Par exemple : "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Demander pour ajouter un identifiant</value>
@@ -1595,7 +1598,7 @@ La numérisation se fera automatiquement.</value>
     <value>Au redémarrage de l'application</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Le remplissage automatique permet d'accéder facilement à votre coffre Bitwarden depuis d'autres sites et applications. Il semble que vous n'ayez pas activé de service de remplissage automatique pour Bitwarden. Activez le remplissage automatique pour Bitwarden à partir de l'écran "Paramètres".</value>
+    <value>La saisie automatique permet d'accéder facilement et en toute sécurité à votre coffre Bitwarden à partir d'autres sites web et applications. Il semble que vous n'ayez pas configuré de service de saisie automatique pour Bitwarden. Configurez la saisie automatique pour Bitwarden à partir de l'écran "Paramètres".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Vos modifications de thème s'appliqueront lorsque l'application sera redémarrée.</value>
@@ -1629,7 +1632,7 @@ La numérisation se fera automatiquement.</value>
     <value>Utiliser la biométrie pour déverrouiller</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden requiert votre attention - Voir "Service d'accessibilité pour le remplissage automatique" dans les paramètres de Bitwarden</value>
+    <value>Bitwarden a besoin d'attention - Voir "Service d'accessibilité de saisie automatique" depuis les paramètres de Bitwarden</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
     <value>3. Sur l'écran des paramètres d'application Android pour Bitwarden, sélectionnez "Superposer aux autres applications" (sous "Avancé") et appuyez sur le bouton pour permettre la superposition.</value>
@@ -1665,7 +1668,7 @@ La numérisation se fera automatiquement.</value>
     <value>Confirmez votre identité pour continuer.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>Cet export contient les données de votre coffre dans un format non chiffré. Vous ne devriez ni le stocker ni l'envoyer via des canaux non sécurisés (tel que par e-mail). Supprimez-le immédiatement après l'avoir utilisé.</value>
+    <value>Cet export contient vos données de coffre dans un format non chiffré. Vous ne devriez pas stocker ou envoyer le fichier exporté par des canaux non sécurisés (comme le courriel). Supprimez-le immédiatement dès que vous avez fini de l'utiliser.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
     <value>Cet export chiffre vos données en utilisant la clé de chiffrement de votre compte. Si jamais vous modifiez la clé de chiffrement de votre compte, vous devriez exporter à nouveau car vous ne pourrez pas déchiffrer ce fichier.</value>
@@ -1704,7 +1707,7 @@ La numérisation se fera automatiquement.</value>
     <value>La pièce jointe a été enregistrée avec succès</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Veuillez activer le "Service d'accessibilité pour le remplissage automatique" dans les paramètres de Bitwarden pour utiliser la tuile de remplissage automatique.</value>
+    <value>Veuillez activer le "Service d'accessibilité de saisie automatique" dans les paramètres de Bitwarden pour utiliser la tuile de saisie automatique.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
     <value>Aucun champ de mot de passe détecté</value>
@@ -1822,10 +1825,10 @@ La numérisation se fera automatiquement.</value>
     <value>Politique de confidentialité</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden requiert votre attention - Activer "Superposition" dans "Services de remplissage automatique" depuis les paramètres de Bitwarden</value>
+    <value>Bitwarden a besoin d'attention - Activer "Superposition" dans "Services de saisie automatique" depuis les paramètres de Bitwarden.</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Services de remplissage automatique</value>
+    <value>Services de saisie automatique</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
     <value>Utiliser le remplissage automatique intégré</value>
@@ -1837,10 +1840,10 @@ La numérisation se fera automatiquement.</value>
     <value>Utiliser l'accessibilité</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Utilisez le service d'accessibilité de Bitwarden pour remplir automatiquement vos identifiants à travers les applications et le web. Lorsqu'il est activé, nous afficherons une popup lorsque des champs de connexion sont sélectionnés.</value>
+    <value>Utilisez le service d'accessibilité Bitwarden pour saisir automatiquement vos identifiants sur les applications et le web. Une fois configuré, nous afficherons un popup lorsque les champs de connexion seront sélectionnés.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Utilisez le service d'accessibilité de Bitwarden pour remplir automatiquement vos identifiants à travers les applications et le web. (Nécessite également l'activation de la superposition)</value>
+    <value>Utilisez le service d'accessibilité Bitwarden pour saisir automatiquement vos identifiants sur les applications et le web (requiert également l'activation de la superposition).</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
     <value>Utilisez le service d'accessibilité Bitwarden pour utiliser la tuile de remplissage automatique rapide et/ou afficher une popup en utilisant la superposition (si activée).</value>
@@ -1855,7 +1858,7 @@ La numérisation se fera automatiquement.</value>
     <value>Activer cette option permet au service d'accessibilité de Bitwarden d'afficher une popup lorsque les champs d'identifiants sont sélectionnés.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>Si cette option est activée, le service d'accessibilité de Bitwarden affichera une popup lorsque des champs d'identifiants sont sélectionnés pour aider à remplir automatiquement vos identifiants.</value>
+    <value>S'il est activé, le service d'accessibilité Bitwarden affichera une fenêtre popup lorsque les champs de connexion sont sélectionnés afin de faciliter la saisie automatique de vos identifiants.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
     <value>Si cette option est activée, l'accessibilité affichera une popup pour améliorer le service de remplissage automatique pour les anciennes applications qui ne prennent pas en charge les outils de remplissage automatique d'Android.</value>
@@ -1980,7 +1983,7 @@ La numérisation se fera automatiquement.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
-    <value>Il n’y a aucun Send dans votre compte.</value>
+    <value>Il n'y a aucun Send dans votre compte.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
@@ -2056,7 +2059,7 @@ La numérisation se fera automatiquement.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Cacher mon adresse e-mail aux destinataires.</value>
+    <value>Masquer mon adresse électronique aux destinataires</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Une ou plusieurs politiques d'organisation affectent vos options Send.</value>
@@ -2067,7 +2070,7 @@ La numérisation se fera automatiquement.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Vous devez vérifier votre adresse e-mail pour utiliser des fichiers avec Send. Vous pouvez vérifier votre adresse e-mail dans le coffre web.</value>
+    <value>Vous devez vérifier votre courriel pour utiliser des fichiers avec Send. Vous pouvez vérifier votre courriel dans le coffre web.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
@@ -2209,13 +2212,13 @@ La numérisation se fera automatiquement.</value>
     <value>Renvoyer le Code</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
-    <value>Un code de vérification a été envoyé à votre adresse e-mail.</value>
+    <value>Un code de vérification a été envoyé à votre courriel</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>Une erreur s'est produite lors de l'envoi d'un code de vérification à votre adresse e-mail. Veuillez réessayer</value>
+    <value>Une erreur s'est produite lors de l'envoi d'un code de vérification à votre courriel. Veuillez réessayer</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
-    <value>Saisissez le code de vérification que nous avons envoyé votre adresse e-mail</value>
+    <value>Saisissez le code de vérification qui vous a été envoyé par courriel</value>
   </data>
   <data name="SubmitCrashLogs" xml:space="preserve">
     <value>Envoyer les journaux de plantage</value>
@@ -2419,6 +2422,14 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Jeton d'accès API</value>
   </data>
@@ -2511,7 +2522,58 @@ Voulez-vous basculer vers ce compte ?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Cette demande n'est plus valide</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Demandes de connexion en attente</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Refuser toutes les demandes</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir refuser toutes les demandes de connexion en attente ?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Demandes refusées</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Aucune demande en attente</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Activer la permission de l'appareil photo pour utiliser le scanner</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Important</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Votre mot de passe principal ne peut pas être récupéré si vous l'oubliez ! {0} caractères minimum.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Mot de passe principal faible</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Mot de passe faible identifié. Utilisez un mot de passe fort pour protéger votre compte. Êtes-vous sûr de vouloir utiliser un mot de passe faible?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Faible</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Suffisant</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Fort</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Vérifier les fuites de données connues pour ce mot de passe</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Mot de passe principal compromis</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Mot de passe trouvé dans une fuite de données. Utilisez un mot de passe unique pour protéger votre compte. Voulez-vous vraiment utiliser un mot de passe compromis ?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Mot de passe principal faible et compromis</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Mot de passe faible identifié et trouvé dans une fuite de données. Utilisez un mot de passe fort et unique pour protéger votre compte. Voulez-vous vraiment utiliser ce mot de passe ?</value>
   </data>
 </root>

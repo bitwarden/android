@@ -1103,6 +1103,9 @@ Skanning vil ske automatisk.</value>
   <data name="Ms" xml:space="preserve">
     <value>Frk</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
   </data>
@@ -2419,6 +2422,14 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API-adgangstoken</value>
   </data>
@@ -2511,7 +2522,58 @@ Vil du skifte til denne konto?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Anmodningen er ikke længere gyldig</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Afventende login-anmodninger</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Afvis alle anmodninger</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Sikker på, at alle afventende login-anmodninger skal afvises?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Anmodninger afvist</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Ingen afventende anmodninger</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Tildel kameratilladelse for brug af skanneren</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Vigtigt</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Hovedadgangskoden kan ikke gendannes, hvis du glemmer den! {0} tegn minimum.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Svag hovedadgangskode</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Svag adgangskode identificeret. Brug en stærk adgangskode til at beskytte din konto. Sikker på, at du vil bruge en svag adgangskode?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Svag</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>God</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Stærk</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Tjek kendte datalæk for denne adgangskode</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Kompromitteret hovedadgangskode</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Adgangskode fundet i datalæk. Brug en unik adgangskode til at beskytte din konto. Sikker på, at du vil bruge en kompromitteret adgangskode?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Svag eller kompromitteret hovedadgangskode</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Svag adgangskode identificeret og fundet i datalæk. Brug en unik adgangskode til at beskytte din konto. Sikker på, at du vil bruge denne adgangskode?</value>
   </data>
 </root>

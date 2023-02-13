@@ -1103,6 +1103,9 @@ Skenovanie prebehne automaticky.</value>
   <data name="Ms" xml:space="preserve">
     <value>Slečna</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Vážený</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
   </data>
@@ -1614,7 +1617,7 @@ Skenovanie prebehne automaticky.</value>
     <value>Zdieľané</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Toggle visibility</value>
+    <value>Prepnúť viditeľnosť</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>Platnosť prihlásenia vypršala.</value>
@@ -2419,6 +2422,14 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Prístupový token API</value>
   </data>
@@ -2511,7 +2522,58 @@ Chcete prepnúť na toto konto?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Táto požiadavka už nie je platná</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Čakajúce požiadavky o prihlásenie</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Odmietnuť všetky žiadosti</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Naozaj chcete odmietnuť všetky čakajúce požiadavky o prihlásenie?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Požiadavky odmietnuté</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Žiadne čakajúce požiadavky</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Pre použitie skenera povoľte prístup ku kamere</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Dôležité</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Vaše hlavné heslo sa nedá obnoviť, ak ho zabudnete! Minimálne {0} znakov.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Slabé hlavné heslo</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Nájdené slabé heslo. Používajte silné heslo na ochranu svojho účtu. Naozaj chcete použiť slabé heslo?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Slabé</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Dobré</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Silné</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Skontrolovať známe úniky údajov pre toto heslo</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Odhalené hlavné heslo</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Nájdené heslo v uniknuných údajoch. Na ochranu svojho účtu používajte jedinečné heslo. Naozaj chcete používať odhalené heslo?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Slabé a odhalené hlavné heslo</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Nájdené slabé heslo v uniknuných údajoch. Na ochranu svojho účtu používajte silné a jedinečné heslo. Naozaj chcete používať toto heslo?</value>
   </data>
 </root>

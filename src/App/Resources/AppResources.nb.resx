@@ -1103,6 +1103,9 @@ Skanning skjer automatisk.</value>
   <data name="Ms" xml:space="preserve">
     <value>Frøken</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Nøytral</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
   </data>
@@ -2420,6 +2423,14 @@ velg Legg til TOTP for å lagre nøkkelen sikkert</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API tilgangstoken</value>
   </data>
@@ -2512,7 +2523,58 @@ Vil du bytte til denne kontoen?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Invitasjonen er ikke lenger gyldig</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Avventende innloggingsforespørsler</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Avvis alle forespørsler</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Er du sikker på at du vil avvise alle avventende innloggingsforespørsler?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Forespørsler avvist</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Ingen ventende forespørsler</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Aktiver kameratillatelse for å bruke skanner</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Viktig</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Hovedpassordet ditt kan ikke gjenopprettes hvis du glemmer det! Minst {0} tegn.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Svakt hovedpassord</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Svakt passord er identifisert. Bruk et sterkt passord for å beskytte kontoen din. Er du sikker på at du vil bruke et svakt passord?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Svakt</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Bra</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Sterkt</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Sjekk kjente databrudd for dette passordet</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Eksponert hovedpassord</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Passord funnet i et databrudd. Bruk et unikt passord for å beskytte kontoen din. Er du sikker på at du vil bruke et eksponert passord?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Svakt og eksponert hovedpassord</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Svakt passord identifisert og funnet i et databrudd. Bruk et sterkt og unikt passord for å beskytte kontoen din. Er du sikker på at du vil bruke dette passordet?</value>
   </data>
 </root>

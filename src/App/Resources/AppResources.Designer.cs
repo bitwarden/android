@@ -563,6 +563,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to decline all pending login requests?.
+        /// </summary>
+        public static string AreYouSureYouWantToDeclineAllPendingLogInRequests {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToDeclineAllPendingLogInRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to turn on screen capture?.
         /// </summary>
         public static string AreYouSureYouWantToEnableScreenCapture {
@@ -1760,6 +1769,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Decline all requests.
+        /// </summary>
+        public static string DeclineAllRequests {
+            get {
+                return ResourceManager.GetString("DeclineAllRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Default.
         /// </summary>
         public static string Default {
@@ -2044,6 +2062,15 @@ namespace Bit.App.Resources {
         public static string DrawOverDescription3 {
             get {
                 return ResourceManager.GetString("DrawOverDescription3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DuckDuckGo.
+        /// </summary>
+        public static string DuckDuckGo {
+            get {
+                return ResourceManager.GetString("DuckDuckGo", resourceCulture);
             }
         }
         
@@ -2539,6 +2566,15 @@ namespace Bit.App.Resources {
         public static string FaceIDDirection {
             get {
                 return ResourceManager.GetString("FaceIDDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fastmail.
+        /// </summary>
+        public static string Fastmail {
+            get {
+                return ResourceManager.GetString("Fastmail", resourceCulture);
             }
         }
         
@@ -3983,7 +4019,18 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("Ms", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Mx.
+        /// </summary>
+        public static string Mx
+        {
+            get
+            {
+                return ResourceManager.GetString("Mx", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to You must log into the main Bitwarden app before you can use the extension..
         /// </summary>
@@ -4251,6 +4298,15 @@ namespace Bit.App.Resources {
         public static string NoPasswordsToList {
             get {
                 return ResourceManager.GetString("NoPasswordsToList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No pending requests.
+        /// </summary>
+        public static string NoPendingRequests {
+            get {
+                return ResourceManager.GetString("NoPendingRequests", resourceCulture);
             }
         }
         
@@ -4742,6 +4798,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pending login requests.
+        /// </summary>
+        public static string PendingLogInRequests {
+            get {
+                return ResourceManager.GetString("PendingLogInRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An organization policy is affecting your ownership options..
         /// </summary>
         public static string PersonalOwnershipPolicyInEffect {
@@ -5090,6 +5155,15 @@ namespace Bit.App.Resources {
         public static string RequestOTP {
             get {
                 return ResourceManager.GetString("RequestOTP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Requests declined.
+        /// </summary>
+        public static string RequestsDeclined {
+            get {
+                return ResourceManager.GetString("RequestsDeclined", resourceCulture);
             }
         }
         

@@ -36,11 +36,10 @@ namespace Bit.Core.Abstractions
         Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key, HashPurpose hashPurpose = HashPurpose.ServerAuthorization);
         Task<bool> HasKeyAsync(string userId = null);
         Task<Tuple<SymmetricCryptoKey, EncString>> MakeEncKeyAsync(SymmetricCryptoKey key);
-        Task<SymmetricCryptoKey> MakeKeyAsync(string password, string salt, KdfType? kdf, int? kdfIterations);
-        Task<SymmetricCryptoKey> MakeKeyFromPinAsync(string pin, string salt, KdfType kdf, int kdfIterations,
-            EncString protectedKeyEs = null);
+        Task<SymmetricCryptoKey> MakeKeyAsync(string password, string salt, KdfConfig config);
+        Task<SymmetricCryptoKey> MakeKeyFromPinAsync(string pin, string salt, KdfConfig config, EncString protectedKeyEs = null);
         Task<Tuple<string, EncString>> MakeKeyPairAsync(SymmetricCryptoKey key = null);
-        Task<SymmetricCryptoKey> MakePinKeyAysnc(string pin, string salt, KdfType kdf, int kdfIterations);
+        Task<SymmetricCryptoKey> MakePinKeyAysnc(string pin, string salt, KdfConfig config);
         Task<Tuple<EncString, SymmetricCryptoKey>> MakeShareKeyAsync();
         Task<SymmetricCryptoKey> MakeSendKeyAsync(byte[] keyMaterial);
         Task<int> RandomNumberAsync(int min, int max);

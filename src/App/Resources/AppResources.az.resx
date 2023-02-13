@@ -1103,6 +1103,9 @@ Skan prosesi avtomatik baş tutacaq.</value>
   <data name="Ms" xml:space="preserve">
     <value>Hörmətli</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Hörmətli</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>Noyabr</value>
   </data>
@@ -2137,7 +2140,7 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>Bu təşkilat, sizi "parol sıfırlama"da avtomatik olaraq qeydiyyata alan müəssisə siyasətinə sahibdir. Qeydiyyat, təşkilat administratorlarına ana parolunuzu dəyişdirmə icazəsi verəcək.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s)</value>
+    <value>Təşkilatınızın siyasətləri, anbarınızın vaxt bitişinə təsir edir. Anbar vaxt bitişi üçün icazə verilən maksimum vaxt {0} saat {1} dəqiqədir</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Anbar vaxt bitişi, təşkilatınız tərəfindən tənzimlənən məhdudiyyətləri aşır.</value>
@@ -2418,6 +2421,14 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API müraciət tokeni</value>
   </data>
@@ -2510,7 +2521,58 @@ Bu hesaba keçmək istəyirsiniz?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Bu tələb artıq yararsızdır</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Giriş tələbləri gözlənilir</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Bütün tələbləri rədd et</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Gözləyən bütün giriş tələblərini rədd etmək istədiyinizə əminsiniz?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Tələblər rədd edildi</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Gözləyən heç bir tələb yoxdur</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Skaneri istifadə etmək üçün kamera icazəsini fəallaşdırın</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Vacib</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Ana parolunuzu unutsanız bərpa edə bilməzsiniz! Ən az {0} simvol.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Zəif ana parol</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Zəif parol aşkarlandı. Hesabınızı qorumaq üçün güclü bir parol istifadə edin. Zəif bir parol istifadə etmək istədiyinizə əminsiniz?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Zəif</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Yaxşı</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Güclü</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Bu parol üçün bilinən məlumat pozuntularını yoxlayın</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>İfşa olunmuş ana parol</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Parol, məlumat pozuntusunda tapıldı. Hesabınızı qorumaq üçün unikal bir parol istifadə edin. İfşa olunmuş bir parol istifadə etmək istədiyinizə əminsiniz?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Zəif və ifşa olunmuş ana parol</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Zəif parol məlumat pozuntusunda aşkarlandı və tapıldı. Hesabınızı qorumaq üçün güclü və unikal bir parol istifadə edin. Bu parolu istifadə etmək istədiyinizə əminsiniz?</value>
   </data>
 </root>

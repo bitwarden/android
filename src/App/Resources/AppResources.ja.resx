@@ -1103,6 +1103,9 @@
   <data name="Ms" xml:space="preserve">
     <value>Ms</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>11月</value>
   </data>
@@ -2419,6 +2422,14 @@
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API アクセストークン</value>
   </data>
@@ -2511,7 +2522,58 @@
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>このリクエストは無効になりました</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>保留中のログインリクエスト</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>すべてのリクエストを拒否する</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>保留中のログインリクエストをすべて拒否してもよろしいですか？</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>リクエストが拒否されました</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>保留中のリクエストはありません</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>スキャナを使用できるようカメラ権限を許可する</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>重要</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>マスターパスワードを忘れた場合は復元できません。最小文字数は {0} です。</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>脆弱なマスターパスワード</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>入力されたパスワードは脆弱です。アカウントを守るためより強力なパスワードを使用してください。本当にこの脆弱なパスワードを使用しますか？</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>脆弱</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>良好</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>強力</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>このパスワードの既知のデータ流出を確認</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>流出したマスターパスワード</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>入力したパスワードはデータ流出結果で見つかりました。アカウントを保護するためには一意のパスワードを使用してください。流出済みのパスワードを本当に使用しますか？</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>脆弱で流出済みのマスターパスワード</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>入力されたパスワードは脆弱かつすでに流出済みです。アカウントを守るためより強力で一意なパスワードを使用してください。本当にこの脆弱なパスワードを使用しますか？</value>
   </data>
 </root>

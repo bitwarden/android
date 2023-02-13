@@ -1104,6 +1104,9 @@ Skanningen sker automatiskt.</value>
   <data name="Ms" xml:space="preserve">
     <value>Fröken</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
   </data>
@@ -2421,6 +2424,14 @@ välj Lägg till TOTP för att lagra nyckeln på ett säkert sätt</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API-åtkomsttoken</value>
   </data>
@@ -2513,7 +2524,58 @@ Vill du byta till detta konto?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Denna förfrågan är inte längre giltig</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Pending login requests</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Decline all requests</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Are you sure you want to decline all pending login requests?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Requests declined</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>No pending requests</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Bevilja kamerabehörighet för att använda skannern</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Viktigt</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Ditt huvudlösenord kan inte återställas om du glömmer det! Det måste innehålla minst {0} tecken.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Svagt huvudlösenord</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Lösenordet är svagt. Använd ett starkt lösenord för att skydda ditt konto. Är det säkert att du vill använda ett svagt lösenord?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Svagt</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Bra</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Starkt</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Kontrollera kända dataintrång för detta lösenord</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Huvudlösenordet har exponerats</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Lösenordet avslöjades vid ett dataintrång. Använd ett unikt lösenord för att skydda ditt konto. Är du säker på att du vill använda ett lösenord som avslöjats?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Huvudlösenordet är svagt och har exponerats</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Lösenordet är svagt och avslöjades vid ett dataintrång. Använd ett starkt och unikt lösenord för att skydda ditt konto. Är det säkert att du vill använda detta lösenord?</value>
   </data>
 </root>

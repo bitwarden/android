@@ -1103,6 +1103,9 @@
   <data name="Ms" xml:space="preserve">
     <value>Проф.</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Микстер</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>Ноябрь</value>
   </data>
@@ -2419,6 +2422,14 @@
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Токен доступа к API</value>
   </data>
@@ -2488,7 +2499,7 @@
     <value>Войти с мастер-паролем</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Войти с другого устройства</value>
+    <value>Войти с помощью устройства</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>Вход инициирован</value>
@@ -2497,7 +2508,7 @@
     <value>На ваше устройство отправлено уведомление.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Убедитесь, что ваше хранилище разблокировано, а фраза отпечатка соответствует другому устройству.</value>
+    <value>Убедитесь, что ваше хранилище разблокировано и фраза отпечатка пальца совпадает на другом устройстве.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
     <value>Отправить уведомление повторно</value>
@@ -2511,7 +2522,58 @@
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Этот запрос больше не действителен</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Ожидающие запросы на авторизацию</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Отклонить все запросы</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Вы действительно хотите отклонить все ожидающие запросы на авторизацию?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Запросы отклонены</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Нет ожидающих запросов</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Для использования сканера необходимо предоставить разрешение на доступ к камере</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Важно</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Ваш мастер-пароль невозможно восстановить, если вы его забудете! Минимум символов - {0}.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Слабый мастер-пароль</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Обнаружен слабый пароль. Для защиты аккаунта следует установить надежный пароль. Вы уверены, что хотите использовать слабый пароль?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Слабый</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Хороший</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Сильный</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Проверьте известные случаи утечки данных для этого пароля</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Мастер-пароль скомпрометирован</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Пароль найден в утечке данных. Используйте уникальный пароль для защиты вашего аккаунта. Вы уверены, что хотите использовать скомпрометированный пароль?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Слабый и скомпрометированный мастер-пароль</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Обнаружен слабый пароль, найденный в утечке данных. Используйте надежный и уникальный пароль для защиты вашего аккаунта. Вы уверены, что хотите использовать этот пароль?</value>
   </data>
 </root>

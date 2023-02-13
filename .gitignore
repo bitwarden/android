@@ -30,6 +30,7 @@ Components/
 [Rr]eleases/
 x64/
 x86/
+!src/lib/x86/
 build/
 bld/
 [Bb]in/

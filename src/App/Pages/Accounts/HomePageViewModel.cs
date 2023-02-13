@@ -73,8 +73,6 @@ namespace Bit.App.Pages
 
         public bool CanContinue => !string.IsNullOrEmpty(Email);
 
-        public bool ShouldCheckRememberEmail { get; set; }
-
         public FormattedString CreateAccountText
         {
             get
@@ -110,15 +108,6 @@ namespace Bit.App.Pages
             RememberEmail = !string.IsNullOrEmpty(Email);
         }
 
-        public void CheckNavigateLoginStep()
-        {
-            if (ShouldCheckRememberEmail && RememberEmail)
-            {
-                StartLoginAction();
-            }
-            ShouldCheckRememberEmail = false;
-        }
-
         public async Task ContinueToLoginStepAsync()
         {
             try
@@ -136,16 +125,16 @@ namespace Bit.App.Pages
                         AppResources.Ok);
                     return;
                 }
+
                 await _stateService.SetRememberedEmailAsync(RememberEmail ? Email : null);
                 var userId = await _stateService.GetUserIdAsync(Email);
-                if (!string.IsNullOrWhiteSpace(userId))
+
+                if (!string.IsNullOrWhiteSpace(userId) &&
+                    (await _stateService.GetEnvironmentUrlsAsync(userId))?.Base == _environmentService.BaseUrl &&
+                    await _stateService.IsAuthenticatedAsync(userId))
                 {
-                    var userEnvUrls = await _stateService.GetEnvironmentUrlsAsync(userId);
-                    if (userEnvUrls?.Base == _environmentService.BaseUrl)
-                    {
-                        await _accountManager.PromptToSwitchToExistingAccountAsync(userId);
-                        return;
-                    }
+                    await _accountManager.PromptToSwitchToExistingAccountAsync(userId);
+                    return;
                 }
                 StartLoginAction();
             }

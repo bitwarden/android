@@ -459,14 +459,7 @@ namespace Bit.App
             switch (navTarget)
             {
                 case NavigationTarget.HomeLogin:
-                    if (navParams is HomeNavigationParams homeParams)
-                    {
-                        Current.MainPage = new NavigationPage(new HomePage(Options, homeParams.ShouldCheckRememberEmail));
-                    }
-                    else
-                    {
-                        Current.MainPage = new NavigationPage(new HomePage(Options));
-                    }
+                    Current.MainPage = new NavigationPage(new HomePage(Options));
                     break;
                 case NavigationTarget.Login:
                     if (navParams is LoginNavigationParams loginParams)
