@@ -584,7 +584,7 @@
     <value>A master password hint can help you remember your password if you forget it.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Master password must be at least 8 characters long.</value>
+    <value>Master password must be at least 12 characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimum numbers</value>

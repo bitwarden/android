@@ -50,7 +50,7 @@
         public const int Argon2Iterations = 3;
         public const int Argon2MemoryInMB = 64;
         public const int Argon2Parallelism = 4;
-        public const int MasterPasswordMinimumChars = 8;
+        public const int MasterPasswordMinimumChars = 12;
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {
