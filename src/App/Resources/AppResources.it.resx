@@ -376,7 +376,7 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>{0} copiata.</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Verifica impronta</value>
@@ -1101,6 +1101,9 @@
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Sig.na</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Novembre</value>
@@ -2137,7 +2140,7 @@
     <value>Questa organizzazione ha una politica aziendale che ti iscriverà automaticamente al ripristino della password. Ciò permetterà agli amministratori dell'organizzazione di cambiare la tua password principale.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Le policy dell'organizzazione controllano il timeout della tua cassaforte. Il tempo massimo consentito è di $HOURS$ ore e $MINUTES$ minuti</value>
+    <value>Le tue politiche organizzative stanno influenzando il timeout della tua cassaforte. Il timeout massimo consentito della cassaforte è di {0} ora(e) e {1} minuto(i)</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Il timeout della tua cassaforte supera i limiti impostati dalla tua organizzazione.</value>
@@ -2299,9 +2302,6 @@
     <value>Una volta inserita la chiave,
 seleziona Aggiungi TOTP per salvare la chiave in modo sicuro</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Impostare le opzioni di blocco su “Mai” fa sì che la tua cassaforte sia a disposizione di chiunque abbia accesso al tuo dispositivo. Se si utilizza questa opzione, è necessario assicurarsi di mantenere il dispositivo adeguatamente protetto.</value>
   </data>
@@ -2422,6 +2422,14 @@ seleziona Aggiungi TOTP per salvare la chiave in modo sicuro</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token di accesso API</value>
   </data>
@@ -2451,6 +2459,9 @@ seleziona Aggiungi TOTP per salvare la chiave in modo sicuro</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Casuale</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connetti a watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Maggiori informazioni sul servizio di accessibilità</value>
@@ -2511,7 +2522,58 @@ Vuoi passare a questo account?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>La richiesta non è più valida</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Richieste d'accesso in sospeso</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Rifiuta tutte le richieste</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Sei sicuro di voler rifiutare tutte le richieste d'accesso in sospeso?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Richieste rifiutate</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Nessuna richiesta in sospeso</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>Abilita i permessi della fotocamera per usare lo scanner</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Importante</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>La tua password principale non può essere recuperata se la dimentichi! {0} caratteri minimi.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Password principale debole</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Password debole identificata. Usa una password forte per proteggere il tuo account. Sei sicuro di voler usare una password debole?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Debole</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Buona</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Forte</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Controlla se la tua password è presente nei database dei data breach noti</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Password principale violata</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Password trovata in un database di data breach noto. Usa una password esclusiva per proteggere il tuo account. Sei sicuro di voler usare una password violata?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Password principale debole e violata</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Password debole trovata in un database di data breach noto. Usa una password forte ed esclusiva per proteggere il tuo account. Sei sicuro di voler utilizzare questa password?</value>
   </data>
 </root>

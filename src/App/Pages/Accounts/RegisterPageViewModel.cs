@@ -1,28 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Request;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class RegisterPageViewModel : CaptchaProtectedViewModel
+    public class RegisterPageViewModel : CaptchaProtectedViewModel, IPasswordStrengthable
     {
         private readonly IDeviceActionService _deviceActionService;
         private readonly II18nService _i18nService;
         private readonly IEnvironmentService _environmentService;
+        private readonly IAuditService _auditService;
         private readonly IApiService _apiService;
         private readonly ICryptoService _cryptoService;
         private readonly IPlatformUtilsService _platformUtilsService;
+        private string _email;
+        private string _masterPassword;
         private bool _showPassword;
         private bool _acceptPolicies;
+        private bool _checkExposedMasterPassword;
 
         public RegisterPageViewModel()
         {
@@ -32,12 +40,15 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+            _auditService = ServiceContainer.Resolve<IAuditService>();
 
             PageTitle = AppResources.CreateAccount;
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleConfirmPasswordCommand = new Command(ToggleConfirmPassword);
             SubmitCommand = new Command(async () => await SubmitAsync());
             ShowTerms = !_platformUtilsService.IsSelfHost();
+            PasswordStrengthViewModel = new PasswordStrengthViewModel(this);
+            CheckExposedMasterPassword = true;
         }
 
         public ICommand PoliciesClickCommand => new Command<string>((url) =>
@@ -61,6 +72,34 @@ namespace Bit.App.Pages
             get => _acceptPolicies;
             set => SetProperty(ref _acceptPolicies, value);
         }
+
+        public bool CheckExposedMasterPassword
+        {
+            get => _checkExposedMasterPassword;
+            set => SetProperty(ref _checkExposedMasterPassword, value);
+        }
+
+        public string MasterPassword
+        {
+            get => _masterPassword;
+            set
+            {
+                SetProperty(ref _masterPassword, value);
+                PasswordStrengthViewModel.CalculatePasswordStrength();
+            }
+        }
+
+        public string Email
+        {
+            get => _email;
+            set => SetProperty(ref _email, value);
+        }
+
+        public string Password => MasterPassword;
+        public List<string> UserInputs => PasswordStrengthViewModel.GetPasswordStrengthUserInput(Email);
+        public string MasterPasswordMininumCharactersDescription => string.Format(AppResources.YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum,
+                                                                            Constants.MasterPasswordMinimumChars);
+        public PasswordStrengthViewModel PasswordStrengthViewModel { get; }
         public bool ShowTerms { get; set; }
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
@@ -68,13 +107,10 @@ namespace Bit.App.Pages
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string Name { get; set; }
-        public string Email { get; set; }
-        public string MasterPassword { get; set; }
         public string ConfirmMasterPassword { get; set; }
         public string Hint { get; set; }
         public Action RegistrationSuccess { get; set; }
         public Action CloseAction { get; set; }
-
         protected override II18nService i18nService => _i18nService;
         protected override IEnvironmentService environmentService => _environmentService;
         protected override IDeviceActionService deviceActionService => _deviceActionService;
@@ -110,7 +146,7 @@ namespace Bit.App.Pages
                     AppResources.Ok);
                 return;
             }
-            if (MasterPassword.Length < 8)
+            if (MasterPassword.Length < Constants.MasterPasswordMinimumChars)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.MasterPasswordLengthValMessage,
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
@@ -128,8 +164,10 @@ namespace Bit.App.Pages
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
-
-            // TODO: Password strength check?
+            if (await IsPasswordWeakOrExposed())
+            {
+                return;
+            }
 
             if (showLoading)
             {
@@ -138,9 +176,8 @@ namespace Bit.App.Pages
 
             Name = string.IsNullOrWhiteSpace(Name) ? null : Name;
             Email = Email.Trim().ToLower();
-            var kdf = KdfType.PBKDF2_SHA256;
-            var kdfIterations = 100_000;
-            var key = await _cryptoService.MakeKeyAsync(MasterPassword, Email, kdf, kdfIterations);
+            var kdfConfig = new KdfConfig(KdfType.PBKDF2_SHA256, Constants.Pbkdf2Iterations, null, null);
+            var key = await _cryptoService.MakeKeyAsync(MasterPassword, Email, kdfConfig);
             var encKey = await _cryptoService.MakeEncKeyAsync(key);
             var hashedPassword = await _cryptoService.HashPasswordAsync(MasterPassword, key);
             var keys = await _cryptoService.MakeKeyPairAsync(encKey.Item1);
@@ -151,8 +188,10 @@ namespace Bit.App.Pages
                 MasterPasswordHash = hashedPassword,
                 MasterPasswordHint = Hint,
                 Key = encKey.Item2.EncryptedString,
-                Kdf = kdf,
-                KdfIterations = kdfIterations,
+                Kdf = kdfConfig.Type,
+                KdfIterations = kdfConfig.Iterations,
+                KdfMemory = kdfConfig.Memory,
+                KdfParallelism = kdfConfig.Parallelism,
                 Keys = new KeysRequest
                 {
                     PublicKey = keys.Item1,
@@ -160,6 +199,7 @@ namespace Bit.App.Pages
                 },
                 CaptchaResponse = _captchaToken,
             };
+
             // TODO: org invite?
 
             try
@@ -207,6 +247,44 @@ namespace Bit.App.Pages
             var entry = (Page as RegisterPage).ConfirmMasterPasswordEntry;
             entry.Focus();
             entry.CursorPosition = String.IsNullOrEmpty(ConfirmMasterPassword) ? 0 : ConfirmMasterPassword.Length;
+        }
+
+        private async Task<bool> IsPasswordWeakOrExposed()
+        {
+            try
+            {
+                var title = string.Empty;
+                var message = string.Empty;
+                var exposedPassword = CheckExposedMasterPassword ? await _auditService.PasswordLeakedAsync(MasterPassword) > 0 : false;
+                var weakPassword = PasswordStrengthViewModel.PasswordStrengthLevel <= PasswordStrengthLevel.Weak;
+
+                if (exposedPassword && weakPassword)
+                {
+                    title = AppResources.WeakAndExposedMasterPassword;
+                    message = AppResources.WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription;
+                }
+                else if (exposedPassword)
+                {
+                    title = AppResources.ExposedMasterPassword;
+                    message = AppResources.PasswordFoundInADataBreachAlertDescription;
+                }
+                else if (weakPassword)
+                {
+                    title = AppResources.WeakMasterPassword;
+                    message = AppResources.WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount;
+                }
+
+                if (exposedPassword || weakPassword)
+                {
+                    return !await _platformUtilsService.ShowDialogAsync(message, title, AppResources.Yes, AppResources.No);
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
+
+            return false;
         }
     }
 }

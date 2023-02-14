@@ -376,7 +376,7 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>Skopiowano {0}.</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Zweryfikuj odcisk palca</value>
@@ -946,7 +946,7 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Źródło pliku</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Funkcja niedostępna</value>
+    <value>Funkcja jest niedostępna</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
     <value>Maksymalny rozmiar pliku to 100 MB.</value>
@@ -958,7 +958,7 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Dowiedz się więcej</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>Adres URL serwera interfejsu API</value>
+    <value>Adres URL serwera API</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
     <value>Niestandardowe środowisko</value>
@@ -1102,6 +1102,9 @@ Skanowanie nastąpi automatycznie.</value>
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Pani</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Pan(i)</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Listopad</value>
@@ -1813,7 +1816,7 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Zaznaczając tę opcję, akceptujesz:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Nie zaakceptowałeś regulaminu i polityki prywatności.</value>
+    <value>Regulamin i polityka prywatności nie zostały zaakceptowane.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
     <value>Regulamin</value>
@@ -2143,7 +2146,7 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Czas blokowania sejfu przekracza limit określony przez organizację.</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
-    <value>Co najmniej jedna zasada organizacji uniemożliwia wyeksportowanie Twojego sejfu.</value>
+    <value>Co najmniej jedna zasada organizacji uniemożliwia wyeksportowanie osobistego sejfu.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
     <value>Dodaj konto</value>
@@ -2176,7 +2179,7 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Usunięcie konta jest nieodwracalne</value>
   </data>
   <data name="DeleteAccountExplanation" xml:space="preserve">
-    <value>Konto i wszystkie powiązane z nim dane zostaną trwale usunięte. Czy na pewno chcesz usunąć konto?</value>
+    <value>Konto i wszystkie dane sejfu zostaną trwale usunięte. Czy na pewno chcesz usunąć konto?</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
     <value>Usuwanie konta</value>
@@ -2299,9 +2302,6 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Gdy klucz zostanie pomyślnie wprowadzony,
 wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Ustawienie opcji blokady na „Nigdy” sprawi, że sejf będzie dostępny dla każdego, kto ma dostęp do urządzenia. Jeśli korzystasz z tej opcji, upewnij się, że urządzenie jest odpowiednio chronione.</value>
   </data>
@@ -2318,7 +2318,7 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
     <value>Czy na pewno chcesz zezwolić na wykonywanie zrzutów ekranu?</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
-    <value>Wysłano prośbę o logowanie</value>
+    <value>Wysłano prośbę logowania</value>
   </data>
   <data name="AreYouTryingToLogIn" xml:space="preserve">
     <value>Próbujesz się zalogować?</value>
@@ -2357,10 +2357,10 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
     <value>Logowanie zostało odrzucone</value>
   </data>
   <data name="ApproveLoginRequests" xml:space="preserve">
-    <value>Zatwierdź prośby o logowanie</value>
+    <value>Zatwierdź prośby logowania</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Użyj tego urządzenia, aby zatwierdzić prośby o logowanie z innych urządzeń.</value>
+    <value>Użyj tego urządzenia, aby zatwierdzić prośby logowania z innych urządzeń.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Zezwalaj na powiadomienia</value>
@@ -2393,13 +2393,13 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
     <value>Adres catch-all</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
-    <value>Alias przekazywanego e-maila</value>
+    <value>Alias przekierowania</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
     <value>Losowe słowo</value>
   </data>
   <data name="EmailRequiredParenthesis" xml:space="preserve">
-    <value>E-mail (wymagany)</value>
+    <value>Adres e-mail (wymagany)</value>
   </data>
   <data name="DomainNameRequiredParenthesis" xml:space="preserve">
     <value>Nazwa domeny (wymagana)</value>
@@ -2421,6 +2421,14 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
   <data name="SimpleLogin" xml:space="preserve">
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token dostępu API</value>
@@ -2447,13 +2455,16 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
     <value>Użyj skonfigurowanej skrzynki catch-all w swojej domenie.</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
-    <value>Wygeneruj alias adresu e-mail z zewnętrznej usługi przekazywania.</value>
+    <value>Wygeneruj alias adresu e-mail z zewnętrznej usługi przekierowania.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Losowy</value>
   </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Połącz się z Watch</value>
+  </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
-    <value>Omówienie usługi ułatwień dostępu</value>
+    <value>Omówienie usługi ułatwienia dostępu</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
     <value>Bitwarden używa usługi ułatwienia dostępu do wyszukiwania pól logowania w aplikacjach i witrynach internetowych, następnie ustawia odpowiednie identyfikatory polom, aby uzupełnić nazwę użytkownika i hasło, gdy zostaną znalezione dla aplikacji lub witryny. Nie przechowujemy żadnych informacji przedstawionych nam przez usługę, ani nie próbujemy kontrolować żadnych elementów na ekranie poza tekstem danych logowania.</value>
@@ -2465,7 +2476,7 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
     <value>Odrzuć</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
-    <value>Prośba o logowanie wygasła.</value>
+    <value>Prośba logowania wygasła.</value>
   </data>
   <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
     <value>Próba logowania z:
@@ -2473,7 +2484,7 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
 Czy chcesz przełączyć się na to konto?</value>
   </data>
   <data name="NewAroundHere" xml:space="preserve">
-    <value>Jesteś tu nowy(a)?</value>
+    <value>Nowy użytkownik?</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Uzyskaj podpowiedź hasła głównego</value>
@@ -2511,7 +2522,58 @@ Czy chcesz przełączyć się na to konto?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Ta prośba nie jest już ważna</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Oczekujące prośby o logowanie</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Odrzuć wszystkie prośby</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Czy na pewno chcesz odrzucić wszystkie oczekujące prośby o logowanie?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Prośba odrzucona</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Brak oczekujących próśb</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Włącz uprawnienia aparatu do korzystania ze skanera</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Ważne</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Twoje hasło główne nie może zostać odzyskane, jeśli je zapomnisz! Minimum znaków: {0}.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Słabe hasło główne</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Zidentyfikowano słabe hasło. Użyj silnego hasła, aby chronić swoje konto. Czy na pewno chcesz użyć słabego hasła?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Słabe</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Dobre</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Silne</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Sprawdź znane naruszenia ochrony danych tego hasła</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Ujawnione hasło główne</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Hasło ujawnione w wyniku naruszenia ochrony danych. Użyj unikalnego hasła, aby chronić swoje konto. Czy na pewno chcesz użyć ujawnionego hasła?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Słabe i ujawnione hasło główne</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Słabe hasło ujawnione w wyniku naruszenia ochrony danych. Użyj silnego i unikalnego hasła, aby chronić swoje konto. Czy na pewno chcesz użyć tego hasła?</value>
   </data>
 </root>

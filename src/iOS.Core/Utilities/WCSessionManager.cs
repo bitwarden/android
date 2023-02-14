@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.Core.Models.Domain;
+using Bit.Core.Services;
 using Bit.iOS.Core.Utilities;
 using Foundation;
 using Newtonsoft.Json;
+using ObjCRuntime;
 
 namespace WatchConnectivity
 {
@@ -15,19 +19,18 @@ namespace WatchConnectivity
         private static readonly WCSessionManager sharedManager = new WCSessionManager();
         private static WCSession session = WCSession.IsSupported ? WCSession.DefaultSession : null;
 
-        public static string Device = "Phone";
+        public event WCSessionReceiveDataHandler OnApplicationContextUpdated;
+        public event WCSessionReceiveDataHandler OnMessagedReceived;
+        public delegate void WCSessionReceiveDataHandler(WCSession session, Dictionary<string, object> data);
 
-        public event WCSessionReceiveDataHandler ApplicationContextUpdated;
-        public event WCSessionReceiveDataHandler MessagedReceived;
-        public delegate void WCSessionReceiveDataHandler(WCSession session, Dictionary<string, object> applicationContext);
-
+        WCSessionUserInfoTransfer _transf;
 
         private WCSession validSession
         {
             get
             {
-                Console.WriteLine($"Paired status:{(session.Paired ? '✓' : '✗')}\n");
-                Console.WriteLine($"Watch App Installed status:{(session.WatchAppInstalled ? '✓' : '✗')}\n");
+                Debug.WriteLine($"Paired status:{(session.Paired ? '✓' : '✗')}\n");
+                Debug.WriteLine($"Watch App Installed status:{(session.WatchAppInstalled ? '✓' : '✗')}\n");
                 return (session.Paired && session.WatchAppInstalled) ? session : null;
             }
         }
@@ -62,25 +65,14 @@ namespace WatchConnectivity
             {
                 session.Delegate = this;
                 session.ActivateSession();
-                Console.WriteLine($"Started Watch Connectivity Session on {Device}");
+                Debug.WriteLine($"Started Watch Connectivity Session");
             }
         }
 
         public override void SessionReachabilityDidChange(WCSession session)
         {
-            Console.WriteLine($"Watch connectivity Reachable:{(session.Reachable ? '✓' : '✗')} from {Device}");
-            // handle session reachability change
-            if (session.Reachable)
-            {
-                // great! continue on with Interactive Messaging
-            }
-            else
-            {
-                // 😥 prompt the user to unlock their iOS device
-            }
+            Debug.WriteLine($"Watch connectivity Reachable:{(session.Reachable ? '✓' : '✗')}");
         }
-
-        #region Application Context Methods
 
         public void SendBackgroundHighPriorityMessage(Dictionary<string, object> applicationContext)
         {
@@ -90,27 +82,24 @@ namespace WatchConnectivity
                 return;
             }
 
-            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+            try
             {
-                try
+                var sendSuccessfully = validSession.UpdateApplicationContext(applicationContext.ToNSDictionary(), out var error);
+                if (sendSuccessfully)
                 {
-                    var sendSuccessfully = validSession.UpdateApplicationContext(applicationContext.ToNSDictionary(), out var error);
-                    if (sendSuccessfully)
-                    {
-                        Console.WriteLine($"Sent App Context from {Device} \nPayLoad: {applicationContext.ToNSDictionary().ToString()} \n");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Error Updating Application Context: {error.LocalizedDescription}");
-                    }
+                    Debug.WriteLine($"Sent App Context \nPayLoad: {applicationContext.ToNSDictionary().ToString()} \n");
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine($"Exception Updating Application Context: {ex.Message}");
+                    Debug.WriteLine($"Error Updating Application Context: {error.LocalizedDescription}");
                 }
-            });
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
-        WCSessionUserInfoTransfer _transf;
+
         public void SendBackgroundFifoHighPriorityMessage(Dictionary<string, object> message)
         {
             if(validSession is null || validSession.ActivationState != WCSessionActivationState.Activated)
@@ -120,10 +109,9 @@ namespace WatchConnectivity
 
             _transf?.Cancel();
 
-            Console.WriteLine("Started transferring user info");
+            Debug.WriteLine("Started transferring user info");
 
             _transf = session.TransferUserInfo(message.ToNSDictionary());
-
 
             Task.Run(async () =>
             {
@@ -133,53 +121,41 @@ namespace WatchConnectivity
                     {
                         await Task.Delay(1000);
                     }
-                    Console.WriteLine("Finished transferring user info");
+                    Debug.WriteLine("Finished transferring user info");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error transferring user info " + ex);
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
                 }
             });
-
-            //session.SendMessage(dic,
-            //    (dd) =>
-            //    {
-            //        Console.WriteLine(dd?.ToString());
-            //    },
-            //    error =>
-            //    {
-            //        Console.WriteLine(error?.ToString());
-            //    }
-            //);
         }
 
         public override void DidReceiveApplicationContext(WCSession session, NSDictionary<NSString, NSObject> applicationContext)
         {
-            Console.WriteLine($"Receiving Message on {Device}");
-            if (ApplicationContextUpdated != null)
+            Debug.WriteLine($"Receiving Message");
+            if (OnApplicationContextUpdated != null)
             {
                 var keys = applicationContext.Keys.Select(k => k.ToString()).ToArray();
                 var values = applicationContext.Values.Select(v => JsonConvert.DeserializeObject(v.ToString())).ToArray();
                 var dictionary = keys.Zip(values, (k, v) => new { Key = k, Value = v })
                                      .ToDictionary(x => x.Key, x => x.Value);
 
-                ApplicationContextUpdated(session, dictionary);
+                OnApplicationContextUpdated(session, dictionary);
             }
         }
 
-
         public override void DidReceiveMessage(WCSession session, NSDictionary<NSString, NSObject> message)
         {
-            Console.WriteLine($"Receiving Message on {Device}");
+            Debug.WriteLine($"Receiving Message");
 
-            var keys = message.Keys.Select(k => k.ToString()).ToArray();
-            var values = message.Values.Select(v => v?.ToString() as object).ToArray();
-            var dictionary = keys.Zip(values, (k, v) => new { Key = k, Value = v })
-                                 .ToDictionary(x => x.Key, x => x.Value);
-
-            MessagedReceived?.Invoke(session, dictionary);
+            OnMessagedReceived?.Invoke(session, message.ToDictionary());
         }
 
-        #endregion
+        public override void DidReceiveMessage(WCSession session, NSDictionary<NSString, NSObject> message, WCSessionReplyHandler replyHandler)
+        {
+            Debug.WriteLine($"Receiving Message");
+
+            OnMessagedReceived?.Invoke(session, message.ToDictionary());
+        }
     }
 }

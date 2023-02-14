@@ -149,9 +149,10 @@ namespace Bit.Droid
             var clipboardService = new ClipboardService(stateService);
             var deviceActionService = new DeviceActionService(stateService, messagingService);
             var fileService = new FileService(stateService, broadcasterService);
-            var autofillHandler = new AutofillHandler(stateService, messagingService, clipboardService, new LazyResolve<IEventService>());
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, clipboardService,
                 messagingService, broadcasterService);
+            var autofillHandler = new AutofillHandler(stateService, messagingService, clipboardService,
+                platformUtilsService, new LazyResolve<IEventService>());
             var biometricService = new BiometricService();
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);

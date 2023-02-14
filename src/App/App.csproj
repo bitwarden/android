@@ -143,6 +143,7 @@
     <Folder Include="Utilities\AccountManagement\" />
     <Folder Include="Controls\DateTime\" />
     <Folder Include="Controls\IconLabelButton\" />
+    <Folder Include="Controls\PasswordStrengthProgressBar\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -435,5 +436,6 @@
     <None Remove="Utilities\AccountManagement\" />
     <None Remove="Controls\DateTime\" />
     <None Remove="Controls\IconLabelButton\" />
+    <None Remove="Controls\PasswordStrengthProgressBar\" />
   </ItemGroup>
 </Project>

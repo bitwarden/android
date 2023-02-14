@@ -376,7 +376,7 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>S'ha copiat '{0}'.</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Verifica empremta digital</value>
@@ -556,7 +556,7 @@
     <value>Temps d'espera de la caixa forta</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Acció del temps d'espera de la caixa forta</value>
+    <value>Acció quan acabe el temps d'espera de la caixa forta</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
     <value>En tancar la sessió s'eliminarà tot l'accés a la vostra caixa forta i es requerirà una autenticació en línia després del període de temps d'espera. Esteu segur que voleu utilitzar aquesta configuració?</value>
@@ -769,16 +769,16 @@
     <value>2. Activeu el commutador i premeu d'acord per acceptar.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>Deshabilitat</value>
+    <value>No</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>Habilitat</value>
+    <value>Sí</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Desactivat</value>
+    <value>No</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Activat</value>
+    <value>Sí</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Estat</value>
@@ -1102,6 +1102,9 @@ L'escaneig es farà automàticament.</value>
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Srta.</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Novembre</value>
@@ -1620,13 +1623,13 @@ L'escaneig es farà automàticament.</value>
     <value>La vostra sessió ha caducat.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Utilitzeu dades biomètriques per verificar</value>
+    <value>Desbloqueja amb biometria</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>Dades biomètriques</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Utilitzeu dades biomètriques per desbloquejar</value>
+    <value>Desbloqueja amb biometria</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
     <value>Bitwarden necessita atenció: vegeu "Servei d'accessibilitat d'emplenament automàtic" de la configuració de Bitwarden</value>
@@ -1828,7 +1831,7 @@ L'escaneig es farà automàticament.</value>
     <value>Serveis d'emplenament automàtic</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Utilitza l'emplenament automàtic en línia</value>
+    <value>Utilitza l'emplenament automàtic integrat</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
     <value>Utilitzeu l'emplenament automàtic en línia si l'IME (teclat) seleccionat l'admet. Si la vostra configuració no és compatible (o aquesta opció està desactivada), s'utilitzarà la superposició d'emplenament automàtic per defecte.</value>
@@ -2299,9 +2302,6 @@ L'escaneig es farà automàticament.</value>
     <value>Una vegada introduïda la clau correctament,
 seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Si configureu les opcions de bloqueig a "Mai", la vostra caixa forta està disponible per a qualsevol persona amb accés al vostre dispositiu. Si utilitzeu aquesta opció, hauríeu d'assegurar-vos de mantenir el vostre dispositiu correctament protegit.</value>
   </data>
@@ -2422,6 +2422,14 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token d'accés a l'API</value>
   </data>
@@ -2451,6 +2459,9 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Aleatori</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connecta't a Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Divulgació del servei d'accessibilitat</value>
@@ -2488,7 +2499,7 @@ Voleu canviar a aquest compte?</value>
     <value>Inicia sessió amb la contrasenya mestra</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Inicia sessió amb un altre dispositiu</value>
+    <value>Inici de sessió amb un altre dispositiu</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>S'ha iniciat la sessió</value>
@@ -2511,7 +2522,58 @@ Voleu canviar a aquest compte?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Aquesta sol·licitud ja no és vàlida</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Sol·licituds d'inici de sessió pendents</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Rebutja totes les sol·licituds</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Esteu segur que voleu rebutjar totes les sol·licituds d'inici de sessió pendents?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Sol·licituds rebutjades</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Cap sol·licitud pendent</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Doneu permís de càmera per a escanejar</value>
+    <value>Habilita el permís de la càmera per utilitzar l'escàner</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Important</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>La vostra contrasenya mestra no es pot recuperar si l'oblideu! {0} caràcters com a mínim.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Contrasenya mestra poc segura</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>S'ha identificat una contrasenya feble. Utilitzeu una contrasenya segura per protegir el vostre compte. Esteu segur que voleu utilitzar una contrasenya feble?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Poc segura</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Bona</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Forta</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Comproveu les infraccions de dades conegudes per a aquesta contrasenya</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Contrasenya mestra exposada</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>S'ha trobat la contrasenya en una filtració de dades. Utilitzeu una contrasenya única per protegir el vostre compte. Esteu segur que voleu utilitzar una contrasenya exposada?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Contrasenya mestra exposada i poc segura</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Contrasenya feble identificada i trobada en una filtració de dades. Utilitzeu una contrasenya única i segura per protegir el vostre compte. Esteu segur que voleu utilitzar aquesta contrasenya?</value>
   </data>
 </root>

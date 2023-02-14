@@ -122,40 +122,40 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden ir pierakstīšanās datu un paroļu pārvaldnieks, kas palīdz uzturēt Tavu drošību tiešsaistē.</value>
+    <value>Bitwarden ir pieteikšanās un paroļu pārvaldnieks, kas palīdz nodrošināt drošību tiešsaistē.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>Bitwarden, Inc. ir 8bit Solutions LLC mātesuzņēmums.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET UN CITI ATZINA PAR LABĀKO PAROĻU PĀRVALDNIEKU.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+Pārvaldi, uzglabā, aizsargā un kopīgo neierobežotu skaitu paroļu neierobežotā skaitā ierīču no jebkuras vietas! Bitwarden piedāvā atvērtā koda paroļu pārvaldības risinājumus ikvienam gan mājās, gan darbā, gan ceļā.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Veido spēcīgas, neatkārtojamas un nejaušas paroles atbilstoši drošības prasībām ikkatrai bieži apmeklētai vietnei.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+Bitwarden Send ātri pārsūta šifrētu informāciju - datnes un vienkāršu tekstu - ikvienam.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+Bitwarden piedāvā Teams un Enterprise plānus uzņēmumiem, lai Tu varētu droši kopīgot paroles ar darbabiedriem.
 
-Why Choose Bitwarden:
+Kāpēc izvēlēties Bitwarden:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+Pasaules mēroga šifrēšana
+Paroles tiek aizsargātas ar mūsdienīgu un nepārtrauktu šifrēšanu (AES-256 bitu, "sāls" jaucējalgoritms un PBKDF2 SHA-256), lai Tavi dati būtu droši un neatklāti.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Iebūvēts paroļu veidotājs
+Veido spēcīgas, neatkārtojamas un nejaušas paroles atbilstoši drošības prasībām ikkatrai bieži apmeklētai vietnei.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+Vispasaules tulkojumi
+Bitwarden tulkojumi ir pieejami 40 valodās, un to skaits turpina pieaugt, pateicoties mūsu vispasaules kopienai.
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+Starpplatformu lietotnes
+Nodrošini un kopīgo sensitīvus datus savā Bitwarden glabātavā no jebkura pārlūka, mobilās ierīces vai darbvirsmas operētājsistēmas un daudz ko citu!
 </value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>Drošs bezmaksas paroļu pārvaldnieks visām Tavām ierīcēm</value>
+    <value>Drošs bezmaksas paroļu pārvaldnieks visām jūsu ierīcēm</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Pārvaldi visus savus pierakstīšanās vienumus un paroles no drošas glabātavas</value>
@@ -167,14 +167,14 @@ Secure and share sensitive data within your Bitwarden Vault from any browser, mo
     <value>Aizsargā savu glabātavu ar pirkstu nospiedumu, PIN kodu vai galveno paroli</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Pierakstīšanās veidņu ātra automātiskā aizpilde tīmekļa pārlūkā un citās lietotnēs</value>
+    <value>Ātri automātiski aizpildiet pieteikšanās datus no tīmekļa pārlūkprogrammas un citām lietotnēm</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sinhronizē un piekļūsti savai glabātavai vairākās ierīcēs:
+    <value>Sinhronizējiet un piekļūstiet glabātuvei no vairākām ierīcēm
 
-- tālrunī
-- planšetē
-- darbvirsmā
-- tīmeklī</value>
+- Tālrunis
+- Planšetdators
+- Darbvirsma
+- Tīmeklis</value>
   </data>
 </root>

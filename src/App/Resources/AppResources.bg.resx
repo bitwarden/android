@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authenticator</value>
+    <value>Удостоверител</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -376,7 +376,7 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>{0} беше копирано.</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Потвърждаване на пръстовия отпечатък</value>
@@ -1102,6 +1102,9 @@
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Г-ца</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>ноември</value>
@@ -2080,7 +2083,7 @@
     <value>Това действие е защитено. За да продължите, въведете отново главната си парола, за да потвърдите самоличността си.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Captcha required</value>
+    <value>Адресът за hCaptcha е задължителен</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
     <value>
@@ -2267,7 +2270,7 @@
     <value>Всички</value>
   </data>
   <data name="Totp" xml:space="preserve">
-    <value>TOTP</value>
+    <value>Кода за потвърждаване</value>
   </data>
   <data name="VerificationCodes" xml:space="preserve">
     <value>Кодове за потвърждаване</value>
@@ -2291,17 +2294,14 @@
     <value>Ръчно въвеждане на кода</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
-    <value>Add TOTP</value>
+    <value>Копиране на кода за потвърждаване</value>
   </data>
   <data name="SetupTotp" xml:space="preserve">
-    <value>Set up TOTP</value>
+    <value>Копиране на кода за потвърждаване</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
     <value>Once the key is successfully entered,
 select Add TOTP to store the key safely</value>
-  </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Ако изберете „Никога“ като настройка за заключването, трезорът Ви ще бъде достъпен за всеки, който има досег с устройството. Ако използвате тази настройка, трябва да се уверите, че устройството Ви е удачно защитено.</value>
@@ -2337,7 +2337,7 @@ select Add TOTP to store the key safely</value>
     <value>Време</value>
   </data>
   <data name="Near" xml:space="preserve">
-    <value>Near</value>
+    <value>Близо</value>
   </data>
   <data name="ConfirmLogIn" xml:space="preserve">
     <value>Потвърждаване на вписването</value>
@@ -2388,13 +2388,13 @@ select Add TOTP to store the key safely</value>
     <value>Тип потребителско име</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Plus addressed email</value>
+    <value>Адрес на е-поща с плюс</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
-    <value>Catch-all email</value>
+    <value>Хващаща всичко е-поща</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
-    <value>Forwarded email alias</value>
+    <value>Псевдоним на препратена е-поща</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
     <value>Произволна дума</value>
@@ -2423,6 +2423,14 @@ select Add TOTP to store the key safely</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Идентификатор за достъп до API</value>
   </data>
@@ -2433,7 +2441,7 @@ select Add TOTP to store the key safely</value>
     <value>Генериране на потр. име</value>
   </data>
   <data name="EmailType" xml:space="preserve">
-    <value>Email Type</value>
+    <value>Вид е-поща</value>
   </data>
   <data name="WebsiteRequired" xml:space="preserve">
     <value>Уеб сайт (задължително)</value>
@@ -2445,13 +2453,16 @@ select Add TOTP to store the key safely</value>
     <value>Използвайте възможностите за под-адресиране на е-поща на своя доставчик</value>
   </data>
   <data name="CatchAllEmailDescription" xml:space="preserve">
-    <value>Use your domain's configured catch-all inbox.</value>
+    <value>Използвайте конфигурираната входяща кутия за събиране на всичко.</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
-    <value>Generate an email alias with an external forwarding service.</value>
+    <value>Създайте псевдоним на е-поща с външна услуга за препращане.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Произволно</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Свързване към часовник</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Използване на услугата за достъпност</value>
@@ -2512,7 +2523,58 @@ select Add TOTP to store the key safely</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Тази зявка вече не е приложима</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Чакащи заявки за вписване</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Отказване на всички заявки</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Наистина ли искате да откажете всички чакащи заявки за вписване?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Заявките са отказани</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Няма чакащи заявки</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Разрешете достъпа до камерата, за да използвате скенера</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Важно</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Главната парола не може да бъде възстановена, ако я забравите! Дължината трябва да е поне {0} знака.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Слаба главна парола</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Разпозната е слаба парола. Използвайте силна парола, за да защитете данните си. Наистина ли искате да използвате слаба парола?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Слаба</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Добра</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Силна</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Проверяване в известните случаи на изтекли данни за тази парола</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Exposed Master Password</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Weak and Exposed Master Password</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
   </data>
 </root>

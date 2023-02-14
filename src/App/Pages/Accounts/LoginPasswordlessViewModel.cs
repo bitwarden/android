@@ -118,7 +118,7 @@ namespace Bit.App.Pages
             }
 
             var loginRequestData = await _authService.GetPasswordlessLoginRequestByIdAsync(LoginRequest.Id);
-            if (loginRequestData.RequestApproved.HasValue && loginRequestData.ResponseDate.HasValue)
+            if (loginRequestData.IsAnswered)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.ThisRequestIsNoLongerValid);
                 await Page.Navigation.PopModalAsync();

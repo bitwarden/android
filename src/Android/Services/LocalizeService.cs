@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using Bit.App.Abstractions;
 using Bit.App.Models;
@@ -25,13 +26,13 @@ namespace Bit.Droid.Services
                 try
                 {
                     var fallback = ToDotnetFallbackLanguage(new PlatformCulture(netLanguage));
-                    Console.WriteLine(netLanguage + " failed, trying " + fallback + " (" + e1.Message + ")");
+                    Debug.WriteLine(netLanguage + " failed, trying " + fallback + " (" + e1.Message + ")");
                     ci = new CultureInfo(fallback);
                 }
                 catch (CultureNotFoundException e2)
                 {
                     // iOS language not valid .NET culture, falling back to English
-                    Console.WriteLine(netLanguage + " couldn't be set, using 'en' (" + e2.Message + ")");
+                    Debug.WriteLine(netLanguage + " couldn't be set, using 'en' (" + e2.Message + ")");
                     ci = new CultureInfo("en");
                 }
             }
@@ -40,7 +41,7 @@ namespace Bit.Droid.Services
 
         private string AndroidToDotnetLanguage(string androidLanguage)
         {
-            Console.WriteLine("Android Language:" + androidLanguage);
+            Debug.WriteLine("Android Language:" + androidLanguage);
             var netLanguage = androidLanguage;
             if (androidLanguage.StartsWith("zh"))
             {
@@ -79,13 +80,13 @@ namespace Bit.Droid.Services
                         // ONLY use cultures that have been tested and known to work
                 }
             }
-            Console.WriteLine(".NET Language/Locale:" + netLanguage);
+            Debug.WriteLine(".NET Language/Locale:" + netLanguage);
             return netLanguage;
         }
 
         private string ToDotnetFallbackLanguage(PlatformCulture platCulture)
         {
-            Console.WriteLine(".NET Fallback Language:" + platCulture.LanguageCode);
+            Debug.WriteLine(".NET Fallback Language:" + platCulture.LanguageCode);
             var netLanguage = platCulture.LanguageCode; // use the first part of the identifier (two chars, usually);
             switch (platCulture.LanguageCode)
             {
@@ -95,7 +96,7 @@ namespace Bit.Droid.Services
                     // add more application-specific cases here (if required)
                     // ONLY use cultures that have been tested and known to work
             }
-            Console.WriteLine(".NET Fallback Language/Locale:" + netLanguage + " (application-specific)");
+            Debug.WriteLine(".NET Fallback Language/Locale:" + netLanguage + " (application-specific)");
             return netLanguage;
         }
 

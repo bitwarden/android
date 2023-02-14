@@ -376,7 +376,7 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>{0} wurde kopiert</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Fingerabdruck überprüfen</value>
@@ -1102,6 +1102,9 @@ Das Scannen erfolgt automatisch.</value>
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Frau</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Divers</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
@@ -2298,9 +2301,6 @@ Das Scannen erfolgt automatisch.</value>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
     <value>Sobald der Schlüssel erfolgreich eingegeben wurde, wähle TOTP hinzufügen, um den Schlüssel sicher abzuspeichern</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Wenn du deine Sperroptionen auf „Nie“ einstellst, bleibt dein Tresor für jeden zugänglich, der Zugriff auf dein Gerät hat. Wenn du diese Option verwendest, solltest du sicherstellen, dass du dein Gerät angemessen schützt.</value>
   </data>
@@ -2317,7 +2317,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Bist du sicher, dass du die Bildschirmaufnahme aktivieren möchtest?</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
-    <value>Zugangsdaten angefordert</value>
+    <value>Anmeldung angefordert</value>
   </data>
   <data name="AreYouTryingToLogIn" xml:space="preserve">
     <value>Versuchst du dich anzumelden?</value>
@@ -2421,6 +2421,14 @@ Das Scannen erfolgt automatisch.</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API-Zugangs-Token</value>
   </data>
@@ -2450,6 +2458,9 @@ Das Scannen erfolgt automatisch.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Zufällig</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Mit Uhr verbinden</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Bedienungshilfen Offenlegung</value>
@@ -2510,7 +2521,58 @@ Möchtest du zu diesem Konto wechseln?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Diese Anfrage ist nicht mehr gültig</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Ausstehende Anmeldeanfragen</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Alle Anfragen ablehnen</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Bist du sicher, dass du alle ausstehenden Anmeldeanfragen ablehnen möchtest?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Anfragen abgelehnt</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Keine ausstehenden Anfragen</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Kamerazugriff aktivieren, um den Scanner zu verwenden</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Wichtig</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Dein Master-Passwort kann nicht wiederhergestellt werden, wenn du es vergisst! Mindestens {0} Zeichen.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Schwaches Master-Passwort</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Schwaches Passwort erkannt. Verwende ein starkes Passwort, um dein Konto zu schützen. Bist du sicher, dass du ein schwaches Passwort verwenden möchtest?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Schwach</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Gut</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Stark</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Bekannte Datendiebstähle auf dieses Passwort überprüfen</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Kompromittiertes Master-Passwort</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Passwort in einem Datendiebstahl gefunden. Verwende ein einzigartiges Passwort, um dein Konto zu schützen. Bist du sicher, dass du ein kompromittiertes Passwort verwenden möchtest?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Schwaches und kompromittiertes Master-Passwort</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Schwaches Passwort erkannt und in einem Datendiebstahl gefunden. Verwende ein starkes und einzigartiges Passwort, um dein Konto zu schützen. Bist du sicher, dass du dieses Passwort verwenden möchtest?</value>
   </data>
 </root>

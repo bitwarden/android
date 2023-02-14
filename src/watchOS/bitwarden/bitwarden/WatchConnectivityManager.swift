@@ -10,8 +10,9 @@ final class WatchConnectivityManager: NSObject, ObservableObject {
     static let shared = WatchConnectivityManager()
     @Published var notificationMessage: NotificationMessage? = nil
     
-    private let kMessageKey = "message"
-    private let kCipherDataKey = "cipherData"
+    private let WATCH_DTO_APP_CONTEXT_KEY = "watchDto"
+    private let TRIGGER_SYNC_ACTION_KEY = "triggerSync"
+    private let ACTION_MESSAGE_KEY = "actionMessage"
     
     private override init() {
         super.init()
@@ -40,7 +41,7 @@ final class WatchConnectivityManager: NSObject, ObservableObject {
             return
         }
         
-        WCSession.default.sendMessage([kMessageKey : message], replyHandler: nil) { error in
+        WCSession.default.sendMessage([ACTION_MESSAGE_KEY : TRIGGER_SYNC_ACTION_KEY], replyHandler: nil) { error in
             print("Cannot send message: \(String(describing: error))")
         }
     }
@@ -52,7 +53,7 @@ extension WatchConnectivityManager: WCSessionDelegate {
             self?.notificationMessage = NotificationMessage(text: "testing this didReceiveMessage")
         }
         
-        if let notificationText = message[kMessageKey] as? String {
+        if let notificationText = message[ACTION_MESSAGE_KEY] as? String {
             DispatchQueue.main.async { [weak self] in
                 self?.notificationMessage = NotificationMessage(text: notificationText)
             }
@@ -96,7 +97,7 @@ extension WatchConnectivityManager: WCSessionDelegate {
         DispatchQueue.main.async { [weak self] in
             self?.notificationMessage = NotificationMessage(text: "testing this didReceiveApplicationContext")
         }
-        if let notificationText = applicationContext[kCipherDataKey] as? String {
+        if let notificationText = applicationContext[WATCH_DTO_APP_CONTEXT_KEY] as? String {
             
 //            let decoder = JSONDecoder()
 //            do {

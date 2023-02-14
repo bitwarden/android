@@ -12,7 +12,7 @@ The Bitwarden mobile application is written in C# with Xamarin Android, Xamarin 
 
 # Build/Run
 
-Please refer to the [Mobile section](https://contributing.bitwarden.com/mobile/) of the [Contributing Documentation](https://contributing.bitwarden.com/) for build instructions, recommended tooling, code style tips, and lots of other great information to get you started.
+Please refer to the [Mobile section](https://contributing.bitwarden.com/getting-started/clients/mobile/) of the [Contributing Documentation](https://contributing.bitwarden.com/) for build instructions, recommended tooling, code style tips, and lots of other great information to get you started.
 
 # We're Hiring!
 

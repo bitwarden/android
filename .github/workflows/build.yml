@@ -4,10 +4,10 @@ name: Build
 on:
   push:
     branches-ignore:
-      - 'l10n_master'
-      - 'gh-pages'
+      - "l10n_master"
+      - "gh-pages"
     paths-ignore:
-      - '.github/workflows/**'
+      - ".github/workflows/**"
   workflow_dispatch:
     inputs: {}
 
@@ -62,10 +62,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: ['prod', 'qa']
+        variant: ["prod", "qa"]
     steps:
       - name: Setup NuGet
-        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
+        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa # v1.0.6
         with:
           nuget-version: 5.9.0
 
@@ -151,7 +151,17 @@ jobs:
         shell: pwsh
 
       - name: Run Core tests
-        run: dotnet test test/Core.Test/Core.Test.csproj
+        run: dotnet test test/Core.Test/Core.Test.csproj --logger "trx;LogFileName=test-results.trx"
+        shell: pwsh
+
+      - name: Report test results
+        uses: dorny/test-reporter@c9b3d0e2bd2a4e96aaf424dbaa31c46b42318226
+        if: always()
+        with:
+          name: Test Results
+          path: "**/test-results.trx"
+          reporter: dotnet-trx
+          fail-on-error: true
 
       - name: Build Play Store publisher
         if: ${{ matrix.variant == 'prod' }}
@@ -179,7 +189,7 @@ jobs:
           $androidPath = $($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj");
           $packageName = "com.x8bit.bitwarden";
 
-          if ("${{ matrix.variant }}" -ne "prod")
+          if ("${{ matrix.variant }}" -ne "prod") 
           {
             $packageName = "com.x8bit.bitwarden.${{ matrix.variant }}";
           }
@@ -291,7 +301,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Setup NuGet
-        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
+        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa # v1.0.6
         with:
           nuget-version: 5.9.0
 
@@ -486,11 +496,11 @@ jobs:
 
   ios:
     name: Apple iOS
-    runs-on: macos-11
+    runs-on: macos-12
     needs: setup
     steps:
       - name: Setup NuGet
-        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
+        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa # v1.0.6
         with:
           nuget-version: 5.9.0
 
@@ -549,6 +559,8 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output $HOME/secrets/dist_watch_app_extension.mobileprovision \
             ./.github/secrets/dist_watch_app_extension.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output ./src/watchOS/bitwarden/GoogleService-Info.plist ./.github/secrets/GoogleService-Info.plist.gpg
         shell: bash
 
       - name: Increment version
@@ -636,9 +648,6 @@ jobs:
           echo "########################################"
           echo "##### Done"
           echo "########################################"
-          cd src/watchOS
-          ls -R
-          cd ../..
         shell: bash
 
       - name: Restore packages
@@ -676,7 +685,12 @@ jobs:
           ARCHIVE_DSYMS_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive/dSYMs"
           EXPORT_PATH="./bitwarden-export"
 
-          cp -r $ARCHIVE_DSYMS_PATH $EXPORT_PATH
+          WATCH_ARCHIVE_DSYMS_PATH="./src/watchOS/bitwarden.xcarchive/dSYMs/"
+          WATCH_DSYMS_EXPORT_PATH="$EXPORT_PATH/Watch_dSYMs"
+
+          cp -r -v $ARCHIVE_DSYMS_PATH $EXPORT_PATH
+          mkdir $WATCH_DSYMS_EXPORT_PATH
+          cp -r -v $WATCH_ARCHIVE_DSYMS_PATH $WATCH_DSYMS_EXPORT_PATH
         shell: bash
 
       - name: Upload App Store .ipa & dSYMs artifacts
@@ -699,23 +713,39 @@ jobs:
 
       - name: Upload dSYMs to App Center
         if: |
-            (github.ref == 'refs/heads/master'
-              && needs.setup.outputs.rc_branch_exists == 0
-              && needs.setup.outputs.hotfix_branch_exists == 0)
-            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix-rc'
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
         env:
           APPCENTER_IOS_TOKEN: ${{ steps.retrieve-secrets.outputs.appcenter-ios-token }}
         run: appcenter crashes upload-symbols -a bitwarden/bitwarden -s "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
         shell: bash
 
+      - name: Upload Watch dSYMs to Firebase Crashlytics
+        if: |
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
+        run: |
+
+          echo "########################################"
+          echo "##### Uploading Watch dSYMs to Firebase"
+          echo "########################################"
+
+          find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/Watch_dSYMs" \;
+        shell: bash
+
       - name: Deploy to App Store
         if: |
-            (github.ref == 'refs/heads/master'
-              && needs.setup.outputs.rc_branch_exists == 0
-              && needs.setup.outputs.hotfix_branch_exists == 0)
-            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix-rc'
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
         env:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
@@ -783,9 +813,9 @@ jobs:
     steps:
       - name: Check if any job failed
         if: |
-            (github.ref == 'refs/heads/master')
-            || (github.ref == 'refs/heads/rc')
-            || (github.ref == 'refs/heads/hotfix-rc')
+          (github.ref == 'refs/heads/master')
+          || (github.ref == 'refs/heads/rc')
+          || (github.ref == 'refs/heads/hotfix-rc')
         env:
           CLOC_STATUS: ${{ needs.cloc.result }}
           ANDROID_STATUS: ${{ needs.android.result }}

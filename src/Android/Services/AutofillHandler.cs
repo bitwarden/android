@@ -6,6 +6,7 @@ using Android.Content;
 using Android.OS;
 using Android.Provider;
 using Android.Views.Autofill;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
@@ -20,16 +21,19 @@ namespace Bit.Droid.Services
         private readonly IStateService _stateService;
         private readonly IMessagingService _messagingService;
         private readonly IClipboardService _clipboardService;
+        private readonly IPlatformUtilsService _platformUtilsService;
         private readonly LazyResolve<IEventService> _eventService;
 
         public AutofillHandler(IStateService stateService,
             IMessagingService messagingService,
             IClipboardService clipboardService,
+            IPlatformUtilsService platformUtilsService,
             LazyResolve<IEventService> eventService)
         {
             _stateService = stateService;
             _messagingService = messagingService;
             _clipboardService = clipboardService;
+            _platformUtilsService = platformUtilsService;
             _eventService = eventService;
         }
 
@@ -202,6 +206,7 @@ namespace Bit.Droid.Services
                     if (totp != null)
                     {
                         await _clipboardService.CopyTextAsync(totp);
+                        _platformUtilsService.ShowToastForCopiedValue(AppResources.VerificationCodeTotp);
                     }
                 }
             }

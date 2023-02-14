@@ -34,7 +34,7 @@ public class CryptoService{
             let item = try JSONDecoder().decode(type, from: decryptedData)
             return item
         } catch {
-            assertionFailure("Fail to decode item for keychain: \(error)")
+            Log.e("Fail to decode item for keychain: \(error)")
             return nil
         }
     }

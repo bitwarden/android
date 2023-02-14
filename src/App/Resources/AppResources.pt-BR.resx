@@ -276,7 +276,7 @@
     <value>Tem certeza que deseja sair?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Remover Conta</value>
+    <value>Remover conta</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
     <value>Tem certeza que deseja remover essa conta?</value>
@@ -376,7 +376,7 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>{0} foi copiado(a).</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Verificar impressão digital</value>
@@ -431,7 +431,7 @@
     <value>Extensão do Aplicativo Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir da Extensão do App do Bitwarden. Saiba mais sobre como usar a Extensão do App do Bitwarden navegando até a tela de "Configurações".</value>
+    <value>A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir da extensão do app do Bitwarden. Saiba mais sobre como usar a extensão do app do Bitwarden navegando até a tela de "Configurações".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Use o Bitwarden no Safari e em outros aplicativos para preencher automaticamente suas credenciais.</value>
@@ -808,7 +808,7 @@
     <value>Você está procurando uma credencial de autopreenchimento para "{0}".</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Aprenda mais Sobre as Organizações</value>
+    <value>Aprenda mais sobre as Organizações</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Não é possível abrir o aplicativo "{0}".</value>
@@ -1102,6 +1102,9 @@ A leitura será feita automaticamente.</value>
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Sra</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Novembro</value>
@@ -1580,7 +1583,7 @@ A leitura será feita automaticamente.</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
-    <value>Preencher automaticamente URIs bloqueadas</value>
+    <value>Auto-preencher URIs bloqueadas</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
     <value>O preenchimento automático não será oferecido para URIs bloqueados. Separe vários URIs com uma vírgula. Por exemplo: "https://twitter.com, androidapp://com.twitter.android".</value>
@@ -1605,7 +1608,7 @@ A leitura será feita automaticamente.</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Incluir Número</value>
+    <value>Incluir número</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Baixar</value>
@@ -1620,13 +1623,13 @@ A leitura será feita automaticamente.</value>
     <value>A sua sessão expirou.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Verificação Biométrica</value>
+    <value>Verificação biométrica</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>Biometria</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Usar Biometria para Desbloquear</value>
+    <value>Usar biometria para desbloquear</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
     <value>O Bitwarden precisa de atenção - Veja o "Serviço de Acessibilidade de Autopreenchimento" nas Configurações do Bitwarden</value>
@@ -1659,7 +1662,7 @@ A leitura será feita automaticamente.</value>
     <value>Enviar um código de verificação para o seu e-mail</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
-    <value>Código Enviado!</value>
+    <value>Código enviado!</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
     <value>Confirme a sua identidade para continuar.</value>
@@ -2300,9 +2303,6 @@ A leitura será feita automaticamente.</value>
     <value>Assim que a chave for inserida corretamente,
 selecione Adicionar TOTP para armazenar a chave de forma segura</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Definir suas opções de bloqueio para "Nunca" mantém o cofre disponível para qualquer pessoa com acesso ao seu dispositivo. Se usar esta opção, você deverá garantir que manterá seu dispositivo devidamente protegido.</value>
   </data>
@@ -2423,6 +2423,14 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token de Acesso à API</value>
   </data>
@@ -2452,6 +2460,9 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Aleatória</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Conectar ao Relógio</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Aviso sobre o Serviço de Acessibilidade</value>
@@ -2512,7 +2523,58 @@ Você deseja mudar para esta conta?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Este pedido não é mais válido</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Pedidos de acesso pendentes</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Recusar todas as solicitações</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Tem certeza que deseja recusar todos os pedidos de login pendentes?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Solicitações recusadas</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Nenhuma solicitação pendente</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>Conceda permissão de uso da câmera para usar o scanner</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Importante</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Sua senha mestra não pode ser recuperada se você esquecê-la! Mínimo de {0} caracteres.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Senha Mestra Fraca</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Senha fraca identificada. Use uma senha forte para proteger a sua conta. Você tem certeza que deseja usar uma senha fraca?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Fraca</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Boa</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Forte</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Verifique vazamento de dados conhecidos para esta senha</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Senha Mestra Comprometida</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>A senha foi encontrada em um vazamento de dados. Use uma senha única e forte para proteger sua conta. Tem certeza de que deseja usar uma senha comprometida?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Senha Mestra Fraca e Comprometida</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Uma senha foi identificada como fraca e foi encontrada em um vazamento de dados. Use uma senha única e forte para proteger sua conta. Quer mesmo usar essa senha?</value>
   </data>
 </root>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using Bit.App.Abstractions;
 using Bit.App.Models;
@@ -31,13 +32,13 @@ namespace Bit.iOS.Core.Services
                 try
                 {
                     var fallback = ToDotnetFallbackLanguage(new PlatformCulture(netLanguage));
-                    Console.WriteLine(netLanguage + " failed, trying " + fallback + " (" + e1.Message + ")");
+                    Debug.WriteLine(netLanguage + " failed, trying " + fallback + " (" + e1.Message + ")");
                     ci = new CultureInfo(fallback);
                 }
                 catch (CultureNotFoundException e2)
                 {
                     // iOS language not valid .NET culture, falling back to English
-                    Console.WriteLine(netLanguage + " couldn't be set, using 'en' (" + e2.Message + ")");
+                    Debug.WriteLine(netLanguage + " couldn't be set, using 'en' (" + e2.Message + ")");
                     ci = new CultureInfo("en");
                 }
             }
@@ -47,7 +48,7 @@ namespace Bit.iOS.Core.Services
 
         private string iOSToDotnetLanguage(string iOSLanguage)
         {
-            Console.WriteLine("iOS Language:" + iOSLanguage);
+            Debug.WriteLine("iOS Language:" + iOSLanguage);
             var netLanguage = iOSLanguage;
             if (iOSLanguage.StartsWith("zh-Hant") || iOSLanguage.StartsWith("zh-HK"))
             {
@@ -77,13 +78,13 @@ namespace Bit.iOS.Core.Services
                 }
             }
 
-            Console.WriteLine(".NET Language/Locale:" + netLanguage);
+            Debug.WriteLine(".NET Language/Locale:" + netLanguage);
             return netLanguage;
         }
 
         private string ToDotnetFallbackLanguage(PlatformCulture platCulture)
         {
-            Console.WriteLine(".NET Fallback Language:" + platCulture.LanguageCode);
+            Debug.WriteLine(".NET Fallback Language:" + platCulture.LanguageCode);
             // Use the first part of the identifier (two chars, usually);
             var netLanguage = platCulture.LanguageCode;
             switch (platCulture.LanguageCode)
@@ -97,7 +98,7 @@ namespace Bit.iOS.Core.Services
                     // add more application-specific cases here (if required)
                     // ONLY use cultures that have been tested and known to work
             }
-            Console.WriteLine(".NET Fallback Language/Locale:" + netLanguage + " (application-specific)");
+            Debug.WriteLine(".NET Fallback Language/Locale:" + netLanguage + " (application-specific)");
             return netLanguage;
         }
 

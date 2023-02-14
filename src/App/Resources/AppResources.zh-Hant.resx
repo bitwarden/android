@@ -376,7 +376,7 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>{0} 已複製。</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>驗證指紋</value>
@@ -904,7 +904,7 @@
 掃描將自動進行。</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>掃描 QR 碼</value>
+    <value>掃描 QR Code</value>
   </data>
   <data name="Camera" xml:space="preserve">
     <value>相機</value>
@@ -1102,6 +1102,9 @@
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Ms</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>十一月</value>
@@ -2299,9 +2302,6 @@
     <value>成功輸入金鑰後，
 選擇「新增 TOTP」即可安全地儲存金鑰</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>將鎖定選項設定為「從不」可讓任何能夠存取您的裝置的人都可以使用您的密碼庫。 如果您使用此選項，則應確保您的裝置得到妥善的保護。</value>
   </data>
@@ -2422,6 +2422,14 @@
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API 存取權杖</value>
   </data>
@@ -2451,6 +2459,9 @@
   </data>
   <data name="Random" xml:space="preserve">
     <value>隨機</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>連線至 Apple Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>無障礙服務聲明</value>
@@ -2511,7 +2522,58 @@
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>此請求已失效</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Pending login requests</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Decline all requests</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Are you sure you want to decline all pending login requests?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Requests declined</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>No pending requests</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>啟用相機權限以使用掃描儀</value>
+    <value>允許相機權限以使用掃描功能</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>重要</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>若忘記此密碼，任何儲存在 Bitwarden 內的資料將會丟失！請輸入最少 {0} 個字。</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>主密碼強度太弱</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>偵測到您的密碼強度不夠。我們建議您使用強密碼保護您的帳號。您確定要使用弱密碼嗎？</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>脆弱</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>良好</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>高強度</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>在被攻擊的資料庫中搜尋是否有此密碼</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Exposed Master Password</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>在其他資料庫中找到您的密碼。我們建議您使用一個獨特的密碼來保護您的帳號，您確定要用這個密碼嗎？</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>主密碼強度不足</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>是密碼強度不足，且在其他資料庫中找到這個密碼。使用一個強度足夠和獨特的密碼來保護您的帳號。請問您確定要用這個密碼嗎？</value>
   </data>
 </root>

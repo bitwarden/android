@@ -376,7 +376,7 @@
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>{0} s-a copiat</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Verificare amprentă</value>
@@ -1102,6 +1102,9 @@ Scanarea se va face automat.</value>
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Dra</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>noiembrie</value>
@@ -2299,9 +2302,6 @@ Scanarea se va face automat.</value>
     <value>După ce cheia este introdusă corect,
 selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Setarea opțiunilor de blocare la „Niciodată” face ca seiful dvs. să fie disponibil oricui are acces la acesta. Dacă utilizați această opțiune, trebuie să vă asigurați că vă păstrați dispozitivul protejat corespunzător.</value>
   </data>
@@ -2422,6 +2422,14 @@ selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>FastMail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token de acces API</value>
   </data>
@@ -2451,6 +2459,9 @@ selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Aleatoriu</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Conectează Watch(Apple)</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Dezvăluirea serviciilor de accesibilitate</value>
@@ -2491,27 +2502,78 @@ Doriți să comutați la acest cont?</value>
     <value>Autentificați-vă cu un alt dispozitiv</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Log in initiated</value>
+    <value>Autentificare inițiată</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
-    <value>A notification has been sent to your device.</value>
+    <value>O notificare a fost trimisă pe dispozitivul dvs.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+    <value>Asigurați-vă că seiful dvs. este deblocat și că fraza amprentă corespunde cu cea a celuilalt dispozitiv.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
-    <value>Resend notification</value>
+    <value>Retrimitere notificare</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>Selectezi o altă opțiune?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>View all log in options</value>
+    <value>Vedeți toate opțiunile de autentificare</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
-    <value>This request is no longer valid</value>
+    <value>Această cerere nu mai este valabilă</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Pending login requests</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Decline all requests</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Are you sure you want to decline all pending login requests?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Requests declined</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>No pending requests</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>Permite accesul camerei foto pentru a utiliza scanerul</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Important</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Parola principală nu poate fi recuperată dacă o uitați! Minim {0} caractere.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Parolă principală slabă</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Parola slabă identificată. Utilizați o parolă puternică pentru a vă proteja contul. Sigur doriți să utilizați o parolă slabă?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Slabă</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Bună</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Puternică</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Verifică spargerile cunoscute ale datelor pentru această parolă</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Parolă generală expusă</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Parola a fost găsită într-o baza de date expusa. Utilizați o parolă unică pentru a vă proteja contul. Sigur doriți să utilizați o parolă expusă?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Parolă principală slabă și expusă</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Parolă slabă identificată și găsită într-o baza de date expusa. Folosiți o parolă puternică și unică pentru a vă proteja contul. Sigur doriți să utilizați această parolă?</value>
   </data>
 </root>

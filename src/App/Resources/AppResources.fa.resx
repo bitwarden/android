@@ -148,11 +148,11 @@
     <comment>Cancel an operation.</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>رونوشت</value>
+    <value>کپی</value>
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>رونوشت کلمه عبور</value>
+    <value>کپی کلمه عبور</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
@@ -182,18 +182,18 @@
     <value>ويرايش پوشه</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>رایانامه</value>
+    <value>ایمیل</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>آدرس ایمیل</value>
+    <value>نشانی ایمیل</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
     <value>ایمیل ما</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>برای کمک گرفتن و گذاشتن بازخورد بصورت مستقیم به ما رایانامه ارسال کنید.</value>
+    <value>برای کمک گرفتن و گذاشتن بازخورد به‌صورت مستقیم به ما ایمیل ارسال کنید.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
     <value>کد پین را وارد کنید.</value>
@@ -209,7 +209,7 @@
     <value>یک مشکل را در مخزن GitHub ما باز کنید.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>از اثر انگشت برای تایید استفاده کنید.</value>
+    <value>از اثر انگشت برای تأیید استفاده کنید.</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>پوشه</value>
@@ -229,10 +229,10 @@
     <value>پوشه‌ها</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>پوشه بروزرسانی شد.</value>
+    <value>پوشه ذخیره شد</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>برو به وب سایت</value>
+    <value>برو به وب‌سایت</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
@@ -285,7 +285,7 @@
     <value>حساب قبلا اضافه شده</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value> آیا می خواهید همین الان تعویض کنید؟</value>
+    <value> آیا می‌خواهید همین الان تعویض کنید؟</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>کلمه عبور اصلی</value>
@@ -315,7 +315,7 @@
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>تایید</value>
+    <value>تأیید</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
@@ -349,18 +349,18 @@
     <value>ثبت</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>همگام سازی</value>
+    <value>همگام‌سازی</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>با تشکر از شما</value>
+    <value>متشکرم</value>
   </data>
   <data name="Tools" xml:space="preserve">
-    <value>ابزارها</value>
+    <value>ابزار</value>
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
-    <value>URI</value>
+    <value>نشانی اینترنتی</value>
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
@@ -375,8 +375,8 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} رونوشت شد.</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+    <value>{0} کپی شد.</value>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>تأیید اثر انگشت</value>
@@ -385,7 +385,7 @@
     <value>تأیید کلمه عبور اصلی</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
-    <value>تایید پین</value>
+    <value>تأیید پین</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>نسخه</value>
@@ -394,10 +394,10 @@
     <value>مشاهده</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>از وب‌ سایت ما دیدن کنید</value>
+    <value>از وب‌سایت ما دیدن کنید</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>برای کمک گرفتن، اخبار، رایانامه ما، و یا آموزش بیشتر برای استفاده از Bitwarden از وب سایت ما دیدن کنید.</value>
+    <value>برای کمک گرفتن، اخبار، ایمیل ما، و یا آموزش بیشتر برای استفاده از Bitwarden از وب سایت ما دیدن کنید.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>وب‌سایت</value>
@@ -410,7 +410,7 @@
     <value>حساب</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>حساب کاربری شما ساخته شد! حالا می‌توانید وارد شوید.</value>
+    <value>حساب کاربری جدید شما ساخته شد! حالا می‌توانید وارد شوید.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
     <value>افزودن یک مورد</value>
@@ -419,19 +419,19 @@
     <value>افزونه برنامه</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>از قابلیت دسترسی Bitwarden برای پر کردن خودکار ورود به سیستم خود در سراسر برنامه‌ها و وب استفاده کنید.</value>
+    <value>از سرویس دسترسی Bitwarden برای پر کردن خودکار ورود به سیستم خود در سراسر برنامه‌ها و وب استفاده کنید.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>سرویس پر کردن خودکار</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>از کاراکترهای مبهم اجتناب شود</value>
+    <value>از کاراکترهای مبهم اجتناب کن</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>افزونه برنامه Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>ساده‌ترین روش برای افزودن اطلاعات ورود به گاوصندوق از طریق افزونه برنامه Bitwarden است. برای اطلاع بیشتر از چگونگی استفاده از افزونه برنامه صفحه "تنظیمات" را ببینید.</value>
+    <value>ساده‌ترین روش برای افزودن اطلاعات ورود به گاوصندوق از طریق افزونه برنامه Bitwarden است. با رفتن به صفحه "تنظیمات" درباره استفاده از افزونه برنامه Bitwarden بیشتر بدانید.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>با Bitwarden در سافاری و دیگر برنامه‌ها می‌توانید از قابلیت پر کردن خودکار در ورودهایتان استفاده کنید.</value>
@@ -440,13 +440,13 @@
     <value>سرویس پرکردن خودکار Bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>از قابلیت دسترسی Bitwarden برای تکمیل خودکار ورود به سیستم خود در سراسر برنامه‌ها و وب استفاده کنید.</value>
+    <value>از سرویس دسترسی Bitwarden برای پر کردن خودکار ورود به سیستم خود استفاده کنید.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>تغییر ایمیل</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>شما می‌توانید آدرس رایانامه را در نسخه وب گاوصندوق bitwarden.com تغییر دهید. می‌خواهید اکنون از سایت بازدید کنید؟</value>
+    <value>شما می‌توانید نشانی ایمیل را در نسخه وب گاوصندوق bitwarden.com تغییر دهید. می‌خواهید اکنون از سایت بازدید کنید؟</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>تغییر کلمه عبور اصلی</value>
@@ -474,7 +474,7 @@
     <value>فعال کردن همگام‌سازی خودکار</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>برای دریافت راهنمایی گذرواژه اصلی خود آدرس رایانامه‌تان را وارد کنید.</value>
+    <value>برای دریافت یادآور کلمه عبور اصلی خود نشانی ایمیل‌تان را وارد کنید.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>افزونه برنامه را دوباره فعال کنید</value>
@@ -520,13 +520,13 @@
     <value>دریافت راهنمای کلمه عبور اصلی</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>واردن کردن موارد</value>
+    <value>درون ریزی موارد</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>شما میتوانید موارد را بصورت فله ای در گاوصندوق وب bitwarden.com وارد کنید. آیا مایل به دیدن وبسایت هستید؟</value>
+    <value>شما می‌توانید موارد را به‌صورت فله ای در گاوصندوق وب bitwarden.com درون ریزی کنید. آیا مایل به دیدن وب‌سایت هستید؟</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>موارد مهم خود را سریعاً از دیگر برنامه های مدیریت کلمه عبور وارد کنید.</value>
+    <value>موارد مهم خود را سریعاً از دیگر برنامه‌های مدیریت کلمه عبور درون ریزی کنید.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>آخرین همگام‌سازی:</value>
@@ -559,7 +559,7 @@
     <value>عمل متوقف شدن گاو‌صندوق</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>خروج از سیستم تمام دسترسی ها به گاو‌صندوق شما را از بین می برد و نیاز به احراز هویت آنلاین پس از مدت زمان توقف دارد. آیا مطمئن هستید که می خواهید از این تنظیمات استفاده کنید؟</value>
+    <value>خروج از سیستم، تمام دسترسی ها به گاو‌صندوق شما را از بین می‌برد و نیاز به احراز هویت آنلاین پس از مدت زمان توقف دارد. آیا مطمئن هستید که می‌خواهید از این تنظیمات استفاده کنید؟</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>در حال ورود...</value>
@@ -572,16 +572,16 @@
     <value>مدیریت</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
-    <value>تایید کلمه عبور صحیح نیست.</value>
+    <value>تأیید کلمه عبور صحیح نیست.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>کلمه عبور اصلی کلمه عبوری است که شما برای دسترسی به گاوصندوق خود استفاده میکنید. بیاد داشتن کلمه عبور اصلی بسیار اهمیت دارد. اگر فراموشش کنید هیچ راهی برای بازگردانی آن وجود ندارد.</value>
+    <value>کلمه عبور اصلی، کلمه عبوری است که شما برای دسترسی به گاوصندوق خود استفاده می‌کنید. به یاد داشتن کلمه عبور اصلی بسیار اهمیت دارد. اگر فراموشش کنید هیچ راهی برای بازگردانی آن وجود ندارد.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>راهنمای کلمه عبور اصلی (اختیاری)</value>
+    <value>یادآور کلمه عبور اصلی (اختیاری)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>راهنمای کلمه عبور اصلی می تواند در صورت فراموشی آن را بیاد بیارید.</value>
+    <value>یادآور کلمه عبور اصلی کمک می‌کند در صورت فراموشی آن را به یاد بیارید.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
     <value>طول کلمه عبور اصلی باید حداقل ۸ کاراکتر باشد.</value>
@@ -598,13 +598,13 @@
     <value>تنظیمات بیشتر</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>شما بایستی به برنامه اصلی Bitwarden وارد شوید تا بتوانید از افزونه استفاده کنید.</value>
+    <value>شما باید به برنامه اصلی Bitwarden وارد شوید تا بتوانید از افزونه استفاده کنید.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>هرگز</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>مورد جدید ساخته شد.</value>
+    <value>مورد اضافه شد</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>هیج علاقه مندی در گاوصندوقتان موجود نیست.</value>
@@ -613,7 +613,7 @@
     <value>هیج موردی در گاوصندوقتان موجود نیست.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>هیج علاقه مندی برای این وب سایت در گاوصندوقتان موجود نیست. برای افزودن ضربه بزنید.</value>
+    <value>هیج علاقه مندی برای این وب‌سایت در گاوصندوقتان موجود نیست. برای افزودن ضربه بزنید.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>این ورود هیچ نام کاربری و کلمه عبور پیکربندی شده ای ندارد.</value>
@@ -623,7 +623,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>گزینه های پیش فرض از ابزار تولید کلمه عبور Bitwarden تنظیم شد.</value>
+    <value>گزینه های پیش‌فرض از ابزار تولید کلمه عبور Bitwarden تنظیم می‌شود.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>گزینه‌ها</value>
@@ -635,19 +635,19 @@
     <value>کلمه عبور تولید شد.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>تولیدکننده کلمه عبور</value>
+    <value>تولید کننده کلمه عبور</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>راهنمای کلمه عبور</value>
+    <value>یادآور کلمه عبور</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>ما یک ایمیل همراه با راهنمای گذرواژه اصلی برایتان ارسال کردیم.</value>
+    <value>ما یک ایمیل همراه با یادآور کلمه عبور اصلی برایتان ارسال کردیم.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
     <value>آیا از بازنویسی بر روی کلمه عبور فعلی مطمئن هستید؟</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden گاوصندوق شما را بصورت خودکار از طریق نشان دادن اطلاعیه ها به هنگام سازی میکند. برای بهترین تجربه کاربری ممکن، لطفاً زمانی که از شما پرسیده شد "مجاز" را سریعاً انتخاب کنید تا نمایش اعلانیه ها فعال شود.</value>
+    <value>Bitwarden گاوصندوق شما را به صورت خودکار از طریق نشان دادن اعلانیه های اجباری به هنگام سازی می‌کند. برای بهترین تجربه کاربری ممکن، لطفاً زمانی که از شما پرسیده شد، "مجاز" را سریعاً انتخاب کنید تا نمایش اعلانیه های اجباری فعال شود.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -657,10 +657,10 @@
     <value>لطفاً با یک بررسی خوب به ما کمک کنید!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>تولید کلمه عبور</value>
+    <value>تولید مجدد کلمه عبور</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>تایپ دوباره کلمه عبور اصلی</value>
+    <value>نوشتن دوباره کلمه عبور اصلی</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>جستجوی گاوصندوق</value>
@@ -675,7 +675,7 @@
     <value>تعیین پین</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>یک پین کد ۴ رقمی برای باز کردن برنامه وارد کنید.</value>
+    <value>یک کد پین ۴ رقمی برای باز کردن برنامه وارد کنید.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
     <value>اطلاعات مورد</value>
@@ -698,7 +698,7 @@
     <value>همگام‌سازی شکست خورد.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>همگام‌سازی گاو صندوق</value>
+    <value>همگام‌سازی گاوصندوق</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
@@ -708,13 +708,13 @@
     <value>ورود دو مرحله ای</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>ورود دو مرحله ای باعث می شود که حساب کاربری شما با استفاده از یک دستگاه دیگر مانند کلید امنیتی، برنامه تأیید هویت، پیامک، تماس تلفنی و یا ایمیل، اعتبار خود را با ایمنی بیشتر اثبات کند. ورود دو مرحله ای می تواند در bitwarden.com فعال شود. آیا میخواهید از سایت بازدید کنید؟</value>
+    <value>ورود دو مرحله ای باعث می‌شود که حساب کاربری شما با استفاده از یک دستگاه دیگر مانند کلید امنیتی، برنامه احراز هویت، پیامک، تماس تلفنی و یا ایمیل، اعتبار خود را با ایمنی بیشتر اثبات کند. ورود دو مرحله ای می تواند در bitwarden.com فعال شود. آیا می‌خواهید از سایت بازدید کنید؟</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>باز کردن با {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>باز کردن با پین کد</value>
+    <value>باز کردن با کد پین</value>
   </data>
   <data name="Validating" xml:space="preserve">
     <value>اعتبار سنجی</value>
@@ -730,7 +730,7 @@
     <value>گاوصندوق وب Bitwarden</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>برنامه تأیید کننده از دست رفته؟</value>
+    <value>برنامه احراز هویت را گم کرده اید؟</value>
   </data>
   <data name="Items" xml:space="preserve">
     <value>موارد</value>
@@ -754,16 +754,16 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>هنگامی که یک فیلد ورودی را انتخاب می کنید و یک لایه پر کردن خودکار Bitwarden را مشاهده می کنید، می توانید برای راه اندازی سرویس پر کردن خودکار روی آن ضربه بزنید.</value>
+    <value>هنگامی که یک فیلد ورودی را انتخاب می‌کنید و یک لایه‌ی پر کردن خودکار Bitwarden را مشاهده کردید، می‌توانید برای راه اندازی سرویس پر کردن خودکار روی آن ضربه بزنید.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>برای پر کردن خودکار یک اطلاع رسانی در گاوصندوقتان این اطلاع رسانی را ضربه بزنید.</value>
+    <value>برای پر کردن خودکار یک مورد در گاوصندوقتان روی این اعلان ضربه بزنید.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>باز کردن تنظیمات دستیابی</value>
+    <value>باز کردن تنظیمات دسترسی</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. در صفحه تنظیمات دستیابی اندروید، "Bitwarden" را در قسمت سرویس ها لمس کنید.</value>
+    <value>1. در صفحه تنظیمات دسترسی اندروید، "Bitwarden" را در قسمت سرویس ها لمس کنید.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>۲. روشن کردن را انتخاب کنید و تأیید را بفشارید.</value>
@@ -784,16 +784,16 @@
     <value>وضعیت</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوقتان از سرویس پر کردن خودکار Bitwarden است. برای اطلاعات بیشتر درباره استفاده از سرویس پر کردن خودکار Bitwarden است مرور کردن صفحه "تنظیمات" است.</value>
+    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوقتان استفاده از سرویس پر کردن خودکار Bitwarden است. با رفتن به صفحه "تنظیمات" درباره‌ی استفاده از سرویس پر کردن خودکار Bitwarden اطلاعات بیشتری کسب کنید.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>پر کردن خودکار</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>آیا مایل به پر کردن خودکار یا دیدن این مورد هستید؟</value>
+    <value>آیا می‌خواهید این مورد را به صورت خودکار پر کنید یا مشاهده کنید؟</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>آیا از پر کردن خودکار این مورد اطمینان دارید؟ کاملا منطبق با "{0}" نیست.</value>
+    <value>آیا از پر کردن خودکار این مورد اطمینان دارید؟ کاملاً منطبق با "{0}" نیست.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>موارد منطبق</value>
@@ -808,30 +808,30 @@
     <value>شما به دنبال یافتن یک پر کردن خودکار برای "{0}" هستید.</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>درباره سازمانها اطلاعات کسب کنید</value>
+    <value>درباره سازمان‌ها اطلاعات کسب کنید</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>نمیتوان برنامه را باز کرد "{0}".</value>
+    <value>نمی‌توان برنامه را باز کرد "{0}".</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>برنامه تأیید کننده</value>
+    <value>برنامه احراز هویت</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>کد ۶ رقمی تأیید را از برنامه تأیید کننده وارد کنید.</value>
+    <value>کد ۶ رقمی تأیید را از برنامه احراز هویت وارد کنید.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>کد ۶ رقمی تأیید را که به {0} رایانامه شده را وارد کنید.</value>
+    <value>کد ۶ رقمی تأیید را که به {0} ایمیل شده را وارد کنید.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>ورود به سیستم موجود نیست</value>
+    <value>ورود به سیستم در دسترس نیست</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>ورود دو مرحله ای برای این حساب فعال است، هرچند که، هیچ یک از ارائه دهندگان دو مرحله ای پیکربندی شده در این دستگاه پشتیبانی نمی شود. لطفاً از یک دستگاه پشتیبانی شده استفاده کنید یا از یک ارائه دهنده اضافه کنید که بهتر از سایر دستگاه ها پشتیبانی می کند (مانند یک برنامه تأیید هویت).</value>
+    <value>ورود دو مرحله ای برای این حساب فعال است، هرچند که هیچ یک از ارائه دهندگان دو مرحله ای پیکربندی شده در این دستگاه پشتیبانی نمی‌شود. لطفاً از یک دستگاه پشتیبانی شده استفاده کنید و یا ارائه دهندگان دیگری را اضافه کنید که در همه دستگاه‌ها بهتر پشتیبانی می‌شوند (مانند یک برنامه احراز هویت).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>کد بازیابی</value>
@@ -842,7 +842,7 @@
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>ارسال دوباره رایانامه کد تایید</value>
+    <value>ارسال دوباره ایمیل کد تأیید</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
@@ -852,7 +852,7 @@
     <value>استفاده از روش ورود دو مرحله‌ای دیگر</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>نمی‌توان رایانامه تایید را ارسال کرد. دوباره امتحان کنید.</value>
+    <value>نمی‌توان ایمیل تأیید را ارسال کرد. دوباره امتحان کنید.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
@@ -860,7 +860,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>برای ادامه، YubiKey NEO خود را در پشت دستگاه نگه دارید یا YubiKey خود را در پورت USB دستگاه خود قرار دهید، سپس دکمه ی آن را لمس کنید.</value>
+    <value>برای ادامه، YubiKey NEO خود را در پشت دستگاه نگهدارید یا YubiKey خود را در پورت USB دستگاه خود قرار دهید، سپس دکمه‌ی آن را لمس کنید.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>کلید امنیتی YubiKey</value>
@@ -873,31 +873,31 @@
     <value>پیوست‌ها</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>نمیتوان پرونده را دانلود کرد.</value>
+    <value>نمی‌توان پرونده را دانلود کرد.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>دستگاهتان قادر به باز کردن این نوع از فایل نیست.</value>
+    <value>دستگاهتان قادر به باز کردن این نوع از پرونده نیست.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
     <value>در حال دانلود...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>حجم این پیوست {0} است. آیا مایل به دانلود این فایل به دستگاهتان هستید؟</value>
+    <value>حجم این پیوست {0} است. آیا مایل به دانلود این پرونده به دستگاهتان هستید؟</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>کلید تأیید کننده (TOTP)</value>
+    <value>کلید احراز هویت (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
     <value>کد تأیید (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>کلید تأیید کننده اضافه شد.</value>
+    <value>کلید احراز هویت اضافه شد.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>کلید تأیید کننده را نمیتوان خواند.</value>
+    <value>نمی‌توان کلید احراز هویت را خواند.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
     <value>دوربین دستگاهتان را به سمت کد QR بگیرید.
@@ -913,10 +913,10 @@
     <value>تصاویر</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>رونوشت TOTP</value>
+    <value>کپی TOTP</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>اگر یک ورود دارای یک کلید احراز هویت باشد، هنگام تکمیل خودکار ورود، کد تأیید TOTP را در کلیپ برد خود کپی کن.</value>
+    <value>اگر یک ورود دارای یک کلید احراز هویت باشد، هنگام پر کردن خودکار ورود، کد تأیید TOTP را در کلیپ بورد خود کپی کن.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>TOTP را به صورت خودکار کپی کن</value>
@@ -949,57 +949,57 @@
     <value>ویژگی موجود نیست</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>بیشترین حجم فایل ۱۰۰ مگابایت است.</value>
+    <value>بیشترین حجم پرونده ۱۰۰ مگابایت است.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>تا زمانی که کد رمزنگاری را بروز نکنید نمیتوانید از این قابلیت استفاده کنید.</value>
+    <value>تا زمانی که کد رمزنگاری را به‌روز نکنید نمی‌توانید از این قابلیت استفاده کنید.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>بیشتر بدانید</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>آدرس سرور API</value>
+    <value>نشانی سرور API</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
-    <value>محیط های سفارشی</value>
+    <value>محیط سفارشی</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>برای کاربران پیشرفته. شما می توانید آدرس پایه هر سرویس را مستقل تعیین کنید.</value>
+    <value>برای کاربران پیشرفته. شما می‌توانید نشانی پایه هر سرویس را مستقلاً تعیین کنید.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>آدرس های اینترنتی محیط ذخیره شد.</value>
+    <value>نشانی‌های اینترنتی محیط ذخیره شد.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
     <value>{0} به درستی فرمت نشده.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>آدرس سرور شناسایی</value>
+    <value>نشانی سرور شناسایی</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
     <value>محیط خود میزبان</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>آدرس اینترنتی پایه فرضی نصب Bitwarden میزبانی شده را مشخص کنید.</value>
+    <value>نشانی اینترنتی پایه فرضی نصب Bitwarden میزبانی شده را مشخص کنید.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>آدرس اینترنتی سرور</value>
+    <value>نشانی اینترنتی سرور</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>آدرس اینترنتی سرور گاوصندوق وب</value>
+    <value>نشانی اینترنتی سرور گاوصندوق وب</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>برای مشاهده موارد مربوط به گاوصندوقتان به این اطلاع رسانی ضربه بزنید.</value>
+    <value>برای دیدن موارد مربوط به گاوصندوقتان به این اطلاع رسانی ضربه بزنید.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>فیلدهای سفارشی</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>رونوشت شماره</value>
+    <value>کپی شماره</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>رونوشت کد امنیتی</value>
+    <value>کپی کد امنیتی</value>
   </data>
   <data name="Number" xml:space="preserve">
     <value>شماره</value>
@@ -1011,7 +1011,7 @@
     <value>کارت</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>مشخصات</value>
+    <value>هویت</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
     <value>ورود</value>
@@ -1083,7 +1083,7 @@
     <value>نام کامل</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>شماره مجوز</value>
+    <value>شماره گواهی‌نامه</value>
   </data>
   <data name="March" xml:space="preserve">
     <value>مارس</value>
@@ -1098,10 +1098,13 @@
     <value>آقا</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>بانو</value>
+    <value>خانم</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>خانم</value>
+    <value>بانو</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>عنوان</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>نوامبر</value>
@@ -1110,7 +1113,7 @@
     <value>اکتبر</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>شماره پاسپورت</value>
+    <value>شماره گذرنامه</value>
   </data>
   <data name="Phone" xml:space="preserve">
     <value>تلفن</value>
@@ -1119,7 +1122,7 @@
     <value>سپتامبر</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>شماره امنیتی اجتماعی</value>
+    <value>کد ملی</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
     <value>ایالت / استان</value>
@@ -1137,13 +1140,13 @@
     <value>انقضاء</value>
   </data>
   <data name="ShowWebsiteIcons" xml:space="preserve">
-    <value>نمایش نمادهای وب سایت</value>
+    <value>نمایش نمادهای وب‌سایت</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
     <value>یک تصویر قابل تشخیص در کنار هر ورود نشان دهید.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>آدرس سرور آیکون ها</value>
+    <value>نشانی سرور آیکون ها</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
     <value>پر کردن خودکار با Bitwarden</value>
@@ -1170,10 +1173,10 @@
     <value>سرویس دستیابی به پر کردن خودکار</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>سرویس خودکار Bitwarden با استفاده از چهار چوب پر کردن خودکار اندروید برای کمک به پر کردن ورودی ها، کارت های اعتباری و اطلاعات هویت به سایر برنامه ها در دستگاه شما کمک می کند.</value>
+    <value>سرویس پر کردن خودکار Bitwarden با استفاده از چهار چوب پر کردن خودکار اندروید برای کمک به پر کردن ورودی ها، کارت های اعتباری و اطلاعات هویت به سایر برنامه ها در دستگاه شما کمک می کند.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>از سرویس پر کردن خودکار Bitwarden برای پر کردن ورودها، کارتهای اعتباری، و اطلاعات هویتی درون اپلیکیشن ها استفاده کنید.</value>
+    <value>از سرویس پر کردن خودکار Bitwarden برای پر کردن ورودها، کارت‌های اعتباری، و اطلاعات هویتی درون برنامه‌ها استفاده کنید.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>باز کردن تنظیمات پر کردن خودکار</value>
@@ -1195,19 +1198,19 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>ما نتوانستیم بصورت خودکار منو تنظیمات پر کردن خودکار اندروید را برای شما باز کنیم. شما میتوانید منوی تنظیمات را بصورت دستی مرور کنید از تنظیمات اندروید &gt; سیستم &gt; زبانها و ورودی &gt; پیشرفته &gt; سرویس پر کردن خودکار.</value>
+    <value>ما نتوانستیم به صورت خودکار منو تنظیمات پر کردن خودکار اندروید را برای شما باز کنیم. شما می‌توانید منوی تنظیمات را به صورت دستی مرور کنید. از تنظیمات اندروید &gt; سیستم &gt; زبان‌ها و ورودی &gt; پیشرفته &gt; سرویس پر کردن خودکار.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
     <value>نام فیلد سفارشی</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
-    <value>بولین</value>
+    <value>منطقی</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>مخفی</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>لینک شده</value>
+    <value>پیوند شده</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>متن</value>
@@ -1216,16 +1219,16 @@
     <value>فیلد سفارشی جدید</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>چه نوع فیلد سفارشی میخواهید اضافه کنید؟</value>
+    <value>می‌خواهید چه نوع فیلد سفارشی اضافه کنید؟</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>حذف</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>آدرس اینترنتی جدید</value>
+    <value>نشانی اینترنتی جدید</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
-    <value>آدرس اینترنتی {0}</value>
+    <value>نشانی اینترنتی {0}</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
@@ -1249,10 +1252,10 @@
     <value>شروع می شود با</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>تشخیص سابقه آدرس اینترنتی</value>
+    <value>تشخیص مطابقت نشانی اینترنتی</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>تشخیص تطابق</value>
+    <value>تشخیص مطابقت</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
@@ -1275,63 +1278,63 @@
     <value>برای ادامه، دوباره YubiKey NEO خود را پشت دستگاه نگه دارید.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>خدمات دسترسی ممکن است مفید باشد برای استفاده در زمانی که برنامه از سرویس پر کردن خودکار استاندارد پشتیبانی نمی کند.</value>
+    <value>وقتی برنامه‌ها از سرویس پر کردن خودکار استاندارد پشتیبانی نمی‌کنند، ممکن است از سرویس دسترسی استفاده شود.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>کلمه عبور بروزرسانی شد</value>
+    <value>کلمه عبور به‌روزرسانی شد</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>بروزرسانی شد</value>
+    <value>به‌روزرسانی شد</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
     <value>پرکردن خودکار فعال شد!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>شما بایستی به برنامه اصلی Bitwarden وارد شوید تا بتوانید از پرکردن خودکار استفاده کنید.</value>
+    <value>شما باید به برنامه اصلی Bitwarden وارد شوید تا بتوانید از پرکردن خودکار استفاده کنید.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
+    <value>حالا ورودهای شما به سادگی از طریق صفحه کلیدتان در برنامه‌ها و وب‌سایت‌ها قابل دسترس است.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>پیشهاز ما این است که اگر از اپ های پرکردن خودکار دیگری استفاده میکنید آنها را غیرفعال کنید اگر برنامه ای برای استفاده از آنها ندارید.</value>
+    <value>پیشهاد ما این است که اگر از برنامه‌های پر کردن خودکار دیگری استفاده می‌کنید و قصدی برای به کار گرفتن آن‌ها ندارید غیرفعالشان کنید.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>دسترسی به گاوصندوقتان بصورت مستقیم از طرق کیبوردتان برای سریعتر پرکردن خودکار کلمه های عبور.</value>
+    <value>برای پر کردن سریع کلمه های عبور، مستقیماً از صفحه کلید به گاوصندوق خود دسترسی داشته باشید.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
     <value>برای فعال کردن پر کردن خودکار کلمه عبور بر روی دستگاهتان، این دستورالعمل ها را دنبال کنید:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>۱. برو به اپ "تنظیمات" ios</value>
+    <value>۱. به برنامه "تنظیمات" iOS برو</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>۲. بزن روی "کلمات عبور و حسابها"</value>
+    <value>۲. روی "کلمه های عبور" بزن</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>۳. بزن روی "پرکردن خودکار کلمات عبور"</value>
+    <value>۳. روی "پر کردن خودکار کلمه های عبور" بزن</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>۴. روشن کردن پرکردن خودکار</value>
+    <value>۴. روشن کردن پر کردن خودکار</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
     <value>۵. انتخاب "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>پرکردن خودکار کلمه عبور</value>
+    <value>پر کردن خودکار کلمه عبور</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوق از طریق افزونه پرکردن خودکار کلمه عبور Bitwarden است. برای اطلاع بیشتر از چگونگی استفاده از پرکردن خودکار کلمه عبور Bitwarden مرورکردن صفحه "تنظیمات" است.</value>
+    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوق از طریق افزونه پر کردن خودکار کلمه عبور Bitwarden است. با رفتن به صفحه "تنظیمات" درباره‌ی استفاده از افزونه‌ی پر کردن خودکار کلمه های عبور بیشتر بیاموزید.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>نشانی رایانامه نامعتبر است.</value>
+    <value>نشانی ایمیل نامعتبر است.</value>
   </data>
   <data name="Cards" xml:space="preserve">
     <value>کارت‌ها</value>
   </data>
   <data name="Identities" xml:space="preserve">
-    <value>مشخصات</value>
+    <value>هویت‌ها</value>
   </data>
   <data name="Logins" xml:space="preserve">
     <value>ورودها</value>
@@ -1343,7 +1346,7 @@
     <value>تمام موارد</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>آدرس اینترنتی</value>
+    <value>نشانی‌های اینترنتی</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
@@ -1357,10 +1360,10 @@
     <value>این کلمه عبور در رخنه داده ها {0} بار افشا شده است. باید تغییرش دهید.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>این کلمه عبور در هیچ رخنه داده ای شناخته نشده است. باید برای امنیت از آن استفاده کنید.</value>
+    <value>این کلمه عبور در هیچ رخنه داده ای شناخته نشده است. استفاده از آن باید ایمن باشد.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
-    <value>نام شناسایی</value>
+    <value>نام هویت</value>
   </data>
   <data name="Value" xml:space="preserve">
     <value>مقدار</value>
@@ -1381,13 +1384,13 @@
     <value>جستجوی مجموعه</value>
   </data>
   <data name="SearchFileSends" xml:space="preserve">
-    <value>ارسال های فایل را جستجو کن</value>
+    <value>جستجوی پرونده ارسال‌ها</value>
   </data>
   <data name="SearchTextSends" xml:space="preserve">
-    <value>ارسال های متن را جستجو کن</value>
+    <value>جستجوی متن ارسال‌ها</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
-    <value>جستوجو {0}</value>
+    <value>جستجو {0}</value>
     <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
@@ -1434,7 +1437,7 @@
     <value>هیچ سازمانی برای نمایش وجود ندارد.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>سازمانی را انتخاب کنید که می خواهید این مورد را به آن منتقل کنید. انتقال به یک سازمان، مالکیت مورد را به آن سازمان منتقل می کند. پس از انتقال این مورد، دیگر مالک مستقیم آن نخواهید بود.</value>
+    <value>سازمانی را انتخاب کنید که می‌خواهید این مورد را به آن منتقل کنید. انتقال به یک سازمان، مالکیت مورد را به آن سازمان منتقل می کند. پس از انتقال این مورد، دیگر مالک مستقیم آن نخواهید بود.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>تعداد کلمات</value>
@@ -1465,10 +1468,10 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwarden به شما اجازه می دهد با استفاده از سازماندهی حساب، موارد گاوصندوق خود را با دیگران به اشتراک بگذارید. آیا مایل به بازدید از وب سایت bitwarden.com برای کسب اطلاعات بیشتر هستید؟</value>
+    <value>Bitwarden به شما اجازه می‌دهد با استفاده از سازماندهی حساب، موارد گاوصندوق خود را با دیگران به اشتراک بگذارید. آیا مایل به بازدید از وب سایت bitwarden.com برای کسب اطلاعات بیشتر هستید؟</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>خروجی گرفتن از گاوصندوق</value>
+    <value>برون ریزی گاوصندوق</value>
   </data>
   <data name="LockNow" xml:space="preserve">
     <value>الان قفل شود</value>
@@ -1486,7 +1489,7 @@
     <value>۳۰ دقیقه</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>پین کد خود را برای باز کردن بیت واردن خود استفاده کنید. اگر به صورت کامل از حساب خود خارج شوید تنظیمات پین شما ریست می شود.</value>
+    <value>کد پین خود را برای باز کردن Bitwarden استفاده کنید. اگر به صورت کامل از حساب خود خارج شوید تنظیمات پین شما مجدداً تنظیم می‌شود.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
     <value>وارد شده به عنوان {0} در {1}.</value>
@@ -1525,19 +1528,19 @@
     <value>۲ دقیقه</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>پاک‌سازی کلیپ‌برد</value>
+    <value>پاکسازی کلیپ بورد</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>به صورت خودکار، مقادیر رونوشت شده را از کلیپ‌برد پاک کن.</value>
+    <value>به صورت خودکار، مقادیر کپی شده را از کلیپ بورد پاک کن.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>بازرسی تطابق URL پیشفرض</value>
+    <value>بررسی مطابقت آدرس اینترنتی پیش‌فرض</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>هنگام انجام کارهایی مانند پر کردن خودکار، روش پیش فرضی را که برای شناسایی ورود URL انجام می شود انتخاب کنید.</value>
+    <value>هنگام انجام دادن کارهایی مانند پر کردن خودکار، روش پیش‌فرضی را که برای شناسایی ورود نشانی اینترنتی انجام می‌شود انتخاب کنید.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>پوسته</value>
@@ -1547,16 +1550,16 @@
     <value>تغییر رنگ پوسته برنامه.</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
-    <value>پیش فرض (سیستم)</value>
+    <value>پیش‌فرض (سیستم)</value>
   </data>
   <data name="DefaultDarkTheme" xml:space="preserve">
-    <value>تم تیره پیش‌فرض</value>
+    <value>تم تیره پیش‌‌فرض</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
     <value>هنگام استفاده از طرح زمینه پیش‌فرض (سیستم) در حالی که حالت تاریک دستگاه شما فعال است، تم تیره را انتخاب کنید</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>رونوشت یادداشتها</value>
+    <value>کپی یادداشت‌ها</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>خروج</value>
@@ -1565,7 +1568,7 @@
     <value>آیا مطمئنید که می‌خواهید از Bitwarden خارج شوید؟</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>You you want to require unlocking with your master password when the application is restarted?</value>
+    <value>آیا می‌خواهید هنگام راه اندازی مجدد برنامه، نیاز به باز کردن قفل با کلمه عبور اصلی خود داشته باشید؟</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>سیاه</value>
@@ -1580,25 +1583,25 @@
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
-    <value>پر کردن خودکار URI های مسدود شده</value>
+    <value>پر کردن خودکار نشانی‌های اینترنتی مسدود شده</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>تکمیل خودکار برای URI های مسدود شده ارائه نمی شود. چندین URI را با کاما جدا کنید. به عنوان مثال: "https://twitter.com، androidapp://com.twitter.android".</value>
+    <value>پر کردن خودکار برای نشانی‌های اینترنتی مسدود شده ارائه نمی‌شود. چندین نشانی اینترنتی را با کاما جدا کنید. به عنوان مثال: "https://twitter.com، androidapp://com.twitter.android".</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
-    <value>درخواست اضافه کردن ورود به سیستم</value>
+    <value>درخواست افزودن ورود به سیستم</value>
   </data>
   <data name="AskToAddLoginDescription" xml:space="preserve">
     <value>در صورتی که موردی در گاوصندوق شما یافت نشد، درخواست افزودن کنید.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>راه اندازی مجدد در برنامه</value>
+    <value>در راه اندازی مجدد برنامه</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>پرکردن خودکار دسترسی ایمن به گاوصندوق Bitwarden شما را از سایر وبسایت ها و برنامه ها آسان تر میکند. بنظر میرسد که سرویس پرکردن خودکار را برای Bitwarden فعال نکرده اید. از صفحه "تنظیمات" Bitwarden پرکردن خودکار رافعال کنید.</value>
+    <value>پر کردن خودکار دسترسی ایمن به گاوصندوق Bitwarden شما را از سایر وب‌سایت ها و برنامه ها آسان تر می‌کند. بنظر می‌رسد که سرویس پرکردن خودکار را برای Bitwarden فعال نکرده اید. از صفحه "تنظیمات" Bitwarden، پرکردن خودکار را فعال کنید.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>تغییرات شما در ظاهر برنامه بعد از اینکه برنامه را دوباره آغاز کردید اعمال می‌شود.</value>
+    <value>تغییرات شما در ظاهر برنامه بعد از اینکه برنامه را دوباره راه اندازی کردید اعمال می‌شود.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
     <value>بزرگ نوشتن حرف اول</value>
@@ -1617,22 +1620,22 @@
     <value>تغییر نمایشگر</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>جلسه ورود شما منقضی شده است.</value>
+    <value>نشست ورود شما منقضی شده است.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>برای تأیید از بیومتریک استفاده کنید.</value>
+    <value>تأیید بیومتریک</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>بیومتریک</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>برای قفل گشایی از بیومتریک استفاده کنید</value>
+    <value>برای قفل گشایی از بیومتریک استفاده کن</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden نیاز به توجه دارد - از "سرویس دستیابی خودکار" در تنظیمات Bitwarden دیدن کنید</value>
+    <value>Bitwarden نیاز به توجه دارد - از "سرویس دسترسی پر کردن خودکار" در تنظیمات Bitwarden دیدن کنید</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. در صفحه تنظیمات برنامه اندروید برای Bitwarden، به گزینه های "نمایش روی سایر برنامه ها" (زیر گزینه پیشرفته) بروید و برای فعال کردن پشتیبانی روی هم، روی ضامن ضربه بزنید.</value>
+    <value>3. در صفحه تنظیمات برنامه اندروید Bitwarden، به گزینه های "نمایش روی سایر برنامه ها" (زیر گزینه پیشرفته) بروید و برای فعال کردن پشتیبانی همپوشانی، روی ضامن ضربه بزنید.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>مجوز</value>
@@ -1641,70 +1644,70 @@
     <value>تنظیمات اجازه همپوشانی را باز کنید</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. در صفحه تنظیمات برنامه اندروید برای Bitwarden ، "نمایش روی برنامه های دیگر" (در زیر "پیشرفته") را انتخاب کنید و ضامن را تغییر دهید تا پوشش روی آن امکان پذیر باشد.</value>
+    <value>3. در صفحه تنظیمات برنامه اندروید Bitwarden، "نمایش روی برنامه های دیگر" (در زیر "پیشرفته") را انتخاب کنید و ضامن را تغییر دهید تا همپوشانی روی آن امکان‌پذیر باشد.</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>غیر مجاز</value>
+    <value>رد شده</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>اجازه دادن</value>
+    <value>اعطا کردن</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
     <value>فرمت پرونده</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>کلمه عبور اصلی خود را برای خروجی گرفتن از گاوصندوقتان وارد کنید.</value>
+    <value>کلمه عبور اصلی خود را برای برون ریزی داده‌های گاوصندوقتان وارد کنید.</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
-    <value>ارسال یک کد تأیید به ایمیل شما</value>
+    <value>یک کد تأیید به ایمیل خود ارسال کنید</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
     <value>کد ارسال شد!</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
-    <value>برای ادامه هویت خود را تأیید کنید.</value>
+    <value>برای ادامه، هویت خود را تأیید کنید.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>این خروجی شامل داده‌های گاوصندوق در یک قالب رمزنگاری نشده است. شما نباید آن را از طریق یک راه ارتباطی ناامن (مثل ایمیل) ذخیره یا ارسال کنید. به محض اینکه استفاده‌تان از آن تمام شد، آن را حذف کنید.</value>
+    <value>این برون ریزی شامل داده‌های گاوصندوق در یک قالب رمزنگاری نشده است. شما نباید آن را از طریق یک راه ارتباطی نا امن (مثل ایمیل) ذخیره یا ارسال کنید. به محض اینکه کارتان با آن تمام شد، آن را حذف کنید.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
-    <value>این صادرات با استفاده از کلید رمزگذاری حساب شما ، اطلاعات شما را رمزگذاری می کند. اگر حتی کلید رمزگذاری حساب خود را بچرخانید ، باید دوباره صادر کنید چون قادر به رمزگشایی این پرونده صادراتی نخواهید بود.</value>
+    <value>این برون ریزی با استفاده از کلید رمزگذاری حساب شما، اطلاعاتتان را رمزگذاری می کند. اگر زمانی کلید رمزگذاری حساب خود را بچرخانید، باید دوباره خروجی بگیرید، چون قادر به رمزگشایی این پرونده برون ریزی نخواهید بود.</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
-    <value>کلیدهای رمزگذاری حساب برای هر حساب کاربری Bitwarden منحصر به فرد است ، بنابراین نمی توانید صادرات رمزگذاری شده را به حساب دیگری وارد کنید.</value>
+    <value>کلیدهای رمزگذاری حساب برای هر حساب کاربری Bitwarden منحصر به فرد است، بنابراین نمی‌توانید برون ریزی رمزگذاری شده را به حساب دیگری وارد کنید.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>صادرات گاوصندوق را تأیید کنید</value>
+    <value>برون ریزی گاوصندوق را تأیید کنید</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>هشدار</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>هنگام صادرات گاوصندوق شما مشکلی پیش آمد. اگر مشکل همچنان ادامه داشت، باید از گاوصندوق وب صادرات کنید.</value>
+    <value>هنگام برون ریزی گاوصندوق شما مشکلی پیش آمد. اگر مشکل همچنان ادامه داشت، باید از گاوصندوق وب برون ریزی بگیرید.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
-    <value>گاوصندوق با موفقیت صادر شد!</value>
+    <value>برون ریزی گاوصندوق با موفقیت انجام شد</value>
   </data>
   <data name="Clone" xml:space="preserve">
     <value>شبیه سازی</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>یک یا چند خط مشی سازمان بر تنظیمات تولیدکننده شما تأثیر می گذارد</value>
+    <value>یک یا چند سیاست سازمان بر تنظیمات تولید کننده شما تأثیر می‌گذارد</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>بازکردن</value>
+    <value>باز کن</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>هنگام ذخیره این پیوست مشکلی رخ داد. اگر مشکل همچنان ادامه داشت، می توانید آن را از گاوصندوق وب ذخیره کنید.</value>
+    <value>هنگام ذخیره این پیوست مشکلی رخ داد. اگر مشکل همچنان ادامه داشت، می‌توانید آن را از گاوصندوق وب ذخیره کنید.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>پیوست با موفقیت ذخیره شد.</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>لطفاً برای استفاده از کاشی پر کردن خودکار ، "سرویس دستیابی خودکار" را از تنظیمات Bitwarden فعال کنید.</value>
+    <value>لطفاً برای استفاده از کاشی پر کردن خودکار، "سرویس دسترسی پر کردن خودکار" را از تنظیمات Bitwarden فعال کنید.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
     <value>هیچ فیلدی برای کلمه عبور شناسایی نشد</value>
@@ -1742,11 +1745,11 @@
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
-    <value>واقعا می خواهید این آیتم را بازیابی کنید؟</value>
+    <value>واقعاً می‌خواهید این آیتم را بازیابی کنید؟</value>
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>واقعا می خواهید این آیتم را به سطل زباله ارسال کنید؟</value>
+    <value>واقعاً می‌خواهید این آیتم را به سطل زباله ارسال کنید؟</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
@@ -1756,28 +1759,28 @@
     <value>باز کردن قفل بیومتریک برای پرکردن خودکار در انتظار تأیید کلمه عبور اصلی غیرفعال است.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>فعال کردن همگام سازی در نوسازی</value>
+    <value>فعال کردن همگام‌سازی در نوسازی</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>همگام سازی گاوصندوق با کشیدن به پایین.</value>
+    <value>همگام‌سازی گاوصندوق با کشیدن به پایین.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>ورود به سیستم پروژه</value>
+    <value>ورود به سیستم واحد سازمانی</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>با استفاده از پورتال ورود به سیستم واحد سازمانی خود، سریع وارد سیستم شوید. لطفا برای شروع شناسه سازمانی خود را وارد کنید.</value>
+    <value>با استفاده از پورتال ورود به سیستم واحد سازمانی خود، سریع وارد سیستم شوید. لطفاً برای شروع شناسه سازمانی خود را وارد کنید.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
     <value>شناسه سازمان</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>در حال حاضر نمی توانید با SSO وارد شوید</value>
+    <value>در حال حاضر نمی‌توانید با SSO وارد شوید</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
     <value>تنظیم کلمه عبور اصلی</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>برای تکمیل ورود به سیستم با SSO ، لطفاً یک کلمه عبور اصلی برای دسترسی و محافظت از گاوصندوق خود تنظیم کنید.</value>
+    <value>برای پر کردن ورود به سیستم با SSO، لطفاً یک کلمه عبور اصلی برای دسترسی و محافظت از گاوصندوق خود تنظیم کنید.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
     <value>یک یا چند سیاست سازمانی برای تأمین شرایط زیر به کلمه عبور اصلی شما احتیاج دارد:</value>
@@ -1804,13 +1807,13 @@
     <value>کلمه عبور نامعتبر</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>کلمه عبور از شرایط سازمان پیروی نمیکند. لطفاً اطلاعات سیاست را بررسی کرده و دوباره امتحان کنید.</value>
+    <value>کلمه عبور از شرایط سازمان پیروی نمی‌کند. لطفاً اطلاعات سیاست را بررسی کرده و دوباره امتحان کنید.</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value>در حال بارگذاری</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>با فعال کردن این سوئیچ با موارد زیر موافقت می کنید:</value>
+    <value>با فعال کردن این سوئیچ با موارد زیر موافقت می‌کنید:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
     <value>شرایط خدمات و سیاست حفظ حریم خصوصی تأیید نشده است.</value>
@@ -1822,49 +1825,49 @@
     <value>سیاست حفظ حریم خصوصی</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden نیاز به توجه دارد - "قرعه کشی" را در تنظیمات Bitwarden فعال کنید</value>
+    <value>Bitwarden نیاز به توجه دارد - "قرعه کشی" را در "سرویس پر کردن خودکار" از تنظیمات Bitwarden فعال کنید</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>خدمات پر کردن خودکار</value>
+    <value>سرویس پر کردن خودکار</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
     <value>از پر کردن خودکار درون خطی استفاده کنید</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>اگر IME (صفحه کلید) انتخابی شما از آن پشتیبانی می کند، از تکمیل خودکار درون خطی استفاده کنید. اگر پیکربندی شما پشتیبانی نمیکند (یا این گزینه غیرفعال باشد) ، از پوشش پیش فرض پر کردن خودکار استفاده می شود.</value>
+    <value>اگر IME (صفحه کلید) انتخابی شما از آن پشتیبانی می کند، از پر کردن خودکار درون خطی استفاده کنید. اگر پیکربندی شما پشتیبانی نمی‌کند (یا این گزینه غیرفعال باشد)، از پوشش پیش‌فرض پر کردن خودکار استفاده می‌شود.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
     <value>از قابلیت دسترسی استفاده کنید</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>برای پر کردن خودکار ورود به سیستم خود در برنامه ها و وب، از سرویس دسترسی Bitwarden استفاده کنید. وقتی فعال شد، هنگام انتخاب قسمتهای ورود، یک پنجره بازشو نمایش خواهیم داد.</value>
+    <value>برای پر کردن خودکار ورود به سیستم خود در برنامه ها و وب، از سرویس دسترسی Bitwarden استفاده کنید. وقتی فعال شد، هنگام انتخاب قسمت‌های ورود، یک پنجره بازشو نمایش خواهیم داد.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
     <value>برای پر کردن خودکار ورود به سیستم خود در برنامه ها و وب، از سرویس دسترسی Bitwarden استفاده کنید. (برای فعال سازی نیاز به قرعه کشی نیز دارد)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>از سرویس قابلیت دسترسی Bitwarden برای استفاده از کاشی واکنش سریع پر کردن خودکار استفاده کنید و یا با استفاده از قرعه کشی (در صورت فعال بودن) پنجره بازشو را نشان دهید.</value>
+    <value>از سرویس دسترسی Bitwarden برای استفاده از کاشی واکنش سریع پر کردن خودکار استفاده کنید و یا با استفاده از قرعه کشی (در صورت فعال بودن) پنجره بازشو را نشان دهید.</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>برای استفاده از کاشی واکنش سریع پر کردن خودکار یا تقویت خدمات تکمیل خودکار، استفاده از قرعه کشی (در صورت فعال بودن) لازم است.</value>
+    <value>برای استفاده از کاشی واکنش سریع پر کردن خودکار یا تقویت سرویس پر کردن خودکار، استفاده از قرعه کشی (در صورت فعال بودن) لازم است.</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>از قرعه کشی استفاده کنید</value>
+    <value>از قرعه کشی استفاده کن</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>هنگامی که فعال است، به سرویس دسترسی Bitwarden اجازه می دهد تا هنگام انتخاب قسمتهای ورود، یک پنجره بازشو نمایش دهد.</value>
+    <value>هنگامی که فعال است، به سرویس دسترسی Bitwarden اجازه می‌دهد تا هنگام انتخاب قسمت‌های ورود، یک پنجره بازشو نمایش دهد.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>در صورت فعال بودن، سرویس دسترسی Bitwarden هنگام انتخاب قسمتهای ورود به سیستم، پنجره بازشویی را برای کمک به پر کردن خودکار ورود به سیستم نشان می دهد.</value>
+    <value>در صورت فعال بودن، سرویس دسترسی Bitwarden هنگام انتخاب قسمت‌های ورود به سیستم، پنجره بازشویی را برای کمک به پر کردن خودکار ورود به سیستم نشان می‌دهد.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>در صورت فعال بودن، قابلیت دسترسی برای تقویت سرویس پر کردن خودکار برای برنامه های قدیمی که از چارچوب پر کردن خودکار اندروید پشتیبانی نمی کنند، پنجره ای ظاهر می شود.</value>
+    <value>در صورت فعال بودن، سرویس دسترسی برای تقویت سرویس پر کردن خودکار برای برنامه‌های قدیمی که از چارچوب پر کردن خودکار اندروید پشتیبانی نمی‌کنند، پنجره ای ظاهر می‌شود.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>به دلیل خط مشی Enterprise ، برای ذخیره موارد در گاوصندوق شخصی خود محدود شده اید. گزینه مالکیت را به یک سازمان تغییر دهید و مجموعه های موجود را انتخاب کنید.</value>
+    <value>به دلیل سیاست پرمیوم، برای ذخیره موارد در گاوصندوق شخصی خود محدود شده اید. گزینه مالکیت را به یک سازمان تغییر دهید و مجموعه های موجود را انتخاب کنید.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
-    <value>خط مشی سازمانی بر تنظیمات مالکیت شما تأثیر می گذارد.</value>
+    <value>سیاست سازمانی بر تنظیمات مالکیت شما تأثیر می‌گذارد.</value>
   </data>
   <data name="Send" xml:space="preserve">
     <value>ارسال</value>
@@ -1889,23 +1892,23 @@
     <value>متن</value>
   </data>
   <data name="TypeTextInfo" xml:space="preserve">
-    <value>متنی که می خواهید ارسال کنید.</value>
+    <value>متنی که می‌خواهید ارسال کنید.</value>
   </data>
   <data name="HideTextByDefault" xml:space="preserve">
-    <value>هنگام دسترسی به ارسال، متن را به طور پیش فرض پنهان کن</value>
+    <value>هنگام دسترسی به ارسال، متن را به طور پیش‌فرض پنهان کن</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeFile" xml:space="preserve">
-    <value>فایل</value>
+    <value>پرونده</value>
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
-    <value>فایلی که می خواهید ارسال کنید.</value>
+    <value>پرونده ای که می‌خواهید ارسال کنید.</value>
   </data>
   <data name="FileTypeIsSelected" xml:space="preserve">
-    <value>نوع فایل انتخاب شده است.</value>
+    <value>نوع پرونده انتخاب شده است.</value>
   </data>
   <data name="FileTypeIsNotSelected" xml:space="preserve">
-    <value>نوع فایل انتخاب نشده است، برای انتخاب ضربه بزنید.</value>
+    <value>نوع پرونده انتخاب نشده است، برای انتخاب ضربه بزنید.</value>
   </data>
   <data name="TextTypeIsSelected" xml:space="preserve">
     <value>نوع متن انتخاب شده است.</value>
@@ -1917,7 +1920,7 @@
     <value>تاریخ حذف</value>
   </data>
   <data name="DeletionTime" xml:space="preserve">
-    <value>تاریخ حذف</value>
+    <value>زمان حذف</value>
   </data>
   <data name="DeletionDateInfo" xml:space="preserve">
     <value>ارسال در تاریخ و ساعت مشخص شده برای همیشه حذف خواهد شد.</value>
@@ -1930,10 +1933,10 @@
     <value>تاريخ انقضاء</value>
   </data>
   <data name="ExpirationTime" xml:space="preserve">
-    <value>زمان انقضا</value>
+    <value>زمان انقضاء</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
-    <value>در صورت تنظیم، دسترسی به این ارسال در تاریخ و ساعت مشخص شده منقضی می شود.</value>
+    <value>در صورت تنظیم، دسترسی به این ارسال در تاریخ و ساعت مشخص شده منقضی می‌شود.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
@@ -1943,7 +1946,7 @@
     <value>تعداد دسترسی حداکثر</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>در صورت تنظیم، با رسیدن به حداکثر تعداد دسترسی، کاربران دیگر نمی توانند به این ارسال دسترسی پیدا کنند.</value>
+    <value>در صورت تنظیم، با رسیدن به حداکثر تعداد دسترسی، کاربران دیگر نمی‌توانند به این ارسال دسترسی پیدا کنند.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
@@ -1998,7 +2001,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
-    <value>ارسال ها را جستجو کن</value>
+    <value>جستجوی ارسال‌ها</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
@@ -2006,11 +2009,11 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>افزودن ارسال</value>
+    <value>ارسال جدید</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
-    <value>آیا مطمئن هستید می خواهید این ارسال را حذف کنید؟</value>
+    <value>آیا مطمئن هستید که می‌خواهید این ارسال را حذف کنید؟</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
@@ -2018,11 +2021,11 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>ارسال بروزرسانی شد.</value>
+    <value>ارسال ذخیره شد</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>ارسال جدید ساخته شد.</value>
+    <value>ارسال ساخته شد</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2048,7 +2051,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
-    <value>به دلیل خط مشی سازمانی، شما فقط می توانید ارسال موجود را حذف کنید.</value>
+    <value>به دلیل سیاست سازمانی، شما فقط می‌توانید ارسال موجود را حذف کنید.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
@@ -2056,55 +2059,55 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>آدرس ایمیلم را از گیرندگان مخفی کن.</value>
+    <value>نشانی ایمیلم را از گیرندگان مخفی کن</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
-    <value>یک یا چند سیاست سازمان بر گزینه های ارسال شما تأثیر می گذارد.</value>
+    <value>یک یا چند سیاست سازمان بر گزینه های ارسال شما تأثیر می‌گذارد.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>حساب های رایگان فقط به اشتراک گذاری متن محدود می شوند. برای استفاده از پرونده های با Send عضویت Premium لازم است.</value>
+    <value>حساب های رایگان فقط به اشتراک گذاری متن محدود می‌شوند. برای استفاده از پرونده ها با "ارسال" عضویت Premium لازم است.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>برای استفاده از پرونده های با Send باید ایمیل خود را تأیید کنید.</value>
+    <value>برای استفاده از پرونده ها با "ارسال" باید ایمیل خود را تأیید کنید.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>کلمه عبور اصلی دوباره تولید می شود</value>
+    <value>درخواست مجدد کلمه عبور اصلی</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
     <value>تأیید کلمه عبور اصلی</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>این عمل محافظت می شود. برای ادامه، لطفاً کلمه ورود اصلی خود را دوباره وارد کنید تا هویتان را تأیید کنید.</value>
+    <value>این عمل محافظت می‌شود. برای ادامه، لطفاً کلمه عبور اصلی خود را دوباره وارد کنید تا هویتان را تأیید کنید.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
     <value>نیازمند کپچا</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>کپچا اشتباه بود. لطفا دوباره سعی کنید.</value>
+    <value>کپچا اشتباه بود. لطفاً دوباره سعی کنید.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>کلمه عبور اصلی بروز شد</value>
+    <value>کلمه عبور اصلی به‌روز شد</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>بروزرسانی کلمه عبور اصلی</value>
+    <value>به‌روزرسانی کلمه عبور اصلی</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>کلمه عبور اصلی شما اخیراً توسط سرپرست سازمانتان تغییر کرده است. برای دسترسی به گاوصندوق، باید همین حالا کلمه عبور اصلی خود را به روز کنید. در صورت ادامه، شما از نشست فعلی خود خارج می شوید و باید دوباره وارد سیستم شوید. نشست فعال در دستگاه های دیگر ممکن است تا یک ساعت همچنان فعال باقی بمانند.</value>
+    <value>کلمه عبور اصلی شما اخیراً توسط سرپرست سازمان‌تان تغییر کرده است. برای دسترسی به گاوصندوق، باید همین حالا کلمه عبور اصلی خود را به‌روز کنید. در صورت ادامه، شما از نشست فعلی خود خارج می‌شوید و باید دوباره وارد سیستم شوید. نشست فعال در دستگاه های دیگر ممکن است تا یک ساعت همچنان فعال باقی بمانند.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
-    <value>در حال به روز رسانی رمز عبور...</value>
+    <value>در حال به روز رسانی کلمه عبور...</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
-    <value>در حال حاضر نمی توان کلمه عبور را به روز کرد</value>
+    <value>در حال حاضر نمی‌توان کلمه عبور را به‌روز کرد</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>پاک کردن کلمه عبور اصلی</value>
+    <value>حذف کلمه عبور اصلی</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} از SSO با رمزگذاری مدیریت شده توسط مشتری استفاده می کند. ادامه، کلمه عبور اصلی شما را از حساب شما حذف می کند و نیاز به ورود SSO دارد.</value>
+    <value>{0} از SSO با رمزگذاری مدیریت شده توسط مشتری استفاده می‌کند. ادامه، کلمه عبور اصلی شما را از حسابتان حذف می‌کند و نیاز به ورود SSO دارد.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
     <value>اگر نمی‌خواهید کلمه عبور اصلی خود را حذف کنید، می‌توانید این سازمان را ترک کنید.</value>
@@ -2123,7 +2126,7 @@
     <value>برای ادامه، کلید امنیتی FIDO2 WebAuthn خود را فعال کنید و دستورالعمل ها را پس از کلیک روی "احراز هویت WebAuthn" در صفحه بعدی دنبال کنید.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>احراز هویت با استفاده از FIDO2 WebAuthn، می توانید با استفاده از یک کلید امنیتی خارجی احراز هویت کنید.</value>
+    <value>احراز هویت با استفاده از FIDO2 WebAuthn، می‌توانید با استفاده از یک کلید امنیتی خارجی احراز هویت کنید.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
     <value>تأیید اعتبار در WebAuthn</value>
@@ -2132,19 +2135,19 @@
     <value>بازگشت به برنامه</value>
   </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
-    <value>لطفاً مطمئن شوید که مرورگر پیش فرض شما از WebAuthn پشتیبانی می کند و دوباره امتحان کنید.</value>
+    <value>لطفاً مطمئن شوید که مرورگر پیش‌فرض شما از WebAuthn پشتیبانی می‌کند و دوباره امتحان کنید.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>این سازمان دارای خط مشی سازمانی ای است که به طور خودکار شما را در بازنشانی کلمه عبور ثبت نام می کند. این ثبت نام به مدیران سازمان اجازه می دهد تا کلمه عبور اصلی شما را تغییر دهند.</value>
+    <value>این سازمان دارای سیاست سازمانی ای است که به طور خودکار شما را در بازنشانی کلمه عبور ثبت نام می‌کند. این ثبت نام به مدیران سازمان اجازه می‌دهد تا کلمه عبور اصلی شما را تغییر دهند.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>خط مشی های سازمانتان بر مهلت زمانی گاوصندوق شما تأثیر می گذارد. حداکثر زمان مجاز گاوصندوق {0} ساعت و {1} دقیقه است</value>
+    <value>سیاست‌های سازمانتان بر مهلت زمانی گاوصندوق شما تأثیر می‌گذارد. حداکثر زمان مجاز گاوصندوق {0} ساعت و {1} دقیقه است</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>مهلت زمانی شما بیش از محدودیت های تعیین شده توسط سازمانتان است.</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
-    <value>یک یا چند خط مشی سازمان از صادرات گاوصندوق شخصی شما جلوگیری می کند.</value>
+    <value>یک یا چند سیاست سازمان از برون ریزی گاوصندوق شخصی شما جلوگیری می‌کند.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
     <value>افزودن حساب کاربری</value>
@@ -2156,7 +2159,7 @@
     <value>قفل شده</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>خارج شده</value>
+    <value>خارج شد</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>به حساب بعدی موجود تغییر کرد</value>
@@ -2177,7 +2180,7 @@
     <value>حذف حساب شما دائمی است</value>
   </data>
   <data name="DeleteAccountExplanation" xml:space="preserve">
-    <value>حساب شما و تمام داده های مرتبط پاک می شود و قابل بازیابی نیست. آیا مطمئن هستید که میخواهید ادامه دهید؟</value>
+    <value>حساب شما و تمام داده های مرتبط پاک می‌شود و قابل بازیابی نیست. آیا مطمئن هستید که می‌خواهید ادامه دهید؟</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
     <value>در حال حذف حساب شما</value>
@@ -2198,13 +2201,13 @@
     <value>درحال ارسال</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>لینک ارسال را در ذخیره کپی کن</value>
+    <value>لینک ارسال را هنگام ذخیره کپی کن</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
     <value>درحال ارسال کد</value>
   </data>
   <data name="Verifying" xml:space="preserve">
-    <value>درحال بررسی</value>
+    <value>در حال تأیید</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
     <value>ارسال مجدد کد</value>
@@ -2213,7 +2216,7 @@
     <value>یک کد تأیید به ایمیل شما ارسال گردید</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>هنگام ارسال کد تأیید به ایمیل شما خطایی رخ داد. لطفا دوباره تلاش کنید</value>
+    <value>هنگام ارسال کد تأیید به ایمیل شما خطایی رخ داد. لطفاً دوباره تلاش کنید</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>کد تأییدی که به ایمیل شما ارسال شده است را وارد کنید</value>
@@ -2225,10 +2228,10 @@
     <value>با ارسال گزارش‌های خرابی، به Bitwarden در بهبود پایداری برنامه کمک کنید.</value>
   </data>
   <data name="OptionsExpanded" xml:space="preserve">
-    <value>گزینه‌ها بزرگ شده اند، برای جمع کردن ضربه بزنید.</value>
+    <value>گزینه‌ها گسترده شده اند، برای جمع کردن ضربه بزنید.</value>
   </data>
   <data name="OptionsCollapsed" xml:space="preserve">
-    <value>گزینه‌ها جمع شده‌اند، برای بزرگ کردن ضربه بزنید.</value>
+    <value>گزینه‌ها جمع شده‌اند، برای گسترش ضربه بزنید.</value>
   </data>
   <data name="UppercaseAtoZ" xml:space="preserve">
     <value>حروف بزرگ (A تا Z)</value>
@@ -2276,13 +2279,13 @@
     <value>اشتراک پرمیوم نیاز است</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
-    <value>نمی توانید کلید احراز هویت را اضافه کنید؟</value>
+    <value>نمی‌توانید کلید احراز هویت را اضافه کنید؟</value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
     <value>اسکن کد QR</value>
   </data>
   <data name="CannotScanQRCode" xml:space="preserve">
-    <value>نمی توانید کد QR را اسکن کنید؟</value>
+    <value>نمی‌توانید کد QR را اسکن کنید</value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
     <value>کلید احراز هویت</value>
@@ -2294,20 +2297,17 @@
     <value>افزودن TOTP</value>
   </data>
   <data name="SetupTotp" xml:space="preserve">
-    <value>TOTP را راه اندازی کنید</value>
+    <value>راه اندازی TOTP</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
     <value>هنگامی که کلید با موفقیت وارد شد،
 برای ذخیره ایمن کلید، افزودن TOTP را انتخاب کنید</value>
   </data>
-  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>با تنظیم گزینه‌های قفل روی «هرگز»، گاوصندوق شما برای هر کسی که به دستگاه شما دسترسی دارد در دسترس نگه داشته می‌شود. اگر از این گزینه استفاده می کنید، باید مطمئن شوید که دستگاه خود را به درستی محافظت می‌کنید.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
-    <value>یک یا چند URL وارد شده نامعتبر است. لطفاً آن را اصلاح کنید و دوباره سعی کنید ذخیره کنید.</value>
+    <value>یک یا چند نشانی اینترنتی وارد شده نامعتبر است. لطفاً آن را اصلاح کنید و سعی کنید دوباره ذخیره کنید.</value>
   </data>
   <data name="GenericErrorMessage" xml:space="preserve">
     <value>ما نتوانستیم درخواست شما را پردازش کنیم. لطفاً دوباره امتحان کنید یا با ما تماس بگیرید.</value>
@@ -2316,7 +2316,7 @@
     <value>اجازه ضبط صفحه</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>آیا مطمئن هستید که می خواهید ضبط صفحه را فعال کنید؟</value>
+    <value>آیا مطمئنید که می‌خواهید عکس گرفتن از صفحه نمایش را فعال کنید؟</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
     <value>ورود الزامیست</value>
@@ -2331,7 +2331,7 @@
     <value>نوع دستگاه</value>
   </data>
   <data name="IpAddress" xml:space="preserve">
-    <value>آدرس IP</value>
+    <value>نشانی IP</value>
   </data>
   <data name="Time" xml:space="preserve">
     <value>زمان</value>
@@ -2343,7 +2343,7 @@
     <value>تأیید ورود</value>
   </data>
   <data name="DenyLogIn" xml:space="preserve">
-    <value>رَدِ ورود</value>
+    <value>رد ورود</value>
   </data>
   <data name="JustNow" xml:space="preserve">
     <value>همین الان</value>
@@ -2355,7 +2355,7 @@
     <value>ورود تأیید شد</value>
   </data>
   <data name="LogInDenied" xml:space="preserve">
-    <value>ورود رَد شد</value>
+    <value>ورود رد شد</value>
   </data>
   <data name="ApproveLoginRequests" xml:space="preserve">
     <value>درخواست های ورود را تأیید کنید</value>
@@ -2367,7 +2367,7 @@
     <value>اجازه دادن به اعلان‌ها</value>
   </data>
   <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
-    <value>دریافت اعلان‌های پوش برای درخواست‌های ورود جدید</value>
+    <value>دریافت اعلان‌های اجباری برای درخواست‌های ورود جدید</value>
   </data>
   <data name="NoThanks" xml:space="preserve">
     <value>نه ممنون</value>
@@ -2379,7 +2379,7 @@
     <value>همه اعلان‌ها</value>
   </data>
   <data name="PasswordType" xml:space="preserve">
-    <value>نوع گذرواژه</value>
+    <value>نوع کلمه عبور</value>
   </data>
   <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
     <value>چه چیزی دوست دارید تولید کنید؟</value>
@@ -2388,7 +2388,7 @@
     <value>نوع نام کاربری</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>به علاوه ایمیل آدرس داده شده</value>
+    <value>به علاوه نشانی ایمیل داده شده</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
     <value>دریافت همه ایمیل‌ها</value>
@@ -2409,7 +2409,7 @@
     <value>کلید API (الزامی)</value>
   </data>
   <data name="Service" xml:space="preserve">
-    <value>خدمت</value>
+    <value>سرویس</value>
   </data>
   <data name="AnonAddy" xml:space="preserve">
     <value>AnonAddy</value>
@@ -2422,6 +2422,14 @@
   <data name="SimpleLogin" xml:space="preserve">
     <value>ورود ساده</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>داک داک گو</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>توکن دسترسی API</value>
@@ -2448,22 +2456,25 @@
     <value>از صندوق ورودی پیکربندی شده دامنه خود استفاده کنید.</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
-    <value>یک نام مستعار ایمیل با یک سرویس فروارد خارجی ایجاد کنید.</value>
+    <value>یک نام مستعار ایمیل با یک سرویس ارسال خارجی ایجاد کنید.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>تصادفی</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>اتصال به ساعت</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>افشای سرویس دسترسی</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden از سرویس دسترس‌پذیری برای جستجوی فیلدهای ورود در برنامه‌ها و وب‌سایت‌ها استفاده می‌کند، سپس زمانی که مطابقتی با برنامه یا سایت پیدا شد، شناسه‌های فیلد مناسب را برای وارد کردن نام کاربری و رمز عبور ایجاد می‌کند. ما هیچ کدام از اطلاعات ارائه شده توسط سرویس به ما را ذخیره نمی کنیم و هیچ تلاشی برای کنترل عناصر روی صفحه فراتر از ورود متن اعتبارنامه ها انجام نمی دهیم.</value>
+    <value>Bitwarden از سرویس دسترسی برای جستجوی فیلدهای ورود در برنامه‌ها و وب‌سایت‌ها استفاده می‌کند، سپس زمانی که مطابقتی با برنامه یا سایت پیدا شد، شناسه‌های فیلد مناسب را برای وارد کردن نام کاربری و کلمه عبور ایجاد می‌کند. ما هیچ کدام از اطلاعات ارائه شده به خود را توسط سرویس ذخیره نمی‌کنیم و هیچ تلاشی برای کنترل عناصر روی صفحه فراتر از ورود متن اعتبارنامه ها انجام نمی‌دهیم.</value>
   </data>
   <data name="Accept" xml:space="preserve">
     <value>پذیرفتن</value>
   </data>
   <data name="Decline" xml:space="preserve">
-    <value>رَد کردن</value>
+    <value>رد کردن</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>درخواست ورود قبلاً منقضی شده است.</value>
@@ -2471,13 +2482,13 @@
   <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
     <value>تلاش برای ورود از:
 {0}
-آیا می خواهید به این حساب تغییر دهید؟</value>
+آیا می‌خواهید به این حساب تغییر دهید؟</value>
   </data>
   <data name="NewAroundHere" xml:space="preserve">
     <value>اینجا جدیده؟</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
-    <value>دریافت راهنمای گذرواژه اصلی</value>
+    <value>دریافت یادآور کلمه عبور اصلی</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
     <value>در حال ورود به عنوان {0}</value>
@@ -2498,7 +2509,7 @@
     <value>یک اعلان به دستگاه شما ارسال شده است.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>لطفاً مطمئن شوید که قفل صندوق شما باز است و عبارت اثر انگشت با دستگاه دیگر مطابقت دارد.</value>
+    <value>لطفاً مطمئن شوید که قفل گاوصندوق شما باز است و عبارت اثر انگشت با دستگاه دیگر مطابقت دارد.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
     <value>ارسال مجدد اعلان</value>
@@ -2512,7 +2523,58 @@
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>این درخواست دیگر معتبر نیست</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>در حال انتظار برای ورود به سیستم</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>رد کردن همه درخواست‌ها</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>آیا مطمئنید که می‌خواهید همه درخواست‌های ورود در انتظار را رد کنید؟</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>درخواست‌ها رد شد</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>بدون درخواست معلق</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>اجازه دوربین را برای استفاده از اسکنر فعال کنید</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>مهم</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>کلمه عبور اصلی شما در صورت فراموشی قابل بازیابی نیست! حداقل {0} کاراکتر.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>کلمه عبور اصلی ضعیف</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>کلمه عبور ضعیف شناسایی شد. از یک کلمه عبور قوی برای محافظت از حساب خود استفاده کنید. آیا مطمئنید که می‌خواهید از یک کلمه عبور ضعیف استفاده کنید؟</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>ضعیف</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>خوب</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>قوی</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>نقض اطلاعات شناخته شده برای این کلمه عبور را بررسی کنید</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>کلمه عبور اصلی افشا شده</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>کلمه عبور در نقض داده پیدا شد. از یک کلمه عبور منحصر به فرد برای محافظت از حساب خود استفاده کنید. آیا مطمئنید که می‌خواهید از یک کلمه عبور افشا شده استفاده کنید؟</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>کلمه عبور اصلی ضعیف و افشا شده</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>کلمه عبور ضعیف شناسایی و در یک نقض داده پیدا شد. از یک کلمه عبور قوی و منحصر به فرد برای محافظت از حساب خود استفاده کنید. آیا مطمئنید که می‌خواهید از این کلمه عبور استفاده کنید؟</value>
   </data>
 </root>

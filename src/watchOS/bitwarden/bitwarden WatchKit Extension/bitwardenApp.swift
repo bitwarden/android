@@ -1,7 +1,9 @@
 import SwiftUI
 
 @main
-struct bitwardenApp: App {    
+struct bitwardenApp: App {
+    @WKExtensionDelegateAdaptor(ExtensionDelegate.self) var delegate
+    
     @SceneBuilder var body: some Scene {
         WindowGroup {
             NavigationView {

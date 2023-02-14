@@ -291,6 +291,20 @@ namespace Bit.Core.Services
             return organizations?.Any(o => o.UsersGetPremium && o.Enabled) ?? false;
         }
 
+        public async Task SetPersonalPremiumAsync(bool value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+            if (account?.Profile == null || account.Profile.HasPremiumPersonally.GetValueOrDefault() == value)
+            {
+                return;
+            }
+
+            account.Profile.HasPremiumPersonally = value;
+            await SaveAccountAsync(account, reconciledOptions);
+        }
+
         public async Task<string> GetProtectedPinAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
@@ -339,35 +353,15 @@ namespace Bit.Core.Services
             await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<KdfType?> GetKdfTypeAsync(string userId = null)
-        {
-            return (await GetAccountAsync(
-                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
-            ))?.Profile?.KdfType;
-        }
-
-        public async Task SetKdfTypeAsync(KdfType? value, string userId = null)
+        public async Task SetKdfConfigurationAsync(KdfConfig config, string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
-            account.Profile.KdfType = value;
-            await SaveAccountAsync(account, reconciledOptions);
-        }
-
-        public async Task<int?> GetKdfIterationsAsync(string userId = null)
-        {
-            return (await GetAccountAsync(
-                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
-            ))?.Profile?.KdfIterations;
-        }
-
-        public async Task SetKdfIterationsAsync(int? value, string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-            account.Profile.KdfIterations = value;
+            account.Profile.KdfType = config.Type;
+            account.Profile.KdfIterations = config.Iterations;
+            account.Profile.KdfMemory = config.Memory;
+            account.Profile.KdfParallelism = config.Parallelism;
             await SaveAccountAsync(account, reconciledOptions);
         }
 
@@ -1305,6 +1299,23 @@ namespace Bit.Core.Services
             var key = Constants.PasswordlessLoginNotificationKey;
             await SetValueAsync(key, value, options);
         }
+
+        public async Task SetAvatarColorAsync(string value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+            account.Profile.AvatarColor = value;
+            await SaveAccountAsync(account, reconciledOptions);
+        }
+
+        public async Task<string> GetAvatarColorAsync(string userId = null)
+        {
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            ))?.Profile?.AvatarColor;
+        }
+
         // Helpers
 
         private async Task<T> GetValueAsync<T>(string key, StorageOptions options)

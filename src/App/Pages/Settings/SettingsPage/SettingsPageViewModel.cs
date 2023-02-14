@@ -9,6 +9,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models;
 using Bit.Core.Models.Domain;
+using Bit.Core.Models.Response;
 using Bit.Core.Models.View;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
@@ -35,6 +36,7 @@ namespace Bit.App.Pages
         private readonly IClipboardService _clipboardService;
         private readonly ILogger _loggerService;
         private readonly IPushNotificationService _pushNotificationService;
+        private readonly IAuthService _authService;
         private readonly IWatchDeviceService _watchDeviceService;
         private const int CustomVaultTimeoutValue = -100;
 
@@ -49,7 +51,6 @@ namespace Bit.App.Pages
         private bool _reportLoggingEnabled;
         private bool _approvePasswordlessLoginRequests;
         private bool _shouldConnectToWatch;
-
         private List<KeyValuePair<string, int?>> _vaultTimeouts =
             new List<KeyValuePair<string, int?>>
             {
@@ -92,8 +93,8 @@ namespace Bit.App.Pages
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
             _loggerService = ServiceContainer.Resolve<ILogger>("logger");
             _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
+            _authService = ServiceContainer.Resolve<IAuthService>();
             _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
-
             GroupedItems = new ObservableRangeCollection<ISettingsPageListItem>();
             PageTitle = AppResources.Settings;
 
@@ -144,7 +145,6 @@ namespace Bit.App.Pages
                 !await _keyConnectorService.GetUsesKeyConnector();
             _reportLoggingEnabled = await _loggerService.IsEnabled();
             _approvePasswordlessLoginRequests = await _stateService.GetApprovePasswordlessLoginsAsync();
-
             _shouldConnectToWatch = await _stateService.GetShouldConnectToWatchAsync();
 
             BuildList();
@@ -422,12 +422,9 @@ namespace Bit.App.Pages
                             AppResources.Yes, AppResources.No);
                     }
 
-                    var kdf = await _stateService.GetKdfTypeAsync();
-                    var kdfIterations = await _stateService.GetKdfIterationsAsync();
+                    var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
                     var email = await _stateService.GetEmailAsync();
-                    var pinKey = await _cryptoService.MakePinKeyAysnc(pin, email,
-                        kdf.GetValueOrDefault(Core.Enums.KdfType.PBKDF2_SHA256),
-                        kdfIterations.GetValueOrDefault(5000));
+                    var pinKey = await _cryptoService.MakePinKeyAysnc(pin, email, kdfConfig);
                     var key = await _cryptoService.GetKeyAsync();
                     var pinProtectedKey = await _cryptoService.EncryptAsync(key.Key, pinKey);
 
@@ -566,6 +563,14 @@ namespace Bit.App.Pages
                     ExecuteAsync = () => TwoStepAsync()
                 }
             };
+            if (_approvePasswordlessLoginRequests)
+            {
+                manageItems.Add(new SettingsPageListItem
+                {
+                    Name = AppResources.PendingLogInRequests,
+                    ExecuteAsync = () => PendingLoginRequestsAsync()
+                });
+            }
             if (_supportsBiometric || _biometric)
             {
                 var biometricName = AppResources.Biometrics;
@@ -754,6 +759,25 @@ namespace Bit.App.Pages
                 {
                     GroupedItems.Clear();
                 }
+            }
+        }
+
+        private async Task PendingLoginRequestsAsync()
+        {
+            try
+            {
+                var requests = await _authService.GetActivePasswordlessLoginRequestsAsync();
+                if (requests == null || !requests.Any())
+                {
+                    _platformUtilsService.ShowToast("info", null, AppResources.NoPendingRequests);
+                    return;
+                }
+
+                Page.Navigation.PushModalAsync(new NavigationPage(new LoginPasswordlessRequestsListPage())).FireAndForget();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
             }
         }
 

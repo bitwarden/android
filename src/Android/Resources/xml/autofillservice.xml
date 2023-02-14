@@ -93,6 +93,9 @@
     android:name="com.kiwibrowser.browser.dev"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.lemurbrowser.exts"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.microsoft.emmx"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
@@ -115,6 +118,9 @@
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="com.naver.whale"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.neeva.app"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="com.opera.browser"
@@ -141,6 +147,9 @@
     android:name="com.qwant.liberty"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.rainsee.create"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.sec.android.app.sbrowser"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
@@ -165,6 +174,15 @@
     android:name="com.yandex.browser"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.yjllq.internet"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.yjllq.kito"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.yujian.ResideMenuDemo"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.z28j.feel"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
@@ -184,6 +202,9 @@
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="mark.via.gp"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="net.dezor.browser"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="net.slions.fulguris.full.download"
