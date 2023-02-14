@@ -460,7 +460,7 @@ namespace Bit.Core.Services
 
         public Task<OrganizationDomainSsoDetailsResponse> GetOrgDomainSsoDetailsAsync(string userEmail)
         {
-            return SendAsync<OrganizationDomainSsoDetailsRequest, OrganizationDomainSsoDetailsResponse>(HttpMethod.Post, $"/domain/sso/details", new OrganizationDomainSsoDetailsRequest { Email = userEmail }, false, true);
+            return SendAsync<OrganizationDomainSsoDetailsRequest, OrganizationDomainSsoDetailsResponse>(HttpMethod.Post, $"/organizations/domain/sso/details", new OrganizationDomainSsoDetailsRequest { Email = userEmail }, false, true);
         }
         #endregion
 

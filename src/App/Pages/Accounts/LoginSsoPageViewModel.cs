@@ -67,7 +67,6 @@ namespace Bit.App.Pages
         {
             try
             {
-                await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
                 if (await TryClaimedDomainLogin())
                 {
                     return;
@@ -229,8 +228,10 @@ namespace Bit.App.Pages
 
         private async Task<bool> TryClaimedDomainLogin()
         {
+            await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
             var userEmail = await _stateService.GetRememberedEmailAsync();
             var claimedDomainOrg = await _organizationService.GetClaimedOrganizationDomainAsync(userEmail);
+            await _deviceActionService.HideLoadingAsync();
             if (string.IsNullOrEmpty(claimedDomainOrg))
             {
                 return false;
