@@ -73,8 +73,7 @@ jobs:
         uses: microsoft/setup-msbuild@ab534842b4bdf384b8aaf93765dc6f721d9f5fab
 
       - name: Setup Windows builder
-        run: |
-          choco install checksum --no-progress
+        run: choco install checksum --no-progress
 
       - name: Work Around for broken Windows 2022 Runner Image
         run: |
