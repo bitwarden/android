@@ -92,8 +92,8 @@ jobs:
           artifacts: "./com.x8bit.bitwarden.aab/com.x8bit.bitwarden.aab,
                       ./com.x8bit.bitwarden.apk/com.x8bit.bitwarden.apk,
                       ./com.x8bit.bitwarden-fdroid.apk/com.x8bit.bitwarden-fdroid.apk,
-                      ./Bitwarden iOS.zip
-                      ./bw-android-apk-sha256.txt
+                      ./Bitwarden iOS.zip,
+                      ./bw-android-apk-sha256.txt,
                       ./bw-fdroid-apk-sha256.txt"
           commit: ${{ github.sha }}
           tag: v${{ steps.version.outputs.version }}
