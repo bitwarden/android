@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -329,62 +330,58 @@ namespace Bit.Core.Services
         private async Task MigrateFrom3To4Async()
         {
             var state = await GetValueAsync<State>(Storage.LiteDb, Constants.StateKey);
-            if (state?.Accounts != null)
+            if (state?.Accounts is null)
             {
-                string firstUserId = null;
+                // Update stored version
+                await SetLastStateVersionAsync(4);
+                return;
+            }
 
-                // move values from state to standalone values in LiteDB
-                foreach (var account in state.Accounts)
+            string firstUserId = null;
+
+            // move values from state to standalone values in LiteDB
+            foreach (var account in state.Accounts.Where(a => a.Value?.Profile?.UserId != null))
+            {
+                var userId = account.Value.Profile.UserId;
+                if (firstUserId == null)
                 {
-                    var userId = account.Value?.Profile?.UserId;
-                    if (userId != null)
-                    {
-                        if (firstUserId == null)
-                        {
-                            firstUserId = userId;
-                        }
-                        var vaultTimeout = account.Value?.Settings?.VaultTimeout;
-                        await SetValueAsync(Storage.LiteDb, V4Keys.VaultTimeoutKey(userId), vaultTimeout);
-
-                        var vaultTimeoutAction = account.Value?.Settings?.VaultTimeoutAction;
-                        await SetValueAsync(Storage.LiteDb, V4Keys.VaultTimeoutActionKey(userId), vaultTimeoutAction);
-
-                        var screenCaptureAllowed = account.Value?.Settings?.ScreenCaptureAllowed;
-                        await SetValueAsync(Storage.LiteDb, V4Keys.ScreenCaptureAllowedKey(userId),
-                            screenCaptureAllowed);
-                    }
+                    firstUserId = userId;
                 }
+                var vaultTimeout = account.Value.Settings?.VaultTimeout;
+                await SetValueAsync(Storage.LiteDb, V4Keys.VaultTimeoutKey(userId), vaultTimeout);
 
-                // use values from first userId to apply globals
-                if (firstUserId != null)
-                {
-                    var theme = await GetValueAsync<int?>(Storage.LiteDb, V3Keys.ThemeKey(firstUserId));
-                    await SetValueAsync(Storage.LiteDb, V4Keys.ThemeKey, theme);
+                var vaultTimeoutAction = account.Value.Settings?.VaultTimeoutAction;
+                await SetValueAsync(Storage.LiteDb, V4Keys.VaultTimeoutActionKey(userId), vaultTimeoutAction);
 
-                    var autoDarkTheme = await GetValueAsync<int?>(Storage.LiteDb, V3Keys.AutoDarkThemeKey(firstUserId));
-                    await SetValueAsync(Storage.LiteDb, V4Keys.AutoDarkThemeKey, autoDarkTheme);
+                var screenCaptureAllowed = account.Value.Settings?.ScreenCaptureAllowed;
+                await SetValueAsync(Storage.LiteDb, V4Keys.ScreenCaptureAllowedKey(userId), screenCaptureAllowed);
+            }
 
-                    var disableFavicon =
-                        await GetValueAsync<bool?>(Storage.LiteDb, V3Keys.DisableFaviconKey(firstUserId));
-                    await SetValueAsync(Storage.LiteDb, V4Keys.DisableFaviconKey, disableFavicon);
-                }
+            // use values from first userId to apply globals
+            if (firstUserId != null)
+            {
+                var theme = await GetValueAsync<int?>(Storage.LiteDb, V3Keys.ThemeKey(firstUserId));
+                await SetValueAsync(Storage.LiteDb, V4Keys.ThemeKey, theme);
+
+                var autoDarkTheme = await GetValueAsync<int?>(Storage.LiteDb, V3Keys.AutoDarkThemeKey(firstUserId));
+                await SetValueAsync(Storage.LiteDb, V4Keys.AutoDarkThemeKey, autoDarkTheme);
+
+                var disableFavicon = await GetValueAsync<bool?>(Storage.LiteDb, V3Keys.DisableFaviconKey(firstUserId));
+                await SetValueAsync(Storage.LiteDb, V4Keys.DisableFaviconKey, disableFavicon);
             }
 
             // Update stored version
             await SetLastStateVersionAsync(4);
 
             // Remove old data
-            if (state?.Accounts != null)
+            foreach (var account in state.Accounts)
             {
-                foreach (var account in state.Accounts)
+                var userId = account.Value?.Profile?.UserId;
+                if (userId != null)
                 {
-                    var userId = account.Value?.Profile?.UserId;
-                    if (userId != null)
-                    {
-                        await RemoveValueAsync(Storage.LiteDb, V3Keys.ThemeKey(userId));
-                        await RemoveValueAsync(Storage.LiteDb, V3Keys.AutoDarkThemeKey(userId));
-                        await RemoveValueAsync(Storage.LiteDb, V3Keys.DisableFaviconKey(userId));
-                    }
+                    await RemoveValueAsync(Storage.LiteDb, V3Keys.ThemeKey(userId));
+                    await RemoveValueAsync(Storage.LiteDb, V3Keys.AutoDarkThemeKey(userId));
+                    await RemoveValueAsync(Storage.LiteDb, V3Keys.DisableFaviconKey(userId));
                 }
             }
 

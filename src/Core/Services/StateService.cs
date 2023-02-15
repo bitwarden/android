@@ -542,7 +542,7 @@ namespace Bit.Core.Services
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
             var key = Constants.VaultTimeoutKey(reconciledOptions.UserId);
-            return await GetValueAsync<int?>(key, reconciledOptions) ?? 15;
+            return await GetValueAsync<int?>(key, reconciledOptions) ?? Constants.VaultTimeoutDefault;
         }
 
         public async Task SetVaultTimeoutAsync(int? value, string userId = null)

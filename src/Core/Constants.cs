@@ -3,6 +3,7 @@
     public static class Constants
     {
         public const int MaxAccounts = 5;
+        public const int VaultTimeoutDefault = 15;
         public const string AndroidAppProtocol = "androidapp://";
         public const string iOSAppProtocol = "iosapp://";
         public const string DefaultUsernameGenerated = "-";
