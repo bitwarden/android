@@ -132,7 +132,7 @@ Luo usein käyttämillesi sivustoille automaattisesti vahvoja, yksilöllisiä ja
 
 Bitwarden Send -ominaisuudella lähetät tietoa nopeasti salattuna — tiedostoja ja tekstiä — suoraan kenelle tahansa.
 
-Yrityksille Bitwarden tarjoaa Teams ja Enterprise -tilaukset, jotta voit jakaa salasanoja kollegoiden kesken turvallisesti.
+Yritystoimintaan Bitwarden tarjoaa tilaukset Tiimeille ja Yrityksille, jotta salasanojen jakaminen kollegoiden kesken on turvallista.
 
 Miksi Bitwarden?:
 
@@ -146,7 +146,8 @@ Monikielinen
 Bitwardenin sovelluksia on käännetty yli 40 kielelle ja määrä kasvaa jatkuvasti, kiitos kansainvälisen yhteisömme.
 
 Alustariippumattomaton
-Suojaa, käytä ja jaa Bitwarden-holvisi arkaluontoisia tietoja kaikilla selaimilla, mobiililaitteilla, pöytätietokoneilla ja muissa järjestelmissä.</value>
+Suojaa, käytä ja jaa Bitwarden-holvisi arkaluontoisia tietoja kaikilla selaimilla, mobiililaitteilla, pöytätietokoneilla ja muissa järjestelmissä.
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
