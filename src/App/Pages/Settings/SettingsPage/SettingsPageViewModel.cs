@@ -374,6 +374,10 @@ namespace Bit.App.Pages
 
         public async Task VaultTimeoutActionAsync()
         {
+            if (!string.IsNullOrEmpty(_policyService.GetPolicyString(_vaultTimeoutPolicy, "action")))
+            {
+                return;
+            }
             var options = _vaultTimeoutActions.Select(o =>
                 o.Key == _vaultTimeoutActionDisplayValue ? $"✓ {o.Key}" : o.Key).ToArray();
             var selection = await Page.DisplayActionSheet(AppResources.VaultTimeoutAction,
@@ -598,13 +602,37 @@ namespace Bit.App.Pages
             if (_vaultTimeoutPolicy != null)
             {
                 var maximumTimeout = _policyService.GetPolicyInt(_vaultTimeoutPolicy, "minutes").GetValueOrDefault();
-                securityItems.Insert(0, new SettingsPageListItem
+                var timeoutAction = _policyService.GetPolicyString(_vaultTimeoutPolicy, "action");
+                if (maximumTimeout != default && timeoutAction != default)
                 {
-                    Name = string.Format(AppResources.VaultTimeoutPolicyInEffect,
+                    securityItems.Insert(0, new SettingsPageListItem
+                    {
+                        Name = string.Format(AppResources.VaultTimeoutPolicyWithActionInEffect,
+                        Math.Floor((float)maximumTimeout / 60),
+                        maximumTimeout % 60,
+                        timeoutAction == "lock" ? AppResources.Lock : AppResources.LogOut),
+                        UseFrame = true,
+                    });
+                }
+                else if (maximumTimeout != default && timeoutAction == default)
+                {
+                    securityItems.Insert(0, new SettingsPageListItem
+                    {
+                        Name = string.Format(AppResources.VaultTimeoutPolicyInEffect,
                         Math.Floor((float)maximumTimeout / 60),
                         maximumTimeout % 60),
-                    UseFrame = true,
-                });
+                        UseFrame = true,
+                    });
+                }
+                else if (maximumTimeout == default && timeoutAction != default)
+                {
+                    securityItems.Insert(0, new SettingsPageListItem
+                    {
+                        Name = string.Format(AppResources.VaultTimeoutActionPolicyInEffect,
+                        timeoutAction == "lock" ? AppResources.Lock : AppResources.LogOut),
+                        UseFrame = true,
+                    });
+                } 
             }
             if (Device.RuntimePlatform == Device.Android)
             {

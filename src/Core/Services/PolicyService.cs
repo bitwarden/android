@@ -247,6 +247,19 @@ namespace Bit.Core.Services
             return null;
         }
 
+        public string GetPolicyString(Policy policy, string key)
+        {
+            if (policy.Data.ContainsKey(key))
+            {
+                var value = policy.Data[key];
+                if (value != null)
+                {
+                    return (string)value;
+                }
+            }
+            return null;
+        }
+
         public async Task<bool> ShouldShowVaultFilterAsync()
         {
             var personalOwnershipPolicyApplies = await PolicyAppliesToUser(PolicyType.PersonalOwnership);
@@ -272,17 +285,6 @@ namespace Bit.Core.Services
             return null;
         }
 
-        private string GetPolicyString(Policy policy, string key)
-        {
-            if (policy.Data.ContainsKey(key))
-            {
-                var value = policy.Data[key];
-                if (value != null)
-                {
-                    return (string)value;
-                }
-            }
-            return null;
-        }
+
     }
 }
