@@ -11,7 +11,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.8bit.bitwarden</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2023.1.1</string>
+	<string>2023.2.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>CFBundleIconName</key>
