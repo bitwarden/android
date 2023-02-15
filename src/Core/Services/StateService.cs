@@ -539,55 +539,50 @@ namespace Bit.Core.Services
 
         public async Task<int?> GetVaultTimeoutAsync(string userId = null)
         {
-            return (await GetAccountAsync(
-                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
-            ))?.Settings?.VaultTimeout;
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var key = Constants.VaultTimeoutKey(reconciledOptions.UserId);
+            return await GetValueAsync<int?>(key, reconciledOptions) ?? Constants.VaultTimeoutDefault;
         }
 
         public async Task SetVaultTimeoutAsync(int? value, string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-            account.Settings.VaultTimeout = value;
-            await SaveAccountAsync(account, reconciledOptions);
+            var key = Constants.VaultTimeoutKey(reconciledOptions.UserId);
+            await SetValueAsync(key, value, reconciledOptions);
         }
 
         public async Task<VaultTimeoutAction?> GetVaultTimeoutActionAsync(string userId = null)
         {
-            return (await GetAccountAsync(
-                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
-            ))?.Settings?.VaultTimeoutAction;
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var key = Constants.VaultTimeoutActionKey(reconciledOptions.UserId);
+            return await GetValueAsync<VaultTimeoutAction?>(key, reconciledOptions) ?? VaultTimeoutAction.Lock;
         }
 
         public async Task SetVaultTimeoutActionAsync(VaultTimeoutAction? value, string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-            account.Settings.VaultTimeoutAction = value;
-            await SaveAccountAsync(account, reconciledOptions);
+            var key = Constants.VaultTimeoutActionKey(reconciledOptions.UserId);
+            await SetValueAsync(key, value, reconciledOptions);
         }
 
         public async Task<bool> GetScreenCaptureAllowedAsync(string userId = null)
         {
-            if (CoreHelpers.ForceScreenCaptureEnabled())
-            {
-                return true;
-            }
-
-            return (await GetAccountAsync(
-                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
-            ))?.Settings?.ScreenCaptureAllowed ?? false;
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var key = Constants.ScreenCaptureAllowedKey(reconciledOptions.UserId);
+            return await GetValueAsync<bool?>(key, reconciledOptions) ?? CoreHelpers.InDebugMode();
         }
 
         public async Task SetScreenCaptureAllowedAsync(bool value, string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-            account.Settings.ScreenCaptureAllowed = value;
-            await SaveAccountAsync(account, reconciledOptions);
+            var key = Constants.ScreenCaptureAllowedKey(reconciledOptions.UserId);
+            await SetValueAsync(key, value, reconciledOptions);
         }
 
         public async Task<DateTime?> GetLastFileCacheClearAsync()
@@ -650,23 +645,18 @@ namespace Bit.Core.Services
             await SetValueAsync(key, value, options);
         }
 
-        public async Task<bool?> GetDisableFaviconAsync(string userId = null)
+        public async Task<bool?> GetDisableFaviconAsync()
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var key = Constants.DisableFaviconKey(reconciledOptions.UserId);
-            return await GetValueAsync<bool?>(key, reconciledOptions);
+            var options = await GetDefaultStorageOptionsAsync();
+            var key = Constants.DisableFaviconKey;
+            return await GetValueAsync<bool?>(key, options);
         }
 
-        public async Task SetDisableFaviconAsync(bool? value, string userId = null)
+        public async Task SetDisableFaviconAsync(bool? value)
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var key = Constants.DisableFaviconKey(reconciledOptions.UserId);
-            await SetValueAsync(key, value, reconciledOptions);
-
-            // TODO remove this to restore per-account DisableFavicon support
-            SetValueGloballyAsync(Constants.DisableFaviconKey, value, reconciledOptions).FireAndForget();
+            var options = await GetDefaultStorageOptionsAsync();
+            var key = Constants.DisableFaviconKey;
+            await SetValueAsync(key, value, options);
         }
 
         public async Task<bool?> GetDisableAutoTotpCopyAsync(string userId = null)
@@ -937,42 +927,32 @@ namespace Bit.Core.Services
             await SetValueAsync(key, value, options);
         }
 
-        public async Task<string> GetThemeAsync(string userId = null)
+        public async Task<string> GetThemeAsync()
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var key = Constants.ThemeKey(reconciledOptions.UserId);
-            return await GetValueAsync<string>(key, reconciledOptions);
+            var options = await GetDefaultStorageOptionsAsync();
+            var key = Constants.ThemeKey;
+            return await GetValueAsync<string>(key, options);
         }
 
-        public async Task SetThemeAsync(string value, string userId = null)
+        public async Task SetThemeAsync(string value)
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var key = Constants.ThemeKey(reconciledOptions.UserId);
-            await SetValueAsync(key, value, reconciledOptions);
-
-            // TODO remove this to restore per-account Theme support
-            SetValueGloballyAsync(Constants.ThemeKey, value, reconciledOptions).FireAndForget();
+            var options = await GetDefaultStorageOptionsAsync();
+            var key = Constants.ThemeKey;
+            await SetValueAsync(key, value, options);
         }
 
-        public async Task<string> GetAutoDarkThemeAsync(string userId = null)
+        public async Task<string> GetAutoDarkThemeAsync()
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var key = Constants.AutoDarkThemeKey(reconciledOptions.UserId);
-            return await GetValueAsync<string>(key, reconciledOptions);
+            var options = await GetDefaultStorageOptionsAsync();
+            var key = Constants.AutoDarkThemeKey;
+            return await GetValueAsync<string>(key, options);
         }
 
-        public async Task SetAutoDarkThemeAsync(string value, string userId = null)
+        public async Task SetAutoDarkThemeAsync(string value)
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var key = Constants.AutoDarkThemeKey(reconciledOptions.UserId);
-            await SetValueAsync(key, value, reconciledOptions);
-
-            // TODO remove this to restore per-account Theme support
-            SetValueGloballyAsync(Constants.AutoDarkThemeKey, value, reconciledOptions).FireAndForget();
+            var options = await GetDefaultStorageOptionsAsync();
+            var key = Constants.AutoDarkThemeKey;
+            await SetValueAsync(key, value, options);
         }
 
         public async Task<bool?> GetAddSitePromptShownAsync(string userId = null)
@@ -1333,30 +1313,6 @@ namespace Bit.Core.Services
             await GetStorageService(options).SaveAsync(key, value);
         }
 
-        private async Task SetValueGloballyAsync<T>(Func<string, string> keyPrefix, T value, StorageOptions options)
-        {
-            if (value == null)
-            {
-                // don't remove values globally
-                return;
-            }
-            await CheckStateAsync();
-            if (_state?.Accounts == null)
-            {
-                return;
-            }
-            // userId from options was already applied, skip those
-            var userIdToSkip = options.UserId;
-            foreach (var account in _state.Accounts)
-            {
-                var uid = account.Value?.Profile?.UserId;
-                if (uid != null && uid != userIdToSkip)
-                {
-                    await SetValueAsync(keyPrefix(uid), value, options);
-                }
-            }
-        }
-
         private IStorageService GetStorageService(StorageOptions options)
         {
             return options.UseSecureStorage.GetValueOrDefault(false) ? _secureStorageService : _storageService;
@@ -1489,7 +1445,6 @@ namespace Bit.Core.Services
             }
 
             // Non-state storage
-            await SetBiometricUnlockAsync(null, userId);
             await SetProtectedPinAsync(null, userId);
             await SetPinProtectedAsync(null, userId);
             await SetKeyEncryptedAsync(null, userId);
@@ -1511,37 +1466,11 @@ namespace Bit.Core.Services
             await SetEncryptedPasswordGenerationHistoryAsync(null, userId);
             await SetEncryptedSendsAsync(null, userId);
             await SetSettingsAsync(null, userId);
-            await SetApprovePasswordlessLoginsAsync(null, userId);
-
-            if (userInitiated)
-            {
-                // user initiated logout (not vault timeout or scaffolding new account) so remove remaining settings
-                await SetAutofillBlacklistedUrisAsync(null, userId);
-                await SetDisableFaviconAsync(null, userId);
-                await SetDisableAutoTotpCopyAsync(null, userId);
-                await SetInlineAutofillEnabledAsync(null, userId);
-                await SetAutofillDisableSavePromptAsync(null, userId);
-                await SetDefaultUriMatchAsync(null, userId);
-                await SetNeverDomainsAsync(null, userId);
-                await SetClearClipboardAsync(null, userId);
-                await SetPasswordRepromptAutofillAsync(null, userId);
-                await SetPasswordVerifiedAutofillAsync(null, userId);
-                await SetSyncOnRefreshAsync(null, userId);
-                await SetThemeAsync(null, userId);
-                await SetAutoDarkThemeAsync(null, userId);
-                await SetAddSitePromptShownAsync(null, userId);
-                await SetPasswordGenerationOptionsAsync(null, userId);
-                await SetApprovePasswordlessLoginsAsync(null, userId);
-                await SetUsernameGenerationOptionsAsync(null, userId);
-            }
         }
 
         private async Task ScaffoldNewAccountAsync(Account account)
         {
             await CheckStateAsync();
-            var currentTheme = await GetThemeAsync();
-            var currentAutoDarkTheme = await GetAutoDarkThemeAsync();
-            var currentDisableFavicons = await GetDisableFaviconAsync();
 
             account.Settings.EnvironmentUrls = await GetPreAuthEnvironmentUrlsAsync();
 
@@ -1551,28 +1480,6 @@ namespace Bit.Core.Services
             {
                 state.Accounts = new Dictionary<string, Account>();
             }
-            if (state.Accounts.ContainsKey(account.Profile.UserId))
-            {
-                // Run cleanup pass on existing account before proceeding
-                await RemoveAccountAsync(account.Profile.UserId, false);
-                var existingAccount = state.Accounts[account.Profile.UserId];
-                account.Settings.VaultTimeout = existingAccount.Settings.VaultTimeout;
-                account.Settings.VaultTimeoutAction = existingAccount.Settings.VaultTimeoutAction;
-                account.Settings.ScreenCaptureAllowed = existingAccount.Settings.ScreenCaptureAllowed;
-            }
-
-            // New account defaults
-            if (account.Settings.VaultTimeout == null)
-            {
-                account.Settings.VaultTimeout = 15;
-            }
-            if (account.Settings.VaultTimeoutAction == null)
-            {
-                account.Settings.VaultTimeoutAction = VaultTimeoutAction.Lock;
-            }
-            await SetThemeAsync(currentTheme, account.Profile.UserId);
-            await SetAutoDarkThemeAsync(currentAutoDarkTheme, account.Profile.UserId);
-            await SetDisableFaviconAsync(currentDisableFavicons, account.Profile.UserId);
 
             state.Accounts[account.Profile.UserId] = account;
             await SaveStateToStorageAsync(state);

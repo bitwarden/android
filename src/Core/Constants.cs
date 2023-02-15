@@ -3,6 +3,7 @@
     public static class Constants
     {
         public const int MaxAccounts = 5;
+        public const int VaultTimeoutDefault = 15;
         public const string AndroidAppProtocol = "androidapp://";
         public const string iOSAppProtocol = "iosapp://";
         public const string DefaultUsernameGenerated = "-";
@@ -29,6 +30,9 @@
         public static string RememberedEmailKey = "rememberedEmail";
         public static string RememberedOrgIdentifierKey = "rememberedOrgIdentifier";
         public static string PasswordlessLoginNotificationKey = "passwordlessLoginNotificationKey";
+        public const string ThemeKey = "theme";
+        public const string AutoDarkThemeKey = "autoDarkTheme";
+        public const string DisableFaviconKey = "disableFavicon";
         public const string PasswordlessNotificationId = "26072022";
         public const string AndroidNotificationChannelId = "general_notification_channel";
         public const string iOSNotificationCategoryId = "dismissableCategory";
@@ -65,6 +69,8 @@
             iOSShareExtensionClearCiphersCacheKey
         };
 
+        public static string VaultTimeoutKey(string userId) => $"vaultTimeout_{userId}";
+        public static string VaultTimeoutActionKey(string userId) => $"vaultTimeoutAction_{userId}";
         public static string CiphersKey(string userId) => $"ciphers_{userId}";
         public static string FoldersKey(string userId) => $"folders_{userId}";
         public static string CollectionsKey(string userId) => $"collections_{userId}";
@@ -89,10 +95,7 @@
         public static string AutofillBlacklistedUrisKey(string userId) => $"autofillBlacklistedUris_{userId}";
         public static string ClearClipboardKey(string userId) => $"clearClipboard_{userId}";
         public static string SyncOnRefreshKey(string userId) => $"syncOnRefresh_{userId}";
-        public static string DisableFaviconKey(string userId) => $"disableFavicon_{userId}";
         public static string DefaultUriMatchKey(string userId) => $"defaultUriMatch_{userId}";
-        public static string ThemeKey(string userId) => $"theme_{userId}";
-        public static string AutoDarkThemeKey(string userId) => $"autoDarkTheme_{userId}";
         public static string DisableAutoTotpCopyKey(string userId) => $"disableAutoTotpCopy_{userId}";
         public static string PreviousPageKey(string userId) => $"previousPage_{userId}";
         public static string PasswordRepromptAutofillKey(string userId) => $"passwordRepromptAutofillKey_{userId}";
@@ -107,5 +110,6 @@
         public static string PushLastRegistrationDateKey(string userId) => $"pushLastRegistrationDate_{userId}";
         public static string PushCurrentTokenKey(string userId) => $"pushCurrentToken_{userId}";
         public static string ShouldConnectToWatchKey(string userId) => $"shouldConnectToWatch_{userId}";
+        public static string ScreenCaptureAllowedKey(string userId) => $"screenCaptureAllowed_{userId}";
     }
 }

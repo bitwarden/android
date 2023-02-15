@@ -37,25 +37,6 @@ namespace Bit.Core.Utilities
 #endif
         }
 
-        /// <summary>
-        /// Returns whether to force enabling the screen capture.
-        /// On Debug it will allow screen capture by default but this method
-        /// makes it easier to test the change on enabling/disabling the feature
-        /// on debug.
-        /// </summary>
-        /// <remarks>
-        /// To test enabling/disabling in DEBUG, just return <c>false</c> in the #if condition
-        /// and that's it.
-        /// </remarks>
-        public static bool ForceScreenCaptureEnabled()
-        {
-#if DEBUG
-            return true;
-#else
-            return false;
-#endif
-        }
-
         public static string GetHostname(string uriString)
         {
             var uri = GetUri(uriString);
