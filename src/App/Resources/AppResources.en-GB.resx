@@ -2137,7 +2137,7 @@ Scanning will happen automatically.</value>
     <value>Please make sure your default browser supports WebAuthn and try again.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>This organisation has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organisation administrators to change your master password.</value>
+    <value>This organisation has an enterprise policy that will automatically enrol you in password reset. Enrolment will allow organisation administrators to change your master password.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Your organisation policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s)</value>

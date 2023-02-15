@@ -2083,11 +2083,10 @@
     <value>Това действие е защитено. За да продължите, въведете отново главната си парола, за да потвърдите самоличността си.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Адресът за hCaptcha е задължителен</value>
+    <value>Проверката е задължителна</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>
-Грешка. Моля опитайте пак</value>
+    <value>Грешка. Опитайте отново.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
     <value>Главната парола е променена</value>
@@ -2294,10 +2293,10 @@
     <value>Ръчно въвеждане на кода</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
-    <value>Копиране на кода за потвърждаване</value>
+    <value>Добавяне на TOTP</value>
   </data>
   <data name="SetupTotp" xml:space="preserve">
-    <value>Копиране на кода за потвърждаване</value>
+    <value>Настройка на TOTP</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
     <value>Once the key is successfully entered,
