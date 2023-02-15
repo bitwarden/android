@@ -2536,7 +2536,7 @@ Do you want to switch to this account?</value>
     <value>Requests declined</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>No pending requests</value>
+    <value>No pending requests</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Enable camera permission to use the scanner</value>
