@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
+using Bit.Core.Models.Response;
 
 namespace Bit.Core.Abstractions
 {
@@ -12,6 +13,6 @@ namespace Bit.Core.Abstractions
         Task<List<Organization>> GetAllAsync(string userId = null);
         Task ReplaceAsync(Dictionary<string, OrganizationData> organizations);
         Task ClearAllAsync(string userId);
-        Task<string> GetClaimedOrganizationDomainAsync(string userEmail);
+        Task<OrganizationDomainSsoDetailsResponse> GetClaimedOrganizationDomainAsync(string userEmail);
     }
 }

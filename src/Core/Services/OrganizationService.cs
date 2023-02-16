@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
+using Bit.Core.Models.Response;
 using Bit.Core.Utilities;
 
 namespace Bit.Core.Services
@@ -57,19 +61,15 @@ namespace Bit.Core.Services
             await _stateService.SetOrganizationsAsync(null, userId);
         }
 
-        public async Task<string> GetClaimedOrganizationDomainAsync(string userEmail)
+        public async Task<OrganizationDomainSsoDetailsResponse> GetClaimedOrganizationDomainAsync(string userEmail)
         {
-            try
+            if (string.IsNullOrEmpty(userEmail))
             {
-                var response = await _apiService.GetOrgDomainSsoDetailsAsync(userEmail);
-                return response.OrganizationIdentifier;
+                return null;
             }
-            catch (System.Exception ex)
-            {
-                // api throws 404 if there is no domain claimed
-                _logger.Value.Exception(ex);
-                return string.Empty;
-            }
+
+            var response = await _apiService.GetOrgDomainSsoDetailsAsync(userEmail);
+            return response;
         }
     }
 }

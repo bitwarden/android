@@ -143,7 +143,7 @@ namespace Bit.App.Pages
             try
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
-                await _stateService.SetPreLoginEmail(Email);
+                await _stateService.SetPreLoginEmailAsync(Email);
                 await AccountSwitchingOverlayViewModel.RefreshAccountViewsAsync();
                 if (string.IsNullOrWhiteSpace(Email))
                 {

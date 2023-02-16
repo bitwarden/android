@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
@@ -17,6 +18,7 @@ namespace Bit.App.Pages
     public class LoginSsoPageViewModel : BaseViewModel
     {
         private const string REDIRECT_URI = "bitwarden://sso-callback";
+        private const string DOMAIN_CLAIM_NOT_FOUND = "Claimed org domain not found";
 
         private readonly IDeviceActionService _deviceActionService;
         private readonly IAuthService _authService;
@@ -228,18 +230,37 @@ namespace Bit.App.Pages
 
         private async Task<bool> TryClaimedDomainLogin()
         {
-            await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
-            var userEmail = await _stateService.GetPreLoginEmail();
-            var claimedDomainOrg = await _organizationService.GetClaimedOrganizationDomainAsync(userEmail);
-            await _deviceActionService.HideLoadingAsync();
-            if (string.IsNullOrEmpty(claimedDomainOrg))
+            try
             {
-                return false;
+                await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
+                var userEmail = await _stateService.GetPreLoginEmailAsync();
+                var claimedDomainOrgDetails = await _organizationService.GetClaimedOrganizationDomainAsync(userEmail);
+                await _deviceActionService.HideLoadingAsync();
+
+                if (claimedDomainOrgDetails == null)
+                {
+                    return false;
+                }
+
+                if (claimedDomainOrgDetails.SsoAvailable)
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.OrganizationSsoIdentifierRequired, AppResources.AnErrorHasOccurred);
+                    return false;
+                }
+
+                OrgIdentifier = claimedDomainOrgDetails.OrganizationIdentifier;
+                await LogInAsync();
+                return true;
+            }
+            catch (ApiException e)
+            {
+                if (e.Error != null && e.Error.StatusCode == HttpStatusCode.NotFound && e.Error.Message == DOMAIN_CLAIM_NOT_FOUND)
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.NoSchemeOrHandlerForThisSsoConfigurationFound, AppResources.AnErrorHasOccurred);
+                }
             }
 
-            OrgIdentifier = claimedDomainOrg;
-            await LogInAsync();
-            return true;
+            return false;
         }
     }
 }

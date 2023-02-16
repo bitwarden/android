@@ -162,7 +162,7 @@ namespace Bit.Core.Abstractions
         Task<bool> GetLastUserShouldConnectToWatchAsync();
         Task SetAvatarColorAsync(string value, string userId = null);
         Task<string> GetAvatarColorAsync(string userId = null);
-        Task<string> GetPreLoginEmail();
-        Task SetPreLoginEmail(string value);
+        Task<string> GetPreLoginEmailAsync();
+        Task SetPreLoginEmailAsync(string value);
     }
 }
