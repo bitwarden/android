@@ -4293,6 +4293,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No scheme or handler for this SSO configuration found..
+        /// </summary>
+        public static string NoSchemeOrHandlerForThisSsoConfigurationFound {
+            get {
+                return ResourceManager.GetString("NoSchemeOrHandlerForThisSsoConfigurationFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no Sends in your account..
         /// </summary>
         public static string NoSends {
@@ -4533,6 +4542,15 @@ namespace Bit.App.Resources {
         public static string Organization {
             get {
                 return ResourceManager.GetString("Organization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organization SSO identifier required..
+        /// </summary>
+        public static string OrganizationSsoIdentifierRequired {
+            get {
+                return ResourceManager.GetString("OrganizationSsoIdentifierRequired", resourceCulture);
             }
         }
         
