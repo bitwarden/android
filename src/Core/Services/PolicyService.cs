@@ -17,6 +17,11 @@ namespace Bit.Core.Services
 
         private IEnumerable<Policy> _policyCache;
 
+        public const string TIMEOUT_POLICY_MINUTES = "minutes";
+        public const string TIMEOUT_POLICY_ACTION = "action";
+        public const string TIMEOUT_POLICY_ACTION_LOCK = "lock";
+        public const string TIMEOUT_POLICY_ACTION_LOGOUT = "logOut";
+
         public PolicyService(
             IStateService stateService,
             IOrganizationService organizationService)
@@ -247,18 +252,9 @@ namespace Bit.Core.Services
             return null;
         }
 
-        public string GetPolicyString(Policy policy, string key)
-        {
-            if (policy.Data.ContainsKey(key))
-            {
-                var value = policy.Data[key];
-                if (value != null)
-                {
-                    return (string)value;
-                }
-            }
-            return null;
-        }
+        public string GetPolicyString(Policy policy, string key) =>
+            policy.Data.TryGetValue(key, out var val) ? val as string : null;
+        
 
         public async Task<bool> ShouldShowVaultFilterAsync()
         {
