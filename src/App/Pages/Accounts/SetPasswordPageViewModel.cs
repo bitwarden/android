@@ -152,7 +152,7 @@ namespace Bit.App.Pages
                 if (MasterPassword.Length < Constants.MasterPasswordMinimumChars)
                 {
                     await Page.DisplayAlert(AppResources.MasterPasswordPolicyValidationTitle,
-                        AppResources.MasterPasswordLengthValMessage, AppResources.Ok);
+                        string.Format(AppResources.MasterPasswordLengthValMessageX, Constants.MasterPasswordMinimumChars), AppResources.Ok);
                     return;
                 }
             }
