@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>主密碼提示可以在您忘記主密碼時幫助您回憶主密碼。</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>主密碼需要至少 8 個字元。</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>最少數字位數</value>
@@ -2145,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>您的密碼庫逾時時間超過組織設定的限制。</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>一個或多個組織原則禁止您匯出個人密碼庫。</value>
   </data>
   <data name="AddAccount" xml:space="preserve">

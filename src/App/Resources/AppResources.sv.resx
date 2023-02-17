@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>En huvudlösenordsledtråd kan hjälpa dig att komma ihåg ditt huvudlösenord om du glömmer bort det.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Huvudlösenordet måste vara minst 8 tecken långt.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minsta antal siffror</value>
@@ -2147,7 +2147,7 @@ Skanningen sker automatiskt.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Ditt valvs tid för timeout överskrider de begränsningar som fastställts av din organisation.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>En eller flera organisationsprinciper hindrar dig från att exportera ditt personliga valv.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">

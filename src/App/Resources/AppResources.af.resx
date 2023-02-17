@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>’n Hoofwagwoordwenk kan u help om u wagwoord te onthou indien u dit sou vergeet.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Hoofwagwoord moet ten minste 8 karakters lank wees.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Min. aantal syfers</value>
@@ -2145,7 +2145,7 @@ Skandering gebeur outomaties.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>U kluisuittelling oorskry die beperkinge wat deur u organisasie daargestel is.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Een of meer organisasiebeleide verhoed u om u persoonlike kluis uit te stuur.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">

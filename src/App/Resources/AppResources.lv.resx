@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Galvenās paroles norāde var palīdzēt atcerēties paroli, ja tā ir aizmirsta.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Galvenajai parolei ir jābūt vismaz 8 rakstzīmes garai.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Mazākais pieļaujamais ciparu skaits</value>
@@ -2145,7 +2145,7 @@ Nolasīšana notiks automātiski.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Glabātavas noildze pārsniedz apvienības uzstādītos ierobežojumus.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Viens vai vairāki apvienības nosacījumi neļauj izgūt privātās glabātavas saturu.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">

@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Una pista de tu contraseña maestra puede ayudarte a recordarla en caso de que la olvides.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>La contraseña maestra debe tener al menos 8 caracteres.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>La contraseña maestra debe tener al menos {0} caracteres.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Mínimo de caracteres numéricos</value>
@@ -2145,7 +2145,7 @@ El escaneo se realizará automáticamente.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>El tiempo de espera de tu caja fuerte excede las restricciones establecidas por tu organización.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Una o más políticas de organización impiden que usted exporte su caja fuerte personal.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">

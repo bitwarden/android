@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Et hovedeadgangskodentip kan hjælpe dig med at huske din adgangskode, hvis du glemmer den.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Hovedadgangskode skal være på minimum 8 tegn.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Hovedadgangskoden skal udgøre mindst {0} tegn.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Mindste antal cifre</value>
@@ -1104,7 +1104,7 @@ Skanning vil ske automatisk.</value>
     <value>Frk</value>
   </data>
   <data name="Mx" xml:space="preserve">
-    <value>Mx</value>
+    <value>Neutral</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
@@ -2145,7 +2145,7 @@ Skanning vil ske automatisk.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Timeout for din boks overskrider de begrænsninger, der er angivet af din organisation.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>En eller flere organisationspolitikker forhindrer eksport af din personlige boks.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2499,7 +2499,7 @@ Vil du skifte til denne konto?</value>
     <value>Log ind med hovedadgangskoden</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Log ind med en anden enhed</value>
+    <value>Log ind med enhed</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>Indlogning påbegyndt</value>

@@ -375,7 +375,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} copied</value>
+    <value>{0} nukopijuota</value>
     <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -556,7 +556,7 @@
     <value>Atsijungta nuo saugyklos</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault timeout action</value>
+    <value>Saugyklos skirtojo laiko veiksmas</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
     <value>Atsijungus bus pašalinta visa prieiga prie saugyklos, o pasibaigus skirtajam laikotarpiui reikės autentifikuoti prisijungus. Ar tikrai norite naudoti šį nustatymą?</value>
@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Pagrindinio slaptažodžio užuomina gali padėti prisiminti slaptažodį, jei jį pamiršite.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Pagrindinis slaptažodis turi būti bent 8 simbolių ilgio.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Mažiausiai skaičių</value>
@@ -647,7 +647,7 @@
     <value>Ar tikrai norite perrašyti dabartinį slaptažodį?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Allow" on the following prompt when asked to allow push notifications.</value>
+    <value>„Bitwarden“ automatiškai sinchronizuoja jūsų saugyklą naudodama tiesioginius pranešimus. Norėdami gauti geriausią įmanomą patirtį, toliau pateiktame raginime pasirinkite „Leisti“, kai bus paprašyta leisti tiesioginius pranešimus.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -675,7 +675,7 @@
     <value>Nustatyti PIN kodą</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Enter a 4 digit PIN code to unlock the app with.</value>
+    <value>Norėdami atrakinti programą, įveskite 4 skaitmenų PIN kodą.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
     <value>Informacija</value>
@@ -711,10 +711,10 @@
     <value>Prisijungus dviem veiksmais, jūsų paskyra tampa saugesnė, reikalaujant patvirtinti prisijungimą naudojant kitą įrenginį, pvz., Saugos raktą, autentifikavimo programą, SMS, telefono skambutį ar el. Paštą. Dviejų žingsnių prisijungimą galima įjungti „bitwarden.com“ interneto saugykloje. Ar norite dabar apsilankyti svetainėje?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Unlock with {0}</value>
+    <value>Atrakinti naudojant {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>Unlock with PIN code</value>
+    <value>Atrakinti PIN kodu</value>
   </data>
   <data name="Validating" xml:space="preserve">
     <value>Tikrinimas</value>
@@ -730,14 +730,14 @@
     <value>„Bitwarden“ žiniatinklio saugykla</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>Lost authenticator app?</value>
+    <value>Pamiršote autentifikavimo programą?</value>
   </data>
   <data name="Items" xml:space="preserve">
     <value>Elementai</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Extension activated!</value>
+    <value>Plėtinys aktyvuotas!</value>
   </data>
   <data name="Icons" xml:space="preserve">
     <value>Piktogramos</value>
@@ -746,18 +746,18 @@
     <value>Vertimai</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>Elementai {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>Jūsų saugykloje nėra jokių elementų {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>Kai pasirenkate įvesties lauką ir matote „Bitwarden“ automatinio pildymo perdangą, galite ją paliesti, kad paleistumėte automatinio pildymo paslaugą.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tap this notification to auto-fill an item from your vault.</value>
+    <value>Bakstelėkite šį pranešimą, kad automatiškai užpildytumėte elementą iš saugyklos.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Atidarykite pritaikymo neįgaliesiems nustatymus</value>
@@ -846,13 +846,13 @@
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Two-step login options</value>
+    <value>Dviejų žingsnių prisijungimo parinktys</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
     <value>Naudoti kitą dviejų žingsnių prisijungimo metodą</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Could not send verification email. Try again.</value>
+    <value>Nepavyko išsiųsti patvirtinimo el. laiško. Bandyk iš naujo.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
@@ -860,10 +860,10 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device's USB port, then touch its button.</value>
+    <value>Norėdami tęsti, laikykite YubiKey NEO prie įrenginio galinės dalies arba įkiškite YubiKey į įrenginio USB prievadą, tada palieskite jo mygtuką.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey security key</value>
+    <value>YubiKey saugos raktas</value>
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -876,32 +876,32 @@
     <value>Nepavyksta atsiųsti failo.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of file.</value>
+    <value>Jūsų įrenginys negali atidaryti tokio tipo failo.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
     <value>Atsiunčiama...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <value>Šis priedas yra {0} dydžio. Ar tikrai norite jį atsisiųsti į savo įrenginį?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
     <value>Vienkartinio autentifikavimo raktas (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Verification code (TOTP)</value>
+    <value>Patvirtinimo kodas (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
     <value>Vienkartinio autentifikavimo raktas (TOTP)</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Cannot read authenticator key.</value>
+    <value>Nepavyko nuskaityti autentifikavimo rakto.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Point your camera at the QR Code.
-Scanning will happen automatically.</value>
+    <value>Nukreipkite fotoaparatą į QR kodą.
+Nuskaitymas vyks automatiškai.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Nuskaitykite QR kodą</value>
@@ -913,19 +913,19 @@ Scanning will happen automatically.</value>
     <value>Nuotraukos</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Copy TOTP</value>
+    <value>Kopijuoti TOTP</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</value>
+    <value>Jei prisijungimas turi autentifikavimo raktą, automatiškai užpildydami prisijungimo duomenis nukopijuokite TOTP patvirtinimo kodą į iškarpinę.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>Kopijuoti vienkartinį kodą (TOTP) automatiškai</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>Premium narystė reikalinga šiai funkcijai naudoti.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Attachment added</value>
+    <value>Priedas pridėtas</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
     <value>Priedas ištrintas</value>
@@ -943,16 +943,16 @@ Scanning will happen automatically.</value>
     <value>Nėra jokių priedų.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>File Source</value>
+    <value>Failo šaltinis</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Feature unavailable</value>
+    <value>Funkcija nepasiekiama</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
     <value>Maximum file size is 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>You cannot use this feature until you update your encryption key.</value>
+    <value>Negalite naudoti šios funkcijos, kol neatnaujinsite šifravimo raktą.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Sužinoti daugiau</value>
@@ -961,36 +961,36 @@ Scanning will happen automatically.</value>
     <value>API serverio nuoroda</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
-    <value>Custom environment</value>
+    <value>Individualizuota aplinka</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>For advanced users. You can specify the base URL of each service independently.</value>
+    <value>Pažengusiems vartotojams. Galite nurodyti kiekvienos paslaugos bazinį URL atskirai.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>The environment URLs have been saved.</value>
+    <value>Aplinkos URL buvo išsaugoti.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} is not correctly formatted.</value>
+    <value>{0} netinkamai suformatuotas.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Identity server URL</value>
+    <value>Tapatybės serverio URL</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Self-hosted environment</value>
+    <value>Savarankiška aplinka</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Specify the base URL of your on-premise hosted Bitwarden installation.</value>
+    <value>Nurodykite bazinį vietinio priglobto „Bitwarden“ diegimo URL.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>Serverio URL - "nuoroda"</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Web vault server URL</value>
+    <value>Žiniatinklio saugyklos serverio URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view items from your vault.</value>
+    <value>Palieskite šį pranešimą, kad peržiūrėtumėte elementus iš saugyklos.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Papildomi laukai</value>
@@ -1128,77 +1128,77 @@ Scanning will happen automatically.</value>
     <value>Rajonas/apskritis</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Pavadinimas</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal code</value>
+    <value>Pašto kodas</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>Adresas</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Galiojimo pabaiga</value>
   </data>
   <data name="ShowWebsiteIcons" xml:space="preserve">
-    <value>Show website icons</value>
+    <value>Rodyti tinklalapių ikonėles</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
-    <value>Show a recognizable image next to each login.</value>
+    <value>Prie kiekvieno prisijungimo parodykite atpažįstamą vaizdą.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons server URL</value>
+    <value>Piktogramų serverio URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with Bitwarden</value>
+    <value>Automatinis užpildymas naudojant „Bitwarden“</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>Saugykla užrakinta</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Eik į mano saugyklą</value>
   </data>
   <data name="Collections" xml:space="preserve">
     <value>Rinkinys</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>Kolekcijoje dar nėra elementų.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>Šiame aplanke elementų nėra.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
-    <value>There are no items in the trash.</value>
+    <value>Šiukšliadėžėje elementų nėra.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>Automatinio užpildymo pritaikymo neįgaliesiems paslauga</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling login information into other apps on your device.</value>
+    <value>„Bitwarden“ automatinio pildymo paslauga naudoja „Android“ automatinio pildymo sistemą, kad padėtų užpildyti prisijungimo informaciją į kitas jūsų įrenginio programas.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Use the Bitwarden auto-fill service to fill login information into other apps.</value>
+    <value>Norėdami užpildyti prisijungimo informaciją į kitas programas, naudokite „Bitwarden“ automatinio pildymo paslaugą.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>Atidarykite automatinio pildymo nustatymus</value>
   </data>
   <data name="FaceID" xml:space="preserve">
-    <value>Face ID</value>
+    <value>Veido ID</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Patvirtinkite naudodami „Veido ID“.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Norėdami atrakinti, naudokite „Veido ID“</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Patvirtinkite veido ID</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
-    <value>Windows Hello</value>
+    <value>„Windows Hello“</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>Negalėjome automatiškai atidaryti „Android“ automatinio pildymo nustatymų meniu. Automatinio pildymo nustatymų meniu galite naršyti rankiniu būdu iš „Android“ nustatymų &gt; Sistema &gt; Kalbos ir įvestis &gt; Išsamiau &gt; Automatinio pildymo paslauga.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
     <value>Pasirinktinio lauko pavadinimas</value>
@@ -1219,7 +1219,7 @@ Scanning will happen automatically.</value>
     <value>Naujas pasirinktis laukelis</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>What type of custom field do you want to add?</value>
+    <value>Kokio tipo tinkintą lauką norite pridėti?</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Pašalinti</value>
@@ -1232,7 +1232,7 @@ Scanning will happen automatically.</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Base domain</value>
+    <value>Bazinis domenas</value>
   </data>
   <data name="Default" xml:space="preserve">
     <value>Numatyta</value>
@@ -1252,14 +1252,14 @@ Scanning will happen automatically.</value>
     <value>Prasideda su</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI match detection</value>
+    <value>URI atitikties aptikimas</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Match detection</value>
+    <value>Atitikmens aptikimas</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Yes, and save</value>
+    <value>Taip, ir išsaugoti</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
     <value>Automatiškai užpildyti ir išsaugoti</value>
@@ -1269,16 +1269,16 @@ Scanning will happen automatically.</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hold your Yubikey near the top of the device.</value>
+    <value>Laikykite Yubikey šalia įrenginio viršaus.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
     <value>Bandyti dar kartą</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+    <value>Norėdami tęsti, laikykite YubiKey NEO prie įrenginio galinės dalies.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
+    <value>Pasiekiamumo paslaugą gali būti naudinga naudoti, kai programos nepalaiko standartinės automatinio pildymo paslaugos.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
     <value>Slaptažodis atnaujintas</value>
@@ -1295,34 +1295,34 @@ Scanning will happen automatically.</value>
     <value>Kad galėtumėte naudoti plėtinį, turite prisijungti prie pagrindinės „Bitwarden“ programos.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Your logins are now easily accessible right from your keyboard while logging into apps and websites.</value>
+    <value>Dabar prisijungimo duomenys yra lengvai pasiekiami tiesiog iš klaviatūros, kai prisijungiate prie programų ir svetainių.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
+    <value>Dabar prisijungimo duomenys yra lengvai pasiekiami tiesiog iš klaviatūros, kai prisijungiate prie programų ir svetainių.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+    <value>Norėdami greitai automatiškai užpildyti slaptažodžius, pasiekite saugyklą tiesiai iš klaviatūros.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>To set up password auto-fill on your device, follow these instructions:</value>
+    <value>Norėdami įrenginyje nustatyti automatinį slaptažodžio užpildymą, vadovaukitės šiomis instrukcijomis:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Go to the iOS "Settings" app</value>
+    <value>1. Eikite į „iOS“ programą „Nustatymai“</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tap "Passwords"</value>
+    <value>2. Palieskite „Slaptažodžiai“</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Tap "AutoFill Passwords"</value>
+    <value>3. Palieskite „Automatiškai užpildyti slaptažodžius“</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
     <value>4. Turn on AutoFill</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Select "Bitwarden"</value>
+    <value>5. Pasirinkite „Bitwarden“</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Password auto-fill</value>
+    <value>Slaptažodžio automatinis užpildymas</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
     <value>Lengviausias būdas pridėti naujų prisijungimų prie saugyklos yra iš „Bitwarden“ programos plėtinio. Sužinokite daugiau apie „Bitwarden“ programos plėtinio naudojimą nuėję į „Nustatymų“ ekraną.</value>
@@ -1354,1062 +1354,1062 @@ Scanning will happen automatically.</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>Check if password has been exposed.</value>
+    <value>Patikrinkite, ar slaptažodis buvo atskleistas.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
+    <value>Šis slaptažodis buvo atskleistas {0} kartą (-us) dėl duomenų pažeidimų. Turėtumėte jį pakeisti.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>This password was not found in any known data breaches. It should be safe to use.</value>
+    <value>Šis slaptažodis nebuvo rastas per jokius žinomus duomenų pažeidimus. Jis turėtų būti saugus naudoti.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
-    <value>Identity name</value>
+    <value>Tapatybės vardas</value>
   </data>
   <data name="Value" xml:space="preserve">
-    <value>Value</value>
+    <value>Vertė</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Password history</value>
+    <value>Slaptažodžio istorija</value>
   </data>
   <data name="Types" xml:space="preserve">
-    <value>Types</value>
+    <value>Tipai</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>No passwords to list.</value>
+    <value>Nerasta slaptažodžių.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>There are no items to list.</value>
+    <value>Nėra rodytinų elementų.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>Search collection</value>
+    <value>Ieškoti kolekcijoje</value>
   </data>
   <data name="SearchFileSends" xml:space="preserve">
-    <value>Search file Sends</value>
+    <value>Ieškoti failų</value>
   </data>
   <data name="SearchTextSends" xml:space="preserve">
-    <value>Search text Sends</value>
+    <value>Ieškoti failų</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
     <value>Search {0}</value>
     <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>Tipas</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Move down</value>
+    <value>Perkelti žemyn</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
-    <value>Move Up</value>
+    <value>Perkelti aukštyn</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
-    <value>Miscellaneous</value>
+    <value>Kita</value>
   </data>
   <data name="Ownership" xml:space="preserve">
-    <value>Ownership</value>
+    <value>Nuosavybė</value>
   </data>
   <data name="WhoOwnsThisItem" xml:space="preserve">
-    <value>Who owns this item?</value>
+    <value>Kam priklauso šis daiktas?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>There are no collections to list.</value>
+    <value>Aplankų nėra.</value>
   </data>
   <data name="MovedItemToOrg" xml:space="preserve">
-    <value>{0} moved to {1}.</value>
+    <value>{0} perkelta į {1}.</value>
     <comment>ex: Item moved to Organization.</comment>
   </data>
   <data name="ItemShared" xml:space="preserve">
-    <value>Item has been shared.</value>
+    <value>Elementas pasidalintas.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
-    <value>You must select at least one collection.</value>
+    <value>Turite pasirinkti bent vieną kategoriją.</value>
   </data>
   <data name="Share" xml:space="preserve">
-    <value>Share</value>
+    <value>Dalintis</value>
   </data>
   <data name="ShareItem" xml:space="preserve">
-    <value>Share Item</value>
+    <value>Pasidalinti</value>
   </data>
   <data name="MoveToOrganization" xml:space="preserve">
-    <value>Move to Organization</value>
+    <value>Pereikite į organizaciją</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>No organizations to list.</value>
+    <value>Organizacijų sąraše nėra.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
+    <value>Pasirinkite organizaciją, į kurią norite perkelti šį elementą. Perkėlus į organizaciją, nuosavybės teisė į elementą perduodama tai organizacijai. Kai jis bus perkeltas, nebebūsite tiesioginis šio elemento savininkas.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
-    <value>Number of words</value>
+    <value>Žodžių skaičius</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Passphrase</value>
+    <value>Slaptafrazė</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>Word separator</value>
+    <value>Žodžių skirtukas</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>Išvalyti</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
-    <value>Generator</value>
+    <value>Generatorius</value>
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>There are no folders to list.</value>
+    <value>Aplankų nėra.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fingerprint phrase</value>
+    <value>Pirštų atspaudų frazė</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Your account's fingerprint phrase</value>
+    <value>Jūsų paskyros kontrolinio kodo frazė</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault items with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>„Bitwarden“ leidžia bendrinti saugyklos elementus su kitais naudojant organizacijos paskyrą. Ar norėtumėte apsilankyti bitwarden.com svetainėje ir sužinoti daugiau?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Export vault</value>
+    <value>Eksportuoti saugyklą</value>
   </data>
   <data name="LockNow" xml:space="preserve">
-    <value>Lock now</value>
+    <value>Užrakinti dabar</value>
   </data>
   <data name="PIN" xml:space="preserve">
     <value>PIN</value>
   </data>
   <data name="Unlock" xml:space="preserve">
-    <value>Unlock</value>
+    <value>Atrakinti</value>
   </data>
   <data name="UnlockVault" xml:space="preserve">
-    <value>Unlock vault</value>
+    <value>Atrakinti saugyklą</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 minučių</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
+    <value>Nustatykite savo PIN kodą, kad atrakintumėte „Bitwarden“. Jūsų PIN nustatymai bus nustatyti iš naujo, jei kada nors visiškai atsijungsite nuo programos.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Logged in as {0} on {1}.</value>
+    <value>Prisijungęs kaip {0} {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Your vault is locked. Verify your master password to continue.</value>
+    <value>Jūsų saugykla užrakinta. Norėdami tęsti, patikrinkite pagrindinį slaptažodį.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Your vault is locked. Verify your PIN code to continue.</value>
+    <value>Jūsų saugykla užrakinta. Norėdami tęsti, patikrinkite pagrindinį slaptažodį.</value>
   </data>
   <data name="VaultLockedIdentity" xml:space="preserve">
-    <value>Your vault is locked. Verify your identity to continue.</value>
+    <value>Jūsų saugykla užrakinta. Norėdami tęsti, patvirtinkite savo tapatybę.</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+    <value>Tamsi</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Light</value>
+    <value>Šviesi</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>5 min</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
-    <value>10 seconds</value>
+    <value>10 sek</value>
   </data>
   <data name="ThirtySeconds" xml:space="preserve">
-    <value>30 seconds</value>
+    <value>30 sek</value>
   </data>
   <data name="TwentySeconds" xml:space="preserve">
-    <value>20 seconds</value>
+    <value>20 sek</value>
   </data>
   <data name="TwoMinutes" xml:space="preserve">
-    <value>2 minutes</value>
+    <value>2 min</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Clear clipboard</value>
+    <value>Išvalyti iškarpinę</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Automatically clear copied values from your clipboard.</value>
+    <value>Automatiškai išvalyti nukopijuotas reikšmes iškarpinėje.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Default URI match detection</value>
+    <value>Numatytasis URI atitikties aptikimas</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
+    <value>Pasirinkite numatytąjį būdą, kuriuo URI atitikties aptikimas bus tvarkomas prisijungiant, kai atliekate tokius veiksmus kaip automatinis pildymas.</value>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Theme</value>
+    <value>Tema</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>Change the application's color theme.</value>
+    <value>Pakeisti programos spalvos temą.</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>Numatytasis (sistema)</value>
   </data>
   <data name="DefaultDarkTheme" xml:space="preserve">
-    <value>Default dark theme</value>
+    <value>Numatytoji tamsi tema</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is in use.</value>
+    <value>Pasirinkite tamsiąją temą, kurią norite naudoti, kai naudojate numatytąją (sistemos) temą, kai naudojamas įrenginio tamsusis režimas.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Copy note</value>
+    <value>Kopijuoti pastabas</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Išeiti</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>Are you sure you want to exit Bitwarden?</value>
+    <value>Ar tikrai norite išeiti iš „Bitwarden“?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Do you want to require unlocking with your master password when the application is restarted?</value>
+    <value>Ar norite reikalauti atrakinti naudojant pagrindinį slaptažodį, kai programa paleidžiama iš naujo?</value>
   </data>
   <data name="Black" xml:space="preserve">
-    <value>Black</value>
+    <value>Juoda</value>
     <comment>The color black</comment>
   </data>
   <data name="Nord" xml:space="preserve">
-    <value>Nord</value>
+    <value>Nordška</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
-    <value>Solarized Dark</value>
+    <value>Tamsi</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
-    <value>Auto-fill blocked URIs</value>
+    <value>Automatiškai užpildyti užblokuotus URI</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Auto-fill will not be offered for blocked URIs. Separate multiple URIs with a comma. For example: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Užblokuotų URI automatinis pildymas nebus siūlomas. Atskirkite kelis URI kableliais. Pavyzdžiui: „https://twitter.com, androidapp://com.twitter.android“.</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
-    <value>Ask to add login</value>
+    <value>Prašyti pridėti prisijungimą</value>
   </data>
   <data name="AskToAddLoginDescription" xml:space="preserve">
-    <value>Ask to add an item if one isn't found in your vault.</value>
+    <value>Paprašykite pridėti elementą, jei jo nerasta jūsų saugykloje.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>On app restart</value>
+    <value>Paleidus programą iš naujo</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not set up an auto-fill service for Bitwarden. Set up auto-fill for Bitwarden from the "Settings" screen.</value>
+    <value>Automatinis užpildymas leidžia lengvai saugiai pasiekti „Bitwarden“ saugyklą iš kitų svetainių ir programų. Panašu, kad nenustatėte „Bitwarden“ automatinio pildymo paslaugos. Ekrane „Nustatymai“ nustatykite automatinį „Bitwarden“ užpildymą.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>Jūsų temos pakeitimai bus taikomi, kai programa bus paleista iš naujo.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>Pradėti didžiosiomis</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include number</value>
+    <value>Įtraukti skaičius</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Atsisiųsti</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>Shared</value>
+    <value>Pasidalinta</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Toggle visibility</value>
+    <value>Pakeisti matomumą</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Your login session has expired.</value>
+    <value>Sesijos laikas baigėsi.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Biometric verification</value>
+    <value>Biometrinis autentifikavimas</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrics</value>
+    <value>Biometrika</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Use biometrics to unlock</value>
+    <value>Naudoti biometrinius duomenis arba ekrano užraktą</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden settings</value>
+    <value>„Bitwarden“ reikia peržiūros – „Bitwarden“ nustatymuose žr. „Automatinio pildymo prieinamumo paslauga“</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to allow overlay support.</value>
+    <value>3. „Android“ programos nustatymų ekrane, skirtame „Bitwarden“, eikite į parinktis „Rodyti virš kitų programų“ (skiltyje „Išplėstinė“) ir bakstelėkite jungiklį, kad leistumėte perdangos palaikymą.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
-    <value>Permission</value>
+    <value>Prieigos teisės</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay Permission Settings</value>
+    <value>Atidarykite Perdangos leidimo nustatymus</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>3. „Android“ programos nustatymų ekrane, skirtame „Bitwarden“, pasirinkite „Rodyti virš kitų programų“ (skiltyje „Išplėstinė“) ir įjunkite perjungiklį, kad leistumėte perdangą.</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>Denied</value>
+    <value>Neleidžiama</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>Granted</value>
+    <value>Suteikta</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
-    <value>File format</value>
+    <value>Failo formatas</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Enter your master password to export your vault data.</value>
+    <value>Įveskite pagrindinį slaptažodį norint eksportuoti saugyklos duomenis.</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
-    <value>Send a verification code to your email</value>
+    <value>Siųsti patvirtinimo kodą į el. paštą</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
-    <value>Code sent!</value>
+    <value>Kodas išsiųstas!</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
-    <value>Confirm your identity to continue.</value>
+    <value>Norint tęsti, patvirtinkite tapatybę.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
+    <value>Šiame eksporte yra jūsų saugyklos duomenys nešifruotu formatu. Neturėtumėte saugoti ar siųsti eksportuoto failo nesaugiais kanalais (pvz., el. paštu). Ištrinkite jį iš karto, kai baigsite naudoti.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>Šis eksportavimas užšifruoja jūsų duomenis naudojant paskyros šifravimo raktą. Jei kada nors pakeisite paskyros šifravimo raktą, turėtumėte eksportuoti dar kartą, nes negalėsite iššifruoti šio eksporto failo.</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
-    <value>Account encryption keys are unique to each Bitwarden user account, so you can't import an encrypted export into a different account.</value>
+    <value>Paskyros šifravimo raktai yra unikalūs kiekvienai „Bitwarden“ vartotojo paskyrai, todėl negalite importuoti šifruoto eksporto į kitą paskyrą.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm vault export</value>
+    <value>Patvirtinkite saugyklos eksportavimą</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Warning</value>
+    <value>Įspėjimas</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
+    <value>Eksportuojant saugyklą kilo problema. Jei problema išlieka, turėsite eksportuoti iš žiniatinklio saugyklos.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
-    <value>Vault exported successfully</value>
+    <value>Saugykla sėkmingai eksportuota</value>
   </data>
   <data name="Clone" xml:space="preserve">
-    <value>Clone</value>
+    <value>Klonuoti</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your generator settings</value>
+    <value>Viena ar daugiau organizacijos strategijų turi įtakos jūsų generatoriaus nustatymams</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Atverti</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>There was a problem saving this attachment. If the problem persists, you can save it from the web vault.</value>
+    <value>Išsaugant šį priedą kilo problema. Jei problema išlieka, galite ją išsaugoti žiniatinklio saugykloje.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
-    <value>Attachment saved successfully</value>
+    <value>Priedas sėkmingai išsaugotas</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Please turn on "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+    <value>Norėdami naudoti automatinio pildymo plytelę, „Bitwarden“ nustatymuose įjunkite „Automatinio pildymo prieinamumo paslaugą“.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
-    <value>No password fields detected</value>
+    <value>Slaptažodžio laukų neaptikta</value>
   </data>
   <data name="SoftDeleting" xml:space="preserve">
-    <value>Sending to trash...</value>
+    <value>Siunčiama į šiukšliadėžę...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemSoftDeleted" xml:space="preserve">
-    <value>Item has been sent to trash.</value>
+    <value>Elementas išsiųstas į šiukšliadėžę.</value>
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Restore</value>
+    <value>Atkurti</value>
     <comment>Restores an entity (verb).</comment>
   </data>
   <data name="Restoring" xml:space="preserve">
-    <value>Restoring...</value>
+    <value>Atkuriama...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Item restored</value>
+    <value>Elementas atkurtas</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>Trash</value>
+    <value>Šiukšliadėžė</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
-    <value>Search trash</value>
+    <value>Ieškoti šiukšliadėžėje</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
-    <value>Do you really want to permanently delete? This cannot be undone.</value>
+    <value>Ar tikrai norite panaikinti? Atkurti nebebus galima.</value>
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
-    <value>Do you really want to restore this item?</value>
+    <value>Ar tikrai norite atkurti šį elementą?</value>
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>Do you really want to send to the trash?</value>
+    <value>Ar tikrai norite perkelti į šiukšlinę?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock disabled pending verification of master password.</value>
+    <value>Biometrinis atrakinimas išjungtas, kol bus patvirtintas pagrindinis slaptažodis.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+    <value>Biometrinis automatinio pildymo atrakinimas išjungtas, kol bus patvirtintas pagrindinis slaptažodis.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Allow sync on refresh</value>
+    <value>Leisti sinchronizuoti atnaujinant</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Syncing vault with pull down gesture.</value>
+    <value>Sinchronizuojama saugykla su perbraukimu iš viršaus į apačią gestu.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Enterprise single sign-on</value>
+    <value>Vienkartinis įmonės prisijungimas</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+    <value>Greitai prisijunkite naudodami savo organizacijos vieno prisijungimo portalą. Norėdami pradėti, įveskite savo organizacijos identifikatorių.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
-    <value>Organization identifier</value>
+    <value>Organizacijos identifikatorius</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Currently unable to login with SSO</value>
+    <value>Šiuo metu nepavyksta prisijungti naudojant SSO</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Set master password</value>
+    <value>Pagrindinio slaptažodžio nustatymas</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
+    <value>Kad užbaigtumėte prisijungimą naudodami SSO, nustatykite pagrindinį slaptažodį, kad galėtumėte pasiekti ir apsaugoti saugyklą.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies require your master password to meet the following requirements:</value>
+    <value>Viena ar daugiau organizacijos strategijų reikalauja, kad pagrindinis slaptažodis atitiktų šiuos reikalavimus:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Minimum complexity score of {0}</value>
+    <value>Mažiausias {0} sudėtingumo balas</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
-    <value>Minimum length of {0}</value>
+    <value>Mažiausias ilgis: {0}</value>
   </data>
   <data name="PolicyInEffectUppercase" xml:space="preserve">
-    <value>Contain one or more uppercase characters</value>
+    <value>Turi vieną ar daugiau didžiųjų raidžių</value>
   </data>
   <data name="PolicyInEffectLowercase" xml:space="preserve">
-    <value>Contain one or more lowercase characters</value>
+    <value>Turi vieną ar daugiau mažųjų raidžių</value>
   </data>
   <data name="PolicyInEffectNumbers" xml:space="preserve">
-    <value>Contain one or more numbers</value>
+    <value>Turi vieną ar daugiau skaičių</value>
   </data>
   <data name="PolicyInEffectSpecial" xml:space="preserve">
-    <value>Contain one or more of the following special characters: {0}</value>
+    <value>Turi vieną ar daugiau iš šių specialiųjų simbolių: {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>Invalid password</value>
+    <value>Neteisingas slaptažodis</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
+    <value>Slaptažodis neatitinka organizacijos reikalavimų. Patikrinkite politikos informaciją ir bandykite dar kartą.</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Loading</value>
+    <value>Įkeliama</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
+    <value>Aktyvuodami šį jungiklį sutinkate su šiais dalykais:
 </value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>Paslaugų teikimo sąlygos ir privatumo politika nebuvo pripažinti.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>Paslaugų teikimo sąlygos</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Privatumo politika</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - Turn on "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
+    <value>„Bitwarden“ reikia dėmesio – „Bitwarden“ nustatymų „Auto-fill Services“ skiltyje įjunkite „Draw-Over“</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-fill services</value>
+    <value>Automatinio pildymo paslaugos</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Use inline autofill</value>
+    <value>Naudokite tiesioginį automatinį pildymą</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is turned off), the default Autofill overlay will be used.</value>
+    <value>Naudokite tiesioginį automatinį pildymą, jei pasirinkta IME (klaviatūra) jį palaiko. Jei jūsų konfigūracija nepalaikoma (arba ši parinktis išjungta), bus naudojama numatytoji automatinio pildymo perdanga.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
-    <value>Use accessibility</value>
+    <value>Naudokite prieinamumą</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When set up, we'll display a popup when login fields are selected.</value>
+    <value>Naudokite „Bitwarden“ pritaikymo neįgaliesiems paslaugą, kad automatiškai užpildytumėte prisijungimo duomenis programose ir žiniatinklyje. Kai bus nustatyta, bus rodomas iššokantis langas, kai bus pasirinkti prisijungimo laukai.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be turned on as well)</value>
+    <value>Naudokite „Bitwarden“ pritaikymo neįgaliesiems paslaugą, kad automatiškai užpildytumėte prisijungimo duomenis programose ir žiniatinklyje. (Taip pat reikia įjungti Draw-Over)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if turned on).</value>
+    <value>Naudokite „Bitwarden“ pritaikymo neįgaliesiems paslaugą, kad galėtumėte naudoti automatinio pildymo greito veiksmo plytelę ir (arba) rodyti iššokantįjį langą naudodami „Draw-Over“ (jei įjungta).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if turned on).</value>
+    <value>Būtina naudoti automatinio pildymo greito veiksmo plytelę arba papildyti automatinio pildymo paslaugą naudojant „Draw-Over“ (jei įjungta).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Use draw-over</value>
+    <value>Naudokite pertraukimą</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>Allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
+    <value>Leidžia „Bitwarden“ pritaikymo neįgaliesiems paslaugai rodyti iššokantįjį langą, kai pasirenkami prisijungimo laukai.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>If turned on, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+    <value>Jei įjungta, „Bitwarden“ pritaikymo neįgaliesiems paslauga parodys iššokantįjį langą, kai bus pasirinkti prisijungimo laukai, padedantys automatiškai užpildyti prisijungimo duomenis.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>If turned on, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
+    <value>Jei įjungta, pritaikymo neįgaliesiems bus rodomas iššokantis langas, papildantis automatinio pildymo paslaugą senesnėms programoms, kurios nepalaiko „Android“ automatinio pildymo sistemos.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Due to an enterprise policy, you are restricted from saving items to your individual vault. Change the ownership option to an organization and choose from available collections.</value>
+    <value>Dėl įmonės politikos jums neleidžiama saugoti daiktų asmeninėje saugykloje. Pakeiskite nuosavybės parinktį į organizaciją ir pasirinkite iš galimų kolekcijų.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
-    <value>An organization policy is affecting your ownership options.</value>
+    <value>Organizacijos politika turi įtakos jūsų nuosavybės galimybėms.</value>
   </data>
   <data name="Send" xml:space="preserve">
-    <value>Send</value>
+    <value>Siūsti</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AllSends" xml:space="preserve">
-    <value>All Sends</value>
+    <value>Visi siuntimai</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
-    <value>Sends</value>
+    <value>Siuntimai</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NameInfo" xml:space="preserve">
-    <value>A friendly name to describe this Send.</value>
+    <value>Draugiškas pavadinimas, apibūdinantis šį siuntimą.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Text" xml:space="preserve">
-    <value>Text</value>
+    <value>Tekstas</value>
   </data>
   <data name="TypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>Tekstas</value>
   </data>
   <data name="TypeTextInfo" xml:space="preserve">
-    <value>The text you want to send.</value>
+    <value>Tekstas, kurį norite siųsti.</value>
   </data>
   <data name="HideTextByDefault" xml:space="preserve">
-    <value>When accessing the Send, hide the text by default</value>
+    <value>Kai pasiekiate Siųsti, pagal numatytuosius nustatymus paslėpkite tekstą</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeFile" xml:space="preserve">
-    <value>File</value>
+    <value>Failas</value>
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
-    <value>The file you want to send.</value>
+    <value>Failas, kurį norite siųsti.</value>
   </data>
   <data name="FileTypeIsSelected" xml:space="preserve">
-    <value>File type is selected.</value>
+    <value>Pasirinktas failo tipas.</value>
   </data>
   <data name="FileTypeIsNotSelected" xml:space="preserve">
-    <value>File type is not selected, tap to select.</value>
+    <value>Failo tipas nepasirinktas, palieskite, kad pasirinktumėte.</value>
   </data>
   <data name="TextTypeIsSelected" xml:space="preserve">
-    <value>Text type is selected.</value>
+    <value>Pasirinktas teksto tipas.</value>
   </data>
   <data name="TextTypeIsNotSelected" xml:space="preserve">
-    <value>Text type is not selected, tap to select.</value>
+    <value>Failo tipas nepasirinktas, palieskite, kad pasirinktumėte.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
-    <value>Deletion date</value>
+    <value>Ištrynimo data</value>
   </data>
   <data name="DeletionTime" xml:space="preserve">
-    <value>Deletion time</value>
+    <value>Panaikinimo laikas</value>
   </data>
   <data name="DeletionDateInfo" xml:space="preserve">
-    <value>The Send will be permanently deleted on the specified date and time.</value>
+    <value>Nurodytą datą ir laiką siuntinys bus visam laikui ištrintas.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PendingDelete" xml:space="preserve">
-    <value>Pending deletion</value>
+    <value>Laukiama ištrynimo</value>
   </data>
   <data name="ExpirationDate" xml:space="preserve">
-    <value>Expiration date</value>
+    <value>Galiojimo laiko data</value>
   </data>
   <data name="ExpirationTime" xml:space="preserve">
-    <value>Expiration time</value>
+    <value>Galiojimo laikas</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
-    <value>If set, access to this Send will expire on the specified date and time.</value>
+    <value>Jei nustatyta, prieiga prie šio siuntimo nustos galioti nurodytą datą ir laiką.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
-    <value>Expired</value>
+    <value>Nebegalioja</value>
   </data>
   <data name="MaximumAccessCount" xml:space="preserve">
-    <value>Maximum access count</value>
+    <value>Maksimalus prieigos skaičius</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>If set, users will no longer be able to access this Send once the maximum access count is reached.</value>
+    <value>Jei nustatyta, vartotojai nebegalės pasiekti šio siuntimo, kai bus pasiektas maksimalus prieigos skaičius.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
-    <value>Max access count reached</value>
+    <value>Pasiektas maksimalus prisijungimų skaičius</value>
   </data>
   <data name="CurrentAccessCount" xml:space="preserve">
-    <value>Current access count</value>
+    <value>Dabartinis prieigos skaičius</value>
   </data>
   <data name="NewPassword" xml:space="preserve">
-    <value>New password</value>
+    <value>Naujas slaptažodis</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>Optionally require a password for users to access this Send.</value>
+    <value>Pasirinktinai reikalauti slaptažodžio, kad vartotojai galėtų pasiekti šį siuntimą.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
-    <value>Remove password</value>
+    <value>Šalinti slaptažodį</value>
   </data>
   <data name="AreYouSureRemoveSendPassword" xml:space="preserve">
-    <value>Are you sure you want to remove the password?</value>
+    <value>Ar tikrai norite pašalinti slaptažodį?</value>
   </data>
   <data name="RemovingSendPassword" xml:space="preserve">
-    <value>Removing password</value>
+    <value>Pašalinamas slaptažodis</value>
   </data>
   <data name="SendPasswordRemoved" xml:space="preserve">
-    <value>Password has been removed.</value>
+    <value>Slaptažodis pašalintas.</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
-    <value>Private notes about this Send.</value>
+    <value>Asmeninės pastabos apie šį Siuntinį.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Deactivate this Send so that no one can access it</value>
+    <value>Išjunkite šį siuntimą, kad niekas negalėtų jo pasiekti</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
-    <value>There are no Sends in your account.</value>
+    <value>Jūsų paskyroje nėra siuntinių.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Add a Send</value>
+    <value>Pridėti siuntinį</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
-    <value>Copy link</value>
+    <value>Kopijuoti nuorodą</value>
   </data>
   <data name="ShareLink" xml:space="preserve">
-    <value>Share link</value>
+    <value>Dalintis nuoroda</value>
   </data>
   <data name="SendLink" xml:space="preserve">
-    <value>Send link</value>
+    <value>Siųsti nuorodą</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
-    <value>Search Sends</value>
+    <value>Ieškoti Siuntinių</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
-    <value>Edit Send</value>
+    <value>Pakeisti Siuntinį</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>New Send</value>
+    <value>Naujas Siuntinys</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
-    <value>Are you sure you want to delete this Send?</value>
+    <value>Ar tikrai norite ištrinti šį Siuntinį?</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Send deleted</value>
+    <value>Siuntinys ištrintas</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Send saved</value>
+    <value>Siuntinys išsaugotas</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Send created</value>
+    <value>Siuntinys sukurtas</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
-    <value>1 day</value>
+    <value>1 d</value>
   </data>
   <data name="TwoDays" xml:space="preserve">
-    <value>2 days</value>
+    <value>2 dienos</value>
   </data>
   <data name="ThreeDays" xml:space="preserve">
-    <value>3 days</value>
+    <value>3 dienos</value>
   </data>
   <data name="SevenDays" xml:space="preserve">
-    <value>7 days</value>
+    <value>7 dienos</value>
   </data>
   <data name="ThirtyDays" xml:space="preserve">
-    <value>30 days</value>
+    <value>30 dienų</value>
   </data>
   <data name="Custom" xml:space="preserve">
-    <value>Custom</value>
+    <value>Pasirinktinis</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Share this Send upon save</value>
+    <value>Dalintis Siuntiniu po išsaugojimo</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
-    <value>Due to an enterprise policy, you are only able to delete an existing Send.</value>
+    <value>Dėl įmonės politikos galite ištrinti tik esamą Siuntinį.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
-    <value>About Send</value>
+    <value>Apie Siuntinį</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Hide my email address from recipients</value>
+    <value>Slėpti mano el. pašto adresą nuo gavėjų</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your Send options.</value>
+    <value>Viena ar daugiau organizacijos strategijų turi įtakos jūsų Siuntinio parinktims.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</value>
+    <value>Nemokamose paskyrose galima bendrinti tik tekstą. Norint naudoti failus su Siuntinio funkcija, reikalinga Premium narystė.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>You must verify your email to use files with Send. You can verify your email in the web vault.</value>
+    <value>Turite patvirtinti savo el. paštą, kad galėtumėte naudoti failus su Siuntinio funkcija. Savo el. pašto adresą galite patvirtinti žiniatinklio saugykloje.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Master password re-prompt</value>
+    <value>Iš naujo paraginti pagrindinį slaptažodį</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
-    <value>Master password confirmation</value>
+    <value>Pagrindinio slaptažodžio patvirtinimas</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
+    <value>Šis veiksmas yra apsaugotas. Jei norite tęsti, iš naujo įveskite pagrindinį slaptažodį, kad patvirtintumėte savo tapatybę.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Captcha required</value>
+    <value>Reikalinga „Captcha“</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>Captcha failed. Please try again.</value>
+    <value>„Captcha“ nepavyko. Prašau, pabandykite dar kartą.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Updated master password</value>
+    <value>Atnaujintas pagrindinis slaptažodis</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Update master password</value>
+    <value>Atnaujinti pagrindinį slaptažodį</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>Jūsų pagrindinis slaptažodį neseniai pakeitė jūsų organizacijos administratorius. Kad galėtumėte pasiekti saugyklą, dabar turite atnaujinti pagrindinį slaptažodį. Tęsdami būsite atjungti nuo dabartinės sesijos, todėl turėsite vėl prisijungti. Aktyvios sesijos kituose įrenginiuose gali išlikti aktyvios iki vienos valandos.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
-    <value>Updating password</value>
+    <value>Atnaujinamas slaptažodis</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
-    <value>Currently unable to update password</value>
+    <value>Šiuo metu nepavyksta atnaujinti slaptažodžio</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>Remove master password</value>
+    <value>Panaikinti pagrindinį slaptažodį</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your master password from your account and require SSO to login.</value>
+    <value>{0} naudoja SSO su kliento valdoma šifruote. Jei tęsite, pagrindinis slaptažodis bus pašalintas iš paskyros ir norint prisijungti reikės SSO.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>If you do not want to remove your master password, you may leave this organization.</value>
+    <value>Jei nenorite pašalinti pagrindinio slaptažodžio, galite išeiti iš šios organizacijos.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>Leave organization</value>
+    <value>Palikti organizaciją</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>Leave {0}?</value>
+    <value>Palikti {0}?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>To continue, have your FIDO2 WebAuthn compatible security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
+    <value>Norėdami tęsti, turėkite su FIDO2 WebAuthn suderinamą saugos raktą, tada vadovaukitės instrukcijomis, kitame ekrane spustelėję „Autentifikuoti WebAuthn“.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
+    <value>Autentifikavimas naudojant FIDO2 WebAuthn, galite autentifikuoti naudodami išorinį saugos raktą.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>Authenticate WebAuthn</value>
+    <value>Autentifikuoti WebAuthn</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
-    <value>Return to app</value>
+    <value>Grįžti į programą</value>
   </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
-    <value>Please make sure your default browser supports WebAuthn and try again.</value>
+    <value>Įsitikinkite, kad numatytoji naršyklė palaiko „WebAuthn“, ir bandykite dar kartą.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
+    <value>Ši organizacija turi įmonės politiką, kuri automatiškai įtrauks jus į slaptažodžio nustatymą iš naujo. Užsiregistravę organizacijos administratoriai galės pakeisti pagrindinį slaptažodį.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s)</value>
+    <value>Jūsų organizacijos politika turi įtakos saugyklos skirtajam laikui. Didžiausias leistinas saugyklos skirtasis laikas yra {0} valanda (-os) ir {1} minutė (-ės)</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
-    <value>Your vault timeout exceeds the restrictions set by your organization.</value>
+    <value>Jūsų saugyklos skirtasis laikas viršija jūsų organizacijos nustatytus apribojimus.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
-    <value>One or more organization policies prevents your from exporting your individual vault.</value>
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
+    <value>Viena ar daugiau organizacijos strategijų neleidžia eksportuoti asmeninės saugyklos.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Add account</value>
+    <value>Pridėti paskyrą</value>
   </data>
   <data name="AccountUnlocked" xml:space="preserve">
-    <value>Unlocked</value>
+    <value>Atrakinta</value>
   </data>
   <data name="AccountLocked" xml:space="preserve">
-    <value>Locked</value>
+    <value>Užrakinta</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>Logged out</value>
+    <value>Atsijungta</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
-    <value>Switched to next available account</value>
+    <value>Perjungta į kitą galimą paskyrą</value>
   </data>
   <data name="AccountLockedSuccessfully" xml:space="preserve">
-    <value>Account locked</value>
+    <value>Paskyra užrakinta</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
-    <value>Account logged out successfully</value>
+    <value>Paskyra sėkmingai atsijungta</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
-    <value>Account removed successfully</value>
+    <value>Paskyra sėkmingai pašalinta</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
-    <value>Delete account</value>
+    <value>Pašalinti paskyrą</value>
   </data>
   <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
-    <value>Deleting your account is permanent</value>
+    <value>Paskyros ištrynimas yra visam laikui</value>
   </data>
   <data name="DeleteAccountExplanation" xml:space="preserve">
-    <value>Your account and all vault data will be erased and unrecoverable. Are you sure you want to continue?</value>
+    <value>Jūsų paskyra ir visi saugyklos duomenys bus ištrinti ir neatkurti. Ar tikrai norite tęsti?</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
-    <value>Deleting your account</value>
+    <value>Paskyros ištrynimas</value>
   </data>
   <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
-    <value>Your account has been permanently deleted</value>
+    <value>Jūsų paskyra ištrinta visam laikui</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Invalid verification code</value>
+    <value>Neteisingas patvirtinimo kodas</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+    <value>Prašyti vienkartinio slaptažodžio</value>
   </data>
   <data name="SendCode" xml:space="preserve">
-    <value>Send code</value>
+    <value>Siųsti kodą</value>
   </data>
   <data name="Sending" xml:space="preserve">
-    <value>Sending</value>
+    <value>Siunčiama</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Copy Send link on save</value>
+    <value>Nukopijuokite Siuntinio nuorodą išsaugodami</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
-    <value>Sending code</value>
+    <value>Siunčiamas kodas</value>
   </data>
   <data name="Verifying" xml:space="preserve">
-    <value>Verifying</value>
+    <value>Tvirtinama</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Resend code</value>
+    <value>Siųsti kodą dar kartą</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
-    <value>A verification code was sent to your email</value>
+    <value>Jūsų el. paštu buvo išsiųstas patvirtinimo kodas</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>An error occurred while sending a verification code to your email. Please try again</value>
+    <value>Siunčiant patvirtinimo kodą el. paštu įvyko klaida. Prašau, pabandykite dar kartą</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
-    <value>Enter the verification code that was sent to your email</value>
+    <value>Įveskite patvirtinimo kodą, kuris buvo išsiųstas jūsų el. paštu</value>
   </data>
   <data name="SubmitCrashLogs" xml:space="preserve">
-    <value>Submit crash logs</value>
+    <value>Pateikite gedimų žurnalus</value>
   </data>
   <data name="SubmitCrashLogsDescription" xml:space="preserve">
-    <value>Help Bitwarden improve app stability by submitting crash reports.</value>
+    <value>Padėkite „Bitwarden“ pagerinti programos stabilumą pateikdami strigčių ataskaitas.</value>
   </data>
   <data name="OptionsExpanded" xml:space="preserve">
-    <value>Options are expanded, tap to collapse.</value>
+    <value>Parinktys išplėstos, palieskite, kad sutrauktumėte.</value>
   </data>
   <data name="OptionsCollapsed" xml:space="preserve">
-    <value>Options are collapsed, tap to expand.</value>
+    <value>Parinktys sutrauktos, palieskite, kad išplėstumėte.</value>
   </data>
   <data name="UppercaseAtoZ" xml:space="preserve">
-    <value>Uppercase (A to Z)</value>
+    <value>Didžiosios raidės (nuo A iki Z)</value>
   </data>
   <data name="LowercaseAtoZ" xml:space="preserve">
-    <value>Lowercase (A to Z)</value>
+    <value>Mažosios raidės (nuo A iki Z)</value>
   </data>
   <data name="NumbersZeroToNine" xml:space="preserve">
-    <value>Numbers (0 to 9)</value>
+    <value>Skaičiai (nuo 0 iki 9)</value>
   </data>
   <data name="SpecialCharacters" xml:space="preserve">
-    <value>Special characters (!@#$%^&amp;*)</value>
+    <value>Specialieji simboliai (!@#$%^&amp;*)</value>
   </data>
   <data name="TapToGoBack" xml:space="preserve">
-    <value>Tap to go back</value>
+    <value>Bakstelėkite, kad grįžtumėte atgal</value>
   </data>
   <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
-    <value>Password is visible, tap to hide.</value>
+    <value>Slaptažodis matomas, palieskite, kad paslėptumėte.</value>
   </data>
   <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
-    <value>Password is not visible, tap to show.</value>
+    <value>Slaptažodis nematomas, palieskite, kad parodytumėte.</value>
   </data>
   <data name="FilterByVault" xml:space="preserve">
-    <value>Filter items by vault</value>
+    <value>Filtruoti elementus pagal saugyklą</value>
   </data>
   <data name="AllVaults" xml:space="preserve">
-    <value>All vaults</value>
+    <value>Visos saugyklos</value>
   </data>
   <data name="Vaults" xml:space="preserve">
-    <value>Vaults</value>
+    <value>Saugyklos</value>
   </data>
   <data name="VaultFilterDescription" xml:space="preserve">
-    <value>Vault: {0}</value>
+    <value>Saugykla {0}</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>Visi</value>
   </data>
   <data name="Totp" xml:space="preserve">
     <value>TOTP</value>
   </data>
   <data name="VerificationCodes" xml:space="preserve">
-    <value>Verification codes</value>
+    <value>Patvirtinimo kodai</value>
   </data>
   <data name="PremiumSubscriptionRequired" xml:space="preserve">
-    <value>Premium subscription required</value>
+    <value>Reikalingas Premium abonementas</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
-    <value>Cannot add authenticator key? </value>
+    <value>Nepavyko nuskaityti autentifikavimo rakto? </value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>Nuskaitykite QR kodą</value>
   </data>
   <data name="CannotScanQRCode" xml:space="preserve">
-    <value>Cannot scan QR Code? </value>
+    <value>Negalite nuskaityti QR kodo? </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Authenticator key</value>
+    <value>Autentifikatoriaus raktas</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Enter key manually</value>
+    <value>Įvesti raktą rankiniu būdu</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
-    <value>Add TOTP</value>
+    <value>Pridėti TOTP</value>
   </data>
   <data name="SetupTotp" xml:space="preserve">
-    <value>Set up TOTP</value>
+    <value>Nustatyti TOTP</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
-    <value>Once the key is successfully entered,
-select Add TOTP to store the key safely</value>
+    <value>Sėkmingai įvedus raktą,
+pasirinkite Pridėti TOTP, kad raktas būtų saugiai išsaugotas</value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
-    <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>
+    <value>Nustačius užrakto parinktis į „Niekada“, saugykla bus pasiekiama visiems, turintiems prieigą prie jūsų įrenginio. Jei naudojate šią parinktį, turėtumėte užtikrinti, kad jūsų įrenginys būtų tinkamai apsaugotas.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
-    <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
+    <value>Vienas ar daugiau įvestų URL yra neteisingi. Peržiūrėkite jį ir bandykite išsaugoti dar kartą.</value>
   </data>
   <data name="GenericErrorMessage" xml:space="preserve">
-    <value>We were unable to process your request. Please try again or contact us.</value>
+    <value>Nepavyko apdoroti jūsų užklausos. Bandykite dar kartą arba susisiekite su mumis.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
-    <value>Allow screen capture</value>
+    <value>Leisti ekrano fotografavimą</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>Are you sure you want to turn on screen capture?</value>
+    <value>Ar tikrai norite įjungti ekrano fotografavimą?</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
-    <value>Login requested</value>
+    <value>Prašoma prisijungti</value>
   </data>
   <data name="AreYouTryingToLogIn" xml:space="preserve">
-    <value>Are you trying to log in?</value>
+    <value>Ar bandote prisijungti?</value>
   </data>
   <data name="LogInAttemptByXOnY" xml:space="preserve">
-    <value>Login attempt by {0} on {1}</value>
+    <value>{0} bandė prisijungti {1}</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
-    <value>Device type</value>
+    <value>Įrenginio tipas</value>
   </data>
   <data name="IpAddress" xml:space="preserve">
-    <value>IP address</value>
+    <value>IP adresas</value>
   </data>
   <data name="Time" xml:space="preserve">
-    <value>Time</value>
+    <value>Laikas</value>
   </data>
   <data name="Near" xml:space="preserve">
-    <value>Near</value>
+    <value>Netoliese</value>
   </data>
   <data name="ConfirmLogIn" xml:space="preserve">
-    <value>Confirm login</value>
+    <value>Patvirtinkite prisijungimą</value>
   </data>
   <data name="DenyLogIn" xml:space="preserve">
-    <value>Deny login</value>
+    <value>Neleisti prisijungti</value>
   </data>
   <data name="JustNow" xml:space="preserve">
-    <value>Just now</value>
+    <value>Ką tik</value>
   </data>
   <data name="XMinutesAgo" xml:space="preserve">
-    <value>{0} minutes ago</value>
+    <value>Prieš {0} minutes(ių)</value>
   </data>
   <data name="LogInAccepted" xml:space="preserve">
-    <value>Login confirmed</value>
+    <value>Prisijungimas patvirtintas</value>
   </data>
   <data name="LogInDenied" xml:space="preserve">
-    <value>Login denied</value>
+    <value>Prisijungimas atmestas</value>
   </data>
   <data name="ApproveLoginRequests" xml:space="preserve">
-    <value>Approve login requests</value>
+    <value>Patvirtinti prisijungimo užklausas</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Use this device to approve login requests made from other devices.</value>
+    <value>Naudokite šį įrenginį, kad patvirtintumėte prisijungimo užklausas, pateiktas iš kitų įrenginių.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
-    <value>Allow notifications</value>
+    <value>Leisti pranešimus</value>
   </data>
   <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
-    <value>Receive push notifications for new login requests</value>
+    <value>Gaukite tiesioginius pranešimus apie naujas prisijungimo užklausas</value>
   </data>
   <data name="NoThanks" xml:space="preserve">
-    <value>No thanks</value>
+    <value>Ne, ačiū</value>
   </data>
   <data name="ConfimLogInAttempForX" xml:space="preserve">
-    <value>Confirm login attempt for {0}</value>
+    <value>Patvirtinti bandymą prisijungti prie {0}</value>
   </data>
   <data name="AllNotifications" xml:space="preserve">
-    <value>All notifications</value>
+    <value>Visi pranešimai</value>
   </data>
   <data name="PasswordType" xml:space="preserve">
-    <value>Password type</value>
+    <value>Slaptažodžio tipas</value>
   </data>
   <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
-    <value>What would you like to generate?</value>
+    <value>Ką norėtumėte sugeneruoti?</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
-    <value>Username type</value>
+    <value>Vartotojo vardo tipas</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Plus addressed email</value>
+    <value>Plius adresuotas el paštas</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
-    <value>Catch-all email</value>
+    <value>Viską palaikantis el. paštas</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
-    <value>Forwarded email alias</value>
+    <value>Persiunčiamas el. pašto slapyvardis</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
-    <value>Random word</value>
+    <value>Atsitiktinis žodis</value>
   </data>
   <data name="EmailRequiredParenthesis" xml:space="preserve">
-    <value>Email (required)</value>
+    <value>El. paštas (būtinas)</value>
   </data>
   <data name="DomainNameRequiredParenthesis" xml:space="preserve">
-    <value>Domain name (required)</value>
+    <value>Domeno vardas (būtina)</value>
   </data>
   <data name="APIKeyRequiredParenthesis" xml:space="preserve">
-    <value>API key (required)</value>
+    <value>API raktas (būtinas)</value>
   </data>
   <data name="Service" xml:space="preserve">
-    <value>Service</value>
+    <value>Paslauga</value>
   </data>
   <data name="AnonAddy" xml:space="preserve">
     <value>AnonAddy</value>
@@ -2432,149 +2432,149 @@ select Add TOTP to store the key safely</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
-    <value>API access token</value>
+    <value>API prieigos raktas</value>
   </data>
   <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
-    <value>Are you sure you want to overwrite the current username?</value>
+    <value>Ar tikrai norite perrašyti dabartinį vartotojo vardą?</value>
   </data>
   <data name="GenerateUsername" xml:space="preserve">
-    <value>Generate username</value>
+    <value>Sugeneruoti naują vartotojo vardą</value>
   </data>
   <data name="EmailType" xml:space="preserve">
-    <value>Email Type</value>
+    <value>El. pašto tipas</value>
   </data>
   <data name="WebsiteRequired" xml:space="preserve">
-    <value>Website (required)</value>
+    <value>Svetainė (būtina)</value>
   </data>
   <data name="UnknownXErrorMessage" xml:space="preserve">
-    <value>Unknown {0} error occurred.</value>
+    <value>Įvyko nežinoma {0} klaida.</value>
   </data>
   <data name="PlusAddressedEmailDescription" xml:space="preserve">
-    <value>Use your email provider's subaddress capabilities</value>
+    <value>Pasinaudokite el. pašto teikėjo antrinio adreso galimybėmis</value>
   </data>
   <data name="CatchAllEmailDescription" xml:space="preserve">
-    <value>Use your domain's configured catch-all inbox.</value>
+    <value>Naudokite savo domeno sukonfigūruotus gautuosius.</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
     <value>Generate an email alias with an external forwarding service.</value>
   </data>
   <data name="Random" xml:space="preserve">
-    <value>Random</value>
+    <value>Atsitiktinis</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connect to Watch</value>
+    <value>Prisijunkite prie laikrodžio</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
-    <value>Accessibility Service Disclosure</value>
+    <value>Prieinamumo paslaugos atskleidimas</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
+    <value>„Bitwarden“ naudoja pritaikymo neįgaliesiems paslaugą, kad ieškotų prisijungimo laukų programose ir svetainėse, tada nustato atitinkamus lauko ID, kad būtų įvestas vartotojo vardas ir slaptažodis, kai randama programos ar svetainės atitiktis. Mes nesaugome jokios informacijos, kurią mums teikia paslauga, ir nesistengiame valdyti jokių ekrano elementų, išskyrus teksto įvedimo kredencialus.</value>
   </data>
   <data name="Accept" xml:space="preserve">
-    <value>Accept</value>
+    <value>Priimti</value>
   </data>
   <data name="Decline" xml:space="preserve">
-    <value>Decline</value>
+    <value>Atmesti</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
-    <value>Login request has already expired.</value>
+    <value>Prisijungimo prašymas jau pasibaigęs.</value>
   </data>
   <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
-    <value>Login attempt from:
+    <value>Bandymas prisijungti iš:
 {0}
-Do you want to switch to this account?</value>
+Ar norite pereiti prie šios paskyros?</value>
   </data>
   <data name="NewAroundHere" xml:space="preserve">
-    <value>New around here?</value>
+    <value>Ar jūs naujas čia?</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
-    <value>Get master password hint</value>
+    <value>Gauti pagrindinio slaptažodžio užuominą</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>Prisijungiama kaip {0}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
-    <value>Not you?</value>
+    <value>Ne jūs?</value>
   </data>
   <data name="LogInWithMasterPassword" xml:space="preserve">
-    <value>Log in with master password</value>
+    <value>Prisijunkite naudodami pagrindinį slaptažodį</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Log in with device</value>
+    <value>Prisijunkite naudodami įrenginį</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Log in initiated</value>
+    <value>Pradėtas prisijungimas</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
-    <value>A notification has been sent to your device.</value>
+    <value>Į jūsų įrenginį išsiųstas pranešimas.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
     <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
-    <value>Resend notification</value>
+    <value>Iš naujo siųsti pranešimą</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>Reikia kito varianto?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>View all log in options</value>
+    <value>Peržiūrėkite visas prisijungimo parinktis</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
-    <value>This request is no longer valid</value>
+    <value>Ši užklausa nebegalioja</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Pending login requests</value>
+    <value>Laukia prisijungimo užklausos</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
-    <value>Decline all requests</value>
+    <value>Atmesti visas užklausas</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>Are you sure you want to decline all pending login requests?</value>
+    <value>Ar tikrai norite atmesti visas laukiančias prisijungimo užklausas?</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
-    <value>Requests declined</value>
+    <value>Užklausos atmestos</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>No pending requests</value>  
+    <value>Nėra laukiančių užklausų</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>Įgalinkite fotoaparato leidimą naudoti skaitytuvą</value>
   </data>
   <data name="Important" xml:space="preserve">
-    <value>Important</value>
+    <value>Svarbu</value>
   </data>
   <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
-    <value>Your master password cannot be recovered if you forget it! {0} characters minimum.</value>
+    <value>Pagrindinis slaptažodis negali būti atkurtas, jei jį pamiršite! Mažiausiai {0} simboliai.</value>
   </data>
   <data name="WeakMasterPassword" xml:space="preserve">
-    <value>Weak Master Password</value>
+    <value>Silpnas pagrindinis slaptažodis</value>
   </data>
   <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
-    <value>Weak password identified. Use a strong password to protect your account. Are you sure you want to use a weak password?</value>
+    <value>Nustatytas silpnas slaptažodis. Norėdami apsaugoti paskyrą, naudokite stiprų slaptažodį. Ar tikrai norite naudoti silpną slaptažodį?</value>
   </data>
   <data name="Weak" xml:space="preserve">
-    <value>Weak</value>
+    <value>Silpnas</value>
   </data>
   <data name="Good" xml:space="preserve">
-    <value>Good</value>
+    <value>Geras</value>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Strong</value>
+    <value>Stiprus</value>
   </data>
   <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
-    <value>Check known data breaches for this password</value>
+    <value>Patikrinkite žinomus šio slaptažodžio duomenų pažeidimus</value>
   </data>
   <data name="ExposedMasterPassword" xml:space="preserve">
-    <value>Exposed Master Password</value>
+    <value>Atskleistas pagrindinis slaptažodis</value>
   </data>
   <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?</value>
+    <value>Slaptažodis rastas duomenų pažeidimo metu. Norėdami apsaugoti paskyrą, naudokite unikalų slaptažodį. Ar tikrai norite naudoti atvirą slaptažodį?</value>
   </data>
   <data name="WeakAndExposedMasterPassword" xml:space="preserve">
-    <value>Weak and Exposed Master Password</value>
+    <value>Silpnas ir atskleistas pagrindinis slaptažodis</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+    <value>Nustatytas ir rastas per duomenų pažeidimą silpnas slaptažodis. Norėdami apsaugoti paskyrą, naudokite stiprų ir unikalų slaptažodį. Ar tikrai norite naudoti šį slaptažodį?</value>
   </data>
 </root>

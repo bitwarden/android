@@ -584,8 +584,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Η υπόδειξη κύριου κωδικού μπορεί να σας βοηθήσει να θυμηθείτε τον κωδικό σας αν τον ξεχάσετε.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Ο κύριος κωδικός πρέπει να έχει μήκος τουλάχιστον 8 χαρακτήρων.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Ελάχιστα Αριθμητικά Ψηφία</value>
@@ -2145,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Το χρονικό όριο του vault σας υπερβαίνει τους περιορισμούς που έχει ορίσει ο οργανισμός σας.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Μία ή περισσότερες οργανωτικές πολιτικές αποτρέπουν την εξαγωγή του προσωπικού vault.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">

@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Nápoveda k hlavnému heslu vám môže pomôcť spomenúť si na heslo, ak ho zabudnete.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Hlavné heslo musí obsahovať aspoň 8 znakov.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Hlavné heslo musí obsahovať aspoň {0} znakov.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimum číslic</value>
@@ -2145,7 +2145,7 @@ Skenovanie prebehne automaticky.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Časový limit vášho trezora prekračuje obmedzenia nastavené vašou organizáciou.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Jedna alebo viacero zásad organizácie vám bráni exportovať váš osobný trezor.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">

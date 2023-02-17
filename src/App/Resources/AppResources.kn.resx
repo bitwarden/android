@@ -584,8 +584,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ನೀವು ಮರೆತರೆ ಅದನ್ನು ನೆನಪಿಟ್ಟುಕೊಳ್ಳಲು ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಸುಳಿವು ನಿಮಗೆ ಸಹಾಯ ಮಾಡುತ್ತದೆ.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಕನಿಷ್ಠ 8 ಅಕ್ಷರಗಳಷ್ಟು ಉದ್ದವಾಗಿರಬೇಕು.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>ಕನಿಷ್ಠ ಸಂಖ್ಯೆಗಳು</value>
@@ -2146,7 +2146,7 @@ Scanning will happen automatically.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Your vault timeout exceeds the restrictions set by your organization.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>One or more organization policies prevents your from exporting your individual vault.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
