@@ -48,6 +48,7 @@ namespace Bit.App.Pages
             SubmitCommand = new Command(async () => await SubmitAsync());
             ShowTerms = !_platformUtilsService.IsSelfHost();
             PasswordStrengthViewModel = new PasswordStrengthViewModel(this);
+            CheckExposedMasterPassword = true;
         }
 
         public ICommand PoliciesClickCommand => new Command<string>((url) =>
@@ -147,7 +148,7 @@ namespace Bit.App.Pages
             }
             if (MasterPassword.Length < Constants.MasterPasswordMinimumChars)
             {
-                await _platformUtilsService.ShowDialogAsync(AppResources.MasterPasswordLengthValMessage,
+                await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.MasterPasswordLengthValMessageX, Constants.MasterPasswordMinimumChars),
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }

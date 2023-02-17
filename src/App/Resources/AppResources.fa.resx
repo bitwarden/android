@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>یادآور کلمه عبور اصلی کمک می‌کند در صورت فراموشی آن را به یاد بیارید.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>طول کلمه عبور اصلی باید حداقل ۸ کاراکتر باشد.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>حداقل اعداد</value>
@@ -2146,7 +2146,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>مهلت زمانی شما بیش از محدودیت های تعیین شده توسط سازمانتان است.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>یک یا چند سیاست سازمان از برون ریزی گاوصندوق شخصی شما جلوگیری می‌کند.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2423,6 +2423,14 @@
     <value>ورود ساده</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>داک داک گو</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>توکن دسترسی API</value>
   </data>
@@ -2514,6 +2522,21 @@
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>این درخواست دیگر معتبر نیست</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>در حال انتظار برای ورود به سیستم</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>رد کردن همه درخواست‌ها</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>آیا مطمئنید که می‌خواهید همه درخواست‌های ورود در انتظار را رد کنید؟</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>درخواست‌ها رد شد</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>بدون درخواست معلق</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>اجازه دوربین را برای استفاده از اسکنر فعال کنید</value>

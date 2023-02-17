@@ -584,8 +584,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ನೀವು ಮರೆತರೆ ಅದನ್ನು ನೆನಪಿಟ್ಟುಕೊಳ್ಳಲು ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಸುಳಿವು ನಿಮಗೆ ಸಹಾಯ ಮಾಡುತ್ತದೆ.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಕನಿಷ್ಠ 8 ಅಕ್ಷರಗಳಷ್ಟು ಉದ್ದವಾಗಿರಬೇಕು.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>ಕನಿಷ್ಠ ಸಂಖ್ಯೆಗಳು</value>
@@ -2146,7 +2146,7 @@ Scanning will happen automatically.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Your vault timeout exceeds the restrictions set by your organization.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>One or more organization policies prevents your from exporting your individual vault.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2423,6 +2423,14 @@ select Add TOTP to store the key safely</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API access token</value>
   </data>
@@ -2492,7 +2500,7 @@ Do you want to switch to this account?</value>
     <value>Log in with master password</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Log In with another device</value>
+    <value>Log in with device</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>Log in initiated</value>
@@ -2514,6 +2522,21 @@ Do you want to switch to this account?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>This request is no longer valid</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Pending login requests</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Decline all requests</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Are you sure you want to decline all pending login requests?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Requests declined</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>No pending requests</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Enable camera permission to use the scanner</value>

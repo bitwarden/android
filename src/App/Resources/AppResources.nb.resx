@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Et hint om hovedpassordet kan hjelpe deg å huske passordet om du skulle glemme det.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Hovedpassordet må være minst 8 tegn.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minst antall siffer</value>
@@ -1104,7 +1104,7 @@ Skanning skjer automatisk.</value>
     <value>Frøken</value>
   </data>
   <data name="Mx" xml:space="preserve">
-    <value>Mx</value>
+    <value>Nøytral</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
@@ -2146,7 +2146,7 @@ Skanning skjer automatisk.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Tidsavbruddet ditt for hvelvet overstiger begrensningene som er satt av organisasjonen din.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>En eller flere organisasjonvilkår hindrer deg i å eksportere ditt personlige hvelv.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2423,6 +2423,14 @@ velg Legg til TOTP for å lagre nøkkelen sikkert</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API tilgangstoken</value>
   </data>
@@ -2514,6 +2522,21 @@ Vil du bytte til denne kontoen?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Invitasjonen er ikke lenger gyldig</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Avventende innloggingsforespørsler</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Avvis alle forespørsler</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Er du sikker på at du vil avvise alle avventende innloggingsforespørsler?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Forespørsler avvist</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Ingen ventende forespørsler</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Aktiver kameratillatelse for å bruke skanner</value>

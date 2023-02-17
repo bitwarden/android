@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Подсказка к мастер-паролю может помочь вам его вспомнить.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Мастер-пароль должен содержать не менее 8 символов.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Минимум цифр</value>
@@ -1104,7 +1104,7 @@
     <value>Проф.</value>
   </data>
   <data name="Mx" xml:space="preserve">
-    <value>Mx</value>
+    <value>Микстер</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Ноябрь</value>
@@ -2145,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Тайм-аут вашего хранилища превышает ограничения, установленные вашей организацией.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Экспорт вашего личного хранилища запрещен одной или несколькими политиками организации.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2422,6 +2422,14 @@
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Токен доступа к API</value>
   </data>
@@ -2491,7 +2499,7 @@
     <value>Войти с мастер-паролем</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Войти с другого устройства</value>
+    <value>Войти с помощью устройства</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>Вход инициирован</value>
@@ -2500,7 +2508,7 @@
     <value>На ваше устройство отправлено уведомление.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Убедитесь, что ваше хранилище разблокировано, а фраза отпечатка соответствует другому устройству.</value>
+    <value>Убедитесь, что ваше хранилище разблокировано и фраза отпечатка пальца совпадает на другом устройстве.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
     <value>Отправить уведомление повторно</value>
@@ -2513,6 +2521,21 @@
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Этот запрос больше не действителен</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Ожидающие запросы на авторизацию</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Отклонить все запросы</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Вы действительно хотите отклонить все ожидающие запросы на авторизацию?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Запросы отклонены</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Нет ожидающих запросов</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Для использования сканера необходимо предоставить разрешение на доступ к камере</value>

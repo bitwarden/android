@@ -265,7 +265,7 @@
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Nom d'utilisateur</value>
+    <value>Identifiant</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
@@ -556,7 +556,7 @@
     <value>Délai d'expiration du coffre</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Après délai d'expiration du coffre</value>
+    <value>Action après délai d'expiration du coffre</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
     <value>La déconnexion supprimera tout accès à votre coffre et nécessitera une authentification en ligne après la période d'expiration. Êtes-vous sûr de vouloir utiliser ce paramètre ?</value>
@@ -583,15 +583,15 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Un indice de mot de passe principal peut vous aider à vous souvenir de votre mot de passe si vous l'oubliez.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Le mot de passe principal doit comporter au moins 8 caractères.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Le mot de passe principal doit comporter au moins {0} caractères.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Min. de chiffres</value>
+    <value>Chiffres minimum</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Min. de caractères spéciaux</value>
+    <value>Caractères spéciaux minimum</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -604,19 +604,19 @@
     <value>Jamais</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Nouvel élément créé.</value>
+    <value>Élément ajouté</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>Aucun favori dans votre coffre.</value>
+    <value>Il n'y a aucun favori dans votre coffre.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>Il n’y a aucun élément dans votre coffre.</value>
+    <value>Il n'y a aucun élément dans votre coffre.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Il n’y a aucun élément dans votre coffre pour ce site web/app. Appuyer pour en ajouter un.</value>
+    <value>Il n'y a aucun élément dans votre coffre pour ce site web/app. Appuyez pour en ajouter un.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>Cet identifiant n'a aucun nom d'utilisateur ou mot de passe associé.</value>
+    <value>Cet identifiant n'a pas de nom d'utilisateur ou de mot de passe configuré.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Ok, compris !</value>
@@ -750,7 +750,7 @@
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>Il n’y a aucun élément dans votre coffre pour {0}.</value>
+    <value>Il n'y a aucun élément dans votre coffre pour {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
@@ -940,7 +940,7 @@ La numérisation se fera automatiquement.</value>
     <value>Aucun fichier choisi</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>Il n'y a pas de pièces jointes.</value>
+    <value>Il n'y a aucune pièce jointe.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
     <value>Source du fichier</value>
@@ -990,7 +990,7 @@ La numérisation se fera automatiquement.</value>
     <value>URL du serveur du coffre web</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Touchez cette notification pour voir les éléments de votre coffre.</value>
+    <value>Appuyez sur cette notification pour afficher les éléments depuis votre coffre.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Champs personnalisés</value>
@@ -1161,10 +1161,10 @@ La numérisation se fera automatiquement.</value>
     <value>Collections</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>Aucun élément dans cette collection.</value>
+    <value>Il n'y a aucun élément dans cette collection.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>Aucun élément dans ce dossier.</value>
+    <value>Il n'y a aucun élément dans ce dossier.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
     <value>Il n'y a aucun élément dans la corbeille.</value>
@@ -1289,7 +1289,7 @@ La numérisation se fera automatiquement.</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>Remplissage automatique activé !</value>
+    <value>Saisie automatique activée !</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
     <value>Vous devez vous identifier sur l'application principale Bitwarden avant d'utiliser le remplissage automatique des mots de passe.</value>
@@ -1375,10 +1375,10 @@ La numérisation se fera automatiquement.</value>
     <value>Types</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>Aucun mot de passe à afficher.</value>
+    <value>Aucun mot de passe à lister.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>Aucun élément à afficher.</value>
+    <value>Il n'y a aucun élément à lister.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
     <value>Rechercher dans la collection</value>
@@ -1412,7 +1412,7 @@ La numérisation se fera automatiquement.</value>
     <value>À qui appartient cet élément ?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>Aucune collection à afficher.</value>
+    <value>Il n'y a aucune collection à lister.</value>
   </data>
   <data name="MovedItemToOrg" xml:space="preserve">
     <value>{0} déplacé vers {1}</value>
@@ -1434,7 +1434,7 @@ La numérisation se fera automatiquement.</value>
     <value>Déplacer vers l'organisation</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>Aucune organisation à afficher.</value>
+    <value>Aucune organisation à lister.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
     <value>Choisissez une organisation vers laquelle vous souhaitez déplacer cet élément. Déplacer un élément vers une organisation transfère la propriété de l'élément à cette organisation. Vous ne serez plus le propriétaire direct de cet élément une fois qu'il aura été déplacé.</value>
@@ -1457,7 +1457,7 @@ La numérisation se fera automatiquement.</value>
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>Aucun dossier à afficher.</value>
+    <value>Il n'y a aucun dossier à lister.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
     <value>Phrase d'empreinte</value>
@@ -1983,7 +1983,7 @@ La numérisation se fera automatiquement.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
-    <value>Il n’y a aucun Send dans votre compte.</value>
+    <value>Il n'y a aucun Send dans votre compte.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
@@ -2145,7 +2145,7 @@ La numérisation se fera automatiquement.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Le délai d'expiration de votre coffre dépasse les restrictions définies par votre organisation.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Une ou plusieurs politiques d'organisation vous empêchent d'exporter votre coffre personnel.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2422,6 +2422,14 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Jeton d'accès API</value>
   </data>
@@ -2513,6 +2521,21 @@ Voulez-vous basculer vers ce compte ?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Cette demande n'est plus valide</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Demandes de connexion en attente</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Refuser toutes les demandes</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir refuser toutes les demandes de connexion en attente ?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Demandes refusées</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Aucune demande en attente</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Activer la permission de l'appareil photo pour utiliser le scanner</value>

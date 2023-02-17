@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Pasahitz nagusia ahazten baduzu, pista batek pasahitza gogoratzen lagunduko dizu.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Pasahitz nagusiak gutxienez 8 karaktere izan behar ditu.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Gutxieneko zenbaki kopurua</value>
@@ -2145,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Zure kutxa gotorreko itxaronaldiak, zure erakundeak ezarritako murrizpenak gainditzen ditu.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Erakundeko politika batek edo gehiagok kutxa gotorra esportatzea galarazten dute.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2421,6 +2421,14 @@
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token sarbide API-a</value>
   </data>
@@ -2512,6 +2520,21 @@ Kontu honetara aldatu nahi duzu?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Eskaera jada ez da balekoa.</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Pending login requests</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Decline all requests</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Are you sure you want to decline all pending login requests?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Requests declined</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>No pending requests</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Gaitu kameraren baimena eskanerra erabiltzeko</value>

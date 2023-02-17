@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Een hoofdwachtwoordhint kan je helpen je wachtwoord te herinneren als je het vergeten bent.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Het hoofdwachtwoord moet minimaal 8 tekens lang zijn.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Min. aantal cijfers</value>
@@ -2145,7 +2145,7 @@ Het scannen gebeurt automatisch.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Je kluis time-out is hoger dan het maximum van jouw organisatie.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Organisatiebeleid voorkomt dat je je persoonlijke kluis exporteert.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2422,6 +2422,14 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API-toegangstoken</value>
   </data>
@@ -2514,6 +2522,21 @@ Wilt u naar dit account wisselen?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Dit verzoek is niet langer geldig</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Inlogverzoeken in behandeling</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Alle aanvragen afwijzen</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Weet je zeker dat je alle in behandeling zijnde inlogverzoeken wilt afwijzen?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Afgewezen aanvragen</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Geen verzoeken in behandeling</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Camera-toestemming inschakelen om de scanner te gebruiken</value>
   </data>
@@ -2539,7 +2562,7 @@ Wilt u naar dit account wisselen?</value>
     <value>Sterk</value>
   </data>
   <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
-    <value>Controleer bekende datalekken voor dit wachtwoord</value>
+    <value>Bekende datalekken voor dit wachtwoord controleren</value>
   </data>
   <data name="ExposedMasterPassword" xml:space="preserve">
     <value>Gelekt hoofdwachtwoord</value>

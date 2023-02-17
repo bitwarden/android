@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
@@ -387,6 +388,8 @@ namespace Bit.Core.Services
                         Name = _tokenService.GetName(),
                         KdfType = tokenResponse.Kdf,
                         KdfIterations = tokenResponse.KdfIterations,
+                        KdfMemory = tokenResponse.KdfMemory,
+                        KdfParallelism = tokenResponse.KdfParallelism,
                         HasPremiumPersonally = _tokenService.GetPremium(),
                     },
                     new Account.AccountTokens()
@@ -492,6 +495,12 @@ namespace Bit.Core.Services
         public async Task<List<PasswordlessLoginResponse>> GetPasswordlessLoginRequestsAsync()
         {
             return await _apiService.GetAuthRequestAsync();
+        }
+
+        public async Task<List<PasswordlessLoginResponse>> GetActivePasswordlessLoginRequestsAsync()
+        {
+            var requests = await GetPasswordlessLoginRequestsAsync();
+            return requests.Where(r => !r.IsAnswered && !r.IsExpired).OrderByDescending(r => r.CreationDate).ToList();
         }
 
         public async Task<PasswordlessLoginResponse> GetPasswordlessLoginRequestByIdAsync(string id)

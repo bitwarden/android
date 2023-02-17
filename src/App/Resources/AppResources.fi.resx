@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Pääsalasanan vihje voi auttaa sinua muistamaan unohtamasi salasanan.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Pääsalasanan tulee sisältää ainakin 8 merkkiä.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Pääsalasanan tulee sisältää ainakin {0} merkkiä.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Numeroita vähintään</value>
@@ -708,7 +708,7 @@
     <value>Kaksivaiheinen kirjautuminen</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Kaksivaiheinen kirjautuminen tekee tilistäsi turvallisemman edellyttämällä salasanan lisäksi kirjautumisen lisätodennusta todennuslaitteen, ‑sovelluksen, tekstiviestin, puhelun tai sähköpostin avulla. Voit ottaa kaksivaiheisen kirjautumisen käyttöön bitwarden.com‑verkkoholvista. Haluatko avata sivuston nyt?</value>
+    <value>Kaksivaiheinen kirjautuminen parantaa tilisi suojausta vaatimalla kirjautumisen vahvistuksen salasanan lisäksi todennuslaitteen, ‑sovelluksen, tekstiviestin, puhelun tai sähköpostin avulla. Voit ottaa kaksivaiheisen kirjautumisen käyttöön bitwarden.com‑verkkoholvissa. Haluatko avata sen nyt?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Avaustapa: {0}</value>
@@ -2096,7 +2096,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Vaihda pääsalasana</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Organisaatiosi ylläpito on hiljattain vaihtanut pääsalasanasi. Käyttääksesi holvia, sinun on vaihdettava se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan.</value>
+    <value>Organisaatiosi ylläpito on hiljattain vaihtanut pääsalasanasi. Käyttääksesi holvia sinun on päivitettävä pääsalasanasi nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
     <value>Salasanaa vaihdetaan</value>
@@ -2146,7 +2146,7 @@ Koodi luetaan automaattisesti.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Holvisi aikakatkaisu ylittää organisaatiosi asettamat rajoitukset.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Yksi tai useampi organisaatiokäytäntö estää henkilökohtaisen holvisi viennin.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2361,7 +2361,7 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
     <value>Hyväksy kirjautumispyyntöjä</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Hyväksy muiden laitteiden kirjautumispyyntöjä tällä laitteelta.</value>
+    <value>Hyväksy muiden laitteiden kirjautumispyynnöt tältä laitteelta.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Salli ilmoitukset</value>
@@ -2422,6 +2422,14 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
   <data name="SimpleLogin" xml:space="preserve">
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API-käyttötunniste</value>
@@ -2492,7 +2500,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Kirjaudu pääsalasanalla</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Kirjaudu toisella laitteella</value>
+    <value>Laitteella kirjautuminen</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>Kirjautuminen aloitettu</value>
@@ -2514,6 +2522,21 @@ Haluatko vaihtaa tähän tiliin?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Pyyntö ei ole enää voimassa.</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Odottavia kirjautumispyyntöjä</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Hylkää kaikki pyynnöt</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Haluatko varmasti hylätä kaikki odottavat kirjautumispyynnöt?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Pyynnöt on hylätty</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Ei odottavia pyyntöjä</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Myönnä kameran käyttöoikeus skannerin käyttämiseksi</value>

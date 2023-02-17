@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Падказка да асноўнага пароля можа дапамагчы вам успомніць яго, калі вы яго забылі.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Асноўны пароль павінен змяшчаць прынамсі 8 сімвалаў.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Мінімум лічбаў</value>
@@ -2145,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Час чакання вашага сховішча перавышае дазволеныя абмежаванні, якія прызначыла ваша арганізацыя.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Адна або больш палітык арганізацыі не дазваляюць вам экспартаваць асабістае сховішча.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2422,6 +2422,14 @@
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Токен доступу да API</value>
   </data>
@@ -2513,6 +2521,21 @@
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Гэты запыт больш не дзейнічае</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Чаканне запыту на ўваход</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Адхіліць усе запыты</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Вы сапраўды хочаце адхіліць усе запыты, якія чакаюць уваходу?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Запыты адхілены</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Няма запытаў, якія чакаюць уваходу</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Каб выкарыстоўваць сканер дайце дазвол на выкарыстанне камеры</value>

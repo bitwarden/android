@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Vihje võib abiks olla olukorras, kui oled ülemparooli unustanud.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Ülemparool peab olema vähemalt 8 tähemärgi pikkune.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Vähim arv numbreid</value>
@@ -2145,7 +2145,7 @@ Skaneerimine toimub automaatselt.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Valitud hoidla ajalõpp ei ole organisatsiooni poolt määratud reeglitega kooskõlas.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Üks või enam organisatsiooni poliitikat ei võimalda sul oma personaalset hoidlat eksportida.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2422,6 +2422,14 @@ Skaneerimine toimub automaatselt.</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API ligipääsu võti</value>
   </data>
@@ -2513,6 +2521,21 @@ Soovid selle konto peale lülituda?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>See päring ei ole enam kehtiv</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Ootel sisselogimise taotlused</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Tühista kõik taotlused</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Oled kindel, et soovid tühistada kõik pooleliolevad sisselogimise taotlused?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Taotlused on tagasi lükatud</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Ootel taotlused puuduvad</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Kaamera kasutamiseks luba ligipääs kaamerale</value>

@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Nápoveda k hlavnému heslu vám môže pomôcť spomenúť si na heslo, ak ho zabudnete.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Hlavné heslo musí obsahovať aspoň 8 znakov.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Hlavné heslo musí obsahovať aspoň {0} znakov.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimum číslic</value>
@@ -1617,7 +1617,7 @@ Skenovanie prebehne automaticky.</value>
     <value>Zdieľané</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Toggle visibility</value>
+    <value>Prepnúť viditeľnosť</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>Platnosť prihlásenia vypršala.</value>
@@ -2145,7 +2145,7 @@ Skenovanie prebehne automaticky.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Časový limit vášho trezora prekračuje obmedzenia nastavené vašou organizáciou.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Jedna alebo viacero zásad organizácie vám bráni exportovať váš osobný trezor.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2422,6 +2422,14 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Prístupový token API</value>
   </data>
@@ -2513,6 +2521,21 @@ Chcete prepnúť na toto konto?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Táto požiadavka už nie je platná</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Čakajúce požiadavky o prihlásenie</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Odmietnuť všetky žiadosti</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Naozaj chcete odmietnuť všetky čakajúce požiadavky o prihlásenie?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Požiadavky odmietnuté</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Žiadne čakajúce požiadavky</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Pre použitie skenera povoľte prístup ku kamere</value>

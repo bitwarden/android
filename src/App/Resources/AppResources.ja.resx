@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>マスターパスワードのヒントは、パスワードを忘れた場合に役立ちます。</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>マスターパスワードは、少なくとも8文字以上で設定してください。</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>数字の最小個数</value>
@@ -2145,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>保管庫のタイムアウトが組織によって設定された制限を超えています。</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>1 つまたは複数の組織ポリシーにより、個人の保管庫をエクスポートできません。</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2422,6 +2422,14 @@
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API アクセストークン</value>
   </data>
@@ -2513,6 +2521,21 @@
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>このリクエストは無効になりました</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>保留中のログインリクエスト</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>すべてのリクエストを拒否する</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>保留中のログインリクエストをすべて拒否してもよろしいですか？</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>リクエストが拒否されました</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>保留中のリクエストはありません</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>スキャナを使用できるようカメラ権限を許可する</value>

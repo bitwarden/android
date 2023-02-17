@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Uma dica de senha mestra pode ajudá-lo(a) a lembrá-la caso você a esqueça.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>A senha mestra deve ser pelo menos 8 caracteres.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Números Mínimos</value>
@@ -2146,7 +2146,7 @@ A leitura será feita automaticamente.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>O tempo limite do seu cofre excede as restrições definidas por sua organização.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Uma ou mais políticas da organização impedem que você exporte seu cofre pessoal.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2423,6 +2423,14 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token de Acesso à API</value>
   </data>
@@ -2514,6 +2522,21 @@ Você deseja mudar para esta conta?</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Este pedido não é mais válido</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Pedidos de acesso pendentes</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Recusar todas as solicitações</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Tem certeza que deseja recusar todos os pedidos de login pendentes?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Solicitações recusadas</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Nenhuma solicitação pendente</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Conceda permissão de uso da câmera para usar o scanner</value>

@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>’n Hoofwagwoordwenk kan u help om u wagwoord te onthou indien u dit sou vergeet.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Hoofwagwoord moet ten minste 8 karakters lank wees.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Min. aantal syfers</value>
@@ -2145,7 +2145,7 @@ Skandering gebeur outomaties.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>U kluisuittelling oorskry die beperkinge wat deur u organisasie daargestel is.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Een of meer organisasiebeleide verhoed u om u persoonlike kluis uit te stuur.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2422,6 +2422,14 @@ kies u Voeg TOTP toe om die sleutel veilig te bewaar</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API-toegangsteken</value>
   </data>
@@ -2514,43 +2522,58 @@ Wil u na die rekening omskakel?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Hierdie versoek is nie langer gelding nie</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>In afwagting vir aantekeningsversoeke</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Weier alle versoeke</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Is jy seker dat jy alle hangende aantekeningsversoeke wil weier?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Versoeke geweier</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Geen hangende versoeke</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Laat die kamera versoek toe om die skandeerder te gebruik</value>
   </data>
   <data name="Important" xml:space="preserve">
-    <value>Important</value>
+    <value>Belangrik</value>
   </data>
   <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
-    <value>Your master password cannot be recovered if you forget it! {0} characters minimum.</value>
+    <value>Jou hoofwagwoord kan nie geherstel word as jy dit vergeet het nie! {0} karakters minimum.</value>
   </data>
   <data name="WeakMasterPassword" xml:space="preserve">
-    <value>Weak Master Password</value>
+    <value>Swak Hoofwagwoord</value>
   </data>
   <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
-    <value>Weak password identified. Use a strong password to protect your account. Are you sure you want to use a weak password?</value>
+    <value>Swak wagwoord geïdentifiseer. Gebruik 'n sterk wagwoord om jou rekening te beskerm. Is jy seker dat jy 'n swak wagwoord wil gebruik?</value>
   </data>
   <data name="Weak" xml:space="preserve">
-    <value>Weak</value>
+    <value>Swak</value>
   </data>
   <data name="Good" xml:space="preserve">
-    <value>Good</value>
+    <value>Goed</value>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Strong</value>
+    <value>Sterk</value>
   </data>
   <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
-    <value>Check known data breaches for this password</value>
+    <value>Ondersoek bekende data lekkasies vir dié wagwoord</value>
   </data>
   <data name="ExposedMasterPassword" xml:space="preserve">
-    <value>Exposed Master Password</value>
+    <value>Blootgestelde Hoofwagwoord</value>
   </data>
   <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?</value>
+    <value>Dié wagwoord was in data lekkasie gevind. Gebruik 'n unieke wagwoord om jou rekening te beskerm. Is jy seker dat jy 'n blootgestelde wagwoord wil gebruik?</value>
   </data>
   <data name="WeakAndExposedMasterPassword" xml:space="preserve">
-    <value>Weak and Exposed Master Password</value>
+    <value>Swak en Blootgestelde Hoofwagwoord</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+    <value>Swak wagwoord geïdentifiseer en in 'n data lekkasie gevind. Gebruik 'n sterk en unieke wagwoord om jou rekening te beskerm. Is jy seker dat jy hierdie wagwoord wil gebruik?</value>
   </data>
 </root>
