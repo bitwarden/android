@@ -17,7 +17,6 @@ namespace Bit.Core.Services
     {
         private readonly IStateService _stateService;
         private readonly IApiService _apiService;
-        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
 
         public OrganizationService(IStateService stateService, IApiService apiService)
         {
@@ -72,15 +71,10 @@ namespace Bit.Core.Services
 
                 return await _apiService.GetOrgDomainSsoDetailsAsync(userEmail);
             }
-            catch (Exception ex)
+            catch (ApiException ex) when (ex.Error?.StatusCode == HttpStatusCode.NotFound)
             {
-                if (ex is ApiException apiEx && apiEx.Error != null && apiEx.Error.StatusCode == HttpStatusCode.NotFound)
-                {
-                    // this is a valid case so there is no need to show an error
-                    return null;
-                }
-
-                throw ex;
+                // this is a valid case so there is no need to show an error
+                return null;
             }
         }
     }
