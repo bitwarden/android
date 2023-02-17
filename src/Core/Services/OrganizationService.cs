@@ -63,13 +63,25 @@ namespace Bit.Core.Services
 
         public async Task<OrganizationDomainSsoDetailsResponse> GetClaimedOrganizationDomainAsync(string userEmail)
         {
-            if (string.IsNullOrEmpty(userEmail))
+            try
             {
-                return null;
-            }
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return null;
+                }
 
-            var response = await _apiService.GetOrgDomainSsoDetailsAsync(userEmail);
-            return response;
+                return await _apiService.GetOrgDomainSsoDetailsAsync(userEmail);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ApiException apiEx && apiEx.Error != null && apiEx.Error.StatusCode == HttpStatusCode.NotFound)
+                {
+                    // this is a valid case so there is no need to show an error
+                    return null;
+                }
+
+                throw ex;
+            }
         }
     }
 }

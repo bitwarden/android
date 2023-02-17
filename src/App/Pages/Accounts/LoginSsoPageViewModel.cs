@@ -18,7 +18,6 @@ namespace Bit.App.Pages
     public class LoginSsoPageViewModel : BaseViewModel
     {
         private const string REDIRECT_URI = "bitwarden://sso-callback";
-        private const string DOMAIN_CLAIM_NOT_FOUND = "Claimed org domain not found";
 
         private readonly IDeviceActionService _deviceActionService;
         private readonly IAuthService _authService;
@@ -237,12 +236,12 @@ namespace Bit.App.Pages
                 var claimedDomainOrgDetails = await _organizationService.GetClaimedOrganizationDomainAsync(userEmail);
                 await _deviceActionService.HideLoadingAsync();
 
-                if (claimedDomainOrgDetails == null)
+                if (claimedDomainOrgDetails == null || !claimedDomainOrgDetails.SsoAvailable)
                 {
                     return false;
                 }
 
-                if (claimedDomainOrgDetails.SsoAvailable)
+                if (string.IsNullOrEmpty(claimedDomainOrgDetails.OrganizationIdentifier))
                 {
                     await _platformUtilsService.ShowDialogAsync(AppResources.OrganizationSsoIdentifierRequired, AppResources.AnErrorHasOccurred);
                     return false;
@@ -252,12 +251,9 @@ namespace Bit.App.Pages
                 await LogInAsync();
                 return true;
             }
-            catch (ApiException e)
+            catch (Exception ex)
             {
-                if (e.Error != null && e.Error.StatusCode == HttpStatusCode.NotFound && e.Error.Message == DOMAIN_CLAIM_NOT_FOUND)
-                {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.NoSchemeOrHandlerForThisSsoConfigurationFound, AppResources.AnErrorHasOccurred);
-                }
+                HandleException(ex);
             }
 
             return false;
