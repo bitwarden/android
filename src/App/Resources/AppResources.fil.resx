@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>May isang pahiwatig para sa master password na makakatulong na maalala mo ang iyong password kapag nakalimutan mo ito.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Ang master password ay dapat hindi bababa sa 8 na mga character.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Pinakamababang mga numero</value>
@@ -2148,7 +2148,7 @@ mga salita</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Ang iyong vault timeout ay lumalampas sa mga restriksiyon na itinakda ng iyong organisasyon.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Ang isa o higit pang mga patakaran sa organisasyon ay pumipigil sa iyong pag export ng iyong indibidwal na vault.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">

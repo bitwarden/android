@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Un indice de mot de passe principal peut vous aider à vous souvenir de votre mot de passe si vous l'oubliez.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Le mot de passe principal doit comporter au moins 8 caractères.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Le mot de passe principal doit comporter au moins {0} caractères.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Chiffres minimum</value>
@@ -2145,7 +2145,7 @@ La numérisation se fera automatiquement.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Le délai d'expiration de votre coffre dépasse les restrictions définies par votre organisation.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Une ou plusieurs politiques d'organisation vous empêchent d'exporter votre coffre personnel.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">

@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Podpowiedź do hasła głównego może pomóc Ci przypomnieć hasło, jeśli je zapomnisz.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Hasło główne musi zawierać co najmniej 8 znaków.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Hasło główne musi zawierać co najmniej {0} znaków.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimalna liczba cyfr</value>
@@ -2145,7 +2145,7 @@ Skanowanie nastąpi automatycznie.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Czas blokowania sejfu przekracza limit określony przez organizację.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Co najmniej jedna zasada organizacji uniemożliwia wyeksportowanie osobistego sejfu.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">

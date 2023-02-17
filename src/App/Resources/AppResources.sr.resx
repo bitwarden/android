@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Савет Главне Лозинке може да Вам помогне да се потсетите ако је заборавите.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Главна Лозинка треба имати бар 8 знака.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Минимално Бројева</value>
@@ -2147,7 +2147,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Време истека вашег сефа је премашило дозвољена ограничења од стране ваше организације.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Једна или више полиса ваше организације вас спречава да извезете ваш сеф.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">

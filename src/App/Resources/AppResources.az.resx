@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Ana parol məsləhəti, unutduğunuz parolu xatırlamağınıza kömək edir.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Ana parol ən azı 8 simvol uzunluğunda olmalıdır.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimum rəqəm</value>
@@ -2145,7 +2145,7 @@ Skan prosesi avtomatik baş tutacaq.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Anbar vaxt bitişi, təşkilatınız tərəfindən tənzimlənən məhdudiyyətləri aşır.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Bir və ya daha çox təşkilat siyasəti, fərdi anbarınızı ixrac etməyinizin qarşısını alır.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">

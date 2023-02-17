@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>يمكن أن تساعدك فكرة كلمة المرور الرئيسية على تذكر كلمة المرور الخاصة بك إذا نسيت.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>يجب أن تكون كلمة المرور الرئيسية أكثر من 8 أحرف.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>الحد الأدنى للأرقام</value>
@@ -2146,7 +2146,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>مهلة خزنتك تتجاوز القيود التي تضعها مؤسستك.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>واحدة أو أكثر من سياسات المؤسسة تمنعك من تصدير خزانتك الشخصية.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">

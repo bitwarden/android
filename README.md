@@ -23,15 +23,3 @@ Interested in contributing in a big way? Consider joining our team! We're hiring
 Code contributions are welcome! Please commit any pull requests against the `master` branch. Learn more about how to contribute by reading the [Contributing Guidelines](https://contributing.bitwarden.com/contributing/). Check out the [Contributing Documentation](https://contributing.bitwarden.com/) for how to get started with your first contribution.
 
 Security audits and feedback are welcome. Please open an issue or email us privately if the report is sensitive in nature. You can read our security policy in the [`SECURITY.md`](SECURITY.md) file.
-
-### Dotnet-format
-
-We recently migrated to using dotnet-format as code formatter. All previous branches will need to updated to avoid large merge conflicts using the following steps:
-
-1. Check out your local Branch
-2. Run `git merge e0efcfbe45b2a27c73e9593bfd7a71fad2aa7a35`
-3. Resolve any merge conflicts, commit.
-4. Run `dotnet tool run dotnet-format`
-5. Commit
-6. Run `git merge -Xours 04539af2a66668b6e85476d5cf318c9150ec4357`
-7. Push

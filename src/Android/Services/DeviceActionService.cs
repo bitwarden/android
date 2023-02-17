@@ -502,11 +502,6 @@ namespace Bit.Droid.Services
 
         public async Task SetScreenCaptureAllowedAsync()
         {
-            if (CoreHelpers.ForceScreenCaptureEnabled())
-            {
-                return;
-            }
-
             var activity = CrossCurrentActivity.Current?.Activity;
             if (await _stateService.GetScreenCaptureAllowedAsync())
             {

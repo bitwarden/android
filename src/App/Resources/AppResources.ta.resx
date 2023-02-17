@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>உங்கள் கடவுச்சொல்லை மறந்துவிட்டால் அதை நினைவுபடுத்த பிரதான கடவுச்சொல் குறிப்பு உதவும்.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>பிரதான கடவுச்சொல் குறைந்தது 8 எழுத்துக்குறிகள் இருக்க வேண்டும்.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>குறைந்தபட்ச எண்கள்</value>
@@ -2146,7 +2146,7 @@ Scanning will happen automatically.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>உமது பெட்டக நேரமுடிவு உம் நிறுவனம் அமைத்த கட்டுப்பாடுகளை தாண்டுகிறது.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகள் உம் சொந்த பெட்டகத்தை ஏற்றுமதிசெய்வதைத் தவிர்க்கிறது.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
