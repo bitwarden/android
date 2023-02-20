@@ -1208,6 +1208,18 @@ namespace Bit.Core.Services
             ))?.Profile?.AvatarColor;
         }
 
+        public async Task<string> GetPreLoginEmailAsync()
+        {
+            var options = await GetDefaultStorageOptionsAsync();
+            return await GetValueAsync<string>(Constants.PreLoginEmailKey, options);
+        }
+
+        public async Task SetPreLoginEmailAsync(string value)
+        {
+            var options = await GetDefaultStorageOptionsAsync();
+            await SetValueAsync(Constants.PreLoginEmailKey, value, options);
+        }
+
         // Helpers
 
         private async Task<T> GetValueAsync<T>(string key, StorageOptions options)
