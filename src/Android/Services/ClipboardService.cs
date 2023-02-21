@@ -49,12 +49,6 @@ namespace Bit.Droid.Services
             }
         }
 
-        public bool IsCopyNotificationHandledByPlatform()
-        {
-            // Android 13+ provides built-in notification when text is copied to the clipboard
-            return (int)Build.VERSION.SdkInt >= 33;
-        }
-
         private void CopyToClipboard(string text, bool isSensitive = true)
         {
             var clipboardManager = Application.Context.GetSystemService(Context.ClipboardService) as ClipboardManager;
