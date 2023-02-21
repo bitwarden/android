@@ -134,7 +134,7 @@ namespace Bit.App.Services
 
         public void ShowToastForCopiedValue(string valueNameCopied)
         {
-            ShowToast("info", null,string.Format(AppResources.ValueHasBeenCopied, valueNameCopied));
+            ShowToast("info", null, string.Format(AppResources.ValueHasBeenCopied, valueNameCopied));
         }
 
         public bool SupportsFido2()
