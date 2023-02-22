@@ -501,7 +501,7 @@ namespace Bit.Core.Services
         public async Task<List<PasswordlessLoginResponse>> GetActivePasswordlessLoginRequestsAsync()
         {
             var requests = await GetPasswordlessLoginRequestsAsync();
-            var activeRequests =  requests.Where(r => !r.IsAnswered && !r.IsExpired).OrderByDescending(r => r.CreationDate).ToList();
+            var activeRequests = requests.Where(r => !r.IsAnswered && !r.IsExpired).OrderByDescending(r => r.CreationDate).ToList();
             return await PopulateFingerprintPhrasesAsync(activeRequests);
         }
 
