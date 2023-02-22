@@ -494,18 +494,21 @@ namespace Bit.Core.Services
 
         public async Task<List<PasswordlessLoginResponse>> GetPasswordlessLoginRequestsAsync()
         {
-            return await _apiService.GetAuthRequestAsync();
+            var response = await _apiService.GetAuthRequestAsync();
+            return await PopulateFingerprintPhrasesAsync(response);
         }
 
         public async Task<List<PasswordlessLoginResponse>> GetActivePasswordlessLoginRequestsAsync()
         {
             var requests = await GetPasswordlessLoginRequestsAsync();
-            return requests.Where(r => !r.IsAnswered && !r.IsExpired).OrderByDescending(r => r.CreationDate).ToList();
+            var activeRequests =  requests.Where(r => !r.IsAnswered && !r.IsExpired).OrderByDescending(r => r.CreationDate).ToList();
+            return await PopulateFingerprintPhrasesAsync(activeRequests);
         }
 
         public async Task<PasswordlessLoginResponse> GetPasswordlessLoginRequestByIdAsync(string id)
         {
-            return await _apiService.GetAuthRequestAsync(id);
+            var response = await _apiService.GetAuthRequestAsync(id);
+            return await PopulateFingerprintPhraseAsync(response, await _stateService.GetEmailAsync());
         }
 
         public async Task<PasswordlessLoginResponse> GetPasswordlessLoginResponseAsync(string id, string accessCode)
@@ -520,7 +523,8 @@ namespace Bit.Core.Services
             var encryptedKey = await _cryptoService.RsaEncryptAsync(masterKey.EncKey, publicKey);
             var encryptedMasterPassword = await _cryptoService.RsaEncryptAsync(Encoding.UTF8.GetBytes(await _stateService.GetKeyHashAsync()), publicKey);
             var deviceId = await _appIdService.GetAppIdAsync();
-            return await _apiService.PutAuthRequestAsync(id, encryptedKey.EncryptedString, encryptedMasterPassword.EncryptedString, deviceId, requestApproved);
+            var response = await _apiService.PutAuthRequestAsync(id, encryptedKey.EncryptedString, encryptedMasterPassword.EncryptedString, deviceId, requestApproved);
+            return await PopulateFingerprintPhraseAsync(response, await _stateService.GetEmailAsync());
         }
 
         public async Task<PasswordlessLoginResponse> PasswordlessCreateLoginRequestAsync(string email)
@@ -538,9 +542,30 @@ namespace Bit.Core.Services
             {
                 response.RequestKeyPair = keyPair;
                 response.RequestAccessCode = accessCode;
+                response.FingerprintPhrase = fingerprintPhrase;
             }
 
             return response;
+        }
+
+        private async Task<List<PasswordlessLoginResponse>> PopulateFingerprintPhrasesAsync(List<PasswordlessLoginResponse> passwordlessLoginList)
+        {
+            if (passwordlessLoginList == null)
+            {
+                return null;
+            }
+            var userEmail = await _stateService.GetEmailAsync();
+            foreach (var passwordlessLogin in passwordlessLoginList)
+            {
+                await PopulateFingerprintPhraseAsync(passwordlessLogin, userEmail);
+            }
+            return passwordlessLoginList;
+        }
+
+        private async Task<PasswordlessLoginResponse> PopulateFingerprintPhraseAsync(PasswordlessLoginResponse passwordlessLogin, string userEmail)
+        {
+            passwordlessLogin.FingerprintPhrase = string.Join("-", await _cryptoService.GetFingerprintAsync(userEmail, CoreHelpers.Base64UrlDecode(passwordlessLogin.PublicKey)));
+            return passwordlessLogin;
         }
     }
 }
