@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Pääsalasanan vihje voi auttaa sinua muistamaan unohtamasi salasanan.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Pääsalasanan tulee sisältää ainakin 8 merkkiä.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Pääsalasanan tulee sisältää vähintään {0} merkkiä.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Numeroita vähintään</value>
@@ -2146,7 +2146,7 @@ Koodi luetaan automaattisesti.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Holvisi aikakatkaisu ylittää organisaatiosi asettamat rajoitukset.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Yksi tai useampi organisaatiokäytäntö estää henkilökohtaisen holvisi viennin.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2524,7 +2524,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Pyyntö ei ole enää voimassa.</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Odottavia kirjautumispyyntöjä</value>
+    <value>Odottavat kirjautumispyynnöt</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
     <value>Hylkää kaikki pyynnöt</value>
@@ -2533,7 +2533,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Haluatko varmasti hylätä kaikki odottavat kirjautumispyynnöt?</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
-    <value>Pyynnöt on hylätty</value>
+    <value>Pyynnöt hylättiin</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
     <value>Ei odottavia pyyntöjä</value>  
@@ -2551,7 +2551,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Heikko pääsalasana</value>
   </data>
   <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
-    <value>Tunnistettiin heikko salasana. Sinun tulisi suojata tilisi vahvalla salasanalla. Haluatko varmasti käyttää heikkoa salasanaa?</value>
+    <value>Havaittiin heikko salasana. Suojaa tilisi vahvalla salasanalla. Haluatko varmasti käyttää heikkoa salasanaa?</value>
   </data>
   <data name="Weak" xml:space="preserve">
     <value>Heikko</value>
@@ -2576,5 +2576,8 @@ Haluatko vaihtaa tähän tiliin?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Havaittiin heikko ja tietovuodosta löytynyt salasana. Sinun tulisi suojata tilisi vahvalla ja ainutlaatuisella salasanalla. Haluatko varmasti käyttää tätä salasanaa?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organisaation SSO-tunniste tarvitaan.</value>
   </data>
 </root>

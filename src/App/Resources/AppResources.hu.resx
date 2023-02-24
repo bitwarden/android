@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>A mesterjelszó emlékeztető segíthet emlékezni a jelszavadra ha elfejetetted volna.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Mesterjelszónak legalább 8 karakter hosszúnak kell lennie.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Mesterjelszónak legalább {0} karakter hosszúnak kell lennie.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Legalább ennyi szám</value>
@@ -2144,7 +2144,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>A széf időkorlátja túllépi a szervezet által beállított korlátozást.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Egy vagy több szervezeti házirend tiltja a személyes széf exportálását.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2574,5 +2574,8 @@ Szeretnénk átváltani erre a fiókra?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Gyenge jelszó lett azonosítva és megtalálva egy adatvédelmi incidens során. A fók védelme érdekében használjunk erős és egyedi jelszót. Biztosan használni szeretnénk ezt a jelszót?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>A szervezeti SSO azonosító megadása szükséges.</value>
   </data>
 </root>

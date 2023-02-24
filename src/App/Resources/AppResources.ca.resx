@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Una pista de contrasenya mestra pot ajudar-vos a recordar-la si la oblideu.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>La contrasenya ha de contenir almenys 8 caràcters.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>La contrasenya mestra ha de contenir almenys {0} caràcters.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Mínim de caràcters numèrics</value>
@@ -2145,7 +2145,7 @@ L'escaneig es farà automàticament.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>El temps d'espera de la caixa forta supera les restriccions establertes per la vostra organització.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Una o més polítiques d'organització us impedeixen exportar la vostra caixa forta.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2575,5 +2575,8 @@ Voleu canviar a aquest compte?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Contrasenya feble identificada i trobada en una filtració de dades. Utilitzeu una contrasenya única i segura per protegir el vostre compte. Esteu segur que voleu utilitzar aquesta contrasenya?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>L’identificador SSO de l’organització és obligatori.</value>
   </data>
 </root>

@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Падказка да асноўнага пароля можа дапамагчы вам успомніць яго, калі вы яго забылі.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Асноўны пароль павінен змяшчаць прынамсі 8 сімвалаў.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Асноўны пароль павінен змяшчаць прынамсі {0} сімвалаў.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Мінімум лічбаў</value>
@@ -2145,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Час чакання вашага сховішча перавышае дазволеныя абмежаванні, якія прызначыла ваша арганізацыя.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Адна або больш палітык арганізацыі не дазваляюць вам экспартаваць асабістае сховішча.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2575,5 +2575,8 @@
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Вызначаны ненадзейны пароль, які знойдзены ва ўцечках даных. Выкарыстоўвайце надзейныя і ўнікальныя паролі для абароны свайго ўліковага запісу. Вы сапраўды хочаце выкарыстоўваць гэты пароль?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Неабходны ідэнтыфікатар SSO арганізацыі.</value>
   </data>
 </root>

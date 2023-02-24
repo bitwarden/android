@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
@@ -27,6 +28,7 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IStateService _stateService;
         private readonly ILogger _logger;
+        private readonly IOrganizationService _organizationService;
 
         private string _orgIdentifier;
 
@@ -42,6 +44,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
+            _organizationService = ServiceContainer.Resolve<IOrganizationService>();
 
 
             PageTitle = AppResources.Bitwarden;
@@ -63,9 +66,25 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            if (string.IsNullOrWhiteSpace(OrgIdentifier))
+            try
             {
-                OrgIdentifier = await _stateService.GetRememberedOrgIdentifierAsync();
+                if (await TryClaimedDomainLogin())
+                {
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(OrgIdentifier))
+                {
+                    OrgIdentifier = await _stateService.GetRememberedOrgIdentifierAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
+            finally
+            {
+                await _deviceActionService.HideLoadingAsync();
             }
         }
 
@@ -206,6 +225,38 @@ namespace Bit.App.Pages
                 await _platformUtilsService.ShowDialogAsync(AppResources.LoginSsoError,
                     AppResources.AnErrorHasOccurred);
             }
+        }
+
+        private async Task<bool> TryClaimedDomainLogin()
+        {
+            try
+            {
+                await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
+                var userEmail = await _stateService.GetPreLoginEmailAsync();
+                var claimedDomainOrgDetails = await _organizationService.GetClaimedOrganizationDomainAsync(userEmail);
+                await _deviceActionService.HideLoadingAsync();
+
+                if (claimedDomainOrgDetails == null || !claimedDomainOrgDetails.SsoAvailable)
+                {
+                    return false;
+                }
+
+                if (string.IsNullOrEmpty(claimedDomainOrgDetails.OrganizationIdentifier))
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.OrganizationSsoIdentifierRequired, AppResources.AnErrorHasOccurred);
+                    return false;
+                }
+
+                OrgIdentifier = claimedDomainOrgDetails.OrganizationIdentifier;
+                await LogInAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
+
+            return false;
         }
     }
 }

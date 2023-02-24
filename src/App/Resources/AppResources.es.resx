@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Una pista de tu contraseña maestra puede ayudarte a recordarla en caso de que la olvides.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>La contraseña maestra debe tener al menos 8 caracteres.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>La contraseña maestra debe tener al menos {0} caracteres.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Mínimo de caracteres numéricos</value>
@@ -2145,7 +2145,7 @@ El escaneo se realizará automáticamente.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>El tiempo de espera de tu caja fuerte excede las restricciones establecidas por tu organización.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Una o más políticas de organización impiden que usted exporte su caja fuerte personal.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2524,19 +2524,19 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Esta solicitud ya no es válida</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Pending login requests</value>
+    <value>Solicitudes de acceso pendientes</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
-    <value>Decline all requests</value>
+    <value>Rechazar todas las solicitudes</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>Are you sure you want to decline all pending login requests?</value>
+    <value>¿Está seguro de que desea rechazar todas las solicitudes de inicio de sesión pendientes?</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
-    <value>Requests declined</value>
+    <value>Solicitudes rechazadas</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>No pending requests</value>  
+    <value>No hay solicitudes pendientes</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Habilitar el permiso de la cámara para usar el escáner</value>
@@ -2576,5 +2576,8 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Contraseña débil encontrada en una violación de datos. Utilice una contraseña única para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña comprometida?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Se requiere un inicio de sesión único de la organización.</value>
   </data>
 </root>

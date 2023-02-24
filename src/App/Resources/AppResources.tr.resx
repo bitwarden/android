@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Ana parolanızı unutursanız bu ipucuna bakınca size ana parolanızı hatırlatacak bir şey yazabilirsiniz.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Ana parola en az 8 karakter uzunluğunda olmalıdır.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Ana parola en az {0} karakter uzunluğunda olmalıdır.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>En az rakam</value>
@@ -2145,7 +2145,7 @@ Kod otomatik olarak taranacaktır.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Kasa zaman aşımınız, kuruluşunuz tarafından belirlenen kısıtlamaları aşıyor.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Bir veya daha fazla kuruluş ilkesi, kişisel kasanızı dışa aktarmanızı engelliyor.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2574,5 +2574,8 @@ Bu hesaba geçmek ister misiniz?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Hem zayıf hem de veri ihlalinde yer alan bir tespit edildi. Hesabınızı korumak için güçlü bir parola seçin ve o parolayı başka yerlerde kullanmayın. Bu parolayı kullanmak istediğinizden emin misiniz?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Kuruluş SSO tanımlayıcısı gereklidir.</value>
   </data>
 </root>

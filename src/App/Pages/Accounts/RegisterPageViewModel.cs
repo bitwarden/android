@@ -148,7 +148,7 @@ namespace Bit.App.Pages
             }
             if (MasterPassword.Length < Constants.MasterPasswordMinimumChars)
             {
-                await _platformUtilsService.ShowDialogAsync(AppResources.MasterPasswordLengthValMessage,
+                await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.MasterPasswordLengthValMessageX, Constants.MasterPasswordMinimumChars),
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }

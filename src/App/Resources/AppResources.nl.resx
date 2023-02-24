@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Een hoofdwachtwoordhint kan je helpen je wachtwoord te herinneren als je het vergeten bent.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Het hoofdwachtwoord moet minimaal 8 tekens lang zijn.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Min. aantal cijfers</value>
@@ -2145,7 +2145,7 @@ Het scannen gebeurt automatisch.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Je kluis time-out is hoger dan het maximum van jouw organisatie.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Organisatiebeleid voorkomt dat je je persoonlijke kluis exporteert.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2575,5 +2575,8 @@ Wilt u naar dit account wisselen?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Zwak wachtwoord geïdentificeerd en gevonden in een datalek. Gebruik een sterk en uniek wachtwoord om uw account te beschermen. Weet u zeker dat u dit wachtwoord wilt gebruiken?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organisatie-identificatie vereist.</value>
   </data>
 </root>
