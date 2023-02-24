@@ -143,14 +143,14 @@ namespace Bit.App.Pages
             try
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
+                await _stateService.SetPreLoginEmailAsync(Email);
                 await AccountSwitchingOverlayViewModel.RefreshAccountViewsAsync();
                 if (string.IsNullOrWhiteSpace(Email))
                 {
                     Email = await _stateService.GetRememberedEmailAsync();
                 }
                 var deviceIdentifier = await _appIdService.GetAppIdAsync();
-                // TODO uncomment to enable login with device
-                //IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
+                IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
                 CanRemoveAccount = await _stateService.GetActiveUserEmailAsync() != Email;
                 await _deviceActionService.HideLoadingAsync();
             }

@@ -221,8 +221,7 @@ namespace Bit.iOS.Core.Controllers
             }
 
             var email = await _stateService.GetEmailAsync();
-            var kdf = await _stateService.GetKdfTypeAsync();
-            var kdfIterations = await _stateService.GetKdfIterationsAsync();
+            var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
             var inputtedValue = MasterPasswordCell.TextField.Text;
 
             if (_pinLock)
@@ -233,7 +232,7 @@ namespace Bit.iOS.Core.Controllers
                     if (_isPinProtected)
                     {
                         var key = await _cryptoService.MakeKeyFromPinAsync(inputtedValue, email,
-                            kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000),
+                            kdfConfig,
                             await _stateService.GetPinProtectedKeyAsync());
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
                         var protectedPin = await _stateService.GetProtectedPinAsync();
@@ -248,7 +247,7 @@ namespace Bit.iOS.Core.Controllers
                     else
                     {
                         var key2 = await _cryptoService.MakeKeyFromPinAsync(inputtedValue, email,
-                            kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
+                            kdfConfig);
                         failed = false;
                         await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                         await SetKeyAndContinueAsync(key2);
@@ -265,7 +264,7 @@ namespace Bit.iOS.Core.Controllers
             }
             else
             {
-                var key2 = await _cryptoService.MakeKeyAsync(inputtedValue, email, kdf, kdfIterations);
+                var key2 = await _cryptoService.MakeKeyAsync(inputtedValue, email, kdfConfig);
 
                 var storedKeyHash = await _cryptoService.GetKeyHashAsync();
                 if (storedKeyHash == null)
@@ -287,7 +286,7 @@ namespace Bit.iOS.Core.Controllers
                         var encKey = await _cryptoService.GetEncKeyAsync(key2);
                         var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
                         var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, email,
-                            kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
+                            kdfConfig);
                         await _stateService.SetPinProtectedKeyAsync(await _cryptoService.EncryptAsync(key2.Key, pinKey));
                     }
                     await AppHelpers.ResetInvalidUnlockAttemptsAsync();

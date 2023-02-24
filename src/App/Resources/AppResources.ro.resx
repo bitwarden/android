@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Un indiciu pentru parola principală vă poate ajuta să v-o reamintiți dacă o uitați.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Parola principală trebuie să conțină minimum 8 caractere.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimum de cifre</value>
@@ -1102,6 +1102,9 @@ Scanarea se va face automat.</value>
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Dra</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>noiembrie</value>
@@ -2142,7 +2145,7 @@ Scanarea se va face automat.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Timpul de expirare al seifului depășește restricțiile stabilite de organizația dvs.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Una sau mai multe politici de organizație vă împiedică să vă exportați seiful individual.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2419,6 +2422,14 @@ selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>FastMail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token de acces API</value>
   </data>
@@ -2450,7 +2461,7 @@ selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</value>
     <value>Aleatoriu</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Conectează-te pentru a urmări</value>
+    <value>Conectează Watch(Apple)</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Dezvăluirea serviciilor de accesibilitate</value>
@@ -2511,7 +2522,61 @@ Doriți să comutați la acest cont?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Această cerere nu mai este valabilă</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Pending login requests</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Decline all requests</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Are you sure you want to decline all pending login requests?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Requests declined</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>No pending requests</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Permite accesul camerei foto pentru a utiliza scanerul</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Important</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Parola principală nu poate fi recuperată dacă o uitați! Minim {0} caractere.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Parolă principală slabă</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Parola slabă identificată. Utilizați o parolă puternică pentru a vă proteja contul. Sigur doriți să utilizați o parolă slabă?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Slabă</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Bună</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Puternică</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Verifică spargerile cunoscute ale datelor pentru această parolă</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Parolă generală expusă</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Parola a fost găsită într-o baza de date expusa. Utilizați o parolă unică pentru a vă proteja contul. Sigur doriți să utilizați o parolă expusă?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Parolă principală slabă și expusă</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Parolă slabă identificată și găsită într-o baza de date expusa. Folosiți o parolă puternică și unică pentru a vă proteja contul. Sigur doriți să utilizați această parolă?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organization SSO identifier required.</value>
   </data>
 </root>

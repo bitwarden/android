@@ -139,6 +139,7 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, string>(AppResources.Mr, AppResources.Mr),
                 new KeyValuePair<string, string>(AppResources.Mrs, AppResources.Mrs),
                 new KeyValuePair<string, string>(AppResources.Ms, AppResources.Ms),
+                new KeyValuePair<string, string>(AppResources.Mx, AppResources.Mx),
                 new KeyValuePair<string, string>(AppResources.Dr, AppResources.Dr),
             };
             FolderOptions = new List<KeyValuePair<string, string>>();

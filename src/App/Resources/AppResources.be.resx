@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Падказка да асноўнага пароля можа дапамагчы вам успомніць яго, калі вы яго забылі.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Асноўны пароль павінен змяшчаць прынамсі 8 сімвалаў.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Асноўны пароль павінен змяшчаць прынамсі {0} сімвалаў.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Мінімум лічбаў</value>
@@ -1101,6 +1101,9 @@
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Пані</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Лістапад</value>
@@ -2142,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Час чакання вашага сховішча перавышае дазволеныя абмежаванні, якія прызначыла ваша арганізацыя.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Адна або больш палітык арганізацыі не дазваляюць вам экспартаваць асабістае сховішча.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2419,6 +2422,14 @@
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Токен доступу да API</value>
   </data>
@@ -2511,7 +2522,61 @@
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Гэты запыт больш не дзейнічае</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Чаканне запыту на ўваход</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Адхіліць усе запыты</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Вы сапраўды хочаце адхіліць усе запыты, якія чакаюць уваходу?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Запыты адхілены</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Няма запытаў, якія чакаюць уваходу</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Каб выкарыстоўваць сканер дайце дазвол на выкарыстанне камеры</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Важна</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Ваш асноўны пароль нельга будзе аднавіць, калі вы забудзеце яго! Мінімальная колькасць сімвалаў: {0}.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Ненадзейны асноўны пароль</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Вызначаны ненадзейны пароль. Выкарыстоўвайце надзейны пароль для абароны вашага ўліковага запісу. Вы сапраўды хочаце выкарыстоўваць ненадзейны пароль?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Ненадзейны</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Добры</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Надзейны</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Праверыць у вядомых уцечках даных для гэтага пароля</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Скампраметаваны асноўны пароль</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Пароль знойдзены ва ўцечках даных. Выкарыстоўвайце ўнікальныя паролі для абароны свайго ўліковага запісу. Вы сапраўды хочаце выкарыстоўваць скампраметаваны пароль?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Ненадзейны і скампраметаваны асноўны пароль</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Вызначаны ненадзейны пароль, які знойдзены ва ўцечках даных. Выкарыстоўвайце надзейныя і ўнікальныя паролі для абароны свайго ўліковага запісу. Вы сапраўды хочаце выкарыстоўваць гэты пароль?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Неабходны ідэнтыфікатар SSO арганізацыі.</value>
   </data>
 </root>

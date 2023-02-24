@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Якщо ви забудете головний пароль, підказка може допомогти вам згадати його.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Довжина головного пароля має бути принаймні 8 символів.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Довжина головного пароля має бути принаймні {0} символів.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Мінімум цифр</value>
@@ -1102,6 +1102,9 @@
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Міс</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Листопад</value>
@@ -2142,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Час очікування сховища перевищує обмеження, встановлені вашою організацією.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Одна чи декілька організаційних політик не дозволяють вам експортувати особисте сховище.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2419,6 +2422,14 @@
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Токен доступу до API</value>
   </data>
@@ -2488,7 +2499,7 @@
     <value>Увійти з головним паролем</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Увійти з іншого пристрою</value>
+    <value>Увійти з пристроєм</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>Ініційовано вхід</value>
@@ -2511,7 +2522,61 @@
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Цей запит більше недійсний</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Необроблені запити входу</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Відхилити всі запити</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Ви дійсно хочете відхилити всі необроблені запити входу?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Запити відхилено</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Немає необроблених запитів</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Увімкніть доступ до камери для використання сканера</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Важливо</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Головний пароль неможливо відновити, якщо ви його втратите! Мінімум {0} символів.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Слабкий головний пароль</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Виявлено слабкий пароль. Використовуйте надійний пароль для захисту свого облікового запису. Ви дійсно хочете використати слабкий пароль?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Слабкий</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Хороший</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Надійний</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Перевірити відомі витоки даних для цього пароля</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Головний пароль викрито</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Пароль знайдено у витоку даних. Використовуйте унікальний пароль для захисту свого облікового запису. Ви дійсно хочете використати викритий пароль?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Слабкий і викритий головний пароль</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Виявлено слабкий пароль, який знайдено у витоку даних. Використовуйте надійний та унікальний пароль для захисту свого облікового запису. Ви дійсно хочете використати цей пароль?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Потрібен SSO-ідентифікатор організації.</value>
   </data>
 </root>
