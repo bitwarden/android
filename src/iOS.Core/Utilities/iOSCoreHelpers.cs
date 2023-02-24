@@ -115,7 +115,7 @@ namespace Bit.iOS.Core.Utilities
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
 
-            ServiceContainer.Register<IPreferencesStorageService>(preferencesStorage);
+            ServiceContainer.Register<ISynchronousStorageService>(preferencesStorage);
             ServiceContainer.Register<IBroadcasterService>("broadcasterService", broadcasterService);
             ServiceContainer.Register<IMessagingService>("messagingService", messagingService);
             ServiceContainer.Register<ILocalizeService>("localizeService", localizeService);
@@ -147,7 +147,7 @@ namespace Bit.iOS.Core.Utilities
 
         public static void Bootstrap(Func<Task> postBootstrapFunc = null)
         {
-            var locale = ServiceContainer.Resolve<IPreferencesStorageService>().Get<string>(Bit.Core.Constants.AppLocaleKey);
+            var locale = ServiceContainer.Resolve<ISynchronousStorageService>().Get<string>(Bit.Core.Constants.AppLocaleKey);
             (ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService)
                 .Init(locale != null ? new System.Globalization.CultureInfo(locale) : null);
             ServiceContainer.Resolve<IAuthService>("authService").Init();

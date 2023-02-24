@@ -6,7 +6,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Bit.App.Services
 {
-    public class PreferencesStorageService : IStorageService, IPreferencesStorageService
+    public class PreferencesStorageService : IStorageService, ISynchronousStorageService
     {
         public static string KeyFormat = "bwPreferencesStorage:{0}";
 

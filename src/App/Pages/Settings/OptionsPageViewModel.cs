@@ -16,7 +16,7 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly IMessagingService _messagingService;
         private readonly II18nService _i18nService;
-        private readonly IPreferencesStorageService _preferencesStorageService;
+        private readonly ISynchronousStorageService _synchronousStorageService;
         private readonly IPlatformUtilsService _platformUtilsService;
 
         private bool _autofillSavePrompt;
@@ -37,7 +37,7 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _i18nService = ServiceContainer.Resolve<II18nService>();
-            _preferencesStorageService = ServiceContainer.Resolve<IPreferencesStorageService>();
+            _synchronousStorageService = ServiceContainer.Resolve<ISynchronousStorageService>();
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
 
             PageTitle = AppResources.Options;
@@ -230,7 +230,7 @@ namespace Bit.App.Pages
             var clearClipboard = await _stateService.GetClearClipboardAsync();
             ClearClipboardSelectedIndex = ClearClipboardOptions.FindIndex(k => k.Key == clearClipboard);
 
-            var appLocale = _preferencesStorageService.Get<string>(Core.Constants.AppLocaleKey);
+            var appLocale = _synchronousStorageService.Get<string>(Core.Constants.AppLocaleKey);
             SelectedLocale = appLocale == null ? LocalesOptions.First() : LocalesOptions.FirstOrDefault(kv => kv.Key == appLocale);
 
             _inited = true;
@@ -332,7 +332,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _preferencesStorageService.Save(Core.Constants.AppLocaleKey, SelectedLocale.Key);
+            _synchronousStorageService.Save(Core.Constants.AppLocaleKey, SelectedLocale.Key);
 
             await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.LanguageChangeXDescription, SelectedLocale.Value), AppResources.Language, AppResources.Ok);
         }
