@@ -584,7 +584,7 @@
     <value>Uma dica de senha mestra pode ajudá-lo(a) a lembrá-la caso você a esqueça.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>A senha mestra deve ter pelo menos {0} caracteres.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Números Mínimos</value>
@@ -2576,5 +2576,8 @@ Você deseja mudar para esta conta?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Uma senha foi identificada como fraca e foi encontrada em um vazamento de dados. Use uma senha única e forte para proteger sua conta. Quer mesmo usar essa senha?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Identificador SSO da organização necessário.</value>
   </data>
 </root>

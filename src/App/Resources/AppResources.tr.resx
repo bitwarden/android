@@ -2575,4 +2575,7 @@ Bu hesaba geçmek ister misiniz?</value>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Hem zayıf hem de veri ihlalinde yer alan bir tespit edildi. Hesabınızı korumak için güçlü bir parola seçin ve o parolayı başka yerlerde kullanmayın. Bu parolayı kullanmak istediğinizden emin misiniz?</value>
   </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Kuruluş SSO tanımlayıcısı gereklidir.</value>
+  </data>
 </root>

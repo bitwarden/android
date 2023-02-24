@@ -584,7 +584,7 @@
     <value>Подсказката помага да си спомните паролата, ако сте я забравили.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Главната парола трябва да е дълга поне {0} знака.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Минимален брой цифри</value>
@@ -2575,5 +2575,8 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Идентификаторът за еднократн идентификация на организация е задължителен.</value>
   </data>
 </root>

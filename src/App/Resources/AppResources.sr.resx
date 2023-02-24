@@ -584,7 +584,7 @@
     <value>Савет Главне Лозинке може да Вам помогне да се потсетите ако је заборавите.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Главна лозинка треба имати барем {0} карактера.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Минимално Бројева</value>
@@ -2577,5 +2577,8 @@
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Потребан је SSO идентификатор организације.</value>
   </data>
 </root>

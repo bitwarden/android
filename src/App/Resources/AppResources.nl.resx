@@ -2576,4 +2576,7 @@ Wilt u naar dit account wisselen?</value>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Zwak wachtwoord geïdentificeerd en gevonden in een datalek. Gebruik een sterk en uniek wachtwoord om uw account te beschermen. Weet u zeker dat u dit wachtwoord wilt gebruiken?</value>
   </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organisatie-identificatie vereist.</value>
+  </data>
 </root>

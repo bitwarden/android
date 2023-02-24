@@ -2576,4 +2576,7 @@ Doriți să comutați la acest cont?</value>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Parolă slabă identificată și găsită într-o baza de date expusa. Folosiți o parolă puternică și unică pentru a vă proteja contul. Sigur doriți să utilizați această parolă?</value>
   </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organization SSO identifier required.</value>
+  </data>
 </root>

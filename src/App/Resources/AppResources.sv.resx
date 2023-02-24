@@ -584,7 +584,7 @@
     <value>En huvudlösenordsledtråd kan hjälpa dig att komma ihåg ditt huvudlösenord om du glömmer bort det.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Huvudlösenordet måste vara minst {0} tecken långt.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minsta antal siffror</value>
@@ -2525,19 +2525,19 @@ Vill du byta till detta konto?</value>
     <value>Denna förfrågan är inte längre giltig</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Pending login requests</value>
+    <value>Väntande inloggningsbegäran</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
-    <value>Decline all requests</value>
+    <value>Avvisa alla förfrågningar</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>Are you sure you want to decline all pending login requests?</value>
+    <value>Är du säker på att du vill avvisa alla väntande inloggningsförfrågningar?</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
-    <value>Requests declined</value>
+    <value>Förfågningar avböjdes</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>No pending requests</value>  
+    <value>Inga väntande förfrågningar</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Bevilja kamerabehörighet för att använda skannern</value>
@@ -2577,5 +2577,8 @@ Vill du byta till detta konto?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Lösenordet är svagt och avslöjades vid ett dataintrång. Använd ett starkt och unikt lösenord för att skydda ditt konto. Är det säkert att du vill använda detta lösenord?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organization SSO identifier required.</value>
   </data>
 </root>
