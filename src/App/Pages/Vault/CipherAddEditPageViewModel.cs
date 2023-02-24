@@ -44,6 +44,8 @@ namespace Bit.App.Pages
         private bool _hasCollections;
         private string _previousCipherId;
         private List<Core.Models.View.CollectionView> _writeableCollections;
+        private bool _fromOtp;
+
         protected override string[] AdditionalPropertiesToRaiseOnCipherChanged => new string[]
         {
             nameof(IsLogin),
@@ -302,6 +304,7 @@ namespace Bit.App.Pages
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public bool HasTotpValue => IsLogin && !string.IsNullOrEmpty(Cipher?.Login?.Totp);
         public string SetupTotpText => $"{BitwardenIcons.Camera} {AppResources.SetupTotp}";
+
         public void Init()
         {
             PageTitle = EditMode && !CloneMode ? AppResources.EditItem : AppResources.AddItem;
@@ -309,6 +312,8 @@ namespace Bit.App.Pages
 
         public async Task<bool> LoadAsync(AppOptions appOptions = null)
         {
+            _fromOtp = appOptions?.OtpData != null;
+
             var myEmail = await _stateService.GetEmailAsync();
             OwnershipOptions.Add(new KeyValuePair<string, string>(myEmail, null));
             var orgs = await _organizationService.GetAllAsync();
@@ -358,6 +363,10 @@ namespace Bit.App.Pages
                             Cipher.OrganizationId = OrganizationId;
                         }
                     }
+                    if (appOptions?.OtpData != null && Cipher.Type == CipherType.Login)
+                    {
+                        Cipher.Login.Totp = appOptions.OtpData.Value.Uri;
+                    }
                 }
                 else
                 {
@@ -380,6 +389,7 @@ namespace Bit.App.Pages
                         Cipher.Type = appOptions.SaveType.GetValueOrDefault(Cipher.Type);
                         Cipher.Login.Username = appOptions.SaveUsername;
                         Cipher.Login.Password = appOptions.SavePassword;
+                        Cipher.Login.Totp = appOptions.OtpData?.Uri;
                         Cipher.Card.Code = appOptions.SaveCardCode;
                         if (int.TryParse(appOptions.SaveCardExpMonth, out int month) && month <= 12 && month >= 1)
                         {
@@ -423,6 +433,11 @@ namespace Bit.App.Pages
                 if (Cipher.Fields != null)
                 {
                     Fields.ResetWithRange(Cipher.Fields?.Select(f => _customFieldItemFactory.CreateCustomFieldItem(f, true, Cipher, null, null, FieldOptionsCommand)));
+                }
+
+                if (appOptions?.OtpData != null)
+                {
+                    _platformUtilsService.ShowToast(null, AppResources.AuthenticatorKey, AppResources.AuthenticatorKeyAdded);
                 }
             }
 
@@ -516,6 +531,10 @@ namespace Bit.App.Pages
                 {
                     // Close and go back to app
                     _autofillHandler.CloseAutofill();
+                }
+                else if (_fromOtp)
+                {
+                    _messagingService.Send(App.POP_ALL_AND_GO_TO_TAB_MYVAULT_MESSAGE);
                 }
                 else
                 {

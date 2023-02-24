@@ -20,7 +20,7 @@ namespace Bit.App.Utilities
 
             // TODO: This could be further improved by Lazy Registration since it may not be needed at all
             ServiceContainer.Register<ICustomFieldItemFactory>("customFieldItemFactory", new CustomFieldItemFactory(i18nService, eventService));
-            ServiceContainer.Register<IDeepLinkContext>(new DeepLinkContext());
+            ServiceContainer.Register<IDeepLinkContext>(new DeepLinkContext(ServiceContainer.Resolve<IMessagingService>()));
         }
     }
 }

@@ -89,6 +89,10 @@ namespace Bit.App.Utilities.AccountManagement
                 {
                     _accountsManagerHost.Navigate(NavigationTarget.AutofillCiphers);
                 }
+                else if (Options.OtpData != null)
+                {
+                    _accountsManagerHost.Navigate(NavigationTarget.OtpCipherSelection);
+                }
                 else if (Options.CreateSend != null)
                 {
                     _accountsManagerHost.Navigate(NavigationTarget.SendAddEdit);
