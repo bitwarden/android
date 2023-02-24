@@ -477,7 +477,7 @@
     <value>Gebe die E-Mail Adresse deines Kontos ein, um den Hinweis für dein Master-Passwort zu erhalten.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>App-Erweiterung wieder aktivieren</value>
+    <value>App-Erweiterung reaktivieren</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Fast geschafft!</value>
@@ -2574,5 +2574,8 @@ Möchtest du zu diesem Konto wechseln?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Schwaches Passwort erkannt und in einem Datendiebstahl gefunden. Verwende ein starkes und einzigartiges Passwort, um dein Konto zu schützen. Bist du sicher, dass du dieses Passwort verwenden möchtest?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>SSO-Kennung der Organisation erforderlich.</value>
   </data>
 </root>

@@ -584,7 +584,7 @@
     <value>Pagrindinio slaptažodžio užuomina gali padėti prisiminti slaptažodį, jei jį pamiršite.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Pagrindinis slaptažodis turi būti bent {0} simbolių ilgio.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Mažiausiai skaičių</value>
@@ -2576,5 +2576,8 @@ Ar norite pereiti prie šios paskyros?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Nustatytas ir rastas per duomenų pažeidimą silpnas slaptažodis. Norėdami apsaugoti paskyrą, naudokite stiprų ir unikalų slaptažodį. Ar tikrai norite naudoti šį slaptažodį?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Būtinas organizacijos SSO identifikatorius.</value>
   </data>
 </root>
