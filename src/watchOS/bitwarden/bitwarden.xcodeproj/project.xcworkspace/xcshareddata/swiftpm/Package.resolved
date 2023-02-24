@@ -82,15 +82,6 @@
       }
     },
     {
-      "identity" : "messagepack.swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/a2/MessagePack.swift.git",
-      "state" : {
-        "revision" : "27b35fd49e92fcae395bf8ccb233499d89cc7890",
-        "version" : "4.0.0"
-      }
-    },
-    {
       "identity" : "nanopb",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/nanopb.git",
