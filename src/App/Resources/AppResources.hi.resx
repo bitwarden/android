@@ -276,10 +276,10 @@
     <value>क्या आप वाकई लॉग आउट करना चाहते हैं?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Remove account</value>
+    <value>खाता हटाएं</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Are you sure you want to remove this account?</value>
+    <value>क्या आप वाकई यह खाता हटाना चाहते हैं?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
     <value>Account already added</value>
@@ -2577,5 +2577,8 @@ Do you want to switch to this account?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organization SSO identifier required.</value>
   </data>
 </root>

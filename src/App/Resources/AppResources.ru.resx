@@ -584,7 +584,7 @@
     <value>Подсказка к мастер-паролю может помочь вам его вспомнить.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Мастер-пароль должен содержать не менее {0} символов.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Минимум цифр</value>
@@ -2575,5 +2575,8 @@
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Обнаружен слабый пароль, найденный в утечке данных. Используйте надежный и уникальный пароль для защиты вашего аккаунта. Вы уверены, что хотите использовать этот пароль?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Требуется идентификатор SSO организации.</value>
   </data>
 </root>

@@ -584,7 +584,7 @@
     <value>Падказка да асноўнага пароля можа дапамагчы вам успомніць яго, калі вы яго забылі.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Асноўны пароль павінен змяшчаць прынамсі {0} сімвалаў.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Мінімум лічбаў</value>
@@ -2575,5 +2575,8 @@
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Вызначаны ненадзейны пароль, які знойдзены ва ўцечках даных. Выкарыстоўвайце надзейныя і ўнікальныя паролі для абароны свайго ўліковага запісу. Вы сапраўды хочаце выкарыстоўваць гэты пароль?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Неабходны ідэнтыфікатар SSO арганізацыі.</value>
   </data>
 </root>

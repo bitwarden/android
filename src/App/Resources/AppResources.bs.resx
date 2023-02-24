@@ -2575,4 +2575,7 @@ Skeniranje će biti izvršeno automatski.</value>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Slaba lozinka prepoznata i pronađena u kompromitovanim bazama podataka. Koristite jaku lozinku za zaštitu Vašeg računa. Da li ste sigurni da želite koristiti ovu lozinku?</value>
   </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organization SSO identifier required.</value>
+  </data>
 </root>

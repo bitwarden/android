@@ -584,7 +584,7 @@
     <value>Galvenās paroles norāde var palīdzēt atcerēties paroli, ja tā ir aizmirsta.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Galvenajai parolei ir jābūt vismaz {0} rakstzīmes garai.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Mazākais pieļaujamais ciparu skaits</value>
@@ -2575,5 +2575,8 @@ Vai pārslēgties uz šo kontu?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Noteikta vāja parole, un tā ir atrasta datu noplūdē. Jāizmanto spēcīga un neatkārtojama parole, lai aizsargātu savu kontu. Vai tiešām izmantot šo paroli?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Ir nepieciešams apvienības SSO identifikators.</value>
   </data>
 </root>

@@ -2575,4 +2575,7 @@ Kontu honetara aldatu nahi duzu?</value>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Pasahitz ahul hau datu-urraketa batean aurkitu da. Erabil ezazu beste inon erabili ez duzun pasahitz sendi bat zure kontua babesteko. Ziur zaude pasahitz hau erabili nahi duzula?</value>
   </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organization SSO identifier required.</value>
+  </data>
 </root>

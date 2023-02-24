@@ -2576,4 +2576,7 @@ Vil du skifte til denne konto?</value>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Svag adgangskode identificeret og fundet i datalæk. Brug en unik adgangskode til at beskytte din konto. Sikker på, at du vil bruge denne adgangskode?</value>
   </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organisations-SSO obligatorisk.</value>
+  </data>
 </root>

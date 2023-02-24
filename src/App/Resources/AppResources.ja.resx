@@ -584,7 +584,7 @@
     <value>マスターパスワードのヒントは、パスワードを忘れた場合に役立ちます。</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>マスターパスワードは、少なくとも{0}文字以上で設定してください。</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>数字の最小個数</value>
@@ -2574,6 +2574,9 @@
     <value>脆弱で流出済みのマスターパスワード</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>入力されたパスワードは脆弱かつすでに流出済みです。アカウントを守るためより強力で一意なパスワードを使用してください。本当にこの脆弱なパスワードを使用しますか？</value>
+    <value>入力されたパスワードは脆弱かつ流出済みです。アカウントを守るためより強力で一意なパスワードを使用してください。本当にこの脆弱なパスワードを使用しますか？</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>組織の SSO IDが必要です。</value>
   </data>
 </root>
