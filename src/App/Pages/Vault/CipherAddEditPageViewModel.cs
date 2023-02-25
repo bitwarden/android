@@ -526,7 +526,9 @@ namespace Bit.App.Pages
                     // if the app is tombstoned then PopModalAsync would throw index out of bounds
                     if (Page.Navigation?.ModalStack?.Count > 0)
                     {
-                        await Page.Navigation.PopModalAsync();
+                        var previousPage = Page.Navigation.NavigationStack.LastOrDefault();
+                        await Page.Navigation.PushAsync(new NavigationPage(new CipherDetailsPage(this.Cipher.Id)));
+                        Page.Navigation.RemovePage(previousPage);
                     }
                 }
                 return true;
