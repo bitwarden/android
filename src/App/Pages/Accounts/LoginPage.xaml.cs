@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Bit.App.Models;
 using Bit.App.Utilities;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
@@ -12,6 +13,7 @@ namespace Bit.App.Pages
 {
     public partial class LoginPage : BaseContentPage
     {
+        private readonly IBroadcasterService _broadcasterService;
         private readonly LoginPageViewModel _vm;
         private readonly AppOptions _appOptions;
 
@@ -23,6 +25,7 @@ namespace Bit.App.Pages
         {
             _appOptions = appOptions;
             InitializeComponent();
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _vm = BindingContext as LoginPageViewModel;
             _vm.Page = this;
             _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
@@ -70,6 +73,13 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            _broadcasterService.Subscribe(nameof(LoginPage), async (message) =>
+            {
+                if (message.Command == Constants.ClearSensitiveFields)
+                {
+                    Device.BeginInvokeOnMainThread(ResetPasswordField);
+                }
+            });
             _mainContent.Content = _mainLayout;
             _accountAvatar?.OnAppearing();
 
@@ -104,6 +114,20 @@ namespace Bit.App.Pages
             base.OnDisappearing();
 
             _accountAvatar?.OnDisappearing();
+            _broadcasterService.Unsubscribe(nameof(LoginPage));
+        }
+
+        private void ResetPasswordField()
+        {
+            try
+            {
+                _vm.MasterPassword = string.Empty;
+                _vm.ShowPassword = false;
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
         private async void LogIn_Clicked(object sender, EventArgs e)

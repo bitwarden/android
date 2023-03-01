@@ -32,6 +32,8 @@ namespace Bit.App.Pages
         private readonly WeakEventManager<int?> _secretEntryFocusWeakEventManager = new WeakEventManager<int?>();
 
         private string _email;
+        private string _masterPassword;
+        private string _pin;
         private bool _showPassword;
         private bool _pinLock;
         private bool _biometricLock;
@@ -68,6 +70,18 @@ namespace Bit.App.Pages
                 AllowAddAccountRow = true,
                 AllowActiveAccountSelection = true
             };
+        }
+
+        public string MasterPassword
+        {
+            get => _masterPassword;
+            set => SetProperty(ref _masterPassword, value);
+        }
+
+        public string Pin
+        {
+            get => _pin;
+            set => SetProperty(ref _pin, value);
         }
 
         public bool ShowPassword
@@ -134,8 +148,6 @@ namespace Bit.App.Pages
         public Command TogglePasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
-        public string MasterPassword { get; set; }
-        public string Pin { get; set; }
         public Action UnlockedAction { get; set; }
         public event Action<int?> FocusSecretEntry
         {
