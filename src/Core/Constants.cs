@@ -47,6 +47,7 @@
         /// </summary>
         public const string LastUserShouldConnectToWatchKey = "lastUserShouldConnectToWatch";
         public const string OtpAuthScheme = "otpauth";
+        public const string AppLocaleKey = "appLocale";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;
