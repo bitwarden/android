@@ -1808,6 +1808,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default (System).
+        /// </summary>
+        public static string DefaultSystem {
+            get {
+                return ResourceManager.GetString("DefaultSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Default URI match detection.
         /// </summary>
         public static string DefaultUriMatchDetection {
@@ -3370,6 +3379,33 @@ namespace Bit.App.Resources {
         public static string JustNow {
             get {
                 return ResourceManager.GetString("JustNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language change requires app restart.
+        /// </summary>
+        public static string LanguageChangeRequiresAppRestart {
+            get {
+                return ResourceManager.GetString("LanguageChangeRequiresAppRestart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The language has been changed to {0}. Please restart the app to see the change.
+        /// </summary>
+        public static string LanguageChangeXDescription {
+            get {
+                return ResourceManager.GetString("LanguageChangeXDescription", resourceCulture);
             }
         }
         

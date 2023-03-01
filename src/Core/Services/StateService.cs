@@ -14,8 +14,11 @@ namespace Bit.Core.Services
 {
     public class StateService : IStateService
     {
+        // TODO: Refactor this removing all storage services and use the IStorageMediatorService instead
+
         private readonly IStorageService _storageService;
         private readonly IStorageService _secureStorageService;
+        private readonly IStorageMediatorService _storageMediatorService;
         private readonly IMessagingService _messagingService;
 
         private State _state;
@@ -25,10 +28,12 @@ namespace Bit.Core.Services
 
         public StateService(IStorageService storageService,
                             IStorageService secureStorageService,
+                            IStorageMediatorService storageMediatorService,
                             IMessagingService messagingService)
         {
             _storageService = storageService;
             _secureStorageService = secureStorageService;
+            _storageMediatorService = storageMediatorService;
             _messagingService = messagingService;
         }
 
@@ -891,6 +896,16 @@ namespace Bit.Core.Services
             await SetValueAsync(Constants.AutoDarkThemeKey, value, await GetDefaultStorageOptionsAsync());
         }
 
+        public string GetLocale()
+        {
+            return _storageMediatorService.Get<string>(Constants.AppLocaleKey);
+        }
+
+        public void SetLocale(string locale)
+        {
+            _storageMediatorService.Save(Constants.AppLocaleKey, locale);
+        }
+
         public async Task<bool?> GetAddSitePromptShownAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
@@ -1222,11 +1237,13 @@ namespace Bit.Core.Services
 
         // Helpers
 
+        [Obsolete("Use IStorageMediatorService instead")]
         private async Task<T> GetValueAsync<T>(string key, StorageOptions options)
         {
             return await GetStorageService(options).GetAsync<T>(key);
         }
 
+        [Obsolete("Use IStorageMediatorService instead")]
         private async Task SetValueAsync<T>(string key, T value, StorageOptions options)
         {
             if (value == null)
@@ -1237,9 +1254,15 @@ namespace Bit.Core.Services
             await GetStorageService(options).SaveAsync(key, value);
         }
 
+        [Obsolete("Use IStorageMediatorService instead")]
         private IStorageService GetStorageService(StorageOptions options)
         {
             return options.UseSecureStorage.GetValueOrDefault(false) ? _secureStorageService : _storageService;
+        }
+
+        private async Task<string> ComposeKeyAsync(Func<string, string> userDependantKey, string userId = null)
+        {
+            return userDependantKey(userId ?? await GetActiveUserIdAsync());
         }
 
         private async Task<Account> GetAccountAsync(StorageOptions options)
@@ -1437,6 +1460,12 @@ namespace Bit.Core.Services
             return requestedOptions;
         }
 
+        /// <summary>
+        /// Gets the default options for storage.
+        /// If it's only used for composing the constant key with the user id
+        /// then use <see cref="ComposeKeyAsync(Func{string, string}, string)"/> instead
+        /// which saves time if the user id is already known
+        /// </summary>
         private async Task<StorageOptions> GetDefaultStorageOptionsAsync()
         {
             return new StorageOptions()

@@ -6,7 +6,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Bit.App.Services
 {
-    public class PreferencesStorageService : IStorageService
+    public class PreferencesStorageService : IStorageService, ISynchronousStorageService
     {
         public static string KeyFormat = "bwPreferencesStorage:{0}";
 
@@ -22,57 +22,72 @@ namespace Bit.App.Services
             _sharedName = sharedName;
         }
 
-        public Task<T> GetAsync<T>(string key)
+        public Task<T> GetAsync<T>(string key) => Task.FromResult(Get<T>(key));
+
+        public Task SaveAsync<T>(string key, T obj)
+        {
+            Save(key, obj);
+            return Task.CompletedTask;
+        }
+
+        public Task RemoveAsync(string key)
+        {
+            Remove(key);
+            return Task.CompletedTask;
+        }
+
+        public T Get<T>(string key)
         {
             var formattedKey = string.Format(KeyFormat, key);
             if (!Xamarin.Essentials.Preferences.ContainsKey(formattedKey, _sharedName))
             {
-                return Task.FromResult(default(T));
+                return default(T);
             }
 
             var objType = typeof(T);
             if (objType == typeof(string))
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(string), _sharedName);
-                return Task.FromResult((T)(object)val);
+                return (T)(object)val;
             }
             else if (objType == typeof(bool) || objType == typeof(bool?))
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(bool), _sharedName);
-                return Task.FromResult(ChangeType<T>(val));
+                return ChangeType<T>(val);
             }
             else if (objType == typeof(int) || objType == typeof(int?))
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(int), _sharedName);
-                return Task.FromResult(ChangeType<T>(val));
+                return ChangeType<T>(val);
             }
             else if (objType == typeof(long) || objType == typeof(long?))
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(long), _sharedName);
-                return Task.FromResult(ChangeType<T>(val));
+                return ChangeType<T>(val);
             }
             else if (objType == typeof(double) || objType == typeof(double?))
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(double), _sharedName);
-                return Task.FromResult(ChangeType<T>(val));
+                return ChangeType<T>(val);
             }
             else if (objType == typeof(DateTime) || objType == typeof(DateTime?))
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(DateTime), _sharedName);
-                return Task.FromResult(ChangeType<T>(val));
+                return ChangeType<T>(val);
             }
             else
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(string), _sharedName);
-                return Task.FromResult(JsonConvert.DeserializeObject<T>(val, _jsonSettings));
+                return JsonConvert.DeserializeObject<T>(val, _jsonSettings);
             }
         }
 
-        public Task SaveAsync<T>(string key, T obj)
+        public void Save<T>(string key, T obj)
         {
             if (obj == null)
             {
-                return RemoveAsync(key);
+                Remove(key);
+                return;
             }
 
             var formattedKey = string.Format(KeyFormat, key);
@@ -106,17 +121,15 @@ namespace Bit.App.Services
                 Xamarin.Essentials.Preferences.Set(formattedKey, JsonConvert.SerializeObject(obj, _jsonSettings),
                     _sharedName);
             }
-            return Task.FromResult(0);
         }
 
-        public Task RemoveAsync(string key)
+        public void Remove(string key)
         {
             var formattedKey = string.Format(KeyFormat, key);
             if (Xamarin.Essentials.Preferences.ContainsKey(formattedKey, _sharedName))
             {
                 Xamarin.Essentials.Preferences.Remove(formattedKey, _sharedName);
             }
-            return Task.FromResult(0);
         }
 
         private static T ChangeType<T>(object value)
