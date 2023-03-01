@@ -143,7 +143,8 @@ namespace Bit.Droid
             var secureStorageService = new SecureStorageService();
             var cryptoPrimitiveService = new CryptoPrimitiveService();
             var mobileStorageService = new MobileStorageService(preferencesStorage, liteDbStorage);
-            var stateService = new StateService(mobileStorageService, secureStorageService, messagingService);
+            var storageMediatorService = new StorageMediatorService(mobileStorageService, secureStorageService, preferencesStorage);
+            var stateService = new StateService(mobileStorageService, secureStorageService, storageMediatorService, messagingService);
             var stateMigrationService =
                 new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
             var clipboardService = new ClipboardService(stateService);
@@ -166,6 +167,7 @@ namespace Bit.Droid
             ServiceContainer.Register<ICryptoPrimitiveService>("cryptoPrimitiveService", cryptoPrimitiveService);
             ServiceContainer.Register<IStorageService>("storageService", mobileStorageService);
             ServiceContainer.Register<IStorageService>("secureStorageService", secureStorageService);
+            ServiceContainer.Register<IStorageMediatorService>(storageMediatorService);
             ServiceContainer.Register<IStateService>("stateService", stateService);
             ServiceContainer.Register<IStateMigrationService>("stateMigrationService", stateMigrationService);
             ServiceContainer.Register<IClipboardService>("clipboardService", clipboardService);
@@ -198,7 +200,7 @@ namespace Bit.Droid
 
         private void Bootstrap()
         {
-            var locale = ServiceContainer.Resolve<ISynchronousStorageService>().Get<string>(Bit.Core.Constants.AppLocaleKey);
+            var locale = ServiceContainer.Resolve<IStateService>().GetLocale();
             (ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService)
                 .Init(locale != null ? new System.Globalization.CultureInfo(locale) : null);
             ServiceContainer.Resolve<IAuthService>("authService").Init();

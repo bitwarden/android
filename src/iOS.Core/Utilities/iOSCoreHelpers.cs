@@ -102,7 +102,8 @@ namespace Bit.iOS.Core.Utilities
                 () => ServiceContainer.Resolve<IAppIdService>("appIdService").GetAppIdAsync());
             var cryptoPrimitiveService = new CryptoPrimitiveService();
             var mobileStorageService = new MobileStorageService(preferencesStorage, liteDbStorage);
-            var stateService = new StateService(mobileStorageService, secureStorageService, messagingService);
+            var storageMediatorService = new StorageMediatorService(mobileStorageService, secureStorageService, preferencesStorage);
+            var stateService = new StateService(mobileStorageService, secureStorageService, storageMediatorService, messagingService);
             var stateMigrationService =
                 new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
             var deviceActionService = new DeviceActionService();
@@ -123,6 +124,7 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Register<ICryptoPrimitiveService>("cryptoPrimitiveService", cryptoPrimitiveService);
             ServiceContainer.Register<IStorageService>("storageService", mobileStorageService);
             ServiceContainer.Register<IStorageService>("secureStorageService", secureStorageService);
+            ServiceContainer.Register<IStorageMediatorService>(storageMediatorService);
             ServiceContainer.Register<IStateService>("stateService", stateService);
             ServiceContainer.Register<IStateMigrationService>("stateMigrationService", stateMigrationService);
             ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
@@ -147,7 +149,7 @@ namespace Bit.iOS.Core.Utilities
 
         public static void Bootstrap(Func<Task> postBootstrapFunc = null)
         {
-            var locale = ServiceContainer.Resolve<ISynchronousStorageService>().Get<string>(Bit.Core.Constants.AppLocaleKey);
+            var locale = ServiceContainer.Resolve<IStateService>().GetLocale();
             (ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService)
                 .Init(locale != null ? new System.Globalization.CultureInfo(locale) : null);
             ServiceContainer.Resolve<IAuthService>("authService").Init();
