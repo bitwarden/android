@@ -26,6 +26,7 @@ namespace Bit.Core.Services
         private readonly IMessagingService _messagingService;
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly IPasswordGenerationService _passwordGenerationService;
+        private readonly IPolicyService _policyService;
         private readonly bool _setCryptoKeys;
 
         private readonly LazyResolve<IWatchDeviceService> _watchDeviceService = new LazyResolve<IWatchDeviceService>();
@@ -44,7 +45,7 @@ namespace Bit.Core.Services
             IVaultTimeoutService vaultTimeoutService,
             IKeyConnectorService keyConnectorService,
             IPasswordGenerationService passwordGenerationService,
-            bool setCryptoKeys = true)
+            IPolicyService policyService, bool setCryptoKeys = true)
         {
             _cryptoService = cryptoService;
             _cryptoFunctionService = cryptoFunctionService;
@@ -57,6 +58,7 @@ namespace Bit.Core.Services
             _messagingService = messagingService;
             _keyConnectorService = keyConnectorService;
             _passwordGenerationService = passwordGenerationService;
+            _policyService = policyService;
             _setCryptoKeys = setCryptoKeys;
 
             TwoFactorProviders = new Dictionary<TwoFactorProviderType, TwoFactorProvider>();
