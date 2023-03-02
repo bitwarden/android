@@ -57,7 +57,6 @@ jobs:
 
   android:
     name: Android
-    if: false
     runs-on: windows-2022
     needs: setup
     strategy:
@@ -299,7 +298,6 @@ jobs:
 
   f-droid:
     name: F-Droid Build
-    if: false
     runs-on: windows-2022
     steps:
       - name: Setup NuGet
