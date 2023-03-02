@@ -33,30 +33,30 @@ namespace Bit.Core.Services
             _synchronousStorageService.Remove(key);
         }
 
-        public Task<T> GetAsync<T>(string key, StorageMediatorOptions options = default)
+        public Task<T> GetAsync<T>(string key, bool useSecureStorage = false)
         {
-            return GetAsyncStorage(options).GetAsync<T>(key);
+            return GetAsyncStorage(useSecureStorage).GetAsync<T>(key);
         }
 
-        public async Task SaveAsync<T>(string key, T obj, StorageMediatorOptions options = default)
+        public async Task SaveAsync<T>(string key, T obj, bool useSecureStorage = false, bool allowSaveNull = false)
         {
-            if (obj is null && !options.AllowSaveNull)
+            if (obj is null && !allowSaveNull)
             {
-                await GetAsyncStorage(options).RemoveAsync(key);
+                await GetAsyncStorage(useSecureStorage).RemoveAsync(key);
                 return;
             }
 
-            await GetAsyncStorage(options).SaveAsync<T>(key, obj);
+            await GetAsyncStorage(useSecureStorage).SaveAsync<T>(key, obj);
         }
 
-        public Task RemoveAsync(string key, StorageMediatorOptions options = default)
+        public Task RemoveAsync(string key, bool useSecureStorage = false)
         {
-            return GetAsyncStorage(options).RemoveAsync(key);
+            return GetAsyncStorage(useSecureStorage).RemoveAsync(key);
         }
 
-        IStorageService GetAsyncStorage(StorageMediatorOptions options)
+        IStorageService GetAsyncStorage(bool useSecureStorage)
         {
-            return options.UseSecureStorage ? _secureStorageService : _storageService;
+            return useSecureStorage ? _secureStorageService : _storageService;
         }
     }
 }
