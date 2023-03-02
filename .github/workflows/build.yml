@@ -57,6 +57,7 @@ jobs:
 
   android:
     name: Android
+    if: false
     runs-on: windows-2022
     needs: setup
     strategy:
@@ -298,6 +299,7 @@ jobs:
 
   f-droid:
     name: F-Droid Build
+    if: false
     runs-on: windows-2022
     steps:
       - name: Setup NuGet
@@ -741,7 +743,7 @@ jobs:
 
       - name: Deploy to App Store
         if: |
-          (github.ref == 'refs/heads/master'
+          (github.ref == 'refs/heads/patch/update-ios-provision-profiles'
             && needs.setup.outputs.rc_branch_exists == 0
             && needs.setup.outputs.hotfix_branch_exists == 0)
           || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
