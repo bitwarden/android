@@ -741,7 +741,7 @@ jobs:
 
       - name: Deploy to App Store
         if: |
-          (github.ref == 'refs/heads/patch/update-ios-provision-profiles'
+          (github.ref == 'refs/heads/master'
             && needs.setup.outputs.rc_branch_exists == 0
             && needs.setup.outputs.hotfix_branch_exists == 0)
           || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
