@@ -7,13 +7,13 @@
     <key>provisioningProfiles</key>
     <dict>
         <key>com.8bit.bitwarden</key>
-        <string>Dist: Bitwarden 2021</string>
+        <string>Dist: Bitwarden</string>
         <key>com.8bit.bitwarden.autofill</key>
-        <string>Dist: Autofill 2021</string>
+        <string>Dist: Autofill</string>
         <key>com.8bit.bitwarden.find-login-action-extension</key>
-        <string>Dist: Extension 2021</string>
+        <string>Dist: Extension</string>
         <key>com.8bit.bitwarden.share-extension</key>
-        <string>Dist: Share Extension 2021</string>
+        <string>Dist: Share Extension</string>
         <key>com.8bit.bitwarden.watchkitapp</key>
         <string>Dist: Bitwarden Watch App</string>
         <key>com.8bit.bitwarden.watchkitapp.watchkitextension</key>
