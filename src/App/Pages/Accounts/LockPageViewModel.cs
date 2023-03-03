@@ -9,6 +9,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.Forms;
@@ -358,6 +359,20 @@ namespace Bit.App.Pages
             if (confirmed)
             {
                 _messagingService.Send("logout");
+            }
+        }
+
+        public void ResetPinPasswordFields()
+        {
+            try
+            {
+                MasterPassword = string.Empty;
+                Pin = string.Empty;
+                ShowPassword = false;
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
         }
 

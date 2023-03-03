@@ -5,7 +5,6 @@ using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
-using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -26,7 +25,7 @@ namespace Bit.App.Pages
             _appOptions = appOptions;
             _autoPromptBiometric = autoPromptBiometric;
             InitializeComponent();
-            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>();
             _vm = BindingContext as LockPageViewModel;
             _vm.Page = this;
             _vm.UnlockedAction = () => Device.BeginInvokeOnMainThread(async () => await UnlockedAsync());
@@ -69,11 +68,11 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            _broadcasterService.Subscribe(nameof(LockPage), async (message) =>
+            _broadcasterService.Subscribe(nameof(LockPage), message =>
             {
                 if (message.Command == Constants.ClearSensitiveFields)
                 {
-                    Device.BeginInvokeOnMainThread(ResetPinPasswordFields);
+                    Device.BeginInvokeOnMainThread(_vm.ResetPinPasswordFields);
                 }
             });
             if (_appeared)
@@ -111,20 +110,6 @@ namespace Bit.App.Pages
                         Device.BeginInvokeOnMainThread(async () => await _vm.PromptBiometricAsync());
                     });
                 }
-            }
-        }
-
-        private void ResetPinPasswordFields()
-        {
-            try
-            {
-                _vm.MasterPassword = string.Empty;
-                _vm.Pin = string.Empty;
-                _vm.ShowPassword = false;
-            }
-            catch (Exception ex)
-            {
-                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
         }
 

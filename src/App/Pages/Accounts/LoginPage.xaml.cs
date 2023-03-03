@@ -25,7 +25,7 @@ namespace Bit.App.Pages
         {
             _appOptions = appOptions;
             InitializeComponent();
-            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>();
             _vm = BindingContext as LoginPageViewModel;
             _vm.Page = this;
             _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
@@ -73,11 +73,11 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            _broadcasterService.Subscribe(nameof(LoginPage), async (message) =>
+            _broadcasterService.Subscribe(nameof(LoginPage), message =>
             {
                 if (message.Command == Constants.ClearSensitiveFields)
                 {
-                    Device.BeginInvokeOnMainThread(ResetPasswordField);
+                    Device.BeginInvokeOnMainThread(_vm.ResetPasswordField);
                 }
             });
             _mainContent.Content = _mainLayout;
@@ -115,19 +115,6 @@ namespace Bit.App.Pages
 
             _accountAvatar?.OnDisappearing();
             _broadcasterService.Unsubscribe(nameof(LoginPage));
-        }
-
-        private void ResetPasswordField()
-        {
-            try
-            {
-                _vm.MasterPassword = string.Empty;
-                _vm.ShowPassword = false;
-            }
-            catch (Exception ex)
-            {
-                LoggerHelper.LogEvenIfCantBeResolved(ex);
-            }
         }
 
         private async void LogIn_Clicked(object sender, EventArgs e)
