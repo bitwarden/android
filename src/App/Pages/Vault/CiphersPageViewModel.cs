@@ -156,6 +156,12 @@ namespace Bit.App.Pages
                 selection = await Page.DisplayActionSheet(AppResources.AutofillOrView, AppResources.Cancel, null,
                     options.ToArray());
             }
+            
+            if (cipher.Reprompt != CipherRepromptType.None && !await _passwordRepromptService.ShowPasswordPromptAsync())
+            {
+                return;
+            }
+            
             if (selection == AppResources.View || string.IsNullOrWhiteSpace(AutofillUrl))
             {
                 var page = new CipherDetailsPage(cipher.Id);
