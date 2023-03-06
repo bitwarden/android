@@ -337,8 +337,7 @@ namespace Bit.Droid.Autofill
         
         private bool FieldIsUsername(Field f)
         {
-            return f.InputType.HasFlag(InputTypes.TextVariationEmailAddress) ||
-                f.InputType.HasFlag(InputTypes.TextVariationWebEmailAddress) || FieldHasUsernameTerms(f);
+            return f.InputType.HasFlag(InputTypes.TextVariationWebEmailAddress) || FieldHasUsernameTerms(f);
         }
 
         private bool FieldHasUsernameTerms(Field f)
