@@ -2541,6 +2541,18 @@ Haluatko vaihtaa tähän tiliin?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Myönnä kameran käyttöoikeus skannerin käyttämiseksi</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Kieli</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Kieleksi vaihdettiin {0}. Käynnistä sovellus uudelleen nähdäksesi muutoksen.</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Kielen vaihto edellyttää sovelluksen uudelleenkäynnistyksen</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Oletus (järjestelmä)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Tärkeää</value>
   </data>

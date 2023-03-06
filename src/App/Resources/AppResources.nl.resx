@@ -2540,6 +2540,18 @@ Wilt u naar dit account wisselen?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Camera-toestemming inschakelen om de scanner te gebruiken</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Taal</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>De taal is veranderd in {0}. Herstart de app om de verandering te zien</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Taalverandering vereist herstarten</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Standaard (Systeem)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Belangrijk</value>
   </data>

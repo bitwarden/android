@@ -2080,7 +2080,7 @@
     <value>Подтверждение мастер-пароля</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>Это действие защищено. Для продолжения введите свой мастер-пароль, чтобы подтвердить свою личность.</value>
+    <value>Это действие защищено. Чтобы продолжить, введите ваш мастер-пароль для подтверждения личности.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
     <value>Требуется капча</value>
@@ -2539,6 +2539,18 @@
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Для использования сканера необходимо предоставить разрешение на доступ к камере</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Язык был изменен на {0}. Перезапустите приложение, чтобы увидеть изменения</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Для смены языка требуется перезапуск приложения</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>По умолчанию (системный)</value>
   </data>
   <data name="Important" xml:space="preserve">
     <value>Важно</value>

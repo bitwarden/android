@@ -9,8 +9,8 @@ namespace Bit.Core.Abstractions
         void Save<T>(string key, T obj);
         void Remove(string key);
 
-        Task<T> GetAsync<T>(string key, StorageMediatorOptions options = default);
-        Task SaveAsync<T>(string key, T obj, StorageMediatorOptions options = default);
-        Task RemoveAsync(string key, StorageMediatorOptions options = default);
+        Task<T> GetAsync<T>(string key, bool useSecureStorage = false);
+        Task SaveAsync<T>(string key, T obj, bool useSecureStorage = false, bool allowSaveNull = false);
+        Task RemoveAsync(string key, bool useSecureStorage = false);
     }
 }

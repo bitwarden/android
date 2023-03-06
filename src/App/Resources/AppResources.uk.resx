@@ -2540,6 +2540,18 @@
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Увімкніть доступ до камери для використання сканера</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Мова</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Мову змінено на {0}. Для застосування змін перезапустіть програму</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Для зміни мови потрібно перезапустити програму</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Типова (Система)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Важливо</value>
   </data>

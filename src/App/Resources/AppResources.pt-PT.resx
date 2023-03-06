@@ -2540,6 +2540,18 @@ Deseja mudar para esta conta?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Ative a permissão da câmara para usar o digitalizador</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>O idioma foi alterado para {0}. Por favor, reinicie a aplicação para ver a alteração</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>A alteração do idioma requer o reinício da aplicação</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Predefinido (Sistema)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Important</value>
   </data>
