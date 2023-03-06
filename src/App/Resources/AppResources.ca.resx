@@ -2540,6 +2540,18 @@ Voleu canviar a aquest compte?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Habilita el permís de la càmera per utilitzar l'escàner</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>L'idioma s'ha canviat a {0}. Reinicieu l'aplicació per veure el canvi</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>El canvi d'idioma requereix un reinici de l'aplicació</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Per defecte (Sistema)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Important</value>
   </data>

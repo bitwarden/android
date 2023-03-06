@@ -2540,6 +2540,18 @@
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>スキャナを使用できるようカメラ権限を許可する</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>言語 (Language)</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>言語を {0} に変更しました。変更を反映するにはアプリを再起動してください。</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>言語の変更にはアプリの再起動が必要です</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>デフォルト (システム)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>重要</value>
   </data>

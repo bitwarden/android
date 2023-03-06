@@ -2540,6 +2540,18 @@ Soovid selle konto peale lülituda?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Kaamera kasutamiseks luba ligipääs kaamerale</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Keel</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Rakenduse keel muudeti {0}-ks. Muudatuste rakendamiseks taaskäivita Bitwarden</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Keele muutmiseks on vajalik rakenduse taaskäivitamine</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Vaikeväärtus (süsteem)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Tähtis</value>
   </data>

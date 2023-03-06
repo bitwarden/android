@@ -2539,6 +2539,18 @@ Szeretnénk átváltani erre a fiókra?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Kamera engedélyezése a lapolvasó használatához</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Nyelv</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>A nyelv a {0} nyelvre módosult. A változás megtekintéséhez indítsuk újra az alkalmazást.</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>A nyelvváltáshoz újra kell indítani az alkalmazást.</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Alapértelmezett (rendszer)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Fontos</value>
   </data>

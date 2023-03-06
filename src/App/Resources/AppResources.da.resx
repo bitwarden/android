@@ -2540,6 +2540,18 @@ Vil du skifte til denne konto?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Tildel kameratilladelse for brug af skanneren</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Sprog</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Sproget er blevet ændret til {0}. Genstart appen for at se ændringen</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Skift af sprog kræver app-genstart</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Standard (system)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Vigtigt</value>
   </data>
