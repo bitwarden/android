@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Lists.ItemViewModels.CustomFields;
 using Bit.App.Models;
 using Bit.App.Resources;
@@ -30,6 +31,7 @@ namespace Bit.App.Pages
         private readonly IClipboardService _clipboardService;
         private readonly IAutofillHandler _autofillHandler;
         private readonly IWatchDeviceService _watchDeviceService;
+        private readonly IAccountsManager _accountsManager;
 
         private bool _showNotesSeparator;
         private bool _showPassword;
@@ -84,6 +86,8 @@ namespace Bit.App.Pages
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
             _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
             _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
+            _accountsManager = ServiceContainer.Resolve<IAccountsManager>();
+            
 
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
@@ -534,7 +538,7 @@ namespace Bit.App.Pages
                 }
                 else if (_fromOtp)
                 {
-                    _messagingService.Send(App.POP_ALL_AND_GO_TO_TAB_MYVAULT_MESSAGE);
+                    await _accountsManager.StartDefaultNavigationFlowAsync(op => op.OtpData = null);
                 }
                 else
                 {

@@ -114,6 +114,11 @@ namespace Bit.App
                         message.Command == POP_ALL_AND_GO_TO_AUTOFILL_CIPHERS_MESSAGE ||
                         message.Command == DeepLinkContext.NEW_OTP_MESSAGE)
                     {
+                        if (message.Command == DeepLinkContext.NEW_OTP_MESSAGE)
+                        {
+                            Options.OtpData = new OtpData((string)message.Data);
+                        }
+
                         await Device.InvokeOnMainThreadAsync(async () =>
                         {
                             if (Current.MainPage is TabsPage tabsPage)
@@ -124,7 +129,7 @@ namespace Bit.App
                                 }
                                 if (message.Command == POP_ALL_AND_GO_TO_AUTOFILL_CIPHERS_MESSAGE)
                                 {
-                                    Current.MainPage = new NavigationPage(new AutofillCiphersPage(Options));
+                                    Current.MainPage = new NavigationPage(new CipherSelectionPage(Options));
                                 }
                                 else if (message.Command == POP_ALL_AND_GO_TO_TAB_MYVAULT_MESSAGE)
                                 {
@@ -142,9 +147,8 @@ namespace Bit.App
                                 }
                                 else if (message.Command == DeepLinkContext.NEW_OTP_MESSAGE)
                                 {
-                                    Options.OtpData = new OtpData((string)message.Data);
                                     tabsPage.ResetToVaultPage();
-                                    await tabsPage.Navigation.PushModalAsync(new NavigationPage(new AutofillCiphersPage(Options)));
+                                    await tabsPage.Navigation.PushModalAsync(new NavigationPage(new CipherSelectionPage(Options)));
                                 }
                             }
                         });
@@ -497,7 +501,7 @@ namespace Bit.App
                     break;
                 case NavigationTarget.AutofillCiphers:
                 case NavigationTarget.OtpCipherSelection:
-                    Current.MainPage = new NavigationPage(new AutofillCiphersPage(Options));
+                    Current.MainPage = new NavigationPage(new CipherSelectionPage(Options));
                     break;
                 case NavigationTarget.SendAddEdit:
                     Current.MainPage = new NavigationPage(new SendAddEditPage(Options));

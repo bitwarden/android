@@ -434,7 +434,7 @@ namespace Bit.App.Utilities
                     ||
                     appOptions.OtpData != null)
                 {
-                    Application.Current.MainPage = new NavigationPage(new AutofillCiphersPage(appOptions));
+                    Application.Current.MainPage = new NavigationPage(new CipherSelectionPage(appOptions));
                     return true;
                 }
                 if (appOptions.CreateSend != null)

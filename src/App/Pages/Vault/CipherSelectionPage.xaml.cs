@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
@@ -10,16 +11,17 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public partial class AutofillCiphersPage : BaseContentPage
+    public partial class CipherSelectionPage : BaseContentPage
     {
         private readonly AppOptions _appOptions;
         private readonly IBroadcasterService _broadcasterService;
         private readonly ISyncService _syncService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
+        private readonly IAccountsManager _accountsManager;
 
         private readonly CipherSelectionPageViewModel _vm;
 
-        public AutofillCiphersPage(AppOptions appOptions)
+        public CipherSelectionPage(AppOptions appOptions)
         {
             _appOptions = appOptions;
 
@@ -41,6 +43,7 @@ namespace Bit.App.Pages
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+            _accountsManager = ServiceContainer.Resolve<IAccountsManager>();
         }
 
         protected async override void OnAppearing()
@@ -59,14 +62,16 @@ namespace Bit.App.Pages
                 return;
             }
 
-            await Device.InvokeOnMainThreadAsync(async () =>
+            // TODO: There's currently an issue on iOS where the toolbar item is not getting updated
+            // as the others somehow. Removing this so at least we get the circle with ".." instead
+            // of a white circle
+            if (Device.RuntimePlatform != Device.iOS)
             {
                 _accountAvatar?.OnAppearing();
                 _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
-            });
+            }
 
-
-            _broadcasterService.Subscribe(nameof(AutofillCiphersPage), async (message) =>
+            _broadcasterService.Subscribe(nameof(CipherSelectionPage), async (message) =>
             {
                 try
                 {
@@ -164,7 +169,7 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                Navigation.PopModalAsync().FireAndForget();
+                _accountsManager.StartDefaultNavigationFlowAsync(op => op.OtpData = null).FireAndForget();
             }
         }
     }

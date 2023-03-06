@@ -7,7 +7,6 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities.AccountManagement
@@ -56,6 +55,13 @@ namespace Bit.App.Utilities.AccountManagement
             _accountsManagerHost = accountsManagerHost;
 
             _broadcasterService.Subscribe(nameof(AccountsManager), OnMessage);
+        }
+
+        public async Task StartDefaultNavigationFlowAsync(Action<AppOptions> appOptionsAction)
+        {
+            appOptionsAction(Options);
+
+            await NavigateOnAccountChangeAsync();
         }
 
         public async Task NavigateOnAccountChangeAsync(bool? isAuthed = null)

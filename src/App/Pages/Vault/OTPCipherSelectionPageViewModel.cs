@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
-using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -64,28 +63,6 @@ namespace Bit.App.Pages
             var editCipherPage = new CipherAddEditPage(cipher.Id, appOptions: _appOptions);
             await Page.Navigation.PushModalAsync(new NavigationPage(editCipherPage));
             return;
-            // Move to details
-
-            cipher.Login.Totp = _otpData.Uri;
-            try
-            {
-                await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
-                await _cipherService.SaveWithServerAsync(await _cipherService.EncryptAsync(cipher));
-                await _deviceActionService.HideLoadingAsync();
-
-                _platformUtilsService.ShowToast(null, AppResources.AuthenticatorKey, AppResources.AuthenticatorKeyAdded);
-
-                _messagingService.Send(App.POP_ALL_AND_GO_TO_TAB_MYVAULT_MESSAGE);
-            }
-            catch (ApiException e)
-            {
-                await _deviceActionService.HideLoadingAsync();
-                if (e?.Error != null)
-                {
-                    await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
-                        AppResources.AnErrorHasOccurred);
-                }
-            }
         }
     }
 }
