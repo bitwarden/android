@@ -135,8 +135,8 @@ namespace Bit.App.Pages
                 {
                     if (groupedItems.Any())
                     {
-                            GroupedItems.ReplaceRange(new List<IGroupingsPageListItem> { new GroupingsPageHeaderListItem(groupedItems[0].Name, groupedItems[0].ItemCount) });
-                            GroupedItems.AddRange(items);
+                        GroupedItems.ReplaceRange(new List<IGroupingsPageListItem> { new GroupingsPageHeaderListItem(groupedItems[0].Name, groupedItems[0].ItemCount) });
+                        GroupedItems.AddRange(items);
                     }
                     else
                     {

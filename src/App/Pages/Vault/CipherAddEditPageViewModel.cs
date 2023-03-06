@@ -87,7 +87,7 @@ namespace Bit.App.Pages
             _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
             _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
             _accountsManager = ServiceContainer.Resolve<IAccountsManager>();
-            
+
 
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
