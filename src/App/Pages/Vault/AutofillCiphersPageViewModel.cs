@@ -11,6 +11,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
@@ -24,10 +25,12 @@ namespace Bit.App.Pages
         private readonly IAutofillHandler _autofillHandler;
         private readonly ICipherService _cipherService;
         private readonly IStateService _stateService;
+        private readonly ISyncService _syncService;
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly IMessagingService _messagingService;
         private readonly ILogger _logger;
 
+        private bool _refreshing;
         private bool _showNoData;
         private bool _showList;
         private string _noDataText;
@@ -42,10 +45,12 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             GroupedItems = new ObservableRangeCollection<IGroupingsPageListItem>();
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
+            RefreshCommand = new Command(RefreshAsync);
 
             AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
@@ -56,9 +61,16 @@ namespace Bit.App.Pages
         public string Name { get; set; }
         public string Uri { get; set; }
         public Command CipherOptionsCommand { get; set; }
+        public Command RefreshCommand { get; set; }
         public bool LoadedOnce { get; set; }
         public ObservableRangeCollection<IGroupingsPageListItem> GroupedItems { get; set; }
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
+
+        public bool Refreshing
+        {
+            get => _refreshing;
+            set => SetProperty(ref _refreshing, value);
+        }
 
         public bool ShowNoData
         {
@@ -244,6 +256,20 @@ namespace Bit.App.Pages
             if ((Page as BaseContentPage).DoOnce())
             {
                 await AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService);
+            }
+        }
+
+        public async void RefreshAsync()
+        {
+            Refreshing = true;
+            try
+            {
+                await Task.Delay(500);
+                await _syncService.FullSyncAsync(false);
+            }
+            finally
+            {
+                Refreshing = false;
             }
         }
     }

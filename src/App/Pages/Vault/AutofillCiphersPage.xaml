@@ -78,15 +78,19 @@
                         Clicked="AddButton_Clicked"></Button>
                 </StackLayout>
 
-                <controls:ExtendedCollectionView
+                <RefreshView
                     IsVisible="{Binding ShowList}"
-                    ItemsSource="{Binding GroupedItems}"
-                    VerticalOptions="FillAndExpand"
-                    ItemTemplate="{StaticResource listItemDataTemplateSelector}"
-                    SelectionMode="Single"
-                    SelectionChanged="RowSelected"
-                    StyleClass="list, list-platform"
-                    ExtraDataForLogging="Autofill Ciphers Page" />
+                    IsRefreshing="{Binding Refreshing}"
+                    Command="{Binding BindingContext.RefreshCommand, Source={x:Reference _page}}">
+                    <controls:ExtendedCollectionView
+                        ItemsSource="{Binding GroupedItems}"
+                        VerticalOptions="FillAndExpand"
+                        ItemTemplate="{StaticResource listItemDataTemplateSelector}"
+                        SelectionMode="Single"
+                        SelectionChanged="RowSelected"
+                        StyleClass="list, list-platform"
+                        ExtraDataForLogging="Autofill Ciphers Page" />
+                </RefreshView>
             </StackLayout>
         </ResourceDictionary>
     </ContentPage.Resources>
