@@ -60,6 +60,23 @@ namespace Bit.Core.Utilities
             return null;
         }
 
+        public static string GetOrigin(string uriString)
+        {
+            var uri = GetUri(uriString);
+            if (!string.IsNullOrEmpty(uri?.Scheme) && !string.IsNullOrEmpty(uri?.Host))
+            {
+                if (uri.IsDefaultPort)
+                {
+                    return string.Format("{0}://{1}", uri.Scheme, uri.Host);
+                }
+                else
+                {
+                    return string.Format("{0}://{1}:{2}", uri.Scheme, uri.Host, uri.Port);
+                }
+            }
+            return null;
+        }
+
         public static string GetDomain(string uriString)
         {
             var uri = GetUri(uriString);

@@ -410,6 +410,14 @@ namespace Bit.Core.Services
                                 AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
                             }
                             break;
+                        case UriMatchType.Origin:
+                            var urlOrigin = CoreHelpers.GetOrigin(url);
+                            match = urlOrigin != null && urlOrigin == CoreHelpers.GetOrigin(u.Uri);
+                            if (match)
+                            {
+                                AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                            }
+                            break;
                         case UriMatchType.Exact:
                             match = url == u.Uri;
                             if (match)

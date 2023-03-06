@@ -62,6 +62,7 @@ namespace Bit.App.Pages
                 new KeyValuePair<UriMatchType?, string>(null, AppResources.Default),
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Domain, AppResources.BaseDomain),
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Host, AppResources.Host),
+                new KeyValuePair<UriMatchType?, string>(UriMatchType.Origin, AppResources.Origin),
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.StartsWith, AppResources.StartsWith),
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.RegularExpression, AppResources.RegEx),
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Exact, AppResources.Exact),

@@ -3093,7 +3093,16 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("Host", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Origin.
+        /// </summary>
+        public static string Origin {
+            get {
+                return ResourceManager.GetString("Origin", resourceCulture);
+            }
+        }
+                
         /// <summary>
         ///   Looks up a localized string similar to Icons.
         /// </summary>
