@@ -584,7 +584,7 @@
     <value>Un suggerimento per la password principale può aiutarti a ricordarla nel caso la dimenticassi.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>La password principale deve essere lunga almeno {0} caratteri.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimo numeri</value>
@@ -2540,6 +2540,18 @@ Vuoi passare a questo account?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Abilita i permessi della fotocamera per usare lo scanner</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Language change requires app restart</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Default (System)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Importante</value>
   </data>
@@ -2577,6 +2589,6 @@ Vuoi passare a questo account?</value>
     <value>Password debole trovata in un database di data breach noto. Usa una password forte ed esclusiva per proteggere il tuo account. Sei sicuro di voler utilizzare questa password?</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
-    <value>Organization SSO identifier required.</value>
+    <value>L'identificatore SSO dell'organizzazione è necessario.</value>
   </data>
 </root>

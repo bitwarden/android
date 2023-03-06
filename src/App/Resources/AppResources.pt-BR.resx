@@ -2541,6 +2541,18 @@ Você deseja mudar para esta conta?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Conceda permissão de uso da câmera para usar o scanner</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>O idioma foi alterado para {0}. Por favor, reinicie o aplicativo para ver a alteração</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Mudança de idioma requer a reinicialização do aplicativo</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Padrão (Sistema)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Importante</value>
   </data>

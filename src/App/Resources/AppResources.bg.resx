@@ -2540,6 +2540,18 @@ select Add TOTP to store the key safely</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Разрешете достъпа до камерата, за да използвате скенера</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Език</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Езикът беше променен на {0}. Рестартирайте приложението, за да влезе промяната в сила</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Промяната на езика изисква рестартиране на приложението</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>По подразбиране (от системата)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Важно</value>
   </data>
