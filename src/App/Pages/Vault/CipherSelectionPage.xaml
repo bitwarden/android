@@ -11,12 +11,6 @@
              Title="{Binding PageTitle}"
              x:Name="_page">
     <ContentPage.ToolbarItems>
-        <ToolbarItem
-            x:Name="_closeItem"
-            Text="{u:I18n Close}"
-            Clicked="CloseItem_Clicked"
-            Order="Primary"
-            Priority="-1" />
         <controls:ExtendedToolbarItem
             x:Name="_accountAvatar"
             IconImageSource="{Binding AvatarImageSource}"
@@ -35,6 +29,14 @@
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
             <controls:SelectionChangedEventArgsConverter x:Key="SelectionChangedEventArgsConverter" />
+                        
+            <ToolbarItem
+                x:Name="_closeItem"
+                x:Key="_closeItem"
+                Text="{u:I18n Close}"
+                Clicked="CloseItem_Clicked"
+                Order="Primary"
+                Priority="-1" />
 
             <DataTemplate x:Key="cipherTemplate"
                           x:DataType="pages:GroupingsPageListItem">
@@ -80,6 +82,19 @@
                         Text="{u:I18n AddAnItem}"
                         Clicked="AddButton_Clicked"></Button>
                 </StackLayout>
+
+                <Frame
+                    IsVisible="{Binding ShowCallout}"
+                    Padding="10"
+                    Margin="20, 10"
+                    HasShadow="False"
+                    BackgroundColor="Transparent"
+                    BorderColor="{DynamicResource PrimaryColor}">
+                    <Label
+                        Text="{u:I18n AddTheKeyToAnExistingOrNewItem}"
+                        StyleClass="text-muted, text-sm, text-bold"
+                        HorizontalTextAlignment="Center" />
+                </Frame>
 
                 <controls:ExtendedCollectionView
                     IsVisible="{Binding ShowList}"

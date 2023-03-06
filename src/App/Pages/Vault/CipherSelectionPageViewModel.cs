@@ -82,11 +82,14 @@ namespace Bit.App.Pages
             get => _noDataText;
             set => SetProperty(ref _noDataText, value);
         }
+
         public bool WebsiteIconsEnabled
         {
             get => _websiteIconsEnabled;
             set => SetProperty(ref _websiteIconsEnabled, value);
         }
+
+        public virtual bool ShowCallout => false;
 
         public abstract void Init(Models.AppOptions options);
 

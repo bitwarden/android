@@ -35,6 +35,12 @@ namespace Bit.App.Pages
             }
 
             InitializeComponent();
+
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                ToolbarItems.Add(_closeItem);
+            }
+
             SetActivityIndicator(_mainContent);
             _vm = BindingContext as CipherSelectionPageViewModel;
             _vm.Page = this;

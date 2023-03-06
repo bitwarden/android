@@ -16,6 +16,8 @@ namespace Bit.App.Pages
         private OtpData _otpData;
         private Models.AppOptions _appOptions;
 
+        public override bool ShowCallout => true;
+
         public override void Init(Models.AppOptions options)
         {
             _appOptions = options;
