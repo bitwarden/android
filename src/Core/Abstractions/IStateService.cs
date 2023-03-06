@@ -6,6 +6,7 @@ using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Response;
 using Bit.Core.Models.View;
+using Bit.Core.Services;
 
 namespace Bit.Core.Abstractions
 {
@@ -163,7 +164,9 @@ namespace Bit.Core.Abstractions
         Task<bool> GetLastUserShouldConnectToWatchAsync();
         Task SetAvatarColorAsync(string value, string userId = null);
         Task<string> GetAvatarColorAsync(string userId = null);
-
-
+        Task<string> GetPreLoginEmailAsync();
+        Task SetPreLoginEmailAsync(string value);
+        string GetLocale();
+        void SetLocale(string locale);
     }
 }

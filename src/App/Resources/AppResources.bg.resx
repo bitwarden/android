@@ -584,7 +584,7 @@
     <value>Подсказката помага да си спомните паролата, ако сте я забравили.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Главната парола трябва да е дълга поне {0} знака.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Минимален брой цифри</value>
@@ -2540,6 +2540,18 @@ select Add TOTP to store the key safely</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Разрешете достъпа до камерата, за да използвате скенера</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Език</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Езикът беше променен на {0}. Рестартирайте приложението, за да влезе промяната в сила</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Промяната на езика изисква рестартиране на приложението</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>По подразбиране (от системата)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Важно</value>
   </data>
@@ -2575,5 +2587,8 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Идентификаторът за еднократн идентификация на организация е задължителен.</value>
   </data>
 </root>

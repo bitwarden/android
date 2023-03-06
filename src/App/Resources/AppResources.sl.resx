@@ -486,7 +486,7 @@
     <value>Omogoči razširitev aplikacije</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>In Safari, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
+    <value>V brskalnikih Safari in Chrome poiščite Bitwarden z uporabo ikone za skupno rabo (namig: pomaknite se na desno v zadnji vrstici menija za skupno rabo).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -919,7 +919,7 @@ Scanning will happen automatically.</value>
     <value>If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
-    <value>Copy TOTP automatically</value>
+    <value>Samodejno kopiraj TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Premium članstvo je potrebno za uporabo te funkcije.</value>
@@ -1390,7 +1390,7 @@ Scanning will happen automatically.</value>
     <value>Search text Sends</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
-    <value>Search {0}</value>
+    <value>Išči {0}</value>
     <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
@@ -1483,7 +1483,7 @@ Scanning will happen automatically.</value>
     <value>Odkleni</value>
   </data>
   <data name="UnlockVault" xml:space="preserve">
-    <value>Unlock vault</value>
+    <value>Odkleni trezor</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minut</value>
@@ -1553,7 +1553,7 @@ Scanning will happen automatically.</value>
     <value>Privzeto (sistemsko)</value>
   </data>
   <data name="DefaultDarkTheme" xml:space="preserve">
-    <value>Default dark theme</value>
+    <value>Privzeta temna tema</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
     <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is in use.</value>
@@ -1820,10 +1820,10 @@ Scanning will happen automatically.</value>
     <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>Pogoji uporabe</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Politika zasebnosti</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
     <value>Bitwarden needs attention - Turn on "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
@@ -2541,6 +2541,18 @@ Do you want to switch to this account?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Enable camera permission to use the scanner</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Language change requires app restart</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Default (System)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Important</value>
   </data>
@@ -2576,5 +2588,8 @@ Do you want to switch to this account?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organization SSO identifier required.</value>
   </data>
 </root>

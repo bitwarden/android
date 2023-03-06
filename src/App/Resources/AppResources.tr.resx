@@ -2539,6 +2539,18 @@ Bu hesaba geçmek ister misiniz?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Tarayıcıyı kullanmak için kameraya erişim izni verin</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Dil {0} olarak değiştirildi. Değişikliği görmek için uygulamayı yeniden başlatın</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Dil değişikliği için uygulamanın yeniden başlatılması gerekiyor</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Varsayılan (sistem)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Önemli</value>
   </data>
@@ -2574,5 +2586,8 @@ Bu hesaba geçmek ister misiniz?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Hem zayıf hem de veri ihlalinde yer alan bir tespit edildi. Hesabınızı korumak için güçlü bir parola seçin ve o parolayı başka yerlerde kullanmayın. Bu parolayı kullanmak istediğinizden emin misiniz?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Kuruluş SSO tanımlayıcısı gereklidir.</value>
   </data>
 </root>

@@ -2524,22 +2524,34 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Esta solicitud ya no es válida</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Pending login requests</value>
+    <value>Solicitudes de acceso pendientes</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
-    <value>Decline all requests</value>
+    <value>Rechazar todas las solicitudes</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>Are you sure you want to decline all pending login requests?</value>
+    <value>¿Está seguro de que desea rechazar todas las solicitudes de inicio de sesión pendientes?</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
-    <value>Requests declined</value>
+    <value>Solicitudes rechazadas</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>No pending requests</value>  
+    <value>No hay solicitudes pendientes</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Habilitar el permiso de la cámara para usar el escáner</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>El idioma se ha cambiado a {0}. Por favor, reinicia la aplicación para aplicar los cambios</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>El cambio de idioma requiere reiniciar la aplicación</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Por defecto (Sistema)</value>
   </data>
   <data name="Important" xml:space="preserve">
     <value>Importante</value>
@@ -2576,5 +2588,8 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Contraseña débil encontrada en una violación de datos. Utilice una contraseña única para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña comprometida?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Se requiere un inicio de sesión único de la organización.</value>
   </data>
 </root>

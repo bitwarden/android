@@ -584,7 +584,7 @@
     <value>主密码提示可以在你忘记密码时帮你回忆起来。</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>主密码至少需要 {0} 个字符。</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>数字最少个数</value>
@@ -2540,6 +2540,18 @@
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>启用相机权限以使用扫描器</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>语言已更改为 {0}。请重新启动 app 以查看更改</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>更改语言需要重新启动 app</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>默认（系统）</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>重要事项：</value>
   </data>
@@ -2575,5 +2587,8 @@
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>必须填写组织 SSO 标识符。</value>
   </data>
 </root>

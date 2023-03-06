@@ -1808,6 +1808,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default (System).
+        /// </summary>
+        public static string DefaultSystem {
+            get {
+                return ResourceManager.GetString("DefaultSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Default URI match detection.
         /// </summary>
         public static string DefaultUriMatchDetection {
@@ -3374,6 +3383,33 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language change requires app restart.
+        /// </summary>
+        public static string LanguageChangeRequiresAppRestart {
+            get {
+                return ResourceManager.GetString("LanguageChangeRequiresAppRestart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The language has been changed to {0}. Please restart the app to see the change.
+        /// </summary>
+        public static string LanguageChangeXDescription {
+            get {
+                return ResourceManager.GetString("LanguageChangeXDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last name.
         /// </summary>
         public static string LastName {
@@ -4561,6 +4597,15 @@ namespace Bit.App.Resources {
         public static string Organization {
             get {
                 return ResourceManager.GetString("Organization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organization SSO identifier required..
+        /// </summary>
+        public static string OrganizationSsoIdentifierRequired {
+            get {
+                return ResourceManager.GetString("OrganizationSsoIdentifierRequired", resourceCulture);
             }
         }
         

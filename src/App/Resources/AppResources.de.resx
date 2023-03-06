@@ -156,7 +156,7 @@
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Nutzernamen kopieren</value>
+    <value>Benutzernamen kopieren</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -229,7 +229,7 @@
     <value>Ordner</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Ordner aktualisiert</value>
+    <value>Ordner gespeichert</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Webseite besuchen</value>
@@ -285,10 +285,10 @@
     <value>Konto bereits hinzugefügt</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value>Möchtest du jetzt darauf umschalten?</value>
+    <value>Möchtest du jetzt dazu wechseln?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
-    <value>Masterpasswort</value>
+    <value>Master-Passwort</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
@@ -375,14 +375,14 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} wurde kopiert</value>
+    <value>{0} kopiert</value>
     <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Fingerabdruck überprüfen</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Masterpasswort überprüfen</value>
+    <value>Master-Passwort überprüfen</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>PIN überprüfen</value>
@@ -394,7 +394,7 @@
     <value>Ansicht</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Besuchen Sie unsere Website</value>
+    <value>Besuche unsere Webseite</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
     <value>Besuche unsere Webseite um Hilfe zu erhalten, Neuigkeiten zu erfahren, Kontakt aufzunehmen und mehr über die Verwendung von Bitwarden zu lernen.</value>
@@ -422,7 +422,7 @@
     <value>Verwende den Bitwarden Dienst in den Bedienungshilfen, um deine Zugangsdaten in Apps und im Web automatisch ausfüllen zu lassen.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Auto-Ausfüllen Funktion</value>
+    <value>Automatische Ausfüllfunktion</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Mehrdeutige Zeichen vermeiden</value>
@@ -431,7 +431,7 @@
     <value>Bitwarden App-Erweiterung</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>Die einfachste Möglichkeit, neue Anmeldedaten zu Ihrem Tresor hinzuzufügen, ist die Bitwarden App Erweiterung. Erfahren Sie mehr über die Bitwarden App Erweiterung, indem Sie zu dem "Einstellungen"-Bildschirm navigieren.</value>
+    <value>Die einfachste Möglichkeit, neue Zugangsdaten zu deinem Tresor hinzuzufügen, ist die Bitwarden App-Erweiterung. Erfahre mehr über die Benutzung der Bitwarden App-Erweiterung, indem du zu den "Einstellungen" wechselst.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Nutze Bitwarden in Safari und anderen Apps, um Zugangsdaten automatisch einzufügen.</value>
@@ -443,7 +443,7 @@
     <value>Verwende den Bitwarden Dienst in den Bedienungshilfen um deine Zugangsdaten automatisch einzufügen.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>E-Mail Adresse ändern</value>
+    <value>E-Mail-Adresse ändern</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
     <value>Du kannst deine E-Mail Adresse im Bitwarden.com Web-Tresor ändern. Möchtest du die Seite jetzt öffnen?</value>
@@ -471,13 +471,13 @@
     <value>Eintrag bearbeiten</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Automatische Synchronisierung aktivieren</value>
+    <value>Automatische Synchronisierung zulassen</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>Gebe die E-Mail Adresse deines Kontos ein, um den Hinweis für dein Master-Passwort zu erhalten.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>App-Erweiterung wieder aktivieren</value>
+    <value>App-Erweiterung reaktivieren</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Fast geschafft!</value>
@@ -514,7 +514,7 @@
     <value>Fingerabdruck</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>Passwort erstellen</value>
+    <value>Passwort generieren</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
     <value>Hinweis zum Masterpasswort zusenden</value>
@@ -566,7 +566,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Melde dich an oder erstelle einen neuen Account, um auf Deinen Tresor zuzugreifen.</value>
+    <value>Melde dich an oder erstelle ein neues Konto, um auf deinen Tresor zuzugreifen.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Verwalten</value>
@@ -647,7 +647,7 @@
     <value>Bist du sicher, dass du das aktuelle Passwort überschreiben möchtest?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden aktualisiert deinen Tresor mit Push-Benachrichtigungen. Für die bestmögliche Benutzererfahrung tippe im folgenden Dialogfenster auf "Ok", um Push-Benachrichtigungen zu aktivieren.</value>
+    <value>Bitwarden hält deinen Tresor durch Push-Benachrichtigungen automatisch synchronisiert. Für die bestmögliche Benutzererfahrung tippe im folgenden Dialogfenster auf "Erlauben", um Push-Benachrichtigungen zu erlauben.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -681,7 +681,7 @@
     <value>Eintrags-Information</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Eintrag aktualisiert</value>
+    <value>Eintrag gespeichert</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Wird übermittelt...</value>
@@ -708,7 +708,7 @@
     <value>Zwei-Faktor-Authentifizierung</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Mit der Zwei-Faktor-Authentifizierung wird dein Account zusätzlich abgesichert, da jede Anmeldung durch einen Sicherheitscode, eine Authentifizierungs-App, SMS, einen Anruf oder eine E-Mail verifiziert werden muss. Die Zwei-Faktor-Authentifizierung kann im Web-Tresor unter bitwarden.com aktiviert werden. Möchtest du die Seite jetzt öffnen?</value>
+    <value>Mit der Zwei-Faktor-Authentifizierung wird dein Konto zusätzlich abgesichert, da jede Anmeldung mit einem anderen Gerät wie einem Sicherheitsschlüssel, einer Authentifizierungs-App, einer SMS, einem Anruf oder einer E-Mail verifiziert werden muss. Die Zwei-Faktor-Authentifizierung kann im bitwarden.com Web-Tresor aktiviert werden. Möchtest du die Webseite jetzt öffnen?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Mit {0} entsperren</value>
@@ -721,7 +721,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Verifizierungscode </value>
+    <value>Verifizierungscode</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
     <value>Eintrag anzeigen</value>
@@ -827,11 +827,11 @@
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Zugangsdaten nicht verfügbar</value>
+    <value>Anmeldung nicht verfügbar</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Dieses Konto hat eine aktive Zwei-Faktor-Authentifizierung, allerdings wird keiner der konfigurierten Zwei-Faktor-Anbieter von diesem Gerät unterstützt. Bitte nutzen Sie ein unterstütztes Gerät und / oder fügen Sie zusätzliche Anbieter hinzu, die von mehr Geräten unterstützt werden (wie eine Authentifizierungs-App).</value>
+    <value>Für dieses Konto ist eine aktive Zwei-Faktor-Authentifizierung eingerichtet, allerdings wird keiner der konfigurierten Zwei-Faktor-Anbieter von diesem Gerät unterstützt. Bitte nutze ein unterstütztes Gerät und / oder füge zusätzliche Anbieter hinzu, die von mehr Geräten unterstützt werden (wie eine Authentifizierungs-App).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Wiederherstellungscode</value>
@@ -846,7 +846,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Optionen für Zwei-Faktor Authentifizierung</value>
+    <value>Optionen für Zwei-Faktor-Authentifizierung</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
     <value>Verwende eine andere Zwei-Faktor Authentifizierungsmethode</value>
@@ -856,7 +856,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Bestätigungsmail wurde gesendet</value>
+    <value>Verifizierung-E-Mail versendet</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -867,7 +867,7 @@
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Anhang hinzufügen</value>
+    <value>Neuen Anhang hinzufügen</value>
   </data>
   <data name="Attachments" xml:space="preserve">
     <value>Anhänge</value>
@@ -916,7 +916,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>TOTP kopieren</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>Falls Zugangsdaten einen Authentifizierungsschlüssel haben, den TOTP-Verifizierungsscode nach dem automatischen Ausfüllen in die Zwischenablage kopieren.</value>
+    <value>Ist ein Authentifizierungsschlüssel mit deinen Zugangsdaten verknüpft, wird der TOTP Verifizierungscode in die Zwischenablage kopiert, wenn du die Zugangsdaten automatisch einfügen lässt.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>TOTP automatisch kopieren</value>
@@ -958,7 +958,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Mehr erfahren</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>API Server URL</value>
+    <value>API Server-URL</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
     <value>Benutzerdefinierte Umgebung</value>
@@ -974,7 +974,7 @@ Das Scannen erfolgt automatisch.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Identitätsserver-URL</value>
+    <value>URL des Identitätsservers</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
@@ -987,7 +987,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Server URL</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Web-Tresor Server URL</value>
+    <value>URL des Web-Tresor-Servers</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>Tippe auf diese Benachrichtigung um Einträge aus deinem Tresor anzusehen.</value>
@@ -1146,7 +1146,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Ein wiedererkennbares Bild neben jeden Zugangsdaten anzeigen.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>URL des Icons-Servers</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
     <value>Mit Bitwarden automatisch ausfüllen</value>
@@ -1173,10 +1173,10 @@ Das Scannen erfolgt automatisch.</value>
     <value>Auto-Fill Bedienungshilfe</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Der Bitwarden Auto-Fill Service benutzt das Android Autofill Framework, um Logins, Kreditkarten und Identitätsinformationen in anderen Apps auf Ihrem Gerät zu befüllen.</value>
+    <value>Die automatische Ausfüllfunktion von Bitwarden benutzt das Android Autofill Framework, um Zugangsdaten in anderen Apps auf deinem Gerät auszufüllen.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Verwende den Bitwarden Dienst in den Bedienungshilfen, um deine Zugangsdaten automatisch einzufügen.</value>
+    <value>Verwende die automatische Ausfüllfunktion von Bitwarden, um Anmeldedaten in anderen Apps auszufüllen.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Öffne Auto-Fill Einstellungen</value>
@@ -1201,7 +1201,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Die Android Auto-Fill Einstellungen konnten nicht automatisch geöffnet werden. Über Android Einstellungen &gt; Sprachen &amp; Eingabe &gt; AutoFill-Dienst kannst du manuell zu den Auto-Fill Einstellungen navigieren.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Name Benutzerdefiniertes Feld</value>
+    <value>Name des benutzerdefinierten Feld</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
     <value>Boolean</value>
@@ -1252,7 +1252,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Beginnt mit</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>Match-Erkennung</value>
+    <value>URI Match-Erkennung</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
     <value>Match-Erkennung</value>
@@ -1289,7 +1289,7 @@ Das Scannen erfolgt automatisch.</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>AutoFill aktiviert!</value>
+    <value>Automatisch ausfüllen aktiviert!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
     <value>Du musst dich in der Bitwarden App einloggen, bevor du AutoFill nutzen kannst.</value>
@@ -1304,7 +1304,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Greife auf deinen Tressor direkt von deiner Tastatur aus zu um Passwörter schnell und automatisch auszufüllen.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Um Autofill auf deinem Gerät zu aktivieren, befolge bitte diese Anweisungen:</value>
+    <value>Um das automatische Ausfüllen von Passwörtern auf deinem Gerät einzurichten, befolge bitte diese Anweisungen:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Gehe in die iOS Einstellungen</value>
@@ -1322,7 +1322,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>5. Wähle "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Passwort AutoFill</value>
+    <value>Passwort automatisch ausfüllen</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
     <value>Die einfachste Möglichkeit, neue Zugangsdaten zu deinemTresor hinzuzufügen, ist die Bitwarden Passwort Auto-Ausfüllen Erweiterung. Erfahre mehr über die Bitwarden Passwort Auto-Ausfüllen Funktion, indem du zur "Einstellungen" wechselst.</value>
@@ -1384,10 +1384,10 @@ Das Scannen erfolgt automatisch.</value>
     <value>Sammlung durchsuchen</value>
   </data>
   <data name="SearchFileSends" xml:space="preserve">
-    <value>Versendete Dateien suchen</value>
+    <value>Datei-Sends suchen</value>
   </data>
   <data name="SearchTextSends" xml:space="preserve">
-    <value>Versendete Texte suchen</value>
+    <value>Text-Sends suchen</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
     <value>Suche {0}</value>
@@ -1553,13 +1553,13 @@ Das Scannen erfolgt automatisch.</value>
     <value>Standard (System)</value>
   </data>
   <data name="DefaultDarkTheme" xml:space="preserve">
-    <value>Dunkles Standard Design</value>
+    <value>Dunkles Standard-Design</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Wähle das zu verwendende dunkle Design aus, das bei der Auswahl vom Standard (System) Design verwendet werden soll, während der Dunkelmodus deines Geräts aktiviert ist</value>
+    <value>Wähle das zu verwendende dunkle Design aus, das bei der Auswahl vom Standard-(System)-Design verwendet werden soll, während der Dunkelmodus deines Geräts aktiviert ist.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Notizen kopieren</value>
+    <value>Notiz kopieren</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Beenden</value>
@@ -1589,16 +1589,16 @@ Das Scannen erfolgt automatisch.</value>
     <value>Auto-Ausfüllen wird für blockierte URIs nicht angeboten. Trenne mehrere URIs mit einem Komma. Beispiel: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
-    <value>Danach fragen Zugangsdaten hinzuzufügen</value>
+    <value>Nach dem Hinzufügen von Zugangsdaten fragen</value>
   </data>
   <data name="AskToAddLoginDescription" xml:space="preserve">
-    <value>Wenn ein Eintrag nicht in deinem Tresor gefunden wurde, danach fragen.</value>
+    <value>Nach dem Hinzufügen eines Eintrags fragen, wenn dieser nicht in deinem Tresor gefunden wurde.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Beim Neustart der App</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Automatisches Ausfüllen vereinfacht es, sicher auf deinen Bitwarden Tresor über andere Webseiten und Apps zuzugreifen. Es sieht aus, als ob du den automatischen Ausfülldienst für Bitwarden nicht aktiviert hast. Aktiviere automatisches Ausfüllen in der "Einstellungen" Ansicht.</value>
+    <value>Automatisches Ausfüllen vereinfacht es, sicher auf deinen Bitwarden Tresor über andere Webseiten und Apps zuzugreifen. Es sieht aus, als ob du die automatische Ausfüllfunktion für Bitwarden nicht eingerichtet hast. Richte die automatische Ausfüllfunktion in den "Einstellungen" ein.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Deine Änderungen am Aussehen der App werden beim nächsten Neustart der App angewendet.</value>
@@ -1623,19 +1623,19 @@ Das Scannen erfolgt automatisch.</value>
     <value>Deine Sitzung ist abgelaufen.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Biometrische Daten zur Verifizierung nutzen.</value>
+    <value>Biometrische Verifizierung</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>Biometrie</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Biometrische Daten zum Entsperren verwenden</value>
+    <value>Benutze Biometrie zum Entsperren</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden braucht Aufmerksamkeit - Siehe "Auto-Fill-Bedienungshilfe" in den Bitwarden-Einstellungen</value>
+    <value>Bitwarden braucht Aufmerksamkeit - Siehe "Bedienungshilfen zum automatischen Ausfüllen" in den Bitwarden-Einstellungen</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. Gehe unter Android in den App-Einstellungen für Bitwarden zur Option "Über anderen Apps einblenden" (unter Erweitert) und tippe auf den Schalter, um die Overlay-Unterstützung zu aktivieren.</value>
+    <value>3. Gehe in den Android App-Einstellungen für Bitwarden zur Option "Über anderen Apps einblenden" (unter Erweitert) und tippe auf den Schalter, um die Overlay-Unterstützung zu aktivieren.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Berechtigung</value>
@@ -1659,7 +1659,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Gib das Masterpasswort ein, um deine Tresordaten zu exportieren.</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
-    <value>Einen Bestätigungscode an deine E-Mail senden</value>
+    <value>Einen Bestätigungscode an deine E-Mail-Adresse senden</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
     <value>Code gesendet!</value>
@@ -1707,7 +1707,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Anhang erfolgreich gespeichert</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Bitte aktivieren Sie "Auto-Fill-Bedienungshilfe" in den Bitwarden-Einstellungen, um die Auto-Fill-Kachel zu verwenden.</value>
+    <value>Bitte aktiviere "Bedienungshilfen zum automatischen Ausfüllen" in den Bitwarden-Einstellungen, um die Automatisch-Ausfüllen-Kachel zu verwenden.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
     <value>Keine Passwortfelder erkannt</value>
@@ -1765,7 +1765,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Tresor durch Runterziehen Geste synchronisieren.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Enterprise Single Sign-On</value>
+    <value>Enterprise Single-Sign-On</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
     <value>Schnell über den Single Sign-on deiner Organisation anmelden. Bitte gib deine Organisationskennung an, um zu beginnen.</value>
@@ -1777,7 +1777,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Anmeldung mit SSO derzeit nicht möglich</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Masterpasswort festlegen</value>
+    <value>Master-Passwort festlegen</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
     <value>Bitte lege ein Masterpasswort für den Schutz deines Tresors fest, um die Anmeldung über SSO abzuschließen.</value>
@@ -1825,10 +1825,10 @@ Das Scannen erfolgt automatisch.</value>
     <value>Datenschutzbestimmungen</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden braucht Aufmerksamkeit - Aktiviere "Überschreiben" in dem "Auto-Ausfüllen-Dienst" in den Bitwarden-Einstellungen</value>
+    <value>Bitwarden braucht Aufmerksamkeit - Aktiviere "Überschreiben" in den "Funktionen zum automatischen Ausfüllen" in den Bitwarden-Einstellungen</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-Ausfüllen Dienst</value>
+    <value>Funktionen zum automatischen Ausfüllen</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
     <value>Inline Auto-Ausfüllen verwenden</value>
@@ -1840,28 +1840,28 @@ Das Scannen erfolgt automatisch.</value>
     <value>Bedienungshilfen verwenden</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Verwende die Bitwarden Bedienungshilfe, um deine Zugangsdaten innerhalb von Apps und dem Web automatisch auszufüllen. Wenn aktiviert, werden wir ein Popup anzeigen, falls Login-Felder ausgewählt sind.</value>
+    <value>Verwende die Bitwarden Bedienungshilfe, um deine Zugangsdaten innerhalb von Apps und dem Web automatisch auszufüllen. Wenn aktiviert, werden wir ein Pop-up anzeigen, falls Anmeldefelder ausgewählt sind.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Verwende die Bitwarden Bedienungshilfe, um deine Zugangsdaten in Apps und im Web automatisch auszufüllen. (Benötigt das Überschreiben ebenfalls aktiviertes ist)</value>
+    <value>Verwende die Bitwarden Bedienungshilfe, um deine Zugangsdaten in Apps und im Web automatisch auszufüllen. (Benötigt das Überschreiben ebenfalls aktiviert ist)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Verwende die Bitwarden Bedienungshilfe, um die Auto-Ausfüllen Schnellaktionskachel zu verwenden und/oder ein Popup mit Überschreiben anzuzeigen (wenn aktiviert).</value>
+    <value>Verwende die Bitwarden Bedienungshilfe, um die Auto-Ausfüllen-Schnellaktionskachel zu verwenden und/oder ein Pop-up mit Überschreiben anzuzeigen (wenn aktiviert).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Benötigt um die Auto-Ausfüllen Schnellaktionskachel zu verwenden oder um den Auto-Ausfüllen Service durch Überschreiben(falls aktiviert) zu ermöglichen.</value>
+    <value>Benötigt, um die Auto-Ausfüllen-Schnellaktionskachel zu verwenden oder um die Auto-Ausfüllen-Funktion durch Überschreiben (falls aktiviert) zu ermöglichen.</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
     <value>Überschreiben verwenden</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>Falls aktiviert, erlaubt es der Bitwarden Bedienungshilfe ein Popup anzuzeigen, wenn Anmeldefelder ausgewählt sind.</value>
+    <value>Erlaubt es der Bitwarden Bedienungshilfe ein Pop-up anzuzeigen, wenn Anmeldefelder ausgewählt sind.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>Wenn aktiviert, wird die Bitwarden Bedienungshilfe, falls Anmeldefelder ausgewählt sind, ein Popup anzeigen, um bei der automatischen Ausfüllung deiner Zugangsdaten zu helfen.</value>
+    <value>Wenn aktiviert, wird die Bitwarden Bedienungshilfe ein Pop-up anzeigen, falls Anmeldefelder ausgewählt sind, um bei der automatischen Ausfüllung deiner Zugangsdaten zu helfen.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>Wenn aktiviert, wird die Bedienungshilfe ein Popup anzeigen, um das automatische Ausfüllen in älteren Anwendungen zu ermöglichen, die das Android Auto-Ausfüllen Framework nicht unterstützen. </value>
+    <value>Wenn aktiviert, wird die Bedienungshilfe ein Pop-up anzeigen, um das automatische Ausfüllen in älteren Apps zu ermöglichen, die das Android Autofill Framework nicht unterstützen.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
     <value>Aufgrund einer Unternehmensrichtlinie darfst du keine Einträge in deinem persönlichen Tresor speichern. Ändere die Eigentümer-Option in eine Organisation und wähle aus den verfügbaren Sammlungen.</value>
@@ -2009,7 +2009,7 @@ Das Scannen erfolgt automatisch.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Send hinzufügen</value>
+    <value>Neues Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
@@ -2017,11 +2017,11 @@ Das Scannen erfolgt automatisch.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Send wurde gelöscht</value>
+    <value>Send gelöscht</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Send aktualisiert</value>
+    <value>Send gespeichert</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
@@ -2070,7 +2070,7 @@ Das Scannen erfolgt automatisch.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Du musst deine E-Mail verifizieren, um Dateien mit Send zu verwenden. Du kannst deine E-Mail im Web-Tresor verifizieren.</value>
+    <value>Du musst deine E-Mail-Adresse verifizieren, um Dateien mit Send zu verwenden. Du kannst deine E-Mail-Adresse im Web-Tresor verifizieren.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
@@ -2125,7 +2125,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Um fortzufahren, halte deinen FIDO2 WebAuthn kompatiblen Sicherheitsschlüssel bereit und folge dann den Anweisungen, nachdem du auf der nächsten Seite auf 'Authentifiziere WebAuthn' geklickt hast.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>Authentifizierung mit FIDO2 WebAuthn, du kannst dich mit einem externen Sicherheitsschlüssel authentifizieren.</value>
+    <value>Authentifizierung mit FIDO2 WebAuthn. Du kannst dich mit einem externen Sicherheitsschlüssel authentifizieren.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
     <value>Authentifiziere WebAuthn</value>
@@ -2158,7 +2158,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Gesperrt</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>Ausgeloggt</value>
+    <value>Abgemeldet</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>Zum nächsten verfügbaren Konto gewechselt</value>
@@ -2182,7 +2182,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Dein Konto und alle damit verbundenen Daten werden gelöscht und sind nicht wiederherstellbar. Bist du sicher, dass du fortfahren möchtest?</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
-    <value>Löschen deines Kontos</value>
+    <value>Löschung deines Kontos</value>
   </data>
   <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
     <value>Dein Konto wurde unwiderruflich gelöscht</value>
@@ -2194,16 +2194,16 @@ Das Scannen erfolgt automatisch.</value>
     <value>Einmalpasswort anfordern</value>
   </data>
   <data name="SendCode" xml:space="preserve">
-    <value>Send Code</value>
+    <value>Code senden</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Sende</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Send Link beim Speichern kopieren</value>
+    <value>Send-Link beim Speichern kopieren</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
-    <value>Sende code</value>
+    <value>Sende Code</value>
   </data>
   <data name="Verifying" xml:space="preserve">
     <value>Überprüfen</value>
@@ -2245,7 +2245,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Sonderzeichen (!@#$%^&amp;*)</value>
   </data>
   <data name="TapToGoBack" xml:space="preserve">
-    <value>Tippen, um zurück zu gehen</value>
+    <value>Tippen, um zurückzugehen</value>
   </data>
   <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
     <value>Passwort ist sichtbar, tippen um es auszublenden.</value>
@@ -2254,7 +2254,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Passwort ist nicht sichtbar, tippen um es einzublenden.</value>
   </data>
   <data name="FilterByVault" xml:space="preserve">
-    <value>Objekte nach Tresor filtern</value>
+    <value>Einträge nach Tresor filtern</value>
   </data>
   <data name="AllVaults" xml:space="preserve">
     <value>Alle Tresore</value>
@@ -2305,7 +2305,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Wenn du deine Sperroptionen auf „Nie“ einstellst, bleibt dein Tresor für jeden zugänglich, der Zugriff auf dein Gerät hat. Wenn du diese Option verwendest, solltest du sicherstellen, dass du dein Gerät angemessen schützt.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
-    <value>Eine oder mehrere der eingegebenen URLs sind ungültig. Bitte überprüfe sie und versuche erneut zu speichern.</value>
+    <value>Eine oder mehrere der eingegebenen URLs sind ungültig. Bitte überarbeite diese und versuche erneut zu speichern.</value>
   </data>
   <data name="GenericErrorMessage" xml:space="preserve">
     <value>Wir konnten deine Anfrage nicht bearbeiten. Bitte versuche es erneut oder kontaktiere uns.</value>
@@ -2347,7 +2347,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Gerade eben</value>
   </data>
   <data name="XMinutesAgo" xml:space="preserve">
-    <value>vor {0} Minute(n)</value>
+    <value>vor {0} Minuten</value>
   </data>
   <data name="LogInAccepted" xml:space="preserve">
     <value>Anmeldung bestätigt</value>
@@ -2383,10 +2383,10 @@ Das Scannen erfolgt automatisch.</value>
     <value>Was möchtest du generieren?</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
-    <value>Benutzernamentyp</value>
+    <value>Benutzernamenstyp</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Mit Plus adressierte E-Mail</value>
+    <value>Mit Plus adressierte E-Mail-Adresse</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
     <value>Catch-All E-Mail-Adresse</value>
@@ -2466,7 +2466,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Bedienungshilfen Offenlegung</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden verwendet die Bedienungshilfen, um nach Anmeldefeldern in Apps und Webseiten zu suchen und legt dann die entsprechenden Feld-IDs fest, um Benutzername und Passwort einzugeben, wenn eine Übereinstimmung mit der App oder der Seite gefunden wird. Wir speichern keine der Informationen, die uns der Dienst zur Verfügung stellt. Ebenso wenig versuchen wir beliebige Elemente auf dem Bildschirm außer der Texteingabe von Anmeldedaten zu kontrollieren.</value>
+    <value>Bitwarden verwendet die Bedienungshilfen, um nach Anmeldefeldern in Apps und auf Webseiten zu suchen und legt dann die entsprechenden Feld-IDs fest, um einen Benutzernamen und Passwort einzugeben, wenn eine Übereinstimmung mit der App oder der Seite gefunden wird. Wir speichern keine der Informationen, die uns der Dienst zur Verfügung stellt. Ebenso wenig versuchen wir beliebige Elemente auf dem Bildschirm außer der Texteingabe von Anmeldedaten zu kontrollieren.</value>
   </data>
   <data name="Accept" xml:space="preserve">
     <value>Akzeptieren</value>
@@ -2498,10 +2498,10 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Mit Master-Passwort anmelden</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Mit einem anderen Gerät anmelden</value>
+    <value>Mit Gerät anmelden</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Anmeldung initiiert</value>
+    <value>Anmeldung eingeleitet</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
     <value>Eine Benachrichtigung wurde an dein Gerät gesendet.</value>
@@ -2537,7 +2537,19 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Keine ausstehenden Anfragen</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Kamerazugriff aktivieren, um den Scanner zu verwenden</value>
+    <value>Kamerazugriff gewähren, um den Scanner zu verwenden</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Sprache</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Die Sprache wurde auf {0} geändert. Bitte starte die App neu, um die Änderung zu sehen</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Sprachänderung erfordert einen App-Neustart</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Standard (System)</value>
   </data>
   <data name="Important" xml:space="preserve">
     <value>Wichtig</value>
@@ -2574,5 +2586,8 @@ Möchtest du zu diesem Konto wechseln?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Schwaches Passwort erkannt und in einem Datendiebstahl gefunden. Verwende ein starkes und einzigartiges Passwort, um dein Konto zu schützen. Bist du sicher, dass du dieses Passwort verwenden möchtest?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>SSO-Kennung der Organisation erforderlich.</value>
   </data>
 </root>

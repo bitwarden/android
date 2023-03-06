@@ -132,7 +132,7 @@
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
-    <value>Une erreur est survenue.</value>
+    <value>Une erreur s'est produite.</value>
     <comment>Alert title when something goes wrong.</comment>
   </data>
   <data name="Back" xml:space="preserve">
@@ -190,7 +190,7 @@
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>Nous contacter</value>
+    <value>Envoyez-nous un courriel</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
     <value>Envoyez-nous un courriel directement pour obtenir de l'aide ou laisser un commentaire.</value>
@@ -203,7 +203,7 @@
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>Envoyer un rapport de bug</value>
+    <value>Remplir un rapport de bug</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
     <value>Ouvrir un ticket dans notre dépôt Github.</value>
@@ -247,7 +247,7 @@
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Connexion Internet requise</value>
+    <value>Connexion internet requise</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
@@ -282,7 +282,7 @@
     <value>Êtes-vous sûr de vouloir supprimer ce compte ?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
-    <value>Le compte a déjà été ajouté</value>
+    <value>Compte déjà ajouté</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
     <value>Souhaitez-vous y passer maintenant ?</value>
@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authentification</value>
+    <value>Authentificateur</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -471,19 +471,19 @@
     <value>Éditer l'élément</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Activer la synchronisation automatique</value>
+    <value>Autoriser la synchronisation automatique</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>Saisissez l'adresse électronique de votre compte pour recevoir l'indice de votre mot de passe principal.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Activez à nouveau l'extension de l'application</value>
+    <value>Réactivez l'extension de l'application</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Presque terminé !</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Activez l'extension de l'application</value>
+    <value>Activer l'extension de l'application</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>Sur Safari, trouvez Bitwarden en utilisant l'icône de partage (aide : faire défiler sur la droite sur la ligne du bas du menu).</value>
@@ -632,13 +632,13 @@
     <value>Autres</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Mot de passe généré.</value>
+    <value>Mot de passe généré</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Générateur de mot de passe</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>Indice du mot de passe</value>
+    <value>Indice de mot de passe</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
     <value>Nous vous avons envoyé un courriel avec votre indice de mot de passe principal.</value>
@@ -919,7 +919,7 @@ La numérisation se fera automatiquement.</value>
     <value>Si un identifiant possède une clé d'authentification, copiez le code de vérification TOTP dans votre presse-papiers lorsque vous saisissez automatiquement l'identifiant.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
-    <value>Copier le code TOTP automatiquement</value>
+    <value>Copier TOTP automatiquement</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Une adhésion Premium est requise pour utiliser cette fonctionnalité.</value>
@@ -1140,13 +1140,13 @@ La numérisation se fera automatiquement.</value>
     <value>Expiration</value>
   </data>
   <data name="ShowWebsiteIcons" xml:space="preserve">
-    <value>Afficher les icônes des sites web</value>
+    <value>Afficher les icônes du site web</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
-    <value>Afficher une image reconnaissable à côté de chaque identifiant.</value>
+    <value>Affichez une image reconnaissable à côté de chaque identifiant.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>URL du serveur d’icônes</value>
+    <value>Icônes URL du serveur</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
     <value>Saisie automatique avec Bitwarden</value>
@@ -1556,7 +1556,7 @@ La numérisation se fera automatiquement.</value>
     <value>Thème sombre par défaut</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Si le mode sombre de l'appareil et le thème par défaut (système) sont activés, choisissez votre thème sombre préféré</value>
+    <value>Choisissez le thème sombre à utiliser lorsque le thème (système) par défaut est utilisé alors que le mode sombre de votre appareil est en cours d'utilisation.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copier la note</value>
@@ -1579,7 +1579,7 @@ La numérisation se fera automatiquement.</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
-    <value>Sombre "Solarized"</value>
+    <value>Solarized Dark</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
@@ -1617,7 +1617,7 @@ La numérisation se fera automatiquement.</value>
     <value>Partagé</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Afficher/Masquer</value>
+    <value>Basculer la visibilité</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>Votre session a expiré.</value>
@@ -1677,7 +1677,7 @@ La numérisation se fera automatiquement.</value>
     <value>Les clés de chiffrement du compte sont spécifiques à chaque utilisateur Bitwarden. Vous ne pouvez donc pas importer d'export chiffré dans un compte différent.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirmer l'export du coffre</value>
+    <value>Confirmez l'export du coffre</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1729,7 +1729,7 @@ La numérisation se fera automatiquement.</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>L'élément a été restauré.</value>
+    <value>Élément restauré</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
@@ -1759,7 +1759,7 @@ La numérisation se fera automatiquement.</value>
     <value>Déverrouillage biométrique pour la saisie automatique désactivé dans l'attente de vérification du mot de passe principal.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Activer la synchronisation lors de l'actualisation</value>
+    <value>Autoriser la synchronisation au rafraîchissement</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
     <value>Synchronisation du coffre avec un geste vers le bas</value>
@@ -2083,7 +2083,7 @@ La numérisation se fera automatiquement.</value>
     <value>Cette action est protégée, pour continuer veuillez entrer à nouveau votre mot de passe principal pour vérifier votre identité.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Captcha obligatoire</value>
+    <value>Captcha requis</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
     <value>Le captcha a échoué. Veuillez réessayer.</value>
@@ -2209,7 +2209,7 @@ La numérisation se fera automatiquement.</value>
     <value>Vérification</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Renvoyer le Code</value>
+    <value>Renvoyer le code</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
     <value>Un code de vérification a été envoyé à votre courriel</value>
@@ -2224,7 +2224,7 @@ La numérisation se fera automatiquement.</value>
     <value>Envoyer les journaux de plantage</value>
   </data>
   <data name="SubmitCrashLogsDescription" xml:space="preserve">
-    <value>Aidez Bitwarden à améliorer la stabilité de l'application en autorisant les rapports d'erreurs.</value>
+    <value>Aidez Bitwarden à améliorer la stabilité de l'application en soumettant des rapports d'erreur.</value>
   </data>
   <data name="OptionsExpanded" xml:space="preserve">
     <value>Les options sont dépliées, appuyez pour grouper.</value>
@@ -2312,7 +2312,7 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
     <value>Nous n'avons pas pu traiter votre requête. Veuillez réessayer ou nous contacter.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
-    <value>Autoriser les captures d'écran</value>
+    <value>Autoriser la capture d'écran</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir activer la capture d'écran ?</value>
@@ -2464,10 +2464,10 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
     <value>Se connecter à la montre</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
-    <value>Confidentialité du Service d'accessibilité</value>
+    <value>Divulgation du service d'accessibilité</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden utilise le Service d'Accessibilité pour rechercher des champs de connexion dans les applis et les sites web, puis trouvent les IDs des champs liés pour saisir un nom d'utilisateur et un mot de passe lorsqu'une correspondance pour l'appli ou le site est trouvée. Nous ne stockons aucune information que nous recevons via le service, et nous n'essayons pas de contrôler des éléments qui se superposeraient aux entrées de saisie des identifiants.</value>
+    <value>Bitwarden utilise le service d'accessibilité pour rechercher les champs de connexion dans les applications et les sites web, puis établit les identifiants de champ appropriés pour la saisie d'un nom d'utilisateur et d'un mot de passe lorsqu'une correspondance est trouvée pour l'application ou le site. Nous ne stockons aucune des informations qui nous sont présentées par le service, et nous ne tentons pas de contrôler les éléments à l'écran au-delà de la saisie des informations d'identification.</value>
   </data>
   <data name="Accept" xml:space="preserve">
     <value>Accepter</value>
@@ -2476,7 +2476,7 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
     <value>Refuser</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
-    <value>La demande d’identification a déjà expiré.</value>
+    <value>La demande de connexion a déjà expiré.</value>
   </data>
   <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
     <value>Tentative de connexion depuis :
@@ -2540,6 +2540,18 @@ Voulez-vous basculer vers ce compte ?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Activer la permission de l'appareil photo pour utiliser le scanner</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>La langue a été changée en {0}. Veuillez redémarrer l'application pour voir le changement</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Le changement de langue nécessite le redémarrage de l'application</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Par défaut (système)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Important</value>
   </data>
@@ -2575,5 +2587,8 @@ Voulez-vous basculer vers ce compte ?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Mot de passe faible identifié et trouvé dans une fuite de données. Utilisez un mot de passe fort et unique pour protéger votre compte. Voulez-vous vraiment utiliser ce mot de passe ?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Identifiant SSO de l'organisation requis.</value>
   </data>
 </root>

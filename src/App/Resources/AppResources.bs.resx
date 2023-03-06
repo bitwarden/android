@@ -2539,6 +2539,18 @@ Skeniranje će biti izvršeno automatski.</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Omogućite dozvolu za korištenje kamere da bi koristili skener</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Language change requires app restart</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Default (System)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Važno</value>
   </data>
@@ -2574,5 +2586,8 @@ Skeniranje će biti izvršeno automatski.</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Slaba lozinka prepoznata i pronađena u kompromitovanim bazama podataka. Koristite jaku lozinku za zaštitu Vašeg računa. Da li ste sigurni da želite koristiti ovu lozinku?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organization SSO identifier required.</value>
   </data>
 </root>

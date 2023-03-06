@@ -584,7 +584,7 @@
     <value>Ana parol məsləhəti, unutduğunuz parolu xatırlamağınıza kömək edir.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Ana parol ən azı {0} simvol uzunluğunda olmalıdır.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimum rəqəm</value>
@@ -2539,6 +2539,18 @@ Bu hesaba keçmək istəyirsiniz?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Skaneri istifadə etmək üçün kamera icazəsini fəallaşdırın</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Dil, {0} olaraq dəyişdirildi. Dəyişiklikləri görmək üçün zəhmət olmasa tətbiqi yenidən başladın</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Dil dəyişikliyi, tətbiqin yenidən başladılmasını tələb edir</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>İlkin (Sistem)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Vacib</value>
   </data>
@@ -2574,5 +2586,8 @@ Bu hesaba keçmək istəyirsiniz?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Zəif parol məlumat pozuntusunda aşkarlandı və tapıldı. Hesabınızı qorumaq üçün güclü və unikal bir parol istifadə edin. Bu parolu istifadə etmək istədiyinizə əminsiniz?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Təşkilat SSO identifikatoru tələb olundu.</value>
   </data>
 </root>

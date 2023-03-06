@@ -2540,6 +2540,18 @@ Czy chcesz przełączyć się na to konto?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Włącz uprawnienia aparatu do korzystania ze skanera</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Język</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Język został zmieniony na {0}. Uruchom ponownie aplikację, aby zobaczyć zmiany</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Zmiana języka wymaga ponownego uruchomienia aplikacji</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Domyślny (systemowy)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Ważne</value>
   </data>
@@ -2575,5 +2587,8 @@ Czy chcesz przełączyć się na to konto?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Słabe hasło ujawnione w wyniku naruszenia ochrony danych. Użyj silnego i unikalnego hasła, aby chronić swoje konto. Czy na pewno chcesz użyć tego hasła?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Identyfikator organizacji jest wymagany.</value>
   </data>
 </root>

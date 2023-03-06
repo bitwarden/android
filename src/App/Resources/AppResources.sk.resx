@@ -2540,6 +2540,18 @@ Chcete prepnúť na toto konto?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Pre použitie skenera povoľte prístup ku kamere</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Jazyk</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Jazyk bol zmenený na {0}. Reštartujte aplikáciu, aby sa zmena prejavila</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Zmena jazyka si vyžaduje reštart aplikácie</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Predvolený (Systémový)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Dôležité</value>
   </data>
@@ -2575,5 +2587,8 @@ Chcete prepnúť na toto konto?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Nájdené slabé heslo v uniknuných údajoch. Na ochranu svojho účtu používajte silné a jedinečné heslo. Naozaj chcete používať toto heslo?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Pole identifikátora SSO je povinné.</value>
   </data>
 </root>
