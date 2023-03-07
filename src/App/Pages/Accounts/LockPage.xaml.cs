@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.Core;
+using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -10,6 +12,7 @@ namespace Bit.App.Pages
 {
     public partial class LockPage : BaseContentPage
     {
+        private readonly IBroadcasterService _broadcasterService;
         private readonly AppOptions _appOptions;
         private readonly bool _autoPromptBiometric;
         private readonly LockPageViewModel _vm;
@@ -22,6 +25,7 @@ namespace Bit.App.Pages
             _appOptions = appOptions;
             _autoPromptBiometric = autoPromptBiometric;
             InitializeComponent();
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>();
             _vm = BindingContext as LockPageViewModel;
             _vm.Page = this;
             _vm.UnlockedAction = () => Device.BeginInvokeOnMainThread(async () => await UnlockedAsync());
@@ -64,6 +68,13 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            _broadcasterService.Subscribe(nameof(LockPage), message =>
+            {
+                if (message.Command == Constants.ClearSensitiveFields)
+                {
+                    Device.BeginInvokeOnMainThread(_vm.ResetPinPasswordFields);
+                }
+            });
             if (_appeared)
             {
                 return;
@@ -129,6 +140,7 @@ namespace Bit.App.Pages
             base.OnDisappearing();
 
             _accountAvatar?.OnDisappearing();
+            _broadcasterService.Unsubscribe(nameof(LockPage));
         }
 
         private void Unlock_Clicked(object sender, EventArgs e)
