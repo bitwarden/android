@@ -130,6 +130,12 @@ namespace Bit.Core.Services
                 {
                     enforcedOptions.RequireSpecial = true;
                 }
+                
+                var enforceOnLogin = GetPolicyBool(currentPolicy, "enforceOnLogin");
+                if (enforceOnLogin != null && (bool)enforceOnLogin)
+                {
+                    enforcedOptions.EnforceOnLogin = true;
+                }
             }
 
             return enforcedOptions;
