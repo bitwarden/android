@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Vihje võib abiks olla olukorras, kui oled ülemparooli unustanud.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Ülemparool peab olema vähemalt 8 tähemärgi pikkune.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Vähim arv numbreid</value>
@@ -2145,7 +2145,7 @@ Skaneerimine toimub automaatselt.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Valitud hoidla ajalõpp ei ole organisatsiooni poolt määratud reeglitega kooskõlas.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Üks või enam organisatsiooni poliitikat ei võimalda sul oma personaalset hoidlat eksportida.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2523,22 +2523,34 @@ Soovid selle konto peale lülituda?</value>
     <value>See päring ei ole enam kehtiv</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Pending login requests</value>
+    <value>Ootel sisselogimise taotlused</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
-    <value>Decline all requests</value>
+    <value>Tühista kõik taotlused</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>Are you sure you want to decline all pending login requests?</value>
+    <value>Oled kindel, et soovid tühistada kõik pooleliolevad sisselogimise taotlused?</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
-    <value>Requests declined</value>
+    <value>Taotlused on tagasi lükatud</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>No pending requests</value>  
+    <value>Ootel taotlused puuduvad</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Kaamera kasutamiseks luba ligipääs kaamerale</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Keel</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Rakenduse keel muudeti {0}-ks. Muudatuste rakendamiseks taaskäivita Bitwarden</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Keele muutmiseks on vajalik rakenduse taaskäivitamine</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Vaikeväärtus (süsteem)</value>
   </data>
   <data name="Important" xml:space="preserve">
     <value>Tähtis</value>
@@ -2575,5 +2587,8 @@ Soovid selle konto peale lülituda?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Tuvastati nõrk ning andmelekkes lekkinud ülemparool. Kasuta konto paremaks turvamiseks tugevamat parooli. Oled kindel, et soovid nõrga parooliga jätkata?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Nõutud on organisatsiooni SSO identifikaator.</value>
   </data>
 </root>

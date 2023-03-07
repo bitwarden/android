@@ -15,10 +15,5 @@ namespace Bit.Core.Abstractions
         /// <param name="expiresInMs">Expiration time in milliseconds of the copied text</param>
         /// <param name="isSensitive">Flag to mark copied text as sensitive</param>
         Task CopyTextAsync(string text, int expiresInMs = -1, bool isSensitive = true);
-
-        /// <summary>
-        /// Returns true if the platform provides its own notification when text is copied to the clipboard
-        /// </summary>
-        bool IsCopyNotificationHandledByPlatform();
     }
 }
