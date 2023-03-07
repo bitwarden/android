@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
+using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
@@ -31,6 +32,7 @@ namespace Bit.Core.Services
 
         private readonly LazyResolve<IWatchDeviceService> _watchDeviceService = new LazyResolve<IWatchDeviceService>();
         private SymmetricCryptoKey _key;
+        private MasterPasswordPolicyOptions _masterPasswordPolicy { get; set; }
 
         public AuthService(
             ICryptoService cryptoService,
@@ -141,8 +143,36 @@ namespace Bit.Core.Services
             var key = await MakePreloginKeyAsync(masterPassword, email);
             var hashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key);
             var localHashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
-            return await LogInHelperAsync(email, hashedPassword, localHashedPassword, null, null, null, key, null, null,
-                null, captchaToken);
+            var result = await LogInHelperAsync(email, hashedPassword, localHashedPassword, null, null, null, key, null, null, null, captchaToken);
+            
+            if (await RequirePasswordChange(email, masterPassword))
+            {
+                result.ForcePasswordReset = true;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Evaluates the supplied master password against the master password policy provided by the Identity response.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="masterPassword"></param>
+        /// <returns>True if the master password does NOT meet any policy requirements, false otherwise (or if no policy present)</returns>
+        private async Task<bool> RequirePasswordChange(string email, string masterPassword)
+        {
+            // No policy with EnforceOnLogin enabled, we're done. 
+            if (!(_masterPasswordPolicy is { EnforceOnLogin: true }))
+            {
+                return false;
+            }
+            
+            var passwordStrength = _passwordGenerationService.PasswordStrength(
+                masterPassword, 
+                _passwordGenerationService.GetPasswordStrengthUserInput(email)
+            ).Score;
+
+            return !await _policyService.EvaluateMasterPassword(passwordStrength, masterPassword, _masterPasswordPolicy);
         }
 
         public async Task<AuthResult> LogInPasswordlessAsync(string email, string accessCode, string authRequestId, byte[] decryptionKey, string userKeyCiphered, string localHashedPasswordCiphered)
@@ -369,6 +399,7 @@ namespace Bit.Core.Services
                 TwoFactorProvidersData = response.TwoFactorResponse.TwoFactorProviders2;
                 result.TwoFactorProviders = response.TwoFactorResponse.TwoFactorProviders2;
                 CaptchaToken = response.TwoFactorResponse.CaptchaToken;
+                _masterPasswordPolicy = response.TwoFactorResponse.MasterPasswordPolicy;
                 await _tokenService.ClearTwoFactorTokenAsync(email);
                 return result;
             }
@@ -376,6 +407,7 @@ namespace Bit.Core.Services
             var tokenResponse = response.TokenResponse;
             result.ResetMasterPassword = tokenResponse.ResetMasterPassword;
             result.ForcePasswordReset = tokenResponse.ForcePasswordReset;
+            _masterPasswordPolicy = tokenResponse.MasterPasswordPolicy;
             if (tokenResponse.TwoFactorToken != null)
             {
                 await _tokenService.SetTwoFactorTokenAsync(tokenResponse.TwoFactorToken, email);
