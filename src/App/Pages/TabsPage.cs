@@ -15,6 +15,7 @@ namespace Bit.App.Pages
         private readonly IBroadcasterService _broadcasterService;
         private readonly IMessagingService _messagingService;
         private readonly IKeyConnectorService _keyConnectorService;
+        private readonly IStateService _stateService;
         private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         private NavigationPage _groupingsPage;
@@ -26,6 +27,7 @@ namespace Bit.App.Pages
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
 
             _groupingsPage = new NavigationPage(new GroupingsPage(true, previousPage: previousPage))
             {
@@ -94,6 +96,13 @@ namespace Bit.App.Pages
             if (await _keyConnectorService.UserNeedsMigration())
             {
                 _messagingService.Send("convertAccountToKeyConnector");
+            }
+
+            var forcePasswordResetReason = await _stateService.GetForcePasswordResetReasonAsync();
+
+            if (forcePasswordResetReason.HasValue)
+            {
+                _messagingService.Send("forceUpdatePassword");
             }
         }
 
