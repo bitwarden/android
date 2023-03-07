@@ -1040,6 +1040,22 @@ namespace Bit.Core.Services
             await SetValueAsync(Constants.UsesKeyConnectorKey(reconciledOptions.UserId), value, reconciledOptions);
         }
 
+        public async Task<ForcePasswordResetReason?> GetForcePasswordResetReasonAsync(string userId = null)
+        {
+            var reconcileOptions = ReconcileOptions(new StorageOptions { UserId = userId }, 
+                await GetDefaultStorageOptionsAsync());
+            return (await GetAccountAsync(reconcileOptions))?.Profile?.ForcePasswordResetReason;
+        }
+
+        public async Task SetForcePasswordResetReasonAsync(ForcePasswordResetReason? value, string userId = null)
+        {
+            var reconcileOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconcileOptions);
+            account.Profile.ForcePasswordResetReason = value;
+            await SaveAccountAsync(account, reconcileOptions);
+        }
+
         public async Task<Dictionary<string, OrganizationData>> GetOrganizationsAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
