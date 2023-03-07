@@ -2539,6 +2539,18 @@ Bu hesaba geçmek ister misiniz?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Tarayıcıyı kullanmak için kameraya erişim izni verin</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Dil {0} olarak değiştirildi. Değişikliği görmek için uygulamayı yeniden başlatın</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Dil değişikliği için uygulamanın yeniden başlatılması gerekiyor</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Varsayılan (sistem)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Önemli</value>
   </data>

@@ -2540,6 +2540,18 @@ Do you want to switch to this account?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Bật quyền của máy ảnh để sử dụng máy quét</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Language change requires app restart</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Default (System)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Quan trọng</value>
   </data>

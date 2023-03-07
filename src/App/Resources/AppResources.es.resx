@@ -2541,6 +2541,18 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Habilitar el permiso de la cámara para usar el escáner</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>El idioma se ha cambiado a {0}. Por favor, reinicia la aplicación para aplicar los cambios</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>El cambio de idioma requiere reiniciar la aplicación</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Por defecto (Sistema)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Importante</value>
   </data>

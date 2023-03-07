@@ -46,6 +46,8 @@
         /// which is used to handle Apple Watch state logic
         /// </summary>
         public const string LastUserShouldConnectToWatchKey = "lastUserShouldConnectToWatch";
+        public const string AppLocaleKey = "appLocale";
+        public const string ClearSensitiveFields = "clearSensitiveFields";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;

@@ -2540,6 +2540,18 @@
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>启用相机权限以使用扫描器</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>语言已更改为 {0}。请重新启动 app 以查看更改</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>更改语言需要重新启动 app</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>默认（系统）</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>重要事项：</value>
   </data>

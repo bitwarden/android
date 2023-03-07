@@ -1357,10 +1357,10 @@ Nolasīšana notiks automātiski.</value>
     <value>Pārbaudīt, vai parole ir bijusi nopludināta.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>Šī parole datu pārkāpumos ir atklāta {0} reizi(es). To vajag mainīt.</value>
+    <value>Šī parole datu noplūdēs ir atklāta {0} reizi(es). To vajadzētu nomainīt.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>Šī parole netika atrasta nevienā no zināmajiem datu pārkāpumiem. Tai vajadzētu būt droši izmantojamai.</value>
+    <value>Šī parole netika atrasta nevienā zināmā datu noplūdē. Tai vajadzētu būt droši izmantojamai.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
     <value>Identitātes nosaukums</value>
@@ -2540,6 +2540,18 @@ Vai pārslēgties uz šo kontu?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Nodrošināt atļauju izmantot kameru, lai lietotu nolasītāju</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Valoda</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Valoda tika nomainīta uz {0}. Lūgums pārsāknēt lietotni, lai redzētu izmaiņas</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Pēc valodas maiņas ir nepieciešams pārsāknēt lietotni</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Noklusējuma (sistēmas)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Svarīgi</value>
   </data>
@@ -2562,13 +2574,13 @@ Vai pārslēgties uz šo kontu?</value>
     <value>Spēcīga</value>
   </data>
   <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
-    <value>Pārbaudīt šo paroli pret zināmiem datu pārkāpumiem</value>
+    <value>Meklēt šo paroli zināmās datu noplūdēs</value>
   </data>
   <data name="ExposedMasterPassword" xml:space="preserve">
     <value>Noplūdusi galvenā parole</value>
   </data>
   <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>Parole ir atrasta datu noplūdē. Jāizmanto spēcīga parole, lai aizsargātu savu kontu. Vai tiešām izmantot noplūdušu paroli?</value>
+    <value>Parole atrasta datu noplūdē. Jāizmanto neatkārtojama parole, lai aizsargātu savu kontu. Vai tiešām izmantot noplūdušu paroli?</value>
   </data>
   <data name="WeakAndExposedMasterPassword" xml:space="preserve">
     <value>Vāja un noplūdusi galvenā parole</value>
