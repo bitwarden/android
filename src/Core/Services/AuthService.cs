@@ -148,6 +148,8 @@ namespace Bit.Core.Services
             if (await RequirePasswordChange(email, masterPassword))
             {
                 result.ForcePasswordReset = true;
+                await _stateService.SetForcePasswordResetReasonAsync(
+                    ForcePasswordResetReason.WeakMasterPasswordOnLogin);
             }
 
             return result;
@@ -425,6 +427,9 @@ namespace Bit.Core.Services
                         KdfMemory = tokenResponse.KdfMemory,
                         KdfParallelism = tokenResponse.KdfParallelism,
                         HasPremiumPersonally = _tokenService.GetPremium(),
+                        ForcePasswordResetReason = result.ForcePasswordReset 
+                            ? ForcePasswordResetReason.AdminForcePasswordReset 
+                            : (ForcePasswordResetReason?)null,
                     },
                     new Account.AccountTokens()
                     {
