@@ -255,6 +255,19 @@ namespace Bit.App.Pages
             }
         }
 
+        public void ResetPasswordField()
+        {
+            try
+            {
+                MasterPassword = string.Empty;
+                ShowPassword = false;
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
+        }
+
         private async Task MoreAsync()
         {
             var buttons = IsEmailEnabled || CanRemoveAccount

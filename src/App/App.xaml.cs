@@ -324,6 +324,7 @@ namespace Bit.App
         private async Task SleptAsync()
         {
             await _vaultTimeoutService.CheckVaultTimeoutAsync();
+            await ClearSensitiveFieldsAsync();
             _messagingService.Send("stopEventTimer");
         }
 
@@ -331,6 +332,7 @@ namespace Bit.App
         {
             await _stateService.CheckExtensionActiveUserAndSwitchIfNeededAsync();
             await _vaultTimeoutService.CheckVaultTimeoutAsync();
+            await ClearSensitiveFieldsAsync();
             _messagingService.Send("startEventTimer");
             await UpdateThemeAsync();
             await ClearCacheIfNeededAsync();
@@ -348,6 +350,14 @@ namespace Bit.App
             {
                 ThemeManager.SetTheme(Current.Resources);
                 _messagingService.Send("updatedTheme");
+            });
+        }
+
+        private async Task ClearSensitiveFieldsAsync()
+        {
+            await Device.InvokeOnMainThreadAsync(() =>
+            {
+                _messagingService.Send(Constants.ClearSensitiveFields);
             });
         }
 
