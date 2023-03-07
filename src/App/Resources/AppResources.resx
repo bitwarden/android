@@ -2592,4 +2592,7 @@ Do you want to switch to this account?</value>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Organization SSO identifier required.</value>
   </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Add the key to an existing or new item</value>
+  </data>
 </root>

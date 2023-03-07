@@ -7,7 +7,6 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities.AccountManagement
@@ -58,6 +57,13 @@ namespace Bit.App.Utilities.AccountManagement
             _broadcasterService.Subscribe(nameof(AccountsManager), OnMessage);
         }
 
+        public async Task StartDefaultNavigationFlowAsync(Action<AppOptions> appOptionsAction)
+        {
+            appOptionsAction(Options);
+
+            await NavigateOnAccountChangeAsync();
+        }
+
         public async Task NavigateOnAccountChangeAsync(bool? isAuthed = null)
         {
             // TODO: this could be improved by doing chain of responsability pattern
@@ -88,6 +94,10 @@ namespace Bit.App.Utilities.AccountManagement
                 else if (Options.Uri != null)
                 {
                     _accountsManagerHost.Navigate(NavigationTarget.AutofillCiphers);
+                }
+                else if (Options.OtpData != null)
+                {
+                    _accountsManagerHost.Navigate(NavigationTarget.OtpCipherSelection);
                 }
                 else if (Options.CreateSend != null)
                 {

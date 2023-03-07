@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Bit.App.Controls;
+using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
@@ -17,15 +18,18 @@ namespace Bit.App.Pages
         private CiphersPageViewModel _vm;
         private bool _hasFocused;
 
-        public CiphersPage(Func<CipherView, bool> filter, string pageTitle = null, string vaultFilterSelection = null,
-            string autofillUrl = null, bool deleted = false)
+        public CiphersPage(Func<CipherView, bool> filter,
+            string pageTitle = null,
+            string vaultFilterSelection = null,
+            bool deleted = false,
+            AppOptions appOptions = null)
         {
             InitializeComponent();
             _vm = BindingContext as CiphersPageViewModel;
             _vm.Page = this;
-            _vm.Filter = filter;
-            _vm.AutofillUrl = _autofillUrl = autofillUrl;
-            _vm.Deleted = deleted;
+            _autofillUrl = appOptions?.Uri;
+            _vm.Prepare(filter, deleted, appOptions);
+
             if (pageTitle != null)
             {
                 _vm.PageTitle = string.Format(AppResources.SearchGroup, pageTitle);

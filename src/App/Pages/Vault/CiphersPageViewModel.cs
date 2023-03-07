@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Abstractions;
+using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -31,6 +34,7 @@ namespace Bit.App.Pages
         private bool _showNoData;
         private bool _showList;
         private bool _websiteIconsEnabled;
+        private AppOptions _appOptions;
 
         public CiphersPageViewModel()
         {
@@ -46,14 +50,17 @@ namespace Bit.App.Pages
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             Ciphers = new ExtendedObservableCollection<CipherView>();
-            CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
+            CipherOptionsCommand = new AsyncCommand<CipherView>(cipher => Utilities.AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService),
+                onException: ex => HandleException(ex),
+                allowsMultipleExecutions: false);
         }
 
-        public Command CipherOptionsCommand { get; set; }
+        public ICommand CipherOptionsCommand { get; }
         public ExtendedObservableCollection<CipherView> Ciphers { get; set; }
         public Func<CipherView, bool> Filter { get; set; }
         public string AutofillUrl { get; set; }
         public bool Deleted { get; set; }
+        public bool ShowAllIfSearchTextEmpty { get; set; }
 
         protected override ICipherService cipherService => _cipherService;
         protected override IPolicyService policyService => _policyService;
@@ -86,6 +93,15 @@ namespace Bit.App.Pages
             set => SetProperty(ref _websiteIconsEnabled, value);
         }
 
+        internal void Prepare(Func<CipherView, bool> filter, bool deleted, AppOptions appOptions)
+        {
+            Filter = filter;
+            AutofillUrl = appOptions?.Uri;
+            Deleted = deleted;
+            ShowAllIfSearchTextEmpty = appOptions?.OtpData != null;
+            _appOptions = appOptions;
+        }
+
         public async Task InitAsync()
         {
             await InitVaultFilterAsync(true);
@@ -101,25 +117,33 @@ namespace Bit.App.Pages
             {
                 List<CipherView> ciphers = null;
                 var searchable = !string.IsNullOrWhiteSpace(searchText) && searchText.Length > 1;
-                if (searchable)
+                var shouldShowAllWhenEmpty = ShowAllIfSearchTextEmpty && string.IsNullOrEmpty(searchText);
+                if (searchable || shouldShowAllWhenEmpty)
                 {
                     if (timeout != null)
                     {
                         await Task.Delay(timeout.Value);
                     }
-                    if (searchText != (Page as CiphersPage).SearchBar.Text)
+                    if (searchText != (Page as CiphersPage).SearchBar.Text
+                        &&
+                        !shouldShowAllWhenEmpty)
                     {
                         return;
                     }
-                    else
-                    {
-                        previousCts?.Cancel();
-                    }
+
+                    previousCts?.Cancel();
                     try
                     {
                         var vaultFilteredCiphers = await GetAllCiphersAsync();
-                        ciphers = await _searchService.SearchCiphersAsync(searchText,
-                            Filter ?? (c => c.IsDeleted == Deleted), vaultFilteredCiphers, cts.Token);
+                        if (!shouldShowAllWhenEmpty)
+                        {
+                            ciphers = await _searchService.SearchCiphersAsync(searchText,
+                                Filter ?? (c => c.IsDeleted == Deleted), vaultFilteredCiphers, cts.Token);
+                        }
+                        else
+                        {
+                            ciphers = vaultFilteredCiphers;
+                        }
                         cts.Token.ThrowIfCancellationRequested();
                     }
                     catch (OperationCanceledException)
@@ -134,8 +158,8 @@ namespace Bit.App.Pages
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     Ciphers.ResetWithRange(ciphers);
-                    ShowNoData = searchable && Ciphers.Count == 0;
-                    ShowList = searchable && !ShowNoData;
+                    ShowNoData = !shouldShowAllWhenEmpty && searchable && Ciphers.Count == 0;
+                    ShowList = (searchable || shouldShowAllWhenEmpty) && !ShowNoData;
                 });
             }, cts.Token);
             _searchCancellationTokenSource = cts;
@@ -144,6 +168,7 @@ namespace Bit.App.Pages
         public async Task SelectCipherAsync(CipherView cipher)
         {
             string selection = null;
+
             if (!string.IsNullOrWhiteSpace(AutofillUrl))
             {
                 var options = new List<string> { AppResources.Autofill };
@@ -156,6 +181,19 @@ namespace Bit.App.Pages
                 selection = await Page.DisplayActionSheet(AppResources.AutofillOrView, AppResources.Cancel, null,
                     options.ToArray());
             }
+
+            if (_appOptions?.OtpData != null)
+            {
+                if (cipher.Reprompt != CipherRepromptType.None && !await _passwordRepromptService.ShowPasswordPromptAsync())
+                {
+                    return;
+                }
+
+                var editCipherPage = new CipherAddEditPage(cipher.Id, appOptions: _appOptions);
+                await Page.Navigation.PushModalAsync(new NavigationPage(editCipherPage));
+                return;
+            }
+
             if (selection == AppResources.View || string.IsNullOrWhiteSpace(AutofillUrl))
             {
                 var page = new CipherDetailsPage(cipher.Id);
@@ -205,7 +243,7 @@ namespace Bit.App.Pages
 
         private void PerformSearchIfPopulated()
         {
-            if (!string.IsNullOrWhiteSpace((Page as CiphersPage).SearchBar.Text))
+            if (!string.IsNullOrWhiteSpace((Page as CiphersPage).SearchBar.Text) || ShowAllIfSearchTextEmpty)
             {
                 Search((Page as CiphersPage).SearchBar.Text, 200);
             }
@@ -214,14 +252,6 @@ namespace Bit.App.Pages
         protected override async Task OnVaultFilterSelectedAsync()
         {
             PerformSearchIfPopulated();
-        }
-
-        private async void CipherOptionsAsync(CipherView cipher)
-        {
-            if ((Page as BaseContentPage).DoOnce())
-            {
-                await Utilities.AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService);
-            }
         }
     }
 }
