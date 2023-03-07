@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
-using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
@@ -79,7 +76,7 @@ namespace Bit.App.Pages
         public string ConfirmMasterPassword { get; set; }
         public string Hint { get; set; }
 
-        public async Task InitAsync(bool forceSync = false)
+        public virtual async Task InitAsync(bool forceSync = false)
         {
             if (forceSync)
             {
