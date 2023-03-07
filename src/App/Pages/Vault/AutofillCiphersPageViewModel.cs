@@ -9,16 +9,21 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
     public class AutofillCiphersPageViewModel : CipherSelectionPageViewModel
     {
+        private CipherType? _fillType;
+
         public string Uri { get; set; }
 
         public override void Init(AppOptions appOptions)
         {
             Uri = appOptions?.Uri;
+            _fillType = appOptions.FillType;
+
             string name = null;
             if (Uri?.StartsWith(Constants.AndroidAppProtocol) ?? false)
             {
@@ -127,6 +132,20 @@ namespace Bit.App.Pages
             {
                 _autofillHandler.Autofill(cipher);
             }
+        }
+
+        protected override async Task AddCipherAsync()
+        {
+            if (_fillType.HasValue && _fillType != CipherType.Login)
+            {
+                var pageForOther = new CipherAddEditPage(type: _fillType, fromAutofill: true);
+                await Page.Navigation.PushModalAsync(new NavigationPage(pageForOther));
+                return;
+            }
+
+            var pageForLogin = new CipherAddEditPage(null, CipherType.Login, uri: Uri, name: Name,
+                fromAutofill: true);
+            await Page.Navigation.PushModalAsync(new NavigationPage(pageForLogin));
         }
     }
 }

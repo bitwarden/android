@@ -37,6 +37,12 @@
                 Clicked="CloseItem_Clicked"
                 Order="Primary"
                 Priority="-1" />
+            <ToolbarItem x:Name="_addItem" x:Key="addItem"
+                         IconImageSource="plus.png"
+                         Command="{Binding AddCipherCommand}"
+                         Order="Primary"
+                         AutomationProperties.IsInAccessibleTree="True"
+                         AutomationProperties.Name="{u:I18n AddItem}" />
 
             <DataTemplate x:Key="cipherTemplate"
                           x:DataType="pages:GroupingsPageListItem">
@@ -80,7 +86,7 @@
                         HorizontalTextAlignment="Center"></Label>
                     <Button
                         Text="{u:I18n AddAnItem}"
-                        Clicked="AddButton_Clicked"></Button>
+                        Command="{Binding AddCipherCommand}" />
                 </StackLayout>
 
                 <Frame
@@ -129,7 +135,7 @@
         <Button
             x:Name="_fab"
             ImageSource="plus.png"
-            Clicked="AddButton_Clicked"
+            Command="{Binding AddCipherCommand}"
             Style="{StaticResource btn-fab}"
             IsVisible="{OnPlatform iOS=false, Android=true}"
             AbsoluteLayout.LayoutFlags="PositionProportional"

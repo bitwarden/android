@@ -39,6 +39,7 @@ namespace Bit.App.Pages
             if (Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(_closeItem);
+                ToolbarItems.Add(_addItem);
             }
 
             SetActivityIndicator(_mainContent);

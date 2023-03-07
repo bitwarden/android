@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Resources;
@@ -65,6 +66,12 @@ namespace Bit.App.Pages
             var editCipherPage = new CipherAddEditPage(cipher.Id, appOptions: _appOptions);
             await Page.Navigation.PushModalAsync(new NavigationPage(editCipherPage));
             return;
+        }
+
+        protected override async Task AddCipherAsync()
+        {
+            var pageForLogin = new CipherAddEditPage(null, CipherType.Login, name: Name, appOptions: _appOptions);
+            await Page.Navigation.PushModalAsync(new NavigationPage(pageForLogin));
         }
     }
 }
