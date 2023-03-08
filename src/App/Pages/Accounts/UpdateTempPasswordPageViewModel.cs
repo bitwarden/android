@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Bit.App.Resources;
 using Bit.Core.Exceptions;
+using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Xamarin.Forms;
 
@@ -22,6 +23,35 @@ namespace Bit.App.Pages
         public Command ToggleConfirmPasswordCommand { get; }
         public Action UpdateTempPasswordSuccessAction { get; set; }
         public Action LogOutAction { get; set; }
+        public string CurrentMasterPassword { get; set; }
+        public ForcePasswordResetReason Reason { get; set; } = ForcePasswordResetReason.AdminForcePasswordReset;
+
+        public override async Task InitAsync(bool forceSync = false)
+        {
+            await base.InitAsync(forceSync);
+            
+            var forcePasswordResetReason = await _stateService.GetForcePasswordResetReasonAsync();
+
+            if (forcePasswordResetReason.HasValue)
+            {
+                Reason = forcePasswordResetReason.Value;
+            }
+        }
+
+        public bool RequireCurrentPassword
+        {
+            get => Reason == ForcePasswordResetReason.WeakMasterPasswordOnLogin;
+        }
+
+        public string UpdateMasterPasswordWarningText
+        {
+            get
+            {
+                return Reason == ForcePasswordResetReason.WeakMasterPasswordOnLogin
+                    ? _i18nService.T("UpdateWeakMasterPasswordWarning")
+                    : _i18nService.T("UpdateMasterPasswordWarning");
+            }
+        }
 
         public void TogglePassword()
         {
