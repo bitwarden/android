@@ -199,6 +199,11 @@ namespace Bit.Core.Services
                 request, true, false);
         }
 
+        public Task PostPasswordAsync(PasswordRequest request)
+        {
+            return SendAsync<PasswordRequest, object>(HttpMethod.Post, "/accounts/password", request, true, false);
+        }
+
         public Task DeleteAccountAsync(DeleteAccountRequest request)
         {
             return SendAsync<DeleteAccountRequest, object>(HttpMethod.Delete, "/accounts", request, true, false);
