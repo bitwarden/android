@@ -53,9 +53,13 @@ namespace Bit.App.Pages
             CipherOptionsCommand = new AsyncCommand<CipherView>(cipher => Utilities.AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
+            AddCipherCommand = new AsyncCommand(AddCipherAsync,
+                onException: ex => HandleException(ex),
+                allowsMultipleExecutions: false);
         }
 
         public ICommand CipherOptionsCommand { get; }
+        public ICommand AddCipherCommand { get; }
         public ExtendedObservableCollection<CipherView> Ciphers { get; set; }
         public Func<CipherView, bool> Filter { get; set; }
         public string AutofillUrl { get; set; }
@@ -72,7 +76,8 @@ namespace Bit.App.Pages
             get => _showNoData;
             set => SetProperty(ref _showNoData, value, additionalPropertyNames: new string[]
             {
-                nameof(ShowSearchDirection)
+                nameof(ShowSearchDirection),
+                nameof(ShowAddCipher)
             });
         }
 
@@ -86,6 +91,8 @@ namespace Bit.App.Pages
         }
 
         public bool ShowSearchDirection => !ShowList && !ShowNoData;
+
+        public bool ShowAddCipher => ShowNoData && _appOptions?.OtpData != null;
 
         public bool WebsiteIconsEnabled
         {
@@ -252,6 +259,12 @@ namespace Bit.App.Pages
         protected override async Task OnVaultFilterSelectedAsync()
         {
             PerformSearchIfPopulated();
+        }
+
+        private async Task AddCipherAsync()
+        {
+            var pageForLogin = new CipherAddEditPage(null, CipherType.Login, name: _appOptions?.OtpData?.Issuer ?? _appOptions?.OtpData?.AccountName, appOptions: _appOptions);
+            await Page.Navigation.PushModalAsync(new NavigationPage(pageForLogin));
         }
     }
 }
