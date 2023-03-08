@@ -50,6 +50,9 @@ namespace Bit.App.Pages
             SelectCipherCommand = new AsyncCommand<IGroupingsPageListItem>(SelectCipherAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
+            AddCipherCommand = new AsyncCommand(AddCipherAsync,
+                onException: ex => HandleException(ex),
+                allowsMultipleExecutions: false);
 
             AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
@@ -64,6 +67,7 @@ namespace Bit.App.Pages
 
         public ICommand CipherOptionsCommand { get; set; }
         public ICommand SelectCipherCommand { get; set; }
+        public ICommand AddCipherCommand { get; set; }
 
         public bool ShowNoData
         {
@@ -157,5 +161,7 @@ namespace Bit.App.Pages
         protected abstract Task<List<GroupingsPageListGroup>> LoadGroupedItemsAsync();
 
         protected abstract Task SelectCipherAsync(IGroupingsPageListItem item);
+
+        protected abstract Task AddCipherAsync();
     }
 }
