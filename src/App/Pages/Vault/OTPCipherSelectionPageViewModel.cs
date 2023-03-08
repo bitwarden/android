@@ -17,7 +17,7 @@ namespace Bit.App.Pages
         private OtpData _otpData;
         private Models.AppOptions _appOptions;
 
-        public override bool ShowCallout => true;
+        public override bool ShowCallout => !ShowNoData;
 
         public override void Init(Models.AppOptions options)
         {
@@ -26,7 +26,9 @@ namespace Bit.App.Pages
 
             Name = _otpData.Issuer ?? _otpData.AccountName;
             PageTitle = string.Format(AppResources.ItemsForUri, Name ?? "--");
-            NoDataText = string.Format(AppResources.NoItemsForUri, Name ?? "--");
+            NoDataText = string.Format(AppResources.ThereAreNoItemsInYourVaultThatMatchX, Name ?? "--")
+                + Environment.NewLine
+                + AppResources.SearchForAnItemOrAddANewItem;
         }
 
         protected override async Task<List<GroupingsPageListGroup>> LoadGroupedItemsAsync()

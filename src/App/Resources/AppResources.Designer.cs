@@ -5346,6 +5346,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search for an item or add a new item.
+        /// </summary>
+        public static string SearchForAnItemOrAddANewItem {
+            get {
+                return ResourceManager.GetString("SearchForAnItemOrAddANewItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search {0}.
         /// </summary>
         public static string SearchGroup {
@@ -6035,6 +6044,24 @@ namespace Bit.App.Resources {
         public static string ThemeDescription {
             get {
                 return ResourceManager.GetString("ThemeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no items in your vault that match &quot;{0}&quot;.
+        /// </summary>
+        public static string ThereAreNoItemsInYourVaultThatMatchX {
+            get {
+                return ResourceManager.GetString("ThereAreNoItemsInYourVaultThatMatchX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no items that match the search.
+        /// </summary>
+        public static string ThereAreNoItemsThatMatchTheSearch {
+            get {
+                return ResourceManager.GetString("ThereAreNoItemsThatMatchTheSearch", resourceCulture);
             }
         }
         

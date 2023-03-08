@@ -72,7 +72,7 @@ namespace Bit.App.Pages
         public bool ShowNoData
         {
             get => _showNoData;
-            set => SetProperty(ref _showNoData, value);
+            set => SetProperty(ref _showNoData, value, additionalPropertyNames: new string[] { nameof(ShowCallout) });
         }
 
         public bool ShowList

@@ -81,6 +81,8 @@
                     Padding="20, 0"
                     Spacing="20"
                     IsVisible="{Binding ShowNoData}">
+                    <Image
+                        Source="empty_items_state" />
                     <Label
                         Text="{Binding NoDataText}"
                         HorizontalTextAlignment="Center"></Label>
