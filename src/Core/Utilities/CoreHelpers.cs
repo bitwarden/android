@@ -168,10 +168,27 @@ namespace Bit.Core.Utilities
         {
             try
             {
-                if (!Uri.TryCreate(urlString, UriKind.Absolute, out var uri) || string.IsNullOrWhiteSpace(uri.Query))
+                if (Uri.TryCreate(urlString, UriKind.Absolute, out var uri))
+                {
+                    return GetQueryParams(uri);
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
+            return new Dictionary<string, string>();
+        }
+
+        public static Dictionary<string, string> GetQueryParams(Uri uri)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(uri.Query))
                 {
                     return new Dictionary<string, string>();
                 }
+
                 var queryStringNameValueCollection = HttpUtility.ParseQueryString(uri.Query);
                 return queryStringNameValueCollection.AllKeys.Where(k => k != null).ToDictionary(k => k, k => queryStringNameValueCollection[k]);
             }

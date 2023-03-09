@@ -179,6 +179,10 @@
     <BundleResource Include="Resources\generate.png" />
     <BundleResource Include="Resources\generate%402x.png" />
     <BundleResource Include="Resources\generate%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\empty_items_state.imageset\Empty-items-state-dark.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\empty_items_state.imageset\Empty-items-state.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\empty_items_state.imageset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />

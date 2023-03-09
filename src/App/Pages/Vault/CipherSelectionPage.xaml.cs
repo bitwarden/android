@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Bit.App.Controls;
+using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
@@ -12,27 +11,46 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public partial class AutofillCiphersPage : BaseContentPage
+    public partial class CipherSelectionPage : BaseContentPage
     {
         private readonly AppOptions _appOptions;
         private readonly IBroadcasterService _broadcasterService;
         private readonly ISyncService _syncService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
+        private readonly IAccountsManager _accountsManager;
 
-        private AutofillCiphersPageViewModel _vm;
+        private readonly CipherSelectionPageViewModel _vm;
 
-        public AutofillCiphersPage(AppOptions appOptions)
+        public CipherSelectionPage(AppOptions appOptions)
         {
             _appOptions = appOptions;
+
+            if (appOptions?.OtpData is null)
+            {
+                BindingContext = new AutofillCiphersPageViewModel();
+            }
+            else
+            {
+                BindingContext = new OTPCipherSelectionPageViewModel();
+            }
+
             InitializeComponent();
+
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                ToolbarItems.Add(_closeItem);
+                ToolbarItems.Add(_addItem);
+            }
+
             SetActivityIndicator(_mainContent);
-            _vm = BindingContext as AutofillCiphersPageViewModel;
+            _vm = BindingContext as CipherSelectionPageViewModel;
             _vm.Page = this;
             _vm.Init(appOptions);
 
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+            _accountsManager = ServiceContainer.Resolve<IAccountsManager>();
         }
 
         protected async override void OnAppearing()
@@ -51,10 +69,16 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _accountAvatar?.OnAppearing();
-            _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+            // TODO: There's currently an issue on iOS where the toolbar item is not getting updated
+            // as the others somehow. Removing this so at least we get the circle with ".." instead
+            // of a white circle
+            if (Device.RuntimePlatform != Device.iOS)
+            {
+                _accountAvatar?.OnAppearing();
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+            }
 
-            _broadcasterService.Subscribe(nameof(AutofillCiphersPage), async (message) =>
+            _broadcasterService.Subscribe(nameof(CipherSelectionPage), async (message) =>
             {
                 try
                 {
@@ -116,40 +140,44 @@ namespace Bit.App.Pages
             _accountAvatar?.OnDisappearing();
         }
 
-        private async void RowSelected(object sender, SelectionChangedEventArgs e)
+        private void AddButton_Clicked(object sender, System.EventArgs e)
         {
-            ((ExtendedCollectionView)sender).SelectedItem = null;
             if (!DoOnce())
             {
                 return;
             }
-            if (e.CurrentSelection?.FirstOrDefault() is GroupingsPageListItem item && item.Cipher != null)
+
+            if (_vm is AutofillCiphersPageViewModel autofillVM)
             {
-                await _vm.SelectCipherAsync(item.Cipher, item.FuzzyAutofill);
+                AddFromAutofill(autofillVM).FireAndForget();
             }
         }
 
-        private async void AddButton_Clicked(object sender, System.EventArgs e)
+        private async Task AddFromAutofill(AutofillCiphersPageViewModel autofillVM)
         {
-            if (!DoOnce())
-            {
-                return;
-            }
             if (_appOptions.FillType.HasValue && _appOptions.FillType != CipherType.Login)
             {
                 var pageForOther = new CipherAddEditPage(type: _appOptions.FillType, fromAutofill: true);
                 await Navigation.PushModalAsync(new NavigationPage(pageForOther));
                 return;
             }
-            var pageForLogin = new CipherAddEditPage(null, CipherType.Login, uri: _vm.Uri, name: _vm.Name,
+            var pageForLogin = new CipherAddEditPage(null, CipherType.Login, uri: autofillVM.Uri, name: _vm.Name,
                 fromAutofill: true);
             await Navigation.PushModalAsync(new NavigationPage(pageForLogin));
         }
 
-        private void Search_Clicked(object sender, System.EventArgs e)
+        private void Search_Clicked(object sender, EventArgs e)
         {
-            var page = new CiphersPage(null, autofillUrl: _vm.Uri);
-            Application.Current.MainPage = new NavigationPage(page);
+            var page = new CiphersPage(null, appOptions: _appOptions);
+            Navigation.PushModalAsync(new NavigationPage(page)).FireAndForget();
+        }
+
+        void CloseItem_Clicked(object sender, EventArgs e)
+        {
+            if (DoOnce())
+            {
+                _accountsManager.StartDefaultNavigationFlowAsync(op => op.OtpData = null).FireAndForget();
+            }
         }
     }
 }
