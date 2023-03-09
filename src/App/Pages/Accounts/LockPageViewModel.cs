@@ -336,14 +336,14 @@ namespace Bit.App.Pages
                         var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, _email, kdfConfig);
                         await _stateService.SetPinProtectedKeyAsync(await _cryptoService.EncryptAsync(key.Key, pinKey));
                     }
-                    
+
                     if (await RequirePasswordChangeAsync())
                     {
                         // Save the ForcePasswordResetReason to force a password reset after unlock
                         await _stateService.SetForcePasswordResetReasonAsync(
                             ForcePasswordResetReason.WeakMasterPasswordOnLogin);
                     }
-                    
+
                     MasterPassword = string.Empty;
                     await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                     await SetKeyAndContinueAsync(key);
@@ -386,8 +386,8 @@ namespace Bit.App.Pages
                 MasterPassword, _passwordGenerationService.GetPasswordStrengthUserInput(_email)).Score;
 
             return !await _policyService.EvaluateMasterPassword(
-                strength, 
-                MasterPassword, 
+                strength,
+                MasterPassword,
                 _enforcedMasterPasswordOptions
             );
         }

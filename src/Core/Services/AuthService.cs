@@ -147,7 +147,7 @@ namespace Bit.Core.Services
             var hashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key);
             var localHashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
             var result = await LogInHelperAsync(email, hashedPassword, localHashedPassword, null, null, null, key, null, null, null, captchaToken);
-            
+
             if (await RequirePasswordChange(email, masterPassword))
             {
                 if (!string.IsNullOrEmpty(_authedUserId))
@@ -180,9 +180,9 @@ namespace Bit.Core.Services
             {
                 return false;
             }
-            
+
             var passwordStrength = _passwordGenerationService.PasswordStrength(
-                masterPassword, 
+                masterPassword,
                 _passwordGenerationService.GetPasswordStrengthUserInput(email)
             ).Score;
 
@@ -212,7 +212,7 @@ namespace Bit.Core.Services
             }
             var result = await LogInHelperAsync(Email, MasterPasswordHash, LocalMasterPasswordHash, Code, CodeVerifier, SsoRedirectUrl, _key,
                 twoFactorProvider, twoFactorToken, remember, CaptchaToken, authRequestId: AuthRequestId);
-            
+
             // If we successfully authenticated and we have a saved _2faForcePasswordResetReason reason from LogInAsync()
             if (!string.IsNullOrEmpty(_authedUserId) && _2faForcePasswordResetReason.HasValue)
             {
@@ -450,8 +450,8 @@ namespace Bit.Core.Services
                         KdfMemory = tokenResponse.KdfMemory,
                         KdfParallelism = tokenResponse.KdfParallelism,
                         HasPremiumPersonally = _tokenService.GetPremium(),
-                        ForcePasswordResetReason = result.ForcePasswordReset 
-                            ? ForcePasswordResetReason.AdminForcePasswordReset 
+                        ForcePasswordResetReason = result.ForcePasswordReset
+                            ? ForcePasswordResetReason.AdminForcePasswordReset
                             : (ForcePasswordResetReason?)null,
                     },
                     new Account.AccountTokens()

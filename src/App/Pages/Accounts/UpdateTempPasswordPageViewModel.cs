@@ -14,14 +14,14 @@ namespace Bit.App.Pages
     public class UpdateTempPasswordPageViewModel : BaseChangePasswordViewModel
     {
         private readonly IUserVerificationService _userVerificationService;
-        
+
         public UpdateTempPasswordPageViewModel()
         {
             PageTitle = AppResources.UpdateMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleConfirmPasswordCommand = new Command(ToggleConfirmPassword);
             SubmitCommand = new Command(async () => await SubmitAsync());
-            
+
             _userVerificationService = ServiceContainer.Resolve<IUserVerificationService>("userVerificationService");
         }
 
@@ -36,7 +36,7 @@ namespace Bit.App.Pages
         public override async Task InitAsync(bool forceSync = false)
         {
             await base.InitAsync(forceSync);
-            
+
             var forcePasswordResetReason = await _stateService.GetForcePasswordResetReasonAsync();
 
             if (forcePasswordResetReason.HasValue)
@@ -114,10 +114,10 @@ namespace Bit.App.Pages
                         throw new ArgumentOutOfRangeException();
                 }
                 await _deviceActionService.HideLoadingAsync();
-                
+
                 // Clear the force reset password reason
                 await _stateService.SetForcePasswordResetReasonAsync(null);
-                
+
                 _platformUtilsService.ShowToast("success", null, AppResources.UpdatedMasterPassword);
 
                 UpdateTempPasswordSuccessAction?.Invoke();
@@ -146,14 +146,14 @@ namespace Bit.App.Pages
                 NewMasterPasswordHash = newMasterPasswordHash,
                 MasterPasswordHint = Hint
             };
-            
+
             await _apiService.PutUpdateTempPasswordAsync(request);
         }
 
         private async Task UpdatePasswordAsync(string newMasterPasswordHash, Tuple<SymmetricCryptoKey, EncString> newEncKey)
         {
             var currentPasswordHash = await _cryptoService.HashPasswordAsync(CurrentMasterPassword, null);
-            
+
             var request = new PasswordRequest
             {
                 MasterPasswordHash = currentPasswordHash,

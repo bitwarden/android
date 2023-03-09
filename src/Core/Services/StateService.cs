@@ -1042,7 +1042,7 @@ namespace Bit.Core.Services
 
         public async Task<ForcePasswordResetReason?> GetForcePasswordResetReasonAsync(string userId = null)
         {
-            var reconcileOptions = ReconcileOptions(new StorageOptions { UserId = userId }, 
+            var reconcileOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
             return (await GetAccountAsync(reconcileOptions))?.Profile?.ForcePasswordResetReason;
         }
