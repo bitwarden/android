@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
-using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
@@ -32,7 +31,10 @@ namespace Bit.Core.Services
 
         private readonly LazyResolve<IWatchDeviceService> _watchDeviceService = new LazyResolve<IWatchDeviceService>();
         private SymmetricCryptoKey _key;
-        private MasterPasswordPolicyOptions _masterPasswordPolicy { get; set; }
+
+        private string _authedUserId;
+        private MasterPasswordPolicyOptions _masterPasswordPolicy;
+        private ForcePasswordResetReason? _2faForcePasswordResetReason;
 
         public AuthService(
             ICryptoService cryptoService,
@@ -140,6 +142,7 @@ namespace Bit.Core.Services
         public async Task<AuthResult> LogInAsync(string email, string masterPassword, string captchaToken)
         {
             SelectedTwoFactorProviderType = null;
+            _2faForcePasswordResetReason = null;
             var key = await MakePreloginKeyAsync(masterPassword, email);
             var hashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key);
             var localHashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
@@ -147,9 +150,18 @@ namespace Bit.Core.Services
             
             if (await RequirePasswordChange(email, masterPassword))
             {
-                result.ForcePasswordReset = true;
-                await _stateService.SetForcePasswordResetReasonAsync(
-                    ForcePasswordResetReason.WeakMasterPasswordOnLogin);
+                if (!string.IsNullOrEmpty(_authedUserId))
+                {
+                    // Authentication was successful, save the WeakMasterPasswordOnLogin flag for the user
+                    result.ForcePasswordReset = true;
+                    await _stateService.SetForcePasswordResetReasonAsync(
+                        ForcePasswordResetReason.WeakMasterPasswordOnLogin, _authedUserId);
+                }
+                else
+                {
+                    // Authentication not fully successful (likely 2FA), store flag for LogInTwoFactorAsync()
+                    _2faForcePasswordResetReason = ForcePasswordResetReason.WeakMasterPasswordOnLogin;
+                }
             }
 
             return result;
@@ -191,15 +203,26 @@ namespace Bit.Core.Services
             return await LogInHelperAsync(null, null, null, code, codeVerifier, redirectUrl, null, orgId: orgId);
         }
 
-        public Task<AuthResult> LogInTwoFactorAsync(TwoFactorProviderType twoFactorProvider, string twoFactorToken,
+        public async Task<AuthResult> LogInTwoFactorAsync(TwoFactorProviderType twoFactorProvider, string twoFactorToken,
             string captchaToken, bool? remember = null)
         {
             if (captchaToken != null)
             {
                 CaptchaToken = captchaToken;
             }
-            return LogInHelperAsync(Email, MasterPasswordHash, LocalMasterPasswordHash, Code, CodeVerifier, SsoRedirectUrl, _key,
+            var result = await LogInHelperAsync(Email, MasterPasswordHash, LocalMasterPasswordHash, Code, CodeVerifier, SsoRedirectUrl, _key,
                 twoFactorProvider, twoFactorToken, remember, CaptchaToken, authRequestId: AuthRequestId);
+            
+            // If we successfully authenticated and we have a saved _2faForcePasswordResetReason reason from LogInAsync()
+            if (!string.IsNullOrEmpty(_authedUserId) && _2faForcePasswordResetReason.HasValue)
+            {
+                // Save the forcePasswordReset reason with the state service to force a password reset for the user
+                result.ForcePasswordReset = true;
+                await _stateService.SetForcePasswordResetReasonAsync(
+                    ForcePasswordResetReason.WeakMasterPasswordOnLogin, _authedUserId);
+            }
+
+            return result;
         }
 
         public async Task<AuthResult> LogInCompleteAsync(string email, string masterPassword,
@@ -512,6 +535,7 @@ namespace Bit.Core.Services
 
             }
 
+            _authedUserId = _tokenService.GetUserId();
             await _stateService.SetBiometricLockedAsync(false);
             _messagingService.Send("loggedIn");
             return result;
@@ -529,6 +553,8 @@ namespace Bit.Core.Services
             SsoRedirectUrl = null;
             TwoFactorProvidersData = null;
             SelectedTwoFactorProviderType = null;
+            _masterPasswordPolicy = null;
+            _authedUserId = null;
         }
 
         public async Task<List<PasswordlessLoginResponse>> GetPasswordlessLoginRequestsAsync()
