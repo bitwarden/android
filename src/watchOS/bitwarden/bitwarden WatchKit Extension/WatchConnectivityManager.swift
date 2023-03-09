@@ -4,6 +4,7 @@ import WatchConnectivity
 
 struct WatchConnectivityMessage {
     var state: BWState?
+    var debugText: String?
 }
 
 final class WatchConnectivityManager: NSObject, ObservableObject {
@@ -76,22 +77,41 @@ extension WatchConnectivityManager: WCSessionDelegate {
             k.starts(with: WATCH_DTO_APP_CONTEXT_KEY)
         }
         
-        guard let dtoKey = watchDtoKey, let serializedDto = applicationContext[dtoKey] as? String else {
-            return
-        }
-        
-        guard KeychainHelper.standard.hasDeviceOwnerAuth() else {
-            return
-        }
-        
         do {
-            guard let json = try! JSONSerialization.jsonObject(with: serializedDto.data(using: .utf8)!, options: [.fragmentsAllowed]) as? String else {
+            guard let dtoKey = watchDtoKey,
+                  let nsRawData = applicationContext[dtoKey] as? NSData,
+                  KeychainHelper.standard.hasDeviceOwnerAuth() else {
                 return
             }
             
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .upperToLowerCamelCase
-            let watchDTO = try decoder.decode(WatchDTO.self, from: json.data(using: .utf8)!)
+            let decoder = MessagePackDecoder()
+            decoder.userInfo[MessagePackDecoder.dataSpecKey] = DataSpecBuilder()
+                .append("state")
+                .appendArray("ciphers", DataSpecBuilder()
+                    .append("id")
+                    .append("name")
+                    .appendObj("login", DataSpecBuilder()
+                        .append("username")
+                        .append("totp")
+                        .appendArray("uris", DataSpecBuilder()
+                            .append("uri")
+                            .build())
+                        .build())
+                    .build())
+                .appendObj("userData", DataSpecBuilder()
+                    .append("id")
+                    .append("email")
+                    .append("name")
+                    .build())
+                .appendObj("environmentData", DataSpecBuilder()
+                    .append("base")
+                    .append("icons")
+                    .build())
+                .build()
+            
+            let rawData = try nsRawData.decompressed(using: .lzfse)
+
+            let watchDTO = try decoder.decode(WatchDTO.self, from: Data(referencing: rawData))
             
             let previousUserId = StateService.shared.getUser()?.id
             

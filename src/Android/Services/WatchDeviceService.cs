@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Bit.App.Services;
 using Bit.Core.Abstractions;
-using Bit.Core.Models;
 
 namespace Bit.Droid.Services
 {
@@ -22,7 +21,7 @@ namespace Bit.Droid.Services
 
         protected override bool CanSendData => false;
 
-        protected override Task SendDataToWatchAsync(WatchDTO watchDto) => throw new NotImplementedException();
+        protected override Task SendDataToWatchAsync(byte[] rawData) => throw new NotImplementedException();
 
         protected override void ConnectToWatch() => throw new NotImplementedException();
     }

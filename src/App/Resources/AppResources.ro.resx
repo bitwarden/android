@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Un indiciu pentru parola principală vă poate ajuta să v-o reamintiți dacă o uitați.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Parola principală trebuie să conțină minimum 8 caractere.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimum de cifre</value>
@@ -2145,7 +2145,7 @@ Scanarea se va face automat.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Timpul de expirare al seifului depășește restricțiile stabilite de organizația dvs.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Una sau mai multe politici de organizație vă împiedică să vă exportați seiful individual.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2540,6 +2540,18 @@ Doriți să comutați la acest cont?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Permite accesul camerei foto pentru a utiliza scanerul</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Language change requires app restart</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Default (System)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Important</value>
   </data>
@@ -2575,5 +2587,8 @@ Doriți să comutați la acest cont?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Parolă slabă identificată și găsită într-o baza de date expusa. Folosiți o parolă puternică și unică pentru a vă proteja contul. Sigur doriți să utilizați această parolă?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organization SSO identifier required.</value>
   </data>
 </root>

@@ -62,7 +62,7 @@ struct CipherListView: View {
 #endif
         }
         .fullScreenCover(isPresented: $viewModel.showingSheet) {
-            BWStateView(viewModel.currentState)
+            BWStateView(viewModel.currentState, viewModel.debugText)
         }
     }
     

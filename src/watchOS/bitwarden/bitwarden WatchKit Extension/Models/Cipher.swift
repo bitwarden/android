@@ -2,6 +2,12 @@ import Foundation
 import CoreData
 
 struct Cipher:Identifiable,Codable{
+    enum CodingKeys : CodingKey {
+        case id
+        case name
+        case login
+    }
+    
     var id:String
     var name:String?
     var userId:String?

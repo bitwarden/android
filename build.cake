@@ -4,6 +4,7 @@
 #addin nuget:?package=Cake.Incubator&version=7.0.0
 #tool dotnet:?package=GitVersion.Tool&version=5.10.3
 using Path = System.IO.Path;
+using System.Text.RegularExpressions;
 
 var debugScript = Argument<bool>("debugScript", false);
 var target = Argument("target", "Default");
@@ -35,6 +36,7 @@ VariantConfig GetVariant() => variant.ToLower() switch{
 GitVersion _gitVersion; //will be set by GetGitInfo task
 var _slnPath = Path.Combine(""); //base path used to access files. If build.cake file is moved, just update this
 string _androidPackageName = string.Empty; //will be set by UpdateAndroidManifest task
+string _iOSVersionName = string.Empty;  //will be set by UpdateiOSPlist task
 string CreateFeatureBranch(string prevVersionName, GitVersion git) => $"{prevVersionName}-{git.BranchName.Replace("/","-")}";
 string GetVersionName(string prevVersionName, VariantConfig buildVariant, GitVersion git) => buildVariant is Prod? prevVersionName : CreateFeatureBranch(prevVersionName, git); 
 int CreateBuildNumber(int previousNumber) => ++previousNumber; 
@@ -163,7 +165,8 @@ enum iOSProjectType
     MainApp,
     Autofill,
     Extension,
-    ShareExtension
+    ShareExtension,
+    WatchApp
 }
 
 string GetiOSBundleId(VariantConfig buildVariant, iOSProjectType projectType) => projectType switch
@@ -171,6 +174,7 @@ string GetiOSBundleId(VariantConfig buildVariant, iOSProjectType projectType) =>
     iOSProjectType.Autofill => $"{buildVariant.iOSBundleId}.autofill",
     iOSProjectType.Extension => $"{buildVariant.iOSBundleId}.find-login-action-extension",
     iOSProjectType.ShareExtension => $"{buildVariant.iOSBundleId}.share-extension",
+    iOSProjectType.WatchApp => $"{buildVariant.iOSBundleId}.watchkitapp",
     _ => buildVariant.iOSBundleId
 };
 
@@ -205,6 +209,7 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
 
     if(projectType == iOSProjectType.MainApp)
     {
+        _iOSVersionName = newVersionName;
         plist["CFBundleURLTypes"][0]["CFBundleURLName"] = $"{buildVariant.iOSBundleId}.url";
     }
 
@@ -240,10 +245,79 @@ private void UpdateiOSEntitlementsPlist(string entitlementsPath, VariantConfig b
     Information($"{entitlementsPath} updated with success!");
 }
 
-Task("UpdateiOSIcon")
+private void UpdateWatchKitAppInfoPlist(string plistPath, VariantConfig buildVariant)
+{
+    var plistFile = File(plistPath);
+    dynamic plist = DeserializePlist(plistFile);
+
+    var prevBundleId = plist["NSExtension"]["NSExtensionAttributes"]["WKAppBundleIdentifier"];
+    var newBundleId = GetiOSBundleId(buildVariant, iOSProjectType.WatchApp);
+
+    plist["NSExtension"]["NSExtensionAttributes"]["WKAppBundleIdentifier"] = newBundleId;
+
+    SerializePlist(plistFile, plist);
+
+    Information($"Changed Bundle Identifier from {prevBundleId} to {newBundleId}");
+    Information($"{plistPath} updated with success!");
+}
+
+private void UpdateWatchPbxproj(string pbxprojPath, string newVersion)
+{
+    var fileText = FileReadText(pbxprojPath);
+    if (string.IsNullOrEmpty(fileText))
+    {
+        throw new Exception($"Couldn't find {pbxprojPath}");
+    }
+
+    const string pattern = @"MARKETING_VERSION = [^;]*;";
+
+    fileText = Regex.Replace(fileText, pattern, $"MARKETING_VERSION = {newVersion};");
+
+    FileWriteText(pbxprojPath, fileText);
+    Information($"{pbxprojPath} modified successfully.");
+}
+
+/// <summary>
+/// Updates the target icons on the given appiconset target
+/// taking as source the icon in appIcons/iOS folder for the giving variant
+/// </summary>
+/// <param name="target">It can be <ios|watch|complication|macos></param>
+/// <param name="appiconsetTarget">Folder to copy the generated icons to</param>
+private void UpdateAppleIcons(string target, string appiconsetTarget)
+{
+    Information($"Updating {target} App Icons");
+
+    var iconsTempDirPath = Path.Combine(_slnPath, "appIcons", "temp");
+    CreateDirectory(iconsTempDirPath);
+
+    var arguments = new ProcessArgumentBuilder();
+    arguments.Append(target);
+    arguments.Append(Path.Combine(_slnPath, "appIcons", "iOS", $"{variant}.png"));
+    arguments.Append(iconsTempDirPath);
+
+    using(var process = StartAndReturnProcess(Path.Combine(_slnPath, "appIcons", "icongen.sh"), 
+        new ProcessSettings { Arguments = arguments }))
+    {
+        process.WaitForExit();
+        Information("Exit code: {0}", process.GetExitCode());
+    }
+
+    var generatedIconsPath = Path.Combine(iconsTempDirPath, "*.png");
+    CopyFiles(generatedIconsPath, appiconsetTarget);        
+
+    DeleteDirectory(iconsTempDirPath, new DeleteDirectorySettings {
+        Recursive = true,
+        Force = true
+    });
+
+    Information($"{target} App Icons have been updated");
+}
+
+Task("UpdateiOSIcons")
     .Does(()=>{
-        //TODO we'll implement variant icons later
-        Information($"Updating IOS App Icon");
+        UpdateAppleIcons("ios", Path.Combine(_slnPath, "src", "iOS", "Resources", "Assets.xcassets", "AppIcons.appiconset"));
+        UpdateAppleIcons("watch", Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden WatchKit App", "Assets.xcassets", "AppIcon.appiconset"));
+        // TODO: Update complication icons when they start working
     });
 
 Task("UpdateiOSPlist")
@@ -296,8 +370,10 @@ Task("UpdateiOSCodeFiles")
         var fileList = new string[] {
             Path.Combine(_slnPath, "src", "iOS.Core", "Utilities", "iOSCoreHelpers.cs"),
             Path.Combine(_slnPath, "src", "iOS.Core", "Constants.cs"),
+            Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden.xcodeproj", "project.pbxproj"),
+            Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden WatchKit Extension", "Helpers", "KeychainHelper.swift"),
             Path.Combine(".github", "resources", "export-options-ad-hoc.plist"),
-            Path.Combine(".github", "resources", "export-options-app-store.plist"),
+            Path.Combine(".github", "resources", "export-options-app-store.plist")
         };
 
         foreach(string path in fileList)
@@ -305,6 +381,22 @@ Task("UpdateiOSCodeFiles")
             ReplaceInFile(path, "com.8bit.bitwarden", buildVariant.iOSBundleId);
         }
     });
+
+Task("UpdateWatchProject")
+    .IsDependentOn("UpdateiOSPlist")
+    .WithCriteria(() => !string.IsNullOrEmpty(_iOSVersionName))
+    .Does(()=> {
+        var watchProjectPath = Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden.xcodeproj", "project.pbxproj");
+        UpdateWatchPbxproj(watchProjectPath, _iOSVersionName);
+    });
+
+Task("UpdateWatchKitAppInfoPlist")
+    .Does(()=> {
+        var buildVariant = GetVariant();
+        var infoPath = Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden WatchKit Extension", "Info.plist");
+        UpdateWatchKitAppInfoPlist(infoPath, buildVariant);
+    });
+
 #endregion iOS
 
 #region Main Tasks
@@ -318,12 +410,14 @@ Task("Android")
     });
 
 Task("iOS")
-    //.IsDependentOn("UpdateiOSIcon")
+    .IsDependentOn("UpdateiOSIcons")
     .IsDependentOn("UpdateiOSPlist")
     .IsDependentOn("UpdateiOSAutofillPlist")
     .IsDependentOn("UpdateiOSExtensionPlist")
     .IsDependentOn("UpdateiOSShareExtensionPlist")
     .IsDependentOn("UpdateiOSCodeFiles")
+    .IsDependentOn("UpdateWatchProject")
+    .IsDependentOn("UpdateWatchKitAppInfoPlist")
     .Does(()=>
     {
         Information("iOS app updated");

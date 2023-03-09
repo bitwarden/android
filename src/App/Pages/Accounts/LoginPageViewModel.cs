@@ -143,6 +143,7 @@ namespace Bit.App.Pages
             try
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
+                await _stateService.SetPreLoginEmailAsync(Email);
                 await AccountSwitchingOverlayViewModel.RefreshAccountViewsAsync();
                 if (string.IsNullOrWhiteSpace(Email))
                 {
@@ -251,6 +252,19 @@ namespace Bit.App.Pages
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
                         AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
+            }
+        }
+
+        public void ResetPasswordField()
+        {
+            try
+            {
+                MasterPassword = string.Empty;
+                ShowPassword = false;
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
         }
 

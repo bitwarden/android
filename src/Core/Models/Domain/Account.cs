@@ -1,4 +1,5 @@
-﻿using Bit.Core.Enums;
+﻿using System;
+using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 
 namespace Bit.Core.Models.Domain
@@ -104,9 +105,12 @@ namespace Bit.Core.Models.Domain
             }
 
             public EnvironmentUrlData EnvironmentUrls;
+            [Obsolete("Feb 10 2023: VaultTimeout has been deprecated in favor of stored prefs to retain value after logout. It remains here to allow for migration during app upgrade.")]
             public int? VaultTimeout;
+            [Obsolete("Feb 10 2023: VaultTimeoutAction has been deprecated in favor of stored prefs to retain value after logout. It remains here to allow for migration during app upgrade.")]
             public VaultTimeoutAction? VaultTimeoutAction;
-            public bool ScreenCaptureAllowed;
+            [Obsolete("Feb 10 2023: ScreenCaptureAllowed has been deprecated in favor of stored prefs to retain value after logout. It remains here to allow for migration during app upgrade.")]
+            public bool? ScreenCaptureAllowed;
         }
 
         public class AccountVolatileData

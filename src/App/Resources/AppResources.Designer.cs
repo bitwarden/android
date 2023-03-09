@@ -383,6 +383,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add the key to an existing or new item.
+        /// </summary>
+        public static string AddTheKeyToAnExistingOrNewItem {
+            get {
+                return ResourceManager.GetString("AddTheKeyToAnExistingOrNewItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add TOTP.
         /// </summary>
         public static string AddTotp {
@@ -1801,6 +1810,15 @@ namespace Bit.App.Resources {
         public static string DefaultDarkThemeDescription {
             get {
                 return ResourceManager.GetString("DefaultDarkThemeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default (System).
+        /// </summary>
+        public static string DefaultSystem {
+            get {
+                return ResourceManager.GetString("DefaultSystem", resourceCulture);
             }
         }
         
@@ -3371,6 +3389,33 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language change requires app restart.
+        /// </summary>
+        public static string LanguageChangeRequiresAppRestart {
+            get {
+                return ResourceManager.GetString("LanguageChangeRequiresAppRestart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The language has been changed to {0}. Please restart the app to see the change.
+        /// </summary>
+        public static string LanguageChangeXDescription {
+            get {
+                return ResourceManager.GetString("LanguageChangeXDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last name.
         /// </summary>
         public static string LastName {
@@ -3670,7 +3715,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log In with another device.
+        ///   Looks up a localized string similar to Log in with device.
         /// </summary>
         public static string LogInWithAnotherDevice {
             get {
@@ -3787,11 +3832,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Master password must be at least 8 characters long..
+        ///   Looks up a localized string similar to Master password must be at least {0} characters long..
         /// </summary>
-        public static string MasterPasswordLengthValMessage {
+        public static string MasterPasswordLengthValMessageX {
             get {
-                return ResourceManager.GetString("MasterPasswordLengthValMessage", resourceCulture);
+                return ResourceManager.GetString("MasterPasswordLengthValMessageX", resourceCulture);
             }
         }
         
@@ -4019,18 +4064,7 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("Ms", resourceCulture);
             }
         }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Mx.
-        /// </summary>
-        public static string Mx
-        {
-            get
-            {
-                return ResourceManager.GetString("Mx", resourceCulture);
-            }
-        }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to You must log into the main Bitwarden app before you can use the extension..
         /// </summary>
@@ -4046,6 +4080,15 @@ namespace Bit.App.Resources {
         public static string MustLogInMainAppAutofill {
             get {
                 return ResourceManager.GetString("MustLogInMainAppAutofill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mx.
+        /// </summary>
+        public static string Mx {
+            get {
+                return ResourceManager.GetString("Mx", resourceCulture);
             }
         }
         
@@ -4560,6 +4603,15 @@ namespace Bit.App.Resources {
         public static string Organization {
             get {
                 return ResourceManager.GetString("Organization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organization SSO identifier required..
+        /// </summary>
+        public static string OrganizationSsoIdentifierRequired {
+            get {
+                return ResourceManager.GetString("OrganizationSsoIdentifierRequired", resourceCulture);
             }
         }
         
@@ -5294,6 +5346,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search for an item or add a new item.
+        /// </summary>
+        public static string SearchForAnItemOrAddANewItem {
+            get {
+                return ResourceManager.GetString("SearchForAnItemOrAddANewItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search {0}.
         /// </summary>
         public static string SearchGroup {
@@ -5983,6 +6044,24 @@ namespace Bit.App.Resources {
         public static string ThemeDescription {
             get {
                 return ResourceManager.GetString("ThemeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no items in your vault that match &quot;{0}&quot;.
+        /// </summary>
+        public static string ThereAreNoItemsInYourVaultThatMatchX {
+            get {
+                return ResourceManager.GetString("ThereAreNoItemsInYourVaultThatMatchX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no items that match the search.
+        /// </summary>
+        public static string ThereAreNoItemsThatMatchTheSearch {
+            get {
+                return ResourceManager.GetString("ThereAreNoItemsThatMatchTheSearch", resourceCulture);
             }
         }
         

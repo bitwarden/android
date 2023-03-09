@@ -10,6 +10,7 @@ using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
+using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -183,13 +184,13 @@ namespace Bit.Core.Services
 
         public Task PostAccountRequestOTP()
         {
-            return SendAsync<object, object>(HttpMethod.Post, "/accounts/request-otp", null, true, false, false);
+            return SendAsync<object, object>(HttpMethod.Post, "/accounts/request-otp", null, true, false, null, false);
         }
 
         public Task PostAccountVerifyOTPAsync(VerifyOTPRequest request)
         {
             return SendAsync<VerifyOTPRequest, object>(HttpMethod.Post, "/accounts/verify-otp", request,
-                true, false, false);
+                true, false, null, false);
         }
 
         public Task PutUpdateTempPasswordAsync(UpdateTempPasswordRequest request)
@@ -457,6 +458,11 @@ namespace Bit.Core.Services
             return SendAsync<object, object>(HttpMethod.Post, $"/organizations/{id}/leave", null, true, false);
         }
 
+
+        public Task<OrganizationDomainSsoDetailsResponse> GetOrgDomainSsoDetailsAsync(string userEmail)
+        {
+            return SendAsync<OrganizationDomainSsoDetailsRequest, OrganizationDomainSsoDetailsResponse>(HttpMethod.Post, $"/organizations/domain/sso/details", new OrganizationDomainSsoDetailsRequest { Email = userEmail }, false, true);
+        }
         #endregion
 
         #region Organization User APIs
@@ -565,7 +571,11 @@ namespace Bit.Core.Services
 
         public Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier)
         {
-            return SendAsync<object, bool>(HttpMethod.Get, $"/devices/knowndevice/{email}/{deviceIdentifier}", null, false, true);
+            return SendAsync<object, bool>(HttpMethod.Get, "/devices/knowndevice", null, false, true, (message) =>
+            {
+                message.Headers.Add("X-Device-Identifier", deviceIdentifier);
+                message.Headers.Add("X-Request-Email", CoreHelpers.Base64UrlEncode(Encoding.UTF8.GetBytes(email)));
+            });
         }
 
         #endregion
@@ -619,7 +629,7 @@ namespace Bit.Core.Services
         public Task<TResponse> SendAsync<TResponse>(HttpMethod method, string path, bool authed) =>
             SendAsync<object, TResponse>(method, path, null, authed, true);
         public async Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path, TRequest body,
-            bool authed, bool hasResponse, bool logoutOnUnauthorized = true)
+            bool authed, bool hasResponse, Action<HttpRequestMessage> alterRequest = null, bool logoutOnUnauthorized = true)
         {
             using (var requestMessage = new HttpRequestMessage())
             {
@@ -666,6 +676,7 @@ namespace Bit.Core.Services
                 {
                     requestMessage.Headers.Add("Accept", "application/json");
                 }
+                alterRequest?.Invoke(requestMessage);
 
                 HttpResponseMessage response;
                 try

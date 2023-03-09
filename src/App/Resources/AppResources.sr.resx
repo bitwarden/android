@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Савет Главне Лозинке може да Вам помогне да се потсетите ако је заборавите.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Главна Лозинка треба имати бар 8 знака.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Главна лозинка треба имати барем {0} карактера.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Минимално Бројева</value>
@@ -2147,7 +2147,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Време истека вашег сефа је премашило дозвољена ограничења од стране ваше организације.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Једна или више полиса ваше организације вас спречава да извезете ваш сеф.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2542,6 +2542,18 @@
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Омогућите дозволу камере за коришћење скенера</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Језик</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Језик је промењен у {0}. Поново покрените апликацију да бисте видели промену</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Промена језика захтева поновно покретање апликације</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Подразумевано (системско)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Important</value>
   </data>
@@ -2577,5 +2589,8 @@
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Потребан је SSO идентификатор организације.</value>
   </data>
 </root>

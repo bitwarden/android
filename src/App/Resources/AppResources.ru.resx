@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Подсказка к мастер-паролю может помочь вам его вспомнить.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Мастер-пароль должен содержать не менее 8 символов.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Мастер-пароль должен содержать не менее {0} символов.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Минимум цифр</value>
@@ -2080,7 +2080,7 @@
     <value>Подтверждение мастер-пароля</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>Это действие защищено. Для продолжения введите свой мастер-пароль, чтобы подтвердить свою личность.</value>
+    <value>Это действие защищено. Чтобы продолжить, введите ваш мастер-пароль для подтверждения личности.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
     <value>Требуется капча</value>
@@ -2145,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Тайм-аут вашего хранилища превышает ограничения, установленные вашей организацией.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Экспорт вашего личного хранилища запрещен одной или несколькими политиками организации.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2540,6 +2540,18 @@
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Для использования сканера необходимо предоставить разрешение на доступ к камере</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Язык был изменен на {0}. Перезапустите приложение, чтобы увидеть изменения</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Для смены языка требуется перезапуск приложения</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>По умолчанию (системный)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Важно</value>
   </data>
@@ -2575,5 +2587,8 @@
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Обнаружен слабый пароль, найденный в утечке данных. Используйте надежный и уникальный пароль для защиты вашего аккаунта. Вы уверены, что хотите использовать этот пароль?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Требуется идентификатор SSO организации.</value>
   </data>
 </root>

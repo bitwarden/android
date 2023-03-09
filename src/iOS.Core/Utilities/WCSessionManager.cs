@@ -74,7 +74,7 @@ namespace WatchConnectivity
             Debug.WriteLine($"Watch connectivity Reachable:{(session.Reachable ? '✓' : '✗')}");
         }
 
-        public void SendBackgroundHighPriorityMessage(Dictionary<string, object> applicationContext)
+        public void SendBackgroundHighPriorityMessage(NSDictionary<NSString, NSObject> applicationContext)
         {
             // Application context doesnt need the watch to be reachable, it will be received when opened
             if (validSession is null || validSession.ActivationState != WCSessionActivationState.Activated)
@@ -84,10 +84,10 @@ namespace WatchConnectivity
 
             try
             {
-                var sendSuccessfully = validSession.UpdateApplicationContext(applicationContext.ToNSDictionary(), out var error);
+                var sendSuccessfully = validSession.UpdateApplicationContext(applicationContext, out var error);
                 if (sendSuccessfully)
                 {
-                    Debug.WriteLine($"Sent App Context \nPayLoad: {applicationContext.ToNSDictionary().ToString()} \n");
+                    Debug.WriteLine($"Sent App Context \nPayLoad: {applicationContext.ToString()} \n");
                 }
                 else
                 {

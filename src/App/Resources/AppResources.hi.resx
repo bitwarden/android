@@ -276,10 +276,10 @@
     <value>क्या आप वाकई लॉग आउट करना चाहते हैं?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Remove account</value>
+    <value>खाता हटाएं</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Are you sure you want to remove this account?</value>
+    <value>क्या आप वाकई यह खाता हटाना चाहते हैं?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
     <value>Account already added</value>
@@ -584,8 +584,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>मास्टर पासवर्ड संकेत आपको भूल जाने की अवस्था में पासवर्ड को याद करने में सहायता करता है।</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>मास्टर पासवर्ड में कम से कम 8 अक्षर होने चाहिएं।</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>कम से कम अंक</value>
@@ -2147,7 +2147,7 @@ Scanning will happen automatically.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Your vault timeout exceeds the restrictions set by your organization.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>One or more organization policies prevents your from exporting your individual vault.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2542,6 +2542,18 @@ Do you want to switch to this account?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Enable camera permission to use the scanner</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Language change requires app restart</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Default (System)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Important</value>
   </data>
@@ -2577,5 +2589,8 @@ Do you want to switch to this account?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organization SSO identifier required.</value>
   </data>
 </root>

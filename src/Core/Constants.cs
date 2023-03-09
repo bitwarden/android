@@ -3,32 +3,36 @@
     public static class Constants
     {
         public const int MaxAccounts = 5;
+        public const int VaultTimeoutDefault = 15;
         public const string AndroidAppProtocol = "androidapp://";
         public const string iOSAppProtocol = "iosapp://";
         public const string DefaultUsernameGenerated = "-";
-        public static string StateVersionKey = "stateVersion";
-        public static string StateKey = "state";
-        public static string PreAuthEnvironmentUrlsKey = "preAuthEnvironmentUrls";
-        public static string LastFileCacheClearKey = "lastFileCacheClear";
-        public static string AutofillTileAdded = "autofillTileAdded";
-        public static string PushRegisteredTokenKey = "pushRegisteredToken";
-        public static string PushInitialPromptShownKey = "pushInitialPromptShown";
-        public static string PushInstallationRegistrationErrorKey = "pushInstallationRegistrationError";
-        public static string LastBuildKey = "lastBuild";
-        public static string AddSitePromptShownKey = "addSitePromptShown";
-        public static string ClearCiphersCacheKey = "clearCiphersCache";
-        public static string BiometricIntegrityKey = "biometricIntegrityState";
-        public static string iOSAutoFillClearCiphersCacheKey = "iOSAutoFillClearCiphersCache";
-        public static string iOSAutoFillBiometricIntegrityKey = "iOSAutoFillBiometricIntegrityState";
-        public static string iOSExtensionClearCiphersCacheKey = "iOSExtensionClearCiphersCache";
-        public static string iOSExtensionBiometricIntegrityKey = "iOSExtensionBiometricIntegrityState";
-        public static string iOSShareExtensionClearCiphersCacheKey = "iOSShareExtensionClearCiphersCache";
-        public static string iOSShareExtensionBiometricIntegrityKey = "iOSShareExtensionBiometricIntegrityState";
-        public static string iOSExtensionActiveUserIdKey = "iOSExtensionActiveUserId";
-        public static string EventCollectionKey = "eventCollection";
-        public static string RememberedEmailKey = "rememberedEmail";
-        public static string RememberedOrgIdentifierKey = "rememberedOrgIdentifier";
-        public static string PasswordlessLoginNotificationKey = "passwordlessLoginNotificationKey";
+        public const string StateVersionKey = "stateVersion";
+        public const string StateKey = "state";
+        public const string PreAuthEnvironmentUrlsKey = "preAuthEnvironmentUrls";
+        public const string LastFileCacheClearKey = "lastFileCacheClear";
+        public const string AutofillTileAdded = "autofillTileAdded";
+        public const string PushRegisteredTokenKey = "pushRegisteredToken";
+        public const string PushInitialPromptShownKey = "pushInitialPromptShown";
+        public const string PushInstallationRegistrationErrorKey = "pushInstallationRegistrationError";
+        public const string LastBuildKey = "lastBuild";
+        public const string AddSitePromptShownKey = "addSitePromptShown";
+        public const string ClearCiphersCacheKey = "clearCiphersCache";
+        public const string BiometricIntegrityKey = "biometricIntegrityState";
+        public const string iOSAutoFillClearCiphersCacheKey = "iOSAutoFillClearCiphersCache";
+        public const string iOSAutoFillBiometricIntegrityKey = "iOSAutoFillBiometricIntegrityState";
+        public const string iOSExtensionClearCiphersCacheKey = "iOSExtensionClearCiphersCache";
+        public const string iOSExtensionBiometricIntegrityKey = "iOSExtensionBiometricIntegrityState";
+        public const string iOSShareExtensionClearCiphersCacheKey = "iOSShareExtensionClearCiphersCache";
+        public const string iOSShareExtensionBiometricIntegrityKey = "iOSShareExtensionBiometricIntegrityState";
+        public const string iOSExtensionActiveUserIdKey = "iOSExtensionActiveUserId";
+        public const string EventCollectionKey = "eventCollection";
+        public const string RememberedEmailKey = "rememberedEmail";
+        public const string RememberedOrgIdentifierKey = "rememberedOrgIdentifier";
+        public const string PasswordlessLoginNotificationKey = "passwordlessLoginNotificationKey";
+        public const string ThemeKey = "theme";
+        public const string AutoDarkThemeKey = "autoDarkTheme";
+        public const string DisableFaviconKey = "disableFavicon";
         public const string PasswordlessNotificationId = "26072022";
         public const string AndroidNotificationChannelId = "general_notification_channel";
         public const string iOSNotificationCategoryId = "dismissableCategory";
@@ -36,11 +40,15 @@
         public const string NotificationData = "notificationData";
         public const string NotificationDataType = "Type";
         public const string PasswordlessLoginRequestKey = "passwordlessLoginRequest";
+        public const string PreLoginEmailKey = "preLoginEmailKey";
         /// <summary>
         /// This key is used to store the value of "ShouldConnectToWatch" of the last user that had logged in
         /// which is used to handle Apple Watch state logic
         /// </summary>
         public const string LastUserShouldConnectToWatchKey = "lastUserShouldConnectToWatch";
+        public const string OtpAuthScheme = "otpauth";
+        public const string AppLocaleKey = "appLocale";
+        public const string ClearSensitiveFields = "clearSensitiveFields";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;
@@ -50,7 +58,7 @@
         public const int Argon2Iterations = 3;
         public const int Argon2MemoryInMB = 64;
         public const int Argon2Parallelism = 4;
-        public const int MasterPasswordMinimumChars = 8;
+        public const int MasterPasswordMinimumChars = 12;
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {
@@ -65,6 +73,8 @@
             iOSShareExtensionClearCiphersCacheKey
         };
 
+        public static string VaultTimeoutKey(string userId) => $"vaultTimeout_{userId}";
+        public static string VaultTimeoutActionKey(string userId) => $"vaultTimeoutAction_{userId}";
         public static string CiphersKey(string userId) => $"ciphers_{userId}";
         public static string FoldersKey(string userId) => $"folders_{userId}";
         public static string CollectionsKey(string userId) => $"collections_{userId}";
@@ -89,10 +99,7 @@
         public static string AutofillBlacklistedUrisKey(string userId) => $"autofillBlacklistedUris_{userId}";
         public static string ClearClipboardKey(string userId) => $"clearClipboard_{userId}";
         public static string SyncOnRefreshKey(string userId) => $"syncOnRefresh_{userId}";
-        public static string DisableFaviconKey(string userId) => $"disableFavicon_{userId}";
         public static string DefaultUriMatchKey(string userId) => $"defaultUriMatch_{userId}";
-        public static string ThemeKey(string userId) => $"theme_{userId}";
-        public static string AutoDarkThemeKey(string userId) => $"autoDarkTheme_{userId}";
         public static string DisableAutoTotpCopyKey(string userId) => $"disableAutoTotpCopy_{userId}";
         public static string PreviousPageKey(string userId) => $"previousPage_{userId}";
         public static string PasswordRepromptAutofillKey(string userId) => $"passwordRepromptAutofillKey_{userId}";
@@ -107,5 +114,6 @@
         public static string PushLastRegistrationDateKey(string userId) => $"pushLastRegistrationDate_{userId}";
         public static string PushCurrentTokenKey(string userId) => $"pushCurrentToken_{userId}";
         public static string ShouldConnectToWatchKey(string userId) => $"shouldConnectToWatch_{userId}";
+        public static string ScreenCaptureAllowedKey(string userId) => $"screenCaptureAllowed_{userId}";
     }
 }
