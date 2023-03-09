@@ -32,8 +32,8 @@ namespace Bit.Core.Utilities
                 if (label.Contains(LABEL_SEPARATOR))
                 {
                     var parts = label.Split(LABEL_SEPARATOR);
-                    AccountName = parts[0].Trim();
-                    Issuer = parts[1].Trim();
+                    Issuer = parts[0].Trim();
+                    AccountName = parts[1].Trim();
                 }
                 else
                 {
