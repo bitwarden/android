@@ -81,12 +81,22 @@
                VerticalOptions="CenterAndExpand"
                HorizontalOptions="CenterAndExpand"
                HorizontalTextAlignment="Center" />
-        <Label IsVisible="{Binding ShowNoData}"
-               Text="{u:I18n NoItemsToList}"
-               Margin="20, 0"
-               VerticalOptions="CenterAndExpand"
-               HorizontalOptions="CenterAndExpand"
-               HorizontalTextAlignment="Center" />
+        <StackLayout
+            HorizontalOptions="Center"
+            VerticalOptions="StartAndExpand"
+            Margin="20, 80, 20, 0"
+            Spacing="20"
+            IsVisible="{Binding ShowNoData}">
+            <Image
+                Source="empty_items_state" />
+            <Label
+                Text="{u:I18n ThereAreNoItemsThatMatchTheSearch}"
+                HorizontalTextAlignment="Center" />
+            <Button
+                Text="{u:I18n AddAnItem}"
+                Command="{Binding AddCipherCommand}"
+                IsVisible="{Binding ShowAddCipher}"/>
+        </StackLayout>
         <controls:ExtendedCollectionView
                 IsVisible="{Binding ShowList}"
                 ItemsSource="{Binding Ciphers}"

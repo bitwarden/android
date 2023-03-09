@@ -170,7 +170,7 @@ namespace Bit.Droid
             {
                 if (intent?.GetStringExtra("uri") is string uri)
                 {
-                    _messagingService.Send("popAllAndGoToAutofillCiphers");
+                    _messagingService.Send(App.App.POP_ALL_AND_GO_TO_AUTOFILL_CIPHERS_MESSAGE);
                     if (_appOptions != null)
                     {
                        _appOptions.Uri = uri;
@@ -178,7 +178,7 @@ namespace Bit.Droid
                 }
                 else if (intent.GetBooleanExtra("generatorTile", false))
                 {
-                    _messagingService.Send("popAllAndGoToTabGenerator");
+                    _messagingService.Send(App.App.POP_ALL_AND_GO_TO_TAB_GENERATOR_MESSAGE);
                     if (_appOptions != null)
                     {
                         _appOptions.GeneratorTile = true;
@@ -186,7 +186,7 @@ namespace Bit.Droid
                 }
                 else if (intent.GetBooleanExtra("myVaultTile", false))
                 {
-                    _messagingService.Send("popAllAndGoToTabMyVault");
+                    _messagingService.Send(App.App.POP_ALL_AND_GO_TO_TAB_MYVAULT_MESSAGE);
                     if (_appOptions != null)
                     {
                         _appOptions.MyVaultTile = true;
@@ -198,7 +198,7 @@ namespace Bit.Droid
                     {
                         _appOptions.CreateSend = GetCreateSendRequest(intent);
                     }
-                    _messagingService.Send("popAllAndGoToTabSend");
+                    _messagingService.Send(App.App.POP_ALL_AND_GO_TO_TAB_SEND_MESSAGE);
                 }
                 else
                 {

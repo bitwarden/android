@@ -29,6 +29,14 @@
 			<key>CFBundleURLName</key>
 			<string>com.8bit.bitwarden.url</string>
 		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.8bit.bitwarden</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>otpauth</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleLocalizations</key>
 	<array>
