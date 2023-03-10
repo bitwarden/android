@@ -120,7 +120,7 @@ namespace Bit.App.Pages
             if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout))
             {
                 _vaultTimeoutPolicy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout)).First();
-                var minutes = _policyService.GetPolicyInt(_vaultTimeoutPolicy, "minutes").GetValueOrDefault();
+                var minutes = _policyService.GetPolicyInt(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_MINUTES).GetValueOrDefault();
                 _vaultTimeouts = _vaultTimeouts.Where(t =>
                     t.Value <= minutes &&
                     (t.Value > 0 || t.Value == CustomVaultTimeoutValue) &&
@@ -295,7 +295,7 @@ namespace Bit.App.Pages
 
             if (_vaultTimeoutPolicy != null)
             {
-                var maximumTimeout = _policyService.GetPolicyInt(_vaultTimeoutPolicy, "minutes");
+                var maximumTimeout = _policyService.GetPolicyInt(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_MINUTES);
 
                 if (newTimeout > maximumTimeout)
                 {
@@ -374,6 +374,10 @@ namespace Bit.App.Pages
 
         public async Task VaultTimeoutActionAsync()
         {
+            if (!string.IsNullOrEmpty(_policyService.GetPolicyString(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_ACTION)))
+            {
+                return;
+            }
             var options = _vaultTimeoutActions.Select(o =>
                 o.Key == _vaultTimeoutActionDisplayValue ? $"✓ {o.Key}" : o.Key).ToArray();
             var selection = await Page.DisplayActionSheet(AppResources.VaultTimeoutAction,
@@ -597,14 +601,38 @@ namespace Bit.App.Pages
             }
             if (_vaultTimeoutPolicy != null)
             {
-                var maximumTimeout = _policyService.GetPolicyInt(_vaultTimeoutPolicy, "minutes").GetValueOrDefault();
-                securityItems.Insert(0, new SettingsPageListItem
+                var maximumTimeout = _policyService.GetPolicyInt(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_MINUTES).GetValueOrDefault();
+                var timeoutAction = _policyService.GetPolicyString(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_ACTION);
+                if (maximumTimeout != default && timeoutAction != default)
                 {
-                    Name = string.Format(AppResources.VaultTimeoutPolicyInEffect,
-                        Math.Floor((float)maximumTimeout / 60),
-                        maximumTimeout % 60),
-                    UseFrame = true,
-                });
+                    securityItems.Insert(0, new SettingsPageListItem
+                    {
+                        Name = string.Format(AppResources.VaultTimeoutPolicyWithActionInEffect,
+                            Math.Floor((float)maximumTimeout / 60),
+                            maximumTimeout % 60,
+                            timeoutAction == PolicyService.TIMEOUT_POLICY_ACTION_LOCK ? AppResources.Lock : AppResources.LogOut),
+                        UseFrame = true,
+                    });
+                }
+                else if (maximumTimeout != default && timeoutAction == default)
+                {
+                    securityItems.Insert(0, new SettingsPageListItem
+                    {
+                        Name = string.Format(AppResources.VaultTimeoutPolicyInEffect,
+                            Math.Floor((float)maximumTimeout / 60),
+                            maximumTimeout % 60),
+                        UseFrame = true,
+                    });
+                }
+                else if (maximumTimeout == default && timeoutAction != default)
+                {
+                    securityItems.Insert(0, new SettingsPageListItem
+                    {
+                        Name = string.Format(AppResources.VaultTimeoutActionPolicyInEffect,
+                            timeoutAction == PolicyService.TIMEOUT_POLICY_ACTION_LOCK ? AppResources.Lock : AppResources.LogOut),
+                        UseFrame = true,
+                    });
+                }
             }
             if (Device.RuntimePlatform == Device.Android)
             {
