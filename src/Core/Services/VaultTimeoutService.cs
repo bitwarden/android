@@ -247,7 +247,7 @@ namespace Bit.Core.Services
             {
                 var policy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout, userId)).First();
                 // Remove negative values, and ensure it's smaller than maximum allowed value according to policy
-                var policyTimeout = _policyService.GetPolicyInt(policy, PolicyService.TIMEOUT_POLICY_MINUTES);
+                var policyTimeout = _policyService.GetPolicyInt(policy, "minutes");
                 if (!policyTimeout.HasValue)
                 {
                     return vaultTimeout;
