@@ -49,7 +49,8 @@ namespace Bit.Core.Services
             IVaultTimeoutService vaultTimeoutService,
             IKeyConnectorService keyConnectorService,
             IPasswordGenerationService passwordGenerationService,
-            IPolicyService policyService, bool setCryptoKeys = true)
+            IPolicyService policyService,
+            bool setCryptoKeys = true)
         {
             _cryptoService = cryptoService;
             _cryptoFunctionService = cryptoFunctionService;

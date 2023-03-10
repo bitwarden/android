@@ -15,7 +15,7 @@ namespace Bit.App.Pages
     public class UpdateTempPasswordPageViewModel : BaseChangePasswordViewModel
     {
         private readonly IUserVerificationService _userVerificationService;
-        
+
         private ForcePasswordResetReason _reason = ForcePasswordResetReason.AdminForcePasswordReset;
 
         public UpdateTempPasswordPageViewModel()
@@ -83,8 +83,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            if (
-                RequireCurrentPassword &&
+            if (RequireCurrentPassword &&
                 !await _userVerificationService.VerifyUser(CurrentMasterPassword, VerificationType.MasterPassword))
             {
                 return;
