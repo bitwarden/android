@@ -1684,9 +1684,9 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Current master password.
         /// </summary>
-        public static string CurrentMasterPass {
+        public static string CurrentMasterPassword {
             get {
-                return ResourceManager.GetString("CurrentMasterPass", resourceCulture);
+                return ResourceManager.GetString("CurrentMasterPassword", resourceCulture);
             }
         }
         

@@ -2595,7 +2595,7 @@ Do you want to switch to this account?</value>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
   </data>
-  <data name="CurrentMasterPass" xml:space="preserve">
+  <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Current master password</value>
   </data>
 </root>
