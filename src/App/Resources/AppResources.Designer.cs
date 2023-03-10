@@ -3670,7 +3670,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log In with another device.
+        ///   Looks up a localized string similar to Log in with device.
         /// </summary>
         public static string LogInWithAnotherDevice {
             get {
@@ -4019,18 +4019,7 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("Ms", resourceCulture);
             }
         }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Mx.
-        /// </summary>
-        public static string Mx
-        {
-            get
-            {
-                return ResourceManager.GetString("Mx", resourceCulture);
-            }
-        }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to You must log into the main Bitwarden app before you can use the extension..
         /// </summary>
@@ -4046,6 +4035,15 @@ namespace Bit.App.Resources {
         public static string MustLogInMainAppAutofill {
             get {
                 return ResourceManager.GetString("MustLogInMainAppAutofill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mx.
+        /// </summary>
+        public static string Mx {
+            get {
+                return ResourceManager.GetString("Mx", resourceCulture);
             }
         }
         
@@ -6599,6 +6597,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your organization policies have set your vault timeout action to {0}..
+        /// </summary>
+        public static string VaultTimeoutActionPolicyInEffect {
+            get {
+                return ResourceManager.GetString("VaultTimeoutActionPolicyInEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?.
         /// </summary>
         public static string VaultTimeoutLogOutConfirmation {
@@ -6608,11 +6615,20 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s).
+        ///   Looks up a localized string similar to Your organization policies have set your maximum allowed vault timeout to {0} hour(s) and {1} minute(s)..
         /// </summary>
         public static string VaultTimeoutPolicyInEffect {
             get {
                 return ResourceManager.GetString("VaultTimeoutPolicyInEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s). Your vault timeout action is set to {2}..
+        /// </summary>
+        public static string VaultTimeoutPolicyWithActionInEffect {
+            get {
+                return ResourceManager.GetString("VaultTimeoutPolicyWithActionInEffect", resourceCulture);
             }
         }
         

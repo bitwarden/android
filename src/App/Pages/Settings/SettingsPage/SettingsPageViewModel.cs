@@ -632,7 +632,7 @@ namespace Bit.App.Pages
                             timeoutAction == PolicyService.TIMEOUT_POLICY_ACTION_LOCK ? AppResources.Lock : AppResources.LogOut),
                         UseFrame = true,
                     });
-                } 
+                }
             }
             if (Device.RuntimePlatform == Device.Android)
             {

@@ -254,7 +254,7 @@ namespace Bit.Core.Services
 
         public string GetPolicyString(Policy policy, string key) =>
             policy.Data.TryGetValue(key, out var val) ? val as string : null;
-        
+
 
         public async Task<bool> ShouldShowVaultFilterAsync()
         {
