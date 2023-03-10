@@ -22,7 +22,7 @@ namespace Bit.App.Pages
             ToggleConfirmPasswordCommand = new Command(ToggleConfirmPassword);
             SubmitCommand = new Command(async () => await SubmitAsync());
 
-            _userVerificationService = ServiceContainer.Resolve<IUserVerificationService>("userVerificationService");
+            _userVerificationService = ServiceContainer.Resolve<IUserVerificationService>();
         }
 
         public Command SubmitCommand { get; }

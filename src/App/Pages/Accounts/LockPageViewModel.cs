@@ -65,9 +65,8 @@ namespace Bit.App.Pages
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
             _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
-            _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
-            _passwordGenerationService =
-                ServiceContainer.Resolve<IPasswordGenerationService>("passwordGenerationService");
+            _policyService = ServiceContainer.Resolve<IPolicyService>();
+            _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>();
 
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);

@@ -27,7 +27,7 @@ namespace Bit.App.Pages
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
-            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _stateService = ServiceContainer.Resolve<IStateService>();
 
             _groupingsPage = new NavigationPage(new GroupingsPage(true, previousPage: previousPage))
             {
