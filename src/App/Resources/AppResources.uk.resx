@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Якщо ви забудете головний пароль, підказка може допомогти вам згадати його.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Довжина головного пароля має бути принаймні 8 символів.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Довжина головного пароля має бути принаймні {0} символів.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Мінімум цифр</value>
@@ -2145,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Час очікування сховища перевищує обмеження, встановлені вашою організацією.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Одна чи декілька організаційних політик не дозволяють вам експортувати особисте сховище.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2499,7 +2499,7 @@
     <value>Увійти з головним паролем</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Увійти з іншого пристрою</value>
+    <value>Увійти з пристроєм</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>Ініційовано вхід</value>
@@ -2540,6 +2540,18 @@
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Увімкніть доступ до камери для використання сканера</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Мова</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Мову змінено на {0}. Для застосування змін перезапустіть програму</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Для зміни мови потрібно перезапустити програму</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Типова (Система)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Важливо</value>
   </data>
@@ -2575,5 +2587,20 @@
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Виявлено слабкий пароль, який знайдено у витоку даних. Використовуйте надійний та унікальний пароль для захисту свого облікового запису. Ви дійсно хочете використати цей пароль?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Потрібен SSO-ідентифікатор організації.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Додати ключ до наявного чи нового запису</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>У вашому сховищі немає записів, які відповідають "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Шукати запис або додати новий запис</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Немає записів, що відповідають пошуку</value>
   </data>
 </root>

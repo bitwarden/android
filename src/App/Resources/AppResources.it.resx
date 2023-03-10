@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Un suggerimento per la password principale può aiutarti a ricordarla nel caso la dimenticassi.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>La password principale deve essere lunga almeno 8 caratteri.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>La password principale deve essere lunga almeno {0} caratteri.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimo numeri</value>
@@ -2145,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Il timeout della tua cassaforte supera i limiti impostati dalla tua organizzazione.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Una o più policy dell'organizzazione ti impediscono di esportare la tua cassaforte personale.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2540,6 +2540,18 @@ Vuoi passare a questo account?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Abilita i permessi della fotocamera per usare lo scanner</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Lingua</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>La lingua è stata cambiata a {0}. Riavviare l'app per applicare la modifica</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>La modifica della lingua richiede il riavvio dell'app</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Predefinito (Sistema)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Importante</value>
   </data>
@@ -2575,5 +2587,20 @@ Vuoi passare a questo account?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Password debole trovata in un database di data breach noto. Usa una password forte ed esclusiva per proteggere il tuo account. Sei sicuro di voler utilizzare questa password?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>L'identificatore SSO dell'organizzazione è necessario.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Add the key to an existing or new item</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>There are no items in your vault that match "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Search for an item or add a new item</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>There are no items that match the search</value>
   </data>
 </root>

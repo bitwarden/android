@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>マスターパスワードのヒントは、パスワードを忘れた場合に役立ちます。</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>マスターパスワードは、少なくとも8文字以上で設定してください。</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>マスターパスワードは、少なくとも{0}文字以上で設定してください。</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>数字の最小個数</value>
@@ -2145,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>保管庫のタイムアウトが組織によって設定された制限を超えています。</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>1 つまたは複数の組織ポリシーにより、個人の保管庫をエクスポートできません。</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2540,6 +2540,18 @@
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>スキャナを使用できるようカメラ権限を許可する</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>言語 (Language)</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>言語を {0} に変更しました。変更を反映するにはアプリを再起動してください。</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>言語の変更にはアプリの再起動が必要です</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>デフォルト (システム)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>重要</value>
   </data>
@@ -2574,6 +2586,21 @@
     <value>脆弱で流出済みのマスターパスワード</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>入力されたパスワードは脆弱かつすでに流出済みです。アカウントを守るためより強力で一意なパスワードを使用してください。本当にこの脆弱なパスワードを使用しますか？</value>
+    <value>入力されたパスワードは脆弱かつ流出済みです。アカウントを守るためより強力で一意なパスワードを使用してください。本当にこの脆弱なパスワードを使用しますか？</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>組織の SSO IDが必要です。</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>既存または新規アイテムにキーを追加</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>"{0}" に一致するアイテムは保管庫にありません</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>アイテムを検索するか、新しいアイテムを追加</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>検索に一致するアイテムはありません</value>
   </data>
 </root>

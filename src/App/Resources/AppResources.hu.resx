@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>A mesterjelszó emlékeztető segíthet emlékezni a jelszavadra ha elfejetetted volna.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Mesterjelszónak legalább 8 karakter hosszúnak kell lennie.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Mesterjelszónak legalább {0} karakter hosszúnak kell lennie.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Legalább ennyi szám</value>
@@ -2144,7 +2144,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>A széf időkorlátja túllépi a szervezet által beállított korlátozást.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Egy vagy több szervezeti házirend tiltja a személyes széf exportálását.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2539,6 +2539,18 @@ Szeretnénk átváltani erre a fiókra?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Kamera engedélyezése a lapolvasó használatához</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Nyelv</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>A nyelv a {0} nyelvre módosult. A változás megtekintéséhez indítsuk újra az alkalmazást.</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>A nyelvváltáshoz újra kell indítani az alkalmazást.</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Alapértelmezett (rendszer)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Fontos</value>
   </data>
@@ -2574,5 +2586,20 @@ Szeretnénk átváltani erre a fiókra?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Gyenge jelszó lett azonosítva és megtalálva egy adatvédelmi incidens során. A fók védelme érdekében használjunk erős és egyedi jelszót. Biztosan használni szeretnénk ezt a jelszót?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>A szervezeti SSO azonosító megadása szükséges.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Adjuk hozzá a kulcsot egy meglévő vagy új elemhez.</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Nincs elem a széfben {0} egyezéssel.</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Keressünk egy elemet vagy adjunk hozzá új elemet.</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Nincsenek a keresésnek megfelelő elemek.</value>
   </data>
 </root>

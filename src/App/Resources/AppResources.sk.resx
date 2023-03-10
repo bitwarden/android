@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Nápoveda k hlavnému heslu vám môže pomôcť spomenúť si na heslo, ak ho zabudnete.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Hlavné heslo musí obsahovať aspoň 8 znakov.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Hlavné heslo musí obsahovať aspoň {0} znakov.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimum číslic</value>
@@ -2145,7 +2145,7 @@ Skenovanie prebehne automaticky.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Časový limit vášho trezora prekračuje obmedzenia nastavené vašou organizáciou.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Jedna alebo viacero zásad organizácie vám bráni exportovať váš osobný trezor.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2540,6 +2540,18 @@ Chcete prepnúť na toto konto?</value>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Pre použitie skenera povoľte prístup ku kamere</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Jazyk</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Jazyk bol zmenený na {0}. Reštartujte aplikáciu, aby sa zmena prejavila</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Zmena jazyka si vyžaduje reštart aplikácie</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Predvolený (Systémový)</value>
+  </data>
   <data name="Important" xml:space="preserve">
     <value>Dôležité</value>
   </data>
@@ -2575,5 +2587,20 @@ Chcete prepnúť na toto konto?</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>Nájdené slabé heslo v uniknuných údajoch. Na ochranu svojho účtu používajte silné a jedinečné heslo. Naozaj chcete používať toto heslo?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Pole identifikátora SSO je povinné.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Pridať kľúč k existujúcej alebo novej položke</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Vo vašom trezore nie sú žiadne položky, ktoré zodpovedajú "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Vyhľadať položku alebo pridať novú položku</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Vyhľadávaniu nezodpovedajú žiadne položky</value>
   </data>
 </root>

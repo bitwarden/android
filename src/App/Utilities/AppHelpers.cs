@@ -430,9 +430,11 @@ namespace Bit.App.Utilities
                     Application.Current.MainPage = new NavigationPage(new CipherAddEditPage(appOptions: appOptions));
                     return true;
                 }
-                if (appOptions.Uri != null)
+                if (appOptions.Uri != null
+                    ||
+                    appOptions.OtpData != null)
                 {
-                    Application.Current.MainPage = new NavigationPage(new AutofillCiphersPage(appOptions));
+                    Application.Current.MainPage = new NavigationPage(new CipherSelectionPage(appOptions));
                     return true;
                 }
                 if (appOptions.CreateSend != null)

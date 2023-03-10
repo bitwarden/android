@@ -834,11 +834,6 @@ namespace Bit.App.Pages
 
         public async Task SetScreenCaptureAllowedAsync()
         {
-            if (CoreHelpers.ForceScreenCaptureEnabled())
-            {
-                return;
-            }
-
             try
             {
                 if (!_screenCaptureAllowed
