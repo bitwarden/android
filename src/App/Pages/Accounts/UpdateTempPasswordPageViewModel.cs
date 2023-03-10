@@ -108,10 +108,10 @@ namespace Bit.App.Pages
                 switch (Reason)
                 {
                     case ForcePasswordResetReason.AdminForcePasswordReset:
-                        await UpdateTempPasswordAsync(masterPasswordHash, newEncKey);
+                        await UpdateTempPasswordAsync(masterPasswordHash, newEncKey.Item2.EncryptedString);
                         break;
                     case ForcePasswordResetReason.WeakMasterPasswordOnLogin:
-                        await UpdatePasswordAsync(masterPasswordHash, newEncKey);
+                        await UpdatePasswordAsync(masterPasswordHash, newEncKey.Item2.EncryptedString);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -141,11 +141,11 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task UpdateTempPasswordAsync(string newMasterPasswordHash, Tuple<SymmetricCryptoKey, EncString> newEncKey)
+        private async Task UpdateTempPasswordAsync(string newMasterPasswordHash, string newEncKey)
         {
             var request = new UpdateTempPasswordRequest
             {
-                Key = newEncKey.Item2.EncryptedString,
+                Key = newEncKey,
                 NewMasterPasswordHash = newMasterPasswordHash,
                 MasterPasswordHint = Hint
             };
@@ -153,14 +153,14 @@ namespace Bit.App.Pages
             await _apiService.PutUpdateTempPasswordAsync(request);
         }
 
-        private async Task UpdatePasswordAsync(string newMasterPasswordHash, Tuple<SymmetricCryptoKey, EncString> newEncKey)
+        private async Task UpdatePasswordAsync(string newMasterPasswordHash, string newEncKey)
         {
             var currentPasswordHash = await _cryptoService.HashPasswordAsync(CurrentMasterPassword, null);
 
             var request = new PasswordRequest
             {
                 MasterPasswordHash = currentPasswordHash,
-                Key = newEncKey.Item2.EncryptedString,
+                Key = newEncKey,
                 NewMasterPasswordHash = newMasterPasswordHash,
                 MasterPasswordHint = Hint
             };
