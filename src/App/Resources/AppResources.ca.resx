@@ -2591,4 +2591,16 @@ Voleu canviar a aquest compte?</value>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>L’identificador SSO de l’organització és obligatori.</value>
   </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Afig la clau a un element existent o nou</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>No hi ha cap element a la caixa forta que coincidisca amb "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Cerca un element o n'afig un nou</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>No hi ha elements que coincidisquen amb la cerca</value>
+  </data>
 </root>

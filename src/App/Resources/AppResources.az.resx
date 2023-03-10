@@ -2590,4 +2590,16 @@ Bu hesaba keçmək istəyirsiniz?</value>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Təşkilat SSO identifikatoru tələb olundu.</value>
   </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Açarı, mövcud və ya yeni bir elementə əlavə edin</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Anbarınızda {0} ilə uyğunlaşan heç bir element yoxdur</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Bir element axtarın və ya yenisini əlavə edin</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Axtarışa uyğun gələn heç bir element yoxdur</value>
+  </data>
 </root>

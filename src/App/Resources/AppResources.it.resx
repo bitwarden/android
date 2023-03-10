@@ -2541,16 +2541,16 @@ Vuoi passare a questo account?</value>
     <value>Abilita i permessi della fotocamera per usare lo scanner</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Lingua</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
-    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+    <value>La lingua è stata cambiata a {0}. Riavviare l'app per applicare la modifica</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
-    <value>Language change requires app restart</value>
+    <value>La modifica della lingua richiede il riavvio dell'app</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>Predefinito (Sistema)</value>
   </data>
   <data name="Important" xml:space="preserve">
     <value>Importante</value>
@@ -2590,5 +2590,17 @@ Vuoi passare a questo account?</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>L'identificatore SSO dell'organizzazione è necessario.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Add the key to an existing or new item</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>There are no items in your vault that match "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Search for an item or add a new item</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>There are no items that match the search</value>
   </data>
 </root>

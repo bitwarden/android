@@ -2591,4 +2591,16 @@ Wilt u naar dit account wisselen?</value>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Organisatie-identificatie vereist.</value>
   </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>De sleutel aan een bestaand of nieuw item toevoegen</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Er zijn geen items in je kluis die overeenkomen met "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Naar een item zoeken of een nieuw item toevoegen</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Er zijn geen items die overeenkomen met de zoekopdracht</value>
+  </data>
 </root>
