@@ -2498,7 +2498,7 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>Ana parola ile giriş yap</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Başka bir cihazla giriş yap</value>
+    <value>Cihazla giriş yap</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>Giriş başlatıldı</value>
@@ -2522,13 +2522,13 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>Bu istek artık geçerli değil</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Bekleyen oturum açma istekleri</value>
+    <value>Bekleyen giriş istekleri</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
     <value>Tüm istekleri reddet</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>Bekleyen tüm oturum açma isteklerini reddetmek istediğinizden emin misiniz?</value>
+    <value>Bekleyen tüm giriş isteklerini reddetmek istediğinizden emin misiniz?</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
     <value>İstekler reddedildi</value>
@@ -2589,5 +2589,17 @@ Bu hesaba geçmek ister misiniz?</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Kuruluş SSO tanımlayıcısı gereklidir.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Add the key to an existing or new item</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>There are no items in your vault that match "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Search for an item or add a new item</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>There are no items that match the search</value>
   </data>
 </root>

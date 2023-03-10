@@ -2591,4 +2591,16 @@ Chcete prepnúť na toto konto?</value>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Pole identifikátora SSO je povinné.</value>
   </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Pridať kľúč k existujúcej alebo novej položke</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Vo vašom trezore nie sú žiadne položky, ktoré zodpovedajú "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Vyhľadať položku alebo pridať novú položku</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Vyhľadávaniu nezodpovedajú žiadne položky</value>
+  </data>
 </root>

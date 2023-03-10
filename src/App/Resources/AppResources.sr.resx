@@ -2593,4 +2593,16 @@
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Потребан је SSO идентификатор организације.</value>
   </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Додајте кључ постојећој или новој ставци</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>У вашем сефу нема ставке за "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Потражите ставку или додајте нову</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Нема ставки које одговарају претрази</value>
+  </data>
 </root>

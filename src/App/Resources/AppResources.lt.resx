@@ -2542,7 +2542,7 @@ Ar norite pereiti prie šios paskyros?</value>
     <value>Įgalinkite fotoaparato leidimą naudoti skaitytuvą</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Kalba</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
     <value>The language has been changed to {0}. Please restart the app to see the change</value>
@@ -2591,5 +2591,17 @@ Ar norite pereiti prie šios paskyros?</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Būtinas organizacijos SSO identifikatorius.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Add the key to an existing or new item</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>There are no items in your vault that match "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Search for an item or add a new item</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>There are no items that match the search</value>
   </data>
 </root>

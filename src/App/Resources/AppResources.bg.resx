@@ -2591,4 +2591,16 @@ select Add TOTP to store the key safely</value>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Идентификаторът за еднократн идентификация на организация е задължителен.</value>
   </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Добавяне на ключа към съществуващ или нов елемент</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>В трезора липсват елементи, които отговарят на „{0}“</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Търсене на елемент или добавяне на нов</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Няма елементи, които отговарят на търсенето</value>
+  </data>
 </root>

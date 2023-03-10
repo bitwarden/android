@@ -2592,4 +2592,16 @@ Haluatko vaihtaa tähän tiliin?</value>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Organisaation SSO-tunniste tarvitaan.</value>
   </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Lisää avain olemassa olevaan tai uuteen kohteeseen</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Holvissasi ei ole kohteita osoitteelle "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Etsi kohdetta tai lisää uusi kohde</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Hakua vastaavia kohteita ei ole</value>
+  </data>
 </root>
