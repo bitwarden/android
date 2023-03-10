@@ -55,8 +55,8 @@ namespace Bit.App.Pages
             get
             {
                 return Reason == ForcePasswordResetReason.WeakMasterPasswordOnLogin
-                    ? _i18nService.T("UpdateWeakMasterPasswordWarning")
-                    : _i18nService.T("UpdateMasterPasswordWarning");
+                    ? AppResources.UpdateWeakMasterPasswordWarning
+                    : AppResources.UpdateMasterPasswordWarning;
             }
         }
 
