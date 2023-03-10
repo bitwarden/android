@@ -121,7 +121,7 @@ namespace Bit.App.Pages
                 // Clear the force reset password reason
                 await _stateService.SetForcePasswordResetReasonAsync(null);
 
-                _platformUtilsService.ShowToast("success", null, AppResources.UpdatedMasterPassword);
+                _platformUtilsService.ShowToast(null, null, AppResources.UpdatedMasterPassword);
 
                 UpdateTempPasswordSuccessAction?.Invoke();
             }
