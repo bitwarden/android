@@ -7,6 +7,7 @@ using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -20,12 +21,14 @@ namespace Bit.App.Pages
             PageTitle = AppResources.UpdateMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleConfirmPasswordCommand = new Command(ToggleConfirmPassword);
-            SubmitCommand = new Command(async () => await SubmitAsync());
+            SubmitCommand = new AsyncCommand(SubmitAsync,
+                onException: ex => HandleException(ex),
+                allowsMultipleExecutions: false);
 
             _userVerificationService = ServiceContainer.Resolve<IUserVerificationService>();
         }
 
-        public Command SubmitCommand { get; }
+        public AsyncCommand SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
         public Command ToggleConfirmPasswordCommand { get; }
         public Action UpdateTempPasswordSuccessAction { get; set; }
