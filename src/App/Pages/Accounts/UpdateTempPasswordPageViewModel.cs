@@ -15,6 +15,8 @@ namespace Bit.App.Pages
     public class UpdateTempPasswordPageViewModel : BaseChangePasswordViewModel
     {
         private readonly IUserVerificationService _userVerificationService;
+        
+        private ForcePasswordResetReason _reason = ForcePasswordResetReason.AdminForcePasswordReset;
 
         public UpdateTempPasswordPageViewModel()
         {
@@ -34,7 +36,6 @@ namespace Bit.App.Pages
         public Action UpdateTempPasswordSuccessAction { get; set; }
         public Action LogOutAction { get; set; }
         public string CurrentMasterPassword { get; set; }
-        public ForcePasswordResetReason Reason { get; set; } = ForcePasswordResetReason.AdminForcePasswordReset;
 
         public override async Task InitAsync(bool forceSync = false)
         {
@@ -44,20 +45,20 @@ namespace Bit.App.Pages
 
             if (forcePasswordResetReason.HasValue)
             {
-                Reason = forcePasswordResetReason.Value;
+                _reason = forcePasswordResetReason.Value;
             }
         }
 
         public bool RequireCurrentPassword
         {
-            get => Reason == ForcePasswordResetReason.WeakMasterPasswordOnLogin;
+            get => _reason == ForcePasswordResetReason.WeakMasterPasswordOnLogin;
         }
 
         public string UpdateMasterPasswordWarningText
         {
             get
             {
-                return Reason == ForcePasswordResetReason.WeakMasterPasswordOnLogin
+                return _reason == ForcePasswordResetReason.WeakMasterPasswordOnLogin
                     ? AppResources.UpdateWeakMasterPasswordWarning
                     : AppResources.UpdateMasterPasswordWarning;
             }
@@ -105,7 +106,7 @@ namespace Bit.App.Pages
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.UpdatingPassword);
 
-                switch (Reason)
+                switch (_reason)
                 {
                     case ForcePasswordResetReason.AdminForcePasswordReset:
                         await UpdateTempPasswordAsync(masterPasswordHash, newEncKey.Item2.EncryptedString);
