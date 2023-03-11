@@ -145,7 +145,7 @@ namespace Bit.App
                                 new NavigationPage(new RemoveMasterPasswordPage()));
                         });
                     }
-                    else if (message.Command == "forceUpdatePassword")
+                    else if (message.Command == Constants.ForceUpdatePassword)
                     {
                         Device.BeginInvokeOnMainThread(async () =>
                         {

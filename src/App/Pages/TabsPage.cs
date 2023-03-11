@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Bit.App.Effects;
 using Bit.App.Models;
 using Bit.App.Resources;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
 using Bit.Core.Utilities;
@@ -102,7 +103,7 @@ namespace Bit.App.Pages
 
             if (forcePasswordResetReason.HasValue)
             {
-                _messagingService.Send("forceUpdatePassword");
+                _messagingService.Send(Constants.ForceUpdatePassword);
             }
         }
 

@@ -48,6 +48,7 @@
         public const string LastUserShouldConnectToWatchKey = "lastUserShouldConnectToWatch";
         public const string AppLocaleKey = "appLocale";
         public const string ClearSensitiveFields = "clearSensitiveFields";
+        public const string ForceUpdatePassword = "forceUpdatePassword";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;
