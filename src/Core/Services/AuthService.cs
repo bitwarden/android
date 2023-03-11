@@ -220,7 +220,7 @@ namespace Bit.Core.Services
                 // Save the forcePasswordReset reason with the state service to force a password reset for the user
                 result.ForcePasswordReset = true;
                 await _stateService.SetForcePasswordResetReasonAsync(
-                    ForcePasswordResetReason.WeakMasterPasswordOnLogin, _authedUserId);
+                    _2faForcePasswordResetReason, _authedUserId);
             }
 
             return result;
