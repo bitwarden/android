@@ -14,15 +14,18 @@ namespace Bit.Core.Services
     {
         private readonly IStateService _stateService;
         private readonly IOrganizationService _organizationService;
+        private readonly IPasswordGenerationService _passwordGenerationService;
 
         private IEnumerable<Policy> _policyCache;
 
         public PolicyService(
             IStateService stateService,
-            IOrganizationService organizationService)
+            IOrganizationService organizationService,
+            IPasswordGenerationService passwordGenerationService)
         {
             _stateService = stateService;
             _organizationService = organizationService;
+            _passwordGenerationService = passwordGenerationService;
         }
 
         public void ClearCache()
@@ -180,6 +183,30 @@ namespace Bit.Core.Services
             }
 
             return true;
+        }
+        
+        public async Task<bool> RequirePasswordChangeOnLoginAsync(string masterPassword, string email,
+            MasterPasswordPolicyOptions enforcedOptions)
+        {
+            // No policy to enforce on login/unlock
+            if (!(enforcedOptions is { EnforceOnLogin: true }))
+            {
+                return false;
+            }
+            
+            var strength = _passwordGenerationService.PasswordStrength(
+                masterPassword, _passwordGenerationService.GetPasswordStrengthUserInput(email))?.Score;
+
+            if (!strength.HasValue)
+            {
+                return false;
+            }
+            
+            return !await EvaluateMasterPassword(
+                strength.Value,
+                masterPassword,
+                enforcedOptions
+            );
         }
 
         public Tuple<ResetPasswordPolicyOptions, bool> GetResetPasswordPolicyOptions(IEnumerable<Policy> policies,
