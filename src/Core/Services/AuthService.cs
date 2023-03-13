@@ -149,7 +149,7 @@ namespace Bit.Core.Services
             var localHashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
             var result = await LogInHelperAsync(email, hashedPassword, localHashedPassword, null, null, null, key, null, null, null, captchaToken);
 
-            if (await RequirePasswordChange(email, masterPassword))
+            if (await RequirePasswordChangeAsync(email, masterPassword))
             {
                 if (!string.IsNullOrEmpty(_authedUserId))
                 {
@@ -174,7 +174,7 @@ namespace Bit.Core.Services
         /// <param name="email"></param>
         /// <param name="masterPassword"></param>
         /// <returns>True if the master password does NOT meet any policy requirements, false otherwise (or if no policy present)</returns>
-        private async Task<bool> RequirePasswordChange(string email, string masterPassword)
+        private async Task<bool> RequirePasswordChangeAsync(string email, string masterPassword)
         {
             // No policy with EnforceOnLogin enabled, we're done. 
             if (!(_masterPasswordPolicy is { EnforceOnLogin: true }))
@@ -182,12 +182,17 @@ namespace Bit.Core.Services
                 return false;
             }
 
-            var passwordStrength = _passwordGenerationService.PasswordStrength(
+            var strength = _passwordGenerationService.PasswordStrength(
                 masterPassword,
                 _passwordGenerationService.GetPasswordStrengthUserInput(email)
-            ).Score;
+            )?.Score;
 
-            return !await _policyService.EvaluateMasterPassword(passwordStrength, masterPassword, _masterPasswordPolicy);
+            if (!strength.HasValue)
+            {
+                return false;
+            }
+
+            return !await _policyService.EvaluateMasterPassword(strength.Value, masterPassword, _masterPasswordPolicy);
         }
 
         public async Task<AuthResult> LogInPasswordlessAsync(string email, string accessCode, string authRequestId, byte[] decryptionKey, string userKeyCiphered, string localHashedPasswordCiphered)

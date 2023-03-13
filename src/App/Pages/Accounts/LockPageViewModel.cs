@@ -310,7 +310,7 @@ namespace Bit.App.Pages
                     var keyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.ServerAuthorization);
                     var request = new PasswordVerificationRequest();
                     request.MasterPasswordHash = keyHash;
-                    
+
                     try
                     {
                         var response = await _apiService.PostAccountVerifyPasswordAsync(request);
