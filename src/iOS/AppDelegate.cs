@@ -43,6 +43,8 @@ namespace Bit.iOS
         private IStateService _stateService;
         private IEventService _eventService;
 
+        private LazyResolve<IDeepLinkContext> _deepLinkContext = new LazyResolve<IDeepLinkContext>();
+
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             Forms.Init();
@@ -239,7 +241,7 @@ namespace Bit.iOS
 
         public override bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
         {
-            return Xamarin.Essentials.Platform.OpenUrl(app, url, options);
+            return _deepLinkContext.Value.OnNewUri(url) || Xamarin.Essentials.Platform.OpenUrl(app, url, options);
         }
 
         public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity,

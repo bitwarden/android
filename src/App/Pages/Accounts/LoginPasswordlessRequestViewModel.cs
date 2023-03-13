@@ -171,7 +171,7 @@ namespace Bit.App.Pages
             var response = await _authService.PasswordlessCreateLoginRequestAsync(_email);
             if (response != null)
             {
-                FingerprintPhrase = response.RequestFingerprint;
+                FingerprintPhrase = response.FingerprintPhrase;
                 _requestId = response.Id;
                 _requestAccessCode = response.RequestAccessCode;
                 _requestKeyPair = response.RequestKeyPair;

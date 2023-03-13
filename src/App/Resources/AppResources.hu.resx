@@ -2590,4 +2590,16 @@ Szeretnénk átváltani erre a fiókra?</value>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>A szervezeti SSO azonosító megadása szükséges.</value>
   </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Adjuk hozzá a kulcsot egy meglévő vagy új elemhez.</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Nincs elem a széfben {0} egyezéssel.</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Keressünk egy elemet vagy adjunk hozzá új elemet.</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Nincsenek a keresésnek megfelelő elemek.</value>
+  </data>
 </root>

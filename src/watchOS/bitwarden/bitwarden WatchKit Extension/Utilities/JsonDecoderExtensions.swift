@@ -3,9 +3,9 @@ import Foundation
 extension JSONDecoder.KeyDecodingStrategy {
     static var upperToLowerCamelCase: JSONDecoder.KeyDecodingStrategy {
         return .custom { codingKeys in
-            
-            var key = AnyCodingKey(codingKeys.last!)
-            
+
+            var key = JSONAnyCodingKey(codingKeys.last!)
+
             if let firstChar = key.stringValue.first {
                 key.stringValue.replaceSubrange(
                     ...key.stringValue.startIndex, with: String(firstChar).lowercased()
@@ -16,10 +16,10 @@ extension JSONDecoder.KeyDecodingStrategy {
     }
 }
 
-struct AnyCodingKey : CodingKey {
+struct JSONAnyCodingKey : CodingKey {
     var stringValue: String
     var intValue: Int?
-    
+
     init(_ base: CodingKey) {
         self.init(stringValue: base.stringValue, intValue: base.intValue)
     }
@@ -27,12 +27,12 @@ struct AnyCodingKey : CodingKey {
     init(stringValue: String) {
         self.stringValue = stringValue
     }
-    
+
     init(intValue: Int) {
         self.stringValue = "\(intValue)"
         self.intValue = intValue
     }
-    
+
     init(stringValue: String, intValue: Int?) {
         self.stringValue = stringValue
         self.intValue = intValue

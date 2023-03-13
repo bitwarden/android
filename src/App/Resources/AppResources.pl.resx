@@ -2591,4 +2591,16 @@ Czy chcesz przełączyć się na to konto?</value>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Identyfikator organizacji jest wymagany.</value>
   </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Dodaj klucz do istniejącego lub nowego elementu</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>W Twoim sejfie nie ma żadnych elementów, które pasują do "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Wyszukaj element lub dodaj nowy</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Brak elementów, które pasują do wyszukiwania</value>
+  </data>
 </root>

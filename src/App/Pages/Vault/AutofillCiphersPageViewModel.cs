@@ -1,91 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Bit.App.Abstractions;
-using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core;
-using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class AutofillCiphersPageViewModel : BaseViewModel
+    public class AutofillCiphersPageViewModel : CipherSelectionPageViewModel
     {
-        private readonly IPlatformUtilsService _platformUtilsService;
-        private readonly IDeviceActionService _deviceActionService;
-        private readonly IAutofillHandler _autofillHandler;
-        private readonly ICipherService _cipherService;
-        private readonly IStateService _stateService;
-        private readonly IPasswordRepromptService _passwordRepromptService;
-        private readonly IMessagingService _messagingService;
-        private readonly ILogger _logger;
+        private CipherType? _fillType;
 
-        private bool _showNoData;
-        private bool _showList;
-        private string _noDataText;
-        private bool _websiteIconsEnabled;
-
-        public AutofillCiphersPageViewModel()
-        {
-            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
-            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
-            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
-            _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
-            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _logger = ServiceContainer.Resolve<ILogger>("logger");
-
-            GroupedItems = new ObservableRangeCollection<IGroupingsPageListItem>();
-            CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
-
-            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
-            {
-                AllowAddAccountRow = false
-            };
-        }
-
-        public string Name { get; set; }
         public string Uri { get; set; }
-        public Command CipherOptionsCommand { get; set; }
-        public bool LoadedOnce { get; set; }
-        public ObservableRangeCollection<IGroupingsPageListItem> GroupedItems { get; set; }
-        public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
 
-        public bool ShowNoData
-        {
-            get => _showNoData;
-            set => SetProperty(ref _showNoData, value);
-        }
-
-        public bool ShowList
-        {
-            get => _showList;
-            set => SetProperty(ref _showList, value);
-        }
-
-        public string NoDataText
-        {
-            get => _noDataText;
-            set => SetProperty(ref _noDataText, value);
-        }
-        public bool WebsiteIconsEnabled
-        {
-            get => _websiteIconsEnabled;
-            set => SetProperty(ref _websiteIconsEnabled, value);
-        }
-
-        public void Init(AppOptions appOptions)
+        public override void Init(AppOptions appOptions)
         {
             Uri = appOptions?.Uri;
+            _fillType = appOptions.FillType;
+
             string name = null;
             if (Uri?.StartsWith(Constants.AndroidAppProtocol) ?? false)
             {
@@ -104,14 +42,11 @@ namespace Bit.App.Pages
             NoDataText = string.Format(AppResources.NoItemsForUri, Name ?? "--");
         }
 
-        public async Task LoadAsync()
+        protected override async Task<List<GroupingsPageListGroup>> LoadGroupedItemsAsync()
         {
-            LoadedOnce = true;
-            ShowList = false;
-            ShowNoData = false;
-            WebsiteIconsEnabled = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
             var groupedItems = new List<GroupingsPageListGroup>();
             var ciphers = await _cipherService.GetAllDecryptedByUrlAsync(Uri, null);
+
             var matching = ciphers.Item1?.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
             var hasMatching = matching?.Any() ?? false;
             if (matching?.Any() ?? false)
@@ -119,6 +54,7 @@ namespace Bit.App.Pages
                 groupedItems.Add(
                     new GroupingsPageListGroup(matching, AppResources.MatchingItems, matching.Count, false, true));
             }
+
             var fuzzy = ciphers.Item2?.Select(c =>
                 new GroupingsPageListItem { Cipher = c, FuzzyAutofill = true }).ToList();
             if (fuzzy?.Any() ?? false)
@@ -128,123 +64,88 @@ namespace Bit.App.Pages
                     !hasMatching));
             }
 
-            // TODO: refactor this
-            if (Device.RuntimePlatform == Device.Android
-                ||
-                GroupedItems.Any())
-            {
-                var items = new List<IGroupingsPageListItem>();
-                foreach (var itemGroup in groupedItems)
-                {
-                    items.Add(new GroupingsPageHeaderListItem(itemGroup.Name, itemGroup.ItemCount));
-                    items.AddRange(itemGroup);
-                }
-
-                GroupedItems.ReplaceRange(items);
-            }
-            else
-            {
-                // HACK: we need this on iOS, so that it doesn't crash when adding coming from an empty list
-                var first = true;
-                var items = new List<IGroupingsPageListItem>();
-                foreach (var itemGroup in groupedItems)
-                {
-                    if (!first)
-                    {
-                        items.Add(new GroupingsPageHeaderListItem(itemGroup.Name, itemGroup.ItemCount));
-                    }
-                    else
-                    {
-                        first = false;
-                    }
-                    items.AddRange(itemGroup);
-                }
-
-                if (groupedItems.Any())
-                {
-                    GroupedItems.ReplaceRange(new List<IGroupingsPageListItem> { new GroupingsPageHeaderListItem(groupedItems[0].Name, groupedItems[0].ItemCount) });
-                    GroupedItems.AddRange(items);
-                }
-                else
-                {
-                    GroupedItems.Clear();
-                }
-            }
-            ShowList = groupedItems.Any();
-            ShowNoData = !ShowList;
+            return groupedItems;
         }
 
-        public async Task SelectCipherAsync(CipherView cipher, bool fuzzy)
+        protected override async Task SelectCipherAsync(IGroupingsPageListItem item)
         {
-            if (cipher == null)
+            if (!(item is GroupingsPageListItem listItem) || listItem.Cipher is null)
             {
                 return;
             }
+
+            var cipher = listItem.Cipher;
+
             if (_deviceActionService.SystemMajorVersion() < 21)
             {
                 await AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService);
+                return;
             }
-            else
+
+            if (cipher.Reprompt != CipherRepromptType.None && !await _passwordRepromptService.ShowPasswordPromptAsync())
             {
-                if (cipher.Reprompt != CipherRepromptType.None && !await _passwordRepromptService.ShowPasswordPromptAsync())
+                return;
+            }
+            var autofillResponse = AppResources.Yes;
+            if (listItem.FuzzyAutofill)
+            {
+                var options = new List<string> { AppResources.Yes };
+                if (cipher.Type == CipherType.Login &&
+                    Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.None)
                 {
-                    return;
+                    options.Add(AppResources.YesAndSave);
                 }
-                var autofillResponse = AppResources.Yes;
-                if (fuzzy)
+                autofillResponse = await _deviceActionService.DisplayAlertAsync(null,
+                    string.Format(AppResources.BitwardenAutofillServiceMatchConfirm, Name), AppResources.No,
+                    options.ToArray());
+            }
+            if (autofillResponse == AppResources.YesAndSave && cipher.Type == CipherType.Login)
+            {
+                var uris = cipher.Login?.Uris?.ToList();
+                if (uris == null)
                 {
-                    var options = new List<string> { AppResources.Yes };
-                    if (cipher.Type == CipherType.Login &&
-                        Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.None)
-                    {
-                        options.Add(AppResources.YesAndSave);
-                    }
-                    autofillResponse = await _deviceActionService.DisplayAlertAsync(null,
-                        string.Format(AppResources.BitwardenAutofillServiceMatchConfirm, Name), AppResources.No,
-                        options.ToArray());
+                    uris = new List<LoginUriView>();
                 }
-                if (autofillResponse == AppResources.YesAndSave && cipher.Type == CipherType.Login)
+                uris.Add(new LoginUriView
                 {
-                    var uris = cipher.Login?.Uris?.ToList();
-                    if (uris == null)
+                    Uri = Uri,
+                    Match = null
+                });
+                cipher.Login.Uris = uris;
+                try
+                {
+                    await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
+                    await _cipherService.SaveWithServerAsync(await _cipherService.EncryptAsync(cipher));
+                    await _deviceActionService.HideLoadingAsync();
+                }
+                catch (ApiException e)
+                {
+                    await _deviceActionService.HideLoadingAsync();
+                    if (e?.Error != null)
                     {
-                        uris = new List<LoginUriView>();
-                    }
-                    uris.Add(new LoginUriView
-                    {
-                        Uri = Uri,
-                        Match = null
-                    });
-                    cipher.Login.Uris = uris;
-                    try
-                    {
-                        await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
-                        await _cipherService.SaveWithServerAsync(await _cipherService.EncryptAsync(cipher));
-                        await _deviceActionService.HideLoadingAsync();
-                    }
-                    catch (ApiException e)
-                    {
-                        await _deviceActionService.HideLoadingAsync();
-                        if (e?.Error != null)
-                        {
-                            await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
-                                AppResources.AnErrorHasOccurred);
-                        }
+                        await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
+                            AppResources.AnErrorHasOccurred);
                     }
                 }
-                if (autofillResponse == AppResources.Yes || autofillResponse == AppResources.YesAndSave)
-                {
-                    _autofillHandler.Autofill(cipher);
-                }
+            }
+            if (autofillResponse == AppResources.Yes || autofillResponse == AppResources.YesAndSave)
+            {
+                _autofillHandler.Autofill(cipher);
             }
         }
 
-        private async void CipherOptionsAsync(CipherView cipher)
+        protected override async Task AddCipherAsync()
         {
-            if ((Page as BaseContentPage).DoOnce())
+            if (_fillType.HasValue && _fillType != CipherType.Login)
             {
-                await AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService);
+                var pageForOther = new CipherAddEditPage(type: _fillType, fromAutofill: true);
+                await Page.Navigation.PushModalAsync(new NavigationPage(pageForOther));
+                return;
             }
+
+            var pageForLogin = new CipherAddEditPage(null, CipherType.Login, uri: Uri, name: Name,
+                fromAutofill: true);
+            await Page.Navigation.PushModalAsync(new NavigationPage(pageForLogin));
         }
     }
 }

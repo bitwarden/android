@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models;
 using Bit.Core.Models.View;
-using Xamarin.Forms;
+using MessagePack;
+using MessagePack.Resolvers;
 
 namespace Bit.App.Services
 {
@@ -124,7 +124,18 @@ namespace Bit.App.Services
             await SyncDataToWatchAsync();
         }
 
-        protected abstract Task SendDataToWatchAsync(WatchDTO watchDto);
+        protected async Task SendDataToWatchAsync(WatchDTO watchDto)
+        {
+            var options = MessagePackSerializerOptions.Standard
+                                .WithResolver(CompositeResolver.Create(
+                                    GeneratedResolver.Instance,
+                                    StandardResolver.Instance
+                                ));
+
+            await SendDataToWatchAsync(MessagePackSerializer.Serialize(watchDto, options));
+        }
+
+        protected abstract Task SendDataToWatchAsync(byte[] rawData);
 
         protected abstract void ConnectToWatch();
     }

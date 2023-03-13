@@ -144,7 +144,8 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Register<IWatchDeviceService>(new WatchDeviceService(ServiceContainer.Resolve<ICipherService>(),
                 ServiceContainer.Resolve<IEnvironmentService>(),
                 ServiceContainer.Resolve<IStateService>(),
-                ServiceContainer.Resolve<IVaultTimeoutService>()));
+                ServiceContainer.Resolve<IVaultTimeoutService>(),
+                ServiceContainer.Resolve<ILogger>()));
         }
 
         public static void Bootstrap(Func<Task> postBootstrapFunc = null)

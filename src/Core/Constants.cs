@@ -46,6 +46,7 @@
         /// which is used to handle Apple Watch state logic
         /// </summary>
         public const string LastUserShouldConnectToWatchKey = "lastUserShouldConnectToWatch";
+        public const string OtpAuthScheme = "otpauth";
         public const string AppLocaleKey = "appLocale";
         public const string ClearSensitiveFields = "clearSensitiveFields";
         public const string ForceUpdatePassword = "forceUpdatePassword";

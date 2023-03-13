@@ -1,5 +1,6 @@
 ﻿using System;
 using Bit.Core.Enums;
+using Bit.Core.Utilities;
 
 namespace Bit.App.Models
 {
@@ -23,6 +24,7 @@ namespace Bit.App.Models
         public Tuple<SendType, string, byte[], string> CreateSend { get; set; }
         public bool CopyInsteadOfShareAfterSaving { get; set; }
         public bool HideAccountSwitcher { get; set; }
+        public OtpData? OtpData { get; set; }
 
         public void SetAllFrom(AppOptions o)
         {
@@ -48,6 +50,7 @@ namespace Bit.App.Models
             CreateSend = o.CreateSend;
             CopyInsteadOfShareAfterSaving = o.CopyInsteadOfShareAfterSaving;
             HideAccountSwitcher = o.HideAccountSwitcher;
+            OtpData = o.OtpData;
         }
     }
 }

@@ -2591,4 +2591,16 @@
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>組織の SSO IDが必要です。</value>
   </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>既存または新規アイテムにキーを追加</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>"{0}" に一致するアイテムは保管庫にありません</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>アイテムを検索するか、新しいアイテムを追加</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>検索に一致するアイテムはありません</value>
+  </data>
 </root>

@@ -21,6 +21,7 @@
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2515" />
     <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />
     <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.4.1" />
+    <PackageReference Include="MessagePack" Version="2.4.59" />
   </ItemGroup>
 
   <ItemGroup>
@@ -436,6 +437,8 @@
     <None Remove="Utilities\AccountManagement\" />
     <None Remove="Controls\DateTime\" />
     <None Remove="Controls\IconLabelButton\" />
+    <None Remove="MessagePack" />
+    <None Remove="MessagePack.MSBuild.Tasks" />
     <None Remove="Controls\PasswordStrengthProgressBar\" />
   </ItemGroup>
 </Project>

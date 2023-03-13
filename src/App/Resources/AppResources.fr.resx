@@ -2591,4 +2591,16 @@ Voulez-vous basculer vers ce compte ?</value>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Identifiant SSO de l'organisation requis.</value>
   </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Ajouter la clé à un élément existant ou nouveau</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Il n'y a pas d'éléments dans votre coffre qui correspondent à "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Rechercher un élément ou ajouter un nouvel élément</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Il n'y a pas d'éléments qui correspondent à la recherche</value>
+  </data>
 </root>
