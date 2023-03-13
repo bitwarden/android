@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
@@ -35,6 +36,8 @@ namespace Bit.iOS.Autofill
         LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
         bool _alreadyLoadItemsOnce = false;
 
+        UIRefreshControl refreshControl = new UIRefreshControl();
+
         public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
@@ -42,13 +45,27 @@ namespace Bit.iOS.Autofill
             SubscribeSyncCompleted();
 
             NavItem.Title = AppResources.Items;
-            CancelBarButton.Title = AppResources.Cancel;
+            CancelBarButton.Title = AppResources.Cancel;            
 
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 44;
             TableView.BackgroundColor = ThemeHelpers.BackgroundColor;
             TableView.Source = new TableSource(this);
             await ((TableSource)TableView.Source).LoadItemsAsync();
+
+            refreshControl.AddTarget(async (sender, e) => {
+                try
+                {
+                    await Task.Delay(500);
+                    await ((TableSource)TableView.Source).RefreshAsync();
+                }
+                finally
+                {
+                    refreshControl.EndRefreshing();
+                }
+            }, UIControlEvent.ValueChanged);
+
+            TableView.AddSubview(refreshControl);
 
             _alreadyLoadItemsOnce = true;
 

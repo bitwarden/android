@@ -25,6 +25,7 @@ namespace Bit.iOS.Core.Views
         protected ITotpService _totpService;
         protected IStateService _stateService;
         protected ISearchService _searchService;
+        protected ISyncService _syncService;
         private AppExtensionContext _context;
         private UIViewController _controller;
 
@@ -34,11 +35,17 @@ namespace Bit.iOS.Core.Views
             _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _searchService = ServiceContainer.Resolve<ISearchService>("searchService");
+            _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _context = context;
             _controller = controller;
         }
 
         public IEnumerable<CipherViewModel> Items { get; private set; }
+
+        public async Task RefreshAsync()
+        {
+            await _syncService.FullSyncAsync(false);
+        }
 
         public async Task LoadItemsAsync(bool urlFilter = true, string searchFilter = null)
         {
