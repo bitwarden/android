@@ -149,7 +149,7 @@ namespace Bit.Core.Services
             var localHashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
             var result = await LogInHelperAsync(email, hashedPassword, localHashedPassword, null, null, null, key, null, null, null, captchaToken);
 
-            if (await _policyService.RequirePasswordChangeOnLoginAsync(masterPassword, email, _masterPasswordPolicy))
+            if (await RequirePasswordChange(email, masterPassword))
             {
                 if (!string.IsNullOrEmpty(_authedUserId))
                 {
@@ -166,6 +166,28 @@ namespace Bit.Core.Services
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Evaluates the supplied master password against the master password policy provided by the Identity response.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="masterPassword"></param>
+        /// <returns>True if the master password does NOT meet any policy requirements, false otherwise (or if no policy present)</returns>
+        private async Task<bool> RequirePasswordChange(string email, string masterPassword)
+        {
+            // No policy with EnforceOnLogin enabled, we're done. 
+            if (!(_masterPasswordPolicy is { EnforceOnLogin: true }))
+            {
+                return false;
+            }
+
+            var passwordStrength = _passwordGenerationService.PasswordStrength(
+                masterPassword,
+                _passwordGenerationService.GetPasswordStrengthUserInput(email)
+            ).Score;
+
+            return !await _policyService.EvaluateMasterPassword(passwordStrength, masterPassword, _masterPasswordPolicy);
         }
 
         public async Task<AuthResult> LogInPasswordlessAsync(string email, string accessCode, string authRequestId, byte[] decryptionKey, string userKeyCiphered, string localHashedPasswordCiphered)

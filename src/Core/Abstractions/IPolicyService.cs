@@ -21,14 +21,5 @@ namespace Bit.Core.Abstractions
         Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter = null, string userId = null);
         int? GetPolicyInt(Policy policy, string key);
         Task<bool> ShouldShowVaultFilterAsync();
-
-        /// <summary>
-        /// Checks if the master password requires updating to meet the enforced policy requirements
-        /// </summary>
-        /// <param name="masterPassword"></param>
-        /// <param name="email">The user's email, used to help evaluate password strength</param>
-        /// <param name="enforcedOptions"></param>
-        Task<bool> RequirePasswordChangeOnLoginAsync(string masterPassword, string email,
-            MasterPasswordPolicyOptions enforcedOptions);
     }
 }

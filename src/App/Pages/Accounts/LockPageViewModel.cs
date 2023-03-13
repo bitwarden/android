@@ -303,7 +303,6 @@ namespace Bit.App.Pages
                 if (storedKeyHash != null)
                 {
                     passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(MasterPassword, key);
-                    enforcedMasterPasswordOptions = await _policyService.GetMasterPasswordPolicyOptions();
                 }
                 else
                 {
@@ -311,7 +310,7 @@ namespace Bit.App.Pages
                     var keyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.ServerAuthorization);
                     var request = new PasswordVerificationRequest();
                     request.MasterPasswordHash = keyHash;
-
+                    
                     try
                     {
                         var response = await _apiService.PostAccountVerifyPasswordAsync(request);
@@ -337,8 +336,7 @@ namespace Bit.App.Pages
                         await _stateService.SetPinProtectedKeyAsync(await _cryptoService.EncryptAsync(key.Key, pinKey));
                     }
 
-                    if (await _policyService.RequirePasswordChangeOnLoginAsync(MasterPassword, _email,
-                            enforcedMasterPasswordOptions))
+                    if (await RequirePasswordChangeAsync(enforcedMasterPasswordOptions))
                     {
                         // Save the ForcePasswordResetReason to force a password reset after unlock
                         await _stateService.SetForcePasswordResetReasonAsync(
@@ -367,6 +365,37 @@ namespace Bit.App.Pages
                         AppResources.AnErrorHasOccurred);
                 }
             }
+        }
+
+        /// <summary>
+        /// Checks if the master password requires updating to meet the enforced policy requirements
+        /// </summary>
+        /// <param name="options"></param>
+        private async Task<bool> RequirePasswordChangeAsync(MasterPasswordPolicyOptions options = null)
+        {
+            // If no policy options are provided, attempt to load them from the policy service
+            var enforcedOptions = options ?? await _policyService.GetMasterPasswordPolicyOptions();
+
+            // No policy to enforce on login/unlock
+            if (!(enforcedOptions is { EnforceOnLogin: true }))
+            {
+                return false;
+            }
+
+            var strength = _passwordGenerationService.PasswordStrength(
+                MasterPassword, _passwordGenerationService.GetPasswordStrengthUserInput(_email))?.Score;
+
+            if (!strength.HasValue)
+            {
+                _logger.Error("Unable to evaluate master password strength during unlock");
+                return false;
+            }
+
+            return !await _policyService.EvaluateMasterPassword(
+                strength.Value,
+                MasterPassword,
+                enforcedOptions
+            );
         }
 
         public async Task LogOutAsync()
