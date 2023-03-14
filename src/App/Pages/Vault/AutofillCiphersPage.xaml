@@ -65,18 +65,24 @@
                                                  CipherTemplate="{StaticResource cipherTemplate}" />
 
             <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
-                <StackLayout
-                    VerticalOptions="CenterAndExpand"
-                    Padding="20, 0"
-                    Spacing="20"
-                    IsVisible="{Binding ShowNoData}">
-                    <Label
-                        Text="{Binding NoDataText}"
-                        HorizontalTextAlignment="Center"></Label>
-                    <Button
-                        Text="{u:I18n AddAnItem}"
-                        Clicked="AddButton_Clicked"></Button>
-                </StackLayout>
+                <RefreshView
+                    IsVisible="{Binding ShowNoData}"
+                    IsRefreshing="{Binding Refreshing}"
+                    Command="{Binding BindingContext.RefreshCommand, Source={x:Reference _page}}">
+                    <ScrollView>
+                        <StackLayout
+                            VerticalOptions="CenterAndExpand"
+                            Padding="20, 0"
+                            Spacing="20">
+                            <Label
+                                Text="{Binding NoDataText}"
+                                HorizontalTextAlignment="Center"></Label>
+                            <Button
+                                Text="{u:I18n AddAnItem}"
+                                Clicked="AddButton_Clicked"></Button>
+                        </StackLayout>
+                    </ScrollView>
+                </RefreshView>
 
                 <RefreshView
                     IsVisible="{Binding ShowList}"
@@ -92,6 +98,7 @@
                         ExtraDataForLogging="Autofill Ciphers Page" />
                 </RefreshView>
             </StackLayout>
+                
         </ResourceDictionary>
     </ContentPage.Resources>
 
