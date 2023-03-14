@@ -138,7 +138,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <connections>
-                                        <action selector="RefreshControl_Activated:" destination="2304" eventType="valueChanged" id="RTo-I2-O8j"/>
+                                        <action selector="RefreshControl_ActivatedAsync:" destination="2304" eventType="valueChanged" id="RTo-I2-O8j"/>
                                     </connections>
                                 </refreshControl>
                                 <prototypes>

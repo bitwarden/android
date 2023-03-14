@@ -67,7 +67,7 @@ namespace Bit.iOS.Autofill
             _accountSwitchingOverlayView = _accountSwitchingOverlayHelper.CreateAccountSwitchingOverlayView(OverlayView);
         }
 
-        async partial void RefreshControl_Activated(UIRefreshControl sender)
+        async partial void RefreshControl_ActivatedAsync(UIRefreshControl sender)
         {
             try
             {
