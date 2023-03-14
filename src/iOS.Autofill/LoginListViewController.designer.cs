@@ -45,6 +45,9 @@ namespace Bit.iOS.Autofill
 		[Action ("CancelBarButton_Activated:")]
 		partial void CancelBarButton_Activated (UIKit.UIBarButtonItem sender);
 
+		[Action ("RefreshControl_Activated:")]
+		partial void RefreshControl_Activated (UIKit.UIRefreshControl sender);
+
 		[Action ("SearchBarButton_Activated:")]
 		partial void SearchBarButton_Activated (UIKit.UIBarButtonItem sender);
 		

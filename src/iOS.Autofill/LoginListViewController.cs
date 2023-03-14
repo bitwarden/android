@@ -36,8 +36,6 @@ namespace Bit.iOS.Autofill
         LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
         bool _alreadyLoadItemsOnce = false;
 
-        UIRefreshControl refreshControl = new UIRefreshControl();
-
         public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
@@ -45,27 +43,13 @@ namespace Bit.iOS.Autofill
             SubscribeSyncCompleted();
 
             NavItem.Title = AppResources.Items;
-            CancelBarButton.Title = AppResources.Cancel;            
+            CancelBarButton.Title = AppResources.Cancel;
 
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 44;
             TableView.BackgroundColor = ThemeHelpers.BackgroundColor;
             TableView.Source = new TableSource(this);
             await ((TableSource)TableView.Source).LoadItemsAsync();
-
-            refreshControl.AddTarget(async (sender, e) => {
-                try
-                {
-                    await Task.Delay(500);
-                    await ((TableSource)TableView.Source).RefreshAsync();
-                }
-                finally
-                {
-                    refreshControl.EndRefreshing();
-                }
-            }, UIControlEvent.ValueChanged);
-
-            TableView.AddSubview(refreshControl);
 
             _alreadyLoadItemsOnce = true;
 
@@ -81,6 +65,19 @@ namespace Bit.iOS.Autofill
             AccountSwitchingBarButton.Image = await _accountSwitchingOverlayHelper.CreateAvatarImageAsync();
 
             _accountSwitchingOverlayView = _accountSwitchingOverlayHelper.CreateAccountSwitchingOverlayView(OverlayView);
+        }
+
+        async partial void RefreshControl_Activated(UIRefreshControl sender)
+        {
+            try
+            {
+                await Task.Delay(500);
+                await((TableSource)TableView.Source).RefreshAsync();
+            }
+            finally
+            {
+                sender.EndRefreshing();
+            }
         }
 
         partial void AccountSwitchingBarButton_Activated(UIBarButtonItem sender)

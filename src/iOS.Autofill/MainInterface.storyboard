@@ -134,6 +134,13 @@
                             <tableView opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="2305">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="737"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <refreshControl key="refreshControl" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="refreshControl">
+                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <connections>
+                                        <action selector="RefreshControl_Activated:" destination="2304" eventType="valueChanged" id="RTo-I2-O8j"/>
+                                    </connections>
+                                </refreshControl>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="3763" detailTextLabel="3764" rowHeight="44" style="IBUITableViewCellStyleSubtitle" id="3761">
                                         <rect key="frame" x="0.0" y="44.5" width="414" height="44"/>
@@ -219,7 +226,7 @@
                         <outlet property="AccountSwitchingBarButton" destination="I0b-et-FGw" id="KZj-EO-7wd"/>
                         <outlet property="AddBarButton" destination="3736" id="name-outlet-3736"/>
                         <outlet property="CancelBarButton" destination="3735" id="name-outlet-3735"/>
-                        <outlet property="MainView" destination="q9o-3n-3xL" id="gjJ-12-71Q"/>
+                        <outlet property="MainView" destination="refreshControl" id="mb6-FJ-B2C"/>
                         <outlet property="NavItem" destination="3734" id="name-outlet-3734"/>
                         <outlet property="OverlayView" destination="Tq0-Ep-tHr" id="igj-R2-gXJ"/>
                         <outlet property="TableView" destination="2305" id="aUe-Uz-iIb"/>
