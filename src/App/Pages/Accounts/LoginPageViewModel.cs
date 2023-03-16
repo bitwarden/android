@@ -265,7 +265,7 @@ namespace Bit.App.Pages
         {
             try
             {
-                if(!_isExecutingLogin)
+                if (!_isExecutingLogin)
                 {
                     MasterPassword = string.Empty;
                     ShowPassword = false;
