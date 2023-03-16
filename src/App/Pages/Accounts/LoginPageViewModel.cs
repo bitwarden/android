@@ -150,14 +150,24 @@ namespace Bit.App.Pages
                 {
                     Email = await _stateService.GetRememberedEmailAsync();
                 }
-                var deviceIdentifier = await _appIdService.GetAppIdAsync();
-                IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
                 CanRemoveAccount = await _stateService.GetActiveUserEmailAsync() != Email;
-                await _deviceActionService.HideLoadingAsync();
+                IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, await _appIdService.GetAppIdAsync());
             }
             catch (Exception ex)
             {
-                HandleException(ex);
+                if(ex is ApiException apiException
+                    && apiException.Error.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    _logger.Exception(ex);
+                }
+                else
+                {
+                    HandleException(ex);
+                }
+            }
+            finally
+            {
+                await _deviceActionService.HideLoadingAsync();
             }
         }
 
