@@ -40,6 +40,7 @@ namespace Bit.App.Pages
         private string _masterPassword;
         private bool _isEmailEnabled;
         private bool _isKnownDevice;
+        private bool _isExecutingLogin;
 
         public LoginPageViewModel()
         {
@@ -192,6 +193,7 @@ namespace Bit.App.Pages
             ShowPassword = false;
             try
             {
+                _isExecutingLogin = true;
                 if (checkForExistingAccount)
                 {
                     var userId = await _stateService.GetUserIdAsync(Email);
@@ -253,14 +255,21 @@ namespace Bit.App.Pages
                         AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
             }
+            finally
+            {
+                _isExecutingLogin = false;
+            }
         }
 
         public void ResetPasswordField()
         {
             try
             {
-                MasterPassword = string.Empty;
-                ShowPassword = false;
+                if(!_isExecutingLogin)
+                {
+                    MasterPassword = string.Empty;
+                    ShowPassword = false;
+                }
             }
             catch (Exception ex)
             {
