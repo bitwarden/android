@@ -2593,15 +2593,15 @@ Você deseja mudar para esta conta?</value>
     <value>Identificador SSO da organização necessário.</value>
   </data>
   <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
-    <value>Add the key to an existing or new item</value>
+    <value>Adicionar a chave a um item existente ou novo</value>
   </data>
   <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
-    <value>There are no items in your vault that match "{0}"</value>
+    <value>Não existem itens no seu cofre que correspondam a "{0}"</value>
   </data>
   <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
-    <value>Search for an item or add a new item</value>
+    <value>Procure por um item ou adicione um novo item</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
-    <value>There are no items that match the search</value>
+    <value>Não há itens que correspondam à pesquisa</value>
   </data>
 </root>

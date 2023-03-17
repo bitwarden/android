@@ -1694,7 +1694,7 @@ La numérisation se fera automatiquement.</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>Une ou plusieurs politiques d'organisation affectent les paramètres de votre générateur</value>
+    <value>Une ou plusieurs politiques de sécurité de l'organisation affectent les paramètres de votre générateur</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Ouvrir</value>
@@ -1783,7 +1783,7 @@ La numérisation se fera automatiquement.</value>
     <value>Afin de finaliser la connexion avec SSO, veuillez définir un mot de passe principal pour accéder et protéger votre coffre.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>Une ou plusieurs politiques de l'organisation exigent que votre mot de passe principal réponde aux exigences suivantes :</value>
+    <value>Une ou plusieurs politiques de sécurité de l'organisation exigent que votre mot de passe principal réponde aux exigences suivantes :</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
     <value>Score de complexité minimum de {0}</value>
@@ -1813,7 +1813,8 @@ La numérisation se fera automatiquement.</value>
     <value>Chargement</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>En cochant cette case, vous acceptez les éléments suivants :</value>
+    <value>En cochant cette case vous acceptez ce qui suit :
+</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
     <value>Les conditions d'utilisation et la politique de confidentialité n'ont pas été acceptées.</value>
@@ -2062,7 +2063,7 @@ La numérisation se fera automatiquement.</value>
     <value>Masquer mon adresse électronique aux destinataires</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
-    <value>Une ou plusieurs politiques d'organisation affectent vos options Send.</value>
+    <value>Une ou plusieurs politiques de sécurité de l'organisation affectent vos options Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
@@ -2140,13 +2141,13 @@ La numérisation se fera automatiquement.</value>
     <value>Cette organisation dispose d'une politique d'entreprise qui vous inscrira automatiquement à la réinitialisation du mot de passe. L'inscription permettra aux administrateurs de l'organisation de changer votre mot de passe principal.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Les politiques de votre organisation affectent le délai d'expiration de votre coffre-fort. Le délai d'expiration maximal autorisé est de {0} heure(s) et {1} minute(s)</value>
+    <value>Les politiques de sécurité de votre organisation affectent le délai d'expiration de votre coffre. Le délai d'expiration autorisé du coffre est de {0} heure(s) et {1} minute(s) maximum</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Le délai d'expiration de votre coffre dépasse les restrictions définies par votre organisation.</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
-    <value>Une ou plusieurs politiques d'organisation vous empêchent d'exporter votre coffre personnel.</value>
+    <value>Une ou plusieurs politiques de sécurité de l'organisation vous empêchent d'exporter votre coffre individuel.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
     <value>Ajouter un compte</value>
