@@ -155,7 +155,7 @@ namespace Bit.App.Pages
             }
             catch (Exception ex)
             {
-                if(ex is ApiException apiException
+                if (ex is ApiException apiException
                     && apiException.Error.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
                     _logger.Exception(ex);
