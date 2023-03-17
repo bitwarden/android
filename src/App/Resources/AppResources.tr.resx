@@ -2591,15 +2591,15 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>Kuruluş SSO tanımlayıcısı gereklidir.</value>
   </data>
   <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
-    <value>Add the key to an existing or new item</value>
+    <value>Anahtarı mevcut veya yeni bir kayda ekle</value>
   </data>
   <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
-    <value>There are no items in your vault that match "{0}"</value>
+    <value>Kasanızda "{0}" ile eşleşen kayıt yok</value>
   </data>
   <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
-    <value>Search for an item or add a new item</value>
+    <value>Kayıtlarda ara veya yeni kayıt ekle</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
-    <value>There are no items that match the search</value>
+    <value>Aramayla eşleşen kayıt yok</value>
   </data>
 </root>
