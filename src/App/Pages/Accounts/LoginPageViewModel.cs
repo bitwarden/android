@@ -153,17 +153,13 @@ namespace Bit.App.Pages
                 CanRemoveAccount = await _stateService.GetActiveUserEmailAsync() != Email;
                 IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, await _appIdService.GetAppIdAsync());
             }
+            catch (ApiException apiEx) when (apiEx.Error.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _logger.Exception(apiEx);
+            }
             catch (Exception ex)
             {
-                if (ex is ApiException apiException
-                    && apiException.Error.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                {
-                    _logger.Exception(ex);
-                }
-                else
-                {
-                    HandleException(ex);
-                }
+                HandleException(ex);
             }
             finally
             {
