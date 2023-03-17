@@ -2141,7 +2141,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Organisaatiolla on käytäntö, joka liittää tilisi automaattisesti salasanan palautusapuun. Liitos sallii organisaation ylläpitäjien vaihtaa pääsalasanasi.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Organisaatiokäytännöt vaikuttavat holvin aikakatkaisuun. Suurin sallittu aika on {0} tunti(a) ja {1} minuutti(a)</value>
+    <value>Organisaatiokäytännöt vaikuttavat holvisi aikakatkaisuun. Suurin sallittu aika on {0} tunti(a) ja {1} minuutti(a).</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Holvisi aikakatkaisu ylittää organisaatiosi asettamat rajoitukset.</value>

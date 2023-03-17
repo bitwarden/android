@@ -2545,13 +2545,13 @@ Ar norite pereiti prie šios paskyros?</value>
     <value>Kalba</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
-    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+    <value>Kalba pakeista į {0}. Iš naujo paleiskite programą, kad pamatytumėte pakeitimą</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
-    <value>Language change requires app restart</value>
+    <value>Keičiant kalbą reikia iš naujo paleisti programą</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>Numatyta (System)</value>
   </data>
   <data name="Important" xml:space="preserve">
     <value>Svarbu</value>
@@ -2593,15 +2593,15 @@ Ar norite pereiti prie šios paskyros?</value>
     <value>Būtinas organizacijos SSO identifikatorius.</value>
   </data>
   <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
-    <value>Add the key to an existing or new item</value>
+    <value>Pridėkite raktą prie esamo ar naujo elemento</value>
   </data>
   <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
     <value>There are no items in your vault that match "{0}"</value>
   </data>
   <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
-    <value>Search for an item or add a new item</value>
+    <value>Ieškokite elemento arba pridėkite naują elementą</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
-    <value>There are no items that match the search</value>
+    <value>Elementų, atitinkančių paiešką, nėra</value>
   </data>
 </root>
