@@ -177,9 +177,30 @@ namespace Bit.Core.Services
                 Type = model.Type,
                 CollectionIds = model.CollectionIds,
                 RevisionDate = model.RevisionDate,
-                Reprompt = model.Reprompt
+                Reprompt = model.Reprompt,
+                ForceKeyRotation = model.ForceKeyRotation
             };
 
+            key = await UpdateCipherAndGetCipherKeyAsync(cipher, model, key);
+
+            var tasks = new List<Task>
+            {
+                EncryptObjPropertyAsync(model, cipher, new HashSet<string>
+                {
+                   nameof(CipherView.Name),
+                   nameof(CipherView.Notes)
+                }, key),
+                EncryptCipherDataAsync(cipher, model, key),
+                EncryptFieldsAsync(model.Fields, key, cipher),
+                EncryptPasswordHistoriesAsync(model.PasswordHistory, key, cipher),
+                EncryptAttachmentsAsync(model.Attachments, key, cipher)
+            };
+            await Task.WhenAll(tasks);
+            return cipher;
+        }
+
+        private async Task<SymmetricCryptoKey> UpdateCipherAndGetCipherKeyAsync(Cipher cipher, CipherView cipherView, SymmetricCryptoKey key = null)
+        {
             if (key == null && cipher.OrganizationId != null)
             {
                 key = await _cryptoService.GetOrgKeyAsync(cipher.OrganizationId);
@@ -189,20 +210,21 @@ namespace Bit.Core.Services
                 }
             }
 
-            var tasks = new List<Task>
+            if (cipherView.Key != null && !cipherView.ForceKeyRotation)
             {
-                EncryptObjPropertyAsync(model, cipher, new HashSet<string>
-                {
-                   "Name",
-                   "Notes"
-                }, key),
-                EncryptCipherDataAsync(cipher, model, key),
-                EncryptFieldsAsync(model.Fields, key, cipher),
-                EncryptPasswordHistoriesAsync(model.PasswordHistory, key, cipher),
-                EncryptAttachmentsAsync(model.Attachments, key, cipher)
-            };
-            await Task.WhenAll(tasks);
-            return cipher;
+                cipher.Key = await _cryptoService.EncryptAsync(cipherView.Key.Key, key);
+                return cipherView.Key;
+            }
+#if DEBUG
+            // turned on, only on debug to check that the enc/decryption is working fine at the cipher level.
+            // this will be allowed on production on a later release.
+            var cfs = ServiceContainer.Resolve<ICryptoFunctionService>();
+            var newKey = new SymmetricCryptoKey(await cfs.RandomBytesAsync(Core.Constants.CipherKeyRandomBytesLength));
+            cipher.Key = await _cryptoService.EncryptAsync(newKey.Key, key);
+            return newKey;
+#else
+            return key;
+#endif
         }
 
         public async Task<Cipher> GetAsync(string id)
@@ -526,6 +548,7 @@ namespace Bit.Core.Services
                 var request = new CipherRequest(cipher);
                 response = await _apiService.PutCipherAsync(cipher.Id, request);
             }
+
             var userId = await _stateService.GetActiveUserIdAsync();
             var data = new CipherData(response, userId, cipher.CollectionIds);
             await UpsertAsync(data);
@@ -574,6 +597,7 @@ namespace Bit.Core.Services
 
                 var uploadDataResponse = await _apiService.PostCipherAttachmentAsync(cipher.Id, request);
                 response = uploadDataResponse.CipherResponse;
+
                 await _fileUploadService.UploadCipherAttachmentFileAsync(uploadDataResponse, encFileName, encFileData);
             }
             catch (ApiException e) when (e.Error.StatusCode == System.Net.HttpStatusCode.NotFound || e.Error.StatusCode == System.Net.HttpStatusCode.MethodNotAllowed)
@@ -1054,7 +1078,7 @@ namespace Bit.Core.Services
             {
                 await EncryptObjPropertyAsync(model, attachment, new HashSet<string>
                 {
-                    "FileName"
+                    nameof(AttachmentView.FileName)
                 }, key);
                 if (model.Key != null)
                 {

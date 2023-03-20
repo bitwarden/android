@@ -59,6 +59,7 @@
         public const int Argon2MemoryInMB = 64;
         public const int Argon2Parallelism = 4;
         public const int MasterPasswordMinimumChars = 12;
+        public const int CipherKeyRandomBytesLength = 64;
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {

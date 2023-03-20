@@ -29,20 +29,20 @@ namespace Bit.Core.Models.Domain
         public DateTime? PasswordRevisionDate { get; set; }
         public EncString Totp { get; set; }
 
-        public async Task<LoginView> DecryptAsync(string orgId)
+        public async Task<LoginView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
             var view = await DecryptObjAsync(new LoginView(this), this, new HashSet<string>
             {
                 "Username",
                 "Password",
                 "Totp"
-            }, orgId);
+            }, orgId, key);
             if (Uris != null)
             {
                 view.Uris = new List<LoginUriView>();
                 foreach (var uri in Uris)
                 {
-                    view.Uris.Add(await uri.DecryptAsync(orgId));
+                    view.Uris.Add(await uri.DecryptAsync(orgId, key));
                 }
             }
             return view;

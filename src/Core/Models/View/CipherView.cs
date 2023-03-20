@@ -25,6 +25,7 @@ namespace Bit.Core.Models.View
             RevisionDate = c.RevisionDate;
             DeletedDate = c.DeletedDate;
             Reprompt = c.Reprompt;
+            ForceKeyRotation = c.ForceKeyRotation;
         }
 
         public string Id { get; set; }
@@ -49,6 +50,8 @@ namespace Bit.Core.Models.View
         public DateTime RevisionDate { get; set; }
         public DateTime? DeletedDate { get; set; }
         public CipherRepromptType Reprompt { get; set; }
+        public SymmetricCryptoKey Key { get; set; }
+        public bool ForceKeyRotation { get; set; }
 
         public ItemView Item
         {
