@@ -91,5 +91,6 @@ namespace Bit.Core.Abstractions
         Task<string> GetUsernameFromAsync(ForwardedEmailServiceType service, UsernameGeneratorConfig config);
         Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier);
         Task<OrganizationDomainSsoDetailsResponse> GetOrgDomainSsoDetailsAsync(string email);
+        Task<ConfigResponse> GetAllConfigsAsync();
     }
 }

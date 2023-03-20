@@ -580,6 +580,15 @@ namespace Bit.Core.Services
 
         #endregion
 
+        #region Configs
+
+        public async Task<ConfigResponse> GetAllConfigsAsync()
+        {
+            return await SendAsync<object, ConfigResponse>(HttpMethod.Get, $"/config/", null, false, true);
+        }
+
+        #endregion
+
         #region Helpers
 
         public async Task<string> GetActiveBearerTokenAsync()
