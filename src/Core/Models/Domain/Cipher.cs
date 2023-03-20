@@ -95,7 +95,7 @@ namespace Bit.Core.Models.Domain
         {
             var model = new CipherView(this);
 
-            if(Key != null)
+            if (Key != null)
             {
                 // HACK: I don't like resolving this here but I can't see a better way without
                 // refactoring a lot of things.
