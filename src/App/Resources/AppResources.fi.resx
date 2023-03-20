@@ -2141,7 +2141,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Organisaatiolla on käytäntö, joka liittää tilisi automaattisesti salasanan palautusapuun. Liitos sallii organisaation ylläpitäjien vaihtaa pääsalasanasi.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Organisaatiokäytännöt vaikuttavat holvin aikakatkaisuun. Suurin sallittu aika on {0} tunti(a) ja {1} minuutti(a)</value>
+    <value>Organisaatiokäytännöt vaikuttavat holvisi aikakatkaisuun. Suurin sallittu aika on {0} tunti(a) ja {1} minuutti(a).</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Holvisi aikakatkaisu ylittää organisaatiosi asettamat rajoitukset.</value>
@@ -2591,5 +2591,17 @@ Haluatko vaihtaa tähän tiliin?</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Organisaation SSO-tunniste tarvitaan.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Lisää avain olemassa olevaan tai uuteen kohteeseen</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Holvissasi ei ole kohteita osoitteelle "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Etsi kohdetta tai lisää uusi kohde</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Hakua vastaavia kohteita ei ole</value>
   </data>
 </root>

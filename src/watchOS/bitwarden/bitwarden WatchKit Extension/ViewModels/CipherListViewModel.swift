@@ -15,6 +15,8 @@ class CipherListViewModel : ObservableObject {
     
     @Published var searchTerm: String = ""
     
+    var debugText: String? = nil
+    
     private var subscriber: AnyCancellable?
     
     init(_ cipherService: CipherServiceProtocol){
@@ -23,6 +25,7 @@ class CipherListViewModel : ObservableObject {
         subscriber = watchConnectivityManager.watchConnectivitySubject.sink { completion in
                 print("WCM subject: \(completion)")
         } receiveValue: { value in
+            self.debugText = value.debugText
             self.checkStateAndFetch(value.state)
         }
         

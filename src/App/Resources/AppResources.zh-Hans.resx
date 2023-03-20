@@ -2523,19 +2523,19 @@
     <value>请求已失效</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Pending login requests</value>
+    <value>待定登录请求</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
     <value>拒绝所有请求</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>Are you sure you want to decline all pending login requests?</value>
+    <value>您确定要拒绝所有待处理的登录请求吗？</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
     <value>请求被拒绝</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>No pending requests</value>  
+    <value>无待处理请求</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>启用相机权限以使用扫描器</value>
@@ -2556,39 +2556,51 @@
     <value>重要事项：</value>
   </data>
   <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
-    <value>Your master password cannot be recovered if you forget it! {0} characters minimum.</value>
+    <value>主密码忘记后，将无法恢复！密码不能少于{0}个字符</value>
   </data>
   <data name="WeakMasterPassword" xml:space="preserve">
-    <value>Weak Master Password</value>
+    <value>脆弱的主密码</value>
   </data>
   <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
-    <value>Weak password identified. Use a strong password to protect your account. Are you sure you want to use a weak password?</value>
+    <value>发现弱密码。使用一个强密码来保护你的账户。你确定你要使用弱密码吗？</value>
   </data>
   <data name="Weak" xml:space="preserve">
-    <value>Weak</value>
+    <value>弱</value>
   </data>
   <data name="Good" xml:space="preserve">
-    <value>Good</value>
+    <value>良好</value>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Strong</value>
+    <value>强</value>
   </data>
   <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
-    <value>Check known data breaches for this password</value>
+    <value>检查已知的数据泄露是否包含此密码</value>
   </data>
   <data name="ExposedMasterPassword" xml:space="preserve">
-    <value>Exposed Master Password</value>
+    <value>已暴露的主密码</value>
   </data>
   <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?</value>
+    <value>一起数据泄露中存在该密码。使用独特的密码有助保护您的账户。确定要使用曾经暴露的密码吗？</value>
   </data>
   <data name="WeakAndExposedMasterPassword" xml:space="preserve">
-    <value>Weak and Exposed Master Password</value>
+    <value>主密码弱且曾经暴露</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+    <value>密码太弱并出现在数据泄露。使用强悍且独特的密码有助保护您的账户。确定继续使用当前密码吗？</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>必须填写组织 SSO 标识符。</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>将密钥添加到现有或新项目</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>您的密码库中没有匹配 "{0}" 的项目</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>搜索一个项目或添加一个新项目</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>没有匹配搜索的项目</value>
   </data>
 </root>

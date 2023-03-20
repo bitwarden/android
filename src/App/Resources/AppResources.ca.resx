@@ -2140,7 +2140,7 @@ L'escaneig es farà automàticament.</value>
     <value>Aquesta organització té una política empresarial que us inscriurà automàticament al restabliment de la contrasenya. La inscripció permetrà als administradors de l’organització canviar la vostra contrasenya mestra.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Les polítiques de la vostra organització afecten el temps d'espera de la vostra caixa forta. El temps d'espera màxim permès de la caixa forta és de {0} hores i {1} minuts</value>
+    <value>Les polítiques de l'organització afecten el temps d'espera de la caixa forta. El temps d'espera màxim permès de la caixa forta és de {0} hores i {1} minuts</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>El temps d'espera de la caixa forta supera les restriccions establertes per la vostra organització.</value>
@@ -2590,5 +2590,17 @@ Voleu canviar a aquest compte?</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>L’identificador SSO de l’organització és obligatori.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Afig la clau a un element existent o nou</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>No hi ha cap element a la caixa forta que coincidisca amb "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Cerca un element o n'afig un nou</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>No hi ha elements que coincidisquen amb la cerca</value>
   </data>
 </root>

@@ -584,7 +584,7 @@
     <value>Et hint om hovedpassordet kan hjelpe deg å huske passordet om du skulle glemme det.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Hovedpassordet må være minst {0} tegn.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minst antall siffer</value>
@@ -604,7 +604,7 @@
     <value>Aldri</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Nytt element opprettet.</value>
+    <value>Nytt element opprettet</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Det er ingen favoritter i hvelvet ditt.</value>
@@ -2542,16 +2542,16 @@ Vil du bytte til denne kontoen?</value>
     <value>Aktiver kameratillatelse for å bruke skanner</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Språk</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
-    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+    <value>Språket er endret til {0}. Start appen på nytt for å se endringen</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
-    <value>Language change requires app restart</value>
+    <value>Språkendring krever omstart av appen</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>Standard (System)</value>
   </data>
   <data name="Important" xml:space="preserve">
     <value>Viktig</value>
@@ -2590,6 +2590,18 @@ Vil du bytte til denne kontoen?</value>
     <value>Svakt passord identifisert og funnet i et databrudd. Bruk et sterkt og unikt passord for å beskytte kontoen din. Er du sikker på at du vil bruke dette passordet?</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
-    <value>Organization SSO identifier required.</value>
+    <value>Organisasjon SSO identifikator kreves.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Legg nøkkelen til et eksisterende eller nytt element</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Det er ingen elementer i hvelvet ditt som samsvarer med "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Søk etter et element eller legg til et nytt element</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Det er ingen elementer som samsvarer med søket</value>
   </data>
 </root>

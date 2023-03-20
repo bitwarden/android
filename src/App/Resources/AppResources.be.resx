@@ -2591,4 +2591,16 @@
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Неабходны ідэнтыфікатар SSO арганізацыі.</value>
   </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Дадаць ключ да існуючага або новага элемента</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>У вашым сховішчы адсутнічаюць элементы, якія адпавядаюць "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Пошук або дабаўленне новага элемента</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Адсутнічаюць элементы, якія адпавядаюць пошуку</value>
+  </data>
 </root>

@@ -2591,4 +2591,16 @@ Vil du skifte til denne konto?</value>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Organisations-SSO obligatorisk.</value>
   </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Føj nøglen til et eksisterende eller nyt emne</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Der er ingen emner i boksen matchende "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Søg efter, eller tilføj et nyt, emne</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Ingen emner matcher søgningen</value>
+  </data>
 </root>

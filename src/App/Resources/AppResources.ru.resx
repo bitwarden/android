@@ -2591,4 +2591,16 @@
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Требуется идентификатор SSO организации.</value>
   </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Добавить ключ к существующему или новому элементу</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>В вашем хранилище нет элементов, соответствующих "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Поиск или добавление нового элемента</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Нет элементов, соответствующих запросу</value>
+  </data>
 </root>

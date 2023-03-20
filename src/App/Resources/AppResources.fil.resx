@@ -1668,7 +1668,7 @@ Awtomatikong itong magsa-scan.</value>
     <value>Kumpirmahin ang pagkakakilanlan mo para tumuloy.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>Naglalaman ng unencrypted vault data mo ang export na ito. Hindi mo dapat ilagay o ipadala ang file gamit ang hindi ligtas na mga paraan (tulad ng email). I-delete ito kaagad pagkagamit.</value>
+    <value>Naglalaman ng unencrypted vault data mo ang export na ito. Hindi mo dapat ilagay o ipadala ang file gamit ang hindi ligtas na mga paraan (tulad ng email). Burahin ito kaagad pagkagamit.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
     <value>Ine-encrypt ng export na ito ang data mo gamit ang encryption key ng iyong account. Kung iro-rotate mo man ang encryption key ng iyong account, kailangan mong mag-export ulit dahil hindi mo na made-decrypt ang file na ito.</value>
@@ -2591,5 +2591,17 @@ Gusto mo bang pumunta sa account na ito?</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Kinakailangan ang Organization SSO identifier.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Idagdag ang key sa kasalukuyan o bagong item</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Walang mga item sa vault mo na tumutugma sa "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Hanapin ang isang item o gumawa ng bagong item</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Walang mga item na tumutugma sa paghahanap</value>
   </data>
 </root>

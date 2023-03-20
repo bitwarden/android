@@ -2546,10 +2546,10 @@ Vill du byta till detta konto?</value>
     <value>Språk</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
-    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+    <value>Språket har ändrats till {0}. Starta om appen för att se ändringen</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
-    <value>Language change requires app restart</value>
+    <value>Ändring av språk kräver att appen startas om</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
     <value>Standard (System)</value>
@@ -2591,6 +2591,18 @@ Vill du byta till detta konto?</value>
     <value>Lösenordet är svagt och avslöjades vid ett dataintrång. Använd ett starkt och unikt lösenord för att skydda ditt konto. Är det säkert att du vill använda detta lösenord?</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
-    <value>Organization SSO identifier required.</value>
+    <value>Organisationens SSO-identifierare krävs.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Lägg till nyckeln till ett befintligt eller nytt objekt</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Det finns inga objekt i ditt valv som matchar "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Sök efter ett objekt eller lägg till ett nytt objekt</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Det finns inga objekt som matchar sökningen</value>
   </data>
 </root>

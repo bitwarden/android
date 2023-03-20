@@ -584,7 +584,7 @@
     <value>Vihje võib abiks olla olukorras, kui oled ülemparooli unustanud.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Ülemparool peab olema vähemalt {0} tähemärgi pikkune.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Vähim arv numbreid</value>
@@ -2590,5 +2590,17 @@ Soovid selle konto peale lülituda?</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Nõutud on organisatsiooni SSO identifikaator.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Lisa võti olemasolevale või uuele kirjele</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Hoidlas puuduvad kirjed, mis sobituksid sõnaga "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Otsi kirjet või lisa uus kirje</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Otsingusõnale ei vasta kirjeid</value>
   </data>
 </root>
