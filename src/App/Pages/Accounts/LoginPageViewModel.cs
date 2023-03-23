@@ -40,6 +40,7 @@ namespace Bit.App.Pages
         private string _masterPassword;
         private bool _isEmailEnabled;
         private bool _isKnownDevice;
+        private bool _isExecutingLogin;
 
         public LoginPageViewModel()
         {
@@ -143,19 +144,26 @@ namespace Bit.App.Pages
             try
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
+                await _stateService.SetPreLoginEmailAsync(Email);
                 await AccountSwitchingOverlayViewModel.RefreshAccountViewsAsync();
                 if (string.IsNullOrWhiteSpace(Email))
                 {
                     Email = await _stateService.GetRememberedEmailAsync();
                 }
-                var deviceIdentifier = await _appIdService.GetAppIdAsync();
-                IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, deviceIdentifier);
                 CanRemoveAccount = await _stateService.GetActiveUserEmailAsync() != Email;
-                await _deviceActionService.HideLoadingAsync();
+                IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, await _appIdService.GetAppIdAsync());
+            }
+            catch (ApiException apiEx) when (apiEx.Error.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _logger.Exception(apiEx);
             }
             catch (Exception ex)
             {
                 HandleException(ex);
+            }
+            finally
+            {
+                await _deviceActionService.HideLoadingAsync();
             }
         }
 
@@ -191,6 +199,7 @@ namespace Bit.App.Pages
             ShowPassword = false;
             try
             {
+                _isExecutingLogin = true;
                 if (checkForExistingAccount)
                 {
                     var userId = await _stateService.GetUserIdAsync(Email);
@@ -251,6 +260,26 @@ namespace Bit.App.Pages
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
                         AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
+            }
+            finally
+            {
+                _isExecutingLogin = false;
+            }
+        }
+
+        public void ResetPasswordField()
+        {
+            try
+            {
+                if (!_isExecutingLogin)
+                {
+                    MasterPassword = string.Empty;
+                    ShowPassword = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
         }
 

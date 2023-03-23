@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Pääsalasanan vihje voi auttaa sinua muistamaan unohtamasi salasanan.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Pääsalasanan tulee sisältää ainakin 8 merkkiä.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Pääsalasanan tulee sisältää vähintään {0} merkkiä.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Numeroita vähintään</value>
@@ -708,7 +708,7 @@
     <value>Kaksivaiheinen kirjautuminen</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Kaksivaiheinen kirjautuminen tekee tilistäsi turvallisemman edellyttämällä salasanan lisäksi kirjautumisen lisätodennusta todennuslaitteen, ‑sovelluksen, tekstiviestin, puhelun tai sähköpostin avulla. Voit ottaa kaksivaiheisen kirjautumisen käyttöön bitwarden.com‑verkkoholvista. Haluatko avata sivuston nyt?</value>
+    <value>Kaksivaiheinen kirjautuminen parantaa tilisi suojausta vaatimalla kirjautumisen vahvistuksen salasanan lisäksi todennuslaitteen, ‑sovelluksen, tekstiviestin, puhelun tai sähköpostin avulla. Voit ottaa kaksivaiheisen kirjautumisen käyttöön bitwarden.com‑verkkoholvissa. Haluatko avata sen nyt?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Avaustapa: {0}</value>
@@ -1103,6 +1103,9 @@ Koodi luetaan automaattisesti.</value>
   <data name="Ms" xml:space="preserve">
     <value>Nti</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Neutraali</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>Marraskuu</value>
   </data>
@@ -1387,7 +1390,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Etsi teksti-Sendeistä</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
-    <value>Hae - {0}</value>
+    <value>Etsi - {0}</value>
     <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
@@ -2093,7 +2096,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Vaihda pääsalasana</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Organisaatiosi ylläpito on hiljattain vaihtanut pääsalasanasi. Käyttääksesi holvia, sinun on vaihdettava se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan.</value>
+    <value>Organisaatiosi ylläpito on hiljattain vaihtanut pääsalasanasi. Käyttääksesi holvia sinun on päivitettävä pääsalasanasi nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
     <value>Salasanaa vaihdetaan</value>
@@ -2138,12 +2141,12 @@ Koodi luetaan automaattisesti.</value>
     <value>Organisaatiolla on käytäntö, joka liittää tilisi automaattisesti salasanan palautusapuun. Liitos sallii organisaation ylläpitäjien vaihtaa pääsalasanasi.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Organisaatiokäytännöt vaikuttavat holvin aikakatkaisuun. Suurin sallittu aika on {0} tunti(a) ja {1} minuutti(a)</value>
+    <value>Organisaatiokäytännöt vaikuttavat holvisi aikakatkaisuun. Suurin sallittu aika on {0} tunti(a) ja {1} minuutti(a).</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Holvisi aikakatkaisu ylittää organisaatiosi asettamat rajoitukset.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Yksi tai useampi organisaatiokäytäntö estää henkilökohtaisen holvisi viennin.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2349,7 +2352,7 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
     <value>{0} minuuttia sitten</value>
   </data>
   <data name="LogInAccepted" xml:space="preserve">
-    <value>Kirjautuminen vahvistettu</value>
+    <value>Kirjautuminen vahvistettiin</value>
   </data>
   <data name="LogInDenied" xml:space="preserve">
     <value>Kirjautuminen estetty</value>
@@ -2358,7 +2361,7 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
     <value>Hyväksy kirjautumispyyntöjä</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Hyväksy muiden laitteiden kirjautumispyyntöjä tällä laitteelta.</value>
+    <value>Hyväksy muiden laitteiden kirjautumispyynnöt tältä laitteelta.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Salli ilmoitukset</value>
@@ -2370,7 +2373,7 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
     <value>Ei kiitos</value>
   </data>
   <data name="ConfimLogInAttempForX" xml:space="preserve">
-    <value>Vahvista kirjautuminen kohteessa {0}</value>
+    <value>Vahvista kirjautuminen tunnuksella {0}</value>
   </data>
   <data name="AllNotifications" xml:space="preserve">
     <value>Kaikki ilmoitukset</value>
@@ -2419,6 +2422,14 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
   <data name="SimpleLogin" xml:space="preserve">
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API-käyttötunniste</value>
@@ -2489,7 +2500,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Kirjaudu pääsalasanalla</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Kirjaudu toisella laitteella</value>
+    <value>Laitteella kirjautuminen</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>Kirjautuminen aloitettu</value>
@@ -2512,7 +2523,85 @@ Haluatko vaihtaa tähän tiliin?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Pyyntö ei ole enää voimassa.</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Odottavat kirjautumispyynnöt</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Hylkää kaikki pyynnöt</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Haluatko varmasti hylätä kaikki odottavat kirjautumispyynnöt?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Pyynnöt hylättiin</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Ei odottavia pyyntöjä</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Myönnä kameran käyttöoikeus skannerin käyttämiseksi</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Kieli</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Kieleksi vaihdettiin {0}. Käynnistä sovellus uudelleen nähdäksesi muutoksen.</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Kielen vaihto edellyttää sovelluksen uudelleenkäynnistyksen</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Oletus (järjestelmä)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Tärkeää</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Pääsalasanasi palautus ei ole mahdollista, jos unohdat sen! Vähintään {0} merkkiä.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Heikko pääsalasana</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Havaittiin heikko salasana. Suojaa tilisi vahvalla salasanalla. Haluatko varmasti käyttää heikkoa salasanaa?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Heikko</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Hyvä</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Vahva</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Tarkasta esiintyykö salasanaa tunnetuissa tietovuodoissa</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Paljastunut pääsalasana</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Salasana löytyi tietovuodosta. Sinun tulisi suojata tilisi ainutlaatuisella salasanalla. Haluatko varmasti käyttää paljastunutta salasanaa?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Heikko ja paljastunut pääsalasana</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Havaittiin heikko ja tietovuodosta löytynyt salasana. Sinun tulisi suojata tilisi vahvalla ja ainutlaatuisella salasanalla. Haluatko varmasti käyttää tätä salasanaa?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organisaation SSO-tunniste tarvitaan.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Lisää avain olemassa olevaan tai uuteen kohteeseen</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Holvissasi ei ole kohteita osoitteelle "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Etsi kohdetta tai lisää uusi kohde</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Hakua vastaavia kohteita ei ole</value>
   </data>
 </root>

@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>主密碼提示可以在您忘記主密碼時幫助您回憶主密碼。</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>主密碼需要至少 8 個字元。</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>主密碼需要至少 {0} 個字元。</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>最少數字位數</value>
@@ -1102,6 +1102,9 @@
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Ms</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>十一月</value>
@@ -2142,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>您的密碼庫逾時時間超過組織設定的限制。</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>一個或多個組織原則禁止您匯出個人密碼庫。</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2419,6 +2422,14 @@
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API 存取權杖</value>
   </data>
@@ -2511,7 +2522,85 @@
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>此請求已失效</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Pending login requests</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Decline all requests</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Are you sure you want to decline all pending login requests?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Requests declined</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>No pending requests</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>允許相機權限以使用掃描功能</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Language change requires app restart</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Default (System)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>重要</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>若忘記此密碼，任何儲存在 Bitwarden 內的資料將會丟失！請輸入最少 {0} 個字。</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>主密碼強度太弱</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>偵測到您的密碼強度不夠。我們建議您使用強密碼保護您的帳號。您確定要使用弱密碼嗎？</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>脆弱</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>良好</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>高強度</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>在被攻擊的資料庫中搜尋是否有此密碼</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Exposed Master Password</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>在其他資料庫中找到您的密碼。我們建議您使用一個獨特的密碼來保護您的帳號，您確定要用這個密碼嗎？</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>主密碼強度不足</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>是密碼強度不足，且在其他資料庫中找到這個密碼。使用一個強度足夠和獨特的密碼來保護您的帳號。請問您確定要用這個密碼嗎？</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>需要單一登入 (SSO) 組織識別碼。</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Add the key to an existing or new item</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>There are no items in your vault that match "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Search for an item or add a new item</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>There are no items that match the search</value>
   </data>
 </root>

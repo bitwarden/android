@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Podpowiedź do hasła głównego może pomóc Ci przypomnieć hasło, jeśli je zapomnisz.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Hasło główne musi zawierać co najmniej 8 znaków.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Hasło główne musi zawierać co najmniej {0} znaków.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimalna liczba cyfr</value>
@@ -1102,6 +1102,9 @@ Skanowanie nastąpi automatycznie.</value>
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Pani</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Pan(i)</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Listopad</value>
@@ -2142,7 +2145,7 @@ Skanowanie nastąpi automatycznie.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Czas blokowania sejfu przekracza limit określony przez organizację.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Co najmniej jedna zasada organizacji uniemożliwia wyeksportowanie osobistego sejfu.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2419,6 +2422,14 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token dostępu API</value>
   </data>
@@ -2511,7 +2522,85 @@ Czy chcesz przełączyć się na to konto?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Ta prośba nie jest już ważna</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Oczekujące prośby o logowanie</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Odrzuć wszystkie prośby</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Czy na pewno chcesz odrzucić wszystkie oczekujące prośby o logowanie?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Prośba odrzucona</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Brak oczekujących próśb</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Włącz uprawnienia aparatu do korzystania ze skanera</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Język</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Język został zmieniony na {0}. Uruchom ponownie aplikację, aby zobaczyć zmiany</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Zmiana języka wymaga ponownego uruchomienia aplikacji</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Domyślny (systemowy)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Ważne</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Twoje hasło główne nie może zostać odzyskane, jeśli je zapomnisz! Minimum znaków: {0}.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Słabe hasło główne</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Zidentyfikowano słabe hasło. Użyj silnego hasła, aby chronić swoje konto. Czy na pewno chcesz użyć słabego hasła?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Słabe</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Dobre</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Silne</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Sprawdź znane naruszenia ochrony danych tego hasła</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Ujawnione hasło główne</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Hasło ujawnione w wyniku naruszenia ochrony danych. Użyj unikalnego hasła, aby chronić swoje konto. Czy na pewno chcesz użyć ujawnionego hasła?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Słabe i ujawnione hasło główne</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Słabe hasło ujawnione w wyniku naruszenia ochrony danych. Użyj silnego i unikalnego hasła, aby chronić swoje konto. Czy na pewno chcesz użyć tego hasła?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Identyfikator organizacji jest wymagany.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Dodaj klucz do istniejącego lub nowego elementu</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>W Twoim sejfie nie ma żadnych elementów, które pasują do "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Wyszukaj element lub dodaj nowy</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Brak elementów, które pasują do wyszukiwania</value>
   </data>
 </root>

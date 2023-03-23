@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>یادآور کلمه عبور اصلی کمک می‌کند در صورت فراموشی آن را به یاد بیارید.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>طول کلمه عبور اصلی باید حداقل ۸ کاراکتر باشد.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>طول کلمه عبور اصلی باید حداقل {0} کاراکتر باشد.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>حداقل اعداد</value>
@@ -1102,6 +1102,9 @@
   </data>
   <data name="Ms" xml:space="preserve">
     <value>بانو</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>عنوان</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>نوامبر</value>
@@ -2143,7 +2146,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>مهلت زمانی شما بیش از محدودیت های تعیین شده توسط سازمانتان است.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>یک یا چند سیاست سازمان از برون ریزی گاوصندوق شخصی شما جلوگیری می‌کند.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2420,6 +2423,14 @@
     <value>ورود ساده</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>داک داک گو</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>توکن دسترسی API</value>
   </data>
@@ -2512,7 +2523,85 @@
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>این درخواست دیگر معتبر نیست</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>در حال انتظار برای ورود به سیستم</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>رد کردن همه درخواست‌ها</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>آیا مطمئنید که می‌خواهید همه درخواست‌های ورود در انتظار را رد کنید؟</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>درخواست‌ها رد شد</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>بدون درخواست معلق</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>اجازه دوربین را برای استفاده از اسکنر فعال کنید</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>زبان</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>زبان به {0} تغییر کرده است. لطفاً برنامه را مجدداً راه اندازی کنید تا تغییرات را مشاهده کنید</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>تغییر زبان نیاز به راه اندازی مجدد برنامه دارد</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>پیش‌فرض (سیستم)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>مهم</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>کلمه عبور اصلی شما در صورت فراموشی قابل بازیابی نیست! حداقل {0} کاراکتر.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>کلمه عبور اصلی ضعیف</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>کلمه عبور ضعیف شناسایی شد. از یک کلمه عبور قوی برای محافظت از حساب خود استفاده کنید. آیا مطمئنید که می‌خواهید از یک کلمه عبور ضعیف استفاده کنید؟</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>ضعیف</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>خوب</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>قوی</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>نقض اطلاعات شناخته شده برای این کلمه عبور را بررسی کنید</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>کلمه عبور اصلی افشا شده</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>کلمه عبور در نقض داده پیدا شد. از یک کلمه عبور منحصر به فرد برای محافظت از حساب خود استفاده کنید. آیا مطمئنید که می‌خواهید از یک کلمه عبور افشا شده استفاده کنید؟</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>کلمه عبور اصلی ضعیف و افشا شده</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>کلمه عبور ضعیف شناسایی و در یک نقض داده پیدا شد. از یک کلمه عبور قوی و منحصر به فرد برای محافظت از حساب خود استفاده کنید. آیا مطمئنید که می‌خواهید از این کلمه عبور استفاده کنید؟</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>شناسه سازمان SSO مورد نیاز است.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>کلید را به یک مورد موجود یا جدید اضافه کنید</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>هیچ موردی در گاوصندوق شما وجود ندارد که با "{0}" مطابقت داشته باشد</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>یک مورد را جستجو کنید یا یک مورد جدید اضافه کنید</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>هیچ موردی وجود ندارد که با جستجو مطابقت داشته باشد</value>
   </data>
 </root>

@@ -69,6 +69,7 @@ namespace Bit.App.Controls
         {
             InitializeComponent();
             SetBinding(PasswordStrengthProgressBar.PasswordStrengthLevelProperty, new Binding() { Path = nameof(PasswordStrengthViewModel.PasswordStrengthLevel) });
+            UpdateColors();
         }
 
         private static void OnControlPropertyChanged(BindableObject bindable, object oldValue, object newValue)

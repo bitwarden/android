@@ -383,6 +383,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add the key to an existing or new item.
+        /// </summary>
+        public static string AddTheKeyToAnExistingOrNewItem {
+            get {
+                return ResourceManager.GetString("AddTheKeyToAnExistingOrNewItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add TOTP.
         /// </summary>
         public static string AddTotp {
@@ -559,6 +568,15 @@ namespace Bit.App.Resources {
         public static string AreYouSureRemoveSendPassword {
             get {
                 return ResourceManager.GetString("AreYouSureRemoveSendPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to decline all pending login requests?.
+        /// </summary>
+        public static string AreYouSureYouWantToDeclineAllPendingLogInRequests {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToDeclineAllPendingLogInRequests", resourceCulture);
             }
         }
         
@@ -1760,6 +1778,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Decline all requests.
+        /// </summary>
+        public static string DeclineAllRequests {
+            get {
+                return ResourceManager.GetString("DeclineAllRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Default.
         /// </summary>
         public static string Default {
@@ -1783,6 +1810,15 @@ namespace Bit.App.Resources {
         public static string DefaultDarkThemeDescription {
             get {
                 return ResourceManager.GetString("DefaultDarkThemeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default (System).
+        /// </summary>
+        public static string DefaultSystem {
+            get {
+                return ResourceManager.GetString("DefaultSystem", resourceCulture);
             }
         }
         
@@ -2044,6 +2080,15 @@ namespace Bit.App.Resources {
         public static string DrawOverDescription3 {
             get {
                 return ResourceManager.GetString("DrawOverDescription3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DuckDuckGo.
+        /// </summary>
+        public static string DuckDuckGo {
+            get {
+                return ResourceManager.GetString("DuckDuckGo", resourceCulture);
             }
         }
         
@@ -2539,6 +2584,15 @@ namespace Bit.App.Resources {
         public static string FaceIDDirection {
             get {
                 return ResourceManager.GetString("FaceIDDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fastmail.
+        /// </summary>
+        public static string Fastmail {
+            get {
+                return ResourceManager.GetString("Fastmail", resourceCulture);
             }
         }
         
@@ -3335,6 +3389,33 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language change requires app restart.
+        /// </summary>
+        public static string LanguageChangeRequiresAppRestart {
+            get {
+                return ResourceManager.GetString("LanguageChangeRequiresAppRestart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The language has been changed to {0}. Please restart the app to see the change.
+        /// </summary>
+        public static string LanguageChangeXDescription {
+            get {
+                return ResourceManager.GetString("LanguageChangeXDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last name.
         /// </summary>
         public static string LastName {
@@ -3634,7 +3715,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log In with another device.
+        ///   Looks up a localized string similar to Log in with device.
         /// </summary>
         public static string LogInWithAnotherDevice {
             get {
@@ -3751,11 +3832,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Master password must be at least 8 characters long..
+        ///   Looks up a localized string similar to Master password must be at least {0} characters long..
         /// </summary>
-        public static string MasterPasswordLengthValMessage {
+        public static string MasterPasswordLengthValMessageX {
             get {
-                return ResourceManager.GetString("MasterPasswordLengthValMessage", resourceCulture);
+                return ResourceManager.GetString("MasterPasswordLengthValMessageX", resourceCulture);
             }
         }
         
@@ -3999,6 +4080,15 @@ namespace Bit.App.Resources {
         public static string MustLogInMainAppAutofill {
             get {
                 return ResourceManager.GetString("MustLogInMainAppAutofill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mx.
+        /// </summary>
+        public static string Mx {
+            get {
+                return ResourceManager.GetString("Mx", resourceCulture);
             }
         }
         
@@ -4251,6 +4341,15 @@ namespace Bit.App.Resources {
         public static string NoPasswordsToList {
             get {
                 return ResourceManager.GetString("NoPasswordsToList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No pending requests.
+        /// </summary>
+        public static string NoPendingRequests {
+            get {
+                return ResourceManager.GetString("NoPendingRequests", resourceCulture);
             }
         }
         
@@ -4508,6 +4607,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Organization SSO identifier required..
+        /// </summary>
+        public static string OrganizationSsoIdentifierRequired {
+            get {
+                return ResourceManager.GetString("OrganizationSsoIdentifierRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Organization identifier.
         /// </summary>
         public static string OrgIdentifier {
@@ -4738,6 +4846,15 @@ namespace Bit.App.Resources {
         public static string PendingDelete {
             get {
                 return ResourceManager.GetString("PendingDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pending login requests.
+        /// </summary>
+        public static string PendingLogInRequests {
+            get {
+                return ResourceManager.GetString("PendingLogInRequests", resourceCulture);
             }
         }
         
@@ -5094,6 +5211,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Requests declined.
+        /// </summary>
+        public static string RequestsDeclined {
+            get {
+                return ResourceManager.GetString("RequestsDeclined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resend code.
         /// </summary>
         public static string ResendCode {
@@ -5216,6 +5342,15 @@ namespace Bit.App.Resources {
         public static string SearchFileSends {
             get {
                 return ResourceManager.GetString("SearchFileSends", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search for an item or add a new item.
+        /// </summary>
+        public static string SearchForAnItemOrAddANewItem {
+            get {
+                return ResourceManager.GetString("SearchForAnItemOrAddANewItem", resourceCulture);
             }
         }
         
@@ -5909,6 +6044,24 @@ namespace Bit.App.Resources {
         public static string ThemeDescription {
             get {
                 return ResourceManager.GetString("ThemeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no items in your vault that match &quot;{0}&quot;.
+        /// </summary>
+        public static string ThereAreNoItemsInYourVaultThatMatchX {
+            get {
+                return ResourceManager.GetString("ThereAreNoItemsInYourVaultThatMatchX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no items that match the search.
+        /// </summary>
+        public static string ThereAreNoItemsThatMatchTheSearch {
+            get {
+                return ResourceManager.GetString("ThereAreNoItemsThatMatchTheSearch", resourceCulture);
             }
         }
         

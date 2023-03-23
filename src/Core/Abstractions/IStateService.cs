@@ -6,6 +6,7 @@ using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Response;
 using Bit.Core.Models.View;
+using Bit.Core.Services;
 
 namespace Bit.Core.Abstractions
 {
@@ -31,16 +32,14 @@ namespace Bit.Core.Abstractions
         Task<bool> GetBiometricLockedAsync(string userId = null);
         Task SetBiometricLockedAsync(bool value, string userId = null);
         Task<bool> CanAccessPremiumAsync(string userId = null);
+        Task SetPersonalPremiumAsync(bool value, string userId = null);
         Task<string> GetProtectedPinAsync(string userId = null);
         Task SetProtectedPinAsync(string value, string userId = null);
         Task<string> GetPinProtectedAsync(string userId = null);
         Task SetPinProtectedAsync(string value, string userId = null);
         Task<EncString> GetPinProtectedKeyAsync(string userId = null);
         Task SetPinProtectedKeyAsync(EncString value, string userId = null);
-        Task<KdfType?> GetKdfTypeAsync(string userId = null);
-        Task SetKdfTypeAsync(KdfType? value, string userId = null);
-        Task<int?> GetKdfIterationsAsync(string userId = null);
-        Task SetKdfIterationsAsync(int? value, string userId = null);
+        Task SetKdfConfigurationAsync(KdfConfig config, string userId = null);
         Task<string> GetKeyEncryptedAsync(string userId = null);
         Task SetKeyEncryptedAsync(string value, string userId = null);
         Task<SymmetricCryptoKey> GetKeyDecryptedAsync(string userId = null);
@@ -75,8 +74,8 @@ namespace Bit.Core.Abstractions
         Task SetInvalidUnlockAttemptsAsync(int? value, string userId = null);
         Task<string> GetLastBuildAsync();
         Task SetLastBuildAsync(string value);
-        Task<bool?> GetDisableFaviconAsync(string userId = null);
-        Task SetDisableFaviconAsync(bool? value, string userId = null);
+        Task<bool?> GetDisableFaviconAsync();
+        Task SetDisableFaviconAsync(bool? value);
         Task<bool?> GetDisableAutoTotpCopyAsync(string userId = null);
         Task SetDisableAutoTotpCopyAsync(bool? value, string userId = null);
         Task<bool?> GetInlineAutofillEnabledAsync(string userId = null);
@@ -111,10 +110,10 @@ namespace Bit.Core.Abstractions
         Task SetRememberedEmailAsync(string value);
         Task<string> GetRememberedOrgIdentifierAsync();
         Task SetRememberedOrgIdentifierAsync(string value);
-        Task<string> GetThemeAsync(string userId = null);
-        Task SetThemeAsync(string value, string userId = null);
-        Task<string> GetAutoDarkThemeAsync(string userId = null);
-        Task SetAutoDarkThemeAsync(string value, string userId = null);
+        Task<string> GetThemeAsync();
+        Task SetThemeAsync(string value);
+        Task<string> GetAutoDarkThemeAsync();
+        Task SetAutoDarkThemeAsync(string value);
         Task<bool?> GetAddSitePromptShownAsync(string userId = null);
         Task SetAddSitePromptShownAsync(bool? value, string userId = null);
         Task<bool?> GetPushInitialPromptShownAsync();
@@ -165,7 +164,9 @@ namespace Bit.Core.Abstractions
         Task<bool> GetLastUserShouldConnectToWatchAsync();
         Task SetAvatarColorAsync(string value, string userId = null);
         Task<string> GetAvatarColorAsync(string userId = null);
-
-
+        Task<string> GetPreLoginEmailAsync();
+        Task SetPreLoginEmailAsync(string value);
+        string GetLocale();
+        void SetLocale(string locale);
     }
 }

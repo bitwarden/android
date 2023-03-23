@@ -7,7 +7,6 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities.AccountManagement
@@ -58,6 +57,13 @@ namespace Bit.App.Utilities.AccountManagement
             _broadcasterService.Subscribe(nameof(AccountsManager), OnMessage);
         }
 
+        public async Task StartDefaultNavigationFlowAsync(Action<AppOptions> appOptionsAction)
+        {
+            appOptionsAction(Options);
+
+            await NavigateOnAccountChangeAsync();
+        }
+
         public async Task NavigateOnAccountChangeAsync(bool? isAuthed = null)
         {
             // TODO: this could be improved by doing chain of responsability pattern
@@ -89,6 +95,10 @@ namespace Bit.App.Utilities.AccountManagement
                 {
                     _accountsManagerHost.Navigate(NavigationTarget.AutofillCiphers);
                 }
+                else if (Options.OtpData != null)
+                {
+                    _accountsManagerHost.Navigate(NavigationTarget.OtpCipherSelection);
+                }
                 else if (Options.CreateSend != null)
                 {
                     _accountsManagerHost.Navigate(NavigationTarget.SendAddEdit);
@@ -109,11 +119,11 @@ namespace Bit.App.Utilities.AccountManagement
 
                     var email = await _stateService.GetEmailAsync();
                     await _stateService.SetRememberedEmailAsync(email);
-                    _accountsManagerHost.Navigate(NavigationTarget.HomeLogin, new HomeNavigationParams(true));
+                    _accountsManagerHost.Navigate(NavigationTarget.HomeLogin);
                 }
                 else
                 {
-                    _accountsManagerHost.Navigate(NavigationTarget.HomeLogin, new HomeNavigationParams(false));
+                    _accountsManagerHost.Navigate(NavigationTarget.HomeLogin);
                 }
             }
         }
@@ -190,7 +200,7 @@ namespace Bit.App.Utilities.AccountManagement
             await Device.InvokeOnMainThreadAsync(() =>
             {
                 Options.HideAccountSwitcher = false;
-                _accountsManagerHost.Navigate(NavigationTarget.HomeLogin, new HomeNavigationParams(false));
+                _accountsManagerHost.Navigate(NavigationTarget.HomeLogin);
             });
         }
 

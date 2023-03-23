@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <pages:BaseContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -20,6 +20,7 @@
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
             <u:LocalizableEnumConverter x:Key="localizableEnum" />
+            <u:IconGlyphConverter x:Key="iconGlyphConverter" />
             <xct:EnumToBoolConverter x:Key="enumToBool"/>
             <ToolbarItem Text="{u:I18n Cancel}" Command="{Binding CloseCommand}" Order="Primary" Priority="-1"
                          x:Name="_closeItem" x:Key="closeItem" />
@@ -251,7 +252,7 @@
                                 Grid.Row="1"/>
                             <controls:IconButton
                                 StyleClass="box-row-button, box-row-button-platform"
-                                Text="{Binding ShowAnonAddyHiddenValueIcon}"
+                                Text="{Binding ShowAnonAddyApiAccessToken, Converter={StaticResource inverseBool, iconGlyphConverter}, ConverterParameter={x:Static u:BooleanGlyphType.Eye}}"
                                 Command="{Binding ToggleForwardedEmailHiddenValueCommand}"
                                 Grid.Row="1"
                                 Grid.Column="1"/>
@@ -280,7 +281,7 @@
                                 IsPassword="{Binding ShowFirefoxRelayApiAccessToken, Converter={StaticResource inverseBool}}"/>
                             <controls:IconButton
                                 StyleClass="box-row-button, box-row-button-platform"
-                                Text="{Binding ShowFirefoxRelayHiddenValueIcon}"
+                                Text="{Binding ShowFirefoxRelayApiAccessToken, Converter={StaticResource inverseBool, iconGlyphConverter}, ConverterParameter={x:Static u:BooleanGlyphType.Eye}}"
                                 Command="{Binding ToggleForwardedEmailHiddenValueCommand}"
                                 Grid.Row="1"
                                 Grid.Column="1"/>
@@ -301,7 +302,49 @@
                                 IsPassword="{Binding ShowSimpleLoginApiKey, Converter={StaticResource inverseBool}}"/>
                             <controls:IconButton 
                                 StyleClass="box-row-button, box-row-button-platform"
-                                Text="{Binding ShowSimpleLoginHiddenValueIcon}"
+                                Text="{Binding ShowSimpleLoginApiKey, Converter={StaticResource inverseBool, iconGlyphConverter}, ConverterParameter={x:Static u:BooleanGlyphType.Eye}}"
+                                Command="{Binding ToggleForwardedEmailHiddenValueCommand}"
+                                Grid.Row="1"
+                                Grid.Column="1"/>
+                        </Grid>
+                        <!--DUCKDUCKGO OPTIONS-->
+                        <Grid StyleClass="box-row, box-row-input"
+                              IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.DuckDuckGo}}"
+                              Grid.RowDefinitions="Auto,*"
+                              Grid.ColumnDefinitions="*,Auto">
+                            <Label
+                                Text="{u:I18n APIKeyRequiredParenthesis}"
+                                StyleClass="box-label"/>
+                            <Entry
+                                x:Name="_duckDuckGoApiAccessTokenEntry"
+                                Text="{Binding DuckDuckGoApiKey}"
+                                StyleClass="box-value"
+                                Grid.Row="1"
+                                IsPassword="{Binding ShowDuckDuckGoApiKey, Converter={StaticResource inverseBool}}"/>
+                            <controls:IconButton
+                                StyleClass="box-row-button, box-row-button-platform"
+                                Text="{Binding ShowDuckDuckGoApiKey, Converter={StaticResource inverseBool, iconGlyphConverter}, ConverterParameter={x:Static u:BooleanGlyphType.Eye}}"
+                                Command="{Binding ToggleForwardedEmailHiddenValueCommand}"
+                                Grid.Row="1"
+                                Grid.Column="1"/>
+                        </Grid>
+                        <!--FASTMAIL OPTIONS-->
+                        <Grid StyleClass="box-row, box-row-input"
+                              IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.Fastmail}}"
+                              Grid.RowDefinitions="Auto,*"
+                              Grid.ColumnDefinitions="*,Auto">
+                            <Label
+                                Text="{u:I18n APIKeyRequiredParenthesis}"
+                                StyleClass="box-label"/>
+                            <Entry
+                                x:Name="_fastmailApiAccessTokenEntry"
+                                Text="{Binding FastmailApiKey}"
+                                StyleClass="box-value"
+                                Grid.Row="1"
+                                IsPassword="{Binding ShowFastmailApiKey, Converter={StaticResource inverseBool}}"/>
+                            <controls:IconButton
+                                StyleClass="box-row-button, box-row-button-platform"
+                                Text="{Binding ShowFastmailApiKey, Converter={StaticResource iconGlyphConverter}, ConverterParameter={x:Static u:BooleanGlyphType.Eye}}"
                                 Command="{Binding ToggleForwardedEmailHiddenValueCommand}"
                                 Grid.Row="1"
                                 Grid.Column="1"/>

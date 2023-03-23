@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Ana parolanızı unutursanız bu ipucuna bakınca size ana parolanızı hatırlatacak bir şey yazabilirsiniz.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Ana parola en az 8 karakter uzunluğunda olmalıdır.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Ana parola en az {0} karakter uzunluğunda olmalıdır.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>En az rakam</value>
@@ -1102,6 +1102,9 @@ Kod otomatik olarak taranacaktır.</value>
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Ms</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Kasım</value>
@@ -2142,7 +2145,7 @@ Kod otomatik olarak taranacaktır.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Kasa zaman aşımınız, kuruluşunuz tarafından belirlenen kısıtlamaları aşıyor.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Bir veya daha fazla kuruluş ilkesi, kişisel kasanızı dışa aktarmanızı engelliyor.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2418,6 +2421,14 @@ Kod otomatik olarak taranacaktır.</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API erişim token'ı</value>
   </data>
@@ -2449,7 +2460,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Rastgele</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>İzlemeye Bağlan</value>
+    <value>Watch'a bağlan</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Erişilebilirlik Hizmeti Beyanı</value>
@@ -2487,7 +2498,7 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>Ana parola ile giriş yap</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Başka bir cihazla giriş yap</value>
+    <value>Cihazla giriş yap</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>Giriş başlatıldı</value>
@@ -2510,7 +2521,85 @@ Bu hesaba geçmek ister misiniz?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Bu istek artık geçerli değil</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Bekleyen giriş istekleri</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Tüm istekleri reddet</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Bekleyen tüm giriş isteklerini reddetmek istediğinizden emin misiniz?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>İstekler reddedildi</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Bekleyen istek yok</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Tarayıcıyı kullanmak için kameraya erişim izni verin</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Dil {0} olarak değiştirildi. Değişikliği görmek için uygulamayı yeniden başlatın</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Dil değişikliği için uygulamanın yeniden başlatılması gerekiyor</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Varsayılan (sistem)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Önemli</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Ana parolanızı unutursanız kurtaramazsınız! En az {0} karakter.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Zayıf ana parola</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Zayıf bir parola tespit edildi. Hesabınızı korumak için daha güçlü bir parola kullanın. Zayıf parolayı kullanmak istediğinizden emin misiniz?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Zayıf</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>İyi</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Güçlü</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Bilinen veri ihlallerinde bu parolayı kontrol et</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Açığa Çıkmış Ana Parola</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Bu parola bir veri ihlalinde tespit edildi. Hesabınızı korumak için aynı parolayı farklı yerlerde kullanmayın. Bu parolayı kullanmak istediğinizden emin misiniz?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Zayıf ve Açığa Çıkmış Ana Parola</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Hem zayıf hem de veri ihlalinde yer alan bir tespit edildi. Hesabınızı korumak için güçlü bir parola seçin ve o parolayı başka yerlerde kullanmayın. Bu parolayı kullanmak istediğinizden emin misiniz?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Kuruluş SSO tanımlayıcısı gereklidir.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Anahtarı mevcut veya yeni bir kayda ekle</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Kasanızda "{0}" ile eşleşen kayıt yok</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Kayıtlarda ara veya yeni kayıt ekle</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Aramayla eşleşen kayıt yok</value>
   </data>
 </root>

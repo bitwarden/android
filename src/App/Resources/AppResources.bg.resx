@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Подсказката помага да си спомните паролата, ако сте я забравили.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Главната парола трябва да е дълга поне 8 знака.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Главната парола трябва да е дълга поне {0} знака.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Минимален брой цифри</value>
@@ -1102,6 +1102,9 @@
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Г-ца</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>ноември</value>
@@ -2080,11 +2083,10 @@
     <value>Това действие е защитено. За да продължите, въведете отново главната си парола, за да потвърдите самоличността си.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Адресът за hCaptcha е задължителен</value>
+    <value>Проверката е задължителна</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>
-Грешка. Моля опитайте пак</value>
+    <value>Грешка. Опитайте отново.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
     <value>Главната парола е променена</value>
@@ -2143,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Времето за достъп до трезора Ви превишава ограничението, определено от организацията Ви.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Една или повече от настройките на организацията Ви не позволяват да изнасяте личния си трезор.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2291,10 +2293,10 @@
     <value>Ръчно въвеждане на кода</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
-    <value>Копиране на кода за потвърждаване</value>
+    <value>Добавяне на TOTP</value>
   </data>
   <data name="SetupTotp" xml:space="preserve">
-    <value>Копиране на кода за потвърждаване</value>
+    <value>Настройка на TOTP</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
     <value>Once the key is successfully entered,
@@ -2420,6 +2422,14 @@ select Add TOTP to store the key safely</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Идентификатор за достъп до API</value>
   </data>
@@ -2512,7 +2522,85 @@ select Add TOTP to store the key safely</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Тази зявка вече не е приложима</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Чакащи заявки за вписване</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Отказване на всички заявки</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Наистина ли искате да откажете всички чакащи заявки за вписване?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Заявките са отказани</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Няма чакащи заявки</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Разрешете достъпа до камерата, за да използвате скенера</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Език</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Езикът беше променен на {0}. Рестартирайте приложението, за да влезе промяната в сила</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Промяната на езика изисква рестартиране на приложението</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>По подразбиране (от системата)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Важно</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Главната парола не може да бъде възстановена, ако я забравите! Дължината трябва да е поне {0} знака.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Слаба главна парола</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Разпозната е слаба парола. Използвайте силна парола, за да защитете данните си. Наистина ли искате да използвате слаба парола?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Слаба</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Добра</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Силна</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Проверяване в известните случаи на изтекли данни за тази парола</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Exposed Master Password</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Weak and Exposed Master Password</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Идентификаторът за еднократн идентификация на организация е задължителен.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Добавяне на ключа към съществуващ или нов елемент</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>В трезора липсват елементи, които отговарят на „{0}“</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Търсене на елемент или добавяне на нов</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Няма елементи, които отговарят на търсенето</value>
   </data>
 </root>

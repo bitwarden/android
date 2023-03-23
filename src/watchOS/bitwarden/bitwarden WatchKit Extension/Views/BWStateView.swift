@@ -3,8 +3,8 @@ import SwiftUI
 struct BWStateView: View {
     @ObservedObject var viewModel:BWStateViewModel
     
-    init(_ state: BWState) {
-        viewModel = BWStateViewModel(state)
+    init(_ state: BWState, _ defaultText: String?) {
+        viewModel = BWStateViewModel(state, defaultText)
     }
     
     var body: some View {
@@ -32,6 +32,6 @@ struct BWStateView: View {
 
 struct BWStateView_Previews: PreviewProvider {
     static var previews: some View {
-        BWStateView(.needSetup)
+        BWStateView(.needSetup, nil)
     }
 }

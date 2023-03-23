@@ -422,7 +422,7 @@
     <value>Usa il servizio di accessibilità di Bitwarden per l'auto-completamento dei tuoi login su app e web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Servizio di auto-completamento</value>
+    <value>Servizio di riempimento automatico</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Evita caratteri ambigui</value>
@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Un suggerimento per la password principale può aiutarti a ricordarla nel caso la dimenticassi.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>La password principale deve essere lunga almeno 8 caratteri.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>La password principale deve essere lunga almeno {0} caratteri.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimo numeri</value>
@@ -784,7 +784,7 @@
     <value>Stato</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Il modo più semplice per aggiungere nuovi login alla tua cassaforte è dal servizio di completamento automatico Bitwarden. Scopri di più sull'utilizzo del servizio di completamento automatico di Bitwarden navigando nella schermata "Impostazioni".</value>
+    <value>Il modo più semplice per aggiungere nuovi login alla tua cassaforte è dal servizio di riempimento automatico di Bitwarden. Scopri di più sull'utilizzo del servizio di riempimento automatico di Bitwarden navigando nella schermata "Impostazioni".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Auto-completamento</value>
@@ -915,7 +915,7 @@
     <value>Copia TOTP</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>Se un login è dotato di una chiave di autenticazione, copia il codice di verifica TOTP negli appunti all'autocompletamento del login.</value>
+    <value>Se un login è dotato di una chiave di autenticazione, copia il codice di verifica TOTP negli appunti al riempimento automatico del login.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>Copia TOTP automaticamente</value>
@@ -1102,6 +1102,9 @@
   <data name="Ms" xml:space="preserve">
     <value>Sig.na</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>Novembre</value>
   </data>
@@ -1169,10 +1172,10 @@
     <value>Servizio di accessibilità dell'auto-completamento</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Il servizio di auto-completamento Bitwarden usa l'Android Autofill Framework per assistenza nel completare informazioni su login, carte di credito e identità su altre applicazioni nel tuo dispositivo.</value>
+    <value>Il servizio di riempimento automatico Bitwarden usa l'Android Autofill Framework per assistenza nel completare informazioni su login, carte di credito e identità su altre applicazioni nel tuo dispositivo.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Usa il servizio di auto-completamento di Bitwarden per riempire le informazioni su login, carte di credito e identità su altre app.</value>
+    <value>Usa il servizio di riempimento automatico di Bitwarden per riempire le informazioni su login, carte di credito e identità su altre app.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Apri impostazioni di auto-completamento</value>
@@ -1318,7 +1321,7 @@
     <value>5. Seleziona "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Completamento automatico password</value>
+    <value>Riempimento automatico password</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
     <value>Il modo più semplice per aggiungere nuovi login alla tua cassaforte è l'estensione Bitwarden Password AutoFill. Scopri di più sull'utilizzo dell'estensione Bitwarden Password AutoFill navigando nella schermata "Impostazioni".</value>
@@ -1532,11 +1535,11 @@
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Rilevamento corrispondenza URI predefinito</value>
+    <value>Rilevamento di corrispondenza URI predefinito</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Scegli il modo predefinito in cui il rilevamento della corrispondenza dell'URI viene gestito per gli accessi quando si eseguono azioni come il completamento automatico.</value>
+    <value>Scegli il modo predefinito in cui il rilevamento della corrispondenza dell'URI viene gestito per gli accessi quando si eseguono azioni come il riempimento automatico.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Tema</value>
@@ -1579,10 +1582,10 @@
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
-    <value>URI per cui l'autocompletamento non è permesso</value>
+    <value>URI per cui il riempimento automatico non è permesso</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>L'autocompletamento non sarà proposto per gli URI bloccati. Separa più URI con una virgola. Ad esempio: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Il riempimento automatico non sarà proposto per gli URI bloccati. Separa più URI con una virgola. Per esempio: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Chiedi di aggiungere il login</value>
@@ -1594,7 +1597,7 @@
     <value>Al riavvio dell'applicazione</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>L'auto-completamento rende facile accedere in modo sicuro alla tua cassaforte Bitwarden da altri siti web e applicazioni. Sembra che tu non abbia abilitato un servizio di completamento automatico per Bitwarden. Abilita l'auto-completamento per Bitwarden dalla schermata "Impostazioni".</value>
+    <value>Il riempimento automatico rende facile accedere in modo sicuro alla tua cassaforte Bitwarden da altri siti web e applicazioni. Sembra che tu non abbia abilitato un servizio di riempimento automatico per Bitwarden. Abilita il riempimento automatico per Bitwarden dalla schermata "Impostazioni".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Le modifiche del tema verranno applicate al riavvio dell'applicazione.</value>
@@ -1628,7 +1631,7 @@
     <value>Sblocca con dati biometrici</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden richiede la tua attenzione - Vedi "Servizio di accessibilità per l'auto-completamento" dalle Impostazioni di Bitwarden</value>
+    <value>Bitwarden richiede la tua attenzione - Vedi "Servizio di accessibilità per il riempimento automatico" dalle impostazioni di Bitwarden</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
     <value>3. Sulla schermata di Impostazioni dell'App Android per Bitwarden, vai alle opzioni "Mostra sulle altre app" (sotto Avanzate) e tocca l'interruttore per abilitare il supporto overlay.</value>
@@ -1703,7 +1706,7 @@
     <value>Allegato salvato con successo</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Abilita il "Servizio di accessibilità per il completamento automatico" dalle impostazioni di Bitwarden per utilizzare la funzione di completamento automatico.</value>
+    <value>Abilita il "Servizio di accessibilità per il riempimento automatico" dalle impostazioni di Bitwarden per utilizzare la funzione di riempimento automatico.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
     <value>Nessun campo password rilevato</value>
@@ -1825,7 +1828,7 @@
     <value>Bitwarden richiede la tua attenzione - Abilita "Mostra sopra altre app" nelle opzioni di Bitwarden</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Servizi di auto-completamento</value>
+    <value>Servizi di riempimento automatico</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
     <value>Usa il completamento automatico</value>
@@ -1837,10 +1840,10 @@
     <value>Usa accessibilità</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Utilizza il servizio di accessibilità di Bitwarden per l'auto-completamento. Se abilitato, verrà mostrato una finestra a comparsa quando i campi relativi al login sono selezionati.</value>
+    <value>Utilizza il servizio di accessibilità di Bitwarden per il riempimento automatico. Se abilitato, verrà mostrato una finestra a comparsa quando i campi relativi al login sono selezionati.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Utilizza il servizio di accessibilità di Bitwarden per accedere automaticamente sul web e sulle applicazioni tramite autocompletamento (È necessario abilitare "Mostra sopra altre app")</value>
+    <value>Utilizza il servizio di accessibilità di Bitwarden per riempire automaticamente i tuoi accessi attraverso siti e applicazioni. (è necessario che anche "Mostra sopra altre app" sia abilitato)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
     <value>Abilita il servizio di accessibilità di Bitwarden per usare il riquadro di auto-completamento rapido, e/o mostra una finestra a comparsa quando "Mostra sopra altre app" viene utilizzato (se abilitato).</value>
@@ -1855,7 +1858,7 @@
     <value>Se abilitato, permette al servizio di accessibilità di Bitwarden di mostrare un popup quando i campi relativi al login vengono selezionati.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>Se abilitato, il servizio di accessibilità di Bitwarden mostrerà una finestra a comparsa quando i campi login vengono selezionati per aiutarti con l'auto-completamento.</value>
+    <value>Se abilitato, il servizio di accessibilità di Bitwarden mostrerà una finestra a comparsa quando i campi di accesso vengono selezionati per aiutarti con il riempimento automatico.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
     <value>Se abilitato, l'accessibilità mostrerà una finestra a comparsa per aumentare il servizio di auto-completamento per le vecchie applicazioni che non supportano il framework di auto-completamento di Android.</value>
@@ -2137,12 +2140,12 @@
     <value>Questa organizzazione ha una politica aziendale che ti iscriverà automaticamente al ripristino della password. Ciò permetterà agli amministratori dell'organizzazione di cambiare la tua password principale.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s)</value>
+    <value>Le tue politiche organizzative stanno influenzando il timeout della tua cassaforte. Il timeout massimo consentito della cassaforte è di {0} ora(e) e {1} minuto(i)</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Il timeout della tua cassaforte supera i limiti impostati dalla tua organizzazione.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Una o più policy dell'organizzazione ti impediscono di esportare la tua cassaforte personale.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2419,6 +2422,14 @@ seleziona Aggiungi TOTP per salvare la chiave in modo sicuro</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token di accesso API</value>
   </data>
@@ -2450,7 +2461,7 @@ seleziona Aggiungi TOTP per salvare la chiave in modo sicuro</value>
     <value>Casuale</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connetti a Watch</value>
+    <value>Connetti a watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Maggiori informazioni sul servizio di accessibilità</value>
@@ -2511,7 +2522,85 @@ Vuoi passare a questo account?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>La richiesta non è più valida</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Richieste d'accesso in sospeso</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Rifiuta tutte le richieste</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Sei sicuro di voler rifiutare tutte le richieste d'accesso in sospeso?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Richieste rifiutate</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Nessuna richiesta in sospeso</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Abilita i permessi della fotocamera per usare lo scanner</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Lingua</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>La lingua è stata cambiata a {0}. Riavviare l'app per applicare la modifica</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>La modifica della lingua richiede il riavvio dell'app</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Predefinito (Sistema)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Importante</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>La tua password principale non può essere recuperata se la dimentichi! {0} caratteri minimi.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Password principale debole</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Password debole identificata. Usa una password forte per proteggere il tuo account. Sei sicuro di voler usare una password debole?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Debole</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Buona</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Forte</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Controlla se la tua password è presente nei database dei data breach noti</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Password principale violata</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Password trovata in un database di data breach noto. Usa una password esclusiva per proteggere il tuo account. Sei sicuro di voler usare una password violata?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Password principale debole e violata</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Password debole trovata in un database di data breach noto. Usa una password forte ed esclusiva per proteggere il tuo account. Sei sicuro di voler utilizzare questa password?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>L'identificatore SSO dell'organizzazione è necessario.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Aggiungi la chiave a un elemento esistente o nuovo</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Nessun elemento nella tua cassaforte corrisponde a "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Cerca un elemento o aggiungi un nuovo elemento</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Nessun elemento corrisponde alla ricerca</value>
   </data>
 </root>

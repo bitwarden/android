@@ -5,6 +5,8 @@ using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using System;
+using System.Runtime.InteropServices;
+using Java.Lang;
 
 namespace Bit.Droid.Services
 {
@@ -33,5 +35,19 @@ namespace Bit.Droid.Services
             generator.Init(password, salt, iterations);
             return ((KeyParameter)generator.GenerateDerivedMacParameters(keySize)).GetKey();
         }
+
+        public byte[] Argon2id(byte[] password, byte[] salt, int iterations, int memory, int parallelism)
+        {
+            JavaSystem.LoadLibrary("argon2");
+            int keySize = 32;
+            var key = new byte[keySize];
+            argon2id_hash_raw(iterations, memory, parallelism,
+                password, password.Length, salt, salt.Length, key, key.Length);
+            return key;
+        }
+
+        [DllImport("argon2", EntryPoint = "argon2id_hash_raw")]
+        private static extern int argon2id_hash_raw(int timeCost, int memoryCost, int parallelism,
+            byte[] pwd, int pwdlen, byte[] salt, int saltlen, byte[] hash, int hashlen);
     }
 }

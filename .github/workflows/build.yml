@@ -37,6 +37,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
+        with:
+          submodules: 'true'
 
       - name: Check if special branches exist
         id: branch-check
@@ -71,6 +73,9 @@ jobs:
 
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ab534842b4bdf384b8aaf93765dc6f721d9f5fab
+
+      - name: Setup Windows builder
+        run: choco install checksum --no-progress
 
       - name: Work Around for broken Windows 2022 Runner Image
         run: |
@@ -148,7 +153,7 @@ jobs:
         shell: pwsh
 
       - name: Run Core tests
-        run: dotnet test test/Core.Test/Core.Test.csproj --logger "trx;LogFileName=test-results.trx" || true
+        run: dotnet test test/Core.Test/Core.Test.csproj --logger "trx;LogFileName=test-results.trx"
         shell: pwsh
 
       - name: Report test results
@@ -249,6 +254,34 @@ jobs:
           path: ./com.x8bit.bitwarden.${{ matrix.variant }}.apk
           if-no-files-found: error
 
+      - name: Create checksum for Prod .apk artifact
+        if: ${{ matrix.variant == 'prod' }}
+        run: |
+          checksum -f="./com.x8bit.bitwarden.apk" `
+            -t sha256 | Out-File -Encoding ASCII ./bw-android-apk-sha256.txt
+
+      - name: Create checksum for Other .apk artifact
+        if: ${{ matrix.variant != 'prod' }}
+        run: |
+          checksum -f="./com.x8bit.bitwarden.${{ matrix.variant }}.apk" `
+            -t sha256 | Out-File -Encoding ASCII ./bw-android-${{ matrix.variant }}-apk-sha256.txt
+
+      - name: Upload .apk sha file for prod
+        if: ${{ matrix.variant == 'prod' }}
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
+        with:
+          name: bw-android-apk-sha256.txt
+          path: ./bw-android-apk-sha256.txt
+          if-no-files-found: error
+
+      - name: Upload .apk sha file for other
+        if: ${{ matrix.variant != 'prod' }}
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
+        with:
+          name: bw-android-${{ matrix.variant }}-apk-sha256.txt
+          path: ./bw-android-${{ matrix.variant }}-apk-sha256.txt
+          if-no-files-found: error
+
       - name: Deploy to Play Store
         if: ${{ matrix.variant == 'prod' && (( github.ref == 'refs/heads/master'
           && needs.setup.outputs.rc_branch_exists == 0
@@ -276,6 +309,9 @@ jobs:
 
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ab534842b4bdf384b8aaf93765dc6f721d9f5fab
+
+      - name: Setup Windows builder
+        run: choco install checksum --no-progress
 
       - name: Work Around for broken Windows 2022 Runner Image
         run: |
@@ -447,6 +483,18 @@ jobs:
           path: ./com.x8bit.bitwarden-fdroid.apk
           if-no-files-found: error
 
+      - name: Create checksum for F-Droid artifact
+        run: |
+          checksum -f="./com.x8bit.bitwarden-fdroid.apk" `
+            -t sha256 | Out-File -Encoding ASCII ./bw-fdroid-apk-sha256.txt
+
+      - name: Upload F-Droid sha file
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
+        with:
+          name: bw-fdroid-apk-sha256.txt
+          path: ./bw-fdroid-apk-sha256.txt
+          if-no-files-found: error
+
 
   ios:
     name: Apple iOS
@@ -468,6 +516,8 @@ jobs:
 
       - name: Checkout repo
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
+        with:
+          submodules: 'true'
 
       - name: Login to Azure - Prod Subscription
         uses: Azure/login@1f63701bf3e6892515f1b7ce2d2bf1708b46beaf

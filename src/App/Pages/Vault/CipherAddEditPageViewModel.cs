@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Lists.ItemViewModels.CustomFields;
 using Bit.App.Models;
 using Bit.App.Resources;
@@ -30,6 +31,7 @@ namespace Bit.App.Pages
         private readonly IClipboardService _clipboardService;
         private readonly IAutofillHandler _autofillHandler;
         private readonly IWatchDeviceService _watchDeviceService;
+        private readonly IAccountsManager _accountsManager;
 
         private bool _showNotesSeparator;
         private bool _showPassword;
@@ -44,6 +46,8 @@ namespace Bit.App.Pages
         private bool _hasCollections;
         private string _previousCipherId;
         private List<Core.Models.View.CollectionView> _writeableCollections;
+        private bool _fromOtp;
+
         protected override string[] AdditionalPropertiesToRaiseOnCipherChanged => new string[]
         {
             nameof(IsLogin),
@@ -82,6 +86,8 @@ namespace Bit.App.Pages
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
             _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
             _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
+            _accountsManager = ServiceContainer.Resolve<IAccountsManager>();
+
 
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
@@ -141,6 +147,7 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, string>(AppResources.Mr, AppResources.Mr),
                 new KeyValuePair<string, string>(AppResources.Mrs, AppResources.Mrs),
                 new KeyValuePair<string, string>(AppResources.Ms, AppResources.Ms),
+                new KeyValuePair<string, string>(AppResources.Mx, AppResources.Mx),
                 new KeyValuePair<string, string>(AppResources.Dr, AppResources.Dr),
             };
             FolderOptions = new List<KeyValuePair<string, string>>();
@@ -303,6 +310,7 @@ namespace Bit.App.Pages
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public bool HasTotpValue => IsLogin && !string.IsNullOrEmpty(Cipher?.Login?.Totp);
         public string SetupTotpText => $"{BitwardenIcons.Camera} {AppResources.SetupTotp}";
+
         public void Init()
         {
             PageTitle = EditMode && !CloneMode ? AppResources.EditItem : AppResources.AddItem;
@@ -310,6 +318,8 @@ namespace Bit.App.Pages
 
         public async Task<bool> LoadAsync(AppOptions appOptions = null)
         {
+            _fromOtp = appOptions?.OtpData != null;
+
             var myEmail = await _stateService.GetEmailAsync();
             OwnershipOptions.Add(new KeyValuePair<string, string>(myEmail, null));
             var orgs = await _organizationService.GetAllAsync();
@@ -359,6 +369,10 @@ namespace Bit.App.Pages
                             Cipher.OrganizationId = OrganizationId;
                         }
                     }
+                    if (appOptions?.OtpData != null && Cipher.Type == CipherType.Login)
+                    {
+                        Cipher.Login.Totp = appOptions.OtpData.Value.Uri;
+                    }
                 }
                 else
                 {
@@ -381,6 +395,7 @@ namespace Bit.App.Pages
                         Cipher.Type = appOptions.SaveType.GetValueOrDefault(Cipher.Type);
                         Cipher.Login.Username = appOptions.SaveUsername;
                         Cipher.Login.Password = appOptions.SavePassword;
+                        Cipher.Login.Totp = appOptions.OtpData?.Uri;
                         Cipher.Card.Code = appOptions.SaveCardCode;
                         if (int.TryParse(appOptions.SaveCardExpMonth, out int month) && month <= 12 && month >= 1)
                         {
@@ -424,6 +439,11 @@ namespace Bit.App.Pages
                 if (Cipher.Fields != null)
                 {
                     Fields.ResetWithRange(Cipher.Fields?.Select(f => _customFieldItemFactory.CreateCustomFieldItem(f, true, Cipher, null, null, FieldOptionsCommand)));
+                }
+
+                if (appOptions?.OtpData != null)
+                {
+                    _platformUtilsService.ShowToast(null, AppResources.AuthenticatorKey, AppResources.AuthenticatorKeyAdded);
                 }
             }
 
@@ -517,6 +537,10 @@ namespace Bit.App.Pages
                 {
                     // Close and go back to app
                     _autofillHandler.CloseAutofill();
+                }
+                else if (_fromOtp)
+                {
+                    await _accountsManager.StartDefaultNavigationFlowAsync(op => op.OtpData = null);
                 }
                 else
                 {

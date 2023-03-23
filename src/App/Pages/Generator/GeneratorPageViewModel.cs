@@ -52,6 +52,8 @@ namespace Bit.App.Pages
         private bool _showFirefoxRelayApiAccessToken;
         private bool _showAnonAddyApiAccessToken;
         private bool _showSimpleLoginApiKey;
+        private bool _showDuckDuckGoApiKey;
+        private bool _showFastmailApiKey;
         private bool _editMode;
 
         public GeneratorPageViewModel()
@@ -79,6 +81,8 @@ namespace Bit.App.Pages
 
             ForwardedEmailServiceTypeOptions = new List<ForwardedEmailServiceType> {
                 ForwardedEmailServiceType.AnonAddy,
+                ForwardedEmailServiceType.DuckDuckGo,
+                ForwardedEmailServiceType.Fastmail,
                 ForwardedEmailServiceType.FirefoxRelay,
                 ForwardedEmailServiceType.SimpleLogin
             };
@@ -461,14 +465,8 @@ namespace Bit.App.Pages
             {
                 return _showAnonAddyApiAccessToken;
             }
-            set => SetProperty(ref _showAnonAddyApiAccessToken, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ShowAnonAddyHiddenValueIcon)
-                });
+            set => SetProperty(ref _showAnonAddyApiAccessToken, value);
         }
-
-        public string ShowAnonAddyHiddenValueIcon => _showAnonAddyApiAccessToken ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
 
         public string AnonAddyDomainName
         {
@@ -504,14 +502,8 @@ namespace Bit.App.Pages
             {
                 return _showFirefoxRelayApiAccessToken;
             }
-            set => SetProperty(ref _showFirefoxRelayApiAccessToken, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ShowFirefoxRelayHiddenValueIcon)
-                });
+            set => SetProperty(ref _showFirefoxRelayApiAccessToken, value);
         }
-
-        public string ShowFirefoxRelayHiddenValueIcon => _showFirefoxRelayApiAccessToken ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
 
         public string SimpleLoginApiKey
         {
@@ -533,14 +525,55 @@ namespace Bit.App.Pages
             {
                 return _showSimpleLoginApiKey;
             }
-            set => SetProperty(ref _showSimpleLoginApiKey, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ShowSimpleLoginHiddenValueIcon)
-                });
+            set => SetProperty(ref _showSimpleLoginApiKey, value);
         }
 
-        public string ShowSimpleLoginHiddenValueIcon => _showSimpleLoginApiKey ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string DuckDuckGoApiKey
+        {
+            get => _usernameOptions.DuckDuckGoApiKey;
+            set
+            {
+                if (_usernameOptions.DuckDuckGoApiKey != value)
+                {
+                    _usernameOptions.DuckDuckGoApiKey = value;
+                    TriggerPropertyChanged(nameof(DuckDuckGoApiKey));
+                    SaveUsernameOptionsAsync(false).FireAndForget();
+                }
+            }
+        }
+
+        public bool ShowDuckDuckGoApiKey
+        {
+            get
+            {
+                return _showDuckDuckGoApiKey;
+            }
+            set => SetProperty(ref _showDuckDuckGoApiKey, value);
+        }
+
+
+        public string FastmailApiKey
+        {
+            get => _usernameOptions.FastMailApiKey;
+            set
+            {
+                if (_usernameOptions.FastMailApiKey != value)
+                {
+                    _usernameOptions.FastMailApiKey = value;
+                    TriggerPropertyChanged(nameof(FastmailApiKey));
+                    SaveUsernameOptionsAsync(false).FireAndForget();
+                }
+            }
+        }
+
+        public bool ShowFastmailApiKey
+        {
+            get
+            {
+                return _showFastmailApiKey;
+            }
+            set => SetProperty(ref _showFastmailApiKey, value);
+        }
 
         public bool CapitalizeRandomWordUsername
         {
@@ -778,6 +811,8 @@ namespace Bit.App.Pages
             TriggerPropertyChanged(nameof(FirefoxRelayApiAccessToken));
             TriggerPropertyChanged(nameof(AnonAddyDomainName));
             TriggerPropertyChanged(nameof(AnonAddyApiAccessToken));
+            TriggerPropertyChanged(nameof(DuckDuckGoApiKey));
+            TriggerPropertyChanged(nameof(FastmailApiKey));
             TriggerPropertyChanged(nameof(CatchAllEmailDomain));
             TriggerPropertyChanged(nameof(ForwardedEmailServiceSelected));
             TriggerPropertyChanged(nameof(UsernameTypeSelected));
@@ -848,6 +883,12 @@ namespace Bit.App.Pages
                     break;
                 case ForwardedEmailServiceType.SimpleLogin:
                     ShowSimpleLoginApiKey = !ShowSimpleLoginApiKey;
+                    break;
+                case ForwardedEmailServiceType.DuckDuckGo:
+                    ShowDuckDuckGoApiKey = !ShowDuckDuckGoApiKey;
+                    break;
+                case ForwardedEmailServiceType.Fastmail:
+                    ShowFastmailApiKey = !ShowFastmailApiKey;
                     break;
             }
         }

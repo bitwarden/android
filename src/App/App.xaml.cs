@@ -23,6 +23,11 @@ namespace Bit.App
 {
     public partial class App : Application, IAccountsManagerHost
     {
+        public const string POP_ALL_AND_GO_TO_TAB_GENERATOR_MESSAGE = "popAllAndGoToTabGenerator";
+        public const string POP_ALL_AND_GO_TO_TAB_MYVAULT_MESSAGE = "popAllAndGoToTabMyVault";
+        public const string POP_ALL_AND_GO_TO_TAB_SEND_MESSAGE = "popAllAndGoToTabSend";
+        public const string POP_ALL_AND_GO_TO_AUTOFILL_CIPHERS_MESSAGE = "popAllAndGoToAutofillCiphers";
+
         private readonly IBroadcasterService _broadcasterService;
         private readonly IMessagingService _messagingService;
         private readonly IStateService _stateService;
@@ -103,12 +108,18 @@ namespace Bit.App
                         await Task.Delay(1000);
                         await _accountsManager.NavigateOnAccountChangeAsync();
                     }
-                    else if (message.Command == "popAllAndGoToTabGenerator" ||
-                        message.Command == "popAllAndGoToTabMyVault" ||
-                        message.Command == "popAllAndGoToTabSend" ||
-                        message.Command == "popAllAndGoToAutofillCiphers")
+                    else if (message.Command == POP_ALL_AND_GO_TO_TAB_GENERATOR_MESSAGE ||
+                        message.Command == POP_ALL_AND_GO_TO_TAB_MYVAULT_MESSAGE ||
+                        message.Command == POP_ALL_AND_GO_TO_TAB_SEND_MESSAGE ||
+                        message.Command == POP_ALL_AND_GO_TO_AUTOFILL_CIPHERS_MESSAGE ||
+                        message.Command == DeepLinkContext.NEW_OTP_MESSAGE)
                     {
-                        Device.BeginInvokeOnMainThread(async () =>
+                        if (message.Command == DeepLinkContext.NEW_OTP_MESSAGE)
+                        {
+                            Options.OtpData = new OtpData((string)message.Data);
+                        }
+
+                        await Device.InvokeOnMainThreadAsync(async () =>
                         {
                             if (Current.MainPage is TabsPage tabsPage)
                             {
@@ -116,23 +127,28 @@ namespace Bit.App
                                 {
                                     await tabsPage.Navigation.PopModalAsync(false);
                                 }
-                                if (message.Command == "popAllAndGoToAutofillCiphers")
+                                if (message.Command == POP_ALL_AND_GO_TO_AUTOFILL_CIPHERS_MESSAGE)
                                 {
-                                    Current.MainPage = new NavigationPage(new AutofillCiphersPage(Options));
+                                    Current.MainPage = new NavigationPage(new CipherSelectionPage(Options));
                                 }
-                                else if (message.Command == "popAllAndGoToTabMyVault")
+                                else if (message.Command == POP_ALL_AND_GO_TO_TAB_MYVAULT_MESSAGE)
                                 {
                                     Options.MyVaultTile = false;
                                     tabsPage.ResetToVaultPage();
                                 }
-                                else if (message.Command == "popAllAndGoToTabGenerator")
+                                else if (message.Command == POP_ALL_AND_GO_TO_TAB_GENERATOR_MESSAGE)
                                 {
                                     Options.GeneratorTile = false;
                                     tabsPage.ResetToGeneratorPage();
                                 }
-                                else if (message.Command == "popAllAndGoToTabSend")
+                                else if (message.Command == POP_ALL_AND_GO_TO_TAB_SEND_MESSAGE)
                                 {
                                     tabsPage.ResetToSendPage();
+                                }
+                                else if (message.Command == DeepLinkContext.NEW_OTP_MESSAGE)
+                                {
+                                    tabsPage.ResetToVaultPage();
+                                    await tabsPage.Navigation.PushModalAsync(new NavigationPage(new CipherSelectionPage(Options)));
                                 }
                             }
                         });
@@ -201,7 +217,7 @@ namespace Bit.App
                 Id = loginRequestData.Id,
                 IpAddress = loginRequestData.RequestIpAddress,
                 Email = await _stateService.GetEmailAsync(),
-                FingerprintPhrase = loginRequestData.RequestFingerprint,
+                FingerprintPhrase = loginRequestData.FingerprintPhrase,
                 RequestDate = loginRequestData.CreationDate,
                 DeviceType = loginRequestData.RequestDeviceType,
                 Origin = loginRequestData.Origin
@@ -308,6 +324,7 @@ namespace Bit.App
         private async Task SleptAsync()
         {
             await _vaultTimeoutService.CheckVaultTimeoutAsync();
+            await ClearSensitiveFieldsAsync();
             _messagingService.Send("stopEventTimer");
         }
 
@@ -315,6 +332,7 @@ namespace Bit.App
         {
             await _stateService.CheckExtensionActiveUserAndSwitchIfNeededAsync();
             await _vaultTimeoutService.CheckVaultTimeoutAsync();
+            await ClearSensitiveFieldsAsync();
             _messagingService.Send("startEventTimer");
             await UpdateThemeAsync();
             await ClearCacheIfNeededAsync();
@@ -332,6 +350,14 @@ namespace Bit.App
             {
                 ThemeManager.SetTheme(Current.Resources);
                 _messagingService.Send("updatedTheme");
+            });
+        }
+
+        private async Task ClearSensitiveFieldsAsync()
+        {
+            await Device.InvokeOnMainThreadAsync(() =>
+            {
+                _messagingService.Send(Constants.ClearSensitiveFields);
             });
         }
 
@@ -459,14 +485,7 @@ namespace Bit.App
             switch (navTarget)
             {
                 case NavigationTarget.HomeLogin:
-                    if (navParams is HomeNavigationParams homeParams)
-                    {
-                        Current.MainPage = new NavigationPage(new HomePage(Options, homeParams.ShouldCheckRememberEmail));
-                    }
-                    else
-                    {
-                        Current.MainPage = new NavigationPage(new HomePage(Options));
-                    }
+                    Current.MainPage = new NavigationPage(new HomePage(Options));
                     break;
                 case NavigationTarget.Login:
                     if (navParams is LoginNavigationParams loginParams)
@@ -491,7 +510,8 @@ namespace Bit.App
                     Current.MainPage = new NavigationPage(new CipherAddEditPage(appOptions: Options));
                     break;
                 case NavigationTarget.AutofillCiphers:
-                    Current.MainPage = new NavigationPage(new AutofillCiphersPage(Options));
+                case NavigationTarget.OtpCipherSelection:
+                    Current.MainPage = new NavigationPage(new CipherSelectionPage(Options));
                     break;
                 case NavigationTarget.SendAddEdit:
                     Current.MainPage = new NavigationPage(new SendAddEditPage(Options));

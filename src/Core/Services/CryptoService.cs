@@ -389,22 +389,46 @@ namespace Bit.Core.Services
             await SetKeyAsync(key);
         }
 
-        public async Task<SymmetricCryptoKey> MakeKeyAsync(string password, string salt,
-            KdfType? kdf, int? kdfIterations)
+        public async Task<SymmetricCryptoKey> MakeKeyAsync(string password, string salt, KdfConfig kdfConfig)
         {
             byte[] key = null;
-            if (kdf == null || kdf == KdfType.PBKDF2_SHA256)
+            if (kdfConfig.Type == null || kdfConfig.Type == KdfType.PBKDF2_SHA256)
             {
-                if (kdfIterations == null)
-                {
-                    kdfIterations = 5000;
-                }
-                if (kdfIterations < 5000)
+                var iterations = kdfConfig.Iterations.GetValueOrDefault(5000);
+                if (iterations < 5000)
                 {
                     throw new Exception("PBKDF2 iteration minimum is 5000.");
                 }
                 key = await _cryptoFunctionService.Pbkdf2Async(password, salt,
-                    CryptoHashAlgorithm.Sha256, kdfIterations.Value);
+                    CryptoHashAlgorithm.Sha256, iterations);
+            }
+            else if (kdfConfig.Type == KdfType.Argon2id)
+            {
+                var iterations = kdfConfig.Iterations.GetValueOrDefault(Constants.Argon2Iterations);
+                var memory = kdfConfig.Memory.GetValueOrDefault(Constants.Argon2MemoryInMB) * 1024;
+                var parallelism = kdfConfig.Parallelism.GetValueOrDefault(Constants.Argon2Parallelism);
+
+                if (kdfConfig.Iterations < 2)
+                {
+                    throw new Exception("Argon2 iterations minimum is 2");
+                }
+
+                if (kdfConfig.Memory < 16)
+                {
+                    throw new Exception("Argon2 memory minimum is 16 MB");
+                }
+                else if (kdfConfig.Memory > 1024)
+                {
+                    throw new Exception("Argon2 memory maximum is 1024 MB");
+                }
+
+                if (kdfConfig.Parallelism < 1)
+                {
+                    throw new Exception("Argon2 parallelism minimum is 1");
+                }
+
+                var saltHash = await _cryptoFunctionService.HashAsync(salt, CryptoHashAlgorithm.Sha256);
+                key = await _cryptoFunctionService.Argon2Async(password, saltHash, iterations, memory, parallelism);
             }
             else
             {
@@ -414,7 +438,7 @@ namespace Bit.Core.Services
         }
 
         public async Task<SymmetricCryptoKey> MakeKeyFromPinAsync(string pin, string salt,
-            KdfType kdf, int kdfIterations, EncString protectedKeyCs = null)
+            KdfConfig config, EncString protectedKeyCs = null)
         {
             if (protectedKeyCs == null)
             {
@@ -425,7 +449,7 @@ namespace Bit.Core.Services
                 }
                 protectedKeyCs = new EncString(pinProtectedKey);
             }
-            var pinKey = await MakePinKeyAysnc(pin, salt, kdf, kdfIterations);
+            var pinKey = await MakePinKeyAysnc(pin, salt, config);
             var decKey = await DecryptToBytesAsync(protectedKeyCs, pinKey);
             return new SymmetricCryptoKey(decKey);
         }
@@ -446,9 +470,9 @@ namespace Bit.Core.Services
             return new Tuple<string, EncString>(publicB64, privateEnc);
         }
 
-        public async Task<SymmetricCryptoKey> MakePinKeyAysnc(string pin, string salt, KdfType kdf, int kdfIterations)
+        public async Task<SymmetricCryptoKey> MakePinKeyAysnc(string pin, string salt, KdfConfig config)
         {
-            var pinKey = await MakeKeyAsync(pin, salt, kdf, kdfIterations);
+            var pinKey = await MakeKeyAsync(pin, salt, config);
             return await StretchKeyAsync(pinKey);
         }
 

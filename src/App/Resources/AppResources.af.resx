@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>’n Hoofwagwoordwenk kan u help om u wagwoord te onthou indien u dit sou vergeet.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Hoofwagwoord moet ten minste 8 karakters lank wees.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Die hoofwagwoord moet ten minste {0} karakters lank wees.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Min. aantal syfers</value>
@@ -1102,6 +1102,9 @@ Skandering gebeur outomaties.</value>
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Mej.</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
@@ -2142,7 +2145,7 @@ Skandering gebeur outomaties.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>U kluisuittelling oorskry die beperkinge wat deur u organisasie daargestel is.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Een of meer organisasiebeleide verhoed u om u persoonlike kluis uit te stuur.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2419,6 +2422,14 @@ kies u Voeg TOTP toe om die sleutel veilig te bewaar</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API-toegangsteken</value>
   </data>
@@ -2511,7 +2522,85 @@ Wil u na die rekening omskakel?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Hierdie versoek is nie langer gelding nie</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>In afwagting vir aantekeningsversoeke</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Weier alle versoeke</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Is jy seker dat jy alle hangende aantekeningsversoeke wil weier?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Versoeke geweier</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Geen hangende versoeke</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Laat die kamera versoek toe om die skandeerder te gebruik</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Taal</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Die taal is na {0} verander. Asseblief herbegin die toep om die veranderinge te sien</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Die taal verandering vereis 'n herbegin van die toep</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Verstek (Sisteem)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Belangrik</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Jou hoofwagwoord kan nie geherstel word as jy dit vergeet het nie! {0} karakters minimum.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Swak Hoofwagwoord</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Swak wagwoord geïdentifiseer. Gebruik 'n sterk wagwoord om jou rekening te beskerm. Is jy seker dat jy 'n swak wagwoord wil gebruik?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Swak</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Goed</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Sterk</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Ondersoek bekende data lekkasies vir dié wagwoord</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Blootgestelde Hoofwagwoord</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Dié wagwoord was in data lekkasie gevind. Gebruik 'n unieke wagwoord om jou rekening te beskerm. Is jy seker dat jy 'n blootgestelde wagwoord wil gebruik?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Swak en Blootgestelde Hoofwagwoord</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Swak wagwoord geïdentifiseer en in 'n data lekkasie gevind. Gebruik 'n sterk en unieke wagwoord om jou rekening te beskerm. Is jy seker dat jy hierdie wagwoord wil gebruik?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organisasie SSO identifiseerder vereis.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Add the key to an existing or new item</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>There are no items in your vault that match "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Search for an item or add a new item</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>There are no items that match the search</value>
   </data>
 </root>

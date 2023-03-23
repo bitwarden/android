@@ -4,7 +4,7 @@ class BWStateViewModel : ObservableObject{
     @Published var text:String
     @Published var isLoading:Bool = false
     
-    init(_ state: BWState){
+    init(_ state: BWState, _ defaultText: String?){
         switch state {
         case .needLogin:
             text = "LogInToBitwardenOnYourIPhoneToViewVerificationCodes"
@@ -22,7 +22,7 @@ class BWStateViewModel : ObservableObject{
         case .needDeviceOwnerAuth:
             text = "SetUpAppleWatchPasscodeInOrderToUseBitwarden"
         default:
-            text = ""
+            text = defaultText ?? ""
         }
     }
 }

@@ -9,6 +9,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.Forms;
@@ -32,6 +33,8 @@ namespace Bit.App.Pages
         private readonly WeakEventManager<int?> _secretEntryFocusWeakEventManager = new WeakEventManager<int?>();
 
         private string _email;
+        private string _masterPassword;
+        private string _pin;
         private bool _showPassword;
         private bool _pinLock;
         private bool _biometricLock;
@@ -68,6 +71,18 @@ namespace Bit.App.Pages
                 AllowAddAccountRow = true,
                 AllowActiveAccountSelection = true
             };
+        }
+
+        public string MasterPassword
+        {
+            get => _masterPassword;
+            set => SetProperty(ref _masterPassword, value);
+        }
+
+        public string Pin
+        {
+            get => _pin;
+            set => SetProperty(ref _pin, value);
         }
 
         public bool ShowPassword
@@ -134,8 +149,6 @@ namespace Bit.App.Pages
         public Command TogglePasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
-        public string MasterPassword { get; set; }
-        public string Pin { get; set; }
         public Action UnlockedAction { get; set; }
         public event Action<int?> FocusSecretEntry
         {
@@ -228,8 +241,7 @@ namespace Bit.App.Pages
             }
 
             ShowPassword = false;
-            var kdf = await _stateService.GetKdfTypeAsync();
-            var kdfIterations = await _stateService.GetKdfIterationsAsync();
+            var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
 
             if (PinLock)
             {
@@ -239,7 +251,7 @@ namespace Bit.App.Pages
                     if (_isPinProtected)
                     {
                         var key = await _cryptoService.MakeKeyFromPinAsync(Pin, _email,
-                            kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000),
+                            kdfConfig,
                             await _stateService.GetPinProtectedKeyAsync());
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
                         var protectedPin = await _stateService.GetProtectedPinAsync();
@@ -254,8 +266,7 @@ namespace Bit.App.Pages
                     }
                     else
                     {
-                        var key = await _cryptoService.MakeKeyFromPinAsync(Pin, _email,
-                            kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
+                        var key = await _cryptoService.MakeKeyFromPinAsync(Pin, _email, kdfConfig);
                         failed = false;
                         Pin = string.Empty;
                         await AppHelpers.ResetInvalidUnlockAttemptsAsync();
@@ -280,7 +291,7 @@ namespace Bit.App.Pages
             }
             else
             {
-                var key = await _cryptoService.MakeKeyAsync(MasterPassword, _email, kdf, kdfIterations);
+                var key = await _cryptoService.MakeKeyAsync(MasterPassword, _email, kdfConfig);
                 var storedKeyHash = await _cryptoService.GetKeyHashAsync();
                 var passwordValid = false;
 
@@ -314,8 +325,7 @@ namespace Bit.App.Pages
                         var protectedPin = await _stateService.GetProtectedPinAsync();
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
                         var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
-                        var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, _email,
-                            kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
+                        var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, _email, kdfConfig);
                         await _stateService.SetPinProtectedKeyAsync(await _cryptoService.EncryptAsync(key.Key, pinKey));
                     }
                     MasterPassword = string.Empty;
@@ -349,6 +359,20 @@ namespace Bit.App.Pages
             if (confirmed)
             {
                 _messagingService.Send("logout");
+            }
+        }
+
+        public void ResetPinPasswordFields()
+        {
+            try
+            {
+                MasterPassword = string.Empty;
+                Pin = string.Empty;
+                ShowPassword = false;
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
         }
 

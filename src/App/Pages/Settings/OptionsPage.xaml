@@ -81,6 +81,22 @@
                     StyleClass="box-footer-label" />
             </StackLayout>
             <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row, box-row-input, box-row-input-options-platform">
+                    <Label
+                        Text="{u:I18n Language}"
+                        StyleClass="box-label" />
+                    <Picker
+                        x:Name="_languagePicker"
+                        ItemsSource="{Binding LocalesOptions, Mode=OneTime}"
+                        SelectedItem="{Binding SelectedLocale}"
+                        ItemDisplayBinding="{Binding Value}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <Label
+                    Text="{u:I18n LanguageChangeRequiresAppRestart}"
+                    StyleClass="box-footer-label" />
+            </StackLayout>
+            <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
                         Text="{u:I18n CopyTotpAutomatically}"

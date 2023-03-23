@@ -118,61 +118,61 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Bitwarden Password Manager</value>
+    <value>Bitwarden — Tagapamahala ng Password</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden is a login and password manager that helps keep you safe while online.</value>
+    <value>Ang Bitwarden ay isang tagapamahala ng password para manatiling ligtas online.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>Ang Bitwarden, Inc. ang parent company ng 8bit Solutions LLC.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+PINANGARALAN NG THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AT IBA PA BILANG PINAKAMAINAM NA TAGAPAMAHALA NG PASSWORD.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+Mamahala, mag-imbak, mag-secure, at magbahagi nang gaano man karaming password sa gaano man karaming device saanman. Naghahatid ang Bitwarden ng open source na kagamitan para mamahala ng password kaninuman, sa bahay man, sa trabaho, o sa paglalakbay.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Gumawa ng malakas, katangi-tangi, at random na password base sa pangangailangan sa seguridad ng mga website na madalas mong puntahan.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+Mabilis direktang magpadala kaninuman ng encrypted na impormasyon -- files at plaintext -- ang Bitwarden Send.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+May planong Teams at Enterprise ang Bitwarden pang-kompanya para ligtas kang makapagbahagi ng password sa mga katrabaho.
 
-Why Choose Bitwarden:
+Bakit Dapat Mong Piliin ang Bitwarden:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+World-Class na Encryption
+Protektado ng advanced end-to-end encryption (AES-256 bit, salted hashtag, at PBKDF2 SHA-256) ang mga password kaya mananatiling ligtas at pribado ang data mo.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Built-in na Panggawa ng Password
+Gumawa ng malakas, katangi-tangi, at random na password base sa pangangailangan sa seguridad ng mga website na madalas mong puntahan.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+Pandaigdigang Pagsasalin
+Naisalin ang Bitwarden sa 40 wika at dumarami pa, salamat sa pandaigdigan naming komunidad.
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+Aplikasyong Cross-Platform
+Panatilihing ligtas at magbahagi ng sensitibong data sa loob ng Bitwarden Vault mo sa anumang browser, mobile device, desktop OS, at iba pa.
 </value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>A secure and free password manager for all of your devices</value>
+    <value>Isang ligtas at libreng tagapamahala ng password para sa lahat ng mga device mo</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Pamahalaan sa isang secure vault ang lahat ng mga login at password mo</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Awtomatikong gumawa ng malakas, random, at ligtas na mga password</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with fingerprint, PIN code, or master password</value>
+    <value>Protektahan gamit ng fingerprint, PIN, o pangunahing password ang vault mo</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>Mabilis na punan ang mga login mula sa loob ng iyong web browser at ibang apps</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices
+    <value>I-sync at i-access ang vault mo sa maraming mga device
 
-- Phone
+- Telepono
 - Tablet
 - Desktop
 - Web</value>

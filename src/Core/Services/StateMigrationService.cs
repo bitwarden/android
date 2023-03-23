@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -11,7 +12,7 @@ namespace Bit.Core.Services
 {
     public class StateMigrationService : IStateMigrationService
     {
-        private const int StateVersion = 3;
+        private const int StateVersion = 4;
 
         private readonly IStorageService _preferencesStorageService;
         private readonly IStorageService _liteDbStorageService;
@@ -54,16 +55,18 @@ namespace Bit.Core.Services
                     goto case 2;
                 case 2:
                     await MigrateFrom2To3Async();
+                    goto case 3;
+                case 3:
+                    await MigrateFrom3To4Async();
                     break;
             }
         }
 
-        // v1 to v2 Migration
+        #region v1 to v2 Migration
 
         private class V1Keys
         {
             internal const string EnvironmentUrlsKey = "environmentUrls";
-
         }
 
         private async Task MigrateFrom1To2Async()
@@ -83,7 +86,9 @@ namespace Bit.Core.Services
             await RemoveValueAsync(Storage.LiteDb, V1Keys.EnvironmentUrlsKey);
         }
 
-        // v2 to v3 Migration
+        #endregion
+
+        #region v2 to v3 Migration
 
         private class V2Keys
         {
@@ -199,72 +204,72 @@ namespace Bit.Core.Services
 
             // migrate user-specific non-state data
             var syncOnRefresh = await GetValueAsync<bool?>(Storage.LiteDb, V2Keys.SyncOnRefreshKey);
-            await SetValueAsync(Storage.LiteDb, Constants.SyncOnRefreshKey(userId), syncOnRefresh);
+            await SetValueAsync(Storage.LiteDb, V3Keys.SyncOnRefreshKey(userId), syncOnRefresh);
             var lastActiveTime = await GetValueAsync<long?>(Storage.Prefs, V2Keys.LastActiveTimeKey);
-            await SetValueAsync(Storage.LiteDb, Constants.LastActiveTimeKey(userId), lastActiveTime);
+            await SetValueAsync(Storage.LiteDb, V3Keys.LastActiveTimeKey(userId), lastActiveTime);
             var biometricUnlock = await GetValueAsync<bool?>(Storage.LiteDb, V2Keys.BiometricUnlockKey);
-            await SetValueAsync(Storage.LiteDb, Constants.BiometricUnlockKey(userId), biometricUnlock);
+            await SetValueAsync(Storage.LiteDb, V3Keys.BiometricUnlockKey(userId), biometricUnlock);
             var protectedPin = await GetValueAsync<string>(Storage.LiteDb, V2Keys.ProtectedPin);
-            await SetValueAsync(Storage.LiteDb, Constants.ProtectedPinKey(userId), protectedPin);
+            await SetValueAsync(Storage.LiteDb, V3Keys.ProtectedPinKey(userId), protectedPin);
             var pinProtectedKey = await GetValueAsync<string>(Storage.LiteDb, V2Keys.PinProtectedKey);
-            await SetValueAsync(Storage.LiteDb, Constants.PinProtectedKey(userId), pinProtectedKey);
+            await SetValueAsync(Storage.LiteDb, V3Keys.PinProtectedKey(userId), pinProtectedKey);
             var defaultUriMatch = await GetValueAsync<int?>(Storage.Prefs, V2Keys.DefaultUriMatch);
-            await SetValueAsync(Storage.LiteDb, Constants.DefaultUriMatchKey(userId), defaultUriMatch);
+            await SetValueAsync(Storage.LiteDb, V3Keys.DefaultUriMatchKey(userId), defaultUriMatch);
             var disableAutoTotpCopy = await GetValueAsync<bool?>(Storage.Prefs, V2Keys.DisableAutoTotpCopyKey);
-            await SetValueAsync(Storage.LiteDb, Constants.DisableAutoTotpCopyKey(userId), disableAutoTotpCopy);
+            await SetValueAsync(Storage.LiteDb, V3Keys.DisableAutoTotpCopyKey(userId), disableAutoTotpCopy);
             var autofillDisableSavePrompt =
                 await GetValueAsync<bool?>(Storage.Prefs, V2Keys.AutofillDisableSavePromptKey);
-            await SetValueAsync(Storage.LiteDb, Constants.AutofillDisableSavePromptKey(userId),
+            await SetValueAsync(Storage.LiteDb, V3Keys.AutofillDisableSavePromptKey(userId),
                 autofillDisableSavePrompt);
             var autofillBlacklistedUris =
                 await GetValueAsync<List<string>>(Storage.LiteDb, V2Keys.AutofillBlacklistedUrisKey);
-            await SetValueAsync(Storage.LiteDb, Constants.AutofillBlacklistedUrisKey(userId), autofillBlacklistedUris);
+            await SetValueAsync(Storage.LiteDb, V3Keys.AutofillBlacklistedUrisKey(userId), autofillBlacklistedUris);
             var disableFavicon = await GetValueAsync<bool?>(Storage.Prefs, V2Keys.DisableFaviconKey);
-            await SetValueAsync(Storage.LiteDb, Constants.DisableFaviconKey(userId), disableFavicon);
+            await SetValueAsync(Storage.LiteDb, V3Keys.DisableFaviconKey(userId), disableFavicon);
             var theme = await GetValueAsync<string>(Storage.Prefs, V2Keys.ThemeKey);
-            await SetValueAsync(Storage.LiteDb, Constants.ThemeKey(userId), theme);
+            await SetValueAsync(Storage.LiteDb, V3Keys.ThemeKey(userId), theme);
             var clearClipboard = await GetValueAsync<int?>(Storage.Prefs, V2Keys.ClearClipboardKey);
-            await SetValueAsync(Storage.LiteDb, Constants.ClearClipboardKey(userId), clearClipboard);
+            await SetValueAsync(Storage.LiteDb, V3Keys.ClearClipboardKey(userId), clearClipboard);
             var previousPage = await GetValueAsync<PreviousPageInfo>(Storage.LiteDb, V2Keys.PreviousPageKey);
-            await SetValueAsync(Storage.LiteDb, Constants.PreviousPageKey(userId), previousPage);
+            await SetValueAsync(Storage.LiteDb, V3Keys.PreviousPageKey(userId), previousPage);
             var inlineAutofillEnabled = await GetValueAsync<bool?>(Storage.Prefs, V2Keys.InlineAutofillEnabledKey);
-            await SetValueAsync(Storage.LiteDb, Constants.InlineAutofillEnabledKey(userId), inlineAutofillEnabled);
+            await SetValueAsync(Storage.LiteDb, V3Keys.InlineAutofillEnabledKey(userId), inlineAutofillEnabled);
             var invalidUnlockAttempts = await GetValueAsync<int?>(Storage.Prefs, V2Keys.InvalidUnlockAttempts);
-            await SetValueAsync(Storage.LiteDb, Constants.InvalidUnlockAttemptsKey(userId), invalidUnlockAttempts);
+            await SetValueAsync(Storage.LiteDb, V3Keys.InvalidUnlockAttemptsKey(userId), invalidUnlockAttempts);
             var passwordRepromptAutofill =
                 await GetValueAsync<bool?>(Storage.LiteDb, V2Keys.PasswordRepromptAutofillKey);
-            await SetValueAsync(Storage.LiteDb, Constants.PasswordRepromptAutofillKey(userId),
+            await SetValueAsync(Storage.LiteDb, V3Keys.PasswordRepromptAutofillKey(userId),
                 passwordRepromptAutofill);
             var passwordVerifiedAutofill =
                 await GetValueAsync<bool?>(Storage.LiteDb, V2Keys.PasswordVerifiedAutofillKey);
-            await SetValueAsync(Storage.LiteDb, Constants.PasswordVerifiedAutofillKey(userId),
+            await SetValueAsync(Storage.LiteDb, V3Keys.PasswordVerifiedAutofillKey(userId),
                 passwordVerifiedAutofill);
             var cipherLocalData = await GetValueAsync<Dictionary<string, Dictionary<string, object>>>(Storage.LiteDb,
                 V2Keys.Keys_LocalData);
-            await SetValueAsync(Storage.LiteDb, Constants.LocalDataKey(userId), cipherLocalData);
+            await SetValueAsync(Storage.LiteDb, V3Keys.LocalDataKey(userId), cipherLocalData);
             var neverDomains = await GetValueAsync<HashSet<string>>(Storage.LiteDb, V2Keys.Keys_NeverDomains);
-            await SetValueAsync(Storage.LiteDb, Constants.NeverDomainsKey(userId), neverDomains);
+            await SetValueAsync(Storage.LiteDb, V3Keys.NeverDomainsKey(userId), neverDomains);
             var key = await GetValueAsync<string>(Storage.Secure, V2Keys.Keys_Key);
-            await SetValueAsync(Storage.Secure, Constants.KeyKey(userId), key);
+            await SetValueAsync(Storage.Secure, V3Keys.KeyKey(userId), key);
             var encOrgKeys = await GetValueAsync<Dictionary<string, string>>(Storage.LiteDb, V2Keys.Keys_EncOrgKeys);
-            await SetValueAsync(Storage.LiteDb, Constants.EncOrgKeysKey(userId), encOrgKeys);
+            await SetValueAsync(Storage.LiteDb, V3Keys.EncOrgKeysKey(userId), encOrgKeys);
             var encPrivateKey = await GetValueAsync<string>(Storage.LiteDb, V2Keys.Keys_EncPrivateKey);
-            await SetValueAsync(Storage.LiteDb, Constants.EncPrivateKeyKey(userId), encPrivateKey);
+            await SetValueAsync(Storage.LiteDb, V3Keys.EncPrivateKeyKey(userId), encPrivateKey);
             var encKey = await GetValueAsync<string>(Storage.LiteDb, V2Keys.Keys_EncKey);
-            await SetValueAsync(Storage.LiteDb, Constants.EncKeyKey(userId), encKey);
+            await SetValueAsync(Storage.LiteDb, V3Keys.EncKeyKey(userId), encKey);
             var keyHash = await GetValueAsync<string>(Storage.LiteDb, V2Keys.Keys_KeyHash);
-            await SetValueAsync(Storage.LiteDb, Constants.KeyHashKey(userId), keyHash);
+            await SetValueAsync(Storage.LiteDb, V3Keys.KeyHashKey(userId), keyHash);
             var usesKeyConnector = await GetValueAsync<bool?>(Storage.LiteDb, V2Keys.Keys_UsesKeyConnector);
-            await SetValueAsync(Storage.LiteDb, Constants.UsesKeyConnectorKey(userId), usesKeyConnector);
+            await SetValueAsync(Storage.LiteDb, V3Keys.UsesKeyConnectorKey(userId), usesKeyConnector);
             var passGenOptions =
                 await GetValueAsync<PasswordGenerationOptions>(Storage.LiteDb, V2Keys.Keys_PassGenOptions);
-            await SetValueAsync(Storage.LiteDb, Constants.PassGenOptionsKey(userId), passGenOptions);
+            await SetValueAsync(Storage.LiteDb, V3Keys.PassGenOptionsKey(userId), passGenOptions);
             var passGenHistory =
                 await GetValueAsync<List<GeneratedPasswordHistory>>(Storage.LiteDb, V2Keys.Keys_PassGenHistory);
-            await SetValueAsync(Storage.LiteDb, Constants.PassGenHistoryKey(userId), passGenHistory);
+            await SetValueAsync(Storage.LiteDb, V3Keys.PassGenHistoryKey(userId), passGenHistory);
 
             // migrate global non-state data
-            await SetValueAsync(Storage.Prefs, Constants.PreAuthEnvironmentUrlsKey, environmentUrls);
+            await SetValueAsync(Storage.Prefs, V3Keys.PreAuthEnvironmentUrlsKey, environmentUrls);
 
             // Update stored version
             await SetLastStateVersionAsync(3);
@@ -313,6 +318,121 @@ namespace Bit.Core.Services
             await RemoveValueAsync(Storage.LiteDb, V2Keys.Keys_PassGenOptions);
             await RemoveValueAsync(Storage.LiteDb, V2Keys.Keys_PassGenHistory);
         }
+
+        #endregion
+
+        #region v3 to v4 Migration
+
+        private class V3Keys
+        {
+            internal const string PreAuthEnvironmentUrlsKey = "preAuthEnvironmentUrls";
+            internal static string LocalDataKey(string userId) => $"ciphersLocalData_{userId}";
+            internal static string NeverDomainsKey(string userId) => $"neverDomains_{userId}";
+            internal static string KeyKey(string userId) => $"key_{userId}";
+            internal static string EncOrgKeysKey(string userId) => $"encOrgKeys_{userId}";
+            internal static string EncPrivateKeyKey(string userId) => $"encPrivateKey_{userId}";
+            internal static string EncKeyKey(string userId) => $"encKey_{userId}";
+            internal static string KeyHashKey(string userId) => $"keyHash_{userId}";
+            internal static string PinProtectedKey(string userId) => $"pinProtectedKey_{userId}";
+            internal static string PassGenOptionsKey(string userId) => $"passwordGenerationOptions_{userId}";
+            internal static string PassGenHistoryKey(string userId) => $"generatedPasswordHistory_{userId}";
+            internal static string LastActiveTimeKey(string userId) => $"lastActiveTime_{userId}";
+            internal static string InvalidUnlockAttemptsKey(string userId) => $"invalidUnlockAttempts_{userId}";
+            internal static string InlineAutofillEnabledKey(string userId) => $"inlineAutofillEnabled_{userId}";
+            internal static string AutofillDisableSavePromptKey(string userId) => $"autofillDisableSavePrompt_{userId}";
+            internal static string AutofillBlacklistedUrisKey(string userId) => $"autofillBlacklistedUris_{userId}";
+            internal static string ClearClipboardKey(string userId) => $"clearClipboard_{userId}";
+            internal static string SyncOnRefreshKey(string userId) => $"syncOnRefresh_{userId}";
+            internal static string DefaultUriMatchKey(string userId) => $"defaultUriMatch_{userId}";
+            internal static string DisableAutoTotpCopyKey(string userId) => $"disableAutoTotpCopy_{userId}";
+            internal static string PreviousPageKey(string userId) => $"previousPage_{userId}";
+
+            internal static string PasswordRepromptAutofillKey(string userId) =>
+                $"passwordRepromptAutofillKey_{userId}";
+
+            internal static string PasswordVerifiedAutofillKey(string userId) =>
+                $"passwordVerifiedAutofillKey_{userId}";
+
+            internal static string UsesKeyConnectorKey(string userId) => $"usesKeyConnector_{userId}";
+            internal static string ProtectedPinKey(string userId) => $"protectedPin_{userId}";
+            internal static string BiometricUnlockKey(string userId) => $"biometricUnlock_{userId}";
+            internal static string ThemeKey(string userId) => $"theme_{userId}";
+            internal static string AutoDarkThemeKey(string userId) => $"autoDarkTheme_{userId}";
+            internal static string DisableFaviconKey(string userId) => $"disableFavicon_{userId}";
+        }
+
+        private async Task MigrateFrom3To4Async()
+        {
+            var state = await GetValueAsync<State>(Storage.LiteDb, Constants.StateKey);
+            if (state?.Accounts is null)
+            {
+                // Update stored version
+                await SetLastStateVersionAsync(4);
+                return;
+            }
+
+            string firstUserId = null;
+
+            // move values from state to standalone values in LiteDB
+            foreach (var account in state.Accounts.Where(a => a.Value?.Profile?.UserId != null))
+            {
+                var userId = account.Value.Profile.UserId;
+                if (firstUserId == null)
+                {
+                    firstUserId = userId;
+                }
+                var vaultTimeout = account.Value.Settings?.VaultTimeout;
+                await SetValueAsync(Storage.LiteDb, V4Keys.VaultTimeoutKey(userId), vaultTimeout);
+
+                var vaultTimeoutAction = account.Value.Settings?.VaultTimeoutAction;
+                await SetValueAsync(Storage.LiteDb, V4Keys.VaultTimeoutActionKey(userId), vaultTimeoutAction);
+
+                var screenCaptureAllowed = account.Value.Settings?.ScreenCaptureAllowed;
+                await SetValueAsync(Storage.LiteDb, V4Keys.ScreenCaptureAllowedKey(userId), screenCaptureAllowed);
+            }
+
+            // use values from first userId to apply globals
+            if (firstUserId != null)
+            {
+                var theme = await GetValueAsync<string>(Storage.LiteDb, V3Keys.ThemeKey(firstUserId));
+                await SetValueAsync(Storage.LiteDb, V4Keys.ThemeKey, theme);
+
+                var autoDarkTheme = await GetValueAsync<string>(Storage.LiteDb, V3Keys.AutoDarkThemeKey(firstUserId));
+                await SetValueAsync(Storage.LiteDb, V4Keys.AutoDarkThemeKey, autoDarkTheme);
+
+                var disableFavicon = await GetValueAsync<bool?>(Storage.LiteDb, V3Keys.DisableFaviconKey(firstUserId));
+                await SetValueAsync(Storage.LiteDb, V4Keys.DisableFaviconKey, disableFavicon);
+            }
+
+            // Update stored version
+            await SetLastStateVersionAsync(4);
+
+            // Remove old data
+            foreach (var account in state.Accounts)
+            {
+                var userId = account.Value?.Profile?.UserId;
+                if (userId != null)
+                {
+                    await RemoveValueAsync(Storage.LiteDb, V3Keys.ThemeKey(userId));
+                    await RemoveValueAsync(Storage.LiteDb, V3Keys.AutoDarkThemeKey(userId));
+                    await RemoveValueAsync(Storage.LiteDb, V3Keys.DisableFaviconKey(userId));
+                }
+            }
+
+            // Removal of old state data will happen organically as state is rebuilt in app
+        }
+
+        private class V4Keys
+        {
+            internal static string VaultTimeoutKey(string userId) => $"vaultTimeout_{userId}";
+            internal static string VaultTimeoutActionKey(string userId) => $"vaultTimeoutAction_{userId}";
+            internal static string ScreenCaptureAllowedKey(string userId) => $"screenCaptureAllowed_{userId}";
+            internal const string ThemeKey = "theme";
+            internal const string AutoDarkThemeKey = "autoDarkTheme";
+            internal const string DisableFaviconKey = "disableFavicon";
+        }
+
+        #endregion
 
         // Helpers
 
