@@ -140,7 +140,7 @@ namespace Bit.App.Utilities.AccountManagement
             try
             {
                 await _conditionedAwaiterManager.GetAwaiterForPrecondition(AwaiterPrecondition.EnvironmentUrlsInited);
-                
+
                 switch (message.Command)
                 {
                     case AccountsManagerMessageCommands.LOCKED:

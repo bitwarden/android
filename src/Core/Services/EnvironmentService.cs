@@ -93,7 +93,7 @@ namespace Bit.Core.Services
                 _conditionedAwaiterManager.SetException(AwaiterPrecondition.EnvironmentUrlsInited, ex);
                 throw ex;
             }
-            
+
         }
 
         public async Task<EnvironmentUrlData> SetUrlsAsync(EnvironmentUrlData urls)
