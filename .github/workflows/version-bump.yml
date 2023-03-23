@@ -7,6 +7,15 @@ on:
       version_number:
         description: "New Version"
         required: true
+  workflow_call:
+    inputs:
+      version_number:
+        required: true
+    secrets:
+      AZURE_PROD_KV_CREDENTIALS:
+        required: true
+      GITHUB_TOKEN:
+        required: true
 
 jobs:
   bump_version:
