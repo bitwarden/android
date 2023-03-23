@@ -14,8 +14,6 @@ on:
     secrets:
       AZURE_PROD_KV_CREDENTIALS:
         required: true
-      GITHUB_TOKEN:
-        required: true
 
 jobs:
   bump_version:
