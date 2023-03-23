@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
+using Bit.Core.Utilities;
 
 namespace Bit.Core.Services
 {
@@ -13,13 +14,16 @@ namespace Bit.Core.Services
 
         private readonly IApiService _apiService;
         private readonly IStateService _stateService;
+        private readonly IConditionedAwaiterManager _conditionedAwaiterManager;
 
         public EnvironmentService(
             IApiService apiService,
-            IStateService stateService)
+            IStateService stateService,
+            IConditionedAwaiterManager conditionedAwaiterManager)
         {
             _apiService = apiService;
             _stateService = stateService;
+            _conditionedAwaiterManager = conditionedAwaiterManager;
         }
 
         public string BaseUrl { get; set; }
@@ -52,30 +56,44 @@ namespace Bit.Core.Services
 
         public async Task SetUrlsFromStorageAsync()
         {
-            var urls = await _stateService.GetEnvironmentUrlsAsync();
-            if (urls == null)
+            try
             {
-                urls = await _stateService.GetPreAuthEnvironmentUrlsAsync();
-            }
-            if (urls == null)
-            {
-                urls = new EnvironmentUrlData();
-            }
-            var envUrls = new EnvironmentUrls();
-            if (!string.IsNullOrWhiteSpace(urls.Base))
-            {
-                BaseUrl = envUrls.Base = urls.Base;
+                var urls = await _stateService.GetEnvironmentUrlsAsync();
+                if (urls == null)
+                {
+                    urls = await _stateService.GetPreAuthEnvironmentUrlsAsync();
+                }
+                if (urls == null)
+                {
+                    urls = new EnvironmentUrlData();
+                }
+                var envUrls = new EnvironmentUrls();
+                if (!string.IsNullOrWhiteSpace(urls.Base))
+                {
+                    BaseUrl = envUrls.Base = urls.Base;
+                    _apiService.SetUrls(envUrls);
+
+                    _conditionedAwaiterManager.SetAsCompleted(AwaiterPrecondition.EnvironmentUrlsInited);
+                    return;
+                }
+
+                BaseUrl = urls.Base;
+                WebVaultUrl = urls.WebVault;
+                ApiUrl = envUrls.Api = urls.Api;
+                IdentityUrl = envUrls.Identity = urls.Identity;
+                IconsUrl = urls.Icons;
+                NotificationsUrl = urls.Notifications;
+                EventsUrl = envUrls.Events = urls.Events;
                 _apiService.SetUrls(envUrls);
-                return;
+
+                _conditionedAwaiterManager.SetAsCompleted(AwaiterPrecondition.EnvironmentUrlsInited);
             }
-            BaseUrl = urls.Base;
-            WebVaultUrl = urls.WebVault;
-            ApiUrl = envUrls.Api = urls.Api;
-            IdentityUrl = envUrls.Identity = urls.Identity;
-            IconsUrl = urls.Icons;
-            NotificationsUrl = urls.Notifications;
-            EventsUrl = envUrls.Events = urls.Events;
-            _apiService.SetUrls(envUrls);
+            catch (System.Exception ex)
+            {
+                _conditionedAwaiterManager.SetException(AwaiterPrecondition.EnvironmentUrlsInited, ex);
+                throw ex;
+            }
+            
         }
 
         public async Task<EnvironmentUrlData> SetUrlsAsync(EnvironmentUrlData urls)

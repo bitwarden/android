@@ -22,6 +22,7 @@ namespace Bit.App.Utilities.AccountManagement
         private readonly ILogger _logger;
         private readonly IMessagingService _messagingService;
         private readonly IWatchDeviceService _watchDeviceService;
+        private readonly IConditionedAwaiterManager _conditionedAwaiterManager;
 
         Func<AppOptions> _getOptionsFunc;
         private IAccountsManagerHost _accountsManagerHost;
@@ -34,7 +35,8 @@ namespace Bit.App.Utilities.AccountManagement
                                IAuthService authService,
                                ILogger logger,
                                IMessagingService messagingService,
-                               IWatchDeviceService watchDeviceService)
+                               IWatchDeviceService watchDeviceService,
+                               IConditionedAwaiterManager conditionedAwaiterManager)
         {
             _broadcasterService = broadcasterService;
             _vaultTimeoutService = vaultTimeoutService;
@@ -45,6 +47,7 @@ namespace Bit.App.Utilities.AccountManagement
             _logger = logger;
             _messagingService = messagingService;
             _watchDeviceService = watchDeviceService;
+            _conditionedAwaiterManager = conditionedAwaiterManager;
         }
 
         private AppOptions Options => _getOptionsFunc?.Invoke() ?? new AppOptions { IosExtension = true };
@@ -59,6 +62,8 @@ namespace Bit.App.Utilities.AccountManagement
 
         public async Task StartDefaultNavigationFlowAsync(Action<AppOptions> appOptionsAction)
         {
+            await _conditionedAwaiterManager.GetAwaiterForPrecondition(AwaiterPrecondition.EnvironmentUrlsInited);
+
             appOptionsAction(Options);
 
             await NavigateOnAccountChangeAsync();
@@ -66,6 +71,8 @@ namespace Bit.App.Utilities.AccountManagement
 
         public async Task NavigateOnAccountChangeAsync(bool? isAuthed = null)
         {
+            await _conditionedAwaiterManager.GetAwaiterForPrecondition(AwaiterPrecondition.EnvironmentUrlsInited);
+
             // TODO: this could be improved by doing chain of responsability pattern
             // but for now it may be an overkill, if logic gets more complex consider refactoring it
 
@@ -132,6 +139,8 @@ namespace Bit.App.Utilities.AccountManagement
         {
             try
             {
+                await _conditionedAwaiterManager.GetAwaiterForPrecondition(AwaiterPrecondition.EnvironmentUrlsInited);
+                
                 switch (message.Command)
                 {
                     case AccountsManagerMessageCommands.LOCKED:
@@ -206,6 +215,8 @@ namespace Bit.App.Utilities.AccountManagement
 
         public async Task LogOutAsync(string userId, bool userInitiated, bool expired)
         {
+            await _conditionedAwaiterManager.GetAwaiterForPrecondition(AwaiterPrecondition.EnvironmentUrlsInited);
+
             await AppHelpers.LogOutAsync(userId, userInitiated);
             await NavigateOnAccountChangeAsync();
             _authService.LogOut(() =>
@@ -244,6 +255,8 @@ namespace Bit.App.Utilities.AccountManagement
                 AppResources.AccountAlreadyAdded, AppResources.Yes, AppResources.Cancel);
             if (switchToAccount)
             {
+                await _conditionedAwaiterManager.GetAwaiterForPrecondition(AwaiterPrecondition.EnvironmentUrlsInited);
+
                 await _stateService.SetActiveUserAsync(userId);
                 _messagingService.Send("switchedAccount");
             }
