@@ -122,7 +122,6 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, string>("Maestro", "Maestro"),
                 new KeyValuePair<string, string>("UnionPay", "UnionPay"),
                 new KeyValuePair<string, string>("RuPay", "RuPay"),
-                new KeyValuePair<string, string>("Mir", "Mir"),
                 new KeyValuePair<string, string>(AppResources.Other, "Other")
             };
             CardExpMonthOptions = new List<KeyValuePair<string, string>>
