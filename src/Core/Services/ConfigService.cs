@@ -22,7 +22,7 @@ namespace Bit.Core.Services
 
         public async Task<ConfigResponse> GetAllAsync()
         {
-            if(_configs == null || _lastUpdate == null || _lastUpdate.AddMinutes(UPDATE_INTERVAL_MINS) < DateTime.Now)
+            if (_configs == null || _lastUpdate == null || _lastUpdate.AddMinutes(UPDATE_INTERVAL_MINS) < DateTime.Now)
             {
                 _configs = await _apiService.GetAllConfigsAsync();
                 _lastUpdate = DateTime.Now;
