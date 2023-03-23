@@ -141,6 +141,7 @@ namespace Bit.Droid.Autofill
             "org.ungoogled.chromium.extensions.stable",
             "org.ungoogled.chromium.stable",
             "us.spotco.fennec_dos",
+            "us.spotco.mulch",
         };
 
         // The URLs are blacklisted from autofilling
