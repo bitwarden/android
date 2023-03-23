@@ -394,10 +394,10 @@ namespace Bit.Core.Services
             // use values from first userId to apply globals
             if (firstUserId != null)
             {
-                var theme = await GetValueAsync<int?>(Storage.LiteDb, V3Keys.ThemeKey(firstUserId));
+                var theme = await GetValueAsync<string>(Storage.LiteDb, V3Keys.ThemeKey(firstUserId));
                 await SetValueAsync(Storage.LiteDb, V4Keys.ThemeKey, theme);
 
-                var autoDarkTheme = await GetValueAsync<int?>(Storage.LiteDb, V3Keys.AutoDarkThemeKey(firstUserId));
+                var autoDarkTheme = await GetValueAsync<string>(Storage.LiteDb, V3Keys.AutoDarkThemeKey(firstUserId));
                 await SetValueAsync(Storage.LiteDb, V4Keys.AutoDarkThemeKey, autoDarkTheme);
 
                 var disableFavicon = await GetValueAsync<bool?>(Storage.LiteDb, V3Keys.DisableFaviconKey(firstUserId));
