@@ -1,6 +1,6 @@
 ﻿using System;
-using Bit.Core.Models.Response;
 using System.Threading.Tasks;
+using Bit.Core.Models.Response;
 
 namespace Bit.Core.Abstractions
 {
