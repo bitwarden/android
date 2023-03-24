@@ -1105,7 +1105,7 @@ Skanningen sker automatiskt.</value>
     <value>Fröken</value>
   </data>
   <data name="Mx" xml:space="preserve">
-    <value>Mx</value>
+    <value>Vederbörande</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
@@ -2534,7 +2534,7 @@ Vill du byta till detta konto?</value>
     <value>Är du säker på att du vill avvisa alla väntande inloggningsförfrågningar?</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
-    <value>Förfågningar avböjdes</value>
+    <value>Förfrågningar avvisades</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
     <value>Inga väntande förfrågningar</value>  
