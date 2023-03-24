@@ -12,7 +12,7 @@ namespace Bit.Core.Services
     {
         private ConfigResponse _configs;
         private DateTime _lastUpdate;
-        private const int UPDATE_INTERVAL_MINS = 10;
+        private const int UPDATE_INTERVAL_MINS = 60;
         private readonly IApiService _apiService;
 
         public ConfigService(IApiService apiService)
