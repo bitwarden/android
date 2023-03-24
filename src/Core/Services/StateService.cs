@@ -526,8 +526,7 @@ namespace Bit.Core.Services
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
-            return await GetValueAsync<int?>(Constants.VaultTimeoutKey(reconciledOptions.UserId), reconciledOptions) ??
-                   Constants.VaultTimeoutDefault;
+            return await GetValueAsync<int?>(Constants.VaultTimeoutKey(reconciledOptions.UserId), reconciledOptions);
         }
 
         public async Task SetVaultTimeoutAsync(int? value, string userId = null)
@@ -542,7 +541,7 @@ namespace Bit.Core.Services
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
             return await GetValueAsync<VaultTimeoutAction?>(Constants.VaultTimeoutActionKey(reconciledOptions.UserId),
-                reconciledOptions) ?? VaultTimeoutAction.Lock;
+                reconciledOptions);
         }
 
         public async Task SetVaultTimeoutActionAsync(VaultTimeoutAction? value, string userId = null)
@@ -1443,6 +1442,14 @@ namespace Bit.Core.Services
                     _state.Accounts = new Dictionary<string, Account>();
                 }
                 _state.Accounts[account.Profile.UserId] = account;
+            }
+
+            // Check if account has logged in before by checking a guaranteed non-null pref
+            if (await GetVaultTimeoutActionAsync(account.Profile.UserId) == null)
+            {
+                // Account has never logged in, set defaults
+                await SetVaultTimeoutAsync(Constants.VaultTimeoutDefault, account.Profile.UserId);
+                await SetVaultTimeoutActionAsync(VaultTimeoutAction.Lock, account.Profile.UserId);
             }
         }
 
