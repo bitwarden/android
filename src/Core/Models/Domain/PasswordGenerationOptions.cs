@@ -60,5 +60,70 @@
             Capitalize = Capitalize ?? defaults.Capitalize;
             IncludeNumber = IncludeNumber ?? defaults.IncludeNumber;
         }
+
+        public void ApplyPolicies(PasswordGeneratorPolicyOptions enforcedPolicyOptions)
+        {
+            if (Length < enforcedPolicyOptions.MinLength)
+            {
+                Length = enforcedPolicyOptions.MinLength;
+            }
+
+            if (enforcedPolicyOptions.UseUppercase)
+            {
+                Uppercase = true;
+            }
+
+            if (enforcedPolicyOptions.UseLowercase)
+            {
+                Lowercase = true;
+            }
+
+            if (enforcedPolicyOptions.UseNumbers)
+            {
+                Number = true;
+            }
+
+            if (MinNumber < enforcedPolicyOptions.NumberCount)
+            {
+                MinNumber = enforcedPolicyOptions.NumberCount;
+            }
+
+            if (enforcedPolicyOptions.UseSpecial)
+            {
+                Special = true;
+            }
+
+            if (MinSpecial < enforcedPolicyOptions.SpecialCount)
+            {
+                MinSpecial = enforcedPolicyOptions.SpecialCount;
+            }
+
+            // Must normalize these fields because the receiving call expects all options to pass the current rules
+            if (MinSpecial + MinNumber > Length)
+            {
+                MinSpecial = Length - MinNumber;
+            }
+
+            if (NumWords < enforcedPolicyOptions.MinNumberOfWords)
+            {
+                NumWords = enforcedPolicyOptions.MinNumberOfWords;
+            }
+
+            if (enforcedPolicyOptions.Capitalize)
+            {
+                Capitalize = true;
+            }
+
+            if (enforcedPolicyOptions.IncludeNumber)
+            {
+                IncludeNumber = true;
+            }
+
+            // Force default type if password/passphrase selected via policy
+            if (enforcedPolicyOptions.DefaultType == "password" || enforcedPolicyOptions.DefaultType == "passphrase")
+            {
+                Type = enforcedPolicyOptions.DefaultType;
+            }
+        }
     }
 }

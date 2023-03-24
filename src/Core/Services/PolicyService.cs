@@ -46,10 +46,8 @@ namespace Bit.Core.Services
             {
                 return _policyCache.Where(p => p.Type == type).ToList();
             }
-            else
-            {
-                return _policyCache;
-            }
+
+            return _policyCache;
         }
 
         public async Task Replace(Dictionary<string, PolicyData> policies, string userId = null)
@@ -283,6 +281,94 @@ namespace Bit.Core.Services
                 }
             }
             return null;
+        }
+
+        public async Task<PasswordGeneratorPolicyOptions> GetPasswordGeneratorPolicyOptionsAsync()
+        {
+            var policies = await GetAll(PolicyType.PasswordGenerator);
+            if (policies == null)
+            {
+                return null;
+            }
+
+            var actualPolicies = policies.Where(p => p.Enabled && p.Data != null);
+            if (!actualPolicies.Any())
+            {
+                return null;
+            }
+
+            var enforcedOptions = new PasswordGeneratorPolicyOptions();
+
+            foreach (var currentPolicy in actualPolicies)
+            {
+                var defaultType = GetPolicyString(currentPolicy, "defaultType");
+                if (defaultType != null && enforcedOptions.DefaultType != "password")
+                {
+                    enforcedOptions.DefaultType = defaultType;
+                }
+
+                var minLength = GetPolicyInt(currentPolicy, "minLength");
+                if (minLength != null && (int)(long)minLength > enforcedOptions.MinLength)
+                {
+                    enforcedOptions.MinLength = (int)(long)minLength;
+                }
+
+                var useUpper = GetPolicyBool(currentPolicy, "useUpper");
+                if (useUpper != null && (bool)useUpper)
+                {
+                    enforcedOptions.UseUppercase = true;
+                }
+
+                var useLower = GetPolicyBool(currentPolicy, "useLower");
+                if (useLower != null && (bool)useLower)
+                {
+                    enforcedOptions.UseLowercase = true;
+                }
+
+                var useNumbers = GetPolicyBool(currentPolicy, "useNumbers");
+                if (useNumbers != null && (bool)useNumbers)
+                {
+                    enforcedOptions.UseNumbers = true;
+                }
+
+                var minNumbers = GetPolicyInt(currentPolicy, "minNumbers");
+                if (minNumbers != null && (int)(long)minNumbers > enforcedOptions.NumberCount)
+                {
+                    enforcedOptions.NumberCount = (int)(long)minNumbers;
+                }
+
+                var useSpecial = GetPolicyBool(currentPolicy, "useSpecial");
+                if (useSpecial != null && (bool)useSpecial)
+                {
+                    enforcedOptions.UseSpecial = true;
+                }
+
+                var minSpecial = GetPolicyInt(currentPolicy, "minSpecial");
+                if (minSpecial != null && (int)(long)minSpecial > enforcedOptions.SpecialCount)
+                {
+                    enforcedOptions.SpecialCount = (int)(long)minSpecial;
+                }
+
+                var minNumberWords = GetPolicyInt(currentPolicy, "minNumberWords");
+                if (minNumberWords != null && (int)(long)minNumberWords > enforcedOptions.MinNumberOfWords)
+                {
+                    enforcedOptions.MinNumberOfWords = (int)(long)minNumberWords;
+                }
+
+                var capitalize = GetPolicyBool(currentPolicy, "capitalize");
+                if (capitalize != null && (bool)capitalize)
+                {
+                    enforcedOptions.Capitalize = true;
+                }
+
+                var includeNumber = GetPolicyBool(currentPolicy, "includeNumber");
+                if (includeNumber != null && (bool)includeNumber)
+                {
+                    enforcedOptions.IncludeNumber = true;
+                }
+            }
+
+            return enforcedOptions;
         }
     }
 }

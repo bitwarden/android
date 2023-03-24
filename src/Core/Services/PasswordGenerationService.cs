@@ -24,7 +24,6 @@ namespace Bit.Core.Services
         private readonly ICryptoService _cryptoService;
         private readonly IStateService _stateService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
-        private readonly IPolicyService _policyService;
         private PasswordGenerationOptions _defaultOptions = new PasswordGenerationOptions(true);
         private PasswordGenerationOptions _optionsCache;
         private List<GeneratedPasswordHistory> _history;
@@ -32,13 +31,11 @@ namespace Bit.Core.Services
         public PasswordGenerationService(
             ICryptoService cryptoService,
             IStateService stateService,
-            ICryptoFunctionService cryptoFunctionService,
-            IPolicyService policyService)
+            ICryptoFunctionService cryptoFunctionService)
         {
             _cryptoService = cryptoService;
             _stateService = stateService;
             _cryptoFunctionService = cryptoFunctionService;
-            _policyService = policyService;
         }
 
         public async Task<string> GeneratePasswordAsync(PasswordGenerationOptions options)
@@ -233,67 +230,7 @@ namespace Bit.Core.Services
             var enforcedPolicyOptions = await GetPasswordGeneratorPolicyOptions();
             if (enforcedPolicyOptions != null)
             {
-                if (options.Length < enforcedPolicyOptions.MinLength)
-                {
-                    options.Length = enforcedPolicyOptions.MinLength;
-                }
-
-                if (enforcedPolicyOptions.UseUppercase)
-                {
-                    options.Uppercase = true;
-                }
-
-                if (enforcedPolicyOptions.UseLowercase)
-                {
-                    options.Lowercase = true;
-                }
-
-                if (enforcedPolicyOptions.UseNumbers)
-                {
-                    options.Number = true;
-                }
-
-                if (options.MinNumber < enforcedPolicyOptions.NumberCount)
-                {
-                    options.MinNumber = enforcedPolicyOptions.NumberCount;
-                }
-
-                if (enforcedPolicyOptions.UseSpecial)
-                {
-                    options.Special = true;
-                }
-
-                if (options.MinSpecial < enforcedPolicyOptions.SpecialCount)
-                {
-                    options.MinSpecial = enforcedPolicyOptions.SpecialCount;
-                }
-
-                // Must normalize these fields because the receiving call expects all options to pass the current rules
-                if (options.MinSpecial + options.MinNumber > options.Length)
-                {
-                    options.MinSpecial = options.Length - options.MinNumber;
-                }
-
-                if (options.NumWords < enforcedPolicyOptions.MinNumberOfWords)
-                {
-                    options.NumWords = enforcedPolicyOptions.MinNumberOfWords;
-                }
-
-                if (enforcedPolicyOptions.Capitalize)
-                {
-                    options.Capitalize = true;
-                }
-
-                if (enforcedPolicyOptions.IncludeNumber)
-                {
-                    options.IncludeNumber = true;
-                }
-
-                // Force default type if password/passphrase selected via policy
-                if (enforcedPolicyOptions.DefaultType == "password" || enforcedPolicyOptions.DefaultType == "passphrase")
-                {
-                    options.Type = enforcedPolicyOptions.DefaultType;
-                }
+                
             }
             else
             {
@@ -302,98 +239,6 @@ namespace Bit.Core.Services
             }
 
             return (options, enforcedPolicyOptions);
-        }
-
-        public async Task<PasswordGeneratorPolicyOptions> GetPasswordGeneratorPolicyOptions()
-        {
-            var policies = await _policyService.GetAll(PolicyType.PasswordGenerator);
-            PasswordGeneratorPolicyOptions enforcedOptions = null;
-
-            if (policies == null || !policies.Any())
-            {
-                return enforcedOptions;
-            }
-
-            foreach (var currentPolicy in policies)
-            {
-                if (!currentPolicy.Enabled || currentPolicy.Data == null)
-                {
-                    continue;
-                }
-
-                if (enforcedOptions == null)
-                {
-                    enforcedOptions = new PasswordGeneratorPolicyOptions();
-                }
-
-                var defaultType = GetPolicyString(currentPolicy, "defaultType");
-                if (defaultType != null && enforcedOptions.DefaultType != "password")
-                {
-                    enforcedOptions.DefaultType = defaultType;
-                }
-
-                var minLength = GetPolicyInt(currentPolicy, "minLength");
-                if (minLength != null && (int)(long)minLength > enforcedOptions.MinLength)
-                {
-                    enforcedOptions.MinLength = (int)(long)minLength;
-                }
-
-                var useUpper = GetPolicyBool(currentPolicy, "useUpper");
-                if (useUpper != null && (bool)useUpper)
-                {
-                    enforcedOptions.UseUppercase = true;
-                }
-
-                var useLower = GetPolicyBool(currentPolicy, "useLower");
-                if (useLower != null && (bool)useLower)
-                {
-                    enforcedOptions.UseLowercase = true;
-                }
-
-                var useNumbers = GetPolicyBool(currentPolicy, "useNumbers");
-                if (useNumbers != null && (bool)useNumbers)
-                {
-                    enforcedOptions.UseNumbers = true;
-                }
-
-                var minNumbers = GetPolicyInt(currentPolicy, "minNumbers");
-                if (minNumbers != null && (int)(long)minNumbers > enforcedOptions.NumberCount)
-                {
-                    enforcedOptions.NumberCount = (int)(long)minNumbers;
-                }
-
-                var useSpecial = GetPolicyBool(currentPolicy, "useSpecial");
-                if (useSpecial != null && (bool)useSpecial)
-                {
-                    enforcedOptions.UseSpecial = true;
-                }
-
-                var minSpecial = GetPolicyInt(currentPolicy, "minSpecial");
-                if (minSpecial != null && (int)(long)minSpecial > enforcedOptions.SpecialCount)
-                {
-                    enforcedOptions.SpecialCount = (int)(long)minSpecial;
-                }
-
-                var minNumberWords = GetPolicyInt(currentPolicy, "minNumberWords");
-                if (minNumberWords != null && (int)(long)minNumberWords > enforcedOptions.MinNumberOfWords)
-                {
-                    enforcedOptions.MinNumberOfWords = (int)(long)minNumberWords;
-                }
-
-                var capitalize = GetPolicyBool(currentPolicy, "capitalize");
-                if (capitalize != null && (bool)capitalize)
-                {
-                    enforcedOptions.Capitalize = true;
-                }
-
-                var includeNumber = GetPolicyBool(currentPolicy, "includeNumber");
-                if (includeNumber != null && (bool)includeNumber)
-                {
-                    enforcedOptions.IncludeNumber = true;
-                }
-            }
-
-            return enforcedOptions;
         }
 
         public List<string> GetPasswordStrengthUserInput(string email)
