@@ -233,6 +233,9 @@
   <compatibility-package
     android:name="org.chromium.chrome"
     android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+    android:name="org.chromium.chrome.stable"
+    android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="org.codeaurora.swe.browser"
     android:maxLongVersionCode="10000000000"/>

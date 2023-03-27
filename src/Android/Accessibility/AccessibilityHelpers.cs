@@ -106,6 +106,7 @@ namespace Bit.Droid.Accessibility
             new Browser("org.bromite.bromite", "url_bar"),
             new Browser("org.bromite.chromium", "url_bar"),
             new Browser("org.chromium.chrome", "url_bar"),
+            new Browser("org.chromium.chrome.stable", "url_bar"),
             new Browser("org.codeaurora.swe.browser", "url_bar"),
             new Browser("org.gnu.icecat", "url_bar_title,mozac_browser_toolbar_url_view"), // 2nd = Anticipation
             new Browser("org.mozilla.fenix", "mozac_browser_toolbar_url_view"),

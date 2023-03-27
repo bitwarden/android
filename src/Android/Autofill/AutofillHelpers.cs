@@ -126,6 +126,7 @@ namespace Bit.Droid.Autofill
             "org.bromite.bromite",
             "org.bromite.chromium",
             "org.chromium.chrome",
+            "org.chromium.chrome.stable",
             "org.codeaurora.swe.browser",
             "org.gnu.icecat",
             "org.mozilla.fenix",
