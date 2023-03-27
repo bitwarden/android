@@ -42,4 +42,4 @@ jobs:
         secrets:
           AZURE_PROD_KV_CREDENTIALS: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
         with:
-          version_number: ${{ needs.setup.outputs.version_number}}
+          version_number: ${{ needs.setup.outputs.version_number }}
