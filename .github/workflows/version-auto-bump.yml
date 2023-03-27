@@ -37,7 +37,7 @@ jobs:
     needs:
       - setup
     steps:
-      - name: Bump version to ${{ needs.setup.outputs.version_number}}
+      - name: Bump version to ${{ needs.setup.outputs.version_number }}
         uses: ./.github/workflows/version-bump.yml
         secrets:
           AZURE_PROD_KV_CREDENTIALS: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
