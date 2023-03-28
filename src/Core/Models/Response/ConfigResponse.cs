@@ -10,6 +10,7 @@ namespace Bit.Core.Models.Response
         public ServerConfigResponse Server { get; set; }
         public EnvironmentConfigResponse Environment { get; set; }
         public IDictionary<string, object> FeatureStates { get; set; }
+        public DateTime ExpiresOn { get; set; }
     }
 
     public class ServerConfigResponse

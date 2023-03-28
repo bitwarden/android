@@ -41,6 +41,7 @@
         public const string NotificationDataType = "Type";
         public const string PasswordlessLoginRequestKey = "passwordlessLoginRequest";
         public const string PreLoginEmailKey = "preLoginEmailKey";
+        public const string ConfigsKey = "configsKey";
         /// <summary>
         /// This key is used to store the value of "ShouldConnectToWatch" of the last user that had logged in
         /// which is used to handle Apple Watch state logic
