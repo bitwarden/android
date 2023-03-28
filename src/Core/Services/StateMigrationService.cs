@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -18,6 +19,8 @@ namespace Bit.Core.Services
         private readonly IStorageService _liteDbStorageService;
         private readonly IStorageService _secureStorageService;
 
+        private static SemaphoreSlim _semaphore;
+
         private enum Storage
         {
             LiteDb,
@@ -31,9 +34,27 @@ namespace Bit.Core.Services
             _liteDbStorageService = liteDbStorageService;
             _preferencesStorageService = preferenceStorageService;
             _secureStorageService = secureStorageService;
+
+            _semaphore = new SemaphoreSlim(1);
         }
 
-        public async Task<bool> NeedsMigration()
+        public async Task MigrateIfNeeded()
+        {
+            await _semaphore.WaitAsync();
+            try
+            {
+                if (await IsMigrationNeededAsync())
+                {
+                    await PerformMigrationAsync();
+                }
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+        }
+
+        private async Task<bool> IsMigrationNeededAsync()
         {
             var lastVersion = await GetLastStateVersionAsync();
             if (lastVersion == 0)
@@ -45,7 +66,7 @@ namespace Bit.Core.Services
             return lastVersion < StateVersion;
         }
 
-        public async Task Migrate()
+        private async Task PerformMigrationAsync()
         {
             var lastVersion = await GetLastStateVersionAsync();
             switch (lastVersion)
