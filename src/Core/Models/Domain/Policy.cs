@@ -6,6 +6,8 @@ namespace Bit.Core.Models.Domain
 {
     public class Policy : Domain
     {
+        public const string MINUTES_KEY = "minutes";
+
         public Policy() { }
 
         public Policy(PolicyData obj)
@@ -22,5 +24,32 @@ namespace Bit.Core.Models.Domain
         public PolicyType Type { get; set; }
         public Dictionary<string, object> Data { get; set; }
         public bool Enabled { get; set; }
+
+        public int? GetInt(string key)
+        {
+            if (Data.TryGetValue(key, out var val))
+            {
+                return (int)(long)val;
+            }
+            return null;
+        }
+
+        public bool? GetBool(string key)
+        {
+            if (Data.TryGetValue(key, out var val))
+            {
+                return (bool)val;
+            }
+            return null;
+        }
+
+        public string GetString(string key)
+        {   
+            if (Data.TryGetValue(key, out var val))
+            {
+                return (string)val;
+            }
+            return null;
+        }
     }
 }

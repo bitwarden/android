@@ -74,7 +74,7 @@ namespace Bit.Core.Utilities
                     messagingService.Send("logout", extras);
                     return Task.CompletedTask;
                 });
-            var passwordGenerationService = new PasswordGenerationService(cryptoService, stateService, cryptoFunctionService);
+            var passwordGenerationService = new PasswordGenerationService(cryptoService, stateService, cryptoFunctionService, policyService);
             var totpService = new TotpService(cryptoFunctionService);
             var authService = new AuthService(cryptoService, cryptoFunctionService, apiService, stateService,
                 tokenService, appIdService, i18nService, platformUtilsService, messagingService, vaultTimeoutService,

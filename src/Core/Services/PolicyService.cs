@@ -65,66 +65,58 @@ namespace Bit.Core.Services
         public async Task<MasterPasswordPolicyOptions> GetMasterPasswordPolicyOptions(
             IEnumerable<Policy> policies = null, string userId = null)
         {
-            MasterPasswordPolicyOptions enforcedOptions = null;
-
             if (policies == null)
             {
                 policies = await GetAll(PolicyType.MasterPassword, userId);
+                if (policies == null)
+                {
+                    return null;
+                }
             }
             else
             {
                 policies = policies.Where(p => p.Type == PolicyType.MasterPassword);
             }
 
-            if (policies == null || !policies.Any())
+            policies = policies.Where(p => p.Enabled && p.Data != null);
+
+            if (!policies.Any())
             {
-                return enforcedOptions;
+                return null;
             }
+
+            var enforcedOptions = new MasterPasswordPolicyOptions();
 
             foreach (var currentPolicy in policies)
             {
-                if (!currentPolicy.Enabled || currentPolicy.Data == null)
+                var minComplexity = currentPolicy.GetInt("minComplexity");
+                if (minComplexity > enforcedOptions.MinComplexity)
                 {
-                    continue;
+                    enforcedOptions.MinComplexity = minComplexity.Value;
                 }
 
-                if (enforcedOptions == null)
+                var minLength = currentPolicy.GetInt("minLength");
+                if (minLength > enforcedOptions.MinLength)
                 {
-                    enforcedOptions = new MasterPasswordPolicyOptions();
+                    enforcedOptions.MinLength = minLength.Value;
                 }
 
-                var minComplexity = GetPolicyInt(currentPolicy, "minComplexity");
-                if (minComplexity != null && (int)(long)minComplexity > enforcedOptions.MinComplexity)
-                {
-                    enforcedOptions.MinComplexity = (int)(long)minComplexity;
-                }
-
-                var minLength = GetPolicyInt(currentPolicy, "minLength");
-                if (minLength != null && (int)(long)minLength > enforcedOptions.MinLength)
-                {
-                    enforcedOptions.MinLength = (int)(long)minLength;
-                }
-
-                var requireUpper = GetPolicyBool(currentPolicy, "requireUpper");
-                if (requireUpper != null && (bool)requireUpper)
+                if (currentPolicy.GetBool("requireUpper") == true)
                 {
                     enforcedOptions.RequireUpper = true;
                 }
 
-                var requireLower = GetPolicyBool(currentPolicy, "requireLower");
-                if (requireLower != null && (bool)requireLower)
+                if (currentPolicy.GetBool("requireLower") == true)
                 {
                     enforcedOptions.RequireLower = true;
                 }
 
-                var requireNumbers = GetPolicyBool(currentPolicy, "requireNumbers");
-                if (requireNumbers != null && (bool)requireNumbers)
+                if (currentPolicy.GetBool("requireNumbers") == true)
                 {
                     enforcedOptions.RequireNumbers = true;
                 }
 
-                var requireSpecial = GetPolicyBool(currentPolicy, "requireSpecial");
-                if (requireSpecial != null && (bool)requireSpecial)
+                if (currentPolicy.GetBool("requireSpecial") == true)
                 {
                     enforcedOptions.RequireSpecial = true;
                 }
@@ -186,7 +178,7 @@ namespace Bit.Core.Services
 
             var policy = policies.FirstOrDefault(p =>
                 p.OrganizationId == orgId && p.Type == PolicyType.ResetPassword && p.Enabled);
-            resetPasswordPolicyOptions.AutoEnrollEnabled = GetPolicyBool(policy, "autoEnrollEnabled") ?? false;
+            resetPasswordPolicyOptions.AutoEnrollEnabled = policy.GetBool("autoEnrollEnabled") ?? false;
 
             return new Tuple<ResetPasswordPolicyOptions, bool>(resetPasswordPolicyOptions, policy != null);
         }
@@ -232,19 +224,6 @@ namespace Bit.Core.Services
             return organization.isExemptFromPolicies;
         }
 
-        public int? GetPolicyInt(Policy policy, string key)
-        {
-            if (policy.Data.ContainsKey(key))
-            {
-                var value = policy.Data[key];
-                if (value != null)
-                {
-                    return (int)(long)value;
-                }
-            }
-            return null;
-        }
-
         public async Task<bool> ShouldShowVaultFilterAsync()
         {
             var personalOwnershipPolicyApplies = await PolicyAppliesToUser(PolicyType.PersonalOwnership);
@@ -255,32 +234,6 @@ namespace Bit.Core.Services
             }
             var organizations = await _organizationService.GetAllAsync();
             return organizations?.Any() ?? false;
-        }
-
-        private bool? GetPolicyBool(Policy policy, string key)
-        {
-            if (policy.Data.ContainsKey(key))
-            {
-                var value = policy.Data[key];
-                if (value != null)
-                {
-                    return (bool)value;
-                }
-            }
-            return null;
-        }
-
-        private string GetPolicyString(Policy policy, string key)
-        {
-            if (policy.Data.ContainsKey(key))
-            {
-                var value = policy.Data[key];
-                if (value != null)
-                {
-                    return (string)value;
-                }
-            }
-            return null;
         }
 
         public async Task<PasswordGeneratorPolicyOptions> GetPasswordGeneratorPolicyOptionsAsync()
@@ -301,68 +254,62 @@ namespace Bit.Core.Services
 
             foreach (var currentPolicy in actualPolicies)
             {
-                var defaultType = GetPolicyString(currentPolicy, "defaultType");
-                if (defaultType != null && enforcedOptions.DefaultType != "password")
+                var defaultType = currentPolicy.GetString("defaultType");
+                if (defaultType != null && enforcedOptions.DefaultType != PasswordGenerationOptions.TYPE_PASSWORD)
                 {
                     enforcedOptions.DefaultType = defaultType;
                 }
 
-                var minLength = GetPolicyInt(currentPolicy, "minLength");
-                if (minLength != null && (int)(long)minLength > enforcedOptions.MinLength)
+                var minLength = currentPolicy.GetInt("minLength");
+                if (minLength > enforcedOptions.MinLength)
                 {
-                    enforcedOptions.MinLength = (int)(long)minLength;
+                    enforcedOptions.MinLength = minLength.Value;
                 }
 
-                var useUpper = GetPolicyBool(currentPolicy, "useUpper");
-                if (useUpper != null && (bool)useUpper)
+                if (currentPolicy.GetBool("useUpper") == true)
                 {
                     enforcedOptions.UseUppercase = true;
                 }
 
-                var useLower = GetPolicyBool(currentPolicy, "useLower");
-                if (useLower != null && (bool)useLower)
+                if (currentPolicy.GetBool("useLower") == true)
                 {
                     enforcedOptions.UseLowercase = true;
                 }
 
-                var useNumbers = GetPolicyBool(currentPolicy, "useNumbers");
-                if (useNumbers != null && (bool)useNumbers)
+                if (currentPolicy.GetBool("useNumbers") == true)
                 {
                     enforcedOptions.UseNumbers = true;
                 }
 
-                var minNumbers = GetPolicyInt(currentPolicy, "minNumbers");
-                if (minNumbers != null && (int)(long)minNumbers > enforcedOptions.NumberCount)
+                var minNumbers = currentPolicy.GetInt("minNumbers");
+                if (minNumbers > enforcedOptions.NumberCount)
                 {
-                    enforcedOptions.NumberCount = (int)(long)minNumbers;
+                    enforcedOptions.NumberCount = minNumbers.Value;
                 }
 
-                var useSpecial = GetPolicyBool(currentPolicy, "useSpecial");
-                if (useSpecial != null && (bool)useSpecial)
+                if (currentPolicy.GetBool("useSpecial") == true)
                 {
                     enforcedOptions.UseSpecial = true;
                 }
 
-                var minSpecial = GetPolicyInt(currentPolicy, "minSpecial");
-                if (minSpecial != null && (int)(long)minSpecial > enforcedOptions.SpecialCount)
+                var minSpecial = currentPolicy.GetInt("minSpecial");
+                if (minSpecial > enforcedOptions.SpecialCount)
                 {
-                    enforcedOptions.SpecialCount = (int)(long)minSpecial;
+                    enforcedOptions.SpecialCount = minSpecial.Value;
                 }
 
-                var minNumberWords = GetPolicyInt(currentPolicy, "minNumberWords");
-                if (minNumberWords != null && (int)(long)minNumberWords > enforcedOptions.MinNumberOfWords)
+                var minNumberWords = currentPolicy.GetInt("minNumberWords");
+                if (minNumberWords > enforcedOptions.MinNumberOfWords)
                 {
-                    enforcedOptions.MinNumberOfWords = (int)(long)minNumberWords;
+                    enforcedOptions.MinNumberOfWords = minNumberWords.Value;
                 }
 
-                var capitalize = GetPolicyBool(currentPolicy, "capitalize");
-                if (capitalize != null && (bool)capitalize)
+                if (currentPolicy.GetBool("capitalize") == true)
                 {
                     enforcedOptions.Capitalize = true;
                 }
 
-                var includeNumber = GetPolicyBool(currentPolicy, "includeNumber");
-                if (includeNumber != null && (bool)includeNumber)
+                if (currentPolicy.GetBool("includeNumber") == true)
                 {
                     enforcedOptions.IncludeNumber = true;
                 }

@@ -534,7 +534,7 @@ namespace Bit.Core.Services
             var generatedFingerprintPhrase = await _cryptoService.GetFingerprintAsync(email, keyPair.Item1);
             var fingerprintPhrase = string.Join("-", generatedFingerprintPhrase);
             var publicB64 = Convert.ToBase64String(keyPair.Item1);
-            var accessCode = await _passwordGenerationService.GeneratePasswordAsync(new PasswordGenerationOptions(true) { Length = 25 });
+            var accessCode = await _passwordGenerationService.GeneratePasswordAsync(PasswordGenerationOptions.CreateDefault.WithLength(25));
             var passwordlessCreateLoginRequest = new PasswordlessCreateLoginRequest(email, publicB64, deviceId, accessCode, AuthRequestType.AuthenticateAndUnlock, fingerprintPhrase);
             var response = await _apiService.PostCreateRequestAsync(passwordlessCreateLoginRequest);
 

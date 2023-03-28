@@ -120,7 +120,7 @@ namespace Bit.App.Pages
             if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout))
             {
                 _vaultTimeoutPolicy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout)).First();
-                var minutes = _policyService.GetPolicyInt(_vaultTimeoutPolicy, "minutes").GetValueOrDefault();
+                var minutes = _vaultTimeoutPolicy.GetInt(Policy.MINUTES_KEY).GetValueOrDefault();
                 _vaultTimeouts = _vaultTimeouts.Where(t =>
                     t.Value <= minutes &&
                     (t.Value > 0 || t.Value == CustomVaultTimeoutValue) &&
@@ -295,7 +295,7 @@ namespace Bit.App.Pages
 
             if (_vaultTimeoutPolicy != null)
             {
-                var maximumTimeout = _policyService.GetPolicyInt(_vaultTimeoutPolicy, "minutes");
+                var maximumTimeout = _vaultTimeoutPolicy.GetInt(Policy.MINUTES_KEY);
 
                 if (newTimeout > maximumTimeout)
                 {
@@ -597,7 +597,7 @@ namespace Bit.App.Pages
             }
             if (_vaultTimeoutPolicy != null)
             {
-                var maximumTimeout = _policyService.GetPolicyInt(_vaultTimeoutPolicy, "minutes").GetValueOrDefault();
+                var maximumTimeout = _vaultTimeoutPolicy.GetInt(Policy.MINUTES_KEY).GetValueOrDefault();
                 securityItems.Insert(0, new SettingsPageListItem
                 {
                     Name = string.Format(AppResources.VaultTimeoutPolicyInEffect,
