@@ -44,7 +44,7 @@ namespace Bit.Core.Models.Domain
         }
 
         public string GetString(string key)
-        {   
+        {
             if (Data.TryGetValue(key, out var val))
             {
                 return (string)val;
