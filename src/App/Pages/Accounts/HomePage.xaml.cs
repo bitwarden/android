@@ -70,6 +70,7 @@ namespace Bit.App.Pages
                     });
                 }
             });
+            await _vm.UpdateEnvironment();
         }
 
         protected override bool OnBackButtonPressed()
@@ -126,14 +127,6 @@ namespace Bit.App.Pages
         {
             var page = new LoginSsoPage(_appOptions);
             await Navigation.PushModalAsync(new NavigationPage(page));
-        }
-
-        private void Environment_Clicked(object sender, EventArgs e)
-        {
-            if (DoOnce())
-            {
-                _vm.StartEnvironmentAction();
-            }
         }
 
         private async Task StartEnvironmentAsync()

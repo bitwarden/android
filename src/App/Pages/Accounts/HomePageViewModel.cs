@@ -4,6 +4,7 @@ using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
@@ -21,6 +22,7 @@ namespace Bit.App.Pages
         private bool _showCancelButton;
         private bool _rememberEmail;
         private string _email;
+        private string _selectedEnvironmentName;
         private bool _isEmailEnabled;
         private bool _canLogin;
         private IPlatformUtilsService _platformUtilsService;
@@ -49,6 +51,8 @@ namespace Bit.App.Pages
                 onException: _logger.Exception, allowsMultipleExecutions: false);
             CloseCommand = new AsyncCommand(async () => await Device.InvokeOnMainThreadAsync(CloseAction),
                 onException: _logger.Exception, allowsMultipleExecutions: false);
+            ShowEnvironmentPickerCommand = new AsyncCommand(async () => await Device.InvokeOnMainThreadAsync(ShowEnvironmentPicker),
+                onException: _logger.Exception, allowsMultipleExecutions: false);
             InitAsync().FireAndForget();
         }
 
@@ -71,6 +75,13 @@ namespace Bit.App.Pages
                 additionalPropertyNames: new[] { nameof(CanContinue) });
         }
 
+        public string SelectedEnvironmentName
+        {
+            get => $"{_selectedEnvironmentName} {BitwardenIcons.AngleDown}";
+            set => SetProperty(ref _selectedEnvironmentName, value);
+        }
+
+        public string RegionText => $"{AppResources.Region}:";
         public bool CanContinue => !string.IsNullOrEmpty(Email);
 
         public FormattedString CreateAccountText
@@ -101,6 +112,7 @@ namespace Bit.App.Pages
         public AsyncCommand ContinueCommand { get; }
         public AsyncCommand CloseCommand { get; }
         public AsyncCommand CreateAccountCommand { get; }
+        public AsyncCommand ShowEnvironmentPickerCommand { get; }
 
         public async Task InitAsync()
         {
@@ -142,6 +154,44 @@ namespace Bit.App.Pages
             {
                 _logger.Exception(ex);
                 await _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage, AppResources.AnErrorHasOccurred, AppResources.Ok);
+            }
+        }
+
+        public async Task ShowEnvironmentPicker()
+        {
+            var result = await Page.DisplayActionSheet(AppResources.DataRegion, AppResources.Cancel, null,
+                new string[] {AppResources.US, AppResources.EU, AppResources.SelfHosted });
+
+            if (result == AppResources.US)
+            {
+                await _environmentService.SetUsUrlsAsync();
+                SelectedEnvironmentName = AppResources.US;
+            }
+            else if (result == AppResources.EU)
+            {
+                await _environmentService.SetEuUrlsAsync();
+                SelectedEnvironmentName = AppResources.EU;
+            }
+            else if (result == AppResources.SelfHosted)
+            {
+                StartEnvironmentAction?.Invoke();
+            }
+        }
+
+        public async Task UpdateEnvironment()
+        {
+            var baseUrlSaved = (await _stateService.GetPreAuthEnvironmentUrlsAsync())?.Base;
+            if (baseUrlSaved == _environmentService.DefaultBaseUsRegion || string.IsNullOrEmpty(baseUrlSaved))
+            {
+                SelectedEnvironmentName = AppResources.US;
+            }
+            else if (baseUrlSaved == _environmentService.DefaultBaseEuRegion)
+            {
+                SelectedEnvironmentName = AppResources.EU;
+            }
+            else
+            {
+                SelectedEnvironmentName = AppResources.SelfHosted;
             }
         }
     }

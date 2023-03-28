@@ -12,10 +12,14 @@ namespace Bit.Core.Abstractions
         string NotificationsUrl { get; set; }
         string WebVaultUrl { get; set; }
         string EventsUrl { get; set; }
+        public string DefaultBaseUsRegion { get; }
+        public string DefaultBaseEuRegion { get; }
 
         string GetWebVaultUrl(bool returnNullIfDefault = false);
         string GetWebSendUrl();
         Task<EnvironmentUrlData> SetUrlsAsync(EnvironmentUrlData urls);
+        Task<EnvironmentUrlData> SetUsUrlsAsync();
+        Task<EnvironmentUrlData> SetEuUrlsAsync();
         Task SetUrlsFromStorageAsync();
     }
 }
