@@ -168,5 +168,7 @@ namespace Bit.Core.Abstractions
         Task SetPreLoginEmailAsync(string value);
         string GetLocale();
         void SetLocale(string locale);
+        ConfigResponse GetConfigs();
+        void SetConfigs(ConfigResponse value);
     }
 }

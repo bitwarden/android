@@ -11,21 +11,31 @@ namespace Bit.Core.Services
     public class ConfigService : IConfigService
     {
         private ConfigResponse _configs;
-        private DateTime _lastUpdate;
         private const int UPDATE_INTERVAL_MINS = 60;
         private readonly IApiService _apiService;
+        private readonly IStateService _stateService;
 
-        public ConfigService(IApiService apiService)
+        public ConfigService(IApiService apiService, IStateService stateService)
         {
             _apiService = apiService;
+            _stateService = stateService;
         }
 
         public async Task<ConfigResponse> GetAllAsync()
         {
-            if (_configs == null || _lastUpdate == null || _lastUpdate.AddMinutes(UPDATE_INTERVAL_MINS) < DateTime.Now)
+            try
             {
-                _configs = await _apiService.GetAllConfigsAsync();
-                _lastUpdate = DateTime.Now;
+                _configs = _stateService.GetConfigs();
+                if (_configs == null || _configs.ExpiresOn == null || _configs.ExpiresOn <= DateTime.UtcNow)
+                {
+                    _configs = await _apiService.GetAllConfigsAsync();
+                    _configs.ExpiresOn = DateTime.UtcNow.AddMinutes(UPDATE_INTERVAL_MINS);
+                    _stateService.SetConfigs(_configs);
+                }
+            }
+            catch (Exception)
+            {
+                //ignore and return state value or null
             }
 
             return _configs;

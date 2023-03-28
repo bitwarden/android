@@ -1234,6 +1234,17 @@ namespace Bit.Core.Services
             await SetValueAsync(Constants.PreLoginEmailKey, value, options);
         }
 
+
+        public ConfigResponse GetConfigs()
+        {
+            return _storageMediatorService.Get<ConfigResponse>(Constants.ConfigsKey);
+        }
+
+        public void SetConfigs(ConfigResponse value)
+        {
+            _storageMediatorService.Save(Constants.ConfigsKey, value);
+        }
+
         // Helpers
 
         [Obsolete("Use IStorageMediatorService instead")]
