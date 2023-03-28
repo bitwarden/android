@@ -18,8 +18,7 @@ namespace Bit.Core.Services
         private readonly IStorageService _preferencesStorageService;
         private readonly IStorageService _liteDbStorageService;
         private readonly IStorageService _secureStorageService;
-
-        private static SemaphoreSlim _semaphore;
+        private readonly SemaphoreSlim _semaphore;
 
         private enum Storage
         {
@@ -38,7 +37,7 @@ namespace Bit.Core.Services
             _semaphore = new SemaphoreSlim(1);
         }
 
-        public async Task MigrateIfNeeded()
+        public async Task MigrateIfNeededAsync()
         {
             await _semaphore.WaitAsync();
             try

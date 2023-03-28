@@ -4,6 +4,6 @@ namespace Bit.Core.Abstractions
 {
     public interface IStateMigrationService
     {
-        Task MigrateIfNeeded();
+        Task MigrateIfNeededAsync();
     }
 }
