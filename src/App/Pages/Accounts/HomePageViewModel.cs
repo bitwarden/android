@@ -29,6 +29,7 @@ namespace Bit.App.Pages
         private ILogger _logger;
         private IEnvironmentService _environmentService;
         private IAccountsManager _accountManager;
+        private IConfigService _configService;
 
         public HomeViewModel()
         {
@@ -38,6 +39,7 @@ namespace Bit.App.Pages
             _logger = ServiceContainer.Resolve<ILogger>();
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>();
             _accountManager = ServiceContainer.Resolve<IAccountsManager>();
+            _configService = ServiceContainer.Resolve<IConfigService>();
 
             PageTitle = AppResources.Bitwarden;
 
@@ -102,6 +104,7 @@ namespace Bit.App.Pages
             }
         }
 
+        public bool DisplayEuEnvironment { get; private set; }
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
         public Action StartLoginAction { get; set; }
         public Action StartRegisterAction { get; set; }
@@ -118,6 +121,7 @@ namespace Bit.App.Pages
         {
             Email = await _stateService.GetRememberedEmailAsync();
             RememberEmail = !string.IsNullOrEmpty(Email);
+            DisplayEuEnvironment = await _configService.GetFeatureFlagAsync(Constants.DisplayEuEnvironmentFlag, forceRefresh: true);
         }
 
         public async Task ContinueToLoginStepAsync()
@@ -136,6 +140,10 @@ namespace Bit.App.Pages
                     await _platformUtilsService.ShowDialogAsync(AppResources.InvalidEmail, AppResources.AnErrorHasOccurred,
                         AppResources.Ok);
                     return;
+                }
+                if(await _stateService.GetPreAuthEnvironmentUrlsAsync() == null)
+                {
+                    await _environmentService.SetUsUrlsAsync();
                 }
 
                 await _stateService.SetRememberedEmailAsync(RememberEmail ? Email : null);
@@ -159,9 +167,13 @@ namespace Bit.App.Pages
 
         public async Task ShowEnvironmentPicker()
         {
-            var result = await Page.DisplayActionSheet(AppResources.DataRegion, AppResources.Cancel, null,
-                new string[] {AppResources.US, AppResources.EU, AppResources.SelfHosted });
+            var options = new string[] { AppResources.US, AppResources.SelfHosted };
+            if (DisplayEuEnvironment)
+            {
+                options = new string[] { AppResources.US, AppResources.EU, AppResources.SelfHosted };
+            }
 
+            var result = await Page.DisplayActionSheet(AppResources.DataRegion, AppResources.Cancel, null, options);
             if (result == AppResources.US)
             {
                 await _environmentService.SetUsUrlsAsync();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
@@ -21,7 +22,7 @@ namespace Bit.Core.Services
             _stateService = stateService;
         }
 
-        public async Task<ConfigResponse> GetAllAsync()
+        public async Task<ConfigResponse> GetAllAsync(bool forceRefresh = false)
         {
             try
             {
@@ -39,6 +40,21 @@ namespace Bit.Core.Services
             }
 
             return _configs;
+        }
+
+        public async Task<bool> GetFeatureFlagAsync(string key, bool forceRefresh = false)
+        {
+            await GetAllAsync(forceRefresh);
+            if (_configs != null
+                && _configs.FeatureStates != null
+                && _configs.FeatureStates.Any()
+                && _configs.FeatureStates.ContainsKey(key)
+                && _configs.FeatureStates[key] is bool)
+            {
+                return (bool)_configs.FeatureStates[key];
+            }
+
+            return false;
         }
     }
 }
