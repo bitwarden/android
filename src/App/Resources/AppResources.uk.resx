@@ -1065,7 +1065,7 @@
     <value>Лютий</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>Ім’я</value>
+    <value>Ім'я</value>
   </data>
   <data name="January" xml:space="preserve">
     <value>Січень</value>
@@ -1950,7 +1950,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
-    <value>Досягнуто максимальну кількість доступів</value>
+    <value>Досягнуто максимальної кількості доступів</value>
   </data>
   <data name="CurrentAccessCount" xml:space="preserve">
     <value>Поточна кількість доступів</value>

@@ -124,43 +124,44 @@
   <data name="Description" xml:space="preserve">
     <value>Bitwarden, Inc. è la società madre di 8bit Solutions LLC.
 
-NOMINATO MIGLIOR PASSWORD MANAGER DA THE VERGE, US NEWS &amp; WORLD REPORT, CNET E ALTRO.
+NOMINATO MIGLIOR PASSWORD MANAGER DA THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, E ALTRO.
 
-Gestisci, archivia, proteggi e condividi password illimitate su dispositivi illimitati da qualsiasi luogo. Bitwarden offre soluzioni di gestione delle password open source a tutti, a casa, al lavoro o in viaggio.
+Gestisci, archivia, proteggi, e condividi password illimitate su dispositivi illimitati da qualsiasi luogo. Bitwarden offre soluzioni di gestione delle password open-source a tutti, a casa, al lavoro, o in viaggio.
 
-Genera password complesse, uniche e casuali in base ai requisiti di sicurezza per ogni sito web che frequenti.
+Genera password forti, uniche, e casuali in base ai requisiti di sicurezza per ogni sito web che frequenti.
 
-Bitwarden Send trasmette rapidamente informazioni cifrate --- file e testo in chiaro - direttamente a chiunque.
+Bitwarden Send trasmette rapidamente informazioni criptate - via file e testo in chiaro - direttamente a chiunque.
 
-Bitwarden offre piani Teams ed Enterprise per le aziende in modo da poter condividere le password in modo sicuro con i colleghi.
+Bitwarden offre piani Teams ed Enterprise per le aziende così puoi condividere le password in modo sicuro con i tuoi colleghi.
 
-Perché scegliere Bitwarden:
+Perché Scegliere Bitwarden:
 
-Crittografia di livello mondiale
-Le password sono protette con cifratura end-to-end avanzata (AES-256 bit, hashtag con sale e PBKDF2 SHA-256) in modo che i tuoi dati rimangano al sicuro e privati.
+Criptografia Di Livello Mondiale
+Le password sono protette con criptografia end-to-end avanzata (AES-256 bit, salted hashing, e PBKDF2 SHA-256) per tenere i tuoi dati al sicuro e privati.
 
-Generatore di password integrato
-Genera password complesse, uniche e casuali in base ai requisiti di sicurezza per ogni sito web che frequenti.
+Generatore Di Password Integrato
+Genera password forti, uniche e casuali in base ai requisiti di sicurezza per ogni sito web che frequenti.
 
-Traduzioni globali
-Le traduzioni di Bitwarden esistono in 40 lingue e sono in crescita, grazie alla nostra comunità globale.
+Traduzioni Globali
+Le traduzioni di Bitwarden esistono in 40 lingue e sono in crescita grazie alla nostra comunità globale.
 
-Applicazioni multipiattaforma
-Proteggi e condividi i dati sensibili all'interno del tuo Bitwarden Vault da qualsiasi browser, dispositivo mobile o sistema operativo desktop e altro ancora.</value>
+Applicazioni Multipiattaforma
+Proteggi e condividi i dati sensibili all'interno della tua cassaforte di Bitwarden da qualsiasi browser, dispositivo mobile, o sistema operativo desktop, e altro.
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bitwarden,8bit,password,gestore password gratuito,gestore password,gestore login</value>
+    <value>bit warden,8bit,password,gestore password gratuito,gestore password,gestore login</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Gestisci tutte le tue password ed i tuoi login da una cassaforte sicura</value>
+    <value>Gestisci tutte le tue password e i tuoi login da una cassaforte sicura</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
     <value>Genera automaticamente password complesse, casuali e sicure</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Proteggi la tua cassaforte con Touch ID, codice PIN o password principale</value>
+    <value>Proteggi la tua cassaforte con Touch ID, Face ID, PIN o password</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
     <value>Auto-completamento login da Safari, Chrome e centinaia di altre applicazioni</value>
