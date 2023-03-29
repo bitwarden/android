@@ -141,7 +141,7 @@ namespace Bit.App.Pages
                         AppResources.Ok);
                     return;
                 }
-                if(await _stateService.GetPreAuthEnvironmentUrlsAsync() == null)
+                if (await _stateService.GetPreAuthEnvironmentUrlsAsync() == null)
                 {
                     await _environmentService.SetUsUrlsAsync();
                 }
