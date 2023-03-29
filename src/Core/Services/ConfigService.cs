@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Response;
 using Bit.Core.Models.View;
@@ -34,6 +35,10 @@ namespace Bit.Core.Services
                     _configs.ExpiresOn = DateTime.UtcNow.AddMinutes(UPDATE_INTERVAL_MINS);
                     _stateService.SetConfigs(_configs);
                 }
+            }
+            catch (ApiException ex) when (ex.Error.StatusCode == System.Net.HttpStatusCode.BadGateway)
+            {
+              // ignore if there is no internet connection and return local configs
             }
             catch (Exception ex)
             {
