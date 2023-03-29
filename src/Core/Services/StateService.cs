@@ -1547,11 +1547,8 @@ namespace Bit.Core.Services
         {
             if (!_migrationChecked)
             {
-                var migrationService = ServiceContainer.Resolve<IStateMigrationService>("stateMigrationService");
-                if (await migrationService.NeedsMigration())
-                {
-                    await migrationService.Migrate();
-                }
+                var migrationService = ServiceContainer.Resolve<IStateMigrationService>();
+                await migrationService.MigrateIfNeededAsync();
                 _migrationChecked = true;
             }
 

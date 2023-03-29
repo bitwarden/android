@@ -87,7 +87,7 @@ namespace Bit.Core.Utilities
             var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService,
                 cryptoService);
             var usernameGenerationService = new UsernameGenerationService(cryptoService, apiService, stateService);
-            var configService = new ConfigService(apiService, stateService);
+            var configService = new ConfigService(apiService, stateService, logger);
 
             Register<ITokenService>("tokenService", tokenService);
             Register<IApiService>("apiService", apiService);

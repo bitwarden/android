@@ -11,15 +11,17 @@ namespace Bit.Core.Services
 {
     public class ConfigService : IConfigService
     {
-        private ConfigResponse _configs;
         private const int UPDATE_INTERVAL_MINS = 60;
+        private ConfigResponse _configs;
         private readonly IApiService _apiService;
         private readonly IStateService _stateService;
+        private readonly ILogger _logger;
 
-        public ConfigService(IApiService apiService, IStateService stateService)
+        public ConfigService(IApiService apiService, IStateService stateService, ILogger logger)
         {
             _apiService = apiService;
             _stateService = stateService;
+            _logger = logger;
         }
 
         public async Task<ConfigResponse> GetAllAsync(bool forceRefresh = false)
@@ -27,16 +29,16 @@ namespace Bit.Core.Services
             try
             {
                 _configs = _stateService.GetConfigs();
-                if (_configs == null || _configs.ExpiresOn == null || _configs.ExpiresOn <= DateTime.UtcNow)
+                if (_configs?.ExpiresOn is null || _configs.ExpiresOn <= DateTime.UtcNow)
                 {
-                    _configs = await _apiService.GetAllConfigsAsync();
+                    _configs = await _apiService.GetConfigsAsync();
                     _configs.ExpiresOn = DateTime.UtcNow.AddMinutes(UPDATE_INTERVAL_MINS);
                     _stateService.SetConfigs(_configs);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //ignore and return state value or null
+                _logger.Exception(ex);
             }
 
             return _configs;
