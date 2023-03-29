@@ -91,7 +91,7 @@ namespace Bit.Core.Services
             catch (System.Exception ex)
             {
                 _conditionedAwaiterManager.SetException(AwaiterPrecondition.EnvironmentUrlsInited, ex);
-                throw ex;
+                throw;
             }
 
         }
