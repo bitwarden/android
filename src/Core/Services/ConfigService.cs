@@ -10,8 +10,8 @@ namespace Bit.Core.Services
 {
     public class ConfigService : IConfigService
     {
-        private ConfigResponse _configs;
         private const int UPDATE_INTERVAL_MINS = 60;
+        private ConfigResponse _configs;
         private readonly IApiService _apiService;
         private readonly IStateService _stateService;
 
@@ -28,7 +28,7 @@ namespace Bit.Core.Services
                 _configs = _stateService.GetConfigs();
                 if (_configs == null || _configs.ExpiresOn == null || _configs.ExpiresOn <= DateTime.UtcNow)
                 {
-                    _configs = await _apiService.GetAllConfigsAsync();
+                    _configs = await _apiService.GetConfigsAsync();
                     _configs.ExpiresOn = DateTime.UtcNow.AddMinutes(UPDATE_INTERVAL_MINS);
                     _stateService.SetConfigs(_configs);
                 }
