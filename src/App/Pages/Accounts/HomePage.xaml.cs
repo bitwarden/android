@@ -15,6 +15,8 @@ namespace Bit.App.Pages
         private readonly AppOptions _appOptions;
         private IBroadcasterService _broadcasterService;
 
+        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
+
         public HomePage(AppOptions appOptions = null)
         {
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
@@ -70,7 +72,14 @@ namespace Bit.App.Pages
                     });
                 }
             });
-            await _vm.UpdateEnvironment();
+            try
+            {
+                await _vm.UpdateEnvironment();
+            }
+            catch (Exception ex)
+            {
+                _logger.Value?.Exception(ex);
+            }
         }
 
         protected override bool OnBackButtonPressed()

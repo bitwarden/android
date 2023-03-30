@@ -25,7 +25,7 @@ namespace Bit.Core.Services
             _logger = logger;
         }
 
-        public async Task<ConfigResponse> GetAllAsync(bool forceRefresh = false)
+        public async Task<ConfigResponse> GetAsync(bool forceRefresh = false)
         {
             try
             {
@@ -51,17 +51,12 @@ namespace Bit.Core.Services
 
         public async Task<bool> GetFeatureFlagAsync(string key, bool forceRefresh = false)
         {
-            await GetAllAsync(forceRefresh);
-            if (_configs != null
-                && _configs.FeatureStates != null
-                && _configs.FeatureStates.Any()
-                && _configs.FeatureStates.ContainsKey(key)
-                && _configs.FeatureStates[key] is bool)
-            {
-                return (bool)_configs.FeatureStates[key];
-            }
-
-            return false;
+            await GetAsync(forceRefresh);
+            return _configs?.FeatureStates?.TryGetValue(key, out var val) == true
+                    &&
+                    val is bool boolVal
+                    &&
+                    boolVal;
         }
     }
 }

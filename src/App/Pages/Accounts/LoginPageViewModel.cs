@@ -116,7 +116,7 @@ namespace Bit.App.Pages
             set => SetProperty(ref _isKnownDevice, value);
         }
 
-        public string EnvironmentHostName
+        public string EnvironmentDomainName
         {
             get => _environmentHostName;
             set => SetProperty(ref _environmentHostName, value,
@@ -133,7 +133,7 @@ namespace Bit.App.Pages
         public ICommand LogInWithDeviceCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
-        public string LoggingInAsText => string.Format(AppResources.LoggingInAsXOnY, Email, EnvironmentHostName);
+        public string LoggingInAsText => string.Format(AppResources.LoggingInAsXOnY, Email, EnvironmentDomainName);
         public bool IsIosExtension { get; set; }
         public bool CanRemoveAccount { get; set; }
         public Action StartTwoFactorAction { get; set; }
@@ -162,7 +162,7 @@ namespace Bit.App.Pages
                     Email = await _stateService.GetRememberedEmailAsync();
                 }
                 CanRemoveAccount = await _stateService.GetActiveUserEmailAsync() != Email;
-                EnvironmentHostName = CoreHelpers.GetDomain((await _stateService.GetPreAuthEnvironmentUrlsAsync())?.Base);
+                EnvironmentDomainName = CoreHelpers.GetDomain((await _stateService.GetPreAuthEnvironmentUrlsAsync())?.Base);
                 IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, await _appIdService.GetAppIdAsync());
             }
             catch (ApiException apiEx) when (apiEx.Error.StatusCode == System.Net.HttpStatusCode.Unauthorized)

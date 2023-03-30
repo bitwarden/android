@@ -6,6 +6,8 @@ using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
+using Bit.Core.Models.Data;
+using Bit.Core.Models.Response;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -25,11 +27,12 @@ namespace Bit.App.Pages
         private string _selectedEnvironmentName;
         private bool _isEmailEnabled;
         private bool _canLogin;
-        private IPlatformUtilsService _platformUtilsService;
-        private ILogger _logger;
-        private IEnvironmentService _environmentService;
-        private IAccountsManager _accountManager;
-        private IConfigService _configService;
+        private bool _displayEuEnvironment;
+        private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly ILogger _logger;
+        private readonly IEnvironmentService _environmentService;
+        private readonly IAccountsManager _accountManager;
+        private readonly IConfigService _configService;
 
         public HomeViewModel()
         {
@@ -53,7 +56,7 @@ namespace Bit.App.Pages
                 onException: _logger.Exception, allowsMultipleExecutions: false);
             CloseCommand = new AsyncCommand(async () => await Device.InvokeOnMainThreadAsync(CloseAction),
                 onException: _logger.Exception, allowsMultipleExecutions: false);
-            ShowEnvironmentPickerCommand = new AsyncCommand(async () => await Device.InvokeOnMainThreadAsync(ShowEnvironmentPicker),
+            ShowEnvironmentPickerCommand = new AsyncCommand(ShowEnvironmentPickerAsync,
                 onException: _logger.Exception, allowsMultipleExecutions: false);
             InitAsync().FireAndForget();
         }
@@ -104,7 +107,6 @@ namespace Bit.App.Pages
             }
         }
 
-        public bool DisplayEuEnvironment { get; private set; }
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
         public Action StartLoginAction { get; set; }
         public Action StartRegisterAction { get; set; }
@@ -121,7 +123,7 @@ namespace Bit.App.Pages
         {
             Email = await _stateService.GetRememberedEmailAsync();
             RememberEmail = !string.IsNullOrEmpty(Email);
-            DisplayEuEnvironment = await _configService.GetFeatureFlagAsync(Constants.DisplayEuEnvironmentFlag, forceRefresh: true);
+            _displayEuEnvironment = await _configService.GetFeatureFlagAsync(ConfigResponse.DisplayEuEnvironmentFlag, forceRefresh: true);
         }
 
         public async Task ContinueToLoginStepAsync()
@@ -140,10 +142,6 @@ namespace Bit.App.Pages
                     await _platformUtilsService.ShowDialogAsync(AppResources.InvalidEmail, AppResources.AnErrorHasOccurred,
                         AppResources.Ok);
                     return;
-                }
-                if (await _stateService.GetPreAuthEnvironmentUrlsAsync() == null)
-                {
-                    await _environmentService.SetUsUrlsAsync();
                 }
 
                 await _stateService.SetRememberedEmailAsync(RememberEmail ? Email : null);
@@ -165,39 +163,47 @@ namespace Bit.App.Pages
             }
         }
 
-        public async Task ShowEnvironmentPicker()
+        public async Task ShowEnvironmentPickerAsync()
         {
-            var options = new string[] { AppResources.US, AppResources.SelfHosted };
-            if (DisplayEuEnvironment)
-            {
-                options = new string[] { AppResources.US, AppResources.EU, AppResources.SelfHosted };
-            }
+            var options = _displayEuEnvironment
+                    ? new string[] { AppResources.US, AppResources.EU, AppResources.SelfHosted }
+                    : new string[] { AppResources.US, AppResources.SelfHosted };
 
-            var result = await Page.DisplayActionSheet(AppResources.DataRegion, AppResources.Cancel, null, options);
-            if (result == AppResources.US)
-            {
-                await _environmentService.SetUsUrlsAsync();
-                SelectedEnvironmentName = AppResources.US;
-            }
-            else if (result == AppResources.EU)
-            {
-                await _environmentService.SetEuUrlsAsync();
-                SelectedEnvironmentName = AppResources.EU;
-            }
-            else if (result == AppResources.SelfHosted)
-            {
-                StartEnvironmentAction?.Invoke();
-            }
+            await Device.InvokeOnMainThreadAsync(async () => {
+                var result = await Page.DisplayActionSheet(AppResources.DataRegion, AppResources.Cancel, null, options);
+
+                if (result is null || result == AppResources.Cancel)
+                {
+                    return;
+                }
+
+                if (result == AppResources.SelfHosted)
+                {
+                    StartEnvironmentAction?.Invoke();
+                }
+                else 
+                {
+                    await _environmentService.SetUrlsAsync( result == AppResources.EU ? EnvironmentUrlData.DefaultEU : EnvironmentUrlData.DefaultUS);
+                    SelectedEnvironmentName = result;
+                }
+            });
         }
 
         public async Task UpdateEnvironment()
         {
-            var baseUrlSaved = (await _stateService.GetPreAuthEnvironmentUrlsAsync())?.Base;
-            if (baseUrlSaved == _environmentService.DefaultBaseUsRegion || string.IsNullOrEmpty(baseUrlSaved))
+            var environmentsSaved = await _stateService.GetPreAuthEnvironmentUrlsAsync();
+            if (environmentsSaved == null || environmentsSaved.Equals(new EnvironmentUrlData()))
+            {
+                await _environmentService.SetUrlsAsync(EnvironmentUrlData.DefaultUS);
+                environmentsSaved = EnvironmentUrlData.DefaultUS;
+                return;
+            }
+
+            if (environmentsSaved.Base == EnvironmentUrlData.DefaultUS.Base)
             {
                 SelectedEnvironmentName = AppResources.US;
             }
-            else if (baseUrlSaved == _environmentService.DefaultBaseEuRegion)
+            else if (environmentsSaved.Base == EnvironmentUrlData.DefaultEU.Base)
             {
                 SelectedEnvironmentName = AppResources.EU;
             }

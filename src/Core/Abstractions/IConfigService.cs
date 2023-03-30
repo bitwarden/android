@@ -6,7 +6,7 @@ namespace Bit.Core.Abstractions
 {
     public interface IConfigService
     {
-        Task<ConfigResponse> GetAllAsync(bool forceRefresh = false);
+        Task<ConfigResponse> GetAsync(bool forceRefresh = false);
         Task<bool> GetFeatureFlagAsync(string key, bool forceRefresh = false);
     }
 }

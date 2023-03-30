@@ -22,9 +22,6 @@ namespace Bit.Core.Services
             _stateService = stateService;
         }
 
-        public string DefaultBaseUsRegion => "https://vault.bitwarden.com";
-        public string DefaultBaseEuRegion => "https://vault.bitwarden.eu";
-
         public string BaseUrl { get; set; }
         public string WebVaultUrl { get; set; }
         public string ApiUrl { get; set; }
@@ -127,18 +124,6 @@ namespace Bit.Core.Services
                 url = string.Concat("https://", url);
             }
             return url.Trim();
-        }
-
-        public async Task<EnvironmentUrlData> SetUsUrlsAsync()
-        {
-            return await SetUrlsAsync(new EnvironmentUrlData()
-            { Base = DefaultBaseUsRegion });
-        }
-
-        public async Task<EnvironmentUrlData> SetEuUrlsAsync()
-        {
-            return await SetUrlsAsync(new EnvironmentUrlData()
-            { Base = DefaultBaseEuRegion });
         }
     }
 }
