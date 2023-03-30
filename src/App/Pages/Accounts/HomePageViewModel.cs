@@ -169,7 +169,8 @@ namespace Bit.App.Pages
                     ? new string[] { AppResources.US, AppResources.EU, AppResources.SelfHosted }
                     : new string[] { AppResources.US, AppResources.SelfHosted };
 
-            await Device.InvokeOnMainThreadAsync(async () => {
+            await Device.InvokeOnMainThreadAsync(async () =>
+            {
                 var result = await Page.DisplayActionSheet(AppResources.DataRegion, AppResources.Cancel, null, options);
 
                 if (result is null || result == AppResources.Cancel)
@@ -181,9 +182,9 @@ namespace Bit.App.Pages
                 {
                     StartEnvironmentAction?.Invoke();
                 }
-                else 
+                else
                 {
-                    await _environmentService.SetUrlsAsync( result == AppResources.EU ? EnvironmentUrlData.DefaultEU : EnvironmentUrlData.DefaultUS);
+                    await _environmentService.SetUrlsAsync(result == AppResources.EU ? EnvironmentUrlData.DefaultEU : EnvironmentUrlData.DefaultUS);
                     SelectedEnvironmentName = result;
                 }
             });
