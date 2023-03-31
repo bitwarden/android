@@ -86,7 +86,9 @@ jobs:
         run: zip -r Bitwarden\ iOS.zip Bitwarden\ iOS
 
       - name: List files
-        run: ls -lRh
+        run: |
+          cat ./bw-android-apk-sha256.txt/bw-android-apk-sha256.txt
+          cat ./bw-fdroid-apk-sha256.txt/bw-fdroid-apk-sha256.txt
 
       - name: Create release
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
@@ -96,8 +98,8 @@ jobs:
                       ./com.x8bit.bitwarden.apk/com.x8bit.bitwarden.apk,
                       ./com.x8bit.bitwarden-fdroid.apk/com.x8bit.bitwarden-fdroid.apk,
                       ./Bitwarden iOS.zip,
-                      ./bw-android-apk-sha256.txt,
-                      ./bw-fdroid-apk-sha256.txt"
+                      ./bw-android-apk-sha256.txt/bw-android-apk-sha256.txt,
+                      ./bw-fdroid-apk-sha256.txt/bw-fdroid-apk-sha256.txt"
           commit: ${{ github.sha }}
           tag: v${{ steps.version.outputs.version }}
           name: Version ${{ steps.version.outputs.version }}
