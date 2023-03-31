@@ -85,11 +85,6 @@ jobs:
       - name: Prep Bitwarden iOS release asset
         run: zip -r Bitwarden\ iOS.zip Bitwarden\ iOS
 
-      - name: List files
-        run: |
-          cat ./bw-android-apk-sha256.txt/bw-android-apk-sha256.txt
-          cat ./bw-fdroid-apk-sha256.txt/bw-fdroid-apk-sha256.txt
-
       - name: Create release
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         uses: ncipollo/release-action@40bb172bd05f266cf9ba4ff965cb61e9ee5f6d01  # v1.9.0
