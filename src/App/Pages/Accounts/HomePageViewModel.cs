@@ -193,7 +193,7 @@ namespace Bit.App.Pages
         public async Task UpdateEnvironment()
         {
             var environmentsSaved = await _stateService.GetPreAuthEnvironmentUrlsAsync();
-            if (environmentsSaved == null || environmentsSaved.Equals(new EnvironmentUrlData()))
+            if (environmentsSaved == null || environmentsSaved.IsEmpty())
             {
                 await _environmentService.SetUrlsAsync(EnvironmentUrlData.DefaultUS);
                 environmentsSaved = EnvironmentUrlData.DefaultUS;

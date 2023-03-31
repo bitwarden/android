@@ -13,25 +13,12 @@
         public string WebVault { get; set; }
         public string Events { get; set; }
 
-        public override bool Equals(object obj)
-        {
-            if (obj is null)
-            {
-                return false;
-            }
-
-            if (obj is EnvironmentUrlData env)
-            {
-                return env.Base == this.Base
-                    && env.Api == this.Api
-                    && env.Identity == this.Identity
-                    && env.Icons == this.Icons
-                    && env.Notifications == this.Notifications
-                    && env.WebVault == this.WebVault
-                    && env.Events == this.Events;
-            }
-
-            return base.Equals(obj);
-        }
+        public bool IsEmpty() => string.IsNullOrEmpty(this.Base)
+                && string.IsNullOrEmpty(this.Api)
+                && string.IsNullOrEmpty(this.Identity)
+                && string.IsNullOrEmpty(this.Icons)
+                && string.IsNullOrEmpty(this.Notifications)
+                && string.IsNullOrEmpty(this.WebVault)
+                && string.IsNullOrEmpty(this.Events);
     }
 }
