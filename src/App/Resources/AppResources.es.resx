@@ -2593,15 +2593,15 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Se requiere un inicio de sesión único de la organización.</value>
   </data>
   <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
-    <value>Add the key to an existing or new item</value>
+    <value>Añadir la clave a un elemento existente o nuevo</value>
   </data>
   <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
-    <value>There are no items in your vault that match "{0}"</value>
+    <value>No hay artículos en su caja fuerte que coincidan con "{0}"</value>
   </data>
   <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
-    <value>Search for an item or add a new item</value>
+    <value>Buscar un elemento o añadir uno nuevo</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
-    <value>There are no items that match the search</value>
+    <value>No hay elementos que coincidan con la búsqueda</value>
   </data>
 </root>

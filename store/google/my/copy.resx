@@ -118,63 +118,63 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Bitwarden – менеджер паролів</value>
+    <value>Bitwarden Password Manager</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden – менеджер паролів, що допомагає вам бути в безпеці онлайн.</value>
+    <value>Bitwarden is a login and password manager that helps keep you safe while online.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>8bit Solutions LLC є дочірньою компанією Bitwarden, Inc.
+    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
 
-НАЙКРАЩИЙ МЕНЕДЖЕР ПАРОЛІВ ЗА ВЕРСІЄЮ THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, А ТАКОЖ ІНШИХ ВИДАНЬ.
+NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
 
-Зберігайте, захищайте, керуйте і надавайте доступ до паролів на різних пристроях де завгодно. Bitwarden пропонує рішення для керування паролями на основі відкритого програмного коду особистим та корпоративним користувачам на всіх пристроях.
+Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
 
-Генеруйте надійні, випадкові та унікальні паролі, які відповідають вимогам безпеки, для кожного вебсайту та сервісу.
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
 
-Швидко відправляйте будь-кому зашифровану інформацію, як-от файли чи звичайний текст, за допомогою функції Bitwarden Send.
+Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
 
-Bitwarden пропонує командні та корпоративні тарифні плани для компаній, щоб ви могли безпечно обмінюватися паролями з колегами.
+Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
 
-Чому варто обрати Bitwarden:
+Why Choose Bitwarden:
 
-Всесвітньо визнані стандарти шифрування
-Паролі захищаються з використанням розширеного наскрізного шифрування (AES-256 bit, хешування з сіллю та PBKDF2 SHA-256), тому ваші дані завжди захищені та приватні.
+World-Class Encryption
+Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
 
-Вбудований генератор паролів
-Генеруйте надійні, випадкові та унікальні паролі, які відповідають вимогам безпеки, для кожного вебсайту та сервісу.
+Built-in Password Generator
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
 
-Переклад багатьма мовами 
-Завдяки нашій глобальній спільноті, Bitwarden перекладено 40 мовами, і їх кількість зростає.
+Global Translations
+Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
 
-Програми для різних платформ 
-Зберігайте і діліться важливими даними, а також користуйтеся іншими можливостями у вашому сховищі Bitwarden в будь-якому браузері, мобільному пристрої, чи комп'ютерній операційній системі.
+Cross-Platform Applications
+Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
 </value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>Захищений, безплатний менеджер паролів для всіх ваших пристроїв</value>
+    <value>A secure and free password manager for all of your devices</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Керуйте всіма своїми записами в захищеному сховищі</value>
+    <value>Manage all your logins and passwords from a secure vault</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Автоматично генеруйте надійні, випадкові та унікальні паролі</value>
+    <value>Automatically generate strong, random, and secure passwords</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Захистіть своє сховище за допомогою відбитку пальця, PIN-коду, або головного пароля</value>
+    <value>Protect your vault with fingerprint, PIN code, or master password</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Швидко, автоматично заповнюйте паролі у веббраузері та інших програмах</value>
+    <value>Quickly auto-fill logins from within your web browser and other apps</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Синхронізація і доступ до сховища з різних пристроїв
+    <value>Sync and access your vault from multiple devices
 
-- Телефон
-- Планшет
-- Комп'ютер
-- Веббраузер</value>
+- Phone
+- Tablet
+- Desktop
+- Web</value>
   </data>
 </root>
