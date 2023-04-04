@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
@@ -24,7 +25,7 @@ namespace Bit.Core.Services
             _logger = logger;
         }
 
-        public async Task<ConfigResponse> GetAllAsync()
+        public async Task<ConfigResponse> GetAsync(bool forceRefresh = false)
         {
             try
             {
@@ -46,6 +47,25 @@ namespace Bit.Core.Services
             }
 
             return _configs;
+        }
+
+        public async Task<bool> GetFeatureFlagBoolAsync(string key, bool forceRefresh = false, bool defaultValue = false) => await GetFeatureFlagAsync<bool>(key, forceRefresh, defaultValue);
+
+        public async Task<string> GetFeatureFlagStringAsync(string key, bool forceRefresh = false, string defaultValue = null) => await GetFeatureFlagAsync<string>(key, forceRefresh, defaultValue);
+
+        public async Task<int> GetFeatureFlagIntAsync(string key, bool forceRefresh = false, int defaultValue = 0) => await GetFeatureFlagAsync<int>(key, forceRefresh, defaultValue);
+
+        private async Task<T> GetFeatureFlagAsync<T>(string key, bool forceRefresh = false, T defaultValue = default)
+        {
+            await GetAsync(forceRefresh);
+            if (_configs?.FeatureStates?.TryGetValue(key, out var val) == true
+                    &&
+                    val is T actualValue)
+            {
+                return actualValue;
+            }
+
+            return defaultValue;
         }
     }
 }

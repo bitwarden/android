@@ -1742,6 +1742,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data region.
+        /// </summary>
+        public static string DataRegion {
+            get {
+                return ResourceManager.GetString("DataRegion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password updated.
         /// </summary>
         public static string DatePasswordUpdated {
@@ -2314,6 +2323,15 @@ namespace Bit.App.Resources {
         public static string EnvironmentSaved {
             get {
                 return ResourceManager.GetString("EnvironmentSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EU.
+        /// </summary>
+        public static string EU {
+            get {
+                return ResourceManager.GetString("EU", resourceCulture);
             }
         }
         
@@ -3560,11 +3578,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logging in as {0}.
+        ///   Looks up a localized string similar to Logging in as {0} on {1}.
         /// </summary>
-        public static string LoggingInAsX {
+        public static string LoggingInAsXOnY {
             get {
-                return ResourceManager.GetString("LoggingInAsX", resourceCulture);
+                return ResourceManager.GetString("LoggingInAsXOnY", resourceCulture);
             }
         }
         
@@ -5121,6 +5139,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Region.
+        /// </summary>
+        public static string Region {
+            get {
+                return ResourceManager.GetString("Region", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remember me.
         /// </summary>
         public static string RememberMe {
@@ -5450,6 +5477,15 @@ namespace Bit.App.Resources {
         public static string SelectTypeField {
             get {
                 return ResourceManager.GetString("SelectTypeField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Self-hosted.
+        /// </summary>
+        public static string SelfHosted {
+            get {
+                return ResourceManager.GetString("SelfHosted", resourceCulture);
             }
         }
         
@@ -6503,6 +6539,15 @@ namespace Bit.App.Resources {
         public static string URIs {
             get {
                 return ResourceManager.GetString("URIs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to US.
+        /// </summary>
+        public static string US {
+            get {
+                return ResourceManager.GetString("US", resourceCulture);
             }
         }
         
