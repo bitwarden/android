@@ -49,40 +49,20 @@ namespace Bit.Core.Services
             return _configs;
         }
 
-        public async Task<bool> GetFeatureFlagBoolAsync(string key, bool forceRefresh = false, bool defaultValue = false)
+        public async Task<bool> GetFeatureFlagBoolAsync(string key, bool forceRefresh = false, bool defaultValue = false) => await GetFeatureFlagAsync<bool>(key, forceRefresh, defaultValue);
+
+        public async Task<string> GetFeatureFlagStringAsync(string key, bool forceRefresh = false, string defaultValue = null) => await GetFeatureFlagAsync<string>(key, forceRefresh, defaultValue);
+
+        public async Task<int> GetFeatureFlagIntAsync(string key, bool forceRefresh = false, int defaultValue = 0) => await GetFeatureFlagAsync<int>(key,forceRefresh,defaultValue);
+
+        private async Task<T> GetFeatureFlagAsync<T>(string key, bool forceRefresh = false, T defaultValue = default)
         {
             await GetAsync(forceRefresh);
             if (_configs?.FeatureStates?.TryGetValue(key, out var val) == true
                     &&
-                    val is bool boolVal)
+                    val is T actualValue)
             {
-                return boolVal;
-            }
-
-            return defaultValue;
-        }
-
-        public async Task<string> GetFeatureFlagStringAsync(string key, bool forceRefresh = false, string defaultValue = null)
-        {
-            await GetAsync(forceRefresh);
-            if (_configs?.FeatureStates?.TryGetValue(key, out var val) == true
-                    &&
-                    val is string strVal)
-            {
-                return strVal;
-            }
-
-            return defaultValue;
-        }
-
-        public async Task<int> GetFeatureFlagIntAsync(string key, bool forceRefresh = false, int defaultValue = 0)
-        {
-            await GetAsync(forceRefresh);
-            if (_configs?.FeatureStates?.TryGetValue(key, out var val) == true
-                    &&
-                    val is int intVal)
-            {
-                return intVal;
+                return actualValue;
             }
 
             return defaultValue;
