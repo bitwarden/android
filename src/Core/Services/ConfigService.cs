@@ -49,14 +49,43 @@ namespace Bit.Core.Services
             return _configs;
         }
 
-        public async Task<bool> GetFeatureFlagAsync(string key, bool forceRefresh = false)
+        public async Task<bool> GetFeatureFlagBoolAsync(string key, bool forceRefresh = false, bool defaultValue = false)
         {
             await GetAsync(forceRefresh);
-            return _configs?.FeatureStates?.TryGetValue(key, out var val) == true
+            if (_configs?.FeatureStates?.TryGetValue(key, out var val) == true
                     &&
-                    val is bool boolVal
+                    val is bool boolVal)
+            {
+                return boolVal;
+            }
+
+            return defaultValue;
+        }
+
+        public async Task<string> GetFeatureFlagStringAsync(string key, bool forceRefresh = false, string defaultValue = null)
+        {
+            await GetAsync(forceRefresh);
+            if (_configs?.FeatureStates?.TryGetValue(key, out var val) == true
                     &&
-                    boolVal;
+                    val is string strVal)
+            {
+                return strVal;
+            }
+
+            return defaultValue;
+        }
+
+        public async Task<int> GetFeatureFlagIntAsync(string key, bool forceRefresh = false, int defaultValue = 0)
+        {
+            await GetAsync(forceRefresh);
+            if (_configs?.FeatureStates?.TryGetValue(key, out var val) == true
+                    &&
+                    val is int intVal)
+            {
+                return intVal;
+            }
+
+            return defaultValue;
         }
     }
 }
