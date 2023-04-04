@@ -584,7 +584,7 @@
     <value>Un indiciu pentru parola principală vă poate ajuta să v-o reamintiți dacă o uitați.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Parola principală trebuie să aibă cel puțin {0} caractere.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimum de cifre</value>
@@ -2523,34 +2523,34 @@ Doriți să comutați la acest cont?</value>
     <value>Această cerere nu mai este valabilă</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Pending login requests</value>
+    <value>Cereri de conectare în așteptare</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
-    <value>Decline all requests</value>
+    <value>Refuză toate cererile</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>Are you sure you want to decline all pending login requests?</value>
+    <value>Sunteţi sigur că doriţi să refuzaţi toate solicitările de conectare în aşteptare?</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
-    <value>Requests declined</value>
+    <value>Cereri respinse</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>No pending requests</value>  
+    <value>Nicio cerere în așteptare</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Permite accesul camerei foto pentru a utiliza scanerul</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Limbă</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
-    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+    <value>Limba a fost schimbată în {0}. Vă rugăm să reporniți aplicația pentru a vedea schimbarea</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
-    <value>Language change requires app restart</value>
+    <value>Schimbarea limbii necesită repornirea aplicației</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>Implicit (sistem)</value>
   </data>
   <data name="Important" xml:space="preserve">
     <value>Important</value>
@@ -2589,18 +2589,18 @@ Doriți să comutați la acest cont?</value>
     <value>Parolă slabă identificată și găsită într-o baza de date expusa. Folosiți o parolă puternică și unică pentru a vă proteja contul. Sigur doriți să utilizați această parolă?</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
-    <value>Organization SSO identifier required.</value>
+    <value>Necesită identificator Organizație SSO.</value>
   </data>
   <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
-    <value>Add the key to an existing or new item</value>
+    <value>Adăugați cheia la un articol existent sau nou</value>
   </data>
   <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
-    <value>There are no items in your vault that match "{0}"</value>
+    <value>Nu există elemente în seiful dvs. care se potrivesc "{0}"</value>
   </data>
   <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
-    <value>Search for an item or add a new item</value>
+    <value>Căutați un articol sau adăugați un articol nou</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
-    <value>There are no items that match the search</value>
+    <value>Nu există lucruri care să corespundă căutării</value>
   </data>
 </root>

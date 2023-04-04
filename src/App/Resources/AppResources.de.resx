@@ -1252,10 +1252,10 @@ Das Scannen erfolgt automatisch.</value>
     <value>Beginnt mit</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI Match-Erkennung</value>
+    <value>URI-Übereinstimmungserkennung</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Match-Erkennung</value>
+    <value>Übereinstimmungserkennung</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
@@ -1536,7 +1536,7 @@ Das Scannen erfolgt automatisch.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Standard-URI-Match-Erkennung</value>
+    <value>Standard URI-Übereinstimmungserkennung</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
