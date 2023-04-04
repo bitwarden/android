@@ -191,7 +191,7 @@ jobs:
           $androidPath = $($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj");
           $packageName = "com.x8bit.bitwarden";
 
-          if ("${{ matrix.variant }}" -ne "prod") 
+          if ("${{ matrix.variant }}" -ne "prod")
           {
             $packageName = "com.x8bit.bitwarden.${{ matrix.variant }}";
           }
@@ -522,12 +522,12 @@ jobs:
       - name: Login to Azure - Prod Subscription
         uses: Azure/login@1f63701bf3e6892515f1b7ce2d2bf1708b46beaf
         with:
-          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPLE }}
 
       - name: Retrieve secrets
         id: retrieve-secrets
         env:
-          KEYVAULT: bitwarden-prod-kv
+          KEYVAULT: bitwarden-ci
           SECRETS: |
             appcenter-ios-token
         run: |
@@ -776,12 +776,12 @@ jobs:
       - name: Login to Azure
         uses: Azure/login@1f63701bf3e6892515f1b7ce2d2bf1708b46beaf
         with:
-          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPLE }}
 
       - name: Retrieve secrets
         id: retrieve-secrets
         env:
-          KEYVAULT: bitwarden-prod-kv
+          KEYVAULT: bitwarden-ci
           SECRETS: |
             crowdin-api-token
         run: |
@@ -843,13 +843,13 @@ jobs:
         uses: Azure/login@1f63701bf3e6892515f1b7ce2d2bf1708b46beaf
         if: failure()
         with:
-          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPLE }}
 
       - name: Retrieve secrets
         id: retrieve-secrets
         if: failure()
         env:
-          KEYVAULT: bitwarden-prod-kv
+          KEYVAULT: bitwarden-ci
           SECRETS: |
             devops-alerts-slack-webhook-url
         run: |

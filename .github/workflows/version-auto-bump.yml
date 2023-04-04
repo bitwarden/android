@@ -40,6 +40,6 @@ jobs:
       - name: Bump version to ${{ needs.setup.outputs.version_number }}
         uses: ./.github/workflows/version-bump.yml
         secrets:
-          AZURE_PROD_KV_CREDENTIALS: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+          AZURE_PROD_KV_CREDENTIALS: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPLE }}
         with:
           version_number: ${{ needs.setup.outputs.version_number }}
