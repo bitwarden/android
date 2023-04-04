@@ -20,6 +20,11 @@ namespace Bit.App.Pages
     {
         private readonly IStateService _stateService;
         private readonly IMessagingService _messagingService;
+        private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly ILogger _logger;
+        private readonly IEnvironmentService _environmentService;
+        private readonly IAccountsManager _accountManager;
+        private readonly IConfigService _configService;
 
         private bool _showCancelButton;
         private bool _rememberEmail;
@@ -28,11 +33,6 @@ namespace Bit.App.Pages
         private bool _isEmailEnabled;
         private bool _canLogin;
         private bool _displayEuEnvironment;
-        private readonly IPlatformUtilsService _platformUtilsService;
-        private readonly ILogger _logger;
-        private readonly IEnvironmentService _environmentService;
-        private readonly IAccountsManager _accountManager;
-        private readonly IConfigService _configService;
 
         public HomeViewModel()
         {
@@ -181,19 +181,18 @@ namespace Bit.App.Pages
                 if (result == AppResources.SelfHosted)
                 {
                     StartEnvironmentAction?.Invoke();
+                    return;
                 }
-                else
-                {
-                    await _environmentService.SetUrlsAsync(result == AppResources.EU ? EnvironmentUrlData.DefaultEU : EnvironmentUrlData.DefaultUS);
-                    SelectedEnvironmentName = result;
-                }
+
+                await _environmentService.SetUrlsAsync(result == AppResources.EU ? EnvironmentUrlData.DefaultEU : EnvironmentUrlData.DefaultUS);
+                SelectedEnvironmentName = result;
             });
         }
 
         public async Task UpdateEnvironment()
         {
             var environmentsSaved = await _stateService.GetPreAuthEnvironmentUrlsAsync();
-            if (environmentsSaved == null || environmentsSaved.IsEmpty())
+            if (environmentsSaved == null || environmentsSaved.IsEmpty)
             {
                 await _environmentService.SetUrlsAsync(EnvironmentUrlData.DefaultUS);
                 environmentsSaved = EnvironmentUrlData.DefaultUS;

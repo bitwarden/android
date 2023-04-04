@@ -15,7 +15,7 @@ namespace Bit.App.Pages
         private readonly AppOptions _appOptions;
         private IBroadcasterService _broadcasterService;
 
-        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
+        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
 
         public HomePage(AppOptions appOptions = null)
         {

@@ -13,12 +13,12 @@
         public string WebVault { get; set; }
         public string Events { get; set; }
 
-        public bool IsEmpty() => string.IsNullOrEmpty(this.Base)
-                && string.IsNullOrEmpty(this.Api)
-                && string.IsNullOrEmpty(this.Identity)
-                && string.IsNullOrEmpty(this.Icons)
-                && string.IsNullOrEmpty(this.Notifications)
-                && string.IsNullOrEmpty(this.WebVault)
-                && string.IsNullOrEmpty(this.Events);
+        public bool IsEmpty => string.IsNullOrEmpty(Base)
+                && string.IsNullOrEmpty(Api)
+                && string.IsNullOrEmpty(Identity)
+                && string.IsNullOrEmpty(Icons)
+                && string.IsNullOrEmpty(Notifications)
+                && string.IsNullOrEmpty(WebVault)
+                && string.IsNullOrEmpty(Events);
     }
 }
