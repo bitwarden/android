@@ -1443,7 +1443,7 @@ Scanning will happen automatically.</value>
     <value>Število besed</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Šifrirna fraza</value>
+    <value>Večbesedno geslo</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
     <value>Ločilo besed</value>
@@ -1460,11 +1460,11 @@ Scanning will happen automatically.</value>
     <value>Ni map za prikazat.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fraza prstnega odtisa</value>
+    <value>Identifikacijsko geslo</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Fraza prstnega odtisa vašega računa</value>
+    <value>Identifikacijsko geslo vašega računa</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">

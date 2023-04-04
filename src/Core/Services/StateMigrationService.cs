@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -17,6 +18,7 @@ namespace Bit.Core.Services
         private readonly IStorageService _preferencesStorageService;
         private readonly IStorageService _liteDbStorageService;
         private readonly IStorageService _secureStorageService;
+        private readonly SemaphoreSlim _semaphore;
 
         private enum Storage
         {
@@ -31,9 +33,27 @@ namespace Bit.Core.Services
             _liteDbStorageService = liteDbStorageService;
             _preferencesStorageService = preferenceStorageService;
             _secureStorageService = secureStorageService;
+
+            _semaphore = new SemaphoreSlim(1);
         }
 
-        public async Task<bool> NeedsMigration()
+        public async Task MigrateIfNeededAsync()
+        {
+            await _semaphore.WaitAsync();
+            try
+            {
+                if (await IsMigrationNeededAsync())
+                {
+                    await PerformMigrationAsync();
+                }
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+        }
+
+        private async Task<bool> IsMigrationNeededAsync()
         {
             var lastVersion = await GetLastStateVersionAsync();
             if (lastVersion == 0)
@@ -45,7 +65,7 @@ namespace Bit.Core.Services
             return lastVersion < StateVersion;
         }
 
-        public async Task Migrate()
+        private async Task PerformMigrationAsync()
         {
             var lastVersion = await GetLastStateVersionAsync();
             switch (lastVersion)
@@ -394,10 +414,10 @@ namespace Bit.Core.Services
             // use values from first userId to apply globals
             if (firstUserId != null)
             {
-                var theme = await GetValueAsync<int?>(Storage.LiteDb, V3Keys.ThemeKey(firstUserId));
+                var theme = await GetValueAsync<string>(Storage.LiteDb, V3Keys.ThemeKey(firstUserId));
                 await SetValueAsync(Storage.LiteDb, V4Keys.ThemeKey, theme);
 
-                var autoDarkTheme = await GetValueAsync<int?>(Storage.LiteDb, V3Keys.AutoDarkThemeKey(firstUserId));
+                var autoDarkTheme = await GetValueAsync<string>(Storage.LiteDb, V3Keys.AutoDarkThemeKey(firstUserId));
                 await SetValueAsync(Storage.LiteDb, V4Keys.AutoDarkThemeKey, autoDarkTheme);
 
                 var disableFavicon = await GetValueAsync<bool?>(Storage.LiteDb, V3Keys.DisableFaviconKey(firstUserId));

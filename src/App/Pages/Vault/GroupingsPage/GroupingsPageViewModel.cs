@@ -78,7 +78,9 @@ namespace Bit.App.Pages
                 Refreshing = true;
                 await LoadAsync();
             });
-            CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
+            CipherOptionsCommand = new AsyncCommand<CipherView>(cipher => AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService),
+                onException: ex => _logger.Exception(ex),
+                allowsMultipleExecutions: false);
             VaultFilterCommand = new AsyncCommand(VaultFilterOptionsAsync,
                 onException: ex => _logger.Exception(ex),
                 allowsMultipleExecutions: false);
@@ -168,7 +170,7 @@ namespace Bit.App.Pages
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
         public ObservableRangeCollection<IGroupingsPageListItem> GroupedItems { get; set; }
         public Command RefreshCommand { get; set; }
-        public Command<CipherView> CipherOptionsCommand { get; set; }
+        public ICommand CipherOptionsCommand { get; }
         public bool LoadedOnce { get; set; }
 
         public async Task LoadAsync()
@@ -708,14 +710,6 @@ namespace Bit.App.Pages
         {
             var folders = decFolders.Where(f => _allCiphers.Any(c => c.FolderId == f.Id)).ToList();
             return folders.Any() ? folders : null;
-        }
-
-        private async void CipherOptionsAsync(CipherView cipher)
-        {
-            if ((Page as BaseContentPage).DoOnce())
-            {
-                await AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService);
-            }
         }
     }
 }

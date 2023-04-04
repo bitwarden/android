@@ -2541,16 +2541,16 @@
     <value>Ενεργοποιήστε την άδεια της κάμερας για χρήση του σαρωτή</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Γλώσσα</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
-    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+    <value>Η γλώσσα έχει αλλάξει σε {0}. Παρακαλούμε επανεκκινήστε την εφαρμογή για να δείτε την αλλαγή</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
-    <value>Language change requires app restart</value>
+    <value>Η αλλαγή γλώσσας απαιτεί επανεκκίνηση της εφαρμογής</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>Προεπιλογή (σύστημα)</value>
   </data>
   <data name="Important" xml:space="preserve">
     <value>Σημαντικό</value>
@@ -2592,15 +2592,15 @@
     <value>Απαιτείται αναγνωριστικό οργανισμού SSO.</value>
   </data>
   <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
-    <value>Add the key to an existing or new item</value>
+    <value>Προσθέστε το κλειδί σε ένα υπάρχον ή νέο στοιχείο</value>
   </data>
   <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
-    <value>There are no items in your vault that match "{0}"</value>
+    <value>Δεν υπάρχουν αντικείμενα στη κρύπτη σας που ταιριάζουν με "{0}"</value>
   </data>
   <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
-    <value>Search for an item or add a new item</value>
+    <value>Αναζητήστε ένα στοιχείο ή προσθέστε ένα νέο</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
-    <value>There are no items that match the search</value>
+    <value>Δεν υπάρχουν στοιχεία που να ταιριάζουν με την αναζήτηση</value>
   </data>
 </root>

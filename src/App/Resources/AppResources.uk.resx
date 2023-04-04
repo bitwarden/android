@@ -1065,7 +1065,7 @@
     <value>Лютий</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>Ім’я</value>
+    <value>Ім'я</value>
   </data>
   <data name="January" xml:space="preserve">
     <value>Січень</value>
@@ -1917,7 +1917,7 @@
     <value>Тип тексту не вибрано. Торкніться, щоб вибрати.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
-    <value>Дата видалення</value>
+    <value>Термін дії</value>
   </data>
   <data name="DeletionTime" xml:space="preserve">
     <value>Час видалення</value>
@@ -1950,7 +1950,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
-    <value>Досягнуто максимальну кількість доступів</value>
+    <value>Досягнуто максимальної кількості доступів</value>
   </data>
   <data name="CurrentAccessCount" xml:space="preserve">
     <value>Поточна кількість доступів</value>
@@ -2044,7 +2044,7 @@
     <value>30 днів</value>
   </data>
   <data name="Custom" xml:space="preserve">
-    <value>Спеціальний</value>
+    <value>Власний</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
     <value>Поділитися цим відправленням після збереження</value>
