@@ -7,10 +7,7 @@ using Bit.App.Pages.Accounts;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
-using Bit.Core.Models;
 using Bit.Core.Models.Domain;
-using Bit.Core.Models.Response;
-using Bit.Core.Models.View;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -51,7 +48,7 @@ namespace Bit.App.Pages
         private bool _reportLoggingEnabled;
         private bool _approvePasswordlessLoginRequests;
         private bool _shouldConnectToWatch;
-        private List<KeyValuePair<string, int?>> _vaultTimeouts =
+        private readonly static List<KeyValuePair<string, int?>> VaultTimeoutOptions =
             new List<KeyValuePair<string, int?>>
             {
                 new KeyValuePair<string, int?>(AppResources.Immediately, 0),
@@ -65,7 +62,7 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, int?>(AppResources.Never, null),
                 new KeyValuePair<string, int?>(AppResources.Custom, CustomVaultTimeoutValue),
             };
-        private List<KeyValuePair<string, VaultTimeoutAction>> _vaultTimeoutActions =
+        private readonly static List<KeyValuePair<string, VaultTimeoutAction>> VaultTimeoutActionOptions =
             new List<KeyValuePair<string, VaultTimeoutAction>>
             {
                 new KeyValuePair<string, VaultTimeoutAction>(AppResources.Lock, VaultTimeoutAction.Lock),
@@ -74,6 +71,9 @@ namespace Bit.App.Pages
 
         private Policy _vaultTimeoutPolicy;
         private int? _vaultTimeout;
+        private VaultTimeoutAction _vaultTimeoutAction;
+        private List<KeyValuePair<string, int?>> _vaultTimeoutOptions = VaultTimeoutOptions;
+        private List<KeyValuePair<string, VaultTimeoutAction>> _vaultTimeoutActionOptions = VaultTimeoutActionOptions;
 
         public SettingsPageViewModel()
         {
@@ -117,20 +117,27 @@ namespace Bit.App.Pages
                     _localizeService.GetLocaleShortTime(lastSync.Value));
             }
 
-            if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout))
-            {
-                _vaultTimeoutPolicy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout)).First();
-                var minutes = _policyService.GetPolicyInt(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_MINUTES).GetValueOrDefault();
-                _vaultTimeouts = _vaultTimeouts.Where(t =>
-                    t.Value <= minutes &&
-                    (t.Value > 0 || t.Value == CustomVaultTimeoutValue) &&
-                    t.Value != null).ToList();
-            }
+            _vaultTimeoutPolicy = null;
+            _vaultTimeoutOptions = VaultTimeoutOptions;
+            _vaultTimeoutActionOptions = VaultTimeoutActionOptions;
 
             _vaultTimeout = await _vaultTimeoutService.GetVaultTimeout();
-            _vaultTimeoutDisplayValue = _vaultTimeouts.FirstOrDefault(o => o.Value == _vaultTimeout).Key;
-            var action = await _stateService.GetVaultTimeoutActionAsync() ?? VaultTimeoutAction.Lock;
-            _vaultTimeoutActionDisplayValue = _vaultTimeoutActions.FirstOrDefault(o => o.Value == action).Key;
+            _vaultTimeoutDisplayValue = _vaultTimeoutOptions.FirstOrDefault(o => o.Value == _vaultTimeout).Key;
+
+            _vaultTimeoutAction = await _vaultTimeoutService.GetVaultTimeoutAction() ?? VaultTimeoutAction.Lock;
+            _vaultTimeoutActionDisplayValue = _vaultTimeoutActionOptions.FirstOrDefault(o => o.Value == _vaultTimeoutAction).Key;
+
+            if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout))
+            {
+                // if we have a vault timeout policy, we need to filter the options
+                _vaultTimeoutPolicy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout)).First();
+                _vaultTimeoutOptions = _vaultTimeoutOptions.Where(t =>
+                    t.Value <= _vaultTimeout &&
+                    (t.Value > 0 || t.Value == CustomVaultTimeoutValue) &&
+                    t.Value != null).ToList();
+                _vaultTimeoutActionOptions = _vaultTimeoutActionOptions.Where(options => options.Value == _vaultTimeoutAction).ToList();
+            }
+
             var pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             _pin = pinSet.Item1 || pinSet.Item2;
             _biometric = await _vaultTimeoutService.IsBiometricLockSetAsync();
@@ -266,7 +273,7 @@ namespace Bit.App.Pages
         {
             var oldTimeout = _vaultTimeout;
 
-            var options = _vaultTimeouts.Select(
+            var options = _vaultTimeoutOptions.Select(
                 o => o.Key == _vaultTimeoutDisplayValue ? $"✓ {o.Key}" : o.Key).ToArray();
             if (promptOptions)
             {
@@ -277,7 +284,7 @@ namespace Bit.App.Pages
                     return;
                 }
                 var cleanSelection = selection.Replace("✓ ", string.Empty);
-                var selectionOption = _vaultTimeouts.FirstOrDefault(o => o.Key == cleanSelection);
+                var selectionOption = _vaultTimeoutOptions.FirstOrDefault(o => o.Key == cleanSelection);
 
                 // Check if the selected Timeout action is "Never" and if it's different from the previous selected value
                 if (selectionOption.Value == null && selectionOption.Value != oldTimeout)
@@ -301,7 +308,7 @@ namespace Bit.App.Pages
                 {
                     await _platformUtilsService.ShowDialogAsync(AppResources.VaultTimeoutToLarge, AppResources.Warning);
                     var timeout = await _vaultTimeoutService.GetVaultTimeout();
-                    _vaultTimeoutDisplayValue = _vaultTimeouts.FirstOrDefault(o => o.Value == timeout).Key ??
+                    _vaultTimeoutDisplayValue = _vaultTimeoutOptions.FirstOrDefault(o => o.Value == timeout).Key ??
                                                 AppResources.Custom;
                     return;
                 }
@@ -374,11 +381,13 @@ namespace Bit.App.Pages
 
         public async Task VaultTimeoutActionAsync()
         {
-            if (!string.IsNullOrEmpty(_policyService.GetPolicyString(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_ACTION)))
+            if (_vaultTimeoutPolicy != null &&
+                !string.IsNullOrEmpty(_policyService.GetPolicyString(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_ACTION)))
             {
+                // do nothing if we have a policy set
                 return;
             }
-            var options = _vaultTimeoutActions.Select(o =>
+            var options = _vaultTimeoutActionOptions.Select(o =>
                 o.Key == _vaultTimeoutActionDisplayValue ? $"✓ {o.Key}" : o.Key).ToArray();
             var selection = await Page.DisplayActionSheet(AppResources.VaultTimeoutAction,
                 AppResources.Cancel, null, options);
@@ -397,7 +406,7 @@ namespace Bit.App.Pages
                     cleanSelection = AppResources.Lock;
                 }
             }
-            var selectionOption = _vaultTimeoutActions.FirstOrDefault(o => o.Key == cleanSelection);
+            var selectionOption = _vaultTimeoutActionOptions.FirstOrDefault(o => o.Key == cleanSelection);
             var changed = _vaultTimeoutActionDisplayValue != selectionOption.Key;
             _vaultTimeoutActionDisplayValue = selectionOption.Key;
             await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(_vaultTimeout,
@@ -601,30 +610,29 @@ namespace Bit.App.Pages
             }
             if (_vaultTimeoutPolicy != null)
             {
-                var maximumTimeout = _policyService.GetPolicyInt(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_MINUTES).GetValueOrDefault();
                 var timeoutAction = _policyService.GetPolicyString(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_ACTION);
-                if (maximumTimeout != default && timeoutAction != default)
+                if (_vaultTimeout != default && timeoutAction != default)
                 {
                     securityItems.Insert(0, new SettingsPageListItem
                     {
                         Name = string.Format(AppResources.VaultTimeoutPolicyWithActionInEffect,
-                            Math.Floor((float)maximumTimeout / 60),
-                            maximumTimeout % 60,
+                            Math.Floor((float)_vaultTimeout / 60),
+                            _vaultTimeout % 60,
                             timeoutAction == PolicyService.TIMEOUT_POLICY_ACTION_LOCK ? AppResources.Lock : AppResources.LogOut),
                         UseFrame = true,
                     });
                 }
-                else if (maximumTimeout != default && timeoutAction == default)
+                else if (_vaultTimeout != default && timeoutAction == default)
                 {
                     securityItems.Insert(0, new SettingsPageListItem
                     {
                         Name = string.Format(AppResources.VaultTimeoutPolicyInEffect,
-                            Math.Floor((float)maximumTimeout / 60),
-                            maximumTimeout % 60),
+                            Math.Floor((float)_vaultTimeout / 60),
+                            _vaultTimeout % 60),
                         UseFrame = true,
                     });
                 }
-                else if (maximumTimeout == default && timeoutAction != default)
+                else if (_vaultTimeout == default && timeoutAction != default)
                 {
                     securityItems.Insert(0, new SettingsPageListItem
                     {
@@ -820,12 +828,12 @@ namespace Bit.App.Pages
 
         private VaultTimeoutAction GetVaultTimeoutActionFromKey(string key)
         {
-            return _vaultTimeoutActions.FirstOrDefault(o => o.Key == key).Value;
+            return _vaultTimeoutActionOptions.FirstOrDefault(o => o.Key == key).Value;
         }
 
         private int? GetVaultTimeoutFromKey(string key)
         {
-            return _vaultTimeouts.FirstOrDefault(o => o.Key == key).Value;
+            return _vaultTimeoutOptions.FirstOrDefault(o => o.Key == key).Value;
         }
 
         private string CreateSelectableOption(string option, bool selected) => selected ? $"✓ {option}" : option;

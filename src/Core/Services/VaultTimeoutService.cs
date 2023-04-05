@@ -271,5 +271,31 @@ namespace Bit.Core.Services
 
             return vaultTimeout;
         }
+
+        public async Task<VaultTimeoutAction?> GetVaultTimeoutAction(string userId = null)
+        {
+            var vaultTimeoutAction = await _stateService.GetVaultTimeoutActionAsync(userId);
+
+            if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout, null, userId))
+            {
+                var policy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout)).First();
+                var policyAction = _policyService.GetPolicyString(policy, PolicyService.TIMEOUT_POLICY_ACTION);
+                if (string.IsNullOrEmpty(policyAction))
+                {
+                    return vaultTimeoutAction;
+                }
+
+                var action = policyAction == "lock" ? VaultTimeoutAction.Lock : VaultTimeoutAction.Logout;
+
+                // We really shouldn't need to set the value here, but multiple services relies on this value being correct.
+                if (vaultTimeoutAction != action)
+                {
+                    await _stateService.SetVaultTimeoutActionAsync(action, userId);
+                }
+                return action;
+            }
+
+            return vaultTimeoutAction;
+        }
     }
 }
