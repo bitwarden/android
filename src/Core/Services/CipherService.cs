@@ -30,6 +30,7 @@ namespace Bit.Core.Services
         private readonly IStorageService _storageService;
         private readonly II18nService _i18nService;
         private readonly Func<ISearchService> _searchService;
+        private readonly IConfigService _configService;
         private readonly string _clearCipherCacheKey;
         private readonly string[] _allClearCipherCacheKeys;
         private Dictionary<string, HashSet<string>> _domainMatchBlacklist = new Dictionary<string, HashSet<string>>
@@ -48,6 +49,7 @@ namespace Bit.Core.Services
             IStorageService storageService,
             II18nService i18nService,
             Func<ISearchService> searchService,
+            IConfigService configService,
             string clearCipherCacheKey,
             string[] allClearCipherCacheKeys)
         {
@@ -59,6 +61,7 @@ namespace Bit.Core.Services
             _storageService = storageService;
             _i18nService = i18nService;
             _searchService = searchService;
+            _configService = configService;
             _clearCipherCacheKey = clearCipherCacheKey;
             _allClearCipherCacheKeys = allClearCipherCacheKeys;
         }
@@ -177,8 +180,7 @@ namespace Bit.Core.Services
                 Type = model.Type,
                 CollectionIds = model.CollectionIds,
                 RevisionDate = model.RevisionDate,
-                Reprompt = model.Reprompt,
-                ForceKeyRotation = model.ForceKeyRotation
+                Reprompt = model.Reprompt
             };
 
             key = await UpdateCipherAndGetCipherKeyAsync(cipher, model, key);
@@ -210,6 +212,11 @@ namespace Bit.Core.Services
                 }
             }
 
+            if (!await ShouldUseCipherKeyEncryptionAsync())
+            {
+                return key;
+            }
+
             if (cipherView.Key != null && !cipherView.ForceKeyRotation)
             {
                 cipher.Key = await _cryptoService.EncryptAsync(cipherView.Key.Key, key);
@@ -221,10 +228,21 @@ namespace Bit.Core.Services
             var cfs = ServiceContainer.Resolve<ICryptoFunctionService>();
             var newKey = new SymmetricCryptoKey(await cfs.RandomBytesAsync(Core.Constants.CipherKeyRandomBytesLength));
             cipher.Key = await _cryptoService.EncryptAsync(newKey.Key, key);
+            cipher.ForceKeyRotation = false;
+
             return newKey;
 #else
             return key;
 #endif
+        }
+
+        private async Task<bool> ShouldUseCipherKeyEncryptionAsync()
+        {
+            var config = await _configService.GetAsync();
+
+            return config != null
+                   &&
+                   VersionHelpers.IsServerVersionGreaterThanOrEqualTo(config.Version, Constants.CipherKeyEncryptionMinServerVersion);
         }
 
         public async Task<Cipher> GetAsync(string id)
