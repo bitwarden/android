@@ -122,10 +122,10 @@ namespace Bit.App.Pages
             _vaultTimeoutActionOptions = VaultTimeoutActionOptions;
 
             _vaultTimeout = await _vaultTimeoutService.GetVaultTimeout();
-            _vaultTimeoutDisplayValue = _vaultTimeoutOptions.FirstOrDefault(o => o.Value == _vaultTimeout).Key;
+            _vaultTimeoutDisplayValue = _vaultTimeoutOptions.First(o => o.Value == _vaultTimeout).Key;
 
             _vaultTimeoutAction = await _vaultTimeoutService.GetVaultTimeoutAction() ?? VaultTimeoutAction.Lock;
-            _vaultTimeoutActionDisplayValue = _vaultTimeoutActionOptions.FirstOrDefault(o => o.Value == _vaultTimeoutAction).Key;
+            _vaultTimeoutActionDisplayValue = _vaultTimeoutActionOptions.First(o => o.Value == _vaultTimeoutAction).Key;
 
             if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout))
             {
