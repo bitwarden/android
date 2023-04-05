@@ -1,0 +1,21 @@
+# Please sort lines alphabetically, this will ensure we don't accidentally add duplicates.
+#
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# The following owners will be the default owners for everything in the repo.
+# Unless a later match takes precedence
+# @bitwarden/team-leads
+
+## Platform team files ##
+appIcons @bitwarden/team-platform-dev
+build.cake @bitwarden/team-platform-dev
+
+## Vault team files ##
+
+src/iOS.Autofill @bitwarden/team-vault-dev
+src/iOS.Extension @bitwarden/team-vault-dev
+src/watchOS @bitwarden/team-vault-dev
+
+## Tools team files ##
+
+iOS.ShareExtension @bitwarden/team-tools-dev
