@@ -243,59 +243,59 @@ namespace Bit.Core.Services
         {
             var vaultTimeout = await _stateService.GetVaultTimeoutAsync(userId);
 
-            if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout, null, userId))
+            if (!await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout, null, userId))
             {
-                var policy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout, userId)).First();
-                // Remove negative values, and ensure it's smaller than maximum allowed value according to policy
-                var policyTimeout = _policyService.GetPolicyInt(policy, PolicyService.TIMEOUT_POLICY_MINUTES);
-                if (!policyTimeout.HasValue)
-                {
-                    return vaultTimeout;
-                }
-
-                var timeout = vaultTimeout.HasValue ? Math.Min(vaultTimeout.Value, policyTimeout.Value) : policyTimeout.Value;
-
-                if (timeout < 0)
-                {
-                    timeout = policyTimeout.Value;
-                }
-
-                // We really shouldn't need to set the value here, but multiple services relies on this value being correct.
-                if (vaultTimeout != timeout)
-                {
-                    await _stateService.SetVaultTimeoutAsync(timeout, userId);
-                }
-
-                return timeout;
+                return vaultTimeout;
             }
 
-            return vaultTimeout;
+            var policy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout, userId)).First();
+            // Remove negative values, and ensure it's smaller than maximum allowed value according to policy
+            var policyTimeout = _policyService.GetPolicyInt(policy, PolicyService.TIMEOUT_POLICY_MINUTES);
+            if (!policyTimeout.HasValue)
+            {
+                return vaultTimeout;
+            }
+
+            var timeout = vaultTimeout.HasValue ? Math.Min(vaultTimeout.Value, policyTimeout.Value) : policyTimeout.Value;
+
+            if (timeout < 0)
+            {
+                timeout = policyTimeout.Value;
+            }
+
+            // We really shouldn't need to set the value here, but multiple services relies on this value being correct.
+            if (vaultTimeout != timeout)
+            {
+                await _stateService.SetVaultTimeoutAsync(timeout, userId);
+            }
+
+            return timeout;
         }
 
         public async Task<VaultTimeoutAction?> GetVaultTimeoutAction(string userId = null)
         {
             var vaultTimeoutAction = await _stateService.GetVaultTimeoutActionAsync(userId);
 
-            if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout, null, userId))
+            if (!await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout, null, userId))
             {
-                var policy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout)).First();
-                var policyAction = _policyService.GetPolicyString(policy, PolicyService.TIMEOUT_POLICY_ACTION);
-                if (string.IsNullOrEmpty(policyAction))
-                {
-                    return vaultTimeoutAction;
-                }
-
-                var action = policyAction == "lock" ? VaultTimeoutAction.Lock : VaultTimeoutAction.Logout;
-
-                // We really shouldn't need to set the value here, but multiple services relies on this value being correct.
-                if (vaultTimeoutAction != action)
-                {
-                    await _stateService.SetVaultTimeoutActionAsync(action, userId);
-                }
-                return action;
+                return vaultTimeoutAction;
             }
 
-            return vaultTimeoutAction;
+            var policy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout)).First();
+            var policyAction = _policyService.GetPolicyString(policy, PolicyService.TIMEOUT_POLICY_ACTION);
+            if (string.IsNullOrEmpty(policyAction))
+            {
+                return vaultTimeoutAction;
+            }
+
+            var action = policyAction == PolicyService.TIMEOUT_POLICY_ACTION_LOCK ? VaultTimeoutAction.Lock : VaultTimeoutAction.Logout;
+
+            // We really shouldn't need to set the value here, but multiple services relies on this value being correct.
+            if (vaultTimeoutAction != action)
+            {
+                await _stateService.SetVaultTimeoutActionAsync(action, userId);
+            }
+            return action;
         }
     }
 }
