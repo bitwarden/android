@@ -17,7 +17,6 @@ namespace Bit.Core.Services
         private readonly ISearchService _searchService;
         private readonly IMessagingService _messagingService;
         private readonly ITokenService _tokenService;
-        private readonly IPolicyService _policyService;
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly Func<Tuple<string, bool>, Task> _lockedCallback;
         private readonly Func<Tuple<string, bool, bool>, Task> _loggedOutCallback;
@@ -32,7 +31,6 @@ namespace Bit.Core.Services
             ISearchService searchService,
             IMessagingService messagingService,
             ITokenService tokenService,
-            IPolicyService policyService,
             IKeyConnectorService keyConnectorService,
             Func<Tuple<string, bool>, Task> lockedCallback,
             Func<Tuple<string, bool, bool>, Task> loggedOutCallback)
@@ -46,7 +44,6 @@ namespace Bit.Core.Services
             _searchService = searchService;
             _messagingService = messagingService;
             _tokenService = tokenService;
-            _policyService = policyService;
             _keyConnectorService = keyConnectorService;
             _lockedCallback = lockedCallback;
             _loggedOutCallback = loggedOutCallback;
@@ -241,61 +238,12 @@ namespace Bit.Core.Services
 
         public async Task<int?> GetVaultTimeout(string userId = null)
         {
-            var vaultTimeout = await _stateService.GetVaultTimeoutAsync(userId);
-
-            if (!await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout, null, userId))
-            {
-                return vaultTimeout;
-            }
-
-            var policy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout, userId)).First();
-            // Remove negative values, and ensure it's smaller than maximum allowed value according to policy
-            var policyTimeout = _policyService.GetPolicyInt(policy, PolicyService.TIMEOUT_POLICY_MINUTES);
-            if (!policyTimeout.HasValue)
-            {
-                return vaultTimeout;
-            }
-
-            var timeout = vaultTimeout.HasValue ? Math.Min(vaultTimeout.Value, policyTimeout.Value) : policyTimeout.Value;
-
-            if (timeout < 0)
-            {
-                timeout = policyTimeout.Value;
-            }
-
-            // We really shouldn't need to set the value here, but multiple services relies on this value being correct.
-            if (vaultTimeout != timeout)
-            {
-                await _stateService.SetVaultTimeoutAsync(timeout, userId);
-            }
-
-            return timeout;
+            return await _stateService.GetVaultTimeoutAsync(userId);
         }
 
         public async Task<VaultTimeoutAction?> GetVaultTimeoutAction(string userId = null)
         {
-            var vaultTimeoutAction = await _stateService.GetVaultTimeoutActionAsync(userId);
-
-            if (!await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout, null, userId))
-            {
-                return vaultTimeoutAction;
-            }
-
-            var policy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout)).First();
-            var policyAction = _policyService.GetPolicyString(policy, PolicyService.TIMEOUT_POLICY_ACTION);
-            if (string.IsNullOrEmpty(policyAction))
-            {
-                return vaultTimeoutAction;
-            }
-
-            var action = policyAction == PolicyService.TIMEOUT_POLICY_ACTION_LOCK ? VaultTimeoutAction.Lock : VaultTimeoutAction.Logout;
-
-            // We really shouldn't need to set the value here, but multiple services relies on this value being correct.
-            if (vaultTimeoutAction != action)
-            {
-                await _stateService.SetVaultTimeoutActionAsync(action, userId);
-            }
-            return action;
+            return await _stateService.GetVaultTimeoutActionAsync(userId);
         }
     }
 }

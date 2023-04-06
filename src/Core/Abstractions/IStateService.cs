@@ -128,8 +128,8 @@ namespace Bit.Core.Abstractions
         Task SetEventCollectionAsync(List<EventData> value);
         Task<Dictionary<string, FolderData>> GetEncryptedFoldersAsync(string userId = null);
         Task SetEncryptedFoldersAsync(Dictionary<string, FolderData> value, string userId = null);
-        Task<Dictionary<string, PolicyData>> GetEncryptedPoliciesAsync(string userId = null);
-        Task SetEncryptedPoliciesAsync(Dictionary<string, PolicyData> value, string userId = null);
+        Task<Dictionary<string, PolicyData>> GetPoliciesAsync(string userId = null);
+        Task SetPoliciesAsync(Dictionary<string, PolicyData> value, string userId = null);
         Task<string> GetPushRegisteredTokenAsync();
         Task SetPushRegisteredTokenAsync(string value);
         Task<bool> GetUsesKeyConnectorAsync(string userId = null);

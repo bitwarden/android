@@ -39,7 +39,7 @@ namespace Bit.Core.Services
         {
             if (_policyCache == null)
             {
-                var policies = await _stateService.GetEncryptedPoliciesAsync(userId);
+                var policies = await _stateService.GetPoliciesAsync(userId);
                 if (policies == null)
                 {
                     return null;
@@ -59,14 +59,49 @@ namespace Bit.Core.Services
 
         public async Task Replace(Dictionary<string, PolicyData> policies, string userId = null)
         {
-            await _stateService.SetEncryptedPoliciesAsync(policies, userId);
+            await _stateService.SetPoliciesAsync(policies, userId);
             _policyCache = null;
+
+            var vaultTimeoutPolicy = policies.FirstOrDefault(p => p.Value.Type == PolicyType.MaximumVaultTimeout);
+            if (!vaultTimeoutPolicy.Equals(default))
+            {
+                await UpdateVaultTimeoutFromPolicyAsync(new Policy(vaultTimeoutPolicy.Value));
+            }
         }
 
         public async Task ClearAsync(string userId)
         {
-            await _stateService.SetEncryptedPoliciesAsync(null, userId);
+            await _stateService.SetPoliciesAsync(null, userId);
             _policyCache = null;
+        }
+
+        public async Task UpdateVaultTimeoutFromPolicyAsync(Policy policy, string userId = null)
+        {
+            var policyTimeout = GetPolicyInt(policy, PolicyService.TIMEOUT_POLICY_MINUTES);
+            if (policyTimeout != null)
+            {
+                var vaultTimeout = await _stateService.GetVaultTimeoutAsync(userId);
+                var timeout = vaultTimeout.HasValue ? Math.Min(vaultTimeout.Value, policyTimeout.Value) : policyTimeout.Value;
+                if (timeout < 0)
+                {
+                    timeout = policyTimeout.Value;
+                }
+                if (vaultTimeout != timeout)
+                {
+                    await _stateService.SetVaultTimeoutAsync(timeout, userId);
+                }
+            }
+
+            var policyAction = GetPolicyString(policy, PolicyService.TIMEOUT_POLICY_ACTION);
+            if (!string.IsNullOrEmpty(policyAction))
+            {
+                var vaultTimeoutAction = await _stateService.GetVaultTimeoutActionAsync(userId);
+                var action = policyAction == PolicyService.TIMEOUT_POLICY_ACTION_LOCK ? VaultTimeoutAction.Lock : VaultTimeoutAction.Logout;
+                if (vaultTimeoutAction != action)
+                {
+                    await _stateService.SetVaultTimeoutActionAsync(action, userId);
+                }
+            }
         }
 
         public async Task<MasterPasswordPolicyOptions> GetMasterPasswordPolicyOptions(
