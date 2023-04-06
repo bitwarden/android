@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -129,13 +129,12 @@ namespace Bit.App.Pages
 
             if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout))
             {
-                // if we have a vault timeout policy, we need to filter the options
+                // if we have a vault timeout policy, we need to filter the timeout options
                 _vaultTimeoutPolicy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout)).First();
                 _vaultTimeoutOptions = _vaultTimeoutOptions.Where(t =>
                     t.Value <= _vaultTimeout &&
                     (t.Value > 0 || t.Value == CustomVaultTimeoutValue) &&
                     t.Value != null).ToList();
-                _vaultTimeoutActionOptions = _vaultTimeoutActionOptions.Where(options => options.Value == _vaultTimeoutAction).ToList();
             }
 
             var pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
