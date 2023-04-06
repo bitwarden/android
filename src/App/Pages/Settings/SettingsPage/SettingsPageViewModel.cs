@@ -609,34 +609,33 @@ namespace Bit.App.Pages
             }
             if (_vaultTimeoutPolicy != null)
             {
-                var timeoutAction = _policyService.GetPolicyString(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_ACTION);
-                if (_vaultTimeout != default && timeoutAction != default)
+                var policyMinutes = _policyService.GetPolicyInt(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_MINUTES);
+                var policyAction = _policyService.GetPolicyString(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_ACTION);
+
+                if (policyMinutes.HasValue || !string.IsNullOrWhiteSpace(policyAction))
                 {
+                    string policyAlert;
+                    if (policyMinutes.HasValue && string.IsNullOrWhiteSpace(policyAction))
+                    {
+                        policyAlert = string.Format(AppResources.VaultTimeoutPolicyInEffect,
+                            Math.Floor((float)policyMinutes / 60),
+                            policyMinutes % 60);
+                    }
+                    else if (!policyMinutes.HasValue && !string.IsNullOrWhiteSpace(policyAction))
+                    {
+                        policyAlert = string.Format(AppResources.VaultTimeoutActionPolicyInEffect,
+                            policyAction == PolicyService.TIMEOUT_POLICY_ACTION_LOCK ? AppResources.Lock : AppResources.LogOut);
+                    }
+                    else
+                    {
+                        policyAlert = string.Format(AppResources.VaultTimeoutPolicyWithActionInEffect,
+                            Math.Floor((float)policyMinutes / 60),
+                            policyMinutes % 60,
+                            policyAction == PolicyService.TIMEOUT_POLICY_ACTION_LOCK ? AppResources.Lock : AppResources.LogOut);
+                    }
                     securityItems.Insert(0, new SettingsPageListItem
                     {
-                        Name = string.Format(AppResources.VaultTimeoutPolicyWithActionInEffect,
-                            Math.Floor((float)_vaultTimeout / 60),
-                            _vaultTimeout % 60,
-                            timeoutAction == PolicyService.TIMEOUT_POLICY_ACTION_LOCK ? AppResources.Lock : AppResources.LogOut),
-                        UseFrame = true,
-                    });
-                }
-                else if (_vaultTimeout != default && timeoutAction == default)
-                {
-                    securityItems.Insert(0, new SettingsPageListItem
-                    {
-                        Name = string.Format(AppResources.VaultTimeoutPolicyInEffect,
-                            Math.Floor((float)_vaultTimeout / 60),
-                            _vaultTimeout % 60),
-                        UseFrame = true,
-                    });
-                }
-                else if (_vaultTimeout == default && timeoutAction != default)
-                {
-                    securityItems.Insert(0, new SettingsPageListItem
-                    {
-                        Name = string.Format(AppResources.VaultTimeoutActionPolicyInEffect,
-                            timeoutAction == PolicyService.TIMEOUT_POLICY_ACTION_LOCK ? AppResources.Lock : AppResources.LogOut),
+                        Name = policyAlert,
                         UseFrame = true,
                     });
                 }
