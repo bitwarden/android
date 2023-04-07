@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>마스터 비밀번호 힌트는 마스터 비밀번호를 잊었을 때 도움이 될 수 있습니다.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>마스터 비밀번호는 최소 8자 이상이어야 합니다.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>마스터 비밀번호는 최소 {0}자 이상이어야 합니다.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>숫자 최소 개수</value>
@@ -1103,6 +1103,9 @@
   <data name="Ms" xml:space="preserve">
     <value>Ms</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>11월</value>
   </data>
@@ -1140,7 +1143,7 @@
     <value>웹사이트 아이콘 표시하기</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
-    <value>로그인 후 식별 가능한 이미지 표시</value>
+    <value>로그인 정보 옆에 식별용 이미지를 표시합니다.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>아이콘 서버 URL</value>
@@ -2142,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>볼트 제한 시간이 조직에서 설정한 제한을 초과합니다.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>하나 이상의 조직 정책이 개인 보관함을 내보내는 것을 제한하고 있습니다.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2354,34 +2357,34 @@
     <value>로그인 거부됨</value>
   </data>
   <data name="ApproveLoginRequests" xml:space="preserve">
-    <value>Approve login requests</value>
+    <value>로그인 요청 승인</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Use this device to approve login requests made from other devices.</value>
+    <value>다른 기기에서 발생하는 로그인 요청을 이 기기에서 승인할 수 있습니다.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
-    <value>Allow notifications</value>
+    <value>알림 허용</value>
   </data>
   <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
-    <value>Receive push notifications for new login requests</value>
+    <value>새 로그인 요청 푸시 알림 받기</value>
   </data>
   <data name="NoThanks" xml:space="preserve">
-    <value>No thanks</value>
+    <value>아니요, 괜찮습니다</value>
   </data>
   <data name="ConfimLogInAttempForX" xml:space="preserve">
-    <value>Confirm login attempt for {0}</value>
+    <value>{0}(으)로의 로그인 시도 확인</value>
   </data>
   <data name="AllNotifications" xml:space="preserve">
     <value>All notifications</value>
   </data>
   <data name="PasswordType" xml:space="preserve">
-    <value>Password type</value>
+    <value>비밀번호 유형</value>
   </data>
   <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
-    <value>What would you like to generate?</value>
+    <value>무엇을 생성하실 건가요?</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
-    <value>Username type</value>
+    <value>사용자 이름 유형</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
     <value>Plus addressed email</value>
@@ -2393,19 +2396,19 @@
     <value>Forwarded email alias</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
-    <value>Random word</value>
+    <value>무작위 단어</value>
   </data>
   <data name="EmailRequiredParenthesis" xml:space="preserve">
-    <value>Email (required)</value>
+    <value>이메일 (필수)</value>
   </data>
   <data name="DomainNameRequiredParenthesis" xml:space="preserve">
-    <value>Domain name (required)</value>
+    <value>도메인 이름 (필수)</value>
   </data>
   <data name="APIKeyRequiredParenthesis" xml:space="preserve">
-    <value>API key (required)</value>
+    <value>API 키 (필수)</value>
   </data>
   <data name="Service" xml:space="preserve">
-    <value>Service</value>
+    <value>서비스</value>
   </data>
   <data name="AnonAddy" xml:space="preserve">
     <value>AnonAddy</value>
@@ -2419,23 +2422,31 @@
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
-    <value>API access token</value>
+    <value>API 액세스 토큰</value>
   </data>
   <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
-    <value>Are you sure you want to overwrite the current username?</value>
+    <value>정말 현재 사용자 이름을 덮어쓰시겠습니까?</value>
   </data>
   <data name="GenerateUsername" xml:space="preserve">
-    <value>Generate username</value>
+    <value>사용자 이름 생성</value>
   </data>
   <data name="EmailType" xml:space="preserve">
-    <value>Email Type</value>
+    <value>이메일 유형</value>
   </data>
   <data name="WebsiteRequired" xml:space="preserve">
     <value>Website (required)</value>
   </data>
   <data name="UnknownXErrorMessage" xml:space="preserve">
-    <value>Unknown {0} error occurred.</value>
+    <value>알 수 없는 {0} 오류가 발생했습니다.</value>
   </data>
   <data name="PlusAddressedEmailDescription" xml:space="preserve">
     <value>Use your email provider's subaddress capabilities</value>
@@ -2447,16 +2458,16 @@
     <value>Generate an email alias with an external forwarding service.</value>
   </data>
   <data name="Random" xml:space="preserve">
-    <value>Random</value>
+    <value>무작위</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connect to Watch</value>
+    <value>Watch에 연결</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Accessibility Service Disclosure</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
+    <value>Bitwarden은 접근성 서비스를 사용하여 앱 및 웹사이트에서 로그인 필드를 찾아내고 일치하는 항목이 발견되면 사용자 이름과 비밀번호를 입력합니다. Bitwarden은 서비스에서 제공하는 어떠한 정보도 저장하지 않으며, 자격 증명 이외의 화면 요소를 제어하려고 시도하지 않습니다.</value>
   </data>
   <data name="Accept" xml:space="preserve">
     <value>Accept</value>
@@ -2465,7 +2476,7 @@
     <value>Decline</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
-    <value>Login request has already expired.</value>
+    <value>이미 만료된 로그인 요청입니다.</value>
   </data>
   <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
     <value>Login attempt from:
@@ -2473,45 +2484,123 @@
 Do you want to switch to this account?</value>
   </data>
   <data name="NewAroundHere" xml:space="preserve">
-    <value>New around here?</value>
+    <value>새로 찾아오셨나요?</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
-    <value>Get master password hint</value>
+    <value>마스터 비밀번호 힌트 얻기</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>{0}(으)로 로그인 중</value>
   </data>
   <data name="NotYou" xml:space="preserve">
-    <value>Not you?</value>
+    <value>본인이 아닌가요?</value>
   </data>
   <data name="LogInWithMasterPassword" xml:space="preserve">
-    <value>Log in with master password</value>
+    <value>마스터 비밀번호로 로그인</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Log In with another device</value>
+    <value>기기로 로그인</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>Log in initiated</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
-    <value>A notification has been sent to your device.</value>
+    <value>기기에 알림이 전송되었습니다.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+    <value>보관함이 잠금 해제되어있고 지문 구절이 다른 기기와 일치하는지 확인하세요.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
-    <value>Resend notification</value>
+    <value>알림 재전송</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>다른 방식이 필요하신가요?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>View all log in options</value>
+    <value>모든 로그인 방식 보기</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>더 이상 유효하지 않은 요청입니다</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>대기 중인 로그인 요청</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>모든 요청 거부</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>대기 중인 모든 요청을 거부하시겠습니까?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>요청 거절됨</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>대기 중인 요청이 없습니다</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>스캐너 기능을 위해 권한을 허용해 주십시오</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>언어</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>언어가 {0}로 변경되었습니다. 적용된 모습을 보려면 앱을 다시 시작하세요.</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>언어 변경은 앱을 다시 시작해야 적용됩니다.</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>기본 (시스템)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>중요</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>마스터 비밀번호를 잊어버리면 복구할 수 없습니다! 최소 길이는 {0}자입니다.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>취약한 마스터 비밀번호</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>취약한 비밀번호가 감지되었습니다. 계정을 보호하려면 강력한 비밀번호를 사용하세요. 취약한 비밀번호를 정말로 사용하시겠습니까?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>약함</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>좋음</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>강함</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Check known data breaches for this password</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Exposed Master Password</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Weak and Exposed Master Password</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>조직 통합 인증(SSO) 식별자가 필요합니다.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Add the key to an existing or new item</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>보관함에 '{0}'와(과) 일치하는 항목이 없습니다.</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>항목 검색 혹은 새 항목 추가</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>검색어와 일치하는 항목이 없습니다</value>
   </data>
 </root>

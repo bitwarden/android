@@ -54,7 +54,7 @@ namespace Bit.App.Utilities
                 case BooleanGlyphType.Checkbox:
                     return value ? BitwardenIcons.CheckSquare : BitwardenIcons.Square;
                 case BooleanGlyphType.Eye:
-                    return value ? BitwardenIcons.Eye : BitwardenIcons.EyeSlash;
+                    return value ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
                 default:
                     return "";
             }

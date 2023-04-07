@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
@@ -18,7 +19,7 @@ namespace Bit.App.Controls
             nameof(WebsiteIconsEnabled), typeof(bool?), typeof(CipherViewCell));
 
         public static readonly BindableProperty ButtonCommandProperty = BindableProperty.Create(
-            nameof(ButtonCommand), typeof(Command<CipherView>), typeof(CipherViewCell));
+            nameof(ButtonCommand), typeof(ICommand), typeof(CipherViewCell));
 
         public CipherViewCell()
         {
@@ -42,9 +43,9 @@ namespace Bit.App.Controls
             set => SetValue(CipherProperty, value);
         }
 
-        public Command<CipherView> ButtonCommand
+        public ICommand ButtonCommand
         {
-            get => GetValue(ButtonCommandProperty) as Command<CipherView>;
+            get => GetValue(ButtonCommandProperty) as ICommand;
             set => SetValue(ButtonCommandProperty, value);
         }
 

@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -137,8 +138,8 @@ namespace Bit.App.Pages
             }
             if (IsPolicyInEffect)
             {
-                var userInput = await GetPasswordStrengthUserInput();
-                var passwordStrength = _passwordGenerationService.PasswordStrength(MasterPassword, userInput);
+                var userInputs = _passwordGenerationService.GetPasswordStrengthUserInput(await _stateService.GetEmailAsync());
+                var passwordStrength = _passwordGenerationService.PasswordStrength(MasterPassword, userInputs);
                 if (!await _policyService.EvaluateMasterPassword(passwordStrength.Score, MasterPassword, Policy))
                 {
                     await Page.DisplayAlert(AppResources.MasterPasswordPolicyValidationTitle,
@@ -148,10 +149,10 @@ namespace Bit.App.Pages
             }
             else
             {
-                if (MasterPassword.Length < 8)
+                if (MasterPassword.Length < Constants.MasterPasswordMinimumChars)
                 {
                     await Page.DisplayAlert(AppResources.MasterPasswordPolicyValidationTitle,
-                        AppResources.MasterPasswordLengthValMessage, AppResources.Ok);
+                        string.Format(AppResources.MasterPasswordLengthValMessageX, Constants.MasterPasswordMinimumChars), AppResources.Ok);
                     return;
                 }
             }
@@ -162,10 +163,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var kdf = KdfType.PBKDF2_SHA256;
-            var kdfIterations = 100000;
+            var kdfConfig = new KdfConfig(KdfType.PBKDF2_SHA256, Constants.Pbkdf2Iterations, null, null);
             var email = await _stateService.GetEmailAsync();
-            var key = await _cryptoService.MakeKeyAsync(MasterPassword, email, kdf, kdfIterations);
+            var key = await _cryptoService.MakeKeyAsync(MasterPassword, email, kdfConfig);
             var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.ServerAuthorization);
             var localMasterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.LocalAuthorization);
 
@@ -186,8 +186,10 @@ namespace Bit.App.Pages
                 MasterPasswordHash = masterPasswordHash,
                 Key = encKey.Item2.EncryptedString,
                 MasterPasswordHint = Hint,
-                Kdf = kdf,
-                KdfIterations = kdfIterations,
+                Kdf = kdfConfig.Type.GetValueOrDefault(KdfType.PBKDF2_SHA256),
+                KdfIterations = kdfConfig.Iterations.GetValueOrDefault(Constants.Pbkdf2Iterations),
+                KdfMemory = kdfConfig.Memory,
+                KdfParallelism = kdfConfig.Parallelism,
                 OrgIdentifier = OrgIdentifier,
                 Keys = new KeysRequest
                 {
@@ -201,8 +203,7 @@ namespace Bit.App.Pages
                 await _deviceActionService.ShowLoadingAsync(AppResources.CreatingAccount);
                 // Set Password and relevant information
                 await _apiService.SetPasswordAsync(request);
-                await _stateService.SetKdfTypeAsync(kdf);
-                await _stateService.SetKdfIterationsAsync(kdfIterations);
+                await _stateService.SetKdfConfigurationAsync(kdfConfig);
                 await _cryptoService.SetKeyAsync(key);
                 await _cryptoService.SetKeyHashAsync(localMasterPasswordHash);
                 await _cryptoService.SetEncKeyAsync(encKey.Item2.EncryptedString);

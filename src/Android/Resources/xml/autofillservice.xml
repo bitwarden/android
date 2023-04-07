@@ -147,6 +147,9 @@
     android:name="com.qwant.liberty"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.rainsee.create"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.sec.android.app.sbrowser"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
@@ -169,6 +172,15 @@
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="com.yandex.browser"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.yjllq.internet"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.yjllq.kito"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.yujian.ResideMenuDemo"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="com.z28j.feel"

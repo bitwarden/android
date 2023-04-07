@@ -169,6 +169,10 @@
     <GoogleServicesJson Include="google-services.json" />
     <GoogleServicesJson Include="google-services.json.enc" />
     <None Include="fdroid-keystore.jks.enc" />
+    <AndroidNativeLibrary Include="lib\arm64-v8a\libargon2.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libargon2.so" />
+    <AndroidNativeLibrary Include="lib\x86\libargon2.so" />
+    <AndroidNativeLibrary Include="lib\x86_64\libargon2.so" />
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="upload-keystore.jks.enc" />
   </ItemGroup>

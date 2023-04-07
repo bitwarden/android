@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-repo_url = "https://mobileapp.bitwarden.com/fdroid"
+repo_url = "https://mobileapp.bitwarden.com/fdroid/repo"
 repo_name = "Bitwarden F-Droid Repo"
 repo_icon = "fdroid-icon.png"
 repo_description = """

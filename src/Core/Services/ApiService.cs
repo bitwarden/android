@@ -10,6 +10,7 @@ using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
+using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -183,13 +184,13 @@ namespace Bit.Core.Services
 
         public Task PostAccountRequestOTP()
         {
-            return SendAsync<object, object>(HttpMethod.Post, "/accounts/request-otp", null, true, false, false);
+            return SendAsync<object, object>(HttpMethod.Post, "/accounts/request-otp", null, true, false, null, false);
         }
 
         public Task PostAccountVerifyOTPAsync(VerifyOTPRequest request)
         {
             return SendAsync<VerifyOTPRequest, object>(HttpMethod.Post, "/accounts/verify-otp", request,
-                true, false, false);
+                true, false, null, false);
         }
 
         public Task PutUpdateTempPasswordAsync(UpdateTempPasswordRequest request)
@@ -457,6 +458,11 @@ namespace Bit.Core.Services
             return SendAsync<object, object>(HttpMethod.Post, $"/organizations/{id}/leave", null, true, false);
         }
 
+
+        public Task<OrganizationDomainSsoDetailsResponse> GetOrgDomainSsoDetailsAsync(string userEmail)
+        {
+            return SendAsync<OrganizationDomainSsoDetailsRequest, OrganizationDomainSsoDetailsResponse>(HttpMethod.Post, $"/organizations/domain/sso/details", new OrganizationDomainSsoDetailsRequest { Email = userEmail }, false, true);
+        }
         #endregion
 
         #region Organization User APIs
@@ -565,7 +571,11 @@ namespace Bit.Core.Services
 
         public Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier)
         {
-            return SendAsync<object, bool>(HttpMethod.Get, $"/devices/knowndevice/{email}/{deviceIdentifier}", null, false, true);
+            return SendAsync<object, bool>(HttpMethod.Get, "/devices/knowndevice", null, false, true, (message) =>
+            {
+                message.Headers.Add("X-Device-Identifier", deviceIdentifier);
+                message.Headers.Add("X-Request-Email", CoreHelpers.Base64UrlEncode(Encoding.UTF8.GetBytes(email)));
+            });
         }
 
         #endregion
@@ -619,7 +629,7 @@ namespace Bit.Core.Services
         public Task<TResponse> SendAsync<TResponse>(HttpMethod method, string path, bool authed) =>
             SendAsync<object, TResponse>(method, path, null, authed, true);
         public async Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path, TRequest body,
-            bool authed, bool hasResponse, bool logoutOnUnauthorized = true)
+            bool authed, bool hasResponse, Action<HttpRequestMessage> alterRequest = null, bool logoutOnUnauthorized = true)
         {
             using (var requestMessage = new HttpRequestMessage())
             {
@@ -666,6 +676,7 @@ namespace Bit.Core.Services
                 {
                     requestMessage.Headers.Add("Accept", "application/json");
                 }
+                alterRequest?.Invoke(requestMessage);
 
                 HttpResponseMessage response;
                 try
@@ -760,6 +771,14 @@ namespace Bit.Core.Services
                     case ForwardedEmailServiceType.SimpleLogin:
                         requestMessage.Headers.Add("Authentication", config.ApiToken);
                         break;
+                    case ForwardedEmailServiceType.DuckDuckGo:
+                        requestMessage.Headers.Add("Authorization", $"Bearer {config.ApiToken}");
+                        break;
+                    case ForwardedEmailServiceType.Fastmail:
+                        requestMessage.Headers.Add("Authorization", $"Bearer {config.ApiToken}");
+                        requestMessage.Content = new StringContent(await CreateFastmailRequest(config.ApiToken),
+                            Encoding.UTF8, "application/json");
+                        break;
                 }
 
                 HttpResponseMessage response;
@@ -790,9 +809,96 @@ namespace Bit.Core.Services
                         return result["full_address"]?.ToString();
                     case ForwardedEmailServiceType.SimpleLogin:
                         return result["alias"]?.ToString();
+                    case ForwardedEmailServiceType.DuckDuckGo:
+                        return $"{result["address"]?.ToString()}@duck.com";
+                    case ForwardedEmailServiceType.Fastmail:
+                        return HandleFastMailResponse(result);
                     default:
                         return string.Empty;
                 }
+            }
+        }
+
+        private string HandleFastMailResponse(JObject result)
+        {
+            if (result["methodResponses"] == null || !result["methodResponses"].HasValues ||
+                !result["methodResponses"][0].HasValues)
+            {
+                throw new Exception("Fastmail error: could not parse response.");
+            }
+            if (result["methodResponses"][0][0].ToString() == "MaskedEmail/set")
+            {
+                if (result["methodResponses"][0][1]?["created"]?["new-masked-email"] != null)
+                {
+                    return result["methodResponses"][0][1]?["created"]?["new-masked-email"]?["email"].ToString();
+                }
+                if (result["methodResponses"][0][1]?["notCreated"]?["new-masked-email"] != null)
+                {
+                    throw new Exception("Fastmail error: " +
+                                        result["methodResponses"][0][1]?["created"]?["new-masked-email"]?["description"].ToString());
+                }
+            }
+            else if (result["methodResponses"][0][0].ToString() == "error")
+            {
+                throw new Exception("Fastmail error: " + result["methodResponses"][0][1]?["description"].ToString());
+            }
+            throw new Exception("Fastmail error: could not parse response.");
+        }
+
+        private async Task<string> CreateFastmailRequest(string apiKey)
+        {
+            using (var httpclient = new HttpClient())
+            {
+                HttpResponseMessage response;
+                try
+                {
+                    httpclient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
+                    httpclient.DefaultRequestHeaders.Add("Accept", "application/json");
+                    response = await httpclient.GetAsync(new Uri("https://api.fastmail.com/jmap/session"));
+                }
+                catch (Exception e)
+                {
+                    throw new ApiException(HandleWebError(e));
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new ApiException(new ErrorResponse
+                    {
+                        StatusCode = response.StatusCode,
+                        Message = $"Fastmail error: {(int)response.StatusCode} {response.ReasonPhrase}."
+                    });
+                }
+                var result = JObject.Parse(await response.Content.ReadAsStringAsync());
+                var accountId = result["primaryAccounts"]?["https://www.fastmail.com/dev/maskedemail"]?.ToString();
+                var requestJObj = new JObject
+                {
+                    new JProperty("using",
+                        new JArray { "https://www.fastmail.com/dev/maskedemail", "urn:ietf:params:jmap:core" }),
+                    new JProperty("methodCalls",
+                        new JArray
+                        {
+                            new JArray
+                            {
+                                "MaskedEmail/set",
+                                new JObject
+                                {
+                                    ["accountId"] = accountId,
+                                    ["create"] = new JObject
+                                    {
+                                        ["new-masked-email"] = new JObject
+                                        {
+                                            ["state"] = "enabled",
+                                            ["description"] = "",
+                                            ["url"] = "",
+                                            ["emailPrefix"] = ""
+                                        }
+                                    }
+                                },
+                                "0"
+                            }
+                        })
+                };
+                return requestJObj.ToString();
             }
         }
 

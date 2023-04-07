@@ -556,7 +556,7 @@
     <value>Temps d'espera de la caixa forta</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Acció del temps d'espera de la caixa forta</value>
+    <value>Acció quan acabe el temps d'espera de la caixa forta</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
     <value>En tancar la sessió s'eliminarà tot l'accés a la vostra caixa forta i es requerirà una autenticació en línia després del període de temps d'espera. Esteu segur que voleu utilitzar aquesta configuració?</value>
@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Una pista de contrasenya mestra pot ajudar-vos a recordar-la si la oblideu.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>La contrasenya ha de contenir almenys 8 caràcters.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>La contrasenya mestra ha de contenir almenys {0} caràcters.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Mínim de caràcters numèrics</value>
@@ -1102,6 +1102,9 @@ L'escaneig es farà automàticament.</value>
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Srta.</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Novembre</value>
@@ -2137,12 +2140,12 @@ L'escaneig es farà automàticament.</value>
     <value>Aquesta organització té una política empresarial que us inscriurà automàticament al restabliment de la contrasenya. La inscripció permetrà als administradors de l’organització canviar la vostra contrasenya mestra.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Les polítiques de la vostra organització afecten el temps d'espera de la vostra caixa forta. El temps d'espera màxim permès de la caixa forta és de {0} hores i {1} minuts</value>
+    <value>Les polítiques de l'organització afecten el temps d'espera de la caixa forta. El temps d'espera màxim permès de la caixa forta és de {0} hores i {1} minuts</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>El temps d'espera de la caixa forta supera les restriccions establertes per la vostra organització.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Una o més polítiques d'organització us impedeixen exportar la vostra caixa forta.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2419,6 +2422,14 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token d'accés a l'API</value>
   </data>
@@ -2450,7 +2461,7 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
     <value>Aleatori</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connect to Watch</value>
+    <value>Connecta't a Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Divulgació del servei d'accessibilitat</value>
@@ -2488,7 +2499,7 @@ Voleu canviar a aquest compte?</value>
     <value>Inicia sessió amb la contrasenya mestra</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Inicia sessió amb un altre dispositiu</value>
+    <value>Inici de sessió amb un altre dispositiu</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>S'ha iniciat la sessió</value>
@@ -2511,7 +2522,85 @@ Voleu canviar a aquest compte?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Aquesta sol·licitud ja no és vàlida</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Sol·licituds d'inici de sessió pendents</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Rebutja totes les sol·licituds</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Esteu segur que voleu rebutjar totes les sol·licituds d'inici de sessió pendents?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Sol·licituds rebutjades</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Cap sol·licitud pendent</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Habilita el permís de la càmera per utilitzar l'escàner</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>L'idioma s'ha canviat a {0}. Reinicieu l'aplicació per veure el canvi</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>El canvi d'idioma requereix un reinici de l'aplicació</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Per defecte (Sistema)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Important</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>La vostra contrasenya mestra no es pot recuperar si l'oblideu! {0} caràcters com a mínim.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Contrasenya mestra poc segura</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>S'ha identificat una contrasenya feble. Utilitzeu una contrasenya segura per protegir el vostre compte. Esteu segur que voleu utilitzar una contrasenya feble?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Poc segura</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Bona</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Forta</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Comproveu les infraccions de dades conegudes per a aquesta contrasenya</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Contrasenya mestra exposada</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>S'ha trobat la contrasenya en una filtració de dades. Utilitzeu una contrasenya única per protegir el vostre compte. Esteu segur que voleu utilitzar una contrasenya exposada?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Contrasenya mestra exposada i poc segura</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Contrasenya feble identificada i trobada en una filtració de dades. Utilitzeu una contrasenya única i segura per protegir el vostre compte. Esteu segur que voleu utilitzar aquesta contrasenya?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>L’identificador SSO de l’organització és obligatori.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Afig la clau a un element existent o nou</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>No hi ha cap element a la caixa forta que coincidisca amb "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Cerca un element o n'afig un nou</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>No hi ha elements que coincidisquen amb la cerca</value>
   </data>
 </root>

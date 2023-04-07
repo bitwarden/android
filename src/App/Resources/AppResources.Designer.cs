@@ -383,6 +383,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add the key to an existing or new item.
+        /// </summary>
+        public static string AddTheKeyToAnExistingOrNewItem {
+            get {
+                return ResourceManager.GetString("AddTheKeyToAnExistingOrNewItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add TOTP.
         /// </summary>
         public static string AddTotp {
@@ -559,6 +568,15 @@ namespace Bit.App.Resources {
         public static string AreYouSureRemoveSendPassword {
             get {
                 return ResourceManager.GetString("AreYouSureRemoveSendPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to decline all pending login requests?.
+        /// </summary>
+        public static string AreYouSureYouWantToDeclineAllPendingLogInRequests {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToDeclineAllPendingLogInRequests", resourceCulture);
             }
         }
         
@@ -1373,6 +1391,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check known data breaches for this password.
+        /// </summary>
+        public static string CheckKnownDataBreachesForThisPassword {
+            get {
+                return ResourceManager.GetString("CheckKnownDataBreachesForThisPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check if password has been exposed..
         /// </summary>
         public static string CheckPassword {
@@ -1751,6 +1778,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Decline all requests.
+        /// </summary>
+        public static string DeclineAllRequests {
+            get {
+                return ResourceManager.GetString("DeclineAllRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Default.
         /// </summary>
         public static string Default {
@@ -1774,6 +1810,15 @@ namespace Bit.App.Resources {
         public static string DefaultDarkThemeDescription {
             get {
                 return ResourceManager.GetString("DefaultDarkThemeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default (System).
+        /// </summary>
+        public static string DefaultSystem {
+            get {
+                return ResourceManager.GetString("DefaultSystem", resourceCulture);
             }
         }
         
@@ -2035,6 +2080,15 @@ namespace Bit.App.Resources {
         public static string DrawOverDescription3 {
             get {
                 return ResourceManager.GetString("DrawOverDescription3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DuckDuckGo.
+        /// </summary>
+        public static string DuckDuckGo {
+            get {
+                return ResourceManager.GetString("DuckDuckGo", resourceCulture);
             }
         }
         
@@ -2417,6 +2471,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exposed Master Password.
+        /// </summary>
+        public static string ExposedMasterPassword {
+            get {
+                return ResourceManager.GetString("ExposedMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extension activated!.
         /// </summary>
         public static string ExtensionActivated {
@@ -2521,6 +2584,15 @@ namespace Bit.App.Resources {
         public static string FaceIDDirection {
             get {
                 return ResourceManager.GetString("FaceIDDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fastmail.
+        /// </summary>
+        public static string Fastmail {
+            get {
+                return ResourceManager.GetString("Fastmail", resourceCulture);
             }
         }
         
@@ -2939,6 +3011,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Good.
+        /// </summary>
+        public static string Good {
+            get {
+                return ResourceManager.GetString("Good", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Go to my vault.
         /// </summary>
         public static string GoToMyVault {
@@ -3070,6 +3151,15 @@ namespace Bit.App.Resources {
         public static string Immediately {
             get {
                 return ResourceManager.GetString("Immediately", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Important.
+        /// </summary>
+        public static string Important {
+            get {
+                return ResourceManager.GetString("Important", resourceCulture);
             }
         }
         
@@ -3295,6 +3385,33 @@ namespace Bit.App.Resources {
         public static string JustNow {
             get {
                 return ResourceManager.GetString("JustNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language change requires app restart.
+        /// </summary>
+        public static string LanguageChangeRequiresAppRestart {
+            get {
+                return ResourceManager.GetString("LanguageChangeRequiresAppRestart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The language has been changed to {0}. Please restart the app to see the change.
+        /// </summary>
+        public static string LanguageChangeXDescription {
+            get {
+                return ResourceManager.GetString("LanguageChangeXDescription", resourceCulture);
             }
         }
         
@@ -3598,7 +3715,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log In with another device.
+        ///   Looks up a localized string similar to Log in with device.
         /// </summary>
         public static string LogInWithAnotherDevice {
             get {
@@ -3715,11 +3832,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Master password must be at least 8 characters long..
+        ///   Looks up a localized string similar to Master password must be at least {0} characters long..
         /// </summary>
-        public static string MasterPasswordLengthValMessage {
+        public static string MasterPasswordLengthValMessageX {
             get {
-                return ResourceManager.GetString("MasterPasswordLengthValMessage", resourceCulture);
+                return ResourceManager.GetString("MasterPasswordLengthValMessageX", resourceCulture);
             }
         }
         
@@ -3963,6 +4080,15 @@ namespace Bit.App.Resources {
         public static string MustLogInMainAppAutofill {
             get {
                 return ResourceManager.GetString("MustLogInMainAppAutofill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mx.
+        /// </summary>
+        public static string Mx {
+            get {
+                return ResourceManager.GetString("Mx", resourceCulture);
             }
         }
         
@@ -4215,6 +4341,15 @@ namespace Bit.App.Resources {
         public static string NoPasswordsToList {
             get {
                 return ResourceManager.GetString("NoPasswordsToList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No pending requests.
+        /// </summary>
+        public static string NoPendingRequests {
+            get {
+                return ResourceManager.GetString("NoPendingRequests", resourceCulture);
             }
         }
         
@@ -4472,6 +4607,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Organization SSO identifier required..
+        /// </summary>
+        public static string OrganizationSsoIdentifierRequired {
+            get {
+                return ResourceManager.GetString("OrganizationSsoIdentifierRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Organization identifier.
         /// </summary>
         public static string OrgIdentifier {
@@ -4567,6 +4711,15 @@ namespace Bit.App.Resources {
         public static string PasswordExposed {
             get {
                 return ResourceManager.GetString("PasswordExposed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?.
+        /// </summary>
+        public static string PasswordFoundInADataBreachAlertDescription {
+            get {
+                return ResourceManager.GetString("PasswordFoundInADataBreachAlertDescription", resourceCulture);
             }
         }
         
@@ -4693,6 +4846,15 @@ namespace Bit.App.Resources {
         public static string PendingDelete {
             get {
                 return ResourceManager.GetString("PendingDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pending login requests.
+        /// </summary>
+        public static string PendingLogInRequests {
+            get {
+                return ResourceManager.GetString("PendingLogInRequests", resourceCulture);
             }
         }
         
@@ -5049,6 +5211,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Requests declined.
+        /// </summary>
+        public static string RequestsDeclined {
+            get {
+                return ResourceManager.GetString("RequestsDeclined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resend code.
         /// </summary>
         public static string ResendCode {
@@ -5171,6 +5342,15 @@ namespace Bit.App.Resources {
         public static string SearchFileSends {
             get {
                 return ResourceManager.GetString("SearchFileSends", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search for an item or add a new item.
+        /// </summary>
+        public static string SearchForAnItemOrAddANewItem {
+            get {
+                return ResourceManager.GetString("SearchForAnItemOrAddANewItem", resourceCulture);
             }
         }
         
@@ -5670,6 +5850,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Strong.
+        /// </summary>
+        public static string Strong {
+            get {
+                return ResourceManager.GetString("Strong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Submit.
         /// </summary>
         public static string Submit {
@@ -5855,6 +6044,24 @@ namespace Bit.App.Resources {
         public static string ThemeDescription {
             get {
                 return ResourceManager.GetString("ThemeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no items in your vault that match &quot;{0}&quot;.
+        /// </summary>
+        public static string ThereAreNoItemsInYourVaultThatMatchX {
+            get {
+                return ResourceManager.GetString("ThereAreNoItemsInYourVaultThatMatchX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no items that match the search.
+        /// </summary>
+        public static string ThereAreNoItemsThatMatchTheSearch {
+            get {
+                return ResourceManager.GetString("ThereAreNoItemsThatMatchTheSearch", resourceCulture);
             }
         }
         
@@ -6651,6 +6858,51 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Weak.
+        /// </summary>
+        public static string Weak {
+            get {
+                return ResourceManager.GetString("Weak", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weak and Exposed Master Password.
+        /// </summary>
+        public static string WeakAndExposedMasterPassword {
+            get {
+                return ResourceManager.GetString("WeakAndExposedMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weak Master Password.
+        /// </summary>
+        public static string WeakMasterPassword {
+            get {
+                return ResourceManager.GetString("WeakMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?.
+        /// </summary>
+        public static string WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription {
+            get {
+                return ResourceManager.GetString("WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weak password identified. Use a strong password to protect your account. Are you sure you want to use a weak password?.
+        /// </summary>
+        public static string WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount {
+            get {
+                return ResourceManager.GetString("WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Website.
         /// </summary>
         public static string Website {
@@ -6764,6 +7016,15 @@ namespace Bit.App.Resources {
         public static string YourAccountsFingerprint {
             get {
                 return ResourceManager.GetString("YourAccountsFingerprint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your master password cannot be recovered if you forget it! {0} characters minimum..
+        /// </summary>
+        public static string YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum {
+            get {
+                return ResourceManager.GetString("YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum", resourceCulture);
             }
         }
         

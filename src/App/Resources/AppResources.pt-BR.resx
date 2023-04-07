@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Uma dica de senha mestra pode ajudá-lo(a) a lembrá-la caso você a esqueça.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>A senha mestra deve ser pelo menos 8 caracteres.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>A senha mestra deve ter pelo menos {0} caracteres.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Números Mínimos</value>
@@ -1102,6 +1102,9 @@ A leitura será feita automaticamente.</value>
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Sra</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Novembro</value>
@@ -2143,7 +2146,7 @@ A leitura será feita automaticamente.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>O tempo limite do seu cofre excede as restrições definidas por sua organização.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Uma ou mais políticas da organização impedem que você exporte seu cofre pessoal.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2420,6 +2423,14 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token de Acesso à API</value>
   </data>
@@ -2512,7 +2523,85 @@ Você deseja mudar para esta conta?</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Este pedido não é mais válido</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Pedidos de acesso pendentes</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Recusar todas as solicitações</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Tem certeza que deseja recusar todos os pedidos de login pendentes?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Solicitações recusadas</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Nenhuma solicitação pendente</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Conceda permissão de uso da câmera para usar o scanner</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>O idioma foi alterado para {0}. Por favor, reinicie o aplicativo para ver a alteração</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Mudança de idioma requer a reinicialização do aplicativo</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Padrão (Sistema)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Importante</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Sua senha mestra não pode ser recuperada se você esquecê-la! Mínimo de {0} caracteres.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Senha Mestra Fraca</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Senha fraca identificada. Use uma senha forte para proteger a sua conta. Você tem certeza que deseja usar uma senha fraca?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Fraca</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Boa</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Forte</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Verifique vazamento de dados conhecidos para esta senha</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Senha Mestra Comprometida</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>A senha foi encontrada em um vazamento de dados. Use uma senha única e forte para proteger sua conta. Tem certeza de que deseja usar uma senha comprometida?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Senha Mestra Fraca e Comprometida</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Uma senha foi identificada como fraca e foi encontrada em um vazamento de dados. Use uma senha única e forte para proteger sua conta. Quer mesmo usar essa senha?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Identificador SSO da organização necessário.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Adicionar a chave a um item existente ou novo</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Não existem itens no seu cofre que correspondam a "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Procure por um item ou adicione um novo item</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Não há itens que correspondam à pesquisa</value>
   </data>
 </root>

@@ -199,7 +199,7 @@
     <value>请输入您的 PIN 码。</value>
   </data>
   <data name="Favorites" xml:space="preserve">
-    <value>收藏</value>
+    <value>收藏夹</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>主密码提示可以在你忘记密码时帮你回忆起来。</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>主密码至少需要 8 个字符。</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>主密码必须至少 $VALUE$ 个字符长度。</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>数字最少个数</value>
@@ -708,7 +708,7 @@
     <value>两步登录</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>两步登录要求您从其他设备（例如安全钥匙、验证器应用、短信、电话或者电子邮件）来验证您的登录，这能使您的账户更加安全。两步登录需要在 bitwarden.com 网页版密码中设置。您现在要访问这个网站吗？</value>
+    <value>两步登录要求您从其他设备（例如安全钥匙、验证器应用、短信、电话或者电子邮件）来验证您的登录，这能使您的账户更加安全。两步登录需要在 bitwarden.com 网页版密码库中设置。现在访问此网站吗？</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>使用 {0} 解锁</value>
@@ -1056,10 +1056,10 @@
     <value>博士</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>到期月份</value>
+    <value>过期月份</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>到期年份</value>
+    <value>过期年份</value>
   </data>
   <data name="February" xml:space="preserve">
     <value>二月</value>
@@ -1103,6 +1103,9 @@
   <data name="Ms" xml:space="preserve">
     <value>女士</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>十一月</value>
   </data>
@@ -1134,7 +1137,7 @@
     <value>地址</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>到期</value>
+    <value>过期日</value>
   </data>
   <data name="ShowWebsiteIcons" xml:space="preserve">
     <value>显示网站图标</value>
@@ -1454,7 +1457,7 @@
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>没有可显示的文件夹。</value>
+    <value>没有可列出的文件夹。</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
     <value>指纹短语</value>
@@ -1671,7 +1674,7 @@
     <value>此导出将使用您账户的加密密钥来加密您的数据。如果您曾经轮换过账户的加密密钥，您应将其重新导出，否则您将无法解密导出的文件。</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
-    <value>账户加密密钥对每个 Bitwarden 用户账户都是唯一的，所以您不能将加密的导出导入到另一个账户。</value>
+    <value>每个 Bitwarden 用户账户的账户加密密钥都是唯一的，因此您无法将加密的导出导入到另一个账户。</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
     <value>确认密码库导出</value>
@@ -1771,13 +1774,13 @@
     <value>组织标识符</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>当前无法使用 SSO 登陆</value>
+    <value>当前无法使用 SSO 登录</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
     <value>设置主密码</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>为使用单点登录（SSO）功能，请设置一个主密码以访问和保护您的密码库。</value>
+    <value>要完成 SSO 登录配置，请设置一个主密码以访问和保护您的密码库。</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
     <value>一个或多个组织策略要求您的主密码满足下列要求：</value>
@@ -1798,7 +1801,7 @@
     <value>至少包含一个数字</value>
   </data>
   <data name="PolicyInEffectSpecial" xml:space="preserve">
-    <value>包含至少一个下列的特殊字符： {0}</value>
+    <value>至少包含一个以下特殊字符：{0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
     <value>无效的密码</value>
@@ -1927,10 +1930,10 @@
     <value>等待删除</value>
   </data>
   <data name="ExpirationDate" xml:space="preserve">
-    <value>到期日期</value>
+    <value>过期日期</value>
   </data>
   <data name="ExpirationTime" xml:space="preserve">
-    <value>到期时间</value>
+    <value>过期时间</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
     <value>设置后，对此 Send 的访问将在指定的日期和时间后过期。</value>
@@ -2077,7 +2080,7 @@
     <value>确认主密码</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>此操作受到保护，要继续，请重新输入您的主密码以验证您的身份。</value>
+    <value>此操作受到保护，要继续，请重新输入主密码以验证您的身份。</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
     <value>请完成 Captcha 验证</value>
@@ -2142,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>您的密码库超时时间超出了组织设置的限制。</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>一个或多个组织策略阻止您导出个人密码库。</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2419,6 +2422,14 @@
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API 访问令牌</value>
   </data>
@@ -2488,7 +2499,7 @@
     <value>使用主密码登录</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>使用其他设备登录</value>
+    <value>设备登录</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>登录已发起</value>
@@ -2511,7 +2522,85 @@
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>请求已失效</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>待处理的登录请求</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>拒绝所有请求</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>您确定要拒绝所有待处理的登录请求吗？</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>请求被拒绝</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>无待处理的请求</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>启用相机权限以使用扫描器</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>语言已更改为 {0}。请重新启动应用程序以查看更改</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>更改语言需要重新启动 app</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>默认（系统）</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>重要：</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>主密码忘记后，将无法恢复！要求不少于 {0} 个字符。</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>脆弱的主密码</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>识别到弱密码。请使用一个强密码以保护你的账户。确定要使用弱密码吗？</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>弱</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>良好</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>强</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>检查已知的数据泄露是否包含此密码</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>已暴露的主密码</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>密码在数据泄露中被发现。请使用一个唯一的密码以保护您的账户。确定要使用已暴露的密码吗？</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>主密码弱且曾经暴露</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>识别到弱密码且其出现在数据泄露中。请使用一个强且唯一的密码以保护你的账户。确定要使用这个密码吗？</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>必须填写组织 SSO 标识符。</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>将密钥添加到现有或新的项目</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>您的密码库中没有匹配 "{0}" 的项目</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>搜索一个项目或添加一个新的项目</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>没有匹配搜索条件的项目</value>
   </data>
 </root>

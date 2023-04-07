@@ -172,7 +172,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Vai tiešām izdzēst? Šo darbību nevar atsaukt.</value>
+    <value>Vai jūs tiešām vēlaties dzēst? Šo darbību nav iespējams atsaukt.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
@@ -261,19 +261,19 @@
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>Pierakstīties</value>
+    <value>Pieteikties</value>
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Pierakstīšanās vienumi</value>
+    <value>Pieteikšanās vienums</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Izrakstīties</value>
+    <value>Atteikties</value>
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>Vai tiešām izrakstīties?</value>
+    <value>Vai tiešām atteikties?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
     <value>Noņemt kontu</value>
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Vienums tika izdzēsts.</value>
+    <value>Vienums ir izdzēsts</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -410,7 +410,7 @@
     <value>Konts</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Tavs jaunais konts ir izveidots. Tagad Tu vari pierakstīties.</value>
+    <value>Jaunais konts ir izveidots. Tagad vari pieteikties.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
     <value>Pievienot vienumu</value>
@@ -419,7 +419,7 @@
     <value>Lietotņu paplašinājums</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Izmantot Bitwarden pieejamības pakalpojumu, lai automātiski aizpildītu pierakstīšanās veidnes dažādās lietotnēs un tīmeklī.</value>
+    <value>Izmantot Bitwarden pieejamības pakalpojumu, lai automātiski aizpildītu pieteikšanās veidnes dažādās lietotnēs un tīmeklī.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Automātiskā aizpilde</value>
@@ -431,16 +431,16 @@
     <value>Bitwarden lietotņu paplašinājums</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>Vieglākais veids, kā glabātavā pievienot jaunus pierakstīšanās vienumus, ir no Bitwarden lietotņu paplašinājuma. Vairāk par Bitwarden lietotņu paplašinājumu var uzzināt dodoties uz iestatījumu sadaļu.</value>
+    <value>Vieglākais veids, kā glabātavā pievienot jaunus pieteikšanās vienumus, ir no Bitwarden lietotnes paplašinājuma. Vairāk par Bitwarden lietotnes paplašinājumu var uzzināt iestatījumu skatā.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Izmantot Bitwarden Safari un citās lietotnēs, lai automātiski ievadītu pierakstīšanās vienumus.</value>
+    <value>Izmantot Bitwarden Safari un citās lietotnēs, lai automātiski ievadītu pieteikšanās vienumus.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>Bitwarden automātiskā aizpilde</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Izmantot Bitwarden pieejamības pakalpojumu, lai automātiski aizpildītu pierakstīšanās veidnes.</value>
+    <value>Izmantot Bitwarden pieejamības pakalpojumu, lai automātiski aizpildītu pieteikšanās veidnes.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Mainīt e-pasta adresi</value>
@@ -493,10 +493,10 @@
     <value>Saņem tūlītēju piekļuvi savām parolēm!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>Tagad vari pierakstīties!</value>
+    <value>Tagad vari pieteikties!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Tavi pierakstīšanās vienumi tagad ir viegli pieejami Safari, Chrome un citās atbalstītās lietotnēs.</value>
+    <value>Pieteikšanās vienumi tagad ir viegli pieejami Safari, Chrome un citās atbalstītās lietotnēs.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>Safari un Chrome Bitwarden var atrast, izmantojot kopīgošanas ikonu (norāde: ritināt pa labi kopīgošanas izvēlnes apakšējā rindā).</value>
@@ -559,14 +559,14 @@
     <value>Glabātavas noildzes darbība</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Izrakstīšanās noņems visu piekļuvi glabātavai un pieprasīs tiešsaistes pieteikšanos pēc noildzes laika. Vai tiešām izmantot šo iestatījumu?</value>
+    <value>Atteikšanās noņems piekļuvi glabātavai un pieprasīs tiešsaistes pieteikšanos pēc noildzes laika. Vai tiešām izmantot šo iestatījumu?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>Notiek pierakstīšanās...</value>
+    <value>Notiek pieteikšanās...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Pieraksties vai izveido jaunu kontu, lai piekļūtu drošajai glabātavai!</value>
+    <value>Jāpiesakās vai jāizveido jauns konts, lai piekļūtu drošajai glabātavai.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Pārvaldīt</value>
@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Galvenās paroles norāde var palīdzēt atcerēties paroli, ja tā ir aizmirsta.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Galvenajai parolei ir jābūt vismaz 8 rakstzīmes garai.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Galvenajai parolei ir jābūt vismaz {0} rakstzīmes garai.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Mazākais pieļaujamais ciparu skaits</value>
@@ -598,7 +598,7 @@
     <value>Citi iestatījumi</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Vispirms ir jāpierakstās galvenajā Bitwarden lietotnē, lai varētu izmantot paplašinājumu.</value>
+    <value>Vispirms ir jāpiesakās galvenajā Bitwarden lietotnē, lai varētu izmantot paplašinājumu.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Nekad</value>
@@ -616,7 +616,7 @@
     <value>Glabātāvā nav vienumu, ko izmantot šajā tīmekļa vietnē/lietotnē. Piesist, lai pievienotu.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>Šajā pierakstīšanās vienumā nav norādīts lietotājvārds vai parole.</value>
+    <value>Šajā pieteikšanās vienumā nav norādīts lietotājvārds vai parole.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Labi, sapratu!</value>
@@ -647,7 +647,7 @@
     <value>Vai tiešām pārrakstīt esošo paroli?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden nodrošina glabātavas sinhronizāciju, izmantojot pašpiegādes paziņojumus. Labākajai iespējamajai pieredzei lūgums atlasīt "Atļaut" gaidāmajā prasījuma logā, kad tiks vaicāts iespējot pašpiegādes paziņojumus.</value>
+    <value>Bitwarden nodrošina glabātavas sinhronizāciju, izmantojot pašpiegādes paziņojumus. Labākajai iespējamajai pieredzei lūgums atlasīt "Atļaut" gaidāmajā uzvednē, kad tiks vaicāts iespējot pašpiegādes paziņojumus.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -692,7 +692,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Sinhronizēšana pabeigta.</value>
+    <value>Sinhronizācija pabeigta</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
     <value>Sinhronizēšana neizdevās.</value>
@@ -705,10 +705,10 @@
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Divpakāpju pierakstīšanās</value>
+    <value>Divpakāpju pieteikšanās</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Divpakāpju pieslēgšanās padara kontu krietni drošāku, pieprasot apstiprināt pierakstīšanos ar tādu citu ierīču vai pakalpojumu starpniecību kā drošības atslēga, autentificētāja lietotne, īsziņa, tālruņa zvans vai e-pasts. Divpakāpju pierakstīšanos var iespējot bitwarden.com tīmekļa glabātavā. Vai apmeklēt tīmekļa vietni?</value>
+    <value>Divpakāpju pieteikšanās padara kontu krietni drošāku, pieprasot apstiprināt pieteikšanos ar tādu citu ierīču vai pakalpojumu starpniecību kā drošības atslēga, autentificētāja lietotne, īsziņa, tālruņa zvans vai e-pasts. Divpakāpju pieteikšanos var iespējot bitwarden.com tīmekļa glabātavā. Vai apmeklēt tīmekļa vietni?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Atslēgt ar {0}</value>
@@ -784,7 +784,7 @@
     <value>Stāvoklis</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Vieglākais veids, kā glabātavā pievienot jaunus pierakstīšanās vienumus, ir no Bitwarden automātiskās aizpildes pakalpojuma. Vairāk par Bitwarden automātiskās aizpildi var uzzināt dodoties uz iestatījumu sadaļu.</value>
+    <value>Vieglākais veids, kā glabātavā pievienot jaunus pieteikšanās vienumus, ir no Bitwarden automātiskās aizpildes pakalpojuma. Vairāk par Bitwarden automātiskās aizpildi var uzzināt iestatījumu skatā.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Automātiskā aizpilde</value>
@@ -827,11 +827,11 @@
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Pierakstīšanās nav pieejama</value>
+    <value>Pieteikšanās nav pieejama</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Šim kontam ir iespējota divpakāpju pierakstīšanās, bet šajā ierīcē netiek nodrošināts neviens no uzstādītajiem divpakāpju pārbaudes nodrošinātājiem. Lūgums izmantot atbalstītu ierīci un/vai pievienot papildus nodrošinātājus, kas tiek labāk atbalstīti dažādās ierīcēs (piemēram, autentificētāja lietotni).</value>
+    <value>Šim kontam ir iestatīta divpakāpju pieteikšanās, bet šajā ierīcē netiek nodrošināts neviens no uzstādītajiem divpakāpju pārbaudes nodrošinātājiem. Lūgums izmantot atbalstītu ierīci un/vai pievienot papildus nodrošinātājus, kas tiek labāk atbalstīti dažādās ierīcēs (piemēram, autentificētāja lietotni).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Atgūšanas kods</value>
@@ -846,10 +846,10 @@
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Divpakāpju pierakstīšanās iespējas</value>
+    <value>Divpakāpju pieteikšanās iespējas</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Izmantot citu divpakāpju pierakstīšanās veidu</value>
+    <value>Izmantot citu divpakāpju pieteikšanās veidu</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
     <value>Apstiprinājumu nevarēja nosūtīt e-pastā. Mēģināt vēlreiz.</value>
@@ -916,7 +916,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Ievietot TOTP starpliktuvē</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>Ja pierakstīšanās vienumam ir autentificētāja atslēga, TOTP apstiprinājuma kods tiek ievietots starpliktuvē automātiskās aizpildes laikā.</value>
+    <value>Ja pieteikšanās vienumam ir pievienota autentificētāja atslēga, TOTP apstiprinājuma kods tiks automātiski pārkopēts uz starpliktuvi, kad vien tiks automātiski aizpildīta pieteikšanās veidne.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>Automātiski ievietot TOTP starpliktuvē</value>
@@ -1014,7 +1014,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Identitāte</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Pierakstīšanās vienums</value>
+    <value>Pieteikšanās vienums</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
     <value>Droša piezīme</value>
@@ -1103,6 +1103,9 @@ Nolasīšana notiks automātiski.</value>
   <data name="Ms" xml:space="preserve">
     <value>Jk-dze</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>Novembris</value>
   </data>
@@ -1140,7 +1143,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Rādīt vietņu ikonas</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
-    <value>Attēlot atpazīstamu attēlu pie katra pierakstīšanās vienuma.</value>
+    <value>Attēlot atpazīstamu attēlu pie katra pieteikšanās vienuma.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Ikonu servera URL</value>
@@ -1170,10 +1173,10 @@ Nolasīšana notiks automātiski.</value>
     <value>Automātiskās aizpildes pieejamības pakalpojums</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden automātiskās aizpildes pakalpojums izmanto Android automātiskās aizpildes ietvaru, lai palīdzētu aizpildīt pierakstīšanās, kredītkartes, un identitātes informācijas veidnes citās ierīces lietotnēs.</value>
+    <value>Bitwarden automātiskās aizpildes pakalpojums izmanto Android automātiskās aizpildes ietvaru, lai palīdzētu aizpildīt pieteikšanās, kredītkartes, un identitātes informācijas veidnes citās ierīces lietotnēs.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden automātiskās aizpilde tiek izmantota, lai aizpildītu pierakstīšanās, kredītkaršu un identitātes informācijas veidnes citās lietotnēs.</value>
+    <value>Bitwarden automātiskās aizpilde tiek izmantota, lai aizpildītu pieteikšanās, kredītkaršu un identitātes informācijas veidnes citās lietotnēs.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Atvērt automātiskās aizpildes iestatījumus</value>
@@ -1289,10 +1292,10 @@ Nolasīšana notiks automātiski.</value>
     <value>Automātiskā aizpilde iespējota!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>Vispirms ir jāpierakstās galvenajā Bitwarden lietotnē, lai varētu izmantot automātisko aizpildi.</value>
+    <value>Vispirms ir jāpiesakās galvenajā Bitwarden lietotnē, lai varētu izmantot automātisko aizpildi.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Tavi pierakstīšanās vienumi tagad ir viegli pieejami tastatūrā, kad notiek pierakstīšanās lietotnēs un tīmekļa vietnēs.</value>
+    <value>Pieteikšanāš vienumi tagad ir viegli pieejami tastatūrā, kad notiek pieteikšanās lietotnēs un tīmekļa vietnēs.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>Mēs iesakām atspējot jebkuras citas automātiskās aizpildes lietotnes iestatījumos, ja nav iecerēts izmantot tās.</value>
@@ -1322,7 +1325,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Paroļu automātiska aizpilde</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>Vieglākais veids, kā glabātavā pievienot jaunus pierakstīšanās vienumus, ir izmantojot Bitwarden automātiskās aizpildes paplašinājumu. Vairāk par to var uzzināt dodoties uz iestatījumu sadaļu.</value>
+    <value>Vieglākais veids, kā glabātavā pievienot jaunus pieteikšanās vienumus, ir izmantojot Bitwarden automātiskās aizpildes paplašinājumu. Vairāk par to var uzzināt iestatījumu skatā.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Nederīga e-pasta adrese.</value>
@@ -1334,7 +1337,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Identitātes</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Pierakstīšanās vienumi</value>
+    <value>Pieteikšanās vienumi</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
     <value>Drošās piezīmes</value>
@@ -1354,10 +1357,10 @@ Nolasīšana notiks automātiski.</value>
     <value>Pārbaudīt, vai parole ir bijusi nopludināta.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>Šī parole datu pārkāpumos ir atklāta {0} reizi(es). To vajag mainīt.</value>
+    <value>Šī parole datu noplūdēs ir atklāta {0} reizi(es). To vajadzētu nomainīt.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>Šī parole netika atrasta nevienā no zināmajiem datu pārkāpumiem. Tai vajadzētu būt droši izmantojamai.</value>
+    <value>Šī parole netika atrasta nevienā zināmā datu noplūdē. Tai vajadzētu būt droši izmantojamai.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
     <value>Identitātes nosaukums</value>
@@ -1381,10 +1384,10 @@ Nolasīšana notiks automātiski.</value>
     <value>Meklēt krājumā</value>
   </data>
   <data name="SearchFileSends" xml:space="preserve">
-    <value>Meklēt datņu "Sends"</value>
+    <value>Meklēt datņu Sūtījumus</value>
   </data>
   <data name="SearchTextSends" xml:space="preserve">
-    <value>Meklēt teksta "Sends"</value>
+    <value>Meklēt teksta Sūtījumus</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
     <value>Meklēt {0}</value>
@@ -1486,10 +1489,10 @@ Nolasīšana notiks automātiski.</value>
     <value>30 minūtes</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Uzstādi savu PIN kodu Bitwarden atslēgšanai! Tavi PIN iestatījumi tiks atiestatīti, ja Tu pilnībā izrakstīsies no lietotnes.</value>
+    <value>Iestatīt PIN kodu Bitwarden atslēgšanai. PIN iestatījumi tiks atiestatīti pēc pilnīgas izrakstīšanās no lietotnes.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Pierakstījies {1} kā {0}.</value>
+    <value>Pieteicies {1} kā {0}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
@@ -1586,7 +1589,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Automātiskā aizpilde aizturētajos URI netiks piedāvāta. Vairākus URI jāatdala ar komatu. Piemēram, "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
-    <value>Vaicāt, lai pievienotu pierakstīšanās vienumu</value>
+    <value>Vaicāt, lai pievienotu pieteikšanās vienumu</value>
   </data>
   <data name="AskToAddLoginDescription" xml:space="preserve">
     <value>Vaicāt pievienot vienumu, ja tāds nav atrodams glabātavā.</value>
@@ -1617,7 +1620,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Pārslēgt redzamību</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Pierakstīšanās sesija ir beigusies.</value>
+    <value>Pieteikšanās sesija ir beigusies.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
     <value>Apstiprināšana ar biometriju</value>
@@ -1662,7 +1665,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Kods nosūtīts</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
-    <value>Apstiprināt identitāti, lai turpinātu.</value>
+    <value>Lai turpinātu, apstipriniet savu identitāti.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Šī izguve satur glabātavas datus nešifrētā veidā. Izdoto datni nevajadzētu glabāt vai sūtīt nedrošos veidos (piemēram, e-pastā). Izdzēst to uzreiz pēc izmantošanas.</value>
@@ -1738,15 +1741,15 @@ Nolasīšana notiks automātiski.</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
-    <value>Vai tiešām izdzēst? Šo darbību nevar atsaukt.</value>
+    <value>Vai tiešām vēlaties neatgriezeniski dzēst? To nevar atsaukt.</value>
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
-    <value>Vai tiešām atjaunot šo vienumu?</value>
+    <value>Vai tiešām vēlaties atjaunot šo vienumu?</value>
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>Vai tiešām pārvietot uz atkritni?</value>
+    <value>Vai tiešām vēlaties sūtīt uz atkritni?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
@@ -1762,10 +1765,10 @@ Nolasīšana notiks automātiski.</value>
     <value>Sinhronizēt glabātavu ar uz leju pavelkošu kustību.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Uzņēmuma vienotā pierakstīšanās</value>
+    <value>Uzņēmuma vienotā pieteikšanās</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Ātri pierakstīties, izmantojot apvienības vienotās pieteikšanās portālu. Lūgums ievadīt apvienības identifikatoru, lai sāktu.</value>
+    <value>Ātri pieteikties apvienības vienotās pieteikšanās portālā. Lūgums ievadīt apvienības identifikatoru, lai sāktu.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
     <value>Apvienības identifikators</value>
@@ -1783,7 +1786,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Vienā vai vairākos apvienības nosacījumos ir norādīts, ka galvenajai parolei ir jāatbilst šādām prasībām:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Mazākais pieļaujamais sarežģītības novērtējums ir $SCORE$</value>
+    <value>Minimālais sarežģītības rādītājs {0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
     <value>Mazākais pieļaujamais garums ir {0}</value>
@@ -1837,13 +1840,13 @@ Nolasīšana notiks automātiski.</value>
     <value>Izmantot pieejamību</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Izmanto Bitwarden pieejamības pakalpojumu, lai automātiski aizpildītu pierakstīšanās veidnes dažādās lietotnēs un tīmeklī. Kad tas ir iespējots, tiks attēlots uznirstošais logs, kad tiks atlasīts kāds pierakstīšanās veidnes lauks.</value>
+    <value>Bitwarden pieejamības pakalpojumu var izmantot, lai automātiski aizpildītu pieteikšanās veidnes dažādās lietotnēs un tīmeklī. Kad tas ir iestatīts, tiks attēlots uznirstošais logs, kad tiks atlasīts kāds pieteikšanās veidnes lauks.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Izmanto Bitwarden pieejamības pakalpojumu, lai automātiski aizpildītu pierakstīšanās veidnes dažādās lietotnēs un tīmeklī (ir nepieciešams iespējot arī "Rādīt pāri").</value>
+    <value>Izmantot Bitwarden pieejamības pakalpojumu, lai automātiski aizpildītu pierakstīšanās veidnes dažādās lietotnēs un tīmeklī (ir nepieciešams ieslēgt arī "Rādīt pāri").</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Bitwarden pieejamības pakalpojums tiek izmantots, lai lietotu automātiskās aizpildes ātrās darbības laukumu un/vai parādītu uznirstošo logu, izmantojot rādīšanu pāri (ja iespējota).</value>
+    <value>Bitwarden pieejamības pakalpojums tiek izmantots, lai lietotu automātiskās aizpildes ātrās darbības laukumu un/vai parādītu uznirstošo logu, izmantojot rādīšanu pāri (ja ieslēgta).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
     <value>Nepieciešams, lai izmantotu automātiskās aizpildes ātrās darbības laukumu vai pastiprinātu automātisko aizpildi, izmantojot rādīšanu pāri (ja iespējota).</value>
@@ -1852,13 +1855,13 @@ Nolasīšana notiks automātiski.</value>
     <value>Izmantot rādīšanu pāri</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>Kad iespējots, ļauj Bitwarden pieejamības pakalpojumam attēlot uznirstošo logu, kad tiek atlasīti pierakstīšanās lauki.</value>
+    <value>Ļauj Bitwarden pieejamības pakalpojumam attēlot uznirstošo logu, kad tiek atlasīti pieteikšanās lauki.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>Ja iespējots, Bitwarden pieejamības pakalpojums attēlos uznirstošo logu, kad pierakstīšanās lauki tiek atlasīti, lai palīdzētu automātiski aizpildīt pieteikšanās veidnes.</value>
+    <value>Ja ieslēgts, Bitwarden pieejamības pakalpojums attēlos uznirstošo logu, kad pieteikšanās lauki tiek atlasīti, lai palīdzētu automātiski aizpildīt pieteikšanās veidnes.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>Ja iespējots, pieejamība attēlos uznirstošo logu, lai pastiprinātu automātisko aizpildi vecākās lietotnēs, kas neatbalsta Android automātiskās aizpildes ietvaru.</value>
+    <value>Ja ieslēgts, pieejamība attēlos uznirstošo logu, lai pastiprinātu automātisko aizpildi vecākās lietotnēs, kas nenodrošina Android automātiskās aizpildes ietvaru.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
     <value>Uzņēmuma nosacījumi liedz saglabāt vienumus privātajā glabātavā. Ir jānorāda piederība apvienībai un jāizvēlas kāds no pieejamajiem krājumiem.</value>
@@ -1867,19 +1870,19 @@ Nolasīšana notiks automātiski.</value>
     <value>Apvienības nosacījumi ietekmē Tavas īpašumtiesību iespējas.</value>
   </data>
   <data name="Send" xml:space="preserve">
-    <value>"Send"</value>
+    <value>Sūtīt</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AllSends" xml:space="preserve">
-    <value>Visi "Send"</value>
+    <value>Visi Sūtījumi</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
-    <value>"Send" vienumi</value>
+    <value>Sūtījumi</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NameInfo" xml:space="preserve">
-    <value>Lasāms nosaukums, kas apraksta šo "Send".</value>
+    <value>Draudzīgs nosaukums, lai raksturotu šo Sūtījumu.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Text" xml:space="preserve">
@@ -1892,7 +1895,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Teksts, kuru ir vēlme nosūtīt.</value>
   </data>
   <data name="HideTextByDefault" xml:space="preserve">
-    <value>Kad piekļūst šim "Send", pēc noklusējuma paslēpt saturu</value>
+    <value>Piekļūstot Sūtījumam, pēc noklusējuma paslēpiet tekstu</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeFile" xml:space="preserve">
@@ -1920,7 +1923,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Dzēšanas laiks</value>
   </data>
   <data name="DeletionDateInfo" xml:space="preserve">
-    <value>"Send" tiks pastāvīgi izdzēsts norādītajā dienā un laikā.</value>
+    <value>Sūtījums tiks neatgriezeniski dzēsts norādītajā datumā un laikā.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PendingDelete" xml:space="preserve">
@@ -1933,7 +1936,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Derīguma beigu laiks</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
-    <value>Ja uzstādīts, piekļuve šim "Send" beigsies norādītajā dienā un laikā.</value>
+    <value>Ja tas ir iestatīts, piekļuve šim Sūtījumam beigsies norādītajā datumā un laikā.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
@@ -1943,7 +1946,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Lielākais pieļaujamais piekļuvju skaits</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>Ja uzstādīts, lietotāji nevarēs piekļūt šim "Send", kad tiks sasniegts lielākais pieļaujamais piekļūšanas reižu skaits.</value>
+    <value>Ja tas ir iestatīts, lietotāji vairs nevarēs piekļūt šim Sūtījumam, tiklīdz būs sasniegts maksimālais piekļuves skaits.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
@@ -1956,14 +1959,14 @@ Nolasīšana notiks automātiski.</value>
     <value>Jauna parole</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>Pēc izvēles pieprasīt lietotājiem paroli, lai viņi varētu piekļūt šim "Send".</value>
+    <value>Pēc izvēles pieprasīt paroli, lai lietotāji varētu piekļūt šim Sūtījumam.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
     <value>Noņemt paroli</value>
   </data>
   <data name="AreYouSureRemoveSendPassword" xml:space="preserve">
-    <value>Vai tiešām noņemt paroli?</value>
+    <value>Vai tiešām vēlaties noņemt paroli?</value>
   </data>
   <data name="RemovingSendPassword" xml:space="preserve">
     <value>Noņem paroli</value>
@@ -1972,19 +1975,19 @@ Nolasīšana notiks automātiski.</value>
     <value>Parole ir noņemta</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
-    <value>Personīgās piezīmes par šo "Send".</value>
+    <value>Privātas piezīmes par šo Sūtījumu.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Atspējot šo "Send", lai neviens tam nevarētu piekļūt.</value>
+    <value>Deaktivizēt šo Sūtījumu, lai neviens tam nevarētu piekļūt</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
-    <value>Kontā nav neviena "Send".</value>
+    <value>Jūsu kontā nav neviena Sūtījuma.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Pievienot "Send'</value>
+    <value>Pievienot Sūtījumu</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -1994,35 +1997,35 @@ Nolasīšana notiks automātiski.</value>
     <value>Kopīgot saiti</value>
   </data>
   <data name="SendLink" xml:space="preserve">
-    <value>"Send" saite</value>
+    <value>Sūtījuma saite</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
-    <value>Meklēt "Send"</value>
+    <value>Meklēt Sūtījumus</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
-    <value>Labot "Send"</value>
+    <value>Labot Sūtījumu</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Pievienot "Send'</value>
+    <value>Jauns Sūtījums</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
-    <value>Vai tiešām izdzēst šo "Send"?</value>
+    <value>Vai tiešām vēlaties dzēst šo Sūtījumu?</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>"Send" tika izdzēsts.</value>
+    <value>Sūtījums dzēsts</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>"Send" ir atjaunināts.</value>
+    <value>Sūtījums saglabāts</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Ir izveidots jauns "Send".</value>
+    <value>Sūtījums izveidots</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2044,30 +2047,30 @@ Nolasīšana notiks automātiski.</value>
     <value>Pielāgots</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Saglabājot kopīgot šo "Send".</value>
+    <value>Kopīgojiet šo Sūtījumu pēc saglabāšanas</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
-    <value>Uzņēmuma nosacījumu kopas dēļ ir tikai iespējams dzēst esošu "Send".</value>
+    <value>Organizācijas politikas dēļ jūs varat dzēst tikai esošu Sūtījumu.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
-    <value>Par "Send"</value>
+    <value>Par Sūtījumu</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
     <value>Slēpt e-pasta adresi no saņēmējiem.</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
-    <value>Viens vai vairāki apvienības nosacījumi ietekmē "Send" iestatījumus.</value>
+    <value>Viena vai vairākas organizācijas politikas ietekmē jūsu Sūtījuma opcijas.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>Ar bezmaksas kontu ir iespējams tikai kopīgot tekstu. Ir nepieciešama Premium dalība, lai sūtītu datnes ar "Send".</value>
+    <value>Bezmaksas kontos var kopīgot tikai tekstu. Lai izmantotu failus ar Sūtījumu, ir nepieciešama Premium dalība.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Ir nepieciešams apstiprināt e-pasta adresi, lai sūtītu datnes ar "Send".</value>
+    <value>Jums ir jāapstiprina savs e-pasts, lai izmantotu failus ar Sūtījumu. Jūs varat verificēt savu e-pastu tīmekļa glabātuvē.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
@@ -2092,7 +2095,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Atjaunināt galveno paroli</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Apvienības pārvaldnieks nesen nomainīja galveno paroli. Lai piekļūtu glabātavai, tā ir jāatjaunina. Turpinot tiks izbeigta pašreizējā sesija un tiks pieprasīta atkārtota pierakstīšanās. Esošās sesijas citās iekārtās var turpināt darboties līdz vienai stundai.</value>
+    <value>Apvienības pārvaldnieks nesen nomainīja galveno paroli. Tā ir jāatjaunina, lai varētu piekļūt glabātavai. Turpinot tiks izbeigta pašreizējā sesija un tiks pieprasīta atkārtota pieteikšanās. Esošās sesijas citās ierīcēs var turpināt darboties līdz vienai stundai.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
     <value>Atjaunina paroli</value>
@@ -2104,7 +2107,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Noņemt galveno paroli</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} izmanto vienoto pieteikšanos ar klientu pārvaldītu šifrēšanu. Turpinot no konta tiks noņemta galvenā parole un būs nepieciešams pierakstīties ar vienoto pieteikšanos.</value>
+    <value>{0} izmanto vienoto pieteikšanos ar klienta pārvaldītu šifrēšanu. Turpinot no konta tiks noņemta galvenā parole un būs nepieciešams pieteikties ar vienoto pieteikšanos.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
     <value>Ja nav vēlēšanās noņemt galveno paroli, var pamest šo apvienību.</value>
@@ -2142,7 +2145,7 @@ Nolasīšana notiks automātiski.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Glabātavas noildze pārsniedz apvienības uzstādītos ierobežojumus.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Viens vai vairāki apvienības nosacījumi neļauj izgūt privātās glabātavas saturu.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2155,7 +2158,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Slēgts</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>Izrakstījies</value>
+    <value>Atteicies</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>Pārslēdzās uz nākamo pieejamo kontu</value>
@@ -2164,7 +2167,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Konts ir slēgts</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
-    <value>Izrakstīšanās no konta bija veiksmīga</value>
+    <value>Veiksmīga izrakstīšanās no konta</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
     <value>Konts tika veiksmīgi noņemts</value>
@@ -2182,7 +2185,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Dzēš kontu</value>
   </data>
   <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
-    <value>Konts tika neatgriezeniski izdzēsts</value>
+    <value>Jūsu konts ir neatgriezeniski izdzēsts</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Nederīgs apstiprinājuma kods.</value>
@@ -2197,7 +2200,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Sūta</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Saglabājot ievietot "Send" saiti starpliktuvē</value>
+    <value>Kopēt Sūtījuma saiti saglabāšanas laikā</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
     <value>Sūta kodu</value>
@@ -2212,7 +2215,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Pārbaudes kods tika nosūtīts e-pastā</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>Pārbaudes koda nosūtīšanā uz e-pastu atgadījās kļūda. Lūgums mēģināt vēlreiz</value>
+    <value>Nosūtot verifikācijas kodu uz jūsu e-pastu, radās kļūda. Lūdzu mēģiniet vēlreiz</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Ievadīt pārbaudes kodu, kas tika nosūtīts e-pastā</value>
@@ -2315,13 +2318,13 @@ jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
     <value>Vai tiešām iespējot ekrāna tveršanu?</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
-    <value>Pieprasīta pierakstīšanās</value>
+    <value>Pieprasīta pieteikšanās</value>
   </data>
   <data name="AreYouTryingToLogIn" xml:space="preserve">
-    <value>Vai mēģini pierakstīties?</value>
+    <value>Vai mēģini pieteikties?</value>
   </data>
   <data name="LogInAttemptByXOnY" xml:space="preserve">
-    <value>{0} pierakstīšanās mēģinājums {1}</value>
+    <value>{0} pieteikšanās mēģinājums {1}</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
     <value>Ierīces veids</value>
@@ -2336,10 +2339,10 @@ jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
     <value>Tuvu</value>
   </data>
   <data name="ConfirmLogIn" xml:space="preserve">
-    <value>Apstiprināt pierakstīšanos</value>
+    <value>Apstiprināt pieteikšanos</value>
   </data>
   <data name="DenyLogIn" xml:space="preserve">
-    <value>Atteikt pierakstīšanos</value>
+    <value>Atteikt pieteikšanos</value>
   </data>
   <data name="JustNow" xml:space="preserve">
     <value>Tikko</value>
@@ -2348,28 +2351,28 @@ jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
     <value>Pirms {0} minūtēm</value>
   </data>
   <data name="LogInAccepted" xml:space="preserve">
-    <value>Pierakstīšanās apstiprināta</value>
+    <value>Pieteikšanās ir apstiprināta</value>
   </data>
   <data name="LogInDenied" xml:space="preserve">
-    <value>Pierakstīšanās atteikta</value>
+    <value>Pieteikšanās ir atteikta</value>
   </data>
   <data name="ApproveLoginRequests" xml:space="preserve">
-    <value>Apstiprināt pierakstīšanās pieprasījumus</value>
+    <value>Apstiprināt pieteikšanās pieprasījumus</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Izmantot šo ierīci, lai apstiprināt pierakstīšanās pieprasījumus, kas tiek veikti no citām iekārtām.</value>
+    <value>Izmantot šo ierīci, lai apstiprinātu pieteikšanās pieprasījumus no citām ierīcēm.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Atļaut paziņojumus</value>
   </data>
   <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
-    <value>Saņemt uznirstošos paziņojumus par jauniem pierakstīšanās paziņojumiem</value>
+    <value>Saņemt uznirstošos paziņojumus par jauniem pieteikšanās pieprasījumiem</value>
   </data>
   <data name="NoThanks" xml:space="preserve">
     <value>Nē, paldies!</value>
   </data>
   <data name="ConfimLogInAttempForX" xml:space="preserve">
-    <value>Apstiprināt pierakstīšanāš mēģinājumu {0}</value>
+    <value>Apstiprināt {0} pieteikšanās mēģinājumu</value>
   </data>
   <data name="AllNotifications" xml:space="preserve">
     <value>Visi paziņojumi</value>
@@ -2419,6 +2422,14 @@ jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API piekļuves pilnvara</value>
   </data>
@@ -2456,7 +2467,7 @@ jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
     <value>Pieejamības pakalpojuma izmantošanas skaidrojums</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden izmanto pieejamības pakalpojumu, lai meklētu pierakstīšanās laukus lietotnēs un tīmekļa vietnēs, tad noskaidro atbistošus lauku identifikatorus lietotājvārda un paroles ievadīšanai, kad ir atrasta atbilstība lietotnei vai vietnei. Bitwarden neglabā neko no informācijas, ko nodrošina pakalpojums, kā arī nemēģina pārvaldīt ekrānā redzamās daļas, kas nav saistītas ar pierakstīšanās datu ievadi.</value>
+    <value>Bitwarden izmanto pieejamības pakalpojumu, lai meklētu pieteikšanās laukus lietotnēs un tīmekļa vietnēs, tad noskaidro atbistošus lauku identifikatorus lietotājvārda un paroles ievadīšanai, kad ir atrasta atbilstība lietotnei vai vietnei. Bitwarden neglabā neko no informācijas, ko nodrošina pakalpojums, kā arī nemēģina pārvaldīt ekrānā redzamās daļas, kas nav saistītas ar pieteikšanās datu ievadi.</value>
   </data>
   <data name="Accept" xml:space="preserve">
     <value>Pieņemt</value>
@@ -2465,10 +2476,10 @@ jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
     <value>Noraidīt</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
-    <value>Pierakstīšanās pieprasījuma derīgums jau ir beidzies.</value>
+    <value>Pieteikšanās pieprasījuma derīgums jau ir beidzies.</value>
   </data>
   <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
-    <value>Pierakstīšanās mēģinājums no:
+    <value>Pieteikšanās mēģinājums no:
 {0}
 Vai pārslēgties uz šo kontu?</value>
   </data>
@@ -2479,19 +2490,19 @@ Vai pārslēgties uz šo kontu?</value>
     <value>Saņemt galvenās paroles norādi</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Pierakstās kā {0}</value>
+    <value>Piesakās kā {0}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Tas neesi Tu?</value>
   </data>
   <data name="LogInWithMasterPassword" xml:space="preserve">
-    <value>Pierakstīties ar galveno paroli</value>
+    <value>Pieteikties ar galveno paroli</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Pierakstīties ar citu ierīci</value>
+    <value>Pieteikties ar ierīci</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Uzsākta pierakstīšanās</value>
+    <value>Uzsākta pieteikšanās</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
     <value>Uz ierīci ir nosūtīts paziņojums.</value>
@@ -2506,12 +2517,90 @@ Vai pārslēgties uz šo kontu?</value>
     <value>Nepieciešama cita iespēja?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>Apskatīt visas pierakstīšanās iespējas</value>
+    <value>Skatīt visas pieteikšanās iespējas</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Šis pieprasījums vairs nav derīgs</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Neapstiprinātie pieteikšanās pieprasījumi</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Noraidīt visus pieprasījumus</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Vai tiešām noraidīt visus neapstiprinātos pieteikšanās pieprasījumus?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Pieprasījumi noraidīti</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Nav neapstiprinātu pieprasījumu</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Nodrošināt atļauju izmantot kameru, lai lietotu nolasītāju</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Valoda</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Valoda tika nomainīta uz {0}. Lūgums pārsāknēt lietotni, lai redzētu izmaiņas</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Pēc valodas maiņas ir nepieciešams pārsāknēt lietotni</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Noklusējuma (sistēmas)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Svarīgi</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Galveno paroli nevarēs atgūt, ja tā tiks aizmirsta. Vismaz {0} rakstzīmes.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Vāja galvenā parole</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Noteikta vāja parole. Jāizmanto spēcīga parole, lai aizsargātu savu kontu. Vai tiešām izmantot vāju paroli?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Vāja</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Laba</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Spēcīga</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Meklēt šo paroli zināmās datu noplūdēs</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Noplūdusi galvenā parole</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Parole atrasta datu noplūdē. Jāizmanto neatkārtojama parole, lai aizsargātu savu kontu. Vai tiešām izmantot noplūdušu paroli?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Vāja un noplūdusi galvenā parole</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Noteikta vāja parole, un tā ir atrasta datu noplūdē. Jāizmanto spēcīga un neatkārtojama parole, lai aizsargātu savu kontu. Vai tiešām izmantot šo paroli?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Ir nepieciešams apvienības SSO identifikators.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Pievienot atslēgu esošam vai jaunam vienumam</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Glabātavā nav vienumu, kas atbilstu "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Meklēt vienumu vai pievienot jaunu</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Nav vienumu, kas atbilstu meklējumam</value>
   </data>
 </root>

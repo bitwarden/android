@@ -64,7 +64,7 @@ jobs:
           environment: 'production'
           description: 'Deployment ${{ steps.version.outputs.version }} from branch ${{ steps.branch.outputs.branch-name }}'
           task: release
-      
+
 
       - name: Download all artifacts
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
@@ -92,7 +92,9 @@ jobs:
           artifacts: "./com.x8bit.bitwarden.aab/com.x8bit.bitwarden.aab,
                       ./com.x8bit.bitwarden.apk/com.x8bit.bitwarden.apk,
                       ./com.x8bit.bitwarden-fdroid.apk/com.x8bit.bitwarden-fdroid.apk,
-                      ./Bitwarden iOS.zip"
+                      ./Bitwarden iOS.zip,
+                      ./bw-android-apk-sha256.txt/bw-android-apk-sha256.txt,
+                      ./bw-fdroid-apk-sha256.txt/bw-fdroid-apk-sha256.txt"
           commit: ${{ github.sha }}
           tag: v${{ steps.version.outputs.version }}
           name: Version ${{ steps.version.outputs.version }}

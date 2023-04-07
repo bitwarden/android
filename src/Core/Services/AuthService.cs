@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
@@ -106,6 +107,7 @@ namespace Bit.Core.Services
         public string CaptchaToken { get; set; }
         public string MasterPasswordHash { get; set; }
         public string LocalMasterPasswordHash { get; set; }
+        public string AuthRequestId { get; set; }
         public string Code { get; set; }
         public string CodeVerifier { get; set; }
         public string SsoRedirectUrl { get; set; }
@@ -163,7 +165,7 @@ namespace Bit.Core.Services
                 CaptchaToken = captchaToken;
             }
             return LogInHelperAsync(Email, MasterPasswordHash, LocalMasterPasswordHash, Code, CodeVerifier, SsoRedirectUrl, _key,
-                twoFactorProvider, twoFactorToken, remember, CaptchaToken);
+                twoFactorProvider, twoFactorToken, remember, CaptchaToken, authRequestId: AuthRequestId);
         }
 
         public async Task<AuthResult> LogInCompleteAsync(string email, string masterPassword,
@@ -275,15 +277,13 @@ namespace Bit.Core.Services
         private async Task<SymmetricCryptoKey> MakePreloginKeyAsync(string masterPassword, string email)
         {
             email = email.Trim().ToLower();
-            KdfType? kdf = null;
-            int? kdfIterations = null;
+            KdfConfig kdfConfig = KdfConfig.Default;
             try
             {
                 var preloginResponse = await _apiService.PostPreloginAsync(new PreloginRequest { Email = email });
                 if (preloginResponse != null)
                 {
-                    kdf = preloginResponse.Kdf;
-                    kdfIterations = preloginResponse.KdfIterations;
+                    kdfConfig = preloginResponse.KdfConfig;
                 }
             }
             catch (ApiException e)
@@ -293,7 +293,7 @@ namespace Bit.Core.Services
                     throw;
                 }
             }
-            return await _cryptoService.MakeKeyAsync(masterPassword, email, kdf, kdfIterations);
+            return await _cryptoService.MakeKeyAsync(masterPassword, email, kdfConfig);
         }
 
         private async Task<AuthResult> LogInHelperAsync(string email, string hashedPassword, string localHashedPassword,
@@ -328,12 +328,12 @@ namespace Bit.Core.Services
             if (twoFactorToken != null && twoFactorProvider != null)
             {
                 request = new TokenRequest(emailPassword, codeCodeVerifier, twoFactorProvider, twoFactorToken, remember,
-                    captchaToken, deviceRequest);
+                    captchaToken, deviceRequest, authRequestId);
             }
             else if (storedTwoFactorToken != null)
             {
                 request = new TokenRequest(emailPassword, codeCodeVerifier, TwoFactorProviderType.Remember,
-                    storedTwoFactorToken, false, captchaToken, deviceRequest);
+                    storedTwoFactorToken, false, captchaToken, deviceRequest, authRequestId);
             }
             else if (authRequestId != null)
             {
@@ -359,6 +359,7 @@ namespace Bit.Core.Services
                 Email = email;
                 MasterPasswordHash = hashedPassword;
                 LocalMasterPasswordHash = localHashedPassword;
+                AuthRequestId = authRequestId;
                 Code = code;
                 CodeVerifier = codeVerifier;
                 SsoRedirectUrl = redirectUrl;
@@ -387,6 +388,8 @@ namespace Bit.Core.Services
                         Name = _tokenService.GetName(),
                         KdfType = tokenResponse.Kdf,
                         KdfIterations = tokenResponse.KdfIterations,
+                        KdfMemory = tokenResponse.KdfMemory,
+                        KdfParallelism = tokenResponse.KdfParallelism,
                         HasPremiumPersonally = _tokenService.GetPremium(),
                     },
                     new Account.AccountTokens()
@@ -440,7 +443,7 @@ namespace Bit.Core.Services
                 {
                     // SSO Key Connector Onboarding
                     var password = await _cryptoFunctionService.RandomBytesAsync(64);
-                    var k = await _cryptoService.MakeKeyAsync(Convert.ToBase64String(password), _tokenService.GetEmail(), tokenResponse.Kdf, tokenResponse.KdfIterations);
+                    var k = await _cryptoService.MakeKeyAsync(Convert.ToBase64String(password), _tokenService.GetEmail(), tokenResponse.KdfConfig);
                     var keyConnectorRequest = new KeyConnectorUserKeyRequest(k.EncKeyB64);
                     await _cryptoService.SetKeyAsync(k);
 
@@ -463,7 +466,7 @@ namespace Bit.Core.Services
                         EncryptedPrivateKey = keyPair.Item2.EncryptedString
                     };
                     var setPasswordRequest = new SetKeyConnectorKeyRequest(
-                        encKey.Item2.EncryptedString, keys, tokenResponse.Kdf, tokenResponse.KdfIterations, orgId
+                        encKey.Item2.EncryptedString, keys, tokenResponse.KdfConfig, orgId
                     );
                     await _apiService.PostSetKeyConnectorKey(setPasswordRequest);
                 }
@@ -481,6 +484,7 @@ namespace Bit.Core.Services
             Email = null;
             CaptchaToken = null;
             MasterPasswordHash = null;
+            AuthRequestId = null;
             Code = null;
             CodeVerifier = null;
             SsoRedirectUrl = null;
@@ -490,12 +494,21 @@ namespace Bit.Core.Services
 
         public async Task<List<PasswordlessLoginResponse>> GetPasswordlessLoginRequestsAsync()
         {
-            return await _apiService.GetAuthRequestAsync();
+            var response = await _apiService.GetAuthRequestAsync();
+            return await PopulateFingerprintPhrasesAsync(response);
+        }
+
+        public async Task<List<PasswordlessLoginResponse>> GetActivePasswordlessLoginRequestsAsync()
+        {
+            var requests = await GetPasswordlessLoginRequestsAsync();
+            var activeRequests = requests.Where(r => !r.IsAnswered && !r.IsExpired).OrderByDescending(r => r.CreationDate).ToList();
+            return await PopulateFingerprintPhrasesAsync(activeRequests);
         }
 
         public async Task<PasswordlessLoginResponse> GetPasswordlessLoginRequestByIdAsync(string id)
         {
-            return await _apiService.GetAuthRequestAsync(id);
+            var response = await _apiService.GetAuthRequestAsync(id);
+            return await PopulateFingerprintPhraseAsync(response, await _stateService.GetEmailAsync());
         }
 
         public async Task<PasswordlessLoginResponse> GetPasswordlessLoginResponseAsync(string id, string accessCode)
@@ -510,7 +523,8 @@ namespace Bit.Core.Services
             var encryptedKey = await _cryptoService.RsaEncryptAsync(masterKey.EncKey, publicKey);
             var encryptedMasterPassword = await _cryptoService.RsaEncryptAsync(Encoding.UTF8.GetBytes(await _stateService.GetKeyHashAsync()), publicKey);
             var deviceId = await _appIdService.GetAppIdAsync();
-            return await _apiService.PutAuthRequestAsync(id, encryptedKey.EncryptedString, encryptedMasterPassword.EncryptedString, deviceId, requestApproved);
+            var response = await _apiService.PutAuthRequestAsync(id, encryptedKey.EncryptedString, encryptedMasterPassword.EncryptedString, deviceId, requestApproved);
+            return await PopulateFingerprintPhraseAsync(response, await _stateService.GetEmailAsync());
         }
 
         public async Task<PasswordlessLoginResponse> PasswordlessCreateLoginRequestAsync(string email)
@@ -528,9 +542,30 @@ namespace Bit.Core.Services
             {
                 response.RequestKeyPair = keyPair;
                 response.RequestAccessCode = accessCode;
+                response.FingerprintPhrase = fingerprintPhrase;
             }
 
             return response;
+        }
+
+        private async Task<List<PasswordlessLoginResponse>> PopulateFingerprintPhrasesAsync(List<PasswordlessLoginResponse> passwordlessLoginList)
+        {
+            if (passwordlessLoginList == null)
+            {
+                return null;
+            }
+            var userEmail = await _stateService.GetEmailAsync();
+            foreach (var passwordlessLogin in passwordlessLoginList)
+            {
+                await PopulateFingerprintPhraseAsync(passwordlessLogin, userEmail);
+            }
+            return passwordlessLoginList;
+        }
+
+        private async Task<PasswordlessLoginResponse> PopulateFingerprintPhraseAsync(PasswordlessLoginResponse passwordlessLogin, string userEmail)
+        {
+            passwordlessLogin.FingerprintPhrase = string.Join("-", await _cryptoService.GetFingerprintAsync(userEmail, CoreHelpers.Base64UrlDecode(passwordlessLogin.PublicKey)));
+            return passwordlessLogin;
         }
     }
 }

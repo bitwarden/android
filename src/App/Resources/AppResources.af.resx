@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>’n Hoofwagwoordwenk kan u help om u wagwoord te onthou indien u dit sou vergeet.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Hoofwagwoord moet ten minste 8 karakters lank wees.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Die hoofwagwoord moet ten minste {0} karakters lank wees.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Min. aantal syfers</value>
@@ -1103,6 +1103,9 @@ Skandering gebeur outomaties.</value>
   <data name="Ms" xml:space="preserve">
     <value>Mej.</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
   </data>
@@ -1576,7 +1579,7 @@ Skandering gebeur outomaties.</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
-    <value>Solarized Dark</value>
+    <value>'Solarized' Donker</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
@@ -2142,7 +2145,7 @@ Skandering gebeur outomaties.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>U kluisuittelling oorskry die beperkinge wat deur u organisasie daargestel is.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Een of meer organisasiebeleide verhoed u om u persoonlike kluis uit te stuur.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2419,6 +2422,14 @@ kies u Voeg TOTP toe om die sleutel veilig te bewaar</value>
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API-toegangsteken</value>
   </data>
@@ -2450,7 +2461,7 @@ kies u Voeg TOTP toe om die sleutel veilig te bewaar</value>
     <value>Lukraak</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connect to Watch</value>
+    <value>Koppel aan horlosie</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Toeganklikheidsdiensopenbaarmaking</value>
@@ -2468,50 +2479,128 @@ kies u Voeg TOTP toe om die sleutel veilig te bewaar</value>
     <value>Aantekenversoek het reeds verstryk.</value>
   </data>
   <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
-    <value>Login attempt from:
+    <value>Teken Aan probeerslag van:
 {0}
-Do you want to switch to this account?</value>
+Wil u na die rekening omskakel?</value>
   </data>
   <data name="NewAroundHere" xml:space="preserve">
-    <value>New around here?</value>
+    <value>Nuut hier?</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
-    <value>Get master password hint</value>
+    <value>Kry hoofwagwoord wenk</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>Teken in as {0}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
-    <value>Not you?</value>
+    <value>Nie jy nie?</value>
   </data>
   <data name="LogInWithMasterPassword" xml:space="preserve">
-    <value>Log in with master password</value>
+    <value>Teken aan met hoofwagwoord</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Log In with another device</value>
+    <value>Teken Aan met 'n ander toestel</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Log in initiated</value>
+    <value>Aanmelding begin</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
-    <value>A notification has been sent to your device.</value>
+    <value>'n Kennisgewing was gestuur na u toestel.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+    <value>Asseblief maak seker jou kluis is oopgesluit en die vingerafdruk frase stem ooreen op die ander toestel.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
-    <value>Resend notification</value>
+    <value>Stuur kennisgewing weer</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>Is daar nog 'n opsie nodig?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>View all log in options</value>
+    <value>Wys alle aanmeldings opsies</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
-    <value>This request is no longer valid</value>
+    <value>Hierdie versoek is nie langer gelding nie</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>In afwagting vir aantekeningsversoeke</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Weier alle versoeke</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Is jy seker dat jy alle hangende aantekeningsversoeke wil weier?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Versoeke geweier</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Geen hangende versoeke</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>Laat die kamera versoek toe om die skandeerder te gebruik</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Taal</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Die taal is na {0} verander. Asseblief herbegin die toep om die veranderinge te sien</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Die taal verandering vereis 'n herbegin van die toep</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Verstek (Sisteem)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Belangrik</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Jou hoofwagwoord kan nie geherstel word as jy dit vergeet het nie! {0} karakters minimum.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Swak Hoofwagwoord</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Swak wagwoord geïdentifiseer. Gebruik 'n sterk wagwoord om jou rekening te beskerm. Is jy seker dat jy 'n swak wagwoord wil gebruik?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Swak</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Goed</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Sterk</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Ondersoek bekende data lekkasies vir dié wagwoord</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Blootgestelde Hoofwagwoord</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Dié wagwoord was in data lekkasie gevind. Gebruik 'n unieke wagwoord om jou rekening te beskerm. Is jy seker dat jy 'n blootgestelde wagwoord wil gebruik?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Swak en Blootgestelde Hoofwagwoord</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Swak wagwoord geïdentifiseer en in 'n data lekkasie gevind. Gebruik 'n sterk en unieke wagwoord om jou rekening te beskerm. Is jy seker dat jy hierdie wagwoord wil gebruik?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organisasie SSO identifiseerder vereis.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Add the key to an existing or new item</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>There are no items in your vault that match "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Search for an item or add a new item</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>There are no items that match the search</value>
   </data>
 </root>

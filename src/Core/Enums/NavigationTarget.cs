@@ -8,6 +8,7 @@
         Home,
         AddEditCipher,
         AutofillCiphers,
-        SendAddEdit
+        SendAddEdit,
+        OtpCipherSelection
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Resources;
 using Bit.App.Utilities;
@@ -14,7 +15,8 @@ namespace Bit.App.Pages
     {
         private readonly IStateService _stateService;
         private readonly IMessagingService _messagingService;
-
+        private readonly II18nService _i18nService;
+        private readonly IPlatformUtilsService _platformUtilsService;
 
         private bool _autofillSavePrompt;
         private string _autofillBlockedUris;
@@ -24,6 +26,7 @@ namespace Bit.App.Pages
         private int _themeSelectedIndex;
         private int _autoDarkThemeSelectedIndex;
         private int _uriMatchSelectedIndex;
+        private KeyValuePair<string, string> _selectedLocale;
         private bool _inited;
         private bool _updatingAutofill;
         private bool _showAndroidAutofillSettings;
@@ -32,6 +35,8 @@ namespace Bit.App.Pages
         {
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _i18nService = ServiceContainer.Resolve<II18nService>();
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
 
             PageTitle = AppResources.Options;
             var iosIos = Device.RuntimePlatform == Device.iOS;
@@ -74,12 +79,18 @@ namespace Bit.App.Pages
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Exact, AppResources.Exact),
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Never, AppResources.Never),
             };
+            LocalesOptions = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(null, AppResources.DefaultSystem)
+            };
+            LocalesOptions.AddRange(_i18nService.LocaleNames.ToList());
         }
 
         public List<KeyValuePair<int?, string>> ClearClipboardOptions { get; set; }
         public List<KeyValuePair<string, string>> ThemeOptions { get; set; }
         public List<KeyValuePair<string, string>> AutoDarkThemeOptions { get; set; }
         public List<KeyValuePair<UriMatchType?, string>> UriMatchOptions { get; set; }
+        public List<KeyValuePair<string, string>> LocalesOptions { get; }
 
         public int ClearClipboardSelectedIndex
         {
@@ -129,6 +140,18 @@ namespace Bit.App.Pages
                 if (SetProperty(ref _uriMatchSelectedIndex, value))
                 {
                     SaveDefaultUriAsync().FireAndForget();
+                }
+            }
+        }
+
+        public KeyValuePair<string, string> SelectedLocale
+        {
+            get => _selectedLocale;
+            set
+            {
+                if (SetProperty(ref _selectedLocale, value))
+                {
+                    UpdateCurrentLocaleAsync().FireAndForget();
                 }
             }
         }
@@ -184,19 +207,30 @@ namespace Bit.App.Pages
         public async Task InitAsync()
         {
             AutofillSavePrompt = !(await _stateService.GetAutofillDisableSavePromptAsync()).GetValueOrDefault();
+
             var blockedUrisList = await _stateService.GetAutofillBlacklistedUrisAsync();
             AutofillBlockedUris = blockedUrisList != null ? string.Join(", ", blockedUrisList) : null;
+
             AutoTotpCopy = !(await _stateService.GetDisableAutoTotpCopyAsync() ?? false);
+
             Favicon = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
+
             var theme = await _stateService.GetThemeAsync();
             ThemeSelectedIndex = ThemeOptions.FindIndex(k => k.Key == theme);
+
             var autoDarkTheme = await _stateService.GetAutoDarkThemeAsync() ?? "dark";
             AutoDarkThemeSelectedIndex = AutoDarkThemeOptions.FindIndex(k => k.Key == autoDarkTheme);
+
             var defaultUriMatch = await _stateService.GetDefaultUriMatchAsync();
             UriMatchSelectedIndex = defaultUriMatch == null ? 0 :
                 UriMatchOptions.FindIndex(k => (int?)k.Key == defaultUriMatch);
+
             var clearClipboard = await _stateService.GetClearClipboardAsync();
             ClearClipboardSelectedIndex = ClearClipboardOptions.FindIndex(k => k.Key == clearClipboard);
+
+            var appLocale = _stateService.GetLocale();
+            SelectedLocale = appLocale == null ? LocalesOptions.First() : LocalesOptions.FirstOrDefault(kv => kv.Key == appLocale);
+
             _inited = true;
         }
 
@@ -287,6 +321,18 @@ namespace Bit.App.Pages
                 }
                 catch { }
             }
+        }
+
+        private async Task UpdateCurrentLocaleAsync()
+        {
+            if (!_inited)
+            {
+                return;
+            }
+
+            _stateService.SetLocale(SelectedLocale.Key);
+
+            await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.LanguageChangeXDescription, SelectedLocale.Value), AppResources.Language, AppResources.Ok);
         }
     }
 }

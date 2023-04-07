@@ -4,10 +4,10 @@ name: Build
 on:
   push:
     branches-ignore:
-      - 'l10n_master'
-      - 'gh-pages'
+      - "l10n_master"
+      - "gh-pages"
     paths-ignore:
-      - '.github/workflows/**'
+      - ".github/workflows/**"
   workflow_dispatch:
     inputs: {}
 
@@ -37,6 +37,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
+        with:
+          submodules: 'true'
 
       - name: Check if special branches exist
         id: branch-check
@@ -62,16 +64,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: ['prod', 'qa']
+        variant: ["prod", "qa"]
     steps:
       - name: Setup NuGet
-        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
+        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa # v1.0.6
         with:
           nuget-version: 5.9.0
 
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ab534842b4bdf384b8aaf93765dc6f721d9f5fab
-          
+
+      - name: Setup Windows builder
+        run: choco install checksum --no-progress
+
       - name: Work Around for broken Windows 2022 Runner Image
         run: |
           Set-Location "C:\Program Files (x86)\Microsoft Visual Studio\Installer\"
@@ -148,7 +153,17 @@ jobs:
         shell: pwsh
 
       - name: Run Core tests
-        run: dotnet test test/Core.Test/Core.Test.csproj
+        run: dotnet test test/Core.Test/Core.Test.csproj --logger "trx;LogFileName=test-results.trx"
+        shell: pwsh
+
+      - name: Report test results
+        uses: dorny/test-reporter@c9b3d0e2bd2a4e96aaf424dbaa31c46b42318226
+        if: always()
+        with:
+          name: Test Results
+          path: "**/test-results.trx"
+          reporter: dotnet-trx
+          fail-on-error: true
 
       - name: Build Play Store publisher
         if: ${{ matrix.variant == 'prod' }}
@@ -175,7 +190,7 @@ jobs:
         run: |
           $androidPath = $($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj");
           $packageName = "com.x8bit.bitwarden";
-          
+
           if ("${{ matrix.variant }}" -ne "prod") 
           {
             $packageName = "com.x8bit.bitwarden.${{ matrix.variant }}";
@@ -239,6 +254,34 @@ jobs:
           path: ./com.x8bit.bitwarden.${{ matrix.variant }}.apk
           if-no-files-found: error
 
+      - name: Create checksum for Prod .apk artifact
+        if: ${{ matrix.variant == 'prod' }}
+        run: |
+          checksum -f="./com.x8bit.bitwarden.apk" `
+            -t sha256 | Out-File -Encoding ASCII ./bw-android-apk-sha256.txt
+
+      - name: Create checksum for Other .apk artifact
+        if: ${{ matrix.variant != 'prod' }}
+        run: |
+          checksum -f="./com.x8bit.bitwarden.${{ matrix.variant }}.apk" `
+            -t sha256 | Out-File -Encoding ASCII ./bw-android-${{ matrix.variant }}-apk-sha256.txt
+
+      - name: Upload .apk sha file for prod
+        if: ${{ matrix.variant == 'prod' }}
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
+        with:
+          name: bw-android-apk-sha256.txt
+          path: ./bw-android-apk-sha256.txt
+          if-no-files-found: error
+
+      - name: Upload .apk sha file for other
+        if: ${{ matrix.variant != 'prod' }}
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
+        with:
+          name: bw-android-${{ matrix.variant }}-apk-sha256.txt
+          path: ./bw-android-${{ matrix.variant }}-apk-sha256.txt
+          if-no-files-found: error
+
       - name: Deploy to Play Store
         if: ${{ matrix.variant == 'prod' && (( github.ref == 'refs/heads/master'
           && needs.setup.outputs.rc_branch_exists == 0
@@ -260,12 +303,15 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Setup NuGet
-        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
+        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa # v1.0.6
         with:
           nuget-version: 5.9.0
 
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ab534842b4bdf384b8aaf93765dc6f721d9f5fab
+
+      - name: Setup Windows builder
+        run: choco install checksum --no-progress
 
       - name: Work Around for broken Windows 2022 Runner Image
         run: |
@@ -437,14 +483,26 @@ jobs:
           path: ./com.x8bit.bitwarden-fdroid.apk
           if-no-files-found: error
 
+      - name: Create checksum for F-Droid artifact
+        run: |
+          checksum -f="./com.x8bit.bitwarden-fdroid.apk" `
+            -t sha256 | Out-File -Encoding ASCII ./bw-fdroid-apk-sha256.txt
+
+      - name: Upload F-Droid sha file
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
+        with:
+          name: bw-fdroid-apk-sha256.txt
+          path: ./bw-fdroid-apk-sha256.txt
+          if-no-files-found: error
+
 
   ios:
     name: Apple iOS
-    runs-on: macos-11
+    runs-on: macos-12
     needs: setup
     steps:
       - name: Setup NuGet
-        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
+        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa # v1.0.6
         with:
           nuget-version: 5.9.0
 
@@ -458,6 +516,8 @@ jobs:
 
       - name: Checkout repo
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
+        with:
+          submodules: 'true'
 
       - name: Login to Azure - Prod Subscription
         uses: Azure/login@1f63701bf3e6892515f1b7ce2d2bf1708b46beaf
@@ -503,6 +563,8 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output $HOME/secrets/dist_watch_app_extension.mobileprovision \
             ./.github/secrets/dist_watch_app_extension.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output ./src/watchOS/bitwarden/GoogleService-Info.plist ./.github/secrets/GoogleService-Info.plist.gpg
         shell: bash
 
       - name: Increment version
@@ -584,15 +646,12 @@ jobs:
           echo "########################################"
           echo "##### Build WatchApp with Release Configuration"
           echo "########################################"
-          
+
           xcodebuild archive -workspace ./src/watchOS/bitwarden/bitwarden.xcodeproj/project.xcworkspace -configuration Release -scheme bitwarden\ WatchKit\ App -archivePath ./src/watchOS/bitwarden
 
           echo "########################################"
           echo "##### Done"
           echo "########################################"
-          cd src/watchOS
-          ls -R
-          cd ../..
         shell: bash
 
       - name: Restore packages
@@ -630,7 +689,12 @@ jobs:
           ARCHIVE_DSYMS_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive/dSYMs"
           EXPORT_PATH="./bitwarden-export"
 
-          cp -r $ARCHIVE_DSYMS_PATH $EXPORT_PATH
+          WATCH_ARCHIVE_DSYMS_PATH="./src/watchOS/bitwarden.xcarchive/dSYMs/"
+          WATCH_DSYMS_EXPORT_PATH="$EXPORT_PATH/Watch_dSYMs"
+
+          cp -r -v $ARCHIVE_DSYMS_PATH $EXPORT_PATH
+          mkdir $WATCH_DSYMS_EXPORT_PATH
+          cp -r -v $WATCH_ARCHIVE_DSYMS_PATH $WATCH_DSYMS_EXPORT_PATH
         shell: bash
 
       - name: Upload App Store .ipa & dSYMs artifacts
@@ -653,23 +717,39 @@ jobs:
 
       - name: Upload dSYMs to App Center
         if: |
-            (github.ref == 'refs/heads/master'
-              && needs.setup.outputs.rc_branch_exists == 0
-              && needs.setup.outputs.hotfix_branch_exists == 0)
-            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix-rc'
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
         env:
           APPCENTER_IOS_TOKEN: ${{ steps.retrieve-secrets.outputs.appcenter-ios-token }}
         run: appcenter crashes upload-symbols -a bitwarden/bitwarden -s "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
         shell: bash
 
+      - name: Upload Watch dSYMs to Firebase Crashlytics
+        if: |
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
+        run: |
+
+          echo "########################################"
+          echo "##### Uploading Watch dSYMs to Firebase"
+          echo "########################################"
+
+          find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/Watch_dSYMs" \;
+        shell: bash
+
       - name: Deploy to App Store
         if: |
-            (github.ref == 'refs/heads/master'
-              && needs.setup.outputs.rc_branch_exists == 0
-              && needs.setup.outputs.hotfix_branch_exists == 0)
-            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix-rc'
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
         env:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
@@ -737,9 +817,9 @@ jobs:
     steps:
       - name: Check if any job failed
         if: |
-            (github.ref == 'refs/heads/master')
-            || (github.ref == 'refs/heads/rc')
-            || (github.ref == 'refs/heads/hotfix-rc')
+          (github.ref == 'refs/heads/master')
+          || (github.ref == 'refs/heads/rc')
+          || (github.ref == 'refs/heads/hotfix-rc')
         env:
           CLOC_STATUS: ${{ needs.cloc.result }}
           ANDROID_STATUS: ${{ needs.android.result }}

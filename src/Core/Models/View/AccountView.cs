@@ -20,6 +20,7 @@ namespace Bit.Core.Models.View
             UserId = a.Profile?.UserId;
             Email = a.Profile?.Email;
             Name = a.Profile?.Name;
+            AvatarColor = a.Profile?.AvatarColor;
             if (!string.IsNullOrWhiteSpace(a.Settings?.EnvironmentUrls?.WebVault))
             {
                 Hostname = CoreHelpers.GetHostname(a.Settings?.EnvironmentUrls?.WebVault);
@@ -37,5 +38,6 @@ namespace Bit.Core.Models.View
         public string Email { get; set; }
         public string Name { get; set; }
         public string Hostname { get; set; }
+        public string AvatarColor { get; set; }
     }
 }

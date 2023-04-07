@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Podsjetnik glavne lozinke ti može pomoći da se prisjetiš svoje lozinke ako ju zaboraviš.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Glavna lozinka mora imati najmanje 8 znakova.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Glavna lozinka mora imati najmanje {0} znakova.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Najmanje brojeva</value>
@@ -1101,6 +1101,9 @@
   </data>
   <data name="Ms" xml:space="preserve">
     <value>gđica.</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>studeni</value>
@@ -2141,7 +2144,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Vrijeme isteka premašuje ograničenje koje je postavila tvoja organizacija.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Jedno ili više pravila organizacija onemogućuje izvoz osobnog trezora. </value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2417,6 +2420,14 @@
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token za API pristup</value>
   </data>
@@ -2448,7 +2459,7 @@
     <value>Nasumično</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connect to Watch</value>
+    <value>Spoji se na Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>Odobrenje servisa pristupačnosti</value>
@@ -2471,7 +2482,7 @@
 Želiš li se prebaciti na ovaj račun?</value>
   </data>
   <data name="NewAroundHere" xml:space="preserve">
-    <value>New around here?</value>
+    <value>Novi korisnik?</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Slanje podsjetnika glavne lozinke</value>
@@ -2509,7 +2520,85 @@
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Ovaj zahtjev više nije valjan</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Zahtjevi za prijavu na čekanju</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Odbij sve zahtjeve</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Sigurno želiš odbiti sve zahtjeve na čekanju?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Zahtjevi odbijeni</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Nema zahtjeva na čekanju</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>Za skeniranje, odobri korištenje kamere</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Jezik</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Jezik je promijenjen u {0}. Ponovno pokreni aplikaciju za primjenu.</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Promjena jezika zahtijeva ponovno pokretanje aplikacije</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Zadano (sustav)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Važno</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Glavnu lozinku nije moguće vratiti ako ju zaboraviš! Najmanje {0} znakova.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Slaba glavna lozinka</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Prepoznata je slaba lozinka. Za zaštitu računa, preporučuje se da koristiš jake lozinke. Želiš li svejedno koristiti slabu lozinku?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Slaba</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Dobra</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Jaka</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Provjeri je li lozinka ukradena prilikom krađe podataka</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Ugrožena glavna lozinka</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Lozinka je nađena među ukradenima tijekom krađa podataka. Za zaštitu svog računa koristi jedinstvenu lozinku. Želiš li svejedno korisiti ukradenu lozinku?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Slaba i ugrožena glavna lozinka</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Slaba lozinka je nađena među ukradenima tijekom krađa podataka. Za zaštitu svog računa koristi jaku i jedinstvenu lozinku. Želiš li svejedno korisiti slabu, ukradenu lozinku?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Potreban SSO identifikator organizacije.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Dodaj ključ postojećoj ili novoj stavci</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>U tvom trezoru nema stavki za ”{0}„</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Potraži ili dodaj novu stavku</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Nema stavki koje odgovaraju pretrazi</value>
   </data>
 </root>

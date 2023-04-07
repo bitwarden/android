@@ -236,7 +236,7 @@
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
-    <value>Ayuda &amp; Comentarios</value>
+    <value>Ayuda y comentarios</value>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>Ocultar</value>
@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Una pista de tu contraseña maestra puede ayudarte a recordarla en caso de que la olvides.</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>La contraseña maestra debe tener al menos 8 caracteres.</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>La contraseña maestra debe tener al menos {0} caracteres.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Mínimo de caracteres numéricos</value>
@@ -987,7 +987,7 @@ El escaneo se realizará automáticamente.</value>
     <value>URL del servidor</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>URL del servidor de la bóveda web</value>
+    <value>URL del servidor de la caja fuerte web</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>Pulsa en esta notificación para ver las entradas de tu caja fuerte.</value>
@@ -1102,6 +1102,9 @@ El escaneo se realizará automáticamente.</value>
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Srta</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>"Mx" = "Sr./Sra</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Noviembre</value>
@@ -1480,13 +1483,13 @@ El escaneo se realizará automáticamente.</value>
     <value>Desbloquear</value>
   </data>
   <data name="UnlockVault" xml:space="preserve">
-    <value>Desbloquear bóveda</value>
+    <value>Desbloquear caja fuerte</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minutos</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Establece su código PIN para desbloquear Bitwarden. Sus ajustes de PIN se reiniciarán si alguna vez cierra su sesión completamente de la aplicación.</value>
+    <value>Establezca su código PIN para desbloquear Bitwarden. Sus ajustes de PIN se reiniciarán si alguna vez cierra su sesión completamente de la aplicación.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
     <value>Iniciado como {0} en {1}.</value>
@@ -1589,7 +1592,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Pedir que se añada el inicio de sesión</value>
   </data>
   <data name="AskToAddLoginDescription" xml:space="preserve">
-    <value>Pedir que se añada un elemento si no se encuentra uno en tu bóveda.</value>
+    <value>Pedir que se añada un elemento si no se encuentra uno en tu caja fuerte.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Al reiniciar la aplicación</value>
@@ -1623,7 +1626,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Verificación biométrica</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometría</value>
+    <value>biometría</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
     <value>Utilizar biometría para desbloquear</value>
@@ -1674,7 +1677,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Las claves de cifrado de cuenta son únicas para cada cuenta de usuario de Bitwarden, por lo que no puede importar una exportación cifrada a una cuenta diferente.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirmar exportación de bóveda</value>
+    <value>Confirmar exportación de la caja fuerte</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1759,7 +1762,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Habilitar sincronización al actualizar</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Sincronizando caja fuerte con gesto desplegable.</value>
+    <value>Sincronizar caja fuerte deslizando hacia abajo.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
     <value>Inicio de sesión único empresarial</value>
@@ -1783,7 +1786,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Una o más políticas de la organización requieren que su contraseña maestra cumpla con los siguientes requisitos:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Puntuación mínima de complejidad de $SCORE$</value>
+    <value>Puntuación de complejidad mínima {0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
     <value>Longitud mínima de {0}</value>
@@ -1798,7 +1801,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Contiene uno o más números</value>
   </data>
   <data name="PolicyInEffectSpecial" xml:space="preserve">
-    <value>Contiene uno o más de los siguientes caracteres especiales $CHARS$</value>
+    <value>Contienen uno o más de los siguientes caracteres especiales {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
     <value>Contraseña no válida</value>
@@ -1861,7 +1864,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Si está activado, la accesibilidad mostrará una ventana emergente para aumentar el servicio de autorelleno para aplicaciones antiguas que no soportan la estructura de autorelleno de Android.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Debido a una Política Empresarial, usted está restringido a guardar elementos en su bóveda personal. Cambie la opción Propiedad a una organización y elija de entre las colecciones disponibles.</value>
+    <value>Debido a una política empresarial, usted está restringido a guardar elementos en su caja fuerte personal. Cambie la opción Propiedad a una organización y elija de entre las colecciones disponibles.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
     <value>Una política de organización está afectando sus opciones de propiedad.</value>
@@ -2067,7 +2070,7 @@ El escaneo se realizará automáticamente.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Debes verificar tu correo electrónico para usar archivos con el Send. Puedes verificar tu correo electrónico en la bóveda web.</value>
+    <value>Debes verificar tu correo electrónico para usar archivos con el Send. Puedes verificar tu correo electrónico en la caja fuerte web.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
@@ -2142,7 +2145,7 @@ El escaneo se realizará automáticamente.</value>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>El tiempo de espera de tu caja fuerte excede las restricciones establecidas por tu organización.</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>Una o más políticas de organización impiden que usted exporte su caja fuerte personal.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2252,16 +2255,16 @@ El escaneo se realizará automáticamente.</value>
     <value>La contraseña no está visible, toque para mostrar.</value>
   </data>
   <data name="FilterByVault" xml:space="preserve">
-    <value>Filtrar elementos por bóveda</value>
+    <value>Filtrar elementos por caja fuerte</value>
   </data>
   <data name="AllVaults" xml:space="preserve">
-    <value>Todas las bóvedas</value>
+    <value>Todas las cajas fuertes</value>
   </data>
   <data name="Vaults" xml:space="preserve">
-    <value>Bóvedas</value>
+    <value>Cajas fuertes</value>
   </data>
   <data name="VaultFilterDescription" xml:space="preserve">
-    <value>Bóveda: {0}</value>
+    <value>Caja fuerte: {0}</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>Todo</value>
@@ -2301,7 +2304,7 @@ El escaneo se realizará automáticamente.</value>
 seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
-    <value>Configurar las opciones de bloqueo a "Nunca" mantiene la bóveda disponible para cualquier persona con acceso a su dispositivo. Si utiliza esta opción, debe asegurarse de que mantiene su dispositivo debidamente protegido.</value>
+    <value>Configurar las opciones de bloqueo a "Nunca" mantiene la caja fuerte disponible para cualquier persona con acceso a su dispositivo. Si utiliza esta opción, debe asegurarse de que mantiene su dispositivo debidamente protegido.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
     <value>Una o más de las URLs introducidas no son válidas. Por favor, revisala e intenta guardar de nuevo.</value>
@@ -2358,7 +2361,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Aprobar solicitudes de inicio de sesión</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Use este dispositivo para aprovar solicitudes de incio de sesión realizadas desde otros dispositivos.</value>
+    <value>Use este dispositivo para aprobar solicitudes de inicio de sesión realizadas desde otros dispositivos.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Permitir notificaciones</value>
@@ -2419,6 +2422,14 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   <data name="SimpleLogin" xml:space="preserve">
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token de acceso API</value>
@@ -2498,7 +2509,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Se ha enviado una notificación a tu dispositivo.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Por favor, asegúrese de que su bóveda está desbloqueada y la frase de huella dactilar coincide en el otro dispositivo.</value>
+    <value>Por favor, asegúrese de que su caja fuerte está desbloqueada y la frase de huella dactilar coincide en el otro dispositivo.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
     <value>Enviar nueva notificación</value>
@@ -2512,7 +2523,85 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>Esta solicitud ya no es válida</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Solicitudes de acceso pendientes</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Rechazar todas las solicitudes</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>¿Está seguro de que desea rechazar todas las solicitudes de inicio de sesión pendientes?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Solicitudes rechazadas</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>No hay solicitudes pendientes</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Habilitar el permiso de la cámara para usar el escáner</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>El idioma se ha cambiado a {0}. Por favor, reinicia la aplicación para aplicar los cambios</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>El cambio de idioma requiere reiniciar la aplicación</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Por defecto (Sistema)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Importante</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Tu contraseña maestra no se puede recuperar si la olvidas! {0} caracteres como mínimo.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Contraseña maestra débil</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Contraseña débil identificada. Utilice una contraseña fuerte para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña débil?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Débil</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Bueno</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Fuerte</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Comprobar filtración de datos conocidos para esta contraseña</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Contraseña maestra comprometida</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Contraseña encontrada en una violación de datos. Utilice una contraseña única para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña comprometida?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Contraseña maestra débil y comprometida</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Contraseña débil encontrada en una violación de datos. Utilice una contraseña única para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña comprometida?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Se requiere un inicio de sesión único de la organización.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Añadir la clave a un elemento existente o nuevo</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>No hay artículos en su caja fuerte que coincidan con "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Buscar un elemento o añadir uno nuevo</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>No hay elementos que coincidan con la búsqueda</value>
   </data>
 </root>

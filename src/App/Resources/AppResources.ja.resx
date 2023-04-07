@@ -477,13 +477,13 @@
     <value>マスターパスワードのヒントを受信するため、アカウントのメールアドレスを入力してください。</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>アプリの拡張機能を再度有効化</value>
+    <value>App Extension を再度有効化</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>ほぼ完了！</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>アプリの拡張機能を有効化</value>
+    <value>App Extension を有効化</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>Safari では、共有アイコンを使って Bitwarden を見つけてください（ヒント：メニューの一番下の行を右側にスクロール）</value>
@@ -583,8 +583,8 @@
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>マスターパスワードのヒントは、パスワードを忘れた場合に役立ちます。</value>
   </data>
-  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>マスターパスワードは、少なくとも8文字以上で設定してください。</value>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>マスターパスワードは、少なくとも{0}文字以上で設定してください。</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>数字の最小個数</value>
@@ -1103,6 +1103,9 @@
   <data name="Ms" xml:space="preserve">
     <value>Ms</value>
   </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
   <data name="November" xml:space="preserve">
     <value>11月</value>
   </data>
@@ -1457,7 +1460,7 @@
     <value>表示するフォルダーがありません。</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>指紋句</value>
+    <value>パスフレーズ</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
@@ -2142,7 +2145,7 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>保管庫のタイムアウトが組織によって設定された制限を超えています。</value>
   </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
     <value>1 つまたは複数の組織ポリシーにより、個人の保管庫をエクスポートできません。</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
@@ -2419,6 +2422,14 @@
     <value>SimpleLogin</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API アクセストークン</value>
   </data>
@@ -2511,7 +2522,85 @@
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
     <value>このリクエストは無効になりました</value>
   </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>保留中のログインリクエスト</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>すべてのリクエストを拒否する</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>保留中のログインリクエストをすべて拒否してもよろしいですか？</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>リクエストが拒否されました</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>保留中のリクエストはありません</value>  
+  </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>スキャナを使用できるようカメラ権限を許可する</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>言語 (Language)</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>言語を {0} に変更しました。変更を反映するにはアプリを再起動してください。</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>言語の変更にはアプリの再起動が必要です</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>デフォルト (システム)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>重要</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>マスターパスワードを忘れた場合は復元できません。最小文字数は {0} です。</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>脆弱なマスターパスワード</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>入力されたパスワードは脆弱です。アカウントを守るためより強力なパスワードを使用してください。本当にこの脆弱なパスワードを使用しますか？</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>脆弱</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>良好</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>強力</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>このパスワードの既知のデータ流出を確認</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>流出したマスターパスワード</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>入力したパスワードはデータ流出結果で見つかりました。アカウントを保護するためには一意のパスワードを使用してください。流出済みのパスワードを本当に使用しますか？</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>脆弱で流出済みのマスターパスワード</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>入力されたパスワードは脆弱かつ流出済みです。アカウントを守るためより強力で一意なパスワードを使用してください。本当にこの脆弱なパスワードを使用しますか？</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>組織の SSO IDが必要です。</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>既存または新規アイテムにキーを追加</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>"{0}" に一致するアイテムは保管庫にありません</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>アイテムを検索するか、新しいアイテムを追加</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>検索に一致するアイテムはありません</value>
   </data>
 </root>
