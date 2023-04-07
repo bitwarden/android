@@ -137,6 +137,8 @@ namespace Bit.Droid.Accessibility
             new Browser("com.jerky.browser2", "enterUrl"),
             new Browser("com.ksmobile.cb", "address_bar_edit_text"),
             new Browser("com.lemurbrowser.exts","url_bar"),
+            new Browser("com.lemurbrowser.exts.beta","url_bar"),
+            new Browser("com.lemurbrowser.exts.datura","url_bar"),
             new Browser("com.linkbubble.playstore", "url_text"),
             new Browser("com.mx.browser", "address_editor_with_progress"),
             new Browser("com.mx.browser.tablet", "address_editor_with_progress"),

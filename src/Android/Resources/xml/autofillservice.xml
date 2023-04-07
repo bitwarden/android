@@ -96,6 +96,12 @@
     android:name="com.lemurbrowser.exts"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.lemurbrowser.exts.beta"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.lemurbrowser.exts.datura"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.microsoft.emmx"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package

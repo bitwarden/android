@@ -80,6 +80,8 @@ namespace Bit.Droid.Autofill
             "com.kiwibrowser.browser",
             "com.kiwibrowser.browser.dev",
             "com.lemurbrowser.exts",
+            "com.lemurbrowser.exts.beta",
+            "com.lemurbrowser.exts.datura",
             "com.microsoft.emmx",
             "com.microsoft.emmx.beta",
             "com.microsoft.emmx.canary",
