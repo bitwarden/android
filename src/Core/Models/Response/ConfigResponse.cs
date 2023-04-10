@@ -5,8 +5,6 @@ namespace Bit.Core.Models.Response
 {
     public class ConfigResponse
     {
-        public static string DisplayEuEnvironmentFlag = "display-eu-environment";
-
         public string Version { get; set; }
         public string GitHash { get; set; }
         public ServerConfigResponse Server { get; set; }

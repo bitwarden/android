@@ -123,7 +123,7 @@ namespace Bit.App.Pages
         {
             Email = await _stateService.GetRememberedEmailAsync();
             RememberEmail = !string.IsNullOrEmpty(Email);
-            _displayEuEnvironment = await _configService.GetFeatureFlagBoolAsync(ConfigResponse.DisplayEuEnvironmentFlag, forceRefresh: true);
+            _displayEuEnvironment = await _configService.GetFeatureFlagBoolAsync(Constants.DisplayEuEnvironmentFlag, forceRefresh: true);
         }
 
         public async Task ContinueToLoginStepAsync()
