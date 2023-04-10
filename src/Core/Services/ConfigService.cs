@@ -30,7 +30,7 @@ namespace Bit.Core.Services
             try
             {
                 _configs = _stateService.GetConfigs();
-                if (_configs?.ExpiresOn is null || _configs.ExpiresOn <= DateTime.UtcNow)
+                if (forceRefresh || _configs?.ExpiresOn is null || _configs.ExpiresOn <= DateTime.UtcNow)
                 {
                     _configs = await _apiService.GetConfigsAsync();
                     _configs.ExpiresOn = DateTime.UtcNow.AddMinutes(UPDATE_INTERVAL_MINS);

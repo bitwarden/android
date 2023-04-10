@@ -584,7 +584,7 @@ namespace Bit.Core.Services
 
         public async Task<ConfigResponse> GetConfigsAsync()
         {
-            return await SendAsync<object, ConfigResponse>(HttpMethod.Get, $"/config/", null, false, true);
+            return await SendAsync<object, ConfigResponse>(HttpMethod.Get, "/config/", null, false, true);
         }
 
         #endregion
