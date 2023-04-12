@@ -39,7 +39,7 @@ namespace Bit.Core.Services
         {
             if (_policyCache == null)
             {
-                var policies = await _stateService.GetPoliciesAsync(userId);
+                var policies = await _stateService.GetEncryptedPoliciesAsync(userId);
                 if (policies == null)
                 {
                     return null;
@@ -59,7 +59,7 @@ namespace Bit.Core.Services
 
         public async Task Replace(Dictionary<string, PolicyData> policies, string userId = null)
         {
-            await _stateService.SetPoliciesAsync(policies, userId);
+            await _stateService.SetEncryptedPoliciesAsync(policies, userId);
             _policyCache = null;
 
             var vaultTimeoutPolicy = policies.FirstOrDefault(p => p.Value.Type == PolicyType.MaximumVaultTimeout);
@@ -71,7 +71,7 @@ namespace Bit.Core.Services
 
         public async Task ClearAsync(string userId)
         {
-            await _stateService.SetPoliciesAsync(null, userId);
+            await _stateService.SetEncryptedPoliciesAsync(null, userId);
             _policyCache = null;
         }
 

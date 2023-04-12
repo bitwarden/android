@@ -1000,7 +1000,7 @@ namespace Bit.Core.Services
             await SetValueAsync(Constants.FoldersKey(reconciledOptions.UserId), value, reconciledOptions);
         }
 
-        public async Task<Dictionary<string, PolicyData>> GetPoliciesAsync(string userId = null)
+        public async Task<Dictionary<string, PolicyData>> GetEncryptedPoliciesAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
@@ -1008,7 +1008,7 @@ namespace Bit.Core.Services
                 reconciledOptions);
         }
 
-        public async Task SetPoliciesAsync(Dictionary<string, PolicyData> value, string userId)
+        public async Task SetEncryptedPoliciesAsync(Dictionary<string, PolicyData> value, string userId)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
@@ -1407,7 +1407,7 @@ namespace Bit.Core.Services
             await SetEncryptedCollectionsAsync(null, userId);
             await SetLastSyncAsync(null, userId);
             await SetEncryptedFoldersAsync(null, userId);
-            await SetPoliciesAsync(null, userId);
+            await SetEncryptedPoliciesAsync(null, userId);
             await SetUsesKeyConnectorAsync(null, userId);
             await SetOrganizationsAsync(null, userId);
             await SetEncryptedPasswordGenerationHistoryAsync(null, userId);
