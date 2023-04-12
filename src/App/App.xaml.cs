@@ -217,7 +217,7 @@ namespace Bit.App
                 Id = loginRequestData.Id,
                 IpAddress = loginRequestData.RequestIpAddress,
                 Email = await _stateService.GetEmailAsync(),
-                FingerprintPhrase = loginRequestData.RequestFingerprint,
+                FingerprintPhrase = loginRequestData.FingerprintPhrase,
                 RequestDate = loginRequestData.CreationDate,
                 DeviceType = loginRequestData.RequestDeviceType,
                 Origin = loginRequestData.Origin
