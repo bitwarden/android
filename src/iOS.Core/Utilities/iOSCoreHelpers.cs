@@ -156,6 +156,20 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Resolve<IAuthService>("authService").Init();
             (ServiceContainer.
                 Resolve<IPlatformUtilsService>("platformUtilsService") as MobilePlatformUtilsService).Init();
+
+            var accountsManager = new AccountsManager(
+                ServiceContainer.Resolve<IBroadcasterService>("broadcasterService"),
+                ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService"),
+                ServiceContainer.Resolve<IStorageService>("secureStorageService"),
+                ServiceContainer.Resolve<IStateService>("stateService"),
+                ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
+                ServiceContainer.Resolve<IAuthService>("authService"),
+                ServiceContainer.Resolve<ILogger>("logger"),
+                ServiceContainer.Resolve<IMessagingService>("messagingService"),
+                ServiceContainer.Resolve<IWatchDeviceService>(),
+                ServiceContainer.Resolve<IConditionedAwaiterManager>());
+            ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
+
             // Note: This is not awaited
             var bootstrapTask = BootstrapAsync(postBootstrapFunc);
         }
@@ -234,18 +248,6 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
                 ServiceContainer.Resolve<ICryptoService>("cryptoService"));
             ServiceContainer.Register<IVerificationActionsFlowHelper>("verificationActionsFlowHelper", verificationActionsFlowHelper);
-
-            var accountsManager = new AccountsManager(
-                ServiceContainer.Resolve<IBroadcasterService>("broadcasterService"),
-                ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService"),
-                ServiceContainer.Resolve<IStorageService>("secureStorageService"),
-                ServiceContainer.Resolve<IStateService>("stateService"),
-                ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
-                ServiceContainer.Resolve<IAuthService>("authService"),
-                ServiceContainer.Resolve<ILogger>("logger"),
-                ServiceContainer.Resolve<IMessagingService>("messagingService"),
-                ServiceContainer.Resolve<IWatchDeviceService>());
-            ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
 
             if (postBootstrapFunc != null)
             {

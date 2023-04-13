@@ -2140,7 +2140,7 @@ L'escaneig es farà automàticament.</value>
     <value>Aquesta organització té una política empresarial que us inscriurà automàticament al restabliment de la contrasenya. La inscripció permetrà als administradors de l’organització canviar la vostra contrasenya mestra.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Les polítiques de la vostra organització afecten el temps d'espera de la vostra caixa forta. El temps d'espera màxim permès de la caixa forta és de {0} hores i {1} minuts</value>
+    <value>Les polítiques de l'organització afecten el temps d'espera de la caixa forta. El temps d'espera màxim permès de la caixa forta és de {0} hores i {1} minuts</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>El temps d'espera de la caixa forta supera les restriccions establertes per la vostra organització.</value>

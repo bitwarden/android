@@ -81,7 +81,8 @@ namespace Bit.Droid
                     ServiceContainer.Resolve<IAuthService>("authService"),
                     ServiceContainer.Resolve<ILogger>("logger"),
                     ServiceContainer.Resolve<IMessagingService>("messagingService"),
-                    ServiceContainer.Resolve<IWatchDeviceService>());
+                    ServiceContainer.Resolve<IWatchDeviceService>(),
+                    ServiceContainer.Resolve<IConditionedAwaiterManager>());
                 ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
             }
 #if !FDROID

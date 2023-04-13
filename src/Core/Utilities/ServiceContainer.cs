@@ -33,6 +33,7 @@ namespace Bit.Core.Utilities
 
             SearchService searchService = null;
 
+            var conditionedRunner = new ConditionedAwaiterManager();
             var tokenService = new TokenService(stateService);
             var apiService = new ApiService(tokenService, platformUtilsService, (extras) =>
             {
@@ -82,12 +83,13 @@ namespace Bit.Core.Utilities
                 keyConnectorService, passwordGenerationService, policyService);
             var exportService = new ExportService(folderService, cipherService, cryptoService);
             var auditService = new AuditService(cryptoFunctionService, apiService);
-            var environmentService = new EnvironmentService(apiService, stateService);
+            var environmentService = new EnvironmentService(apiService, stateService, conditionedRunner);
             var eventService = new EventService(apiService, stateService, organizationService, cipherService);
             var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService,
                 cryptoService);
             var usernameGenerationService = new UsernameGenerationService(cryptoService, apiService, stateService);
 
+            Register<IConditionedAwaiterManager>(conditionedRunner);
             Register<ITokenService>("tokenService", tokenService);
             Register<IApiService>("apiService", apiService);
             Register<IAppIdService>("appIdService", appIdService);

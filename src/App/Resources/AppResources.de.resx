@@ -1252,10 +1252,10 @@ Das Scannen erfolgt automatisch.</value>
     <value>Beginnt mit</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI Match-Erkennung</value>
+    <value>URI-Übereinstimmungserkennung</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Match-Erkennung</value>
+    <value>Übereinstimmungserkennung</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
@@ -1536,7 +1536,7 @@ Das Scannen erfolgt automatisch.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Standard-URI-Match-Erkennung</value>
+    <value>Standard URI-Übereinstimmungserkennung</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
@@ -1556,8 +1556,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Dunkles Standard-Design</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Wähle das zu verwendende dunkle Design aus, das bei der Auswahl vom Standard-(System)-Design verwendet werden soll, während der Dark 
-Mode deines Geräts aktiviert ist.</value>
+    <value>Wähle das zu verwendende dunkle Design aus, das bei der Auswahl vom Standard-(System)-Design verwendet werden soll, während der Dark Mode deines Geräts aktiviert ist.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Notiz kopieren</value>
@@ -1769,7 +1768,7 @@ Mode deines Geräts aktiviert ist.</value>
     <value>Enterprise Single-Sign-On</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Schnell über den Single Sign-on deiner Organisation anmelden. Bitte gib deine Organisations-ID an, um zu beginnen.</value>
+    <value>Melde dich schnell über das Single Sign-on-Portal deiner Organisation an. Bitte gib die Organisationskennung ein, um zu beginnen.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
     <value>Organisationskennung</value>
@@ -2387,7 +2386,7 @@ Mode deines Geräts aktiviert ist.</value>
     <value>Benutzernamenstyp</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Mit Plus adressierte E-Mail-Adresse</value>
+    <value>Plus-adressierte E-Mail-Adresse</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
     <value>Catch-All E-Mail-Adresse</value>
@@ -2589,10 +2588,10 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Schwaches Passwort erkannt und in einem Datendiebstahl gefunden. Verwende ein starkes und einzigartiges Passwort, um dein Konto zu schützen. Bist du sicher, dass du dieses Passwort verwenden möchtest?</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
-    <value>SSO-ID der Organisation erforderlich.</value>
+    <value>SSO-Kennung der Organisation erforderlich.</value>
   </data>
   <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
-    <value>Schlüssel zu einem bestehenden oder neuen Eintrag hinzufügen</value>
+    <value>Den Schlüssel zu einem bestehenden oder neuen Eintrag hinzufügen</value>
   </data>
   <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
     <value>Es gibt keine Einträge in deinem Tresor, die mit "{0}" übereinstimmen</value>
