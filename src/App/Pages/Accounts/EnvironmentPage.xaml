@@ -34,7 +34,8 @@
                         Placeholder="ex. https://bitwarden.company.com"
                         StyleClass="box-value"
                         ReturnType="Go"
-                        ReturnCommand="{Binding SubmitCommand}" />
+                        ReturnCommand="{Binding SubmitCommand}"
+                        AutomationId="ServerURL"/>
                 </StackLayout>
                 <Label
                     Text="{u:I18n SelfHostedEnvironmentFooter}"
@@ -53,7 +54,8 @@
                         x:Name="_webVaultEntry"
                         Text="{Binding WebVaultUrl}"
                         Keyboard="Url"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationId="WebVaultURL"/>
                 </StackLayout>
                 <StackLayout StyleClass="box-row">
                     <Label
@@ -63,7 +65,8 @@
                         x:Name="_apiEntry"
                         Text="{Binding ApiUrl}"
                         Keyboard="Url"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationId="ApiURL"/>
                 </StackLayout>
                 <StackLayout StyleClass="box-row">
                     <Label
@@ -73,7 +76,8 @@
                         x:Name="_identityEntry"
                         Text="{Binding IdentityUrl}"
                         Keyboard="Url"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationId="IdentityURL"/>
                 </StackLayout>
                 <StackLayout StyleClass="box-row">
                     <Label
@@ -85,7 +89,8 @@
                         Keyboard="Url"
                         StyleClass="box-value"
                         ReturnType="Go"
-                        ReturnCommand="{Binding SubmitCommand}" />
+                        ReturnCommand="{Binding SubmitCommand}"
+                        AutomationId="IconsURL"/>
                 </StackLayout>
                 <Label
                     Text="{u:I18n CustomEnvironmentFooter}"
