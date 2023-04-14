@@ -2523,7 +2523,7 @@
     <value>此請求已失效</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Pending login requests</value>
+    <value>待處理的登入請求。</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
     <value>Decline all requests</value>
