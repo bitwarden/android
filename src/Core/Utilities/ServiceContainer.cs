@@ -57,7 +57,7 @@ namespace Bit.Core.Utilities
                 organizationService);
             var vaultTimeoutService = new VaultTimeoutService(cryptoService, stateService, platformUtilsService,
                 folderService, cipherService, collectionService, searchService, messagingService, tokenService,
-                policyService, keyConnectorService,
+                keyConnectorService,
                 (extras) =>
                 {
                     messagingService.Send("locked", extras);
