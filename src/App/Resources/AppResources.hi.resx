@@ -125,14 +125,14 @@
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>नया फ़ोल्डर जोड़ें</value>
+    <value>नया फोल्डर जोड़ें</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>आइटम जोड़ें</value>
+    <value>चीज़ जोड़ें</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
-    <value>एक त्रुटि हुई।</value>
+    <value>एक गड़बड़ हुई।</value>
     <comment>Alert title when something goes wrong.</comment>
   </data>
   <data name="Back" xml:space="preserve">
