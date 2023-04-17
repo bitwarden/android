@@ -8,6 +8,7 @@
         public bool RequireLower { get; set; }
         public bool RequireNumbers { get; set; }
         public bool RequireSpecial { get; set; }
+        public bool EnforceOnLogin { get; set; }
 
         public bool InEffect()
         {

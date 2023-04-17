@@ -161,6 +161,14 @@ namespace Bit.App
                                 new NavigationPage(new RemoveMasterPasswordPage()));
                         });
                     }
+                    else if (message.Command == Constants.ForceUpdatePassword)
+                    {
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            await Application.Current.MainPage.Navigation.PushModalAsync(
+                                new NavigationPage(new UpdateTempPasswordPage()));
+                        });
+                    }
                     else if (message.Command == Constants.PasswordlessLoginRequestKey
                         || message.Command == "unlocked"
                         || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)

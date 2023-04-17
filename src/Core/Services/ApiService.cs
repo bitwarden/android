@@ -176,10 +176,10 @@ namespace Bit.Core.Services
             return SendAsync<KeysRequest, object>(HttpMethod.Post, "/accounts/keys", request, true, false);
         }
 
-        public Task PostAccountVerifyPasswordAsync(PasswordVerificationRequest request)
+        public Task<VerifyMasterPasswordResponse> PostAccountVerifyPasswordAsync(PasswordVerificationRequest request)
         {
-            return SendAsync<PasswordVerificationRequest, object>(HttpMethod.Post, "/accounts/verify-password", request,
-                true, false);
+            return SendAsync<PasswordVerificationRequest, VerifyMasterPasswordResponse>(HttpMethod.Post, "/accounts/verify-password", request,
+                true, true);
         }
 
         public Task PostAccountRequestOTP()
@@ -197,6 +197,11 @@ namespace Bit.Core.Services
         {
             return SendAsync<UpdateTempPasswordRequest, object>(HttpMethod.Put, "/accounts/update-temp-password",
                 request, true, false);
+        }
+
+        public Task PostPasswordAsync(PasswordRequest request)
+        {
+            return SendAsync<PasswordRequest, object>(HttpMethod.Post, "/accounts/password", request, true, false);
         }
 
         public Task DeleteAccountAsync(DeleteAccountRequest request)

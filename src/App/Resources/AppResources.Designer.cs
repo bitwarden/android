@@ -1688,6 +1688,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current master password.
+        /// </summary>
+        public static string CurrentMasterPassword {
+            get {
+                return ResourceManager.GetString("CurrentMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom.
         /// </summary>
         public static string Custom {
@@ -6449,6 +6458,15 @@ namespace Bit.App.Resources {
         public static string UpdatePasswordError {
             get {
                 return ResourceManager.GetString("UpdatePasswordError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour..
+        /// </summary>
+        public static string UpdateWeakMasterPasswordWarning {
+            get {
+                return ResourceManager.GetString("UpdateWeakMasterPasswordWarning", resourceCulture);
             }
         }
         

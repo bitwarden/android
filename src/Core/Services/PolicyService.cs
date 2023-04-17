@@ -148,27 +148,33 @@ namespace Bit.Core.Services
                 }
 
                 var requireUpper = GetPolicyBool(currentPolicy, "requireUpper");
-                if (requireUpper != null && (bool)requireUpper)
+                if (requireUpper == true)
                 {
                     enforcedOptions.RequireUpper = true;
                 }
 
                 var requireLower = GetPolicyBool(currentPolicy, "requireLower");
-                if (requireLower != null && (bool)requireLower)
+                if (requireLower == true)
                 {
                     enforcedOptions.RequireLower = true;
                 }
 
                 var requireNumbers = GetPolicyBool(currentPolicy, "requireNumbers");
-                if (requireNumbers != null && (bool)requireNumbers)
+                if (requireNumbers == true)
                 {
                     enforcedOptions.RequireNumbers = true;
                 }
 
                 var requireSpecial = GetPolicyBool(currentPolicy, "requireSpecial");
-                if (requireSpecial != null && (bool)requireSpecial)
+                if (requireSpecial == true)
                 {
                     enforcedOptions.RequireSpecial = true;
+                }
+
+                var enforceOnLogin = GetPolicyBool(currentPolicy, "enforceOnLogin");
+                if (enforceOnLogin == true)
+                {
+                    enforcedOptions.EnforceOnLogin = true;
                 }
             }
 
