@@ -1052,7 +1052,7 @@
     <value>Dicembre</value>
   </data>
   <data name="Dr" xml:space="preserve">
-    <value>Dott.</value>
+    <value>Dott</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
     <value>Mese di scadenza</value>
@@ -1094,7 +1094,7 @@
     <value>Secondo nome</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Sig.</value>
+    <value>Sig</value>
   </data>
   <data name="Mrs" xml:space="preserve">
     <value>Sig.ra</value>
@@ -1359,7 +1359,7 @@
     <value>Questa password è stata trovata {0} volta(e) in archivi di dati trafugati. Dovresti cambiarla.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>Questa password non è stata trovata in dati violati noti. Dovrebbe essere sicura da usare.</value>
+    <value>Questa password non è stata trovata in violazioni di dati note. Dovrebbe essere sicura da usare.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
     <value>Nome dell'identità</value>
@@ -1436,7 +1436,7 @@
     <value>Nessuna organizzazione da mostrare.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>Scegli un'organizzazione in cui vuoi spostare questo elemento. Spostarlo in un'organizzazione trasferisce la proprietà dell'elemento all'organizzazione. Una volta spostato non sarai più il proprietario diretto di questo elemento.</value>
+    <value>Scegli un'organizzazione in cui vuoi spostare questo elemento. Spostarlo in un'organizzazione trasferisce la proprietà dell'elemento all'organizzazione. Una volta spostato, non sarai più il proprietario diretto di questo elemento.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Numero di parole</value>
@@ -1667,10 +1667,10 @@
     <value>Conferma la tua identità per continuare.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>Questa esportazione contiene i dati della tua cassaforte in formato non criptato. Non archiviare o inviare il file di esportazione attraverso canali non sicuri (come email). Eliminalo immediatamente dopo che hai finito di usarli.</value>
+    <value>Questa esportazione contiene i dati della tua cassaforte in un formato non criptato. Non salvare o inviare il file esportato attraverso canali non protetti (come le email). Eliminalo immediatamente dopo l'utilizzo.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
-    <value>Questa esportazione cripta i tuoi dati utilizzando la chiave di criptografia del tuo account. Se cambi la chiave di criptografia del tuo account, non potrai più decriptare il file esportato e dovrai creare un nuovo file di esportazione.</value>
+    <value>Questa esportazione cripta i tuoi dati usando la chiave di criptografia del tuo account. Se cambi la chiave di criptografia del tuo account, non potrai più decifrare il file esportato e dovrai eseguire una nuova esportazione.</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
     <value>Le chiavi di criptografia dell'account sono uniche per ogni account Bitwarden, quindi non puoi importare un file di esportazione criptato in un account diverso.</value>
@@ -1782,7 +1782,7 @@
     <value>Per completare l'accesso con SSO, imposta una password principale per accedere e proteggere la cassaforte.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>La password principale deve avere i seguenti requisiti, stabiliti dalle politiche dell'organizzazione:</value>
+    <value>Una o più politiche dell'organizzazione richiedono che la tua password principale soddisfi questi requisiti:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
     <value>Punteggio minimo di complessità {0}</value>
@@ -1946,7 +1946,7 @@
     <value>Numero massimo di accessi</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>Se impostata, gli utenti potranno più accedere a questo Send una volta raggiunto il numero massimo di accessi.</value>
+    <value>Se impostata, gli utenti non potranno più accedere a questo Send una volta raggiunto il numero massimo di accessi.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
@@ -2074,13 +2074,13 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Nuova richiesta della password principale</value>
+    <value>Richiedi di inserire la password principale di nuovo per visualizzare questo elemento</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
     <value>Conferma della password principale</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>Questa azione è protetta. Per continuare, digita nuovamente la tua password principale per verificare la tua identità.</value>
+    <value>Questa azione è protetta. Inserisci la tua password principale di nuovo per verificare la tua identità.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
     <value>Captcha obbligatorio</value>
@@ -2095,7 +2095,7 @@
     <value>Aggiorna password principale</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>La tua password principale è stata recentemente modificata da un amministratore nella tua organizzazione. Per accedere alla cassaforte, devi aggiornarla ora. Procedendo sarai disconnesso dalla sessione attuale, richiedendo di effettuare nuovamente l'accesso. Le sessioni attive su altri dispositivi possono continuare a rimanere attive per un massimo di un'ora.</value>
+    <value>La tua password principale è stata recentemente modificata da un amministratore nella tua organizzazione. Per accedere alla cassaforte, aggiornala ora. Procedere ti farà uscire dalla sessione corrente, richiedendoti di accedere di nuovo. Le sessioni attive su altri dispositivi potrebbero continuare a rimanere attive per un massimo di un'ora.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
     <value>Aggiornamento password</value>

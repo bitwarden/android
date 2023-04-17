@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.iOS.Core.Utilities;
-using CoreGraphics;
 using Foundation;
 using MobileCoreServices;
 using Photos;
@@ -29,11 +28,20 @@ namespace Bit.iOS.Core.Services
             var filePath = Path.Combine(GetTempPath(), fileName);
             File.WriteAllBytes(filePath, fileData);
             var url = NSUrl.FromFilename(filePath);
-            var viewer = UIDocumentInteractionController.FromUrl(url);
             var controller = UIViewControllerExtensions.GetVisibleViewController();
-            var rect = UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad ?
-                new CGRect(100, 5, 320, 320) : controller.View.Frame;
-            return viewer.PresentOpenInMenu(rect, controller.View, true);
+
+            try
+            {
+                UIView presentingView = UIApplication.SharedApplication.KeyWindow.RootViewController.View;
+                var documentController = new UIDocumentPickerViewController(url, UIDocumentPickerMode.ExportToService);
+                controller.PresentViewController(documentController, true, null);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public bool CanOpenFile(string fileName)
