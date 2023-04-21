@@ -2141,6 +2141,12 @@
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>A szervezeti házirendek hatással vannak a széf időkorlátjára. A széf időkorlátja legfeljebb {0} óra és {1} perc lehet.</value>
   </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s). Your vault timeout action is set to {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Your organization policies have set your vault timeout action to {0}.</value>
+  </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>A széf időkorlátja túllépi a szervezet által beállított korlátozást.</value>
   </data>
@@ -2601,5 +2607,11 @@ Szeretnénk átváltani erre a fiókra?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Nincsenek a keresésnek megfelelő elemek.</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>A mesterjelszó nem felel meg egy vagy több szervezeti szabályzatnak. A széf eléréséhez frissíteni kell a meszerjelszót. A továbblépés kijelentkeztet az aktuális munkamenetből és újra be kell jelentkezni. A többi eszközön lévő aktív munkamenetek akár egy óráig is aktívak maradhatnak.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Jelenlegi mesterjelszó</value>
   </data>
 </root>
