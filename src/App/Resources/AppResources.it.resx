@@ -2142,6 +2142,12 @@
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Le politiche della tua organizzazione stanno influenzando il timeout della tua cassaforte. Il tempo massimo consentito è di {0} ore e {1} minuti</value>
   </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Le politiche della tua organizzazione stanno influenzando il timeout della tua cassaforte. Il tempo massimo consentito è di {0} ore e {1} minuti. La tua azione di timeout della cassaforte è impostata su {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Le politiche della tua organizzazione hanno impostato l'azione di timeout cassaforte su {0}.</value>
+  </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Il timeout della tua cassaforte supera i limiti impostati dalla tua organizzazione.</value>
   </data>
@@ -2602,5 +2608,11 @@ Vuoi passare a questo account?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Nessun elemento corrisponde alla ricerca</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>La tua password principale non soddisfa uno o più politiche della tua organizzazione. Per accedere alla cassaforte, aggiornala ora. Procedere ti farà uscire dalla sessione corrente, richiedendoti di accedere di nuovo. Le sessioni attive su altri dispositivi potrebbero continuare a rimanere attive per un massimo di un'ora.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Password principale corrente</value>
   </data>
 </root>

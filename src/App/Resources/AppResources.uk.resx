@@ -2140,7 +2140,13 @@
     <value>Ця організація має корпоративну політику, яка автоматично розгортає вас на скидання пароля. Розгортання дозволятиме адміністраторам організації змінювати ваш головний пароль.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Політики вашої організації впливають на час очікування сховища. Максимальний дозволений час очікування сховища {0} годин, {1} хвилин</value>
+    <value>Політикою вашої організації встановлено максимальний дозволений час очікування сховища {0} годин, {1} хвилин.</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Політики вашої організації впливають на час очікування сховища. Максимальний дозволений час очікування сховища {0} годин, {1} хвилин. Для часу очікування вашого сховища встановлена дія {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Політикою вашої організації встановлено дію для часу очікування сховища {0}.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Час очікування сховища перевищує обмеження, встановлені вашою організацією.</value>
@@ -2602,5 +2608,11 @@
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Немає записів, що відповідають пошуку</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Current master password</value>
   </data>
 </root>

@@ -2142,6 +2142,12 @@
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>組織のポリシーが保管庫のタイムアウトに影響を与えています。保管庫のタイムアウトは {0} 時間 {1} 分です。</value>
   </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>組織のポリシーがデータ保管庫のタイムアウトに影響しています。保管庫のタイムアウトの最大許容値は、{0}時間{1}分です。保管庫タイムアウト時のアクションは、{2}に設定されています。</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>組織のポリシーで保管庫のタイムアウトアクションが{0}に設定されています。</value>
+  </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>保管庫のタイムアウトが組織によって設定された制限を超えています。</value>
   </data>
@@ -2602,5 +2608,11 @@
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>検索に一致するアイテムはありません</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>マスターパスワードが組織のポリシーに適合していません。保管庫にアクセスするには、今すぐマスターパスワードを更新しなければなりません。続行すると現在のセッションからログアウトし、再度ログインする必要があります。 他のデバイス上のアクティブなセッションは、最大1時間アクティブであり続けることがあります。</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>現在のマスターパスワード</value>
   </data>
 </root>

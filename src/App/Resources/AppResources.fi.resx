@@ -1281,7 +1281,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Esteettömyyspalvelu voi olla hyödyllinen sellaisten sovellusten kanssa, jotka eivät tue tavallista automaattisen täytön palvelua.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Salasana päivitettiin</value>
+    <value>Salasana vaihdettiin</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
@@ -2090,13 +2090,13 @@ Koodi luetaan automaattisesti.</value>
     <value>Captcha-vahvistus epäonnistui. Yritä uudelleen.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Pääsalasana päivitettiin</value>
+    <value>Pääsalasanasi on vaihdettu</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Vaihda pääsalasana</value>
+    <value>Päivitä pääsalasana</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Organisaatiosi ylläpito on hiljattain vaihtanut pääsalasanasi. Käyttääksesi holvia sinun on päivitettävä pääsalasanasi nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan.</value>
+    <value>Organisaatiosi ylläpito on hiljattain vaihtanut pääsalasanasi ja käyttääksesi holvia sinun on päivitettävä se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
     <value>Salasanaa vaihdetaan</value>
@@ -2141,7 +2141,13 @@ Koodi luetaan automaattisesti.</value>
     <value>Organisaatiolla on käytäntö, joka liittää tilisi automaattisesti salasanan palautusapuun. Liitos sallii organisaation ylläpitäjien vaihtaa pääsalasanasi.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Organisaatiokäytännöt vaikuttavat holvisi aikakatkaisuun. Suurin sallittu aika on {0} tunti(a) ja {1} minuutti(a).</value>
+    <value>Organisaatiokäytännöt ovat määrittäneet holvisi aikakatkaisun enimmäisajaksi {0} tunti(a) {1} minuutti(a).</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Organisaatiokäytännöt vaikuttavat holvisi aikakatkaisuun. Suurin sallittu aika on {0} tunti(a) {1} minuutti(a). Holvillesi määritetty aikakatkaisutoiminto on {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Organisaatiokäytännöt ovat määrittäneet holville aikakatkaisutoiminnon {0}.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Holvisi aikakatkaisu ylittää organisaatiosi asettamat rajoitukset.</value>
@@ -2603,5 +2609,11 @@ Haluatko vaihtaa tähän tiliin?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Hakua vastaavia kohteita ei ole</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Pääsalasanasi ei täytä yhden tai useamman organisaatiokäytännön vaatimuksia ja holvin käyttämiseksi sinun on vaihdettava se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Nykyinen pääsalasana</value>
   </data>
 </root>

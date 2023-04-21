@@ -2145,6 +2145,12 @@ Scanning will happen automatically.</value>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>מדיניות הארגון שלך משפיעה על הזמן הקצוב לכספת שלך. הזמן הקצוב המרבי המותר לכספת הוא {0} שעות ו-{1} דקות</value>
   </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s). Your vault timeout action is set to {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Your organization policies have set your vault timeout action to {0}.</value>
+  </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>הזמן הקצוב לכספת שלך חורג מהמגבלות שנקבעו על ידי הארגון שלך.</value>
   </data>
@@ -2605,5 +2611,11 @@ Do you want to switch to this account?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>There are no items that match the search</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Current master password</value>
   </data>
 </root>
