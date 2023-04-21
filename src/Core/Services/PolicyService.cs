@@ -63,7 +63,7 @@ namespace Bit.Core.Services
             _policyCache = null;
 
             var vaultTimeoutPolicy = policies.FirstOrDefault(p => p.Value.Type == PolicyType.MaximumVaultTimeout);
-            if (!vaultTimeoutPolicy.Equals(default))
+            if (vaultTimeoutPolicy.Value != null)
             {
                 await UpdateVaultTimeoutFromPolicyAsync(new Policy(vaultTimeoutPolicy.Value));
             }
