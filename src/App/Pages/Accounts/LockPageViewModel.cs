@@ -31,6 +31,8 @@ namespace Bit.App.Pages
         private readonly ILogger _logger;
         private readonly IWatchDeviceService _watchDeviceService;
         private readonly WeakEventManager<int?> _secretEntryFocusWeakEventManager = new WeakEventManager<int?>();
+        private readonly IPolicyService _policyService;
+        private readonly IPasswordGenerationService _passwordGenerationService;
 
         private string _email;
         private string _masterPassword;
@@ -61,6 +63,8 @@ namespace Bit.App.Pages
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
             _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
+            _policyService = ServiceContainer.Resolve<IPolicyService>();
+            _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>();
 
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -294,6 +298,7 @@ namespace Bit.App.Pages
                 var key = await _cryptoService.MakeKeyAsync(MasterPassword, _email, kdfConfig);
                 var storedKeyHash = await _cryptoService.GetKeyHashAsync();
                 var passwordValid = false;
+                MasterPasswordPolicyOptions enforcedMasterPasswordOptions = null;
 
                 if (storedKeyHash != null)
                 {
@@ -305,9 +310,11 @@ namespace Bit.App.Pages
                     var keyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.ServerAuthorization);
                     var request = new PasswordVerificationRequest();
                     request.MasterPasswordHash = keyHash;
+
                     try
                     {
-                        await _apiService.PostAccountVerifyPasswordAsync(request);
+                        var response = await _apiService.PostAccountVerifyPasswordAsync(request);
+                        enforcedMasterPasswordOptions = response.MasterPasswordPolicy;
                         passwordValid = true;
                         var localKeyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.LocalAuthorization);
                         await _cryptoService.SetKeyHashAsync(localKeyHash);
@@ -328,6 +335,14 @@ namespace Bit.App.Pages
                         var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, _email, kdfConfig);
                         await _stateService.SetPinProtectedKeyAsync(await _cryptoService.EncryptAsync(key.Key, pinKey));
                     }
+
+                    if (await RequirePasswordChangeAsync(enforcedMasterPasswordOptions))
+                    {
+                        // Save the ForcePasswordResetReason to force a password reset after unlock
+                        await _stateService.SetForcePasswordResetReasonAsync(
+                            ForcePasswordResetReason.WeakMasterPasswordOnLogin);
+                    }
+
                     MasterPassword = string.Empty;
                     await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                     await SetKeyAndContinueAsync(key);
@@ -350,6 +365,37 @@ namespace Bit.App.Pages
                         AppResources.AnErrorHasOccurred);
                 }
             }
+        }
+
+        /// <summary>
+        /// Checks if the master password requires updating to meet the enforced policy requirements
+        /// </summary>
+        /// <param name="options"></param>
+        private async Task<bool> RequirePasswordChangeAsync(MasterPasswordPolicyOptions options = null)
+        {
+            // If no policy options are provided, attempt to load them from the policy service
+            var enforcedOptions = options ?? await _policyService.GetMasterPasswordPolicyOptions();
+
+            // No policy to enforce on login/unlock
+            if (!(enforcedOptions is { EnforceOnLogin: true }))
+            {
+                return false;
+            }
+
+            var strength = _passwordGenerationService.PasswordStrength(
+                MasterPassword, _passwordGenerationService.GetPasswordStrengthUserInput(_email))?.Score;
+
+            if (!strength.HasValue)
+            {
+                _logger.Error("Unable to evaluate master password strength during unlock");
+                return false;
+            }
+
+            return !await _policyService.EvaluateMasterPassword(
+                strength.Value,
+                MasterPassword,
+                enforcedOptions
+            );
         }
 
         public async Task LogOutAsync()

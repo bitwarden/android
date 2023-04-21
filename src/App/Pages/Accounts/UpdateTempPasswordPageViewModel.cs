@@ -1,27 +1,68 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Bit.App.Resources;
+using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Exceptions;
+using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
+using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
     public class UpdateTempPasswordPageViewModel : BaseChangePasswordViewModel
     {
+        private readonly IUserVerificationService _userVerificationService;
+
+        private ForcePasswordResetReason _reason = ForcePasswordResetReason.AdminForcePasswordReset;
+
         public UpdateTempPasswordPageViewModel()
         {
             PageTitle = AppResources.UpdateMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleConfirmPasswordCommand = new Command(ToggleConfirmPassword);
-            SubmitCommand = new Command(async () => await SubmitAsync());
+            SubmitCommand = new AsyncCommand(SubmitAsync,
+                onException: ex => HandleException(ex),
+                allowsMultipleExecutions: false);
+
+            _userVerificationService = ServiceContainer.Resolve<IUserVerificationService>();
         }
 
-        public Command SubmitCommand { get; }
+        public AsyncCommand SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
         public Command ToggleConfirmPasswordCommand { get; }
         public Action UpdateTempPasswordSuccessAction { get; set; }
         public Action LogOutAction { get; set; }
+        public string CurrentMasterPassword { get; set; }
+
+        public override async Task InitAsync(bool forceSync = false)
+        {
+            await base.InitAsync(forceSync);
+
+            var forcePasswordResetReason = await _stateService.GetForcePasswordResetReasonAsync();
+
+            if (forcePasswordResetReason.HasValue)
+            {
+                _reason = forcePasswordResetReason.Value;
+            }
+        }
+
+        public bool RequireCurrentPassword
+        {
+            get => _reason == ForcePasswordResetReason.WeakMasterPasswordOnLogin;
+        }
+
+        public string UpdateMasterPasswordWarningText
+        {
+            get
+            {
+                return _reason == ForcePasswordResetReason.WeakMasterPasswordOnLogin
+                    ? AppResources.UpdateWeakMasterPasswordWarning
+                    : AppResources.UpdateMasterPasswordWarning;
+            }
+        }
 
         public void TogglePassword()
         {
@@ -42,6 +83,12 @@ namespace Bit.App.Pages
                 return;
             }
 
+            if (RequireCurrentPassword &&
+                !await _userVerificationService.VerifyUser(CurrentMasterPassword, VerificationType.MasterPassword))
+            {
+                return;
+            }
+
             // Retrieve details for key generation
             var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
             var email = await _stateService.GetEmailAsync();
@@ -53,20 +100,28 @@ namespace Bit.App.Pages
             // Create new encKey for the User
             var newEncKey = await _cryptoService.RemakeEncKeyAsync(key);
 
-            // Create request
-            var request = new UpdateTempPasswordRequest
-            {
-                Key = newEncKey.Item2.EncryptedString,
-                NewMasterPasswordHash = masterPasswordHash,
-                MasterPasswordHint = Hint
-            };
-
             // Initiate API action
             try
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.UpdatingPassword);
-                await _apiService.PutUpdateTempPasswordAsync(request);
+
+                switch (_reason)
+                {
+                    case ForcePasswordResetReason.AdminForcePasswordReset:
+                        await UpdateTempPasswordAsync(masterPasswordHash, newEncKey.Item2.EncryptedString);
+                        break;
+                    case ForcePasswordResetReason.WeakMasterPasswordOnLogin:
+                        await UpdatePasswordAsync(masterPasswordHash, newEncKey.Item2.EncryptedString);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
                 await _deviceActionService.HideLoadingAsync();
+
+                // Clear the force reset password reason
+                await _stateService.SetForcePasswordResetReasonAsync(null);
+
+                _platformUtilsService.ShowToast(null, null, AppResources.UpdatedMasterPassword);
 
                 UpdateTempPasswordSuccessAction?.Invoke();
             }
@@ -84,6 +139,33 @@ namespace Bit.App.Pages
                         AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
             }
+        }
+
+        private async Task UpdateTempPasswordAsync(string newMasterPasswordHash, string newEncKey)
+        {
+            var request = new UpdateTempPasswordRequest
+            {
+                Key = newEncKey,
+                NewMasterPasswordHash = newMasterPasswordHash,
+                MasterPasswordHint = Hint
+            };
+
+            await _apiService.PutUpdateTempPasswordAsync(request);
+        }
+
+        private async Task UpdatePasswordAsync(string newMasterPasswordHash, string newEncKey)
+        {
+            var currentPasswordHash = await _cryptoService.HashPasswordAsync(CurrentMasterPassword, null);
+
+            var request = new PasswordRequest
+            {
+                MasterPasswordHash = currentPasswordHash,
+                Key = newEncKey,
+                NewMasterPasswordHash = newMasterPasswordHash,
+                MasterPasswordHint = Hint
+            };
+
+            await _apiService.PostPasswordAsync(request);
         }
     }
 }
