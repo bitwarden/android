@@ -104,6 +104,7 @@ namespace Bit.Droid.Accessibility
             new Browser("org.adblockplus.browser", "url_bar,url_bar_title"), // 2nd = Legacy (before v2)
             new Browser("org.adblockplus.browser.beta", "url_bar,url_bar_title"), // 2nd = Legacy (before v2)
             new Browser("org.bromite.bromite", "url_bar"),
+            new Browser("org.bromite.bromite.dev", "url_bar"),
             new Browser("org.bromite.chromium", "url_bar"),
             new Browser("org.chromium.chrome", "url_bar"),
             new Browser("org.codeaurora.swe.browser", "url_bar"),
