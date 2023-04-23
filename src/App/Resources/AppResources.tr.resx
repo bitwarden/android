@@ -2140,7 +2140,13 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Bu kuruluşun sizi otomatik olarak parola sıfırlamaya ekleyen bir ilkesi bulunmakta. Bu ilkeye eklenmek, kuruluş yöneticilerinin ana parolanızı değiştirebilmesini sağlar.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Kuruluş ilkeleriniz kasa zaman aşımınızı etkiliyor. İzin verilen maksimum kasa zaman aşımı {0} saat {1} dakikadır</value>
+    <value>Kuruluş ilkeleriniz izin verilen maksimum kasa zaman aşımını {0} saat {1} dakika olarak belirlemiş.</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Kuruluş ilkeleriniz kasa zaman aşımınızı etkiliyor. İzin verilen maksimum kasa zaman aşımı {0} saat {1} dakikadır. Kasa zaman aşımı eyleminiz {2} olarak ayarlanmış.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Kuruluş ilkeleriniz kasa zaman aşımı eyleminizi {0} olarak ayarlamış.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Kasa zaman aşımınız, kuruluşunuz tarafından belirlenen kısıtlamaları aşıyor.</value>
@@ -2601,5 +2607,11 @@ Bu hesaba geçmek ister misiniz?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Aramayla eşleşen kayıt yok</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Ana parolanız kuruluş ilkelerinizi karşılamıyor. Kasanıza erişmek için ana parolanızı güncellemelisiniz. Devam ettiğinizde oturumunuz kapanacak ve yeniden oturum açmanız gerekecektir. Diğer cihazlardaki aktif oturumlar bir saate kadar aktif kalabilir.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Mevcut ana parola</value>
   </data>
 </root>

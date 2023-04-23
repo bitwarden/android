@@ -2142,6 +2142,12 @@ Scanarea se va face automat.</value>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Politicile de organizație afectează timpul de expirare a seifului. Timpul maxim de expirare a seifului este de {0} oră(e) și {1} minut(e)</value>
   </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s). Your vault timeout action is set to {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Your organization policies have set your vault timeout action to {0}.</value>
+  </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Timpul de expirare al seifului depășește restricțiile stabilite de organizația dvs.</value>
   </data>
@@ -2602,5 +2608,11 @@ Doriți să comutați la acest cont?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Nu există lucruri care să corespundă căutării</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Current master password</value>
   </data>
 </root>

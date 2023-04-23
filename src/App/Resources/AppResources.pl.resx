@@ -2140,7 +2140,13 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Ta organizacja posługuje się zasadą, która automatycznie rejestruje użytkowników do resetowania hasła. Rejestracja umożliwia administratorom organizacji zmianę Twojego hasła głównego.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Zasady organizacji mają wpływ czas blokowania sejfu. Maksymalny dozwolony czas wynosi {0} godz. i {1} min.</value>
+    <value>Zasady organizacji mają wpływ na czas blokowania sejfu. Maksymalny dozwolony czas wynosi {0} godz. i {1} min.</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Zasady organizacji mają wpływ na czas blokowania sejfu. Maksymalny dozwolony czas wynosi {0} godz. i {1} min. Twój czas blokowania sejfu to {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Zasady organizacji ustawiły czas blokowania sejfu na {0}.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Czas blokowania sejfu przekracza limit określony przez organizację.</value>
@@ -2602,5 +2608,11 @@ Czy chcesz przełączyć się na to konto?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Brak elementów, które pasują do wyszukiwania</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Twoje hasło główne nie spełnia jednej lub kilku zasad organizacji. Aby uzyskać dostęp do sejfu, musisz teraz zaktualizować swoje hasło główne. Kontynuacja wyloguje Cię z bieżącej sesji, wymagając zalogowania się ponownie. Aktywne sesje na innych urządzeniach mogą pozostać aktywne przez maksymalnie jedną godzinę.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Aktualne hasło główne</value>
   </data>
 </root>

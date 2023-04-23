@@ -2142,6 +2142,12 @@ L'escaneig es farà automàticament.</value>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Les polítiques de l'organització afecten el temps d'espera de la caixa forta. El temps d'espera màxim permès de la caixa forta és de {0} hores i {1} minuts</value>
   </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Les polítiques de l'organització afecten el temps d'espera de la vostra caixa forta. El temps d'espera màxim permès és de {0} hores i {1} minuts. L'acció de temps d'espera de la caixa forta està definida en {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Les polítiques de l'organització han establert l'acció de temps d'espera de la caixa forta a {0}.</value>
+  </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>El temps d'espera de la caixa forta supera les restriccions establertes per la vostra organització.</value>
   </data>
@@ -2602,5 +2608,11 @@ Voleu canviar a aquest compte?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>No hi ha elements que coincidisquen amb la cerca</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>La vostra contrasenya mestra no compleix una o més de les polítiques de l'organització. Per accedir a la caixa forta, heu d'actualitzar-la ara. Si continueu, es tancarà la sessió actual i us demanarà que torneu a iniciar-la. Les sessions en altres dispositius poden continuar romanent actives fins a una hora.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Contrasenya mestra actual</value>
   </data>
 </root>

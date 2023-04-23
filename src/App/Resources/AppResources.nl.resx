@@ -2142,6 +2142,12 @@ Het scannen gebeurt automatisch.</value>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Het beleid van je organisatie heeft invloed op de time-out van je kluis. De maximaal toegestane kluis time-out is {0} uur en {1} minuten</value>
   </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>De beleidsinstellingen van je organisatie hebben invloed op de time-out van je kluis. De maximale toegestane kluis time-out is {0} uur en {1} minuten. Jouw time-out is ingesteld op {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>De beleidsinstellingen van je organisatie hebben je kluis time-out ingesteld op {0}.</value>
+  </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Je kluis time-out is hoger dan het maximum van jouw organisatie.</value>
   </data>
@@ -2602,5 +2608,11 @@ Wilt u naar dit account wisselen?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Er zijn geen items die overeenkomen met de zoekopdracht</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Je hoofdwachtwoord voldoet niet aan en of meerdere oganisatiebeleidsonderdelen. Om toegang te krijgen tot de kluis, moet je je hoofdwachtwoord nu bijwerken. Doorgaan zal je huidige sessie uitloggen, waarna je opnieuw moet inloggen. Actieve sessies op andere apparaten blijven mogelijk nog een uur actief.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Huidig hoofdwachtwoord</value>
   </data>
 </root>
