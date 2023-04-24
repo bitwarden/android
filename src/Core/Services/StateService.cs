@@ -1428,6 +1428,7 @@ namespace Bit.Core.Services
             await SetEncryptedPasswordGenerationHistoryAsync(null, userId);
             await SetEncryptedSendsAsync(null, userId);
             await SetSettingsAsync(null, userId);
+            await SetApprovePasswordlessLoginsAsync(null, userId);
         }
 
         private async Task ScaffoldNewAccountAsync(Account account)
