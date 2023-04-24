@@ -17,6 +17,11 @@ namespace Bit.Core.Services
 
         private IEnumerable<Policy> _policyCache;
 
+        public const string TIMEOUT_POLICY_MINUTES = "minutes";
+        public const string TIMEOUT_POLICY_ACTION = "action";
+        public const string TIMEOUT_POLICY_ACTION_LOCK = "lock";
+        public const string TIMEOUT_POLICY_ACTION_LOGOUT = "logOut";
+
         public PolicyService(
             IStateService stateService,
             IOrganizationService organizationService)
@@ -56,12 +61,47 @@ namespace Bit.Core.Services
         {
             await _stateService.SetEncryptedPoliciesAsync(policies, userId);
             _policyCache = null;
+
+            var vaultTimeoutPolicy = policies.FirstOrDefault(p => p.Value.Type == PolicyType.MaximumVaultTimeout);
+            if (vaultTimeoutPolicy.Value != null)
+            {
+                await UpdateVaultTimeoutFromPolicyAsync(new Policy(vaultTimeoutPolicy.Value));
+            }
         }
 
         public async Task ClearAsync(string userId)
         {
             await _stateService.SetEncryptedPoliciesAsync(null, userId);
             _policyCache = null;
+        }
+
+        public async Task UpdateVaultTimeoutFromPolicyAsync(Policy policy, string userId = null)
+        {
+            var policyTimeout = GetPolicyInt(policy, PolicyService.TIMEOUT_POLICY_MINUTES);
+            if (policyTimeout != null)
+            {
+                var vaultTimeout = await _stateService.GetVaultTimeoutAsync(userId);
+                var timeout = vaultTimeout.HasValue ? Math.Min(vaultTimeout.Value, policyTimeout.Value) : policyTimeout.Value;
+                if (timeout < 0)
+                {
+                    timeout = policyTimeout.Value;
+                }
+                if (vaultTimeout != timeout)
+                {
+                    await _stateService.SetVaultTimeoutAsync(timeout, userId);
+                }
+            }
+
+            var policyAction = GetPolicyString(policy, PolicyService.TIMEOUT_POLICY_ACTION);
+            if (!string.IsNullOrEmpty(policyAction))
+            {
+                var vaultTimeoutAction = await _stateService.GetVaultTimeoutActionAsync(userId);
+                var action = policyAction == PolicyService.TIMEOUT_POLICY_ACTION_LOCK ? VaultTimeoutAction.Lock : VaultTimeoutAction.Logout;
+                if (vaultTimeoutAction != action)
+                {
+                    await _stateService.SetVaultTimeoutActionAsync(action, userId);
+                }
+            }
         }
 
         public async Task<MasterPasswordPolicyOptions> GetMasterPasswordPolicyOptions(
@@ -108,27 +148,33 @@ namespace Bit.Core.Services
                 }
 
                 var requireUpper = GetPolicyBool(currentPolicy, "requireUpper");
-                if (requireUpper != null && (bool)requireUpper)
+                if (requireUpper == true)
                 {
                     enforcedOptions.RequireUpper = true;
                 }
 
                 var requireLower = GetPolicyBool(currentPolicy, "requireLower");
-                if (requireLower != null && (bool)requireLower)
+                if (requireLower == true)
                 {
                     enforcedOptions.RequireLower = true;
                 }
 
                 var requireNumbers = GetPolicyBool(currentPolicy, "requireNumbers");
-                if (requireNumbers != null && (bool)requireNumbers)
+                if (requireNumbers == true)
                 {
                     enforcedOptions.RequireNumbers = true;
                 }
 
                 var requireSpecial = GetPolicyBool(currentPolicy, "requireSpecial");
-                if (requireSpecial != null && (bool)requireSpecial)
+                if (requireSpecial == true)
                 {
                     enforcedOptions.RequireSpecial = true;
+                }
+
+                var enforceOnLogin = GetPolicyBool(currentPolicy, "enforceOnLogin");
+                if (enforceOnLogin == true)
+                {
+                    enforcedOptions.EnforceOnLogin = true;
                 }
             }
 
@@ -247,6 +293,10 @@ namespace Bit.Core.Services
             return null;
         }
 
+        public string GetPolicyString(Policy policy, string key) =>
+            policy.Data.TryGetValue(key, out var val) ? val as string : null;
+
+
         public async Task<bool> ShouldShowVaultFilterAsync()
         {
             var personalOwnershipPolicyApplies = await PolicyAppliesToUser(PolicyType.PersonalOwnership);
@@ -272,17 +322,6 @@ namespace Bit.Core.Services
             return null;
         }
 
-        private string GetPolicyString(Policy policy, string key)
-        {
-            if (policy.Data.ContainsKey(key))
-            {
-                var value = policy.Data[key];
-                if (value != null)
-                {
-                    return (string)value;
-                }
-            }
-            return null;
-        }
+
     }
 }

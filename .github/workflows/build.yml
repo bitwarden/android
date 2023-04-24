@@ -191,7 +191,7 @@ jobs:
           $androidPath = $($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj");
           $packageName = "com.x8bit.bitwarden";
 
-          if ("${{ matrix.variant }}" -ne "prod") 
+          if ("${{ matrix.variant }}" -ne "prod")
           {
             $packageName = "com.x8bit.bitwarden.${{ matrix.variant }}";
           }
@@ -519,15 +519,15 @@ jobs:
         with:
           submodules: 'true'
 
-      - name: Login to Azure - Prod Subscription
+      - name: Login to Azure - CI Subscription
         uses: Azure/login@1f63701bf3e6892515f1b7ce2d2bf1708b46beaf
         with:
-          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
       - name: Retrieve secrets
         id: retrieve-secrets
         env:
-          KEYVAULT: bitwarden-prod-kv
+          KEYVAULT: bitwarden-ci
           SECRETS: |
             appcenter-ios-token
         run: |
@@ -773,15 +773,15 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
 
-      - name: Login to Azure
+      - name: Login to Azure - CI Subscription
         uses: Azure/login@1f63701bf3e6892515f1b7ce2d2bf1708b46beaf
         with:
-          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
       - name: Retrieve secrets
         id: retrieve-secrets
         env:
-          KEYVAULT: bitwarden-prod-kv
+          KEYVAULT: bitwarden-ci
           SECRETS: |
             crowdin-api-token
         run: |
@@ -839,17 +839,17 @@ jobs:
               exit 1
           fi
 
-      - name: Login to Azure - Prod Subscription
+      - name: Login to Azure - CI Subscription
         uses: Azure/login@1f63701bf3e6892515f1b7ce2d2bf1708b46beaf
         if: failure()
         with:
-          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
       - name: Retrieve secrets
         id: retrieve-secrets
         if: failure()
         env:
-          KEYVAULT: bitwarden-prod-kv
+          KEYVAULT: bitwarden-ci
           SECRETS: |
             devops-alerts-slack-webhook-url
         run: |

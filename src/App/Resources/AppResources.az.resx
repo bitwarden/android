@@ -2142,6 +2142,12 @@ Skan prosesi avtomatik baş tutacaq.</value>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Təşkilatınızın siyasətləri, anbarınızın vaxt bitişinə təsir edir. Anbar vaxt bitişi üçün icazə verilən maksimum vaxt {0} saat {1} dəqiqədir</value>
   </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Təşkilatınızın siyasətləri, anbarınızın vaxt bitişinə təsir edir. Anbar vaxt bitişi üçün icazə verilən maksimum vaxt {0} saat {1} dəqiqədir. Anbar vaxt bitişi əməliyyatı {2} olaraq tənzimləndi.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Təşkilatınızın siyasətləri, anbar vaxt bitişi əməliyyatınızı {0} olaraq tənzimlədi.</value>
+  </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Anbar vaxt bitişi, təşkilatınız tərəfindən tənzimlənən məhdudiyyətləri aşır.</value>
   </data>
@@ -2601,5 +2607,11 @@ Bu hesaba keçmək istəyirsiniz?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Axtarışa uyğun gələn heç bir element yoxdur</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Current master password</value>
   </data>
 </root>

@@ -134,6 +134,8 @@ namespace Bit.Core.Abstractions
         Task SetPushRegisteredTokenAsync(string value);
         Task<bool> GetUsesKeyConnectorAsync(string userId = null);
         Task SetUsesKeyConnectorAsync(bool? value, string userId = null);
+        Task<ForcePasswordResetReason?> GetForcePasswordResetReasonAsync(string userId = null);
+        Task SetForcePasswordResetReasonAsync(ForcePasswordResetReason? value, string userId = null);
         Task<Dictionary<string, OrganizationData>> GetOrganizationsAsync(string userId = null);
         Task SetOrganizationsAsync(Dictionary<string, OrganizationData> organizations, string userId = null);
         Task<PasswordGenerationOptions> GetPasswordGenerationOptionsAsync(string userId = null);

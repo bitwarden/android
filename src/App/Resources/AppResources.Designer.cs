@@ -1688,6 +1688,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current master password.
+        /// </summary>
+        public static string CurrentMasterPassword {
+            get {
+                return ResourceManager.GetString("CurrentMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom.
         /// </summary>
         public static string Custom {
@@ -6489,6 +6498,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour..
+        /// </summary>
+        public static string UpdateWeakMasterPasswordWarning {
+            get {
+                return ResourceManager.GetString("UpdateWeakMasterPasswordWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updating password.
         /// </summary>
         public static string UpdatingPassword {
@@ -6723,6 +6741,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your organization policies have set your vault timeout action to {0}..
+        /// </summary>
+        public static string VaultTimeoutActionPolicyInEffect {
+            get {
+                return ResourceManager.GetString("VaultTimeoutActionPolicyInEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?.
         /// </summary>
         public static string VaultTimeoutLogOutConfirmation {
@@ -6732,11 +6759,20 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s).
+        ///   Looks up a localized string similar to Your organization policies have set your maximum allowed vault timeout to {0} hour(s) and {1} minute(s)..
         /// </summary>
         public static string VaultTimeoutPolicyInEffect {
             get {
                 return ResourceManager.GetString("VaultTimeoutPolicyInEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s). Your vault timeout action is set to {2}..
+        /// </summary>
+        public static string VaultTimeoutPolicyWithActionInEffect {
+            get {
+                return ResourceManager.GetString("VaultTimeoutPolicyWithActionInEffect", resourceCulture);
             }
         }
         

@@ -2142,6 +2142,12 @@ Skenovanie prebehne automaticky.</value>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Zásady vašej organizácie ovplyvňujú časový limit trezoru. Maximálny povolený časový limit trezoru je {0} h a {1} m</value>
   </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Zásady vašej organizácie ovplyvňujú časový limit trezoru. Maximálny povolený časový limit trezoru je {0} h a {1} m. Nastavenie akcie pri vypršaní časového limitu je {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Zásady vašej organizácie nastavili akciu pri vypršaní časového limitu trezora na {0}.</value>
+  </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Časový limit vášho trezora prekračuje obmedzenia nastavené vašou organizáciou.</value>
   </data>
@@ -2602,5 +2608,11 @@ Chcete prepnúť na toto konto?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Vyhľadávaniu nezodpovedajú žiadne položky</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Vaše hlavné heslo nespĺňa jednu alebo viacero podmienok vašej organizácie. Ak chcete získať prístup k trezoru, musíte teraz aktualizovať svoje hlavné heslo. Pokračovaním sa odhlásite z aktuálnej relácie a budete sa musieť znova prihlásiť. Aktívne relácie na iných zariadeniach môžu zostať aktívne až jednu hodinu.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Súčasné hlavné heslo</value>
   </data>
 </root>
