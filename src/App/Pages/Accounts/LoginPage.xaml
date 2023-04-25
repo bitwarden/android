@@ -20,7 +20,7 @@
                 x:Name="_accountAvatar"
                 x:Key="accountAvatar"
                 IconImageSource="{Binding AvatarImageSource}"
-                Command="{Binding Source={x:Reference _accountListOverlay}, Path=ToggleVisibililtyCommand}"
+                Command="{Binding Source={x:Reference _accountListOverlay}, Path=ToggleVisibilityCommand}"
                 Order="Primary"
                 Priority="-1"
                 UseOriginalImage="True"

@@ -40,7 +40,7 @@ namespace Bit.App.Controls
         {
             InitializeComponent();
 
-            ToggleVisibililtyCommand = new AsyncCommand(ToggleVisibilityAsync,
+            ToggleVisibilityCommand = new AsyncCommand(ToggleVisibilityAsync,
                 onException: ex => _logger.Value.Exception(ex),
                 allowsMultipleExecutions: false);
 
@@ -55,7 +55,7 @@ namespace Bit.App.Controls
 
         public AccountSwitchingOverlayViewModel ViewModel => BindingContext as AccountSwitchingOverlayViewModel;
 
-        public ICommand ToggleVisibililtyCommand { get; }
+        public ICommand ToggleVisibilityCommand { get; }
 
         public ICommand SelectAccountCommand { get; }
 

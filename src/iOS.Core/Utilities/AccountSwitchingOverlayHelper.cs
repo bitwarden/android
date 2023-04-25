@@ -96,7 +96,7 @@ namespace Bit.iOS.Core.Utilities
                 // and the hiding if done through AccountSwitchingOverlayView -> AfterHide
                 containerView.Hidden = false;
             }
-            accountSwitchingOverlayView.ToggleVisibililtyCommand.Execute(null);
+            accountSwitchingOverlayView.ToggleVisibilityCommand.Execute(null);
             containerView.UserInteractionEnabled = !overlayVisible;
             containerView.Subviews[0].UserInteractionEnabled = !overlayVisible;
         }
