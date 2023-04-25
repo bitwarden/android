@@ -78,7 +78,7 @@
                             <FormattedString>
                                 <Span Text="{u:I18n Important}" TextColor="{DynamicResource InfoColor}"/>
                                 <Span Text=": " TextColor="{DynamicResource InfoColor}"/>
-                                <Span Text="{Binding MasterPasswordMininumCharactersDescription}" TextColor="{DynamicResource MutedColor}"/>
+                                <Span Text="{Binding MasterPasswordMinimumCharactersDescription}" TextColor="{DynamicResource MutedColor}"/>
                             </FormattedString>
                         </Label.FormattedText>
                 </Label>
