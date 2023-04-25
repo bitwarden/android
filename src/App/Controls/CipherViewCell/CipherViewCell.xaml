@@ -35,7 +35,7 @@
         StyleClass="list-icon, list-icon-platform"
         IsVisible="{Binding ShowIconImage, Converter={StaticResource inverseBool}}"
         Text="{Binding Cipher, Converter={StaticResource iconGlyphConverter}}"
-        ShouldUpdateFontSizeDynamicallyForAccesibility="True"
+        ShouldUpdateFontSizeDynamicallyForAccessibility="True"
         AutomationProperties.IsInAccessibleTree="False" />
 
     <ff:CachedImage

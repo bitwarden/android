@@ -31,7 +31,7 @@
         VerticalOptions="Center"
         StyleClass="list-icon, list-icon-platform"
         Text="{Binding Send, Converter={StaticResource sendIconGlyphConverter}}"
-        ShouldUpdateFontSizeDynamicallyForAccesibility="True"
+        ShouldUpdateFontSizeDynamicallyForAccessibility="True"
         AutomationProperties.IsInAccessibleTree="False" />
 
     <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Padding="0, 7">
