@@ -121,7 +121,7 @@ namespace Bit.Publisher
 
             var commitRequest = service.Edits.Commit(Package, edit.Id);
             var commitEdit = await commitRequest.ExecuteAsync();
-            Console.WriteLine("App edit with id {0} has been comitted.", commitEdit.Id);
+            Console.WriteLine("App edit with id {0} has been committed.", commitEdit.Id);
         }
     }
 }
