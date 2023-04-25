@@ -18,7 +18,7 @@ class BWStateViewModel : ObservableObject{
             text = "SyncingItemsContainingVerificationCodes"
             isLoading = true
         case .need2FAItem:
-            text = "Add2FactorAutenticationToAnItemToViewVerificationCodes"
+            text = "Add2FactorAuthenticationToAnItemToViewVerificationCodes"
         case .needDeviceOwnerAuth:
             text = "SetUpAppleWatchPasscodeInOrderToUseBitwarden"
         default:
