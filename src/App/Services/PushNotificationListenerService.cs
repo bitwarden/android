@@ -214,7 +214,7 @@ namespace Bit.App.Services
 
         public void OnUnregistered(string deviceType)
         {
-            Debug.WriteLine($"{TAG} - Device Unnregistered");
+            Debug.WriteLine($"{TAG} - Device Unregistered");
         }
 
         public void OnError(string message, string deviceType)
