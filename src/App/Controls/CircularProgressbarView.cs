@@ -93,7 +93,7 @@ namespace Bit.App.Controls
 
         private void DrawCircle(SKCanvas canvas, Circle circle, float strokewidth, SKColor color)
         {
-            canvas.DrawCircle(circle.Center, circle.Redius,
+            canvas.DrawCircle(circle.Center, circle.Radius,
                 new SKPaint()
                 {
                     StrokeWidth = strokewidth,
@@ -122,14 +122,14 @@ namespace Bit.App.Controls
     {
         private readonly Func<SKImageInfo, SKPoint> _centerFunc;
 
-        public Circle(float redius, Func<SKImageInfo, SKPoint> centerFunc)
+        public Circle(float radius, Func<SKImageInfo, SKPoint> centerFunc)
         {
             _centerFunc = centerFunc;
-            Redius = redius;
+            Radius = radius;
         }
         public SKPoint Center { get; set; }
-        public float Redius { get; set; }
-        public SKRect Rect => new SKRect(Center.X - Redius, Center.Y - Redius, Center.X + Redius, Center.Y + Redius);
+        public float Radius { get; set; }
+        public SKRect Rect => new SKRect(Center.X - Radius, Center.Y - Radius, Center.X + Radius, Center.Y + Radius);
 
         public void CalculateCenter(SKImageInfo argsInfo)
         {
