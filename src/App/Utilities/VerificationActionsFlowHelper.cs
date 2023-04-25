@@ -15,7 +15,7 @@ namespace Bit.App.Utilities
     {
         IVerificationActionsFlowHelper Configure(VerificationFlowAction action,
             IActionFlowParmeters parameters = null,
-            string verificatioCodeMainActionText = null,
+            string verificationCodeMainActionText = null,
             bool isVerificationCodeMainActionStyleDanger = false);
         IActionFlowParmeters GetParameters();
         Task ValidateAndExecuteAsync();
