@@ -192,7 +192,7 @@
                                     <action selector="CancelBarButton_Activated:" destination="2304" id="3750"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Account" image="person.2" catalog="system" style="plain" id="I0b-et-FGw" userLabel="Accoutn Switching Button">
+                            <barButtonItem title="Account" image="person.2" catalog="system" style="plain" id="I0b-et-FGw" userLabel="Account Switching Button">
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <action selector="AccountSwitchingBarButton_Activated:" destination="2304" id="dZn-bd-bC6"/>
@@ -416,7 +416,7 @@
                                     <action selector="CancelButton_Activated:" destination="cn5-F4-59n" id="1gM-mE-phn"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Account" image="person.2" catalog="system" style="plain" id="nwd-aM-kFD" userLabel="Accoutn Switching Button">
+                            <barButtonItem title="Account" image="person.2" catalog="system" style="plain" id="nwd-aM-kFD" userLabel="Account Switching Button">
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <action selector="AccountSwitchingBarButton_Activated:" destination="cn5-F4-59n" id="vVZ-IM-rkU"/>
