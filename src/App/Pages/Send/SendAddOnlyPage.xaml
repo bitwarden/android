@@ -161,7 +161,7 @@
                     Orientation="Horizontal"
                     Spacing="0"
                     AutomationProperties.IsInAccessibleTree="True"
-                    AutomationProperties.Name="{Binding OptionsAccessilibityText}">
+                    AutomationProperties.Name="{Binding OptionsAccessibilityText}">
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OptionsHeader_Tapped" />
                     </StackLayout.GestureRecognizers>

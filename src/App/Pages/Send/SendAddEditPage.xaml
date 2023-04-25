@@ -256,7 +256,7 @@
                             Spacing="0"
                             xct:TouchEffect.Command="{Binding ToggleOptionsCommand}"
                             AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{Binding OptionsAccessilibityText}">
+                            AutomationProperties.Name="{Binding OptionsAccessibilityText}">
                             <Button
                                 Text="{u:I18n Options}"
                                 x:Name="_btnOptions"
