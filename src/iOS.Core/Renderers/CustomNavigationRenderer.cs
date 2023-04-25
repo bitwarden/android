@@ -57,9 +57,9 @@ namespace Bit.iOS.Core.Renderers
                 toolbarItem.OnAppearingAction = () => toolbarItem.PropertyChanged += ToolbarItem_PropertyChanged;
                 toolbarItem.OnDisappearingAction = () => toolbarItem.PropertyChanged -= ToolbarItem_PropertyChanged;
 
-                // HACK: XF PimaryToolbarItem is sealed so we can't override it, and also it doesn't provide any
+                // HACK: XF PrimaryToolbarItem is sealed so we can't override it, and also it doesn't provide any
                 // direct way to replace it with our custom one (we can but we need to rewrite several parts of the NavigationRenderer)
-                // So I think this is the easiest soolution for now to set UIImageRenderingMode.AlwaysOriginal
+                // So I think this is the easiest solution for now to set UIImageRenderingMode.AlwaysOriginal
                 // on the toolbar item image
                 void ToolbarItem_PropertyChanged(object s, PropertyChangedEventArgs e)
                 {

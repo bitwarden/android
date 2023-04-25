@@ -8,7 +8,7 @@ namespace Bit.Core.Abstractions
     public interface ILogger
     {
         /// <summary>
-        /// Place necessary code to initiaze logger
+        /// Place necessary code to initialize logger
         /// </summary>
         /// <returns></returns>
         Task InitAsync();
