@@ -21,6 +21,7 @@ using Bit.App.Utilities;
 using Bit.App.Pages;
 using Bit.App.Utilities.AccountManagement;
 using Bit.App.Controls;
+using Bit.Core.Enums;
 #if !FDROID
 using Android.Gms.Security;
 #endif
@@ -147,7 +148,7 @@ namespace Bit.Droid
             var storageMediatorService = new StorageMediatorService(mobileStorageService, secureStorageService, preferencesStorage);
             var stateService = new StateService(mobileStorageService, secureStorageService, storageMediatorService, messagingService);
             var stateMigrationService =
-                new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
+                new StateMigrationService(DeviceType.Android, liteDbStorage, preferencesStorage, secureStorageService);
             var clipboardService = new ClipboardService(stateService);
             var deviceActionService = new DeviceActionService(stateService, messagingService);
             var fileService = new FileService(stateService, broadcasterService);

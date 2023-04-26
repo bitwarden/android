@@ -10,6 +10,7 @@ using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.App.Utilities.AccountManagement;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Services;
@@ -105,7 +106,7 @@ namespace Bit.iOS.Core.Utilities
             var storageMediatorService = new StorageMediatorService(mobileStorageService, secureStorageService, preferencesStorage);
             var stateService = new StateService(mobileStorageService, secureStorageService, storageMediatorService, messagingService);
             var stateMigrationService =
-                new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
+                new StateMigrationService(DeviceType.iOS, liteDbStorage, preferencesStorage, secureStorageService);
             var deviceActionService = new DeviceActionService();
             var fileService = new FileService(stateService, messagingService);
             var clipboardService = new ClipboardService(stateService);

@@ -18,13 +18,13 @@
         public const string LastBuildKey = "lastBuild";
         public const string AddSitePromptShownKey = "addSitePromptShown";
         public const string ClearCiphersCacheKey = "clearCiphersCache";
-        public const string BiometricIntegritySourceKey = "biometricIntegrityState";
+        public const string BiometricIntegritySourceKey = "biometricIntegritySource";
         public const string iOSAutoFillClearCiphersCacheKey = "iOSAutoFillClearCiphersCache";
-        public const string iOSAutoFillBiometricIntegritySourceKey = "iOSAutoFillBiometricIntegrityState";
+        public const string iOSAutoFillBiometricIntegritySourceKey = "iOSAutoFillBiometricIntegritySource";
         public const string iOSExtensionClearCiphersCacheKey = "iOSExtensionClearCiphersCache";
-        public const string iOSExtensionBiometricIntegritySourceKey = "iOSExtensionBiometricIntegrityState";
+        public const string iOSExtensionBiometricIntegritySourceKey = "iOSExtensionBiometricIntegritySource";
         public const string iOSShareExtensionClearCiphersCacheKey = "iOSShareExtensionClearCiphersCache";
-        public const string iOSShareExtensionBiometricIntegritySourceKey = "iOSShareExtensionBiometricIntegrityState";
+        public const string iOSShareExtensionBiometricIntegritySourceKey = "iOSShareExtensionBiometricIntegritySource";
         public const string iOSExtensionActiveUserIdKey = "iOSExtensionActiveUserId";
         public const string EventCollectionKey = "eventCollection";
         public const string RememberedEmailKey = "rememberedEmail";
