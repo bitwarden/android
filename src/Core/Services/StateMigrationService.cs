@@ -495,7 +495,7 @@ namespace Bit.Core.Services
             var state = await GetValueAsync<State>(Storage.LiteDb, Constants.StateKey);
             if (state?.Accounts is null)
             {
-                // Nobody logged in, update stored version and exit
+                // No accounts available, update stored version and exit
                 await SetLastStateVersionAsync(5);
                 return;
             }
