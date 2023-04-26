@@ -505,16 +505,16 @@ namespace Bit.Core.Services
             {
                 var userId = account.Value.Profile.UserId;
 
-                await SetValueAsync(Storage.Prefs,
+                await SetValueAsync(Storage.LiteDb,
                     V5Keys.AccountBiometricIntegrityValidKey(userId, bioIntegrityState), true);
 
                 if (_deviceType == DeviceType.iOS)
                 {
-                    await SetValueAsync(Storage.Prefs,
+                    await SetValueAsync(Storage.LiteDb,
                         V5Keys.AccountBiometricIntegrityValidKey(userId, iOSAutofillBioIntegrityState), true);
-                    await SetValueAsync(Storage.Prefs,
+                    await SetValueAsync(Storage.LiteDb,
                         V5Keys.AccountBiometricIntegrityValidKey(userId, iOSExtensionBioIntegrityState), true);
-                    await SetValueAsync(Storage.Prefs,
+                    await SetValueAsync(Storage.LiteDb,
                         V5Keys.AccountBiometricIntegrityValidKey(userId, iOSShareExtensionBioIntegrityState), true);
                 }
             }
