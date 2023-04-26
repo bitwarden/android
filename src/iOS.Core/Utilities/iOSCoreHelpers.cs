@@ -111,7 +111,7 @@ namespace Bit.iOS.Core.Utilities
             var clipboardService = new ClipboardService(stateService);
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, clipboardService,
                 messagingService, broadcasterService);
-            var biometricService = new BiometricService(mobileStorageService);
+            var biometricService = new BiometricService(stateService);
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);

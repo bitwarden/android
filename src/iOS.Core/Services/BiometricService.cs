@@ -7,29 +7,30 @@ namespace Bit.iOS.Core.Services
 {
     public class BiometricService : IBiometricService
     {
-        private IStorageService _storageService;
+        private IStateService _stateService;
 
-        public BiometricService(IStorageService storageService)
+        public BiometricService(IStateService stateService)
         {
-            _storageService = storageService;
+            _stateService = stateService;
         }
 
-        public async Task<bool> SetupBiometricAsync(string bioIntegrityKey = null)
+        public async Task<bool> SetupBiometricAsync(string bioIntegritySrcKey = null)
         {
-            if (bioIntegrityKey == null)
+            if (bioIntegritySrcKey == null)
             {
-                bioIntegrityKey = Bit.Core.Constants.BiometricIntegrityKey;
+                bioIntegritySrcKey = Bit.Core.Constants.BiometricIntegritySourceKey;
             }
             var state = GetState();
             if (state != null)
             {
-                await _storageService.SaveAsync(bioIntegrityKey, ToBase64(state));
+                await _stateService.SetSystemBiometricIntegrityState(bioIntegritySrcKey, ToBase64(state));
+                await _stateService.SetAccountBiometricIntegrityValidAsync(bioIntegritySrcKey);
             }
 
             return true;
         }
 
-        public async Task<bool> ValidateIntegrityAsync(string bioIntegrityKey = null)
+        public async Task<bool> IsSystemBiometricIntegrityValidAsync(string bioIntegritySrcKey = null)
         {
             var state = GetState();
             if (state == null)
@@ -38,18 +39,14 @@ namespace Bit.iOS.Core.Services
                 return true;
             }
             
-            if (bioIntegrityKey == null)
+            if (bioIntegritySrcKey == null)
             {
-                bioIntegrityKey = Bit.Core.Constants.BiometricIntegrityKey;
+                bioIntegritySrcKey = Bit.Core.Constants.BiometricIntegritySourceKey;
             }
-            var oldState = await _storageService.GetAsync<string>(bioIntegrityKey);
-            if (oldState == null)
+            var savedState = await _stateService.GetSystemBiometricIntegrityState(bioIntegritySrcKey);
+            if (savedState != null)
             {
-                oldState = await GetMigratedIntegrityState(bioIntegrityKey);
-            }
-            if (oldState != null)
-            {
-                return FromBase64(oldState).Equals(state);
+                return FromBase64(savedState).Equals(state);
             }
             return false;
         }
@@ -71,36 +68,6 @@ namespace Bit.iOS.Core.Services
         {
             var bytes = System.Convert.FromBase64String(data);
             return NSData.FromArray(bytes);
-        }
-
-        private async Task<string> GetMigratedIntegrityState(string bioIntegrityKey)
-        {
-            var legacyKey = "biometricState";
-            if (bioIntegrityKey == Bit.Core.Constants.iOSAutoFillBiometricIntegrityKey)
-            {
-                legacyKey = "autofillBiometricState";
-            }
-            else if (bioIntegrityKey == Bit.Core.Constants.iOSExtensionBiometricIntegrityKey)
-            {
-                legacyKey = "extensionBiometricState";
-            }
-            
-            // Original values are pulled from DB since the legacy keys were never defined in _preferenceStorageKeys
-            var integrityState = await _storageService.GetAsync<string>(legacyKey);
-            if (integrityState != null)
-            {
-                // Save original value to pref storage with new key
-                await _storageService.SaveAsync(bioIntegrityKey, integrityState);
-                
-                // Remove value from DB storage with legacy key
-                await _storageService.RemoveAsync(legacyKey);
-                
-                // Return value as if it was always in pref storage
-                return integrityState;
-            }
-            
-            // Return null since the state was never set
-            return null;
         }
     }
 }

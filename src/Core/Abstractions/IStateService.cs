@@ -31,6 +31,10 @@ namespace Bit.Core.Abstractions
         Task SetBiometricUnlockAsync(bool? value, string userId = null);
         Task<bool> GetBiometricLockedAsync(string userId = null);
         Task SetBiometricLockedAsync(bool value, string userId = null);
+        Task<string> GetSystemBiometricIntegrityState(string bioIntegritySrcKey);
+        Task SetSystemBiometricIntegrityState(string bioIntegritySrcKey, string systemBioIntegrityState);
+        Task<bool> IsAccountBiometricIntegrityValidAsync(string bioIntegritySrcKey, string userId = null);
+        Task SetAccountBiometricIntegrityValidAsync(string bioIntegritySrcKey, string userId = null);
         Task<bool> CanAccessPremiumAsync(string userId = null);
         Task SetPersonalPremiumAsync(bool value, string userId = null);
         Task<string> GetProtectedPinAsync(string userId = null);
