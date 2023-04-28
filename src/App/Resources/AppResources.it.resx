@@ -419,7 +419,7 @@
     <value>Estensione app</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Usa il servizio di accessibilità di Bitwarden per l'auto-completamento dei tuoi login su app e web.</value>
+    <value>Usa il servizio di accessibilità di Bitwarden per il riempimento automatico dei tuoi login su app e web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Servizio di riempimento automatico</value>
@@ -434,13 +434,13 @@
     <value>Il modo più semplice per aggiungere nuovi login alla tua cassaforte è usare l'estensione di riempimento automatico di Bitwarden. Scopri di più su come usare l'estensione di riempimento automatico di Bitwarden nelle impostazioni.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Usa Bitwarden su Safari e altre applicazioni per auto-completare i tuoi login.</value>
+    <value>Usa Bitwarden su Safari e altre app per riempire automaticamente i tuoi login.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Servizio auto-completamento di Bitwarden</value>
+    <value>Servizio di riempimento automatico di Bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Usa il servizio di accessibilità Bitwarden per auto-completare i tuoi login.</value>
+    <value>Usa il servizio di accessibilità Bitwarden per riempire automaticamente i tuoi login.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Cambia email</value>
@@ -483,7 +483,7 @@
     <value>Quasi fatto!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Abilita l'estensione dell'applicazione</value>
+    <value>Abilita l'estensione dell'app</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>Su Safari, trova Bitwarden utilizzando l'icona di condivisione (scorri a destra sulla riga inferiore del menu).</value>
@@ -496,7 +496,7 @@
     <value>Sei pronto ad accedere!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>I tuoi login sono ora facilmente accessibili da Safari, Chrome e altre applicazioni supportate.</value>
+    <value>I tuoi login sono ora facilmente accessibili da Safari, Chrome e altre app supportate.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>In Safari e Chrome, trova Bitwarden utilizzando l'icona di condivisione (scorri a destra sulla riga in basso del menu Condividi).</value>
@@ -505,7 +505,7 @@
     <value>Clicca l'icona di Bitwarden nel menu per avviare l'estensione.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Per attivare Bitwarden su Safari e altre applicazioni, tocca l'icona "altro" sull'ultima riga del menu.</value>
+    <value>Per attivare Bitwarden su Safari e altre app, clicca l'icona "altro" sull'ultima riga del menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Preferito</value>
@@ -598,7 +598,7 @@
     <value>Altre impostazioni</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>È necessario accedere all'applicazione principale di Bitwarden prima di poter utilizzare l'estensione.</value>
+    <value>È necessario accedere all'app principale di Bitwarden prima di poter utilizzare l'estensione.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Mai</value>
@@ -623,7 +623,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Le opzioni predefinite sono impostate dal generatore di password dell'applicazione principale Bitwarden.</value>
+    <value>Le opzioni predefinite sono impostate dal generatore di password dell'app principale Bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Opzioni</value>
@@ -660,7 +660,7 @@
     <value>Rigenera password</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Digita nuovamente la password</value>
+    <value>Inserisci password principale di nuovo</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Cerca nella cassaforte</value>
@@ -708,7 +708,7 @@
     <value>Verifica in due passaggi</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>La verifica in due passaggi rende il tuo account più sicuro richiedendoti di verificare il tuo login usando un altro dispositivo come una chiave di sicurezza, applicazione di autenticazione, SMS, telefonata, o email. Può essere abilitata nella cassaforte web su bitwarden.com. Vuoi visitare il sito?</value>
+    <value>La verifica in due passaggi rende il tuo account più sicuro richiedendoti di verificare il tuo login usando un altro dispositivo come una chiave di sicurezza, app di autenticazione, SMS, telefonata, o email. Può essere abilitata nella cassaforte web su bitwarden.com. Vuoi visitare il sito?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Sblocca con {0}</value>
@@ -815,11 +815,11 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Applicazione di autenticazione</value>
+    <value>App di autenticazione</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Digita il codice di verifica a 6 cifre dalla tua applicazione di autenticazione.</value>
+    <value>Inserisci il codice di verifica a 6 cifre dalla tua app di autenticazione.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
@@ -842,7 +842,7 @@
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Invia nuovamente l'email con il codice di verifica</value>
+    <value>Invia email con codice di verifica di nuovo</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
@@ -1294,7 +1294,7 @@
     <value>Devi accedere all'app principale di Bitwarden per usare il riempimento automatico.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>I tuoi login sono ora facilmente accessibili dalla tastiera durante l'accesso a siti web e app.</value>
+    <value>I tuoi login sono ora facilmente accessibili dalla tastiera mentre accedi a siti web e app.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>Ti consigliamo di disabilitare qualsiasi altra app di riempimento automatico nelle impostazioni se non prevedi di usarle.</value>
@@ -1539,14 +1539,14 @@
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Scegli il modo predefinito in cui il rilevamento della corrispondenza URI viene gestito per i login quando si eseguono azioni come il riempimento automatico.</value>
+    <value>Scegli il modo predefinito in cui il rilevamento della corrispondenza URI è gestito per i login quando si eseguono azioni come il riempimento automatico.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Tema</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>Cambia il tema dell'applicazione.</value>
+    <value>Cambia il tema dell'app.</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
     <value>Predefinito (Sistema)</value>
@@ -1567,7 +1567,7 @@
     <value>Sei sicuro di voler uscire da Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Vuoi richiedere lo sblocco con la password principale quando l'applicazione viene riavviata?</value>
+    <value>Vuoi richiedere lo sblocco con la password principale quando l'app è riavviata?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Nero</value>
@@ -1686,7 +1686,7 @@
     <value>Si è verificato un problema esportando la tua cassaforte. Se il problema persiste, esportala dalla cassaforte web.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
-    <value>Cassaforte esportata correttamente</value>
+    <value>Cassaforte esportata</value>
   </data>
   <data name="Clone" xml:space="preserve">
     <value>Clona</value>
@@ -1752,10 +1752,10 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Dati biometrici modificati, accedi con la password principale per attivare nuovamente lo sblocco con dati biometrici.</value>
+    <value>Sblocco biometrico disabilitato in attesa della verifica della password principale.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Sblocco biometrico per riempimento automatico disabilitato in attesa della verifica della password principale.</value>
+    <value>Sblocco biometrico per il riempimento automatico disabilitato in attesa della verifica della password principale.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Gesto di sincronizzazione</value>
@@ -1816,7 +1816,7 @@
 </value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>I termini di servizio e l'informativa sulla privacy non sono stati accettati.</value>
+    <value>I Termini di Servizio e l'Informativa sulla Privacy non sono stati accettati.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
     <value>Termini di Servizio</value>
@@ -1825,7 +1825,7 @@
     <value>Informativa sulla Privacy</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden richiede la tua attenzione - Abilita "Mostra sopra altre app" nelle impostazioni di Bitwarden</value>
+    <value>Bitwarden richiede la tua attenzione - Abilita "Mostra sopra altre app" in "Servizi di riempimento automatico" dalle impostazioni di Bitwarden</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Servizi di riempimento automatico</value>
@@ -1861,7 +1861,7 @@
     <value>Se abilitato, il servizio di accessibilità di Bitwarden mostrerà un pop-up per aiutarti a riempire automaticamente i tuoi login quando selezioni dei campi di login.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>Se abilitato, l'accessibilità mostrerà un pop-up per migliorare il servizio di riempimento automatico per applicazioni più vecchie che non supportano la struttura di riempimento automatico di Android.</value>
+    <value>Se abilitato, l'accessibilità mostrerà un pop-up per migliorare il servizio di riempimento automatico per app più vecchie che non supportano la struttura di riempimento automatico di Android.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
     <value>A causa di una politica aziendale, non puoi salvare elementi nella tua cassaforte personale. Cambia l'opzione di proprietà in un'organizzazione e scegli tra le raccolte disponibili.</value>
@@ -1997,7 +1997,7 @@
     <value>Condividi link</value>
   </data>
   <data name="SendLink" xml:space="preserve">
-    <value>Collegamento del Send</value>
+    <value>Link del Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
@@ -2066,7 +2066,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>Gli account gratuiti sono limitati alla condivisione di testo. Per condividere i file usando Send è necessario un abbonamento Premium.</value>
+    <value>Gli account gratis sono limitati alla condivisione di testo. Per condividere i file usando Send è necessario un abbonamento Premium.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
@@ -2173,10 +2173,10 @@
     <value>Account bloccato</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
-    <value>Account uscito correttamente</value>
+    <value>Account uscito</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
-    <value>Account rimosso correttamente</value>
+    <value>Account rimosso</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Elimina account</value>
@@ -2206,7 +2206,7 @@
     <value>Invio in corso</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Copia il link al Send dopo averlo salvato.</value>
+    <value>Copia il link al Send dopo averlo salvato</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
     <value>Invio codice in corso...</value>
@@ -2215,7 +2215,7 @@
     <value>Verifica</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Invia di nuovo il codice</value>
+    <value>Invia codice di nuovo</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
     <value>Il codice di verifica è stato inviato al tuo indirizzo email</value>
@@ -2473,7 +2473,7 @@ clicca Aggiungi TOTP per salvare la chiave in modo sicuro</value>
     <value>Ulteriori informazioni sul servizio di accessibilità</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden usa il servizio di accessibilità per cercare i campi di login in app e siti web e individuare gli ID di campo appropriati per inserire nome utente e password quando è trovata una corrispondenza per il sito o l'app. Non memorizziamo nessuna delle informazioni che ci vengono presentate dal servizio, e non controlliamo eventuali altri elementi sullo schermo diversi dall'immissione di credenziali.</value>
+    <value>Bitwarden usa il servizio di accessibilità per cercare i campi di login in app e siti web e individuare gli ID di campo appropriati per inserire nome utente e password quando è trovata una corrispondenza per il sito o l'app. Non memorizziamo nessuna delle informazioni che ci soono presentate dal servizio, e non controlliamo eventuali altri elementi sullo schermo diversi dall'immissione di credenziali.</value>
   </data>
   <data name="Accept" xml:space="preserve">
     <value>Accetta</value>
@@ -2517,7 +2517,7 @@ Vuoi passare a questo account?</value>
     <value>Assicurati che la tua cassaforte sia sbloccata e che la frase impronta corrisponda sull'altro dispositivo.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
-    <value>Invia nuova notifica</value>
+    <value>Invia notifica di nuovo</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
     <value>Hai bisogno di un'altra opzione?</value>
