@@ -970,18 +970,18 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Biometric unlock disabled pending verification of master password..
         /// </summary>
-        public static string BiometricInvalidated {
+        public static string AccountBiometricInvalidated {
             get {
-                return ResourceManager.GetString("BiometricInvalidated", resourceCulture);
+                return ResourceManager.GetString("AccountBiometricInvalidated", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Biometric unlock for autofill disabled pending verification of master password..
         /// </summary>
-        public static string BiometricInvalidatedExtension {
+        public static string AccountBiometricInvalidatedExtension {
             get {
-                return ResourceManager.GetString("BiometricInvalidatedExtension", resourceCulture);
+                return ResourceManager.GetString("AccountBiometricInvalidatedExtension", resourceCulture);
             }
         }
         

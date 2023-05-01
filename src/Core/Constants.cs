@@ -18,13 +18,13 @@
         public const string LastBuildKey = "lastBuild";
         public const string AddSitePromptShownKey = "addSitePromptShown";
         public const string ClearCiphersCacheKey = "clearCiphersCache";
-        public const string BiometricIntegrityKey = "biometricIntegrityState";
+        public const string BiometricIntegritySourceKey = "biometricIntegritySource";
         public const string iOSAutoFillClearCiphersCacheKey = "iOSAutoFillClearCiphersCache";
-        public const string iOSAutoFillBiometricIntegrityKey = "iOSAutoFillBiometricIntegrityState";
+        public const string iOSAutoFillBiometricIntegritySourceKey = "iOSAutoFillBiometricIntegritySource";
         public const string iOSExtensionClearCiphersCacheKey = "iOSExtensionClearCiphersCache";
-        public const string iOSExtensionBiometricIntegrityKey = "iOSExtensionBiometricIntegrityState";
+        public const string iOSExtensionBiometricIntegritySourceKey = "iOSExtensionBiometricIntegritySource";
         public const string iOSShareExtensionClearCiphersCacheKey = "iOSShareExtensionClearCiphersCache";
-        public const string iOSShareExtensionBiometricIntegrityKey = "iOSShareExtensionBiometricIntegrityState";
+        public const string iOSShareExtensionBiometricIntegritySourceKey = "iOSShareExtensionBiometricIntegritySource";
         public const string iOSExtensionActiveUserIdKey = "iOSExtensionActiveUserId";
         public const string EventCollectionKey = "eventCollection";
         public const string RememberedEmailKey = "rememberedEmail";
@@ -110,6 +110,8 @@
         public static string ProtectedPinKey(string userId) => $"protectedPin_{userId}";
         public static string LastSyncKey(string userId) => $"lastSync_{userId}";
         public static string BiometricUnlockKey(string userId) => $"biometricUnlock_{userId}";
+        public static string AccountBiometricIntegrityValidKey(string userId, string systemBioIntegrityState) =>
+            $"accountBiometricIntegrityValid_{userId}_{systemBioIntegrityState}";
         public static string ApprovePasswordlessLoginsKey(string userId) => $"approvePasswordlessLogins_{userId}";
         public static string UsernameGenOptionsKey(string userId) => $"usernameGenerationOptions_{userId}";
         public static string PushLastRegistrationDateKey(string userId) => $"pushLastRegistrationDate_{userId}";

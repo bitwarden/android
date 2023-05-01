@@ -209,7 +209,7 @@ namespace Bit.App.Pages
 
             if (BiometricLock)
             {
-                BiometricIntegrityValid = await _biometricService.ValidateIntegrityAsync();
+                BiometricIntegrityValid = await _platformUtilsService.IsBiometricIntegrityValidAsync();
                 if (!_biometricIntegrityValid)
                 {
                     BiometricButtonVisible = false;
@@ -431,7 +431,8 @@ namespace Bit.App.Pages
 
         public async Task PromptBiometricAsync()
         {
-            BiometricIntegrityValid = await _biometricService.ValidateIntegrityAsync();
+            BiometricIntegrityValid = await _platformUtilsService.IsBiometricIntegrityValidAsync();
+            BiometricButtonVisible = BiometricIntegrityValid;
             if (!BiometricLock || !BiometricIntegrityValid)
             {
                 return;
