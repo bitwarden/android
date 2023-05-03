@@ -6,16 +6,14 @@
 # Unless a later match takes precedence
 # @bitwarden/team-leads
 
+## Auth team files ##
+
 ## Platform team files ##
 appIcons @bitwarden/team-platform-dev
 build.cake @bitwarden/team-platform-dev
 
 ## Vault team files ##
 
-src/iOS.Autofill @bitwarden/team-vault-dev
-src/iOS.Extension @bitwarden/team-vault-dev
 src/watchOS @bitwarden/team-vault-dev
 
 ## Tools team files ##
-
-iOS.ShareExtension @bitwarden/team-tools-dev
