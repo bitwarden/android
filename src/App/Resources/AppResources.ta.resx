@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authenticator</value>
+    <value>அங்கீகரிப்பாளர்</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -584,7 +584,7 @@
     <value>உங்கள் கடவுச்சொல்லை மறந்துவிட்டால் அதை நினைவுபடுத்த பிரதான கடவுச்சொல் குறிப்பு உதவும்.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>பிரதான கடவுச்சொல் குறைந்தது {0} வரியுருக்கள் இருக்க வேண்டும்.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>குறைந்தபட்ச எண்கள்</value>
@@ -678,10 +678,10 @@
     <value>செயலியைத் திறக்க 4 இலக்க கடவெண் குறியை உள்ளிடு.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>உருப்படியின் தகவல்</value>
+    <value>உருப்படித் தகவல்</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>உருப்படி புதுப்பிக்கப்பட்டது.</value>
+    <value>உருப்படி சேமிக்கப்பட்டது</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>சமர்ப்பிக்கிறது...</value>
@@ -692,10 +692,10 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>ஒத்திசைவு நிறைவடைந்தது.</value>
+    <value>ஒத்திசைவு நிறைவு</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>ஒத்திசைவு தோல்வி.</value>
+    <value>ஒத்திசைவு தோல்வி</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>இப்போது பெட்டகத்தை ஒத்திசை</value>
@@ -901,8 +901,8 @@
     <value>அங்கீகார விசையை படிக்க இயலவில்லை.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Point your camera at the QR Code.
-Scanning will happen automatically.</value>
+    <value>படக்கருவியை விரைவுக்குறியில் சுட்டிக்காட்டுக.
+விருடல் தானாக நடக்கும்.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>வி.ம(QR) குறியீட்டை வருடல் செய்க</value>
@@ -917,7 +917,7 @@ Scanning will happen automatically.</value>
     <value>TOTP ஐ நகலெடு</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</value>
+    <value>ஓர் உள்நுழைவிடம் ஆங்கீகரிப்பு விசை இருந்தால், நீங்கள் உள்நுழைவை தன்னிரப்பும்போது TOTP சிரிபார்ப்புக் குறியீட்டை நகலெடுக்கவும்.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>TOTPஐத் தானாக நகலெடு</value>
@@ -1144,7 +1144,7 @@ Scanning will happen automatically.</value>
     <value>வலைத்தள படவுருக்களைக் காட்டு</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
-    <value>Show a recognizable image next to each login.</value>
+    <value>ஒவ்வொரு உள்நுழைவுக்கு அடுத்தும் அறியம்படியான படத்தைக் காட்டு.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>படவுரு தேக்க உரலி</value>
@@ -1753,11 +1753,11 @@ Scanning will happen automatically.</value>
     <value>நீங்கள் உண்மையில் குப்பைக்கு அனுப்ப விரும்புகிறீர்களா?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>உயிரியளவு பூட்டவிழ்த்தல் முடக்கப்பட்டது பிரதான கடவுச்சொல் சரிபார்ப்பு நிலுவையிலுள்ளது.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>தன்னிரப்பலுக்கான உயிரியளவு பூட்டவிழ்த்தல் முடக்கப்பட்டது பிரதான கடவுச்சொல் சரிபார்ப்பு நிலுவையிலுள்ளது.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>புத்துணர்வூட்டலில் ஒத்திசைவை இயக்கு</value>
@@ -2325,73 +2325,73 @@ select Add TOTP to store the key safely</value>
     <value>திரைப்பிடிப்பை நிச்சயமாக இயக்கவா?</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
-    <value>Login requested</value>
+    <value>உள்நுழைவு கோரப்பட்டது</value>
   </data>
   <data name="AreYouTryingToLogIn" xml:space="preserve">
-    <value>Are you trying to log in?</value>
+    <value>உள்நுழைய முயல்கிறீரா?</value>
   </data>
   <data name="LogInAttemptByXOnY" xml:space="preserve">
-    <value>Login attempt by {0} on {1}</value>
+    <value>{0} ஆல் {1} இல் உள்நுழைவு முயற்சி</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
-    <value>Device type</value>
+    <value>சாதன வகை</value>
   </data>
   <data name="IpAddress" xml:space="preserve">
-    <value>IP address</value>
+    <value>IP முகவரி</value>
   </data>
   <data name="Time" xml:space="preserve">
-    <value>Time</value>
+    <value>நேரம்</value>
   </data>
   <data name="Near" xml:space="preserve">
     <value>Near</value>
   </data>
   <data name="ConfirmLogIn" xml:space="preserve">
-    <value>Confirm login</value>
+    <value>உள்நுழைவை உறுதிபடுத்து</value>
   </data>
   <data name="DenyLogIn" xml:space="preserve">
-    <value>Deny login</value>
+    <value>உள்நுழைவை மறு</value>
   </data>
   <data name="JustNow" xml:space="preserve">
     <value>Just now</value>
   </data>
   <data name="XMinutesAgo" xml:space="preserve">
-    <value>{0} minutes ago</value>
+    <value>{0} நிமிடங்கள் முன்பு</value>
   </data>
   <data name="LogInAccepted" xml:space="preserve">
-    <value>Login confirmed</value>
+    <value>உள்நுழைவு உறுதிபடுத்தப்பட்டது</value>
   </data>
   <data name="LogInDenied" xml:space="preserve">
-    <value>Login denied</value>
+    <value>உள்நுழைவு மறுக்கப்பட்டது</value>
   </data>
   <data name="ApproveLoginRequests" xml:space="preserve">
-    <value>Approve login requests</value>
+    <value>உள்நுழைவு கோரிக்கைகளை ஒப்புக்கொள்</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Use this device to approve login requests made from other devices.</value>
+    <value>பிற சாதனங்களிலிருந்து செய்யப்பட்ட உள்நுழைவு கோரிக்கைகளை ஒப்புக்கொள்ள இச்சாதனத்தைப் பயன்படுத்து.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
-    <value>Allow notifications</value>
+    <value>அறிவிப்புகளை அனுமதி</value>
   </data>
   <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
-    <value>Receive push notifications for new login requests</value>
+    <value>புது உள்நுழைவு கோரிக்கைகளுக்கு push அறிவிப்புகளைப் பெறு</value>
   </data>
   <data name="NoThanks" xml:space="preserve">
-    <value>No thanks</value>
+    <value>பரவாயில்லை வேண்டாம்</value>
   </data>
   <data name="ConfimLogInAttempForX" xml:space="preserve">
-    <value>Confirm login attempt for {0}</value>
+    <value>{0}-க்கான உள்நுழைவு முயற்சியை உறுதுபடுத்து</value>
   </data>
   <data name="AllNotifications" xml:space="preserve">
-    <value>All notifications</value>
+    <value>எல்லா அறிவிப்புகளும்</value>
   </data>
   <data name="PasswordType" xml:space="preserve">
-    <value>Password type</value>
+    <value>கடவுச்சொல் வகை</value>
   </data>
   <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
-    <value>What would you like to generate?</value>
+    <value>என்ன உருவாக்க விரும்புகிறீர்?</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
-    <value>Username type</value>
+    <value>பயனர்பெயர் வகை</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
     <value>Plus addressed email</value>
@@ -2477,18 +2477,18 @@ select Add TOTP to store the key safely</value>
     <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
   </data>
   <data name="Accept" xml:space="preserve">
-    <value>Accept</value>
+    <value>ஏற்றுக்கொள்</value>
   </data>
   <data name="Decline" xml:space="preserve">
-    <value>Decline</value>
+    <value>மறு</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
-    <value>Login request has already expired.</value>
+    <value>உள்நுழைவு கோரிக்கை ஏற்கனவே காலாவதியானது.</value>
   </data>
   <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
-    <value>Login attempt from:
+    <value>இதிலிருந்து உள்நுழைவு முயற்சி:
 {0}
-Do you want to switch to this account?</value>
+இக்கணக்கிற்கு மாற வேண்டுமா?</value>
   </data>
   <data name="NewAroundHere" xml:space="preserve">
     <value>New around here?</value>
@@ -2497,88 +2497,88 @@ Do you want to switch to this account?</value>
     <value>Get master password hint</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>{0} ஆக உள்நுழைகிறது</value>
   </data>
   <data name="NotYou" xml:space="preserve">
-    <value>Not you?</value>
+    <value>நீங்கள் இல்லையா?</value>
   </data>
   <data name="LogInWithMasterPassword" xml:space="preserve">
-    <value>Log in with master password</value>
+    <value>பிரதான கடவுச்சொலுடன் உள்நுழை</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Log in with device</value>
+    <value>சாதனத்துடன் உள்நுழை</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Log in initiated</value>
+    <value>உள்நுழைவு துவங்கியது</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
-    <value>A notification has been sent to your device.</value>
+    <value>உமது சாதனத்திற்கு ஓரறிவிப்பு அனுப்பப்பட்டது.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
     <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
-    <value>Resend notification</value>
+    <value>அறிவிப்பை மீண்டுமனுப்பு</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>வேறு வருப்பம் தேவையா?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>View all log in options</value>
+    <value>எல்லா உள்நுழைவு விருப்பத்தையும் காண்க</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
-    <value>This request is no longer valid</value>
+    <value>இக்கோரிக்கை இனி செல்லாது</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Pending login requests</value>
+    <value>நிலுவையிலுள்ள உள்நுழைவு கோரிக்கைகள்</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
-    <value>Decline all requests</value>
+    <value>எல்லா கோரிக்கைகளையும் மறு</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>Are you sure you want to decline all pending login requests?</value>
+    <value>நிலுவையிலுள்ள எல்லா கோரிக்கைகளையும் மறுக்க வேண்டுமா?</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
-    <value>Requests declined</value>
+    <value>கோரிக்கைகள் மறுக்கப்பட்டன</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>No pending requests</value>  
+    <value>நிலுவையிலுள்ள கோரிக்கைகள் இல்லை</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>வருடியைப் பயன்படுத்த படக்கருவி அனுமதியை இயக்கு</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>மொழி</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
-    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+    <value>மொழி {0}-க்கு மாற்றப்பட்டது. மாற்றத்தைக் காண செயலியை மறுதுவக்கு</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
-    <value>Language change requires app restart</value>
+    <value>மொழிமாற்றத்திற்கு செயலி மறுதுவக்கப்பட வேண்டும்</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>இயல்புநிலை (முறைமை)</value>
   </data>
   <data name="Important" xml:space="preserve">
-    <value>Important</value>
+    <value>முக்கியம்</value>
   </data>
   <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
-    <value>Your master password cannot be recovered if you forget it! {0} characters minimum.</value>
+    <value>மறந்துபோனால் பிரதான கடவுச்சொல்லை மீட்டெடுக்க முடியாது! குறைந்தபட்சம் {0} வரியுருக்கள்.</value>
   </data>
   <data name="WeakMasterPassword" xml:space="preserve">
-    <value>Weak Master Password</value>
+    <value>வலுவற்ற பிரதான கடவுச்சொல்</value>
   </data>
   <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
     <value>Weak password identified. Use a strong password to protect your account. Are you sure you want to use a weak password?</value>
   </data>
   <data name="Weak" xml:space="preserve">
-    <value>Weak</value>
+    <value>வலுவற்ற</value>
   </data>
   <data name="Good" xml:space="preserve">
-    <value>Good</value>
+    <value>நல்ல</value>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Strong</value>
+    <value>வலுவான</value>
   </data>
   <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
     <value>Check known data breaches for this password</value>

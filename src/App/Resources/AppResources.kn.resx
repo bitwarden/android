@@ -1753,11 +1753,11 @@ Scanning will happen automatically.</value>
     <value>ನೀವು ನಿಜವಾಗಿಯೂ ಅನುಪಯುಕ್ತಕ್ಕೆ ಕಳುಹಿಸಲು ಬಯಸುವಿರಾ?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>ಬಯೋಮೆಟ್ರಿಕ್ ಅನ್ಲಾಕ್ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ನ ಪರಿಶೀಲನೆ ಬಾಕಿ ಉಳಿದಿದೆ.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>ಸ್ವಯಂಚಾಲಿತ ಭರ್ತಿಗಾಗಿ ಬಯೋಮೆಟ್ರಿಕ್ ಅನ್ಲಾಕ್ ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ನ ಪರಿಶೀಲನೆ ಬಾಕಿ ಉಳಿದಿದೆ.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>ರಿಫ್ರೆಶ್‌ನಲ್ಲಿ ಸಿಂಕ್ ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ</value>

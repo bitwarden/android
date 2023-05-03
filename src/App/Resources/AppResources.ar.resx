@@ -1752,11 +1752,11 @@
     <value>هل تريد حقاً أن ترسل إلى سلة المهملات؟</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>تم تعطيل فتح القفل الحيوي في انتظار التحقق من كلمة المرور الرئيسية.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>تم تعطيل إلغاء القفل البيومتري للملء التلقائي في انتظار التحقق من كلمة المرور الرئيسية.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>تمكين المزامنة عند التحديث</value>

@@ -1752,11 +1752,11 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>Həqiqətən tullantı qutusuna göndərmək istəyirsiniz?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Ana parolun təsdiqlənməsi gözlənildiyi üçün biometrik kilid açma sıradan çıxarıldı.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Ana parolun təsdiqlənməsi gözlənildiyi üçün bu hesab üzrə biometrik kilid açma sıradan çıxarıldı.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Ana parolun təsdiqlənməsi gözlənildiyi üçün avto-doldurma üzrə biometrik kilid açma sıradan çıxarıldı.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Ana parolun təsdiqlənməsi gözlənildiyi üçün bu hesab üzrə avto-doldurma biometrik kilid açma sıradan çıxarıldı.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Təzələmə əsnasında eyniləşdirməni fəallaşdır</value>

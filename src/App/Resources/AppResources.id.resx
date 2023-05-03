@@ -1752,11 +1752,11 @@ Proses pindai akan terjadi secara otomatis.</value>
     <value>Yakin ingin mengirim ke sampah?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Perubahan biometrik terdeteksi, login menggunakan Master Password untuk mengaktifkan kembali.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Buka kunci biometrik untuk pengisian otomatis dinonaktifkan sambil menunggu verifikasi kata sandi utama.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Aktifkan sinkronisasi saat refresh</value>

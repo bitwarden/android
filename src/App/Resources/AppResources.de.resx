@@ -1752,11 +1752,11 @@ Das Scannen erfolgt automatisch.</value>
     <value>Soll dieser Eintrag wirklich in den Papierkorb verschoben werden?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometrisches Entsperren ist deaktiviert, bis das Master-Passwort eingegeben wurde.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometrie zum Entsperren ist für dieses Konto deaktiviert, bis das Master-Passwort verifiziert wurde.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometrisches Entsperren für automatisches Ausfüllen ist deaktiviert, bis das Master-Passwort eingegeben wurde.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Das Entsperren von Auto-Ausfüllen über Biometrie ist für dieses Konto deaktiviert, bis das Master-Passwort verifiziert wurde.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Synchronisation beim Aktualisieren aktivieren</value>

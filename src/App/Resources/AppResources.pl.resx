@@ -1752,11 +1752,11 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Czy na pewno chcesz to usunąć?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Odblokowanie za pomocą danych biometrycznych zostało wyłączone. Zaloguj się hasłem głównym.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Odblokowanie biometryczne dla tego konta jest wyłączone w oczekiwaniu na weryfikację hasła głównego.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autouzupełnianie za pomocą danych biometrycznych zostało wyłączone. Zaloguj się hasłem głównym.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autouzupełnianie za pomocą danych biometrycznych zostało wyłączone w oczekiwaniu na weryfikację hasła głównego.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Włącz synchronizację podczas odświeżenia</value>

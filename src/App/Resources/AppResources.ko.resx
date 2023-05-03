@@ -1752,11 +1752,11 @@
     <value>정말로 휴지통으로 이동시킬까요?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>생체인증 변경이 확인되었습니다. 마스터 비밀번호로 로그인해서 다시 활성화 해주세요.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>마스터 비밀번호 인증을 하기 전에는 생체 인식을 사용한 자동 채우기가 비활성화됩니다.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>새로고침할 때 동기화 사용</value>

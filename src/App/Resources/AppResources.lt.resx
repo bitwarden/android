@@ -1752,11 +1752,11 @@ Nuskaitymas vyks automatiškai.</value>
     <value>Ar tikrai norite perkelti į šiukšlinę?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometrinis atrakinimas išjungtas, kol bus patvirtintas pagrindinis slaptažodis.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometrinis automatinio pildymo atrakinimas išjungtas, kol bus patvirtintas pagrindinis slaptažodis.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Leisti sinchronizuoti atnaujinant</value>

@@ -1752,11 +1752,11 @@ Awtomatikong itong magsa-scan.</value>
     <value>Gusto mo ba talaga itong itapon?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Na-disable ang biometrikong pag-unlock, naghihintay para sa beripikasyon ng master password.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Na-disable ang biometrikong pag-unlock para sa autofill, naghihintay para sa beripikasyon ng master password.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Payagan ang pag-sync pagka-refresh</value>

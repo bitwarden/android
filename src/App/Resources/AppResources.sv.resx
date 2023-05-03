@@ -1753,11 +1753,11 @@ Skanningen sker automatiskt.</value>
     <value>Vill du verkligen skicka till papperskorgen?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometrisk upplåsning är inaktiverad i väntan på bekräftelse av huvudlösenordet.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometrisk upplåsning för automatisk ifyllnad är inaktiverad i väntan på bekräftelse av huvudlösenordet.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Aktivera synkronisering vid uppdatering</value>

@@ -1752,11 +1752,11 @@ Skeniranje će biti izvršeno automatski.</value>
     <value>Želite li zaista poslati u smeće?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometrijsko otključavanje onemogućeno do potvrde glavne lozinke.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometrijsko otključavanje za auto-ispunu onemogućeno do potvrde glavne lozinke.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Uključi sinkronizaciju pri osvježavanju</value>
