@@ -1752,11 +1752,11 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Bu kaydı çöp kutusuna göndermek istediğinizden emin misiniz?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biyometrik kilit açma devre dışı. Ana parolanın doğrulanması bekleniyor.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Bu hesap için biyometrik kilit açma devre dışı. Ana parolanın doğrulanması bekleniyor.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Otomatik doldurma için biyometrik kilit açma devre dışı. Ana parolanın doğrulanması bekleniyor.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Otomatik doldurma biyometrik kilit açma devre dışı. Ana parolanın doğrulanması bekleniyor.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Yenileme sırasında eşitlemeye izin ver</value>

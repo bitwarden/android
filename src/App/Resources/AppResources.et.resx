@@ -1752,11 +1752,11 @@ Skaneerimine toimub automaatselt.</value>
     <value>Oled kindel, et soovid kirje(d) prügikasti teisaldada?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Automaattäite kinnitamine läbi biomeetria on keelatud. Oodatakse ülemparooli sisestamist.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biomeetriaga lahtilukustamine on keelatud. Oodatakse ülemparooli sisestamist.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Automaattäite kinnitamine läbi biomeetria on keelatud. Oodatakse ülemparooli sisestamist.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Automaattäite ja biomeetrilise avamise kasutamine on keelatud. Oodatakse ülemprooli sisestamist.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Luba allatõmbel sünkroniseerimine</value>

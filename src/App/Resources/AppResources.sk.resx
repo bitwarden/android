@@ -1752,11 +1752,11 @@ Skenovanie prebehne automaticky.</value>
     <value>Naozaj to chcete poslať do koša?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Bola zaznamenaná zmena biometrických údajov, prihláste za svojím hlavným heslom aby ste opäť povolili prihlásenie.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometrické odblokovanie pre tento účet je deaktivované až do overenia hlavného hesla.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometrické odblokovanie pre automatické dopĺňanie je deaktivované až do overenia hlavného hesla.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Automatické vypĺňanie cez biometrické odblokovanie pre tento účet je deaktivované až do overenia hlavného hesla.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Povoliť synchronizáciu pri obnovení</value>

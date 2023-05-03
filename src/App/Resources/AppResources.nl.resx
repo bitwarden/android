@@ -1752,11 +1752,11 @@ Het scannen gebeurt automatisch.</value>
     <value>Weet je zeker dat je dit naar de prullenbak wilt verplaatsen?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometrische ontgrendeling uitgeschakeld in afwachting van verificatie van het hoofdwachtwoord.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometrische ontgrendeling voor deze account is uitgeschakeld in afwachting van verificatie van het hoofdwachtwoord.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometrische ontgrendeling is uitgeschakeld in afwachting van verificatie van het hoofdwachtwoord.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Automatische biometrische ontgrendeling voor deze account is uitgeschakeld in afwachting van verificatie van het hoofdwachtwoord.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Synchronisatie bij vernieuwen inschakelen</value>

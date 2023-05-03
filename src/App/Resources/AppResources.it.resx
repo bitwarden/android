@@ -1751,11 +1751,11 @@
     <value>Sei sicuro di voler eliminare l'elemento?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Sblocco biometrico disabilitato in attesa della verifica della password principale.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Sblocco biometrico per questo account disabilitato in attesa della verifica della password principale.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Sblocco biometrico per il riempimento automatico disabilitato in attesa della verifica della password principale.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Sblocco biometrico del riempimento automatico per questo account disabilitato in attesa della verifica della password principale.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Gesto di sincronizzazione</value>

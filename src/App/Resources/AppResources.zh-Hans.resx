@@ -1752,11 +1752,11 @@
     <value>您确定要将其发送到回收站吗？</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>生物识别解锁已禁用，等待验证主密码。</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>在验证主密码之前，此账户的生物识别解锁将禁用。</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>在验证主密码之前，用于自动填充的生物识别解锁功能将禁用。</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>在验证主密码之前，此账户的自动填充生物识别解锁将禁用。</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>启用刷新时同步</value>

@@ -1752,11 +1752,11 @@ L'escaneig es farà automàticament.</value>
     <value>Esteu segur que voleu enviar-ho a la paperera?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>S'ha detectat un canvi biomètric. Inicieu la sessió mitjançant la contrasenya principal per tornar a activar-la.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>El desbloqueig biomètric d'aquest compte està deshabilitat mentre es verifica la contrasenya mestra.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Desbloqueig biomètric d'emplenament automàtic deshabilitat. Està pendent de verificació de la contrasenya mestra.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>El desbloqueig biomètric d'emplenament automàtic d'aquest compte està deshabilitat mentre es verifica la contrasenya mestra.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Activa la sincronització en actualitzar-se</value>

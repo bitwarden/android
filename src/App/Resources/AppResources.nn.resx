@@ -584,7 +584,7 @@
     <value>Eit hovudpassordvink kan hjelpa deg med å hugsa passordet ditt om du gløymer det.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Hovudpassordet ditt må vera minst {0} teikn langt.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Min. tal på nummer</value>
@@ -660,7 +660,7 @@
     <value>Lag om passord</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Re-type master password</value>
+    <value>Skriv inn hovudpassordet på nytt</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Leita i kvelvet</value>
@@ -993,7 +993,7 @@ Scanning will happen automatically.</value>
     <value>Trykk på denne meldinga for å sjå oppføringar i kvelvet ditt.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>Custom fields</value>
+    <value>Eigendefinerte felt</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
     <value>Skriv av nummer</value>
@@ -1149,16 +1149,16 @@ Scanning will happen automatically.</value>
     <value>Icons server URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with Bitwarden</value>
+    <value>Auto-utfyll med Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Kvelvet er låst</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Gå til kvelvet mitt</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>Samlingar</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>Det er ingen oppføringar i denne samlinga.</value>
@@ -1752,11 +1752,11 @@ Scanning will happen automatically.</value>
     <value>Vil du verkeleg flytta denne til papirkorga?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock disabled pending verification of master password.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Allow sync on refresh</value>

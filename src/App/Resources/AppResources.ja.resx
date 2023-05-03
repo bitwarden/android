@@ -1752,11 +1752,11 @@
     <value>本当にごみ箱に入れますか？</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>生体認証の変更が検出されました。マスターパスワードを使用してログインすると再度有効化できます。</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>このアカウントの生体認証ロック解除はマスターパスワードの検証待ちで無効になっています。</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>マスターパスワードの検証保留中は生体認証でのロック解除は無効化されています</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>このアカウントの自動入力の生体認証ロック解除はマスターパスワードの検証待ちで無効になっています。</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>更新時に同期を有効化</value>

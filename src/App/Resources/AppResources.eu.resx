@@ -1751,11 +1751,11 @@
     <value>Ziur zaude elementu hau zakarrontzira bidali nahi duzula?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Desblokeatze biometrikoa desgaituta dago, pasahitz nagusiarekin saioa hasi zain.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Auto-betetzerako desblokeatze biometrikoa desgaituta dago, pasahitz nagusiarekin saioa hasi zain.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Gaitu eguneratzean sinkronizatzea</value>

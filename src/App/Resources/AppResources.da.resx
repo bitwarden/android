@@ -1752,11 +1752,11 @@ Skanning vil ske automatisk.</value>
     <value>Er du sikker på, at du sende til papirkurven?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometrisk oplåsning deaktiveret - afventer verifikation af hovedadgangskoden.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometrisk oplåsning af denne konto deaktiveret afventende bekræftelse af hovedadgangskode.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometrisk oplåsning til autoudfyldning deaktiveret - afventer verifikation af hovedadgangskoden.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autoudfyldelse for biometrisk oplåsning af denne konto deaktiveret afventende bekræftelse af hovedadgangskode.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Tillad synk ved opfriskning</value>
