@@ -625,14 +625,14 @@ namespace Bit.App.Pages
                     else if (!policyMinutes.HasValue && !string.IsNullOrWhiteSpace(policyAction))
                     {
                         policyAlert = string.Format(AppResources.VaultTimeoutActionPolicyInEffect,
-                            policyAction == PolicyService.TIMEOUT_POLICY_ACTION_LOCK ? AppResources.Lock : AppResources.LogOut);
+                            policyAction == Policy.ACTION_LOCK ? AppResources.Lock : AppResources.LogOut);
                     }
                     else
                     {
                         policyAlert = string.Format(AppResources.VaultTimeoutPolicyWithActionInEffect,
                             Math.Floor((float)policyMinutes / 60),
                             policyMinutes % 60,
-                            policyAction == PolicyService.TIMEOUT_POLICY_ACTION_LOCK ? AppResources.Lock : AppResources.LogOut);
+                            policyAction == Policy.ACTION_LOCK ? AppResources.Lock : AppResources.LogOut);
                     }
                     securityItems.Insert(0, new SettingsPageListItem
                     {

@@ -8,6 +8,8 @@ namespace Bit.Core.Models.Domain
     {
         public const string MINUTES_KEY = "minutes";
         public const string ACTION_KEY = "action";
+        public const string ACTION_LOCK = "lock";
+        public const string ACTION_LOGOUT = "logOut";
 
         public Policy() { }
 
