@@ -609,7 +609,7 @@ namespace Bit.App.Pages
                 });
             }
             if (_vaultTimeoutPolicy != null)
-            {   
+            {
                 var policyMinutes = _vaultTimeoutPolicy.GetInt(Policy.MINUTES_KEY);
                 var policyAction = _vaultTimeoutPolicy.GetString(Policy.ACTION_KEY);
 
