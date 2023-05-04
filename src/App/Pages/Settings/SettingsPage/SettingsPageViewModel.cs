@@ -131,7 +131,7 @@ namespace Bit.App.Pages
             {
                 // if we have a vault timeout policy, we need to filter the timeout options
                 _vaultTimeoutPolicy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout)).First();
-                var policyMinutes = _vaultTimeoutPolicy.GetInt(Policy.MINUTES_KEY).GetValueOrDefault();
+                var policyMinutes = _vaultTimeoutPolicy.GetInt(Policy.MINUTES_KEY);
                 _vaultTimeoutOptions = _vaultTimeoutOptions.Where(t =>
                     t.Value <= policyMinutes &&
                     (t.Value > 0 || t.Value == CustomVaultTimeoutValue) &&
