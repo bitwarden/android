@@ -30,7 +30,7 @@ namespace Bit.Core.Models.Domain
 
         public int? GetInt(string key)
         {
-            if (Data.TryGetValue(key, out var val))
+            if (Data.TryGetValue(key, out var val) && val != null)
             {
                 return (int)(long)val;
             }
@@ -39,7 +39,7 @@ namespace Bit.Core.Models.Domain
 
         public bool? GetBool(string key)
         {
-            if (Data.TryGetValue(key, out var val))
+            if (Data.TryGetValue(key, out var val) && val != null)
             {
                 return (bool)val;
             }
