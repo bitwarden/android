@@ -1,8 +1,10 @@
 android:
+- src/App/*
 - src/Core/*
 - src/Android/*
 
 iOS:
+- src/App/*
 - src/Core/*
 - lib/ios/*
 - src/iOS/*
