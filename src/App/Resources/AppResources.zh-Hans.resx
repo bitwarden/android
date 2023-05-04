@@ -1674,7 +1674,7 @@
     <value>此导出将使用您账户的加密密钥来加密您的数据。如果您曾经轮换过账户的加密密钥，您应将其重新导出，否则您将无法解密导出的文件。</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
-    <value>账户加密密钥对每个 Bitwarden 用户账户都是唯一的，所以您不能将加密的导出导入到另一个账户。</value>
+    <value>每个 Bitwarden 用户账户的账户加密密钥都是唯一的，因此您无法将加密的导出导入到另一个账户。</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
     <value>确认密码库导出</value>
@@ -1752,11 +1752,11 @@
     <value>您确定要将其发送到回收站吗？</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>生物识别解锁已禁用，等待验证主密码。</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>在验证主密码之前，此账户的生物识别解锁将禁用。</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>在验证主密码之前，用于自动填充的生物识别解锁功能将禁用。</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>在验证主密码之前，此账户的自动填充生物识别解锁将禁用。</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>启用刷新时同步</value>
@@ -1774,13 +1774,13 @@
     <value>组织标识符</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>当前无法使用 SSO 登陆</value>
+    <value>当前无法使用 SSO 登录</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
     <value>设置主密码</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>为使用单点登录（SSO）功能，请设置一个主密码以访问和保护您的密码库。</value>
+    <value>要完成 SSO 登录配置，请设置一个主密码以访问和保护您的密码库。</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
     <value>一个或多个组织策略要求您的主密码满足下列要求：</value>
@@ -2080,7 +2080,7 @@
     <value>确认主密码</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>此操作受到保护，要继续，请重新输入您的主密码以验证您的身份。</value>
+    <value>此操作受到保护，要继续，请重新输入主密码以验证您的身份。</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
     <value>请完成 Captcha 验证</value>
@@ -2140,7 +2140,13 @@
     <value>此组织有一个企业策略，将为您自动注册密码重置。注册后将允许组织管理员更改您的主密码。</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>您的组织策略正在影响您的密码库超时时间。最大允许的密码库超时时间是 {0} 小时 {1} 分钟</value>
+    <value>您的组织策略已将您最大允许的密码库超时时间设置为 {0} 小时 {1} 分钟。</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>您的组织策略正在影响您的密码库超时时间。最大允许的密码库超时时间是 {0} 小时 {1} 分钟。您的密码库超时动作被设置为 {2}。</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>您的组织策略已将您的密码库超时动作设置为 {0}。</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>您的密码库超时时间超出了组织设置的限制。</value>
@@ -2544,7 +2550,7 @@
     <value>语言</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
-    <value>语言已更改为 {0}。请重新启动 app 以查看更改</value>
+    <value>语言已更改为 {0}。请重新启动应用程序以查看更改</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
     <value>更改语言需要重新启动 app</value>
@@ -2580,7 +2586,7 @@
     <value>已暴露的主密码</value>
   </data>
   <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>密码在数据泄露中被发现。请使用一个独一无二的的密码以保护您的账户。确定要使用已暴露的密码吗？</value>
+    <value>密码在数据泄露中被发现。请使用一个唯一的密码以保护您的账户。确定要使用已暴露的密码吗？</value>
   </data>
   <data name="WeakAndExposedMasterPassword" xml:space="preserve">
     <value>主密码弱且曾经暴露</value>
@@ -2602,5 +2608,11 @@
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>没有匹配搜索条件的项目</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>您的主密码不符合您的组织策略要求。要访问密码库，必须立即更新您的主密码。继续操作将使您退出当前会话，要求您重新登录。其他设备上的活动会话可能会继续保持活动状态长达一小时。</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>当前主密码</value>
   </data>
 </root>

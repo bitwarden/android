@@ -193,7 +193,7 @@
     <value>Parašykite mums</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Gauti pagalbos ar palikti atsiliepimą - parašykute el. laišką.</value>
+    <value>Gauti pagalbos ar palikti atsiliepimą - parašykite el. laišką.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
     <value>Įveskite PIN kodą.</value>
@@ -219,7 +219,7 @@
     <value>Naujas aplankas sukurtas.</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
-    <value>Katalogas ištrintas.</value>
+    <value>Aplankas ištrintas.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
     <value>Be aplanko</value>
@@ -243,7 +243,7 @@
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Prisijunkite prie interneto kad tęsti toliau.</value>
+    <value>Prisijunkite prie interneto, kad tęsti toliau.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
@@ -1752,11 +1752,11 @@ Nuskaitymas vyks automatiškai.</value>
     <value>Ar tikrai norite perkelti į šiukšlinę?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometrinis atrakinimas išjungtas, kol bus patvirtintas pagrindinis slaptažodis.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometrinis automatinio pildymo atrakinimas išjungtas, kol bus patvirtintas pagrindinis slaptažodis.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Leisti sinchronizuoti atnaujinant</value>
@@ -2142,6 +2142,12 @@ Nuskaitymas vyks automatiškai.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Jūsų organizacijos politika turi įtakos saugyklos skirtajam laikui. Didžiausias leistinas saugyklos skirtasis laikas yra {0} valanda (-os) ir {1} minutė (-ės)</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Jūsų organizacijos nustatymai apriboja jūsų saugyklos neaktyvumo laiko nustatymus. Maksimalus leidžiamas saugyklos neaktyvumo laikas yra {0} valanda(-os) ir {1} minutė(s). Jūsų saugyklos neaktyvumo laikas yra nustatytas {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Jūsų organizacija nustatė saugyklos neaktyvumo trukmę {0}.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Jūsų saugyklos skirtasis laikas viršija jūsų organizacijos nustatytus apribojimus.</value>
@@ -2603,5 +2609,11 @@ Ar norite pereiti prie šios paskyros?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Elementų, atitinkančių paiešką, nėra</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Jūsų pagrindinis slaptažodis neatitinka vieno ar kelių organizacijos slaptažodžiui keliamų reikalavimų. Norėdami prisijungti prie saugyklos, jūs turite atnaujinti savo pagrindinį slaptažodį. Jeigu nuspręsite tęsti, jūs būsite atjungti nuo dabartinės sesijos ir jums reikės vėl prisijungti. Visos aktyvios sesijos kituose įrenginiuose gali išlikti aktyvios iki vienos valandos.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Dabartinis pagrindinis slaptažodis</value>
   </data>
 </root>

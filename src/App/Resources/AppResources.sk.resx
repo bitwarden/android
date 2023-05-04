@@ -1752,11 +1752,11 @@ Skenovanie prebehne automaticky.</value>
     <value>Naozaj to chcete poslať do koša?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Bola zaznamenaná zmena biometrických údajov, prihláste za svojím hlavným heslom aby ste opäť povolili prihlásenie.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometrické odblokovanie pre tento účet je deaktivované až do overenia hlavného hesla.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometrické odblokovanie pre automatické dopĺňanie je deaktivované až do overenia hlavného hesla.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Automatické vypĺňanie cez biometrické odblokovanie pre tento účet je deaktivované až do overenia hlavného hesla.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Povoliť synchronizáciu pri obnovení</value>
@@ -2141,6 +2141,12 @@ Skenovanie prebehne automaticky.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Zásady vašej organizácie ovplyvňujú časový limit trezoru. Maximálny povolený časový limit trezoru je {0} h a {1} m</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Zásady vašej organizácie ovplyvňujú časový limit trezoru. Maximálny povolený časový limit trezoru je {0} h a {1} m. Nastavenie akcie pri vypršaní časového limitu je {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Zásady vašej organizácie nastavili akciu pri vypršaní časového limitu trezora na {0}.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Časový limit vášho trezora prekračuje obmedzenia nastavené vašou organizáciou.</value>
@@ -2602,5 +2608,11 @@ Chcete prepnúť na toto konto?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Vyhľadávaniu nezodpovedajú žiadne položky</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Vaše hlavné heslo nespĺňa jednu alebo viacero podmienok vašej organizácie. Ak chcete získať prístup k trezoru, musíte teraz aktualizovať svoje hlavné heslo. Pokračovaním sa odhlásite z aktuálnej relácie a budete sa musieť znova prihlásiť. Aktívne relácie na iných zariadeniach môžu zostať aktívne až jednu hodinu.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Súčasné hlavné heslo</value>
   </data>
 </root>

@@ -1752,11 +1752,11 @@ Skanning vil ske automatisk.</value>
     <value>Er du sikker på, at du sende til papirkurven?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometrisk oplåsning deaktiveret - afventer verifikation af hovedadgangskoden.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometrisk oplåsning af denne konto deaktiveret afventende bekræftelse af hovedadgangskode.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometrisk oplåsning til autoudfyldning deaktiveret - afventer verifikation af hovedadgangskoden.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autoudfyldelse for biometrisk oplåsning af denne konto deaktiveret afventende bekræftelse af hovedadgangskode.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Tillad synk ved opfriskning</value>
@@ -2141,6 +2141,12 @@ Skanning vil ske automatisk.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Dine organisationspolitikker påvirker din boks-timeout. Maksimum tilladte boks-timeout er {0} time(r) og {1} minut(ter)</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Organisationspolitikkerne påvirker boks-timeout. Maks. tilladt boks-timeout er {0} time(r) og {1} minut(ter). Boks-timeout er pt. sat til {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Organisationspolitikker har sat boks-timeouthandlingen til {0}.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Timeout for din boks overskrider de begrænsninger, der er angivet af din organisation.</value>
@@ -2602,5 +2608,11 @@ Vil du skifte til denne konto?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Ingen emner matcher søgningen</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Din hovedadgangskode overholder ikke én eller flere organisationspolitikker. For at få adgang til boksen skal hovedadgangskode opdateres nu. Fortsættes, logges du ud af den nuværende session og vil skulle logger ind igen. Aktive sessioner på andre enheder kan forblive aktive i op til én time.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Aktuel hovedadgangskode</value>
   </data>
 </root>

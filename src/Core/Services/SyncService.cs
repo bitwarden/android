@@ -111,7 +111,7 @@ namespace Bit.Core.Services
                 await SyncCollectionsAsync(response.Collections);
                 await SyncCiphersAsync(userId, response.Ciphers);
                 await SyncSettingsAsync(userId, response.Domains);
-                await SyncPoliciesAsync(response.Policies);
+                await SyncPoliciesAsync(userId, response.Policies);
                 await SyncSendsAsync(userId, response.Sends);
                 await SetLastSyncAsync(now);
                 _watchDeviceService.Value.SyncDataToWatchAsync().FireAndForget();
@@ -378,11 +378,11 @@ namespace Bit.Core.Services
             await _settingsService.SetEquivalentDomainsAsync(eqDomains);
         }
 
-        private async Task SyncPoliciesAsync(List<PolicyResponse> response)
+        private async Task SyncPoliciesAsync(string userId, List<PolicyResponse> response)
         {
             var policies = response?.ToDictionary(p => p.Id, p => new PolicyData(p)) ??
                 new Dictionary<string, PolicyData>();
-            await _policyService.Replace(policies);
+            await _policyService.Replace(policies, userId);
         }
 
         private async Task SyncSendsAsync(string userId, List<SendResponse> response)

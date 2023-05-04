@@ -9,7 +9,7 @@ namespace Bit.iOS.Extension
         public LockPasswordViewController(IntPtr handle)
             : base(handle)
         {
-            BiometricIntegrityKey = Bit.Core.Constants.iOSExtensionBiometricIntegrityKey;
+            BiometricIntegritySourceKey = Bit.Core.Constants.iOSExtensionBiometricIntegritySourceKey;
             DismissModalAction = Cancel;
         }
 

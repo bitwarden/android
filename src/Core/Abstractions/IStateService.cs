@@ -31,6 +31,10 @@ namespace Bit.Core.Abstractions
         Task SetBiometricUnlockAsync(bool? value, string userId = null);
         Task<bool> GetBiometricLockedAsync(string userId = null);
         Task SetBiometricLockedAsync(bool value, string userId = null);
+        Task<string> GetSystemBiometricIntegrityState(string bioIntegritySrcKey);
+        Task SetSystemBiometricIntegrityState(string bioIntegritySrcKey, string systemBioIntegrityState);
+        Task<bool> IsAccountBiometricIntegrityValidAsync(string bioIntegritySrcKey, string userId = null);
+        Task SetAccountBiometricIntegrityValidAsync(string bioIntegritySrcKey, string userId = null);
         Task<bool> CanAccessPremiumAsync(string userId = null);
         Task SetPersonalPremiumAsync(bool value, string userId = null);
         Task<string> GetProtectedPinAsync(string userId = null);
@@ -134,6 +138,8 @@ namespace Bit.Core.Abstractions
         Task SetPushRegisteredTokenAsync(string value);
         Task<bool> GetUsesKeyConnectorAsync(string userId = null);
         Task SetUsesKeyConnectorAsync(bool? value, string userId = null);
+        Task<ForcePasswordResetReason?> GetForcePasswordResetReasonAsync(string userId = null);
+        Task SetForcePasswordResetReasonAsync(ForcePasswordResetReason? value, string userId = null);
         Task<Dictionary<string, OrganizationData>> GetOrganizationsAsync(string userId = null);
         Task SetOrganizationsAsync(Dictionary<string, OrganizationData> organizations, string userId = null);
         Task<PasswordGenerationOptions> GetPasswordGenerationOptionsAsync(string userId = null);

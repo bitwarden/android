@@ -1752,11 +1752,11 @@
     <value>هل تريد حقاً أن ترسل إلى سلة المهملات؟</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>تم تعطيل فتح القفل الحيوي في انتظار التحقق من كلمة المرور الرئيسية.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>تم تعطيل إلغاء القفل البيومتري للملء التلقائي في انتظار التحقق من كلمة المرور الرئيسية.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>تمكين المزامنة عند التحديث</value>
@@ -2142,6 +2142,12 @@
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>سياسات مؤسستك تؤثر على مهلة الخزنة الخاص بك. الحد الأقصى المسموح به لمهلة الخزنة هو {0} ساعة و {1} دقيقة</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>سياسات مؤسستك تؤثر على مهلة خزنتك. الحد الأقصى المسموح به لمهلة الخزنة هو {0} ساعة(ساعات) و {1} دقيقة(دقائق). يتم تعيين إجراء مهلة المخزن الخاص بك إلى {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>سياسات مؤسستك قامت بتعيين إجراء مهلة خزنتك إلى {0}.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>مهلة خزنتك تتجاوز القيود التي تضعها مؤسستك.</value>
@@ -2542,16 +2548,16 @@
     <value>تمكين إذن الكاميرا لاستخدام الماسح الضوئي</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>اللّغة</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
-    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+    <value>تم تغيير اللغة إلى {0}. الرجاء إعادة تشغيل التطبيق لرؤية التغيير</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
-    <value>Language change requires app restart</value>
+    <value>تغيير اللّغة يتطلب إعادة تشغيل التطبيق</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>الافتراضي (النظام)</value>
   </data>
   <data name="Important" xml:space="preserve">
     <value>مهم</value>
@@ -2590,18 +2596,24 @@
     <value>كلمة مرور ضعيفة محددة وموجودة في خرق البيانات. استخدم كلمة مرور قوية وفريدة لحماية حسابك. هل أنت متأكد من أنك تريد استخدام كلمة المرور هذه؟</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
-    <value>Organization SSO identifier required.</value>
+    <value>معرف الـSSO للمنظمة مطلوب.</value>
   </data>
   <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
-    <value>Add the key to an existing or new item</value>
+    <value>إضافة المفتاح إلى عنصر موجود أو جديد</value>
   </data>
   <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
-    <value>There are no items in your vault that match "{0}"</value>
+    <value>لا توجد عناصر في خزانتك تتطابق مع "{0}"</value>
   </data>
   <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
-    <value>Search for an item or add a new item</value>
+    <value>البحث عن عنصر أو إضافة عنصر جديد</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
-    <value>There are no items that match the search</value>
+    <value>لا توجد عناصر تطابق البحث</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>كلمة المرور الرئيسية الخاصة بك لا تفي بواحدة أو أكثر من سياسات مؤسستك. من أجل الوصول إلى الخزنة، يجب عليك تحديث كلمة المرور الرئيسية الآن. سيتم تسجيل خروجك من الجلسة الحالية، مما يتطلب منك تسجيل الدخول مرة أخرى. وقد تظل الجلسات النشطة على أجهزة أخرى نشطة لمدة تصل إلى ساعة واحدة.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>كلمة المرور الرئيسية الحالية</value>
   </data>
 </root>

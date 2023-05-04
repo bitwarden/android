@@ -7,6 +7,7 @@ namespace Bit.Core.Models.Domain
     public class Policy : Domain
     {
         public const string MINUTES_KEY = "minutes";
+        public const string ACTION_KEY = "action";
 
         public Policy() { }
 

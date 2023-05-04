@@ -4,7 +4,7 @@ namespace Bit.Core.Abstractions
 {
     public interface IBiometricService
     {
-        Task<bool> SetupBiometricAsync(string bioIntegrityKey = null);
-        Task<bool> ValidateIntegrityAsync(string bioIntegrityKey = null);
+        Task<bool> SetupBiometricAsync(string bioIntegritySrcKey = null);
+        Task<bool> IsSystemBiometricIntegrityValidAsync(string bioIntegritySrcKey = null);
     }
 }
