@@ -69,13 +69,15 @@ namespace Bit.App.Pages
                 return;
             }
 
-            // TODO: There's currently an issue on iOS where the toolbar item is not getting updated
-            // as the others somehow. Removing this so at least we get the circle with ".." instead
-            // of a white circle
-            if (Device.RuntimePlatform != Device.iOS)
+            try
             {
+                // don't crash the app if the avatar can't be loaded, just log the ex
                 _accountAvatar?.OnAppearing();
                 _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
 
             _broadcasterService.Subscribe(nameof(CipherSelectionPage), async (message) =>
