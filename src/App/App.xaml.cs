@@ -18,6 +18,12 @@ using Bit.Core.Utilities;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+
+
+
+
+
+
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Bit.App
 {
