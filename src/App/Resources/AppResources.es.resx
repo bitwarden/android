@@ -1753,10 +1753,10 @@ El escaneo se realizará automáticamente.</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>El desbloqueo biométrico para esta cuenta está deshabilitado hasta que se verifique la contraseña maestra.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>El desbloqueo biométrico para autorrelleno de esta cuenta está deshabilitado hasta que realice la verificación de la contraseña maestra.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Habilitar sincronización al actualizar</value>
