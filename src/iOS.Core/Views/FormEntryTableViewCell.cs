@@ -1,4 +1,5 @@
 ﻿using System;
+using Bit.App.Resources;
 using Bit.Core;
 using Bit.iOS.Core.Controllers;
 using Bit.iOS.Core.Utilities;
@@ -171,10 +172,13 @@ namespace Bit.iOS.Core.Views
             var button = useSecondaryButton ? SecondButton : Button;
             button.TitleLabel.Font = UIFont.FromName("bwi-font", 28f);
             button.SetTitle(BitwardenIcons.Eye, UIControlState.Normal);
+            button.AccessibilityLabel = AppResources.ToggleVisibility;
+            button.AccessibilityHint = AppResources.PasswordIsNotVisibleTapToShow;
             button.TouchUpInside += (sender, e) =>
             {
                 TextField.SecureTextEntry = !TextField.SecureTextEntry;
                 button.SetTitle(TextField.SecureTextEntry ? BitwardenIcons.Eye : BitwardenIcons.EyeSlash, UIControlState.Normal);
+                button.AccessibilityHint = TextField.SecureTextEntry ? AppResources.PasswordIsNotVisibleTapToShow : AppResources.PasswordIsVisibleTapToHide;
             };
         }
 
