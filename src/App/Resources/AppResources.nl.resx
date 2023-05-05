@@ -584,7 +584,7 @@
     <value>Een hoofdwachtwoordhint kan je helpen je wachtwoord te herinneren als je het vergeten bent.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Hoofdwachtwoord moet minstens {0} karakters lang zijn.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Min. aantal cijfers</value>

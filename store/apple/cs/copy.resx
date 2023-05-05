@@ -122,32 +122,31 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>Bitwarden, Inc. je mateřskou společností 8bit Solutions LLC.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET A DALŠÍ JI OZNAČILY ZA NEJLEPŠÍHO SPRÁVCE HESEL.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+Spravujte, ukládejte, zabezpečujte a sdílejte neomezený počet hesel na neomezeném počtu zařízení odkudkoliv. Bitwarden poskytuje open source řešení pro správu hesel všem, ať už doma, v práci nebo na cestách.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Generujte silná, jedinečná a náhodná hesla na základě bezpečnostních požadavků pro každou webovou stránku, kterou navštěvujete.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+Bitwarden Send rychle přenáší šifrované informace --- soubory a prostý text -- přímo a komukoli.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+Bitwarden nabízí plány Teams a Enterprise pro firmy, takže můžete bezpečně sdílet hesla s kolegy.
 
-Why Choose Bitwarden:
+Proč si vybrat Bitwarden:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+Šifrování na světové úrovni
+Hesla jsou chráněna pokročilým koncovým šifrováním (AES-256 bit, salted hashování a PBKDF2 SHA-256), takže Vaše data zůstanou bezpečná a soukromá.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Vestavěný generátor hesel
+Generujte silná, jedinečná a náhodná hesla na základě bezpečnostních požadavků pro každou webovou stránku, kterou navštěvujete.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+Globální překlady
+Překlady Bitwarden existují ve 40 jazycích a díky naší globální komunitě se stále rozšiřují.
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
-</value>
+Aplikace pro více platforem
+Zabezpečte a sdílejte citlivá data v rámci svého trezoru Bitwarden z jakéhokoli prohlížeče, mobilního zařízení nebo operačního systému pro počítač.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
