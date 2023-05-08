@@ -16,7 +16,7 @@
             IconImageSource="{Binding AvatarImageSource}"
             Command="{Binding Source={x:Reference _accountListOverlay}, Path=ToggleVisibililtyCommand}"
             Order="Primary"
-            Priority="-2"
+            Priority="-1"
             UseOriginalImage="True"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n Account}" />

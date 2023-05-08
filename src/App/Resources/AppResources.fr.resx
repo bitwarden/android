@@ -1752,11 +1752,11 @@ La numérisation se fera automatiquement.</value>
     <value>Voulez-vous vraiment envoyer à la corbeille ?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Déverrouillage biométrique désactivé dans l'attente de vérification du mot de passe principal.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Déverrouillage biométrique pour la saisie automatique désactivé dans l'attente de vérification du mot de passe principal.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Autoriser la synchronisation au rafraîchissement</value>
@@ -2141,7 +2141,13 @@ La numérisation se fera automatiquement.</value>
     <value>Cette organisation dispose d'une politique d'entreprise qui vous inscrira automatiquement à la réinitialisation du mot de passe. L'inscription permettra aux administrateurs de l'organisation de changer votre mot de passe principal.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Les politiques de sécurité de votre organisation affectent le délai d'expiration de votre coffre. Le délai d'expiration autorisé du coffre est de {0} heure(s) et {1} minute(s) maximum</value>
+    <value>Les politiques de sécurité de votre organisation ont défini le délai d'expiration de votre coffre à {0} heure(s) et {1} minute(s) maximum.</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Les politiques de sécurité de votre organisation affectent le délai d'expiration de votre coffre. Le délai d'expiration autorisé du coffre est de {0} heure(s) et {1} minute(s) maximum. L'action après délai d'expiration de votre coffre est fixée à {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Les politiques de sécurité de votre organisation ont défini l'action après délai d'expiration de votre coffre à {0}.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Le délai d'expiration de votre coffre dépasse les restrictions définies par votre organisation.</value>
@@ -2603,5 +2609,11 @@ Voulez-vous basculer vers ce compte ?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Il n'y a pas d'éléments qui correspondent à la recherche</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Votre mot de passe principal ne répond pas aux exigences de politique de sécurité de cette organisation. Pour accéder au coffre, vous devez mettre à jour votre mot de passe principal dès maintenant. En poursuivant, vous serez déconnecté de votre session actuelle et vous devrez vous reconnecter. Les sessions actives sur d'autres appareils peuver rester actives pendant encore une heure.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Mot de passe principal actuel</value>
   </data>
 </root>

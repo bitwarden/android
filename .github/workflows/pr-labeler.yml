@@ -1,0 +1,17 @@
+---
+name: "Pull Request Labeler"
+
+on:
+  pull_request_target: {}
+
+jobs:
+  labeler:
+    name: "Pull Request Labeler"
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/labeler@ba790c862c380240c6d5e7427be5ace9a05c754b  # v4.0.3
+        with:
+          sync-labels: true

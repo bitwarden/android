@@ -1752,11 +1752,11 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>Həqiqətən tullantı qutusuna göndərmək istəyirsiniz?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Ana parolun təsdiqlənməsi gözlənildiyi üçün biometrik kilid açma sıradan çıxarıldı.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Ana parolun təsdiqlənməsi gözlənildiyi üçün bu hesab üzrə biometrik kilid açma sıradan çıxarıldı.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Ana parolun təsdiqlənməsi gözlənildiyi üçün avto-doldurma üzrə biometrik kilid açma sıradan çıxarıldı.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Ana parolun təsdiqlənməsi gözlənildiyi üçün bu hesab üzrə avto-doldurma biometrik kilid açma sıradan çıxarıldı.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Təzələmə əsnasında eyniləşdirməni fəallaşdır</value>
@@ -2141,6 +2141,12 @@ Skan prosesi avtomatik baş tutacaq.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Təşkilatınızın siyasətləri, anbarınızın vaxt bitişinə təsir edir. Anbar vaxt bitişi üçün icazə verilən maksimum vaxt {0} saat {1} dəqiqədir</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Təşkilatınızın siyasətləri, anbarınızın vaxt bitişinə təsir edir. Anbar vaxt bitişi üçün icazə verilən maksimum vaxt {0} saat {1} dəqiqədir. Anbar vaxt bitişi əməliyyatı {2} olaraq tənzimləndi.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Təşkilatınızın siyasətləri, anbar vaxt bitişi əməliyyatınızı {0} olaraq tənzimlədi.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Anbar vaxt bitişi, təşkilatınız tərəfindən tənzimlənən məhdudiyyətləri aşır.</value>
@@ -2601,5 +2607,11 @@ Bu hesaba keçmək istəyirsiniz?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Axtarışa uyğun gələn heç bir element yoxdur</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Ana parolunuz təşkilatınızdakı siyasətlərdən birinə və ya bir neçəsinə uyğun gəlmir. Anbara müraciət üçün ana parolunuzu indi güncəlləməlisiniz. Davam etsəniz, hazırkı seansdan çıxış etmiş və təkrar giriş etməli olacaqsınız. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Hazırkı ana parol</value>
   </data>
 </root>

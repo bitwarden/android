@@ -22,14 +22,14 @@ namespace Bit.App.Services
             Constants.PushRegisteredTokenKey,
             Constants.LastBuildKey,
             Constants.ClearCiphersCacheKey,
-            Constants.BiometricIntegrityKey,
+            Constants.BiometricIntegritySourceKey,
             Constants.iOSExtensionActiveUserIdKey,
             Constants.iOSAutoFillClearCiphersCacheKey,
-            Constants.iOSAutoFillBiometricIntegrityKey,
+            Constants.iOSAutoFillBiometricIntegritySourceKey,
             Constants.iOSExtensionClearCiphersCacheKey,
-            Constants.iOSExtensionBiometricIntegrityKey,
+            Constants.iOSExtensionBiometricIntegritySourceKey,
             Constants.iOSShareExtensionClearCiphersCacheKey,
-            Constants.iOSShareExtensionBiometricIntegrityKey,
+            Constants.iOSShareExtensionBiometricIntegritySourceKey,
             Constants.RememberedEmailKey,
             Constants.RememberedOrgIdentifierKey
         };

@@ -1752,11 +1752,11 @@ Das Scannen erfolgt automatisch.</value>
     <value>Soll dieser Eintrag wirklich in den Papierkorb verschoben werden?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometrisches Entsperren ist deaktiviert, bis das Master-Passwort eingegeben wurde.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometrie zum Entsperren ist für dieses Konto deaktiviert, bis das Master-Passwort verifiziert wurde.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometrisches Entsperren für automatisches Ausfüllen ist deaktiviert, bis das Master-Passwort eingegeben wurde.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Das Entsperren von Auto-Ausfüllen über Biometrie ist für dieses Konto deaktiviert, bis das Master-Passwort verifiziert wurde.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Synchronisation beim Aktualisieren aktivieren</value>
@@ -2140,7 +2140,13 @@ Das Scannen erfolgt automatisch.</value>
     <value>Diese Organisation hat eine Unternehmensrichtlinie, die dich automatisch für die Passwortzurücksetzung registriert. Die Registrierung wird es Administratoren der Organisation erlauben, dein Master-Passwort zu ändern.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Deine Organisationsrichtlinien haben Auswirkungen auf dein Tresor-Timeout. Das maximal zulässige Tresor-Timeout beträgt {0} Stunde(n) und {1} Minute(n)</value>
+    <value>Deine Unternehmensrichtlinien haben das maximal zulässige Tresor-Timeout auf {0} Stunde(n) und {1} Minute(n) festgelegt.</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Deine Organisationsrichtlinien beeinflussen dein Tresor-Timeout. Das maximal zulässige Tresor-Timeout beträgt {0} Stunde(n) und {1} Minute(n). Deine Tresor-Timeout-Aktion ist auf {2} gesetzt.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Deine Organisationsrichtlinien haben deine Tresor-Timeout-Aktion auf {0} gesetzt.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Dein Tresor-Timeout überschreitet die von deinem Unternehmen festgelegten Beschränkungen.</value>
@@ -2601,5 +2607,11 @@ Möchtest du zu diesem Konto wechseln?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Es gibt keine Einträge, die mit der Suche übereinstimmen</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Dein Master-Passwort entspricht nicht einer oder mehreren Richtlinien deiner Organisation. Um auf den Tresor zugreifen zu können, musst du dein Master-Passwort jetzt aktualisieren. Wenn du fortfährst, wirst du von deiner aktuellen Sitzung abgemeldet und musst dich erneut anmelden. Aktive Sitzungen auf anderen Geräten können noch bis zu einer Stunde lang aktiv bleiben.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Aktuelles Master-Passwort</value>
   </data>
 </root>

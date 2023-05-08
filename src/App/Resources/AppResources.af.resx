@@ -1752,11 +1752,11 @@ Skandering gebeur outomaties.</value>
     <value>Wil u dit regtig na die asblik stuur?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometriese ontgrendeling gedeaktiveer hangende bevestiging van hoofwagwoord.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometriese ontgrendeling vir outovul gedeaktiveer hangende bevestiging van hoofwagwoord.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Aktiveer sinchronisering by verfrissing</value>
@@ -2141,6 +2141,12 @@ Skandering gebeur outomaties.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>U organisasiebeleide beïnvloed u kluisuitelling. Maksimum toegelate kluisuittelling is {0} uur en {1} minuut(e).</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Jou organisasie se beleid affekteer jou kluis-uittel tyd. Maksimum toelaatbare kluis-uittel tyd is {0} uur(ure) en {1} minuut(minute). Jou kluis-uittel aksie is gestel na {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Jou organisasie se beleid het jou kluis-uittel aksie na {0} verander.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>U kluisuittelling oorskry die beperkinge wat deur u organisasie daargestel is.</value>
@@ -2592,15 +2598,21 @@ Wil u na die rekening omskakel?</value>
     <value>Organisasie SSO identifiseerder vereis.</value>
   </data>
   <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
-    <value>Add the key to an existing or new item</value>
+    <value>Voeg die sleutel by 'n huidige of nuwe item</value>
   </data>
   <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
-    <value>There are no items in your vault that match "{0}"</value>
+    <value>Daar is geen items in jou kluis wat met "{0}" ooreenstem nie</value>
   </data>
   <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
-    <value>Search for an item or add a new item</value>
+    <value>Soek vir 'n item of voeg 'n nuwe een by</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
-    <value>There are no items that match the search</value>
+    <value>Daar is geen items wat met die soekterm ooreenstem nie</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Current master password</value>
   </data>
 </root>
