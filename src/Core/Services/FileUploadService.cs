@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -21,7 +22,7 @@ namespace Bit.Core.Services
         private readonly ApiService _apiService;
 
         public async Task UploadCipherAttachmentFileAsync(AttachmentUploadDataResponse uploadData,
-            EncString encryptedFileName, EncByteArray encryptedFileData)
+            EncString encryptedFileName, EncByteArray encryptedFileData, CancellationToken cancellationToken)
         {
             try
             {
@@ -29,15 +30,15 @@ namespace Bit.Core.Services
                 {
                     case FileUploadType.Direct:
                         await _bitwardenFileUploadService.Upload(encryptedFileName.EncryptedString, encryptedFileData,
-                            fd => _apiService.PostAttachmentFileAsync(uploadData.CipherResponse.Id, uploadData.AttachmentId, fd));
+                            (fd, ct) => _apiService.PostAttachmentFileAsync(uploadData.CipherResponse.Id, uploadData.AttachmentId, fd, ct), cancellationToken);
                         break;
                     case FileUploadType.Azure:
-                        Func<Task<string>> renewalCallback = async () =>
+                        Func<CancellationToken, Task<string>> renewalCallback = async ct =>
                         {
-                            var response = await _apiService.RenewAttachmentUploadUrlAsync(uploadData.CipherResponse.Id, uploadData.AttachmentId);
+                            var response = await _apiService.RenewAttachmentUploadUrlAsync(uploadData.CipherResponse.Id, uploadData.AttachmentId, ct);
                             return response.Url;
                         };
-                        await _azureFileUploadService.Upload(uploadData.Url, encryptedFileData, renewalCallback);
+                        await _azureFileUploadService.Upload(uploadData.Url, encryptedFileData, renewalCallback, cancellationToken);
                         break;
                     default:
                         throw new Exception($"Unkown file upload type: {uploadData.FileUploadType}");
@@ -58,16 +59,16 @@ namespace Bit.Core.Services
                 {
                     case FileUploadType.Direct:
                         await _bitwardenFileUploadService.Upload(fileName.EncryptedString, encryptedFileData,
-                            fd => _apiService.PostSendFileAsync(uploadData.SendResponse.Id, uploadData.SendResponse.File.Id, fd));
+                            (fd, _) => _apiService.PostSendFileAsync(uploadData.SendResponse.Id, uploadData.SendResponse.File.Id, fd), default);
                         break;
                     case FileUploadType.Azure:
-                        Func<Task<string>> renewalCallback = async () =>
+                        Func<CancellationToken, Task<string>> renewalCallback = async ct =>
                         {
                             var response = await _apiService.RenewFileUploadUrlAsync(uploadData.SendResponse.Id, uploadData.SendResponse.File.Id);
                             return response.Url;
                         };
 
-                        await _azureFileUploadService.Upload(uploadData.Url, encryptedFileData, renewalCallback);
+                        await _azureFileUploadService.Upload(uploadData.Url, encryptedFileData, renewalCallback, default);
                         break;
                     default:
                         throw new Exception("Unknown file upload type");

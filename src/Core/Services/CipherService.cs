@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -555,12 +556,14 @@ namespace Bit.Core.Services
             await UpsertAsync(data);
         }
 
-        public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, string filename, byte[] data)
+        public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, string filename, byte[] data, CancellationToken cancellationToken)
         {
             var orgKey = await _cryptoService.GetOrgKeyAsync(cipher.OrganizationId);
             var encFileName = await _cryptoService.EncryptAsync(filename, orgKey);
             var (attachmentKey, orgEncAttachmentKey) = await _cryptoService.MakeEncKeyAsync(orgKey);
             var encFileData = await _cryptoService.EncryptToBytesAsync(data, attachmentKey);
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             CipherResponse response;
             try
@@ -572,9 +575,9 @@ namespace Bit.Core.Services
                     FileSize = encFileData.Buffer.Length,
                 };
 
-                var uploadDataResponse = await _apiService.PostCipherAttachmentAsync(cipher.Id, request);
+                var uploadDataResponse = await _apiService.PostCipherAttachmentAsync(cipher.Id, request, cancellationToken);
                 response = uploadDataResponse.CipherResponse;
-                await _fileUploadService.UploadCipherAttachmentFileAsync(uploadDataResponse, encFileName, encFileData);
+                await _fileUploadService.UploadCipherAttachmentFileAsync(uploadDataResponse, encFileName, encFileData, cancellationToken);
             }
             catch (ApiException e) when (e.Error.StatusCode == System.Net.HttpStatusCode.NotFound || e.Error.StatusCode == System.Net.HttpStatusCode.MethodNotAllowed)
             {

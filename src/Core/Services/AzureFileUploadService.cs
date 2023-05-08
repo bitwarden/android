@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Bit.Core.Abstractions;
@@ -29,19 +30,19 @@ namespace Bit.Core.Services
             };
         }
 
-        public async Task Upload(string uri, EncByteArray data, Func<Task<string>> renewalCallback)
+        public async Task Upload(string uri, EncByteArray data, Func<CancellationToken, Task<string>> renewalCallback, CancellationToken cancellationToken)
         {
             if (data?.Buffer?.Length <= MAX_SINGLE_BLOB_UPLOAD_SIZE)
             {
-                await AzureUploadBlob(uri, data);
+                await AzureUploadBlob(uri, data, cancellationToken);
             }
             else
             {
-                await AzureUploadBlocks(uri, data, renewalCallback);
+                await AzureUploadBlocks(uri, data, renewalCallback, cancellationToken);
             }
         }
 
-        private async Task AzureUploadBlob(string uri, EncByteArray data)
+        private async Task AzureUploadBlob(string uri, EncByteArray data, CancellationToken cancellationToken)
         {
             using (var requestMessage = new HttpRequestMessage())
             {
@@ -57,7 +58,7 @@ namespace Bit.Core.Services
                 requestMessage.Method = HttpMethod.Put;
                 requestMessage.RequestUri = uriBuilder.Uri;
 
-                var blobResponse = await _httpClient.SendAsync(requestMessage);
+                var blobResponse = await _httpClient.SendAsync(requestMessage, cancellationToken);
 
                 if (blobResponse.StatusCode != HttpStatusCode.Created)
                 {
@@ -66,7 +67,7 @@ namespace Bit.Core.Services
             }
         }
 
-        private async Task AzureUploadBlocks(string uri, EncByteArray data, Func<Task<string>> renewalFunc)
+        private async Task AzureUploadBlocks(string uri, EncByteArray data, Func<CancellationToken, Task<string>> renewalFunc, CancellationToken cancellationToken)
         {
             _httpClient.Timeout = TimeSpan.FromHours(3);
             var baseParams = HttpUtility.ParseQueryString(CoreHelpers.GetUri(uri).Query);
@@ -82,7 +83,7 @@ namespace Bit.Core.Services
 
             while (blockIndex < numBlocks)
             {
-                uri = await RenewUriIfNecessary(uri, renewalFunc);
+                uri = await RenewUriIfNecessary(uri, renewalFunc, cancellationToken);
                 var blockUriBuilder = new UriBuilder(uri);
                 var blockId = EncodeBlockId(blockIndex);
                 var blockParams = HttpUtility.ParseQueryString(blockUriBuilder.Query);
@@ -101,7 +102,7 @@ namespace Bit.Core.Services
                     requestMessage.Method = HttpMethod.Put;
                     requestMessage.RequestUri = blockUriBuilder.Uri;
 
-                    var blockResponse = await _httpClient.SendAsync(requestMessage);
+                    var blockResponse = await _httpClient.SendAsync(requestMessage, cancellationToken);
 
                     if (blockResponse.StatusCode != HttpStatusCode.Created)
                     {
@@ -115,7 +116,7 @@ namespace Bit.Core.Services
 
             using (var requestMessage = new HttpRequestMessage())
             {
-                uri = await RenewUriIfNecessary(uri, renewalFunc);
+                uri = await RenewUriIfNecessary(uri, renewalFunc, cancellationToken);
                 var blockListXml = GenerateBlockListXml(blocksStaged);
                 var blockListUriBuilder = new UriBuilder(uri);
                 var blockListParams = HttpUtility.ParseQueryString(blockListUriBuilder.Query);
@@ -130,7 +131,7 @@ namespace Bit.Core.Services
                 requestMessage.Method = HttpMethod.Put;
                 requestMessage.RequestUri = blockListUriBuilder.Uri;
 
-                var blockListResponse = await _httpClient.SendAsync(requestMessage);
+                var blockListResponse = await _httpClient.SendAsync(requestMessage, cancellationToken);
 
                 if (blockListResponse.StatusCode != HttpStatusCode.Created)
                 {
@@ -139,13 +140,13 @@ namespace Bit.Core.Services
             }
         }
 
-        private async Task<string> RenewUriIfNecessary(string uri, Func<Task<string>> renewalFunc)
+        private async Task<string> RenewUriIfNecessary(string uri, Func<CancellationToken, Task<string>> renewalFunc, CancellationToken cancellationToken)
         {
             var uriParams = HttpUtility.ParseQueryString(CoreHelpers.GetUri(uri).Query);
 
             if (DateTime.TryParse(uriParams.Get("se") ?? "", out DateTime expiry) && expiry < DateTime.UtcNow.AddSeconds(1))
             {
-                return await renewalFunc();
+                return await renewalFunc(cancellationToken);
             }
             return uri;
         }

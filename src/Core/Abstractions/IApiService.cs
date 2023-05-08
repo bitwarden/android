@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
@@ -47,16 +48,16 @@ namespace Bit.Core.Abstractions
         Task RefreshIdentityTokenAsync();
         Task<SsoPrevalidateResponse> PreValidateSso(string identifier);
         Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path,
-            TRequest body, bool authed, bool hasResponse, Action<HttpRequestMessage> alterRequest, bool logoutOnUnauthorized = true);
+            TRequest body, bool authed, bool hasResponse, Action<HttpRequestMessage> alterRequest, bool logoutOnUnauthorized = true, CancellationToken cancellationToken = default);
         void SetUrls(EnvironmentUrls urls);
         [Obsolete("Mar 25 2021: This method has been deprecated in favor of direct uploads. This method still exists for backward compatibility with old server versions.")]
         Task<CipherResponse> PostCipherAttachmentLegacyAsync(string id, MultipartFormDataContent data);
-        Task<AttachmentUploadDataResponse> PostCipherAttachmentAsync(string id, AttachmentRequest request);
+        Task<AttachmentUploadDataResponse> PostCipherAttachmentAsync(string id, AttachmentRequest request, CancellationToken cancellationToken);
         Task<AttachmentResponse> GetAttachmentData(string cipherId, string attachmentId);
         Task PostShareCipherAttachmentAsync(string id, string attachmentId, MultipartFormDataContent data,
             string organizationId);
-        Task<AttachmentUploadDataResponse> RenewAttachmentUploadUrlAsync(string id, string attachmentId);
-        Task PostAttachmentFileAsync(string id, string attachmentId, MultipartFormDataContent data);
+        Task<AttachmentUploadDataResponse> RenewAttachmentUploadUrlAsync(string id, string attachmentId, CancellationToken cancellationToken);
+        Task PostAttachmentFileAsync(string id, string attachmentId, MultipartFormDataContent data, CancellationToken cancellationToken);
         Task<List<BreachAccountResponse>> GetHibpBreachAsync(string username);
         Task PostTwoFactorEmailAsync(TwoFactorEmailRequest request);
         Task PutDeviceTokenAsync(string identifier, DeviceTokenRequest request);

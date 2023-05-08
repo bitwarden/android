@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -342,10 +343,10 @@ namespace Bit.Core.Services
                 string.Concat("/ciphers/", id, "/attachment"), data, true, true);
         }
 
-        public Task<AttachmentUploadDataResponse> PostCipherAttachmentAsync(string id, AttachmentRequest request)
+        public Task<AttachmentUploadDataResponse> PostCipherAttachmentAsync(string id, AttachmentRequest request, CancellationToken cancellationToken)
         {
             return SendAsync<AttachmentRequest, AttachmentUploadDataResponse>(HttpMethod.Post,
-                $"/ciphers/{id}/attachment/v2", request, true, true);
+                $"/ciphers/{id}/attachment/v2", request, true, true, cancellationToken: cancellationToken);
         }
 
         public Task<AttachmentResponse> GetAttachmentData(string cipherId, string attachmentId) =>
@@ -365,12 +366,12 @@ namespace Bit.Core.Services
                 data, true, false);
         }
 
-        public Task<AttachmentUploadDataResponse> RenewAttachmentUploadUrlAsync(string cipherId, string attachmentId) =>
-            SendAsync<AttachmentUploadDataResponse>(HttpMethod.Get, $"/ciphers/{cipherId}/attachment/{attachmentId}/renew", true);
+        public Task<AttachmentUploadDataResponse> RenewAttachmentUploadUrlAsync(string cipherId, string attachmentId, CancellationToken cancellationToken) =>
+            SendAsync<AttachmentUploadDataResponse>(HttpMethod.Get, $"/ciphers/{cipherId}/attachment/{attachmentId}/renew", true, cancellationToken);
 
-        public Task PostAttachmentFileAsync(string cipherId, string attachmentId, MultipartFormDataContent data) =>
+        public Task PostAttachmentFileAsync(string cipherId, string attachmentId, MultipartFormDataContent data, CancellationToken cancellationToken) =>
             SendAsync(HttpMethod.Post,
-                $"/ciphers/{cipherId}/attachment/{attachmentId}", data, true);
+                $"/ciphers/{cipherId}/attachment/{attachmentId}", data, true, cancellationToken);
 
         #endregion
 
@@ -629,12 +630,12 @@ namespace Bit.Core.Services
 
         public Task SendAsync(HttpMethod method, string path, bool authed) =>
             SendAsync<object, object>(method, path, null, authed, false);
-        public Task SendAsync<TRequest>(HttpMethod method, string path, TRequest body, bool authed) =>
-            SendAsync<TRequest, object>(method, path, body, authed, false);
-        public Task<TResponse> SendAsync<TResponse>(HttpMethod method, string path, bool authed) =>
-            SendAsync<object, TResponse>(method, path, null, authed, true);
+        public Task SendAsync<TRequest>(HttpMethod method, string path, TRequest body, bool authed, CancellationToken cancellationToken = default) =>
+            SendAsync<TRequest, object>(method, path, body, authed, false, cancellationToken: cancellationToken);
+        public Task<TResponse> SendAsync<TResponse>(HttpMethod method, string path, bool authed, CancellationToken cancellationToken = default) =>
+            SendAsync<object, TResponse>(method, path, null, authed, true, cancellationToken: cancellationToken);
         public async Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path, TRequest body,
-            bool authed, bool hasResponse, Action<HttpRequestMessage> alterRequest = null, bool logoutOnUnauthorized = true)
+            bool authed, bool hasResponse, Action<HttpRequestMessage> alterRequest = null, bool logoutOnUnauthorized = true, CancellationToken cancellationToken = default)
         {
             using (var requestMessage = new HttpRequestMessage())
             {
@@ -686,7 +687,7 @@ namespace Bit.Core.Services
                 HttpResponseMessage response;
                 try
                 {
-                    response = await _httpClient.SendAsync(requestMessage);
+                    response = await _httpClient.SendAsync(requestMessage, cancellationToken);
                 }
                 catch (Exception e)
                 {

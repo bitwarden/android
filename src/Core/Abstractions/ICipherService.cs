@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
@@ -27,7 +28,7 @@ namespace Bit.Core.Abstractions
         Task<Cipher> GetAsync(string id);
         Task<CipherView> GetLastUsedForUrlAsync(string url);
         Task ReplaceAsync(Dictionary<string, CipherData> ciphers);
-        Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, string filename, byte[] data);
+        Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, string filename, byte[] data, CancellationToken cancellationToken);
         Task SaveCollectionsWithServerAsync(Cipher cipher);
         Task SaveNeverDomainAsync(string domain);
         Task SaveWithServerAsync(Cipher cipher);
