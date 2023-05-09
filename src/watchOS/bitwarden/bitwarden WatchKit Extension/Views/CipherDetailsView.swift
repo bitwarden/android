@@ -50,6 +50,7 @@ struct CipherDetailsView: View {
                     .fontWeight(.bold)
                     .lineLimit(1)
                     .truncationMode(.tail)
+                    .privacySensitive()
             }
             if cipherDetailsViewModel.totpFormatted == "" {
                 ProgressView()
