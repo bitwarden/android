@@ -1,7 +1,3 @@
-watchOS:
-- 'src/watchOS/*'
-- 'src/watchOS/bitwarden/bitwarden WatchKit Extension/*'
-
 android:
 - src/App/*
 - src/Core/*
@@ -17,3 +13,7 @@ iOS:
 - 'src/iOS.Extension/*'
 - 'src/iOS.ShareExtension/*'
 - 'src/iOS.Widget/*'
+- src/watchOS/*
+
+watchOS:
+- src/watchOS/*
