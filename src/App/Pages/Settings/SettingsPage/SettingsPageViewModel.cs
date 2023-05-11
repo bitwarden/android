@@ -131,7 +131,7 @@ namespace Bit.App.Pages
             {
                 // if we have a vault timeout policy, we need to filter the timeout options
                 _vaultTimeoutPolicy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout)).First();
-                var policyMinutes = _policyService.GetPolicyInt(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_MINUTES);
+                var policyMinutes = _vaultTimeoutPolicy.GetInt(Policy.MINUTES_KEY);
                 _vaultTimeoutOptions = _vaultTimeoutOptions.Where(t =>
                     t.Value <= policyMinutes &&
                     (t.Value > 0 || t.Value == CustomVaultTimeoutValue) &&
@@ -302,7 +302,7 @@ namespace Bit.App.Pages
 
             if (_vaultTimeoutPolicy != null)
             {
-                var maximumTimeout = _policyService.GetPolicyInt(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_MINUTES);
+                var maximumTimeout = _vaultTimeoutPolicy.GetInt(Policy.MINUTES_KEY);
 
                 if (newTimeout > maximumTimeout)
                 {
@@ -382,7 +382,7 @@ namespace Bit.App.Pages
         public async Task VaultTimeoutActionAsync()
         {
             if (_vaultTimeoutPolicy != null &&
-                !string.IsNullOrEmpty(_policyService.GetPolicyString(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_ACTION)))
+                !string.IsNullOrEmpty(_vaultTimeoutPolicy.GetString(Policy.MINUTES_KEY)))
             {
                 // do nothing if we have a policy set
                 return;
@@ -610,8 +610,8 @@ namespace Bit.App.Pages
             }
             if (_vaultTimeoutPolicy != null)
             {
-                var policyMinutes = _policyService.GetPolicyInt(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_MINUTES);
-                var policyAction = _policyService.GetPolicyString(_vaultTimeoutPolicy, PolicyService.TIMEOUT_POLICY_ACTION);
+                var policyMinutes = _vaultTimeoutPolicy.GetInt(Policy.MINUTES_KEY);
+                var policyAction = _vaultTimeoutPolicy.GetString(Policy.ACTION_KEY);
 
                 if (policyMinutes.HasValue || !string.IsNullOrWhiteSpace(policyAction))
                 {
@@ -625,14 +625,14 @@ namespace Bit.App.Pages
                     else if (!policyMinutes.HasValue && !string.IsNullOrWhiteSpace(policyAction))
                     {
                         policyAlert = string.Format(AppResources.VaultTimeoutActionPolicyInEffect,
-                            policyAction == PolicyService.TIMEOUT_POLICY_ACTION_LOCK ? AppResources.Lock : AppResources.LogOut);
+                            policyAction == Policy.ACTION_LOCK ? AppResources.Lock : AppResources.LogOut);
                     }
                     else
                     {
                         policyAlert = string.Format(AppResources.VaultTimeoutPolicyWithActionInEffect,
                             Math.Floor((float)policyMinutes / 60),
                             policyMinutes % 60,
-                            policyAction == PolicyService.TIMEOUT_POLICY_ACTION_LOCK ? AppResources.Lock : AppResources.LogOut);
+                            policyAction == Policy.ACTION_LOCK ? AppResources.Lock : AppResources.LogOut);
                     }
                     securityItems.Insert(0, new SettingsPageListItem
                     {

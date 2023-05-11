@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Services
 {
