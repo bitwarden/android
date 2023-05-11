@@ -1753,10 +1753,10 @@ Scanarea se va face automat.</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Deblocarea biometrică pentru acest cont este dezactivată în așteptarea verificării parolei principale.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Completarea automată a deblocării biometrice pentru acest cont este dezactivată în așteptarea verificării parolei principale.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Activare sincronizare la reîmprospătare</value>

@@ -1753,7 +1753,7 @@ Das Scannen erfolgt automatisch.</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometrie zum Entsperren ist für dieses Konto deaktiviert, bis das Master-Passwort verifiziert wurde.</value>
+    <value>Das Entsperren über Biometrie ist für dieses Konto deaktiviert, bis das Master-Passwort verifiziert wurde.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
     <value>Das Entsperren von Auto-Ausfüllen über Biometrie ist für dieses Konto deaktiviert, bis das Master-Passwort verifiziert wurde.</value>

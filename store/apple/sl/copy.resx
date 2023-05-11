@@ -122,51 +122,50 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>Bitwarden, Inc. je matično podjetje podjetja 8bit Solutions LLC.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+NAJBOŠJI UPRAVLJALNIK GESEL PO MNEJU THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET IN DRUGIH.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+Upravljajte, shranjujte, varujte in delite neomejeno število gesel na neomejenem številu naprav, kjerkoli. Bitwarden ponuja odprtokodne rešitve za upravljanje gesel vsem, tako doma kot v službi ali na poti.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Za vas ustvari močna, edinstvena in naključna gesla, skladna z varnostnimi zahtevami za vsako spletno mesto, ki ga obiščete.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+S pošiljkami Bitwarden Send hitro prenesite šifrirane informacije --- datoteke in navadno besedilo -- neposredno komurkoli.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+Bitwarden ponuja storitvi za organizacije Teams in Enterprise, s katerima lahko gesla varno souporabljate s sodelavci.
 
-Why Choose Bitwarden:
+Zakaj izbrati Bitwarden:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+Vrhunsko šifriranje
+Gesla so zaščitena z naprednim šifriranjem (AES-256, soljene hash-vrednosti in PBKDF2 SHA-256), tako da vaši podatki ostanejo varni in zasebni.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Vgrajen generator gesel
+Ustvarite močna, edinstvena in naključna gesla v skladu z varnostnimi zahtevami za vsako spletno mesto, ki ga obiščete.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+Prevodi za ves svet
+Bitwarden je preveden že v 40 jezikov, naša globalna skupnost pa ves čas posodabljan in ustvarja nove prevede.
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
-</value>
+Deluje na vseh platformah
+Varujte in souporabljajte svoje občutljive podatke znotraj vašega Bitwarden trezorja v katerem koli brskalniku, mobilni napravi, namiznem računalniku in drugje.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bit warden,8bit,password,free password manager,password manager,login manager</value>
+    <value>bit warden,8bit,password,free password manager,password manager,login manager,upravljalnik gesel,shranjevalnik gesel,geslo,upravljalnik prijav</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Urejajte vse svoje prijavne podatke in gesla v zavarovanem trezorju</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Samodejno ustvari močna, naključna in varna gesla</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with Touch ID, PIN code, or master password</value>
+    <value>Zaščitite svoj trezor s pristnim odtisom, PIN-kodo ali glavnim geslom</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Auto-fill logins from Safari, Chrome, and hundreds of other apps</value>
+    <value>Samodejno izpolnjevanje prijav v aplikacijah Safari, Chrome in stotinah drugih</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices</value>
+    <value>Sinhronizirajte svoj trezor gesel in dostopajte do njega z več naprav</value>
   </data>
 </root>
