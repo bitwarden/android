@@ -1753,10 +1753,10 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Биометријско откључавање је онемогућено до верификације главне лозинке.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Биометријско откључавање аутоматског попуњавања за овај налог је онемогућено до верификације главне лозинке.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Омогући синхронизацију при освежавању</value>
