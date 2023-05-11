@@ -1753,10 +1753,10 @@ Koodi luetaan automaattisesti.</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Biometrinen avaus on poistettu käytöstä tältä tililtä, kunnes pääsalasana on vahvistettu.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Automaattisen täytön biometrinen avaus on poistettu käytöstä tältä tililtä, kunnes pääsalasana on vahvistettu.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Synkronoi holvi päivityksen yhteydessä</value>
@@ -2602,7 +2602,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Lisää avain olemassa olevaan tai uuteen kohteeseen</value>
   </data>
   <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
-    <value>Holvissasi ei ole kohteita osoitteelle "{0}"</value>
+    <value>Holvissasi ei ole kohdetta "{0}" vastavia tietoja</value>
   </data>
   <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
     <value>Etsi kohdetta tai lisää uusi kohde</value>
