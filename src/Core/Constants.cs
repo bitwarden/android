@@ -60,6 +60,9 @@
         public const int Argon2MemoryInMB = 64;
         public const int Argon2Parallelism = 4;
         public const int MasterPasswordMinimumChars = 12;
+        public const string DefaultFido2KeyType = "public-key";
+        public const string DefaultFido2KeyAlgorithm = "ECDSA";
+        public const string DefaultFido2KeyCurve = "P-256";
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {

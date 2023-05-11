@@ -42,6 +42,7 @@ namespace Bit.Core.Models.View
         public IdentityView Identity { get; set; }
         public CardView Card { get; set; }
         public SecureNoteView SecureNote { get; set; }
+        public Fido2KeyView Fido2Key { get; set; }
         public List<AttachmentView> Attachments { get; set; }
         public List<FieldView> Fields { get; set; }
         public List<PasswordHistoryView> PasswordHistory { get; set; }
@@ -64,6 +65,8 @@ namespace Bit.Core.Models.View
                         return Card;
                     case CipherType.Identity:
                         return Identity;
+                    case CipherType.Fido2Key:
+                        return Fido2Key;
                     default:
                         break;
                 }
@@ -109,6 +112,5 @@ namespace Bit.Core.Models.View
         {
             return LinkedFieldOptions.Find(lfo => lfo.Value == id).Key;
         }
-
     }
 }
