@@ -382,7 +382,7 @@ namespace Bit.App.Pages
         public async Task VaultTimeoutActionAsync()
         {
             if (_vaultTimeoutPolicy != null &&
-                !string.IsNullOrEmpty(_vaultTimeoutPolicy.GetString(Policy.MINUTES_KEY)))
+                !string.IsNullOrEmpty(_vaultTimeoutPolicy.GetString(Policy.ACTION_KEY)))
             {
                 // do nothing if we have a policy set
                 return;
