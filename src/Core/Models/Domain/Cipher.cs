@@ -202,7 +202,7 @@ namespace Bit.Core.Models.Domain
                     c.Identity = Identity.ToIdentityData();
                     break;
                 case Enums.CipherType.Fido2Key:
-                    c.Fido2Key= Fido2Key.ToFido2KeyData();
+                    c.Fido2Key = Fido2Key.ToFido2KeyData();
                     break;
                 default:
                     break;
