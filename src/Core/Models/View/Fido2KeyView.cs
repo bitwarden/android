@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Bit.Core.Enums;
 
 namespace Bit.Core.Models.View
 {
-    public class Fido2KeyView : ItemView
+    public class Fido2KeyView : ItemView, ILaunchableView
     {
         public string NonDiscoverableId { get; set; }
         public string KeyType { get; set; } = Constants.DefaultFido2KeyType;
@@ -17,7 +18,8 @@ namespace Bit.Core.Models.View
         public string Counter { get; set; }
 
         public override string SubTitle => UserName;
-
         public override List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions => new List<KeyValuePair<string, LinkedIdType>>();
+        public bool CanLaunch => !string.IsNullOrEmpty(RpId);
+        public string LaunchUri => $"https://{RpId}";
     }
 }

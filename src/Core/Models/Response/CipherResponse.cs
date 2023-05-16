@@ -29,5 +29,6 @@ namespace Bit.Core.Models.Response
         public List<string> CollectionIds { get; set; }
         public DateTime? DeletedDate { get; set; }
         public CipherRepromptType Reprompt { get; set; }
+        public DateTime CreationDate { get; set; }
     }
 }

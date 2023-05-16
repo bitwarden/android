@@ -73,6 +73,21 @@ namespace Bit.Core.Models.Request
                         Type = cipher.SecureNote.Type
                     };
                     break;
+                case CipherType.Fido2Key:
+                    Fido2Key = new Fido2KeyApi
+                    {
+                        NonDiscoverableId = cipher.Fido2Key.NonDiscoverableId?.EncryptedString,
+                        KeyType = cipher.Fido2Key.KeyType?.EncryptedString,
+                        KeyAlgorithm = cipher.Fido2Key.KeyAlgorithm?.EncryptedString,
+                        KeyCurve = cipher.Fido2Key.KeyCurve?.EncryptedString,
+                        KeyValue = cipher.Fido2Key.KeyValue?.EncryptedString,
+                        RpId = cipher.Fido2Key.RpId?.EncryptedString,
+                        RpName = cipher.Fido2Key.RpName?.EncryptedString,
+                        UserHandle = cipher.Fido2Key.UserHandle?.EncryptedString,
+                        UserName = cipher.Fido2Key.UserName?.EncryptedString,
+                        Counter = cipher.Fido2Key.Counter?.EncryptedString
+                    };
+                    break;
                 default:
                     break;
             }
@@ -118,6 +133,7 @@ namespace Bit.Core.Models.Request
         public SecureNoteApi SecureNote { get; set; }
         public CardApi Card { get; set; }
         public IdentityApi Identity { get; set; }
+        public Fido2KeyApi Fido2Key { get; set; }
         public List<FieldApi> Fields { get; set; }
         public List<PasswordHistoryRequest> PasswordHistory { get; set; }
         public Dictionary<string, string> Attachments { get; set; }

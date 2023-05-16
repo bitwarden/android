@@ -68,7 +68,7 @@ namespace Bit.App.Pages
             CopyCommand = new AsyncCommand<string>((id) => CopyAsync(id, null), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
             CopyUriCommand = new AsyncCommand<LoginUriView>(uriView => CopyAsync("LoginUri", uriView.Uri), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
             CopyFieldCommand = new AsyncCommand<FieldView>(field => CopyAsync(field.Type == FieldType.Hidden ? "H_FieldValue" : "FieldValue", field.Value), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
-            LaunchUriCommand = new Command<LoginUriView>(LaunchUri);
+            LaunchUriCommand = new Command<ILaunchableView>(LaunchUri);
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardNumberCommand = new Command(ToggleCardNumber);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
@@ -146,6 +146,7 @@ namespace Bit.App.Pages
         public bool IsIdentity => Cipher?.Type == Core.Enums.CipherType.Identity;
         public bool IsCard => Cipher?.Type == Core.Enums.CipherType.Card;
         public bool IsSecureNote => Cipher?.Type == Core.Enums.CipherType.SecureNote;
+        public bool IsFido2Key => Cipher?.Type == Core.Enums.CipherType.Fido2Key;
         public FormattedString ColoredPassword => GeneratedValueFormatter.Format(Cipher.Login.Password);
         public FormattedString UpdatedText
         {
@@ -668,11 +669,11 @@ namespace Bit.App.Pages
             }
         }
 
-        private void LaunchUri(LoginUriView uri)
+        private void LaunchUri(ILaunchableView launchableView)
         {
-            if (uri.CanLaunch && (Page as BaseContentPage).DoOnce())
+            if (launchableView.CanLaunch && (Page as BaseContentPage).DoOnce())
             {
-                _platformUtilsService.LaunchUri(uri.LaunchUri);
+                _platformUtilsService.LaunchUri(launchableView.LaunchUri);
             }
         }
 

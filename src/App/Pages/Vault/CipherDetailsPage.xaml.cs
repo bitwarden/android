@@ -302,13 +302,13 @@ namespace Bit.App.Pages
                 {
                     ToolbarItems.Remove(_collectionsItem);
                 }
-                if (!ToolbarItems.Contains(_cloneItem))
+                if (_vm.Cipher.Type != Core.Enums.CipherType.Fido2Key && !ToolbarItems.Contains(_cloneItem))
                 {
                     ToolbarItems.Insert(1, _cloneItem);
                 }
                 if (!ToolbarItems.Contains(_shareItem))
                 {
-                    ToolbarItems.Insert(2, _shareItem);
+                    ToolbarItems.Insert(_vm.Cipher.Type == Core.Enums.CipherType.Fido2Key ? 1 : 2, _shareItem);
                 }
             }
             else

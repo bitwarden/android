@@ -297,6 +297,7 @@ namespace Bit.App.Pages
         public bool IsIdentity => Cipher?.Type == CipherType.Identity;
         public bool IsCard => Cipher?.Type == CipherType.Card;
         public bool IsSecureNote => Cipher?.Type == CipherType.SecureNote;
+        public bool IsFido2Key => Cipher?.Type == CipherType.Fido2Key;
         public bool ShowUris => IsLogin && Cipher.Login.HasUris;
         public bool ShowAttachments => Cipher.HasAttachments;
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;

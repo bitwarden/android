@@ -176,6 +176,7 @@ namespace Bit.Core.Services
                 OrganizationId = model.OrganizationId,
                 Type = model.Type,
                 CollectionIds = model.CollectionIds,
+                CreationDate = model.CreationDate,
                 RevisionDate = model.RevisionDate,
                 Reprompt = model.Reprompt
             };
@@ -1147,6 +1148,22 @@ namespace Bit.Core.Services
                         "LicenseNumber"
                     }, key);
                     break;
+                case CipherType.Fido2Key:
+                    cipher.Fido2Key = new Fido2Key();
+                    await EncryptObjPropertyAsync(model.Fido2Key, cipher.Fido2Key, new HashSet<string>
+                    {
+                        nameof(Fido2Key.NonDiscoverableId),
+                        nameof(Fido2Key.KeyType),
+                        nameof(Fido2Key.KeyAlgorithm),
+                        nameof(Fido2Key.KeyCurve),
+                        nameof(Fido2Key.KeyValue),
+                        nameof(Fido2Key.RpId),
+                        nameof(Fido2Key.RpName),
+                        nameof(Fido2Key.UserHandle),
+                        nameof(Fido2Key.UserName),
+                        nameof(Fido2Key.Counter)
+                    }, key);
+                    break;
                 default:
                     throw new Exception("Unknown cipher type.");
             }
@@ -1229,8 +1246,8 @@ namespace Bit.Core.Services
 
             public int Compare(CipherView a, CipherView b)
             {
-                var aName = a?.Name;
-                var bName = b?.Name;
+                var aName = a?.ComparableName;
+                var bName = b?.ComparableName;
                 if (aName == null && bName != null)
                 {
                     return -1;
@@ -1242,19 +1259,6 @@ namespace Bit.Core.Services
                 if (aName == null && bName == null)
                 {
                     return 0;
-                }
-                var result = _i18nService.StringComparer.Compare(aName, bName);
-                if (result != 0 || a.Type != CipherType.Login || b.Type != CipherType.Login)
-                {
-                    return result;
-                }
-                if (a.Login.Username != null)
-                {
-                    aName += a.Login.Username;
-                }
-                if (b.Login.Username != null)
-                {
-                    bName += b.Login.Username;
                 }
                 return _i18nService.StringComparer.Compare(aName, bName);
             }

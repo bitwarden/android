@@ -6,7 +6,7 @@ using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Models.View
 {
-    public class CipherView : View
+    public class CipherView : View, ILaunchableView
     {
         public CipherView() { }
 
@@ -23,6 +23,7 @@ namespace Bit.Core.Models.View
             LocalData = c.LocalData;
             CollectionIds = c.CollectionIds;
             RevisionDate = c.RevisionDate;
+            CreationDate = c.CreationDate;
             DeletedDate = c.DeletedDate;
             Reprompt = c.Reprompt;
         }
@@ -48,6 +49,7 @@ namespace Bit.Core.Models.View
         public List<PasswordHistoryView> PasswordHistory { get; set; }
         public HashSet<string> CollectionIds { get; set; }
         public DateTime RevisionDate { get; set; }
+        public DateTime CreationDate { get; set; }
         public DateTime? DeletedDate { get; set; }
         public CipherRepromptType Reprompt { get; set; }
 
@@ -112,5 +114,11 @@ namespace Bit.Core.Models.View
         {
             return LinkedFieldOptions.Find(lfo => lfo.Value == id).Key;
         }
+
+        public string ComparableName => Name + Login?.Username + Fido2Key?.UserName;
+
+        public bool CanLaunch => Login?.CanLaunch == true || Fido2Key?.CanLaunch == true;
+
+        public string LaunchUri => Login?.LaunchUri ?? Fido2Key?.LaunchUri;
     }
 }
