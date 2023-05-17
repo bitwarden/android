@@ -203,6 +203,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Biometric unlock for this account is disabled pending verification of master password..
+        /// </summary>
+        public static string AccountBiometricInvalidated {
+            get {
+                return ResourceManager.GetString("AccountBiometricInvalidated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Autofill biometric unlock for this account is disabled pending verification of master password..
+        /// </summary>
+        public static string AccountBiometricInvalidatedExtension {
+            get {
+                return ResourceManager.GetString("AccountBiometricInvalidatedExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your new account has been created! You may now log in..
         /// </summary>
         public static string AccountCreated {
@@ -541,6 +559,24 @@ namespace Bit.App.Resources {
         public static string ApproveLoginRequests {
             get {
                 return ResourceManager.GetString("ApproveLoginRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approve with master password.
+        /// </summary>
+        public static string ApproveWithMasterPassword {
+            get {
+                return ResourceManager.GetString("ApproveWithMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approve with my other device.
+        /// </summary>
+        public static string ApproveWithMyOtherDevice {
+            get {
+                return ResourceManager.GetString("ApproveWithMyOtherDevice", resourceCulture);
             }
         }
         
@@ -964,24 +1000,6 @@ namespace Bit.App.Resources {
         public static string BaseDomain {
             get {
                 return ResourceManager.GetString("BaseDomain", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Biometric unlock disabled pending verification of master password..
-        /// </summary>
-        public static string AccountBiometricInvalidated {
-            get {
-                return ResourceManager.GetString("AccountBiometricInvalidated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Biometric unlock for autofill disabled pending verification of master password..
-        /// </summary>
-        public static string AccountBiometricInvalidatedExtension {
-            get {
-                return ResourceManager.GetString("AccountBiometricInvalidatedExtension", resourceCulture);
             }
         }
         
@@ -3551,6 +3569,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logged in!.
+        /// </summary>
+        public static string LoggedIn {
+            get {
+                return ResourceManager.GetString("LoggedIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logged in as {0} on {1}..
         /// </summary>
         public static string LoggedInAsOn {
@@ -5139,6 +5166,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remember this device.
+        /// </summary>
+        public static string RememberThisDevice {
+            get {
+                return ResourceManager.GetString("RememberThisDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove.
         /// </summary>
         public static string Remove {
@@ -5207,6 +5243,15 @@ namespace Bit.App.Resources {
         public static string RemovingSendPassword {
             get {
                 return ResourceManager.GetString("RemovingSendPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request admin approval.
+        /// </summary>
+        public static string RequestAdminApproval {
+            get {
+                return ResourceManager.GetString("RequestAdminApproval", resourceCulture);
             }
         }
         
@@ -6197,6 +6242,15 @@ namespace Bit.App.Resources {
         public static string TryAgain {
             get {
                 return ResourceManager.GetString("TryAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turn off using a public device.
+        /// </summary>
+        public static string TurnOffUsingPublicDevice {
+            get {
+                return ResourceManager.GetString("TurnOffUsingPublicDevice", resourceCulture);
             }
         }
         
