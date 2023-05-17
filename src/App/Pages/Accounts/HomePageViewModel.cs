@@ -196,6 +196,7 @@ namespace Bit.App.Pages
             {
                 await _environmentService.SetUrlsAsync(EnvironmentUrlData.DefaultUS);
                 environmentsSaved = EnvironmentUrlData.DefaultUS;
+                SelectedEnvironmentName = AppResources.US;
                 return;
             }
 

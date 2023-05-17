@@ -589,7 +589,8 @@ namespace Bit.Core.Services
 
         public async Task<ConfigResponse> GetConfigsAsync()
         {
-            return await SendAsync<object, ConfigResponse>(HttpMethod.Get, "/config/", null, false, true);
+            var accessToken = await _tokenService.GetTokenAsync();
+            return await SendAsync<object, ConfigResponse>(HttpMethod.Get, "/config/", null, !string.IsNullOrEmpty(accessToken), true);
         }
 
         #endregion
