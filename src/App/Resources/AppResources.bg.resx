@@ -1752,11 +1752,11 @@
     <value>Сигурни ли сте, че искате да преместите записа в кошчето?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Засечена е промяна в биометричните данни. Впишете се с главната парола, за да я включите отново биометричната идентификация.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Потвърждаването с биометрични данни е изключено за тази регистрация. Въведете главната парола, за да го включите.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Потвърждаването с биометрични данни е изключено. Въведете главната парола, за да го включите.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Автоматичното попълване за потвърждаване с биометрични данни е изключено за тази регистрация. Въведете главната парола, за да го включите.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Синхронизация при опресняване</value>

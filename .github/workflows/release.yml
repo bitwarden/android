@@ -38,11 +38,11 @@ jobs:
           fi
 
       - name: Checkout repo
-        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579  # v2.4.0
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
 
       - name: Check Release Version
         id: version
-        uses: bitwarden/gh-actions/release-version-check@8f055ef543c7433c967a1b9b04a0f230923233bb
+        uses: bitwarden/gh-actions/release-version-check@34ecb67b2a357795dc893549df0795e7383ff50f
         with:
           release-type: ${{ github.event.inputs.release_type }}
           project-type: xamarin
@@ -56,7 +56,7 @@ jobs:
 
       - name: Create GitHub deployment
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: chrnorm/deployment-action@1b599fe41a0ef1f95191e7f2eec4743f2d7dfc48
+        uses: chrnorm/deployment-action@d42cde7132fcec920de534fffc3be83794335c00 # v2.0.5
         id: deployment
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
@@ -104,7 +104,7 @@ jobs:
 
       - name: Update deployment status to Success
         if: ${{ github.event.inputs.release_type != 'Dry Run' && success() }}
-        uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
+        uses: chrnorm/deployment-status@2afb7d27101260f4a764219439564d954d10b5b0 # v2.0.1
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
           state: 'success'
@@ -112,7 +112,7 @@ jobs:
 
       - name: Update deployment status to Failure
         if: ${{ github.event.inputs.release_type != 'Dry Run' && failure() }}
-        uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
+        uses: chrnorm/deployment-status@2afb7d27101260f4a764219439564d954d10b5b0 # v2.0.1
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
           state: 'failure'
@@ -126,7 +126,7 @@ jobs:
     if: inputs.fdroid_publish
     steps:
       - name: Checkout repo
-        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579  # v2.4.0
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
 
       - name: Download F-Droid .apk artifact
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}

@@ -1751,11 +1751,11 @@
     <value>Вы сапраўды хочаце адправіць элемент у сметніцу?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Разблакіраванне па біяметрыі адключана. Чакаецца праверка асноўным паролем.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Разблакіроўка па біяметрыі для гэтага ўліковага запісу адключана. Чакаецца праверка асноўным паролем.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Разблакіраванне па біяметрыі для аўтазапаўнення адключана. Чакаецца праверка асноўным паролем.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Аўтазапаўненне з дапамогай разблакіроўкі па біяметрыі для гэтага ўліковага запісу адключана. Чакаецца праверка асноўным паролем.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Уключыць сінхранізацыю пры абнаўленні</value>

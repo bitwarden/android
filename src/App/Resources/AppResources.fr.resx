@@ -1752,11 +1752,11 @@ La numérisation se fera automatiquement.</value>
     <value>Voulez-vous vraiment envoyer à la corbeille ?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Déverrouillage biométrique désactivé dans l'attente de vérification du mot de passe principal.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Le déverrouillage biométrique pour ce compte est désactivé en attente de vérification du mot de passe maître.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Déverrouillage biométrique pour la saisie automatique désactivé dans l'attente de vérification du mot de passe principal.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Le déverrouillage biométrique de saisie automatique pour ce compte est désactivé en attente de vérification du mot de passe maître.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Autoriser la synchronisation au rafraîchissement</value>

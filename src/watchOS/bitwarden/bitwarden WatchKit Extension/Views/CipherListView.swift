@@ -87,6 +87,7 @@ struct CipherListView: View {
                 .font(.headline)
                 .lineLimit(1)
                 .truncationMode(.tail)
+                .privacySensitive()
         }
     }
     

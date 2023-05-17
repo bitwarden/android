@@ -1752,11 +1752,11 @@
     <value>Ви дійсно хочете перенести до смітника?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Біометричне розблокування вимкнено. Очікується перевірка головного пароля.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Біометричне розблокування для автозаповнення вимкнено. Очікується перевірка головного пароля.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Дозволити синхронізацію жестом</value>
@@ -2610,9 +2610,9 @@
     <value>Немає записів, що відповідають пошуку</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
-    <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>Ваш головний пароль не відповідає одній або більше політикам вашої організації. Щоб отримати доступ до сховища, вам необхідно оновити свій головний пароль зараз. Продовживши, ви вийдете з поточного сеансу, після чого потрібно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
-    <value>Current master password</value>
+    <value>Поточний головний пароль</value>
   </data>
 </root>

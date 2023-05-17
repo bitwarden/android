@@ -1752,11 +1752,11 @@
     <value>Вы действительно хотите отправить в корзину?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Биометрическая разблокировка отключена в ожидании проверки мастер-пароля.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Биометрическая разблокировка для этого аккаунта отключена в ожидании проверки мастер-пароля.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Биометрическая разблокировка для автозаполнения отключена в ожидании проверки мастер-пароля.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Биометрическая разблокировка автозаполнения для этого аккаунта отключена в ожидании проверки мастер-пароля.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Включить синхронизацию жестом</value>

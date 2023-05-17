@@ -1752,11 +1752,11 @@ Scanning will happen automatically.</value>
     <value>Pretende mesmo enviar para o lixo?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Alteração biométrica detetada, inicie sessão utilizando a palavra-passe mestra para ativar novamente.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Desbloqueio biométrico para preenchimento automático desabilitado. Aguarda verificação da palavra-passe mestre.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Ativar sincronização ao atualizar</value>

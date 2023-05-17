@@ -272,6 +272,36 @@ namespace Bit.Core.Services
             await SaveAccountAsync(account, reconciledOptions);
         }
 
+        public async Task<string> GetSystemBiometricIntegrityState(string bioIntegritySrcKey)
+        {
+            return await GetValueAsync<string>(bioIntegritySrcKey, await GetDefaultStorageOptionsAsync());
+        }
+
+        public async Task SetSystemBiometricIntegrityState(string bioIntegritySrcKey, string systemBioIntegrityState)
+        {
+            await SetValueAsync(bioIntegritySrcKey, systemBioIntegrityState, await GetDefaultStorageOptionsAsync());
+        }
+
+        public async Task<bool> IsAccountBiometricIntegrityValidAsync(string bioIntegritySrcKey, string userId = null)
+        {
+            var systemBioIntegrityState = await GetSystemBiometricIntegrityState(bioIntegritySrcKey);
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            return await GetValueAsync<bool?>(
+                Constants.AccountBiometricIntegrityValidKey(reconciledOptions.UserId, systemBioIntegrityState),
+                reconciledOptions) ?? false;
+        }
+
+        public async Task SetAccountBiometricIntegrityValidAsync(string bioIntegritySrcKey, string userId = null)
+        {
+            var systemBioIntegrityState = await GetSystemBiometricIntegrityState(bioIntegritySrcKey);
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            await SetValueAsync(
+                Constants.AccountBiometricIntegrityValidKey(reconciledOptions.UserId, systemBioIntegrityState),
+                true, reconciledOptions);
+        }
+
         public async Task<bool> CanAccessPremiumAsync(string userId = null)
         {
             if (userId == null)
@@ -1438,6 +1468,7 @@ namespace Bit.Core.Services
             await SetEncryptedPasswordGenerationHistoryAsync(null, userId);
             await SetEncryptedSendsAsync(null, userId);
             await SetSettingsAsync(null, userId);
+            await SetApprovePasswordlessLoginsAsync(null, userId);
         }
 
         private async Task ScaffoldNewAccountAsync(Account account)

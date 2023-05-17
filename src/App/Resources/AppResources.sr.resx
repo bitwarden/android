@@ -1752,11 +1752,11 @@
     <value>Стварно послати у отпад?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Откривена је биометријска промена, пријавите се помоћу главне лозинке да бисте је поново омогућили.</value>
-  </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
     <value>Биометријско откључавање је онемогућено до верификације главне лозинке.</value>
+  </data>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Биометријско откључавање аутоматског попуњавања за овај налог је онемогућено до верификације главне лозинке.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Омогући синхронизацију при освежавању</value>
@@ -2612,9 +2612,9 @@
     <value>Нема ставки које одговарају претрази</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
-    <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>Ваша главна лозинка не испуњава једну или више смерница ваше организације. Да бисте приступили сефу, морате одмах да ажурирате главну лозинку. Ако наставите, одјавићете се са ваше тренутне сесије, што захтева да се поново пријавите. Активне сесије на другим уређајима могу да остану активне до један сат.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
-    <value>Current master password</value>
+    <value>Тренутна главна лозинка</value>
   </data>
 </root>

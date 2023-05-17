@@ -1751,11 +1751,11 @@
     <value>Biztosan a lomtárba kerüljön?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometrikus változás lett észlelve, bejelentkezés mesterjelszóval az ismételt engedélyezéshez.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>A biometrikus feloldás ennél a fióknál letiltásra került a mesterjelszó ellenőrzéséig.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Az automatikus kitöltés biometrikus feloldása letiltásra került a fő jelszó ellenőrzéséig.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Az automatikus kitöltés biometrikus feloldása ennél a fióknál letiltásra került a mesterjelszó ellenőrzéséig.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Szinkronizálás engedélyezése frissítéskor</value>
@@ -2142,10 +2142,10 @@
     <value>A szervezeti házirendek hatással vannak a széf időkorlátjára. A széf időkorlátja legfeljebb {0} óra és {1} perc lehet.</value>
   </data>
   <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s). Your vault timeout action is set to {2}.</value>
+    <value>A szervezeti házirendek hatással vannak a széf időkorlátjára. A széf időkorlátja legfeljebb {0} óra és {1} perc lehet. A széf időkifutási művelete {2}.</value>
   </data>
   <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies have set your vault timeout action to {0}.</value>
+    <value>A szervezeti házirendek által jelenleg beállított időkifutási művelet {0}.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>A széf időkorlátja túllépi a szervezet által beállított korlátozást.</value>
