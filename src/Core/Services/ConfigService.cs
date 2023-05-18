@@ -58,7 +58,12 @@ namespace Bit.Core.Services
         private async Task<T> GetFeatureFlagAsync<T>(string key, bool forceRefresh = false, T defaultValue = default)
         {
             await GetAsync(forceRefresh);
-            if (_configs?.FeatureStates?.TryGetValue(key, out var val) == true
+            if (_configs == null || _configs.FeatureStates == null)
+            {
+                return defaultValue;
+            }
+
+            if (_configs.FeatureStates.TryGetValue(key, out var val) == true
                     &&
                     val is T actualValue)
             {
