@@ -30,7 +30,8 @@ namespace Bit.Core.Models.Request
                         Username = cipher.Login.Username?.EncryptedString,
                         Password = cipher.Login.Password?.EncryptedString,
                         PasswordRevisionDate = cipher.Login.PasswordRevisionDate,
-                        Totp = cipher.Login.Totp?.EncryptedString
+                        Totp = cipher.Login.Totp?.EncryptedString,
+                        Fido2Key = cipher.Login.Fido2Key != null ? new Fido2KeyApi(cipher.Login.Fido2Key) : null
                     };
                     break;
                 case CipherType.Card:
@@ -74,19 +75,7 @@ namespace Bit.Core.Models.Request
                     };
                     break;
                 case CipherType.Fido2Key:
-                    Fido2Key = new Fido2KeyApi
-                    {
-                        NonDiscoverableId = cipher.Fido2Key.NonDiscoverableId?.EncryptedString,
-                        KeyType = cipher.Fido2Key.KeyType?.EncryptedString,
-                        KeyAlgorithm = cipher.Fido2Key.KeyAlgorithm?.EncryptedString,
-                        KeyCurve = cipher.Fido2Key.KeyCurve?.EncryptedString,
-                        KeyValue = cipher.Fido2Key.KeyValue?.EncryptedString,
-                        RpId = cipher.Fido2Key.RpId?.EncryptedString,
-                        RpName = cipher.Fido2Key.RpName?.EncryptedString,
-                        UserHandle = cipher.Fido2Key.UserHandle?.EncryptedString,
-                        UserName = cipher.Fido2Key.UserName?.EncryptedString,
-                        Counter = cipher.Fido2Key.Counter?.EncryptedString
-                    };
+                    Fido2Key = new Fido2KeyApi(cipher.Fido2Key);
                     break;
                 default:
                     break;

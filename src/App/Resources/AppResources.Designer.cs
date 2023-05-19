@@ -4697,6 +4697,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Passkey will not be copied.
+        /// </summary>
+        public static string PasskeyWillNotBeCopied {
+            get {
+                return ResourceManager.GetString("PasskeyWillNotBeCopied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Passphrase.
         /// </summary>
         public static string Passphrase {
@@ -6089,6 +6098,15 @@ namespace Bit.App.Resources {
         public static string ThemeDescription {
             get {
                 return ResourceManager.GetString("ThemeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The passkey will not be copied to the cloned item. Do you want to continue cloning this item?.
+        /// </summary>
+        public static string ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem {
+            get {
+                return ResourceManager.GetString("ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem", resourceCulture);
             }
         }
         

@@ -15,6 +15,7 @@ namespace Bit.Core.Models.Domain
         {
             PasswordRevisionDate = obj.PasswordRevisionDate;
             Uris = obj.Uris?.Select(u => new LoginUri(u, alreadyEncrypted)).ToList();
+            Fido2Key = obj.Fido2Key != null ? new Fido2Key(obj.Fido2Key, alreadyEncrypted) : null;
             BuildDomainModel(this, obj, new HashSet<string>
             {
                 "Username",

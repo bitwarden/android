@@ -69,6 +69,7 @@ namespace Bit.App.Pages
             CopyUriCommand = new AsyncCommand<LoginUriView>(uriView => CopyAsync("LoginUri", uriView.Uri), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
             CopyFieldCommand = new AsyncCommand<FieldView>(field => CopyAsync(field.Type == FieldType.Hidden ? "H_FieldValue" : "FieldValue", field.Value), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
             LaunchUriCommand = new Command<ILaunchableView>(LaunchUri);
+            CloneCommand = new AsyncCommand(CloneAsync, onException: ex => HandleException(ex), allowsMultipleExecutions: false);
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardNumberCommand = new Command(ToggleCardNumber);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
@@ -81,6 +82,7 @@ namespace Bit.App.Pages
         public ICommand CopyUriCommand { get; set; }
         public ICommand CopyFieldCommand { get; set; }
         public Command LaunchUriCommand { get; set; }
+        public ICommand CloneCommand { get; set; }
         public Command TogglePasswordCommand { get; set; }
         public Command ToggleCardNumberCommand { get; set; }
         public Command ToggleCardCodeCommand { get; set; }
@@ -677,6 +679,17 @@ namespace Bit.App.Pages
             }
         }
 
+        private async Task CloneAsync()
+        {
+            if (!await CanCloneAsync() || !await PromptPasswordAsync())
+            {
+                return;
+            }
+
+            var page = new CipherAddEditPage(CipherId, cloneMode: true, cipherDetailsPage: Page as CipherDetailsPage);
+            await Page.Navigation.PushModalAsync(new NavigationPage(page));
+        }
+
         public async Task<bool> PromptPasswordAsync()
         {
             if (Cipher.Reprompt == CipherRepromptType.None || _passwordReprompted)
@@ -685,6 +698,16 @@ namespace Bit.App.Pages
             }
 
             return _passwordReprompted = await _passwordRepromptService.ShowPasswordPromptAsync();
+        }
+
+        private async Task<bool> CanCloneAsync()
+        {
+            if (Cipher.Type == CipherType.Login && Cipher.Login?.Fido2Key != null)
+            {
+                return await _platformUtilsService.ShowDialogAsync(AppResources.ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem, AppResources.PasskeyWillNotBeCopied, AppResources.Yes, AppResources.No);
+            }
+
+            return true;
         }
     }
 }

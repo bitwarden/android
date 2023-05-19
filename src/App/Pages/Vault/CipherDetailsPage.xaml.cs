@@ -204,19 +204,6 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void Clone_Clicked(object sender, System.EventArgs e)
-        {
-            if (DoOnce())
-            {
-                if (!await _vm.PromptPasswordAsync())
-                {
-                    return;
-                }
-                var page = new CipherAddEditPage(_vm.CipherId, cloneMode: true, cipherDetailsPage: this);
-                await Navigation.PushModalAsync(new NavigationPage(page));
-            }
-        }
-
         private async void More_Clicked(object sender, System.EventArgs e)
         {
             if (!DoOnce())
@@ -267,8 +254,7 @@ namespace Bit.App.Pages
             }
             else if (selection == AppResources.Clone)
             {
-                var page = new CipherAddEditPage(_vm.CipherId, cloneMode: true, cipherDetailsPage: this);
-                await Navigation.PushModalAsync(new NavigationPage(page));
+                _vm.CloneCommand.Execute(null);
             }
         }
 
