@@ -1753,10 +1753,10 @@ La numérisation se fera automatiquement.</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Le déverrouillage biométrique pour ce compte est désactivé en attente de vérification du mot de passe maître.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Le déverrouillage biométrique de saisie automatique pour ce compte est désactivé en attente de vérification du mot de passe maître.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Autoriser la synchronisation au rafraîchissement</value>

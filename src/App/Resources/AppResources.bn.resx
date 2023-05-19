@@ -160,7 +160,7 @@
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
-    <value>Credits</value>
+    <value>কৃতিত্ব</value>
     <comment>Title for page that we use to give credit to resources that we use.</comment>
   </data>
   <data name="Delete" xml:space="preserve">
@@ -168,11 +168,11 @@
     <comment>Delete an entity (verb).</comment>
   </data>
   <data name="Deleting" xml:space="preserve">
-    <value>Deleting...</value>
+    <value>মোছা হচ্ছে...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Do you really want to delete? This cannot be undone.</value>
+    <value>আপনি কি সত্যিই মুছে ফেলতে চান? এটিকে পূর্বের মত করা যাবে না।.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
@@ -190,16 +190,16 @@
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>Email us</value>
+    <value>আমাদের ইমেইল করুন</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Email us directly to get help or leave feedback.</value>
+    <value>সাহায্য পেতে বা মতামত দিতে সরাসরি আমাদের ইমেল করুন।</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>Enter your PIN code.</value>
+    <value>আপনার পিন কোডটি প্রবেশ করান</value>
   </data>
   <data name="Favorites" xml:space="preserve">
-    <value>Favorites</value>
+    <value>পছন্দসমূহ</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
@@ -216,7 +216,7 @@
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>New folder created.</value>
+    <value>নতুন ফোল্ডার তৈরি হয়েছে।</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
     <value>Folder deleted.</value>
@@ -276,7 +276,7 @@
     <value>আপনি লগ আউট করতে চান?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Remove account</value>
+    <value>অ্যাকাউন্ট অপসারণ করুন</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
     <value>Are you sure you want to remove this account?</value>
@@ -315,30 +315,30 @@
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+    <value>ঠিক আছে</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>পাসওয়ার্ড</value>
     <comment>Label for a password.</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>সংরক্ষণ করুন</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>স্থানান্তর করুন</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>Saving...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>সেটিংস</value>
     <comment>The title for the settings page.</comment>
   </data>
   <data name="Show" xml:space="preserve">
-    <value>Show</value>
+    <value>দেখান</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
@@ -346,17 +346,17 @@
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
-    <value>Submit</value>
+    <value>জমা দিন</value>
   </data>
   <data name="Sync" xml:space="preserve">
     <value>Sync</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>Thank you</value>
+    <value>ধন্যবাদ</value>
   </data>
   <data name="Tools" xml:space="preserve">
-    <value>Tools</value>
+    <value>টুলস</value>
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
@@ -379,7 +379,7 @@
     <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Verify fingerprint</value>
+    <value>আঙ্গুলের ছাপ যাচাই করুন</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
     <value>প্রধান পাসওয়ার্ড যাচাইকরণ</value>
@@ -388,32 +388,32 @@
     <value>Verify PIN</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version</value>
+    <value>সংস্করণ</value>
   </data>
   <data name="View" xml:space="preserve">
     <value>View</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Visit our website</value>
+    <value>আমাদের ওয়েবসাইটে ঢু মেরে আসুন</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Visit our website to get help, news, email us, and/or learn more about how to use Bitwarden.</value>
+    <value>সাহায্য পেতে, খবর পেতে, আমাদের ইমেল করতে এবং/অথবা বিটওয়ার্ডেন কীভাবে ব্যবহার করবেন সে সম্পর্কে আরও জানতে আমাদের ওয়েবসাইট দেখুন।</value>
   </data>
   <data name="Website" xml:space="preserve">
-    <value>Website</value>
+    <value>ওয়েবসাইট</value>
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>হ্যাঁ</value>
   </data>
   <data name="Account" xml:space="preserve">
-    <value>Account</value>
+    <value>অ্যাকাউন্ট</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Your new account has been created! You may now log in.</value>
+    <value>আপনার নতুন অ্যাকাউন্ট তৈরি করা হয়েছে! আপনি এখন লগইন করতে পারবেন।</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>একটি আইটেম যোগ করুন</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>App extension</value>
@@ -425,7 +425,7 @@
     <value>Auto-fill service</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Avoid ambiguous characters</value>
+    <value>অস্পষ্ট বর্ণগুলি বাদ দিয়ে যান</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Bitwarden app extension</value>
@@ -440,13 +440,13 @@
     <value>Bitwarden Auto-fill Service</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the Bitwarden accessibility service to auto-fill your logins.</value>
+    <value>আপনার লগইনগুলি স্বয়ংক্রিয়ভাবে পূরণ করতে বিটওয়ার্ডেন অ্যাক্সেসিবিলিটি পরিষেবা ব্যবহার করুন৷</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Change email</value>
+    <value>ইমেইল পরিবর্তন করুন</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>আপনি bitwarden.com ওয়েব ভল্টে আপনার ইমেল ঠিকানা পরিবর্তন করতে পারেন। আপনি কি এখনই ওয়েবসাইট ভিজিট করতে চান?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>প্রধান পাসওয়ার্ড পরিবর্তন</value>
@@ -455,7 +455,7 @@
     <value>আপনি bitwarden.com ওয়েব ভল্ট থেকে প্রধান পাসওয়ার্ডটি পরিবর্তন করতে পারেন। আপনি কি এখনই ওয়েবসাইটটি দেখতে চান?</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Close</value>
+    <value>বন্ধ করুন</value>
   </data>
   <data name="Continue" xml:space="preserve">
     <value>অবিরত</value>
@@ -480,7 +480,7 @@
     <value>Reactivate app extension</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
-    <value>Almost done!</value>
+    <value>প্রায় হয়ে গেছে!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
     <value>Activate app extension</value>
@@ -493,7 +493,7 @@
     <value>Get instant access to your passwords!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>You're ready to log in!</value>
+    <value>আপনি লগইন করার জন্য একদম তৈরি!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Your logins are now easily accessible from Safari, Chrome, and other supported apps.</value>
@@ -511,7 +511,7 @@
     <value>প্রিয়</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>Fingerprint</value>
+    <value>আঙুলের ছাপ</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
     <value>পাসওয়ার্ড তৈরি করুন</value>
@@ -584,7 +584,7 @@
     <value>যদি আপনি আপনার পাসওয়ার্ড ভুলে যান তাহলে একটি প্রধান পাসওয়ার্ডের ইঙ্গিতটি আপনাকে মনে করাতে সাহায্য করতে পারে।</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>মাস্টার পাসওয়ার্ড কমপক্ষে {0} অক্ষরের হতে হবে।</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>সর্বনিম্ন সংখ্যা</value>
@@ -595,7 +595,7 @@
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
-    <value>More settings</value>
+    <value>আরও সেটিংস</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
     <value>You must log into the main Bitwarden app before you can use the extension.</value>
@@ -651,7 +651,7 @@
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Rate the app</value>
+    <value>অ্যাপ্লিকেশনটকে রেট দিন</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>দয়া করে একটি ভাল পর্যালোচনার মাধ্যমে সাহায্য করতে আমাদের বিবেচনা করুন!</value>
@@ -684,7 +684,7 @@
     <value>Item saved</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Submitting...</value>
+    <value>জমা দেওয়া হচ্ছে...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
@@ -701,7 +701,7 @@
     <value>Sync vault now</value>
   </data>
   <data name="TouchID" xml:space="preserve">
-    <value>Touch ID</value>
+    <value>টাচ আইডি</value>
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
@@ -717,17 +717,17 @@
     <value>Unlock with PIN code</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>Validating</value>
+    <value>কার্যকর করা হচ্ছে</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Verification code</value>
+    <value>যাচাইকরণ কোড</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
     <value>View item</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Bitwarden web vault</value>
+    <value>বিটওয়ার্ডেন ওয়েব ভল্ট</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Lost authenticator app?</value>
@@ -740,10 +740,10 @@
     <value>Extension activated!</value>
   </data>
   <data name="Icons" xml:space="preserve">
-    <value>Icons</value>
+    <value>আইকন</value>
   </data>
   <data name="Translations" xml:space="preserve">
-    <value>Translations</value>
+    <value>অনুবাদসমূহ</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
     <value>Items for {0}</value>
@@ -769,19 +769,19 @@
     <value>2. Switch on the toggle and press OK to accept.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>Disabled</value>
+    <value>নিষ্ক্রিয়</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>Enabled</value>
+    <value>সক্রিয়</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Off</value>
+    <value>বন্ধ</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>চালু</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>অবস্থা</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
@@ -876,7 +876,7 @@
     <value>Unable to download file.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of file.</value>
+    <value>আপনার ডিভাইস এই ধরনের ফাইল খুলতে পারে না।</value>
   </data>
   <data name="Downloading" xml:space="preserve">
     <value>ডাউনলোড হচ্ছে...</value>
@@ -904,13 +904,13 @@
 Scanning will happen automatically.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>QR কোড স্ক্যান করুন</value>
   </data>
   <data name="Camera" xml:space="preserve">
-    <value>Camera</value>
+    <value>ক্যামেরা</value>
   </data>
   <data name="Photos" xml:space="preserve">
-    <value>Photos</value>
+    <value>ছবিসমূহ</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>Copy TOTP</value>
@@ -934,7 +934,7 @@ Scanning will happen automatically.</value>
     <value>Choose file</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>File</value>
+    <value>ফাইল</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
     <value>No file chosen</value>
@@ -1080,7 +1080,7 @@ Scanning will happen automatically.</value>
     <value>নামের শেষাংশ</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Full name</value>
+    <value>পুরো নাম</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>লাইসেন্স নম্বর</value>
@@ -1107,34 +1107,34 @@ Scanning will happen automatically.</value>
     <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>November</value>
+    <value>নভেম্বর</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>অক্টোবর</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport number</value>
+    <value>পাসপোর্ট নম্বর</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>ফোন</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>সেপ্টেম্বর</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security number</value>
+    <value>সামাজিক সুরক্ষা নম্বর</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>রাজ্য / প্রদেশ</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>শিরোনাম</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal code</value>
+    <value>জিপ / পোস্টকোড</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>ঠিকানা</value>
   </data>
   <data name="Expiration" xml:space="preserve">
     <value>Expiration</value>
@@ -1204,7 +1204,7 @@ Scanning will happen automatically.</value>
     <value>Custom field name</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
-    <value>Boolean</value>
+    <value>বুলিয়ান</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Hidden</value>
@@ -1225,7 +1225,7 @@ Scanning will happen automatically.</value>
     <value>Remove</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>New URI</value>
+    <value>নতুন URI</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
     <value>URI {0}</value>
@@ -1272,7 +1272,7 @@ Scanning will happen automatically.</value>
     <value>Hold your Yubikey near the top of the device.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Try again</value>
+    <value>আবার চেষ্টা করুন</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
     <value>To continue, hold your YubiKey NEO against the back of the device.</value>
@@ -1440,16 +1440,16 @@ Scanning will happen automatically.</value>
     <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
-    <value>Number of words</value>
+    <value>শব্দসংখ্যা</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Passphrase</value>
+    <value>গুপ্ত-বাক্যাংশ</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>Word separator</value>
+    <value>শব্দ বিভাজক</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>পরিষ্কার করুন</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
@@ -1474,42 +1474,42 @@ Scanning will happen automatically.</value>
     <value>Export vault</value>
   </data>
   <data name="LockNow" xml:space="preserve">
-    <value>Lock now</value>
+    <value>এখনই লক করুন</value>
   </data>
   <data name="PIN" xml:space="preserve">
-    <value>PIN</value>
+    <value>পিন</value>
   </data>
   <data name="Unlock" xml:space="preserve">
-    <value>Unlock</value>
+    <value>আনলক করুন</value>
   </data>
   <data name="UnlockVault" xml:space="preserve">
     <value>Unlock vault</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>৩০ মিনিট</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
+    <value>Bitwarden আনলক করার জন্য আপনার পিন কোডটি সেট করুন। আপনি যদি অ্যাপ্লিকেশনটি থেকে পুরোপুরি লগ আউট করেন তবে আপনার পিন সেটিংস রিসেট করা হবে।</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Logged in as {0} on {1}.</value>
+    <value>{1}-এ {0} হিসেবে লগইন করা হয়েছে।</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
     <value>আপনার ভল্ট লক করা আছে। চালিয়ে যেতে আপনার প্রধান পাসওয়ার্ডটি যাচাই করান।</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Your vault is locked. Verify your PIN code to continue.</value>
+    <value>আপনার ভল্ট লক করা আছে। চালিয়ে যেতে আপনার পিন কোড যাচাই করান।</value>
   </data>
   <data name="VaultLockedIdentity" xml:space="preserve">
-    <value>Your vault is locked. Verify your identity to continue.</value>
+    <value>আপনার ভল্ট লক করা আছে। চালিয়ে যেতে আপনার পরিচয় যাচাই করান।</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+    <value>গাঢ়</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Light</value>
+    <value>উজ্জ্বল</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
@@ -1887,10 +1887,10 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Text" xml:space="preserve">
-    <value>Text</value>
+    <value>লেখা</value>
   </data>
   <data name="TypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>লেখা</value>
   </data>
   <data name="TypeTextInfo" xml:space="preserve">
     <value>The text you want to send.</value>
@@ -1900,7 +1900,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeFile" xml:space="preserve">
-    <value>File</value>
+    <value>ফাইল</value>
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>The file you want to send.</value>
@@ -1918,7 +1918,7 @@ Scanning will happen automatically.</value>
     <value>Text type is not selected, tap to select.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
-    <value>Deletion date</value>
+    <value>মুছে ফেলার তারিখ</value>
   </data>
   <data name="DeletionTime" xml:space="preserve">
     <value>Deletion time</value>
@@ -1957,7 +1957,7 @@ Scanning will happen automatically.</value>
     <value>Current access count</value>
   </data>
   <data name="NewPassword" xml:space="preserve">
-    <value>New password</value>
+    <value>নতুন পাসওয়ার্ড</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
     <value>Optionally require a password for users to access this Send.</value>
@@ -2030,19 +2030,19 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
-    <value>1 day</value>
+    <value>১ দিন</value>
   </data>
   <data name="TwoDays" xml:space="preserve">
-    <value>2 days</value>
+    <value>২ দিন</value>
   </data>
   <data name="ThreeDays" xml:space="preserve">
     <value>3 days</value>
   </data>
   <data name="SevenDays" xml:space="preserve">
-    <value>7 days</value>
+    <value>৭ দিন</value>
   </data>
   <data name="ThirtyDays" xml:space="preserve">
-    <value>30 days</value>
+    <value>৩০ দিন</value>
   </data>
   <data name="Custom" xml:space="preserve">
     <value>Custom</value>
@@ -2240,16 +2240,16 @@ Scanning will happen automatically.</value>
     <value>Options are collapsed, tap to expand.</value>
   </data>
   <data name="UppercaseAtoZ" xml:space="preserve">
-    <value>Uppercase (A to Z)</value>
+    <value>বড় হাতের অক্ষর (A-Z)</value>
   </data>
   <data name="LowercaseAtoZ" xml:space="preserve">
     <value>Lowercase (A to Z)</value>
   </data>
   <data name="NumbersZeroToNine" xml:space="preserve">
-    <value>Numbers (0 to 9)</value>
+    <value>সংখ্যা (0-9)</value>
   </data>
   <data name="SpecialCharacters" xml:space="preserve">
-    <value>Special characters (!@#$%^&amp;*)</value>
+    <value>বিশেষ অক্ষর (!@#$%^&amp;*)</value>
   </data>
   <data name="TapToGoBack" xml:space="preserve">
     <value>Tap to go back</value>
@@ -2352,10 +2352,10 @@ select Add TOTP to store the key safely</value>
     <value>Deny login</value>
   </data>
   <data name="JustNow" xml:space="preserve">
-    <value>Just now</value>
+    <value>এইমাত্র</value>
   </data>
   <data name="XMinutesAgo" xml:space="preserve">
-    <value>{0} minutes ago</value>
+    <value>{0} মিনিট আগে</value>
   </data>
   <data name="LogInAccepted" xml:space="preserve">
     <value>Login confirmed</value>
@@ -2548,7 +2548,7 @@ Do you want to switch to this account?</value>
     <value>Enable camera permission to use the scanner</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>ভাষা</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
     <value>The language has been changed to {0}. Please restart the app to see the change</value>
@@ -2575,10 +2575,10 @@ Do you want to switch to this account?</value>
     <value>Weak</value>
   </data>
   <data name="Good" xml:space="preserve">
-    <value>Good</value>
+    <value>ভালো</value>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Strong</value>
+    <value>শক্তিশালী</value>
   </data>
   <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
     <value>Check known data breaches for this password</value>

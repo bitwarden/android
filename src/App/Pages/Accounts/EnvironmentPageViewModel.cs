@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
+using Bit.Core.Models.Data;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 
@@ -18,7 +19,8 @@ namespace Bit.App.Pages
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
 
             PageTitle = AppResources.Settings;
-            BaseUrl = _environmentService.BaseUrl;
+            BaseUrl = _environmentService.BaseUrl == EnvironmentUrlData.DefaultEU.Base || EnvironmentUrlData.DefaultUS.Base == _environmentService.BaseUrl ?
+                string.Empty : _environmentService.BaseUrl;
             WebVaultUrl = _environmentService.WebVaultUrl;
             ApiUrl = _environmentService.ApiUrl;
             IdentityUrl = _environmentService.IdentityUrl;

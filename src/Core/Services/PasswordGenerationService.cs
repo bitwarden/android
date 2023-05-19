@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
-using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
 using Zxcvbn;
@@ -15,17 +14,17 @@ namespace Bit.Core.Services
 {
     public class PasswordGenerationService : IPasswordGenerationService
     {
-        private const int MaxPasswordsInHistory = 100;
-        private const string LowercaseCharSet = "abcdefghijkmnopqrstuvwxyz";
-        private const string UppercaseCharSet = "ABCDEFGHJKLMNPQRSTUVWXYZ";
-        private const string NumberCharSet = "23456789";
-        private const string SpecialCharSet = "!@#$%^&*";
+        private const int MAX_PASSWORDS_IN_HISTORY = 100;
+        private const string LOWERCASE_CHAR_SET = "abcdefghijkmnopqrstuvwxyz";
+        private const string UPPERCASE_CHAR_SET = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+        private const string NUMER_CHAR_SET = "23456789";
+        private const string SPECIAL_CHAR_SET = "!@#$%^&*";
 
         private readonly ICryptoService _cryptoService;
         private readonly IStateService _stateService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
         private readonly IPolicyService _policyService;
-        private PasswordGenerationOptions _defaultOptions = new PasswordGenerationOptions(true);
+        private PasswordGenerationOptions _defaultOptions = PasswordGenerationOptions.CreateDefault;
         private PasswordGenerationOptions _optionsCache;
         private List<GeneratedPasswordHistory> _history;
 
@@ -45,7 +44,7 @@ namespace Bit.Core.Services
         {
             // Overload defaults with given options
             options.Merge(_defaultOptions);
-            if (options.Type == "passphrase")
+            if (options.Type == PasswordGenerationOptions.TYPE_PASSPHRASE)
             {
                 return await GeneratePassphraseAsync(options);
             }
@@ -54,30 +53,30 @@ namespace Bit.Core.Services
             SanitizePasswordLength(options, true);
 
             var positionsBuilder = new StringBuilder();
-            if (options.Lowercase.GetValueOrDefault() && options.MinLowercase.GetValueOrDefault() > 0)
+            if (options.Lowercase.GetValueOrDefault() && options.MinLowercase > 0)
             {
-                for (int i = 0; i < options.MinLowercase.GetValueOrDefault(); i++)
+                for (int i = 0; i < options.MinLowercase; i++)
                 {
                     positionsBuilder.Append("l");
                 }
             }
-            if (options.Uppercase.GetValueOrDefault() && options.MinUppercase.GetValueOrDefault() > 0)
+            if (options.Uppercase.GetValueOrDefault() && options.MinUppercase > 0)
             {
-                for (int i = 0; i < options.MinUppercase.GetValueOrDefault(); i++)
+                for (int i = 0; i < options.MinUppercase; i++)
                 {
                     positionsBuilder.Append("u");
                 }
             }
-            if (options.Number.GetValueOrDefault() && options.MinNumber.GetValueOrDefault() > 0)
+            if (options.Number.GetValueOrDefault() && options.MinNumber > 0)
             {
-                for (int i = 0; i < options.MinNumber.GetValueOrDefault(); i++)
+                for (int i = 0; i < options.MinNumber; i++)
                 {
                     positionsBuilder.Append("n");
                 }
             }
-            if (options.Special.GetValueOrDefault() && options.MinSpecial.GetValueOrDefault() > 0)
+            if (options.Special.GetValueOrDefault() && options.MinSpecial > 0)
             {
-                for (int i = 0; i < options.MinSpecial.GetValueOrDefault(); i++)
+                for (int i = 0; i < options.MinSpecial; i++)
                 {
                     positionsBuilder.Append("s");
                 }
@@ -92,68 +91,68 @@ namespace Bit.Core.Services
                 .OrderBy(a => _cryptoFunctionService.RandomNumber()).ToArray();
 
             // Build out other character sets
-            var allCharSet = string.Empty;
-            var lowercaseCharSet = LowercaseCharSet;
+            var allCharSet = new StringBuilder();
+
+            var lowercaseCharSet = LOWERCASE_CHAR_SET;
             if (options.AllowAmbiguousChar.GetValueOrDefault())
             {
                 lowercaseCharSet = string.Concat(lowercaseCharSet, "l");
             }
             if (options.Lowercase.GetValueOrDefault())
             {
-                allCharSet = string.Concat(allCharSet, lowercaseCharSet);
+                allCharSet.Append(lowercaseCharSet);
             }
 
-            var uppercaseCharSet = UppercaseCharSet;
+            var uppercaseCharSet = UPPERCASE_CHAR_SET;
             if (options.AllowAmbiguousChar.GetValueOrDefault())
             {
                 uppercaseCharSet = string.Concat(uppercaseCharSet, "IO");
             }
             if (options.Uppercase.GetValueOrDefault())
             {
-                allCharSet = string.Concat(allCharSet, uppercaseCharSet);
+                allCharSet.Append(uppercaseCharSet);
             }
 
-            var numberCharSet = NumberCharSet;
+            var numberCharSet = NUMER_CHAR_SET;
             if (options.AllowAmbiguousChar.GetValueOrDefault())
             {
                 numberCharSet = string.Concat(numberCharSet, "01");
             }
             if (options.Number.GetValueOrDefault())
             {
-                allCharSet = string.Concat(allCharSet, numberCharSet);
+                allCharSet.Append(numberCharSet);
             }
 
-            var specialCharSet = SpecialCharSet;
             if (options.Special.GetValueOrDefault())
             {
-                allCharSet = string.Concat(allCharSet, specialCharSet);
+                allCharSet.Append(SPECIAL_CHAR_SET);
             }
 
             var password = new StringBuilder();
             for (var i = 0; i < options.Length.GetValueOrDefault(); i++)
             {
-                var positionChars = string.Empty;
+                var charSetOnCurrentPosition = string.Empty;
                 switch (positions[i])
                 {
                     case 'l':
-                        positionChars = lowercaseCharSet;
+                        charSetOnCurrentPosition = lowercaseCharSet;
                         break;
                     case 'u':
-                        positionChars = uppercaseCharSet;
+                        charSetOnCurrentPosition = uppercaseCharSet;
                         break;
                     case 'n':
-                        positionChars = numberCharSet;
+                        charSetOnCurrentPosition = numberCharSet;
                         break;
                     case 's':
-                        positionChars = specialCharSet;
+                        charSetOnCurrentPosition = SPECIAL_CHAR_SET;
                         break;
                     case 'a':
-                        positionChars = allCharSet;
+                        charSetOnCurrentPosition = allCharSet.ToString();
                         break;
                 }
 
-                var randomCharIndex = await _cryptoService.RandomNumberAsync(0, positionChars.Length - 1);
-                password.Append(positionChars[randomCharIndex]);
+                var randomCharIndex = await _cryptoService.RandomNumberAsync(0, charSetOnCurrentPosition.Length - 1);
+                password.Append(charSetOnCurrentPosition[randomCharIndex]);
             }
 
             return password.ToString();
@@ -168,7 +167,7 @@ namespace Bit.Core.Services
         public async Task<string> GeneratePassphraseAsync(PasswordGenerationOptions options)
         {
             options.Merge(_defaultOptions);
-            if (options.NumWords.GetValueOrDefault() <= 2)
+            if (options.NumWords <= 2)
             {
                 options.NumWords = _defaultOptions.NumWords;
             }
@@ -221,179 +220,10 @@ namespace Bit.Core.Services
                 }
             }
 
-            var (enforcedOptions, enforcedPolicyOptions) = await EnforcePasswordGeneratorPoliciesOnOptionsAsync(
-                _optionsCache);
-            _optionsCache = enforcedOptions;
-            return (_optionsCache, enforcedPolicyOptions);
-        }
+            var policyOptions = await _policyService.GetPasswordGeneratorPolicyOptionsAsync();
+            _optionsCache.EnforcePolicy(policyOptions);
 
-        public async Task<(PasswordGenerationOptions, PasswordGeneratorPolicyOptions)>
-            EnforcePasswordGeneratorPoliciesOnOptionsAsync(PasswordGenerationOptions options)
-        {
-            var enforcedPolicyOptions = await GetPasswordGeneratorPolicyOptions();
-            if (enforcedPolicyOptions != null)
-            {
-                if (options.Length < enforcedPolicyOptions.MinLength)
-                {
-                    options.Length = enforcedPolicyOptions.MinLength;
-                }
-
-                if (enforcedPolicyOptions.UseUppercase)
-                {
-                    options.Uppercase = true;
-                }
-
-                if (enforcedPolicyOptions.UseLowercase)
-                {
-                    options.Lowercase = true;
-                }
-
-                if (enforcedPolicyOptions.UseNumbers)
-                {
-                    options.Number = true;
-                }
-
-                if (options.MinNumber < enforcedPolicyOptions.NumberCount)
-                {
-                    options.MinNumber = enforcedPolicyOptions.NumberCount;
-                }
-
-                if (enforcedPolicyOptions.UseSpecial)
-                {
-                    options.Special = true;
-                }
-
-                if (options.MinSpecial < enforcedPolicyOptions.SpecialCount)
-                {
-                    options.MinSpecial = enforcedPolicyOptions.SpecialCount;
-                }
-
-                // Must normalize these fields because the receiving call expects all options to pass the current rules
-                if (options.MinSpecial + options.MinNumber > options.Length)
-                {
-                    options.MinSpecial = options.Length - options.MinNumber;
-                }
-
-                if (options.NumWords < enforcedPolicyOptions.MinNumberOfWords)
-                {
-                    options.NumWords = enforcedPolicyOptions.MinNumberOfWords;
-                }
-
-                if (enforcedPolicyOptions.Capitalize)
-                {
-                    options.Capitalize = true;
-                }
-
-                if (enforcedPolicyOptions.IncludeNumber)
-                {
-                    options.IncludeNumber = true;
-                }
-
-                // Force default type if password/passphrase selected via policy
-                if (enforcedPolicyOptions.DefaultType == "password" || enforcedPolicyOptions.DefaultType == "passphrase")
-                {
-                    options.Type = enforcedPolicyOptions.DefaultType;
-                }
-            }
-            else
-            {
-                // UI layer expects an instantiated object to prevent more explicit null checks
-                enforcedPolicyOptions = new PasswordGeneratorPolicyOptions();
-            }
-
-            return (options, enforcedPolicyOptions);
-        }
-
-        public async Task<PasswordGeneratorPolicyOptions> GetPasswordGeneratorPolicyOptions()
-        {
-            var policies = await _policyService.GetAll(PolicyType.PasswordGenerator);
-            PasswordGeneratorPolicyOptions enforcedOptions = null;
-
-            if (policies == null || !policies.Any())
-            {
-                return enforcedOptions;
-            }
-
-            foreach (var currentPolicy in policies)
-            {
-                if (!currentPolicy.Enabled || currentPolicy.Data == null)
-                {
-                    continue;
-                }
-
-                if (enforcedOptions == null)
-                {
-                    enforcedOptions = new PasswordGeneratorPolicyOptions();
-                }
-
-                var defaultType = GetPolicyString(currentPolicy, "defaultType");
-                if (defaultType != null && enforcedOptions.DefaultType != "password")
-                {
-                    enforcedOptions.DefaultType = defaultType;
-                }
-
-                var minLength = GetPolicyInt(currentPolicy, "minLength");
-                if (minLength != null && (int)(long)minLength > enforcedOptions.MinLength)
-                {
-                    enforcedOptions.MinLength = (int)(long)minLength;
-                }
-
-                var useUpper = GetPolicyBool(currentPolicy, "useUpper");
-                if (useUpper != null && (bool)useUpper)
-                {
-                    enforcedOptions.UseUppercase = true;
-                }
-
-                var useLower = GetPolicyBool(currentPolicy, "useLower");
-                if (useLower != null && (bool)useLower)
-                {
-                    enforcedOptions.UseLowercase = true;
-                }
-
-                var useNumbers = GetPolicyBool(currentPolicy, "useNumbers");
-                if (useNumbers != null && (bool)useNumbers)
-                {
-                    enforcedOptions.UseNumbers = true;
-                }
-
-                var minNumbers = GetPolicyInt(currentPolicy, "minNumbers");
-                if (minNumbers != null && (int)(long)minNumbers > enforcedOptions.NumberCount)
-                {
-                    enforcedOptions.NumberCount = (int)(long)minNumbers;
-                }
-
-                var useSpecial = GetPolicyBool(currentPolicy, "useSpecial");
-                if (useSpecial != null && (bool)useSpecial)
-                {
-                    enforcedOptions.UseSpecial = true;
-                }
-
-                var minSpecial = GetPolicyInt(currentPolicy, "minSpecial");
-                if (minSpecial != null && (int)(long)minSpecial > enforcedOptions.SpecialCount)
-                {
-                    enforcedOptions.SpecialCount = (int)(long)minSpecial;
-                }
-
-                var minNumberWords = GetPolicyInt(currentPolicy, "minNumberWords");
-                if (minNumberWords != null && (int)(long)minNumberWords > enforcedOptions.MinNumberOfWords)
-                {
-                    enforcedOptions.MinNumberOfWords = (int)(long)minNumberWords;
-                }
-
-                var capitalize = GetPolicyBool(currentPolicy, "capitalize");
-                if (capitalize != null && (bool)capitalize)
-                {
-                    enforcedOptions.Capitalize = true;
-                }
-
-                var includeNumber = GetPolicyBool(currentPolicy, "includeNumber");
-                if (includeNumber != null && (bool)includeNumber)
-                {
-                    enforcedOptions.IncludeNumber = true;
-                }
-            }
-
-            return enforcedOptions;
+            return (_optionsCache, policyOptions ?? new PasswordGeneratorPolicyOptions());
         }
 
         public List<string> GetPasswordStrengthUserInput(string email)
@@ -407,45 +237,6 @@ namespace Bit.Core.Services
             var data = rx.Split(email.Substring(0, atPosition.Value).Trim().ToLower());
 
             return new List<string>(data);
-        }
-
-        private int? GetPolicyInt(Policy policy, string key)
-        {
-            if (policy.Data.ContainsKey(key))
-            {
-                var value = policy.Data[key];
-                if (value != null)
-                {
-                    return (int)(long)value;
-                }
-            }
-            return null;
-        }
-
-        private bool? GetPolicyBool(Policy policy, string key)
-        {
-            if (policy.Data.ContainsKey(key))
-            {
-                var value = policy.Data[key];
-                if (value != null)
-                {
-                    return (bool)value;
-                }
-            }
-            return null;
-        }
-
-        private string GetPolicyString(Policy policy, string key)
-        {
-            if (policy.Data.ContainsKey(key))
-            {
-                var value = policy.Data[key];
-                if (value != null)
-                {
-                    return (string)value;
-                }
-            }
-            return null;
         }
 
         public async Task SaveOptionsAsync(PasswordGenerationOptions options)
@@ -485,7 +276,7 @@ namespace Bit.Core.Services
             token.ThrowIfCancellationRequested();
             currentHistory.Insert(0, new GeneratedPasswordHistory { Password = password, Date = DateTime.UtcNow });
             // Remove old items.
-            if (currentHistory.Count > MaxPasswordsInHistory)
+            if (currentHistory.Count > MAX_PASSWORDS_IN_HISTORY)
             {
                 currentHistory.RemoveAt(currentHistory.Count - 1);
             }

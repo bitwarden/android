@@ -36,6 +36,7 @@ struct CipherItemView: View {
                     .truncationMode(.tail)
                     .foregroundColor(Color.ui.darkTextMuted)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .privacySensitive()
             }
         }
         .padding()
