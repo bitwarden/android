@@ -1562,6 +1562,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy application.
+        /// </summary>
+        public static string CopyApplication {
+            get {
+                return ResourceManager.GetString("CopyApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy link.
         /// </summary>
         public static string CopyLink {

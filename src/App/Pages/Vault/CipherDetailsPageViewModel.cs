@@ -648,6 +648,11 @@ namespace Bit.App.Pages
                 text = Cipher.Card.Code;
                 name = AppResources.SecurityCode;
             }
+            else if (id == "Fido2KeyApplication")
+            {
+                text = Cipher.Fido2Key?.LaunchUri;
+                name = AppResources.Application;
+            }
 
             if (text != null)
             {

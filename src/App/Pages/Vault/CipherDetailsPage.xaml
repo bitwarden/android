@@ -532,7 +532,7 @@
                             <Grid
                                 StyleClass="box-row"
                                 RowDefinitions="Auto,*,Auto"
-                                ColumnDefinitions="*,Auto">
+                                ColumnDefinitions="*,Auto,Auto">
                                 <Label
                                     Text="{u:I18n Application}"
                                     StyleClass="box-label" />
@@ -545,18 +545,26 @@
                                     Text="{Binding Source={x:Static core:BitwardenIcons.ShareSquare}}"
                                     Command="{Binding LaunchUriCommand}"
                                     CommandParameter="{Binding Cipher.Fido2Key}"
-                                    Grid.Row="0"
                                     Grid.Column="1"
                                     Grid.RowSpan="2"
                                     VerticalOptions="End"
                                     IsVisible="{Binding Cipher.Fido2Key.CanLaunch, Mode=OneWay}"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n Launch}" />
+                                <controls:IconButton
+                                    StyleClass="box-row-button, box-row-button-platform"
+                                    Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                                    Command="{Binding CopyCommand}"
+                                    CommandParameter="Fido2KeyApplication"
+                                    Grid.Column="2"
+                                    Grid.RowSpan="2"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n CopyApplication}" />
                                 <BoxView
                                     StyleClass="box-row-separator"
                                     Margin="0,3,0,0"
                                     Grid.Row="2"
-                                    Grid.ColumnSpan="2" />
+                                    Grid.ColumnSpan="3" />
                             </Grid>
                         </StackLayout>
                     </StackLayout>

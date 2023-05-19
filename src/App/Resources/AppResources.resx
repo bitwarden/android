@@ -2653,4 +2653,7 @@ Do you want to switch to this account?</value>
   <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
     <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
   </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Copy application</value>
+  </data>
 </root>
