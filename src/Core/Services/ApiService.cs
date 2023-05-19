@@ -585,6 +585,16 @@ namespace Bit.Core.Services
 
         #endregion
 
+        #region Configs
+
+        public async Task<ConfigResponse> GetConfigsAsync()
+        {
+            var accessToken = await _tokenService.GetTokenAsync();
+            return await SendAsync<object, ConfigResponse>(HttpMethod.Get, "/config/", null, !string.IsNullOrEmpty(accessToken), true);
+        }
+
+        #endregion
+
         #region Helpers
 
         public async Task<string> GetActiveBearerTokenAsync()

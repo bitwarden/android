@@ -118,14 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>बारे में</value>
+    <value>हमारे बारे में</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>जोड़ें</value>
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>नया फोल्डर जोड़ें</value>
+    <value>फोल्डर जोड़ें</value>
   </data>
   <data name="AddItem" xml:space="preserve">
     <value>चीज़ जोड़ें</value>
@@ -136,11 +136,11 @@
     <comment>Alert title when something goes wrong.</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>वापस जाएं</value>
+    <value>पीछे जाएं</value>
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>bitwarden</value>
+    <value>बिटवार्डन</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -156,105 +156,105 @@
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>उपयोगकर्ता नाम की प्रतिलिपि बनाएँ</value>
+    <value>यूज़रनाम कॉपी करें</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
-    <value>क्रेडिट्स</value>
+    <value>क्रेडिट</value>
     <comment>Title for page that we use to give credit to resources that we use.</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>मिटाए</value>
+    <value>मिटाएं</value>
     <comment>Delete an entity (verb).</comment>
   </data>
   <data name="Deleting" xml:space="preserve">
-    <value>मिटाया जा रहा हैं</value>
+    <value>मिटाया जा रहा हैं...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>क्या आप वास्तव में हटाना चाहते हैं? इसे नष्ट नहीं किया जा सकता है</value>
+    <value>पक्का मिटाएं? इसे अंडू नहीं किया जा सकता।</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>संशोधन करें</value>
+    <value>बदलाव करें</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>फ़ोल्डर संपादित करें</value>
+    <value>फोल्डर बदलाव करें</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>ईमेल</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>ई-मेल पता</value>
+    <value>ईमेल पता</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
     <value>हमें ईमेल करें</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>सहायता प्राप्त करने या प्रतिक्रिया छोड़ने के लिए हमें ईमेल करें।</value>
+    <value>मदद लेने या फीडबैक देने के लिए हमें ईमेल करें।</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>अपना पिन डालें</value>
+    <value>अपना पिन कोड डालें।</value>
   </data>
   <data name="Favorites" xml:space="preserve">
-    <value>पसंदीदा</value>
+    <value>मनपसंद</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>बग रिपोर्ट दर्ज करें</value>
+    <value>बग रिपोर्ट भेजें</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>हमारे GitHub भंडार में एक मुद्दे को बताएं।</value>
+    <value>हमारे गिटहब रिपॉज़िटरी में समस्या बताएं।</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>फिंगरप्रिंट से सत्यापन करें</value>
+    <value>फिंगरप्रिंट से सत्यापन करें।</value>
   </data>
   <data name="Folder" xml:space="preserve">
-    <value>फ़ोल्डर</value>
+    <value>फोल्डर</value>
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>नया फ़ोल्डर बनाया गया</value>
+    <value>नया फोल्डर बनाया गया।</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
-    <value>फ़ोल्डर को हटाया</value>
+    <value>फोल्डर मिटाया गया।</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>कोई फ़ोल्डर नहीं है</value>
+    <value>कोई फोल्डर नहीं है</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>फ़ोल्डर्स</value>
+    <value>फोल्डर</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>फ़ोल्डर अद्यतन हुआ</value>
+    <value>फोल्डर सेव हुआ</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>वेबसाइट पर जाएँ</value>
+    <value>वेबसाइट पर जाएं</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
-    <value>सहायता और सुझाव</value>
+    <value>मदद और फीडबैक</value>
   </data>
   <data name="Hide" xml:space="preserve">
-    <value>छुपायें</value>
+    <value>छुपाएं</value>
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>जारी रखने से पहले कृपया इंटरनेट से जुड़े।</value>
+    <value>जारी रखने से पहले इंटरनेट से जुड़ें।</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>इंटरनेट से जुड़िए।</value>
+    <value>इंटरनेट कनेक्शन चाहिए</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>मास्टर पासवर्ड गलत है। फिर कोशिश करें।</value>
+    <value>मुख्य पासवर्ड गलत है। वापस कोशिश करें।</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
-    <value>पिन गलत है। फिर कोशिश करें।</value>
+    <value>पिन गलत है। वापस कोशिश करें।</value>
   </data>
   <data name="Launch" xml:space="preserve">
     <value>खोलें</value>
@@ -269,38 +269,38 @@
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>लॉग आउट</value>
+    <value>लॉग आउट करें</value>
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>क्या आप वाकई लॉग आउट करना चाहते हैं?</value>
+    <value>पक्का लॉग आउट करें?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
     <value>खाता हटाएं</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>क्या आप वाकई यह खाता हटाना चाहते हैं?</value>
+    <value>पक्का खाता हटाएं?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
-    <value>Account already added</value>
+    <value>खाता पहले से जोड़ा गया</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value>Would you like to switch to it now?</value>
+    <value>अभी खाता इस्तेमाल करें?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
-    <value>मास्टर / मुख्य पासवर्ड</value>
+    <value>मुख्य पासवर्ड</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
-    <value>अतिरिक्त</value>
+    <value>और</value>
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>मेरी तिजोरी</value>
+    <value>मेरा तिजोरी</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authenticator</value>
+    <value>सत्यापन करनेवाला</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -311,11 +311,11 @@
     <value>नहीं</value>
   </data>
   <data name="Notes" xml:space="preserve">
-    <value>टिप्पणियाँ</value>
+    <value>नोट</value>
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>ठीक</value>
+    <value>ठीक है</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
@@ -323,69 +323,69 @@
     <comment>Label for a password.</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>सहेजें</value>
+    <value>सेव करें</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>ले जाएं</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>सेव हो रहा है...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>सेटिंग्स</value>
+    <value>सेटिंग</value>
     <comment>The title for the settings page.</comment>
   </data>
   <data name="Show" xml:space="preserve">
-    <value>दिखाएँ</value>
+    <value>दिखाएं</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>आइटम हटा दिया गया है।</value>
+    <value>चीज़ मिटाया गया।</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>जमा करें</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>संकालन</value>
+    <value>सिंक</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>धन्यवाद</value>
+    <value>शुक्रिया</value>
   </data>
   <data name="Tools" xml:space="preserve">
-    <value>उपकरण</value>
+    <value>औज़ार</value>
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
-    <value>URI</value>
+    <value>यूआरआई</value>
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>अंगुलिछाप से खोलें</value>
+    <value>फिंगरप्रिंट से खोलें</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>उपयोगकर्ता नाम:</value>
+    <value>यूज़रनाम</value>
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>{0} की आश्यकता है।</value>
+    <value>{0} फील्ड चाहिए।</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} कॉपी कर लिया गया है।</value>
+    <value>{0} कॉपी किया</value>
     <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>अंगुलिछाप दें</value>
+    <value>फिंगरप्रिंट सत्यापित करें</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>मास्टर पासवर्ड बताएं।</value>
+    <value>मुख्य पासवर्ड सत्यापित करें</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
-    <value>पिन बताएं।</value>
+    <value>पिन सत्यापित करें।</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>संस्करण</value>
@@ -394,29 +394,29 @@
     <value>देखें</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>हमारी वेबसाइट पर जाएँ</value>
+    <value>हमारी वेबसाइट पर जाएं</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Visit our website to get help, news, email us, and/or learn more about how to use bitwarden.</value>
+    <value>मदद लेने, खबर लेने, हमें ईमेल करने, और/या बिटवार्डन के इस्तेमाल के बारे में ज़्यादा जानने के लिए हमारी वेबसाइट पर जाएं।</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>वेबसाइट</value>
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>हाँ</value>
+    <value>हां</value>
   </data>
   <data name="Account" xml:space="preserve">
     <value>खाता</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>अपना नया खाता बनाया गया है! अब आप लॉग ऑन कर सकते हैं।</value>
+    <value>आपका नया खाता बनाया गया! अब आप लॉग इन कर सकते हैं।</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>आइटम जोड़ें</value>
+    <value>चीज़ जोड़ें</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
-    <value>ऐप का विस्तारण</value>
+    <value>ऐप एक्सटेंशन</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
     <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
@@ -776,10 +776,10 @@
     <value>सक्षम</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Off</value>
+    <value>बंद</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>चालू</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>स्थिति</value>
@@ -1096,16 +1096,16 @@ Scanning will happen automatically.</value>
     <value>मध्य नाम</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Mr</value>
+    <value>श्री</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Mrs</value>
+    <value>श्रीमती</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Ms</value>
+    <value>श्रीमती</value>
   </data>
   <data name="Mx" xml:space="preserve">
-    <value>Mx</value>
+    <value>मैक्स</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>नवंबर</value>
@@ -2274,7 +2274,7 @@ Scanning will happen automatically.</value>
     <value>Vault: {0}</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>सब</value>
   </data>
   <data name="Totp" xml:space="preserve">
     <value>TOTP</value>
@@ -2365,13 +2365,13 @@ select Add TOTP to store the key safely</value>
     <value>Login denied</value>
   </data>
   <data name="ApproveLoginRequests" xml:space="preserve">
-    <value>Approve login requests</value>
+    <value>लॉगइन मांग माने</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
     <value>Use this device to approve login requests made from other devices.</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
-    <value>Allow notifications</value>
+    <value>सूचना देने दें</value>
   </data>
   <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
     <value>Receive push notifications for new login requests</value>
@@ -2522,99 +2522,99 @@ Do you want to switch to this account?</value>
     <value>Resend notification</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>दूसरा ऑप्शन चाहिए?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
-    <value>View all log in options</value>
+    <value>ऑप्शन में सारे लॉग देखें</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
-    <value>This request is no longer valid</value>
+    <value>ये मांग अब मान्य नहीं है</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Pending login requests</value>
+    <value>लंबित लॉगइन मांगे</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
-    <value>Decline all requests</value>
+    <value>सारे मांग नकारे</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>Are you sure you want to decline all pending login requests?</value>
+    <value>सारे लंबित लॉगइन मांग पक्का नकारें?</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
-    <value>Requests declined</value>
+    <value>मांग नकारे गए</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>No pending requests</value>  
+    <value>कोई लंबित मांग नहीं</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>स्कैनर इस्तेमाल करने के लिए कैमरा अनुमति दें</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>भाषा</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
-    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+    <value>भाषा {0} में बदली गई। बदलाव देखने के लिए ऐप बंद करके वापस खोलें।</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
-    <value>Language change requires app restart</value>
+    <value>भाषा बदलाव के लिए ऐप बंद करके खोलना पड़ेगा</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>डिफॉल्ट (सिस्टम)</value>
   </data>
   <data name="Important" xml:space="preserve">
-    <value>Important</value>
+    <value>ज़रूरी</value>
   </data>
   <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
-    <value>Your master password cannot be recovered if you forget it! {0} characters minimum.</value>
+    <value>आप अपना मुख्य पासवर्ड भूलने के बाद वापस नहीं ले सकते। {0} अक्षर कम-से-कम।</value>
   </data>
   <data name="WeakMasterPassword" xml:space="preserve">
-    <value>Weak Master Password</value>
+    <value>कमज़ोर मुख्य पासवर्ड</value>
   </data>
   <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
-    <value>Weak password identified. Use a strong password to protect your account. Are you sure you want to use a weak password?</value>
+    <value>पासवर्ड कमज़ोर है। अपना खाता महफूज़ रखने के लिए एक ताकतवर पासवर्ड इस्तेमाल करें। कमज़ोर पासवर्ड पक्का इस्तेमाल करें?</value>
   </data>
   <data name="Weak" xml:space="preserve">
-    <value>Weak</value>
+    <value>कमज़ोर</value>
   </data>
   <data name="Good" xml:space="preserve">
-    <value>Good</value>
+    <value>अच्छा</value>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Strong</value>
+    <value>ताकतवर</value>
   </data>
   <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
-    <value>Check known data breaches for this password</value>
+    <value>पुराने डाटा लीक में इस पासवर्ड को खोजें</value>
   </data>
   <data name="ExposedMasterPassword" xml:space="preserve">
-    <value>Exposed Master Password</value>
+    <value>मुख्य पासवर्ड लीक हुआ था</value>
   </data>
   <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?</value>
+    <value>पासवर्ड एक डाटा लीक में मिला। अपना खाता महफूज़ रखने के लिए एक खास पासवर्ड इस्तेमाल करें। लीक हुआ पासवर्ड इस्तेमाल करें?</value>
   </data>
   <data name="WeakAndExposedMasterPassword" xml:space="preserve">
-    <value>Weak and Exposed Master Password</value>
+    <value>कमज़ोर और लीक हुआ मुख्य पासवर्ड</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+    <value>पासवर्ड कमज़ोर है और एक डाटा लीक में मिला। अपना खाता महफूज़ रखने के लिए एक ताकतवर और खास पासवर्ड इस्तेमाल करें। ये पासवर्ड पक्का इस्तेमाल करें?</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
-    <value>Organization SSO identifier required.</value>
+    <value>संगठन एसएसओ पहचान चाहिए।</value>
   </data>
   <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
-    <value>Add the key to an existing or new item</value>
+    <value>चाबी एक मौजूदा या नए चीज़ में जोड़ें</value>
   </data>
   <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
-    <value>There are no items in your vault that match "{0}"</value>
+    <value>आपके तिजोरी में ऐसी कोई भी चीज़ नहीं है जो "{0}" से मेल खाती है</value>
   </data>
   <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
-    <value>Search for an item or add a new item</value>
+    <value>चीज़ खोजें या नया चीज़ जोड़ें</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
-    <value>There are no items that match the search</value>
+    <value>कोई भी चीज़ खोज शब्द से मेल नहीं खाता</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
-    <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>आपका मुख्य पासवर्ड आपके संगठन के एक या उससे ज़्यादा नीति को नहीं मानता। तिजोरी एक्सेस करने के लिए आपको अपना मुख्य पासवर्ड अभी बदलना होगा। ये करने से आप अपने चालू सत्र से लॉग आउट हो जाएंगे, जिसके वजह से आपको वापस लॉग इन करना पड़ेगा। दूसरे डिवाइसों पर चालू सत्र एक घंटे तक सक्रिय रह सकते हैं।</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
-    <value>Current master password</value>
+    <value>चालू मुख्य पासवर्ड</value>
   </data>
 </root>
