@@ -171,7 +171,7 @@ namespace Bit.Core.Services
             {
                 options.NumWords = _defaultOptions.NumWords;
             }
-            if (options.WordSeparator == null || options.WordSeparator.Length == 0 || options.WordSeparator.Length > 1)
+            if (options.WordSeparator == null || options.WordSeparator.Length > 1)
             {
                 options.WordSeparator = " ";
             }
