@@ -346,7 +346,7 @@
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
-    <value>Submit</value>
+    <value>জমা দিন</value>
   </data>
   <data name="Sync" xml:space="preserve">
     <value>Sync</value>
@@ -356,7 +356,7 @@
     <value>ধন্যবাদ</value>
   </data>
   <data name="Tools" xml:space="preserve">
-    <value>Tools</value>
+    <value>টুলস</value>
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
@@ -379,7 +379,7 @@
     <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Verify fingerprint</value>
+    <value>আঙ্গুলের ছাপ যাচাই করুন</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
     <value>প্রধান পাসওয়ার্ড যাচাইকরণ</value>
@@ -397,7 +397,7 @@
     <value>আমাদের ওয়েবসাইটে ঢু মেরে আসুন</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Visit our website to get help, news, email us, and/or learn more about how to use Bitwarden.</value>
+    <value>সাহায্য পেতে, খবর পেতে, আমাদের ইমেল করতে এবং/অথবা বিটওয়ার্ডেন কীভাবে ব্যবহার করবেন সে সম্পর্কে আরও জানতে আমাদের ওয়েবসাইট দেখুন।</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>ওয়েবসাইট</value>
@@ -413,7 +413,7 @@
     <value>আপনার নতুন অ্যাকাউন্ট তৈরি করা হয়েছে! আপনি এখন লগইন করতে পারবেন।</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>একটি আইটেম যোগ করুন</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>App extension</value>
@@ -440,13 +440,13 @@
     <value>Bitwarden Auto-fill Service</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the Bitwarden accessibility service to auto-fill your logins.</value>
+    <value>আপনার লগইনগুলি স্বয়ংক্রিয়ভাবে পূরণ করতে বিটওয়ার্ডেন অ্যাক্সেসিবিলিটি পরিষেবা ব্যবহার করুন৷</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>ইমেইল পরিবর্তন করুন</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>আপনি bitwarden.com ওয়েব ভল্টে আপনার ইমেল ঠিকানা পরিবর্তন করতে পারেন। আপনি কি এখনই ওয়েবসাইট ভিজিট করতে চান?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>প্রধান পাসওয়ার্ড পরিবর্তন</value>
@@ -511,7 +511,7 @@
     <value>প্রিয়</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>Fingerprint</value>
+    <value>আঙুলের ছাপ</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
     <value>পাসওয়ার্ড তৈরি করুন</value>
@@ -584,7 +584,7 @@
     <value>যদি আপনি আপনার পাসওয়ার্ড ভুলে যান তাহলে একটি প্রধান পাসওয়ার্ডের ইঙ্গিতটি আপনাকে মনে করাতে সাহায্য করতে পারে।</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>মাস্টার পাসওয়ার্ড কমপক্ষে {0} অক্ষরের হতে হবে।</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>সর্বনিম্ন সংখ্যা</value>
@@ -595,7 +595,7 @@
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
-    <value>More settings</value>
+    <value>আরও সেটিংস</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
     <value>You must log into the main Bitwarden app before you can use the extension.</value>
@@ -684,7 +684,7 @@
     <value>Item saved</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Submitting...</value>
+    <value>জমা দেওয়া হচ্ছে...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
@@ -717,7 +717,7 @@
     <value>Unlock with PIN code</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>Validating</value>
+    <value>কার্যকর করা হচ্ছে</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
@@ -876,7 +876,7 @@
     <value>Unable to download file.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of file.</value>
+    <value>আপনার ডিভাইস এই ধরনের ফাইল খুলতে পারে না।</value>
   </data>
   <data name="Downloading" xml:space="preserve">
     <value>ডাউনলোড হচ্ছে...</value>
