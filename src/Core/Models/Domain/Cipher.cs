@@ -35,7 +35,6 @@ namespace Bit.Core.Models.Domain
             CollectionIds = obj.CollectionIds != null ? new HashSet<string>(obj.CollectionIds) : null;
             LocalData = localData;
             Reprompt = obj.Reprompt;
-            ForceKeyRotation = obj.ForceKeyRotation;
 
             if (obj.Key != null)
             {
@@ -89,7 +88,6 @@ namespace Bit.Core.Models.Domain
         public DateTime? DeletedDate { get; set; }
         public CipherRepromptType Reprompt { get; set; }
         public EncString Key { get; set; }
-        public bool ForceKeyRotation { get; set; }
 
         public async Task<CipherView> DecryptAsync()
         {
@@ -195,8 +193,7 @@ namespace Bit.Core.Models.Domain
                 CollectionIds = CollectionIds.ToList(),
                 DeletedDate = DeletedDate,
                 Reprompt = Reprompt,
-                Key = Key?.EncryptedString,
-                ForceKeyRotation = ForceKeyRotation
+                Key = Key?.EncryptedString
             };
             BuildDataModel(this, c, new HashSet<string>
             {

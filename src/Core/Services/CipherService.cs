@@ -217,7 +217,7 @@ namespace Bit.Core.Services
                 return key;
             }
 
-            if (cipherView.Key != null && !cipherView.ForceKeyRotation)
+            if (cipherView.Key != null)
             {
                 cipher.Key = await _cryptoService.EncryptAsync(cipherView.Key.Key, key);
                 return cipherView.Key;
