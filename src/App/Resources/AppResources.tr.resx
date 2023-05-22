@@ -2494,8 +2494,8 @@ Bu hesaba geçmek ister misiniz?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Ana parola ipucunu al</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>{0} olarak giriş yapılıyor</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>{1} üzerinde {0} olarak giriş yapılıyor</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Siz değil misiniz?</value>
@@ -2607,6 +2607,21 @@ Bu hesaba geçmek ister misiniz?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Aramayla eşleşen kayıt yok</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>ABD</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>AB</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Barındırılan</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Veri bölgesi</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Bölge</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Ana parolanız kuruluş ilkelerinizi karşılamıyor. Kasanıza erişmek için ana parolanızı güncellemelisiniz. Devam ettiğinizde oturumunuz kapanacak ve yeniden oturum açmanız gerekecektir. Diğer cihazlardaki aktif oturumlar bir saate kadar aktif kalabilir.</value>

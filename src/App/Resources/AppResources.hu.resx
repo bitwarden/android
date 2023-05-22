@@ -2494,8 +2494,8 @@ Szeretnénk átváltani erre a fiókra?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Mesterjelszó emlékeztető kérése</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Bejelentkezve mint {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Bejelentkezve mint {0} :: {1}.</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Ez tévedés?</value>
@@ -2607,6 +2607,21 @@ Szeretnénk átváltani erre a fiókra?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Nincsenek a keresésnek megfelelő elemek.</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Saját kiszolgáló</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Adatrégió</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Régió</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>A mesterjelszó nem felel meg egy vagy több szervezeti szabályzatnak. A széf eléréséhez frissíteni kell a meszerjelszót. A továbblépés kijelentkeztet az aktuális munkamenetből és újra be kell jelentkezni. A többi eszközön lévő aktív munkamenetek akár egy óráig is aktívak maradhatnak.</value>

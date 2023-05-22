@@ -2495,8 +2495,8 @@ Chcete prepnúť na toto konto?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Získať nápoveď pre hlavné heslo</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Prihlasujete sa ako {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Prihlasujete sa ako {0} na {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Nie ste to vy?</value>
@@ -2608,6 +2608,21 @@ Chcete prepnúť na toto konto?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Vyhľadávaniu nezodpovedajú žiadne položky</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>USA</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EÚ</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Vlastný hosting</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Dátová oblasť</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Región</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Vaše hlavné heslo nespĺňa jednu alebo viacero podmienok vašej organizácie. Ak chcete získať prístup k trezoru, musíte teraz aktualizovať svoje hlavné heslo. Pokračovaním sa odhlásite z aktuálnej relácie a budete sa musieť znova prihlásiť. Aktívne relácie na iných zariadeniach môžu zostať aktívne až jednu hodinu.</value>

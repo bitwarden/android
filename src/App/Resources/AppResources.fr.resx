@@ -2496,8 +2496,8 @@ Voulez-vous basculer vers ce compte ?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Obtenir l'indice du mot de passe principal</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Connecté en tant que {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Connexion en tant que {0} sur {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Ce n'est pas vous ?</value>
@@ -2609,6 +2609,21 @@ Voulez-vous basculer vers ce compte ?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Il n'y a pas d'éléments qui correspondent à la recherche</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Auto-hébergé</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Région des données</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Région</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Votre mot de passe principal ne répond pas aux exigences de politique de sécurité de cette organisation. Pour accéder au coffre, vous devez mettre à jour votre mot de passe principal dès maintenant. En poursuivant, vous serez déconnecté de votre session actuelle et vous devrez vous reconnecter. Les sessions actives sur d'autres appareils peuver rester actives pendant encore une heure.</value>

@@ -2495,8 +2495,8 @@ Vil du skifte til denne konto?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Få hovedadgangskodetip</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logger ind som {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Logger ind som {0} på {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Ikke dig?</value>
@@ -2608,6 +2608,21 @@ Vil du skifte til denne konto?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Ingen emner matcher søgningen</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>USA</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Selv-hostet</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Dataregion</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Din hovedadgangskode overholder ikke én eller flere organisationspolitikker. For at få adgang til boksen skal hovedadgangskode opdateres nu. Fortsættes, logges du ud af den nuværende session og vil skulle logger ind igen. Aktive sessioner på andre enheder kan forblive aktive i op til én time.</value>
