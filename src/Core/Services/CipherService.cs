@@ -228,7 +228,6 @@ namespace Bit.Core.Services
             var cfs = ServiceContainer.Resolve<ICryptoFunctionService>();
             var newKey = new SymmetricCryptoKey(await cfs.RandomBytesAsync(Core.Constants.CipherKeyRandomBytesLength));
             cipher.Key = await _cryptoService.EncryptAsync(newKey.Key, key);
-            cipher.ForceKeyRotation = false;
 
             return newKey;
 #else
