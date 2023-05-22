@@ -425,7 +425,7 @@
     <value>Sjølvutfyllingsteneste</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Avoid ambiguous characters</value>
+    <value>Unngå forvekslingsbare teikn</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Bitwarden App-utviding</value>
@@ -584,7 +584,7 @@
     <value>Eit hovudpassordvink kan hjelpa deg med å hugsa passordet ditt om du gløymer det.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Hovudpassordet ditt må vera minst {0} teikn langt.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Min. tal på nummer</value>
@@ -660,7 +660,7 @@
     <value>Lag om passord</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Re-type master password</value>
+    <value>Skriv inn hovudpassordet på nytt</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Leita i kvelvet</value>
@@ -684,7 +684,7 @@
     <value>Oppføringa er retta.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Submitting...</value>
+    <value>Sender inn...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
@@ -811,7 +811,7 @@
     <value>Lær om samskipnader</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Cannot open the app "{0}".</value>
+    <value>Kan ikkje opne appen "{0}".</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
@@ -834,7 +834,7 @@
     <value>This account has two-step login set up, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>Recovery code</value>
+    <value>Gjenopprettingskode</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
@@ -842,11 +842,11 @@
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Send verification code email again</value>
+    <value>Send e-post om stadfestingskode på nytt</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Two-step login options</value>
+    <value>Alternativ for totrinnsinnlogging</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
     <value>Use another two-step login method</value>
@@ -863,17 +863,17 @@
     <value>To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device's USB port, then touch its button.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey security key</value>
+    <value>YubiKey sikkerheitsnøkkel</value>
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Add new attachment</value>
+    <value>Legg til nytt vedlegg</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Attachments</value>
+    <value>Vedlegg</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Unable to download file.</value>
+    <value>Kunne ikkje laste ned fila.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
     <value>Eininga di kan ikkje opna denne filtypen.</value>
@@ -900,8 +900,8 @@
     <value>Kan ikkje lesa autentiseringsnykel.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Point your camera at the QR Code.
-Scanning will happen automatically.</value>
+    <value>Peik kameraet ditt mot QR-koden.
+Skanning skjer automatisk.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Skann QR-kode</value>
@@ -919,7 +919,7 @@ Scanning will happen automatically.</value>
     <value>If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
-    <value>Copy TOTP automatically</value>
+    <value>Kopier TOTP-en automatisk</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Ei Premium-tinging er påkravd for å bruka denne funksjonen.</value>
@@ -974,7 +974,7 @@ Scanning will happen automatically.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Identity server URL</value>
+    <value>URL for identitetstenar</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
@@ -993,7 +993,7 @@ Scanning will happen automatically.</value>
     <value>Trykk på denne meldinga for å sjå oppføringar i kvelvet ditt.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>Custom fields</value>
+    <value>Eigendefinerte felt</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
     <value>Skriv av nummer</value>
@@ -1056,10 +1056,10 @@ Scanning will happen automatically.</value>
     <value>Dr.</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration month</value>
+    <value>Utlaupsmånad</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration year</value>
+    <value>Utlaupsår</value>
   </data>
   <data name="February" xml:space="preserve">
     <value>Februar</value>
@@ -1083,7 +1083,7 @@ Scanning will happen automatically.</value>
     <value>Fullt namn</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License number</value>
+    <value>Førarkortnummer</value>
   </data>
   <data name="March" xml:space="preserve">
     <value>Mars</value>
@@ -1137,10 +1137,10 @@ Scanning will happen automatically.</value>
     <value>Adresse</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Utlaup</value>
   </data>
   <data name="ShowWebsiteIcons" xml:space="preserve">
-    <value>Show website icons</value>
+    <value>Vis nettstadikon</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
     <value>Show a recognizable image next to each login.</value>
@@ -1149,16 +1149,16 @@ Scanning will happen automatically.</value>
     <value>Icons server URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with Bitwarden</value>
+    <value>Auto-utfyll med Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Kvelvet er låst</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Gå til kvelvet mitt</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>Samlingar</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>Det er ingen oppføringar i denne samlinga.</value>
@@ -1186,13 +1186,13 @@ Scanning will happen automatically.</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Bruk Face ID for å stadfeste.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Bruk Face ID til å låse opp</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Stadfest Face ID</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
@@ -1752,11 +1752,11 @@ Scanning will happen automatically.</value>
     <value>Vil du verkeleg flytta denne til papirkorga?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock disabled pending verification of master password.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Allow sync on refresh</value>
@@ -2141,7 +2141,13 @@ Scanning will happen automatically.</value>
     <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s)</value>
+    <value>Your organization policies have set your maximum allowed vault timeout to {0} hour(s) and {1} minute(s).</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s). Your vault timeout action is set to {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Your organization policies have set your vault timeout action to {0}.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Avbrotet frå kvelvet ditt skrid over det avgrensingane fastsette av samskipnaden din.</value>
@@ -2490,8 +2496,8 @@ Do you want to switch to this account?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Get master password hint</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Loggar inn som {0} på {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Not you?</value>
@@ -2603,5 +2609,26 @@ Do you want to switch to this account?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>There are no items that match the search</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Self-hosted</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Dataregion</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Current master password</value>
   </data>
 </root>

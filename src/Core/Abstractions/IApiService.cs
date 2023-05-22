@@ -27,7 +27,7 @@ namespace Bit.Core.Abstractions
         Task<ProfileResponse> GetProfileAsync();
         Task<SyncResponse> GetSyncAsync();
         Task PostAccountKeysAsync(KeysRequest request);
-        Task PostAccountVerifyPasswordAsync(PasswordVerificationRequest request);
+        Task<VerifyMasterPasswordResponse> PostAccountVerifyPasswordAsync(PasswordVerificationRequest request);
         Task PostAccountRequestOTP();
         Task PostAccountVerifyOTPAsync(VerifyOTPRequest request);
         Task<CipherResponse> PostCipherAsync(CipherRequest request);
@@ -62,6 +62,7 @@ namespace Bit.Core.Abstractions
         Task PutDeviceTokenAsync(string identifier, DeviceTokenRequest request);
         Task PostEventsCollectAsync(IEnumerable<EventRequest> request);
         Task PutUpdateTempPasswordAsync(UpdateTempPasswordRequest request);
+        Task PostPasswordAsync(PasswordRequest request);
         Task DeleteAccountAsync(DeleteAccountRequest request);
         Task<OrganizationKeysResponse> GetOrganizationKeysAsync(string id);
         Task<OrganizationAutoEnrollStatusResponse> GetOrganizationAutoEnrollStatusAsync(string identifier);
@@ -91,5 +92,6 @@ namespace Bit.Core.Abstractions
         Task<string> GetUsernameFromAsync(ForwardedEmailServiceType service, UsernameGeneratorConfig config);
         Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier);
         Task<OrganizationDomainSsoDetailsResponse> GetOrgDomainSsoDetailsAsync(string email);
+        Task<ConfigResponse> GetConfigsAsync();
     }
 }

@@ -25,10 +25,6 @@
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n Account}" />
         <ToolbarItem x:Name="_closeButton" Text="{u:I18n Close}" Command="{Binding CloseCommand}" Order="Primary" Priority="-1"/>
-        <ToolbarItem
-            Icon="cog_environment.png" Clicked="Environment_Clicked" Order="Primary"
-            AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Options}" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
@@ -66,7 +62,27 @@
                     </Entry>
                     <StackLayout
                         Orientation="Horizontal"
-                        Margin="0, 16, 0 ,0">
+                        Margin="0, 6, 0 ,0">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding ShowEnvironmentPickerCommand}" />
+                        </StackLayout.GestureRecognizers>
+                        <Label
+                            Text="{Binding RegionText}"
+                            FontSize="13"
+                            TextColor="{DynamicResource MutedColor}"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"/>
+                        <controls:IconLabel
+                            Text="{Binding SelectedEnvironmentName}"
+                            FontSize="13"
+                            TextColor="{DynamicResource PrimaryColor}"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"/>
+                    </StackLayout>
+                    <StackLayout
+                        Orientation="Horizontal"
+                        Margin="0, 20, 0 ,0">
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer
                                 Command="{Binding RememberEmailCommand}" />

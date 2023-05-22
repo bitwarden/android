@@ -1752,11 +1752,11 @@
     <value>Стварно послати у отпад?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Откривена је биометријска промена, пријавите се помоћу главне лозинке да бисте је поново омогућили.</value>
-  </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
     <value>Биометријско откључавање је онемогућено до верификације главне лозинке.</value>
+  </data>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Биометријско откључавање аутоматског попуњавања за овај налог је онемогућено до верификације главне лозинке.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Омогући синхронизацију при освежавању</value>
@@ -2144,6 +2144,12 @@
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Полиса ваше организације утиче на време истека сефа. Максимално дозвољено време истека је {0} сат(и) и {1} minut(а)</value>
   </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Смернице ваше организације утичу на временско ограничење сефа. Максимално дозвољено ограничење сефа је {0} сат(и) и {1} минут(а). Ваша радња временског ограничења сефа је подешена на {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Смернице ваше организације су поставиле вашу радњу временског ограничења сефа на {0}.</value>
+  </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Време истека вашег сефа је премашило дозвољена ограничења од стране ваше организације.</value>
   </data>
@@ -2491,8 +2497,8 @@
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Добити савет за Главну Лозинку</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Пријављивање као {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Пријављено као {0} на {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Не ти?</value>
@@ -2555,40 +2561,40 @@
     <value>Подразумевано (системско)</value>
   </data>
   <data name="Important" xml:space="preserve">
-    <value>Important</value>
+    <value>Важно</value>
   </data>
   <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
-    <value>Your master password cannot be recovered if you forget it! {0} characters minimum.</value>
+    <value>Ваша главна лозинка се не може повратити ако је заборавите! Минимално {0} слова.</value>
   </data>
   <data name="WeakMasterPassword" xml:space="preserve">
-    <value>Weak Master Password</value>
+    <value>Слаба главна лозинка</value>
   </data>
   <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
-    <value>Weak password identified. Use a strong password to protect your account. Are you sure you want to use a weak password?</value>
+    <value>Идентификована је слаба лозинка. Користите јаку лозинку да бисте заштитили свој налог. Да ли сте сигурни да желите да користите слабу лозинку?</value>
   </data>
   <data name="Weak" xml:space="preserve">
-    <value>Weak</value>
+    <value>Слабо</value>
   </data>
   <data name="Good" xml:space="preserve">
-    <value>Good</value>
+    <value>Добро</value>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Strong</value>
+    <value>Јако</value>
   </data>
   <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
-    <value>Check known data breaches for this password</value>
+    <value>Проверите познате упада података за ову лозинку</value>
   </data>
   <data name="ExposedMasterPassword" xml:space="preserve">
-    <value>Exposed Master Password</value>
+    <value>Изложена главна лозинка</value>
   </data>
   <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?</value>
+    <value>Лозинка је пронађена у случају повреде података. Користите јединствену лозинку да бисте заштитили свој налог. Да ли сте сигурни да желите да користите откривену лозинку?</value>
   </data>
   <data name="WeakAndExposedMasterPassword" xml:space="preserve">
-    <value>Weak and Exposed Master Password</value>
+    <value>Слаба и изложена главна лозинка</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+    <value>Идентификована је слаба лозинка и пронађена у упаду података. Користите јаку и јединствену лозинку да заштитите свој налог. Да ли сте сигурни да желите да користите ову лозинку?</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Потребан је SSO идентификатор организације.</value>
@@ -2604,5 +2610,26 @@
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Нема ставки које одговарају претрази</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Личан хостинг</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Регион података</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Регион</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Ваша главна лозинка не испуњава једну или више смерница ваше организације. Да бисте приступили сефу, морате одмах да ажурирате главну лозинку. Ако наставите, одјавићете се са ваше тренутне сесије, што захтева да се поново пријавите. Активне сесије на другим уређајима могу да остану активне до један сат.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Тренутна главна лозинка</value>
   </data>
 </root>

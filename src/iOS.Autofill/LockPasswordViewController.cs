@@ -15,7 +15,7 @@ namespace Bit.iOS.Autofill
         public LockPasswordViewController(IntPtr handle)
             : base(handle)
         {
-            BiometricIntegrityKey = Bit.Core.Constants.iOSAutoFillBiometricIntegrityKey;
+            BiometricIntegritySourceKey = Bit.Core.Constants.iOSAutoFillBiometricIntegritySourceKey;
             DismissModalAction = Cancel;
             autofillExtension = true;
         }

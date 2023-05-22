@@ -4,7 +4,6 @@ using Android.OS;
 using Android.Security.Keystore;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
-using Bit.Core.Utilities;
 using Java.Security;
 using Javax.Crypto;
 
@@ -12,6 +11,8 @@ namespace Bit.Droid.Services
 {
     public class BiometricService : IBiometricService
     {
+        private readonly IStateService _stateService;
+
         private const string KeyName = "com.8bit.bitwarden.biometric_integrity";
 
         private const string KeyStoreName = "AndroidKeyStore";
@@ -23,28 +24,28 @@ namespace Bit.Droid.Services
 
         private readonly KeyStore _keystore;
 
-        public BiometricService()
+        public BiometricService(IStateService stateService)
         {
+            _stateService = stateService;
             _keystore = KeyStore.GetInstance(KeyStoreName);
             _keystore.Load(null);
         }
 
-        public Task<bool> SetupBiometricAsync(string bioIntegrityKey = null)
+        public async Task<bool> SetupBiometricAsync(string bioIntegritySrcKey = null)
         {
-            // bioIntegrityKey used in iOS only
             if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
             {
-                CreateKey();
+                await CreateKeyAsync(bioIntegritySrcKey);
             }
 
-            return Task.FromResult(true);
+            return true;
         }
 
-        public Task<bool> ValidateIntegrityAsync(string bioIntegrityKey = null)
+        public async Task<bool> IsSystemBiometricIntegrityValidAsync(string bioIntegritySrcKey = null)
         {
             if (Build.VERSION.SdkInt < BuildVersionCodes.M)
             {
-                return Task.FromResult(true);
+                return true;
             }
 
             try
@@ -55,7 +56,7 @@ namespace Bit.Droid.Services
 
                 if (key == null || cipher == null)
                 {
-                    return Task.FromResult(true);
+                    return true;
                 }
 
                 cipher.Init(CipherMode.EncryptMode, key);
@@ -63,25 +64,32 @@ namespace Bit.Droid.Services
             catch (KeyPermanentlyInvalidatedException e)
             {
                 // Biometric has changed
-                return Task.FromResult(false);
+                await ClearStateAsync(bioIntegritySrcKey);
+                return false;
             }
             catch (UnrecoverableKeyException e)
             {
                 // Biometric was disabled and re-enabled
-                return Task.FromResult(false);
+                await ClearStateAsync(bioIntegritySrcKey);
+                return false;
             }
             catch (InvalidKeyException e)
             {
                 // Fallback for old bitwarden users without a key
                 LoggerHelper.LogEvenIfCantBeResolved(e);
-                CreateKey();
+                await CreateKeyAsync(bioIntegritySrcKey);
             }
 
-            return Task.FromResult(true);
+            return true;
         }
 
-        private void CreateKey()
+        private async Task CreateKeyAsync(string bioIntegritySrcKey = null)
         {
+            bioIntegritySrcKey ??= Core.Constants.BiometricIntegritySourceKey;
+            await _stateService.SetSystemBiometricIntegrityState(bioIntegritySrcKey,
+                await GetStateAsync(bioIntegritySrcKey));
+            await _stateService.SetAccountBiometricIntegrityValidAsync(bioIntegritySrcKey);
+
             try
             {
                 var keyGen = KeyGenerator.GetInstance(KeyAlgorithm, KeyStoreName);
@@ -100,6 +108,17 @@ namespace Bit.Droid.Services
                 // is not functioning
                 LoggerHelper.LogEvenIfCantBeResolved(e);
             }
+        }
+
+        private async Task<string> GetStateAsync(string bioIntegritySrcKey)
+        {
+            return await _stateService.GetSystemBiometricIntegrityState(bioIntegritySrcKey) ??
+                   Guid.NewGuid().ToString();
+        }
+
+        private async Task ClearStateAsync(string bioIntegritySrcKey)
+        {
+            await _stateService.SetSystemBiometricIntegrityState(bioIntegritySrcKey, null);
         }
     }
 }

@@ -827,7 +827,7 @@ namespace Bit.App.Pages
         private void SetOptions()
         {
             _options.AllowAmbiguousChar = AllowAmbiguousChars;
-            _options.Type = PasswordTypeSelectedIndex == 1 ? "passphrase" : "password";
+            _options.Type = PasswordTypeSelectedIndex == 1 ? PasswordGenerationOptions.TYPE_PASSPHRASE : PasswordGenerationOptions.TYPE_PASSWORD;
             _options.MinNumber = MinNumber;
             _options.MinSpecial = MinSpecial;
             _options.Special = Special;

@@ -6,6 +6,7 @@ using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Utilities;
 using Plugin.Fingerprint;
 using Plugin.Fingerprint.Abstractions;
 using Xamarin.Essentials;
@@ -224,6 +225,20 @@ namespace Bit.App.Services
             {
                 return false;
             }
+        }
+
+        public async Task<bool> IsBiometricIntegrityValidAsync(string bioIntegritySrcKey = null)
+        {
+            bioIntegritySrcKey ??= Core.Constants.BiometricIntegritySourceKey;
+
+            var biometricService = ServiceContainer.Resolve<IBiometricService>();
+            if (!await biometricService.IsSystemBiometricIntegrityValidAsync(bioIntegritySrcKey))
+            {
+                return false;
+            }
+
+            var stateService = ServiceContainer.Resolve<IStateService>();
+            return await stateService.IsAccountBiometricIntegrityValidAsync(bioIntegritySrcKey);
         }
 
         public async Task<bool> AuthenticateBiometricAsync(string text = null, string fallbackText = null,

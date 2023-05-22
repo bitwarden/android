@@ -1,0 +1,19 @@
+android:
+- src/App/*
+- src/Core/*
+- src/Android/*
+
+iOS:
+- src/App/*
+- src/Core/*
+- lib/ios/*
+- src/iOS/*
+- 'src/iOS.Autofill/*'
+- 'src/iOS.Core/*'
+- 'src/iOS.Extension/*'
+- 'src/iOS.ShareExtension/*'
+- 'src/iOS.Widget/*'
+- src/watchOS/*
+
+watchOS:
+- src/watchOS/*

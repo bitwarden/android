@@ -970,18 +970,18 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Biometric unlock disabled pending verification of master password..
         /// </summary>
-        public static string BiometricInvalidated {
+        public static string AccountBiometricInvalidated {
             get {
-                return ResourceManager.GetString("BiometricInvalidated", resourceCulture);
+                return ResourceManager.GetString("AccountBiometricInvalidated", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Biometric unlock for autofill disabled pending verification of master password..
         /// </summary>
-        public static string BiometricInvalidatedExtension {
+        public static string AccountBiometricInvalidatedExtension {
             get {
-                return ResourceManager.GetString("BiometricInvalidatedExtension", resourceCulture);
+                return ResourceManager.GetString("AccountBiometricInvalidatedExtension", resourceCulture);
             }
         }
         
@@ -1688,6 +1688,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current master password.
+        /// </summary>
+        public static string CurrentMasterPassword {
+            get {
+                return ResourceManager.GetString("CurrentMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom.
         /// </summary>
         public static string Custom {
@@ -1738,6 +1747,15 @@ namespace Bit.App.Resources {
         public static string Dark {
             get {
                 return ResourceManager.GetString("Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data region.
+        /// </summary>
+        public static string DataRegion {
+            get {
+                return ResourceManager.GetString("DataRegion", resourceCulture);
             }
         }
         
@@ -2314,6 +2332,15 @@ namespace Bit.App.Resources {
         public static string EnvironmentSaved {
             get {
                 return ResourceManager.GetString("EnvironmentSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EU.
+        /// </summary>
+        public static string EU {
+            get {
+                return ResourceManager.GetString("EU", resourceCulture);
             }
         }
         
@@ -3560,11 +3587,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logging in as {0}.
+        ///   Looks up a localized string similar to Logging in as {0} on {1}.
         /// </summary>
-        public static string LoggingInAsX {
+        public static string LoggingInAsXOnY {
             get {
-                return ResourceManager.GetString("LoggingInAsX", resourceCulture);
+                return ResourceManager.GetString("LoggingInAsXOnY", resourceCulture);
             }
         }
         
@@ -5121,6 +5148,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Region.
+        /// </summary>
+        public static string Region {
+            get {
+                return ResourceManager.GetString("Region", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remember me.
         /// </summary>
         public static string RememberMe {
@@ -5450,6 +5486,15 @@ namespace Bit.App.Resources {
         public static string SelectTypeField {
             get {
                 return ResourceManager.GetString("SelectTypeField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Self-hosted.
+        /// </summary>
+        public static string SelfHosted {
+            get {
+                return ResourceManager.GetString("SelfHosted", resourceCulture);
             }
         }
         
@@ -6453,6 +6498,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour..
+        /// </summary>
+        public static string UpdateWeakMasterPasswordWarning {
+            get {
+                return ResourceManager.GetString("UpdateWeakMasterPasswordWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updating password.
         /// </summary>
         public static string UpdatingPassword {
@@ -6503,6 +6557,15 @@ namespace Bit.App.Resources {
         public static string URIs {
             get {
                 return ResourceManager.GetString("URIs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to US.
+        /// </summary>
+        public static string US {
+            get {
+                return ResourceManager.GetString("US", resourceCulture);
             }
         }
         
@@ -6678,6 +6741,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your organization policies have set your vault timeout action to {0}..
+        /// </summary>
+        public static string VaultTimeoutActionPolicyInEffect {
+            get {
+                return ResourceManager.GetString("VaultTimeoutActionPolicyInEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?.
         /// </summary>
         public static string VaultTimeoutLogOutConfirmation {
@@ -6687,11 +6759,20 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s).
+        ///   Looks up a localized string similar to Your organization policies have set your maximum allowed vault timeout to {0} hour(s) and {1} minute(s)..
         /// </summary>
         public static string VaultTimeoutPolicyInEffect {
             get {
                 return ResourceManager.GetString("VaultTimeoutPolicyInEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s). Your vault timeout action is set to {2}..
+        /// </summary>
+        public static string VaultTimeoutPolicyWithActionInEffect {
+            get {
+                return ResourceManager.GetString("VaultTimeoutPolicyWithActionInEffect", resourceCulture);
             }
         }
         

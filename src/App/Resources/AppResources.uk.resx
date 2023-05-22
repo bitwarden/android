@@ -1752,11 +1752,11 @@
     <value>Ви дійсно хочете перенести до смітника?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Біометричне розблокування вимкнено. Очікується перевірка головного пароля.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Біометричне розблокування для цього облікового запису вимкнено. Очікується перевірка головного пароля.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Біометричне розблокування для автозаповнення вимкнено. Очікується перевірка головного пароля.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Біометричне розблокування під час автозаповнення для цього облікового запису вимкнено. Очікується перевірка головного пароля.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Дозволити синхронізацію жестом</value>
@@ -2140,7 +2140,13 @@
     <value>Ця організація має корпоративну політику, яка автоматично розгортає вас на скидання пароля. Розгортання дозволятиме адміністраторам організації змінювати ваш головний пароль.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Політики вашої організації впливають на час очікування сховища. Максимальний дозволений час очікування сховища {0} годин, {1} хвилин</value>
+    <value>Політикою вашої організації встановлено максимальний дозволений час очікування сховища {0} годин, {1} хвилин.</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Політики вашої організації впливають на час очікування сховища. Максимальний дозволений час очікування сховища {0} годин, {1} хвилин. Для часу очікування вашого сховища встановлена дія {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Політикою вашої організації встановлено дію для часу очікування сховища {0}.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Час очікування сховища перевищує обмеження, встановлені вашою організацією.</value>
@@ -2489,8 +2495,8 @@
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Отримати підказку для головного пароля</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Вхід у систему як {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Вхід як {0} на {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Не ви?</value>
@@ -2602,5 +2608,26 @@
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Немає записів, що відповідають пошуку</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>США</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>ЄС</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Власне розміщення</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Регіон даних</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Регіон</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Ваш головний пароль не відповідає одній або більше політикам вашої організації. Щоб отримати доступ до сховища, вам необхідно оновити свій головний пароль зараз. Продовживши, ви вийдете з поточного сеансу, після чого потрібно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Поточний головний пароль</value>
   </data>
 </root>

@@ -28,6 +28,7 @@ namespace Bit.Core.Abstractions
         bool SupportsFido2();
         bool SupportsDuo();
         Task<bool> SupportsBiometricAsync();
+        Task<bool> IsBiometricIntegrityValidAsync(string bioIntegritySrcKey = null);
         Task<bool> AuthenticateBiometricAsync(string text = null, string fallbackText = null, Action fallback = null);
         long GetActiveTime();
     }
