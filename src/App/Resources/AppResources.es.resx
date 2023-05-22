@@ -2496,8 +2496,8 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Obtener pista de contraseña maestra</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Iniciando sesión como {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Iniciando sesión como {0} en {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>¿No eres tú?</value>
@@ -2609,6 +2609,21 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>No hay elementos que coincidan con la búsqueda</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>EE.UU.</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>Unión Europea</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Autoalojado</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Región de datos</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Región</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Su contraseña maestra no cumple con una o más de las políticas de su organización. Para acceder a la caja fuerte, debe actualizar su contraseña maestra ahora. Proceder le desconectará de su sesión actual, requiriendo que vuelva a iniciar sesión. Las sesiones activas en otros dispositivos pueden seguir estando activas durante hasta una hora.</value>

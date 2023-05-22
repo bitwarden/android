@@ -2495,8 +2495,8 @@
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Получить подсказку к мастер-паролю</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Войти как {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Войти как {0} на {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Не вы?</value>
@@ -2608,6 +2608,21 @@
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Нет элементов, соответствующих запросу</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>США</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>Европа</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Собственный хостинг</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Регион данных</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Регион</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущая сессия будет завершена и потребуется повторная авторизация. Сессии на других устройствах могут оставаться активными в течение часа.</value>

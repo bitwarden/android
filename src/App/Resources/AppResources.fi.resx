@@ -1492,7 +1492,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Aseta PIN-koodi Bitwardenin avaukselle. PIN-asetukset tyhjentyvät, jos kirjaudut kokonaan ulos sovelluksesta.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Kirjautui tunnuksella {0} palvelimelle {1}.</value>
+    <value>Kirjautui palvelimelle {1} tunnuksella {0}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
@@ -2496,8 +2496,8 @@ Haluatko vaihtaa tähän tiliin?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Pyydä pääsalasanan vihjettä</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Kirjaudutaan tunnuksella {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Kirjaudutaan palvelimelle {1} tunnuksella {0}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Etkö se ollut sinä?</value>
@@ -2609,6 +2609,21 @@ Haluatko vaihtaa tähän tiliin?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Hakua vastaavia kohteita ei ole</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Itse ylläpidetty</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Tietoalue</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Alue</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Pääsalasanasi ei täytä yhden tai useamman organisaatiokäytännön vaatimuksia ja holvin käyttämiseksi sinun on vaihdettava se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan.</value>

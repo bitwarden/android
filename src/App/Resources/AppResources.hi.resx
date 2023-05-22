@@ -168,7 +168,7 @@
     <comment>Delete an entity (verb).</comment>
   </data>
   <data name="Deleting" xml:space="preserve">
-    <value>मिटाया जा रहा हैं...</value>
+    <value>मिटा रहे है...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
@@ -261,19 +261,19 @@
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>लॉग इन करें</value>
+    <value>लॉगइन करें</value>
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>लॉग इन</value>
+    <value>लॉगइन करें</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>लॉग आउट करें</value>
+    <value>लॉगआउट करें</value>
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>पक्का लॉग आउट करें?</value>
+    <value>पक्का लॉगआउट करें?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
     <value>खाता हटाएं</value>
@@ -292,7 +292,7 @@
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
-    <value>और</value>
+    <value>ज़्यादा</value>
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
@@ -330,7 +330,7 @@
     <value>ले जाएं</value>
   </data>
   <data name="Saving" xml:space="preserve">
-    <value>सेव हो रहा है...</value>
+    <value>सेव कर रहे है...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Settings" xml:space="preserve">
@@ -394,7 +394,7 @@
     <value>देखें</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>हमारी वेबसाइट पर जाएं</value>
+    <value>हमारे वेबसाइट पर जाएं</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
     <value>मदद लेने, खबर लेने, हमें ईमेल करने, और/या बिटवार्डन के इस्तेमाल के बारे में ज़्यादा जानने के लिए हमारी वेबसाइट पर जाएं।</value>
@@ -410,7 +410,7 @@
     <value>खाता</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>आपका नया खाता बनाया गया! अब आप लॉग इन कर सकते हैं।</value>
+    <value>आपका नया खाता बनाया गया! अब लॉगइन कर सकते हैं।</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
     <value>चीज़ जोड़ें</value>
@@ -419,40 +419,40 @@
     <value>ऐप एक्सटेंशन</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>दूसरे ऐप और वेबसाइट पर अपनेआप लॉगइन भरने के लिए बिटवार्डन सुलभता सेवा इस्तेमाल करें।</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>भरण सेवा</value>
+    <value>अपनेआप-भर सेवा</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>अस्पष्ट अक्षर से बचें</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>bitwarden App Extension</value>
+    <value>बिटवार्डन ऐप एक्सटेंशन</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>अपने तिजोरी में नए आइटम डालने का सबसे सरल तरीका है Bitwarden ऐप विस्तारण। Bitwarden ऐप विस्तरण के उपयोग संबंधी जानकारी पाने के लिए "सेटिंग्स" में जाएं।</value>
+    <value>बिटवार्डन ऐप एक्सटेंशन अपने तिजोरी में नए चीज़ डालने का सबसे आसात तरीका है। बिटवार्डन ऐप एक्सटेंशन के इस्तेमाल से जुड़ी जानकारी लेने के लिए "सेटिंग" में जाएं।</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Use bitwarden in Safari and other apps to auto-fill your logins.</value>
+    <value>सफारी और दूसरे ऐप में अपने लॉगइन अपनेआप भरने के लिए बिटवार्डन इस्तेमाल करें।</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>bitwarden Auto-fill Service</value>
+    <value>बिटवार्डन अपनेआप-भर सेवा</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>अपने लॉगइन अपनेआप भरने के लिए बिटवार्डन सुलभता सेवा इस्तेमाल करें।</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>ईमेल बदलें</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>आप bitwarden.com वेब तिजोरी पर आपका ईमेल पता परिवर्तित कर सकते हैं। आप अब वेबसाइट पर जाएँ करने के लिए चाहते हैं?</value>
+    <value>Bitwarden.com वेब तिजोरी पर ईमेल पता बदला जा सकता है। इस वेबसाइट पर अभी जाएं?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>मास्टर पासवर्ड बदलें</value>
+    <value>मुख्य पासवर्ड बदलें</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>मास्टर पासवर्ड Bitwarden के वेब-तिजोरी पर जाकर बदला जा सकता है। क्या आप वहां जाना चाहते हैं?</value>
+    <value>मुख्य पासवर्ड बिटवार्डन वेब तिजोरी पर जाकर बदला जा सकता है। वेबसाइट पर अभी जाएं?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>बंद करें</value>
@@ -461,20 +461,20 @@
     <value>जारी रखें</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>खाता बनाएँ</value>
+    <value>खाता बनाएं</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
-    <value>खाता बना रहें है...</value>
+    <value>खाता बना रहे है...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>आइटम संपादित करें</value>
+    <value>चीज़ बदलाव करें</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>स्वतः सिंक चालू करें।</value>
+    <value>अपनेआप-सिंक की अनुमति दें</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>अपने मास्टर पासवर्ड संकेत प्राप्त करने के लिए अपने खाते का ईमेल पता दर्ज करें।</value>
+    <value>मुख्य पासवर्ड इशारा लेने के लिए अपने खाते का ईमेल पता डालें।</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>ऐप विस्तारण को फिर चालू करें</value>
@@ -585,7 +585,7 @@
     <value>मास्टर पासवर्ड संकेत आपको भूल जाने की अवस्था में पासवर्ड को याद करने में सहायता करता है।</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>मुख्य पासवर्ड कम-से-कम {0} अक्षर लंबा होना चाहिए।</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>कम से कम अंक</value>
@@ -809,7 +809,7 @@
     <value>You are searching for an auto-fill login for "{0}".</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Learn about organizations</value>
+    <value>संगठन के बारे में जानें</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>"{0}" ऐप नहीं खोल सकता।</value>
@@ -850,7 +850,7 @@
     <value>दो-चरण लॉगिन विकल्प</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Use another two-step login method</value>
+    <value>कोई दूसरा दो-कदम लॉगइन तरीका इस्तेमाल करें</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
     <value>Could not send verification email. Try again.</value>
@@ -1211,7 +1211,7 @@ Scanning will happen automatically.</value>
     <value>छुपा हुआ</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Linked</value>
+    <value>जुड़ा हुआ</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>वाक्य</value>
@@ -1286,7 +1286,7 @@ Scanning will happen automatically.</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Updated</value>
+    <value>अपडेट किया गया</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
@@ -1576,7 +1576,7 @@ Scanning will happen automatically.</value>
     <comment>The color black</comment>
   </data>
   <data name="Nord" xml:space="preserve">
-    <value>Nord</value>
+    <value>नॉर्ड</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
@@ -1872,7 +1872,7 @@ Scanning will happen automatically.</value>
     <value>An organization policy is affecting your ownership options.</value>
   </data>
   <data name="Send" xml:space="preserve">
-    <value>Send</value>
+    <value>सेंड</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AllSends" xml:space="preserve">
@@ -1880,7 +1880,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
-    <value>Sends</value>
+    <value>सेंड्स</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NameInfo" xml:space="preserve">
@@ -1888,10 +1888,10 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Text" xml:space="preserve">
-    <value>Text</value>
+    <value>टेक्सट</value>
   </data>
   <data name="TypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>टेक्सट</value>
   </data>
   <data name="TypeTextInfo" xml:space="preserve">
     <value>The text you want to send.</value>
@@ -1901,7 +1901,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeFile" xml:space="preserve">
-    <value>File</value>
+    <value>फाइल</value>
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>The file you want to send.</value>
@@ -2031,22 +2031,22 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
-    <value>1 day</value>
+    <value>1 दिन</value>
   </data>
   <data name="TwoDays" xml:space="preserve">
-    <value>2 days</value>
+    <value>2 दिन</value>
   </data>
   <data name="ThreeDays" xml:space="preserve">
-    <value>3 days</value>
+    <value>3 दिन</value>
   </data>
   <data name="SevenDays" xml:space="preserve">
-    <value>7 days</value>
+    <value>7 दिन</value>
   </data>
   <data name="ThirtyDays" xml:space="preserve">
-    <value>30 days</value>
+    <value>30 दिन</value>
   </data>
   <data name="Custom" xml:space="preserve">
-    <value>Custom</value>
+    <value>कस्टम</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
     <value>Share this Send upon save</value>
@@ -2163,7 +2163,7 @@ Scanning will happen automatically.</value>
     <value>Unlocked</value>
   </data>
   <data name="AccountLocked" xml:space="preserve">
-    <value>Locked</value>
+    <value>बंद</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
     <value>Logged out</value>
@@ -2205,7 +2205,7 @@ Scanning will happen automatically.</value>
     <value>Send code</value>
   </data>
   <data name="Sending" xml:space="preserve">
-    <value>Sending</value>
+    <value>भेज रहे</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
     <value>Copy Send link on save</value>
@@ -2268,7 +2268,7 @@ Scanning will happen automatically.</value>
     <value>All vaults</value>
   </data>
   <data name="Vaults" xml:space="preserve">
-    <value>Vaults</value>
+    <value>तिजोरी</value>
   </data>
   <data name="VaultFilterDescription" xml:space="preserve">
     <value>Vault: {0}</value>
@@ -2277,7 +2277,7 @@ Scanning will happen automatically.</value>
     <value>सब</value>
   </data>
   <data name="Totp" xml:space="preserve">
-    <value>TOTP</value>
+    <value>टीओटीपी</value>
   </data>
   <data name="VerificationCodes" xml:space="preserve">
     <value>Verification codes</value>
@@ -2341,10 +2341,10 @@ select Add TOTP to store the key safely</value>
     <value>IP address</value>
   </data>
   <data name="Time" xml:space="preserve">
-    <value>Time</value>
+    <value>समय</value>
   </data>
   <data name="Near" xml:space="preserve">
-    <value>Near</value>
+    <value>पास</value>
   </data>
   <data name="ConfirmLogIn" xml:space="preserve">
     <value>Confirm login</value>
@@ -2368,120 +2368,120 @@ select Add TOTP to store the key safely</value>
     <value>लॉगइन मांग माने</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Use this device to approve login requests made from other devices.</value>
+    <value>इस डिवाइस का इस्तेमाल दूसरे डिवाइस के लॉगइन मांगे मानने के लिए करें।</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>सूचना देने दें</value>
   </data>
   <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
-    <value>Receive push notifications for new login requests</value>
+    <value>नए लॉगइन मांग के लिए पुश सूचना लें</value>
   </data>
   <data name="NoThanks" xml:space="preserve">
-    <value>No thanks</value>
+    <value>ना, शुक्रिया</value>
   </data>
   <data name="ConfimLogInAttempForX" xml:space="preserve">
-    <value>Confirm login attempt for {0}</value>
+    <value>{0} के लिए लॉगइन कोशिश पक्का करें</value>
   </data>
   <data name="AllNotifications" xml:space="preserve">
-    <value>All notifications</value>
+    <value>सारे सूचनाएं</value>
   </data>
   <data name="PasswordType" xml:space="preserve">
-    <value>Password type</value>
+    <value>पासवर्ड प्रकार</value>
   </data>
   <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
-    <value>What would you like to generate?</value>
+    <value>क्या बनाएं?</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
-    <value>Username type</value>
+    <value>यूज़रनाम प्रकार</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Plus addressed email</value>
+    <value>प्लस पता किया गया ईमेल</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
-    <value>Catch-all email</value>
+    <value>सब-पकड़ें ईमेल</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
-    <value>Forwarded email alias</value>
+    <value>ईमेल नकलीनाम फॉरवर्ड किया गया</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
-    <value>Random word</value>
+    <value>बेतरतीब शब्द</value>
   </data>
   <data name="EmailRequiredParenthesis" xml:space="preserve">
-    <value>Email (required)</value>
+    <value>ईमेल (ज़रूरी)</value>
   </data>
   <data name="DomainNameRequiredParenthesis" xml:space="preserve">
-    <value>Domain name (required)</value>
+    <value>डोमेन नाम (ज़रूरी)</value>
   </data>
   <data name="APIKeyRequiredParenthesis" xml:space="preserve">
-    <value>API key (required)</value>
+    <value>एपीआई चाबी (ज़रूरी)</value>
   </data>
   <data name="Service" xml:space="preserve">
-    <value>Service</value>
+    <value>सेवा</value>
   </data>
   <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
+    <value>एननऐडी</value>
     <comment>"AnonAddy" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
-    <value>Firefox Relay</value>
+    <value>फायरफॉक्स रीले</value>
     <comment>"Firefox Relay" is the product name and should not be translated.</comment>
   </data>
   <data name="SimpleLogin" xml:space="preserve">
-    <value>SimpleLogin</value>
+    <value>सिंपललॉगइन</value>
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
   <data name="DuckDuckGo" xml:space="preserve">
-    <value>DuckDuckGo</value>
+    <value>डकडकगो</value>
     <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
   </data>
   <data name="Fastmail" xml:space="preserve">
-    <value>Fastmail</value>
+    <value>फास्टमेल</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
-    <value>API access token</value>
+    <value>एपीआई एक्सेस टोकन</value>
   </data>
   <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
-    <value>Are you sure you want to overwrite the current username?</value>
+    <value>चालू यूज़रनाम को पक्का ओवरराइट करें?</value>
   </data>
   <data name="GenerateUsername" xml:space="preserve">
-    <value>Generate username</value>
+    <value>यूज़रनाम बनाएं</value>
   </data>
   <data name="EmailType" xml:space="preserve">
-    <value>Email Type</value>
+    <value>ईमेल टाइप</value>
   </data>
   <data name="WebsiteRequired" xml:space="preserve">
-    <value>Website (required)</value>
+    <value>वेबसाइट (ज़रूरी)</value>
   </data>
   <data name="UnknownXErrorMessage" xml:space="preserve">
-    <value>Unknown {0} error occurred.</value>
+    <value>अनजान {0} गड़बड़ हुई।</value>
   </data>
   <data name="PlusAddressedEmailDescription" xml:space="preserve">
-    <value>Use your email provider's subaddress capabilities</value>
+    <value>अपने ईमेल प्रदाता की उपपता ताकत इस्तेमाल करें</value>
   </data>
   <data name="CatchAllEmailDescription" xml:space="preserve">
-    <value>Use your domain's configured catch-all inbox.</value>
+    <value>अपने डोमेन का सब-पकड़ें इनबॉक्स इस्तेमाल करें।</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
-    <value>Generate an email alias with an external forwarding service.</value>
+    <value>बाहरी फॉरवर्ड सेवा से ईमेल नकलीनाम बनाएं।</value>
   </data>
   <data name="Random" xml:space="preserve">
-    <value>Random</value>
+    <value>बेतरतीब</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>Connect to Watch</value>
+    <value>घड़ी से जुड़े</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
-    <value>Accessibility Service Disclosure</value>
+    <value>सुलभता सेवा प्रकटीकरण</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
     <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
   </data>
   <data name="Accept" xml:space="preserve">
-    <value>Accept</value>
+    <value>मानें</value>
   </data>
   <data name="Decline" xml:space="preserve">
-    <value>Decline</value>
+    <value>नकारें</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>Login request has already expired.</value>
@@ -2497,8 +2497,8 @@ Do you want to switch to this account?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Get master password hint</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Logging in as {0} on {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Not you?</value>
@@ -2534,7 +2534,7 @@ Do you want to switch to this account?</value>
     <value>लंबित लॉगइन मांगे</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
-    <value>सारे मांग नकारे</value>
+    <value>सारे मांग नकारें</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
     <value>सारे लंबित लॉगइन मांग पक्का नकारें?</value>
@@ -2564,7 +2564,7 @@ Do you want to switch to this account?</value>
     <value>ज़रूरी</value>
   </data>
   <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
-    <value>आप अपना मुख्य पासवर्ड भूलने के बाद वापस नहीं ले सकते। {0} अक्षर कम-से-कम।</value>
+    <value>मुख्य पासवर्ड भूलने के बाद रिकवर नहीं कर सकते। {0} अक्षर कम-से-कम।</value>
   </data>
   <data name="WeakMasterPassword" xml:space="preserve">
     <value>कमज़ोर मुख्य पासवर्ड</value>
@@ -2610,6 +2610,21 @@ Do you want to switch to this account?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>कोई भी चीज़ खोज शब्द से मेल नहीं खाता</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>अमेरिकी संयुक्त राज्य</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>यूरोपीय संघ</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>खुद-होस्ट</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>डाटा इलाका</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>इलाका</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>आपका मुख्य पासवर्ड आपके संगठन के एक या उससे ज़्यादा नीति को नहीं मानता। तिजोरी एक्सेस करने के लिए आपको अपना मुख्य पासवर्ड अभी बदलना होगा। ये करने से आप अपने चालू सत्र से लॉग आउट हो जाएंगे, जिसके वजह से आपको वापस लॉग इन करना पड़ेगा। दूसरे डिवाइसों पर चालू सत्र एक घंटे तक सक्रिय रह सकते हैं।</value>

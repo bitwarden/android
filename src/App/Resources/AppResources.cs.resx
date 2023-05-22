@@ -2494,8 +2494,8 @@ Chcete se přepnout na tento účet?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Získat nápovědu pro hlavní heslo</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Přihlášování jako {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Přihlašování jako {0} na {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Nejste to Vy?</value>
@@ -2607,6 +2607,21 @@ Chcete se přepnout na tento účet?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Neexistují žádné položky, které by odpovídaly hledání</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Vlastní hosting</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Datový region</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Vaše hlavní heslo nesplňuje jednu nebo více zásad Vaší organizace. Pro přístup k trezoru musíte nyní aktualizovat své hlavní heslo. Pokračování Vás odhlásí z Vaší aktuální relace a bude nutné se přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny.</value>
