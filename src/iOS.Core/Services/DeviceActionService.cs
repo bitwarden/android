@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
@@ -61,7 +62,7 @@ namespace Bit.iOS.Core.Services
             };
         }
 
-        public Task ShowLoadingAsync(string text)
+        public Task ShowLoadingAsync(string text, CancellationTokenSource cts = null, string cancelButtonText = null)
         {
             if (_progressAlert != null)
             {
@@ -84,6 +85,14 @@ namespace Bit.iOS.Core.Services
             _progressAlert = UIAlertController.Create(null, text, UIAlertControllerStyle.Alert);
             _progressAlert.View.TintColor = UIColor.Black;
             _progressAlert.View.Add(loadingIndicator);
+            if (cts != null)
+            {
+                _progressAlert.AddAction(UIAlertAction.Create(cancelButtonText ?? AppResources.Cancel, UIAlertActionStyle.Cancel, x =>
+                {
+                    cts.Cancel();
+                    result.TrySetResult(0);
+                }));
+            }
 
             vc.PresentViewController(_progressAlert, false, () => result.TrySetResult(0));
             return result.Task;

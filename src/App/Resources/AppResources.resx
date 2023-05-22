@@ -2631,4 +2631,7 @@ Do you want to switch to this account?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Current master password</value>
   </data>
+  <data name="UploadHasBeenCanceled" xml:space="preserve">
+    <value>Upload has been canceled</value>
+  </data>
 </root>

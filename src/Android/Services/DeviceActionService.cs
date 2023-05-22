@@ -83,7 +83,7 @@ namespace Bit.Droid.Services
             return launchIntentSender != null;
         }
 
-        public async Task ShowLoadingAsync(string text)
+        public async Task ShowLoadingAsync(string text, System.Threading.CancellationTokenSource cts = null, string cancelButtonText = null)
         {
             if (_progressDialog != null)
             {
@@ -98,10 +98,16 @@ namespace Bit.Droid.Services
             txtLoading.Text = text;
             txtLoading.SetTextColor(ThemeHelpers.TextColor);
 
-            _progressDialog = new AlertDialog.Builder(activity)
+            var progressDialogBuilder = new AlertDialog.Builder(activity)
                 .SetView(dialogView)
-                .SetCancelable(false)
-                .Create();
+                .SetCancelable(cts != null);
+
+            if (cts != null)
+            {
+                progressDialogBuilder.SetNegativeButton(cancelButtonText ?? AppResources.Cancel, (sender, args) => cts?.Cancel());
+            }
+
+            _progressDialog = progressDialogBuilder.Create();
             _progressDialog.Show();
         }
 

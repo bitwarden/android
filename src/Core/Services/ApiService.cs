@@ -699,6 +699,14 @@ namespace Bit.Core.Services
                 {
                     response = await _httpClient.SendAsync(requestMessage, cancellationToken);
                 }
+                catch (OperationCanceledException)
+                {
+                    throw;
+                }
+                catch (Exception ex) when (ex.Message?.Contains("Socket closed") == true)
+                {
+                    throw new OperationCanceledException();
+                }
                 catch (Exception e)
                 {
                     throw new ApiException(HandleWebError(e));

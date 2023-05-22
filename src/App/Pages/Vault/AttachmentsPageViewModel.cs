@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
@@ -31,6 +32,7 @@ namespace Bit.App.Pages
         private bool _hasUpdatedKey;
         private bool _canAccessAttachments;
         private string _fileName;
+        private CancellationTokenSource _uploadCts;
 
         public AttachmentsPageViewModel()
         {
@@ -119,11 +121,15 @@ namespace Bit.App.Pages
                     AppResources.AnErrorHasOccurred);
                 return false;
             }
+
+            _uploadCts = new CancellationTokenSource();
+            var uploadCts = _uploadCts;
+
             try
             {
-                await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
+                await _deviceActionService.ShowLoadingAsync(AppResources.Saving, uploadCts);
                 _cipherDomain = await _cipherService.SaveAttachmentRawWithServerAsync(
-                    _cipherDomain, FileName, FileData);
+                    _cipherDomain, FileName, FileData, uploadCts.Token);
                 Cipher = await _cipherDomain.DecryptAsync();
                 await _deviceActionService.HideLoadingAsync();
                 _platformUtilsService.ShowToast("success", null, AppResources.AttachementAdded);
@@ -131,6 +137,11 @@ namespace Bit.App.Pages
                 FileData = null;
                 FileName = null;
                 return true;
+            }
+            catch (OperationCanceledException)
+            {
+                await _deviceActionService.HideLoadingAsync();
+                await _platformUtilsService.ShowDialogAsync(AppResources.UploadHasBeenCanceled, AppResources.Attachments);
             }
             catch (ApiException e)
             {

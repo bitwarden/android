@@ -203,6 +203,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Biometric unlock for this account is disabled pending verification of master password..
+        /// </summary>
+        public static string AccountBiometricInvalidated {
+            get {
+                return ResourceManager.GetString("AccountBiometricInvalidated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Autofill biometric unlock for this account is disabled pending verification of master password..
+        /// </summary>
+        public static string AccountBiometricInvalidatedExtension {
+            get {
+                return ResourceManager.GetString("AccountBiometricInvalidatedExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your new account has been created! You may now log in..
         /// </summary>
         public static string AccountCreated {
@@ -964,24 +982,6 @@ namespace Bit.App.Resources {
         public static string BaseDomain {
             get {
                 return ResourceManager.GetString("BaseDomain", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Biometric unlock disabled pending verification of master password..
-        /// </summary>
-        public static string AccountBiometricInvalidated {
-            get {
-                return ResourceManager.GetString("AccountBiometricInvalidated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Biometric unlock for autofill disabled pending verification of master password..
-        /// </summary>
-        public static string AccountBiometricInvalidatedExtension {
-            get {
-                return ResourceManager.GetString("AccountBiometricInvalidatedExtension", resourceCulture);
             }
         }
         
@@ -6512,6 +6512,15 @@ namespace Bit.App.Resources {
         public static string UpdatingPassword {
             get {
                 return ResourceManager.GetString("UpdatingPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload has been canceled.
+        /// </summary>
+        public static string UploadHasBeenCanceled {
+            get {
+                return ResourceManager.GetString("UploadHasBeenCanceled", resourceCulture);
             }
         }
         
