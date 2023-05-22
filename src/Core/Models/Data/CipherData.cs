@@ -27,7 +27,6 @@ namespace Bit.Core.Models.Data
             CollectionIds = collectionIds?.ToList() ?? response.CollectionIds;
             Reprompt = response.Reprompt;
             Key = response.Key;
-            ForceKeyRotation = response.ForceKeyRotation;
 
             try // Added to address Issue (https://github.com/bitwarden/mobile/issues/1006)
             {
@@ -89,6 +88,5 @@ namespace Bit.Core.Models.Data
         public DateTime? DeletedDate { get; set; }
         public Enums.CipherRepromptType Reprompt { get; set; }
         public string Key { get; set; }
-        public bool ForceKeyRotation { get; set; }
     }
 }

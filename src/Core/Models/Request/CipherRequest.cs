@@ -20,7 +20,6 @@ namespace Bit.Core.Models.Request
             LastKnownRevisionDate = cipher.RevisionDate;
             Reprompt = cipher.Reprompt;
             Key = cipher.Key?.EncryptedString;
-            ForceKeyRotation = cipher.ForceKeyRotation;
 
             switch (Type)
             {
@@ -127,6 +126,5 @@ namespace Bit.Core.Models.Request
         public DateTime LastKnownRevisionDate { get; set; }
         public CipherRepromptType Reprompt { get; set; }
         public string Key { get; set; }
-        public bool ForceKeyRotation { get; set; }
     }
 }

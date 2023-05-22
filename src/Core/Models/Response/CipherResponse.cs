@@ -29,6 +29,5 @@ namespace Bit.Core.Models.Response
         public DateTime? DeletedDate { get; set; }
         public CipherRepromptType Reprompt { get; set; }
         public string Key { get; set; }
-        public bool ForceKeyRotation { get; set; }
     }
 }

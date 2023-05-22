@@ -177,8 +177,7 @@ namespace Bit.Core.Services
                 Type = model.Type,
                 CollectionIds = model.CollectionIds,
                 RevisionDate = model.RevisionDate,
-                Reprompt = model.Reprompt,
-                ForceKeyRotation = model.ForceKeyRotation
+                Reprompt = model.Reprompt
             };
 
             key = await UpdateCipherAndGetCipherKeyAsync(cipher, model, key);
@@ -210,7 +209,7 @@ namespace Bit.Core.Services
                 }
             }
 
-            if (cipherView.Key != null && !cipherView.ForceKeyRotation)
+            if (cipherView.Key != null)
             {
                 cipher.Key = await _cryptoService.EncryptAsync(cipherView.Key.Key, key);
                 return cipherView.Key;
