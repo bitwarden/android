@@ -1,4 +1,6 @@
-﻿using Bit.Core.Enums;
+﻿using System.Collections.Generic;
+using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
 using Newtonsoft.Json;
 
 namespace Bit.Core.Models.Response
@@ -24,6 +26,7 @@ namespace Bit.Core.Models.Response
         public int? KdfParallelism { get; set; }
         public bool ForcePasswordReset { get; set; }
         public string KeyConnectorUrl { get; set; }
+        public MasterPasswordPolicyOptions MasterPasswordPolicy { get; set; }
         [JsonIgnore]
         public KdfConfig KdfConfig => new KdfConfig(Kdf, KdfIterations, KdfMemory, KdfParallelism);
     }

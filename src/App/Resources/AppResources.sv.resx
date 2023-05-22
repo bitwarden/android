@@ -1753,11 +1753,11 @@ Skanningen sker automatiskt.</value>
     <value>Vill du verkligen skicka till papperskorgen?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometrisk upplåsning är inaktiverad i väntan på bekräftelse av huvudlösenordet.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometrisk upplåsning för automatisk ifyllnad är inaktiverad i väntan på bekräftelse av huvudlösenordet.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Aktivera synkronisering vid uppdatering</value>
@@ -2144,6 +2144,12 @@ Skanningen sker automatiskt.</value>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Dina organisationsprinciper påverkar ditt valvs tid för timeout. Maximal tillåten tid innan timeout är {0} timme(ar) och {1} minut(er)</value>
   </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s). Your vault timeout action is set to {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Your organization policies have set your vault timeout action to {0}.</value>
+  </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Ditt valvs tid för timeout överskrider de begränsningar som fastställts av din organisation.</value>
   </data>
@@ -2491,8 +2497,8 @@ Vill du byta till detta konto?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Hämta huvudlösenordsledtråd</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Loggar in som {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Logging in as {0} on {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Är det inte du?</value>
@@ -2604,5 +2610,26 @@ Vill du byta till detta konto?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Det finns inga objekt som matchar sökningen</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Self-hosted</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Data region</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Nuvarande huvudlösenord</value>
   </data>
 </root>

@@ -18,13 +18,13 @@
         public const string LastBuildKey = "lastBuild";
         public const string AddSitePromptShownKey = "addSitePromptShown";
         public const string ClearCiphersCacheKey = "clearCiphersCache";
-        public const string BiometricIntegrityKey = "biometricIntegrityState";
+        public const string BiometricIntegritySourceKey = "biometricIntegritySource";
         public const string iOSAutoFillClearCiphersCacheKey = "iOSAutoFillClearCiphersCache";
-        public const string iOSAutoFillBiometricIntegrityKey = "iOSAutoFillBiometricIntegrityState";
+        public const string iOSAutoFillBiometricIntegritySourceKey = "iOSAutoFillBiometricIntegritySource";
         public const string iOSExtensionClearCiphersCacheKey = "iOSExtensionClearCiphersCache";
-        public const string iOSExtensionBiometricIntegrityKey = "iOSExtensionBiometricIntegrityState";
+        public const string iOSExtensionBiometricIntegritySourceKey = "iOSExtensionBiometricIntegritySource";
         public const string iOSShareExtensionClearCiphersCacheKey = "iOSShareExtensionClearCiphersCache";
-        public const string iOSShareExtensionBiometricIntegrityKey = "iOSShareExtensionBiometricIntegrityState";
+        public const string iOSShareExtensionBiometricIntegritySourceKey = "iOSShareExtensionBiometricIntegritySource";
         public const string iOSExtensionActiveUserIdKey = "iOSExtensionActiveUserId";
         public const string EventCollectionKey = "eventCollection";
         public const string RememberedEmailKey = "rememberedEmail";
@@ -41,6 +41,9 @@
         public const string NotificationDataType = "Type";
         public const string PasswordlessLoginRequestKey = "passwordlessLoginRequest";
         public const string PreLoginEmailKey = "preLoginEmailKey";
+        public const string ConfigsKey = "configsKey";
+        public const string DisplayEuEnvironmentFlag = "display-eu-environment";
+
         /// <summary>
         /// This key is used to store the value of "ShouldConnectToWatch" of the last user that had logged in
         /// which is used to handle Apple Watch state logic
@@ -49,6 +52,7 @@
         public const string OtpAuthScheme = "otpauth";
         public const string AppLocaleKey = "appLocale";
         public const string ClearSensitiveFields = "clearSensitiveFields";
+        public const string ForceUpdatePassword = "forceUpdatePassword";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;
@@ -111,6 +115,8 @@
         public static string ProtectedPinKey(string userId) => $"protectedPin_{userId}";
         public static string LastSyncKey(string userId) => $"lastSync_{userId}";
         public static string BiometricUnlockKey(string userId) => $"biometricUnlock_{userId}";
+        public static string AccountBiometricIntegrityValidKey(string userId, string systemBioIntegrityState) =>
+            $"accountBiometricIntegrityValid_{userId}_{systemBioIntegrityState}";
         public static string ApprovePasswordlessLoginsKey(string userId) => $"approvePasswordlessLogins_{userId}";
         public static string UsernameGenOptionsKey(string userId) => $"usernameGenerationOptions_{userId}";
         public static string PushLastRegistrationDateKey(string userId) => $"pushLastRegistrationDate_{userId}";

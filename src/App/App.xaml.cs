@@ -38,6 +38,7 @@ namespace Bit.App
         private readonly IFileService _fileService;
         private readonly IAccountsManager _accountsManager;
         private readonly IPushNotificationService _pushNotificationService;
+        private readonly IConfigService _configService;
         private static bool _isResumed;
         // these variables are static because the app is launching new activities on notification click, creating new instances of App. 
         private static bool _pendingCheckPasswordlessLoginRequests;
@@ -61,6 +62,7 @@ namespace Bit.App
             _fileService = ServiceContainer.Resolve<IFileService>();
             _accountsManager = ServiceContainer.Resolve<IAccountsManager>("accountsManager");
             _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
+            _configService = ServiceContainer.Resolve<IConfigService>();
 
             _accountsManager.Init(() => Options, this);
 
@@ -160,6 +162,18 @@ namespace Bit.App
                             await Application.Current.MainPage.Navigation.PushModalAsync(
                                 new NavigationPage(new RemoveMasterPasswordPage()));
                         });
+                    }
+                    else if (message.Command == Constants.ForceUpdatePassword)
+                    {
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            await Application.Current.MainPage.Navigation.PushModalAsync(
+                                new NavigationPage(new UpdateTempPasswordPage()));
+                        });
+                    }
+                    else if (message.Command == "syncCompleted")
+                    {
+                        await _configService.GetAsync(true);
                     }
                     else if (message.Command == Constants.PasswordlessLoginRequestKey
                         || message.Command == "unlocked"
@@ -285,6 +299,8 @@ namespace Bit.App
                 // Reset delay on every start
                 _vaultTimeoutService.DelayLockAndLogoutMs = null;
             }
+
+            await _configService.GetAsync();
             _messagingService.Send("startEventTimer");
         }
 

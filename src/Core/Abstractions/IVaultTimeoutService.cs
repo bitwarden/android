@@ -22,5 +22,6 @@ namespace Bit.Core.Abstractions
         Task LogOutAsync(bool userInitiated = true, string userId = null);
         Task SetVaultTimeoutOptionsAsync(int? timeout, VaultTimeoutAction? action);
         Task<int?> GetVaultTimeout(string userId = null);
+        Task<VaultTimeoutAction?> GetVaultTimeoutAction(string userId = null);
     }
 }

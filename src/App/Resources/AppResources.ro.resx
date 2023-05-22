@@ -397,10 +397,10 @@
     <value>Vizitați-ne website-ul</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Vizitați saitul nostru pentru a primi ajutor, știri, pentru a trimite e-mail, și/sau aflați mai multe despre cum să utilizați Bitwarden.</value>
+    <value>Vizitați siteul nostru pentru a primi ajutor, știri, pentru a trimite e-mail, și/sau aflați mai multe despre cum să utilizați Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
-    <value>Sait web</value>
+    <value>Site web</value>
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
@@ -523,7 +523,7 @@
     <value>Import de articole</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>Puteți să importați datele de conectare din seiful web bitwarden.com. Doriți să vizitați saitul acum?</value>
+    <value>Puteți să importați datele de conectare din seiful web bitwarden.com. Doriți să vizitați siteul acum?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
     <value>Import rapid al datelor de conectare din alte aplicații de gestionare a parolelor.</value>
@@ -613,7 +613,7 @@
     <value>Nu există niciun articol în seiful dvs.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Nu sunt articole în seif pentru acest sait/aplicație. Atingeți pentru a adăuga unul.</value>
+    <value>Nu sunt articole în seif pentru acest site/aplicație. Atingeți pentru a adăuga unul.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Această autentificare nu are un nume de utilizator sau parolă configurate.</value>
@@ -1295,7 +1295,7 @@ Scanarea se va face automat.</value>
     <value>Trebuie să vă conectați la aplicația principală Bitwarden înainte de a putea utiliza auto-completarea.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Conectările dvs. sunt acum ușor accesibile chiar de la tastatură în timp ce vă conectați la aplicații și saituri web.</value>
+    <value>Conectările dvs. sunt acum ușor accesibile chiar de la tastatură în timp ce vă conectați la aplicații și site-uri web.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>Vă recomandăm să dezactivați orice alte aplicații cu auto-completare din Setări dacă nu intenționați să le utilizați.</value>
@@ -1468,7 +1468,7 @@ Scanarea se va face automat.</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwarden vă permite să vă partajați seiful cu alte persoane utilizând un cont pentru organizații. Doriți să vizitați saitul bitwarden.com pentru a afla mai multe?</value>
+    <value>Bitwarden vă permite să vă partajați seiful cu alte persoane utilizând un cont pentru organizații. Doriți să vizitați siteul bitwarden.com pentru a afla mai multe?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Export seif</value>
@@ -1752,11 +1752,11 @@ Scanarea se va face automat.</value>
     <value>Sigur doriți să trimiteți în coșul de reciclare?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Deblocarea biometrică a fost dezactivată în așteptarea verificării parolei principale.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Deblocarea biometrică pentru acest cont este dezactivată în așteptarea verificării parolei principale.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Deblocarea biometrică pentru auto-completare a fost dezactivată în așteptarea verificării parolei principale.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Completarea automată a deblocării biometrice pentru acest cont este dezactivată în așteptarea verificării parolei principale.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Activare sincronizare la reîmprospătare</value>
@@ -2142,6 +2142,12 @@ Scanarea se va face automat.</value>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Politicile de organizație afectează timpul de expirare a seifului. Timpul maxim de expirare a seifului este de {0} oră(e) și {1} minut(e)</value>
   </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Politicile organizației dumneavoastră afectează expirarea de seif. Timpul maxim permis de expirare a seifului este {0} ore şi {1} minut(e). Acţiunea de timeout a seifului este setată la {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Politicile organizației dvs. au setat acțiunea de expirare seif la {0}.</value>
+  </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Timpul de expirare al seifului depășește restricțiile stabilite de organizația dvs.</value>
   </data>
@@ -2489,8 +2495,8 @@ Doriți să comutați la acest cont?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Obțineți indiciul parolei principale</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Autentificare ca {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Logging in as {0} on {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Nu sunteți dvs.?</value>
@@ -2602,5 +2608,26 @@ Doriți să comutați la acest cont?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Nu există lucruri care să corespundă căutării</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Self-hosted</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Data region</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Parola principală nu îndeplinește una sau mai multe politici ale organizației. Pentru a accesa seiful trebuie să actualizați acum parola principală. Continuarea te va deconecta din sesiunea curentă, necesitând să te autentifici din nou. Sesiunile active pe alte dispozitive pot continua să rămână active timp de maxim o oră.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Parola principală curentă</value>
   </data>
 </root>

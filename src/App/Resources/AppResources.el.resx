@@ -1752,11 +1752,11 @@
     <value>Θέλετε πραγματικά να στείλετε στον κάδο απορριμμάτων;</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Εντοπίστηκε βιομετρική αλλαγή, συνδεθείτε χρησιμοποιώντας τον κύριο κωδικό πρόσβασης για ενεργοποίηση ξανά.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Το βιομετρικό ξεκλείδωμα για αυτόν τον λογαριασμό είναι απενεργοποιημένο εν αναμονή της επαλήθευσης του κύριου κωδικού πρόσβασης.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Το βιομετρικό ξεκλείδωμα για αυτόματη συμπλήρωση απενεργοποιήθηκε εν αναμονή της επαλήθευσης του κύριου κωδικού πρόσβασης.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Το βιομετρικό ξεκλείδωμα αυτόματης συμπλήρωσης για αυτό το λογαριασμό είναι απενεργοποιημένο εν αναμονή της επαλήθευσης του κύριου κωδικού πρόσβασης.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Ενεργοποίηση συγχρονισμού κατά την ανανέωση</value>
@@ -2142,6 +2142,12 @@
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Οι πολιτικές του οργανισμού σας επηρεάζουν το χρονικό όριο vault σας. Το μέγιστο επιτρεπόμενο Χρονικό όριο Vault είναι {0} ώρα(ες) και {1} λεπτό(ά)</value>
   </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Οι πολιτικές του οργανισμού σας επηρεάζουν το χρονικό όριο του vault σας. Το μέγιστο επιτρεπόμενο χρονικό όριο vault είναι {0} ώρα(ες) και {1} λεπτό(ά). Το χρονικό όριο του vault σας έχει οριστεί σε {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Οι πολιτικές του οργανισμού σας έχουν ορίσει την ενέργεια χρονικού ορίου vault σε {0}.</value>
+  </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Το χρονικό όριο του vault σας υπερβαίνει τους περιορισμούς που έχει ορίσει ο οργανισμός σας.</value>
   </data>
@@ -2489,8 +2495,8 @@
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Λάβετε υπόδειξη κύριου κωδικού</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Σύνδεση ως {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Logging in as {0} on {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Δεν είστε εσείς;</value>
@@ -2602,5 +2608,26 @@
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Δεν υπάρχουν στοιχεία που να ταιριάζουν με την αναζήτηση</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Self-hosted</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Data region</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Ο κύριος κωδικός πρόσβασής σας δεν πληροί μία ή περισσότερες πολιτικές του οργανισμού σας. Για να αποκτήσετε πρόσβαση στο Vault σας, πρέπει να ενημερώσετε τον κύριο κωδικό πρόσβασής σας τώρα. Η διαδικασία θα σας αποσυνδέσει από την τρέχουσα συνεδρία σας, απαιτώντας από εσάς να συνδεθείτε ξανά. Οι ενεργές συνεδρίες σε άλλες συσκευές ενδέχεται να συνεχίσουν να είναι ενεργές εώς και μία ώρα.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Τρέχων κύριος κωδικός</value>
   </data>
 </root>

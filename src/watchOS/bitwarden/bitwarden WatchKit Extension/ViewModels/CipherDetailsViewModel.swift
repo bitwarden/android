@@ -34,30 +34,34 @@ class CipherDetailsViewModel: ObservableObject{
                 self.counter = self.period - mod
                 self.progress = Double(self.counter) / Double(self.period)
             }
+            
             if mod == 0 || self.totpFormatted == "" {
                 do {
-                    var totpF = try TotpService.shared.GetCodeAsync(key: self.key) ?? ""
-                    if totpF.count > 4 {
-                        let halfIndex = totpF.index(totpF.startIndex, offsetBy: totpF.count / 2)
-                        totpF = "\(totpF[totpF.startIndex..<halfIndex]) \(totpF[halfIndex..<totpF.endIndex])"
-                    }
-                    DispatchQueue.main.async {
-                        self.totpFormatted = totpF
-                    }
+                    try self.regenerateTotp()
                 } catch {
                     DispatchQueue.main.async {
                         self.totpFormatted = "error"
                         t.invalidate()
                     }
                 }
-                
             }
         })
         RunLoop.current.add(timer!, forMode: .common)
         timer?.fire()
     }
     
-    func stopGeneration(){
+    func stopGeneration() {
         self.timer?.invalidate()
+    }
+    
+    func regenerateTotp() throws {
+        var totpF = try TotpService.shared.GetCodeAsync(key: self.key) ?? ""
+        if totpF.count > 4 {
+            let halfIndex = totpF.index(totpF.startIndex, offsetBy: totpF.count / 2)
+            totpF = "\(totpF[totpF.startIndex..<halfIndex]) \(totpF[halfIndex..<totpF.endIndex])"
+        }
+        DispatchQueue.main.async {
+            self.totpFormatted = totpF
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace Bit.Core.Abstractions
         Tuple<ResetPasswordPolicyOptions, bool> GetResetPasswordPolicyOptions(IEnumerable<Policy> policies,
             string orgId);
         Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter = null, string userId = null);
-        int? GetPolicyInt(Policy policy, string key);
         Task<bool> ShouldShowVaultFilterAsync();
+        Task<PasswordGeneratorPolicyOptions> GetPasswordGeneratorPolicyOptionsAsync();
     }
 }
