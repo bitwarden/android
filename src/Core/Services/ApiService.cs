@@ -583,6 +583,16 @@ namespace Bit.Core.Services
             });
         }
 
+        public Task<DeviceResponse> GetDeviceByIdentifierAsync(string deviceIdentifier)
+        {
+            return SendAsync<object, DeviceResponse>(HttpMethod.Get, $"/devices/identifier/{deviceIdentifier}", null, true, true);
+        }
+
+        public Task<DeviceResponse> UpdateTrustedDeviceKeysAsync(string deviceIdentifier, TrustedDeviceKeysRequest trustedDeviceKeysRequest)
+        {
+            return SendAsync<TrustedDeviceKeysRequest, DeviceResponse>(HttpMethod.Get, $"/devices/identifier/{deviceIdentifier}", trustedDeviceKeysRequest, true, true);
+        }
+
         #endregion
 
         #region Configs
