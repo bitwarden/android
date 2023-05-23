@@ -959,6 +959,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available for two-step login.
+        /// </summary>
+        public static string AvailableForTwoStepLogin {
+            get {
+                return ResourceManager.GetString("AvailableForTwoStepLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A verification code was sent to your email.
         /// </summary>
         public static string AVerificationCodeWasSentToYourEmail {

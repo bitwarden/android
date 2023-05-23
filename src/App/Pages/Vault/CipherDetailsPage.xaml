@@ -187,10 +187,8 @@
                                 StyleClass="box-label"
                                 Margin="0,10,0,0"
                                 IsVisible="{Binding Cipher.Login.Fido2Key}"/>
-                            <!--TODO: Update binding to display the true creation date of the login's Fido2Key.
-                                      For now, displaying the creation date of the cipher to check the UI-->
                             <Entry
-                                Text="{Binding CreationDate}"
+                                Text="{u:I18n AvailableForTwoStepLogin}"
                                 IsEnabled="False"
                                 StyleClass="box-value,text-muted"
                                 IsVisible="{Binding Cipher.Login.Fido2Key}" />

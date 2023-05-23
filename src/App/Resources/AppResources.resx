@@ -2656,4 +2656,7 @@ Do you want to switch to this account?</value>
   <data name="CopyApplication" xml:space="preserve">
     <value>Copy application</value>
   </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Available for two-step login</value>
+  </data>
 </root>
