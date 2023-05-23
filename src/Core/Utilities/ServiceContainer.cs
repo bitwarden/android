@@ -44,8 +44,9 @@ namespace Bit.Core.Utilities
             var organizationService = new OrganizationService(stateService, apiService);
             var settingsService = new SettingsService(stateService);
             var fileUploadService = new FileUploadService(apiService);
+            var configService = new ConfigService(apiService, stateService, logger);
             var cipherService = new CipherService(cryptoService, stateService, settingsService, apiService,
-                fileUploadService, storageService, i18nService, () => searchService, clearCipherCacheKey,
+                fileUploadService, storageService, i18nService, () => searchService, configService, clearCipherCacheKey,
                 allClearCipherCacheKeys);
             var folderService = new FolderService(cryptoService, stateService, apiService, i18nService, cipherService);
             var collectionService = new CollectionService(cryptoService, stateService, i18nService);
@@ -87,7 +88,6 @@ namespace Bit.Core.Utilities
             var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService,
                 cryptoService);
             var usernameGenerationService = new UsernameGenerationService(cryptoService, apiService, stateService);
-            var configService = new ConfigService(apiService, stateService, logger);
 
             Register<IConditionedAwaiterManager>(conditionedRunner);
             Register<ITokenService>("tokenService", tokenService);
@@ -95,6 +95,7 @@ namespace Bit.Core.Utilities
             Register<IAppIdService>("appIdService", appIdService);
             Register<IOrganizationService>("organizationService", organizationService);
             Register<ISettingsService>("settingsService", settingsService);
+            Register<IConfigService>(configService);
             Register<ICipherService>("cipherService", cipherService);
             Register<IFolderService>("folderService", folderService);
             Register<ICollectionService>("collectionService", collectionService);
@@ -113,7 +114,6 @@ namespace Bit.Core.Utilities
             Register<IKeyConnectorService>("keyConnectorService", keyConnectorService);
             Register<IUserVerificationService>("userVerificationService", userVerificationService);
             Register<IUsernameGenerationService>(usernameGenerationService);
-            Register<IConfigService>(configService);
         }
 
         public static void Register<T>(string serviceName, T obj)
