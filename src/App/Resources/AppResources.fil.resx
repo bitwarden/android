@@ -2496,8 +2496,8 @@ Gusto mo bang pumunta sa account na ito?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Kunin ang palatandaan ng master password</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Nagla-log in bilang si {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Logging in as {0} on {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Hindi ikaw?</value>
@@ -2609,6 +2609,21 @@ Gusto mo bang pumunta sa account na ito?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Walang mga item na tumutugma sa paghahanap</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Self-hosted</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Data region</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>

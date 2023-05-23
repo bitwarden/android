@@ -2495,8 +2495,8 @@
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Отримати підказку для головного пароля</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Вхід у систему як {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Вхід як {0} на {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Не ви?</value>
@@ -2608,6 +2608,21 @@
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Немає записів, що відповідають пошуку</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>США</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>ЄС</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Власне розміщення</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Регіон даних</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Регіон</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Ваш головний пароль не відповідає одній або більше політикам вашої організації. Щоб отримати доступ до сховища, вам необхідно оновити свій головний пароль зараз. Продовживши, ви вийдете з поточного сеансу, після чого потрібно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години.</value>

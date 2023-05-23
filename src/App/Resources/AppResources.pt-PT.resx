@@ -296,11 +296,11 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>O meu Cofre</value>
+    <value>O meu cofre</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authenticator</value>
+    <value>Autenticador</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -327,7 +327,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>Mover</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>A guardar...</value>
@@ -584,7 +584,7 @@
     <value>Uma dica da palavra-passe mestra pode ajudar a lembrar-se da sua palavra-passe se a esquecer.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>A palavra-passe mestra deve ter pelo menos {0} caracteres.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Números mínimos</value>
@@ -775,10 +775,10 @@
     <value>Ativado</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Off</value>
+    <value>Desligado</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>Ligado</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Estado</value>
@@ -1483,7 +1483,7 @@ Scanning will happen automatically.</value>
     <value>Desbloquear</value>
   </data>
   <data name="UnlockVault" xml:space="preserve">
-    <value>Unlock vault</value>
+    <value>Desbloquear cofre</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minutos</value>
@@ -1550,7 +1550,7 @@ Scanning will happen automatically.</value>
     <value>Altere o tema de cor da aplicação.</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>Predefinido (Sistema)</value>
   </data>
   <data name="DefaultDarkTheme" xml:space="preserve">
     <value>Tema Escuro Predefinido</value>
@@ -1659,10 +1659,10 @@ Scanning will happen automatically.</value>
     <value>Introduza a sua palavra-passe mestra para exportar os dados do seu cofre.</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
-    <value>Send a verification code to your email</value>
+    <value>Enviar um código de verificação para o seu e-mail</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
-    <value>Code sent!</value>
+    <value>Código enviado!</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
     <value>Confirm your identity to continue.</value>
@@ -2029,22 +2029,22 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
-    <value>1 day</value>
+    <value>1 dia</value>
   </data>
   <data name="TwoDays" xml:space="preserve">
-    <value>2 days</value>
+    <value>2 dias</value>
   </data>
   <data name="ThreeDays" xml:space="preserve">
-    <value>3 days</value>
+    <value>3 dias</value>
   </data>
   <data name="SevenDays" xml:space="preserve">
-    <value>7 days</value>
+    <value>7 dias</value>
   </data>
   <data name="ThirtyDays" xml:space="preserve">
-    <value>30 days</value>
+    <value>30 dias</value>
   </data>
   <data name="Custom" xml:space="preserve">
-    <value>Custom</value>
+    <value>Personalizado</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
     <value>Share this Send upon save</value>
@@ -2495,8 +2495,8 @@ Deseja mudar para esta conta?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Obter dica da palavra-passe mestra</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>A iniciar sessão como {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>A iniciar sessão como {0} em {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Utilizador incorreto?</value>
@@ -2608,6 +2608,21 @@ Deseja mudar para esta conta?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>There are no items that match the search</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>EUA</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>UE</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Auto-hospedado</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Região dos dados</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Região</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
