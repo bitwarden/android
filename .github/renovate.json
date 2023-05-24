@@ -17,6 +17,11 @@
         "groupName": "Nuget updates",
         "groupSlug": "nuget",
         "separateMajorMinor": false
+      },
+      {
+        "groupName": "gh minor",
+        "matchManagers": ["github-actions"],
+        "matchUpdateTypes": ["minor", "patch"]
       }
     ]
   }
