@@ -165,6 +165,7 @@ namespace Bit.App.Pages
 
         public async Task ShowEnvironmentPickerAsync()
         {
+            _displayEuEnvironment = await _configService.GetFeatureFlagBoolAsync(Constants.DisplayEuEnvironmentFlag);
             var options = _displayEuEnvironment
                     ? new string[] { AppResources.US, AppResources.EU, AppResources.SelfHosted }
                     : new string[] { AppResources.US, AppResources.SelfHosted };
@@ -185,6 +186,7 @@ namespace Bit.App.Pages
                 }
 
                 await _environmentService.SetUrlsAsync(result == AppResources.EU ? EnvironmentUrlData.DefaultEU : EnvironmentUrlData.DefaultUS);
+                await _configService.GetAsync(true);
                 SelectedEnvironmentName = result;
             });
         }
@@ -210,6 +212,7 @@ namespace Bit.App.Pages
             }
             else
             {
+                await _configService.GetAsync(true);
                 SelectedEnvironmentName = AppResources.SelfHosted;
             }
         }
