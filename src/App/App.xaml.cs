@@ -297,7 +297,7 @@ namespace Bit.App
             {
                 await _vaultTimeoutService.CheckVaultTimeoutAsync();
                 // Reset delay on every start
-                _vaultTimeoutService.DelayLockAndLogoutMs = null;
+                _vaultTimeoutService.DelayTimeoutMs = null;
             }
 
             await _configService.GetAsync();
