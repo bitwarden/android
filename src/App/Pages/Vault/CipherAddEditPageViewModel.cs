@@ -309,7 +309,7 @@ namespace Bit.App.Pages
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public bool HasTotpValue => IsLogin && !string.IsNullOrEmpty(Cipher?.Login?.Totp);
         public string SetupTotpText => $"{BitwardenIcons.Camera} {AppResources.SetupTotp}";
-        public bool ShowPasskeyCreationDate => Cipher?.Login?.Fido2Key != null && !CloneMode;
+        public bool ShowPasskeyInfo => Cipher?.Login?.Fido2Key != null && !CloneMode;
 
         public void Init()
         {
