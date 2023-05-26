@@ -161,13 +161,13 @@ Secure and share sensitive data within your Bitwarden Vault from any browser, mo
     <value>Gira todas as suas credenciais e palavras-passe a partir de um cofre seguro</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Gira automaticamente palavras-passe fortes, aleatórias e seguras</value>
+    <value>Gera automaticamente palavras-passe fortes, aleatórias e seguras</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
     <value>Proteja o seu cofre com impressão digital, código PIN, ou palavra-passe mestra</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Auto-preencha rapidamente credenciais a partir do seu navegador web e outras aplicações</value>
+    <value>Preencher rapidamente os inícios de sessão de forma automática a partir do seu navegador web e de outras aplicações</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Sincronize e aceda ao seu cofre a partir de múltiplos dispositivos
