@@ -285,7 +285,7 @@
     <value>खाता पहले से जोड़ा गया</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value>अभी खाता इस्तेमाल करें?</value>
+    <value>खाता अभी इस्तेमाल करें?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>मुख्य पासवर्ड</value>
@@ -431,7 +431,7 @@
     <value>बिटवार्डन ऐप एक्सटेंशन</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>बिटवार्डन ऐप एक्सटेंशन अपने तिजोरी में नए चीज़ डालने का सबसे आसात तरीका है। बिटवार्डन ऐप एक्सटेंशन के इस्तेमाल से जुड़ी जानकारी लेने के लिए "सेटिंग" में जाएं।</value>
+    <value>बिटवार्डन ऐप एक्सटेंशन तिजोरी में नए चीज़ डालने का सबसे आसात तरीका है। बिटवार्डन ऐप एक्सटेंशन के इस्तेमाल से जुड़ी जानकारी लेने के लिए "सेटिंग" में जाएं।</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>सफारी और दूसरे ऐप में अपने लॉगइन अपनेआप भरने के लिए बिटवार्डन इस्तेमाल करें।</value>
@@ -477,59 +477,59 @@
     <value>मुख्य पासवर्ड इशारा लेने के लिए अपने खाते का ईमेल पता डालें।</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>ऐप विस्तारण को फिर चालू करें</value>
+    <value>ऐप एक्सटेंशन वापस चालू करें</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
-    <value>लगभग सम्पूर्ण!</value>
+    <value>करीब-करीब खत्म!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>ऐप विस्तारण को चालू करें</value>
+    <value>ऐप एक्सटेंशन चालू करें</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>In Safari, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
+    <value>सफारी में, शेयर आइकन से बिटवार्डन का पता लगाएं (इशारा: मेन्यू के सबसे निचले पट्टी पर दाएं तरफ जाएं)।</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>अपने पासवर्ड को तुरंत प्राप्त करें</value>
+    <value>अपने पासवर्ड को तुरंत एक्सेस करें!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>आप लॉग इन करने के लिए तैयार हैं!</value>
+    <value>आप लॉगइन करने के लिए तैयार हैं!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable from Safari, Chrome, and other supported apps.</value>
+    <value>अब सफारी, क्रोम, और दूसरे सपोर्ट किए गए ऐप से लॉगइन आसानी से एक्सेस किए जा सकते है।</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>In Safari and Chrome, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).</value>
+    <value>सफारी और क्रोम में, शेयर आइकन से बिटवार्डन का पता लगाएं (इशारा: मेन्यू के सबसे निचले पट्टी पर दाएं तरफ जाएं)</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Tap the bitwarden icon in the menu to launch the extension.</value>
+    <value>एक्सटेंशन खोलने के लिए मेन्यू में बिटवार्डन आइकन पर दबाएं।</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>To turn on bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
+    <value>सफारी और दूसरे ऐप में बिटवार्डन चालू करने के लिए, मेन्यू के सबसे निचले पट्टी में "ज़्यादा" आइकन दबाएं।</value>
   </data>
   <data name="Favorite" xml:space="preserve">
-    <value>पसंदीदा</value>
+    <value>मनपसंद</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
     <value>फिंगरप्रिंट</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>पासवर्ड उत्पन्न करें</value>
+    <value>पासवर्ड बनाएं</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>मास्टर पासवर्ड संकेत प्राप्त करें</value>
+    <value>मुख्य पासवर्ड इशारा लें</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>आइटम्स आयात करें</value>
+    <value>चीज़ आयात करें</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>Bitwarden के वेब-तिजोरी से एक साथ कई आइटम आयातित किए जा सकते हैं। क्या आप वहां जाना चाहते हैं?</value>
+    <value>Bitwarden.com वेब तिजोरी से थोक में चीज़ आयात किए जा सकते हैं। वेबसाइट पर अभी जाएं?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>दूसरे पासवर्ड प्रबंधन ऐप से एक साथ कई आइटम जल्दी आयातित करें।</value>
+    <value>दूसरे पासवर्ड मैनेजमेंट ऐप से थोक में चीज़ जल्दी आयात करें।</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>आखिरी बार सिंक हुआ:</value>
+    <value>आखिरी सिंक:</value>
   </data>
   <data name="Length" xml:space="preserve">
     <value>लंबाई</value>
@@ -538,7 +538,7 @@
     <value>लॉक</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 मिनिट</value>
+    <value>15 मिनट</value>
   </data>
   <data name="OneHour" xml:space="preserve">
     <value>1 घंटा</value>
@@ -550,87 +550,86 @@
     <value>4 घंटे</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>तत्‍काल
-</value>
+    <value>तुरंत</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>तिजोरी का समय समाप्त</value>
+    <value>तिजोरी वक्त खत्म</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>तिजोरी का समय समाप्त</value>
+    <value>तिजोरी वक्त खत्म</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>लॉग आउट करने से तिजोरी में प्रवेश संभव नहीं होगा और समय समाप्त होने के बाद ऑनलाइन प्रमाणीकरण की आश्यकता होगी। आप इस सेटिंग्स को प्रयोग करने के लिए विश्वस्त हैं?</value>
+    <value>लॉगआउट करने के बाद तिजोरी में जाना मुमकिन नहीं होगा और वक्त खत्म होने के बाद ऑनलाइन सत्यापन की ज़रूरत होगी। इस सेटिंग को पक्का इस्तेमाल करें?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>लॉगिन कर रहा है...</value>
+    <value>लॉगइन कर रहे है...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>सुरक्षित तिजोरी में प्रवेश करने के लिए नया खाता बनाएं या लॉग इन करें।</value>
+    <value>अपनी महफूज़ तिजोरी एक्सेस करने के लिए नया खाता बनाएं या लॉगइन करें।</value>
   </data>
   <data name="Manage" xml:space="preserve">
-    <value>प्रबंधन</value>
+    <value>मैनेज करें</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
     <value>पासवर्ड गलत है।</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>मास्टर पासवर्ड वह पासवर्ड है जो तिजोरी में प्रवेश के लिए प्रयोग होता है। आप मास्टर पासवर्ड ना भूले यह अतिआवश्यक है। भूलने की अवस्था में पासवर्ड को दोबारा पाना संभव नहीं होगा।</value>
+    <value>मुख्य पासवर्ड वो पासवर्ड है जो तिजोरी एक्सेस करने के लिए इस्तेमाल होता है। मुख्य पासवर्ड ना भूलना बहुत ज़रूरी है। भूलने के बाद पासवर्ड वापस पाना मुमकिन नहीं होगा।</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>मास्टर पासवर्ड संकेत (वैकल्पिक)</value>
+    <value>मुख्य पासवर्ड इशारा (ज़रूरी नहीं)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>मास्टर पासवर्ड संकेत आपको भूल जाने की अवस्था में पासवर्ड को याद करने में सहायता करता है।</value>
+    <value>मुख्य पासवर्ड इशारा आपको पासवर्ड भूल जाने के स्थिति में उसको याद करने में मदद करता है।</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
     <value>मुख्य पासवर्ड कम-से-कम {0} अक्षर लंबा होना चाहिए।</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>कम से कम अंक</value>
+    <value>कम-से-कम अंक</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>कम से कम विशेष अक्षर</value>
+    <value>कम-से-कम खास अक्षर</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
-    <value>अधिक सेटिंग्‍स</value>
+    <value>ज़्यादा सेटिंग</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>You must log into the main bitwarden app before you can use the extension.</value>
+    <value>एक्सटेशन इस्तेमाल करने से पहले मुख्य बिटवार्डन ऐप में लॉगइन करना पड़ेगा।</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>कभी नहीं</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>नया आइटम बनाया गया</value>
+    <value>नया चीज़ बनाया गया</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>तिजोरी में कोई अभिमत आइटम नहीं है।</value>
+    <value>तिजोरी में कोई मनपसंद चीज़ नहीं है।</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>तिजोरी में कोई आइटम नहीं है।</value>
+    <value>तिजोरी में कोई चीज़ नहीं है।</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>इस वेबसाइट/ऐप के लिए तिजोरी में कोई चीज़ नहीं है। चीज़ जोड़ने के लिए दबाएं।</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>इस आइटम में कोई यूजरनेम या पासवर्ड नहीं पड़ा है।</value>
+    <value>इस लॉगइन में कोई यूजरनाम या पासवर्ड नहीं है।</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>ठीक है, समझ गए!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Option defaults are set from the main bitwarden app's password generator tool.</value>
+    <value>विकल्प डिफॉल्ट मुख्य बिटवार्डन ऐप के पासवर्ड जनरेटर औज़ार से सेट होता है।</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>विकल्प</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>अन्य</value>
+    <value>दूसरे</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
     <value>पासवर्ड बनाया गया</value>
@@ -639,13 +638,13 @@
     <value>पासवर्ड जनरेटर</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>पासवर्ड संकेत</value>
+    <value>पासवर्ड इशारा</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>हमने आपको मास्टर पासवर्ड संकेत के साथ एक ईमेल भेजा है।</value>
+    <value>हमने आपको मुख्य पासवर्ड इशारा एक ईमेल के साथ भेजा है।</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>आप पुराने पासवर्ड के ऊपर दूसरा पासवर्ड लिखने के लिए आश्वस्त हैं?</value>
+    <value>चालू पासवर्ड पक्का ओवरराइट करें?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
     <value>bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Ok" on the following prompt when asked to enable push notifications.</value>
