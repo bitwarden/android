@@ -54,7 +54,9 @@
             IsPassword="{Binding ShowHiddenValue, Converter={StaticResource inverseBool}}"
             IsEnabled="{Binding ShowViewHidden}"
             IsSpellCheckEnabled="False"
-            IsTextPredictionEnabled="False">
+            IsTextPredictionEnabled="False"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{Binding Field.Name}">
             <Entry.Keyboard>
                 <Keyboard x:FactoryMethod="Create">
                     <x:Arguments>
