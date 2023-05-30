@@ -151,7 +151,7 @@ Proteggi e condividi i dati sensibili all'interno della tua cassaforte di Bitwar
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bit warden,8bit,password,gestore password gratuito,gestore password,gestore login</value>
+    <value>bit warden,8bit,password,gestore password gratis,gestore password,gestore login</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
@@ -164,7 +164,7 @@ Proteggi e condividi i dati sensibili all'interno della tua cassaforte di Bitwar
     <value>Proteggi la tua cassaforte con Touch ID, Face ID, PIN o password</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Auto-completamento login da Safari, Chrome e centinaia di altre applicazioni</value>
+    <value>Riempi automaticamente i login su Safari, Chrome e centinaia di altre app</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Sincronizza e accedi alla tua cassaforte da più dispositivi</value>

@@ -15,6 +15,8 @@ namespace Bit.App.Pages
         private readonly AppOptions _appOptions;
         private IBroadcasterService _broadcasterService;
 
+        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
+
         public HomePage(AppOptions appOptions = null)
         {
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
@@ -70,6 +72,14 @@ namespace Bit.App.Pages
                     });
                 }
             });
+            try
+            {
+                await _vm.UpdateEnvironment();
+            }
+            catch (Exception ex)
+            {
+                _logger.Value?.Exception(ex);
+            }
         }
 
         protected override bool OnBackButtonPressed()
@@ -126,14 +136,6 @@ namespace Bit.App.Pages
         {
             var page = new LoginSsoPage(_appOptions);
             await Navigation.PushModalAsync(new NavigationPage(page));
-        }
-
-        private void Environment_Clicked(object sender, EventArgs e)
-        {
-            if (DoOnce())
-            {
-                _vm.StartEnvironmentAction();
-            }
         }
 
         private async Task StartEnvironmentAsync()

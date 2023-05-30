@@ -46,16 +46,20 @@ namespace Bit.Core.Services
             {
                 return _policyCache.Where(p => p.Type == type).ToList();
             }
-            else
-            {
-                return _policyCache;
-            }
+
+            return _policyCache;
         }
 
         public async Task Replace(Dictionary<string, PolicyData> policies, string userId = null)
         {
             await _stateService.SetEncryptedPoliciesAsync(policies, userId);
             _policyCache = null;
+
+            var vaultTimeoutPolicy = policies.FirstOrDefault(p => p.Value.Type == PolicyType.MaximumVaultTimeout);
+            if (vaultTimeoutPolicy.Value != null)
+            {
+                await UpdateVaultTimeoutFromPolicyAsync(new Policy(vaultTimeoutPolicy.Value));
+            }
         }
 
         public async Task ClearAsync(string userId)
@@ -64,71 +68,98 @@ namespace Bit.Core.Services
             _policyCache = null;
         }
 
+        public async Task UpdateVaultTimeoutFromPolicyAsync(Policy policy, string userId = null)
+        {
+            var policyTimeout = policy.GetInt(Policy.MINUTES_KEY);
+            if (policyTimeout != null)
+            {
+                var vaultTimeout = await _stateService.GetVaultTimeoutAsync(userId);
+                var timeout = vaultTimeout.HasValue ? Math.Min(vaultTimeout.Value, policyTimeout.Value) : policyTimeout.Value;
+                if (timeout < 0)
+                {
+                    timeout = policyTimeout.Value;
+                }
+                if (vaultTimeout != timeout)
+                {
+                    await _stateService.SetVaultTimeoutAsync(timeout, userId);
+                }
+            }
+
+            var policyAction = policy.GetString(Policy.ACTION_KEY);
+            if (!string.IsNullOrEmpty(policyAction))
+            {
+                var vaultTimeoutAction = await _stateService.GetVaultTimeoutActionAsync(userId);
+                var action = policyAction == Policy.ACTION_LOCK ? VaultTimeoutAction.Lock : VaultTimeoutAction.Logout;
+                if (vaultTimeoutAction != action)
+                {
+                    await _stateService.SetVaultTimeoutActionAsync(action, userId);
+                }
+            }
+        }
+
         public async Task<MasterPasswordPolicyOptions> GetMasterPasswordPolicyOptions(
             IEnumerable<Policy> policies = null, string userId = null)
         {
-            MasterPasswordPolicyOptions enforcedOptions = null;
-
             if (policies == null)
             {
                 policies = await GetAll(PolicyType.MasterPassword, userId);
+                if (policies == null)
+                {
+                    return null;
+                }
             }
             else
             {
                 policies = policies.Where(p => p.Type == PolicyType.MasterPassword);
             }
 
-            if (policies == null || !policies.Any())
+            policies = policies.Where(p => p.Enabled && p.Data != null);
+
+            if (!policies.Any())
             {
-                return enforcedOptions;
+                return null;
             }
+
+            var enforcedOptions = new MasterPasswordPolicyOptions();
 
             foreach (var currentPolicy in policies)
             {
-                if (!currentPolicy.Enabled || currentPolicy.Data == null)
+                var minComplexity = currentPolicy.GetInt("minComplexity");
+                if (minComplexity > enforcedOptions.MinComplexity)
                 {
-                    continue;
+                    enforcedOptions.MinComplexity = minComplexity.Value;
                 }
 
-                if (enforcedOptions == null)
+                var minLength = currentPolicy.GetInt("minLength");
+                if (minLength > enforcedOptions.MinLength)
                 {
-                    enforcedOptions = new MasterPasswordPolicyOptions();
+                    enforcedOptions.MinLength = minLength.Value;
                 }
 
-                var minComplexity = GetPolicyInt(currentPolicy, "minComplexity");
-                if (minComplexity != null && (int)(long)minComplexity > enforcedOptions.MinComplexity)
-                {
-                    enforcedOptions.MinComplexity = (int)(long)minComplexity;
-                }
-
-                var minLength = GetPolicyInt(currentPolicy, "minLength");
-                if (minLength != null && (int)(long)minLength > enforcedOptions.MinLength)
-                {
-                    enforcedOptions.MinLength = (int)(long)minLength;
-                }
-
-                var requireUpper = GetPolicyBool(currentPolicy, "requireUpper");
-                if (requireUpper != null && (bool)requireUpper)
+                if (currentPolicy.GetBool("requireUpper") == true)
                 {
                     enforcedOptions.RequireUpper = true;
                 }
 
-                var requireLower = GetPolicyBool(currentPolicy, "requireLower");
-                if (requireLower != null && (bool)requireLower)
+                if (currentPolicy.GetBool("requireLower") == true)
                 {
                     enforcedOptions.RequireLower = true;
                 }
 
-                var requireNumbers = GetPolicyBool(currentPolicy, "requireNumbers");
-                if (requireNumbers != null && (bool)requireNumbers)
+                if (currentPolicy.GetBool("requireNumbers") == true)
                 {
                     enforcedOptions.RequireNumbers = true;
                 }
 
-                var requireSpecial = GetPolicyBool(currentPolicy, "requireSpecial");
-                if (requireSpecial != null && (bool)requireSpecial)
+                if (currentPolicy.GetBool("requireSpecial") == true)
                 {
                     enforcedOptions.RequireSpecial = true;
+                }
+
+                var enforceOnLogin = currentPolicy.GetBool("enforceOnLogin");
+                if (enforceOnLogin == true)
+                {
+                    enforcedOptions.EnforceOnLogin = true;
                 }
             }
 
@@ -188,7 +219,7 @@ namespace Bit.Core.Services
 
             var policy = policies.FirstOrDefault(p =>
                 p.OrganizationId == orgId && p.Type == PolicyType.ResetPassword && p.Enabled);
-            resetPasswordPolicyOptions.AutoEnrollEnabled = GetPolicyBool(policy, "autoEnrollEnabled") ?? false;
+            resetPasswordPolicyOptions.AutoEnrollEnabled = policy.GetBool("autoEnrollEnabled") ?? false;
 
             return new Tuple<ResetPasswordPolicyOptions, bool>(resetPasswordPolicyOptions, policy != null);
         }
@@ -234,19 +265,6 @@ namespace Bit.Core.Services
             return organization.isExemptFromPolicies;
         }
 
-        public int? GetPolicyInt(Policy policy, string key)
-        {
-            if (policy.Data.ContainsKey(key))
-            {
-                var value = policy.Data[key];
-                if (value != null)
-                {
-                    return (int)(long)value;
-                }
-            }
-            return null;
-        }
-
         public async Task<bool> ShouldShowVaultFilterAsync()
         {
             var personalOwnershipPolicyApplies = await PolicyAppliesToUser(PolicyType.PersonalOwnership);
@@ -259,30 +277,86 @@ namespace Bit.Core.Services
             return organizations?.Any() ?? false;
         }
 
-        private bool? GetPolicyBool(Policy policy, string key)
+        public async Task<PasswordGeneratorPolicyOptions> GetPasswordGeneratorPolicyOptionsAsync()
         {
-            if (policy.Data.ContainsKey(key))
+            var policies = await GetAll(PolicyType.PasswordGenerator);
+            if (policies == null)
             {
-                var value = policy.Data[key];
-                if (value != null)
-                {
-                    return (bool)value;
-                }
+                return null;
             }
-            return null;
-        }
 
-        private string GetPolicyString(Policy policy, string key)
-        {
-            if (policy.Data.ContainsKey(key))
+            var actualPolicies = policies.Where(p => p.Enabled && p.Data != null);
+            if (!actualPolicies.Any())
             {
-                var value = policy.Data[key];
-                if (value != null)
+                return null;
+            }
+
+            var enforcedOptions = new PasswordGeneratorPolicyOptions();
+
+            foreach (var currentPolicy in actualPolicies)
+            {
+                var defaultType = currentPolicy.GetString("defaultType");
+                if (defaultType != null && enforcedOptions.DefaultType != PasswordGenerationOptions.TYPE_PASSWORD)
                 {
-                    return (string)value;
+                    enforcedOptions.DefaultType = defaultType;
+                }
+
+                var minLength = currentPolicy.GetInt("minLength");
+                if (minLength > enforcedOptions.MinLength)
+                {
+                    enforcedOptions.MinLength = minLength.Value;
+                }
+
+                if (currentPolicy.GetBool("useUpper") == true)
+                {
+                    enforcedOptions.UseUppercase = true;
+                }
+
+                if (currentPolicy.GetBool("useLower") == true)
+                {
+                    enforcedOptions.UseLowercase = true;
+                }
+
+                if (currentPolicy.GetBool("useNumbers") == true)
+                {
+                    enforcedOptions.UseNumbers = true;
+                }
+
+                var minNumbers = currentPolicy.GetInt("minNumbers");
+                if (minNumbers > enforcedOptions.NumberCount)
+                {
+                    enforcedOptions.NumberCount = minNumbers.Value;
+                }
+
+                if (currentPolicy.GetBool("useSpecial") == true)
+                {
+                    enforcedOptions.UseSpecial = true;
+                }
+
+                var minSpecial = currentPolicy.GetInt("minSpecial");
+                if (minSpecial > enforcedOptions.SpecialCount)
+                {
+                    enforcedOptions.SpecialCount = minSpecial.Value;
+                }
+
+                var minNumberWords = currentPolicy.GetInt("minNumberWords");
+                if (minNumberWords > enforcedOptions.MinNumberOfWords)
+                {
+                    enforcedOptions.MinNumberOfWords = minNumberWords.Value;
+                }
+
+                if (currentPolicy.GetBool("capitalize") == true)
+                {
+                    enforcedOptions.Capitalize = true;
+                }
+
+                if (currentPolicy.GetBool("includeNumber") == true)
+                {
+                    enforcedOptions.IncludeNumber = true;
                 }
             }
-            return null;
+
+            return enforcedOptions;
         }
     }
 }

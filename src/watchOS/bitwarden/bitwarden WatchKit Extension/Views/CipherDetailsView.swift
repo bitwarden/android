@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CipherDetailsView: View {
     @ObservedObject var cipherDetailsViewModel: CipherDetailsViewModel
+    @Environment(\.scenePhase) var scenePhase
     
     let iconSize: CGSize = CGSize(width: 30, height: 30)
     
@@ -49,6 +50,7 @@ struct CipherDetailsView: View {
                     .fontWeight(.bold)
                     .lineLimit(1)
                     .truncationMode(.tail)
+                    .privacySensitive()
             }
             if cipherDetailsViewModel.totpFormatted == "" {
                 ProgressView()
@@ -61,6 +63,7 @@ struct CipherDetailsView: View {
                         .minimumScaleFactor(0.01)
                         .lineLimit(1)
                         .id(cipherDetailsViewModel.totpFormatted)
+                        .privacySensitive()
                         .transition(transition)
                         .animation(.default.speed(0.7), value: cipherDetailsViewModel.totpFormatted)
                     Spacer()
@@ -70,6 +73,7 @@ struct CipherDetailsView: View {
                         Text("\(cipherDetailsViewModel.counter)")
                             .font(.title3)
                             .fontWeight(.semibold)
+                            .privacySensitive()
                     }
                 }
                 .padding(.top, 20)
@@ -82,6 +86,11 @@ struct CipherDetailsView: View {
         }
         .onDisappear{
             self.cipherDetailsViewModel.stopGeneration()
+        }
+        .onChange(of: scenePhase) { newPhase in
+            if newPhase == .active {
+                try? self.cipherDetailsViewModel.regenerateTotp()
+            }
         }
     }
     

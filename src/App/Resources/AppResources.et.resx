@@ -1752,11 +1752,11 @@ Skaneerimine toimub automaatselt.</value>
     <value>Oled kindel, et soovid kirje(d) prügikasti teisaldada?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Automaattäite kinnitamine läbi biomeetria on keelatud. Oodatakse ülemparooli sisestamist.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biomeetriaga lahtilukustamine on keelatud. Oodatakse ülemparooli sisestamist.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Automaattäite kinnitamine läbi biomeetria on keelatud. Oodatakse ülemparooli sisestamist.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Automaattäite ja biomeetrilise avamise kasutamine on keelatud. Oodatakse ülemprooli sisestamist.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Luba allatõmbel sünkroniseerimine</value>
@@ -2140,7 +2140,13 @@ Skaneerimine toimub automaatselt.</value>
     <value>Selle organisatsiooni poliitika kohaselt liidetakse sind automaatselt ülemparooli lähtestamise funktsiooniga. Liitumisel saavad organisatsiooni administraatorid sinu ülemparooli muuta.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Organisatsiooni poliitikad mõjutavad sinu hoidla ajalõppu. Maksimaalne lubatud hoidla ajalõpp on {0}  tund(i) ja {1} minut(it)</value>
+    <value>Organisatsiooni poliitikad mõjutavad sinu hoidla ajalõppu. Maksimaalne lubatud hoidla ajalõpp on {0} tund(i) ja {1} minut(it).</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Organisatsiooni poliitikad mõjutavad sinu hoidla ajalõppu. Maksimaalne lubatud hoidla ajalõpp on {0} tund(i) ja {1} minut(it). Sinu hoidla ajalõpu tegevus on {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Organisatsiooni poliitika on sinu hoidla ajalõpu tegevuse seadistanud {0} peale.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Valitud hoidla ajalõpp ei ole organisatsiooni poolt määratud reeglitega kooskõlas.</value>
@@ -2489,8 +2495,8 @@ Soovid selle konto peale lülituda?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Tuleta ülemparooli vihjega meelde</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Sisselogimas kui {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Logging in as {0} on {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Pole sina?</value>
@@ -2602,5 +2608,26 @@ Soovid selle konto peale lülituda?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Otsingusõnale ei vasta kirjeid</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Self-hosted</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Data region</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Sinu ülemparool ei vasta ühele või rohkemale organisatsiooni poolt seatud poliitikale. Hoidlale ligipääsemiseks pead oma ülemaprooli uuendama. Jätkamisel logitakse sind praegusest sessioonist välja, mistõttu pead uuesti sisse logima. Teistes seadmetes olevad aktiivsed sessioonid aeguvad umbes ühe tunni jooksul.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Praegune ülemparool</value>
   </data>
 </root>

@@ -10,6 +10,7 @@ using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.App.Utilities.AccountManagement;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Services;
@@ -105,13 +106,13 @@ namespace Bit.iOS.Core.Utilities
             var storageMediatorService = new StorageMediatorService(mobileStorageService, secureStorageService, preferencesStorage);
             var stateService = new StateService(mobileStorageService, secureStorageService, storageMediatorService, messagingService);
             var stateMigrationService =
-                new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
+                new StateMigrationService(DeviceType.iOS, liteDbStorage, preferencesStorage, secureStorageService);
             var deviceActionService = new DeviceActionService();
             var fileService = new FileService(stateService, messagingService);
             var clipboardService = new ClipboardService(stateService);
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, clipboardService,
                 messagingService, broadcasterService);
-            var biometricService = new BiometricService(mobileStorageService);
+            var biometricService = new BiometricService(stateService);
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
@@ -156,6 +157,20 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Resolve<IAuthService>("authService").Init();
             (ServiceContainer.
                 Resolve<IPlatformUtilsService>("platformUtilsService") as MobilePlatformUtilsService).Init();
+
+            var accountsManager = new AccountsManager(
+                ServiceContainer.Resolve<IBroadcasterService>("broadcasterService"),
+                ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService"),
+                ServiceContainer.Resolve<IStorageService>("secureStorageService"),
+                ServiceContainer.Resolve<IStateService>("stateService"),
+                ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
+                ServiceContainer.Resolve<IAuthService>("authService"),
+                ServiceContainer.Resolve<ILogger>("logger"),
+                ServiceContainer.Resolve<IMessagingService>("messagingService"),
+                ServiceContainer.Resolve<IWatchDeviceService>(),
+                ServiceContainer.Resolve<IConditionedAwaiterManager>());
+            ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
+
             // Note: This is not awaited
             var bootstrapTask = BootstrapAsync(postBootstrapFunc);
         }
@@ -234,18 +249,6 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
                 ServiceContainer.Resolve<ICryptoService>("cryptoService"));
             ServiceContainer.Register<IVerificationActionsFlowHelper>("verificationActionsFlowHelper", verificationActionsFlowHelper);
-
-            var accountsManager = new AccountsManager(
-                ServiceContainer.Resolve<IBroadcasterService>("broadcasterService"),
-                ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService"),
-                ServiceContainer.Resolve<IStorageService>("secureStorageService"),
-                ServiceContainer.Resolve<IStateService>("stateService"),
-                ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
-                ServiceContainer.Resolve<IAuthService>("authService"),
-                ServiceContainer.Resolve<ILogger>("logger"),
-                ServiceContainer.Resolve<IMessagingService>("messagingService"),
-                ServiceContainer.Resolve<IWatchDeviceService>());
-            ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
 
             if (postBootstrapFunc != null)
             {

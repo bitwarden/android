@@ -44,6 +44,7 @@ namespace Bit.Droid
         private IAppIdService _appIdService;
         private IEventService _eventService;
         private IPushNotificationListenerService _pushNotificationListenerService;
+        private IVaultTimeoutService _vaultTimeoutService;
         private ILogger _logger;
         private PendingIntent _eventUploadPendingIntent;
         private AppOptions _appOptions;
@@ -68,6 +69,7 @@ namespace Bit.Droid
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
             _pushNotificationListenerService = ServiceContainer.Resolve<IPushNotificationListenerService>();
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>();
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -232,6 +234,7 @@ namespace Bit.Droid
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
+            _vaultTimeoutService.ResetTimeoutDelay = true;
             if (resultCode == Result.Ok &&
                (requestCode == Core.Constants.SelectFileRequestCode || requestCode == Core.Constants.SaveFileRequestCode))
             {

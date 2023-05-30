@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Services
 {
@@ -17,7 +18,6 @@ namespace Bit.Core.Services
         private readonly ISearchService _searchService;
         private readonly IMessagingService _messagingService;
         private readonly ITokenService _tokenService;
-        private readonly IPolicyService _policyService;
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly Func<Tuple<string, bool>, Task> _lockedCallback;
         private readonly Func<Tuple<string, bool, bool>, Task> _loggedOutCallback;
@@ -32,7 +32,6 @@ namespace Bit.Core.Services
             ISearchService searchService,
             IMessagingService messagingService,
             ITokenService tokenService,
-            IPolicyService policyService,
             IKeyConnectorService keyConnectorService,
             Func<Tuple<string, bool>, Task> lockedCallback,
             Func<Tuple<string, bool, bool>, Task> loggedOutCallback)
@@ -46,13 +45,13 @@ namespace Bit.Core.Services
             _searchService = searchService;
             _messagingService = messagingService;
             _tokenService = tokenService;
-            _policyService = policyService;
             _keyConnectorService = keyConnectorService;
             _lockedCallback = lockedCallback;
             _loggedOutCallback = loggedOutCallback;
         }
 
-        public long? DelayLockAndLogoutMs { get; set; }
+        public long? DelayTimeoutMs { get; set; }
+        public bool ResetTimeoutDelay { get; set; }
 
         public async Task<bool> IsLockedAsync(string userId = null)
         {
@@ -119,7 +118,7 @@ namespace Bit.Core.Services
             {
                 return false;
             }
-            if (vaultTimeoutMinutes == 0 && !DelayLockAndLogoutMs.HasValue)
+            if (vaultTimeoutMinutes == 0 && !DelayTimeoutMs.HasValue)
             {
                 return true;
             }
@@ -129,8 +128,13 @@ namespace Bit.Core.Services
                 return false;
             }
             var diffMs = _platformUtilsService.GetActiveTime() - lastActiveTime;
-            if (DelayLockAndLogoutMs.HasValue && diffMs < DelayLockAndLogoutMs)
+            if (DelayTimeoutMs.HasValue && diffMs < DelayTimeoutMs)
             {
+                if (ResetTimeoutDelay)
+                {
+                    DelayTimeoutMs = null;
+                    ResetTimeoutDelay = false;
+                }
                 return false;
             }
             var vaultTimeoutMs = vaultTimeoutMinutes * 60000;
@@ -241,35 +245,12 @@ namespace Bit.Core.Services
 
         public async Task<int?> GetVaultTimeout(string userId = null)
         {
-            var vaultTimeout = await _stateService.GetVaultTimeoutAsync(userId);
+            return await _stateService.GetVaultTimeoutAsync(userId);
+        }
 
-            if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout, null, userId))
-            {
-                var policy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout, userId)).First();
-                // Remove negative values, and ensure it's smaller than maximum allowed value according to policy
-                var policyTimeout = _policyService.GetPolicyInt(policy, "minutes");
-                if (!policyTimeout.HasValue)
-                {
-                    return vaultTimeout;
-                }
-
-                var timeout = vaultTimeout.HasValue ? Math.Min(vaultTimeout.Value, policyTimeout.Value) : policyTimeout.Value;
-
-                if (timeout < 0)
-                {
-                    timeout = policyTimeout.Value;
-                }
-
-                // We really shouldn't need to set the value here, but multiple services relies on this value being correct.
-                if (vaultTimeout != timeout)
-                {
-                    await _stateService.SetVaultTimeoutAsync(timeout, userId);
-                }
-
-                return timeout;
-            }
-
-            return vaultTimeout;
+        public async Task<VaultTimeoutAction?> GetVaultTimeoutAction(string userId = null)
+        {
+            return await _stateService.GetVaultTimeoutActionAsync(userId);
         }
     }
 }

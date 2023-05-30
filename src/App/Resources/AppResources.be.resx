@@ -1751,11 +1751,11 @@
     <value>Вы сапраўды хочаце адправіць элемент у сметніцу?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Разблакіраванне па біяметрыі адключана. Чакаецца праверка асноўным паролем.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Разблакіроўка па біяметрыі для гэтага ўліковага запісу адключана. Чакаецца праверка асноўным паролем.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Разблакіраванне па біяметрыі для аўтазапаўнення адключана. Чакаецца праверка асноўным паролем.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Аўтазапаўненне з дапамогай разблакіроўкі па біяметрыі для гэтага ўліковага запісу адключана. Чакаецца праверка асноўным паролем.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Уключыць сінхранізацыю пры абнаўленні</value>
@@ -2142,6 +2142,12 @@
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Палітыка вашай арганізацыі ўплывае на час чакання сховішча. Максімальны дазволены час чакання сховішча складае {0} гадз. і {1} хв.</value>
   </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Палітыка вашай арганізацыі ўплывае на час чакання сховішча. Максімальны дазволены час чакання сховішча складае гадзін: {0}; хвілін: {1}. Для часу чакання вашага сховішча прызначана дзеянне {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Палітыкай вашай арганізацыі прызначана дзеянне {0} для часу чакання вашага сховішча.</value>
+  </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Час чакання вашага сховішча перавышае дазволеныя абмежаванні, якія прызначыла ваша арганізацыя.</value>
   </data>
@@ -2489,8 +2495,8 @@
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Атрымаць падказку да асноўнага пароля</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Увайсці як {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Logging in as {0} on {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Не вы?</value>
@@ -2602,5 +2608,26 @@
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Адсутнічаюць элементы, якія адпавядаюць пошуку</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Self-hosted</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Data region</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Ваш асноўны пароль не адпавядае адной або некалькім палітыкам арганізацыі. Для атрымання доступу да сховішча, вы павінны абнавіць яго. Працягваючы, вы выйдзіце з бягучага сеанса і вам неабходна будзе ўвайсці паўторна. Актыўныя сеансы на іншых прыладах могуць заставацца актыўнымі на працягу адной гадзіны.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Бягучы асноўны пароль</value>
   </data>
 </root>

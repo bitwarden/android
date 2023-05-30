@@ -121,9 +121,8 @@ namespace Bit.App.Pages
 
                 var ssoToken = response.Token;
 
-
-                var passwordOptions = new PasswordGenerationOptions(true);
-                passwordOptions.Length = 64;
+                var passwordOptions = PasswordGenerationOptions.CreateDefault
+                                                               .WithLength(64);
 
                 var codeVerifier = await _passwordGenerationService.GeneratePasswordAsync(passwordOptions);
                 var codeVerifierHash = await _cryptoFunctionService.HashAsync(codeVerifier, CryptoHashAlgorithm.Sha256);

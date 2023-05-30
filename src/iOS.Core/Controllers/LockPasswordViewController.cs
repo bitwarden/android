@@ -53,7 +53,7 @@ namespace Bit.iOS.Core.Controllers
         public FormEntryTableViewCell MasterPasswordCell { get; set; } = new FormEntryTableViewCell(
             AppResources.MasterPassword, buttonsConfig: FormEntryTableViewCell.ButtonsConfig.One);
 
-        public string BiometricIntegrityKey { get; set; }
+        public string BiometricIntegritySourceKey { get; set; }
 
         public UITableViewCell BiometricCell
         {
@@ -74,7 +74,7 @@ namespace Bit.iOS.Core.Controllers
                     cell.TextLabel.Font = ThemeHelpers.GetDangerFont();
                     cell.TextLabel.Lines = 0;
                     cell.TextLabel.LineBreakMode = UILineBreakMode.WordWrap;
-                    cell.TextLabel.Text = AppResources.BiometricInvalidatedExtension;
+                    cell.TextLabel.Text = AppResources.AccountBiometricInvalidatedExtension;
                 }
                 return cell;
             }
@@ -108,7 +108,8 @@ namespace Bit.iOS.Core.Controllers
                            _isPinProtectedWithKey;
                 _biometricLock = await _vaultTimeoutService.IsBiometricLockSetAsync() &&
                                  await _cryptoService.HasKeyAsync();
-                _biometricIntegrityValid = await _biometricService.ValidateIntegrityAsync(BiometricIntegrityKey);
+                _biometricIntegrityValid =
+                    await _platformUtilsService.IsBiometricIntegrityValidAsync(BiometricIntegritySourceKey);
                 _usesKeyConnector = await _keyConnectorService.GetUsesKeyConnector();
                 _biometricUnlockOnly = _usesKeyConnector && _biometricLock && !_pinLock;
             }
@@ -361,7 +362,7 @@ namespace Bit.iOS.Core.Controllers
             // Re-enable biometrics if initial use
             if (_biometricLock & !_biometricIntegrityValid)
             {
-                await _biometricService.SetupBiometricAsync(BiometricIntegrityKey);
+                await _biometricService.SetupBiometricAsync(BiometricIntegritySourceKey);
             }
         }
 

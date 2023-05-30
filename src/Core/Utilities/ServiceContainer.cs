@@ -33,6 +33,7 @@ namespace Bit.Core.Utilities
 
             SearchService searchService = null;
 
+            var conditionedRunner = new ConditionedAwaiterManager();
             var tokenService = new TokenService(stateService);
             var apiService = new ApiService(tokenService, platformUtilsService, (extras) =>
             {
@@ -56,7 +57,7 @@ namespace Bit.Core.Utilities
                 organizationService);
             var vaultTimeoutService = new VaultTimeoutService(cryptoService, stateService, platformUtilsService,
                 folderService, cipherService, collectionService, searchService, messagingService, tokenService,
-                policyService, keyConnectorService,
+                keyConnectorService,
                 (extras) =>
                 {
                     messagingService.Send("locked", extras);
@@ -74,20 +75,21 @@ namespace Bit.Core.Utilities
                     messagingService.Send("logout", extras);
                     return Task.CompletedTask;
                 });
-            var passwordGenerationService = new PasswordGenerationService(cryptoService, stateService,
-                cryptoFunctionService, policyService);
+            var passwordGenerationService = new PasswordGenerationService(cryptoService, stateService, cryptoFunctionService, policyService);
             var totpService = new TotpService(cryptoFunctionService);
             var authService = new AuthService(cryptoService, cryptoFunctionService, apiService, stateService,
                 tokenService, appIdService, i18nService, platformUtilsService, messagingService, vaultTimeoutService,
-                keyConnectorService, passwordGenerationService);
+                keyConnectorService, passwordGenerationService, policyService);
             var exportService = new ExportService(folderService, cipherService, cryptoService);
             var auditService = new AuditService(cryptoFunctionService, apiService);
-            var environmentService = new EnvironmentService(apiService, stateService);
+            var environmentService = new EnvironmentService(apiService, stateService, conditionedRunner);
             var eventService = new EventService(apiService, stateService, organizationService, cipherService);
             var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService,
                 cryptoService);
             var usernameGenerationService = new UsernameGenerationService(cryptoService, apiService, stateService);
+            var configService = new ConfigService(apiService, stateService, logger);
 
+            Register<IConditionedAwaiterManager>(conditionedRunner);
             Register<ITokenService>("tokenService", tokenService);
             Register<IApiService>("apiService", apiService);
             Register<IAppIdService>("appIdService", appIdService);
@@ -111,6 +113,7 @@ namespace Bit.Core.Utilities
             Register<IKeyConnectorService>("keyConnectorService", keyConnectorService);
             Register<IUserVerificationService>("userVerificationService", userVerificationService);
             Register<IUsernameGenerationService>(usernameGenerationService);
+            Register<IConfigService>(configService);
         }
 
         public static void Register<T>(string serviceName, T obj)

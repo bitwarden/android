@@ -1752,11 +1752,11 @@
     <value>您确定要将其发送到回收站吗？</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>生物识别解锁已禁用，等待验证主密码。</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>在验证主密码之前，此账户的生物识别解锁将禁用。</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>在验证主密码之前，用于自动填充的生物识别解锁功能将禁用。</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>在验证主密码之前，此账户的自动填充生物识别解锁将禁用。</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>启用刷新时同步</value>
@@ -2140,7 +2140,13 @@
     <value>此组织有一个企业策略，将为您自动注册密码重置。注册后将允许组织管理员更改您的主密码。</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>您的组织策略正在影响您的密码库超时时间。最大允许的密码库超时时间是 {0} 小时 {1} 分钟</value>
+    <value>您的组织策略已将您最大允许的密码库超时时间设置为 {0} 小时 {1} 分钟。</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>您的组织策略正在影响您的密码库超时时间。最大允许的密码库超时时间是 {0} 小时 {1} 分钟。您的密码库超时动作被设置为 {2}。</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>您的组织策略已将您的密码库超时动作设置为 {0}。</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>您的密码库超时时间超出了组织设置的限制。</value>
@@ -2489,8 +2495,8 @@
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>获取主密码提示</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>正登录为 {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>在 {1} 上以 {0} 身份登录</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>不是你？</value>
@@ -2602,5 +2608,26 @@
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>没有匹配搜索条件的项目</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>美国</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>欧盟</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>自托管</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>数据区域</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>区域</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>您的主密码不符合某一项或多项组织策略要求。要访问密码库，必须立即更新您的主密码。继续操作将使您退出当前会话，并要求您重新登录。其他设备上的活动会话可能会继续保持活动状态长达一小时。</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>当前主密码</value>
   </data>
 </root>

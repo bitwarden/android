@@ -1752,11 +1752,11 @@ L'escaneig es farà automàticament.</value>
     <value>Esteu segur que voleu enviar-ho a la paperera?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
-  <data name="BiometricInvalidated" xml:space="preserve">
-    <value>S'ha detectat un canvi biomètric. Inicieu la sessió mitjançant la contrasenya principal per tornar a activar-la.</value>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>El desbloqueig biomètric d'aquest compte està deshabilitat mentre es verifica la contrasenya mestra.</value>
   </data>
-  <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Desbloqueig biomètric d'emplenament automàtic deshabilitat. Està pendent de verificació de la contrasenya mestra.</value>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>El desbloqueig biomètric d'emplenament automàtic d'aquest compte està deshabilitat mentre es verifica la contrasenya mestra.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Activa la sincronització en actualitzar-se</value>
@@ -2142,6 +2142,12 @@ L'escaneig es farà automàticament.</value>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Les polítiques de l'organització afecten el temps d'espera de la caixa forta. El temps d'espera màxim permès de la caixa forta és de {0} hores i {1} minuts</value>
   </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Les polítiques de l'organització afecten el temps d'espera de la vostra caixa forta. El temps d'espera màxim permès és de {0} hores i {1} minuts. L'acció de temps d'espera de la caixa forta està definida en {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Les polítiques de l'organització han establert l'acció de temps d'espera de la caixa forta a {0}.</value>
+  </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>El temps d'espera de la caixa forta supera les restriccions establertes per la vostra organització.</value>
   </data>
@@ -2489,8 +2495,8 @@ Voleu canviar a aquest compte?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Obteniu la pista de la contrasenya mestra</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Connectat com {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Inici de sessió com a {0} a {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>No sou vosaltres?</value>
@@ -2602,5 +2608,26 @@ Voleu canviar a aquest compte?</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>No hi ha elements que coincidisquen amb la cerca</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>EUA</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>UE</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Autoallotjat</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Regió de dades</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Regió</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>La vostra contrasenya mestra no compleix una o més de les polítiques de l'organització. Per accedir a la caixa forta, heu d'actualitzar-la ara. Si continueu, es tancarà la sessió actual i us demanarà que torneu a iniciar-la. Les sessions en altres dispositius poden continuar romanent actives fins a una hora.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Contrasenya mestra actual</value>
   </data>
 </root>
