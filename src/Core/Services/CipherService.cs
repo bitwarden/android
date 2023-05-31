@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define ENABLE_NEW_CIPHER_KEY_ENCRYPTION_ON_CREATION
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -222,7 +224,7 @@ namespace Bit.Core.Services
                 cipher.Key = await _cryptoService.EncryptAsync(cipherView.Key.Key, key);
                 return cipherView.Key;
             }
-#if DEBUG
+#if ENABLE_NEW_CIPHER_KEY_ENCRYPTION_ON_CREATION
             // turned on, only on debug to check that the enc/decryption is working fine at the cipher level.
             // this will be allowed on production on a later release.
             var cfs = ServiceContainer.Resolve<ICryptoFunctionService>();
