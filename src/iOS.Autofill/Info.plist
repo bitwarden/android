@@ -11,7 +11,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.8bit.bitwarden.autofill</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2023.4.1</string>
+	<string>2023.5.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>CFBundleLocalizations</key>
