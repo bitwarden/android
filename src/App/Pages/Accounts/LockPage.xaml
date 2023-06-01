@@ -71,7 +71,8 @@
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 ReturnType="Go"
-                                ReturnCommand="{Binding SubmitCommand}" />
+                                ReturnCommand="{Binding SubmitCommand}" 
+                                AutomationId="PINField"/>
                             <controls:IconButton
                                 StyleClass="box-row-button, box-row-button-platform"
                                 Text="{Binding ShowPasswordIcon}"
@@ -81,7 +82,8 @@
                                 Grid.RowSpan="2"
                                 AutomationProperties.IsInAccessibleTree="True"
                                 AutomationProperties.Name="{u:I18n ToggleVisibility}" 
-                                AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"/>
+                                AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
+                                AutomationId="TogglePINVisibility"/>
                         </Grid>
                         <Grid
                             x:Name="_passwordGrid"
@@ -111,7 +113,8 @@
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 ReturnType="Go"
-                                ReturnCommand="{Binding SubmitCommand}" />
+                                ReturnCommand="{Binding SubmitCommand}"
+                                AutomationId="MasterPasswordField"/>
                             <controls:IconButton
                                 StyleClass="box-row-button, box-row-button-platform"
                                 Text="{Binding ShowPasswordIcon}"
@@ -121,7 +124,9 @@
                                 Grid.RowSpan="2"
                                 AutomationProperties.IsInAccessibleTree="True"
                                 AutomationProperties.Name="{u:I18n ToggleVisibility}"
-                                AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}" />
+                                AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
+                                AutomationId="TogglePasswordVisibility"
+                                />
                         </Grid>
                         <StackLayout
                             StyleClass="box-row"
@@ -147,7 +152,8 @@
                             x:Name="_unlockButton"
                             Text="{u:I18n Unlock}"
                             StyleClass="btn-primary"
-                            Clicked="Unlock_Clicked" />
+                            Clicked="Unlock_Clicked"
+                            AutomationId="UnlockVaultButton"/>
                     </StackLayout>
                 </StackLayout>
             </ScrollView>
