@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Text;
 using AutoFixture;
 using Bit.Core.Models.Domain;
+using Bit.Core.Models.View;
 using Bit.Test.Common.AutoFixture;
 using Bit.Test.Common.AutoFixture.Attributes;
 
@@ -26,16 +28,36 @@ namespace Bit.Core.Test.AutoFixture
         }
     }
 
+    internal class UserCipherView : ICustomization
+    {
+        public void Customize(IFixture fixture)
+        {
+            byte[] getRandomBytes(int size)
+            {
+                Random random = new Random();
+
+                byte[] bytes = new byte[size];
+                random.NextBytes(bytes);
+                return bytes;
+            };
+
+            fixture.Customize<CipherView>(composer => composer
+                .Without(c => c.OrganizationId)
+                .Without(c => c.Attachments)
+                .With(c => c.Key, new SymmetricCryptoKey(getRandomBytes(32), Enums.EncryptionType.AesCbc128_HmacSha256_B64)));
+        }
+    }
+
     internal class UserCipherAutoDataAttribute : CustomAutoDataAttribute
     {
         public UserCipherAutoDataAttribute() : base(new SutProviderCustomization(),
-            new UserCipher())
+            new UserCipher(), new UserCipherView())
         { }
     }
     internal class InlineUserCipherAutoDataAttribute : InlineCustomAutoDataAttribute
     {
         public InlineUserCipherAutoDataAttribute(params object[] values) : base(new[] { typeof(SutProviderCustomization),
-            typeof(UserCipher) }, values)
+            typeof(UserCipher), typeof(UserCipherView) }, values)
         { }
     }
 
