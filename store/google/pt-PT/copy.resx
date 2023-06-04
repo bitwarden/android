@@ -118,11 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Bitwarden - Gestor de palavras-passe</value>
+    <value>Bitwarden - gestor de palavras-passe</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>O Bitwarden é um gestor de palavras-passe que lhe ajuda a manter-se seguro online.</value>
+    <value>O Bitwarden é um gestor de inícios de sessão e de palavras-passe que o ajuda a manter-se seguro enquanto está online.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
@@ -158,19 +158,19 @@ Secure and share sensitive data within your Bitwarden Vault from any browser, mo
     <value>Um gestor de palavras-passe seguro e gratuito para todos os seus dispositivos</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Gira todas as suas credenciais e palavras-passe a partir de um cofre seguro</value>
+    <value>Gira todos os seus inícios de sessão e palavras-passe a partir de um cofre seguro</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
     <value>Gera automaticamente palavras-passe fortes, aleatórias e seguras</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Proteja o seu cofre com impressão digital, código PIN, ou palavra-passe mestra</value>
+    <value>Proteja o seu cofre com impressão digital, código PIN ou palavra-passe mestra</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Preencher rapidamente os inícios de sessão de forma automática a partir do seu navegador web e de outras aplicações</value>
+    <value>Preencha rapidamente os inícios de sessão de forma automática a partir do seu navegador web e de outras aplicações</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sincronize e aceda ao seu cofre a partir de múltiplos dispositivos
+    <value>Sincronize e aceda ao seu cofre a partir de vários dispositivos
 
 - Telemóvel
 - Tablet

@@ -474,7 +474,7 @@
     <value>Omogoči samodejno sinhronizacijo</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Vnesite e-poštni naslov svojega računa za pridobitev namiga glavnega gesla. </value>
+    <value>Vnesite e-naslov svojega računa in poslali vam bomo namig za glavno geslo.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Ponovno omogoči razširitev aplikacije</value>
@@ -562,7 +562,7 @@
     <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>Vpisujem...</value>
+    <value>Prijava poteka...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
@@ -937,7 +937,7 @@ Scanning will happen automatically.</value>
     <value>Datoteka</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>Nobena datoteka izbrana</value>
+    <value>Datoteka ni izbrana</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
     <value>Ni prilog.</value>
@@ -1384,10 +1384,10 @@ Scanning will happen automatically.</value>
     <value>Preišči zbirko</value>
   </data>
   <data name="SearchFileSends" xml:space="preserve">
-    <value>Search file Sends</value>
+    <value>Išči med datotečnimi pošiljkami</value>
   </data>
   <data name="SearchTextSends" xml:space="preserve">
-    <value>Search text Sends</value>
+    <value>Išči med besedilnimi pošiljkami</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
     <value>Išči {0}</value>
@@ -1879,11 +1879,11 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
-    <value>Poslano</value>
+    <value>Pošiljke</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NameInfo" xml:space="preserve">
-    <value>A friendly name to describe this Send.</value>
+    <value>Prijazno ime, ki opisuje to pošiljko.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Text" xml:space="preserve">
@@ -1980,15 +1980,15 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Deactivate this Send so that no one can access it</value>
+    <value>Onemogoči to pošiljko, da ne bo dostopna nikomur</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
-    <value>There are no Sends in your account.</value>
+    <value>Vaš račun ne vsebuje pošiljk.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Add a Send</value>
+    <value>Dodaj pošiljko</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -2002,31 +2002,31 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
-    <value>Išči poslano</value>
+    <value>Išči med pošiljkami</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
-    <value>Uredi poslano</value>
+    <value>Uredi pošiljko</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Dodaj poslano</value>
+    <value>Nova pošiljka</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
-    <value>Ali želite izbrisati to poslano?</value>
+    <value>Ali želite izbrisati to pošiljko?</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Poslano je bilo izbrisano.</value>
+    <value>Pošiljka je bila izbrisana.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Poslano posodobljeno.</value>
+    <value>Pošiljka shranjena.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Ustvarjeno novo poslano.</value>
+    <value>Pošiljka ustvarjena.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2048,7 +2048,7 @@ Scanning will happen automatically.</value>
     <value>Po meri</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Deli to poslano po shranjevanju.</value>
+    <value>Deli to pošiljko, ko bo shranjena</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2056,7 +2056,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
-    <value>O poslanem</value>
+    <value>O pošiljkah</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
@@ -2067,11 +2067,11 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>Brezplačni računi so omejeni samo na skupno rabo besedila. Za uporabo pošiljanje datotek preko Pošlji je potrebno premium članstvo.</value>
+    <value>Brezplačni računi so omejeni samo na besedilne pošiljke. Za uporabo datotečnih pošiljk je potrebno članstvo Premium.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Če želite uporabljati datoteke s funkcijo Pošlji, morate potrditi svoj e-poštni naslov.</value>
+    <value>Če želite uporabljati datotečne pošiljke, morate potrditi svoj e-naslov. To lahko storite v trezorju na spletu.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
@@ -2093,7 +2093,7 @@ Scanning will happen automatically.</value>
     <value>Updated master password</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Update master password</value>
+    <value>Posodobi glavno geslo</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
     <value>Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>

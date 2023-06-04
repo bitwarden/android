@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden</value>
+    <value>Bitwarden - gestor de palavras-passe</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
@@ -151,22 +151,22 @@ Secure and share sensitive data within your Bitwarden Vault from any browser, mo
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bit warden,8bit,password,free password manager,password manager,login manager</value>
+    <value>bit warden,8bit,palavra-passe,gestor de palavras-passe gratuito,gestor de palavras-passe,gestor de inícios de sessão</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Gira todas as suas credenciais e palavras-passe a partir de um cofre seguro</value>
+    <value>Gira todos os seus inícios de sessão e palavras-passe a partir de um cofre seguro</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Gira automaticamente palavras-passe fortes, aleatórias e seguras</value>
+    <value>Gera automaticamente palavras-passe fortes, aleatórias e seguras</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Proteja o seu cofre com Touch ID, código PIN, ou palavra-passe mestra</value>
+    <value>Proteja o seu cofre com Touch ID, código PIN ou palavra-passe mestra</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
     <value>Preenchimento automático de inícios de sessão no Safari, Chrome e centenas de outras aplicações</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sincronize e aceda ao seu cofre através de múltiplos dispositivos</value>
+    <value>Sincronize e aceda ao seu cofre através de vários dispositivos</value>
   </data>
 </root>
