@@ -41,7 +41,9 @@
             StyleClass="box-value"
             Grid.Row="1"
             Grid.Column="0"
-            IsVisible="{Binding IsEditing}" />
+            IsVisible="{Binding IsEditing}"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{Binding Field.Name}" />
         <controls:IconButton
             StyleClass="box-row-button, box-row-button-platform"
             Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
