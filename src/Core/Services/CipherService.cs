@@ -597,11 +597,12 @@ namespace Bit.Core.Services
             await UpsertAsync(data);
         }
 
-        public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, string filename, byte[] data)
+        public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, CipherView cipherView, string filename, byte[] data)
         {
             var orgKey = await _cryptoService.GetOrgKeyAsync(cipher.OrganizationId);
-            var encFileName = await _cryptoService.EncryptAsync(filename, orgKey);
-            var (attachmentKey, orgEncAttachmentKey) = await _cryptoService.MakeEncKeyAsync(orgKey);
+            var key = await UpdateCipherAndGetCipherKeyAsync(cipher, cipherView, orgKey);
+            var encFileName = await _cryptoService.EncryptAsync(filename, key);
+            var (attachmentKey, encAttachmentKey) = await _cryptoService.MakeEncKeyAsync(key);
             var encFileData = await _cryptoService.EncryptToBytesAsync(data, attachmentKey);
 
             CipherResponse response;
@@ -609,7 +610,7 @@ namespace Bit.Core.Services
             {
                 var request = new AttachmentRequest
                 {
-                    Key = orgEncAttachmentKey.EncryptedString,
+                    Key = encAttachmentKey.EncryptedString,
                     FileName = encFileName.EncryptedString,
                     FileSize = encFileData.Buffer.Length,
                 };
@@ -621,7 +622,7 @@ namespace Bit.Core.Services
             }
             catch (ApiException e) when (e.Error.StatusCode == System.Net.HttpStatusCode.NotFound || e.Error.StatusCode == System.Net.HttpStatusCode.MethodNotAllowed)
             {
-                response = await LegacyServerAttachmentFileUploadAsync(cipher.Id, encFileName, encFileData, orgEncAttachmentKey);
+                response = await LegacyServerAttachmentFileUploadAsync(cipher.Id, encFileName, encFileData, encAttachmentKey);
             }
 
             var userId = await _stateService.GetActiveUserIdAsync();
