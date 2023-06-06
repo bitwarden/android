@@ -203,7 +203,7 @@ namespace Bit.Core.Services
             return cipher;
         }
 
-        private async Task<SymmetricCryptoKey> UpdateCipherAndGetCipherKeyAsync(Cipher cipher, CipherView cipherView, SymmetricCryptoKey key = null)
+        private async Task<SymmetricCryptoKey> UpdateCipherAndGetCipherKeyAsync(Cipher cipher, CipherView cipherView, SymmetricCryptoKey key = null, bool shouldCreateNewCipherKeyIfNeeded = true)
         {
             if (key == null && cipher.OrganizationId != null)
             {
@@ -224,6 +224,12 @@ namespace Bit.Core.Services
                 cipher.Key = await _cryptoService.EncryptAsync(cipherView.Key.Key, key);
                 return cipherView.Key;
             }
+
+            if (!shouldCreateNewCipherKeyIfNeeded)
+            {
+                return key;
+            }
+
 #if ENABLE_NEW_CIPHER_KEY_ENCRYPTION_ON_CREATION
             // turned on, only on debug to check that the enc/decryption is working fine at the cipher level.
             // this will be allowed on production on a later release.
@@ -600,7 +606,7 @@ namespace Bit.Core.Services
         public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, CipherView cipherView, string filename, byte[] data)
         {
             var orgKey = await _cryptoService.GetOrgKeyAsync(cipher.OrganizationId);
-            var key = await UpdateCipherAndGetCipherKeyAsync(cipher, cipherView, orgKey);
+            var key = await UpdateCipherAndGetCipherKeyAsync(cipher, cipherView, orgKey, false);
             var encFileName = await _cryptoService.EncryptAsync(filename, key);
             var (attachmentKey, encAttachmentKey) = await _cryptoService.MakeEncKeyAsync(key);
             var encFileData = await _cryptoService.EncryptToBytesAsync(data, attachmentKey);
