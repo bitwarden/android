@@ -72,7 +72,7 @@
                                 Grid.Column="0"
                                 ReturnType="Go"
                                 ReturnCommand="{Binding SubmitCommand}" 
-                                AutomationId="PINField"/>
+                                AutomationId="PinEntry"/>
                             <controls:IconButton
                                 StyleClass="box-row-button, box-row-button-platform"
                                 Text="{Binding ShowPasswordIcon}"
@@ -83,7 +83,7 @@
                                 AutomationProperties.IsInAccessibleTree="True"
                                 AutomationProperties.Name="{u:I18n ToggleVisibility}" 
                                 AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
-                                AutomationId="TogglePINVisibility"/>
+                                AutomationId="PinVisibilityToggle"/>
                         </Grid>
                         <Grid
                             x:Name="_passwordGrid"
@@ -114,7 +114,7 @@
                                 Grid.Column="0"
                                 ReturnType="Go"
                                 ReturnCommand="{Binding SubmitCommand}"
-                                AutomationId="MasterPasswordField"/>
+                                AutomationId="MasterPasswordEntry"/>
                             <controls:IconButton
                                 StyleClass="box-row-button, box-row-button-platform"
                                 Text="{Binding ShowPasswordIcon}"
@@ -125,7 +125,7 @@
                                 AutomationProperties.IsInAccessibleTree="True"
                                 AutomationProperties.Name="{u:I18n ToggleVisibility}"
                                 AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
-                                AutomationId="TogglePasswordVisibility"
+                                AutomationId="PasswordVisibilityToggle"
                                 />
                         </Grid>
                         <StackLayout

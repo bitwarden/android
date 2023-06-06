@@ -35,7 +35,7 @@
                         StyleClass="box-value"
                         ReturnType="Go"
                         ReturnCommand="{Binding SubmitCommand}"
-                        AutomationId="ServerURL"/>
+                        AutomationId="ServerUrlEntry"/>
                 </StackLayout>
                 <Label
                     Text="{u:I18n SelfHostedEnvironmentFooter}"
@@ -55,7 +55,7 @@
                         Text="{Binding WebVaultUrl}"
                         Keyboard="Url"
                         StyleClass="box-value"
-                        AutomationId="WebVaultURL"/>
+                        AutomationId="WebVaultUrlEntry"/>
                 </StackLayout>
                 <StackLayout StyleClass="box-row">
                     <Label
@@ -66,7 +66,7 @@
                         Text="{Binding ApiUrl}"
                         Keyboard="Url"
                         StyleClass="box-value"
-                        AutomationId="ApiURL"/>
+                        AutomationId="ApiUrlEntry"/>
                 </StackLayout>
                 <StackLayout StyleClass="box-row">
                     <Label
@@ -77,7 +77,7 @@
                         Text="{Binding IdentityUrl}"
                         Keyboard="Url"
                         StyleClass="box-value"
-                        AutomationId="IdentityURL"/>
+                        AutomationId="IdentityUrlEntry"/>
                 </StackLayout>
                 <StackLayout StyleClass="box-row">
                     <Label
@@ -90,7 +90,7 @@
                         StyleClass="box-value"
                         ReturnType="Go"
                         ReturnCommand="{Binding SubmitCommand}"
-                        AutomationId="IconsURL"/>
+                        AutomationId="IconsUrlEntry"/>
                 </StackLayout>
                 <Label
                     Text="{u:I18n CustomEnvironmentFooter}"

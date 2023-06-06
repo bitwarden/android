@@ -10,7 +10,7 @@
     x:DataType="pages:LoginPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}"
-    AutomationId="PageTitle">
+    AutomationId="PageTitleLabel">
     
     <ContentPage.BindingContext>
         <pages:LoginPageViewModel />
@@ -34,7 +34,7 @@
                 x:Name="_moreItem" x:Key="moreItem"
                  AutomationProperties.IsInAccessibleTree="True"
                  AutomationProperties.Name="{u:I18n Options}"
-                 AutomationId="Options"/>
+                 AutomationId="OptionsButton"/>
             <ToolbarItem Text="{u:I18n GetPasswordHint}"
                 x:Key="getPasswordHint"
                 x:Name="_getPasswordHint"
@@ -76,7 +76,7 @@
                                 Grid.Column="0"
                                 ReturnType="Go"
                                 ReturnCommand="{Binding LogInCommand}"
-                                AutomationId="MasterPasswordField"
+                                AutomationId="MasterPasswordEntry"
                             />
                             <controls:IconButton
                                 StyleClass="box-row-button, box-row-button-platform"
@@ -86,7 +86,7 @@
                                 Grid.Column="1"
                                 Grid.RowSpan="1"
                                 AutomationProperties.IsInAccessibleTree="True"
-                                AutomationId="TogglePasswordVisibility"
+                                AutomationId="PasswordVisibilityToggle"
                                 AutomationProperties.Name="{u:I18n ToggleVisibility}"
                                 AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"/>
                             <Label
@@ -97,7 +97,7 @@
                                 Grid.Row="2"
                                 Grid.Column="0"
                                 Grid.ColumnSpan="2"
-                                AutomationId="GetMasterPasswordHint"
+                                AutomationId="GetMasterPasswordHintLabel"
                                 >
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="Hint_Clicked" />
@@ -110,7 +110,7 @@
                             Text="{u:I18n LogInWithMasterPassword}" 
                                 StyleClass="btn-primary"
                                 Clicked="LogIn_Clicked"
-                                AutomationId="LogInWithMasterPassword"
+                                AutomationId="LogInWithMasterPasswordButton"
                                 />
                         <controls:IconLabelButton
                             HorizontalOptions="Fill"
@@ -119,14 +119,14 @@
                             Label="{u:I18n LogInWithAnotherDevice}"
                             ButtonCommand="{Binding LogInWithDeviceCommand}"
                             IsVisible="{Binding IsKnownDevice}"
-                            AutomationId="LogInWithAnotherDevice"
+                            AutomationId="LogInWithAnotherDeviceButton"
                             />
                         <controls:IconLabelButton
                             HorizontalOptions="Fill"
                             VerticalOptions="CenterAndExpand"
                             Icon="{Binding Source={x:Static core:BitwardenIcons.Suitcase}}"
                             Label="{u:I18n LogInSso}"
-                            AutomationId="LogInSso">
+                            AutomationId="LogInWithSsoButton">
                             <controls:IconLabelButton.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="LogInSSO_Clicked" />
                             </controls:IconLabelButton.GestureRecognizers>
@@ -134,13 +134,15 @@
                         <Label
                             Text="{Binding LoggingInAsText}"
                             StyleClass="text-sm"
-                            Margin="0,40,0,0"/>
+                            Margin="0,40,0,0"
+                            AutomationId="LoggingInAsLabel"
+                            />
                         <Label
                             Text="{u:I18n NotYou}"
                             StyleClass="text-md"
                             HorizontalOptions="Start"
                             TextColor="{DynamicResource HyperlinkColor}"
-                            AutomationId="NotYou">
+                            AutomationId="NotYouLabel">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="Cancel_Clicked" />
                             </Label.GestureRecognizers>

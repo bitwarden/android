@@ -50,7 +50,7 @@
                         StyleClass="box-value"
                         ReturnType="Go"
                         ReturnCommand="{Binding ContinueCommand}"
-                        AutomationId="EmailAddressField"
+                        AutomationId="EmailAddressEntry"
                         >
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
@@ -80,7 +80,8 @@
                             FontSize="13"
                             TextColor="{DynamicResource PrimaryColor}"
                             VerticalOptions="Center"
-                            VerticalTextAlignment="Center"/>
+                            VerticalTextAlignment="Center"
+                            AutomationId="RegionSelectorDropdown"/>
                     </StackLayout>
                     <StackLayout
                         Orientation="Horizontal"
@@ -100,7 +101,7 @@
                             Scale="0.8"
                             IsToggled="{Binding RememberEmail}"
                             VerticalOptions="Center"
-                            AutomationId="RememberMe"
+                            AutomationId="RememberMeSwitch"
                             />
                     </StackLayout>
                 </StackLayout>
@@ -114,7 +115,7 @@
                 <Label FormattedText="{Binding CreateAccountText}"
                        Margin="0, 10"
                         StyleClass="box-footer-label"
-                        AutomationId="CreateAccount">
+                        AutomationId="CreateAccountLabel">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding CreateAccountCommand}" />
                     </Label.GestureRecognizers>
