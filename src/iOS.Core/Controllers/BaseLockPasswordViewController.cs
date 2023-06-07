@@ -225,6 +225,18 @@ namespace Bit.iOS.Core.Controllers
             var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
             var inputtedValue = MasterPasswordCell.TextField.Text;
 
+            // HACK: iOS extensions have constrained memory, given how it works Argon2Id, it's likely to crash
+            // the extension depending on the argon2id memory configured.
+            // So, we warn the user and advise to decrease the configured memory letting them the option to continue, if wanted.
+            if (kdfConfig.Type == KdfType.Argon2id
+                &&
+                kdfConfig.Memory > Constants.MaximumArgon2IdMemoryBeforeExtensionCrashing
+                &&
+                !await _platformUtilsService.ShowDialogAsync(AppResources.UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve, AppResources.Warning, AppResources.Continue, AppResources.Cancel))
+            {
+                return;
+            }
+
             if (_pinLock)
             {
                 var failed = true;

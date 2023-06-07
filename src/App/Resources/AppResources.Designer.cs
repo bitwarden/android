@@ -6435,6 +6435,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.
+        /// </summary>
+        public static string UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve {
+            get {
+                return ResourceManager.GetString("UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unlock vault.
         /// </summary>
         public static string UnlockVault {

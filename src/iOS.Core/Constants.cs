@@ -32,5 +32,6 @@
         public const string UTTypeAppExtensionImage = "public.image";
 
         public const string AutofillNeedsIdentityReplacementKey = "autofillNeedsIdentityReplacement";
+        public const int MaximumArgon2IdMemoryBeforeExtensionCrashing = 48;
     }
 }
