@@ -64,7 +64,7 @@
         public const int Argon2Parallelism = 4;
         public const int MasterPasswordMinimumChars = 12;
         public const int CipherKeyRandomBytesLength = 64;
-        public const string CipherKeyEncryptionMinServerVersion = "2023.3.0";
+        public const string CipherKeyEncryptionMinServerVersion = "2023.6.0";
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {
