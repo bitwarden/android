@@ -584,7 +584,7 @@
     <value>Pasahitz nagusia ahazten baduzu, pista batek pasahitza gogoratzen lagunduko dizu.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Pasahitz nagusiak {0} karaktere izan behar ditu gutxienez.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Gutxieneko zenbaki kopurua</value>
@@ -1752,10 +1752,10 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Desblokeatze biometrikoa desgaituta dago kontu honentzat, pasahitz nagusia egiaztatzeko zain.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Desblokeatze biometriko automatikoa desgaituta dago kontu honentzat, pasahitz nagusia egiaztatzeko zain.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Gaitu eguneratzean sinkronizatzea</value>
@@ -2495,7 +2495,7 @@ Kontu honetara aldatu nahi duzu?</value>
     <value>Jaso pasahitz nagusiaren pista</value>
   </data>
   <data name="LoggingInAsXOnY" xml:space="preserve">
-    <value>Logging in as {0} on {1}</value>
+    <value>{0} bezala saioa hasten {1}(e)n</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Ez zara zu?</value>
@@ -2531,31 +2531,31 @@ Kontu honetara aldatu nahi duzu?</value>
     <value>Pending login requests</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
-    <value>Decline all requests</value>
+    <value>Ukatu eskaera guztiak</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>Are you sure you want to decline all pending login requests?</value>
+    <value>Ziur al zaude zain dauden saioa hasteko eskaera guztiak ukatu nahi dituzula?</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
-    <value>Requests declined</value>
+    <value>Eskaerak ukatuta</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>No pending requests</value>  
+    <value>Ez dago eskaerarik zain</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Gaitu kameraren baimena eskanerra erabiltzeko</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Hizkuntza</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
-    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+    <value>{0} hizkuntza ezarri da. Berrabiarazi aplikazioa mesedez aldaketa ikusi ahal izateko</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
-    <value>Language change requires app restart</value>
+    <value>Hizkuntza aldatzeak aplikazioa berabiaraztea behar du</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>Lehenetsia (Sistema)</value>
   </data>
   <data name="Important" xml:space="preserve">
     <value>Garrantzitsua</value>
@@ -2594,7 +2594,7 @@ Kontu honetara aldatu nahi duzu?</value>
     <value>Pasahitz ahul hau datu-urraketa batean aurkitu da. Erabil ezazu beste inon erabili ez duzun pasahitz sendi bat zure kontua babesteko. Ziur zaude pasahitz hau erabili nahi duzula?</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
-    <value>Organization SSO identifier required.</value>
+    <value>Erakundearen identifikazio bakarra (SSO) beharrezkoa da.</value>
   </data>
   <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
     <value>Add the key to an existing or new item</value>
@@ -2603,13 +2603,13 @@ Kontu honetara aldatu nahi duzu?</value>
     <value>There are no items in your vault that match "{0}"</value>
   </data>
   <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
-    <value>Search for an item or add a new item</value>
+    <value>Bilatu elementu bat ala gehitu elementu berria</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
-    <value>There are no items that match the search</value>
+    <value>Ez dago bilaketarekin bat datorren emaitzarik</value>
   </data>
   <data name="US" xml:space="preserve">
-    <value>US</value>
+    <value>AEB</value>
   </data>
   <data name="EU" xml:space="preserve">
     <value>EU</value>
@@ -2621,12 +2621,18 @@ Kontu honetara aldatu nahi duzu?</value>
     <value>Data region</value>
   </data>
   <data name="Region" xml:space="preserve">
-    <value>Region</value>
+    <value>Eskualdea</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
-    <value>Current master password</value>
+    <value>Uneko pasahitz nagusia</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve</value>
   </data>
 </root>

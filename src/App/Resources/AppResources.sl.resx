@@ -382,7 +382,7 @@
     <value>Potrdi prstni odtis</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Potrdi glavno geslo</value>
+    <value>Preverjanje glavnega gesla</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>Potrdi PIN</value>
@@ -446,13 +446,13 @@
     <value>Spremeni e-poštni naslov</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>Svoje glavno geslo lahko spremenite na bitwarden.com spletnem trezorju. Želite to stran obiskati sedaj? </value>
+    <value>Svoje e-naslov lahko spremenite v spletnem trezorju na bitwarden.com. Želite to stran obiskati sedaj? </value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Spremeni glavno geslo</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Svoje glavno geslo lahko spremenite na bitwarden.com spletnem trezorju. Želite to stran obiskati sedaj? </value>
+    <value>Svoje glavno geslo lahko spremenite v spletnem trezorju na bitwarden.com. Želite to stran obiskati sedaj? </value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Zapri</value>
@@ -461,7 +461,7 @@
     <value>Nadaljuj</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Ustvari račun</value>
+    <value>Ustvarite račun</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
     <value>Ustvarjanje računa... </value>
@@ -578,16 +578,16 @@
     <value>The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Namig glavnega gesla (opcijsko) </value>
+    <value>Namig za glavno geslo (neobvezno)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>Namig glavnega gesla se vam lahko pomaga spomniti geslo, v kolikor bi ga pozabili.</value>
+    <value>Namig vam lahko pomaga, da se spomnite glavnega gesla, če bi ga pozabili.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
     <value>Glavno geslo mora vsebovati vsaj {0} znakov.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minimalno števil</value>
+    <value>Minimalno števk</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
@@ -708,7 +708,7 @@
     <value>Prijava v dveh korakih</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Avtentikacija v dveh korakih naredi vaš račun bolj varen, saj od vas zahteva, da svojo prijavo preverite z drugo napravo, kot je varnostni ključ, aplikacija za preverjanje pristnosti, SMS, telefonski klic ali e-pošta. V spletnem trezorju bitwarden.com je lahko omogočite prijavo v dveh korakih. Ali želite spletno stran obiskati sedaj?</value>
+    <value>Avtentikacija v dveh korakih naredi vaš račun bolj varen, saj od vas zahteva, da svojo prijavo potrdite z drugo napravo oz. na dodaten način, n.pr. varnostni ključ, aplikacija za preverjanje pristnosti, SMS, telefonski klic ali e-pošta. Prijavo v dveh korakih lahko omogočite v spletnem trezorju bitwarden.com. Ali želite to spletno stran obiskati sedaj?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Odkleni z {0}</value>
@@ -1468,7 +1468,7 @@ Scanning will happen automatically.</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwaren omogoča delitev vašega trezorja z drugimi s pomočjo organizacijskega računa. Želite obiskati bitwarden.dom spletno stran za več informacij?</value>
+    <value>Bitwaren vam omogoča souporabo vašega trezorja z drugimi s pomočjo računa organizacije. Želite obiskati spletno mesto bitwarden.dom za več informacij?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Izvoz trezorja</value>
@@ -1496,7 +1496,7 @@ Scanning will happen automatically.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Vaš trezor je zaklenjen. Potrdite vaše glavno geslo za nadaljevanje.</value>
+    <value>Vaš trezor je zaklenjen. Vpišite svoje glavno geslo za nadaljevanje.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Vaš trezor je zaklenjen. Potrdite PIN kodo za nadaljevanje.</value>
@@ -1813,8 +1813,7 @@ Scanning will happen automatically.</value>
     <value>Nalaganje</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>Potrjujem, da se strinjam z naslednjim:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
     <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
@@ -2075,7 +2074,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Master password re-prompt</value>
+    <value>Ponovno zahtevaj glavno geslo</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
     <value>Master password confirmation</value>
@@ -2246,7 +2245,7 @@ Scanning will happen automatically.</value>
     <value>Male črke (a-z)</value>
   </data>
   <data name="NumbersZeroToNine" xml:space="preserve">
-    <value>Numbers (0 to 9)</value>
+    <value>Števke (0-9)</value>
   </data>
   <data name="SpecialCharacters" xml:space="preserve">
     <value>Posebni znaki (!@#$%^&amp;*)</value>
@@ -2391,22 +2390,22 @@ select Add TOTP to store the key safely</value>
     <value>Kaj želite generirati?</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
-    <value>Username type</value>
+    <value>Vrsta uporabniškega imena</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Plus addressed email</value>
+    <value>E-naslov s plusom</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
-    <value>Catch-all email</value>
+    <value>E-naslov za vse</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
-    <value>Forwarded email alias</value>
+    <value>Posredniški psevdonim</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
-    <value>Random word</value>
+    <value>Naključna beseda</value>
   </data>
   <data name="EmailRequiredParenthesis" xml:space="preserve">
-    <value>Email (required)</value>
+    <value>E-naslov (obvezno)</value>
   </data>
   <data name="DomainNameRequiredParenthesis" xml:space="preserve">
     <value>Domain name (required)</value>
@@ -2447,7 +2446,7 @@ select Add TOTP to store the key safely</value>
     <value>Generiraj uporabniško ime</value>
   </data>
   <data name="EmailType" xml:space="preserve">
-    <value>Email Type</value>
+    <value>Vrsta e-pošte</value>
   </data>
   <data name="WebsiteRequired" xml:space="preserve">
     <value>Website (required)</value>
@@ -2456,16 +2455,16 @@ select Add TOTP to store the key safely</value>
     <value>Unknown {0} error occurred.</value>
   </data>
   <data name="PlusAddressedEmailDescription" xml:space="preserve">
-    <value>Use your email provider's subaddress capabilities</value>
+    <value>Uporabite možnosti podnaslavljanja vašega ponudnika elektronske pošte.</value>
   </data>
   <data name="CatchAllEmailDescription" xml:space="preserve">
-    <value>Use your domain's configured catch-all inbox.</value>
+    <value>Uporabite naslov za vse ("catch-all"), ki ste ga nastavili za svojo domeno.</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
-    <value>Generate an email alias with an external forwarding service.</value>
+    <value>Ustvari psevdonim (alias) za elektronski naslov z uporabo zunanjega ponudnika posredovanja pošte.</value>
   </data>
   <data name="Random" xml:space="preserve">
-    <value>Random</value>
+    <value>Naključno</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
     <value>Connect to Watch</value>
@@ -2620,15 +2619,21 @@ Do you want to switch to this account?</value>
     <value>Self-hosted</value>
   </data>
   <data name="DataRegion" xml:space="preserve">
-    <value>Data region</value>
+    <value>Podatkovna regija</value>
   </data>
   <data name="Region" xml:space="preserve">
-    <value>Region</value>
+    <value>Regija</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Trenutno glavno geslo</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Pomoč o ponovnem zahtevku za glavno geslo</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve</value>
   </data>
 </root>

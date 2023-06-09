@@ -2629,4 +2629,10 @@ Bu hesaba geçmek ister misiniz?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Mevcut ana parola</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Ana parola yeniden istemi yardımı</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Yetersiz bellek nedeniyle kilit açma başarısız olabilir. Çözmek için KDF bellek ayarlarınızı azaltın</value>
+  </data>
 </root>

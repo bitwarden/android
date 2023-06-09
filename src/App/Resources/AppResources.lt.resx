@@ -2631,4 +2631,10 @@ Ar norite pereiti prie šios paskyros?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Dabartinis pagrindinis slaptažodis</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve</value>
+  </data>
 </root>

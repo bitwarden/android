@@ -2631,4 +2631,10 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Contraseña maestra actual</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>El desbloqueo puede fallar por falta de memoria. Disminuye los ajustes de memoria KDF para resolver</value>
+  </data>
 </root>

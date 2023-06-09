@@ -2630,4 +2630,10 @@ Wilt u naar dit account wisselen?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Huidig hoofdwachtwoord</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Hulptekst hoofdwachtwoord opnieuw vragen</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Ontgrendelen kan mislukken als er onvoldoende geheugen is. Verminder je KDF-geheugeninstellingen om dit op te lossen</value>
+  </data>
 </root>
