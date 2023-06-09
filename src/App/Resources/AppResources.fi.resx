@@ -2631,4 +2631,10 @@ Haluatko vaihtaa tähän tiliin?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Nykyinen pääsalasana</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Pääsalasanan uudelleenkyselyn ohje</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Lukituksen avaus voi epäonnistua riittämättömän keskusmuistin vuoksi. Tämän välttämiseksi voit madaltaa KDF-muistiasetuksiasi.</value>
+  </data>
 </root>

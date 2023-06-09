@@ -2629,4 +2629,10 @@ Szeretnénk átváltani erre a fiókra?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Jelenlegi mesterjelszó</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Mesterjelszó újbóli bekérés súgó</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>A feloldás meghiúsulhat, mert nincs elegendő memória. A megoldáshoz csökkentsül a KDF memóriabeállításait.</value>
+  </data>
 </root>

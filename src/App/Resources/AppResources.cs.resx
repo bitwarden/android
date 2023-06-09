@@ -2629,4 +2629,10 @@ Chcete se přepnout na tento účet?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Aktuální hlavní heslo</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Nápověda pro znovuzeptání se na hlavní heslo</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Odemknutí může selhat z důvodu nedostatku paměti. Pro vyřešení snižte nastavení paměti KDF.</value>
+  </data>
 </root>
