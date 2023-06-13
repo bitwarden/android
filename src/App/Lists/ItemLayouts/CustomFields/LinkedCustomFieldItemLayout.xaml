@@ -30,14 +30,14 @@
             StyleClass="box-label"
             Grid.Row="0"
             Grid.Column="0"
-            AutomationId="LinkedCustomFieldNameLabel"/>
+            AutomationId="LinkedCustomFieldNameLabel" />
         <controls:IconLabel
             Text="{Binding ValueText, Mode=OneWay}"
             StyleClass="box-value"
             Grid.Row="1"
             Grid.Column="0"
             IsVisible="{Binding IsEditing, Mode=OneWay, Converter={StaticResource inverseBool}}"
-            AutomationId="LinkedCustomFieldValueLabel"/>
+            AutomationId="LinkedCustomFieldValueLabel" />
         <StackLayout
             StyleClass="box-row, box-row-input"
             IsVisible="{Binding IsEditing}">
@@ -47,7 +47,7 @@
                 SelectedIndex="{Binding LinkedFieldOptionSelectedIndex}"
                 ItemDisplayBinding="{Binding Key}"
                 StyleClass="box-value"
-                AutomationId="LinkedCustomFieldValuePicker"/>
+                AutomationId="LinkedCustomFieldValuePicker" />
         </StackLayout>
         <controls:IconButton 
             StyleClass="box-row-button, box-row-button-platform"
@@ -59,7 +59,7 @@
             Grid.RowSpan="2"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n Options}"
-            AutomationId="LinkedCustomFieldOptionsButton"/>
+            AutomationId="LinkedCustomFieldOptionsButton" />
     </Grid>
     <BoxView StyleClass="box-row-separator" IsVisible="{Binding IsEditing, Mode=OneWay, Converter={StaticResource inverseBool}}" />
 </StackLayout>

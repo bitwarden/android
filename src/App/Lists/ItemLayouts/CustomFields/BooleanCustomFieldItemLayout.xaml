@@ -34,7 +34,7 @@
             Grid.Row="0"
             Grid.Column="0"
             IsVisible="{Binding IsEditing, Mode=OneWay, Converter={StaticResource inverseBool}}"
-            AutomationId="BooleanCustomFieldNameLabel"/>
+            AutomationId="BooleanCustomFieldNameLabel" />
         <Label
             Text="{Binding Field.Name, Mode=OneWay}"
             IsVisible="{Binding IsEditing}"
@@ -51,14 +51,14 @@
             Grid.Column="0"
             Margin="0, 5, 0, 0"
             IsVisible="{Binding IsEditing, Mode=OneWay, Converter={StaticResource inverseBool}}"
-            AutomationId="BooleanCustomFieldValueLabel"/>
+            AutomationId="BooleanCustomFieldValueLabel" />
         <Switch
             IsToggled="{Binding BooleanValue}"
             IsVisible="{Binding IsEditing}"
             Grid.Row="0"
             Grid.Column="1"
             Grid.RowSpan="2"
-            AutomationId="BooleanCustomFieldValueToggle"/>
+            AutomationId="BooleanCustomFieldValueToggle" />
         <controls:IconButton 
             StyleClass="box-row-button, box-row-button-platform"
             Text="{Binding Source={x:Static core:BitwardenIcons.Cog}}"

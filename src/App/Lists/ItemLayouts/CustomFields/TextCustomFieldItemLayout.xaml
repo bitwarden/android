@@ -30,14 +30,14 @@
             StyleClass="box-label"
             Grid.Row="0"
             Grid.Column="0"
-            AutomationId="TextCustomFieldNameLabel"/>
+            AutomationId="TextCustomFieldNameLabel" />
         <Label
             Text="{Binding ValueText, Mode=OneWay}"
             StyleClass="box-value"
             Grid.Row="1"
             Grid.Column="0"
             IsVisible="{Binding IsEditing, Mode=OneWay, Converter={StaticResource inverseBool}}"
-            AutomationId="TextCustomFieldValueLabel"/>
+            AutomationId="TextCustomFieldValueLabel" />
         <Entry
             Text="{Binding Field.Value}"
             StyleClass="box-value"
@@ -46,7 +46,7 @@
             IsVisible="{Binding IsEditing}"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{Binding Field.Name}"
-            AutomationId="TextCustomFieldValueEntry"/>
+            AutomationId="TextCustomFieldValueEntry" />
         <controls:IconButton
             StyleClass="box-row-button, box-row-button-platform"
             Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
@@ -57,7 +57,7 @@
             Grid.RowSpan="2"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n Copy}"
-            AutomationId="TextCustomFieldCopyValue"/>
+            AutomationId="TextCustomFieldCopyValue" />
         <controls:IconButton 
             StyleClass="box-row-button, box-row-button-platform"
             Text="{Binding Source={x:Static core:BitwardenIcons.Cog}}"
@@ -68,7 +68,7 @@
             Grid.RowSpan="2"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n Options}"
-            AutomationId="TextCustomFieldOptionsButton"/>
+            AutomationId="TextCustomFieldOptionsButton" />
     </Grid>
     <BoxView StyleClass="box-row-separator" IsVisible="{Binding IsEditing, Mode=OneWay, Converter={StaticResource inverseBool}}" />
 </StackLayout>
