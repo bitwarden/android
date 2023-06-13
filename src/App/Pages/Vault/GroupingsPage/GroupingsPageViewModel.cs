@@ -235,7 +235,7 @@ namespace Bit.App.Pages
                 {
                     AddTotpGroupItem(groupedItems, uppercaseGroupNames);
 
-                    var types = Enum.GetValues(typeof(CipherType));
+                    var types = new CipherType[] { CipherType.Login, CipherType.Card, CipherType.Identity, CipherType.SecureNote };
                     var typesGroup = new GroupingsPageListGroup(AppResources.Types, types.Length, uppercaseGroupNames, !hasFavorites);
                     foreach (CipherType t in types)
                     {
@@ -455,9 +455,6 @@ namespace Bit.App.Pages
                 case CipherType.Identity:
                     title = AppResources.Identities;
                     break;
-                case CipherType.Fido2Key:
-                    title = AppResources.Passkeys;
-                    break;
                 default:
                     break;
             }
@@ -630,14 +627,11 @@ namespace Bit.App.Pages
                         NoFolderCiphers.Add(c);
                     }
 
-                    if (_typeCounts.ContainsKey(c.Type))
-                    {
-                        _typeCounts[c.Type] = _typeCounts[c.Type] + 1;
-                    }
-                    else
-                    {
-                        _typeCounts.Add(c.Type, 1);
-                    }
+                    // Fido2Key ciphers should be counted as Login ciphers
+                    var countType = c.Type == CipherType.Fido2Key ? CipherType.Login : c.Type;
+                    _typeCounts[countType] = _typeCounts.TryGetValue(countType, out var currentTypeCount)
+                                                ? currentTypeCount + 1
+                                                : 1;
                 }
 
                 if (c.IsDeleted)
