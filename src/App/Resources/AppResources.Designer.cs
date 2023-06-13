@@ -3931,6 +3931,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Master password re-prompt help.
+        /// </summary>
+        public static string MasterPasswordRePromptHelp {
+            get {
+                return ResourceManager.GetString("MasterPasswordRePromptHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Match detection.
         /// </summary>
         public static string MatchDetection {
@@ -6494,6 +6503,15 @@ namespace Bit.App.Resources {
         public static string Unlock {
             get {
                 return ResourceManager.GetString("Unlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.
+        /// </summary>
+        public static string UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve {
+            get {
+                return ResourceManager.GetString("UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve", resourceCulture);
             }
         }
         

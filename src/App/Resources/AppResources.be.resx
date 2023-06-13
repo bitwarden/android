@@ -2496,7 +2496,7 @@
     <value>Атрымаць падказку да асноўнага пароля</value>
   </data>
   <data name="LoggingInAsXOnY" xml:space="preserve">
-    <value>Logging in as {0} on {1}</value>
+    <value>Вы ўваходзіце як {0} у {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Не вы?</value>
@@ -2610,24 +2610,30 @@
     <value>Адсутнічаюць элементы, якія адпавядаюць пошуку</value>
   </data>
   <data name="US" xml:space="preserve">
-    <value>US</value>
+    <value>ЗША</value>
   </data>
   <data name="EU" xml:space="preserve">
-    <value>EU</value>
+    <value>ЕС</value>
   </data>
   <data name="SelfHosted" xml:space="preserve">
-    <value>Self-hosted</value>
+    <value>Уласнае размяшчэнне</value>
   </data>
   <data name="DataRegion" xml:space="preserve">
-    <value>Data region</value>
+    <value>Рэгіён даных</value>
   </data>
   <data name="Region" xml:space="preserve">
-    <value>Region</value>
+    <value>Рэгіён</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Ваш асноўны пароль не адпавядае адной або некалькім палітыкам арганізацыі. Для атрымання доступу да сховішча, вы павінны абнавіць яго. Працягваючы, вы выйдзіце з бягучага сеанса і вам неабходна будзе ўвайсці паўторна. Актыўныя сеансы на іншых прыладах могуць заставацца актыўнымі на працягу адной гадзіны.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Бягучы асноўны пароль</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Дапамога з паўторным запытам асноўнага пароля</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Па прычыне недахопу памяці можа адбыцца збой разблакіроўкі. Паменшыце налады памяці KDF, каб вырашыць гэту праблему</value>
   </data>
 </root>

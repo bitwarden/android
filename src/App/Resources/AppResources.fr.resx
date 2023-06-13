@@ -2631,4 +2631,10 @@ Voulez-vous basculer vers ce compte ?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Mot de passe principal actuel</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Aide sur la ressaisie du mot de passe principal</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Le déverrouillage peut échouer en raison d'une mémoire insuffisante. Diminuez les paramètres de mémoire KDF pour y remédier</value>
+  </data>
 </root>

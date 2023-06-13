@@ -2659,4 +2659,10 @@ Do you want to switch to this account?</value>
   <data name="AvailableForTwoStepLogin" xml:space="preserve">
     <value>Available for two-step login</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve</value>
+  </data>
 </root>
