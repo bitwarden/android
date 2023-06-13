@@ -1492,7 +1492,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Aseta PIN-koodi Bitwardenin avaukselle. PIN-asetukset tyhjentyvät, jos kirjaudut kokonaan ulos sovelluksesta.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Kirjautui tunnuksella {0} palvelimelle {1}.</value>
+    <value>Kirjautui palvelimelle {1} tunnuksella {0}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
@@ -1753,10 +1753,10 @@ Koodi luetaan automaattisesti.</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Biometrinen avaus on poistettu käytöstä tältä tililtä, kunnes pääsalasana on vahvistettu.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Automaattisen täytön biometrinen avaus on poistettu käytöstä tältä tililtä, kunnes pääsalasana on vahvistettu.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Synkronoi holvi päivityksen yhteydessä</value>
@@ -2496,8 +2496,8 @@ Haluatko vaihtaa tähän tiliin?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Pyydä pääsalasanan vihjettä</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Kirjaudutaan tunnuksella {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Kirjaudutaan palvelimelle {1} tunnuksella {0}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Etkö se ollut sinä?</value>
@@ -2602,7 +2602,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Lisää avain olemassa olevaan tai uuteen kohteeseen</value>
   </data>
   <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
-    <value>Holvissasi ei ole kohteita osoitteelle "{0}"</value>
+    <value>Holvissasi ei ole kohdetta "{0}" vastavia tietoja</value>
   </data>
   <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
     <value>Etsi kohdetta tai lisää uusi kohde</value>
@@ -2610,10 +2610,31 @@ Haluatko vaihtaa tähän tiliin?</value>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Hakua vastaavia kohteita ei ole</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Itse ylläpidetty</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Tietoalue</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Alue</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Pääsalasanasi ei täytä yhden tai useamman organisaatiokäytännön vaatimuksia ja holvin käyttämiseksi sinun on vaihdettava se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Nykyinen pääsalasana</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Pääsalasanan uudelleenkyselyn ohje</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Lukituksen avaus voi epäonnistua riittämättömän keskusmuistin vuoksi. Tämän välttämiseksi voit madaltaa KDF-muistiasetuksiasi.</value>
   </data>
 </root>

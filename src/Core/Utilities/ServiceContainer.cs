@@ -75,8 +75,7 @@ namespace Bit.Core.Utilities
                     messagingService.Send("logout", extras);
                     return Task.CompletedTask;
                 });
-            var passwordGenerationService = new PasswordGenerationService(cryptoService, stateService,
-                cryptoFunctionService, policyService);
+            var passwordGenerationService = new PasswordGenerationService(cryptoService, stateService, cryptoFunctionService, policyService);
             var totpService = new TotpService(cryptoFunctionService);
             var authService = new AuthService(cryptoService, cryptoFunctionService, apiService, stateService,
                 tokenService, appIdService, i18nService, platformUtilsService, messagingService, vaultTimeoutService,
@@ -88,6 +87,7 @@ namespace Bit.Core.Utilities
             var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService,
                 cryptoService);
             var usernameGenerationService = new UsernameGenerationService(cryptoService, apiService, stateService);
+            var configService = new ConfigService(apiService, stateService, logger);
 
             Register<IConditionedAwaiterManager>(conditionedRunner);
             Register<ITokenService>("tokenService", tokenService);
@@ -113,6 +113,7 @@ namespace Bit.Core.Utilities
             Register<IKeyConnectorService>("keyConnectorService", keyConnectorService);
             Register<IUserVerificationService>("userVerificationService", userVerificationService);
             Register<IUsernameGenerationService>(usernameGenerationService);
+            Register<IConfigService>(configService);
         }
 
         public static void Register<T>(string serviceName, T obj)

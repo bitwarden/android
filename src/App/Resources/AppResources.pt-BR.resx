@@ -1756,7 +1756,7 @@ A leitura será feita automaticamente.</value>
     <value>O desbloqueio biométrico desta conta está desabilitado com a verificação da senha mestra.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>O desbloqueio biométrico do autopreenchimento está desabilitado para esta conta por pendência de verificação da senha mestra.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Ativar sincronização ao atualizar</value>
@@ -2496,8 +2496,8 @@ Você deseja mudar para esta conta?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Obter dica da senha mestra</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Entrando como {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Entrando como {0} em {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Não é você?</value>
@@ -2610,10 +2610,31 @@ Você deseja mudar para esta conta?</value>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Não há itens que correspondam à pesquisa</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>EUA</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>Europa</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Auto-hospedado</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Região de dados</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Região</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>A sua senha mestra não atende a uma ou mais das políticas da sua organização. Para acessar o cofre, você deve atualizar a sua senha mestra agora. O processo desconectará você da sessão atual, exigindo que você inicie a sessão novamente. Sessões ativas em outros dispositivos podem continuar ativas por até uma hora.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Senha mestra atual</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve</value>
   </data>
 </root>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -585,6 +586,16 @@ namespace Bit.Core.Services
 
         #endregion
 
+        #region Configs
+
+        public async Task<ConfigResponse> GetConfigsAsync()
+        {
+            var accessToken = await _tokenService.GetTokenAsync();
+            return await SendAsync<object, ConfigResponse>(HttpMethod.Get, "/config/", null, !string.IsNullOrEmpty(accessToken), true);
+        }
+
+        #endregion
+
         #region Helpers
 
         public async Task<string> GetActiveBearerTokenAsync()
@@ -965,7 +976,19 @@ namespace Bit.Core.Services
 
         private bool IsJsonResponse(HttpResponseMessage response)
         {
-            return (response.Content?.Headers?.ContentType?.MediaType ?? string.Empty) == "application/json";
+            if (response.Content?.Headers is null)
+            {
+                return false;
+            }
+
+            if (response.Content.Headers.ContentType?.MediaType == "application/json")
+            {
+                return true;
+            }
+
+            return response.Content.Headers.TryGetValues("Content-Type", out var vals)
+                   &&
+                   vals?.Any(v => v.Contains("application/json")) is true;
         }
 
         #endregion

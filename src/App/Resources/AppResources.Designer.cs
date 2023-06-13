@@ -203,6 +203,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Biometric unlock for this account is disabled pending verification of master password..
+        /// </summary>
+        public static string AccountBiometricInvalidated {
+            get {
+                return ResourceManager.GetString("AccountBiometricInvalidated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Autofill biometric unlock for this account is disabled pending verification of master password..
+        /// </summary>
+        public static string AccountBiometricInvalidatedExtension {
+            get {
+                return ResourceManager.GetString("AccountBiometricInvalidatedExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your new account has been created! You may now log in..
         /// </summary>
         public static string AccountCreated {
@@ -964,24 +982,6 @@ namespace Bit.App.Resources {
         public static string BaseDomain {
             get {
                 return ResourceManager.GetString("BaseDomain", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Biometric unlock disabled pending verification of master password..
-        /// </summary>
-        public static string AccountBiometricInvalidated {
-            get {
-                return ResourceManager.GetString("AccountBiometricInvalidated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Biometric unlock for autofill disabled pending verification of master password..
-        /// </summary>
-        public static string AccountBiometricInvalidatedExtension {
-            get {
-                return ResourceManager.GetString("AccountBiometricInvalidatedExtension", resourceCulture);
             }
         }
         
@@ -1751,6 +1751,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data region.
+        /// </summary>
+        public static string DataRegion {
+            get {
+                return ResourceManager.GetString("DataRegion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password updated.
         /// </summary>
         public static string DatePasswordUpdated {
@@ -2323,6 +2332,15 @@ namespace Bit.App.Resources {
         public static string EnvironmentSaved {
             get {
                 return ResourceManager.GetString("EnvironmentSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EU.
+        /// </summary>
+        public static string EU {
+            get {
+                return ResourceManager.GetString("EU", resourceCulture);
             }
         }
         
@@ -3569,11 +3587,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logging in as {0}.
+        ///   Looks up a localized string similar to Logging in as {0} on {1}.
         /// </summary>
-        public static string LoggingInAsX {
+        public static string LoggingInAsXOnY {
             get {
-                return ResourceManager.GetString("LoggingInAsX", resourceCulture);
+                return ResourceManager.GetString("LoggingInAsXOnY", resourceCulture);
             }
         }
         
@@ -3873,6 +3891,15 @@ namespace Bit.App.Resources {
         public static string MasterPasswordPolicyValidationTitle {
             get {
                 return ResourceManager.GetString("MasterPasswordPolicyValidationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Master password re-prompt help.
+        /// </summary>
+        public static string MasterPasswordRePromptHelp {
+            get {
+                return ResourceManager.GetString("MasterPasswordRePromptHelp", resourceCulture);
             }
         }
         
@@ -5130,6 +5157,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Region.
+        /// </summary>
+        public static string Region {
+            get {
+                return ResourceManager.GetString("Region", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remember me.
         /// </summary>
         public static string RememberMe {
@@ -5459,6 +5495,15 @@ namespace Bit.App.Resources {
         public static string SelectTypeField {
             get {
                 return ResourceManager.GetString("SelectTypeField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Self-hosted.
+        /// </summary>
+        public static string SelfHosted {
+            get {
+                return ResourceManager.GetString("SelfHosted", resourceCulture);
             }
         }
         
@@ -6390,6 +6435,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.
+        /// </summary>
+        public static string UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve {
+            get {
+                return ResourceManager.GetString("UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unlock vault.
         /// </summary>
         public static string UnlockVault {
@@ -6521,6 +6575,15 @@ namespace Bit.App.Resources {
         public static string URIs {
             get {
                 return ResourceManager.GetString("URIs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to US.
+        /// </summary>
+        public static string US {
+            get {
+                return ResourceManager.GetString("US", resourceCulture);
             }
         }
         

@@ -2494,8 +2494,8 @@ Bu hesaba keçmək istəyirsiniz?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Ana parol üçün məsləhət alın</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>{0} olaraq giriş edilir</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>{1} üzərində {0} olaraq giriş edildi</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Siz deyilsiniz?</value>
@@ -2608,10 +2608,31 @@ Bu hesaba keçmək istəyirsiniz?</value>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Axtarışa uyğun gələn heç bir element yoxdur</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>ABŞ</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>AB</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Öz-özünə sahiblik edən</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Data bölgəsi</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Bölgə</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Ana parolunuz təşkilatınızdakı siyasətlərdən birinə və ya bir neçəsinə uyğun gəlmir. Anbara müraciət üçün ana parolunuzu indi güncəlləməlisiniz. Davam etsəniz, hazırkı seansdan çıxış etmiş və təkrar giriş etməli olacaqsınız. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Hazırkı ana parol</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Ana parolu təkrar soruş köməyi</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve</value>
   </data>
 </root>

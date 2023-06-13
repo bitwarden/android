@@ -118,55 +118,55 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden पासवर्ड मैनेजर</value>
+    <value>बिटवार्डन पासवर्ड मैनेजर</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>बिटवार्डन अंतरराष्ट्रीय कॉरपोरेशन, 8बिट सॉल्यूश्नस एलएलसी की मूल कंपनी है।
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+द वर्ज, यूएस न्यूज़ एंड वर्ल्ड रिपोर्ट, सीनेट, और कई दूसरे मीडिया संगठन द्वारा बोला गया दुनिया का सबसे बेहतरीन पासवर्ड मैनेजर।
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+अनगिनत पासवर्ड मैनेज, स्टोर, महफूज़, और शेयर करें कही से भी। बिटवार्डन देता है ओपन सोर्स पासवर्ड मैनेजमेंट सुविधा सबको, चाहे वो घर पर हो, दफ्तर पर हो, या घूम रहे हो।
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+आप जिन वेबसाइट पर जाते है उनके लिए बनाएं ताकतवर, खास, और बेतरतीब पासवर्ड उनकी सुरक्षा ज़रूरतो के हिसाब से।
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+बिटवार्डन सेंड किसी को भी एन्क्रिप्टेड जानकारी, फाइल, और सादा टेक्सट, फौरन भेजें।
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+बिटवार्डन कंपनियों के लिए टीम और बिज़नेस प्लान भी देता है ताकि आप अपने साथ काम करनेवालो के साथ पासवर्ड शेयर करे सुरक्षित होकर।
 
-Why Choose Bitwarden:
+बिटवार्डन को क्यों चुनें:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+ताकतवर एन्क्रिप्शन
+पासवर्ड एडवांस एंड-टू-एंड एन्क्रिप्शन (एईएस-256 बिट, सॉल्टेड हैशटैग, और पीबीकेडीएफ2 शा-256) के साथ सुरक्षित रखा जाता है ताकि आपका डाटा महफूज़ और निजी रहे।
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+पहले से बना पासवर्ड जेनरेटर
+आप जिन वेबसाइट पर जाते है उनके लिए बनाएं ताकतवर, खास, और बेतरतीब पासवर्ड उनकी सुरक्षा ज़रूरतो के हिसाब से।
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+अंतरराष्ट्रीय अनुवाद
+40 से ज़्यादा भाषा में बिटवार्डन इस्तेमाल करें, जिसे लिखा है हमारी अंतरराष्ट्रीय दोस्तो ने।
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+कई प्लेनफॉर्म पर मौजूद
+अपने बिटवार्डन तिजोरी से संवेदनशील डाटा महफूज़ और शेयर करें किसी भी ब्राउज़र, फोन, या डेस्कटॉप जैसे डिवाइसो से।
 </value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>बिटवर्डन, 8 बिट, पासवर्ड, फ्री पासवर्ड मैनेजर, पासवर्ड मैनेजर, लॉगिन मैनेजर</value>
+    <value>बिटवर्डन, 8 बिट, पासवर्ड, मुफ्त पासवर्ड मैनेजर, पासवर्ड मैनेजर, लॉगइन मैनेजर</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>एक सुरक्षित तिजोरी से अपने सभी लॉगिन और पासवर्ड प्रबंधित करें</value>
+    <value>एक सुरक्षित तिजोरी से अपने सारे लॉगइन और पासवर्ड मैनेज करें</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>स्वचालित रूप से मजबूत, यादृच्छिक और सुरक्षित पासवर्ड उत्पन्न करते हैं</value>
+    <value>अपनेआप ताकतवर, बेतरतीब, और महफूज़ पासवर्ड बनाएं</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>टच आईडी, पिन कोड या मास्टर पासवर्ड से अपनी तिजोरी को सुरक्षित रखें</value>
+    <value>टच आईडी, पिन कोड, या मुख्य पासवर्ड से अपनी तिजोरी सुरक्षित रखें</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>सफारी, क्रोम और अन्य सैकड़ों ऐप्स से ऑटो-फिल लॉगिन करें</value>
+    <value>सफारी, क्रोम, और सैकड़ों दूसरे ऐप से अपनेआप भरकर लॉगइन करें</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>कई उपकरणों से अपने Vault को सिंक और एक्सेस करें</value>
+    <value>अपने तिजोरी को अलग-अलग डिवाइसो से सिंक और एक्सेस करें</value>
   </data>
 </root>

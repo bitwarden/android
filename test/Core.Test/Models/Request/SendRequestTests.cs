@@ -14,7 +14,7 @@ namespace Bit.Core.Test.Models.Request
     {
         [Theory]
         [InlineCustomAutoData(new[] { typeof(TextSendCustomization) }, null)]
-        [InlineCustomAutoData(new[] { typeof(FileSendCustomization) }, 100)]
+        [InlineCustomAutoData(new[] { typeof(FileSendCustomization) }, 100L)]
         public void SendRequest_FromSend_Success(long? fileLength, Send send)
         {
             var request = new SendRequest(send, fileLength);

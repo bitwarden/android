@@ -1753,10 +1753,10 @@ Scanarea se va face automat.</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Deblocarea biometrică pentru acest cont este dezactivată în așteptarea verificării parolei principale.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Completarea automată a deblocării biometrice pentru acest cont este dezactivată în așteptarea verificării parolei principale.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Activare sincronizare la reîmprospătare</value>
@@ -2495,8 +2495,8 @@ Doriți să comutați la acest cont?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Obțineți indiciul parolei principale</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Autentificare ca {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Logging in as {0} on {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Nu sunteți dvs.?</value>
@@ -2609,10 +2609,31 @@ Doriți să comutați la acest cont?</value>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Nu există lucruri care să corespundă căutării</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Self-hosted</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Data region</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Parola principală nu îndeplinește una sau mai multe politici ale organizației. Pentru a accesa seiful trebuie să actualizați acum parola principală. Continuarea te va deconecta din sesiunea curentă, necesitând să te autentifici din nou. Sesiunile active pe alte dispozitive pot continua să rămână active timp de maxim o oră.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Parola principală curentă</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve</value>
   </data>
 </root>

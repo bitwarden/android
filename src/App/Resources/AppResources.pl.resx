@@ -2495,8 +2495,8 @@ Czy chcesz przełączyć się na to konto?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Uzyskaj podpowiedź hasła głównego</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logowanie jako {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Logowanie jako {0} do {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>To nie Ty?</value>
@@ -2609,10 +2609,31 @@ Czy chcesz przełączyć się na to konto?</value>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Brak elementów, które pasują do wyszukiwania</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>UE</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Samodzielnie hostowany</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Region danych</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Twoje hasło główne nie spełnia jednej lub kilku zasad organizacji. Aby uzyskać dostęp do sejfu, musisz teraz zaktualizować swoje hasło główne. Kontynuacja wyloguje Cię z bieżącej sesji, wymagając zalogowania się ponownie. Aktywne sesje na innych urządzeniach mogą pozostać aktywne przez maksymalnie jedną godzinę.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Aktualne hasło główne</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Odblokowanie może się nie powieść z powodu niewystarczającej ilości pamięci. Zmniejsz ustawienia pamięci KDF, aby to rozwiązać</value>
   </data>
 </root>

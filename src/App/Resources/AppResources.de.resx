@@ -1753,7 +1753,7 @@ Das Scannen erfolgt automatisch.</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometrie zum Entsperren ist für dieses Konto deaktiviert, bis das Master-Passwort verifiziert wurde.</value>
+    <value>Das Entsperren über Biometrie ist für dieses Konto deaktiviert, bis das Master-Passwort verifiziert wurde.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
     <value>Das Entsperren von Auto-Ausfüllen über Biometrie ist für dieses Konto deaktiviert, bis das Master-Passwort verifiziert wurde.</value>
@@ -2494,8 +2494,8 @@ Möchtest du zu diesem Konto wechseln?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Hinweis zum Master-Passwort erhalten</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Anmelden als {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Anmelden als {0} auf {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Nicht du?</value>
@@ -2608,10 +2608,31 @@ Möchtest du zu diesem Konto wechseln?</value>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Es gibt keine Einträge, die mit der Suche übereinstimmen</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Selbst gehostet</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Datenregion</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Dein Master-Passwort entspricht nicht einer oder mehreren Richtlinien deiner Organisation. Um auf den Tresor zugreifen zu können, musst du dein Master-Passwort jetzt aktualisieren. Wenn du fortfährst, wirst du von deiner aktuellen Sitzung abgemeldet und musst dich erneut anmelden. Aktive Sitzungen auf anderen Geräten können noch bis zu einer Stunde lang aktiv bleiben.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Aktuelles Master-Passwort</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Hilfe zum erneuten Abfragen des Master-Passworts</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Das Entsperren kann aufgrund von unzureichendem Arbeitsspeicher fehlschlagen. Verringere deine KDF-Speichereinstellungen, um das Problem zu beheben.</value>
   </data>
 </root>

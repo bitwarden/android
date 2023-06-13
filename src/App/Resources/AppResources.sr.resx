@@ -1753,10 +1753,10 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Биометријско откључавање је онемогућено до верификације главне лозинке.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Биометријско откључавање аутоматског попуњавања за овај налог је онемогућено до верификације главне лозинке.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Омогући синхронизацију при освежавању</value>
@@ -2497,8 +2497,8 @@
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Добити савет за Главну Лозинку</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Пријављивање као {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Пријављено као {0} на {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Не ти?</value>
@@ -2611,10 +2611,31 @@
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Нема ставки које одговарају претрази</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Личан хостинг</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Регион података</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Регион</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Ваша главна лозинка не испуњава једну или више смерница ваше организације. Да бисте приступили сефу, морате одмах да ажурирате главну лозинку. Ако наставите, одјавићете се са ваше тренутне сесије, што захтева да се поново пријавите. Активне сесије на другим уређајима могу да остану активне до један сат.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Тренутна главна лозинка</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve</value>
   </data>
 </root>
