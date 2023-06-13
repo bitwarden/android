@@ -32,7 +32,7 @@
             StyleClass="box-label"
             Grid.Row="0"
             Grid.Column="0"
-            AutomationId="HiddenCustomFieldNameLabel"/>
+            AutomationId="HiddenCustomFieldNameLabel" />
         <StackLayout
             Grid.Row="1"
             Grid.Column="0"
@@ -59,7 +59,7 @@
             IsTextPredictionEnabled="False"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{Binding Field.Name}"
-            AutomationId="HiddenCustomFieldValueEntry" >
+            AutomationId="HiddenCustomFieldValueEntry">
             <Entry.Keyboard>
                 <Keyboard x:FactoryMethod="Create">
                     <x:Arguments>
