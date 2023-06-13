@@ -12,7 +12,7 @@ namespace Bit.Droid.Autofill
         private List<Field> _passwordFields = null;
         private List<Field> _usernameFields = null;
         private HashSet<string> _ignoreSearchTerms = new HashSet<string> { "search", "find", "recipient", "edit" };
-        private HashSet<string> _usernameTerms = new HashSet<string> { "email", "phone", "username"};
+        private HashSet<string> _usernameTerms = new HashSet<string> { "email", "phone", "username" };
         private HashSet<string> _passwordTerms = new HashSet<string> { "password", "pswd" };
 
         public List<AutofillId> AutofillIds { get; private set; } = new List<AutofillId>();
@@ -54,15 +54,14 @@ namespace Bit.Droid.Autofill
                     if (HintToFieldsMap.ContainsKey(View.AutofillHintPassword))
                     {
                         _passwordFields.AddRange(HintToFieldsMap[View.AutofillHintPassword]);
+                        return _passwordFields;
                     }
                 }
-                else
+
+                _passwordFields = Fields.Where(f => FieldIsPassword(f)).ToList();
+                if (!_passwordFields.Any())
                 {
-                    _passwordFields = Fields.Where(f => FieldIsPassword(f)).ToList();
-                    if (!_passwordFields.Any())
-                    {
-                        _passwordFields = Fields.Where(f => FieldHasPasswordTerms(f)).ToList();
-                    }
+                    _passwordFields = Fields.Where(f => FieldHasPasswordTerms(f)).ToList();
                 }
                 return _passwordFields;
             }
@@ -87,23 +86,25 @@ namespace Bit.Droid.Autofill
                     {
                         _usernameFields.AddRange(HintToFieldsMap[View.AutofillHintUsername]);
                     }
+                    if (_usernameFields.Any())
+                    {
+                        return _usernameFields;
+                    }
                 }
-                else
-                {
-                    foreach (var passwordField in PasswordFields)
-                    {
-                        var usernameField = Fields.TakeWhile(f => f.AutofillId != passwordField.AutofillId)
-                            .LastOrDefault();
-                        if (usernameField != null)
-                        {
-                            _usernameFields.Add(usernameField);
-                        }
-                    }
 
-                    if (!_usernameFields.Any())
+                foreach (var passwordField in PasswordFields)
+                {
+                    var usernameField = Fields.TakeWhile(f => f.AutofillId != passwordField.AutofillId)
+                        .LastOrDefault();
+                    if (usernameField != null)
                     {
-                        _usernameFields = Fields.Where(f => FieldIsUsername(f)).ToList();
+                        _usernameFields.Add(usernameField);
                     }
+                }
+
+                if (!_usernameFields.Any())
+                {
+                    _usernameFields = Fields.Where(f => FieldIsUsername(f)).ToList();
                 }
                 return _usernameFields;
             }
