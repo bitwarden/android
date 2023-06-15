@@ -100,7 +100,7 @@
                         Grid.Column="2"
                         AutomationProperties.IsInAccessibleTree="True"
                         AutomationProperties.Name="{u:I18n GeneratePassword}"
-                        AutomationId="RegenerateValueButton"/>
+                        AutomationId="RegenerateValueButton" />
                 </Grid>
                 <Grid IsVisible="{Binding IsUsername}"
                         StyleClass="box-row"                  
@@ -170,7 +170,7 @@
                         SelectedItem="{Binding UsernameTypeSelected}"
                         ItemDisplayBinding="{Binding ., Converter={StaticResource localizableEnum}}"
                         StyleClass="box-value"
-                        AutomationId="UsernameTypePicker"/>
+                        AutomationId="UsernameTypePicker" />
                     <Label
                         StyleClass="box-footer-label"
                         Text="{Binding UsernameTypeDescriptionLabel}" />
@@ -214,7 +214,7 @@
                             x:Name="_catchAllEmailDomainNameEntry"
                             Text="{Binding CatchAllEmailDomain}"
                             StyleClass="box-value"
-                            AutomationId="CatchAllEmailDomainEntry"/>
+                            AutomationId="CatchAllEmailDomainEntry" />
                         <Label IsVisible="{Binding ShowUsernameEmailType}"
                             Text="{u:I18n EmailType}"
                             StyleClass="box-label" 
@@ -383,7 +383,7 @@
                             IsToggled="{Binding CapitalizeRandomWordUsername}"
                             StyleClass="box-value"
                             HorizontalOptions="End"
-                            AutomationId="CapitalizeRandomWordUsernameToggle"/>
+                            AutomationId="CapitalizeRandomWordUsernameToggle" />
                     </Grid>
                     <BoxView IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.RandomWord}}"
                         StyleClass="box-row-separator" />
@@ -448,7 +448,7 @@
                                 IsSpellCheckEnabled="False"
                                 IsTextPredictionEnabled="False"
                                 StyleClass="box-value"
-                                AutomationId="WordSeparatorEntry" >
+                                AutomationId="WordSeparatorEntry">
                                 <Entry.Effects>
                                     <effects:NoEmojiKeyboardEffect />
                                 </Entry.Effects>

@@ -28,7 +28,7 @@
                          Order="Secondary"
                          x:Name="_clearItem"
                          x:Key="clearItem"
-                         AutomationId="ClearPasswordList"/>
+                         AutomationId="ClearPasswordList" />
             <ToolbarItem Icon="more_vert.png"
                          AutomationProperties.IsInAccessibleTree="True"
                          AutomationProperties.Name="{u:I18n Options}"
@@ -92,7 +92,7 @@
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{u:I18n CopyPassword}"
-                            AutomationId="CopyPasswordValueButton"/>
+                            AutomationId="CopyPasswordValueButton" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
