@@ -24,7 +24,8 @@
                 Priority="-1"
                 UseOriginalImage="True"
                 AutomationProperties.IsInAccessibleTree="True"
-                AutomationProperties.Name="{u:I18n Account}" />
+                AutomationProperties.Name="{u:I18n Account}"
+                AutomationId="AccountIconButton" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
@@ -34,7 +35,7 @@
                 x:Name="_moreItem" x:Key="moreItem"
                  AutomationProperties.IsInAccessibleTree="True"
                  AutomationProperties.Name="{u:I18n Options}"
-                 AutomationId="OptionsButton"/>
+                 AutomationId="OptionsButton" />
             <ToolbarItem Text="{u:I18n GetPasswordHint}"
                 x:Key="getPasswordHint"
                 x:Name="_getPasswordHint"

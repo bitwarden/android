@@ -24,7 +24,8 @@
                 Priority="-1"
                 UseOriginalImage="True"
                 AutomationProperties.IsInAccessibleTree="True"
-                AutomationProperties.Name="{u:I18n Account}" />
+                AutomationProperties.Name="{u:I18n Account}"
+                AutomationId="AccountIconButton" />
     </ContentPage.ToolbarItems>
     
     <ContentPage.Resources>
@@ -72,7 +73,7 @@
                                 Grid.Column="0"
                                 ReturnType="Go"
                                 ReturnCommand="{Binding SubmitCommand}" 
-                                AutomationId="PinEntry"/>
+                                AutomationId="PinEntry" />
                             <controls:IconButton
                                 StyleClass="box-row-button, box-row-button-platform"
                                 Text="{Binding ShowPasswordIcon}"
@@ -83,7 +84,7 @@
                                 AutomationProperties.IsInAccessibleTree="True"
                                 AutomationProperties.Name="{u:I18n ToggleVisibility}" 
                                 AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
-                                AutomationId="PinVisibilityToggle"/>
+                                AutomationId="PinVisibilityToggle" />
                         </Grid>
                         <Grid
                             x:Name="_passwordGrid"
@@ -114,7 +115,7 @@
                                 Grid.Column="0"
                                 ReturnType="Go"
                                 ReturnCommand="{Binding SubmitCommand}"
-                                AutomationId="MasterPasswordEntry"/>
+                                AutomationId="MasterPasswordEntry" />
                             <controls:IconButton
                                 StyleClass="box-row-button, box-row-button-platform"
                                 Text="{Binding ShowPasswordIcon}"
@@ -153,7 +154,7 @@
                             Text="{u:I18n Unlock}"
                             StyleClass="btn-primary"
                             Clicked="Unlock_Clicked"
-                            AutomationId="UnlockVaultButton"/>
+                            AutomationId="UnlockVaultButton" />
                     </StackLayout>
                 </StackLayout>
             </ScrollView>
