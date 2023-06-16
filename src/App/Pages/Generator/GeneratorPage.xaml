@@ -112,7 +112,7 @@
                         Text="{Binding ColoredUsername, Mode=OneWay}"
                         Margin="0, 20"
                         HorizontalOptions="Start"
-                        AutomationId="GeneratedUsernameValue" />
+                        AutomationId="GeneratedPasswordLabel" />
                     <controls:IconButton 
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
