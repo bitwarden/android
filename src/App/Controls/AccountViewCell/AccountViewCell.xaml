@@ -114,7 +114,7 @@
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
                 StyleClass="list-icon, list-icon-platform"
-                AutomationId="UnlockedAndInactiveVaultIcon" />
+                AutomationId="InactiveVaultIcon" />
             <controls:IconLabel
                 Grid.Column="2"
                 Text="{Binding AuthStatusIconActive}" 
@@ -124,7 +124,7 @@
                 VerticalOptions="Center"
                 StyleClass="list-icon, list-icon-platform"
                 TextColor="{DynamicResource TextColor}"
-                AutomationId="UnlockedAndActiveVaultIcon" />
+                AutomationId="ActiveVaultIcon" />
         </Grid>
 
         <Grid
