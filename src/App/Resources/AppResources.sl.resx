@@ -2634,6 +2634,6 @@ Do you want to switch to this account?</value>
     <value>Pomoč o ponovnem zahtevku za glavno geslo</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
   </data>
 </root>

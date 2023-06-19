@@ -964,7 +964,7 @@
     <value>自定义环境</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>适用于高级用户，你可以分别指定各个服务的基础 URL。</value>
+    <value>适用于高级用户。你可以分别指定各个服务的基础 URL。</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
     <value>各环境 URL 已保存。</value>
