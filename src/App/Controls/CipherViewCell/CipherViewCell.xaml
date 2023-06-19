@@ -38,7 +38,7 @@
         Text="{Binding Cipher, Converter={StaticResource iconGlyphConverter}}"
         ShouldUpdateFontSizeDynamicallyForAccesibility="True"
         AutomationProperties.IsInAccessibleTree="False"
-        AutomationId="CipherTypeIcon"/>
+        AutomationId="CipherTypeIcon" />
 
     <ff:CachedImage
         x:Name="_iconImage"
@@ -55,7 +55,7 @@
         IsVisible="{Binding ShowIconImage}"
         Source="{Binding IconImageSource, Mode=OneTime}"
         AutomationProperties.IsInAccessibleTree="False"
-        AutomationId="CipherWebsiteIcon"/>
+        AutomationId="CipherWebsiteIcon" />
 
     <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Padding="0, 7">
         <Grid.RowDefinitions>
