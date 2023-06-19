@@ -2633,9 +2633,9 @@
     <value>Тренутна главна лозинка</value>
   </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
-    <value>Master password re-prompt help</value>
+    <value>Помоћ поновно тражење главне лозинке</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve</value>
+    <value>Откључавање можда неће успети због недовољне меморије. Умањите подешавање KDF меморије за решење</value>
   </data>
 </root>
