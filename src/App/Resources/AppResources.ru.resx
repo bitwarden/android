@@ -2634,6 +2634,6 @@
     <value>Помощь с повторным запросом мастер-пароля</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve</value>
+    <value>Разблокировка может завершиться ошибкой из-за нехватки памяти. Уменьшите настройки памяти KDF для решения этой проблемы</value>
   </data>
 </root>
