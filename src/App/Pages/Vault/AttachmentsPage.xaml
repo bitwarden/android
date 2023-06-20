@@ -33,23 +33,25 @@
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row" Padding="10, 20"
                              IsVisible="{Binding HasAttachments, Converter={StaticResource inverseBool}}">
-                    <Label Text="{u:I18n NoAttachments}" HorizontalTextAlignment="Center" />
+                    <Label Text="{u:I18n NoAttachments}" HorizontalTextAlignment="Center" AutomationId="NoAttachmentsLabel" />
                 </StackLayout>
-                <controls:RepeaterView ItemsSource="{Binding Attachments}" IsVisible="{Binding HasAttachments}">
+                <controls:RepeaterView ItemsSource="{Binding Attachments}" IsVisible="{Binding HasAttachments}" AutomationId="AttachmentsList">
                     <controls:RepeaterView.ItemTemplate>
                         <DataTemplate x:DataType="views:AttachmentView">
                             <StackLayout Spacing="0" Padding="0">
-                                <StackLayout Orientation="Horizontal" StyleClass="box-row" Spacing="10">
+                                <StackLayout Orientation="Horizontal" StyleClass="box-row" Spacing="10" AutomationId="AttachmentRow">
                                     <Label
                                         Text="{Binding FileName, Mode=OneWay}"
                                         StyleClass="box-value"
                                         VerticalTextAlignment="Center"
-                                        HorizontalOptions="StartAndExpand" />
+                                        HorizontalOptions="StartAndExpand"
+                                        AutomationId="AttachmentFileNameLabel" />
                                     <Label
                                         Text="{Binding SizeName, Mode=OneWay}"
                                         StyleClass="box-sub-label"
                                         HorizontalTextAlignment="End"
-                                        VerticalTextAlignment="Center" />
+                                        VerticalTextAlignment="Center"
+                                        AutomationId="AttachmentFileSizeLabel" />
                                     <controls:IconButton 
                                         StyleClass="box-row-button, box-row-button-platform"
                                         Text="{Binding Source={x:Static core:BitwardenIcons.Trash}}"
@@ -57,7 +59,8 @@
                                         CommandParameter="{Binding .}"
                                         VerticalOptions="Center"
                                         AutomationProperties.IsInAccessibleTree="True"
-                                        AutomationProperties.Name="{u:I18n Delete}" />
+                                        AutomationProperties.Name="{u:I18n Delete}"
+                                        AutomationId="AttachmentDeleteButton" />
                                 </StackLayout>
                                 <BoxView StyleClass="box-row-separator" />
                             </StackLayout>
@@ -77,17 +80,20 @@
                         LineBreakMode="CharacterWrap"
                         StyleClass="text-sm, text-muted"
                         HorizontalOptions="FillAndExpand"
-                        HorizontalTextAlignment="Center" />
+                        HorizontalTextAlignment="Center"
+                        AutomationId="NoFileChosenLabel" />
                     <Label
                         IsVisible="{Binding FileName, Converter={StaticResource notNull}}"
                         Text="{Binding FileName}"
                         LineBreakMode="CharacterWrap"
                         StyleClass="text-sm, text-muted"
                         HorizontalOptions="FillAndExpand"
-                        HorizontalTextAlignment="Center" />
+                        HorizontalTextAlignment="Center"
+                        AutomationId="NewAttachmentNameLabel" />
                 </StackLayout>
                 <Button Text="{u:I18n ChooseFile}" StyleClass="box-button-row"
-                        Clicked="ChooseFile_Clicked"></Button>
+                        Clicked="ChooseFile_Clicked"
+                        AutomationId="ChooseFileButton"></Button>
                 <Label
                     Margin="0, 10, 0, 0"
                     Text="{u:I18n MaxFileSize}"
