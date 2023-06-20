@@ -478,7 +478,7 @@
                             <BoxView StyleClass="box-row-separator"
                                      IsVisible="{Binding Cipher.Identity.LicenseNumber, Converter={StaticResource stringHasValue}}" />
                             <StackLayout StyleClass="box-row"
-                                         IsVisible="{Binding Cipher.Identity.Email, Converter={StaticResource stringHasValue}}" >
+                                         IsVisible="{Binding Cipher.Identity.Email, Converter={StaticResource stringHasValue}}">
                                 <Label
                                     Text="{u:I18n Email}"
                                     StyleClass="box-label" />
