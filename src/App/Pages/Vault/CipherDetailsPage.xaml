@@ -670,7 +670,7 @@
                         <Label FormattedText="{Binding PasswordUpdatedText}"
                                StyleClass="box-footer-label"
                                IsVisible="{Binding Cipher.PasswordRevisionDisplayDate, Converter={StaticResource notNull}}"
-                               AutomationId="CipherUpdatedPasswordDateLabel" >
+                               AutomationId="CipherUpdatedPasswordDateLabel">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="PasswordHistory_Tapped" />
                             </Label.GestureRecognizers>
@@ -678,7 +678,7 @@
                         <Label FormattedText="{Binding PasswordHistoryText}"
                                StyleClass="box-footer-label"
                                IsVisible="{Binding Cipher.HasPasswordHistory}"
-                               AutomationId="CipherPasswordHistoryLabel" >
+                               AutomationId="CipherPasswordHistoryLabel">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="PasswordHistory_Tapped" />
                             </Label.GestureRecognizers>
