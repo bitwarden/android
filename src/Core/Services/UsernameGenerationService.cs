@@ -142,7 +142,7 @@ namespace Bit.Core.Services
             }
 
             BaseForwarder<ForwarderOptions> simpleForwarder = null;
-            
+
             switch (options.ServiceType)
             {
                 case ForwardedEmailServiceType.FirefoxRelay:
