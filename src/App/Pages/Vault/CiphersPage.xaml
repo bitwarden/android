@@ -41,7 +41,8 @@
                     HorizontalOptions="FillAndExpand"
                     TextChanged="SearchBar_TextChanged"
                     SearchButtonPressed="SearchBar_SearchButtonPressed"
-                    Placeholder="{Binding PageTitle}" />
+                    Placeholder="{Binding PageTitle}"
+                    AutomationId="SearchBar" />
             </StackLayout>
             <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform"
                      x:Name="_separator" x:Key="separator" />
@@ -91,7 +92,8 @@
                 Source="empty_items_state" />
             <Label
                 Text="{u:I18n ThereAreNoItemsThatMatchTheSearch}"
-                HorizontalTextAlignment="Center" />
+                HorizontalTextAlignment="Center"
+                AutomationId="NoSearchResultsLabel" />
             <Button
                 Text="{u:I18n AddAnItem}"
                 Command="{Binding AddCipherCommand}"
@@ -104,7 +106,8 @@
                 SelectionMode="Single"
                 SelectionChanged="RowSelected"
                 StyleClass="list, list-platform"
-                ExtraDataForLogging="Ciphers Page">
+                ExtraDataForLogging="Ciphers Page"
+                AutomationId="CipherList">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="views:CipherView">
                     <controls:CipherViewCell
