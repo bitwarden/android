@@ -132,7 +132,7 @@ namespace Bit.Core.Services
             {
                 if (ResetTimeoutDelay)
                 {
-                    DelayTimeoutMs = null;
+                    DelayTimeoutMs = 1000;
                     ResetTimeoutDelay = false;
                 }
                 return false;
