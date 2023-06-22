@@ -10,5 +10,12 @@
 
         public string Title { get; }
         public string ItemCount { get; set; }
+        public string AutomationId
+        {
+            get
+            {
+                return $"{Title.Replace(" ", string.Empty).ToLowerInvariant()}Header";
+            }
+        }
     }
 }
