@@ -66,7 +66,8 @@
             <DataTemplate x:Key="groupTemplate"
                           x:DataType="pages:GroupingsPageListItem">
                 <controls:ExtendedStackLayout Orientation="Horizontal" 
-                                                StyleClass="list-row, list-row-platform" AutomationId="{Binding AutomationId}">
+                                                StyleClass="list-row, list-row-platform"
+                                                AutomationId="{Binding AutomationId}">
                     <controls:IconLabel Text="{Binding Icon, Mode=OneWay}"
                                         HorizontalOptions="Start"
                                         VerticalOptions="Center"
@@ -98,7 +99,8 @@
                     Spacing="0"
                     Padding="0"
                     VerticalOptions="FillAndExpand"
-                    StyleClass="list-row-header-container, list-row-header-container-platform" AutomationId="{Binding AutomationId}">
+                    StyleClass="list-row-header-container, list-row-header-container-platform"
+                    AutomationId="{Binding AutomationId}">
                     <BoxView
                         StyleClass="list-section-separator-top, list-section-separator-top-platform" />
                     <StackLayout StyleClass="list-row-header, list-row-header-platform">

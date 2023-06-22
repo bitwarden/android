@@ -2,7 +2,6 @@
 using Bit.Core;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
-using static Bit.Core.Utilities.DomainName.TLDRule;
 
 namespace Bit.App.Pages
 {
@@ -20,7 +19,7 @@ namespace Bit.App.Pages
         public bool FuzzyAutofill { get; set; }
         public bool IsTrash { get; set; }
         public bool IsTotpCode { get; set; }
-        
+
         public string Name
         {
             get
