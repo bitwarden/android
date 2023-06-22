@@ -52,7 +52,7 @@
                 <controls:CipherViewCell
                     Cipher="{Binding Cipher}"
                     ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}"
-                    WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"/>
+                    WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}" />
             </DataTemplate>
 
             <DataTemplate x:Key="authenticatorTemplate"
@@ -152,7 +152,7 @@
                     <Label
                         Text="{Binding NoDataText}"
                         HorizontalTextAlignment="Center"
-                        AutomationId="NoDataDisplayed" ></Label>
+                        AutomationId="NoDataDisplayed"></Label>
                     <Button
                         Text="{u:I18n AddAnItem}"
                         Clicked="AddButton_Clicked"
