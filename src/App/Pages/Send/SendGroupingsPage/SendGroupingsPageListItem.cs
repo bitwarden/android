@@ -81,12 +81,8 @@ namespace Bit.App.Pages
                     {
                         case SendType.Text:
                             return "SendTextFilter";
-                            break;
                         case SendType.File:
                             return "SendFileFilter";
-                            break;
-                        default:
-                            break;
                     }
                 }
                 return null;
