@@ -20,7 +20,8 @@
                 x:Key="regularTemplate"
                 x:DataType="pages:SettingsPageListItem">
                 <controls:ExtendedStackLayout Orientation="Horizontal"
-                             StyleClass="list-row, list-row-platform">
+                             StyleClass="list-row, list-row-platform"
+                             AutomationId="{Binding AutomationId}">
                     <Frame
                         IsVisible="{Binding UseFrame}"
                         Padding="10"
@@ -37,14 +38,16 @@
                            LineBreakMode="{Binding LineBreakMode}"
                            HorizontalOptions="StartAndExpand"
                            VerticalOptions="CenterAndExpand"
-                           StyleClass="list-title"/>
+                           StyleClass="list-title"
+                           AutomationId="SettingTitleLabel" />
                     <Label Text="{Binding SubLabel, Mode=OneWay}"
                            IsVisible="{Binding ShowSubLabel}"
                            HorizontalOptions="End"
                            HorizontalTextAlignment="End"
                            VerticalOptions="CenterAndExpand"
                            TextColor="{Binding SubLabelColor}"
-                           StyleClass="list-sub" />
+                           StyleClass="list-sub"
+                           AutomationId="SettingStatusLabel" />
                 </controls:ExtendedStackLayout>
             </DataTemplate>
             <DataTemplate
@@ -57,7 +60,8 @@
                         Padding="10"
                         HasShadow="False"
                         BackgroundColor="Transparent"
-                        BorderColor="{DynamicResource PrimaryColor}">
+                        BorderColor="{DynamicResource PrimaryColor}"
+                        AutomationId="SettingActivePolicyTextLabel" >
                         <Label
                             Text="{Binding Name, Mode=OneWay}"
                             StyleClass="text-muted, text-sm, text-bold"
@@ -75,7 +79,8 @@
                                 VerticalOptions="Center"
                                 FontSize="Small"
                                 TextColor="{Binding SubLabelColor}"
-                                StyleClass="list-sub" Margin="-5"/>
+                                StyleClass="list-sub" Margin="-5"
+                                AutomationId="SettingCustomVaultTimeoutPicker" />
                     <controls:ExtendedStackLayout.GestureRecognizers>
 			            <TapGestureRecognizer Tapped="ActivateTimePicker"/>
 		            </controls:ExtendedStackLayout.GestureRecognizers>
