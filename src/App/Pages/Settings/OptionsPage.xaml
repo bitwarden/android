@@ -146,8 +146,7 @@
                     <Switch
                         IsToggled="{Binding AutofillSavePrompt}"
                         StyleClass="box-value"
-                        HorizontalOptions="End"
-                        />
+                        HorizontalOptions="End" />
                 </StackLayout>
                 <Label
                     Text="{u:I18n AskToAddLoginDescription}"
