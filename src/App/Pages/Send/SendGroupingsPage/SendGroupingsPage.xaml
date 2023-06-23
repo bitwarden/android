@@ -49,7 +49,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="sendGroupTemplate"
-                          x:DataType="pages:SendGroupingsPageListItem" >
+                          x:DataType="pages:SendGroupingsPageListItem">
                 <controls:ExtendedStackLayout Orientation="Horizontal" 
                                               StyleClass="list-row, list-row-platform" AutomationId="{Binding AutomationId}">
                     <controls:IconLabel Text="{Binding Icon, Mode=OneWay}"

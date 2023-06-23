@@ -354,7 +354,7 @@
                                     StyleClass="box-value"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n ExpirationTime}"
-                                    AutomationId="SendExpirationOptionsPicker"/>
+                                    AutomationId="SendExpirationOptionsPicker" />
                                 <Grid
                                     IsVisible="{Binding ShowExpirationCustomPickers}"
                                     Margin="0,5,0,0">
