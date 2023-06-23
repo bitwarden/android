@@ -2613,7 +2613,7 @@ Vuoi passare a questo account?</value>
     <value>US</value>
   </data>
   <data name="EU" xml:space="preserve">
-    <value>UE</value>
+    <value>EU</value>
   </data>
   <data name="SelfHosted" xml:space="preserve">
     <value>Self-hosted</value>
