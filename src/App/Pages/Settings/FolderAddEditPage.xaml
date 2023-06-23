@@ -13,13 +13,16 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
-        <ToolbarItem Text="{u:I18n Save}" Clicked="Save_Clicked" Order="Primary" />
+        <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
+                     AutomationId="CancelButton" />
+        <ToolbarItem Text="{u:I18n Save}" Clicked="Save_Clicked" Order="Primary"
+                     AutomationId="SaveFolderButton" />
         <ToolbarItem Text="{u:I18n Delete}"
                      Clicked="Delete_Clicked"
                      Order="Secondary"
                      IsDestructive="True"
-                     x:Name="_deleteItem" />
+                     x:Name="_deleteItem"
+                     AutomationId="DeleteFolderButton" />
     </ContentPage.ToolbarItems>
     
     <ContentPage.Resources>
@@ -43,7 +46,8 @@
                         StyleClass="box-value"
                         x:Name="_nameEntry"
                         ReturnType="Go"
-                        ReturnCommand="{Binding SubmitCommand}" />
+                        ReturnCommand="{Binding SubmitCommand}"
+                        AutomationId="FolderNameEntry" />
                 </StackLayout>
             </StackLayout>
         </StackLayout>

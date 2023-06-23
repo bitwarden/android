@@ -31,7 +31,8 @@
                        Margin="20, 0"
                        VerticalOptions="CenterAndExpand"
                        HorizontalOptions="CenterAndExpand"
-                       HorizontalTextAlignment="Center"></Label>
+                       HorizontalTextAlignment="Center"
+                       AutomationId="NoFoldersLabel"></Label>
                 <controls:ExtendedCollectionView
                           IsVisible="{Binding ShowNoData, Converter={StaticResource inverseBool}}"
                           ItemsSource="{Binding Folders}"
@@ -44,10 +45,12 @@
                         <DataTemplate x:DataType="views:FolderView">
                             <controls:ExtendedStackLayout
                                 StyleClass="list-row, list-row-platform"
-                                Padding="10">
+                                Padding="10"
+                                AutomationId="FolderCell">
                                 <Label LineBreakMode="TailTruncation"
                                         StyleClass="list-title, list-title-platform"
-                                        Text="{Binding Name, Mode=OneWay}" />
+                                        Text="{Binding Name, Mode=OneWay}"
+                                        AutomationId="FolderName" />
                             </controls:ExtendedStackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
