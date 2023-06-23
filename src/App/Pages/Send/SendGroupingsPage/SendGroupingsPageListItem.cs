@@ -9,6 +9,7 @@ namespace Bit.App.Pages
     {
         private string _icon;
         private string _name;
+        private string _automationId;
 
         public SendView Send { get; set; }
         public SendType? Type { get; set; }
@@ -64,6 +65,32 @@ namespace Bit.App.Pages
                     }
                 }
                 return _icon;
+            }
+        }
+
+        public string AutomationId
+        {
+            get
+            {
+                if (_name != null)
+                {
+                    _automationId = "SendItem";
+                }
+                if (Type != null)
+                {
+                    switch (Type.Value)
+                    {
+                        case SendType.Text:
+                            _automationId = "SendTextFilter";
+                            break;
+                        case SendType.File:
+                            _automationId = "SendFileFilter";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                return _automationId;
             }
         }
     }

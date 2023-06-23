@@ -59,7 +59,8 @@
                Margin="20, 0"
                VerticalOptions="CenterAndExpand"
                HorizontalOptions="CenterAndExpand"
-               HorizontalTextAlignment="Center" />
+               HorizontalTextAlignment="Center"
+               AutomationId="NoSendDisplayedLabel" />
         <controls:ExtendedCollectionView
                IsVisible="{Binding ShowList}"
                ItemsSource="{Binding Sends}"
