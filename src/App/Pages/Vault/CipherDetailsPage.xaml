@@ -212,7 +212,7 @@
                                     StyleClass="box-label"
                                     Grid.Row="0"
                                     Grid.Column="0"
-                                    AutomationId="ItemName"/>
+                                    AutomationId="ItemName" />
                                 <controls:MonoLabel
                                     Text="{Binding TotpCodeFormatted, Mode=OneWay}"
                                     IsVisible="{Binding ShowUpgradePremiumTotpText, Converter={StaticResource inverseBool}}"
@@ -381,7 +381,7 @@
                                     StyleClass="box-label"
                                     Grid.Row="0"
                                     Grid.Column="0"
-                                    AutomationId="ItemName"/>
+                                    AutomationId="ItemName" />
                                 <controls:MonoLabel
                                     Text="{Binding Cipher.Card.MaskedCode, Mode=OneWay}"
                                     StyleClass="box-value"
