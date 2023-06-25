@@ -121,7 +121,7 @@ namespace Bit.App.Pages
         {
             get
             {
-                if (_name != null && Type != null)
+                if (Type != null)
                 {
                     switch (Type.Value)
                     {
