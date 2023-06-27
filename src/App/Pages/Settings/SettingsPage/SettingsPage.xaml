@@ -20,8 +20,7 @@
                 x:Key="regularTemplate"
                 x:DataType="pages:SettingsPageListItem">
                 <controls:ExtendedStackLayout Orientation="Horizontal"
-                             StyleClass="list-row, list-row-platform"
-                             AutomationId="{Binding AutomationId}">
+                             StyleClass="list-row, list-row-platform">
                     <Frame
                         IsVisible="{Binding UseFrame}"
                         Padding="10"
@@ -39,7 +38,7 @@
                            HorizontalOptions="StartAndExpand"
                            VerticalOptions="CenterAndExpand"
                            StyleClass="list-title"
-                           AutomationId="SettingTitleLabel" />
+                           AutomationId="{Binding AutomationId}" />
                     <Label Text="{Binding SubLabel, Mode=OneWay}"
                            IsVisible="{Binding ShowSubLabel}"
                            HorizontalOptions="End"
@@ -47,7 +46,7 @@
                            VerticalOptions="CenterAndExpand"
                            TextColor="{Binding SubLabelColor}"
                            StyleClass="list-sub"
-                           AutomationId="SettingStatusLabel" />
+                           AutomationId="{Binding AutomationIdSettingStatus}" />
                 </controls:ExtendedStackLayout>
             </DataTemplate>
             <DataTemplate

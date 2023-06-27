@@ -42,5 +42,22 @@ namespace Bit.App.Pages
                 }
             }
         }
+
+        public string AutomationIdSettingStatus
+        {
+            get
+            {
+                if (!UseFrame)
+                {
+                    var idText = new CultureInfo("en-US", false)
+                    .TextInfo
+                    .ToTitleCase(Name)
+                    .Replace(" ", String.Empty)
+                    .Replace("-", String.Empty);
+                    return $"{idText}SettingValue";
+                }
+                return null;
+            }
+        }
     }
 }
