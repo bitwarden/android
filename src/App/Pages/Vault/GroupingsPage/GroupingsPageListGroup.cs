@@ -26,11 +26,13 @@ namespace Bit.App.Pages
             }
             ItemCount = count.ToString("N0");
             First = first;
+            AutomationId = $"{NameShort}ListGroup";
         }
 
         public bool First { get; set; }
         public string Name { get; set; }
         public string NameShort => string.IsNullOrWhiteSpace(Name) || Name.Length == 0 ? "-" : Name[0].ToString();
         public string ItemCount { get; set; }
+        public string AutomationId { get; set; }
     }
 }

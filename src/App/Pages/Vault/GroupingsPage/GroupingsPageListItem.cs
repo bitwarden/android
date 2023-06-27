@@ -9,6 +9,7 @@ namespace Bit.App.Pages
     {
         private string _icon;
         private string _name;
+        private string _automationId;
 
         public FolderView Folder { get; set; }
         public CollectionView Collection { get; set; }
@@ -115,5 +116,51 @@ namespace Bit.App.Pages
                 return _icon;
             }
         }
+
+        public string AutomationId
+        {
+            get
+            {
+                if (Type != null)
+                {
+                    switch (Type.Value)
+                    {
+                        case CipherType.Login:
+                            _automationId = "LoginFilter";
+                            break;
+                        case CipherType.SecureNote:
+                            _automationId = "SecureNoteFilter";
+                            break;
+                        case CipherType.Card:
+                            _automationId = "CardFilter";
+                            break;
+                        case CipherType.Identity:
+                            _automationId = "IdentityFilter";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else if (IsTrash)
+                {
+                    _automationId = "TrashFilter";
+                }
+                else if (Folder != null)
+                {
+                    _automationId = "FolderFilter";
+                }
+                else if (Collection != null)
+                {
+                    _automationId = "CollectionFilter";
+                }
+                else if (IsTotpCode)
+                {
+                    _automationId = "TOTPListItem";
+                }
+                
+                return _automationId;
+            }
+        }
     }
+          
 }
