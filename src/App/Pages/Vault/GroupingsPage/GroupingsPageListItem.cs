@@ -126,41 +126,34 @@ namespace Bit.App.Pages
                     switch (Type.Value)
                     {
                         case CipherType.Login:
-                            _automationId = "LoginFilter";
-                            break;
+                            return "LoginFilter";
                         case CipherType.SecureNote:
-                            _automationId = "SecureNoteFilter";
-                            break;
+                            return "SecureNoteFilter";
                         case CipherType.Card:
-                            _automationId = "CardFilter";
-                            break;
+                            return "CardFilter";
                         case CipherType.Identity:
-                            _automationId = "IdentityFilter";
-                            break;
-                        default:
-                            break;
+                            return "IdentityFilter";
                     }
                 }
                 else if (IsTrash)
                 {
-                    _automationId = "TrashFilter";
+                    return "TrashFilter";
                 }
                 else if (Folder != null)
                 {
-                    _automationId = "FolderFilter";
+                    return "FolderFilter";
                 }
                 else if (Collection != null)
                 {
-                    _automationId = "CollectionFilter";
+                    return "CollectionFilter";
                 }
                 else if (IsTotpCode)
                 {
-                    _automationId = "TOTPListItem";
+                    return "TOTPListItem";
                 }
                 
-                return _automationId;
+                return null;
             }
         }
-    }
-          
+    }     
 }

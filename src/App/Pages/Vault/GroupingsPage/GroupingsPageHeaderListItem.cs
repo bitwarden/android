@@ -14,7 +14,7 @@
         {
             get
             {
-                return $"{Title.Replace(" ", string.Empty).ToLowerInvariant()}Header";
+                return $"{Title?.Replace(" ", string.Empty).ToLowerInvariant()}Header";
             }
         }
     }
