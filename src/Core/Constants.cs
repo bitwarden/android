@@ -91,7 +91,7 @@
         public static string EncOrgKeysKey(string userId) => $"encOrgKeys_{userId}";
         public static string EncPrivateKeyKey(string userId) => $"encPrivateKey_{userId}";
         public static string EncKeyKey(string userId) => $"encKey_{userId}";
-        public static string DeviceKeyKey(string userId) => $"device_{userId}";
+        public static string DeviceKeyKey(string userId) => $"deviceKey_{userId}";
         public static string KeyHashKey(string userId) => $"keyHash_{userId}";
         public static string PinProtectedKey(string userId) => $"pinProtectedKey_{userId}";
         public static string PassGenOptionsKey(string userId) => $"passwordGenerationOptions_{userId}";

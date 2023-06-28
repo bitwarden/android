@@ -31,9 +31,9 @@ namespace Bit.Core.Abstractions
 
         public async Task<DeviceResponse> TrustDeviceAsync()
         {
-            // Attempt to get user symmetric key
-            var userSymKey = await _cryptoService.GetEncKeyAsync();
-            if (userSymKey == null)
+            // Attempt to get user key
+            var userKey = await _cryptoService.GetEncKeyAsync();
+            if (userKey == null)
             {
                 return null;
             }
@@ -43,15 +43,15 @@ namespace Bit.Core.Abstractions
             // Generate asymmetric RSA key pair: devicePrivateKey, devicePublicKey
             var deviceKeyPair = await _cryptoFunctionService.RsaGenerateKeyPairAsync(2048);
 
-            var encryptSymKeyTask = _cryptoService.RsaEncryptAsync(userSymKey.EncKey, deviceKeyPair.Item1);
-            var encryptPublicKeyTask = _cryptoService.EncryptAsync(deviceKeyPair.Item1, userSymKey);
+            var encryptUserKeyTask = _cryptoService.RsaEncryptAsync(userKey.EncKey, deviceKeyPair.Item1);
+            var encryptPublicKeyTask = _cryptoService.EncryptAsync(deviceKeyPair.Item1, userKey);
             var encryptPrivateKeyTask = _cryptoService.EncryptAsync(deviceKeyPair.Item2, deviceKey);
 
             // Send encrypted keys to server
             var deviceIdentifier = await _appIdService.GetAppIdAsync();
             var deviceRequest = new TrustedDeviceKeysRequest()
             {
-                EncryptedUserKey = (await encryptSymKeyTask).EncryptedString,
+                EncryptedUserKey = (await encryptUserKeyTask).EncryptedString,
                 EncryptedPublicKey = (await encryptPublicKeyTask).EncryptedString,
                 EncryptedPrivateKey = (await encryptPrivateKeyTask).EncryptedString,
             };

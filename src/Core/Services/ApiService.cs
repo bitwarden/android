@@ -590,7 +590,7 @@ namespace Bit.Core.Services
 
         public Task<DeviceResponse> UpdateTrustedDeviceKeysAsync(string deviceIdentifier, TrustedDeviceKeysRequest trustedDeviceKeysRequest)
         {
-            return SendAsync<TrustedDeviceKeysRequest, DeviceResponse>(HttpMethod.Get, $"/devices/identifier/{deviceIdentifier}", trustedDeviceKeysRequest, true, true);
+            return SendAsync<TrustedDeviceKeysRequest, DeviceResponse>(HttpMethod.Get, $"/devices/{deviceIdentifier}/keys", trustedDeviceKeysRequest, true, true);
         }
 
         #endregion
