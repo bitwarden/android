@@ -145,9 +145,9 @@ namespace Bit.App.Pages
                 {
                     return AutomationIdsHelper.AddSuffixFor("TOTP", SuffixType.ListItem);
                 }
-                
+
                 return null;
             }
         }
-    }     
+    }
 }

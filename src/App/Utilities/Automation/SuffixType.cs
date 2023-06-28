@@ -1,5 +1,4 @@
-﻿using System;
-namespace Bit.App.Utilities.Automation
+﻿namespace Bit.App.Utilities.Automation
 {
     public enum SuffixType
     {
