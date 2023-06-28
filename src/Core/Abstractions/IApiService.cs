@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
-using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
@@ -48,6 +49,7 @@ namespace Bit.Core.Abstractions
         Task<SsoPrevalidateResponse> PreValidateSso(string identifier);
         Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path,
             TRequest body, bool authed, bool hasResponse, Action<HttpRequestMessage> alterRequest, bool logoutOnUnauthorized = true);
+        Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken = default);
         void SetUrls(EnvironmentUrls urls);
         [Obsolete("Mar 25 2021: This method has been deprecated in favor of direct uploads. This method still exists for backward compatibility with old server versions.")]
         Task<CipherResponse> PostCipherAttachmentLegacyAsync(string id, MultipartFormDataContent data);
@@ -89,9 +91,9 @@ namespace Bit.Core.Abstractions
         Task<PasswordlessLoginResponse> GetAuthResponseAsync(string id, string accessCode);
         Task<PasswordlessLoginResponse> PutAuthRequestAsync(string id, string key, string masterPasswordHash, string deviceIdentifier, bool requestApproved);
         Task<PasswordlessLoginResponse> PostCreateRequestAsync(PasswordlessCreateLoginRequest passwordlessCreateLoginRequest);
-        Task<string> GetUsernameFromAsync(ForwardedEmailServiceType service, UsernameGeneratorConfig config);
         Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier);
         Task<OrganizationDomainSsoDetailsResponse> GetOrgDomainSsoDetailsAsync(string email);
         Task<ConfigResponse> GetConfigsAsync();
+        Task<string> GetFastmailAccountIdAsync(string apiKey);
     }
 }

@@ -43,6 +43,7 @@ namespace Bit.Core.Abstractions
         Task<Tuple<EncString, SymmetricCryptoKey>> MakeShareKeyAsync();
         Task<SymmetricCryptoKey> MakeSendKeyAsync(byte[] keyMaterial);
         Task<int> RandomNumberAsync(int min, int max);
+        Task<string> RandomStringAsync(int length);
         Task<Tuple<SymmetricCryptoKey, EncString>> RemakeEncKeyAsync(SymmetricCryptoKey key);
         Task<EncString> RsaEncryptAsync(byte[] data, byte[] publicKey = null);
         Task<byte[]> RsaDecryptAsync(string encValue, byte[] privateKey = null);
