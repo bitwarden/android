@@ -1,4 +1,4 @@
-
+﻿
 namespace Bit.Core.Models.Request
 {
     public class TrustedDeviceKeysRequest
