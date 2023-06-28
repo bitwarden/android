@@ -2630,4 +2630,10 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Текущий мастер-пароль</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Помощь с повторным запросом мастер-пароля</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Разблокировка может завершиться ошибкой из-за нехватки памяти. Уменьшите настройки памяти KDF для решения этой проблемы</value>
+  </data>
 </root>

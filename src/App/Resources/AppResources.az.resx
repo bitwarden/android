@@ -2629,4 +2629,10 @@ Bu hesaba keçmək istəyirsiniz?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Hazırkı ana parol</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Ana parolu təkrar soruş köməyi</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Yetərsiz yaddaşa görə kilid açma uğursuz ola bilər. Həll etmək üçün KDF yaddaş tənzimləmələrinizi azaldın</value>
+  </data>
 </root>

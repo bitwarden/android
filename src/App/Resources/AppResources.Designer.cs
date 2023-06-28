@@ -3263,6 +3263,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid API key.
+        /// </summary>
+        public static string InvalidAPIKey {
+            get {
+                return ResourceManager.GetString("InvalidAPIKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid API token.
+        /// </summary>
+        public static string InvalidAPIToken {
+            get {
+                return ResourceManager.GetString("InvalidAPIToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid email address..
         /// </summary>
         public static string InvalidEmail {
@@ -6435,7 +6453,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.
+        ///   Looks up a localized string similar to Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve..
         /// </summary>
         public static string UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve {
             get {

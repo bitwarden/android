@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Bit.App.Resources;
 using Bit.App.Utilities;
@@ -22,5 +23,24 @@ namespace Bit.App.Pages
         public Color SubLabelColor => SubLabelTextEnabled ?
             ThemeManager.GetResourceColor("SuccessColor") :
             ThemeManager.GetResourceColor("MutedColor");
+        public string AutomationId
+        {
+            get
+            {
+                if (!UseFrame)
+                {
+                    var idText = new CultureInfo("en-US", false)
+                    .TextInfo
+                    .ToTitleCase(Name)
+                    .Replace(" ", String.Empty)
+                    .Replace("-", String.Empty);
+                    return $"{idText}Cell";
+                }
+                else
+                {
+                    return "EnabledPolicyCell";
+                }
+            }
+        }
     }
 }

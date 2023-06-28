@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
           xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
@@ -60,20 +60,23 @@
                     Text="{Binding AccountView.Email}"
                     IsVisible="{Binding IsActive}"
                     StyleClass="accountlist-title, accountlist-title-platform"
-                    LineBreakMode="TailTruncation" />
+                    LineBreakMode="TailTruncation"
+                    AutomationId="AccountEmailLabel" />
                 <Label
                     Grid.Row="0"
                     Text="{Binding AccountView.Email}"
                     IsVisible="{Binding IsActive, Converter={StaticResource inverseBool}}"
                     StyleClass="accountlist-title, accountlist-title-platform"
                     TextColor="{DynamicResource MutedColor}"
-                    LineBreakMode="TailTruncation" />
+                    LineBreakMode="TailTruncation"
+                    AutomationId="AccountEmailLabel" />
                 <Label
                     Grid.Row="1"
                     IsVisible="{Binding ShowHostname}"
                     Text="{Binding AccountView.Hostname}"
                     StyleClass="accountlist-sub, accountlist-sub-platform"
-                    LineBreakMode="TailTruncation" />
+                    LineBreakMode="TailTruncation"
+                    AutomationId="AccountHostUrlLabel" />
                 <Label
                     Grid.Row="2"
                     Text="{u:I18n AccountUnlocked}"
@@ -81,7 +84,8 @@
                     StyleClass="accountlist-sub, accountlist-sub-platform"
                     FontAttributes="Italic"
                     TextTransform="Lowercase"
-                    LineBreakMode="TailTruncation" />
+                    LineBreakMode="TailTruncation"
+                    AutomationId="AccountStatusLabel" />
                 <Label
                     Grid.Row="2"
                     Text="{u:I18n AccountLocked}"
@@ -89,7 +93,8 @@
                     StyleClass="accountlist-sub, accountlist-sub-platform"
                     FontAttributes="Italic"
                     TextTransform="Lowercase"
-                    LineBreakMode="TailTruncation" />
+                    LineBreakMode="TailTruncation"
+                    AutomationId="AccountStatusLabel" />
                 <Label
                     Grid.Row="2"
                     Text="{u:I18n AccountLoggedOut}"
@@ -97,7 +102,8 @@
                     StyleClass="accountlist-sub, accountlist-sub-platform"
                     FontAttributes="Italic"
                     TextTransform="Lowercase"
-                    LineBreakMode="TailTruncation" />
+                    LineBreakMode="TailTruncation"
+                    AutomationId="AccountStatusLabel" />
             </Grid>
 
             <controls:IconLabel
@@ -107,7 +113,8 @@
                 Margin="12,0"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
-                StyleClass="list-icon, list-icon-platform" />
+                StyleClass="list-icon, list-icon-platform"
+                AutomationId="InactiveVaultIcon" />
             <controls:IconLabel
                 Grid.Column="2"
                 Text="{Binding AuthStatusIconActive}" 
@@ -116,7 +123,8 @@
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
                 StyleClass="list-icon, list-icon-platform"
-                TextColor="{DynamicResource TextColor}"/>
+                TextColor="{DynamicResource TextColor}"
+                AutomationId="ActiveVaultIcon" />
         </Grid>
 
         <Grid
@@ -147,7 +155,8 @@
                 StyleClass="accountlist-title, accountlist-title-platform"
                 LineBreakMode="TailTruncation"
                 VerticalOptions="Center"
-                Grid.Column="1" />
+                Grid.Column="1"
+                AutomationId="AddAccountButton" />
         </Grid>
     </Grid>
 </ViewCell>

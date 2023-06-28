@@ -19,7 +19,8 @@
             Priority="-1"
             UseOriginalImage="True"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Account}" />
+            AutomationProperties.Name="{u:I18n Account}"
+            AutomationId="AccountIconButton" />
         <ToolbarItem IconImageSource="search.png" Clicked="Search_Clicked"
                      AutomationProperties.IsInAccessibleTree="True"
                      AutomationProperties.Name="{u:I18n Search}" />

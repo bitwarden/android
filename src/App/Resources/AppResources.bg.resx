@@ -2630,4 +2630,10 @@ select Add TOTP to store the key safely</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Текуща главна парола</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Помощ за повторното запитване за главната парола</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Отключването може да бъде неуспешно заради недостатъчно памет. Намалете настройките на паметта за KDF, за да разрешите проблема.</value>
+  </data>
 </root>

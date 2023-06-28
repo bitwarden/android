@@ -775,10 +775,10 @@
     <value>Activado</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Apagado</value>
+    <value>No</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Activado</value>
+    <value>Sí</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Estado</value>
@@ -2630,5 +2630,11 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Contraseña maestra actual</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Ayuda de volver a pedir contraseña maestra</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>El desbloqueo puede fallar por falta de memoria. Disminuye los ajustes de memoria KDF para resolver</value>
   </data>
 </root>

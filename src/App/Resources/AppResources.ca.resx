@@ -2630,4 +2630,10 @@ Voleu canviar a aquest compte?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Contrasenya mestra actual</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Ajuda per tornar a demanar la contrasenya mestra</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>El desbloqueig pot fallar a causa de memòria insuficient. Disminueix la configuració de memòria KDF per resoldre-ho</value>
+  </data>
 </root>

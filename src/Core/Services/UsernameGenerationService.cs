@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text;
+using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
+using Bit.Core.Services.EmailForwarders;
 using Bit.Core.Utilities;
 
 namespace Bit.Core.Services
@@ -12,7 +14,7 @@ namespace Bit.Core.Services
         private readonly ICryptoService _cryptoService;
         private readonly IApiService _apiService;
         private readonly IStateService _stateService;
-        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
+        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
         private UsernameGenerationOptions _optionsCache;
 
         public UsernameGenerationService(
@@ -104,7 +106,7 @@ namespace Bit.Core.Services
 
             if (options.PlusAddressedEmailType == UsernameEmailType.Random)
             {
-                var randomString = await RandomStringAsync(8);
+                var randomString = await _cryptoService.RandomStringAsync(8);
                 return options.PlusAddressedEmail.Insert(atIndex, $"+{randomString}");
             }
             else
@@ -124,7 +126,7 @@ namespace Bit.Core.Services
 
             if (options.CatchAllEmailType == UsernameEmailType.Random)
             {
-                var randomString = await RandomStringAsync(8);
+                var randomString = await _cryptoService.RandomStringAsync(8);
                 return string.Format(CATCH_ALL_EMAIL_DOMAIN_FORMAT, randomString, catchAllEmailDomain);
             }
 
@@ -133,85 +135,34 @@ namespace Bit.Core.Services
 
         private async Task<string> GenerateForwardedEmailAliasAsync(UsernameGenerationOptions options)
         {
+            if (options.ServiceType == ForwardedEmailServiceType.AnonAddy)
+            {
+                return await new AnonAddyForwarder()
+                                    .GenerateAsync(_apiService, (AnonAddyForwarderOptions)options.GetForwarderOptions());
+            }
+
+            BaseForwarder<ForwarderOptions> simpleForwarder = null;
+
             switch (options.ServiceType)
             {
-                case ForwardedEmailServiceType.AnonAddy:
-                    if (string.IsNullOrWhiteSpace(options.AnonAddyApiAccessToken) || string.IsNullOrWhiteSpace(options.AnonAddyDomainName))
-                    {
-                        return Constants.DefaultUsernameGenerated;
-                    }
-                    return await _apiService.GetUsernameFromAsync(ForwardedEmailServiceType.AnonAddy,
-                        new UsernameGeneratorConfig()
-                        {
-                            ApiToken = options.AnonAddyApiAccessToken,
-                            Domain = options.AnonAddyDomainName,
-                            Url = "https://app.anonaddy.com/api/v1/aliases"
-                        });
-
                 case ForwardedEmailServiceType.FirefoxRelay:
-                    if (string.IsNullOrWhiteSpace(options.FirefoxRelayApiAccessToken))
-                    {
-                        return Constants.DefaultUsernameGenerated;
-                    }
-                    return await _apiService.GetUsernameFromAsync(ForwardedEmailServiceType.FirefoxRelay,
-                        new UsernameGeneratorConfig()
-                        {
-                            ApiToken = options.FirefoxRelayApiAccessToken,
-                            Url = "https://relay.firefox.com/api/v1/relayaddresses/"
-                        });
-
+                    simpleForwarder = new FirefoxRelayForwarder();
+                    break;
                 case ForwardedEmailServiceType.SimpleLogin:
-                    if (string.IsNullOrWhiteSpace(options.SimpleLoginApiKey))
-                    {
-                        return Constants.DefaultUsernameGenerated;
-                    }
-                    return await _apiService.GetUsernameFromAsync(ForwardedEmailServiceType.SimpleLogin,
-                        new UsernameGeneratorConfig()
-                        {
-                            ApiToken = options.SimpleLoginApiKey,
-                            Url = "https://app.simplelogin.io/api/alias/random/new"
-                        });
+                    simpleForwarder = new SimpleLoginForwarder();
+                    break;
                 case ForwardedEmailServiceType.DuckDuckGo:
-                    if (string.IsNullOrWhiteSpace(options.DuckDuckGoApiKey))
-                    {
-                        return Constants.DefaultUsernameGenerated;
-                    }
-                    return await _apiService.GetUsernameFromAsync(ForwardedEmailServiceType.DuckDuckGo,
-                        new UsernameGeneratorConfig()
-                        {
-                            ApiToken = options.DuckDuckGoApiKey,
-                            Url = "https://quack.duckduckgo.com/api/email/addresses"
-                        });
+                    simpleForwarder = new DuckDuckGoForwarder();
+                    break;
                 case ForwardedEmailServiceType.Fastmail:
-                    if (string.IsNullOrWhiteSpace(options.FastMailApiKey))
-                    {
-                        return Constants.DefaultUsernameGenerated;
-                    }
-
-                    return await _apiService.GetUsernameFromAsync(ForwardedEmailServiceType.Fastmail,
-                        new UsernameGeneratorConfig()
-                        {
-                            ApiToken = options.FastMailApiKey,
-                            Url = "https://api.fastmail.com/jmap/api/"
-                        });
+                    simpleForwarder = new FastmailForwarder();
+                    break;
                 default:
                     _logger.Value.Error($"Error UsernameGenerationService: ForwardedEmailServiceType {options.ServiceType} not implemented.");
                     return Constants.DefaultUsernameGenerated;
             }
-        }
 
-        private async Task<string> RandomStringAsync(int length)
-        {
-            var str = "";
-            var charSet = "abcdefghijklmnopqrstuvwxyz1234567890";
-
-            for (var i = 0; i < length; i++)
-            {
-                var randomCharIndex = await _cryptoService.RandomNumberAsync(0, charSet.Length - 1);
-                str += charSet[randomCharIndex];
-            }
-
-            return str;
+            return await simpleForwarder.GenerateAsync(_apiService, options.GetForwarderOptions());
         }
 
         private string Capitalize(string str)
