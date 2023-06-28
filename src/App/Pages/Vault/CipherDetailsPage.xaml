@@ -196,7 +196,9 @@
                             </Grid>
                             <BoxView StyleClass="box-row-separator"
                                      IsVisible="{Binding Cipher.Login.Password, Converter={StaticResource stringHasValue}}" />
-                            <Grid StyleClass="box-row" IsVisible="{Binding ShowTotp}" AutomationId="ItemRow">
+                            <Grid StyleClass="box-row"
+                                  IsVisible="{Binding ShowTotp}"
+                                  AutomationId="ItemRow">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
