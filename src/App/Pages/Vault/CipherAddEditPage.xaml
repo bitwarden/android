@@ -57,16 +57,16 @@
                          x:Key="deleteItem" />
             
             <DataTemplate x:Key="TextCustomFieldDataTemplate">
-                <il:TextCustomFieldItemLayout />
+                <il:TextCustomFieldItemLayout AutomationId="TextCustomFieldItem" />
             </DataTemplate>
             <DataTemplate x:Key="BooleanCustomFieldDataTemplate">
-                <il:BooleanCustomFieldItemLayout />
+                <il:BooleanCustomFieldItemLayout AutomationId="BooleanCustomFieldItem" />
             </DataTemplate>
             <DataTemplate x:Key="HiddenCustomFieldDataTemplate">
-                <il:HiddenCustomFieldItemLayout />
+                <il:HiddenCustomFieldItemLayout AutomationId="HiddenCustomFieldItem" />
             </DataTemplate>
             <DataTemplate x:Key="LinkedCustomFieldDataTemplate">
-                <il:LinkedCustomFieldItemLayout />
+                <il:LinkedCustomFieldItemLayout AutomationId="LinkedCustomFieldItem" />
             </DataTemplate>
 
             <dts:CustomFieldItemTemplateSelector x:Key="CustomFieldItemTemplateSelector"
@@ -100,7 +100,8 @@
                         <Label
                             Text="{u:I18n PersonalOwnershipPolicyInEffect}"
                             StyleClass="text-muted, text-sm, text-bold"
-                            HorizontalTextAlignment="Center" />
+                            HorizontalTextAlignment="Center"
+                            AutomationId="PersonalOwnershipPolicyLabel"/>
                     </Frame>
                 </Grid>
                 <StackLayout StyleClass="box-row-header">
@@ -116,7 +117,8 @@
                         x:Name="_typePicker"
                         ItemsSource="{Binding TypeOptions, Mode=OneTime}"
                         SelectedIndex="{Binding TypeSelectedIndex}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationId="ItemTypePicker" />
                 </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-input">
                     <Label
@@ -125,7 +127,10 @@
                     <Entry
                         x:Name="_nameEntry"
                         Text="{Binding Cipher.Name}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n Name}"
+                        AutomationId="ItemNameEntry" />
                 </StackLayout>
                 <StackLayout IsVisible="{Binding IsLogin}" Spacing="0" Padding="0">
                     <Grid StyleClass="box-row, box-row-input"
@@ -138,7 +143,10 @@
                             x:Name="_loginUsernameEntry"
                             Text="{Binding Cipher.Login.Username}"
                             StyleClass="box-value" 
-                            Grid.Row="1"/>
+                            Grid.Row="1"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n Username}"
+                            AutomationId="LoginUsernameEntry" />
                         <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
@@ -146,7 +154,8 @@
                             Grid.Column="1"
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n GenerateUsername}" />
+                            AutomationProperties.Name="{u:I18n GenerateUsername}"
+                            AutomationId="GenerateUsernameButton" />
                     </Grid>
                     <Grid StyleClass="box-row, box-row-input">
                         <Grid.RowDefinitions>
@@ -174,7 +183,10 @@
                             IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False"
-                            IsEnabled="{Binding Cipher.ViewPassword}"/>
+                            IsEnabled="{Binding Cipher.ViewPassword}"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n Password}"
+                            AutomationId="LoginPasswordEntry" />
                         <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding Source={x:Static core:BitwardenIcons.CheckCircle}}"
@@ -184,7 +196,8 @@
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{u:I18n CheckPassword}"
-                            IsVisible="{Binding Cipher.ViewPassword}" />
+                            IsVisible="{Binding Cipher.ViewPassword}"
+                            AutomationId="CheckPasswordButton" />
                         <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding ShowPasswordIcon}"
@@ -195,7 +208,8 @@
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{u:I18n ToggleVisibility}"
                             AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
-                            IsVisible="{Binding Cipher.ViewPassword}" />
+                            IsVisible="{Binding Cipher.ViewPassword}"
+                            AutomationId="ViewPasswordButton" />
                         <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
@@ -205,7 +219,8 @@
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{u:I18n GeneratePassword}"
-                            IsVisible="{Binding Cipher.ViewPassword}" />
+                            IsVisible="{Binding Cipher.ViewPassword}"
+                            AutomationId="RegeneratePasswordButton" />
                     </Grid>
 
                     <Grid StyleClass="box-row, box-row-input">
@@ -241,7 +256,8 @@
                                 Padding="0,15"
                                 HorizontalOptions="Center"
                                 VerticalOptions="FillAndExpand"
-                                VerticalTextAlignment="Center" />
+                                VerticalTextAlignment="Center"
+                                AutomationId="SetupTotpButton" />
                         </Frame>
                         <controls:MonoEntry
                             x:Name="_loginTotpEntry"
@@ -254,7 +270,10 @@
                             StyleClass="box-value"
                             Grid.Row="1"
                             Grid.Column="0"
-                            Grid.ColumnSpan="{Binding TotpColumnSpan}" />
+                            Grid.ColumnSpan="{Binding TotpColumnSpan}"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n AuthenticatorKey}"
+                            AutomationId="LoginTotpEntry" />
                         <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
@@ -262,7 +281,10 @@
                             IsVisible="{Binding HasTotpValue}"
                             Grid.Row="0"
                             Grid.Column="1"
-                            Grid.RowSpan="2" />
+                            Grid.RowSpan="2"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n CopyTotp}"
+                            AutomationId="CopyTotpValueButton" />
                         <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding Source={x:Static core:BitwardenIcons.Camera}}"
@@ -272,7 +294,8 @@
                             Grid.RowSpan="2"
                             IsVisible="{Binding HasTotpValue}"
                             AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n ScanQrTitle}" />
+                            AutomationProperties.Name="{u:I18n ScanQrTitle}"
+                            />
                     </Grid>
                 </StackLayout>
                 <StackLayout IsVisible="{Binding IsCard}" Spacing="0" Padding="0">
@@ -283,7 +306,8 @@
                         <Entry
                             x:Name="_cardholderNameEntry"
                             Text="{Binding Cipher.Card.CardholderName}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value"
+                            AutomationId="CardholderNameEntry" />
                     </StackLayout>
                     <Grid StyleClass="box-row, box-row-input">
                         <Grid.RowDefinitions>
@@ -307,7 +331,10 @@
                             Grid.Column="0"
                             IsPassword="{Binding ShowCardNumber, Converter={StaticResource inverseBool}}"
                             IsSpellCheckEnabled="False"
-                            IsTextPredictionEnabled="False" />
+                            IsTextPredictionEnabled="False"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n Number}"
+                            AutomationId="CardNumberEntry" />
                         <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding ShowCardNumberIcon}"
@@ -316,7 +343,8 @@
                             Grid.Column="1"
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n ToggleVisibility}" />
+                            AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                            AutomationId="ShowCardNumberButton" />
                     </Grid>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -326,7 +354,8 @@
                             x:Name="_cardBrandPicker"
                             ItemsSource="{Binding CardBrandOptions, Mode=OneTime}"
                             SelectedIndex="{Binding CardBrandSelectedIndex}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value"
+                            AutomationId="CardBrandPicker" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -336,7 +365,8 @@
                             x:Name="_cardExpMonthPicker"
                             ItemsSource="{Binding CardExpMonthOptions, Mode=OneTime}"
                             SelectedIndex="{Binding CardExpMonthSelectedIndex}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value"
+                            AutomationId="CardExpirationMonthPicker" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -346,7 +376,10 @@
                             x:Name="_cardExpYearEntry"
                             Text="{Binding Cipher.Card.ExpYear}"
                             StyleClass="box-value"
-                            Keyboard="Numeric" />
+                            Keyboard="Numeric"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n ExpirationYear}"
+                            AutomationId="CardExpirationYearEntry" />
                     </StackLayout>
                     <Grid StyleClass="box-row, box-row-input">
                         <Grid.RowDefinitions>
@@ -371,7 +404,10 @@
                             Keyboard="Numeric"
                             IsPassword="{Binding ShowCardCode, Converter={StaticResource inverseBool}}"
                             IsSpellCheckEnabled="False"
-                            IsTextPredictionEnabled="False" />
+                            IsTextPredictionEnabled="False"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n SecurityCode}"
+                            AutomationId="CardSecurityCodeEntry" />
                         <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding ShowCardCodeIcon}"
@@ -380,7 +416,8 @@
                             Grid.Column="1"
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n ToggleVisibility}" />
+                            AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                            AutomationId="CardShowSecurityCodeButton" />
                     </Grid>
                 </StackLayout>
                 <StackLayout IsVisible="{Binding IsIdentity}" Spacing="0" Padding="0">
@@ -392,7 +429,8 @@
                             x:Name="_identityTitlePicker"
                             ItemsSource="{Binding IdentityTitleOptions, Mode=OneTime}"
                             SelectedIndex="{Binding IdentityTitleSelectedIndex}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value"
+                            AutomationId="IdentityTitlePicker" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -401,7 +439,10 @@
                         <Entry
                             x:Name="_identityFirstNameEntry"
                             Text="{Binding Cipher.Identity.FirstName}"
-                            StyleClass="box-value,capitalize-word-input"/>
+                            StyleClass="box-value,capitalize-word-input"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n FirstName}"
+                            AutomationId="IdentityFirstNameEntry" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -410,7 +451,10 @@
                         <Entry
                             x:Name="_identityMiddleNameEntry"
                             Text="{Binding Cipher.Identity.MiddleName}"
-                            StyleClass="box-value,capitalize-word-input" />
+                            StyleClass="box-value,capitalize-word-input"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n MiddleName}"
+                            AutomationId="IdentityMiddleNameEntry" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -419,7 +463,10 @@
                         <Entry
                             x:Name="_identityLastNameEntry"
                             Text="{Binding Cipher.Identity.LastName}"
-                            StyleClass="box-value,capitalize-word-input" />
+                            StyleClass="box-value,capitalize-word-input"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n LastName}"
+                            AutomationId="IdentityLastNameEntry" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -428,7 +475,10 @@
                         <Entry
                             x:Name="_identityUsernameEntry"
                             Text="{Binding Cipher.Identity.Username}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n Username}"
+                            AutomationId="IdentityUsernameEntry" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -437,7 +487,10 @@
                         <Entry
                             x:Name="_identityCompanyEntry"
                             Text="{Binding Cipher.Identity.Company}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value" 
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n Company}"
+                            AutomationId="IdentityCompanyEntry" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -446,7 +499,10 @@
                         <Entry
                             x:Name="_identitySsnEntry"
                             Text="{Binding Cipher.Identity.SSN}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value" 
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n SSN}"
+                            AutomationId="IdentitySsnEntry" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -455,7 +511,10 @@
                         <Entry
                             x:Name="_identityPassportNumberEntry"
                             Text="{Binding Cipher.Identity.PassportNumber}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value" 
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n PassportNumber}"
+                            AutomationId="IdentityPassportNumberEntry" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -464,7 +523,10 @@
                         <Entry
                             x:Name="_identityLicenseNumberEntry"
                             Text="{Binding Cipher.Identity.LicenseNumber}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n LicenseNumber}"
+                            AutomationId="IdentityLicenseNumberEntry" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -474,7 +536,10 @@
                             x:Name="_identityEmailEntry"
                             Keyboard="Email"
                             Text="{Binding Cipher.Identity.Email}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value" 
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n Email}"
+                            AutomationId="IdentityEmailEntry" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -484,7 +549,10 @@
                             x:Name="_identityPhoneEntry"
                             Text="{Binding Cipher.Identity.Phone}"
                             Keyboard="Telephone"
-                            StyleClass="box-value" />
+                            StyleClass="box-value"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n Phone}"
+                            AutomationId="IdentityPhoneEntry" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -493,7 +561,10 @@
                         <Entry
                             x:Name="_identityAddress1Entry"
                             Text="{Binding Cipher.Identity.Address1}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value" 
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n Address1}"
+                            AutomationId="IdentityAddressOneEntry" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -502,7 +573,10 @@
                         <Entry
                             x:Name="_identityAddress2Entry"
                             Text="{Binding Cipher.Identity.Address2}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n Address2}"
+                            AutomationId="IdentityAddressTwoEntry" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -511,7 +585,10 @@
                         <Entry
                             x:Name="_identityAddress3Entry"
                             Text="{Binding Cipher.Identity.Address3}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n Address3}"
+                            AutomationId="IdentityAddressThreeEntry" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -520,7 +597,10 @@
                         <Entry
                             x:Name="_identityCityEntry"
                             Text="{Binding Cipher.Identity.City}"
-                            StyleClass="box-value,capitalize-sentence-input" />
+                            StyleClass="box-value,capitalize-sentence-input"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n CityTown}"
+                            AutomationId="IdentityCityEntry" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -529,7 +609,10 @@
                         <Entry
                             x:Name="_identityStateEntry"
                             Text="{Binding Cipher.Identity.State}"
-                            StyleClass="box-value,capitalize-sentence-input" />
+                            StyleClass="box-value,capitalize-sentence-input"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n StateProvince}"
+                            AutomationId="IdentityStateEntry" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -538,7 +621,10 @@
                         <Entry
                             x:Name="_identityPostalCodeEntry"
                             Text="{Binding Cipher.Identity.PostalCode}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n ZipPostalCode}"
+                            AutomationId="IdentityPostalCodeEntry" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -547,7 +633,10 @@
                         <Entry
                             x:Name="_identityCountryEntry"
                             Text="{Binding Cipher.Identity.Country}"
-                            StyleClass="box-value,capitalize-sentence-input" />
+                            StyleClass="box-value,capitalize-sentence-input"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n Country}"
+                            AutomationId="IdentityCountryEntry" />
                     </StackLayout>
                 </StackLayout>
             </StackLayout>
@@ -559,7 +648,7 @@
                 <controls:RepeaterView ItemsSource="{Binding Uris}">
                     <controls:RepeaterView.ItemTemplate>
                         <DataTemplate x:DataType="views:LoginUriView">
-                            <Grid StyleClass="box-row, box-row-input">
+                            <Grid StyleClass="box-row, box-row-input" AutomationId="UriListGrid" >
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
@@ -578,7 +667,10 @@
                                     Keyboard="Url"
                                     StyleClass="box-value"
                                     Grid.Row="1"
-                                    Grid.Column="0" />
+                                    Grid.Column="0"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n URI}"
+                                    AutomationId="LoginUriEntry" />
                                 <controls:IconButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="{Binding Source={x:Static core:BitwardenIcons.Cog}}"
@@ -588,13 +680,15 @@
                                     Grid.Column="1"
                                     Grid.RowSpan="2"
                                     AutomationProperties.IsInAccessibleTree="True"
-                                    AutomationProperties.Name="{u:I18n Options}" />
+                                    AutomationProperties.Name="{u:I18n Options}"
+                                    AutomationId="LoginUriOptionsButton" />
                             </Grid>
                         </DataTemplate>
                     </controls:RepeaterView.ItemTemplate>
                 </controls:RepeaterView>
                 <Button Text="{u:I18n NewUri}" StyleClass="box-button-row"
-                        Clicked="NewUri_Clicked"></Button>
+                        Clicked="NewUri_Clicked"
+                        AutomationId="LoginAddNewUriButton"></Button>
             </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">
@@ -609,7 +703,8 @@
                         x:Name="_folderPicker"
                         ItemsSource="{Binding FolderOptions, Mode=OneTime}"
                         SelectedIndex="{Binding FolderSelectedIndex}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationId="FolderPicker" />
                 </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
@@ -619,7 +714,8 @@
                     <Switch
                         IsToggled="{Binding Cipher.Favorite}"
                         StyleClass="box-value"
-                        HorizontalOptions="End" />
+                        HorizontalOptions="End"
+                        AutomationId="ItemFavoriteToggle" />
                 </StackLayout>
                 <StackLayout x:Name="_passwordPrompt" StyleClass="box-row, box-row-switch">
                     <Label
@@ -631,13 +727,14 @@
                         Command="{Binding PasswordPromptHelpCommand}"
                         TextColor="{DynamicResource MutedColor}"
                         AutomationProperties.IsInAccessibleTree="True"
-                        AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                        AutomationProperties.Name="{u:I18n MasterPasswordRePromptHelp}"
                         HorizontalOptions="StartAndExpand" />
                     <Switch
                         IsToggled="{Binding PasswordPrompt}"
                         Toggled="PasswordPrompt_Toggled"
                         StyleClass="box-value"
-                        HorizontalOptions="End" />
+                        HorizontalOptions="End"
+                        AutomationId="MasterPasswordRepromptToggle" />
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator" />
             </StackLayout>
@@ -652,7 +749,10 @@
                         AutoSize="TextChanges"
                         StyleClass="box-value"
                         effects:ScrollEnabledEffect.IsScrollEnabled="false"
-                        Text="{Binding Cipher.Notes}">
+                        Text="{Binding Cipher.Notes}"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n Notes}"
+                        AutomationId="ItemNotesEntry">
                         <Editor.Behaviors>
                             <behaviors:EditorPreventAutoBottomScrollingOnFocusedBehavior ParentScrollView="{x:Reference _scrollView}" />
                         </Editor.Behaviors>
@@ -671,9 +771,11 @@
                 <StackLayout
                     Spacing="0"
                     BindableLayout.ItemsSource="{Binding Fields}"
-                    BindableLayout.ItemTemplateSelector="{StaticResource CustomFieldItemTemplateSelector}" />
+                    BindableLayout.ItemTemplateSelector="{StaticResource CustomFieldItemTemplateSelector}"
+                    AutomationId="CustomFieldsList" />
                 <Button Text="{u:I18n NewCustomField}" StyleClass="box-button-row"
-                        Clicked="NewField_Clicked"></Button>
+                        Clicked="NewField_Clicked"
+                        AutomationId="NewCustomFieldButton"></Button>
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding ShowOwnershipOptions}">
                 <StackLayout StyleClass="box-row-header">
@@ -688,7 +790,8 @@
                         x:Name="_ownershipPicker"
                         ItemsSource="{Binding OwnershipOptions, Mode=OneTime}"
                         SelectedIndex="{Binding OwnershipSelectedIndex}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationId="ItemOwnershipPicker" />
                 </StackLayout>
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding ShowCollections}">
@@ -699,7 +802,8 @@
                 <StackLayout Spacing="0" Padding="0"
                                 IsVisible="{Binding HasCollections, Converter={StaticResource inverseBool}}">
                     <StackLayout StyleClass="box-row, box-row-switch">
-                        <Label Text="{u:I18n NoCollectionsToList}" />
+                        <Label Text="{u:I18n NoCollectionsToList}"
+                               AutomationId="NoCollectionsToListLabel" />
                     </StackLayout>
                     <BoxView StyleClass="box-row-separator" />
                 </StackLayout>
@@ -709,15 +813,17 @@
                     <controls:RepeaterView.ItemTemplate>
                         <DataTemplate x:DataType="pages:CollectionViewModel">
                             <StackLayout Spacing="0" Padding="0">
-                                <StackLayout StyleClass="box-row, box-row-switch">
+                                <StackLayout StyleClass="box-row, box-row-switch" AutomationId="CollectionItemCell">
                                     <Label
                                         Text="{Binding Collection.Name}"
                                         StyleClass="box-label-regular"
-                                        HorizontalOptions="StartAndExpand" />
+                                        HorizontalOptions="StartAndExpand"
+                                        AutomationId="CollectionItemNameLabel" />
                                     <Switch
                                         IsToggled="{Binding Checked}"
                                         StyleClass="box-value"
-                                        HorizontalOptions="End" />
+                                        HorizontalOptions="End"
+                                        AutomationId="CollectionItemSwitch" />
                                 </StackLayout>
                                 <BoxView StyleClass="box-row-separator" />
                             </StackLayout>
@@ -727,5 +833,4 @@
             </StackLayout>
         </StackLayout>
     </ScrollView>
-
 </pages:BaseContentPage>

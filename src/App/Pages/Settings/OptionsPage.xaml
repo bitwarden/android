@@ -27,7 +27,8 @@
                         x:Name="_themePicker"
                         ItemsSource="{Binding ThemeOptions, Mode=OneTime}"
                         SelectedIndex="{Binding ThemeSelectedIndex}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationId="ThemeSelectorPicker" />
                 </StackLayout>
                 <Label
                     StyleClass="box-footer-label"
@@ -44,7 +45,8 @@
                         x:Name="_autoDarkThemePicker"
                         ItemsSource="{Binding AutoDarkThemeOptions, Mode=OneTime}"
                         SelectedIndex="{Binding AutoDarkThemeSelectedIndex}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationId="DefaultDarkThemePicker" />
                 </StackLayout>
                 <Label
                     StyleClass="box-footer-label"
@@ -59,7 +61,8 @@
                         x:Name="_uriMatchPicker"
                         ItemsSource="{Binding UriMatchOptions, Mode=OneTime}"
                         SelectedIndex="{Binding UriMatchSelectedIndex}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationId="DefaultUriMatchDetectionPicker" />
                 </StackLayout>
                 <Label
                     Text="{u:I18n DefaultUriMatchDetectionDescription}"
@@ -74,7 +77,8 @@
                         x:Name="_clearClipboardPicker"
                         ItemsSource="{Binding ClearClipboardOptions, Mode=OneTime}"
                         SelectedIndex="{Binding ClearClipboardSelectedIndex}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationId="ClearClipboardPicker" />
                 </StackLayout>
                 <Label
                     Text="{u:I18n ClearClipboardDescription}"
@@ -90,7 +94,8 @@
                         ItemsSource="{Binding LocalesOptions, Mode=OneTime}"
                         SelectedItem="{Binding SelectedLocale}"
                         ItemDisplayBinding="{Binding Value}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationId="LanguagePicker" />
                 </StackLayout>
                 <Label
                     Text="{u:I18n LanguageChangeRequiresAppRestart}"
@@ -105,7 +110,8 @@
                     <Switch
                         IsToggled="{Binding AutoTotpCopy}"
                         StyleClass="box-value"
-                        HorizontalOptions="End" />
+                        HorizontalOptions="End"
+                        AutomationId="CopyTotpAutomaticallyToggle" />
                 </StackLayout>
                 <Label
                     Text="{u:I18n CopyTotpAutomaticallyDescription}"
@@ -120,7 +126,8 @@
                     <Switch
                         IsToggled="{Binding Favicon}"
                         StyleClass="box-value"
-                        HorizontalOptions="End" />
+                        HorizontalOptions="End"
+                        AutomationId="ShowWebsiteIconsToggle" />
                 </StackLayout>
                 <Label
                     Text="{u:I18n ShowWebsiteIconsDescription}"

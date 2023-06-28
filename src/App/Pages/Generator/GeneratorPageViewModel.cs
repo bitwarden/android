@@ -8,6 +8,7 @@ using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -23,7 +24,7 @@ namespace Bit.App.Pages
         private readonly IUsernameGenerationService _usernameGenerationService;
         private readonly ITokenService _tokenService;
         private readonly IDeviceActionService _deviceActionService;
-        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
+        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
 
         private PasswordGenerationOptions _options;
         private UsernameGenerationOptions _usernameOptions;
@@ -49,11 +50,7 @@ namespace Bit.App.Pages
         private bool _doneIniting;
         private bool _showTypePicker;
         private string _emailWebsite;
-        private bool _showFirefoxRelayApiAccessToken;
-        private bool _showAnonAddyApiAccessToken;
-        private bool _showSimpleLoginApiKey;
-        private bool _showDuckDuckGoApiKey;
-        private bool _showFastmailApiKey;
+        private bool _showForwardedEmailApiSecret;
         private bool _editMode;
 
         public GeneratorPageViewModel()
@@ -96,7 +93,7 @@ namespace Bit.App.Pages
             UsernameTypePromptHelpCommand = new Command(UsernameTypePromptHelp);
             RegenerateCommand = new AsyncCommand(RegenerateAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
             RegenerateUsernameCommand = new AsyncCommand(RegenerateUsernameAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
-            ToggleForwardedEmailHiddenValueCommand = new AsyncCommand(ToggleForwardedEmailHiddenValueAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
+            ToggleForwardedEmailHiddenValueCommand = new Command(() => ShowForwardedEmailApiSecret = !ShowForwardedEmailApiSecret);
             CopyCommand = new AsyncCommand(CopyAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
             CloseCommand = new AsyncCommand(CloseAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
         }
@@ -415,7 +412,6 @@ namespace Bit.App.Pages
 
         public string UsernameTypeDescriptionLabel => GetUsernameTypeLabelDescription(UsernameTypeSelected);
 
-
         public ForwardedEmailServiceType ForwardedEmailServiceSelected
         {
             get => _usernameOptions.ServiceType;
@@ -425,7 +421,11 @@ namespace Bit.App.Pages
                 {
                     _usernameOptions.ServiceType = value;
                     Username = Constants.DefaultUsernameGenerated;
-                    TriggerPropertyChanged(nameof(ForwardedEmailServiceSelected));
+                    TriggerPropertyChanged(nameof(ForwardedEmailServiceSelected), new string[]
+                    {
+                        nameof(ForwardedEmailApiSecret),
+                        nameof(ForwardedEmailApiSecretLabel)
+                    });
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
             }
@@ -445,27 +445,104 @@ namespace Bit.App.Pages
             }
         }
 
-        public string AnonAddyApiAccessToken
+        public string ForwardedEmailApiSecret
         {
-            get => _usernameOptions.AnonAddyApiAccessToken;
+            get
+            {
+                switch (ForwardedEmailServiceSelected)
+                {
+                    case ForwardedEmailServiceType.AnonAddy:
+                        return _usernameOptions.AnonAddyApiAccessToken;
+                    case ForwardedEmailServiceType.DuckDuckGo:
+                        return _usernameOptions.DuckDuckGoApiKey;
+                    case ForwardedEmailServiceType.Fastmail:
+                        return _usernameOptions.FastMailApiKey;
+                    case ForwardedEmailServiceType.FirefoxRelay:
+                        return _usernameOptions.FirefoxRelayApiAccessToken;
+                    case ForwardedEmailServiceType.SimpleLogin:
+                        return _usernameOptions.SimpleLoginApiKey;
+                    default:
+                        return null;
+                }
+            }
             set
             {
-                if (_usernameOptions.AnonAddyApiAccessToken != value)
+                bool changed = false;
+                switch (ForwardedEmailServiceSelected)
                 {
-                    _usernameOptions.AnonAddyApiAccessToken = value;
-                    TriggerPropertyChanged(nameof(AnonAddyApiAccessToken));
+                    case ForwardedEmailServiceType.AnonAddy:
+                        if (_usernameOptions.AnonAddyApiAccessToken != value)
+                        {
+                            _usernameOptions.AnonAddyApiAccessToken = value;
+                            changed = true;
+                        }
+                        break;
+                    case ForwardedEmailServiceType.DuckDuckGo:
+                        if (_usernameOptions.DuckDuckGoApiKey != value)
+                        {
+                            _usernameOptions.DuckDuckGoApiKey = value;
+                            changed = true;
+                        }
+                        break;
+                    case ForwardedEmailServiceType.Fastmail:
+                        if (_usernameOptions.FastMailApiKey != value)
+                        {
+                            _usernameOptions.FastMailApiKey = value;
+                            changed = true;
+                        }
+                        break;
+                    case ForwardedEmailServiceType.FirefoxRelay:
+                        if (_usernameOptions.FirefoxRelayApiAccessToken != value)
+                        {
+                            _usernameOptions.FirefoxRelayApiAccessToken = value;
+                            changed = true;
+                        }
+                        break;
+                    case ForwardedEmailServiceType.SimpleLogin:
+                        if (_usernameOptions.SimpleLoginApiKey != value)
+                        {
+                            _usernameOptions.SimpleLoginApiKey = value;
+                            changed = true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                if (changed)
+                {
+                    TriggerPropertyChanged(nameof(ForwardedEmailApiSecret));
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
             }
         }
 
-        public bool ShowAnonAddyApiAccessToken
+        public string ForwardedEmailApiSecretLabel
         {
             get
             {
-                return _showAnonAddyApiAccessToken;
+                switch (ForwardedEmailServiceSelected)
+                {
+                    case ForwardedEmailServiceType.AnonAddy:
+                    case ForwardedEmailServiceType.FirefoxRelay:
+                        return AppResources.APIAccessToken;
+                    case ForwardedEmailServiceType.DuckDuckGo:
+                    case ForwardedEmailServiceType.Fastmail:
+                    case ForwardedEmailServiceType.SimpleLogin:
+                        return AppResources.APIKeyRequiredParenthesis;
+                    default:
+                        return null;
+                }
             }
-            set => SetProperty(ref _showAnonAddyApiAccessToken, value);
+        }
+
+        public bool ShowForwardedEmailApiSecret
+        {
+            get
+            {
+                return _showForwardedEmailApiSecret;
+            }
+            set => SetProperty(ref _showForwardedEmailApiSecret, value);
         }
 
         public string AnonAddyDomainName
@@ -480,99 +557,6 @@ namespace Bit.App.Pages
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
             }
-        }
-
-        public string FirefoxRelayApiAccessToken
-        {
-            get => _usernameOptions.FirefoxRelayApiAccessToken;
-            set
-            {
-                if (_usernameOptions.FirefoxRelayApiAccessToken != value)
-                {
-                    _usernameOptions.FirefoxRelayApiAccessToken = value;
-                    TriggerPropertyChanged(nameof(FirefoxRelayApiAccessToken));
-                    SaveUsernameOptionsAsync(false).FireAndForget();
-                }
-            }
-        }
-
-        public bool ShowFirefoxRelayApiAccessToken
-        {
-            get
-            {
-                return _showFirefoxRelayApiAccessToken;
-            }
-            set => SetProperty(ref _showFirefoxRelayApiAccessToken, value);
-        }
-
-        public string SimpleLoginApiKey
-        {
-            get => _usernameOptions.SimpleLoginApiKey;
-            set
-            {
-                if (_usernameOptions.SimpleLoginApiKey != value)
-                {
-                    _usernameOptions.SimpleLoginApiKey = value;
-                    TriggerPropertyChanged(nameof(SimpleLoginApiKey));
-                    SaveUsernameOptionsAsync(false).FireAndForget();
-                }
-            }
-        }
-
-        public bool ShowSimpleLoginApiKey
-        {
-            get
-            {
-                return _showSimpleLoginApiKey;
-            }
-            set => SetProperty(ref _showSimpleLoginApiKey, value);
-        }
-
-        public string DuckDuckGoApiKey
-        {
-            get => _usernameOptions.DuckDuckGoApiKey;
-            set
-            {
-                if (_usernameOptions.DuckDuckGoApiKey != value)
-                {
-                    _usernameOptions.DuckDuckGoApiKey = value;
-                    TriggerPropertyChanged(nameof(DuckDuckGoApiKey));
-                    SaveUsernameOptionsAsync(false).FireAndForget();
-                }
-            }
-        }
-
-        public bool ShowDuckDuckGoApiKey
-        {
-            get
-            {
-                return _showDuckDuckGoApiKey;
-            }
-            set => SetProperty(ref _showDuckDuckGoApiKey, value);
-        }
-
-
-        public string FastmailApiKey
-        {
-            get => _usernameOptions.FastMailApiKey;
-            set
-            {
-                if (_usernameOptions.FastMailApiKey != value)
-                {
-                    _usernameOptions.FastMailApiKey = value;
-                    TriggerPropertyChanged(nameof(FastmailApiKey));
-                    SaveUsernameOptionsAsync(false).FireAndForget();
-                }
-            }
-        }
-
-        public bool ShowFastmailApiKey
-        {
-            get
-            {
-                return _showFastmailApiKey;
-            }
-            set => SetProperty(ref _showFastmailApiKey, value);
         }
 
         public bool CapitalizeRandomWordUsername
@@ -807,12 +791,9 @@ namespace Bit.App.Pages
             TriggerPropertyChanged(nameof(PlusAddressedEmailTypeSelected));
             TriggerPropertyChanged(nameof(IncludeNumberRandomWordUsername));
             TriggerPropertyChanged(nameof(CapitalizeRandomWordUsername));
-            TriggerPropertyChanged(nameof(SimpleLoginApiKey));
-            TriggerPropertyChanged(nameof(FirefoxRelayApiAccessToken));
+            TriggerPropertyChanged(nameof(ForwardedEmailApiSecret));
+            TriggerPropertyChanged(nameof(ForwardedEmailApiSecretLabel));
             TriggerPropertyChanged(nameof(AnonAddyDomainName));
-            TriggerPropertyChanged(nameof(AnonAddyApiAccessToken));
-            TriggerPropertyChanged(nameof(DuckDuckGoApiKey));
-            TriggerPropertyChanged(nameof(FastmailApiKey));
             TriggerPropertyChanged(nameof(CatchAllEmailDomain));
             TriggerPropertyChanged(nameof(ForwardedEmailServiceSelected));
             TriggerPropertyChanged(nameof(UsernameTypeSelected));
@@ -845,15 +826,23 @@ namespace Bit.App.Pages
         {
             _logger.Value.Exception(ex);
 
+            string message = AppResources.GenericErrorMessage;
+
             if (IsUsername && UsernameTypeSelected == UsernameType.ForwardedEmailAlias)
             {
-                await Device.InvokeOnMainThreadAsync(() => Page.DisplayAlert(
-                    AppResources.AnErrorHasOccurred, string.Format(AppResources.UnknownXErrorMessage, ForwardedEmailServiceSelected), AppResources.Ok));
+                if (ex is ForwardedEmailInvalidSecretException)
+                {
+                    message = ForwardedEmailServiceSelected == ForwardedEmailServiceType.AnonAddy || ForwardedEmailServiceSelected == ForwardedEmailServiceType.FirefoxRelay
+                                ? AppResources.InvalidAPIToken
+                                : AppResources.InvalidAPIKey;
+                }
+                else
+                {
+                    message = string.Format(AppResources.UnknownXErrorMessage, ForwardedEmailServiceSelected);
+                }
             }
-            else
-            {
-                await Device.InvokeOnMainThreadAsync(() => Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok));
-            }
+
+            await Device.InvokeOnMainThreadAsync(() => Page.DisplayAlert(AppResources.AnErrorHasOccurred, message, AppResources.Ok));
         }
 
         private string GetUsernameTypeLabelDescription(UsernameType value)
@@ -868,28 +857,6 @@ namespace Bit.App.Pages
                     return AppResources.ForwardedEmailDescription;
                 default:
                     return string.Empty;
-            }
-        }
-
-        private async Task ToggleForwardedEmailHiddenValueAsync()
-        {
-            switch (ForwardedEmailServiceSelected)
-            {
-                case ForwardedEmailServiceType.AnonAddy:
-                    ShowAnonAddyApiAccessToken = !ShowAnonAddyApiAccessToken;
-                    break;
-                case ForwardedEmailServiceType.FirefoxRelay:
-                    ShowFirefoxRelayApiAccessToken = !ShowFirefoxRelayApiAccessToken;
-                    break;
-                case ForwardedEmailServiceType.SimpleLogin:
-                    ShowSimpleLoginApiKey = !ShowSimpleLoginApiKey;
-                    break;
-                case ForwardedEmailServiceType.DuckDuckGo:
-                    ShowDuckDuckGoApiKey = !ShowDuckDuckGoApiKey;
-                    break;
-                case ForwardedEmailServiceType.Fastmail:
-                    ShowFastmailApiKey = !ShowFastmailApiKey;
-                    break;
             }
         }
     }

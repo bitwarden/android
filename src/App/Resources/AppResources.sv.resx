@@ -2498,7 +2498,7 @@ Vill du byta till detta konto?</value>
     <value>Hämta huvudlösenordsledtråd</value>
   </data>
   <data name="LoggingInAsXOnY" xml:space="preserve">
-    <value>Logging in as {0} on {1}</value>
+    <value>Loggar in som {0} på {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Är det inte du?</value>
@@ -2631,5 +2631,11 @@ Vill du byta till detta konto?</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Nuvarande huvudlösenord</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
   </data>
 </root>

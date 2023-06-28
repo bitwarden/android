@@ -2630,4 +2630,10 @@ Vai pārslēgties uz šo kontu?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Pašreizējā galvenā parole</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Galvenās paroles pārvaicāšanas palīdzība</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Atslēgšana var neizdoties nepietiekamas atmiņas dēļ. Lai to novērstu, jāsamazina KDF atmiņas iestatījmi</value>
+  </data>
 </root>

@@ -2613,7 +2613,7 @@ Vuoi passare a questo account?</value>
     <value>US</value>
   </data>
   <data name="EU" xml:space="preserve">
-    <value>UE</value>
+    <value>EU</value>
   </data>
   <data name="SelfHosted" xml:space="preserve">
     <value>Self-hosted</value>
@@ -2629,5 +2629,11 @@ Vuoi passare a questo account?</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Password principale corrente</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Aiuto per chiedere la password principale di nuovo</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Lo sblocco potrebbe fallire a causa di memoria insufficiente. Riduci le impostazioni della memoria KDF per risolvere il problema</value>
   </data>
 </root>

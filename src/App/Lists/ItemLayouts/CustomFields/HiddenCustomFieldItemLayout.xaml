@@ -31,7 +31,8 @@
             Text="{Binding Field.Name, Mode=OneWay}"
             StyleClass="box-label"
             Grid.Row="0"
-            Grid.Column="0" />
+            Grid.Column="0"
+            AutomationId="HiddenCustomFieldNameLabel" />
         <StackLayout
             Grid.Row="1"
             Grid.Column="0"
@@ -39,7 +40,8 @@
             <controls:MonoLabel
                 Text="{Binding ValueText, Mode=OneWay}"
                 StyleClass="box-value"
-                IsVisible="{Binding ShowHiddenValue}" />
+                IsVisible="{Binding ShowHiddenValue}"
+                AutomationId="HiddenCustomFieldValueLabel" />
             <controls:MonoLabel
                 Text="{Binding Field.MaskedValue, Mode=OneWay}"
                 StyleClass="box-value"
@@ -54,7 +56,10 @@
             IsPassword="{Binding ShowHiddenValue, Converter={StaticResource inverseBool}}"
             IsEnabled="{Binding ShowViewHidden}"
             IsSpellCheckEnabled="False"
-            IsTextPredictionEnabled="False">
+            IsTextPredictionEnabled="False"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{Binding Field.Name}"
+            AutomationId="HiddenCustomFieldValueEntry">
             <Entry.Keyboard>
                 <Keyboard x:FactoryMethod="Create">
                     <x:Arguments>
@@ -72,7 +77,8 @@
             Grid.Column="1"
             Grid.RowSpan="2"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n ToggleVisibility}" />
+            AutomationProperties.Name="{u:I18n ToggleVisibility}"
+            AutomationId="HiddenCustomFieldShowValueButton" />
         <controls:IconButton
             StyleClass="box-row-button, box-row-button-platform"
             Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"

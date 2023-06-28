@@ -1,5 +1,6 @@
 using System;
 using Bit.App.Controls;
+using Bit.Core.Utilities;
 using Bit.iOS.Core.Utilities;
 using UIKit;
 
@@ -44,7 +45,7 @@ namespace Bit.iOS.Autofill
 
         partial void SubmitButton_Activated(UIBarButtonItem sender)
         {
-            var task = CheckPasswordAsync();
+            CheckPasswordAsync().FireAndForget();
         }
 
         partial void CancelButton_Activated(UIBarButtonItem sender)

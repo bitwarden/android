@@ -190,7 +190,7 @@
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>எங்களுக்கு மின்னஞ்சலிடு</value>
+    <value>எமக்கு மின்னஞ்சலிடு</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
     <value>நேரடியாக உதவி பெற அ கருத்து தெரிவிக்க எங்களுக்கு மின்னஞ்சலிடு</value>
@@ -229,7 +229,7 @@
     <value>கோப்புறைகள்</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>கோப்புறை புதுப்பிக்கப்பட்டது.</value>
+    <value>கோப்புறை சேமிக்கப்பட்டது</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>வலைத்தளத்திற்குச் செல்</value>
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>உருப்படி நீக்கப்பட்டது.</value>
+    <value>உருப்படி நீக்கப்பட்டது</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -364,7 +364,7 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>கைரேகையைப் பயன்படுத்தி பூட்டவிழ்</value>
+    <value>கைரேகை பயன்படுத்தி பூட்டவிழ்</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>பயனர்பெயர்</value>
@@ -375,7 +375,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} நகலெடுக்கப்பட்டது.</value>
+    <value>{0} நகலெடுக்கப்பட்டது</value>
     <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -431,7 +431,7 @@
     <value>Bitwarden செயலி நீட்டிப்பு</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>உங்கள் பெட்டகத்திற்கு புதிய உள்நுழைவுகளைச் சேர்ப்பதற்கான மிக எளிய வழி பிட்வார்டன் செயலி நீட்டிப்பு மூலமே. "அமைப்புகள்" திரைக்கு செல்வதன் மூலம் பிட்வார்டன் செயலி நீட்டிப்பைப் பயன்படுத்துவது பற்றி மேலுமறிக.</value>
+    <value>உம் பெட்டகத்திற்கு புதிய உள்நுழைவுகளைச் சேர்ப்பதற்கான மிக எளிய வழி பிட்வார்டன் செயலி நீட்டிப்பிலிருந்தே. "அமைப்புகள்" திரைக்குச் சென்று பிட்வார்டன் செயலி நீட்டிப்பைப் பயன்படுத்துவது பற்றி மேலுமறிக.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Safari மற்றும் பிற செயலிகளில் உமது உள்நுழைவுகளைத் தன்னிரப்ப Bitwardenஐப் பயன்படுத்து.</value>
@@ -461,7 +461,7 @@
     <value>தொடர்</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>கணக்கு உருவாக்கு</value>
+    <value>கணக்கை உருவாக்கு</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
     <value>கணக்கை உருவாக்குகிறது...</value>
@@ -471,7 +471,7 @@
     <value>உருப்படியைத் திருத்து</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>தானியங்கு ஒத்திசைவை இயக்கு</value>
+    <value>தானியங்கு ஒத்திசைவை அனுமதி</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>உமது பிரதான கடவுச்சொல் குறிப்பைப் பெற உமது கணக்கு மின்னஞ்சல் முகவரியை உள்ளிடு.</value>
@@ -529,7 +529,7 @@
     <value>உங்கள் உருப்படிகளை மற்ற கடவுச்சொல் நிர்வாக செயலிகளிலிருந்து விரைவாக மொத்த இறக்குமதி செய்க.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>கடந்த ஒத்திசைவு: </value>
+    <value>கடந்த ஒத்திசைவு:</value>
   </data>
   <data name="Length" xml:space="preserve">
     <value>நீளம்</value>
@@ -1580,20 +1580,20 @@
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
-    <value>Solarized Dark</value>
+    <value>சோலரைஸ்டு இருள்</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
-    <value>Auto-fill blocked URIs</value>
+    <value>தடுக்கப்பட்ட உரலிகளைத் தன்னிரப்பு</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Auto-fill will not be offered for blocked URIs. Separate multiple URIs with a comma. For example: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>தடுக்கப்பட்ட உரலிகளுக்கு தன்னிரப்பல் அளிக்கப்படா. பல உரலிகள் காற்புள்ளியுடன் பிரிக்கவும். எ.கா:"https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>உள்நுழைவைச் சேர்க்க கேள்</value>
   </data>
   <data name="AskToAddLoginDescription" xml:space="preserve">
-    <value>Ask to add an item if one isn't found in your vault.</value>
+    <value>உமது பெட்டகத்தில் உருப்படி இல்லையெனில் சேர்க்க கேள்.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>செயலி மறுதொடக்கத்தில்</value>
@@ -1754,7 +1754,7 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>இக்கணக்கிற்கான உயிரியளவு பூட்டவிழ்த்தல் முடக்கப்பட்டது பிரதான கடவுச்சொல் சரிபார்ப்பு நிலுவையிலுள்ளது.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
     <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
@@ -2144,10 +2144,10 @@
     <value>உம் நிறுவன கொள்கைகள் உம் பெட்டக நேரமுடிவைப் பாதிக்கிறது. அனுமதிக்கப்பட்ட அதிகபட்ச பெட்டக நேரமுடிவு {0} மணிநேரம் மற்றும் {1} நிமிடம(கள்) ஆகும்</value>
   </data>
   <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s). Your vault timeout action is set to {2}.</value>
+    <value>உம் நிறுவன கொள்கைகள் உம் பெட்டக நேரமுடிவைப் பாதிக்கிறது. அனுமதிக்கப்பட்ட அதிகபட்ச பெட்டக நேரமுடிவு {0} மணிநேரம் மற்றும் {1} நிமிடம(கள்) ஆகும். உம் பெட்டக நேரமுடிவுச் செயல் {2} என அமைக்கப்ப்பட்டுள்ளது.</value>
   </data>
   <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies have set your vault timeout action to {0}.</value>
+    <value>உம் நிறுவன கொள்கைகள் உம் பெட்டக நேரமுடிவு செயலை {0} என அமைத்துள்ளன.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>உமது பெட்டக நேரமுடிவு உம் நிறுவனம் அமைத்த கட்டுப்பாடுகளை தாண்டுகிறது.</value>
@@ -2231,7 +2231,7 @@
     <value>சிதைவுக்குறிப்புகளைச் சமர்ப்பி</value>
   </data>
   <data name="SubmitCrashLogsDescription" xml:space="preserve">
-    <value>Help Bitwarden improve app stability by submitting crash reports.</value>
+    <value>சிதைவு அறிக்கைகளைச் சமர்ப்பித்துச் செயலி உறுதிநிலையை மேம்படுத்த Bitwardenக்கு உதவுக.</value>
   </data>
   <data name="OptionsExpanded" xml:space="preserve">
     <value>தெரிவுகள் விரிவாகின, சுருக்கத் தட்டு.</value>
@@ -2279,25 +2279,25 @@
     <value>TOTP</value>
   </data>
   <data name="VerificationCodes" xml:space="preserve">
-    <value>Verification codes</value>
+    <value>சரிபார்ப்பு குறியீடுகள்</value>
   </data>
   <data name="PremiumSubscriptionRequired" xml:space="preserve">
-    <value>Premium subscription required</value>
+    <value>உயர்தரச் சந்தா தேவை</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
-    <value>Cannot add authenticator key? </value>
+    <value>அங்கீகரிப்பான் விசையைச் சேர்க்க முடியவில்லையா? </value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>விரைவுக்குறியை வருடு</value>
   </data>
   <data name="CannotScanQRCode" xml:space="preserve">
-    <value>Cannot scan QR Code? </value>
+    <value>விரைவுக்குறியை வருட முடியவில்லையா? </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Authenticator key</value>
+    <value>அங்கீகரிப்பான் விசை</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Enter key manually</value>
+    <value>கைமுறையாக விசையை உள்ளிடு</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
     <value>Add TOTP</value>
@@ -2494,10 +2494,10 @@ select Add TOTP to store the key safely</value>
     <value>New around here?</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
-    <value>Get master password hint</value>
+    <value>பிரதான கடவுச்சொல் குறிப்பைப் பெறு</value>
   </data>
   <data name="LoggingInAsXOnY" xml:space="preserve">
-    <value>Logging in as {0} on {1}</value>
+    <value>{1} இல் {0} ஆக உள்நுழைகிறது</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>நீங்கள் இல்லையா?</value>
@@ -2611,24 +2611,30 @@ select Add TOTP to store the key safely</value>
     <value>There are no items that match the search</value>
   </data>
   <data name="US" xml:space="preserve">
-    <value>US</value>
+    <value>அமெரிக்க ஐக்கிய நாடுகள்</value>
   </data>
   <data name="EU" xml:space="preserve">
-    <value>EU</value>
+    <value>ஐரோப்பிய ஒன்றியம்</value>
   </data>
   <data name="SelfHosted" xml:space="preserve">
     <value>Self-hosted</value>
   </data>
   <data name="DataRegion" xml:space="preserve">
-    <value>Data region</value>
+    <value>தரவு இடம்</value>
   </data>
   <data name="Region" xml:space="preserve">
-    <value>Region</value>
+    <value>இடம்</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Current master password</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
   </data>
 </root>

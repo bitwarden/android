@@ -36,6 +36,7 @@ namespace Bit.iOS.Core.Controllers
         private bool _passwordReprompt = false;
         private bool _usesKeyConnector;
         private bool _biometricUnlockOnly = false;
+        private bool _checkingPassword;
 
         protected bool autofillExtension = false;
 
@@ -154,7 +155,7 @@ namespace Bit.iOS.Core.Controllers
                 MasterPasswordCell.TextField.ReturnKeyType = UIReturnKeyType.Go;
                 MasterPasswordCell.TextField.ShouldReturn += (UITextField tf) =>
                 {
-                    CheckPasswordAsync().GetAwaiter().GetResult();
+                    CheckPasswordAsync().FireAndForget();
                     return true;
                 };
                 if (_pinLock)
@@ -208,95 +209,120 @@ namespace Bit.iOS.Core.Controllers
                 MasterPasswordCell.TextField.BecomeFirstResponder();
             }
         }
-
+        
         protected async Task CheckPasswordAsync()
         {
-            if (string.IsNullOrWhiteSpace(MasterPasswordCell.TextField.Text))
+            if (_checkingPassword)
             {
-                var alert = Dialogs.CreateAlert(AppResources.AnErrorHasOccurred,
-                    string.Format(AppResources.ValidationFieldRequired,
-                        _pinLock ? AppResources.PIN : AppResources.MasterPassword),
-                    AppResources.Ok);
-                PresentViewController(alert, true, null);
                 return;
             }
+            _checkingPassword = true;
 
-            var email = await _stateService.GetEmailAsync();
-            var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
-            var inputtedValue = MasterPasswordCell.TextField.Text;
-
-            if (_pinLock)
+            try
             {
-                var failed = true;
-                try
+                if (string.IsNullOrWhiteSpace(MasterPasswordCell.TextField.Text))
                 {
-                    if (_isPinProtected)
+                    var alert = Dialogs.CreateAlert(AppResources.AnErrorHasOccurred,
+                        string.Format(AppResources.ValidationFieldRequired,
+                            _pinLock ? AppResources.PIN : AppResources.MasterPassword),
+                        AppResources.Ok);
+                    PresentViewController(alert, true, null);
+                    return;
+                }
+
+                var email = await _stateService.GetEmailAsync();
+                var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
+                var inputtedValue = MasterPasswordCell.TextField.Text;
+
+                // HACK: iOS extensions have constrained memory, given how it works Argon2Id, it's likely to crash
+                // the extension depending on the argon2id memory configured.
+                // So, we warn the user and advise to decrease the configured memory letting them the option to continue, if wanted.
+                if (kdfConfig.Type == KdfType.Argon2id
+                    &&
+                    kdfConfig.Memory > Constants.MaximumArgon2IdMemoryBeforeExtensionCrashing
+                    &&
+                    !await _platformUtilsService.ShowDialogAsync(AppResources.UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve, AppResources.Warning, AppResources.Continue, AppResources.Cancel))
+                {
+                    return;
+                }
+
+                if (_pinLock)
+                {
+                    var failed = true;
+                    try
                     {
-                        var key = await _cryptoService.MakeKeyFromPinAsync(inputtedValue, email,
-                            kdfConfig,
-                            await _stateService.GetPinProtectedKeyAsync());
-                        var encKey = await _cryptoService.GetEncKeyAsync(key);
-                        var protectedPin = await _stateService.GetProtectedPinAsync();
-                        var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
-                        failed = decPin != inputtedValue;
-                        if (!failed)
+                        if (_isPinProtected)
                         {
+                            var key = await _cryptoService.MakeKeyFromPinAsync(inputtedValue, email,
+                                kdfConfig,
+                                await _stateService.GetPinProtectedKeyAsync());
+                            var encKey = await _cryptoService.GetEncKeyAsync(key);
+                            var protectedPin = await _stateService.GetProtectedPinAsync();
+                            var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
+                            failed = decPin != inputtedValue;
+                            if (!failed)
+                            {
+                                await AppHelpers.ResetInvalidUnlockAttemptsAsync();
+                                await SetKeyAndContinueAsync(key);
+                            }
+                        }
+                        else
+                        {
+                            var key2 = await _cryptoService.MakeKeyFromPinAsync(inputtedValue, email,
+                                kdfConfig);
+                            failed = false;
                             await AppHelpers.ResetInvalidUnlockAttemptsAsync();
-                            await SetKeyAndContinueAsync(key);
+                            await SetKeyAndContinueAsync(key2);
                         }
                     }
-                    else
+                    catch
                     {
-                        var key2 = await _cryptoService.MakeKeyFromPinAsync(inputtedValue, email,
-                            kdfConfig);
-                        failed = false;
-                        await AppHelpers.ResetInvalidUnlockAttemptsAsync();
-                        await SetKeyAndContinueAsync(key2);
+                        failed = true;
                     }
-                }
-                catch
-                {
-                    failed = true;
-                }
-                if (failed)
-                {
-                    await HandleFailedCredentialsAsync();
-                }
-            }
-            else
-            {
-                var key2 = await _cryptoService.MakeKeyAsync(inputtedValue, email, kdfConfig);
-
-                var storedKeyHash = await _cryptoService.GetKeyHashAsync();
-                if (storedKeyHash == null)
-                {
-                    var oldKey = await _secureStorageService.GetAsync<string>("oldKey");
-                    if (key2.KeyB64 == oldKey)
+                    if (failed)
                     {
-                        var localKeyHash = await _cryptoService.HashPasswordAsync(inputtedValue, key2, HashPurpose.LocalAuthorization);
-                        await _secureStorageService.RemoveAsync("oldKey");
-                        await _cryptoService.SetKeyHashAsync(localKeyHash);
+                        await HandleFailedCredentialsAsync();
                     }
-                }
-                var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(inputtedValue, key2);
-                if (passwordValid)
-                {
-                    if (_isPinProtected)
-                    {
-                        var protectedPin = await _stateService.GetProtectedPinAsync();
-                        var encKey = await _cryptoService.GetEncKeyAsync(key2);
-                        var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
-                        var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, email,
-                            kdfConfig);
-                        await _stateService.SetPinProtectedKeyAsync(await _cryptoService.EncryptAsync(key2.Key, pinKey));
-                    }
-                    await AppHelpers.ResetInvalidUnlockAttemptsAsync();
-                    await SetKeyAndContinueAsync(key2, true);
                 }
                 else
                 {
-                    await HandleFailedCredentialsAsync();
+                    var key2 = await _cryptoService.MakeKeyAsync(inputtedValue, email, kdfConfig);
+
+                    var storedKeyHash = await _cryptoService.GetKeyHashAsync();
+                    if (storedKeyHash == null)
+                    {
+                        var oldKey = await _secureStorageService.GetAsync<string>("oldKey");
+                        if (key2.KeyB64 == oldKey)
+                        {
+                            var localKeyHash = await _cryptoService.HashPasswordAsync(inputtedValue, key2, HashPurpose.LocalAuthorization);
+                            await _secureStorageService.RemoveAsync("oldKey");
+                            await _cryptoService.SetKeyHashAsync(localKeyHash);
+                        }
+                    }
+                    var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(inputtedValue, key2);
+                    if (passwordValid)
+                    {
+                        if (_isPinProtected)
+                        {
+                            var protectedPin = await _stateService.GetProtectedPinAsync();
+                            var encKey = await _cryptoService.GetEncKeyAsync(key2);
+                            var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
+                            var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, email,
+                                kdfConfig);
+                            await _stateService.SetPinProtectedKeyAsync(await _cryptoService.EncryptAsync(key2.Key, pinKey));
+                        }
+                        await AppHelpers.ResetInvalidUnlockAttemptsAsync();
+                        await SetKeyAndContinueAsync(key2, true);
+                    }
+                    else
+                    {
+                        await HandleFailedCredentialsAsync();
+                    }
                 }
+            }
+            finally
+            {
+                _checkingPassword = false;
             }
         }
 

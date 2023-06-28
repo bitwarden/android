@@ -276,7 +276,7 @@
     <value>നിങ്ങൾക്ക് ലോഗ് ഔട്ട് ചെയ്യണമെന്ന് ഉറപ്പാണോ?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Remove account</value>
+    <value>അക്കൗണ്ട് നീക്കംചെയ്യുക</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
     <value>Are you sure you want to remove this account?</value>
@@ -584,7 +584,7 @@
     <value>നിങ്ങളുടെ പാസ്‌വേഡ് മറന്നാൽ അത് ഓർമ്മിക്കാൻ ഒരു പ്രാഥമിക പാസ്‌വേഡ് സൂചന സഹായിക്കും.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>പ്രാഥമിക പാസ്‌വേഡിന് കുറഞ്ഞത് {0} പ്രതീകങ്ങളെങ്കിലും ദൈർഘ്യമുണ്ടായിരിക്കണം.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>കുറഞ്ഞ സംഖ്യകൾ</value>
@@ -775,10 +775,10 @@
     <value>പ്രവർത്തനക്ഷമമാക്കി</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Off</value>
+    <value>ഓഫ്</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>ഓൺ</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>അവസ്ഥ</value>
@@ -900,8 +900,8 @@
     <value>ഓതന്റിക്കേറ്റർ കീ വായിക്കാൻ കഴിയുന്നില്ല.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Point your camera at the QR Code.
-Scanning will happen automatically.</value>
+    <value>നിങ്ങളുടെ ക്യാമറ QR കോഡിലേക്ക് ചൂണ്ടുക.
+സ്കാനിംഗ് സ്വയമേവ നടക്കും.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>QR കോഡ് സ്കാൻ ചെയ്യുക</value>
@@ -1080,7 +1080,7 @@ Scanning will happen automatically.</value>
     <value>പേരിന്റെ അവസാന ഭാഗം</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Full name</value>
+    <value>പൂര്‍ണ്ണമായ പേര്</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>ലൈസൻസ് നമ്പർ</value>
@@ -1210,7 +1210,7 @@ Scanning will happen automatically.</value>
     <value>മറച്ചത്</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Linked</value>
+    <value>ബന്ധിപ്പിച്ചത്</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>വാചകം</value>
@@ -1384,10 +1384,10 @@ Scanning will happen automatically.</value>
     <value>കളക്ഷനുകൾ  തിരയുക</value>
   </data>
   <data name="SearchFileSends" xml:space="preserve">
-    <value>Search file Sends</value>
+    <value>അയച്ച വാക്കുകൾ തിരയുക</value>
   </data>
   <data name="SearchTextSends" xml:space="preserve">
-    <value>Search text Sends</value>
+    <value>അയച്ച വാക്കുകൾ തിരയുക</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
     <value>Search {0}</value>
@@ -1662,10 +1662,10 @@ Scanning will happen automatically.</value>
     <value>Send a verification code to your email</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
-    <value>Code sent!</value>
+    <value>കോഡ് അയച്ചു!</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
-    <value>Confirm your identity to continue.</value>
+    <value>തുടരാൻ നിങ്ങളുടെ ഐഡന്റിറ്റി സ്ഥിരീകരിക്കുക.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>ഈ എക്‌സ്‌പോർട്ടിൽ എൻക്രിപ്റ്റ് ചെയ്യാത്ത ഫോർമാറ്റിൽ നിങ്ങളുടെ വാൾട് ഡാറ്റ അടങ്ങിയിരിക്കുന്നു. എക്‌സ്‌പോർട് ചെയ്ത ഫയൽ സുരക്ഷിതമല്ലാത്ത ചാനലുകളിൽ (ഇമെയിൽ പോലുള്ളവ) നിങ്ങൾ സംഭരിക്കുകയോ അയയ്ക്കുകയോ ചെയ്യരുത്. നിങ്ങൾ ഇത് ഉപയോഗിച്ചുകഴിഞ്ഞാലുടൻ അത് മായ്ച്ചുകളയണം.</value>
@@ -1886,7 +1886,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Text" xml:space="preserve">
-    <value>Text</value>
+    <value>വാചകം</value>
   </data>
   <data name="TypeText" xml:space="preserve">
     <value>വാചകം</value>
@@ -1905,13 +1905,13 @@ Scanning will happen automatically.</value>
     <value>നിങ്ങൾ അയയ്ക്കാൻ ആഗ്രഹിക്കുന്ന ഫയൽ.</value>
   </data>
   <data name="FileTypeIsSelected" xml:space="preserve">
-    <value>File type is selected.</value>
+    <value>ഫയൽ തരം തിരഞ്ഞെടുത്തു.</value>
   </data>
   <data name="FileTypeIsNotSelected" xml:space="preserve">
-    <value>File type is not selected, tap to select.</value>
+    <value>ഫയൽ തരം തിരഞ്ഞെടുത്തിട്ടില്ല, തിരഞ്ഞെടുക്കാൻ ടാപ്പുചെയ്യുക.</value>
   </data>
   <data name="TextTypeIsSelected" xml:space="preserve">
-    <value>Text type is selected.</value>
+    <value>ഫയൽ തരം തിരഞ്ഞെടുത്തു.</value>
   </data>
   <data name="TextTypeIsNotSelected" xml:space="preserve">
     <value>Text type is not selected, tap to select.</value>
@@ -1927,7 +1927,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PendingDelete" xml:space="preserve">
-    <value>Pending deletion</value>
+    <value>പരിപൂർണ്ണമാവാത്ത ഇല്ലാതാക്കൽ</value>
   </data>
   <data name="ExpirationDate" xml:space="preserve">
     <value>കാലഹരണപ്പെടുന്ന തീയതി</value>
@@ -2629,5 +2629,11 @@ Do you want to switch to this account?</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Current master password</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
   </data>
 </root>

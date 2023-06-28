@@ -14,6 +14,8 @@ namespace Bit.Core.Services
 {
     public class CryptoService : ICryptoService
     {
+        private const string RANDOM_STRING_CHARSET = "abcdefghijklmnopqrstuvwxyz1234567890";
+
         private readonly IStateService _stateService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
 
@@ -631,6 +633,22 @@ namespace Bit.Core.Services
                 ui = await _cryptoFunctionService.RandomNumberAsync();
             } while (ui >= upperBound);
             return (int)(min + (ui % diff));
+        }
+
+        /// <summary>
+        /// Makes random string with length <paramref name="length"/> based on the charset <see cref="RANDOM_STRING_CHARSET"/>
+        /// </summary>
+        public async Task<string> RandomStringAsync(int length)
+        {
+            var sb = new StringBuilder();
+
+            for (var i = 0; i < length; i++)
+            {
+                var randomCharIndex = await RandomNumberAsync(0, RANDOM_STRING_CHARSET.Length - 1);
+                sb.Append(RANDOM_STRING_CHARSET[randomCharIndex]);
+            }
+
+            return sb.ToString();
         }
 
         // Helpers
