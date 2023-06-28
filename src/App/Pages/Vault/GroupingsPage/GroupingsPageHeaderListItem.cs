@@ -1,4 +1,6 @@
-﻿namespace Bit.App.Pages
+﻿using Bit.App.Utilities.Automation;
+
+namespace Bit.App.Pages
 {
     public class GroupingsPageHeaderListItem : IGroupingsPageListItem
     {
@@ -14,7 +16,7 @@
         {
             get
             {
-                return $"{Title?.Replace(" ", string.Empty).ToLowerInvariant()}Header";
+                return AutomationIdsHelper.AddSuffixFor(AutomationIdsHelper.ToEnglishTitleCase(Title), SuffixType.Header);
             }
         }
     }

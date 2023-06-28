@@ -1,4 +1,5 @@
 ﻿using Bit.App.Resources;
+using Bit.App.Utilities.Automation;
 using Bit.Core;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
@@ -9,7 +10,6 @@ namespace Bit.App.Pages
     {
         private string _icon;
         private string _name;
-        private string _automationId;
 
         public FolderView Folder { get; set; }
         public CollectionView Collection { get; set; }
@@ -123,33 +123,27 @@ namespace Bit.App.Pages
             {
                 if (Type != null)
                 {
-                    switch (Type.Value)
-                    {
-                        case CipherType.Login:
-                            return "LoginFilter";
-                        case CipherType.SecureNote:
-                            return "SecureNoteFilter";
-                        case CipherType.Card:
-                            return "CardFilter";
-                        case CipherType.Identity:
-                            return "IdentityFilter";
-                    }
+                    return AutomationIdsHelper.AddSuffixFor(System.Enum.GetName(typeof(CipherType), Type.Value), SuffixType.Filter);
                 }
-                else if (IsTrash)
+
+                if (IsTrash)
                 {
-                    return "TrashFilter";
+                    return AutomationIdsHelper.AddSuffixFor("Trash", SuffixType.Filter);
                 }
-                else if (Folder != null)
+
+                if (Folder != null)
                 {
-                    return "FolderFilter";
+                    return AutomationIdsHelper.AddSuffixFor("Folder", SuffixType.Filter);
                 }
-                else if (Collection != null)
+
+                if (Collection != null)
                 {
-                    return "CollectionFilter";
+                    return AutomationIdsHelper.AddSuffixFor("Collection", SuffixType.Filter);
                 }
-                else if (IsTotpCode)
+
+                if (IsTotpCode)
                 {
-                    return "TOTPListItem";
+                    return AutomationIdsHelper.AddSuffixFor("TOTP", SuffixType.ListItem);
                 }
                 
                 return null;

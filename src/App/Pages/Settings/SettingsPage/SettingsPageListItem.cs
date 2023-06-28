@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.App.Utilities.Automation;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -23,23 +24,15 @@ namespace Bit.App.Pages
         public Color SubLabelColor => SubLabelTextEnabled ?
             ThemeManager.GetResourceColor("SuccessColor") :
             ThemeManager.GetResourceColor("MutedColor");
-        public string AutomationId
+
+        public string AutomationIdSettingName
         {
             get
             {
-                if (!UseFrame)
-                {
-                    var idText = new CultureInfo("en-US", false)
-                    .TextInfo
-                    .ToTitleCase(Name)
-                    .Replace(" ", String.Empty)
-                    .Replace("-", String.Empty);
-                    return $"{idText}Cell";
-                }
-                else
-                {
-                    return "EnabledPolicyCell";
-                }
+                return AutomationIdsHelper.AddSuffixFor(
+                    UseFrame ? "EnabledPolicy"
+                             : AutomationIdsHelper.ToEnglishTitleCase(Name)
+                    , SuffixType.Cell);
             }
         }
 
@@ -47,16 +40,12 @@ namespace Bit.App.Pages
         {
             get
             {
-                if (!UseFrame)
+                if (UseFrame)
                 {
-                    var idText = new CultureInfo("en-US", false)
-                    .TextInfo
-                    .ToTitleCase(Name)
-                    .Replace(" ", String.Empty)
-                    .Replace("-", String.Empty);
-                    return $"{idText}SettingValue";
+                    return null;
                 }
-                return null;
+
+                return AutomationIdsHelper.AddSuffixFor(AutomationIdsHelper.ToEnglishTitleCase(Name), SuffixType.SettingValue);
             }
         }
     }

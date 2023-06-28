@@ -32,14 +32,14 @@
                             StyleClass="text-muted, text-sm, text-bold"
                             HorizontalTextAlignment="Center" />
                     </Frame>
-                    <Label IsVisible="{Binding UseFrame, Converter={StaticResource inverseBool}}"
+                    <controls:CustomLabel IsVisible="{Binding UseFrame, Converter={StaticResource inverseBool}}"
                            Text="{Binding Name, Mode=OneWay}"
                            LineBreakMode="{Binding LineBreakMode}"
                            HorizontalOptions="StartAndExpand"
                            VerticalOptions="CenterAndExpand"
                            StyleClass="list-title"
-                           AutomationId="{Binding AutomationId}" />
-                    <Label Text="{Binding SubLabel, Mode=OneWay}"
+                           AutomationId="{Binding AutomationIdSettingName}" />
+                    <controls:CustomLabel  Text="{Binding SubLabel, Mode=OneWay}"
                            IsVisible="{Binding ShowSubLabel}"
                            HorizontalOptions="End"
                            HorizontalTextAlignment="End"
