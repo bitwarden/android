@@ -172,6 +172,7 @@ namespace Bit.Core.Abstractions
         Task<string> GetAvatarColorAsync(string userId = null);
         Task<string> GetPreLoginEmailAsync();
         Task SetPreLoginEmailAsync(string value);
+        Task<AccountDecryptionOptions> GetAccountDecryptionOptions(string userId = null);
         string GetLocale();
         void SetLocale(string locale);
     }

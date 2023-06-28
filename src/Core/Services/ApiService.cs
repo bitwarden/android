@@ -395,10 +395,32 @@ namespace Bit.Core.Services
 
         #region Device APIs
 
+
+        public Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier)
+        {
+            return SendAsync<object, bool>(HttpMethod.Get, "/devices/knowndevice", null, false, true, (message) =>
+            {
+                message.Headers.Add("X-Device-Identifier", deviceIdentifier);
+                message.Headers.Add("X-Request-Email", CoreHelpers.Base64UrlEncode(Encoding.UTF8.GetBytes(email)));
+            });
+        }
+
         public Task PutDeviceTokenAsync(string identifier, DeviceTokenRequest request)
         {
             return SendAsync<DeviceTokenRequest, object>(
                 HttpMethod.Put, $"/devices/identifier/{identifier}/token", request, true, false);
+        }
+
+        public Task<bool> GetDevicesExistenceByTypes(DeviceType[] deviceTypes)
+        {
+            return SendAsync<DeviceType[], bool>(
+                HttpMethod.Post, "/devices/exist-by-types", deviceTypes, true, true);
+        }
+
+        public Task<DeviceResponse> PutUpdateTrustedDeviceKeys(UpdateTrustedDeviceKeysRequest request)
+        {
+            return SendAsync<UpdateTrustedDeviceKeysRequest, DeviceResponse>(
+                HttpMethod.Put, $"/devices/${request.DeviceIdentifier}/keys", request, true, true);
         }
 
         #endregion
@@ -572,15 +594,6 @@ namespace Bit.Core.Services
         {
             var request = new PasswordlessLoginRequest(encKey, encMasterPasswordHash, deviceIdentifier, requestApproved);
             return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Put, $"/auth-requests/{id}", request, true, true);
-        }
-
-        public Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier)
-        {
-            return SendAsync<object, bool>(HttpMethod.Get, "/devices/knowndevice", null, false, true, (message) =>
-            {
-                message.Headers.Add("X-Device-Identifier", deviceIdentifier);
-                message.Headers.Add("X-Request-Email", CoreHelpers.Base64UrlEncode(Encoding.UTF8.GetBytes(email)));
-            });
         }
 
         #endregion

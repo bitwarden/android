@@ -1,7 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.App.Utilities.AccountManagement;
+using Bit.Core.Abstractions;
+using Bit.Core.Enums;
+using Bit.Core.Models.Request;
+using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace Bit.App.Pages
@@ -12,6 +18,8 @@ namespace Bit.App.Pages
         private bool _approveWithMyOtherDeviceEnabled;
         private bool _requestAdminApprovalEnabled;
         private bool _approveWithMasterPasswordEnabled;
+        private readonly IStateService _stateService;
+        private readonly IApiService _apiService;
 
         public ICommand ApproveWithMyOtherDeviceCommand { get; }
         public ICommand RequestAdminApprovalCommand { get; }
@@ -19,7 +27,11 @@ namespace Bit.App.Pages
 
         public LoginApproveDeviceViewModel()
         {
+            _stateService = ServiceContainer.Resolve<IStateService>(); 
+            _apiService = ServiceContainer.Resolve<IApiService>();
+
             PageTitle = AppResources.LoggedIn;
+
             ApproveWithMyOtherDeviceCommand = new AsyncCommand(InitAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
@@ -59,9 +71,25 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            ApproveWithMyOtherDeviceEnabled = true;
-            RequestAdminApprovalEnabled = true;
-            ApproveWithMasterPasswordEnabled = true;
+            try
+            {
+                var decryptOptions = await _stateService.GetAccountDecryptionOptions();
+                RequestAdminApprovalEnabled = decryptOptions.TrustedDeviceOption.HasAdminApproval;
+                ApproveWithMasterPasswordEnabled = decryptOptions.HasMasterPassword;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
+
+            try
+            {
+                ApproveWithMyOtherDeviceEnabled = await _apiService.GetDevicesExistenceByTypes(DeviceTypeExtensions.GetDesktopAndMobileTypes().ToArray());
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
         }
     }
 }

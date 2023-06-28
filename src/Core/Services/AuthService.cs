@@ -459,6 +459,7 @@ namespace Bit.Core.Services
                         ForcePasswordResetReason = result.ForcePasswordReset
                             ? ForcePasswordResetReason.AdminForcePasswordReset
                             : (ForcePasswordResetReason?)null,
+                        UserDecryptionOptions = tokenResponse.UserDecryptionOptions,
                     },
                     new Account.AccountTokens()
                     {

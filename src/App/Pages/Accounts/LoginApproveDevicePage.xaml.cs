@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Bit.App.Models;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -9,7 +9,7 @@ namespace Bit.App.Pages
     {
 
         private readonly LoginApproveDeviceViewModel _vm;
-        public LoginApproveDevicePage()
+        public LoginApproveDevicePage(AppOptions appOptions = null)
         {
             InitializeComponent();
             _vm = BindingContext as LoginApproveDeviceViewModel;

@@ -1280,6 +1280,13 @@ namespace Bit.Core.Services
             await SetValueAsync(Constants.PreLoginEmailKey, value, options);
         }
 
+        public async Task<AccountDecryptionOptions> GetAccountDecryptionOptions(string userId = null)
+        {
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            ))?.Profile?.UserDecryptionOptions;
+        }
+
         // Helpers
 
         [Obsolete("Use IStorageMediatorService instead")]
