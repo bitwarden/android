@@ -72,8 +72,7 @@
                     <StackLayout StyleClass="box" AutomationId="ItemInformationSection">
                         <StackLayout StyleClass="box-row-header">
                             <Label Text="{u:I18n ItemInformation, Header=True}"
-                                   StyleClass="box-header, box-header-platform"
-                                   AutomationId="" />
+                                   StyleClass="box-header, box-header-platform" />
                         </StackLayout>
                         <StackLayout StyleClass="box-row" AutomationId="ItemRow">
                             <Label
@@ -196,7 +195,9 @@
                             </Grid>
                             <BoxView StyleClass="box-row-separator"
                                      IsVisible="{Binding Cipher.Login.Password, Converter={StaticResource stringHasValue}}" />
-                            <Grid StyleClass="box-row" IsVisible="{Binding ShowTotp}" AutomationId="ItemRow">
+                            <Grid StyleClass="box-row"
+                                  IsVisible="{Binding ShowTotp}"
+                                  AutomationId="ItemRow">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
