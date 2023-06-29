@@ -6237,6 +6237,16 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This item cannot be shared with the organization because there is one already with the same passkey..
+        /// </summary>
+        public static string ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey {
+            get {
+                return ResourceManager.GetString("ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePassk" +
+                        "ey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This request is no longer valid.
         /// </summary>
         public static string ThisRequestIsNoLongerValid {
