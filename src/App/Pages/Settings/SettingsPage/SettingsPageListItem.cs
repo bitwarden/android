@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.App.Utilities.Automation;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -22,5 +24,29 @@ namespace Bit.App.Pages
         public Color SubLabelColor => SubLabelTextEnabled ?
             ThemeManager.GetResourceColor("SuccessColor") :
             ThemeManager.GetResourceColor("MutedColor");
+
+        public string AutomationIdSettingName
+        {
+            get
+            {
+                return AutomationIdsHelper.AddSuffixFor(
+                    UseFrame ? "EnabledPolicy"
+                             : AutomationIdsHelper.ToEnglishTitleCase(Name)
+                    , SuffixType.Cell);
+            }
+        }
+
+        public string AutomationIdSettingStatus
+        {
+            get
+            {
+                if (UseFrame)
+                {
+                    return null;
+                }
+
+                return AutomationIdsHelper.AddSuffixFor(AutomationIdsHelper.ToEnglishTitleCase(Name), SuffixType.SettingValue);
+            }
+        }
     }
 }
