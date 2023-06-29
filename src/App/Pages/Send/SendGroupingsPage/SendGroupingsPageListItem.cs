@@ -66,5 +66,27 @@ namespace Bit.App.Pages
                 return _icon;
             }
         }
+
+        public string AutomationId
+        {
+            get
+            {
+                if (_name != null)
+                {
+                    return "SendItem";
+                }
+                if (Type != null)
+                {
+                    switch (Type.Value)
+                    {
+                        case SendType.Text:
+                            return "SendTextFilter";
+                        case SendType.File:
+                            return "SendFileFilter";
+                    }
+                }
+                return null;
+            }
+        }
     }
 }

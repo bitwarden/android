@@ -2495,8 +2495,8 @@
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>マスターパスワードのヒントを取得する</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>{0} としてログイン</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>{1} で {0} としてログイン</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>あなたではないですか？</value>
@@ -2609,10 +2609,31 @@
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>検索に一致するアイテムはありません</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>米国</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>自己ホスト型</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>データのリージョン</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>リージョン</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>マスターパスワードが組織のポリシーに適合していません。保管庫にアクセスするには、今すぐマスターパスワードを更新しなければなりません。続行すると現在のセッションからログアウトし、再度ログインする必要があります。 他のデバイス上のアクティブなセッションは、最大1時間アクティブであり続けることがあります。</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>現在のマスターパスワード</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>マスターパスワードの再プロンプトヘルプ</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>メモリ不足のためロック解除に失敗することがあります。KDF のメモリ設定を減らして解決してください</value>
   </data>
 </root>

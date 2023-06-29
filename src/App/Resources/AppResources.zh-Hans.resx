@@ -964,7 +964,7 @@
     <value>自定义环境</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>适用于高级用户，你可以分别指定各个服务的基础 URL。</value>
+    <value>适用于高级用户。你可以分别指定各个服务的基础 URL。</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
     <value>各环境 URL 已保存。</value>
@@ -2495,8 +2495,8 @@
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>获取主密码提示</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>正登录为 {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>在 {1} 上以 {0} 身份登录</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>不是你？</value>
@@ -2609,10 +2609,31 @@
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>没有匹配搜索条件的项目</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>美国</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>欧盟</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>自托管</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>数据区域</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>区域</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>您的主密码不符合某一项或多项组织策略要求。要访问密码库，必须立即更新您的主密码。继续操作将使您退出当前会话，并要求您重新登录。其他设备上的活动会话可能会继续保持活动状态长达一小时。</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>当前主密码</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>主密码重新询问帮助</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>解锁可能由于内存不足而失败。可以通过减少 KDF 内存设置来解决。</value>
   </data>
 </root>

@@ -2497,8 +2497,8 @@
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Добити савет за Главну Лозинку</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Пријављивање као {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Пријављено као {0} на {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Не ти?</value>
@@ -2611,10 +2611,31 @@
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Нема ставки које одговарају претрази</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Личан хостинг</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Регион података</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Регион</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Ваша главна лозинка не испуњава једну или више смерница ваше организације. Да бисте приступили сефу, морате одмах да ажурирате главну лозинку. Ако наставите, одјавићете се са ваше тренутне сесије, што захтева да се поново пријавите. Активне сесије на другим уређајима могу да остану активне до један сат.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Тренутна главна лозинка</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Помоћ поновно тражење главне лозинке</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Откључавање можда неће успети због недовољне меморије. Умањите подешавање KDF меморије за решење</value>
   </data>
 </root>

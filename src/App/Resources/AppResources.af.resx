@@ -1753,10 +1753,10 @@ Skandering gebeur outomaties.</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Biometriese ontgrendeling vir hierdie rekening is gedeaktiveer hangende bevestiging van hoofwagwoord.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Outovul-biometriese ontgrendeline vir hierdie rekening is gedeaktiveer hangende bevestiging van hoofwagwoord.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Aktiveer sinchronisering by verfrissing</value>
@@ -2495,8 +2495,8 @@ Wil u na die rekening omskakel?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Kry hoofwagwoord wenk</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Teken in as {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Teken aan as {0} op {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Nie jy nie?</value>
@@ -2609,10 +2609,31 @@ Wil u na die rekening omskakel?</value>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Daar is geen items wat met die soekterm ooreenstem nie</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>VS</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Selghehuisves</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Datastreek</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Streek</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
-    <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>U hoofwagwoord voldoen nie aan een of meer van die organisasiebeleide nie. Om toegang tot die kluis te kry, moet u nou u hoofwagwoord bywerk. Deur voort te gaan sal u van u huidige sessie afgeteken word, en u sal weer moet aanteken. Aktiewe sessies op ander toestelle kan vir tot een uur aktief bly.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
-    <value>Current master password</value>
+    <value>Huidige hoofwagwoord</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
   </data>
 </root>

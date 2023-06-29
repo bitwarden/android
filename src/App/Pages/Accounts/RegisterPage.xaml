@@ -35,7 +35,8 @@
                         x:Name="_email"
                         Text="{Binding Email}"
                         Keyboard="Email"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationId="EmailAddressEntry"/>
                 </StackLayout>
                 <Grid StyleClass="box-row">
                     <Grid.RowDefinitions>
@@ -59,7 +60,8 @@
                         IsTextPredictionEnabled="False"
                         IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
                         Grid.Row="1"
-                        Grid.Column="0" />
+                        Grid.Column="0"
+                        AutomationId="MasterPasswordEntry"/>
                     <controls:IconButton
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="{Binding ShowPasswordIcon}"
@@ -69,7 +71,8 @@
                         Grid.RowSpan="2"
                         AutomationProperties.IsInAccessibleTree="True"
                         AutomationProperties.Name="{u:I18n ToggleVisibility}" 
-                        AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"/>
+                        AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
+                        AutomationId="PasswordVisibilityToggle"/>
                 </Grid>
                 <Label
                     StyleClass="box-sub-label"
@@ -109,7 +112,8 @@
                         IsTextPredictionEnabled="False"
                         IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
                         Grid.Row="1"
-                        Grid.Column="0" />
+                        Grid.Column="0"
+                        AutomationId="ConfirmMasterPasswordEntry"/>
                     <controls:IconButton
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="{Binding ShowPasswordIcon}"
@@ -118,6 +122,7 @@
                         Grid.Column="1"
                         Grid.RowSpan="2"
                         AutomationProperties.IsInAccessibleTree="True"
+                        AutomationId="ConfirmPasswordVisibilityToggle"
                         AutomationProperties.Name="{u:I18n ToggleVisibility}"
                         AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}" />
                 </Grid>
@@ -130,7 +135,8 @@
                         Text="{Binding Hint}"
                         StyleClass="box-value"
                         ReturnType="Go"
-                        ReturnCommand="{Binding SubmitCommand}" />
+                        ReturnCommand="{Binding SubmitCommand}"
+                        AutomationId="MasterPasswordHintLabel" />
                 </StackLayout>
                 <Label
                     Text="{u:I18n MasterPasswordHintDescription}"
@@ -142,7 +148,8 @@
                         IsToggled="{Binding CheckExposedMasterPassword}"
                         StyleClass="box-value"
                         HorizontalOptions="Start"
-                        Margin="0, 0, 10, 0"/>
+                        Margin="0, 0, 10, 0"
+                        AutomationId="CheckExposedMasterPasswordToggle"/>
                     <Label
                         Text="{u:I18n CheckKnownDataBreachesForThisPassword}"
                         StyleClass="box-footer-label"
@@ -154,7 +161,8 @@
                         IsToggled="{Binding AcceptPolicies}"
                         StyleClass="box-value"
                         HorizontalOptions="Start"
-                        Margin="0, 0, 10, 0"/>
+                        Margin="0, 0, 10, 0"
+                        AutomationId="AcceptPoliciesToggle"/>
                     <Label StyleClass="box-footer-label"
                            HorizontalOptions="Fill">
                         <Label.FormattedText>

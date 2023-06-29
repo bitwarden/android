@@ -2495,8 +2495,8 @@ Do you want to switch to this account?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Get master password hint</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Logging in as {0} on {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Not you?</value>
@@ -2609,10 +2609,31 @@ Do you want to switch to this account?</value>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>There are no items that match the search</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Self-hosted</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Data region</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Current master password</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
   </data>
 </root>

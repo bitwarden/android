@@ -44,13 +44,15 @@
                 <controls:SendViewCell
                     Send="{Binding Send}"
                     ButtonCommand="{Binding BindingContext.SendOptionsCommand, Source={x:Reference _page}}"
-                    ShowOptions="{Binding BindingContext.SendEnabled, Source={x:Reference _page}}" />
+                    ShowOptions="{Binding BindingContext.SendEnabled, Source={x:Reference _page}}"
+                    AutomationId="SendCell" />
             </DataTemplate>
 
             <DataTemplate x:Key="sendGroupTemplate"
                           x:DataType="pages:SendGroupingsPageListItem">
                 <controls:ExtendedStackLayout Orientation="Horizontal" 
-                                              StyleClass="list-row, list-row-platform">
+                                              StyleClass="list-row, list-row-platform"
+                                              AutomationId="{Binding AutomationId}">
                     <controls:IconLabel Text="{Binding Icon, Mode=OneWay}"
                                       HorizontalOptions="Start"
                                       VerticalOptions="Center"
@@ -64,12 +66,14 @@
                            LineBreakMode="TailTruncation"
                            HorizontalOptions="FillAndExpand"
                            VerticalOptions="CenterAndExpand"
-                           StyleClass="list-title" />
+                           StyleClass="list-title"
+                           AutomationId="SendFilterNameLabel" />
                     <Label Text="{Binding ItemCount, Mode=OneWay}"
                            HorizontalOptions="End"
                            VerticalOptions="CenterAndExpand"
                            HorizontalTextAlignment="End"
-                           StyleClass="list-sub" />
+                           StyleClass="list-sub"
+                           AutomationId="SendFilterCountLabel" />
                 </controls:ExtendedStackLayout>
             </DataTemplate>
 

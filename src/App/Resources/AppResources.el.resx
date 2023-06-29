@@ -2495,8 +2495,8 @@
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Λάβετε υπόδειξη κύριου κωδικού</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Σύνδεση ως {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Σύνδεση ως {0} στις {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Δεν είστε εσείς;</value>
@@ -2609,10 +2609,31 @@
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Δεν υπάρχουν στοιχεία που να ταιριάζουν με την αναζήτηση</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Self-hosted</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Data region</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Περιοχή</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Ο κύριος κωδικός πρόσβασής σας δεν πληροί μία ή περισσότερες πολιτικές του οργανισμού σας. Για να αποκτήσετε πρόσβαση στο Vault σας, πρέπει να ενημερώσετε τον κύριο κωδικό πρόσβασής σας τώρα. Η διαδικασία θα σας αποσυνδέσει από την τρέχουσα συνεδρία σας, απαιτώντας από εσάς να συνδεθείτε ξανά. Οι ενεργές συνεδρίες σε άλλες συσκευές ενδέχεται να συνεχίσουν να είναι ενεργές εώς και μία ώρα.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Τρέχων κύριος κωδικός</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
   </data>
 </root>

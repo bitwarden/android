@@ -1753,10 +1753,10 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>تم تعطيل فتح القفل الحيوي لهذا الحساب في انتظار التحقق من كلمة المرور الرئيسية.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>إلغاء القفل الحيوي للملء التلقائي لهذا الحساب معطل في انتظار التحقق من كلمة المرور الرئيسية.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>تمكين المزامنة عند التحديث</value>
@@ -2496,8 +2496,8 @@
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>احصل على تلميح كلمة المرور الرئيسية</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>تسجيل الدخول كـ {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>تسجيل الدخول كـ {0} في {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>ليس أنت؟</value>
@@ -2610,10 +2610,31 @@
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>لا توجد عناصر تطابق البحث</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>الولايات المتحدة</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>الاتحاد الأوروبي</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>استضافة ذاتية</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>منطقة البيانات</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>المنطقة</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>كلمة المرور الرئيسية الخاصة بك لا تفي بواحدة أو أكثر من سياسات مؤسستك. من أجل الوصول إلى الخزنة، يجب عليك تحديث كلمة المرور الرئيسية الآن. سيتم تسجيل خروجك من الجلسة الحالية، مما يتطلب منك تسجيل الدخول مرة أخرى. وقد تظل الجلسات النشطة على أجهزة أخرى نشطة لمدة تصل إلى ساعة واحدة.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>كلمة المرور الرئيسية الحالية</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
   </data>
 </root>

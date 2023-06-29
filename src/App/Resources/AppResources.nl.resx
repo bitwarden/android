@@ -2495,8 +2495,8 @@ Wilt u naar dit account wisselen?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Hoofdwachtwoordhint krijgen</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Inloggen als {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Inloggen als {0} op {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Ben jij dit niet?</value>
@@ -2609,10 +2609,31 @@ Wilt u naar dit account wisselen?</value>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Er zijn geen items die overeenkomen met de zoekopdracht</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Zelfgehost</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Dataregio</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Regio</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Je hoofdwachtwoord voldoet niet aan en of meerdere oganisatiebeleidsonderdelen. Om toegang te krijgen tot de kluis, moet je je hoofdwachtwoord nu bijwerken. Doorgaan zal je huidige sessie uitloggen, waarna je opnieuw moet inloggen. Actieve sessies op andere apparaten blijven mogelijk nog een uur actief.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Huidig hoofdwachtwoord</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Hulptekst hoofdwachtwoord opnieuw vragen</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Ontgrendelen kan mislukken als er onvoldoende geheugen is. Verminder je KDF-geheugeninstellingen om dit op te lossen</value>
   </data>
 </root>

@@ -1753,10 +1753,10 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Біометричне розблокування для цього облікового запису вимкнено. Очікується перевірка головного пароля.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Біометричне розблокування під час автозаповнення для цього облікового запису вимкнено. Очікується перевірка головного пароля.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Дозволити синхронізацію жестом</value>
@@ -2495,8 +2495,8 @@
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Отримати підказку для головного пароля</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Вхід у систему як {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Вхід як {0} на {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Не ви?</value>
@@ -2609,10 +2609,31 @@
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Немає записів, що відповідають пошуку</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>США</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>ЄС</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Власне розміщення</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Регіон даних</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Регіон</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Ваш головний пароль не відповідає одній або більше політикам вашої організації. Щоб отримати доступ до сховища, вам необхідно оновити свій головний пароль зараз. Продовживши, ви вийдете з поточного сеансу, після чого потрібно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Поточний головний пароль</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Допомога щодо повторного запиту головного пароля</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Розблокування може не працювати через брак пам'яті. Зменште значення KDF у налаштуваннях, щоб розв'язати проблему.</value>
   </data>
 </root>

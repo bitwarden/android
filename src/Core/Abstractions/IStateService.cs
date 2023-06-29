@@ -175,5 +175,7 @@ namespace Bit.Core.Abstractions
         Task<AccountDecryptionOptions> GetAccountDecryptionOptions(string userId = null);
         string GetLocale();
         void SetLocale(string locale);
+        ConfigResponse GetConfigs();
+        void SetConfigs(ConfigResponse value);
     }
 }

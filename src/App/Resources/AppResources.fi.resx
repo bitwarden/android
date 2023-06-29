@@ -937,7 +937,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Tiedosto</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>Ei valittua tiedostoa</value>
+    <value>Tiedostoa ei ole valittu.</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
     <value>Ei liitteitä.</value>
@@ -1492,7 +1492,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Aseta PIN-koodi Bitwardenin avaukselle. PIN-asetukset tyhjentyvät, jos kirjaudut kokonaan ulos sovelluksesta.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Kirjautui tunnuksella {0} palvelimelle {1}.</value>
+    <value>Kirjautui palvelimelle {1} tunnuksella {0}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
@@ -1762,7 +1762,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Synkronoi holvi päivityksen yhteydessä</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Synkronoidaan holvi alasveto-eleellä.</value>
+    <value>Holvi synkronoidaan myös alasveto-eleellä suoritettavan päivityksen yhteydessä.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
     <value>Yrityksen kertakirjautuminen (SSO)</value>
@@ -2367,7 +2367,7 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
     <value>Hyväksy kirjautumispyyntöjä</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Hyväksy muiden laitteiden kirjautumispyynnöt tältä laitteelta.</value>
+    <value>Hyväksy laitteiden kirjautumispyyntöjä tältä laitteelta</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Salli ilmoitukset</value>
@@ -2496,8 +2496,8 @@ Haluatko vaihtaa tähän tiliin?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Pyydä pääsalasanan vihjettä</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Kirjaudutaan tunnuksella {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Kirjaudutaan palvelimelle {1} tunnuksella {0}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Etkö se ollut sinä?</value>
@@ -2542,7 +2542,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Pyynnöt hylättiin</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>Ei odottavia pyyntöjä</value>  
+    <value>Odottavia pyyntöjä ei ole</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Myönnä kameran käyttöoikeus skannerin käyttämiseksi</value>
@@ -2554,7 +2554,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Kieleksi vaihdettiin {0}. Käynnistä sovellus uudelleen nähdäksesi muutoksen.</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
-    <value>Kielen vaihto edellyttää sovelluksen uudelleenkäynnistyksen</value>
+    <value>Kielen vaihto vaatii sovelluksen uudelleenkäynnistyksen.</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
     <value>Oletus (järjestelmä)</value>
@@ -2610,10 +2610,31 @@ Haluatko vaihtaa tähän tiliin?</value>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Hakua vastaavia kohteita ei ole</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Itse ylläpidetty</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Tietoalue</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Alue</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Pääsalasanasi ei täytä yhden tai useamman organisaatiokäytännön vaatimuksia ja holvin käyttämiseksi sinun on vaihdettava se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Nykyinen pääsalasana</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Pääsalasanan uudelleenkyselyn ohje</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Lukituksen avaus voi epäonnistua riittämättömän keskusmuistin vuoksi. Tämän välttämiseksi voit madaltaa KDF-muistiasetuksiasi.</value>
   </data>
 </root>

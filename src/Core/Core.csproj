@@ -20,6 +20,7 @@
     <None Remove="Attributes\" />
     <None Remove="MessagePack" />
     <None Remove="MessagePack.MSBuild.Tasks" />
+    <None Remove="Services\EmailForwarders\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,5 +45,6 @@
   <ItemGroup>
     <Folder Include="Services\Logging\" />
     <Folder Include="Attributes\" />
+    <Folder Include="Services\EmailForwarders\" />
   </ItemGroup>
 </Project>
