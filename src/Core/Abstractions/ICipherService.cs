@@ -10,12 +10,6 @@ namespace Bit.Core.Abstractions
 {
     public interface ICipherService
     {
-        public enum ShareWithServerError
-        {
-            None,
-            DuplicatedPasskeyInOrg
-        }
-
         Task ClearAsync(string userId);
         Task ClearCacheAsync();
         Task DeleteAsync(List<string> ids);
@@ -37,7 +31,7 @@ namespace Bit.Core.Abstractions
         Task SaveCollectionsWithServerAsync(Cipher cipher);
         Task SaveNeverDomainAsync(string domain);
         Task SaveWithServerAsync(Cipher cipher);
-        Task<ShareWithServerError> ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds);
+        Task ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds);
         Task UpdateLastUsedDateAsync(string id);
         Task UpsertAsync(CipherData cipher);
         Task UpsertAsync(List<CipherData> cipher);

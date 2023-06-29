@@ -113,15 +113,8 @@ namespace Bit.App.Pages
             try
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
-                var error = await _cipherService.ShareWithServerAsync(cipherView, OrganizationId, checkedCollectionIds);
+                await _cipherService.ShareWithServerAsync(cipherView, OrganizationId, checkedCollectionIds);
                 await _deviceActionService.HideLoadingAsync();
-
-                if (error == ICipherService.ShareWithServerError.DuplicatedPasskeyInOrg)
-                {
-                    _platformUtilsService.ShowToast(null, null, AppResources.ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey);
-                    return false;
-                }
-
                 var movedItemToOrgText = string.Format(AppResources.MovedItemToOrg, cipherView.Name,
                    (await _organizationService.GetAsync(OrganizationId)).Name);
                 _platformUtilsService.ShowToast("success", null, movedItemToOrgText);
