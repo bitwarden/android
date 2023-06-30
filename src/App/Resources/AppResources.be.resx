@@ -2636,4 +2636,10 @@
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>Па прычыне недахопу памяці можа адбыцца збой разблакіроўкі. Паменшыце налады памяці KDF, каб вырашыць гэту праблему</value>
   </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Памылковы ключ API</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Памылковы токен API</value>
+  </data>
 </root>

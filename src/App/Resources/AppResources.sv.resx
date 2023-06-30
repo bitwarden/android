@@ -2638,4 +2638,10 @@ Vill du byta till detta konto?</value>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
   </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Ogiltig API-nyckel</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Ogiltig API-token</value>
+  </data>
 </root>

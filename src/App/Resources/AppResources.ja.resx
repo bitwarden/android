@@ -2636,4 +2636,10 @@
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>メモリ不足のためロック解除に失敗することがあります。KDF のメモリ設定を減らして解決してください</value>
   </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>無効な API キー</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>無効な API トークン</value>
+  </data>
 </root>

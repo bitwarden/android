@@ -2633,6 +2633,12 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>Ana parola yeniden istemi yardımı</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Yetersiz bellek nedeniyle kilit açma başarısız olabilir. Sorunu çözmek için KDF bellek ayarlarınızı azaltın</value>
+    <value>Yetersiz bellek nedeniyle kilit açma başarısız olabilir. Sorunu çözmek için KDF bellek ayarlarınızı azaltın.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Geçersiz API anahtarı</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Geçersiz API token'ı</value>
   </data>
 </root>
