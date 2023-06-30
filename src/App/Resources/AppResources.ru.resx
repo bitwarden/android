@@ -2636,4 +2636,10 @@
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>Разблокировка может завершиться ошибкой из-за нехватки памяти. Уменьшите настройки памяти KDF для решения этой проблемы</value>
   </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Некорректный ключ API</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Некорректный токен API</value>
+  </data>
 </root>

@@ -1101,7 +1101,7 @@ A leitura será efetuada automaticamente.</value>
     <value>Sra.</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Sra.</value>
+    <value>Menina</value>
   </data>
   <data name="Mx" xml:space="preserve">
     <value>Neutro</value>
@@ -1671,7 +1671,7 @@ A leitura será efetuada automaticamente.</value>
     <value>Esta exportação contém os dados do seu cofre num formato não encriptado. Não deve armazenar ou enviar o ficheiro exportado através de canais não seguros (como o e-mail). Elimine-o imediatamente após terminar a sua utilização.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
-    <value>Esta exportação encripta os seus dados utilizando a chave de encriptação da sua conta. Se alguma vez alterar a chave de encriptação da sua conta, deve exportar novamente, uma vez que não conseguirá desencriptar este ficheiro de exportação.</value>
+    <value>Esta exportação encripta os seus dados utilizando a chave de encriptação da sua conta. Se alguma vez regenerar a chave de encriptação da sua conta, deve exportar novamente, uma vez que não conseguirá desencriptar este ficheiro de exportação.</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
     <value>As chaves de encriptação da conta são únicas para cada conta de utilizador Bitwarden, pelo que não é possível importar uma exportação encriptada para uma conta diferente.</value>
@@ -2634,5 +2634,11 @@ Deseja mudar para esta conta?</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>O desbloqueio pode falhar devido a memória insuficiente. Diminua as definições de memória do KDF para resolver o problema.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Chave da API inválida</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Token da API inválido</value>
   </data>
 </root>

@@ -2636,4 +2636,10 @@ Soovid selle konto peale lülituda?</value>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
   </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Vigane API võti</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Vigane API token</value>
+  </data>
 </root>

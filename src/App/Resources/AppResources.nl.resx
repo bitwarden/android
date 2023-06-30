@@ -2636,4 +2636,10 @@ Wilt u naar dit account wisselen?</value>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>Ontgrendelen kan mislukken als er onvoldoende geheugen is. Verminder je KDF-geheugeninstellingen om dit op te lossen</value>
   </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Invalid API key</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Invalid API token</value>
+  </data>
 </root>
