@@ -19,6 +19,14 @@ namespace Bit.App.Pages
         protected override void OnAppearing(){
             _vm.InitAsync();
         }
+
+        private void Cancel_Clicked(object sender, EventArgs e)
+        {
+            if (DoOnce())
+            {
+                _vm.CloseAction();
+            }
+        }
     }
 }
 

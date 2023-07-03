@@ -18,12 +18,15 @@ namespace Bit.App.Pages
         private bool _approveWithMyOtherDeviceEnabled;
         private bool _requestAdminApprovalEnabled;
         private bool _approveWithMasterPasswordEnabled;
+        private bool _continueEnabled;
         private readonly IStateService _stateService;
         private readonly IApiService _apiService;
 
         public ICommand ApproveWithMyOtherDeviceCommand { get; }
         public ICommand RequestAdminApprovalCommand { get; }
         public ICommand ApproveWithMasterPasswordCommand { get; }
+        public ICommand ContinueCommand { get; }
+        public Action CloseAction { get; set; }
 
         public LoginApproveDeviceViewModel()
         {
@@ -41,6 +44,10 @@ namespace Bit.App.Pages
                 allowsMultipleExecutions: false);
 
             ApproveWithMasterPasswordCommand = new AsyncCommand(InitAsync,
+                onException: ex => HandleException(ex),
+                allowsMultipleExecutions: false);
+
+            ContinueCommand = new AsyncCommand(InitAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
         }
@@ -69,8 +76,16 @@ namespace Bit.App.Pages
             set => SetProperty(ref _approveWithMasterPasswordEnabled, value);
         }
 
+        public bool ContinueEnabled
+        {
+            get => _continueEnabled;
+            set => SetProperty(ref _continueEnabled, value);
+        }
+
         public async Task InitAsync()
         {
+            // Appears if the browser is trusted and shared the key with the app
+            ContinueEnabled = true;
             try
             {
                 var decryptOptions = await _stateService.GetAccountDecryptionOptions();
