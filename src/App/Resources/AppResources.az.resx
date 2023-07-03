@@ -2635,4 +2635,10 @@ Bu hesaba keçmək istəyirsiniz?</value>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>Yetərsiz yaddaşa görə kilid açma uğursuz ola bilər. Həll etmək üçün KDF yaddaş tənzimləmələrinizi azaldın</value>
   </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Yararsız API açarı</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Yararsız API tokeni</value>
+  </data>
 </root>

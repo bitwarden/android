@@ -2636,4 +2636,10 @@ select Add TOTP to store the key safely</value>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>Отключването може да бъде неуспешно заради недостатъчно памет. Намалете настройките на паметта за KDF, за да разрешите проблема.</value>
   </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Неправилен ключ за ППИ</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Неправилен идентификатор за ППИ</value>
+  </data>
 </root>

@@ -23,7 +23,15 @@ namespace Bit.iOS.Core.Renderers
 
 		protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			base.OnElementPropertyChanged(sender, e);
+            var label = sender as CustomLabel;
+            switch (e.PropertyName)
+            {
+                case nameof(CustomLabel.AutomationId):
+                    Control.AccessibilityIdentifier = label.AutomationId;
+                    break;
+            }
+
+            base.OnElementPropertyChanged(sender, e);
 
 			if (e.PropertyName == Label.FontProperty.PropertyName ||
 				e.PropertyName == Label.TextProperty.PropertyName ||

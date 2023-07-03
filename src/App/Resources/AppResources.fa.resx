@@ -2497,7 +2497,7 @@
     <value>دریافت یادآور کلمه عبور اصلی</value>
   </data>
   <data name="LoggingInAsXOnY" xml:space="preserve">
-    <value>Logging in as {0} on {1}</value>
+    <value>درحال وارد شدن به عنوان {0} در {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>شما نیستید؟</value>
@@ -2611,19 +2611,19 @@
     <value>هیچ موردی وجود ندارد که با جستجو مطابقت داشته باشد</value>
   </data>
   <data name="US" xml:space="preserve">
-    <value>US</value>
+    <value>امریکا</value>
   </data>
   <data name="EU" xml:space="preserve">
-    <value>EU</value>
+    <value>اروپا</value>
   </data>
   <data name="SelfHosted" xml:space="preserve">
-    <value>Self-hosted</value>
+    <value>خود میزبان</value>
   </data>
   <data name="DataRegion" xml:space="preserve">
-    <value>Data region</value>
+    <value>منطقه داده</value>
   </data>
   <data name="Region" xml:space="preserve">
-    <value>Region</value>
+    <value>منطقه</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>کلمه عبور اصلی شما با یک یا چند سیاست سازمان‌تان مطابقت ندارد. برای دسترسی به گاوصندوق، باید همین حالا کلمه عبور اصلی خود را به‌روز کنید. در صورت ادامه، شما از نشست فعلی خود خارج می‌شوید و باید دوباره وارد سیستم شوید. نشست فعال در دستگاه های دیگر ممکن است تا یک ساعت همچنان فعال باقی بمانند.</value>
@@ -2632,9 +2632,15 @@
     <value>کلمه عبور اصلی فعلی</value>
   </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
-    <value>Master password re-prompt help</value>
+    <value>راهنمای درخواست مجدد کلمه عبور اصلی</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
+    <value>باز کردن قفل ممکن است به دلیل حافظه ناکافی انجام شود. تنظیمات حافظه KDF خود را کاهش دهید تا حل شود.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Invalid API key</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Invalid API token</value>
   </data>
 </root>

@@ -2635,4 +2635,10 @@ Chcete se přepnout na tento účet?</value>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>Odemknutí může selhat z důvodu nedostatku paměti. Pro vyřešení snižte nastavení paměti KDF.</value>
   </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Neplatný klíč API</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Neplatný token API</value>
+  </data>
 </root>

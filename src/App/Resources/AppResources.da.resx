@@ -2636,4 +2636,10 @@ Vil du skifte til denne konto?</value>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>Oplåsning kan fejle grundet utilstrækkelig hukommelse. Reducér KDF-hukommelsesindstillinger for at afhjælpe</value>
   </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Ugyldig API-nøgle</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Ugyldigt API-token</value>
+  </data>
 </root>
