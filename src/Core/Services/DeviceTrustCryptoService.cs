@@ -1,12 +1,12 @@
 ﻿
-using System;
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 
-namespace Bit.Core.Abstractions
+namespace Bit.Core.Services
 {
-    public class DeviceCryptoService
+    public class DeviceTrustCryptoService : IDeviceTrustCryptoService
     {
         private readonly IApiService _apiService;
         private readonly IAppIdService _appIdService;
@@ -14,7 +14,9 @@ namespace Bit.Core.Abstractions
         private readonly ICryptoService _cryptoService;
         private readonly IStateService _stateService;
 
-        public DeviceCryptoService(
+        private const int DEVICE_KEY_SIZE = 64;
+
+        public DeviceTrustCryptoService(
             IApiService apiService,
             IAppIdService appIdService,
             ICryptoFunctionService cryptoFunctionService,
@@ -38,7 +40,7 @@ namespace Bit.Core.Abstractions
                 return null;
             }
             // Generate deviceKey
-            var deviceKey = await this.MakeDeviceKeyAsync();
+            var deviceKey = await MakeDeviceKeyAsync();
 
             // Generate asymmetric RSA key pair: devicePrivateKey, devicePublicKey
             var deviceKeyPair = await _cryptoFunctionService.RsaGenerateKeyPairAsync(2048);
@@ -49,37 +51,37 @@ namespace Bit.Core.Abstractions
 
             // Send encrypted keys to server
             var deviceIdentifier = await _appIdService.GetAppIdAsync();
-            var deviceRequest = new TrustedDeviceKeysRequest()
+            var deviceRequest = new TrustedDeviceKeysRequest
             {
                 EncryptedUserKey = (await encryptUserKeyTask).EncryptedString,
                 EncryptedPublicKey = (await encryptPublicKeyTask).EncryptedString,
                 EncryptedPrivateKey = (await encryptPrivateKeyTask).EncryptedString,
             };
-            return await _apiService.UpdateTrustedDeviceKeysAsync(deviceIdentifier, deviceRequest);
+
+            var deviceResponse = await _apiService.UpdateTrustedDeviceKeysAsync(deviceIdentifier, deviceRequest);
+
+            // Store device key if successful
+            await SetDeviceKeyAsync(deviceKey);
+            return deviceResponse;
         }
 
 
         public async Task<SymmetricCryptoKey> GetDeviceKeyAsync()
         {
-            // Check if device key already exists
-            var deviceKey = await this._stateService.GetDeviceKeyAsync();
-
-            return deviceKey != null
-                ? deviceKey
-                : await this.MakeDeviceKeyAsync();
+            return await _stateService.GetDeviceKeyAsync();
         }
 
 
         private async Task<SymmetricCryptoKey> MakeDeviceKeyAsync()
         {
             // Create 512-bit device key
-            var randomBytes = await _cryptoFunctionService.RandomBytesAsync(64);
-            var deviceKey = new SymmetricCryptoKey(randomBytes);
+            var randomBytes = await _cryptoFunctionService.RandomBytesAsync(DEVICE_KEY_SIZE);
+            return new SymmetricCryptoKey(randomBytes);
+        }
 
-            // Save new device key
-            await this._stateService.SetDeviceKeyAsync(deviceKey);
-            return deviceKey;
-
+        private async Task SetDeviceKeyAsync(SymmetricCryptoKey deviceKey)
+        {
+            await _stateService.SetDeviceKeyAsync(deviceKey);
         }
     }
 }
