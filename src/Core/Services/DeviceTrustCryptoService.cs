@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
@@ -52,11 +53,11 @@ namespace Bit.Core.Services
             var deviceKey = await MakeDeviceKeyAsync();
 
             // Generate asymmetric RSA key pair: devicePrivateKey, devicePublicKey
-            var deviceKeyPair = await _cryptoFunctionService.RsaGenerateKeyPairAsync(2048);
+            var (devicePublicKey, devicePrivateKey) = await _cryptoFunctionService.RsaGenerateKeyPairAsync(2048);
 
-            var encryptUserKeyTask = _cryptoService.RsaEncryptAsync(userKey.EncKey, deviceKeyPair.Item1);
-            var encryptPublicKeyTask = _cryptoService.EncryptAsync(deviceKeyPair.Item1, userKey);
-            var encryptPrivateKeyTask = _cryptoService.EncryptAsync(deviceKeyPair.Item2, deviceKey);
+            var encryptUserKeyTask = _cryptoService.RsaEncryptAsync(userKey.EncKey, devicePublicKey);
+            var encryptPublicKeyTask = _cryptoService.EncryptAsync(devicePublicKey, userKey);
+            var encryptPrivateKeyTask = _cryptoService.EncryptAsync(devicePrivateKey, deviceKey);
 
             // Send encrypted keys to server
             var deviceIdentifier = await _appIdService.GetAppIdAsync();
