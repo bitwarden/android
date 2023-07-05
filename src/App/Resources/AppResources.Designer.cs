@@ -419,6 +419,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Admin approval requested.
+        /// </summary>
+        public static string AdminApprovalRequested {
+            get {
+                return ResourceManager.GetString("AdminApprovalRequested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
         public static string All {
@@ -3286,15 +3295,6 @@ namespace Bit.App.Resources {
         public static string InvalidAPIKey {
             get {
                 return ResourceManager.GetString("InvalidAPIKey", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid API token.
-        /// </summary>
-        public static string InvalidAPIToken {
-            get {
-                return ResourceManager.GetString("InvalidAPIToken", resourceCulture);
             }
         }
         
@@ -6300,6 +6300,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Trouble logging in?.
+        /// </summary>
+        public static string TroubleLoggingIn {
+            get {
+                return ResourceManager.GetString("TroubleLoggingIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Try again.
         /// </summary>
         public static string TryAgain {
@@ -7196,6 +7205,24 @@ namespace Bit.App.Resources {
         public static string YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum {
             get {
                 return ResourceManager.GetString("YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your request has been sent to your admin..
+        /// </summary>
+        public static string YourRequestHasBeenSentToYourAdmin {
+            get {
+                return ResourceManager.GetString("YourRequestHasBeenSentToYourAdmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You will be notified once approved. .
+        /// </summary>
+        public static string YouWillBeNotifiedOnceApproved {
+            get {
+                return ResourceManager.GetString("YouWillBeNotifiedOnceApproved", resourceCulture);
             }
         }
         

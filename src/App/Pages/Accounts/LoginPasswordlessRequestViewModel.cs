@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -44,6 +45,7 @@ namespace Bit.App.Pages
         private string _email;
         private string _requestId;
         private string _requestAccessCode;
+        private AuthRequestType _authRequestType;
         // Item1 publicKey, Item2 privateKey
         private Tuple<byte[], byte[]> _requestKeyPair;
 
@@ -77,6 +79,69 @@ namespace Bit.App.Pages
         public ICommand CreatePasswordlessLoginCommand { get; }
         public ICommand CloseCommand { get; }
 
+        public string Tittle
+        {
+            get
+            {
+                switch (_authRequestType) {
+                    case AuthRequestType.LoginWithDevice:
+                        return AppResources.LogInInitiated;
+                    case AuthRequestType.AdminApproval:
+                        return AppResources.AdminApprovalRequested;
+                    default:
+                        return string.Empty;
+                };
+            }
+        }
+
+        public string SubTittle
+        {
+            get
+            {
+                switch (_authRequestType)
+                {
+                    case AuthRequestType.LoginWithDevice:
+                        return AppResources.ANotificationHasBeenSentToYourDevice;
+                    case AuthRequestType.AdminApproval:
+                        return AppResources.YourRequestHasBeenSentToYourAdmin;
+                    default:
+                        return string.Empty;
+                };
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                switch (_authRequestType)
+                {
+                    case AuthRequestType.LoginWithDevice:
+                        return AppResources.PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice;
+                    case AuthRequestType.AdminApproval:
+                        return AppResources.YouWillBeNotifiedOnceApproved;
+                    default:
+                        return string.Empty;
+                };
+            }
+        }
+
+        public string OtherOptions
+        {
+            get
+            {
+                switch (_authRequestType)
+                {
+                    case AuthRequestType.LoginWithDevice:
+                        return AppResources.NeedAnotherOption;
+                    case AuthRequestType.AdminApproval:
+                        return AppResources.TroubleLoggingIn;
+                    default:
+                        return string.Empty;
+                };
+            }
+        }
+
         public string FingerprintPhrase
         {
             get => _fingerprintPhrase;
@@ -87,6 +152,18 @@ namespace Bit.App.Pages
         {
             get => _email;
             set => SetProperty(ref _email, value);
+        }
+
+        public AuthRequestType AuthRequestType
+        {
+            get => _authRequestType;
+            set => SetProperty(ref _authRequestType, value, additionalPropertyNames: new string[]
+            {
+                nameof(Tittle),
+                nameof(SubTittle),
+                nameof(Description),
+                nameof(OtherOptions)
+            });
         }
 
         public void StartCheckLoginRequestStatus()
