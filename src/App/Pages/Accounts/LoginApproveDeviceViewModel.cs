@@ -19,6 +19,7 @@ namespace Bit.App.Pages
         private bool _requestAdminApprovalEnabled;
         private bool _approveWithMasterPasswordEnabled;
         private bool _continueEnabled;
+        private string _email;
         private readonly IStateService _stateService;
         private readonly IApiService _apiService;
 
@@ -26,6 +27,12 @@ namespace Bit.App.Pages
         public ICommand RequestAdminApprovalCommand { get; }
         public ICommand ApproveWithMasterPasswordCommand { get; }
         public ICommand ContinueCommand { get; }
+
+        public Action StartTwoFactorAction { get; set; }
+        public Action LogInSuccessAction { get; set; }
+        public Action UpdateTempPasswordAction { get; set; }
+        public Action LogInWithDeviceAction { get; set; }
+        public Action RequestAdminApprovalAction { get; set; }
         public Action CloseAction { get; set; }
 
         public LoginApproveDeviceViewModel()
@@ -39,7 +46,7 @@ namespace Bit.App.Pages
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            RequestAdminApprovalCommand = new AsyncCommand(InitAsync,
+            RequestAdminApprovalCommand = new AsyncCommand(RequestAdminApproval,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
@@ -82,6 +89,12 @@ namespace Bit.App.Pages
             set => SetProperty(ref _continueEnabled, value);
         }
 
+        public string Email
+        {
+            get => _email;
+            set => SetProperty(ref _email, value);
+        }
+
         public async Task InitAsync()
         {
             // Appears if the browser is trusted and shared the key with the app
@@ -100,6 +113,18 @@ namespace Bit.App.Pages
             try
             {
                 ApproveWithMyOtherDeviceEnabled = await _apiService.GetDevicesExistenceByTypes(DeviceTypeExtensions.GetDesktopAndMobileTypes().ToArray());
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
+        }
+
+        private Task RequestAdminApproval()
+        {
+            try
+            {
+                RequestAdminApprovalAction?.Invoke();
             }
             catch (Exception ex)
             {
