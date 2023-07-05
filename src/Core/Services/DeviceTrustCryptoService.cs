@@ -55,17 +55,13 @@ namespace Bit.Core.Services
             // Generate asymmetric RSA key pair: devicePrivateKey, devicePublicKey
             var (devicePublicKey, devicePrivateKey) = await _cryptoFunctionService.RsaGenerateKeyPairAsync(2048);
 
-            var encryptUserKeyTask = _cryptoService.RsaEncryptAsync(userKey.EncKey, devicePublicKey);
-            var encryptPublicKeyTask = _cryptoService.EncryptAsync(devicePublicKey, userKey);
-            var encryptPrivateKeyTask = _cryptoService.EncryptAsync(devicePrivateKey, deviceKey);
-
             // Send encrypted keys to server
             var deviceIdentifier = await _appIdService.GetAppIdAsync();
             var deviceRequest = new TrustedDeviceKeysRequest
             {
-                EncryptedUserKey = (await encryptUserKeyTask).EncryptedString,
-                EncryptedPublicKey = (await encryptPublicKeyTask).EncryptedString,
-                EncryptedPrivateKey = (await encryptPrivateKeyTask).EncryptedString,
+                EncryptedUserKey = (await _cryptoService.RsaEncryptAsync(userKey.EncKey, devicePublicKey)).EncryptedString,
+                EncryptedPublicKey = (await _cryptoService.EncryptAsync(devicePublicKey, userKey)).EncryptedString,
+                EncryptedPrivateKey = (await _cryptoService.EncryptAsync(devicePrivateKey, deviceKey)).EncryptedString,
             };
 
             var deviceResponse = await _apiService.UpdateTrustedDeviceKeysAsync(deviceIdentifier, deviceRequest);
