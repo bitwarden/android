@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.App.Models;
 using Bit.App.Utilities;
+using Bit.Core.Enums;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -12,7 +13,7 @@ namespace Bit.App.Pages
         private LoginPasswordlessRequestViewModel _vm;
         private readonly AppOptions _appOptions;
 
-        public LoginPasswordlessRequestPage(string email, AppOptions appOptions = null)
+        public LoginPasswordlessRequestPage(string email, AuthRequestType authRequestType, AppOptions appOptions = null)
         {
             InitializeComponent();
             _appOptions = appOptions;
