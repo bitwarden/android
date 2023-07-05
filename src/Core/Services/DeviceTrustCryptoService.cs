@@ -30,6 +30,15 @@ namespace Bit.Core.Services
             _stateService = stateService;
         }
 
+        public async Task<SymmetricCryptoKey> GetDeviceKeyAsync()
+        {
+            return await _stateService.GetDeviceKeyAsync();
+        }
+
+        private async Task SetDeviceKeyAsync(SymmetricCryptoKey deviceKey)
+        {
+            await _stateService.SetDeviceKeyAsync(deviceKey);
+        }
 
         public async Task<DeviceResponse> TrustDeviceAsync()
         {
@@ -65,23 +74,11 @@ namespace Bit.Core.Services
             return deviceResponse;
         }
 
-
-        public async Task<SymmetricCryptoKey> GetDeviceKeyAsync()
-        {
-            return await _stateService.GetDeviceKeyAsync();
-        }
-
-
         private async Task<SymmetricCryptoKey> MakeDeviceKeyAsync()
         {
             // Create 512-bit device key
             var randomBytes = await _cryptoFunctionService.RandomBytesAsync(DEVICE_KEY_SIZE);
             return new SymmetricCryptoKey(randomBytes);
-        }
-
-        private async Task SetDeviceKeyAsync(SymmetricCryptoKey deviceKey)
-        {
-            await _stateService.SetDeviceKeyAsync(deviceKey);
         }
     }
 }
