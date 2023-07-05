@@ -56,6 +56,8 @@ namespace Bit.Core.Abstractions
         Task SetOrgKeysEncryptedAsync(Dictionary<string, string> value, string userId = null);
         Task<string> GetPrivateKeyEncryptedAsync(string userId = null);
         Task SetPrivateKeyEncryptedAsync(string value, string userId = null);
+        Task<SymmetricCryptoKey> GetDeviceKeyAsync(string userId = null);
+        Task SetDeviceKeyAsync(SymmetricCryptoKey value, string userId = null);
         Task<List<string>> GetAutofillBlacklistedUrisAsync(string userId = null);
         Task SetAutofillBlacklistedUrisAsync(List<string> value, string userId = null);
         Task<bool?> GetAutofillTileAddedAsync();
