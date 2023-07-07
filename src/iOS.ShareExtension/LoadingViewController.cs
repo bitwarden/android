@@ -350,7 +350,7 @@ namespace Bit.iOS.ShareExtension
 
         private void LaunchLoginWithDevice(string email = null)
         {
-            var loginWithDevicePage = new LoginPasswordlessRequestPage(email, AuthRequestType.LoginWithDevice, _appOptions.Value);
+            var loginWithDevicePage = new LoginPasswordlessRequestPage(email, AuthRequestType.AuthenticateAndUnlock, _appOptions.Value);
             SetupAppAndApplyResources(loginWithDevicePage);
             if (loginWithDevicePage.BindingContext is LoginPasswordlessRequestViewModel vm)
             {

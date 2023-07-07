@@ -2658,6 +2658,9 @@ Do you want to switch to this account?</value>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Invalid API key</value>
   </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Invalid API token</value>
+  </data>
   <data name="AdminApprovalRequested" xml:space="preserve">
     <value>Admin approval requested</value>
   </data>
@@ -2669,5 +2672,8 @@ Do you want to switch to this account?</value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
     <value>Trouble logging in?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Logging in as {0}</value>
   </data>
 </root>

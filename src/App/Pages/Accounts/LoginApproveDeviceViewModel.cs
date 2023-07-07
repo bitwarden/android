@@ -7,8 +7,10 @@ using Bit.App.Utilities.AccountManagement;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Request;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -28,9 +30,7 @@ namespace Bit.App.Pages
         public ICommand ApproveWithMasterPasswordCommand { get; }
         public ICommand ContinueCommand { get; }
 
-        public Action StartTwoFactorAction { get; set; }
-        public Action LogInSuccessAction { get; set; }
-        public Action UpdateTempPasswordAction { get; set; }
+        public Action LogInWithMasterPassword { get; set; }
         public Action LogInWithDeviceAction { get; set; }
         public Action RequestAdminApprovalAction { get; set; }
         public Action CloseAction { get; set; }
@@ -42,15 +42,15 @@ namespace Bit.App.Pages
 
             PageTitle = AppResources.LoggedIn;
 
-            ApproveWithMyOtherDeviceCommand = new AsyncCommand(InitAsync,
+            ApproveWithMyOtherDeviceCommand = new AsyncCommand(() => Device.InvokeOnMainThreadAsync(LogInWithDeviceAction),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            RequestAdminApprovalCommand = new AsyncCommand(RequestAdminApproval,
+            RequestAdminApprovalCommand = new AsyncCommand(() => Device.InvokeOnMainThreadAsync(RequestAdminApprovalAction),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            ApproveWithMasterPasswordCommand = new AsyncCommand(InitAsync,
+            ApproveWithMasterPasswordCommand = new AsyncCommand(() => Device.InvokeOnMainThreadAsync(LogInWithMasterPassword),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
@@ -58,6 +58,8 @@ namespace Bit.App.Pages
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
         }
+
+        public string LoggingInAsText => string.Format(AppResources.LoggingInAsX, Email);
 
         public bool RememberThisDevice
         {
@@ -92,7 +94,10 @@ namespace Bit.App.Pages
         public string Email
         {
             get => _email;
-            set => SetProperty(ref _email, value);
+            set => SetProperty(ref _email, value, additionalPropertyNames:
+                new string[] {
+                    nameof(LoggingInAsText)
+                });
         }
 
         public async Task InitAsync()
@@ -113,18 +118,6 @@ namespace Bit.App.Pages
             try
             {
                 ApproveWithMyOtherDeviceEnabled = await _apiService.GetDevicesExistenceByTypes(DeviceTypeExtensions.GetDesktopAndMobileTypes().ToArray());
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-            }
-        }
-
-        private Task RequestAdminApproval()
-        {
-            try
-            {
-                RequestAdminApprovalAction?.Invoke();
             }
             catch (Exception ex)
             {

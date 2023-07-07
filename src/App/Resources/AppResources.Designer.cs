@@ -3299,6 +3299,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid API token.
+        /// </summary>
+        public static string InvalidAPIToken {
+            get {
+                return ResourceManager.GetString("InvalidAPIToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid email address..
         /// </summary>
         public static string InvalidEmail {
@@ -3628,6 +3637,15 @@ namespace Bit.App.Resources {
         public static string LoggingIn {
             get {
                 return ResourceManager.GetString("LoggingIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logging in as {0}.
+        /// </summary>
+        public static string LoggingInAsX {
+            get {
+                return ResourceManager.GetString("LoggingInAsX", resourceCulture);
             }
         }
         

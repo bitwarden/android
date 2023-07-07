@@ -1,10 +1,11 @@
 ﻿using System;
 namespace Bit.Core.Enums
 {
-    public enum AuthRequestType
+    public enum AuthRequestType : byte
     {
-        LoginWithDevice,
-        AdminApproval,
+        AuthenticateAndUnlock = 0,
+        Unlock = 1,
+        AdminApproval = 2
     }
 }
 

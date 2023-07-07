@@ -84,7 +84,7 @@ namespace Bit.App.Pages
             get
             {
                 switch (_authRequestType) {
-                    case AuthRequestType.LoginWithDevice:
+                    case AuthRequestType.AuthenticateAndUnlock:
                         return AppResources.LogInInitiated;
                     case AuthRequestType.AdminApproval:
                         return AppResources.AdminApprovalRequested;
@@ -100,7 +100,7 @@ namespace Bit.App.Pages
             {
                 switch (_authRequestType)
                 {
-                    case AuthRequestType.LoginWithDevice:
+                    case AuthRequestType.AuthenticateAndUnlock:
                         return AppResources.ANotificationHasBeenSentToYourDevice;
                     case AuthRequestType.AdminApproval:
                         return AppResources.YourRequestHasBeenSentToYourAdmin;
@@ -116,7 +116,7 @@ namespace Bit.App.Pages
             {
                 switch (_authRequestType)
                 {
-                    case AuthRequestType.LoginWithDevice:
+                    case AuthRequestType.AuthenticateAndUnlock:
                         return AppResources.PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice;
                     case AuthRequestType.AdminApproval:
                         return AppResources.YouWillBeNotifiedOnceApproved;
@@ -132,7 +132,7 @@ namespace Bit.App.Pages
             {
                 switch (_authRequestType)
                 {
-                    case AuthRequestType.LoginWithDevice:
+                    case AuthRequestType.AuthenticateAndUnlock:
                         return AppResources.NeedAnotherOption;
                     case AuthRequestType.AdminApproval:
                         return AppResources.TroubleLoggingIn;
@@ -245,7 +245,7 @@ namespace Bit.App.Pages
         {
             await Device.InvokeOnMainThreadAsync(() => _deviceActionService.ShowLoadingAsync(AppResources.Loading));
 
-            var response = await _authService.PasswordlessCreateLoginRequestAsync(_email);
+            var response = await _authService.PasswordlessCreateLoginRequestAsync(_email, AuthRequestType);
             if (response != null)
             {
                 FingerprintPhrase = response.FingerprintPhrase;

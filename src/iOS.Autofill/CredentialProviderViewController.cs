@@ -515,7 +515,7 @@ namespace Bit.iOS.Autofill
         {
             var appOptions = new AppOptions { IosExtension = true };
             var app = new App.App(appOptions);
-            var loginWithDevicePage = new LoginPasswordlessRequestPage(email, AuthRequestType.LoginWithDevice, appOptions);
+            var loginWithDevicePage = new LoginPasswordlessRequestPage(email, AuthRequestType.AuthenticateAndUnlock, appOptions);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(loginWithDevicePage);
             if (loginWithDevicePage.BindingContext is LoginPasswordlessRequestViewModel vm)

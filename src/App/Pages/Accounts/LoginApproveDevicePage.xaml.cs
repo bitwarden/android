@@ -19,9 +19,7 @@ namespace Bit.App.Pages
         {
             InitializeComponent();
             _vm = BindingContext as LoginApproveDeviceViewModel;
-            _vm.StartTwoFactorAction = () => StartTwoFactorAsync().FireAndForget(); ;
-            _vm.LogInSuccessAction = () => LogInSuccessAsync().FireAndForget(); ;
-            _vm.UpdateTempPasswordAction = () => UpdateTempPasswordAsync().FireAndForget(); ;
+            _vm.LogInWithMasterPassword = () => StartLogInWithMasterPassword().FireAndForget();
             _vm.LogInWithDeviceAction = () => StartLoginWithDeviceAsync().FireAndForget();
             _vm.RequestAdminApprovalAction = () => RequestAdminApprovalAsync().FireAndForget();
             _vm.CloseAction = () => { Navigation.PopModalAsync(); };
@@ -42,31 +40,16 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task StartTwoFactorAsync()
+        private async Task StartLogInWithMasterPassword()
         {
             var page = new TwoFactorPage(false, _appOptions);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
-        private async Task LogInSuccessAsync()
-        {
-            if (AppHelpers.SetAlternateMainPage(_appOptions))
-            {
-                return;
-            }
-            var previousPage = await AppHelpers.ClearPreviousPage();
-            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
-        }
-
-        private async Task UpdateTempPasswordAsync()
-        {
-            var page = new UpdateTempPasswordPage();
-            await Navigation.PushModalAsync(new NavigationPage(page));
-        }
 
         private async Task StartLoginWithDeviceAsync()
         {
-            var page = new LoginPasswordlessRequestPage(_vm.Email, AuthRequestType.LoginWithDevice, _appOptions);
+            var page = new LoginPasswordlessRequestPage(_vm.Email, AuthRequestType.AuthenticateAndUnlock, _appOptions);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 

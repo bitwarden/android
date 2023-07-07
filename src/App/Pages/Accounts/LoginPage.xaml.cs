@@ -136,7 +136,7 @@ namespace Bit.App.Pages
 
         private async Task StartLoginWithDeviceAsync()
         {
-            var page = new LoginPasswordlessRequestPage(_vm.Email, AuthRequestType.LoginWithDevice, _appOptions);
+            var page = new LoginPasswordlessRequestPage(_vm.Email, AuthRequestType.AuthenticateAndUnlock, _appOptions);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
