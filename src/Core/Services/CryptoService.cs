@@ -36,6 +36,37 @@ namespace Bit.Core.Services
             _cryptoFunctionService = cryptoFunctionService;
         }
 
+        public async Task SetUserKeyAsync(UserKey key)
+        {
+            await _stateService.SetUserKeyAsync(key);
+        }
+
+        public async Task<UserKey> GetUserKey(string userId = null)
+        {
+            return await _stateService.GetUserKeyAsync(userId);
+        }
+
+        public async Task SetMasterKey(MasterKey masterKey, string userId = null)
+        {
+            await _stateService.SetMasterKeyAsync(masterKey, userId);
+        }
+
+        public async Task<MasterKey> GetMasterKey(string userId = null)
+        {
+            var masterKey = await _stateService.GetMasterKeyAsync(userId);
+            if (masterKey == null)
+            {
+                // Migration support
+                var encMasterKey = await _stateService.GetKeyEncryptedAsync(userId);
+                masterKey = new MasterKey(Convert.FromBase64String(encMasterKey));
+                await this.SetMasterKey(masterKey, userId);
+            }
+            return masterKey;
+        }
+
+
+
+
         public async Task SetKeyAsync(SymmetricCryptoKey key)
         {
             await _stateService.SetKeyDecryptedAsync(key);
@@ -49,7 +80,7 @@ namespace Bit.Core.Services
             await _stateService.SetKeyEncryptedAsync(key?.KeyB64);
         }
 
-        public async Task SetKeyHashAsync(string keyHash)
+        public async Task SetPasswordHashAsync(string keyHash)
         {
             _keyHash = keyHash;
             await _stateService.SetKeyHashAsync(keyHash);
@@ -289,7 +320,7 @@ namespace Bit.Core.Services
                 var serverKeyHash = await HashPasswordAsync(masterPassword, key, HashPurpose.ServerAuthorization);
                 if (serverKeyHash != null & storedKeyHash == serverKeyHash)
                 {
-                    await SetKeyHashAsync(localKeyHash);
+                    await SetPasswordHashAsync(localKeyHash);
                     return true;
                 }
             }
@@ -818,6 +849,19 @@ namespace Bit.Core.Services
             }
 
             return await _cryptoFunctionService.RsaDecryptAsync(data, privateKey, alg);
+        }
+
+        private async Task<UserKey> GetUserKeyWithLegacySupport(string userId = null)
+        {
+            var userKey = await GetUserKey();
+            if (userKey != null)
+            {
+                return userKey;
+            }
+
+            // Legacy support: encryption used to be done with the master key (derived from master password).
+            // Users who have not migrated will have a null user key and must use the master key instead.
+            return (SymmetricCryptoKey)await GetMasterKey() as UserKey;
         }
 
         private async Task<SymmetricCryptoKey> GetKeyForEncryptionAsync(SymmetricCryptoKey key = null)
