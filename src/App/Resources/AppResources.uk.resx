@@ -2630,4 +2630,16 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Поточний головний пароль</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Допомога щодо повторного запиту головного пароля</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Розблокування може не працювати через брак пам'яті. Зменште значення KDF у налаштуваннях, щоб розв'язати проблему.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Недійсний ключ API</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Недійсний токен API</value>
+  </data>
 </root>

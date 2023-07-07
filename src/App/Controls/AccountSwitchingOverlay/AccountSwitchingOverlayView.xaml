@@ -30,13 +30,15 @@
                 BackgroundColor="{DynamicResource BackgroundColor}"
                 VerticalOptions="Start"
                 RowHeight="{Binding AccountListRowHeight, Source={x:Reference _mainOverlay}}"
-                effects:ScrollViewContentInsetAdjustmentBehaviorEffect.ContentInsetAdjustmentBehavior="Never">
+                effects:ScrollViewContentInsetAdjustmentBehaviorEffect.ContentInsetAdjustmentBehavior="Never"
+                AutomationId="AccountListView">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="view:AccountView">
                         <controls:AccountViewCell
                             Account="{Binding .}"
                             SelectAccountCommand="{Binding SelectAccountCommand, Source={x:Reference _mainOverlay}}"
                             LongPressAccountCommand="{Binding LongPressAccountCommand, Source={x:Reference _mainOverlay}}"
+                            AutomationId="AccountViewCell"
                             />
                     </DataTemplate>
                 </ListView.ItemTemplate>

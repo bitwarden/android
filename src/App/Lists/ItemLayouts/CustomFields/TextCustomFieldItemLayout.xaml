@@ -29,19 +29,24 @@
             Text="{Binding Field.Name, Mode=OneWay}"
             StyleClass="box-label"
             Grid.Row="0"
-            Grid.Column="0" />
+            Grid.Column="0"
+            AutomationId="TextCustomFieldNameLabel" />
         <Label
             Text="{Binding ValueText, Mode=OneWay}"
             StyleClass="box-value"
             Grid.Row="1"
             Grid.Column="0"
-            IsVisible="{Binding IsEditing, Mode=OneWay, Converter={StaticResource inverseBool}}" />
+            IsVisible="{Binding IsEditing, Mode=OneWay, Converter={StaticResource inverseBool}}"
+            AutomationId="TextCustomFieldValueLabel" />
         <Entry
             Text="{Binding Field.Value}"
             StyleClass="box-value"
             Grid.Row="1"
             Grid.Column="0"
-            IsVisible="{Binding IsEditing}" />
+            IsVisible="{Binding IsEditing}"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{Binding Field.Name}"
+            AutomationId="TextCustomFieldValueEntry" />
         <controls:IconButton
             StyleClass="box-row-button, box-row-button-platform"
             Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
@@ -51,7 +56,8 @@
             Grid.Column="1"
             Grid.RowSpan="2"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Copy}" />
+            AutomationProperties.Name="{u:I18n Copy}"
+            AutomationId="TextCustomFieldCopyValue" />
         <controls:IconButton 
             StyleClass="box-row-button, box-row-button-platform"
             Text="{Binding Source={x:Static core:BitwardenIcons.Cog}}"
@@ -61,7 +67,8 @@
             Grid.Column="1"
             Grid.RowSpan="2"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Options}" />
+            AutomationProperties.Name="{u:I18n Options}"
+            AutomationId="TextCustomFieldOptionsButton" />
     </Grid>
     <BoxView StyleClass="box-row-separator" IsVisible="{Binding IsEditing, Mode=OneWay, Converter={StaticResource inverseBool}}" />
 </StackLayout>

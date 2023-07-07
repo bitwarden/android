@@ -159,6 +159,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Effects\RemoveFontPaddingEffect.cs" />
     <Compile Include="Services\WatchDeviceService.cs" />
+    <Compile Include="Renderers\CustomLabelRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\bwi-font.ttf" />

@@ -27,7 +27,8 @@
                          Clicked="Clear_Clicked"
                          Order="Secondary"
                          x:Name="_clearItem"
-                         x:Key="clearItem" />
+                         x:Key="clearItem"
+                         AutomationId="ClearPasswordList" />
             <ToolbarItem Icon="more_vert.png"
                          AutomationProperties.IsInAccessibleTree="True"
                          AutomationProperties.Name="{u:I18n Options}"
@@ -43,7 +44,8 @@
                Margin="20, 0"
                VerticalOptions="CenterAndExpand"
                HorizontalOptions="CenterAndExpand"
-               HorizontalTextAlignment="Center"></Label>
+               HorizontalTextAlignment="Center"
+               AutomationId="NoPasswordsDisplayedLabel"></Label>
         <controls:ExtendedCollectionView
                   IsVisible="{Binding ShowNoData, Converter={StaticResource inverseBool}}"
                   ItemsSource="{Binding History}"
@@ -56,7 +58,8 @@
                         StyleClass="list-row, list-row-platform"
                         Padding="10"
                         RowSpacing="0"
-                        ColumnSpacing="10">
+                        ColumnSpacing="10"
+                        AutomationId="GeneratedPasswordRow">
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -71,12 +74,14 @@
                             Grid.Column="0"
                             Grid.Row="0"
                             StyleClass="list-title, list-title-platform, text-html"
-                            Text="{Binding Password, Mode=OneWay, Converter={StaticResource coloredPassword}}" />
+                            Text="{Binding Password, Mode=OneWay, Converter={StaticResource coloredPassword}}"
+                            AutomationId="GeneratedPasswordValue" />
                         <Label LineBreakMode="TailTruncation"
                             Grid.Column="0"
                             Grid.Row="1"
                             StyleClass="list-subtitle, list-subtitle-platform"
-                            Text="{Binding Date, Mode=OneWay, Converter={StaticResource dateTime}}" />
+                            Text="{Binding Date, Mode=OneWay, Converter={StaticResource dateTime}}"
+                            AutomationId="GeneratedPasswordDateLabel" />
                         <controls:IconButton
                             StyleClass="list-row-button, list-row-button-platform"
                             Text="{Binding Source={x:Static core:BitwardenIcons.Paste}}"
@@ -86,7 +91,8 @@
                             Grid.Column="1"
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n CopyPassword}" />
+                            AutomationProperties.Name="{u:I18n CopyPassword}"
+                            AutomationId="CopyPasswordValueButton" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

@@ -964,7 +964,7 @@
     <value>自定义环境</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>适用于高级用户，你可以分别指定各个服务的基础 URL。</value>
+    <value>适用于高级用户。你可以分别指定各个服务的基础 URL。</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
     <value>各环境 URL 已保存。</value>
@@ -2629,5 +2629,17 @@
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>当前主密码</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>主密码重新询问帮助</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>内存不足可能导致解锁失败。可以通过减少 KDF 内存设置来解决。</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>无效的 API 密钥</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>无效的 API 令牌</value>
   </data>
 </root>

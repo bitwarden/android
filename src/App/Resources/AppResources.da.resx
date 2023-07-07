@@ -2630,4 +2630,16 @@ Vil du skifte til denne konto?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Aktuel hovedadgangskode</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Hjælp til genanmodning om hovedadgangskode</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Oplåsning kan fejle grundet utilstrækkelig hukommelse. Reducér KDF-hukommelsesindstillinger for at afhjælpe</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Ugyldig API-nøgle</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Ugyldigt API-token</value>
+  </data>
 </root>

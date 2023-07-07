@@ -2632,4 +2632,16 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Тренутна главна лозинка</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Помоћ поновно тражење главне лозинке</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Откључавање можда неће успети због недовољне меморије. Умањите подешавање KDF меморије за решење</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Invalid API key</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Invalid API token</value>
+  </data>
 </root>

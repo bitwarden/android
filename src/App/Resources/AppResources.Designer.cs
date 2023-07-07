@@ -203,6 +203,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Biometric unlock for this account is disabled pending verification of master password..
+        /// </summary>
+        public static string AccountBiometricInvalidated {
+            get {
+                return ResourceManager.GetString("AccountBiometricInvalidated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Autofill biometric unlock for this account is disabled pending verification of master password..
+        /// </summary>
+        public static string AccountBiometricInvalidatedExtension {
+            get {
+                return ResourceManager.GetString("AccountBiometricInvalidatedExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your new account has been created! You may now log in..
         /// </summary>
         public static string AccountCreated {
@@ -964,24 +982,6 @@ namespace Bit.App.Resources {
         public static string BaseDomain {
             get {
                 return ResourceManager.GetString("BaseDomain", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Biometric unlock disabled pending verification of master password..
-        /// </summary>
-        public static string AccountBiometricInvalidated {
-            get {
-                return ResourceManager.GetString("AccountBiometricInvalidated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Biometric unlock for autofill disabled pending verification of master password..
-        /// </summary>
-        public static string AccountBiometricInvalidatedExtension {
-            get {
-                return ResourceManager.GetString("AccountBiometricInvalidatedExtension", resourceCulture);
             }
         }
         
@@ -3263,6 +3263,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid API key.
+        /// </summary>
+        public static string InvalidAPIKey {
+            get {
+                return ResourceManager.GetString("InvalidAPIKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid API token.
+        /// </summary>
+        public static string InvalidAPIToken {
+            get {
+                return ResourceManager.GetString("InvalidAPIToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid email address..
         /// </summary>
         public static string InvalidEmail {
@@ -3891,6 +3909,15 @@ namespace Bit.App.Resources {
         public static string MasterPasswordPolicyValidationTitle {
             get {
                 return ResourceManager.GetString("MasterPasswordPolicyValidationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Master password re-prompt help.
+        /// </summary>
+        public static string MasterPasswordRePromptHelp {
+            get {
+                return ResourceManager.GetString("MasterPasswordRePromptHelp", resourceCulture);
             }
         }
         
@@ -6422,6 +6449,15 @@ namespace Bit.App.Resources {
         public static string Unlock {
             get {
                 return ResourceManager.GetString("Unlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve..
+        /// </summary>
+        public static string UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve {
+            get {
+                return ResourceManager.GetString("UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve", resourceCulture);
             }
         }
         

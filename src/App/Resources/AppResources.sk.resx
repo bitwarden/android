@@ -2630,4 +2630,16 @@ Chcete prepnúť na toto konto?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Súčasné hlavné heslo</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Pomoc s opätovnou výzvou na zadanie hlavného hesla</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Odomknutie môže zlyhať z dôvodu nedostatku pamäte. Znížte nastavenia pamäte KDF, aby ste vyriešili problém</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Neplatný kľúč API</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Neplatný token API</value>
+  </data>
 </root>

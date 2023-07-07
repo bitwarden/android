@@ -9,7 +9,8 @@
     StyleClass="list-row, list-row-platform"
     RowSpacing="0"
     ColumnSpacing="0"
-    x:DataType="controls:CipherViewCellViewModel">
+    x:DataType="controls:CipherViewCellViewModel"
+    AutomationId="CipherCell">
 
     <Grid.Resources>
         <u:IconGlyphConverter x:Key="iconGlyphConverter"/>
@@ -36,7 +37,8 @@
         IsVisible="{Binding ShowIconImage, Converter={StaticResource inverseBool}}"
         Text="{Binding Cipher, Converter={StaticResource iconGlyphConverter}}"
         ShouldUpdateFontSizeDynamicallyForAccesibility="True"
-        AutomationProperties.IsInAccessibleTree="False" />
+        AutomationProperties.IsInAccessibleTree="False"
+        AutomationId="CipherTypeIcon" />
 
     <ff:CachedImage
         x:Name="_iconImage"
@@ -52,7 +54,8 @@
         Aspect="AspectFit"
         IsVisible="{Binding ShowIconImage}"
         Source="{Binding IconImageSource, Mode=OneTime}"
-        AutomationProperties.IsInAccessibleTree="False" />
+        AutomationProperties.IsInAccessibleTree="False"
+        AutomationId="CipherWebsiteIcon" />
 
     <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Padding="0, 7">
         <Grid.RowDefinitions>
@@ -71,7 +74,8 @@
             Grid.Column="0"
             Grid.Row="0"
             StyleClass="list-title, list-title-platform"
-            Text="{Binding Cipher.Name}" />
+            Text="{Binding Cipher.Name}"
+            AutomationId="CipherNameLabel" />
         <Label
             LineBreakMode="TailTruncation"
             Grid.Column="0"
@@ -80,7 +84,8 @@
             StyleClass="list-subtitle, list-subtitle-platform"
             Text="{Binding Cipher.SubTitle}"
             IsVisible="{Binding Source={RelativeSource Self}, Path=Text,
-                        Converter={StaticResource stringHasValueConverter}}"/>
+                        Converter={StaticResource stringHasValueConverter}}"
+            AutomationId="CipherSubTitleLabel" />
         <controls:IconLabel
             Grid.Column="1"
             Grid.Row="0"
@@ -91,7 +96,8 @@
             Text="{Binding Source={x:Static core:BitwardenIcons.Collection}}"
             IsVisible="{Binding Cipher.Shared, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Shared}" />
+            AutomationProperties.Name="{u:I18n Shared}"
+            AutomationId="CipherInCollectionIcon" />
         <controls:IconLabel
             Grid.Column="2"
             Grid.Row="0"
@@ -102,7 +108,8 @@
             Text="{Binding Source={x:Static core:BitwardenIcons.Paperclip}}"
             IsVisible="{Binding Cipher.HasAttachments, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Attachments}" />
+            AutomationProperties.Name="{u:I18n Attachments}"
+            AutomationId="CipherWithAttachmentsIcon" />
     </Grid>
 
     <controls:MiButton
@@ -114,6 +121,7 @@
         VerticalOptions="CenterAndExpand"
         HorizontalOptions="EndAndExpand"
         AutomationProperties.IsInAccessibleTree="True"
-        AutomationProperties.Name="{u:I18n Options}" />
+        AutomationProperties.Name="{u:I18n Options}"
+        AutomationId="CipherOptionsButton" />
 
 </controls:ExtendedGrid>

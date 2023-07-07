@@ -2629,4 +2629,16 @@ Möchtest du zu diesem Konto wechseln?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Aktuelles Master-Passwort</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Hilfe zum erneuten Abfragen des Master-Passworts</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Das Entsperren kann aufgrund von unzureichendem Arbeitsspeicher fehlschlagen. Verringere deine KDF-Speichereinstellungen, um das Problem zu beheben.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Ungültiger API-Schlüssel</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Ungültiger API-Token</value>
+  </data>
 </root>

@@ -2496,7 +2496,7 @@ Soovid selle konto peale lülituda?</value>
     <value>Tuleta ülemparooli vihjega meelde</value>
   </data>
   <data name="LoggingInAsXOnY" xml:space="preserve">
-    <value>Logging in as {0} on {1}</value>
+    <value>Sisselogimas kui {0} lehel {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Pole sina?</value>
@@ -2610,24 +2610,36 @@ Soovid selle konto peale lülituda?</value>
     <value>Otsingusõnale ei vasta kirjeid</value>
   </data>
   <data name="US" xml:space="preserve">
-    <value>US</value>
+    <value>USA</value>
   </data>
   <data name="EU" xml:space="preserve">
-    <value>EU</value>
+    <value>EL</value>
   </data>
   <data name="SelfHosted" xml:space="preserve">
-    <value>Self-hosted</value>
+    <value>Enda majutatud</value>
   </data>
   <data name="DataRegion" xml:space="preserve">
-    <value>Data region</value>
+    <value>Andmete salvestamise piirkond</value>
   </data>
   <data name="Region" xml:space="preserve">
-    <value>Region</value>
+    <value>Piirkond</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Sinu ülemparool ei vasta ühele või rohkemale organisatsiooni poolt seatud poliitikale. Hoidlale ligipääsemiseks pead oma ülemaprooli uuendama. Jätkamisel logitakse sind praegusest sessioonist välja, mistõttu pead uuesti sisse logima. Teistes seadmetes olevad aktiivsed sessioonid aeguvad umbes ühe tunni jooksul.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Praegune ülemparool</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Vigane API võti</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Vigane API token</value>
   </data>
 </root>

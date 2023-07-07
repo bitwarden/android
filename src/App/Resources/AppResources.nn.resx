@@ -176,10 +176,10 @@
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Rei</value>
+    <value>Rediger</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Rei mappa</value>
+    <value>Rediger mappe</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>E-post</value>
@@ -468,7 +468,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Rei oppføring</value>
+    <value>Rediger oppføringa</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Slå på sjølvverkande synkronisering</value>
@@ -1235,10 +1235,10 @@ Skanning skjer automatisk.</value>
     <value>Grunndomene</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Standard</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>Exact</value>
+    <value>Nøyaktig</value>
   </data>
   <data name="Host" xml:space="preserve">
     <value>Host</value>
@@ -1249,7 +1249,7 @@ Skanning skjer automatisk.</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>Starts with</value>
+    <value>Startar med</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
     <value>URI match detection</value>
@@ -1272,7 +1272,7 @@ Skanning skjer automatisk.</value>
     <value>Hold your Yubikey near the top of the device.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Try again</value>
+    <value>Prøv igjen</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
     <value>To continue, hold your YubiKey NEO against the back of the device.</value>
@@ -1281,7 +1281,7 @@ Skanning skjer automatisk.</value>
     <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Password updated</value>
+    <value>Passordet er oppdatert</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
@@ -1289,13 +1289,13 @@ Skanning skjer automatisk.</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>AutoFill activated!</value>
+    <value>Autoutfylling aktivert!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+    <value>Du må logge deg inn på Bitwarden-hovudappen før du kan bruke autoutfylling.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Your logins are now easily accessible right from your keyboard while logging into apps and websites.</value>
+    <value>Innloggingane dine er no lett tilgjengelege frå tastaturet når du loggar deg inn på appar og nettstadar.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
@@ -2006,7 +2006,7 @@ Skanning skjer automatisk.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
-    <value>Rei Send</value>
+    <value>Rediger Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
@@ -2630,5 +2630,17 @@ Do you want to switch to this account?</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Current master password</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Kunne ikkje låse opp på grunn av utilstrekkeleg minnekapasitet. Reduser KDF-minne-innstillingane for å løyse dette</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Invalid API key</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Invalid API token</value>
   </data>
 </root>

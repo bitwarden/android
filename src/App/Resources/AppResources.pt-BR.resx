@@ -2631,4 +2631,16 @@ Você deseja mudar para esta conta?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Senha mestra atual</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Ajuda com Nova solicitação de senha mestra</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>O desbloqueio pode falhar devido à memória insuficiente. Diminua suas configurações de memória KDF para resolver.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Chave da API inválida</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Token de API inválido</value>
+  </data>
 </root>

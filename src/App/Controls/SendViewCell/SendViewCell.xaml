@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <controls:ExtendedGrid xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Controls.SendViewCell"
@@ -54,14 +54,16 @@
             Grid.Column="0"
             Grid.Row="0"
             StyleClass="list-title, list-title-platform"
-            Text="{Binding Send.Name}" />
+            Text="{Binding Send.Name}"
+            AutomationId="SendNameLabel" />
         <Label
             LineBreakMode="TailTruncation"
             Grid.Column="0"
             Grid.Row="1"
             Grid.ColumnSpan="6"
             StyleClass="list-subtitle, list-subtitle-platform"
-            Text="{Binding Send.DisplayDate}" />
+            Text="{Binding Send.DisplayDate}"
+            AutomationId="SendDateLabel" />
         <controls:IconLabel
             Grid.Column="1"
             Grid.Row="0"
@@ -72,7 +74,8 @@
             Text="{Binding Source={x:Static core:BitwardenIcons.ExclamationTriangle}}"
             IsVisible="{Binding Send.Disabled, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Disabled}" />
+            AutomationProperties.Name="{u:I18n Disabled}"
+            AutomationId="DisabledSendLabel" />
         <controls:IconLabel
             Grid.Column="2"
             Grid.Row="0"
@@ -83,7 +86,8 @@
             Text="{Binding Source={x:Static core:BitwardenIcons.Key}}"
             IsVisible="{Binding Send.HasPassword, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Password}" />
+            AutomationProperties.Name="{u:I18n Password}"
+            AutomationId="PasswordProtectedSendLabel" />
         <controls:IconLabel
             Grid.Column="3"
             Grid.Row="0"
@@ -94,7 +98,8 @@
             Text="{Binding Source={x:Static core:BitwardenIcons.Ban}}"
             IsVisible="{Binding Send.MaxAccessCountReached, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n MaxAccessCountReached}" />
+            AutomationProperties.Name="{u:I18n MaxAccessCountReached}"
+            AutomationId="SendMaxAccessCountReachedLabel" />
         <controls:IconLabel
             Grid.Column="4"
             Grid.Row="0"
@@ -105,7 +110,8 @@
             Text="{Binding Source={x:Static core:BitwardenIcons.Clock}}"
             IsVisible="{Binding Send.Expired, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Expired}" />
+            AutomationProperties.Name="{u:I18n Expired}"
+            AutomationId="ExpiredSendLabel" />
         <controls:IconLabel
             Grid.Column="5"
             Grid.Row="0"
@@ -116,7 +122,8 @@
             Text="{Binding Source={x:Static core:BitwardenIcons.Trash}}"
             IsVisible="{Binding Send.PendingDelete, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n PendingDelete}" />
+            AutomationProperties.Name="{u:I18n PendingDelete}"
+            AutomationId="SendWithPendingDeletionLabel" />
     </Grid>
 
     <controls:MiButton
@@ -129,6 +136,7 @@
         VerticalOptions="CenterAndExpand"
         HorizontalOptions="EndAndExpand"
         AutomationProperties.IsInAccessibleTree="True"
-        AutomationProperties.Name="{u:I18n Options}" />
+        AutomationProperties.Name="{u:I18n Options}"
+        AutomationId="SendOptionsButton" />
 
 </controls:ExtendedGrid>

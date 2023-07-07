@@ -2495,7 +2495,7 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>Ana parola ipucunu al</value>
   </data>
   <data name="LoggingInAsXOnY" xml:space="preserve">
-    <value>{1} üzerinde {0} olarak giriş yapılıyor</value>
+    <value>{1} sitesine {0} olarak giriş yapılıyor</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Siz değil misiniz?</value>
@@ -2628,5 +2628,17 @@ Bu hesaba geçmek ister misiniz?</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Mevcut ana parola</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Ana parola yeniden istemi yardımı</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Yetersiz bellek nedeniyle kilit açma başarısız olabilir. Sorunu çözmek için KDF bellek ayarlarınızı azaltın.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Geçersiz API anahtarı</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Geçersiz API token'ı</value>
   </data>
 </root>

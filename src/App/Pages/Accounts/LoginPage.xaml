@@ -9,23 +9,23 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     x:DataType="pages:LoginPageViewModel"
     x:Name="_page"
-    Title="{Binding PageTitle}">
+    Title="{Binding PageTitle}"
+    AutomationId="PageTitleLabel">
     
     <ContentPage.BindingContext>
         <pages:LoginPageViewModel />
     </ContentPage.BindingContext>
-
     <ContentPage.ToolbarItems>
         <controls:ExtendedToolbarItem
                 x:Name="_accountAvatar"
-                x:Key="accountAvatar"
                 IconImageSource="{Binding AvatarImageSource}"
                 Command="{Binding Source={x:Reference _accountListOverlay}, Path=ToggleVisibililtyCommand}"
                 Order="Primary"
                 Priority="-1"
                 UseOriginalImage="True"
                 AutomationProperties.IsInAccessibleTree="True"
-                AutomationProperties.Name="{u:I18n Account}" />
+                AutomationProperties.Name="{u:I18n Account}"
+                AutomationId="AccountIconButton" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
@@ -34,7 +34,8 @@
             <ToolbarItem Icon="more_vert.png" Clicked="More_Clicked" Order="Primary"
                 x:Name="_moreItem" x:Key="moreItem"
                  AutomationProperties.IsInAccessibleTree="True"
-                 AutomationProperties.Name="{u:I18n Options}" />
+                 AutomationProperties.Name="{u:I18n Options}"
+                 AutomationId="OptionsButton" />
             <ToolbarItem Text="{u:I18n GetPasswordHint}"
                 x:Key="getPasswordHint"
                 x:Name="_getPasswordHint"
@@ -75,7 +76,9 @@
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 ReturnType="Go"
-                                ReturnCommand="{Binding LogInCommand}" />
+                                ReturnCommand="{Binding LogInCommand}"
+                                AutomationId="MasterPasswordEntry"
+                            />
                             <controls:IconButton
                                 StyleClass="box-row-button, box-row-button-platform"
                                 Text="{Binding ShowPasswordIcon}"
@@ -84,6 +87,7 @@
                                 Grid.Column="1"
                                 Grid.RowSpan="1"
                                 AutomationProperties.IsInAccessibleTree="True"
+                                AutomationId="PasswordVisibilityToggle"
                                 AutomationProperties.Name="{u:I18n ToggleVisibility}"
                                 AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"/>
                             <Label
@@ -93,7 +97,9 @@
                                 Padding="0,5,0,0"
                                 Grid.Row="2"
                                 Grid.Column="0"
-                                Grid.ColumnSpan="2">
+                                Grid.ColumnSpan="2"
+                                AutomationId="GetMasterPasswordHintLabel"
+                                >
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="Hint_Clicked" />
                                 </Label.GestureRecognizers>
@@ -104,19 +110,24 @@
                         <Button x:Name="_loginWithMasterPassword"
                             Text="{u:I18n LogInWithMasterPassword}" 
                                 StyleClass="btn-primary"
-                                Clicked="LogIn_Clicked" />
+                                Clicked="LogIn_Clicked"
+                                AutomationId="LogInWithMasterPasswordButton"
+                                />
                         <controls:IconLabelButton
                             HorizontalOptions="Fill"
                             VerticalOptions="CenterAndExpand"
                             Icon="{Binding Source={x:Static core:BitwardenIcons.Device}}"
                             Label="{u:I18n LogInWithAnotherDevice}"
                             ButtonCommand="{Binding LogInWithDeviceCommand}"
-                            IsVisible="{Binding IsKnownDevice}"/>
+                            IsVisible="{Binding IsKnownDevice}"
+                            AutomationId="LogInWithAnotherDeviceButton"
+                            />
                         <controls:IconLabelButton
                             HorizontalOptions="Fill"
                             VerticalOptions="CenterAndExpand"
                             Icon="{Binding Source={x:Static core:BitwardenIcons.Suitcase}}"
-                            Label="{u:I18n LogInSso}">
+                            Label="{u:I18n LogInSso}"
+                            AutomationId="LogInWithSsoButton">
                             <controls:IconLabelButton.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="LogInSSO_Clicked" />
                             </controls:IconLabelButton.GestureRecognizers>
@@ -124,12 +135,15 @@
                         <Label
                             Text="{Binding LoggingInAsText}"
                             StyleClass="text-sm"
-                            Margin="0,40,0,0"/>
+                            Margin="0,40,0,0"
+                            AutomationId="LoggingInAsLabel"
+                            />
                         <Label
                             Text="{u:I18n NotYou}"
                             StyleClass="text-md"
                             HorizontalOptions="Start"
-                            TextColor="{DynamicResource HyperlinkColor}">
+                            TextColor="{DynamicResource HyperlinkColor}"
+                            AutomationId="NotYouLabel">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="Cancel_Clicked" />
                             </Label.GestureRecognizers>

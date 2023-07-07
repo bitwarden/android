@@ -2630,4 +2630,16 @@ Czy chcesz przełączyć się na to konto?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Aktualne hasło główne</value>
   </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Odblokowanie może się nie powieść z powodu niewystarczającej ilości pamięci. Zmniejsz ustawienia pamięci KDF, aby to rozwiązać</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Nieprawidłowy klucz API</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Nieprawidłowy token API.</value>
+  </data>
 </root>
