@@ -1582,6 +1582,14 @@ Scanning will happen automatically.</value>
     <value>Solarized Dark</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
+  <data name="SolarizedDarkBlue" xml:space="preserve">
+    <value>Solarized DarkBlue</value>
+    <comment>'Solarized DarkBlue' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="DarkPlus" xml:space="preserve">
+    <value>Dark +</value>
+    <comment>'DarkPlus' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Auto-fill blocked URIs</value>
   </data>

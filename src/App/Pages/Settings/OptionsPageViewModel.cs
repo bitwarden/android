@@ -62,6 +62,8 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, string>(ThemeManager.Black, AppResources.Black),
                 new KeyValuePair<string, string>(ThemeManager.Nord, AppResources.Nord),
                 new KeyValuePair<string, string>(ThemeManager.SolarizedDark, AppResources.SolarizedDark),
+                new KeyValuePair<string, string>(ThemeManager.SolarizedDarkBlue, AppResources.SolarizedDarkBlue),
+                new KeyValuePair<string, string>(ThemeManager.DarkPlus, AppResources.DarkPlus),
             };
             AutoDarkThemeOptions = new List<KeyValuePair<string, string>>
             {
@@ -69,6 +71,8 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, string>(ThemeManager.Black, AppResources.Black),
                 new KeyValuePair<string, string>(ThemeManager.Nord, AppResources.Nord),
                 new KeyValuePair<string, string>(ThemeManager.SolarizedDark, AppResources.SolarizedDark),
+                new KeyValuePair<string, string>(ThemeManager.SolarizedDarkBlue, AppResources.SolarizedDarkBlue),
+                new KeyValuePair<string, string>(ThemeManager.DarkPlus, AppResources.DarkPlus),
             };
             UriMatchOptions = new List<KeyValuePair<UriMatchType?, string>>
             {
