@@ -133,10 +133,20 @@ namespace Bit.App.Services
                     break;
                 case NotificationType.SyncSendCreate:
                 case NotificationType.SyncSendUpdate:
-                case NotificationType.SyncSendDelete:
-                    if (isAuthenticated)
+                    var sendCreateUpdateMessage = JsonConvert.DeserializeObject<SyncSendNotification>(
+                        notification.Payload);
+                    if (isAuthenticated && sendCreateUpdateMessage.UserId == myUserId)
                     {
-                        await _syncService.Value.FullSyncAsync(false);
+                        await _syncService.Value.SyncUpsertSendAsync(sendCreateUpdateMessage,
+                            notification.Type == NotificationType.SyncCipherUpdate);
+                    }
+                    break;
+                case NotificationType.SyncSendDelete:
+                    var sendDeleteMessage = JsonConvert.DeserializeObject<SyncSendNotification>(
+                        notification.Payload);
+                    if (isAuthenticated && sendDeleteMessage.UserId == myUserId)
+                    {
+                        await _syncService.Value.SyncDeleteSendAsync(sendDeleteMessage);
                     }
                     break;
                 case NotificationType.AuthRequest:

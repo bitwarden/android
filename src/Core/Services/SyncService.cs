@@ -274,6 +274,78 @@ namespace Bit.Core.Services
             return SyncCompleted(false);
         }
 
+        public async Task<bool> SyncUpsertSendAsync(SyncSendNotification notification, bool isEdit)
+        {
+            SyncStarted();
+            if (await _stateService.IsAuthenticatedAsync())
+            {
+                try
+                {
+                    var shouldUpdate = true;
+                    var localSend = await _sendService.GetAsync(notification.Id);
+                    if (localSend != null && localSend.RevisionDate >= notification.RevisionDate)
+                    {
+                        shouldUpdate = false;
+                    }
+
+                    if (shouldUpdate)
+                    {
+                        if (isEdit)
+                        {
+                            shouldUpdate = localSend != null;
+                        }
+                        else
+                        {
+                            shouldUpdate = localSend == null;
+                        }
+                    }
+
+                    if (shouldUpdate)
+                    {
+                        var remoteSend = await _apiService.GetSendAsync(notification.Id);
+                        if (remoteSend != null)
+                        {
+                            var userId = await _stateService.GetActiveUserIdAsync();
+                            await _sendService.UpsertAsync(new SendData(remoteSend, userId));
+                            _messagingService.Send("syncedUpsertedSend", new Dictionary<string, string>
+                            {
+                                ["sendId"] = notification.Id
+                            });
+                            return SyncCompleted(true);
+                        }
+                    }
+                }
+                catch (ApiException e)
+                {
+                    if (e.Error != null && e.Error.StatusCode == System.Net.HttpStatusCode.NotFound && isEdit)
+                    {
+                        await _sendService.DeleteAsync(notification.Id);
+                        _messagingService.Send("syncedDeletedSend", new Dictionary<string, string>
+                        {
+                            ["sendId"] = notification.Id
+                        });
+                        return SyncCompleted(true);
+                    }
+                }
+            }
+            return SyncCompleted(false);
+        }
+
+        public async Task<bool> SyncDeleteSendAsync(SyncSendNotification notification)
+        {
+            SyncStarted();
+            if (await _stateService.IsAuthenticatedAsync())
+            {
+                await _sendService.DeleteAsync(notification.Id);
+                _messagingService.Send("syncedDeletedSend", new Dictionary<string, string>
+                {
+                    ["sendId"] = notification.Id
+                });
+                return SyncCompleted(true);
+            }
+            return SyncCompleted(false);
+        }
+
         // Helpers
 
         private void SyncStarted()
