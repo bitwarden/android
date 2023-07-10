@@ -43,11 +43,6 @@ namespace Bit.Core.Services
 
         public async Task<DeviceResponse> TrustDeviceAsync()
         {
-            if (!await GetUserTrustDeviceChoiceForDecryptionAsync())
-            {
-                return null;
-            }
-
             // Attempt to get user key
             var userKey = await _cryptoService.GetEncKeyAsync();
             if (userKey == null)

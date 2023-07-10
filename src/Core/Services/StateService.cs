@@ -1300,12 +1300,12 @@ namespace Bit.Core.Services
 
         public async Task<bool> GetUserTrustDeviceChoiceForDecryptionAsync()
         {
-            return await _storageMediatorService.GetAsync<bool>(Constants.RememberDeviceTde, true);
+            return await _storageMediatorService.GetAsync<bool>(Constants.RememberDeviceTde);
         }
 
         public async Task SetUserTrustDeviceChoiceForDecryptionAsync(bool value)
         {
-            await _storageMediatorService.SaveAsync(Constants.RememberDeviceTde, true);
+            await _storageMediatorService.SaveAsync(Constants.RememberDeviceTde, value);
         }
 
         public ConfigResponse GetConfigs()
