@@ -419,10 +419,14 @@ namespace Bit.Core.Services
                 HttpMethod.Post, "/devices/exist-by-types", deviceTypes, true, true);
         }
 
-        public Task<DeviceResponse> PutUpdateTrustedDeviceKeys(UpdateTrustedDeviceKeysRequest request)
+        public Task<DeviceResponse> GetDeviceByIdentifierAsync(string deviceIdentifier)
         {
-            return SendAsync<UpdateTrustedDeviceKeysRequest, DeviceResponse>(
-                HttpMethod.Put, $"/devices/${request.DeviceIdentifier}/keys", request, true, true);
+            return SendAsync<object, DeviceResponse>(HttpMethod.Get, $"/devices/identifier/{deviceIdentifier}", null, true, true);
+        }
+
+        public Task<DeviceResponse> UpdateTrustedDeviceKeysAsync(string deviceIdentifier, TrustedDeviceKeysRequest trustedDeviceKeysRequest)
+        {
+            return SendAsync<TrustedDeviceKeysRequest, DeviceResponse>(HttpMethod.Put, $"/devices/{deviceIdentifier}/keys", trustedDeviceKeysRequest, true, true);
         }
 
         #endregion
