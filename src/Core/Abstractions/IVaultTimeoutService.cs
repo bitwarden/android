@@ -6,8 +6,7 @@ namespace Bit.Core.Abstractions
 {
     public interface IVaultTimeoutService
     {
-        long? DelayTimeoutMs { get; set; }
-        bool ResetTimeoutDelay { get; set; }
+        long? DelayLockAndLogoutMs { get; set; }
 
         Task CheckVaultTimeoutAsync();
         Task<bool> ShouldTimeoutAsync(string userId = null);

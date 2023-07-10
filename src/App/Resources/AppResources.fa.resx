@@ -2638,9 +2638,9 @@
     <value>باز کردن قفل ممکن است به دلیل حافظه ناکافی انجام شود. تنظیمات حافظه KDF خود را کاهش دهید تا حل شود.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
-    <value>Invalid API key</value>
+    <value>کلید API نامعتبر</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
-    <value>Invalid API token</value>
+    <value>کلید توکن API نامعتبر</value>
   </data>
 </root>
