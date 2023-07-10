@@ -7,5 +7,7 @@ namespace Bit.Core.Abstractions
     {
         Task<SymmetricCryptoKey> GetDeviceKeyAsync();
         Task<DeviceResponse> TrustDeviceAsync();
+        Task<bool> GetUserTrustDeviceChoiceForDecryptionAsync();
+        Task SetUserTrustDeviceChoiceForDecryptionAsync(bool value);
     }
 }

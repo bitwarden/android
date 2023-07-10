@@ -33,6 +33,7 @@ namespace Bit.App.Pages
         private IPlatformUtilsService _platformUtilsService;
         private IEnvironmentService _environmentService;
         private ILogger _logger;
+        private IDeviceTrustCryptoService _deviceTrustCryptoService;
 
         protected override II18nService i18nService => _i18nService;
         protected override IEnvironmentService environmentService => _environmentService;
@@ -59,6 +60,7 @@ namespace Bit.App.Pages
             _i18nService = ServiceContainer.Resolve<II18nService>();
             _stateService = ServiceContainer.Resolve<IStateService>();
             _logger = ServiceContainer.Resolve<ILogger>();
+            _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
 
             PageTitle = AppResources.LogInWithAnotherDevice;
 
@@ -162,9 +164,12 @@ namespace Bit.App.Pages
                 nameof(Tittle),
                 nameof(SubTittle),
                 nameof(Description),
-                nameof(OtherOptions)
+                nameof(OtherOptions),
+                nameof(ResendNotificationVisible)
             });
         }
+
+        public bool ResendNotificationVisible => AuthRequestType == AuthRequestType.AuthenticateAndUnlock;
 
         public void StartCheckLoginRequestStatus()
         {
@@ -231,6 +236,7 @@ namespace Bit.App.Pages
                 else
                 {
                     _syncService.FullSyncAsync(true).FireAndForget();
+                    await _deviceTrustCryptoService.TrustDeviceAsync();
                     LogInSuccessAction?.Invoke();
                 }
             }

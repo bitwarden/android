@@ -46,7 +46,6 @@ namespace Bit.App.Pages
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
-
         private async Task StartLoginWithDeviceAsync()
         {
             var page = new LoginPasswordlessRequestPage(_vm.Email, AuthRequestType.AuthenticateAndUnlock, _appOptions);

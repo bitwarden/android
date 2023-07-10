@@ -25,6 +25,7 @@ namespace Bit.App.Pages
         private string _email;
         private readonly IStateService _stateService;
         private readonly IApiService _apiService;
+        private IDeviceTrustCryptoService _deviceTrustCryptoService;
 
         public ICommand ApproveWithMyOtherDeviceCommand { get; }
         public ICommand RequestAdminApprovalCommand { get; }
@@ -40,18 +41,19 @@ namespace Bit.App.Pages
         {
             _stateService = ServiceContainer.Resolve<IStateService>(); 
             _apiService = ServiceContainer.Resolve<IApiService>();
+            _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
 
             PageTitle = AppResources.LoggedIn;
 
-            ApproveWithMyOtherDeviceCommand = new AsyncCommand(() => Device.InvokeOnMainThreadAsync(LogInWithDeviceAction),
+            ApproveWithMyOtherDeviceCommand = new AsyncCommand(() => CheckDeviceTrustAndInvoke(LogInWithDeviceAction),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            RequestAdminApprovalCommand = new AsyncCommand(() => Device.InvokeOnMainThreadAsync(RequestAdminApprovalAction),
+            RequestAdminApprovalCommand = new AsyncCommand(() => CheckDeviceTrustAndInvoke(RequestAdminApprovalAction),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            ApproveWithMasterPasswordCommand = new AsyncCommand(() => Device.InvokeOnMainThreadAsync(LogInWithMasterPassword),
+            ApproveWithMasterPasswordCommand = new AsyncCommand(() => CheckDeviceTrustAndInvoke(LogInWithMasterPassword),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
@@ -106,8 +108,8 @@ namespace Bit.App.Pages
             try
             {
                 var decryptOptions = await _stateService.GetAccountDecryptionOptions();
-                RequestAdminApprovalEnabled = decryptOptions.TrustedDeviceOption.HasAdminApproval;
-                ApproveWithMasterPasswordEnabled = decryptOptions.HasMasterPassword;
+                RequestAdminApprovalEnabled = decryptOptions != null && decryptOptions.TrustedDeviceOption != null && decryptOptions.TrustedDeviceOption.HasAdminApproval;
+                ApproveWithMasterPasswordEnabled = decryptOptions != null && decryptOptions.HasMasterPassword;
             }
             catch (Exception ex)
             {
@@ -125,6 +127,12 @@ namespace Bit.App.Pages
 
             // TODO: Change this expression to, Appear if the browser is trusted and shared the key with the app
             ContinueEnabled = !RequestAdminApprovalEnabled && !ApproveWithMasterPasswordEnabled && !ApproveWithMyOtherDeviceEnabled;
+        }
+
+        private async Task CheckDeviceTrustAndInvoke(Action action)
+        {
+            await _deviceTrustCryptoService.SetUserTrustDeviceChoiceForDecryptionAsync(RememberThisDevice);
+            await Device.InvokeOnMainThreadAsync(action);
         }
     }
 }

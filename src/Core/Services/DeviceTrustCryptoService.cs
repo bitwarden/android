@@ -43,6 +43,11 @@ namespace Bit.Core.Services
 
         public async Task<DeviceResponse> TrustDeviceAsync()
         {
+            if(!await GetUserTrustDeviceChoiceForDecryptionAsync())
+            {
+                return null;
+            }
+
             // Attempt to get user key
             var userKey = await _cryptoService.GetEncKeyAsync();
             if (userKey == null)
@@ -76,6 +81,16 @@ namespace Bit.Core.Services
             // Create 512-bit device key
             var randomBytes = await _cryptoFunctionService.RandomBytesAsync(DEVICE_KEY_SIZE);
             return new SymmetricCryptoKey(randomBytes);
+        }
+
+        public async Task<bool> GetUserTrustDeviceChoiceForDecryptionAsync()
+        {
+            return await _stateService.GetUserTrustDeviceChoiceForDecryptionAsync();
+        }
+
+        public async Task SetUserTrustDeviceChoiceForDecryptionAsync(bool value)
+        {
+            await _stateService.SetUserTrustDeviceChoiceForDecryptionAsync(value);
         }
     }
 }
