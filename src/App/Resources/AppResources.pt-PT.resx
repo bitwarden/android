@@ -1098,7 +1098,7 @@ A leitura será efetuada automaticamente.</value>
     <value>Sr.</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Sra.</value>
+    <value>Sr.ª</value>
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Menina</value>
@@ -1579,7 +1579,7 @@ A leitura será efetuada automaticamente.</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
-    <value>Solarized Dark</value>
+    <value>Solarized (escuro)</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
@@ -2233,10 +2233,10 @@ A leitura será efetuada automaticamente.</value>
     <value>Ajude o Bitwarden a melhorar a estabilidade da aplicação ao enviar relatórios de falhas.</value>
   </data>
   <data name="OptionsExpanded" xml:space="preserve">
-    <value>Options are expanded, tap to collapse.</value>
+    <value>As opções foram expandidas, clique para fechar.</value>
   </data>
   <data name="OptionsCollapsed" xml:space="preserve">
-    <value>Options are collapsed, tap to expand.</value>
+    <value>As opções foram fechadas, clique para expandir.</value>
   </data>
   <data name="UppercaseAtoZ" xml:space="preserve">
     <value>Maiúsculas (A-Z)</value>
@@ -2392,10 +2392,10 @@ A leitura será efetuada automaticamente.</value>
     <value>Tipo de nome de utilizador</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Plus addressed email</value>
+    <value>E-mail com subendereço</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
-    <value>Catch-all email</value>
+    <value>E-mail de captura geral</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
     <value>Alias de e-mail reencaminhado</value>
@@ -2454,10 +2454,10 @@ A leitura será efetuada automaticamente.</value>
     <value>Ocorreu um erro desconhecido ({0}).</value>
   </data>
   <data name="PlusAddressedEmailDescription" xml:space="preserve">
-    <value>Use your email provider's subaddress capabilities</value>
+    <value>Utilize as capacidades de subendereçamento do seu fornecedor de e-mail.</value>
   </data>
   <data name="CatchAllEmailDescription" xml:space="preserve">
-    <value>Use your domain's configured catch-all inbox.</value>
+    <value>Utilize a caixa de entrada de captura geral configurada para o seu domínio.</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
     <value>Gerar um alias de e-mail com um serviço de reencaminhamento externo.</value>
