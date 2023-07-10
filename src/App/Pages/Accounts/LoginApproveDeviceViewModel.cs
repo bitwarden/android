@@ -103,8 +103,6 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            // Appears if the browser is trusted and shared the key with the app
-            ContinueEnabled = true;
             try
             {
                 var decryptOptions = await _stateService.GetAccountDecryptionOptions();
@@ -124,6 +122,9 @@ namespace Bit.App.Pages
             {
                 HandleException(ex);
             }
+
+            // TODO: Change this expression to, Appear if the browser is trusted and shared the key with the app
+            ContinueEnabled = !RequestAdminApprovalEnabled && !ApproveWithMasterPasswordEnabled && !ApproveWithMyOtherDeviceEnabled;
         }
     }
 }
