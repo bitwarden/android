@@ -43,7 +43,7 @@ namespace Bit.Core.Services
 
         public async Task<DeviceResponse> TrustDeviceAsync()
         {
-            if(!await GetUserTrustDeviceChoiceForDecryptionAsync())
+            if (!await GetUserTrustDeviceChoiceForDecryptionAsync())
             {
                 return null;
             }

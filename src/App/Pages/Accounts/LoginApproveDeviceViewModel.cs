@@ -10,8 +10,8 @@ using Bit.Core.Models.Request;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Forms;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -39,7 +39,7 @@ namespace Bit.App.Pages
 
         public LoginApproveDeviceViewModel()
         {
-            _stateService = ServiceContainer.Resolve<IStateService>(); 
+            _stateService = ServiceContainer.Resolve<IStateService>();
             _apiService = ServiceContainer.Resolve<IApiService>();
             _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
 

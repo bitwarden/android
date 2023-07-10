@@ -85,7 +85,8 @@ namespace Bit.App.Pages
         {
             get
             {
-                switch (_authRequestType) {
+                switch (_authRequestType)
+                {
                     case AuthRequestType.AuthenticateAndUnlock:
                         return AppResources.LogInInitiated;
                     case AuthRequestType.AdminApproval:

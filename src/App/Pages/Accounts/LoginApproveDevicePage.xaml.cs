@@ -28,7 +28,8 @@ namespace Bit.App.Pages
             _appOptions = appOptions;
         }
 
-        protected override void OnAppearing(){
+        protected override void OnAppearing()
+        {
             _vm.InitAsync();
         }
 
