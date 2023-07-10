@@ -48,6 +48,7 @@ namespace Bit.App.Pages
         private bool _reportLoggingEnabled;
         private bool _approvePasswordlessLoginRequests;
         private bool _shouldConnectToWatch;
+        private bool _hasMasterPassword;
         private readonly static List<KeyValuePair<string, int?>> VaultTimeoutOptions =
             new List<KeyValuePair<string, int?>>
             {
@@ -106,6 +107,9 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
+            var decryptionOptions = await _stateService.GetAccountDecryptionOptions();
+            // set has true for backwards compatibility
+            _hasMasterPassword = decryptionOptions != null ? decryptionOptions.HasMasterPassword : true;
             _supportsBiometric = await _platformUtilsService.SupportsBiometricAsync();
             var lastSync = await _syncService.GetLastSyncAsync();
             if (lastSync != null)
@@ -124,7 +128,13 @@ namespace Bit.App.Pages
             _vaultTimeoutDisplayValue = _vaultTimeoutOptions.FirstOrDefault(o => o.Value == _vaultTimeout).Key;
             _vaultTimeoutDisplayValue ??= _vaultTimeoutOptions.Where(o => o.Value == CustomVaultTimeoutValue).First().Key;
 
-            var action = await _vaultTimeoutService.GetVaultTimeoutAction() ?? VaultTimeoutAction.Lock;
+            var savedVaultTimeoutAction = await _vaultTimeoutService.GetVaultTimeoutAction();
+            var action = savedVaultTimeoutAction ?? VaultTimeoutAction.Lock;
+            if (!_hasMasterPassword && savedVaultTimeoutAction == null)
+            {
+                action = VaultTimeoutAction.Logout;
+                await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(_vaultTimeout, VaultTimeoutAction.Logout);
+            }
             _vaultTimeoutActionDisplayValue = _vaultTimeoutActionOptions.FirstOrDefault(o => o.Value == action).Key;
 
             if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout))
@@ -387,8 +397,14 @@ namespace Bit.App.Pages
                 // do nothing if we have a policy set
                 return;
             }
-            var options = _vaultTimeoutActionOptions.Select(o =>
-                o.Key == _vaultTimeoutActionDisplayValue ? $"✓ {o.Key}" : o.Key).ToArray();
+
+            var options = _vaultTimeoutActionOptions.Select(o => o.Key == _vaultTimeoutActionDisplayValue ? $"✓ {o.Key}" : o.Key).ToArray();
+
+            if (!_hasMasterPassword && !_biometric && !_pin)
+            {
+                options = _vaultTimeoutActionOptions.Where(o => o.Value == VaultTimeoutAction.Logout).Select(v => $"✓ {v.Key}").ToArray();
+            }
+
             var selection = await Page.DisplayActionSheet(AppResources.VaultTimeoutAction,
                 AppResources.Cancel, null, options);
             if (selection == null || selection == AppResources.Cancel)
@@ -459,6 +475,11 @@ namespace Bit.App.Pages
             }
             if (!_pin)
             {
+                if (!_hasMasterPassword && !_biometric)
+                {
+                    _vaultTimeoutActionDisplayValue = _vaultTimeoutActionOptions.FirstOrDefault(o => o.Value == VaultTimeoutAction.Logout).Key;
+                    await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(_vaultTimeout, VaultTimeoutAction.Logout);
+                }
                 await _cryptoService.ClearPinProtectedKeyAsync();
                 await _vaultTimeoutService.ClearAsync();
             }
@@ -489,6 +510,11 @@ namespace Bit.App.Pages
             else
             {
                 await _stateService.SetBiometricUnlockAsync(null);
+                if (!_hasMasterPassword && !_pin)
+                {
+                    _vaultTimeoutActionDisplayValue = _vaultTimeoutActionOptions.FirstOrDefault(o => o.Value == VaultTimeoutAction.Logout).Key;
+                    await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(_vaultTimeout, VaultTimeoutAction.Logout);
+                }
             }
             await _stateService.SetBiometricLockedAsync(false);
             await _cryptoService.ToggleKeyAsync();
