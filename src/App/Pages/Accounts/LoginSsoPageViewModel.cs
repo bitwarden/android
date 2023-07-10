@@ -31,7 +31,6 @@ namespace Bit.App.Pages
         private readonly IOrganizationService _organizationService;
 
         private string _orgIdentifier;
-        private string _email;
 
         public LoginSsoPageViewModel()
         {
@@ -58,12 +57,6 @@ namespace Bit.App.Pages
             set => SetProperty(ref _orgIdentifier, value);
         }
 
-        public string Email
-        {
-            get => _email;
-            set => SetProperty(ref _email, value);
-        }
-
         public ICommand LogInCommand { get; }
         public Action StartTwoFactorAction { get; set; }
         public Action StartSetPasswordAction { get; set; }
@@ -84,8 +77,6 @@ namespace Bit.App.Pages
                 {
                     OrgIdentifier = await _stateService.GetRememberedOrgIdentifierAsync();
                 }
-
-                Email = await _stateService.GetRememberedEmailAsync();
             }
             catch (Exception ex)
             {

@@ -237,7 +237,11 @@ namespace Bit.App.Pages
                 else
                 {
                     _syncService.FullSyncAsync(true).FireAndForget();
-                    await _deviceTrustCryptoService.TrustDeviceAsync();
+                    if (await _deviceTrustCryptoService.GetUserTrustDeviceChoiceForDecryptionAsync())
+                    {
+                        await _deviceTrustCryptoService.TrustDeviceAsync();
+                        await _deviceTrustCryptoService.SetUserTrustDeviceChoiceForDecryptionAsync(false);
+                    }
                     LogInSuccessAction?.Invoke();
                 }
             }

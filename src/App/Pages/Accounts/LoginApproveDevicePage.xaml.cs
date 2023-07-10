@@ -15,7 +15,7 @@ namespace Bit.App.Pages
         private readonly LoginApproveDeviceViewModel _vm;
         private readonly AppOptions _appOptions;
 
-        public LoginApproveDevicePage(string email, AppOptions appOptions = null)
+        public LoginApproveDevicePage(AppOptions appOptions = null)
         {
             InitializeComponent();
             _vm = BindingContext as LoginApproveDeviceViewModel;
@@ -24,7 +24,6 @@ namespace Bit.App.Pages
             _vm.RequestAdminApprovalAction = () => RequestAdminApprovalAsync().FireAndForget();
             _vm.CloseAction = () => { Navigation.PopModalAsync(); };
             _vm.Page = this;
-            _vm.Email = email;
             _appOptions = appOptions;
         }
 
@@ -43,7 +42,7 @@ namespace Bit.App.Pages
 
         private async Task StartLogInWithMasterPassword()
         {
-            var page = new TwoFactorPage(false, _appOptions);
+            var page = new LockPage(_appOptions);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 

@@ -112,7 +112,7 @@ namespace Bit.App.Pages
             await AppHelpers.ClearPreviousPage();
 
             // Just for testing the screen
-            Application.Current.MainPage = new NavigationPage(new LoginApproveDevicePage(_vm.Email, _appOptions));
+            Application.Current.MainPage = new NavigationPage(new LoginApproveDevicePage(_appOptions));
             return;
 
             if (await _vaultTimeoutService.IsLockedAsync())
