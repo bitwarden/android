@@ -482,6 +482,17 @@ namespace Bit.Core.Services
             await SetValueAsync(Constants.EncPrivateKeyKey(reconciledOptions.UserId), value, reconciledOptions);
         }
 
+        public async Task<SymmetricCryptoKey> GetDeviceKeyAsync(string userId = null)
+        {
+            var deviceKeyB64 = await _storageMediatorService.GetAsync<string>(Constants.DeviceKeyKey(userId), true);
+            return new SymmetricCryptoKey(Convert.FromBase64String(deviceKeyB64));
+        }
+
+        public async Task SetDeviceKeyAsync(SymmetricCryptoKey value, string userId = null)
+        {
+            await _storageMediatorService.SaveAsync(Constants.DeviceKeyKey(userId), value.KeyB64, true);
+        }
+
         public async Task<List<string>> GetAutofillBlacklistedUrisAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },

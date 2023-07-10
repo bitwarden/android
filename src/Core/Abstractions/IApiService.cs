@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
@@ -92,9 +93,10 @@ namespace Bit.Core.Abstractions
         Task<PasswordlessLoginResponse> PutAuthRequestAsync(string id, string key, string masterPasswordHash, string deviceIdentifier, bool requestApproved);
         Task<PasswordlessLoginResponse> PostCreateRequestAsync(PasswordlessCreateLoginRequest passwordlessCreateLoginRequest);
         Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier);
+        Task<DeviceResponse> GetDeviceByIdentifierAsync(string deviceIdentifier);
+        Task<DeviceResponse> UpdateTrustedDeviceKeysAsync(string deviceIdentifier, TrustedDeviceKeysRequest deviceRequest);
         Task<OrganizationDomainSsoDetailsResponse> GetOrgDomainSsoDetailsAsync(string email);
         Task<bool> GetDevicesExistenceByTypes(DeviceType[] deviceTypes);
-        Task<DeviceResponse> PutUpdateTrustedDeviceKeys(UpdateTrustedDeviceKeysRequest request);
         Task<ConfigResponse> GetConfigsAsync();
         Task<string> GetFastmailAccountIdAsync(string apiKey);
     }

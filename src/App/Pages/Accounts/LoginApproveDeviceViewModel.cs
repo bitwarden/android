@@ -9,6 +9,7 @@ using Bit.Core.Enums;
 using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Essentials;
 
 namespace Bit.App.Pages
 {
@@ -19,6 +20,7 @@ namespace Bit.App.Pages
         private bool _requestAdminApprovalEnabled;
         private bool _approveWithMasterPasswordEnabled;
         private bool _continueEnabled;
+        private string _email;
         private readonly IStateService _stateService;
         private readonly IApiService _apiService;
 
@@ -52,6 +54,8 @@ namespace Bit.App.Pages
                 allowsMultipleExecutions: false);
         }
 
+        public string LoggingInAsText => string.Format(AppResources.LoggingInAsX, Email);
+
         public bool RememberThisDevice
         {
             get => _rememberThisDevice;
@@ -80,6 +84,15 @@ namespace Bit.App.Pages
         {
             get => _continueEnabled;
             set => SetProperty(ref _continueEnabled, value);
+        }
+
+        public string Email
+        {
+            get => _email;
+            set => SetProperty(ref _email, value, additionalPropertyNames:
+                new string[] {
+                    nameof(LoggingInAsText)
+                });
         }
 
         public async Task InitAsync()

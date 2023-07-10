@@ -3632,6 +3632,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logging in as {0}.
+        /// </summary>
+        public static string LoggingInAsX {
+            get {
+                return ResourceManager.GetString("LoggingInAsX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logging in as {0} on {1}.
         /// </summary>
         public static string LoggingInAsXOnY {
