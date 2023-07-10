@@ -45,15 +45,15 @@ namespace Bit.App.Pages
 
             PageTitle = AppResources.LoggedIn;
 
-            ApproveWithMyOtherDeviceCommand = new AsyncCommand(() => CheckDeviceTrustAndInvoke(LogInWithDeviceAction),
+            ApproveWithMyOtherDeviceCommand = new AsyncCommand(() => SetDeviceTrustAndInvoke(LogInWithDeviceAction),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            RequestAdminApprovalCommand = new AsyncCommand(() => CheckDeviceTrustAndInvoke(RequestAdminApprovalAction),
+            RequestAdminApprovalCommand = new AsyncCommand(() => SetDeviceTrustAndInvoke(RequestAdminApprovalAction),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            ApproveWithMasterPasswordCommand = new AsyncCommand(() => CheckDeviceTrustAndInvoke(LogInWithMasterPassword),
+            ApproveWithMasterPasswordCommand = new AsyncCommand(() => SetDeviceTrustAndInvoke(LogInWithMasterPassword),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
@@ -130,7 +130,7 @@ namespace Bit.App.Pages
             ContinueEnabled = !RequestAdminApprovalEnabled && !ApproveWithMasterPasswordEnabled && !ApproveWithMyOtherDeviceEnabled;
         }
 
-        private async Task CheckDeviceTrustAndInvoke(Action action)
+        private async Task SetDeviceTrustAndInvoke(Action action)
         {
             await _deviceTrustCryptoService.SetUserTrustDeviceChoiceForDecryptionAsync(RememberThisDevice);
             await Device.InvokeOnMainThreadAsync(action);
