@@ -455,11 +455,7 @@ namespace Bit.App.Pages
             {
                 await _cryptoService.SetKeyAsync(key);
             }
-            if (await _deviceTrustCryptoService.GetUserTrustDeviceChoiceForDecryptionAsync())
-            {
-                await _deviceTrustCryptoService.TrustDeviceAsync();
-                await _deviceTrustCryptoService.SetUserTrustDeviceChoiceForDecryptionAsync(false);
-            }
+            await _deviceTrustCryptoService.TrustDeviceIfNeededAsync();
             await DoContinueAsync();
         }
 

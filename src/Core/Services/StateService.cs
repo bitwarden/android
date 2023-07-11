@@ -1298,14 +1298,14 @@ namespace Bit.Core.Services
             ))?.Profile?.UserDecryptionOptions;
         }
 
-        public async Task<bool> GetUserTrustDeviceChoiceForDecryptionAsync()
+        public async Task<bool> GetShouldTrustDeviceAsync()
         {
-            return await _storageMediatorService.GetAsync<bool>(Constants.RememberDeviceTde);
+            return await _storageMediatorService.GetAsync<bool>(Constants.ShouldTrustDevice);
         }
 
-        public async Task SetUserTrustDeviceChoiceForDecryptionAsync(bool value)
+        public async Task SetShouldTrustDeviceAsync(bool value)
         {
-            await _storageMediatorService.SaveAsync(Constants.RememberDeviceTde, value);
+            await _storageMediatorService.SaveAsync(Constants.ShouldTrustDevice, value);
         }
 
         public ConfigResponse GetConfigs()

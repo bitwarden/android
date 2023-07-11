@@ -179,7 +179,7 @@ namespace Bit.Core.Abstractions
         void SetLocale(string locale);
         ConfigResponse GetConfigs();
         void SetConfigs(ConfigResponse value);
-        Task<bool> GetUserTrustDeviceChoiceForDecryptionAsync();
-        Task SetUserTrustDeviceChoiceForDecryptionAsync(bool value);
+        Task<bool> GetShouldTrustDeviceAsync();
+        Task SetShouldTrustDeviceAsync(bool value);
     }
 }

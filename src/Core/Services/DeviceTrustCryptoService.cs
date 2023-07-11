@@ -78,14 +78,25 @@ namespace Bit.Core.Services
             return new SymmetricCryptoKey(randomBytes);
         }
 
-        public async Task<bool> GetUserTrustDeviceChoiceForDecryptionAsync()
+        public async Task<bool> GetShouldTrustDeviceAsync()
         {
-            return await _stateService.GetUserTrustDeviceChoiceForDecryptionAsync();
+            return await _stateService.GetShouldTrustDeviceAsync();
         }
 
-        public async Task SetUserTrustDeviceChoiceForDecryptionAsync(bool value)
+        public async Task SetShouldTrustDeviceAsync(bool value)
         {
-            await _stateService.SetUserTrustDeviceChoiceForDecryptionAsync(value);
+            await _stateService.SetShouldTrustDeviceAsync(value);
+        }
+
+        public async Task<DeviceResponse> TrustDeviceIfNeededAsync()
+        {
+            DeviceResponse response = null;
+            if (await GetShouldTrustDeviceAsync())
+            {
+                response = await TrustDeviceAsync();
+                await SetShouldTrustDeviceAsync(false);
+            }
+            return response;
         }
     }
 }

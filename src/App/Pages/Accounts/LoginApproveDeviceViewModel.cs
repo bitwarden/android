@@ -45,15 +45,15 @@ namespace Bit.App.Pages
 
             PageTitle = AppResources.LoggedIn;
 
-            ApproveWithMyOtherDeviceCommand = new AsyncCommand(() => SetDeviceTrustAndInvoke(LogInWithDeviceAction),
+            ApproveWithMyOtherDeviceCommand = new AsyncCommand(() => SetDeviceTrustAndInvokeAsync(LogInWithDeviceAction),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            RequestAdminApprovalCommand = new AsyncCommand(() => SetDeviceTrustAndInvoke(RequestAdminApprovalAction),
+            RequestAdminApprovalCommand = new AsyncCommand(() => SetDeviceTrustAndInvokeAsync(RequestAdminApprovalAction),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            ApproveWithMasterPasswordCommand = new AsyncCommand(() => SetDeviceTrustAndInvoke(LogInWithMasterPassword),
+            ApproveWithMasterPasswordCommand = new AsyncCommand(() => SetDeviceTrustAndInvokeAsync(LogInWithMasterPassword),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
@@ -109,8 +109,8 @@ namespace Bit.App.Pages
             {
                 Email = await _stateService.GetRememberedEmailAsync();
                 var decryptOptions = await _stateService.GetAccountDecryptionOptions();
-                RequestAdminApprovalEnabled = decryptOptions != null && decryptOptions.TrustedDeviceOption != null && decryptOptions.TrustedDeviceOption.HasAdminApproval;
-                ApproveWithMasterPasswordEnabled = decryptOptions != null && decryptOptions.HasMasterPassword;
+                RequestAdminApprovalEnabled = decryptOptions?.TrustedDeviceOption?.HasAdminApproval ?? false;
+                ApproveWithMasterPasswordEnabled = decryptOptions?.HasMasterPassword ?? false;
             }
             catch (Exception ex)
             {
@@ -130,9 +130,9 @@ namespace Bit.App.Pages
             ContinueEnabled = !RequestAdminApprovalEnabled && !ApproveWithMasterPasswordEnabled && !ApproveWithMyOtherDeviceEnabled;
         }
 
-        private async Task SetDeviceTrustAndInvoke(Action action)
+        private async Task SetDeviceTrustAndInvokeAsync(Action action)
         {
-            await _deviceTrustCryptoService.SetUserTrustDeviceChoiceForDecryptionAsync(RememberThisDevice);
+            await _deviceTrustCryptoService.SetShouldTrustDeviceAsync(RememberThisDevice);
             await Device.InvokeOnMainThreadAsync(action);
         }
     }
