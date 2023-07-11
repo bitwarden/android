@@ -2634,6 +2634,12 @@
     <value>主密码重新询问帮助</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>解锁可能由于内存不足而失败。可以通过减少 KDF 内存设置来解决。</value>
+    <value>内存不足可能导致解锁失败。可以通过减少 KDF 内存设置来解决。</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>无效的 API 密钥</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>无效的 API 令牌</value>
   </data>
 </root>

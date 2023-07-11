@@ -2637,4 +2637,10 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>El desbloqueo puede fallar por falta de memoria. Disminuye los ajustes de memoria KDF para resolver</value>
   </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Clave API no válida</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Token de API no válido</value>
+  </data>
 </root>
