@@ -1,4 +1,6 @@
 ﻿using System;
+using Bit.Core.Enums;
+
 namespace Bit.Core.Models.Request
 {
     public class PasswordlessCreateLoginRequest
@@ -24,11 +26,5 @@ namespace Bit.Core.Models.Request
         public AuthRequestType? Type { get; set; }
 
         public string FingerprintPhrase { get; set; }
-    }
-
-    public enum AuthRequestType : byte
-    {
-        AuthenticateAndUnlock = 0,
-        Unlock = 1
     }
 }

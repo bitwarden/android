@@ -599,7 +599,7 @@ namespace Bit.Core.Services
             return await PopulateFingerprintPhraseAsync(response, await _stateService.GetEmailAsync());
         }
 
-        public async Task<PasswordlessLoginResponse> PasswordlessCreateLoginRequestAsync(string email)
+        public async Task<PasswordlessLoginResponse> PasswordlessCreateLoginRequestAsync(string email, AuthRequestType authRequestType)
         {
             var deviceId = await _appIdService.GetAppIdAsync();
             var keyPair = await _cryptoFunctionService.RsaGenerateKeyPairAsync(2048);
@@ -607,7 +607,7 @@ namespace Bit.Core.Services
             var fingerprintPhrase = string.Join("-", generatedFingerprintPhrase);
             var publicB64 = Convert.ToBase64String(keyPair.Item1);
             var accessCode = await _passwordGenerationService.GeneratePasswordAsync(PasswordGenerationOptions.CreateDefault.WithLength(25));
-            var passwordlessCreateLoginRequest = new PasswordlessCreateLoginRequest(email, publicB64, deviceId, accessCode, AuthRequestType.AuthenticateAndUnlock, fingerprintPhrase);
+            var passwordlessCreateLoginRequest = new PasswordlessCreateLoginRequest(email, publicB64, deviceId, accessCode, authRequestType, fingerprintPhrase);
             var response = await _apiService.PostCreateRequestAsync(passwordlessCreateLoginRequest);
 
             if (response != null)

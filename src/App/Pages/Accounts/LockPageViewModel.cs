@@ -33,7 +33,7 @@ namespace Bit.App.Pages
         private readonly WeakEventManager<int?> _secretEntryFocusWeakEventManager = new WeakEventManager<int?>();
         private readonly IPolicyService _policyService;
         private readonly IPasswordGenerationService _passwordGenerationService;
-
+        private IDeviceTrustCryptoService _deviceTrustCryptoService;
         private string _email;
         private string _masterPassword;
         private string _pin;
@@ -65,6 +65,7 @@ namespace Bit.App.Pages
             _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
             _policyService = ServiceContainer.Resolve<IPolicyService>();
             _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>();
+            _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
 
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -454,6 +455,7 @@ namespace Bit.App.Pages
             {
                 await _cryptoService.SetKeyAsync(key);
             }
+            await _deviceTrustCryptoService.TrustDeviceIfNeededAsync();
             await DoContinueAsync();
         }
 

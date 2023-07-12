@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,6 +33,7 @@ namespace Bit.App.Pages
         private IPlatformUtilsService _platformUtilsService;
         private IEnvironmentService _environmentService;
         private ILogger _logger;
+        private IDeviceTrustCryptoService _deviceTrustCryptoService;
 
         protected override II18nService i18nService => _i18nService;
         protected override IEnvironmentService environmentService => _environmentService;
@@ -44,6 +46,7 @@ namespace Bit.App.Pages
         private string _email;
         private string _requestId;
         private string _requestAccessCode;
+        private AuthRequestType _authRequestType;
         // Item1 publicKey, Item2 privateKey
         private Tuple<byte[], byte[]> _requestKeyPair;
 
@@ -57,6 +60,7 @@ namespace Bit.App.Pages
             _i18nService = ServiceContainer.Resolve<II18nService>();
             _stateService = ServiceContainer.Resolve<IStateService>();
             _logger = ServiceContainer.Resolve<ILogger>();
+            _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
 
             PageTitle = AppResources.LogInWithAnotherDevice;
 
@@ -77,6 +81,70 @@ namespace Bit.App.Pages
         public ICommand CreatePasswordlessLoginCommand { get; }
         public ICommand CloseCommand { get; }
 
+        public string Tittle
+        {
+            get
+            {
+                switch (_authRequestType)
+                {
+                    case AuthRequestType.AuthenticateAndUnlock:
+                        return AppResources.LogInInitiated;
+                    case AuthRequestType.AdminApproval:
+                        return AppResources.AdminApprovalRequested;
+                    default:
+                        return string.Empty;
+                };
+            }
+        }
+
+        public string SubTittle
+        {
+            get
+            {
+                switch (_authRequestType)
+                {
+                    case AuthRequestType.AuthenticateAndUnlock:
+                        return AppResources.ANotificationHasBeenSentToYourDevice;
+                    case AuthRequestType.AdminApproval:
+                        return AppResources.YourRequestHasBeenSentToYourAdmin;
+                    default:
+                        return string.Empty;
+                };
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                switch (_authRequestType)
+                {
+                    case AuthRequestType.AuthenticateAndUnlock:
+                        return AppResources.PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice;
+                    case AuthRequestType.AdminApproval:
+                        return AppResources.YouWillBeNotifiedOnceApproved;
+                    default:
+                        return string.Empty;
+                };
+            }
+        }
+
+        public string OtherOptions
+        {
+            get
+            {
+                switch (_authRequestType)
+                {
+                    case AuthRequestType.AuthenticateAndUnlock:
+                        return AppResources.NeedAnotherOption;
+                    case AuthRequestType.AdminApproval:
+                        return AppResources.TroubleLoggingIn;
+                    default:
+                        return string.Empty;
+                };
+            }
+        }
+
         public string FingerprintPhrase
         {
             get => _fingerprintPhrase;
@@ -88,6 +156,21 @@ namespace Bit.App.Pages
             get => _email;
             set => SetProperty(ref _email, value);
         }
+
+        public AuthRequestType AuthRequestType
+        {
+            get => _authRequestType;
+            set => SetProperty(ref _authRequestType, value, additionalPropertyNames: new string[]
+            {
+                nameof(Tittle),
+                nameof(SubTittle),
+                nameof(Description),
+                nameof(OtherOptions),
+                nameof(ResendNotificationVisible)
+            });
+        }
+
+        public bool ResendNotificationVisible => AuthRequestType == AuthRequestType.AuthenticateAndUnlock;
 
         public void StartCheckLoginRequestStatus()
         {
@@ -154,6 +237,7 @@ namespace Bit.App.Pages
                 else
                 {
                     _syncService.FullSyncAsync(true).FireAndForget();
+                    await _deviceTrustCryptoService.TrustDeviceIfNeededAsync();
                     LogInSuccessAction?.Invoke();
                 }
             }
@@ -168,7 +252,7 @@ namespace Bit.App.Pages
         {
             await Device.InvokeOnMainThreadAsync(() => _deviceActionService.ShowLoadingAsync(AppResources.Loading));
 
-            var response = await _authService.PasswordlessCreateLoginRequestAsync(_email);
+            var response = await _authService.PasswordlessCreateLoginRequestAsync(_email, AuthRequestType);
             if (response != null)
             {
                 FingerprintPhrase = response.FingerprintPhrase;

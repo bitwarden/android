@@ -4,6 +4,7 @@ using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -135,7 +136,7 @@ namespace Bit.App.Pages
 
         private async Task StartLoginWithDeviceAsync()
         {
-            var page = new LoginPasswordlessRequestPage(_vm.Email, _appOptions);
+            var page = new LoginPasswordlessRequestPage(_vm.Email, AuthRequestType.AuthenticateAndUnlock, _appOptions);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 

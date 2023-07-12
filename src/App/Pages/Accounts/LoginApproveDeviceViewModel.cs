@@ -7,9 +7,11 @@ using Bit.App.Utilities.AccountManagement;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Request;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -23,29 +25,35 @@ namespace Bit.App.Pages
         private string _email;
         private readonly IStateService _stateService;
         private readonly IApiService _apiService;
+        private IDeviceTrustCryptoService _deviceTrustCryptoService;
 
         public ICommand ApproveWithMyOtherDeviceCommand { get; }
         public ICommand RequestAdminApprovalCommand { get; }
         public ICommand ApproveWithMasterPasswordCommand { get; }
         public ICommand ContinueCommand { get; }
+
+        public Action LogInWithMasterPassword { get; set; }
+        public Action LogInWithDeviceAction { get; set; }
+        public Action RequestAdminApprovalAction { get; set; }
         public Action CloseAction { get; set; }
 
         public LoginApproveDeviceViewModel()
         {
-            _stateService = ServiceContainer.Resolve<IStateService>(); 
+            _stateService = ServiceContainer.Resolve<IStateService>();
             _apiService = ServiceContainer.Resolve<IApiService>();
+            _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
 
             PageTitle = AppResources.LoggedIn;
 
-            ApproveWithMyOtherDeviceCommand = new AsyncCommand(InitAsync,
+            ApproveWithMyOtherDeviceCommand = new AsyncCommand(() => SetDeviceTrustAndInvokeAsync(LogInWithDeviceAction),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            RequestAdminApprovalCommand = new AsyncCommand(InitAsync,
+            RequestAdminApprovalCommand = new AsyncCommand(() => SetDeviceTrustAndInvokeAsync(RequestAdminApprovalAction),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            ApproveWithMasterPasswordCommand = new AsyncCommand(InitAsync,
+            ApproveWithMasterPasswordCommand = new AsyncCommand(() => SetDeviceTrustAndInvokeAsync(LogInWithMasterPassword),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
@@ -97,13 +105,12 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            // Appears if the browser is trusted and shared the key with the app
-            ContinueEnabled = true;
             try
             {
+                Email = await _stateService.GetRememberedEmailAsync();
                 var decryptOptions = await _stateService.GetAccountDecryptionOptions();
-                RequestAdminApprovalEnabled = decryptOptions.TrustedDeviceOption.HasAdminApproval;
-                ApproveWithMasterPasswordEnabled = decryptOptions.HasMasterPassword;
+                RequestAdminApprovalEnabled = decryptOptions?.TrustedDeviceOption?.HasAdminApproval ?? false;
+                ApproveWithMasterPasswordEnabled = decryptOptions?.HasMasterPassword ?? false;
             }
             catch (Exception ex)
             {
@@ -118,6 +125,15 @@ namespace Bit.App.Pages
             {
                 HandleException(ex);
             }
+
+            // TODO: Change this expression to, Appear if the browser is trusted and shared the key with the app
+            ContinueEnabled = !RequestAdminApprovalEnabled && !ApproveWithMasterPasswordEnabled && !ApproveWithMyOtherDeviceEnabled;
+        }
+
+        private async Task SetDeviceTrustAndInvokeAsync(Action action)
+        {
+            await _deviceTrustCryptoService.SetShouldTrustDeviceAsync(RememberThisDevice);
+            await Device.InvokeOnMainThreadAsync(action);
         }
     }
 }
