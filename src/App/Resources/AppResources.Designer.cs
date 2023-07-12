@@ -6858,6 +6858,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vault timeout action changed to log out.
+        /// </summary>
+        public static string VaultTimeoutActionChangedToLogOut {
+            get {
+                return ResourceManager.GetString("VaultTimeoutActionChangedToLogOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your organization policies have set your vault timeout action to {0}..
         /// </summary>
         public static string VaultTimeoutActionPolicyInEffect {

@@ -2676,4 +2676,7 @@ Do you want to switch to this account?</value>
   <data name="LoggingInAsX" xml:space="preserve">
     <value>Logging in as {0}</value>
   </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Vault timeout action changed to log out</value>
+  </data>
 </root>

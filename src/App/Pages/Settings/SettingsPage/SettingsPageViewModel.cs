@@ -48,6 +48,7 @@ namespace Bit.App.Pages
         private bool _reportLoggingEnabled;
         private bool _approvePasswordlessLoginRequests;
         private bool _shouldConnectToWatch;
+        private bool _hasMasterPassword;
         private readonly static List<KeyValuePair<string, int?>> VaultTimeoutOptions =
             new List<KeyValuePair<string, int?>>
             {
@@ -100,12 +101,17 @@ namespace Bit.App.Pages
             ExecuteSettingItemCommand = new AsyncCommand<SettingsPageListItem>(item => item.ExecuteAsync(), onException: _loggerService.Exception, allowsMultipleExecutions: false);
         }
 
+        private bool IsVaultTimeoutActionLockAllowed => _hasMasterPassword || _biometric || _pin;
+
         public ObservableRangeCollection<ISettingsPageListItem> GroupedItems { get; set; }
 
         public IAsyncCommand<SettingsPageListItem> ExecuteSettingItemCommand { get; }
 
         public async Task InitAsync()
         {
+            var decryptionOptions = await _stateService.GetAccountDecryptionOptions();
+            // set has true for backwards compatibility
+            _hasMasterPassword = decryptionOptions?.HasMasterPassword ?? true;
             _supportsBiometric = await _platformUtilsService.SupportsBiometricAsync();
             var lastSync = await _syncService.GetLastSyncAsync();
             if (lastSync != null)
@@ -124,7 +130,13 @@ namespace Bit.App.Pages
             _vaultTimeoutDisplayValue = _vaultTimeoutOptions.FirstOrDefault(o => o.Value == _vaultTimeout).Key;
             _vaultTimeoutDisplayValue ??= _vaultTimeoutOptions.Where(o => o.Value == CustomVaultTimeoutValue).First().Key;
 
-            var action = await _vaultTimeoutService.GetVaultTimeoutAction() ?? VaultTimeoutAction.Lock;
+            var savedVaultTimeoutAction = await _vaultTimeoutService.GetVaultTimeoutAction();
+            var action = savedVaultTimeoutAction ?? VaultTimeoutAction.Lock;
+            if (!_hasMasterPassword && savedVaultTimeoutAction == null)
+            {
+                action = VaultTimeoutAction.Logout;
+                await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(_vaultTimeout, VaultTimeoutAction.Logout);
+            }
             _vaultTimeoutActionDisplayValue = _vaultTimeoutActionOptions.FirstOrDefault(o => o.Value == action).Key;
 
             if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout))
@@ -387,8 +399,11 @@ namespace Bit.App.Pages
                 // do nothing if we have a policy set
                 return;
             }
-            var options = _vaultTimeoutActionOptions.Select(o =>
-                o.Key == _vaultTimeoutActionDisplayValue ? $"✓ {o.Key}" : o.Key).ToArray();
+
+            var options = IsVaultTimeoutActionLockAllowed
+                ? _vaultTimeoutActionOptions.Select(o => CreateSelectableOption(o.Key, _vaultTimeoutActionDisplayValue == o.Key)).ToArray()
+                : _vaultTimeoutActionOptions.Where(o => o.Value == VaultTimeoutAction.Logout).Select(v => ToSelectedOption(v.Key)).ToArray();
+
             var selection = await Page.DisplayActionSheet(AppResources.VaultTimeoutAction,
                 AppResources.Cancel, null, options);
             if (selection == null || selection == AppResources.Cancel)
@@ -459,6 +474,7 @@ namespace Bit.App.Pages
             }
             if (!_pin)
             {
+                await UpdateVaultTimeoutActionIfNeededAsync();
                 await _cryptoService.ClearPinProtectedKeyAsync();
                 await _vaultTimeoutService.ClearAsync();
             }
@@ -489,6 +505,7 @@ namespace Bit.App.Pages
             else
             {
                 await _stateService.SetBiometricUnlockAsync(null);
+                await UpdateVaultTimeoutActionIfNeededAsync();
             }
             await _stateService.SetBiometricLockedAsync(false);
             await _cryptoService.ToggleKeyAsync();
@@ -835,9 +852,11 @@ namespace Bit.App.Pages
             return _vaultTimeoutOptions.FirstOrDefault(o => o.Key == key).Value;
         }
 
-        private string CreateSelectableOption(string option, bool selected) => selected ? $"✓ {option}" : option;
+        private string CreateSelectableOption(string option, bool selected) => selected ? ToSelectedOption(option) : option;
 
-        private bool CompareSelection(string selection, string compareTo) => selection == compareTo || selection == $"✓ {compareTo}";
+        private bool CompareSelection(string selection, string compareTo) => selection == compareTo || selection == ToSelectedOption(compareTo);
+
+        private string ToSelectedOption(string option) => $"✓ {option}";
 
         public async Task SetScreenCaptureAllowedAsync()
         {
@@ -868,6 +887,18 @@ namespace Bit.App.Pages
 
             await _watchDeviceService.SetShouldConnectToWatchAsync(_shouldConnectToWatch);
             BuildList();
+        }
+
+        private async Task UpdateVaultTimeoutActionIfNeededAsync()
+        {
+            if (IsVaultTimeoutActionLockAllowed)
+            {
+                return;
+            }
+
+            _vaultTimeoutActionDisplayValue = _vaultTimeoutActionOptions.First(o => o.Value == VaultTimeoutAction.Logout).Key;
+            await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(_vaultTimeout, VaultTimeoutAction.Logout);
+            _deviceActionService.Toast(AppResources.VaultTimeoutActionChangedToLogOut);
         }
     }
 }
