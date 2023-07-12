@@ -898,6 +898,7 @@ namespace Bit.App.Pages
 
             _vaultTimeoutActionDisplayValue = _vaultTimeoutActionOptions.First(o => o.Value == VaultTimeoutAction.Logout).Key;
             await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(_vaultTimeout, VaultTimeoutAction.Logout);
+            _deviceActionService.Toast(AppResources.VaultTimeoutActionChangedToLogOut);
         }
     }
 }
