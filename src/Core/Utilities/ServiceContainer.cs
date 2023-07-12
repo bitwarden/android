@@ -88,6 +88,7 @@ namespace Bit.Core.Utilities
                 cryptoService);
             var usernameGenerationService = new UsernameGenerationService(cryptoService, apiService, stateService);
             var configService = new ConfigService(apiService, stateService, logger);
+            var deviceTrustCryptoService = new DeviceTrustCryptoService(apiService, appIdService, cryptoFunctionService, cryptoService, stateService);
 
             Register<IConditionedAwaiterManager>(conditionedRunner);
             Register<ITokenService>("tokenService", tokenService);
@@ -114,6 +115,7 @@ namespace Bit.Core.Utilities
             Register<IUserVerificationService>("userVerificationService", userVerificationService);
             Register<IUsernameGenerationService>(usernameGenerationService);
             Register<IConfigService>(configService);
+            Register<IDeviceTrustCryptoService>(deviceTrustCryptoService);
         }
 
         public static void Register<T>(string serviceName, T obj)

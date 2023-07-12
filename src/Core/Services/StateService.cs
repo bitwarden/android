@@ -1298,6 +1298,16 @@ namespace Bit.Core.Services
             ))?.Profile?.UserDecryptionOptions;
         }
 
+        public async Task<bool> GetShouldTrustDeviceAsync()
+        {
+            return await _storageMediatorService.GetAsync<bool>(Constants.ShouldTrustDevice);
+        }
+
+        public async Task SetShouldTrustDeviceAsync(bool value)
+        {
+            await _storageMediatorService.SaveAsync(Constants.ShouldTrustDevice, value);
+        }
+
         public ConfigResponse GetConfigs()
         {
             return _storageMediatorService.Get<ConfigResponse>(Constants.ConfigsKey);

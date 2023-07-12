@@ -77,5 +77,27 @@ namespace Bit.Core.Services
             var randomBytes = await _cryptoFunctionService.RandomBytesAsync(DEVICE_KEY_SIZE);
             return new SymmetricCryptoKey(randomBytes);
         }
+
+        public async Task<bool> GetShouldTrustDeviceAsync()
+        {
+            return await _stateService.GetShouldTrustDeviceAsync();
+        }
+
+        public async Task SetShouldTrustDeviceAsync(bool value)
+        {
+            await _stateService.SetShouldTrustDeviceAsync(value);
+        }
+
+        public async Task<DeviceResponse> TrustDeviceIfNeededAsync()
+        {
+            if (!await GetShouldTrustDeviceAsync())
+            {
+                return null;
+            }
+
+            var response = await TrustDeviceAsync();
+            await SetShouldTrustDeviceAsync(false);
+            return response;
+        }
     }
 }
