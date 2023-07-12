@@ -852,9 +852,9 @@ namespace Bit.App.Pages
             return _vaultTimeoutOptions.FirstOrDefault(o => o.Key == key).Value;
         }
 
-        private string CreateSelectableOption(string option, bool selected) => selected ? $"✓ {option}" : option;
+        private string CreateSelectableOption(string option, bool selected) => selected ? ToSelectedOption(option) : option;
 
-        private bool CompareSelection(string selection, string compareTo) => selection == compareTo || selection == $"✓ {compareTo}";
+        private bool CompareSelection(string selection, string compareTo) => selection == compareTo || selection == ToSelectedOption(compareTo);
 
         private string ToSelectedOption(string option) => $"✓ {option}";
 
