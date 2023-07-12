@@ -90,12 +90,13 @@ namespace Bit.Core.Services
 
         public async Task<DeviceResponse> TrustDeviceIfNeededAsync()
         {
-            DeviceResponse response = null;
-            if (await GetShouldTrustDeviceAsync())
+            if (!await GetShouldTrustDeviceAsync())
             {
-                response = await TrustDeviceAsync();
-                await SetShouldTrustDeviceAsync(false);
+                return null;
             }
+
+            var response = await TrustDeviceAsync();
+            await SetShouldTrustDeviceAsync(false);
             return response;
         }
     }
