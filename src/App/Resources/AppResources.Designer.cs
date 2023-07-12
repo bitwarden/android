@@ -2039,15 +2039,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you really want to restore this item?.
-        /// </summary>
-        public static string DoYouReallyWantToRestoreCipher {
-            get {
-                return ResourceManager.GetString("DoYouReallyWantToRestoreCipher", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Do you really want to send to the trash?.
         /// </summary>
         public static string DoYouReallyWantToSoftDeleteCipher {
