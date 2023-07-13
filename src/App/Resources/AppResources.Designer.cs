@@ -1274,6 +1274,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot edit multiple URIs at once.
+        /// </summary>
+        public static string CannotEditMultipleURIsAtOnce {
+            get {
+                return ResourceManager.GetString("CannotEditMultipleURIsAtOnce", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot open the app &quot;{0}&quot;..
         /// </summary>
         public static string CannotOpenApp {
@@ -6219,6 +6228,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The URI {0} is already blocked.
+        /// </summary>
+        public static string TheURIXIsAlreadyBlocked {
+            get {
+                return ResourceManager.GetString("TheURIXIsAlreadyBlocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 30 days.
         /// </summary>
         public static string ThirtyDays {
@@ -6251,15 +6269,6 @@ namespace Bit.App.Resources {
         public static string ThisRequestIsNoLongerValid {
             get {
                 return ResourceManager.GetString("ThisRequestIsNoLongerValid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This URI is already blocked.
-        /// </summary>
-        public static string ThisURIIsAlreadyBlocked {
-            get {
-                return ResourceManager.GetString("ThisURIIsAlreadyBlocked", resourceCulture);
             }
         }
         

@@ -2680,7 +2680,10 @@ Do you want to switch to this account?</value>
   <data name="ThereAreNoBlockedURIs" xml:space="preserve">
     <value>There are no blocked URIs</value>
   </data>
-  <data name="ThisURIIsAlreadyBlocked" xml:space="preserve">
-    <value>This URI is already blocked</value>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>The URI {0} is already blocked</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Cannot edit multiple URIs at once</value>
   </data>
 </root>

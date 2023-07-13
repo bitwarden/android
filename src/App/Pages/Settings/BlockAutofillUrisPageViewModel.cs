@@ -65,7 +65,7 @@ namespace Bit.App.Pages
                 Subtitle = AppResources.EnterURI,
                 ValueSubInfo = string.Format(AppResources.FormatXSeparateMultipleURIsWithAComma, URI_FORMAT),
                 OkButtonText = AppResources.Save,
-                ValidateText = ValidateUris
+                ValidateText = text => ValidateUris(text, true)
             });
             if (response?.Text is null)
             {
@@ -98,7 +98,7 @@ namespace Bit.App.Pages
                 ValueSubInfo = string.Format(AppResources.FormatX, URI_FORMAT),
                 OkButtonText = AppResources.Save,
                 ThirdButtonText = AppResources.Remove,
-                ValidateText = ValidateUris
+                ValidateText = text => ValidateUris(text, false)
             });
             if (response is null)
             {
@@ -130,11 +130,16 @@ namespace Bit.App.Pages
             _deviceActionService.Toast(AppResources.URISaved);
         }
 
-        private string ValidateUris(string uris)
+        private string ValidateUris(string uris, bool allowMultipleUris)
         {
             if (string.IsNullOrWhiteSpace(uris))
             {
                 return string.Format(AppResources.FormatX, URI_FORMAT);
+            }
+
+            if (!allowMultipleUris && uris.Contains(URI_SEPARARTOR))
+            {
+                return AppResources.CannotEditMultipleURIsAtOnce;
             }
 
             foreach (var uri in uris.Split(URI_SEPARARTOR).Where(u => !string.IsNullOrWhiteSpace(u)))
@@ -153,7 +158,7 @@ namespace Bit.App.Pages
 
                 if (BlockedUris.Any(uriItem => uriItem.Uri == cleanedUri))
                 {
-                    return AppResources.ThisURIIsAlreadyBlocked;
+                    return string.Format(AppResources.TheURIXIsAlreadyBlocked, cleanedUri);
                 }
             }
 
