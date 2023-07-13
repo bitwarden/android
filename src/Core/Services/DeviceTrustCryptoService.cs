@@ -99,5 +99,28 @@ namespace Bit.Core.Services
             await SetShouldTrustDeviceAsync(false);
             return response;
         }
+
+        // TODO: Add proper types to parameters once we have them coming down from server
+        public async Task<SymmetricCryptoKey> DecryptUserKeyWithDeviceKey(string encryptedDevicePrivateKey, string encryptedUserKey)
+        {
+            // Get device key
+            var existingDeviceKey = await GetDeviceKeyAsync();
+
+            if (existingDeviceKey == null)
+            {
+              // User doesn't have a device key anymore so device is untrusted
+              return null;
+            }
+
+            // Attempt to decrypt encryptedDevicePrivateKey with device key
+            var devicePrivateKey = await _cryptoService.DecryptToBytesAsync(
+              new EncString(encryptedDevicePrivateKey),
+              existingDeviceKey
+            );
+
+            // Attempt to decrypt encryptedUserDataKey with devicePrivateKey
+            var userKey = await _cryptoService.RsaDecryptAsync(encryptedUserKey, devicePrivateKey);
+            return new SymmetricCryptoKey(userKey);
+        }
     }
 }
