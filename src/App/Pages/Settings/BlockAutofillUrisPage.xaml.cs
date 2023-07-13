@@ -6,7 +6,7 @@ namespace Bit.App.Pages
     {
         private readonly BlockAutofillUrisPageViewModel _vm;
 
-        public BlockAutofillUrisPage ()
+        public BlockAutofillUrisPage()
         {
             InitializeComponent();
 
