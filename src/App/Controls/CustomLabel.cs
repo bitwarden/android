@@ -1,5 +1,4 @@
-﻿using System;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
@@ -8,6 +7,7 @@ namespace Bit.App.Controls
         public CustomLabel()
         {
         }
+
+        public int? FontWeight { get; set; }
     }
 }
-
