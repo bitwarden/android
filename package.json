@@ -1,0 +1,26 @@
+{
+  "name": "@bitwarden/template",
+  "version": "0.0.0",
+  "description": "Bitwarden Template",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitwarden/template.git"
+  },
+  "author": "Bitwarden Inc. <hello@bitwarden.com> (https://bitwarden.com)",
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "bugs": {
+    "url": "https://github.com/bitwarden/template/issues"
+  },
+  "homepage": "https://bitwarden.com",
+  "devDependencies": {
+    "husky": "8.0.3",
+    "lint-staged": "13.2.3",
+    "prettier": "2.8.8"
+  },
+  "lint-staged": {
+    "*": "prettier --cache --write --ignore-unknown"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  }
+}
