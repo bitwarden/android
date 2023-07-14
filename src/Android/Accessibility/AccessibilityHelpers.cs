@@ -90,6 +90,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.yjllq.kito", "search_box"),
             new Browser("com.yujian.ResideMenuDemo", "search_box"),
             new Browser("com.z28j.feel", "g2"),
+            new Browser("foundation.e.browser", "url_bar"),
             new Browser("idm.internet.download.manager", "search"),
             new Browser("idm.internet.download.manager.adm.lite", "search"),
             new Browser("idm.internet.download.manager.plus", "search"),

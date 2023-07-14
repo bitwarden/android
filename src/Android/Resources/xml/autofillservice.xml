@@ -186,6 +186,9 @@
     android:name="com.z28j.feel"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="foundation.e.browser"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="idm.internet.download.manager"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
