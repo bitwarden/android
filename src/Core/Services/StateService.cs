@@ -249,11 +249,26 @@ namespace Bit.Core.Services
                 reconciledOptions);
         }
 
+        public async Task<bool?> GetBiometricRequireMasterPasswordOnResetKeyAsync(string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            return await GetValueAsync<bool?>(Constants.BiometricRequireMasterPasswordOnResetKey(reconciledOptions.UserId),
+                reconciledOptions);
+        }
+
         public async Task SetBiometricUnlockAsync(bool? value, string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
             await SetValueAsync(Constants.BiometricUnlockKey(reconciledOptions.UserId), value, reconciledOptions);
+        }
+
+        public async Task SetBiometricRequireMasterPasswordOnResetKeyAsync(bool? value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            await SetValueAsync(Constants.BiometricRequireMasterPasswordOnResetKey(reconciledOptions.UserId), value, reconciledOptions);
         }
 
         public async Task<bool> GetBiometricLockedAsync(string userId = null)

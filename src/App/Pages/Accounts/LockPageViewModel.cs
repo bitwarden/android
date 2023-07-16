@@ -165,7 +165,9 @@ namespace Bit.App.Pages
             (_isPinProtected, _isPinProtectedWithKey) = await _vaultTimeoutService.IsPinLockSetAsync();
             PinLock = (_isPinProtected && await _stateService.GetPinProtectedKeyAsync() != null) ||
                       _isPinProtectedWithKey;
-            BiometricLock = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _cryptoService.HasKeyAsync();
+            BiometricLock = await _vaultTimeoutService.IsBiometricLockSetAsync() &&
+                            await _cryptoService.HasKeyAsync() &&
+                            await _stateService.GetBiometricRequireMasterPasswordOnResetKeyAsync() == null;
 
             // Users with key connector and without biometric or pin has no MP to unlock with
             _usingKeyConnector = await _keyConnectorService.GetUsesKeyConnector();

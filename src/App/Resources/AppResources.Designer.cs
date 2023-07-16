@@ -4958,15 +4958,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to require unlocking with your master password when the application is restarted?.
-        /// </summary>
-        public static string PINRequireMasterPasswordRestart {
-            get {
-                return ResourceManager.GetString("PINRequireMasterPasswordRestart", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device..
         /// </summary>
         public static string PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice {
@@ -5279,6 +5270,15 @@ namespace Bit.App.Resources {
         public static string RequestsDeclined {
             get {
                 return ResourceManager.GetString("RequestsDeclined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to require unlocking with your master password when the application is restarted?.
+        /// </summary>
+        public static string RequireMasterPasswordRestart {
+            get {
+                return ResourceManager.GetString("RequireMasterPasswordRestart", resourceCulture);
             }
         }
         

@@ -113,6 +113,7 @@
         public static string ProtectedPinKey(string userId) => $"protectedPin_{userId}";
         public static string LastSyncKey(string userId) => $"lastSync_{userId}";
         public static string BiometricUnlockKey(string userId) => $"biometricUnlock_{userId}";
+        public static string BiometricRequireMasterPasswordOnResetKey(string userId) => $"biometricRequireMasterPasswordOnReset_{userId}";
         public static string AccountBiometricIntegrityValidKey(string userId, string systemBioIntegrityState) =>
             $"accountBiometricIntegrityValid_{userId}_{systemBioIntegrityState}";
         public static string ApprovePasswordlessLoginsKey(string userId) => $"approvePasswordlessLogins_{userId}";

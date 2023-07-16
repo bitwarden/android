@@ -427,13 +427,7 @@ namespace Bit.App.Pages
                     AppResources.SetPINDescription, null, AppResources.Submit, AppResources.Cancel, true);
                 if (!string.IsNullOrWhiteSpace(pin))
                 {
-                    var masterPassOnRestart = false;
-                    if (!await _keyConnectorService.GetUsesKeyConnector())
-                    {
-                        masterPassOnRestart = await _platformUtilsService.ShowDialogAsync(
-                            AppResources.PINRequireMasterPasswordRestart, AppResources.UnlockWithPIN,
-                            AppResources.Yes, AppResources.No);
-                    }
+                    var masterPassOnRestart = await AskIfMasterPasswordIsRquiredOnAppReset(AppResources.UnlockWithPIN);
 
                     var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
                     var email = await _stateService.GetEmailAsync();
@@ -483,8 +477,20 @@ namespace Bit.App.Pages
             }
             if (_biometric)
             {
+                var masterPassOnRestartPopupTitle = string.Format(AppResources.UnlockWith, GetSupportedBiometricsName());
+                var masterPassOnRestart = await AskIfMasterPasswordIsRquiredOnAppReset(masterPassOnRestartPopupTitle);
+
                 await _biometricService.SetupBiometricAsync();
                 await _stateService.SetBiometricUnlockAsync(true);
+
+                if (masterPassOnRestart)
+                {
+                    await _stateService.SetBiometricRequireMasterPasswordOnResetKeyAsync(true);
+                }
+                else
+                {
+                    await _stateService.SetBiometricRequireMasterPasswordOnResetKeyAsync(null);
+                }
             }
             else
             {
@@ -586,15 +592,9 @@ namespace Bit.App.Pages
             }
             if (_supportsBiometric || _biometric)
             {
-                var biometricName = AppResources.Biometrics;
-                if (Device.RuntimePlatform == Device.iOS)
-                {
-                    biometricName = _deviceActionService.SupportsFaceBiometric() ? AppResources.FaceID :
-                        AppResources.TouchID;
-                }
                 var item = new SettingsPageListItem
                 {
-                    Name = string.Format(AppResources.UnlockWith, biometricName),
+                    Name = string.Format(AppResources.UnlockWith, GetSupportedBiometricsName()),
                     SubLabel = _biometric ? AppResources.On : AppResources.Off,
                     ExecuteAsync = () => UpdateBiometricAsync()
                 };
@@ -814,6 +814,31 @@ namespace Bit.App.Pages
             {
                 HandleException(ex);
             }
+        }
+
+        private string GetSupportedBiometricsName()
+        {
+            var biometricName = AppResources.Biometrics;
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                biometricName = _deviceActionService.SupportsFaceBiometric() ? AppResources.FaceID :
+                    AppResources.TouchID;
+            }
+
+            return biometricName;
+        }
+
+        private async Task<bool> AskIfMasterPasswordIsRquiredOnAppReset(string title)
+        {
+            var masterPassOnRestart = false;
+            if (!await _keyConnectorService.GetUsesKeyConnector())
+            {
+                masterPassOnRestart = await _platformUtilsService.ShowDialogAsync(
+                    AppResources.RequireMasterPasswordRestart, title,
+                    AppResources.Yes, AppResources.No);
+            }
+
+            return masterPassOnRestart;
         }
 
         private bool IncludeLinksWithSubscriptionInfo()

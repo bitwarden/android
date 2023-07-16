@@ -1567,7 +1567,7 @@ Scanning will happen automatically.</value>
   <data name="ExitConfirmation" xml:space="preserve">
     <value>Are you sure you want to exit Bitwarden?</value>
   </data>
-  <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
+  <data name="RequireMasterPasswordRestart" xml:space="preserve">
     <value>Do you want to require unlocking with your master password when the application is restarted?</value>
   </data>
   <data name="Black" xml:space="preserve">
