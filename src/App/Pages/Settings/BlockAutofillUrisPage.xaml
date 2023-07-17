@@ -18,11 +18,11 @@
     </ContentPage.Resources>
     <StackLayout Orientation="Vertical">
         <Image
+            x:Name="_emptyUrisPlaceholder"
             HorizontalOptions="Center"
             WidthRequest="120"
             HeightRequest="120"
             Margin="0,100,0,0"
-            Source="empty_uris_placeholder"
             IsVisible="{Binding ShowList, Converter={StaticResource inverseBool}}"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n ThereAreNoBlockedURIs}" />
