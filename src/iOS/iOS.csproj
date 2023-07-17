@@ -155,15 +155,33 @@
     <ImageAsset Include="Resources\Assets.xcassets\AppIcons.appiconset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo%403x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%403x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\ic_warning-1.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\ic_warning-1.pdf">
+      <Visible>false</Visible>
+    </ImageAsset>
     <BundleResource Include="Resources\cog_environment.png" />
     <BundleResource Include="Resources\cog_environment%402x.png" />
     <BundleResource Include="Resources\cog_environment%403x.png" />
@@ -179,10 +197,18 @@
     <BundleResource Include="Resources\generate.png" />
     <BundleResource Include="Resources\generate%402x.png" />
     <BundleResource Include="Resources\generate%403x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\empty_items_state.imageset\Empty-items-state-dark.pdf" />
-    <ImageAsset Include="Resources\Assets.xcassets\empty_items_state.imageset\Empty-items-state.pdf" />
-    <ImageAsset Include="Resources\Assets.xcassets\empty_items_state.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\empty_items_state.imageset\Empty-items-state-dark.pdf">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\empty_items_state.imageset\Empty-items-state.pdf">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\empty_items_state.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -419,16 +445,16 @@
     <Folder Include="Resources\Assets.xcassets\ic_warning.imageset\" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Debug' AND Exists('$(WatchAppBundleFullPath)') ">
-      <_ResolvedWatchAppReferences Include="$(WatchAppBundleFullPath)" />
+    <_ResolvedWatchAppReferences Include="$(WatchAppBundleFullPath)" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' != 'Debug' ">
-      <_ResolvedWatchAppReferences Include="$(WatchAppBundleFullPath)" />
+    <_ResolvedWatchAppReferences Include="$(WatchAppBundleFullPath)" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(_ResolvedWatchAppReferences)' != '' ">
-      <CodesignExtraArgs>--deep</CodesignExtraArgs>
+    <CodesignExtraArgs>--deep</CodesignExtraArgs>
   </PropertyGroup>
   <Target Name="PrintWatchAppBundleStatus" BeforeTargets="Build">
-      <Message Text="WatchAppBundleFullPath: '$(WatchAppBundleFullPath)' exists" Condition=" Exists('$(WatchAppBundleFullPath)') " />
-      <Message Text="WatchAppBundleFullPath: '$(WatchAppBundleFullPath)' does NOT exist" Condition=" !Exists('$(WatchAppBundleFullPath)') " />
+    <Message Text="WatchAppBundleFullPath: '$(WatchAppBundleFullPath)' exists" Condition=" Exists('$(WatchAppBundleFullPath)') " />
+    <Message Text="WatchAppBundleFullPath: '$(WatchAppBundleFullPath)' does NOT exist" Condition=" !Exists('$(WatchAppBundleFullPath)') " />
   </Target>
 </Project>

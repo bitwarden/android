@@ -7,7 +7,6 @@ using Android.OS;
 using Android.Runtime;
 using Bit.App.Abstractions;
 using Bit.App.Services;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
@@ -22,6 +21,7 @@ using Bit.App.Pages;
 using Bit.App.Utilities.AccountManagement;
 using Bit.App.Controls;
 using Bit.Core.Enums;
+using Bit.Droid.Security;
 #if !FDROID
 using Android.Gms.Security;
 #endif
@@ -182,6 +182,8 @@ namespace Bit.Droid
             ServiceContainer.Register<ICryptoService>("cryptoService", cryptoService);
             ServiceContainer.Register<IPasswordRepromptService>("passwordRepromptService", passwordRepromptService);
             ServiceContainer.Register<IAvatarImageSourcePool>("avatarImageSourcePool", new AvatarImageSourcePool());
+            ServiceContainer.Register<ICertificateService>("certificateService", new CertificateService());
+            ServiceContainer.Register<IHttpClientHandler>("httpClientHandler", new AndroidHttpsClientHandler());
 
             // Push
 #if FDROID

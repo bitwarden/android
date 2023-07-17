@@ -95,5 +95,6 @@ namespace Bit.Core.Abstractions
         Task<OrganizationDomainSsoDetailsResponse> GetOrgDomainSsoDetailsAsync(string email);
         Task<ConfigResponse> GetConfigsAsync();
         Task<string> GetFastmailAccountIdAsync(string apiKey);
+        Task LoadClientAuthCertificateAsync();
     }
 }

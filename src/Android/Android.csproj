@@ -30,6 +30,13 @@
     <WarningLevel>3</WarningLevel>
     <AndroidSupportedAbis />
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <BundleAssemblies>false</BundleAssemblies>
+    <MandroidI18n />
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+    <AndroidLinkMode>None</AndroidLinkMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -132,6 +139,8 @@
     <Compile Include="Renderers\CustomEntryRenderer.cs" />
     <Compile Include="Renderers\CustomSearchBarRenderer.cs" />
     <Compile Include="Renderers\HybridWebViewRenderer.cs" />
+    <Compile Include="Security\AndroidHttpsClientHandler.cs" />
+    <Compile Include="Security\X509CertificateSpec.cs" />
     <Compile Include="Services\AndroidPushNotificationService.cs" />
     <Compile Include="Services\AndroidLogService.cs" />
     <Compile Include="MainApplication.cs" />
@@ -139,6 +148,7 @@
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BiometricService.cs" />
+    <Compile Include="Services\CertificateService.cs" />
     <Compile Include="Services\CryptoPrimitiveService.cs" />
     <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Services\LocalizeService.cs" />
@@ -230,8 +240,10 @@
     <AndroidResource Include="Resources\drawable\logo_rounded.xml" />
     <AndroidResource Include="Resources\drawable-night-v26\splash_screen_round.xml" />
     <AndroidResource Include="Resources\drawable\ic_notification.xml">
-      <SubType></SubType>
-      <Generator></Generator>
+      <SubType>
+      </SubType>
+      <Generator>
+      </Generator>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
@@ -298,10 +310,6 @@
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\values-v30\" />
-    <Folder Include="Resources\drawable-v26\" />
-    <Folder Include="Resources\drawable-night-v26\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

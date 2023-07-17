@@ -315,6 +315,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Pages\Accounts\AdvancedPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\AppResources.cs.resx">
       <LastGenOutput>AppResources.cs.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -442,5 +445,11 @@
     <None Remove="MessagePack.MSBuild.Tasks" />
     <None Remove="Controls\PasswordStrengthProgressBar\" />
     <None Remove="Utilities\Automation\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Pages\Accounts\AdvancedPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
   </ItemGroup>
 </Project>

@@ -181,6 +181,7 @@ namespace Bit.App.Pages
 
         public async Task LogInAsync(bool showLoading = true, bool checkForExistingAccount = false)
         {
+            await _apiService.LoadClientAuthCertificateAsync();
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
@@ -315,6 +316,16 @@ namespace Bit.App.Pages
         public async Task ShowMasterPasswordHintAsync()
         {
             var hintNavigationPage = new NavigationPage(new HintPage(Email));
+            if (IsIosExtension)
+            {
+                ThemeManager.ApplyResourcesTo(hintNavigationPage);
+            }
+            await Page.Navigation.PushModalAsync(hintNavigationPage);
+        }
+
+        public async Task ShowAdvancedAsync()
+        {
+            var hintNavigationPage = new NavigationPage(new AdvancedPage());
             if (IsIosExtension)
             {
                 ThemeManager.ApplyResourcesTo(hintNavigationPage);

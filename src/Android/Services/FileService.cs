@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Android;
+using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Provider;
 using Android.Webkit;
+using AndroidX.Activity.Result;
+using AndroidX.Activity.Result.Contract;
 using AndroidX.Core.App;
 using AndroidX.Core.Content;
 using Bit.App.Resources;
@@ -19,6 +22,21 @@ namespace Bit.Droid.Services
 {
     public class FileService : IFileService
     {
+        private class SelectCertFileActivityResultCallback : Java.Lang.Object, IActivityResultCallback
+        {
+            private readonly Action<ActivityResult> _handler;
+            public SelectCertFileActivityResultCallback(Action<ActivityResult> handler)
+            {
+                _handler = handler;
+            }
+
+            public void OnActivityResult(Java.Lang.Object result)
+            {
+                ActivityResult activityResult = result as ActivityResult;
+                _handler(activityResult);
+            }
+        }
+
         private readonly IStateService _stateService;
         private readonly IBroadcasterService _broadcasterService;
 
@@ -170,6 +188,39 @@ namespace Bit.Droid.Services
         public Task SelectFileAsync()
         {
             var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+
+            var chooserIntent = CreateFileChooserIntent();
+            if (chooserIntent == null)
+            {
+                return Task.FromResult(0);
+            }
+
+            activity.StartActivityForResult(chooserIntent, Core.Constants.SelectFileRequestCode);
+            return Task.FromResult(0);
+        }
+
+        public Task SelectFileAsync<T>(Action<T> selectFileHandler)
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+
+            var chooserIntent = CreateFileChooserIntent();
+            if (chooserIntent == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            ActivityResultLauncher activityResultLauncher = activity.RegisterForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), 
+                new SelectCertFileActivityResultCallback(selectFileHandler as Action<ActivityResult>));
+
+            activityResultLauncher.Launch(chooserIntent);
+
+            return Task.CompletedTask;
+        }
+
+        private Intent CreateFileChooserIntent()
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
             var hasStorageWritePermission = !_cameraPermissionsDenied &&
                 HasPermission(Manifest.Permission.WriteExternalStorage);
             var additionalIntents = new List<IParcelable>();
@@ -179,12 +230,12 @@ namespace Bit.Droid.Services
                 if (!_cameraPermissionsDenied && !hasStorageWritePermission)
                 {
                     AskPermission(Manifest.Permission.WriteExternalStorage);
-                    return Task.FromResult(0);
+                    return null;
                 }
                 if (!_cameraPermissionsDenied && !hasCameraPermission)
                 {
                     AskPermission(Manifest.Permission.Camera);
-                    return Task.FromResult(0);
+                    return null;
                 }
                 if (!_cameraPermissionsDenied && hasCameraPermission && hasStorageWritePermission)
                 {
@@ -212,10 +263,9 @@ namespace Bit.Droid.Services
             {
                 chooserIntent.PutExtra(Intent.ExtraInitialIntents, additionalIntents.ToArray());
             }
-            activity.StartActivityForResult(chooserIntent, Core.Constants.SelectFileRequestCode);
-            return Task.FromResult(0);
-        }
 
+            return chooserIntent;
+        }
         private bool DeleteDir(Java.IO.File dir)
         {
             if (dir is null)

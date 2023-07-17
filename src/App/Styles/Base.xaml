@@ -451,6 +451,12 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="button-danger">
+        <Setter Property="TextColor"
+                Value="{DynamicResource DangerColor}" />
+    </Style>
     <Style TargetType="BoxView"
            Class="box-row-separator">
         <Setter Property="HeightRequest"

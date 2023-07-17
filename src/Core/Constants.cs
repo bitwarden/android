@@ -33,6 +33,7 @@
         public const string ThemeKey = "theme";
         public const string AutoDarkThemeKey = "autoDarkTheme";
         public const string DisableFaviconKey = "disableFavicon";
+        public const string ClientAuthCertificateAliasKey = "clientAuthCertificateAliasKey";
         public const string PasswordlessNotificationId = "26072022";
         public const string AndroidNotificationChannelId = "general_notification_channel";
         public const string iOSNotificationCategoryId = "dismissableCategory";
@@ -56,6 +57,7 @@
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;
+        public const int InstallCertificateRequestCode = 45;
         public const int TotpDefaultTimer = 30;
         public const int PasswordlessNotificationTimeoutInMinutes = 15;
         public const int Pbkdf2Iterations = 600000;

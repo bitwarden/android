@@ -36,17 +36,25 @@
                  AutomationProperties.IsInAccessibleTree="True"
                  AutomationProperties.Name="{u:I18n Options}"
                  AutomationId="OptionsButton" />
+            
             <ToolbarItem Text="{u:I18n GetPasswordHint}"
                 x:Key="getPasswordHint"
                 x:Name="_getPasswordHint"
                 Clicked="Hint_Clicked" 
                 Order="Secondary" />
+            
             <ToolbarItem Text="{u:I18n RemoveAccount}"
                 x:Key="removeAccount"
                 x:Name="_removeAccount"
                 Clicked="RemoveAccount_Clicked" 
                 Order="Secondary" />
-
+            
+            <ToolbarItem Text="Advanced"
+                x:Key="showAdvanced"
+                x:Name="_Advanced"
+                Clicked="Advanced_Clicked" 
+                Order="Secondary" />
+            
             <ScrollView x:Name="_mainLayout" x:Key="mainLayout">
                 <StackLayout Spacing="0">
                     <StackLayout StyleClass="box">
