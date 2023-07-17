@@ -100,8 +100,13 @@ namespace Bit.Core.Services
             return response;
         }
 
-        // TODO: Add proper types to parameters once we have them coming down from server
-        public async Task<SymmetricCryptoKey> DecryptUserKeyWithDeviceKey(string encryptedDevicePrivateKey, string encryptedUserKey)
+        public async Task<bool> IsDeviceTrustedAsync()
+        {
+            var existingDeviceKey = await GetDeviceKeyAsync();
+            return existingDeviceKey != null;
+        }
+
+        public async Task<SymmetricCryptoKey> DecryptUserKeyWithDeviceKeyAsync(string encryptedDevicePrivateKey, string encryptedUserKey)
         {
             // Get device key
             var existingDeviceKey = await GetDeviceKeyAsync();

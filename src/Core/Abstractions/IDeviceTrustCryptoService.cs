@@ -10,6 +10,7 @@ namespace Bit.Core.Abstractions
         Task<DeviceResponse> TrustDeviceIfNeededAsync();
         Task<bool> GetShouldTrustDeviceAsync();
         Task SetShouldTrustDeviceAsync(bool value);
-        Task<SymmetricCryptoKey> DecryptUserKeyWithDeviceKey(string encryptedDevicePrivateKey, string encryptedUserKey);
+        Task<SymmetricCryptoKey> DecryptUserKeyWithDeviceKeyAsync(string encryptedDevicePrivateKey, string encryptedUserKey);
+        Task<bool> IsDeviceTrustedAsync();
     }
 }

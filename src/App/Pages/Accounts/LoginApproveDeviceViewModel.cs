@@ -111,15 +111,7 @@ namespace Bit.App.Pages
                 var decryptOptions = await _stateService.GetAccountDecryptionOptions();
                 RequestAdminApprovalEnabled = decryptOptions?.TrustedDeviceOption?.HasAdminApproval ?? false;
                 ApproveWithMasterPasswordEnabled = decryptOptions?.HasMasterPassword ?? false;
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-            }
-
-            try
-            {
-                ApproveWithMyOtherDeviceEnabled = await _apiService.GetDevicesExistenceByTypes(DeviceTypeExtensions.GetDesktopAndMobileTypes().ToArray());
+                ApproveWithMyOtherDeviceEnabled = decryptOptions?.TrustedDeviceOption?.HasLoginApprovingDevice ?? false;
             }
             catch (Exception ex)
             {
