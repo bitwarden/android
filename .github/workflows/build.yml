@@ -71,6 +71,11 @@ jobs:
         with:
           nuget-version: 5.9.0
 
+      - name: Set up .NET
+        uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
+        with:
+          dotnet-version: '3.1.x'
+
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@1ff57057b5cfdc39105cd07a01d78e9b0ea0c14c # v1.3.1
 
