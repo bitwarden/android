@@ -10,6 +10,8 @@ using System.Windows.Input;
 using Xamarin.CommunityToolkit.ObjectModel;
 using System.Runtime.ConstrainedExecution;
 using Xamarin.Forms;
+using Bit.Core;
+using System.Runtime.CompilerServices;
 
 namespace Bit.App.Pages
 {
@@ -18,9 +20,10 @@ namespace Bit.App.Pages
         private readonly ICertificateService _certificateService;
         private readonly IStorageService _storageService;
 
-        private bool _isCertificateChosen = false;
         private string _certificateAlias = "";
+        private string _certificateUri = "";
         private string _certificateDetails = "";
+        private bool _isCertificateChosen = false;
 
         public Action OkAction { get; set; }
 
@@ -28,46 +31,60 @@ namespace Bit.App.Pages
         {
             _certificateService = ServiceContainer.Resolve<ICertificateService>("certificateService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+
             OkCommand = new AsyncCommand(OkAsync, allowsMultipleExecutions: false);
-            InstallAndUseCertCommand = new AsyncCommand(InstallAndUseCertAsync, allowsMultipleExecutions: false);
-            ChooseInstalledCertCommand = new AsyncCommand(ChooseInstalledCertAsync, allowsMultipleExecutions: false);
+            ImportAndUseCertCommand = new AsyncCommand(ImportAndUseCertAsync, allowsMultipleExecutions: false);
+            UseSystemCertCommand = new AsyncCommand(UseSystemCertAsync, allowsMultipleExecutions: false);
 
             PageTitle = "Advanced";
-
-            BindCertificateDetails();
+            Task.Run(async () => await BindCertDetailsAsync());
+        }
+        
+        public async Task InitAsync() 
+        {
+            await BindCertDetailsAsync();
         }
 
-        private void BindCertificateDetails()
+        private async Task BindCertDetailsAsync()
         {
-            Task.Run(async () => {
-                
-                await Task.Delay(5000);
+            var certUri = await GetCertUriSafe();
 
-                var cert = _certificateService.GetCertificate("aabb");
-                if (cert != null)
+            await PrintAsync($"->binding->{certUri}");
+
+            try
+            {
+                if (certUri != null)
                 {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        IsCertificateChosen = true;
-                        CertificateAlias = cert.Alias;
-                        CertificateDetails = cert.ToString();
-                    });
+                    var cert = await _certificateService.GetCertificateAsync(certUri);
+
+                    CertificateUri = certUri;
+                    CertificateAlias = cert.Alias;
+                    CertificateDetails = cert.ToString();
+
+                    await PrintAsync($"haha->{certUri}");
+                    await PrintAsync($"haha->{CertificateAlias}");
+                    await PrintAsync($"haha->{CertificateDetails}");
+
+                    await PrintAsync($"->binding->Invokedwithuri");
+
                 }
                 else
                 {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        IsCertificateChosen = false;
-                    });
+                    CertificateUri = certUri;
+
+                    await PrintAsync($"->binding->Invoked-without-uri");
                 }
-            });
+            }
+            catch (Exception ex)
+            {
+                await PrintAsync(ex.ToString());
+            }
+
         }
 
         public ICommand OkCommand { get; }
-        public ICommand InstallAndUseCertCommand { get; }
-        public ICommand ChooseInstalledCertCommand { get; }
-
-
+        public ICommand ImportAndUseCertCommand { get; }
+        public ICommand UseSystemCertCommand { get; }
 
         public Task OkAsync()
         {
@@ -75,18 +92,42 @@ namespace Bit.App.Pages
             return Task.CompletedTask;
         }
 
-        public async Task InstallAndUseCertAsync()
+        public async Task ImportAndUseCertAsync()
         {
-            var installed = await _certificateService.InstallCertificateAsync();
-            if (installed)
+            try
             {
-                var alias = await _certificateService.ChooseCertificateAsync();
+                var certUri = await _certificateService.ImportCertificateAsync();
+                if (!string.IsNullOrEmpty(certUri))
+                {
+                    _certificateService.TryRemoveCertificate(await GetCertUriSafe());
+                    await _storageService.SaveAsync(Constants.ClientAuthCertificateAliasKey, certUri);
+                    await BindCertDetailsAsync();
+                }
             }
+            catch (Exception ex)
+            {
+                await PrintAsync(ex.ToString());
+            }
+
         }
 
-        public Task ChooseInstalledCertAsync()
+        public async Task UseSystemCertAsync()
         {
-            return Task.CompletedTask;
+            var certUri = await _certificateService.ChooseSystemCertificateAsync();
+            await PrintAsync(certUri);
+            if (!string.IsNullOrEmpty(certUri))
+            {
+                _certificateService.TryRemoveCertificate(await GetCertUriSafe());
+                await PrintAsync("removed--");
+
+                await _storageService.SaveAsync(Constants.ClientAuthCertificateAliasKey, certUri);
+
+                await PrintAsync("saved--");
+
+                await BindCertDetailsAsync();
+
+                await PrintAsync("binded--");
+            }
         }
 
         public string CertificateAlias { 
@@ -104,6 +145,36 @@ namespace Bit.App.Pages
         {
             get => _isCertificateChosen;
             set => SetProperty(ref _isCertificateChosen, value);
+        }
+
+        public string CertificateUri
+        {
+            get => _certificateUri;
+            set {
+                SetProperty(ref _certificateUri, value);
+                IsCertificateChosen = !string.IsNullOrEmpty(_certificateUri);
+            } 
+        }
+
+        private async Task<string> GetCertUriSafe()
+        {
+            try
+            {
+                return await _storageService.GetAsync<string>(Constants.ClientAuthCertificateAliasKey);
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private async Task PrintAsync(string text)
+        {
+            await Device.InvokeOnMainThreadAsync(async () =>
+            {
+                Page currentPage = Xamarin.Forms.Application.Current.MainPage;
+                await currentPage.DisplayAlert("TEXXXT Cert", $"{text}", "OK");
+            });
         }
     }
 }

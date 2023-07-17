@@ -20,7 +20,5 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.OkAction = () => Device.BeginInvokeOnMainThread(async () => await Navigation.PopModalAsync());
         }
-
-
     }
 }

@@ -199,23 +199,29 @@ namespace Bit.Droid.Services
             return Task.FromResult(0);
         }
 
-        public Task SelectFileAsync<T>(Action<T> selectFileHandler)
+        public Task<T> SelectFileAsync<T>() where T : class
         {
+            var result = new TaskCompletionSource<T>();
+
             var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
 
             var chooserIntent = CreateFileChooserIntent();
             if (chooserIntent == null)
             {
-                return Task.CompletedTask;
+                result.SetResult(null);
+                return result.Task;
             }
-
+            
             ActivityResultLauncher activityResultLauncher = activity.RegisterForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), 
-                new SelectCertFileActivityResultCallback(selectFileHandler as Action<ActivityResult>));
+                new SelectCertFileActivityResultCallback((ActivityResult activityResult) =>
+                {
+                    result.SetResult(activityResult as T);
+                }));
 
             activityResultLauncher.Launch(chooserIntent);
 
-            return Task.CompletedTask;
+            return result.Task;
         }
 
         private Intent CreateFileChooserIntent()

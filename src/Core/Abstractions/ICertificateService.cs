@@ -6,10 +6,12 @@ namespace Bit.Core.Abstractions
 {
     public interface ICertificateService
     {
-        ICertificateSpec GetCertificate(string alias);
+        bool TryRemoveCertificate(string certUri);
 
-        Task<bool> InstallCertificateAsync();
+        Task<ICertificateSpec> GetCertificateAsync(string certUri);
 
-        Task<string> ChooseCertificateAsync(string alias = null);
+        Task<string> ImportCertificateAsync();
+
+        Task<string> ChooseSystemCertificateAsync();
     }
 }

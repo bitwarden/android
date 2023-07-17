@@ -49,11 +49,7 @@ namespace Bit.App.Pages
         public async Task SelectCertAsync()
         {
             await Task.Delay(100);
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                _certificateService.ChooseCertificateAsync();
-            });
-
+            await _certificateService.ChooseSystemCertificateAsync();
         }
 
         public async Task SubmitAsync()

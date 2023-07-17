@@ -70,7 +70,7 @@ namespace Bit.Core.Services
             {
                 var certService = _lazyCertificateService.Value;
                 _httpClientHandler
-                    .UseClientCertificate(certService.GetCertificate(clientCertAlias));
+                    .UseClientCertificate(await certService.GetCertificateAsync(clientCertAlias));
             }
         }
 

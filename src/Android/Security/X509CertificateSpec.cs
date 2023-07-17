@@ -5,13 +5,13 @@ using Java.Security;
 
 namespace Bit.Droid.Security
 {
-    public class X509CertificateSpec : ICertificateSpec<Java.Security.Cert.X509Certificate, IPrivateKey>
+    public class X509CertificateSpec : ICertificateSpec<Java.Security.Cert.X509Certificate, IKey>
     {
         public Java.Security.Cert.X509Certificate Certificate { get; set; }
 
         public string Alias { get; set; }
 
-        public IPrivateKey PrivateKeyRef { get; internal set; }
+        public IKey PrivateKeyRef { get; internal set; }
 
         public string ToString(string format, IFormatProvider formatProvider)
         {

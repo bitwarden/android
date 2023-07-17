@@ -51,8 +51,11 @@ namespace Bit.Droid
         private Java.Util.Regex.Pattern _otpPattern =
             Java.Util.Regex.Pattern.Compile("^.*?([cbdefghijklnrtuv]{32,64})$");
 
+        private string stamp = "";
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            stamp = DateTime.UtcNow.ToString();
+
             var eventUploadIntent = new Intent(this, typeof(EventUploadReceiver));
             _eventUploadPendingIntent = PendingIntent.GetBroadcast(this, 0, eventUploadIntent,
                 AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, false));

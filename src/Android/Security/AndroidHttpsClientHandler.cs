@@ -14,7 +14,7 @@ namespace Bit.Droid.Security
     public class AndroidHttpsClientHandler : AndroidClientHandler, IHttpClientHandler
     {
         private SSLContext sslContext;
-        private ICertificateSpec<Java.Security.Cert.X509Certificate, IPrivateKey> ClientCertificate;
+        private X509CertificateSpec ClientCertificate;
 
         public AndroidHttpsClientHandler() : base()
         {
@@ -28,7 +28,7 @@ namespace Bit.Droid.Security
 
         public void UseClientCertificate(ICertificateSpec clientCertificate)
         {
-            ClientCertificate = (ICertificateSpec<Java.Security.Cert.X509Certificate, IPrivateKey>)clientCertificate;
+            ClientCertificate = clientCertificate as X509CertificateSpec;
         }
 
         protected override SSLSocketFactory ConfigureCustomSSLSocketFactory(HttpsURLConnection connection)
@@ -43,8 +43,8 @@ namespace Bit.Droid.Security
 
             KeyStore keyStore = KeyStore.GetInstance("pkcs12");
             keyStore.Load(null, null);
-            keyStore.SetKeyEntry(ClientCertificate.Alias, privateKey, null, new Java.Security.Cert.Certificate[] { cert });
-            
+            keyStore.SetKeyEntry(ClientCertificate.Alias + "_TLS", privateKey, null, new Java.Security.Cert.Certificate[] { cert });
+
             var kmf = KeyManagerFactory.GetInstance("x509");
             kmf.Init(keyStore, null);
 

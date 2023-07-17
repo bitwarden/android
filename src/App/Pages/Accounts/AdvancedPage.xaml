@@ -72,15 +72,15 @@
                         AutomationProperties.IsInAccessibleTree="True" />
                 </Grid>
 
-                <Button Text="Install and use a new certificate"
+                <Button Text="Import and use a new certificate"
                         StyleClass="btn-primary"
-                        Command="{Binding InstallAndUseCertCommand}"
+                        Command="{Binding ImportAndUseCertCommand}"
                         AutomationId="ContinueButton"
                         />
 
-                <Button Text="Choose an installed certificate"
+                <Button Text="Use a system certificate"
                         StyleClass="btn-secondary"
-                        Command="{Binding ChooseInstalledCertCommand}"
+                        Command="{Binding UseSystemCertCommand}"
                         AutomationId="ContinueButton"
                         />
 
