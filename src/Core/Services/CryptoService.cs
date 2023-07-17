@@ -21,7 +21,7 @@ namespace Bit.Core.Services
 
         private SymmetricCryptoKey _encKey;
         private SymmetricCryptoKey _legacyEtmKey;
-        private string _keyHash;
+        private string _passwordHash;
         private byte[] _publicKey;
         private byte[] _privateKey;
         private Dictionary<string, SymmetricCryptoKey> _orgKeys;
@@ -36,22 +36,37 @@ namespace Bit.Core.Services
             _cryptoFunctionService = cryptoFunctionService;
         }
 
-        public async Task SetUserKeyAsync(UserKey key)
+        public async Task SetUserKeyAsync(UserKey userKey)
         {
-            await _stateService.SetUserKeyAsync(key);
+            await _stateService.SetUserKeyAsync(userKey);
         }
 
-        public async Task<UserKey> GetUserKey(string userId = null)
+        public async Task<UserKey> GetUserKeyAsync(string userId = null)
         {
             return await _stateService.GetUserKeyAsync(userId);
         }
 
-        public async Task SetMasterKey(MasterKey masterKey, string userId = null)
+        public async Task<bool> HasUserKeyAsync(string userId = null)
+        {
+            return await GetUserKeyAsync(userId) != null;
+        }
+
+        public async Task ClearUserKeyAsync(string userId = null)
+        {
+            await _stateService.SetUserKeyAsync(null, userId);
+        }
+
+        public async Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null)
+        {
+            await _stateService.SetUserKeyMasterKeyAsync(value, userId);
+        }
+
+        public async Task SetMasterKeyAsync(MasterKey masterKey, string userId = null)
         {
             await _stateService.SetMasterKeyAsync(masterKey, userId);
         }
 
-        public async Task<MasterKey> GetMasterKey(string userId = null)
+        public async Task<MasterKey> GetMasterKeyAsync(string userId = null)
         {
             var masterKey = await _stateService.GetMasterKeyAsync(userId);
             if (masterKey == null)
@@ -59,12 +74,63 @@ namespace Bit.Core.Services
                 // Migration support
                 var encMasterKey = await _stateService.GetKeyEncryptedAsync(userId);
                 masterKey = new MasterKey(Convert.FromBase64String(encMasterKey));
-                await this.SetMasterKey(masterKey, userId);
+                await this.SetMasterKeyAsync(masterKey, userId);
             }
             return masterKey;
         }
 
+        public async Task ClearMasterKeyAsync(string userId = null)
+        {
+            await _stateService.SetMasterKeyAsync(null, userId);
+        }
 
+        public async Task SetPasswordHashAsync(string keyHash)
+        {
+            _passwordHash = keyHash;
+            await _stateService.SetKeyHashAsync(keyHash);
+        }
+
+        public async Task<string> GetPasswordHashAsync()
+        {
+            if (_passwordHash != null)
+            {
+                return _passwordHash;
+            }
+            var passwordHash = await _stateService.GetKeyHashAsync();
+            if (passwordHash != null)
+            {
+                _passwordHash = passwordHash;
+            }
+            return _passwordHash;
+        }
+
+        public async Task ClearPasswordHashAsync(string userId = null)
+        {
+            _passwordHash = null;
+            await _stateService.SetKeyHashAsync(null, userId);
+        }
+
+        public async Task<bool> CompareAndUpdatePasswordHashAsync(string masterPassword, SymmetricCryptoKey key)
+        {
+            var storedPasswordHash = await GetPasswordHashAsync();
+            if (masterPassword != null && storedPasswordHash != null)
+            {
+                var localPasswordHash = await HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
+                if (localPasswordHash != null && storedPasswordHash == localPasswordHash)
+                {
+                    return true;
+                }
+
+                var serverPasswordHash = await HashPasswordAsync(masterPassword, key, HashPurpose.ServerAuthorization);
+                if (serverPasswordHash != null & storedPasswordHash == serverPasswordHash)
+                {
+                    await SetPasswordHashAsync(localPasswordHash);
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
 
         public async Task SetKeyAsync(SymmetricCryptoKey key)
@@ -80,11 +146,6 @@ namespace Bit.Core.Services
             await _stateService.SetKeyEncryptedAsync(key?.KeyB64);
         }
 
-        public async Task SetPasswordHashAsync(string keyHash)
-        {
-            _keyHash = keyHash;
-            await _stateService.SetKeyHashAsync(keyHash);
-        }
 
         public async Task SetEncKeyAsync(string encKey)
         {
@@ -129,19 +190,6 @@ namespace Bit.Core.Services
             return inMemoryKey;
         }
 
-        public async Task<string> GetKeyHashAsync()
-        {
-            if (_keyHash != null)
-            {
-                return _keyHash;
-            }
-            var keyHash = await _stateService.GetKeyHashAsync();
-            if (keyHash != null)
-            {
-                _keyHash = keyHash;
-            }
-            return _keyHash;
-        }
 
         public Task<SymmetricCryptoKey> GetEncKeyAsync(SymmetricCryptoKey key = null)
         {
@@ -306,27 +354,6 @@ namespace Bit.Core.Services
             return orgKeys[orgId];
         }
 
-        public async Task<bool> CompareAndUpdateKeyHashAsync(string masterPassword, SymmetricCryptoKey key)
-        {
-            var storedKeyHash = await GetKeyHashAsync();
-            if (masterPassword != null && storedKeyHash != null)
-            {
-                var localKeyHash = await HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
-                if (localKeyHash != null && storedKeyHash == localKeyHash)
-                {
-                    return true;
-                }
-
-                var serverKeyHash = await HashPasswordAsync(masterPassword, key, HashPurpose.ServerAuthorization);
-                if (serverKeyHash != null & storedKeyHash == serverKeyHash)
-                {
-                    await SetPasswordHashAsync(localKeyHash);
-                    return true;
-                }
-            }
-
-            return false;
-        }
 
         public async Task<bool> HasKeyAsync(string userId = null)
         {
@@ -347,11 +374,6 @@ namespace Bit.Core.Services
             await _stateService.SetKeyEncryptedAsync(null, userId);
         }
 
-        public async Task ClearKeyHashAsync(string userId = null)
-        {
-            _keyHash = null;
-            await _stateService.SetKeyHashAsync(null, userId);
-        }
 
         public async Task ClearEncKeyAsync(bool memoryOnly = false, string userId = null)
         {
@@ -389,7 +411,7 @@ namespace Bit.Core.Services
         {
             _encKey = null;
             _legacyEtmKey = null;
-            _keyHash = null;
+            _passwordHash = null;
             _publicKey = null;
             _privateKey = null;
             _orgKeys = null;
@@ -400,7 +422,7 @@ namespace Bit.Core.Services
             await Task.WhenAll(new Task[]
             {
                 ClearKeyAsync(userId),
-                ClearKeyHashAsync(userId),
+                ClearPasswordHashAsync(userId),
                 ClearOrgKeysAsync(false, userId),
                 ClearEncKeyAsync(false, userId),
                 ClearKeyPairAsync(false, userId),
@@ -853,7 +875,7 @@ namespace Bit.Core.Services
 
         private async Task<UserKey> GetUserKeyWithLegacySupport(string userId = null)
         {
-            var userKey = await GetUserKey();
+            var userKey = await GetUserKeyAsync();
             if (userKey != null)
             {
                 return userKey;
@@ -861,7 +883,7 @@ namespace Bit.Core.Services
 
             // Legacy support: encryption used to be done with the master key (derived from master password).
             // Users who have not migrated will have a null user key and must use the master key instead.
-            return (SymmetricCryptoKey)await GetMasterKey() as UserKey;
+            return (SymmetricCryptoKey)await GetMasterKeyAsync() as UserKey;
         }
 
         private async Task<SymmetricCryptoKey> GetKeyForEncryptionAsync(SymmetricCryptoKey key = null)

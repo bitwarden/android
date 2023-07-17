@@ -296,13 +296,13 @@ namespace Bit.App.Pages
             else
             {
                 var key = await _cryptoService.MakeKeyAsync(MasterPassword, _email, kdfConfig);
-                var storedKeyHash = await _cryptoService.GetKeyHashAsync();
+                var storedKeyHash = await _cryptoService.GetPasswordHashAsync();
                 var passwordValid = false;
                 MasterPasswordPolicyOptions enforcedMasterPasswordOptions = null;
 
                 if (storedKeyHash != null)
                 {
-                    passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(MasterPassword, key);
+                    passwordValid = await _cryptoService.CompareAndUpdatePasswordHashAsync(MasterPassword, key);
                 }
                 else
                 {
@@ -317,7 +317,7 @@ namespace Bit.App.Pages
                         enforcedMasterPasswordOptions = response.MasterPasswordPolicy;
                         passwordValid = true;
                         var localKeyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.LocalAuthorization);
-                        await _cryptoService.SetKeyHashAsync(localKeyHash);
+                        await _cryptoService.SetPasswordHashAsync(localKeyHash);
                     }
                     catch (Exception e)
                     {

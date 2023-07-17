@@ -9,9 +9,21 @@ namespace Bit.Core.Abstractions
 {
     public interface ICryptoService
     {
+        Task SetUserKeyAsync(UserKey userKey);
+        Task<UserKey> GetUserKeyAsync(string userId = null);
+        Task<bool> HasUserKeyAsync(string userId = null);
+        Task ClearUserKeyAsync(string userId = null);
+        Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null);
+        Task SetMasterKeyAsync(MasterKey masterKey, string userId = null);
+        Task<MasterKey> GetMasterKeyAsync(string userId = null);
+        Task ClearMasterKeyAsync(string userId = null);
+        Task SetPasswordHashAsync(string keyHash);
+        Task<string> GetPasswordHashAsync();
+        Task ClearPasswordHashAsync(string userId = null);
+        Task<bool> CompareAndUpdatePasswordHashAsync(string masterPassword, SymmetricCryptoKey key);
+
         Task ClearEncKeyAsync(bool memoryOnly = false, string userId = null);
         Task ClearKeyAsync(string userId = null);
-        Task ClearKeyHashAsync(string userId = null);
         Task ClearKeyPairAsync(bool memoryOnly = false, string userId = null);
         Task ClearKeysAsync(string userId = null);
         Task ClearOrgKeysAsync(bool memoryOnly = false, string userId = null);
@@ -26,12 +38,10 @@ namespace Bit.Core.Abstractions
         Task<SymmetricCryptoKey> GetEncKeyAsync(SymmetricCryptoKey key = null);
         Task<List<string>> GetFingerprintAsync(string userId, byte[] publicKey = null);
         Task<SymmetricCryptoKey> GetKeyAsync(string userId = null);
-        Task<string> GetKeyHashAsync();
         Task<SymmetricCryptoKey> GetOrgKeyAsync(string orgId);
         Task<Dictionary<string, SymmetricCryptoKey>> GetOrgKeysAsync();
         Task<byte[]> GetPrivateKeyAsync();
         Task<byte[]> GetPublicKeyAsync();
-        Task<bool> CompareAndUpdateKeyHashAsync(string masterPassword, SymmetricCryptoKey key);
         Task<bool> HasEncKeyAsync();
         Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key, HashPurpose hashPurpose = HashPurpose.ServerAuthorization);
         Task<bool> HasKeyAsync(string userId = null);
@@ -50,7 +60,6 @@ namespace Bit.Core.Abstractions
         Task SetEncKeyAsync(string encKey);
         Task SetEncPrivateKeyAsync(string encPrivateKey);
         Task SetKeyAsync(SymmetricCryptoKey key);
-        Task SetKeyHashAsync(string keyHash);
         Task SetOrgKeysAsync(IEnumerable<ProfileOrganizationResponse> orgs);
         Task ToggleKeyAsync();
     }

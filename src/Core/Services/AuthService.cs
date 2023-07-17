@@ -477,7 +477,7 @@ namespace Bit.Core.Services
 
                 if (localHashedPassword != null)
                 {
-                    await _cryptoService.SetKeyHashAsync(localHashedPassword);
+                    await _cryptoService.SetPasswordHashAsync(localHashedPassword);
                 }
 
                 if (code == null || tokenResponse.Key != null)
