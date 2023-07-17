@@ -179,7 +179,7 @@
                                     AutomationProperties.Name="{u:I18n ToggleVisibility}"
                                     AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
                                     IsVisible="{Binding Cipher.ViewPassword}"
-                                    AutomationId="ViewValueButton" />
+                                    AutomationId="ShowValueButton" />
                                 <controls:IconButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
