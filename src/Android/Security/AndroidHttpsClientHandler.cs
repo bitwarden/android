@@ -14,7 +14,7 @@ namespace Bit.Droid.Security
     public class AndroidHttpsClientHandler : AndroidClientHandler, IHttpClientHandler
     {
         private SSLContext sslContext;
-        private X509CertificateSpec ClientCertificate;
+        private X509CertificateChainSpec ClientCertificate;
 
         public AndroidHttpsClientHandler() : base()
         {
@@ -26,16 +26,16 @@ namespace Bit.Droid.Security
             return this;
         }
 
-        public void UseClientCertificate(ICertificateSpec clientCertificate)
+        public void UseClientCertificate(ICertificateChainSpec clientCertificate)
         {
-            ClientCertificate = clientCertificate as X509CertificateSpec;
+            ClientCertificate = clientCertificate as X509CertificateChainSpec;
         }
 
         protected override SSLSocketFactory ConfigureCustomSSLSocketFactory(HttpsURLConnection connection)
         {
             if (ClientCertificate == null) return base.ConfigureCustomSSLSocketFactory(connection);
 
-            X509Certificate cert = ClientCertificate.Certificate;
+            X509Certificate cert = ClientCertificate.LeafCertificate;
             var privateKey = ClientCertificate.PrivateKeyRef;
 
             if (cert == null)

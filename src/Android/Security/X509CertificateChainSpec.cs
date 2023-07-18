@@ -6,29 +6,33 @@ using Java.Security.Cert;
 
 namespace Bit.Droid.Security
 {
-    public class X509CertificateSpec : ICertificateSpec<Java.Security.Cert.X509Certificate, IKey>
+    public class X509CertificateChainSpec : ICertificateChainSpec<Java.Security.Cert.X509Certificate, IKey>
     {
-        public X509Certificate Certificate { 
-            get => CertificateChain?[0];
-        }
-
         public string Alias { get; set; }
 
         public IKey PrivateKeyRef { get; internal set; }
 
+        public X509Certificate RootCertificate
+        {
+            get => CertificateChain?[0];
+        }
         public X509Certificate[] CertificateChain { get; set; }
+
+        public X509Certificate LeafCertificate { 
+            get => CertificateChain?[CertificateChain.Length-1];
+        }
 
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            if (Certificate == null) { 
+            if (LeafCertificate == null) { 
                 return string.Empty; 
             }
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"Subject: {Certificate.SubjectDN}");
-            sb.AppendLine($"Issuer: {Certificate.IssuerDN}");
-            sb.AppendLine($"Valid From: {Certificate.NotBefore}");
-            sb.AppendLine($"Valid Until: {Certificate.NotAfter}");
+            sb.AppendLine($"Subject: {LeafCertificate.SubjectDN}");
+            sb.AppendLine($"Issuer: {LeafCertificate.IssuerDN}");
+            sb.AppendLine($"Valid From: {LeafCertificate.NotBefore}");
+            sb.AppendLine($"Valid Until: {LeafCertificate.NotAfter}");
             
             return sb.ToString();
         }

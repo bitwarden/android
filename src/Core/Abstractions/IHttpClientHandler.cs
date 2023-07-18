@@ -7,6 +7,6 @@ namespace Bit.Core.Abstractions
     {
         HttpClientHandler AsClientHandler();
 
-        void UseClientCertificate(ICertificateSpec clientCertificate);
+        void UseClientCertificate(ICertificateChainSpec clientCertificate);
     }
 }

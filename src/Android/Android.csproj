@@ -140,7 +140,7 @@
     <Compile Include="Renderers\CustomSearchBarRenderer.cs" />
     <Compile Include="Renderers\HybridWebViewRenderer.cs" />
     <Compile Include="Security\AndroidHttpsClientHandler.cs" />
-    <Compile Include="Security\X509CertificateSpec.cs" />
+    <Compile Include="Security\X509CertificateChainSpec.cs" />
     <Compile Include="Services\AndroidPushNotificationService.cs" />
     <Compile Include="Services\AndroidLogService.cs" />
     <Compile Include="MainApplication.cs" />

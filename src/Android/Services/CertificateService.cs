@@ -80,9 +80,9 @@ namespace Bit.Droid.Services
             }
         }
 
-        public async Task<ICertificateSpec> GetCertificateAsync(string certUri)
+        public async Task<ICertificateChainSpec> GetCertificateAsync(string certUri)
         {
-            var certSpec = new X509CertificateSpec();
+            var certSpec = new X509CertificateChainSpec();
             if (string.IsNullOrEmpty(certUri)) return certSpec;
 
             var uri = new Uri(certUri);

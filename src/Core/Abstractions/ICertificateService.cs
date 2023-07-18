@@ -8,7 +8,7 @@ namespace Bit.Core.Abstractions
     {
         bool TryRemoveCertificate(string certUri);
 
-        Task<ICertificateSpec> GetCertificateAsync(string certUri);
+        Task<ICertificateChainSpec> GetCertificateAsync(string certUri);
 
         Task<string> ImportCertificateAsync();
 
