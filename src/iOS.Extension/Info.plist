@@ -11,7 +11,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.8bit.bitwarden.find-login-action-extension</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2023.7.0</string>
+	<string>2023.7.1</string>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>en</string>
