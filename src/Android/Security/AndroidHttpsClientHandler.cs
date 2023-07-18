@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Linq;
+using System.Net.Http;
 using System.Security.Authentication;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,15 +36,15 @@ namespace Bit.Droid.Security
         {
             if (ClientCertificate == null) return base.ConfigureCustomSSLSocketFactory(connection);
 
-            X509Certificate cert = ClientCertificate.LeafCertificate;
+            X509Certificate[] certChain = ClientCertificate.CertificateChain;
             var privateKey = ClientCertificate.PrivateKeyRef;
 
-            if (cert == null)
+            if (privateKey == null || certChain == null || certChain.Length == 0)
                 return base.ConfigureCustomSSLSocketFactory(connection);
 
             KeyStore keyStore = KeyStore.GetInstance("pkcs12");
             keyStore.Load(null, null);
-            keyStore.SetKeyEntry(ClientCertificate.Alias + "_TLS", privateKey, null, new Java.Security.Cert.Certificate[] { cert });
+            keyStore.SetKeyEntry($"{ClientCertificate.Alias}_TLS", privateKey, null, certChain.Cast<Certificate>().ToArray());
 
             var kmf = KeyManagerFactory.GetInstance("x509");
             kmf.Init(keyStore, null);
