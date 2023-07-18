@@ -16,7 +16,7 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Ok" Command="{Binding OkCommand}" />
+        <ToolbarItem Text="{u:I18n Ok}" Command="{Binding OkCommand}" />
     </ContentPage.ToolbarItems>
 
     <ScrollView>
@@ -32,12 +32,14 @@
                     <Label Text="{u:I18n Certificate, Header=True}"
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
-                <Label
-                    IsVisible="{Binding IsCertificateChosen, Converter={StaticResource inverseBool}}"
-                    Text="{u:I18n NoCertificateSetup}"
-                    StyleClass="box-sub-label"
-                    AutomationId="NoCertificateSetupLabel"/>
-                
+
+                <StackLayout StyleClass="box-row">
+                    <Label Text="{u:I18n CertificateSetupInstruction}"
+                           IsVisible="{Binding IsCertificateChosen, Converter={StaticResource inverseBool}}"
+                           StyleClass="box-sub-label"
+                           AutomationId="CertificateSetupInstructionLabel"/>
+                </StackLayout>
+
                 <Grid
                     IsVisible="{Binding IsCertificateChosen}"
                     StyleClass="box-row">
@@ -76,13 +78,13 @@
                         />
                 </Grid>
 
-                <Button Text="Import and use a new certificate"
+                <Button Text="{u:I18n CertificateImportUseDesc}"
                         StyleClass="btn-primary"
                         Command="{Binding ImportAndUseCertCommand}"
                         AutomationId="ImportAndUseCertButton"
                         />
 
-                <Button Text="Use a system certificate"
+                <Button Text="{u:I18n CertificateUseFromSystemDesc}"
                         StyleClass="btn-secondary"
                         Command="{Binding UseSystemCertCommand}"
                         AutomationId="UseSystemCertButton"

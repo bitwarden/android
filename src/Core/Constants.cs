@@ -57,7 +57,6 @@
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;
-        public const int InstallCertificateRequestCode = 45;
         public const int TotpDefaultTimer = 30;
         public const int PasswordlessNotificationTimeoutInMinutes = 15;
         public const int Pbkdf2Iterations = 600000;

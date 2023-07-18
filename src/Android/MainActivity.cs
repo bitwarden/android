@@ -7,7 +7,6 @@ using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Content.Res;
-using Android.Gms.Tasks;
 using Android.Nfc;
 using Android.OS;
 using Android.Runtime;
@@ -17,7 +16,6 @@ using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Utilities;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
@@ -29,7 +27,6 @@ using Newtonsoft.Json.Linq;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using ZXing.Net.Mobile.Android;
-using static System.Net.Mime.MediaTypeNames;
 using FileProvider = AndroidX.Core.Content.FileProvider;
 using Task = System.Threading.Tasks.Task;
 
@@ -259,16 +256,12 @@ namespace Bit.Droid
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
-            PrintAlert($"-> on-activity-result: {requestCode}");
-
             if (_oneTimeActivityListeners.ContainsKey(requestCode))
             {
                 if (_oneTimeActivityListeners.TryRemove(requestCode, out var listener))
                 {
-                    PrintAlert("-> accessed-listener");
                     listener.SetResult(new ActivityResult((int)resultCode, data));
                 }
-                PrintAlert("-> returnnn");
                 return;
             }
 

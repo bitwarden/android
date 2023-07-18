@@ -138,7 +138,7 @@ namespace Bit.Droid.Services
 
                 string chosenCertAlias = string.Empty;
 
-                var password = await _deviceActionService.DisplayPromptAync("Password", "Enter password to decrypt the certificate", 
+                var password = await _deviceActionService.DisplayPromptAync(AppResources.Password, AppResources.PasswordEnterDecryptCert, 
                     null, AppResources.Submit, AppResources.Cancel, password: true);
                 
                 if (password == null) 
@@ -240,7 +240,7 @@ namespace Bit.Droid.Services
         {
             if (string.IsNullOrEmpty(alias) || alias.StartsWith("cert://") || alias.Contains("/"))
             {
-                throw new Exception("Forbidden certificate!");
+                throw new Exception("Invalid certificate alias!");
             }
 
             if (locatedInSystemVault)

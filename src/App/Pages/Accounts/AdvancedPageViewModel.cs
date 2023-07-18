@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
+using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
@@ -34,7 +35,7 @@ namespace Bit.App.Pages
             UseSystemCertCommand = new AsyncCommand(UseSystemCertAsync, allowsMultipleExecutions: false);
             RemoveCertCommand = new AsyncCommand(RemoveCertAsync, allowsMultipleExecutions: false);
 
-            PageTitle = "Advanced";
+            PageTitle = AppResources.Advanced;
             Task.Run(async () => await BindCertDetailsAsync());
         }
         

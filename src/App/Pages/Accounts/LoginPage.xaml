@@ -48,8 +48,8 @@
                 x:Name="_removeAccount"
                 Clicked="RemoveAccount_Clicked" 
                 Order="Secondary" />
-            
-            <ToolbarItem Text="Advanced"
+
+            <ToolbarItem Text="{u:I18n Advanced}"
                 x:Key="showAdvanced"
                 x:Name="_Advanced"
                 Clicked="Advanced_Clicked" 
