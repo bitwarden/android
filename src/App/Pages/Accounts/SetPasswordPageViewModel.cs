@@ -204,7 +204,7 @@ namespace Bit.App.Pages
                 // Set Password and relevant information
                 await _apiService.SetPasswordAsync(request);
                 await _stateService.SetKdfConfigurationAsync(kdfConfig);
-                await _cryptoService.SetKeyAsync(masterKey);
+                await _cryptoService.SetMasterKeyAsync(masterKey);
                 await _cryptoService.SetPasswordHashAsync(localMasterPasswordHash);
                 await _cryptoService.SetEncKeyAsync(encKey.Item2.EncryptedString);
                 await _cryptoService.SetPrivateKeyAsync(keys.Item2.EncryptedString);

@@ -449,12 +449,12 @@ namespace Bit.App.Pages
         }
 
         // TODO(Jake): Update to store UserKey
-        private async Task SetKeyAndContinueAsync(SymmetricCryptoKey key)
+        private async Task SetKeyAndContinueAsync(UserKey key)
         {
-            var hasKey = await _cryptoService.HasKeyAsync();
+            var hasKey = await _cryptoService.HasUserKeyAsync();
             if (!hasKey)
             {
-                await _cryptoService.SetKeyAsync(key);
+                await _cryptoService.SetUserKeyAsync(key);
             }
             await DoContinueAsync();
         }
