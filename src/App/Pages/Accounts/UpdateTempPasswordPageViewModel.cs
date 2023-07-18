@@ -93,12 +93,12 @@ namespace Bit.App.Pages
             var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
             var email = await _stateService.GetEmailAsync();
 
-            // Create new key and hash new password
-            var key = await _cryptoService.MakeKeyAsync(MasterPassword, email, kdfConfig);
-            var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key);
+            // Create new master key and hash new password
+            var masterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, email, kdfConfig);
+            var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, masterKey);
 
             // Create new encKey for the User
-            var newEncKey = await _cryptoService.RemakeEncKeyAsync(key);
+            var newEncKey = await _cryptoService.RemakeEncKeyAsync(masterKey);
 
             // Initiate API action
             try

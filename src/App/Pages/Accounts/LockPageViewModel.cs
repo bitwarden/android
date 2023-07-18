@@ -295,19 +295,19 @@ namespace Bit.App.Pages
             }
             else
             {
-                var key = await _cryptoService.MakeKeyAsync(MasterPassword, _email, kdfConfig);
+                var masterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, _email, kdfConfig);
                 var storedKeyHash = await _cryptoService.GetPasswordHashAsync();
                 var passwordValid = false;
                 MasterPasswordPolicyOptions enforcedMasterPasswordOptions = null;
 
                 if (storedKeyHash != null)
                 {
-                    passwordValid = await _cryptoService.CompareAndUpdatePasswordHashAsync(MasterPassword, key);
+                    passwordValid = await _cryptoService.CompareAndUpdatePasswordHashAsync(MasterPassword, masterKey);
                 }
                 else
                 {
                     await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
-                    var keyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.ServerAuthorization);
+                    var keyHash = await _cryptoService.HashPasswordAsync(MasterPassword, masterKey, HashPurpose.ServerAuthorization);
                     var request = new PasswordVerificationRequest();
                     request.MasterPasswordHash = keyHash;
 
@@ -316,7 +316,7 @@ namespace Bit.App.Pages
                         var response = await _apiService.PostAccountVerifyPasswordAsync(request);
                         enforcedMasterPasswordOptions = response.MasterPasswordPolicy;
                         passwordValid = true;
-                        var localKeyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.LocalAuthorization);
+                        var localKeyHash = await _cryptoService.HashPasswordAsync(MasterPassword, masterKey, HashPurpose.LocalAuthorization);
                         await _cryptoService.SetPasswordHashAsync(localKeyHash);
                     }
                     catch (Exception e)
@@ -327,13 +327,14 @@ namespace Bit.App.Pages
                 }
                 if (passwordValid)
                 {
+                    // TODO(Jake): Update this to use new PinKeyEphemeral
                     if (_isPinProtected)
                     {
                         var protectedPin = await _stateService.GetProtectedPinAsync();
-                        var encKey = await _cryptoService.GetEncKeyAsync(key);
+                        var encKey = await _cryptoService.GetEncKeyAsync(masterKey);
                         var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
                         var pinKey = await _cryptoService.MakePinKeyAsync(decPin, _email, kdfConfig);
-                        await _stateService.SetPinProtectedKeyAsync(await _cryptoService.EncryptAsync(key.Key, pinKey));
+                        await _stateService.SetPinProtectedKeyAsync(await _cryptoService.EncryptAsync(masterKey.Key, pinKey));
                     }
 
                     if (await RequirePasswordChangeAsync(enforcedMasterPasswordOptions))
@@ -345,7 +346,7 @@ namespace Bit.App.Pages
 
                     MasterPassword = string.Empty;
                     await AppHelpers.ResetInvalidUnlockAttemptsAsync();
-                    await SetKeyAndContinueAsync(key);
+                    await SetKeyAndContinueAsync(masterKey);
 
                     // Re-enable biometrics
                     if (BiometricLock & !BiometricIntegrityValid)
@@ -447,6 +448,7 @@ namespace Bit.App.Pages
             }
         }
 
+        // TODO(Jake): Update to store UserKey
         private async Task SetKeyAndContinueAsync(SymmetricCryptoKey key)
         {
             var hasKey = await _cryptoService.HasKeyAsync();

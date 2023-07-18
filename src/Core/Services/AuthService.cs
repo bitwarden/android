@@ -356,7 +356,7 @@ namespace Bit.Core.Services
                     throw;
                 }
             }
-            return await _cryptoService.MakeKeyAsync(masterPassword, email, kdfConfig);
+            return await _cryptoService.MakeMasterKeyAsync(masterPassword, email, kdfConfig);
         }
 
         private async Task<AuthResult> LogInHelperAsync(string email, string hashedPassword, string localHashedPassword,
@@ -511,11 +511,11 @@ namespace Bit.Core.Services
                 {
                     // SSO Key Connector Onboarding
                     var password = await _cryptoFunctionService.RandomBytesAsync(64);
-                    var k = await _cryptoService.MakeKeyAsync(Convert.ToBase64String(password), _tokenService.GetEmail(), tokenResponse.KdfConfig);
-                    var keyConnectorRequest = new KeyConnectorUserKeyRequest(k.EncKeyB64);
-                    await _cryptoService.SetKeyAsync(k);
+                    var masterKey = await _cryptoService.MakeMasterKeyAsync(Convert.ToBase64String(password), _tokenService.GetEmail(), tokenResponse.KdfConfig);
+                    var keyConnectorRequest = new KeyConnectorUserKeyRequest(masterKey.EncKeyB64);
+                    await _cryptoService.SetKeyAsync(masterKey);
 
-                    var encKey = await _cryptoService.MakeEncKeyAsync(k);
+                    var encKey = await _cryptoService.MakeEncKeyAsync(masterKey);
                     await _cryptoService.SetEncKeyAsync(encKey.Item2.EncryptedString);
                     var keyPair = await _cryptoService.MakeKeyPairAsync();
 

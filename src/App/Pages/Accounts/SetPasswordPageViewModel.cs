@@ -165,19 +165,19 @@ namespace Bit.App.Pages
 
             var kdfConfig = new KdfConfig(KdfType.PBKDF2_SHA256, Constants.Pbkdf2Iterations, null, null);
             var email = await _stateService.GetEmailAsync();
-            var key = await _cryptoService.MakeKeyAsync(MasterPassword, email, kdfConfig);
-            var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.ServerAuthorization);
-            var localMasterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.LocalAuthorization);
+            var masterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, email, kdfConfig);
+            var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, masterKey, HashPurpose.ServerAuthorization);
+            var localMasterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, masterKey, HashPurpose.LocalAuthorization);
 
             Tuple<SymmetricCryptoKey, EncString> encKey;
             var existingEncKey = await _cryptoService.GetEncKeyAsync();
             if (existingEncKey == null)
             {
-                encKey = await _cryptoService.MakeEncKeyAsync(key);
+                encKey = await _cryptoService.MakeEncKeyAsync(masterKey);
             }
             else
             {
-                encKey = await _cryptoService.RemakeEncKeyAsync(key);
+                encKey = await _cryptoService.RemakeEncKeyAsync(masterKey);
             }
 
             var keys = await _cryptoService.MakeKeyPairAsync(encKey.Item1);
@@ -204,7 +204,7 @@ namespace Bit.App.Pages
                 // Set Password and relevant information
                 await _apiService.SetPasswordAsync(request);
                 await _stateService.SetKdfConfigurationAsync(kdfConfig);
-                await _cryptoService.SetKeyAsync(key);
+                await _cryptoService.SetKeyAsync(masterKey);
                 await _cryptoService.SetPasswordHashAsync(localMasterPasswordHash);
                 await _cryptoService.SetEncKeyAsync(encKey.Item2.EncryptedString);
                 await _cryptoService.SetPrivateKeyAsync(keys.Item2.EncryptedString);
