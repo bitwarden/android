@@ -207,7 +207,7 @@ namespace Bit.App.Pages
                 await _cryptoService.SetKeyAsync(key);
                 await _cryptoService.SetPasswordHashAsync(localMasterPasswordHash);
                 await _cryptoService.SetEncKeyAsync(encKey.Item2.EncryptedString);
-                await _cryptoService.SetEncPrivateKeyAsync(keys.Item2.EncryptedString);
+                await _cryptoService.SetPrivateKeyAsync(keys.Item2.EncryptedString);
 
                 if (ResetPasswordAutoEnroll)
                 {

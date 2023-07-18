@@ -437,7 +437,7 @@ namespace Bit.App.Pages
 
                     var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
                     var email = await _stateService.GetEmailAsync();
-                    var pinKey = await _cryptoService.MakePinKeyAysnc(pin, email, kdfConfig);
+                    var pinKey = await _cryptoService.MakePinKeyAsync(pin, email, kdfConfig);
                     var key = await _cryptoService.GetKeyAsync();
                     var pinProtectedKey = await _cryptoService.EncryptAsync(key.Key, pinKey);
 

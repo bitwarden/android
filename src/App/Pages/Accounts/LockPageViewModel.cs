@@ -332,7 +332,7 @@ namespace Bit.App.Pages
                         var protectedPin = await _stateService.GetProtectedPinAsync();
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
                         var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
-                        var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, _email, kdfConfig);
+                        var pinKey = await _cryptoService.MakePinKeyAsync(decPin, _email, kdfConfig);
                         await _stateService.SetPinProtectedKeyAsync(await _cryptoService.EncryptAsync(key.Key, pinKey));
                     }
 

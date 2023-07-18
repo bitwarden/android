@@ -88,4 +88,18 @@ namespace Bit.Core.Models.Domain
             : base(key, encType)
         { }
     }
+
+    public class PinKey : SymmetricCryptoKey
+    {
+        public PinKey(byte[] key, EncryptionType? encType = null)
+            : base(key, encType)
+        { }
+    }
+
+    public class OrgKey : SymmetricCryptoKey
+    {
+        public OrgKey(byte[] key, EncryptionType? encType = null)
+            : base(key, encType)
+        { }
+    }
 }

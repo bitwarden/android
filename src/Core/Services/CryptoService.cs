@@ -24,9 +24,9 @@ namespace Bit.Core.Services
         private string _passwordHash;
         private byte[] _publicKey;
         private byte[] _privateKey;
-        private Dictionary<string, SymmetricCryptoKey> _orgKeys;
+        private Dictionary<string, OrgKey> _orgKeys;
         private Task<SymmetricCryptoKey> _getEncKeysTask;
-        private Task<Dictionary<string, SymmetricCryptoKey>> _getOrgKeysTask;
+        private Task<Dictionary<string, OrgKey>> _getOrgKeysTask;
 
         public CryptoService(
             IStateService stateService,
@@ -79,9 +79,36 @@ namespace Bit.Core.Services
             return masterKey;
         }
 
+        public async Task<MasterKey> MakeMasterKeyAsync(string password, string email, KdfConfig kdfConfig)
+        {
+            return await MakeKeyAsync(password, email, kdfConfig) as MasterKey;
+        }
+
         public async Task ClearMasterKeyAsync(string userId = null)
         {
             await _stateService.SetMasterKeyAsync(null, userId);
+        }
+
+        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKey(UserKey key)
+        {
+            if (key == null)
+            {
+                throw new Exception("No key provided");
+            }
+
+            var newSymKey = await _cryptoFunctionService.RandomBytesAsync(64);
+            return await BuildProtectedSymmetricKey<SymmetricCryptoKey>(key, newSymKey);
+        }
+
+        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKey(OrgKey key)
+        {
+            if (key == null)
+            {
+                throw new Exception("No key provided");
+            }
+
+            var newSymKey = await _cryptoFunctionService.RandomBytesAsync(64);
+            return await BuildProtectedSymmetricKey<SymmetricCryptoKey>(key, newSymKey);
         }
 
         public async Task SetPasswordHashAsync(string keyHash)
@@ -132,6 +159,292 @@ namespace Bit.Core.Services
             return false;
         }
 
+        public async Task SetOrgKeysAsync(IEnumerable<ProfileOrganizationResponse> orgs)
+        {
+            var orgKeys = orgs.ToDictionary(org => org.Id, org => org.Key);
+            _orgKeys = null;
+            await _stateService.SetOrgKeysEncryptedAsync(orgKeys);
+        }
+
+        public async Task<OrgKey> GetOrgKeyAsync(string orgId)
+        {
+            if (string.IsNullOrWhiteSpace(orgId))
+            {
+                return null;
+            }
+            var orgKeys = await GetOrgKeysAsync();
+            if (orgKeys == null || !orgKeys.ContainsKey(orgId))
+            {
+                return null;
+            }
+            return orgKeys[orgId];
+        }
+
+        public Task<Dictionary<string, OrgKey>> GetOrgKeysAsync()
+        {
+            if (_orgKeys != null && _orgKeys.Count > 0)
+            {
+                return Task.FromResult(_orgKeys);
+            }
+            if (_getOrgKeysTask != null && !_getOrgKeysTask.IsCompleted && !_getOrgKeysTask.IsFaulted)
+            {
+                return _getOrgKeysTask;
+            }
+            async Task<Dictionary<string, OrgKey>> doTask()
+            {
+                try
+                {
+                    var encOrgKeys = await _stateService.GetOrgKeysEncryptedAsync();
+                    if (encOrgKeys == null)
+                    {
+                        return null;
+                    }
+                    var orgKeys = new Dictionary<string, OrgKey>();
+                    var setKey = false;
+                    foreach (var org in encOrgKeys)
+                    {
+                        var decValue = await RsaDecryptAsync(org.Value);
+                        orgKeys.Add(org.Key, new OrgKey(decValue));
+                        setKey = true;
+                    }
+
+                    if (setKey)
+                    {
+                        _orgKeys = orgKeys;
+                    }
+                    return _orgKeys;
+                }
+                finally
+                {
+                    _getOrgKeysTask = null;
+                }
+            }
+            _getOrgKeysTask = doTask();
+            return _getOrgKeysTask;
+        }
+
+
+        public async Task ClearOrgKeysAsync(bool memoryOnly = false, string userId = null)
+        {
+            _orgKeys = null;
+            if (!memoryOnly)
+            {
+                await _stateService.SetOrgKeysEncryptedAsync(null, userId);
+            }
+        }
+
+        public async Task<byte[]> GetPublicKeyAsync()
+        {
+            if (_publicKey != null)
+            {
+                return _publicKey;
+            }
+            var privateKey = await GetPrivateKeyAsync();
+            if (privateKey == null)
+            {
+                return null;
+            }
+            _publicKey = await _cryptoFunctionService.RsaExtractPublicKeyAsync(privateKey);
+            return _publicKey;
+        }
+
+        public async Task SetPrivateKeyAsync(string encPrivateKey)
+        {
+            if (encPrivateKey == null)
+            {
+                return;
+            }
+            await _stateService.SetPrivateKeyEncryptedAsync(encPrivateKey);
+            _privateKey = null;
+        }
+
+        public async Task<byte[]> GetPrivateKeyAsync()
+        {
+            if (_privateKey != null)
+            {
+                return _privateKey;
+            }
+            var encPrivateKey = await _stateService.GetPrivateKeyEncryptedAsync();
+            if (encPrivateKey == null)
+            {
+                return null;
+            }
+            _privateKey = await DecryptToBytesAsync(new EncString(encPrivateKey), null);
+            return _privateKey;
+        }
+
+        public async Task<List<string>> GetFingerprintAsync(string userId, byte[] publicKey = null)
+        {
+            if (publicKey == null)
+            {
+                publicKey = await GetPublicKeyAsync();
+            }
+            if (publicKey == null)
+            {
+                throw new Exception("No public key available.");
+            }
+            var keyFingerprint = await _cryptoFunctionService.HashAsync(publicKey, CryptoHashAlgorithm.Sha256);
+            var userFingerprint = await _cryptoFunctionService.HkdfExpandAsync(keyFingerprint, Encoding.UTF8.GetBytes(userId), 32, HkdfAlgorithm.Sha256);
+            return HashPhrase(userFingerprint);
+        }
+
+        public async Task<Tuple<string, EncString>> MakeKeyPairAsync(SymmetricCryptoKey key = null)
+        {
+            var keyPair = await _cryptoFunctionService.RsaGenerateKeyPairAsync(2048);
+            var publicB64 = Convert.ToBase64String(keyPair.Item1);
+            var privateEnc = await EncryptAsync(keyPair.Item2, key);
+            return new Tuple<string, EncString>(publicB64, privateEnc);
+        }
+
+        public async Task ClearKeyPairAsync(bool memoryOnly = false, string userId = null)
+        {
+            _publicKey = _privateKey = null;
+            if (!memoryOnly)
+            {
+                await _stateService.SetPrivateKeyEncryptedAsync(null, userId);
+            }
+        }
+
+        public async Task<PinKey> MakePinKeyAsync(string pin, string salt, KdfConfig config)
+        {
+            var pinKey = await MakeKeyAsync(pin, salt, config);
+            return await StretchKeyAsync(pinKey) as PinKey;
+        }
+
+        // public async Task<UserKey> DecryptUserKeyWithPin(string pin, string salt, KdfConfig kdfConfig, EncString pinProtectedUserKey = null)
+        // {
+        //     pinProtectedUserKey ??= await _stateService.GetUserKeyPinAsync();
+        //     pinProtectedUserKey ??= await _stateService.GetUserKeyPinEphemeralAsync();
+        //     if (pinProtectedUserKey == null)
+        //     {
+        //         throw new Exception("No PIN protected user key found.");
+        //     }
+        //     var pinKey = await MakePinKeyAsync(pin, salt, kdfConfig);
+        //     var userKey = await DecryptToBytesAsync(pinProtectedUserKey, pinKey);
+        //     return new UserKey(userKey);
+        // }
+
+        public async Task<SymmetricCryptoKey> MakeSendKeyAsync(byte[] keyMaterial)
+        {
+            var sendKey = await _cryptoFunctionService.HkdfAsync(keyMaterial, "bitwarden-send", "send", 64, HkdfAlgorithm.Sha256);
+            return new SymmetricCryptoKey(sendKey);
+        }
+
+        // TODO(Jake): This isn't used, delete?
+        public async Task ClearKeysAsync(string userId = null)
+        {
+            await Task.WhenAll(new Task[]
+            {
+                ClearUserKeyAsync(userId),
+                ClearPasswordHashAsync(userId),
+                ClearOrgKeysAsync(false, userId),
+                ClearKeyPairAsync(false, userId),
+                // TODO(Jake): replace with ClearPinKeys
+                ClearPinProtectedKeyAsync(userId)
+            });
+        }
+
+        public async Task<EncString> RsaEncryptAsync(byte[] data, byte[] publicKey = null)
+        {
+            if (publicKey == null)
+            {
+                publicKey = await GetPublicKeyAsync();
+            }
+            if (publicKey == null)
+            {
+                throw new Exception("Public key unavailable.");
+            }
+            var encBytes = await _cryptoFunctionService.RsaEncryptAsync(data, publicKey, CryptoHashAlgorithm.Sha1);
+            return new EncString(EncryptionType.Rsa2048_OaepSha1_B64, Convert.ToBase64String(encBytes));
+        }
+
+        public async Task<byte[]> RsaDecryptAsync(string encValue, byte[] privateKey = null)
+        {
+            var headerPieces = encValue.Split('.');
+            EncryptionType? encType = null;
+            string[] encPieces = null;
+
+            if (headerPieces.Length == 1)
+            {
+                encType = EncryptionType.Rsa2048_OaepSha256_B64;
+                encPieces = new string[] { headerPieces[0] };
+            }
+            else if (headerPieces.Length == 2 && Enum.TryParse(headerPieces[0], out EncryptionType type))
+            {
+                encType = type;
+                encPieces = headerPieces[1].Split('|');
+            }
+
+            if (!encType.HasValue)
+            {
+                throw new Exception("encType unavailable.");
+            }
+            if (encPieces == null || encPieces.Length == 0)
+            {
+                throw new Exception("encPieces unavailable.");
+            }
+
+            var data = Convert.FromBase64String(encPieces[0]);
+
+            if (privateKey is null)
+            {
+                privateKey = await GetPrivateKeyAsync();
+            }
+
+            if (privateKey == null)
+            {
+                throw new Exception("No private key.");
+            }
+
+            var alg = CryptoHashAlgorithm.Sha1;
+            switch (encType.Value)
+            {
+                case EncryptionType.Rsa2048_OaepSha256_B64:
+                case EncryptionType.Rsa2048_OaepSha256_HmacSha256_B64:
+                    alg = CryptoHashAlgorithm.Sha256;
+                    break;
+                case EncryptionType.Rsa2048_OaepSha1_B64:
+                case EncryptionType.Rsa2048_OaepSha1_HmacSha256_B64:
+                    break;
+                default:
+                    throw new Exception("encType unavailable.");
+            }
+
+            return await _cryptoFunctionService.RsaDecryptAsync(data, privateKey, alg);
+        }
+
+        public async Task<int> RandomNumberAsync(int min, int max)
+        {
+            // Make max inclusive
+            max = max + 1;
+
+            var diff = (long)max - min;
+            var upperBound = uint.MaxValue / diff * diff;
+            uint ui;
+            do
+            {
+                ui = await _cryptoFunctionService.RandomNumberAsync();
+            } while (ui >= upperBound);
+            return (int)(min + (ui % diff));
+        }
+
+        /// <summary>
+        /// Makes random string with length <paramref name="length"/> based on the charset <see cref="RANDOM_STRING_CHARSET"/>
+        /// </summary>
+        public async Task<string> RandomStringAsync(int length)
+        {
+            var sb = new StringBuilder();
+
+            for (var i = 0; i < length; i++)
+            {
+                var randomCharIndex = await RandomNumberAsync(0, RANDOM_STRING_CHARSET.Length - 1);
+                sb.Append(RANDOM_STRING_CHARSET[randomCharIndex]);
+            }
+
+            return sb.ToString();
+        }
+
+
 
         public async Task SetKeyAsync(SymmetricCryptoKey key)
         {
@@ -157,22 +470,7 @@ namespace Bit.Core.Services
             _encKey = null;
         }
 
-        public async Task SetEncPrivateKeyAsync(string encPrivateKey)
-        {
-            if (encPrivateKey == null)
-            {
-                return;
-            }
-            await _stateService.SetPrivateKeyEncryptedAsync(encPrivateKey);
-            _privateKey = null;
-        }
 
-        public async Task SetOrgKeysAsync(IEnumerable<ProfileOrganizationResponse> orgs)
-        {
-            var orgKeys = orgs.ToDictionary(org => org.Id, org => org.Key);
-            _orgKeys = null;
-            await _stateService.SetOrgKeysEncryptedAsync(orgKeys);
-        }
 
         public async Task<SymmetricCryptoKey> GetKeyAsync(string userId = null)
         {
@@ -252,107 +550,10 @@ namespace Bit.Core.Services
             return _getEncKeysTask;
         }
 
-        public async Task<byte[]> GetPublicKeyAsync()
-        {
-            if (_publicKey != null)
-            {
-                return _publicKey;
-            }
-            var privateKey = await GetPrivateKeyAsync();
-            if (privateKey == null)
-            {
-                return null;
-            }
-            _publicKey = await _cryptoFunctionService.RsaExtractPublicKeyAsync(privateKey);
-            return _publicKey;
-        }
 
-        public async Task<byte[]> GetPrivateKeyAsync()
-        {
-            if (_privateKey != null)
-            {
-                return _privateKey;
-            }
-            var encPrivateKey = await _stateService.GetPrivateKeyEncryptedAsync();
-            if (encPrivateKey == null)
-            {
-                return null;
-            }
-            _privateKey = await DecryptToBytesAsync(new EncString(encPrivateKey), null);
-            return _privateKey;
-        }
 
-        public async Task<List<string>> GetFingerprintAsync(string userId, byte[] publicKey = null)
-        {
-            if (publicKey == null)
-            {
-                publicKey = await GetPublicKeyAsync();
-            }
-            if (publicKey == null)
-            {
-                throw new Exception("No public key available.");
-            }
-            var keyFingerprint = await _cryptoFunctionService.HashAsync(publicKey, CryptoHashAlgorithm.Sha256);
-            var userFingerprint = await _cryptoFunctionService.HkdfExpandAsync(keyFingerprint, Encoding.UTF8.GetBytes(userId), 32, HkdfAlgorithm.Sha256);
-            return HashPhrase(userFingerprint);
-        }
 
-        public Task<Dictionary<string, SymmetricCryptoKey>> GetOrgKeysAsync()
-        {
-            if (_orgKeys != null && _orgKeys.Count > 0)
-            {
-                return Task.FromResult(_orgKeys);
-            }
-            if (_getOrgKeysTask != null && !_getOrgKeysTask.IsCompleted && !_getOrgKeysTask.IsFaulted)
-            {
-                return _getOrgKeysTask;
-            }
-            async Task<Dictionary<string, SymmetricCryptoKey>> doTask()
-            {
-                try
-                {
-                    var encOrgKeys = await _stateService.GetOrgKeysEncryptedAsync();
-                    if (encOrgKeys == null)
-                    {
-                        return null;
-                    }
-                    var orgKeys = new Dictionary<string, SymmetricCryptoKey>();
-                    var setKey = false;
-                    foreach (var org in encOrgKeys)
-                    {
-                        var decValue = await RsaDecryptAsync(org.Value);
-                        orgKeys.Add(org.Key, new SymmetricCryptoKey(decValue));
-                        setKey = true;
-                    }
 
-                    if (setKey)
-                    {
-                        _orgKeys = orgKeys;
-                    }
-                    return _orgKeys;
-                }
-                finally
-                {
-                    _getOrgKeysTask = null;
-                }
-            }
-            _getOrgKeysTask = doTask();
-            return _getOrgKeysTask;
-        }
-
-        public async Task<SymmetricCryptoKey> GetOrgKeyAsync(string orgId)
-        {
-            if (string.IsNullOrWhiteSpace(orgId))
-            {
-                return null;
-            }
-            var orgKeys = await GetOrgKeysAsync();
-            if (orgKeys == null || !orgKeys.ContainsKey(orgId))
-            {
-                return null;
-            }
-            return orgKeys[orgId];
-        }
 
 
         public async Task<bool> HasKeyAsync(string userId = null)
@@ -384,23 +585,7 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task ClearKeyPairAsync(bool memoryOnly = false, string userId = null)
-        {
-            _publicKey = _privateKey = null;
-            if (!memoryOnly)
-            {
-                await _stateService.SetPrivateKeyEncryptedAsync(null, userId);
-            }
-        }
 
-        public async Task ClearOrgKeysAsync(bool memoryOnly = false, string userId = null)
-        {
-            _orgKeys = null;
-            if (!memoryOnly)
-            {
-                await _stateService.SetOrgKeysEncryptedAsync(null, userId);
-            }
-        }
 
         public async Task ClearPinProtectedKeyAsync(string userId = null)
         {
@@ -417,18 +602,6 @@ namespace Bit.Core.Services
             _orgKeys = null;
         }
 
-        public async Task ClearKeysAsync(string userId = null)
-        {
-            await Task.WhenAll(new Task[]
-            {
-                ClearKeyAsync(userId),
-                ClearPasswordHashAsync(userId),
-                ClearOrgKeysAsync(false, userId),
-                ClearEncKeyAsync(false, userId),
-                ClearKeyPairAsync(false, userId),
-                ClearPinProtectedKeyAsync(userId)
-            });
-        }
 
         public async Task ToggleKeyAsync()
         {
@@ -504,11 +677,12 @@ namespace Bit.Core.Services
                 }
                 protectedKeyCs = new EncString(pinProtectedKey);
             }
-            var pinKey = await MakePinKeyAysnc(pin, salt, config);
+            var pinKey = await MakePinKeyAsync(pin, salt, config);
             var decKey = await DecryptToBytesAsync(protectedKeyCs, pinKey);
             return new SymmetricCryptoKey(decKey);
         }
 
+        // TODO(Jake): This isn't used, delete
         public async Task<Tuple<EncString, SymmetricCryptoKey>> MakeShareKeyAsync()
         {
             var shareKey = await _cryptoFunctionService.RandomBytesAsync(64);
@@ -517,25 +691,8 @@ namespace Bit.Core.Services
             return new Tuple<EncString, SymmetricCryptoKey>(encShareKey, new SymmetricCryptoKey(shareKey));
         }
 
-        public async Task<Tuple<string, EncString>> MakeKeyPairAsync(SymmetricCryptoKey key = null)
-        {
-            var keyPair = await _cryptoFunctionService.RsaGenerateKeyPairAsync(2048);
-            var publicB64 = Convert.ToBase64String(keyPair.Item1);
-            var privateEnc = await EncryptAsync(keyPair.Item2, key);
-            return new Tuple<string, EncString>(publicB64, privateEnc);
-        }
 
-        public async Task<SymmetricCryptoKey> MakePinKeyAysnc(string pin, string salt, KdfConfig config)
-        {
-            var pinKey = await MakeKeyAsync(pin, salt, config);
-            return await StretchKeyAsync(pinKey);
-        }
 
-        public async Task<SymmetricCryptoKey> MakeSendKeyAsync(byte[] keyMaterial)
-        {
-            var sendKey = await _cryptoFunctionService.HkdfAsync(keyMaterial, "bitwarden-send", "send", 64, HkdfAlgorithm.Sha256);
-            return new SymmetricCryptoKey(sendKey);
-        }
 
         public async Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key, HashPurpose hashPurpose = HashPurpose.ServerAuthorization)
         {
@@ -556,13 +713,13 @@ namespace Bit.Core.Services
         {
             var theKey = await GetKeyForEncryptionAsync(key);
             var encKey = await _cryptoFunctionService.RandomBytesAsync(64);
-            return await BuildEncKeyAsync(theKey, encKey);
+            return await BuildProtectedSymmetricKey<SymmetricCryptoKey>(theKey, encKey);
         }
 
         public async Task<Tuple<SymmetricCryptoKey, EncString>> RemakeEncKeyAsync(SymmetricCryptoKey key)
         {
             var encKey = await GetEncKeyAsync();
-            return await BuildEncKeyAsync(key, encKey.Key);
+            return await BuildProtectedSymmetricKey<SymmetricCryptoKey>(key, encKey.Key);
         }
 
         public async Task<EncString> EncryptAsync(string plainValue, SymmetricCryptoKey key = null)
@@ -606,19 +763,6 @@ namespace Bit.Core.Services
             return new EncByteArray(encBytes);
         }
 
-        public async Task<EncString> RsaEncryptAsync(byte[] data, byte[] publicKey = null)
-        {
-            if (publicKey == null)
-            {
-                publicKey = await GetPublicKeyAsync();
-            }
-            if (publicKey == null)
-            {
-                throw new Exception("Public key unavailable.");
-            }
-            var encBytes = await _cryptoFunctionService.RsaEncryptAsync(data, publicKey, CryptoHashAlgorithm.Sha1);
-            return new EncString(EncryptionType.Rsa2048_OaepSha1_B64, Convert.ToBase64String(encBytes));
-        }
 
         public async Task<byte[]> DecryptToBytesAsync(EncString encString, SymmetricCryptoKey key = null)
         {
@@ -673,36 +817,6 @@ namespace Bit.Core.Services
             return await AesDecryptToBytesAsync(encType, ctBytes, ivBytes, macBytes, key);
         }
 
-        public async Task<int> RandomNumberAsync(int min, int max)
-        {
-            // Make max inclusive
-            max = max + 1;
-
-            var diff = (long)max - min;
-            var upperBound = uint.MaxValue / diff * diff;
-            uint ui;
-            do
-            {
-                ui = await _cryptoFunctionService.RandomNumberAsync();
-            } while (ui >= upperBound);
-            return (int)(min + (ui % diff));
-        }
-
-        /// <summary>
-        /// Makes random string with length <paramref name="length"/> based on the charset <see cref="RANDOM_STRING_CHARSET"/>
-        /// </summary>
-        public async Task<string> RandomStringAsync(int length)
-        {
-            var sb = new StringBuilder();
-
-            for (var i = 0; i < length; i++)
-            {
-                var randomCharIndex = await RandomNumberAsync(0, RANDOM_STRING_CHARSET.Length - 1);
-                sb.Append(RANDOM_STRING_CHARSET[randomCharIndex]);
-            }
-
-            return sb.ToString();
-        }
 
         // Helpers
 
@@ -818,60 +932,6 @@ namespace Bit.Core.Services
             return await _cryptoFunctionService.AesDecryptAsync(data, iv, theKey.EncKey);
         }
 
-        public async Task<byte[]> RsaDecryptAsync(string encValue, byte[] privateKey = null)
-        {
-            var headerPieces = encValue.Split('.');
-            EncryptionType? encType = null;
-            string[] encPieces = null;
-
-            if (headerPieces.Length == 1)
-            {
-                encType = EncryptionType.Rsa2048_OaepSha256_B64;
-                encPieces = new string[] { headerPieces[0] };
-            }
-            else if (headerPieces.Length == 2 && Enum.TryParse(headerPieces[0], out EncryptionType type))
-            {
-                encType = type;
-                encPieces = headerPieces[1].Split('|');
-            }
-
-            if (!encType.HasValue)
-            {
-                throw new Exception("encType unavailable.");
-            }
-            if (encPieces == null || encPieces.Length == 0)
-            {
-                throw new Exception("encPieces unavailable.");
-            }
-
-            var data = Convert.FromBase64String(encPieces[0]);
-
-            if (privateKey is null)
-            {
-                privateKey = await GetPrivateKeyAsync();
-            }
-
-            if (privateKey == null)
-            {
-                throw new Exception("No private key.");
-            }
-
-            var alg = CryptoHashAlgorithm.Sha1;
-            switch (encType.Value)
-            {
-                case EncryptionType.Rsa2048_OaepSha256_B64:
-                case EncryptionType.Rsa2048_OaepSha256_HmacSha256_B64:
-                    alg = CryptoHashAlgorithm.Sha256;
-                    break;
-                case EncryptionType.Rsa2048_OaepSha1_B64:
-                case EncryptionType.Rsa2048_OaepSha1_HmacSha256_B64:
-                    break;
-                default:
-                    throw new Exception("encType unavailable.");
-            }
-
-            return await _cryptoFunctionService.RsaDecryptAsync(data, privateKey, alg);
-        }
 
         private async Task<UserKey> GetUserKeyWithLegacySupport(string userId = null)
         {
@@ -948,8 +1008,8 @@ namespace Bit.Core.Services
             return phrase;
         }
 
-        private async Task<Tuple<SymmetricCryptoKey, EncString>> BuildEncKeyAsync(SymmetricCryptoKey key,
-            byte[] encKey)
+        private async Task<Tuple<T, EncString>> BuildProtectedSymmetricKey<T>(SymmetricCryptoKey key,
+            byte[] encKey) where T : SymmetricCryptoKey
         {
             EncString encKeyEnc = null;
             if (key.Key.Length == 32)
@@ -965,7 +1025,7 @@ namespace Bit.Core.Services
             {
                 throw new Exception("Invalid key size.");
             }
-            return new Tuple<SymmetricCryptoKey, EncString>(new SymmetricCryptoKey(encKey), encKeyEnc);
+            return new Tuple<T, EncString>(new SymmetricCryptoKey(encKey) as T, encKeyEnc);
         }
 
         private class EncryptedObject
