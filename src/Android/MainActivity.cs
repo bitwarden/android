@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,10 +7,12 @@ using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Content.Res;
+using Android.Gms.Tasks;
 using Android.Nfc;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
+using AndroidX.Activity.Result;
 using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Resources;
@@ -24,8 +27,11 @@ using Bit.Droid.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 using ZXing.Net.Mobile.Android;
+using static System.Net.Mime.MediaTypeNames;
 using FileProvider = AndroidX.Core.Content.FileProvider;
+using Task = System.Threading.Tasks.Task;
 
 namespace Bit.Droid
 {
@@ -52,8 +58,12 @@ namespace Bit.Droid
             Java.Util.Regex.Pattern.Compile("^.*?([cbdefghijklnrtuv]{32,64})$");
 
         private string stamp = "";
+        private static readonly ConcurrentDictionary<int, TaskCompletionSource<ActivityResult>> _oneTimeActivityListeners = new ConcurrentDictionary<int, TaskCompletionSource<ActivityResult>>();
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
             stamp = DateTime.UtcNow.ToString();
 
             var eventUploadIntent = new Intent(this, typeof(EventUploadReceiver));
@@ -128,6 +138,11 @@ namespace Bit.Droid
                     ExitApp();
                 }
             });
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) 
+        {
+            PrintAlert(e.ExceptionObject.ToString());
         }
 
         protected override void OnPause()
@@ -233,8 +248,30 @@ namespace Bit.Droid
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
+        private void PrintAlert(string text)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                Page currentPage = Xamarin.Forms.Application.Current.MainPage;
+                await currentPage.DisplayAlert("TEXXXT:", $"{text}", "OK");
+            });
+        }
+
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
+            PrintAlert($"-> on-activity-result: {requestCode}");
+
+            if (_oneTimeActivityListeners.ContainsKey(requestCode))
+            {
+                if (_oneTimeActivityListeners.TryRemove(requestCode, out var listener))
+                {
+                    PrintAlert("-> accessed-listener");
+                    listener.SetResult(new ActivityResult((int)resultCode, data));
+                }
+                PrintAlert("-> returnnn");
+                return;
+            }
+
             if (resultCode == Result.Ok &&
                (requestCode == Core.Constants.SelectFileRequestCode || requestCode == Core.Constants.SaveFileRequestCode))
             {
@@ -286,6 +323,14 @@ namespace Bit.Droid
         {
             base.OnDestroy();
             _broadcasterService.Unsubscribe(_activityKey);
+        }
+
+        public void StartActivityForResult<T>(Intent intent, TaskCompletionSource<T> taskCompletionSource)
+        {
+            int requestCode = Math.Abs((int)DateTime.UtcNow.Ticks);
+            _oneTimeActivityListeners[requestCode] = taskCompletionSource as TaskCompletionSource<ActivityResult>;
+
+            StartActivityForResult(intent, requestCode);
         }
 
         private void ListenYubiKey(bool listen)

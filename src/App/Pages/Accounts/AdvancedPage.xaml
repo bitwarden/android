@@ -35,7 +35,8 @@
                 <Label
                     IsVisible="{Binding IsCertificateChosen, Converter={StaticResource inverseBool}}"
                     Text="{u:I18n NoCertificateSetup}"
-                    StyleClass="box-sub-label" />
+                    StyleClass="box-sub-label"
+                    AutomationId="NoCertificateSetupLabel"/>
                 
                 <Grid
                     IsVisible="{Binding IsCertificateChosen}"
@@ -53,35 +54,38 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         Grid.RowSpan="2">
-
                         <Label
                             Text="{Binding CertificateAlias}"
-                            StyleClass="box-label" />
+                            StyleClass="box-label"
+                            AutomationId="CertificateAliasLabel" />
                         <Label
                             Text="{Binding CertificateDetails}"
                             Padding="12, 0, 0, 0"
-                            StyleClass="box-sub-label" />
+                            StyleClass="box-sub-label"
+                            AutomationId="CertificateDetailsLabel" />
                     </StackLayout>
 
                     <controls:IconButton
                         StyleClass="box-row-button, box-row-button-platform, button-danger"
                         Text="{Binding Source={x:Static core:BitwardenIcons.Trash}}"
+                        Command="{Binding RemoveCertCommand}"
                         Grid.Row="0"
                         Grid.Column="1"
                         Grid.RowSpan="2"
-                        AutomationProperties.IsInAccessibleTree="True" />
+                        AutomationId="DeleteCertButton"
+                        />
                 </Grid>
 
                 <Button Text="Import and use a new certificate"
                         StyleClass="btn-primary"
                         Command="{Binding ImportAndUseCertCommand}"
-                        AutomationId="ContinueButton"
+                        AutomationId="ImportAndUseCertButton"
                         />
 
                 <Button Text="Use a system certificate"
                         StyleClass="btn-secondary"
                         Command="{Binding UseSystemCertCommand}"
-                        AutomationId="ContinueButton"
+                        AutomationId="UseSystemCertButton"
                         />
 
             </StackLayout>

@@ -203,6 +203,8 @@ namespace Bit.iOS.Core.Services
             _messagingService.Send("selectFileResult", new Tuple<byte[], string>(data, fileName));
         }
 
+        public Task<T> SelectFileAsync<T>() where T : class => throw new NotImplementedException();
+
         public class PickerDelegate : UIDocumentPickerDelegate
         {
             private readonly FileService _fileService;

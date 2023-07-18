@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Bit.App.Abstractions;
-using Bit.App.Resources;
-using Bit.Core.Utilities;
-using Bit.Core.Abstractions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Xamarin.CommunityToolkit.ObjectModel;
-using System.Runtime.ConstrainedExecution;
-using Xamarin.Forms;
+using Bit.App.Abstractions;
 using Bit.Core;
-using System.Runtime.CompilerServices;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
     public class AdvancedPageViewModel: BaseViewModel
     {
         private readonly ICertificateService _certificateService;
+        private readonly IDeviceActionService _deviceActionService;
         private readonly IStorageService _storageService;
 
         private string _certificateAlias = "";
@@ -31,25 +27,21 @@ namespace Bit.App.Pages
         {
             _certificateService = ServiceContainer.Resolve<ICertificateService>("certificateService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
 
             OkCommand = new AsyncCommand(OkAsync, allowsMultipleExecutions: false);
             ImportAndUseCertCommand = new AsyncCommand(ImportAndUseCertAsync, allowsMultipleExecutions: false);
             UseSystemCertCommand = new AsyncCommand(UseSystemCertAsync, allowsMultipleExecutions: false);
+            RemoveCertCommand = new AsyncCommand(RemoveCertAsync, allowsMultipleExecutions: false);
 
             PageTitle = "Advanced";
             Task.Run(async () => await BindCertDetailsAsync());
         }
         
-        public async Task InitAsync() 
-        {
-            await BindCertDetailsAsync();
-        }
 
         private async Task BindCertDetailsAsync()
         {
             var certUri = await GetCertUriSafe();
-
-            await PrintAsync($"->binding->{certUri}");
 
             try
             {
@@ -60,24 +52,17 @@ namespace Bit.App.Pages
                     CertificateUri = certUri;
                     CertificateAlias = cert.Alias;
                     CertificateDetails = cert.ToString();
-
-                    await PrintAsync($"haha->{certUri}");
-                    await PrintAsync($"haha->{CertificateAlias}");
-                    await PrintAsync($"haha->{CertificateDetails}");
-
-                    await PrintAsync($"->binding->Invokedwithuri");
-
                 }
                 else
                 {
                     CertificateUri = certUri;
-
-                    await PrintAsync($"->binding->Invoked-without-uri");
+                    CertificateAlias = null;
+                    CertificateDetails = null;
                 }
             }
             catch (Exception ex)
             {
-                await PrintAsync(ex.ToString());
+                _deviceActionService.Toast($"Failed to read cert details!\n{ex.Message}");
             }
 
         }
@@ -85,6 +70,7 @@ namespace Bit.App.Pages
         public ICommand OkCommand { get; }
         public ICommand ImportAndUseCertCommand { get; }
         public ICommand UseSystemCertCommand { get; }
+        public ICommand RemoveCertCommand { get; }
 
         public Task OkAsync()
         {
@@ -106,27 +92,29 @@ namespace Bit.App.Pages
             }
             catch (Exception ex)
             {
-                await PrintAsync(ex.ToString());
+                _deviceActionService.Toast($"Failed to import the cert!\n{ex.Message}");
             }
 
+        }
+
+        public async Task RemoveCertAsync()
+        {
+            _certificateService.TryRemoveCertificate(CertificateUri);
+            await _storageService.RemoveAsync(Constants.ClientAuthCertificateAliasKey);
+            await BindCertDetailsAsync();
         }
 
         public async Task UseSystemCertAsync()
         {
             var certUri = await _certificateService.ChooseSystemCertificateAsync();
-            await PrintAsync(certUri);
+
             if (!string.IsNullOrEmpty(certUri))
             {
                 _certificateService.TryRemoveCertificate(await GetCertUriSafe());
-                await PrintAsync("removed--");
 
                 await _storageService.SaveAsync(Constants.ClientAuthCertificateAliasKey, certUri);
 
-                await PrintAsync("saved--");
-
                 await BindCertDetailsAsync();
-
-                await PrintAsync("binded--");
             }
         }
 
@@ -166,15 +154,6 @@ namespace Bit.App.Pages
             {
                 return string.Empty;
             }
-        }
-
-        private async Task PrintAsync(string text)
-        {
-            await Device.InvokeOnMainThreadAsync(async () =>
-            {
-                Page currentPage = Xamarin.Forms.Application.Current.MainPage;
-                await currentPage.DisplayAlert("TEXXXT Cert", $"{text}", "OK");
-            });
         }
     }
 }

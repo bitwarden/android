@@ -22,21 +22,6 @@ namespace Bit.Droid.Services
 {
     public class FileService : IFileService
     {
-        private class SelectCertFileActivityResultCallback : Java.Lang.Object, IActivityResultCallback
-        {
-            private readonly Action<ActivityResult> _handler;
-            public SelectCertFileActivityResultCallback(Action<ActivityResult> handler)
-            {
-                _handler = handler;
-            }
-
-            public void OnActivityResult(Java.Lang.Object result)
-            {
-                ActivityResult activityResult = result as ActivityResult;
-                _handler(activityResult);
-            }
-        }
-
         private readonly IStateService _stateService;
         private readonly IBroadcasterService _broadcasterService;
 
@@ -203,23 +188,24 @@ namespace Bit.Droid.Services
         {
             var result = new TaskCompletionSource<T>();
 
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-
-            var chooserIntent = CreateFileChooserIntent();
-            if (chooserIntent == null)
+            try
             {
-                result.SetResult(null);
-                return result.Task;
-            }
-            
-            ActivityResultLauncher activityResultLauncher = activity.RegisterForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), 
-                new SelectCertFileActivityResultCallback((ActivityResult activityResult) =>
-                {
-                    result.SetResult(activityResult as T);
-                }));
+                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
 
-            activityResultLauncher.Launch(chooserIntent);
+                var chooserIntent = CreateFileChooserIntent();
+                if (chooserIntent == null)
+                {
+                    result.SetResult(null);
+                    return result.Task;
+                }
+
+                activity.StartActivityForResult(chooserIntent, result);
+            }
+            catch (Exception ex)
+            {
+                result.SetException(ex);
+            }
+
 
             return result.Task;
         }

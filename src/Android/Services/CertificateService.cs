@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Security;
 using AndroidX.Activity.Result;
+using Bit.App.Abstractions;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Models;
 using Bit.Core.Utilities;
@@ -25,6 +28,8 @@ namespace Bit.Droid.Services
         private const string HostKeyStore = "keystore";
 
         private readonly IFileService _fileService;
+        private readonly IDeviceActionService _deviceActionService;
+
         private class ChoosePrivateKeyAliasCallback : Java.Lang.Object, IKeyChainAliasCallback
         {
             public Action<string> Success { get; set; }
@@ -45,6 +50,7 @@ namespace Bit.Droid.Services
         public CertificateService()
         {
             _fileService = ServiceContainer.Resolve<IFileService>();
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>();
         }
 
         public bool TryRemoveCertificate(string certUri)
@@ -88,12 +94,16 @@ namespace Bit.Droid.Services
             if (keyHost == HostKeyStore)
             {
                 KeyStore keyStore = KeyStore.GetInstance("AndroidKeyStore");
+                keyStore.Load(null);
+                
                 var cert = keyStore.GetCertificate(alias);
                 var privateKeyRef = keyStore.GetKey(alias, null);
 
                 certSpec.Certificate = cert as Java.Security.Cert.X509Certificate;
                 certSpec.Alias = alias;
                 certSpec.PrivateKeyRef = privateKeyRef;
+
+                keyStore.Dispose();
             }
             else if (keyHost == HostKeyChain)
             {
@@ -114,7 +124,7 @@ namespace Bit.Droid.Services
             try
             {
                 var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-                ActivityResult activityResult = await SelectFileAsync();
+                ActivityResult activityResult = await _fileService.SelectFileAsync<ActivityResult>(); ;
 
                 var data = activityResult?.Data;
 
@@ -126,49 +136,37 @@ namespace Bit.Droid.Services
                     return string.Empty;
                 }
 
-                Android.Net.Uri uri = data.Data;
+                string chosenCertAlias = string.Empty;
 
-                const string password = "1";
-
-                using (var stream = activity.ContentResolver.OpenInputStream(uri))
+                var password = await _deviceActionService.DisplayPromptAync("Password", "Enter password to decrypt the certificate", 
+                    null, AppResources.Submit, AppResources.Cancel, password: true);
+                
+                if (password == null) 
                 {
-                    string chosenCertAlias = string.Empty;
+                    return string.Empty;
+                }
 
+                using (var stream = activity.ContentResolver.OpenInputStream(data.Data))
+                {
                     // Step 1: Load PKCS#12 bytes into a KeyStore
                     KeyStore pkcs12KeyStore = KeyStore.GetInstance("pkcs12");
                     pkcs12KeyStore.Load(stream, password.ToCharArray());
 
-                    // Step 2: Get list of aliases and prompt user to pick one if there are multiple
+                    // Step 2: Get list of aliases and choose first one
                     List<string> aliases = new List<string>();
 
                     var aliasEnumeration = pkcs12KeyStore.Aliases();
-
-                    while (aliasEnumeration.HasMoreElements)
-                    {
-                        aliases.Add(aliasEnumeration.NextElement().ToString());
-                    }
-
-                    if (aliases.Count == 0)
+                    if (!aliasEnumeration.HasMoreElements)
                     {
                         return string.Empty;
                     }
-                    else if (aliases.Count == 1)
-                    {
-                        chosenCertAlias = aliases[0];
-                    }
-                    else
-                    {
-                        Page currentPage = Xamarin.Forms.Application.Current.MainPage;
-                        chosenCertAlias = await PromptChooseCertAliasAsync(aliases);
-                        if (string.IsNullOrEmpty(chosenCertAlias))
-                        {
-                            return string.Empty;
-                        }
-                    }
+                    chosenCertAlias = aliasEnumeration.NextElement().ToString();
 
                     // Step 3: Extract PrivateKey and X.509 certificate from the KeyStore and verify cert. alias
                     IKey privateKey = pkcs12KeyStore.GetKey(chosenCertAlias, password.ToCharArray());
                     Certificate[] certificateChain = pkcs12KeyStore.GetCertificateChain(chosenCertAlias);
+
+                    pkcs12KeyStore.Dispose();
 
                     if (privateKey == null || certificateChain == null || certificateChain.Length == 0)
                     {
@@ -183,27 +181,22 @@ namespace Bit.Droid.Services
 
                     var certUri = VerifyAndFormatCertUri(chosenCertAlias);
 
-                    await Device.InvokeOnMainThreadAsync(async () =>
-                    {
-                        Page currentPage = Xamarin.Forms.Application.Current.MainPage;
-                        await currentPage.DisplayAlert("Selected Cert", $"You selected: {chosenCertAlias}", "OK");
-                    });
-
                     // Step 4: Create an Android KeyStore instance
                     KeyStore androidKeyStore = KeyStore.GetInstance("AndroidKeyStore");
                     androidKeyStore.Load(null);
 
                     // Step 5: Store the private key and X.509 certificate in the Android KeyStore
                     androidKeyStore.SetKeyEntry(chosenCertAlias, privateKey, null, certificateChain);
+
+                    androidKeyStore.Dispose();
+                    return certUri;
                 }
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("No certificate selected", e.Message);
-                throw;
+                _deviceActionService.Toast($"Failed to import the certificate\n {e.Message}");
+                return string.Empty;
             }
-
-            return string.Empty;
         }
 
         public Task<string> ChooseSystemCertificateAsync()
@@ -258,25 +251,6 @@ namespace Bit.Droid.Services
             {
                 return $"cert://{HostKeyStore}/{alias}";
             }
-        }
-
-        private async Task<string> PromptChooseCertAliasAsync(List<string> aliases)
-        {
-            return await Device.InvokeOnMainThreadAsync(async () =>
-            {
-                Page currentPage = Xamarin.Forms.Application.Current.MainPage;
-                var chosenAlias = await currentPage.DisplayActionSheet("Select Certificate", "Cancel", null, aliases.ToArray());
-                return chosenAlias;
-            });
-        }
-
-        private async Task<ActivityResult> SelectFileAsync()
-        {
-            return await Device.InvokeOnMainThreadAsync(async () =>
-            {
-                ActivityResult activityResult = await _fileService.SelectFileAsync<ActivityResult>();
-                return activityResult;
-            });
         }
     }
 }
