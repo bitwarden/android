@@ -9,6 +9,7 @@ namespace Bit.Core.Abstractions
 {
     public interface ICryptoService
     {
+        Task ToggleKeysAsync();
         Task SetUserKeyAsync(UserKey userKey, string userId = null);
         Task<UserKey> GetUserKeyAsync(string userId = null);
         Task<bool> HasUserKeyAsync(string userId = null);
@@ -25,7 +26,7 @@ namespace Bit.Core.Abstractions
         Task SetPasswordHashAsync(string keyHash);
         Task<string> GetPasswordHashAsync();
         Task ClearPasswordHashAsync(string userId = null);
-        Task<bool> CompareAndUpdatePasswordHashAsync(string masterPassword, SymmetricCryptoKey key);
+        Task<bool> CompareAndUpdatePasswordHashAsync(string masterPassword, MasterKey key);
         Task SetOrgKeysAsync(IEnumerable<ProfileOrganizationResponse> orgs);
         Task<OrgKey> GetOrgKeyAsync(string orgId);
         Task<Dictionary<string, OrgKey>> GetOrgKeysAsync();
@@ -75,6 +76,5 @@ namespace Bit.Core.Abstractions
         Task<Tuple<SymmetricCryptoKey, EncString>> RemakeEncKeyAsync(SymmetricCryptoKey key);
         Task SetEncKeyAsync(string encKey);
         Task SetKeyAsync(SymmetricCryptoKey key);
-        Task ToggleKeyAsync();
     }
 }

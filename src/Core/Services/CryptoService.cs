@@ -36,6 +36,17 @@ namespace Bit.Core.Services
             _cryptoFunctionService = cryptoFunctionService;
         }
 
+        public async Task ToggleKeysAsync()
+        {
+            // refresh or clear the pin key
+            await SetUserKeyAsync(await GetUserKeyAsync());
+
+            // refresh or clear the encrypted user key
+            var encUserKey = await _stateService.GetUserKeyMasterKeyAsync();
+            await _stateService.SetUserKeyMasterKeyAsync(null);
+            await _stateService.SetUserKeyMasterKeyAsync(encUserKey);
+        }
+
         public async Task SetUserKeyAsync(UserKey userKey, string userId = null)
         {
             await _stateService.SetUserKeyAsync(userKey, userId);
@@ -44,6 +55,11 @@ namespace Bit.Core.Services
             if (await _stateService.GetProtectedPinAsync(userId) != null)
             {
                 await StorePinKey(userKey, userId);
+            }
+            else
+            {
+                await _stateService.SetUserKeyPinAsync(null, userId);
+                await _stateService.SetUserKeyPinEphemeralAsync(null, userId);
             }
         }
 
@@ -69,12 +85,21 @@ namespace Bit.Core.Services
 
         public async Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null)
         {
+            var option = await _stateService.GetVaultTimeoutAsync();
+            var biometric = await _stateService.GetBiometricUnlockAsync();
+            if (option.HasValue && !biometric.GetValueOrDefault())
+            {
+                // we only store the encrypted user key if the user has a vault timeout set
+                // with no biometric. Otherwise, we need it for auto unlock or biometric unlock
+                return;
+            }
             await _stateService.SetUserKeyMasterKeyAsync(value, userId);
         }
 
         public async Task SetMasterKeyAsync(MasterKey masterKey, string userId = null)
         {
             await _stateService.SetMasterKeyAsync(masterKey, userId);
+
         }
 
         public async Task<MasterKey> GetMasterKeyAsync(string userId = null)
@@ -211,7 +236,7 @@ namespace Bit.Core.Services
         }
 
         // TODO(Jake): Uses Master Key
-        public async Task<bool> CompareAndUpdatePasswordHashAsync(string masterPassword, SymmetricCryptoKey key)
+        public async Task<bool> CompareAndUpdatePasswordHashAsync(string masterPassword, MasterKey key)
         {
             var storedPasswordHash = await GetPasswordHashAsync();
             if (masterPassword != null && storedPasswordHash != null)
@@ -383,6 +408,14 @@ namespace Bit.Core.Services
         {
             var pinKey = await MakeKeyAsync(pin, salt, config);
             return await StretchKeyAsync(pinKey) as PinKey;
+        }
+
+        public async Task ClearPinKeys(string userId = null)
+        {
+            await _stateService.SetUserKeyPinAsync(null, userId);
+            await _stateService.SetUserKeyPinEphemeralAsync(null, userId);
+            await _stateService.SetProtectedPinAsync(null, userId);
+            await clearDeprecatedPinKeysAsync(userId);
         }
 
         // public async Task<UserKey> DecryptUserKeyWithPin(string pin, string salt, KdfConfig kdfConfig, EncString pinProtectedUserKey = null)
@@ -614,7 +647,7 @@ namespace Bit.Core.Services
             return new EncByteArray(encBytes);
         }
 
-        // Helpers
+        // --HELPER METHODS--
 
         private async Task StorePinKey(UserKey userKey, string userId = null)
         {
@@ -899,6 +932,15 @@ namespace Bit.Core.Services
             public SymmetricCryptoKey Key { get; set; }
         }
 
+        // --LEGACY METHODS--
+        // We previously used the master key for additional keys, but now we use the user key.
+        // These methods support migrating the old keys to the new ones.
+
+        public async Task clearDeprecatedPinKeysAsync(string userId = null)
+        {
+            await _stateService.SetPinProtectedAsync(null);
+            await _stateService.SetPinProtectedKeyAsync(null);
+        }
 
 
 
@@ -1080,21 +1122,6 @@ namespace Bit.Core.Services
             _publicKey = null;
             _privateKey = null;
             _orgKeys = null;
-        }
-
-
-        public async Task ToggleKeyAsync()
-        {
-            var key = await GetKeyAsync();
-            var option = await _stateService.GetVaultTimeoutAsync();
-            var biometric = await _stateService.GetBiometricUnlockAsync();
-            if (!biometric.GetValueOrDefault() && (option != null || option == 0))
-            {
-                await ClearKeyAsync();
-                await _stateService.SetKeyDecryptedAsync(key);
-                return;
-            }
-            await SetKeyAsync(key);
         }
 
 
