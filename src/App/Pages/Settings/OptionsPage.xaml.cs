@@ -1,6 +1,4 @@
-﻿using Bit.App.Abstractions;
-using Bit.App.Resources;
-using Bit.Core.Abstractions;
+﻿using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
@@ -42,17 +40,6 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             await _vm.InitAsync();
-        }
-
-        protected async override void OnDisappearing()
-        {
-            base.OnDisappearing();
-            await _vm.UpdateAutofillBlockedUris();
-        }
-
-        private async void AutofillBlockedUrisEditor_Unfocused(object sender, FocusEventArgs e)
-        {
-            await _vm.UpdateAutofillBlockedUris();
         }
 
         private async void Close_Clicked(object sender, System.EventArgs e)
