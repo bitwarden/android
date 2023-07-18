@@ -96,10 +96,10 @@ namespace Bit.Droid.Services
                 KeyStore keyStore = KeyStore.GetInstance("AndroidKeyStore");
                 keyStore.Load(null);
                 
-                var cert = keyStore.GetCertificate(alias);
+                var certChain = keyStore.GetCertificateChain(alias);
                 var privateKeyRef = keyStore.GetKey(alias, null);
 
-                certSpec.Certificate = cert as Java.Security.Cert.X509Certificate;
+                certSpec.CertificateChain = certChain.Cast<X509Certificate>().ToArray();
                 certSpec.Alias = alias;
                 certSpec.PrivateKeyRef = privateKeyRef;
 
@@ -109,7 +109,7 @@ namespace Bit.Droid.Services
             {
                 await Task.Run(() =>
                 {
-                    certSpec.Certificate = KeyChain.GetCertificateChain(Android.App.Application.Context, alias).FirstOrDefault();
+                    certSpec.CertificateChain = KeyChain.GetCertificateChain(Android.App.Application.Context, alias);
                     certSpec.PrivateKeyRef = KeyChain.GetPrivateKey(Android.App.Application.Context, alias);
                 });
 

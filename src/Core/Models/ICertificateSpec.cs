@@ -6,6 +6,7 @@ namespace Bit.Core.Models
     {
         U PrivateKeyRef { get; }
         T Certificate { get; }
+        T[] CertificateChain { get; }
     }
 
     public interface ICertificateSpec: IFormattable {
