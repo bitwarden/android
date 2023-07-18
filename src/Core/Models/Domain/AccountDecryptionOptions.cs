@@ -12,6 +12,7 @@ namespace Bit.Core.Models.Domain
     {
         public bool HasAdminApproval { get; set; }
         public bool HasLoginApprovingDevice { get; }
+        public bool HasManageResetPasswordPermission { get; }
         public string EncryptedPrivateKey { get; }
         public string EncryptedUserKey { get; }
     }
