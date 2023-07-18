@@ -51,6 +51,11 @@ namespace Bit.Core.Services
             return await GetUserKeyAsync(userId) != null;
         }
 
+        public async Task<UserKey> MakeUserKeyAsync()
+        {
+            return new UserKey(await _cryptoFunctionService.RandomBytesAsync(64));
+        }
+
         public async Task ClearUserKeyAsync(string userId = null)
         {
             await _stateService.SetUserKeyAsync(null, userId);

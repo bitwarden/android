@@ -12,6 +12,7 @@ namespace Bit.Core.Abstractions
         Task SetUserKeyAsync(UserKey userKey);
         Task<UserKey> GetUserKeyAsync(string userId = null);
         Task<bool> HasUserKeyAsync(string userId = null);
+        Task<UserKey> MakeUserKeyAsync();
         Task ClearUserKeyAsync(string userId = null);
         Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null);
         Task SetMasterKeyAsync(MasterKey masterKey, string userId = null);
