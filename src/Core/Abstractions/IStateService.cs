@@ -42,12 +42,20 @@ namespace Bit.Core.Abstractions
         Task<bool> IsAccountBiometricIntegrityValidAsync(string bioIntegritySrcKey, string userId = null);
         Task SetAccountBiometricIntegrityValidAsync(string bioIntegritySrcKey, string userId = null);
         Task<bool> CanAccessPremiumAsync(string userId = null);
-        Task SetPersonalPremiumAsync(bool value, string userId = null);
         Task<string> GetProtectedPinAsync(string userId = null);
+        Task SetPersonalPremiumAsync(bool value, string userId = null);
+        Task<string> GetUserKeyPin(string userId = null);
+        Task SetUserKeyPin(string value, string userId = null);
+        Task<EncString> GetUserKeyPinEphemeral(string userId = null);
+        Task SetUserKeyPinEphemeral(EncString value, string userId = null);
         Task SetProtectedPinAsync(string value, string userId = null);
+        [Obsolete("Use GetUserKeyPin instead, left for migration purposes")]
         Task<string> GetPinProtectedAsync(string userId = null);
+        [Obsolete("Use SetUserKeyPin instead")]
         Task SetPinProtectedAsync(string value, string userId = null);
+        [Obsolete("Use GetUserKeyPinEphemeral instead, left for migration purposes")]
         Task<EncString> GetPinProtectedKeyAsync(string userId = null);
+        [Obsolete("Use SetUserKeyPinEphemeral instead")]
         Task SetPinProtectedKeyAsync(EncString value, string userId = null);
         Task SetKdfConfigurationAsync(KdfConfig config, string userId = null);
         Task<string> GetKeyHashAsync(string userId = null);

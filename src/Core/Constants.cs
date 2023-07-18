@@ -81,7 +81,7 @@ namespace Bit.Core
 
         public static string VaultTimeoutKey(string userId) => $"vaultTimeout_{userId}";
         public static string VaultTimeoutActionKey(string userId) => $"vaultTimeoutAction_{userId}";
-        public static string UserKeyKey(string userId) => $"UserKey_{userId}";
+        public static string UserKeyKey(string userId) => $"userKey_{userId}";
         public static string CiphersKey(string userId) => $"ciphers_{userId}";
         public static string FoldersKey(string userId) => $"folders_{userId}";
         public static string CollectionsKey(string userId) => $"collections_{userId}";
@@ -93,7 +93,7 @@ namespace Bit.Core
         public static string EncOrgKeysKey(string userId) => $"encOrgKeys_{userId}";
         public static string EncPrivateKeyKey(string userId) => $"encPrivateKey_{userId}";
         public static string KeyHashKey(string userId) => $"keyHash_{userId}";
-        public static string PinProtectedKey(string userId) => $"pinProtectedKey_{userId}";
+        public static string UserKeyPinKey(string userId) => $"userKeyPin_{userId}";
         public static string PassGenOptionsKey(string userId) => $"passwordGenerationOptions_{userId}";
         public static string PassGenHistoryKey(string userId) => $"generatedPasswordHistory_{userId}";
         public static string TwoFactorTokenKey(string email) => $"twoFactorToken_{email}";
@@ -126,5 +126,7 @@ namespace Bit.Core
         public static string KeyKey(string userId) => $"key_{userId}";
         [Obsolete]
         public static string EncKeyKey(string userId) => $"encKey_{userId}";
+        [Obsolete]
+        public static string PinProtectedKey(string userId) => $"pinProtectedKey_{userId}";
     }
 }
