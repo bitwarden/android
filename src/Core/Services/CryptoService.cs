@@ -36,9 +36,15 @@ namespace Bit.Core.Services
             _cryptoFunctionService = cryptoFunctionService;
         }
 
-        public async Task SetUserKeyAsync(UserKey userKey)
+        public async Task SetUserKeyAsync(UserKey userKey, string userId = null)
         {
-            await _stateService.SetUserKeyAsync(userKey);
+            await _stateService.SetUserKeyAsync(userKey, userId);
+
+            // Refresh the Pin Key if the user has a Pin set
+            if (await _stateService.GetProtectedPinAsync(userId) != null)
+            {
+                await StorePinKey(userKey, userId);
+            }
         }
 
         public async Task<UserKey> GetUserKeyAsync(string userId = null)
@@ -609,6 +615,25 @@ namespace Bit.Core.Services
         }
 
         // Helpers
+
+        private async Task StorePinKey(UserKey userKey, string userId = null)
+        {
+            var pin = await DecryptToUtf8Async(new EncString(await _stateService.GetProtectedPinAsync(userId)));
+            var pinKey = await MakePinKeyAsync(
+                pin,
+                await _stateService.GetEmailAsync(userId),
+                await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile))
+            );
+            var encPin = await EncryptAsync(userKey.Key, pinKey);
+
+            // TODO(Jake): Does this logic make sense? Should we save something in state to indicate the preference?
+            if (await _stateService.GetUserKeyPinAsync(userId) != null)
+            {
+                await _stateService.SetUserKeyPinAsync(encPin, userId);
+                return;
+            }
+            await _stateService.SetUserKeyPinEphemeralAsync(encPin, userId);
+        }
 
         private async Task<EncryptedObject> AesEncryptAsync(byte[] data, SymmetricCryptoKey key)
         {

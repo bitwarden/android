@@ -9,7 +9,7 @@ namespace Bit.Core.Abstractions
 {
     public interface ICryptoService
     {
-        Task SetUserKeyAsync(UserKey userKey);
+        Task SetUserKeyAsync(UserKey userKey, string userId = null);
         Task<UserKey> GetUserKeyAsync(string userId = null);
         Task<bool> HasUserKeyAsync(string userId = null);
         Task<UserKey> MakeUserKeyAsync();
