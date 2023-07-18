@@ -41,24 +41,6 @@
                     Text="{u:I18n SelfHostedEnvironmentFooter}"
                     StyleClass="box-footer-label" />
             </StackLayout>
-
-            <StackLayout StyleClass="box">
-                <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n Security, Header=True}"
-                           StyleClass="box-header, box-header-platform" />
-                </StackLayout>
-                <StackLayout StyleClass="box-row">
-                    <Label
-                        Text="{u:I18n ClientCertificate}"
-                        StyleClass="box-label" />
-                    <Button Text="Select"
-                        StyleClass="btn-primary"
-                        Command="{Binding SelectCertCommand}"
-                        AutomationId="ContinueButton"
-                        />
-                </StackLayout>
-            </StackLayout>
-            
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">
                     <Label Text="{u:I18n CustomEnvironment, Header=True}"

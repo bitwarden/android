@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
@@ -10,7 +9,8 @@ namespace Bit.App.Services
     public class BroadcasterService : IBroadcasterService
     {
         private readonly ILogger _logger;
-        private readonly ConcurrentDictionary<string, Action<Message>> _subscribers = new ConcurrentDictionary<string, Action<Message>>();
+        private readonly Dictionary<string, Action<Message>> _subscribers = new Dictionary<string, Action<Message>>();
+        private object _myLock = new object();
 
         public BroadcasterService(ILogger logger)
         {
@@ -19,19 +19,22 @@ namespace Bit.App.Services
 
         public void Send(Message message)
         {
-            foreach (var sub in _subscribers)
+            lock (_myLock)
             {
-                Task.Run(() =>
+                foreach (var sub in _subscribers)
                 {
-                    try
+                    Task.Run(() =>
                     {
-                        sub.Value(message);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.Exception(ex);
-                    }
-                });
+                        try
+                        {
+                            sub.Value(message);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Exception(ex);
+                        }
+                    });
+                }
             }
         }
 
@@ -42,32 +45,42 @@ namespace Bit.App.Services
                 return;
             }
 
-            if (_subscribers.TryGetValue(id, out var action))
+            lock (_myLock)
             {
-                Task.Run(() =>
+                if (_subscribers.TryGetValue(id, out var action))
                 {
-                    try
+                    Task.Run(() =>
                     {
-                        action(message);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.Exception(ex);
-                    }
-                });
+                        try
+                        {
+                            action(message);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Exception(ex);
+                        }
+                    });
+                }
             }
         }
 
         public void Subscribe(string id, Action<Message> messageCallback)
         {
-            _subscribers[id] = messageCallback;
+            lock (_myLock)
+            {
+                _subscribers[id] = messageCallback;
+            }
         }
 
         public void Unsubscribe(string id)
         {
-            _subscribers.TryRemove(id, out _);
+            lock (_myLock)
+            {
+                if (_subscribers.ContainsKey(id))
+                {
+                    _subscribers.Remove(id);
+                }
+            }
         }
-
-        public void Once(Action<Message> messageCallback) { }
     }
 }

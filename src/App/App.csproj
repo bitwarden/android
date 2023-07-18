@@ -129,6 +129,9 @@
     <Compile Update="Pages\Accounts\LoginPasswordlessRequestPage.xaml.cs">
       <DependentUpon>LoginPasswordlessRequestPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\Accounts\AdvancedPage.xaml.cs">
+      <DependentUpon>AdvancedPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -315,9 +318,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Pages\Accounts\AdvancedPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Resources\AppResources.cs.resx">
       <LastGenOutput>AppResources.cs.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -447,9 +447,4 @@
     <None Remove="Utilities\Automation\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Pages\Accounts\AdvancedPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-  </ItemGroup>
 </Project>

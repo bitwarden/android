@@ -5,23 +5,18 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
 using Bit.Core.Utilities;
-using Xamarin.Forms;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Bit.Core.Models.Domain;
 
 namespace Bit.App.Pages
 {
     public class EnvironmentPageViewModel : BaseViewModel
     {
         private readonly IEnvironmentService _environmentService;
-        private readonly ICertificateService _certificateService;
-
         readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         public EnvironmentPageViewModel()
         {
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
-            _certificateService = ServiceContainer.Resolve<ICertificateService>("certificateService");
 
             PageTitle = AppResources.Settings;
             BaseUrl = _environmentService.BaseUrl == EnvironmentUrlData.DefaultEU.Base || EnvironmentUrlData.DefaultUS.Base == _environmentService.BaseUrl ?
@@ -32,11 +27,9 @@ namespace Bit.App.Pages
             IconsUrl = _environmentService.IconsUrl;
             NotificationsUrls = _environmentService.NotificationsUrl;
             SubmitCommand = new AsyncCommand(SubmitAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
-            SelectCertCommand = new AsyncCommand(SelectCertAsync);
         }
 
         public ICommand SubmitCommand { get; }
-        public ICommand SelectCertCommand { get; }
         public string BaseUrl { get; set; }
         public string ApiUrl { get; set; }
         public string IdentityUrl { get; set; }
@@ -45,12 +38,6 @@ namespace Bit.App.Pages
         public string NotificationsUrls { get; set; }
         public Action SubmitSuccessAction { get; set; }
         public Action CloseAction { get; set; }
-
-        public async Task SelectCertAsync()
-        {
-            await Task.Delay(100);
-            await _certificateService.ChooseSystemCertificateAsync();
-        }
 
         public async Task SubmitAsync()
         {
