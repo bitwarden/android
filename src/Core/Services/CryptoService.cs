@@ -428,7 +428,7 @@ namespace Bit.Core.Services
             return await StretchKeyAsync(pinKey) as PinKey;
         }
 
-        public async Task ClearPinKeys(string userId = null)
+        public async Task ClearPinKeysAsync(string userId = null)
         {
             await _stateService.SetUserKeyPinAsync(null, userId);
             await _stateService.SetUserKeyPinEphemeralAsync(null, userId);
@@ -474,20 +474,6 @@ namespace Bit.Core.Services
         {
             var sendKey = await _cryptoFunctionService.HkdfAsync(keyMaterial, "bitwarden-send", "send", 64, HkdfAlgorithm.Sha256);
             return new SymmetricCryptoKey(sendKey);
-        }
-
-        // TODO(Jake): This isn't used, delete?
-        public async Task ClearKeysAsync(string userId = null)
-        {
-            await Task.WhenAll(new Task[]
-            {
-                ClearUserKeyAsync(userId),
-                ClearPasswordHashAsync(userId),
-                ClearOrgKeysAsync(false, userId),
-                ClearKeyPairAsync(false, userId),
-                // TODO(Jake): replace with ClearPinKeys
-                ClearPinProtectedKeyAsync(userId)
-            });
         }
 
         public async Task<EncString> RsaEncryptAsync(byte[] data, byte[] publicKey = null)
@@ -711,7 +697,7 @@ namespace Bit.Core.Services
         {
             var obj = new EncryptedObject
             {
-                Key = await GetKeyForEncryptionAsync(key),
+                Key = key ?? await GetUserKeyWithLegacySupportAsync(),
                 Iv = await _cryptoFunctionService.RandomBytesAsync(16)
             };
             obj.Data = await _cryptoFunctionService.AesEncryptAsync(data, obj.Iv, obj.Key.EncKey);
@@ -728,7 +714,7 @@ namespace Bit.Core.Services
         private async Task<string> AesDecryptToUtf8Async(EncryptionType encType, string data, string iv, string mac,
             SymmetricCryptoKey key)
         {
-            var keyForEnc = await GetKeyForEncryptionAsync(key);
+            var keyForEnc = key ?? await GetUserKeyWithLegacySupportAsync();
             var theKey = ResolveLegacyKey(encType, keyForEnc);
             if (theKey.MacKey != null && mac == null)
             {
@@ -782,7 +768,7 @@ namespace Bit.Core.Services
             SymmetricCryptoKey key)
         {
 
-            var keyForEnc = await GetKeyForEncryptionAsync(key);
+            var keyForEnc = key ?? await GetUserKeyWithLegacySupportAsync();
             var theKey = ResolveLegacyKey(encType, keyForEnc);
             if (theKey.MacKey != null && mac == null)
             {
@@ -819,19 +805,6 @@ namespace Bit.Core.Services
             return await _cryptoFunctionService.AesDecryptAsync(data, iv, theKey.EncKey);
         }
 
-
-        private async Task<UserKey> GetUserKeyWithLegacySupport(string userId = null)
-        {
-            var userKey = await GetUserKeyAsync();
-            if (userKey != null)
-            {
-                return userKey;
-            }
-
-            // Legacy support: encryption used to be done with the master key (derived from master password).
-            // Users who have not migrated will have a null user key and must use the master key instead.
-            return (SymmetricCryptoKey)await GetMasterKeyAsync() as UserKey;
-        }
 
         private async Task<SymmetricCryptoKey> GetKeyForEncryptionAsync(SymmetricCryptoKey key = null)
         {
@@ -1159,35 +1132,8 @@ namespace Bit.Core.Services
 
 
 
-        public async Task<bool> HasKeyAsync(string userId = null)
-        {
-            var key = await GetKeyAsync(userId);
-            return key != null;
-        }
-
-        public async Task ClearKeyAsync(string userId = null)
-        {
-            await _stateService.SetKeyDecryptedAsync(null, userId);
-            _legacyEtmKey = null;
-            await _stateService.SetKeyEncryptedAsync(null, userId);
-        }
 
 
-        public async Task ClearEncKeyAsync(bool memoryOnly = false, string userId = null)
-        {
-            _encKey = null;
-            if (!memoryOnly)
-            {
-                await _stateService.SetEncKeyEncryptedAsync(null, userId);
-            }
-        }
-
-
-
-        public async Task ClearPinProtectedKeyAsync(string userId = null)
-        {
-            await _stateService.SetPinProtectedAsync(null, userId);
-        }
 
         public void ClearCache()
         {

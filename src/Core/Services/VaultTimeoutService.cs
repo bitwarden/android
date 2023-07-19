@@ -61,7 +61,7 @@ namespace Bit.Core.Services
 
         public async Task<bool> IsLockedAsync(string userId = null)
         {
-            var hasKey = await _cryptoService.HasKeyAsync(userId);
+            var hasKey = await _cryptoService.HasUserKeyAsync(userId);
             if (hasKey)
             {
                 var biometricSet = await IsBiometricLockSetAsync(userId);
@@ -196,10 +196,10 @@ namespace Bit.Core.Services
                 }
             }
             await Task.WhenAll(
-                _cryptoService.ClearKeyAsync(userId),
+                _cryptoService.ClearUserKeyAsync(userId),
+                _cryptoService.ClearMasterKeyAsync(userId),
                 _cryptoService.ClearOrgKeysAsync(true, userId),
-                _cryptoService.ClearKeyPairAsync(true, userId),
-                _cryptoService.ClearEncKeyAsync(true, userId));
+                _cryptoService.ClearKeyPairAsync(true, userId));
 
             if (isActiveAccount)
             {
@@ -257,8 +257,7 @@ namespace Bit.Core.Services
 
         public async Task ClearAsync(string userId = null)
         {
-            await _stateService.SetPinProtectedKeyAsync(null, userId);
-            await _stateService.SetProtectedPinAsync(null, userId);
+            await _cryptoService.ClearPinKeysAsync(userId);
         }
 
         public async Task<int?> GetVaultTimeout(string userId = null)

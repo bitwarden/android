@@ -249,7 +249,7 @@ namespace Bit.Core.Services
             {
                 try
                 {
-                    var hashKey = await _cryptoService.HasKeyAsync();
+                    var hashKey = await _cryptoService.HasUserKeyAsync();
                     if (!hashKey)
                     {
                         throw new Exception("No key.");

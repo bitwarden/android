@@ -206,9 +206,9 @@ namespace Bit.App.Pages
                     // Grab Organization Keys
                     var response = await _apiService.GetOrganizationKeysAsync(OrgId);
                     var publicKey = CoreHelpers.Base64UrlDecode(response.PublicKey);
-                    // Grab user's Encryption Key and encrypt with Org Public Key
-                    var userEncKey = await _cryptoService.GetEncKeyAsync();
-                    var encryptedKey = await _cryptoService.RsaEncryptAsync(userEncKey.Key, publicKey);
+                    // Grab User Key and encrypt with Org Public Key
+                    var userKey = await _cryptoService.GetUserKeyAsync();
+                    var encryptedKey = await _cryptoService.RsaEncryptAsync(userKey.Key, publicKey);
                     // Request
                     var resetRequest = new OrganizationUserResetPasswordEnrollmentRequest
                     {

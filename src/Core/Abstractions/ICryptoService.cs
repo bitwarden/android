@@ -42,11 +42,10 @@ namespace Bit.Core.Abstractions
         Task<Tuple<string, EncString>> MakeKeyPairAsync(SymmetricCryptoKey key = null);
         Task ClearKeyPairAsync(bool memoryOnly = false, string userId = null);
         Task<PinKey> MakePinKeyAsync(string pin, string salt, KdfConfig config);
+        Task ClearPinKeysAsync(string userId = null);
         Task<UserKey> DecryptUserKeyWithPinAsync(string pin, string salt, KdfConfig kdfConfig, EncString pinProtectedUserKey = null);
         Task<MasterKey> DecryptMasterKeyWithPinAsync(string pin, string salt, KdfConfig kdfConfig, EncString pinProtectedMasterKey = null);
         Task<SymmetricCryptoKey> MakeSendKeyAsync(byte[] keyMaterial);
-        // TODO(Jake): This isn't used, delete?
-        Task ClearKeysAsync(string userId = null);
         Task<EncString> RsaEncryptAsync(byte[] data, byte[] publicKey = null);
         Task<byte[]> RsaDecryptAsync(string encValue, byte[] privateKey = null);
         Task<int> RandomNumberAsync(int min, int max);
@@ -67,15 +66,11 @@ namespace Bit.Core.Abstractions
 
 
 
-        Task ClearEncKeyAsync(bool memoryOnly = false, string userId = null);
-        Task ClearKeyAsync(string userId = null);
-        Task ClearPinProtectedKeyAsync(string userId = null);
         void ClearCache();
+
         Task<SymmetricCryptoKey> GetEncKeyAsync(SymmetricCryptoKey key = null);
         Task<SymmetricCryptoKey> GetKeyAsync(string userId = null);
-        Task<bool> HasKeyAsync(string userId = null);
         Task<Tuple<SymmetricCryptoKey, EncString>> MakeEncKeyAsync(SymmetricCryptoKey key);
-        // TODO(Jake): This isn't used, delete
         Task SetEncKeyAsync(string encKey);
         Task SetKeyAsync(SymmetricCryptoKey key);
     }

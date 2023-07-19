@@ -60,11 +60,11 @@ namespace Bit.Core.Services
         public async Task MigrateUser()
         {
             var organization = await GetManagingOrganization();
-            var key = await _cryptoService.GetKeyAsync();
+            var masterKey = await _cryptoService.GetMasterKeyAsync();
 
             try
             {
-                var keyConnectorRequest = new KeyConnectorUserKeyRequest(key.EncKeyB64);
+                var keyConnectorRequest = new KeyConnectorUserKeyRequest(masterKey.EncKeyB64);
                 await _apiService.PostUserKeyToKeyConnector(organization.KeyConnectorUrl, keyConnectorRequest);
             }
             catch (Exception e)
