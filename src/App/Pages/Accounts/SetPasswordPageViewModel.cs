@@ -165,26 +165,18 @@ namespace Bit.App.Pages
 
             var kdfConfig = new KdfConfig(KdfType.PBKDF2_SHA256, Constants.Pbkdf2Iterations, null, null);
             var email = await _stateService.GetEmailAsync();
-            var masterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, email, kdfConfig);
-            var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, masterKey, HashPurpose.ServerAuthorization);
-            var localMasterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, masterKey, HashPurpose.LocalAuthorization);
+            var newMasterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, email, kdfConfig);
+            var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, newMasterKey, HashPurpose.ServerAuthorization);
+            var localMasterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, newMasterKey, HashPurpose.LocalAuthorization);
 
-            Tuple<SymmetricCryptoKey, EncString> encKey;
-            var existingEncKey = await _cryptoService.GetEncKeyAsync();
-            if (existingEncKey == null)
-            {
-                encKey = await _cryptoService.MakeEncKeyAsync(masterKey);
-            }
-            else
-            {
-                encKey = await _cryptoService.RemakeEncKeyAsync(masterKey);
-            }
+            var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(newMasterKey,
+                await _cryptoService.GetUserKeyAsync() ?? await _cryptoService.MakeUserKeyAsync());
 
-            var keys = await _cryptoService.MakeKeyPairAsync(encKey.Item1);
+            var keys = await _cryptoService.MakeKeyPairAsync(newUserKey);
             var request = new SetPasswordRequest
             {
                 MasterPasswordHash = masterPasswordHash,
-                Key = encKey.Item2.EncryptedString,
+                Key = newProtectedUserKey.EncryptedString,
                 MasterPasswordHint = Hint,
                 Kdf = kdfConfig.Type.GetValueOrDefault(KdfType.PBKDF2_SHA256),
                 KdfIterations = kdfConfig.Iterations.GetValueOrDefault(Constants.Pbkdf2Iterations),
@@ -204,9 +196,9 @@ namespace Bit.App.Pages
                 // Set Password and relevant information
                 await _apiService.SetPasswordAsync(request);
                 await _stateService.SetKdfConfigurationAsync(kdfConfig);
-                await _cryptoService.SetMasterKeyAsync(masterKey);
+                await _cryptoService.SetMasterKeyAsync(newMasterKey);
                 await _cryptoService.SetPasswordHashAsync(localMasterPasswordHash);
-                await _cryptoService.SetEncKeyAsync(encKey.Item2.EncryptedString);
+                await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(newProtectedUserKey.EncryptedString);
                 await _cryptoService.SetPrivateKeyAsync(keys.Item2.EncryptedString);
 
                 if (ResetPasswordAutoEnroll)

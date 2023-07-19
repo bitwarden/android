@@ -1193,23 +1193,6 @@ namespace Bit.Core.Services
         }
 
 
-        public async Task<SymmetricCryptoKey> MakeKeyFromPinAsync(string pin, string salt,
-            KdfConfig config, EncString protectedKeyCs = null)
-        {
-            if (protectedKeyCs == null)
-            {
-                var pinProtectedKey = await _stateService.GetPinProtectedAsync();
-                if (pinProtectedKey == null)
-                {
-                    throw new Exception("No PIN protected key found.");
-                }
-                protectedKeyCs = new EncString(pinProtectedKey);
-            }
-            var pinKey = await MakePinKeyAsync(pin, salt, config);
-            var decKey = await DecryptToBytesAsync(protectedKeyCs, pinKey);
-            return new SymmetricCryptoKey(decKey);
-        }
-
         // TODO(Jake): This isn't used, delete
         public async Task<Tuple<EncString, SymmetricCryptoKey>> MakeShareKeyAsync()
         {
@@ -1229,17 +1212,6 @@ namespace Bit.Core.Services
             var encKey = await _cryptoFunctionService.RandomBytesAsync(64);
             return await BuildProtectedSymmetricKey<SymmetricCryptoKey>(theKey, encKey);
         }
-
-        public async Task<Tuple<SymmetricCryptoKey, EncString>> RemakeEncKeyAsync(SymmetricCryptoKey key)
-        {
-            var encKey = await GetEncKeyAsync();
-            return await BuildProtectedSymmetricKey<SymmetricCryptoKey>(key, encKey.Key);
-        }
-
-
-
-
-
 
     }
 }

@@ -97,8 +97,8 @@ namespace Bit.App.Pages
             var masterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, email, kdfConfig);
             var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, masterKey);
 
-            // Create new encKey for the User
-            var newEncKey = await _cryptoService.RemakeEncKeyAsync(masterKey);
+            // Encrypt user key with new master key
+            var (userKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(masterKey);
 
             // Initiate API action
             try
@@ -108,10 +108,10 @@ namespace Bit.App.Pages
                 switch (_reason)
                 {
                     case ForcePasswordResetReason.AdminForcePasswordReset:
-                        await UpdateTempPasswordAsync(masterPasswordHash, newEncKey.Item2.EncryptedString);
+                        await UpdateTempPasswordAsync(masterPasswordHash, newProtectedUserKey.EncryptedString);
                         break;
                     case ForcePasswordResetReason.WeakMasterPasswordOnLogin:
-                        await UpdatePasswordAsync(masterPasswordHash, newEncKey.Item2.EncryptedString);
+                        await UpdatePasswordAsync(masterPasswordHash, newProtectedUserKey.EncryptedString);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

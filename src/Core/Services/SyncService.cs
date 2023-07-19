@@ -327,7 +327,7 @@ namespace Bit.Core.Services
                 }
                 return;
             }
-            await _cryptoService.SetEncKeyAsync(response.Key);
+            await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(response.Key);
             await _cryptoService.SetPrivateKeyAsync(response.PrivateKey);
             await _cryptoService.SetOrgKeysAsync(response.Organizations);
             await _stateService.SetSecurityStampAsync(response.SecurityStamp);

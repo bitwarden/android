@@ -73,10 +73,8 @@ namespace Bit.Core.Abstractions
         Task<bool> HasEncKeyAsync();
         Task<bool> HasKeyAsync(string userId = null);
         Task<Tuple<SymmetricCryptoKey, EncString>> MakeEncKeyAsync(SymmetricCryptoKey key);
-        Task<SymmetricCryptoKey> MakeKeyFromPinAsync(string pin, string salt, KdfConfig config, EncString protectedKeyEs = null);
         // TODO(Jake): This isn't used, delete
         Task<Tuple<EncString, SymmetricCryptoKey>> MakeShareKeyAsync();
-        Task<Tuple<SymmetricCryptoKey, EncString>> RemakeEncKeyAsync(SymmetricCryptoKey key);
         Task SetEncKeyAsync(string encKey);
         Task SetKeyAsync(SymmetricCryptoKey key);
     }
