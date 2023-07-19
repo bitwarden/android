@@ -32,7 +32,7 @@ namespace Bit.App.Pages
         public ICommand ApproveWithMasterPasswordCommand { get; }
         public ICommand ContinueCommand { get; }
 
-        public Action LogInWithMasterPassword { get; set; }
+        public Action LogInWithMasterPasswordAction { get; set; }
         public Action LogInWithDeviceAction { get; set; }
         public Action RequestAdminApprovalAction { get; set; }
         public Action CloseAction { get; set; }
@@ -53,7 +53,7 @@ namespace Bit.App.Pages
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            ApproveWithMasterPasswordCommand = new AsyncCommand(() => SetDeviceTrustAndInvokeAsync(LogInWithMasterPassword),
+            ApproveWithMasterPasswordCommand = new AsyncCommand(() => SetDeviceTrustAndInvokeAsync(LogInWithMasterPasswordAction),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 

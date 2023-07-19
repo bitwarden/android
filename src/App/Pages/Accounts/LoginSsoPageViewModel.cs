@@ -65,6 +65,7 @@ namespace Bit.App.Pages
         public Action StartTwoFactorAction { get; set; }
         public Action StartSetPasswordAction { get; set; }
         public Action SsoAuthSuccessAction { get; set; }
+        public Action StartDeviceApprovalOptionsAction { get; set; }
         public Action CloseAction { get; set; }
         public Action UpdateTempPasswordAction { get; set; }
 
@@ -219,16 +220,6 @@ namespace Bit.App.Pages
                 }
                 else if (decryptOptions.TrustedDeviceOption != null)
                 {
-                    // TODO MOVE THIS CODE TO AUTH SERVICE
-                    //var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
-                    //if (await _deviceTrustCryptoService.IsDeviceTrustedAsync() && decryptOptions?.TrustedDeviceOption != null)
-                    //{
-                    //    var key = await _deviceTrustCryptoService.DecryptUserKeyWithDeviceKeyAsync(decryptOptions?.TrustedDeviceOption.EncryptedPrivateKey, decryptOptions?.TrustedDeviceOption.EncryptedUserKey);
-                    //    if (key != null)
-                    //    {
-                    //        await _cryptoService.SetEncKeyAsync(key);
-                    //    }
-                    //}
                     // If user doesn't have a MP, but has reset password permission, they must set a MP
                     if (!decryptOptions.HasMasterPassword &&
                         decryptOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
@@ -239,9 +230,23 @@ namespace Bit.App.Pages
                     {
                         UpdateTempPasswordAction?.Invoke();
                     }
+                    else if (await _deviceTrustCryptoService.IsDeviceTrustedAsync())
+                    {
+                        // TODO MOVE THIS CODE TO AUTH SERVICE
+                        //if (await _deviceTrustCryptoService.IsDeviceTrustedAsync() && decryptOptions?.TrustedDeviceOption != null)
+                        //{
+                        //    var key = await _deviceTrustCryptoService.DecryptUserKeyWithDeviceKeyAsync(decryptOptions?.TrustedDeviceOption.EncryptedPrivateKey, decryptOptions?.TrustedDeviceOption.EncryptedUserKey);
+                        //    if (key != null)
+                        //    {
+                        //        await _cryptoService.SetEncKeyAsync(key);
+                        //    }
+                        //}
+                        var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
+                        SsoAuthSuccessAction?.Invoke();
+                    }
                     else
                     {
-                        SsoAuthSuccessAction?.Invoke();
+                        StartDeviceApprovalOptionsAction?.Invoke();
                     }
                 }
                 else
