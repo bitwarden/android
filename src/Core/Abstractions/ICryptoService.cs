@@ -12,6 +12,7 @@ namespace Bit.Core.Abstractions
         Task ToggleKeysAsync();
         Task SetUserKeyAsync(UserKey userKey, string userId = null);
         Task<UserKey> GetUserKeyAsync(string userId = null);
+        Task<UserKey> GetUserKeyWithLegacySupportAsync(string userId = null);
         Task<bool> HasUserKeyAsync(string userId = null);
         Task<bool> HasEncryptedUserKeyAsync(string userId = null);
         Task<UserKey> MakeUserKeyAsync();
@@ -23,6 +24,8 @@ namespace Bit.Core.Abstractions
         Task ClearMasterKeyAsync(string userId = null);
         Task<Tuple<UserKey, EncString>> EncryptUserKeyWithMasterKeyAsync(MasterKey masterKey, UserKey userKey = null);
         Task<UserKey> DecryptUserKeyWithMasterKeyAsync(MasterKey masterKey, EncString encUserKey = null, string userId = null);
+        Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(UserKey key);
+        Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(OrgKey key);
         Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key, HashPurpose hashPurpose = HashPurpose.ServerAuthorization);
         Task SetPasswordHashAsync(string keyHash);
         Task<string> GetPasswordHashAsync();
@@ -70,11 +73,9 @@ namespace Bit.Core.Abstractions
         void ClearCache();
         Task<SymmetricCryptoKey> GetEncKeyAsync(SymmetricCryptoKey key = null);
         Task<SymmetricCryptoKey> GetKeyAsync(string userId = null);
-        Task<bool> HasEncKeyAsync();
         Task<bool> HasKeyAsync(string userId = null);
         Task<Tuple<SymmetricCryptoKey, EncString>> MakeEncKeyAsync(SymmetricCryptoKey key);
         // TODO(Jake): This isn't used, delete
-        Task<Tuple<EncString, SymmetricCryptoKey>> MakeShareKeyAsync();
         Task SetEncKeyAsync(string encKey);
         Task SetKeyAsync(SymmetricCryptoKey key);
     }

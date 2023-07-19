@@ -68,6 +68,19 @@ namespace Bit.Core.Services
             return await _stateService.GetUserKeyAsync(userId);
         }
 
+        public async Task<UserKey> GetUserKeyWithLegacySupportAsync(string userId = null)
+        {
+            var userKey = await GetUserKeyAsync();
+            if (userKey != null)
+            {
+                return userKey;
+            }
+
+            // Legacy support: encryption used to be done with the master key (derived from master password).
+            // Users who have not migrated will have a null user key and must use the master key instead.
+            return (SymmetricCryptoKey)await GetMasterKeyAsync() as UserKey;
+        }
+
         public async Task<bool> HasUserKeyAsync(string userId = null)
         {
             return await GetUserKeyAsync(userId) != null;
@@ -176,22 +189,22 @@ namespace Bit.Core.Services
             return new UserKey(decUserKey);
         }
 
-        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKey(UserKey key)
+        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(UserKey key)
         {
             if (key == null)
             {
-                throw new Exception("No key provided");
+                throw new Exception("No user key provided");
             }
 
             var newSymKey = await _cryptoFunctionService.RandomBytesAsync(64);
             return await BuildProtectedSymmetricKey<SymmetricCryptoKey>(key, newSymKey);
         }
 
-        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKey(OrgKey key)
+        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(OrgKey key)
         {
             if (key == null)
             {
-                throw new Exception("No key provided");
+                throw new Exception("No org key provided");
             }
 
             var newSymKey = await _cryptoFunctionService.RandomBytesAsync(64);
@@ -1152,12 +1165,6 @@ namespace Bit.Core.Services
             return key != null;
         }
 
-        public async Task<bool> HasEncKeyAsync()
-        {
-            var encKey = await _stateService.GetEncKeyEncryptedAsync();
-            return encKey != null;
-        }
-
         public async Task ClearKeyAsync(string userId = null)
         {
             await _stateService.SetKeyDecryptedAsync(null, userId);
@@ -1191,17 +1198,6 @@ namespace Bit.Core.Services
             _privateKey = null;
             _orgKeys = null;
         }
-
-
-        // TODO(Jake): This isn't used, delete
-        public async Task<Tuple<EncString, SymmetricCryptoKey>> MakeShareKeyAsync()
-        {
-            var shareKey = await _cryptoFunctionService.RandomBytesAsync(64);
-            var publicKey = await GetPublicKeyAsync();
-            var encShareKey = await RsaEncryptAsync(shareKey, publicKey);
-            return new Tuple<EncString, SymmetricCryptoKey>(encShareKey, new SymmetricCryptoKey(shareKey));
-        }
-
 
 
 

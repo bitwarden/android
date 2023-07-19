@@ -557,9 +557,20 @@ namespace Bit.Core.Services
 
         public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, string filename, byte[] data)
         {
+            SymmetricCryptoKey attachmentKey;
+            EncString protectedAttachmentKey;
             var orgKey = await _cryptoService.GetOrgKeyAsync(cipher.OrganizationId);
+            if (orgKey != null)
+            {
+                (attachmentKey, protectedAttachmentKey) = await _cryptoService.MakeDataEncKeyAsync(orgKey);
+            }
+            else
+            {
+                var userKey = await _cryptoService.GetUserKeyWithLegacySupportAsync();
+                (attachmentKey, protectedAttachmentKey) = await _cryptoService.MakeDataEncKeyAsync(userKey);
+            }
+
             var encFileName = await _cryptoService.EncryptAsync(filename, orgKey);
-            var (attachmentKey, orgEncAttachmentKey) = await _cryptoService.MakeEncKeyAsync(orgKey);
             var encFileData = await _cryptoService.EncryptToBytesAsync(data, attachmentKey);
 
             CipherResponse response;
@@ -567,7 +578,7 @@ namespace Bit.Core.Services
             {
                 var request = new AttachmentRequest
                 {
-                    Key = orgEncAttachmentKey.EncryptedString,
+                    Key = protectedAttachmentKey.EncryptedString,
                     FileName = encFileName.EncryptedString,
                     FileSize = encFileData.Buffer.Length,
                 };
@@ -578,7 +589,7 @@ namespace Bit.Core.Services
             }
             catch (ApiException e) when (e.Error.StatusCode == System.Net.HttpStatusCode.NotFound || e.Error.StatusCode == System.Net.HttpStatusCode.MethodNotAllowed)
             {
-                response = await LegacyServerAttachmentFileUploadAsync(cipher.Id, encFileName, encFileData, orgEncAttachmentKey);
+                response = await LegacyServerAttachmentFileUploadAsync(cipher.Id, encFileName, encFileData, protectedAttachmentKey);
             }
 
             var userId = await _stateService.GetActiveUserIdAsync();
@@ -807,14 +818,27 @@ namespace Bit.Core.Services
 
             var bytes = await attachmentResponse.Content.ReadAsByteArrayAsync();
             var decBytes = await _cryptoService.DecryptFromBytesAsync(bytes, null);
-            var key = await _cryptoService.GetOrgKeyAsync(organizationId);
-            var encFileName = await _cryptoService.EncryptAsync(attachmentView.FileName, key);
-            var dataEncKey = await _cryptoService.MakeEncKeyAsync(key);
-            var encData = await _cryptoService.EncryptToBytesAsync(decBytes, dataEncKey.Item1);
+
+            SymmetricCryptoKey attachmentKey;
+            EncString protectedAttachmentKey;
+            var orgKey = await _cryptoService.GetOrgKeyAsync(organizationId);
+            if (orgKey != null)
+            {
+                (attachmentKey, protectedAttachmentKey) = await _cryptoService.MakeDataEncKeyAsync(orgKey);
+            }
+            else
+            {
+                var userKey = await _cryptoService.GetUserKeyWithLegacySupportAsync();
+                (attachmentKey, protectedAttachmentKey) = await _cryptoService.MakeDataEncKeyAsync(userKey);
+            }
+
+            var encFileName = await _cryptoService.EncryptAsync(attachmentView.FileName, orgKey);
+            var encFileData = await _cryptoService.EncryptToBytesAsync(decBytes, attachmentKey);
+
             var boundary = string.Concat("--BWMobileFormBoundary", DateTime.UtcNow.Ticks);
             var fd = new MultipartFormDataContent(boundary);
-            fd.Add(new StringContent(dataEncKey.Item2.EncryptedString), "key");
-            fd.Add(new StreamContent(new MemoryStream(encData.Buffer)), "data", encFileName.EncryptedString);
+            fd.Add(new StringContent(protectedAttachmentKey.EncryptedString), "key");
+            fd.Add(new StreamContent(new MemoryStream(encFileData.Buffer)), "data", encFileName.EncryptedString);
             await _apiService.PostShareCipherAttachmentAsync(cipherId, attachmentView.Id, fd, organizationId);
         }
 
