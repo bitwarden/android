@@ -44,7 +44,7 @@ namespace Bit.Core.Abstractions
         Task<bool> CanAccessPremiumAsync(string userId = null);
         Task<string> GetProtectedPinAsync(string userId = null);
         Task SetPersonalPremiumAsync(bool value, string userId = null);
-        Task<string> GetUserKeyPinAsync(string userId = null);
+        Task<EncString> GetUserKeyPinAsync(string userId = null);
         Task SetUserKeyPinAsync(EncString value, string userId = null);
         Task<EncString> GetUserKeyPinEphemeralAsync(string userId = null);
         Task SetUserKeyPinEphemeralAsync(EncString value, string userId = null);

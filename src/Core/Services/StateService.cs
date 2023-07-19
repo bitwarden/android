@@ -396,9 +396,9 @@ namespace Bit.Core.Services
         }
 
         // TODO(Jake): Does this need to be secure storage?
-        public async Task<string> GetUserKeyPinAsync(string userId = null)
+        public async Task<EncString> GetUserKeyPinAsync(string userId = null)
         {
-            return await _storageMediatorService.GetAsync<string>(Constants.UserKeyPinKey(userId), false);
+            return new EncString(await _storageMediatorService.GetAsync<string>(Constants.UserKeyPinKey(userId), false));
         }
 
         // TODO(Jake): Does this need to be secure storage?

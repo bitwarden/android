@@ -13,6 +13,7 @@ namespace Bit.Core.Abstractions
         Task SetUserKeyAsync(UserKey userKey, string userId = null);
         Task<UserKey> GetUserKeyAsync(string userId = null);
         Task<bool> HasUserKeyAsync(string userId = null);
+        Task<bool> HasEncryptedUserKeyAsync(string userId = null);
         Task<UserKey> MakeUserKeyAsync();
         Task ClearUserKeyAsync(string userId = null);
         Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null);
@@ -38,7 +39,8 @@ namespace Bit.Core.Abstractions
         Task<Tuple<string, EncString>> MakeKeyPairAsync(SymmetricCryptoKey key = null);
         Task ClearKeyPairAsync(bool memoryOnly = false, string userId = null);
         Task<PinKey> MakePinKeyAsync(string pin, string salt, KdfConfig config);
-        // Task<UserKey> DecryptUserKeyWithPin(string pin, string salt, KdfConfig kdfConfig, EncString pinProtectedUserKey = null);
+        Task<UserKey> DecryptUserKeyWithPinAsync(string pin, string salt, KdfConfig kdfConfig, EncString pinProtectedUserKey = null);
+        Task<MasterKey> DecryptMasterKeyWithPinAsync(string pin, string salt, KdfConfig kdfConfig, EncString pinProtectedMasterKey = null);
         Task<SymmetricCryptoKey> MakeSendKeyAsync(byte[] keyMaterial);
         // TODO(Jake): This isn't used, delete?
         Task ClearKeysAsync(string userId = null);
@@ -52,6 +54,7 @@ namespace Bit.Core.Abstractions
         Task<EncString> EncryptAsync(byte[] plainValue, SymmetricCryptoKey key = null);
         Task<EncString> EncryptAsync(string plainValue, SymmetricCryptoKey key = null);
         Task<EncByteArray> EncryptToBytesAsync(byte[] plainValue, SymmetricCryptoKey key = null);
+        Task<UserKey> DecryptAndMigrateOldPinKeyAsync(bool masterPasswordOnRestart, string pin, string email, KdfConfig kdfConfig, EncString oldPinKey);
 
 
 

@@ -73,6 +73,11 @@ namespace Bit.Core.Services
             return await GetUserKeyAsync(userId) != null;
         }
 
+        public async Task<bool> HasEncryptedUserKeyAsync(string userId = null)
+        {
+            return await _stateService.GetUserKeyMasterKeyAsync(userId) != null;
+        }
+
         public async Task<UserKey> MakeUserKeyAsync()
         {
             return new UserKey(await _cryptoFunctionService.RandomBytesAsync(64));
@@ -418,18 +423,39 @@ namespace Bit.Core.Services
             await clearDeprecatedPinKeysAsync(userId);
         }
 
-        // public async Task<UserKey> DecryptUserKeyWithPin(string pin, string salt, KdfConfig kdfConfig, EncString pinProtectedUserKey = null)
-        // {
-        //     pinProtectedUserKey ??= await _stateService.GetUserKeyPinAsync();
-        //     pinProtectedUserKey ??= await _stateService.GetUserKeyPinEphemeralAsync();
-        //     if (pinProtectedUserKey == null)
-        //     {
-        //         throw new Exception("No PIN protected user key found.");
-        //     }
-        //     var pinKey = await MakePinKeyAsync(pin, salt, kdfConfig);
-        //     var userKey = await DecryptToBytesAsync(pinProtectedUserKey, pinKey);
-        //     return new UserKey(userKey);
-        // }
+        public async Task<UserKey> DecryptUserKeyWithPinAsync(string pin, string salt, KdfConfig kdfConfig, EncString pinProtectedUserKey = null)
+        {
+            pinProtectedUserKey ??= await _stateService.GetUserKeyPinAsync();
+            pinProtectedUserKey ??= await _stateService.GetUserKeyPinEphemeralAsync();
+            if (pinProtectedUserKey == null)
+            {
+                throw new Exception("No PIN protected user key found.");
+            }
+            var pinKey = await MakePinKeyAsync(pin, salt, kdfConfig);
+            var userKey = await DecryptToBytesAsync(pinProtectedUserKey, pinKey);
+            return new UserKey(userKey);
+        }
+
+        // Only for migration purposes
+        public async Task<MasterKey> DecryptMasterKeyWithPinAsync(
+            string pin,
+            string salt,
+            KdfConfig kdfConfig,
+            EncString pinProtectedMasterKey = null)
+        {
+            if (pinProtectedMasterKey == null)
+            {
+                var pinProtectedMasterKeyString = await _stateService.GetPinProtectedAsync();
+                if (pinProtectedMasterKeyString == null)
+                {
+                    throw new Exception("No PIN protected master key found.");
+                }
+                pinProtectedMasterKey = new EncString(pinProtectedMasterKeyString);
+            }
+            var pinKey = await MakePinKeyAsync(pin, salt, kdfConfig);
+            var masterKey = await DecryptToBytesAsync(pinProtectedMasterKey, pinKey);
+            return new MasterKey(masterKey);
+        }
 
         public async Task<SymmetricCryptoKey> MakeSendKeyAsync(byte[] keyMaterial)
         {
@@ -932,9 +958,51 @@ namespace Bit.Core.Services
             public SymmetricCryptoKey Key { get; set; }
         }
 
-        // --LEGACY METHODS--
+        // --MIGRATION METHODS--
         // We previously used the master key for additional keys, but now we use the user key.
         // These methods support migrating the old keys to the new ones.
+
+        public async Task<UserKey> DecryptAndMigrateOldPinKeyAsync(
+            bool masterPasswordOnRestart,
+            string pin,
+            string email,
+            KdfConfig kdfConfig,
+            EncString oldPinKey)
+        {
+            // Decrypt
+            var masterKey = await DecryptMasterKeyWithPinAsync(
+                pin,
+                email,
+                kdfConfig,
+                oldPinKey
+            );
+            var encUserKey = await _stateService.GetEncKeyEncryptedAsync();
+            var userKey = await DecryptUserKeyWithMasterKeyAsync(
+                masterKey,
+                new EncString(encUserKey)
+            );
+
+            // Migrate
+            var pinKey = await MakePinKeyAsync(pin, email, kdfConfig);
+            var pinProtectedKey = await EncryptAsync(userKey.Key, pinKey);
+
+            if (masterPasswordOnRestart)
+            {
+                await _stateService.SetPinProtectedKeyAsync(null);
+                await _stateService.SetUserKeyPinEphemeralAsync(pinProtectedKey);
+            }
+            else
+            {
+                await _stateService.SetPinProtectedAsync(null);
+                await _stateService.SetUserKeyPinAsync(pinProtectedKey);
+
+                // We previously only set the protected pin if MP on Restart was enabled
+                // now we set it regardless
+                var encPin = await EncryptAsync(pin, userKey);
+                await _stateService.SetProtectedPinAsync(encPin.EncryptedString);
+            }
+            return userKey;
+        }
 
         public async Task clearDeprecatedPinKeysAsync(string userId = null)
         {

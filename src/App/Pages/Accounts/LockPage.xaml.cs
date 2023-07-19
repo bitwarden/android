@@ -44,7 +44,7 @@ namespace Bit.App.Pages
         {
             get
             {
-                if (_vm?.PinLock ?? false)
+                if (_vm?.PinEnabled ?? false)
                 {
                     return _pin;
                 }
@@ -54,7 +54,7 @@ namespace Bit.App.Pages
 
         public async Task PromptBiometricAfterResumeAsync()
         {
-            if (_vm.BiometricLock)
+            if (_vm.BiometricEnabled)
             {
                 await Task.Delay(500);
                 if (!_promptedAfterResume)
@@ -91,13 +91,13 @@ namespace Bit.App.Pages
 
             _vm.FocusSecretEntry += PerformFocusSecretEntry;
 
-            if (!_vm.BiometricLock)
+            if (!_vm.BiometricEnabled)
             {
                 RequestFocus(SecretEntry);
             }
             else
             {
-                if (_vm.UsingKeyConnector && !_vm.PinLock)
+                if (_vm.UsingKeyConnector && !_vm.PinEnabled)
                 {
                     _passwordGrid.IsVisible = false;
                     _unlockButton.IsVisible = false;
