@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,11 +11,11 @@ using Android.Nfc;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
+using AndroidX.Activity.Result;
 using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Utilities;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
@@ -26,6 +27,7 @@ using Newtonsoft.Json.Linq;
 using Xamarin.Essentials;
 using ZXing.Net.Mobile.Android;
 using FileProvider = AndroidX.Core.Content.FileProvider;
+using Task = System.Threading.Tasks.Task;
 
 namespace Bit.Droid
 {
@@ -51,8 +53,13 @@ namespace Bit.Droid
         private Java.Util.Regex.Pattern _otpPattern =
             Java.Util.Regex.Pattern.Compile("^.*?([cbdefghijklnrtuv]{32,64})$");
 
+        private string stamp = "";
+        private static readonly ConcurrentDictionary<int, TaskCompletionSource<ActivityResult>> _oneTimeActivityListeners = new ConcurrentDictionary<int, TaskCompletionSource<ActivityResult>>();
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            stamp = DateTime.UtcNow.ToString();
+
             var eventUploadIntent = new Intent(this, typeof(EventUploadReceiver));
             _eventUploadPendingIntent = PendingIntent.GetBroadcast(this, 0, eventUploadIntent,
                 AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, false));
@@ -232,6 +239,15 @@ namespace Bit.Droid
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
+            if (_oneTimeActivityListeners.ContainsKey(requestCode))
+            {
+                if (_oneTimeActivityListeners.TryRemove(requestCode, out var listener))
+                {
+                    listener.SetResult(new ActivityResult((int)resultCode, data));
+                }
+                return;
+            }
+
             if (resultCode == Result.Ok &&
                (requestCode == Core.Constants.SelectFileRequestCode || requestCode == Core.Constants.SaveFileRequestCode))
             {
@@ -283,6 +299,14 @@ namespace Bit.Droid
         {
             base.OnDestroy();
             _broadcasterService.Unsubscribe(_activityKey);
+        }
+
+        public void StartActivityForResult<T>(Intent intent, TaskCompletionSource<T> taskCompletionSource)
+        {
+            int requestCode = Math.Abs((int)DateTime.UtcNow.Ticks);
+            _oneTimeActivityListeners[requestCode] = taskCompletionSource as TaskCompletionSource<ActivityResult>;
+
+            StartActivityForResult(intent, requestCode);
         }
 
         private void ListenYubiKey(bool listen)

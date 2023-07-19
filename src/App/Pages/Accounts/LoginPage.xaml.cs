@@ -55,6 +55,7 @@ namespace Bit.App.Pages
             else
             {
                 ToolbarItems.Add(_getPasswordHint);
+                ToolbarItems.Add(_Advanced);
             }
 
             if (_appOptions?.IosExtension ?? false)
@@ -150,6 +151,14 @@ namespace Bit.App.Pages
             if (DoOnce())
             {
                 _vm.ShowMasterPasswordHintAsync().FireAndForget();
+            }
+        }
+
+        private void Advanced_Clicked(object sender, EventArgs e)
+        {
+            if (DoOnce())
+            {
+                _vm.ShowAdvancedAsync().FireAndForget();
             }
         }
 

@@ -10,5 +10,6 @@ namespace Bit.Core.Abstractions
         bool SaveFile(byte[] fileData, string id, string fileName, string contentUri);
         Task ClearCacheAsync();
         Task SelectFileAsync();
+        Task<T> SelectFileAsync<T>() where T : class;
     }
 }

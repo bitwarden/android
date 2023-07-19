@@ -25,7 +25,15 @@ namespace Bit.Core.Services
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
-        private readonly HttpClient _httpClient = new HttpClient();
+        
+        private readonly Lazy<ICertificateService> _lazyCertificateService = 
+            new Lazy<ICertificateService>(() => ServiceContainer.Resolve<ICertificateService>());
+
+        private readonly IStorageService _storageService;
+
+        private readonly IHttpClientHandler _httpClientHandler;
+        private readonly HttpClient _httpClient;
+
         private readonly ITokenService _tokenService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly Func<Tuple<string, bool, bool>, Task> _logoutCallbackAsync;
@@ -36,6 +44,11 @@ namespace Bit.Core.Services
             Func<Tuple<string, bool, bool>, Task> logoutCallbackAsync,
             string customUserAgent = null)
         {
+            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+
+            _httpClientHandler = ServiceContainer.Resolve<IHttpClientHandler>("httpClientHandler");
+            _httpClient = new HttpClient(_httpClientHandler.AsClientHandler());
+
             _tokenService = tokenService;
             _platformUtilsService = platformUtilsService;
             _logoutCallbackAsync = logoutCallbackAsync;
@@ -43,9 +56,25 @@ namespace Bit.Core.Services
             _httpClient.DefaultRequestHeaders.Add("Device-Type", device.ToString());
             _httpClient.DefaultRequestHeaders.Add("Bitwarden-Client-Name", _platformUtilsService.GetClientType().GetString());
             _httpClient.DefaultRequestHeaders.Add("Bitwarden-Client-Version", _platformUtilsService.GetApplicationVersion());
+
             if (!string.IsNullOrWhiteSpace(customUserAgent))
             {
                 _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(customUserAgent);
+            }
+        }
+
+        public async Task ReloadClientAuthCertificateAsync()
+        {
+            string clientCertAlias = await _storageService.GetAsync<string>(Core.Constants.ClientAuthCertificateAliasKey);
+            if (!string.IsNullOrEmpty(clientCertAlias))
+            {
+                var certService = _lazyCertificateService.Value;
+                _httpClientHandler
+                    .UseClientCertificate(await certService.GetCertificateAsync(clientCertAlias));
+            }
+            else
+            {
+                _httpClientHandler.UseClientCertificate(null);
             }
         }
 

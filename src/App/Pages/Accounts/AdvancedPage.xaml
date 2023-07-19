@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.AdvancedPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    x:DataType="pages:AdvancedPageViewModel"
+    Title="{Binding PageTitle}">
+    
+    <ContentPage.BindingContext>
+        <pages:AdvancedPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Ok}" Command="{Binding OkCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <StackLayout Spacing="20">
+            
+            <StackLayout StyleClass="box">
+                
+                <StackLayout.Resources>
+                    <u:InverseBoolConverter x:Key="inverseBool" />
+                </StackLayout.Resources>
+                
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n Certificate, Header=True}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+
+                <StackLayout StyleClass="box-row">
+                    <Label Text="{u:I18n CertificateSetupInstruction}"
+                           IsVisible="{Binding IsCertificateChosen, Converter={StaticResource inverseBool}}"
+                           StyleClass="box-sub-label"
+                           AutomationId="CertificateSetupInstructionLabel"/>
+                </StackLayout>
+
+                <Grid
+                    IsVisible="{Binding IsCertificateChosen}"
+                    StyleClass="box-row">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackLayout StyleClass="box-row"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.RowSpan="2">
+                        <Label
+                            Text="{Binding CertificateAlias}"
+                            StyleClass="box-label"
+                            AutomationId="CertificateAliasLabel" />
+                        <Label
+                            Text="{Binding CertificateDetails}"
+                            Padding="12, 0, 0, 0"
+                            StyleClass="box-sub-label"
+                            AutomationId="CertificateDetailsLabel" />
+                    </StackLayout>
+
+                    <controls:IconButton
+                        StyleClass="box-row-button, box-row-button-platform, button-danger"
+                        Text="{Binding Source={x:Static core:BitwardenIcons.Trash}}"
+                        Command="{Binding RemoveCertCommand}"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.RowSpan="2"
+                        AutomationId="DeleteCertButton"
+                        />
+                </Grid>
+
+                <Button Text="{u:I18n CertificateImportUseDesc}"
+                        StyleClass="btn-primary"
+                        Command="{Binding ImportAndUseCertCommand}"
+                        AutomationId="ImportAndUseCertButton"
+                        />
+
+                <Button Text="{u:I18n CertificateUseFromSystemDesc}"
+                        StyleClass="btn-secondary"
+                        Command="{Binding UseSystemCertCommand}"
+                        AutomationId="UseSystemCertButton"
+                        />
+
+            </StackLayout>
+            
+        </StackLayout>
+
+    </ScrollView>
+    
+</pages:BaseContentPage>
