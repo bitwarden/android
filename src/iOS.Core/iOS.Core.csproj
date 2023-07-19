@@ -137,8 +137,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="Effects\" />
-    <Folder Include="Renderers\CollectionView\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
@@ -170,6 +168,7 @@
     <Compile Include="Renderers\CustomViewCellRenderer.cs" />
     <Compile Include="Renderers\HybridWebViewRenderer.cs" />
     <Compile Include="Services\BiometricService.cs" />
+    <Compile Include="Services\CertificateService.cs" />
     <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Utilities\ASHelpers.cs" />
     <Compile Include="Utilities\Dialogs.cs" />

@@ -25,7 +25,6 @@ using Bit.Droid.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 using ZXing.Net.Mobile.Android;
 using FileProvider = AndroidX.Core.Content.FileProvider;
 using Task = System.Threading.Tasks.Task;
@@ -59,8 +58,6 @@ namespace Bit.Droid
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-
             stamp = DateTime.UtcNow.ToString();
 
             var eventUploadIntent = new Intent(this, typeof(EventUploadReceiver));
@@ -135,11 +132,6 @@ namespace Bit.Droid
                     ExitApp();
                 }
             });
-        }
-
-        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) 
-        {
-            PrintAlert(e.ExceptionObject.ToString());
         }
 
         protected override void OnPause()
@@ -243,15 +235,6 @@ namespace Bit.Droid
                 PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             }
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-
-        private void PrintAlert(string text)
-        {
-            Device.BeginInvokeOnMainThread(async () =>
-            {
-                Page currentPage = Xamarin.Forms.Application.Current.MainPage;
-                await currentPage.DisplayAlert("TEXXXT:", $"{text}", "OK");
-            });
         }
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
