@@ -26,8 +26,8 @@ namespace Bit.Core.Services
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
-        
-        private readonly Lazy<ICertificateService> _lazyCertificateService = 
+
+        private readonly Lazy<ICertificateService> _lazyCertificateService =
             new Lazy<ICertificateService>(() => ServiceContainer.Resolve<ICertificateService>());
 
         private readonly IStorageService _storageService;

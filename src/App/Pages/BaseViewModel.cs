@@ -49,7 +49,7 @@ namespace Bit.App.Pages
                     _deviceActionService.Value.Toast(AppResources.ClientCertRequiredToSetup, true);
                 }
                 else
-                {                 
+                {
                     await _platformUtilsService.Value.ShowDialogAsync(message ?? AppResources.GenericErrorMessage);
                 }
             }).FireAndForget();

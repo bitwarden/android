@@ -11,7 +11,7 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class AdvancedPageViewModel: BaseViewModel
+    public class AdvancedPageViewModel : BaseViewModel
     {
         private readonly IApiService _apiService;
         private readonly ICertificateService _certificateService;
@@ -25,7 +25,7 @@ namespace Bit.App.Pages
 
         public Action OkAction { get; set; }
 
-        public AdvancedPageViewModel() 
+        public AdvancedPageViewModel()
         {
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _certificateService = ServiceContainer.Resolve<ICertificateService>("certificateService");
@@ -40,7 +40,7 @@ namespace Bit.App.Pages
             PageTitle = AppResources.Advanced;
             Task.Run(async () => await BindCertDetailsAsync());
         }
-        
+
 
         private async Task BindCertDetailsAsync()
         {
@@ -126,9 +126,10 @@ namespace Bit.App.Pages
             _apiService.ReloadClientAuthCertificateAsync().GetAwaiter().GetResult();
         }
 
-        public string CertificateAlias { 
+        public string CertificateAlias
+        {
             get => _certificateAlias;
-            set => SetProperty(ref  _certificateAlias, value);
+            set => SetProperty(ref _certificateAlias, value);
         }
 
         public string CertificateDetails
@@ -146,10 +147,11 @@ namespace Bit.App.Pages
         public string CertificateUri
         {
             get => _certificateUri;
-            set {
+            set
+            {
                 SetProperty(ref _certificateUri, value);
                 IsCertificateChosen = !string.IsNullOrEmpty(_certificateUri);
-            } 
+            }
         }
 
         private async Task<string> GetCertUriSafe()

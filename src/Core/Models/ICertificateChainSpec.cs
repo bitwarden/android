@@ -10,7 +10,8 @@ namespace Bit.Core.Models
         T[] CertificateChain { get; }
     }
 
-    public interface ICertificateChainSpec: IFormattable {
+    public interface ICertificateChainSpec : IFormattable
+    {
         string Alias { get; }
     }
 }
