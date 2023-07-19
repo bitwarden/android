@@ -13,6 +13,7 @@ namespace Bit.App.Pages
 {
     public class AdvancedPageViewModel: BaseViewModel
     {
+        private readonly IApiService _apiService;
         private readonly ICertificateService _certificateService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IStorageService _storageService;
@@ -26,6 +27,7 @@ namespace Bit.App.Pages
 
         public AdvancedPageViewModel() 
         {
+            _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _certificateService = ServiceContainer.Resolve<ICertificateService>("certificateService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
@@ -117,6 +119,11 @@ namespace Bit.App.Pages
 
                 await BindCertDetailsAsync();
             }
+        }
+
+        public void ReloadClientAuthCertificate()
+        {
+            _apiService.ReloadClientAuthCertificateAsync().GetAwaiter().GetResult();
         }
 
         public string CertificateAlias { 

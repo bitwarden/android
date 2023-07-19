@@ -63,7 +63,7 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task LoadClientAuthCertificateAsync()
+        public async Task ReloadClientAuthCertificateAsync()
         {
             string clientCertAlias = await _storageService.GetAsync<string>(Core.Constants.ClientAuthCertificateAliasKey);
             if (!string.IsNullOrEmpty(clientCertAlias))
@@ -71,6 +71,10 @@ namespace Bit.Core.Services
                 var certService = _lazyCertificateService.Value;
                 _httpClientHandler
                     .UseClientCertificate(await certService.GetCertificateAsync(clientCertAlias));
+            }
+            else
+            {
+                _httpClientHandler.UseClientCertificate(null);
             }
         }
 

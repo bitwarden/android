@@ -20,5 +20,11 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.OkAction = () => Device.BeginInvokeOnMainThread(async () => await Navigation.PopModalAsync());
         }
+
+        protected override void OnDisappearing()
+        {
+            _vm.ReloadClientAuthCertificate();
+            base.OnDisappearing();
+        }
     }
 }

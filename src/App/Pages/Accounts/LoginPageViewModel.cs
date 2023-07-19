@@ -181,7 +181,7 @@ namespace Bit.App.Pages
 
         public async Task LogInAsync(bool showLoading = true, bool checkForExistingAccount = false)
         {
-            await _apiService.LoadClientAuthCertificateAsync();
+            await _apiService.ReloadClientAuthCertificateAsync();
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,

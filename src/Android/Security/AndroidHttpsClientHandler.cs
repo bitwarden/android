@@ -14,7 +14,6 @@ namespace Bit.Droid.Security
 {
     public class AndroidHttpsClientHandler : AndroidClientHandler, IHttpClientHandler
     {
-        private SSLContext sslContext;
         private X509CertificateChainSpec ClientCertificate;
 
         public AndroidHttpsClientHandler() : base()
@@ -51,7 +50,7 @@ namespace Bit.Droid.Security
 
             var keyManagers = kmf.GetKeyManagers();
 
-            sslContext = SSLContext.GetInstance("TLS");
+            SSLContext sslContext = SSLContext.GetInstance("TLS");
             sslContext.Init(keyManagers, null, null);
 
             SSLSocketFactory socketFactory = sslContext.SocketFactory;
