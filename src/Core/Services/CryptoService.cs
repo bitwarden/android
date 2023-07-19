@@ -19,13 +19,11 @@ namespace Bit.Core.Services
         private readonly IStateService _stateService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
 
-        private SymmetricCryptoKey _encKey;
         private SymmetricCryptoKey _legacyEtmKey;
         private string _passwordHash;
         private byte[] _publicKey;
         private byte[] _privateKey;
         private Dictionary<string, OrgKey> _orgKeys;
-        private Task<SymmetricCryptoKey> _getEncKeysTask;
         private Task<Dictionary<string, OrgKey>> _getOrgKeysTask;
 
         public CryptoService(
@@ -38,7 +36,6 @@ namespace Bit.Core.Services
 
         public void ClearCache()
         {
-            _encKey = null;
             _legacyEtmKey = null;
             _passwordHash = null;
             _publicKey = null;
