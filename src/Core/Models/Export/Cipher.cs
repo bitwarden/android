@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Newtonsoft.Json;
 
@@ -46,6 +47,7 @@ namespace Bit.Core.Models.Export
             Name = obj.Name?.EncryptedString;
             Notes = obj.Notes?.EncryptedString;
             Favorite = obj.Favorite;
+            Key = obj.Key?.EncryptedString;
 
             Fields = obj.Fields?.Select(f => new Field(f)).ToList();
 
@@ -82,6 +84,8 @@ namespace Bit.Core.Models.Export
         public Card Card { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public Identity Identity { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Key { get; set; }
 
         public CipherView ToView(Cipher req, CipherView view = null)
         {
