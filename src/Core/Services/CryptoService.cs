@@ -36,6 +36,16 @@ namespace Bit.Core.Services
             _cryptoFunctionService = cryptoFunctionService;
         }
 
+        public void ClearCache()
+        {
+            _encKey = null;
+            _legacyEtmKey = null;
+            _passwordHash = null;
+            _publicKey = null;
+            _privateKey = null;
+            _orgKeys = null;
+        }
+
         public async Task ToggleKeysAsync()
         {
             // refresh or clear the pin key
@@ -216,7 +226,7 @@ namespace Bit.Core.Services
         {
             if (key == null)
             {
-                key = await GetKeyAsync();
+                key = await GetMasterKeyAsync();
             }
             if (password == null || key == null)
             {
@@ -806,20 +816,6 @@ namespace Bit.Core.Services
         }
 
 
-        private async Task<SymmetricCryptoKey> GetKeyForEncryptionAsync(SymmetricCryptoKey key = null)
-        {
-            if (key != null)
-            {
-                return key;
-            }
-            var encKey = await GetEncKeyAsync();
-            if (encKey != null)
-            {
-                return encKey;
-            }
-            return await GetKeyAsync();
-        }
-
         private SymmetricCryptoKey ResolveLegacyKey(EncryptionType encKey, SymmetricCryptoKey key)
         {
             if (encKey == EncryptionType.AesCbc128_HmacSha256_B64 && key.EncType == EncryptionType.AesCbc256_B64)
@@ -995,165 +991,5 @@ namespace Bit.Core.Services
             await _stateService.SetPinProtectedAsync(null);
             await _stateService.SetPinProtectedKeyAsync(null);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        public async Task SetKeyAsync(SymmetricCryptoKey key)
-        {
-            await _stateService.SetKeyDecryptedAsync(key);
-            var option = await _stateService.GetVaultTimeoutAsync();
-            var biometric = await _stateService.GetBiometricUnlockAsync();
-            if (option.HasValue && !biometric.GetValueOrDefault())
-            {
-                // If we have a lock option set, we do not store the key
-                return;
-            }
-            await _stateService.SetKeyEncryptedAsync(key?.KeyB64);
-        }
-
-
-        public async Task SetEncKeyAsync(string encKey)
-        {
-            if (encKey == null)
-            {
-                return;
-            }
-            await _stateService.SetEncKeyEncryptedAsync(encKey);
-            _encKey = null;
-        }
-
-
-
-        public async Task<SymmetricCryptoKey> GetKeyAsync(string userId = null)
-        {
-            var inMemoryKey = await _stateService.GetKeyDecryptedAsync(userId);
-            if (inMemoryKey != null)
-            {
-                return inMemoryKey;
-            }
-            var key = await _stateService.GetKeyEncryptedAsync(userId);
-            if (key != null)
-            {
-                inMemoryKey = new SymmetricCryptoKey(Convert.FromBase64String(key));
-                await _stateService.SetKeyDecryptedAsync(inMemoryKey, userId);
-            }
-            return inMemoryKey;
-        }
-
-
-        public Task<SymmetricCryptoKey> GetEncKeyAsync(SymmetricCryptoKey key = null)
-        {
-            if (_encKey != null)
-            {
-                return Task.FromResult(_encKey);
-            }
-            if (_getEncKeysTask != null && !_getEncKeysTask.IsCompleted && !_getEncKeysTask.IsFaulted)
-            {
-                return _getEncKeysTask;
-            }
-            async Task<SymmetricCryptoKey> doTask()
-            {
-                try
-                {
-                    var encKey = await _stateService.GetEncKeyEncryptedAsync();
-                    if (encKey == null)
-                    {
-                        return null;
-                    }
-
-                    if (key == null)
-                    {
-                        key = await GetKeyAsync();
-                    }
-                    if (key == null)
-                    {
-                        return null;
-                    }
-
-                    byte[] decEncKey = null;
-                    var encKeyCipher = new EncString(encKey);
-                    if (encKeyCipher.EncryptionType == EncryptionType.AesCbc256_B64)
-                    {
-                        decEncKey = await DecryptToBytesAsync(encKeyCipher, key);
-                    }
-                    else if (encKeyCipher.EncryptionType == EncryptionType.AesCbc256_HmacSha256_B64)
-                    {
-                        var newKey = await StretchKeyAsync(key);
-                        decEncKey = await DecryptToBytesAsync(encKeyCipher, newKey);
-                    }
-                    else
-                    {
-                        throw new Exception("Unsupported encKey type.");
-                    }
-
-                    if (decEncKey == null)
-                    {
-                        return null;
-                    }
-                    _encKey = new SymmetricCryptoKey(decEncKey);
-                    return _encKey;
-                }
-                finally
-                {
-                    _getEncKeysTask = null;
-                }
-            }
-            _getEncKeysTask = doTask();
-            return _getEncKeysTask;
-        }
-
-
-
-
-
-
-
-
-
-
-        public void ClearCache()
-        {
-            _encKey = null;
-            _legacyEtmKey = null;
-            _passwordHash = null;
-            _publicKey = null;
-            _privateKey = null;
-            _orgKeys = null;
-        }
-
-
-
-
-        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeEncKeyAsync(SymmetricCryptoKey key)
-        {
-            var theKey = await GetKeyForEncryptionAsync(key);
-            var encKey = await _cryptoFunctionService.RandomBytesAsync(64);
-            return await BuildProtectedSymmetricKey<SymmetricCryptoKey>(theKey, encKey);
-        }
-
     }
 }

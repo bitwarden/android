@@ -9,6 +9,7 @@ namespace Bit.Core.Abstractions
 {
     public interface ICryptoService
     {
+        void ClearCache();
         Task ToggleKeysAsync();
         Task SetUserKeyAsync(UserKey userKey, string userId = null);
         Task<UserKey> GetUserKeyAsync(string userId = null);
@@ -57,21 +58,5 @@ namespace Bit.Core.Abstractions
         Task<EncString> EncryptAsync(string plainValue, SymmetricCryptoKey key = null);
         Task<EncByteArray> EncryptToBytesAsync(byte[] plainValue, SymmetricCryptoKey key = null);
         Task<UserKey> DecryptAndMigrateOldPinKeyAsync(bool masterPasswordOnRestart, string pin, string email, KdfConfig kdfConfig, EncString oldPinKey);
-
-
-
-
-
-
-
-
-
-        void ClearCache();
-
-        Task<SymmetricCryptoKey> GetEncKeyAsync(SymmetricCryptoKey key = null);
-        Task<SymmetricCryptoKey> GetKeyAsync(string userId = null);
-        Task<Tuple<SymmetricCryptoKey, EncString>> MakeEncKeyAsync(SymmetricCryptoKey key);
-        Task SetEncKeyAsync(string encKey);
-        Task SetKeyAsync(SymmetricCryptoKey key);
     }
 }

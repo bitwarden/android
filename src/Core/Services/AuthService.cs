@@ -30,7 +30,7 @@ namespace Bit.Core.Services
         private readonly bool _setCryptoKeys;
 
         private readonly LazyResolve<IWatchDeviceService> _watchDeviceService = new LazyResolve<IWatchDeviceService>();
-        private SymmetricCryptoKey _key;
+        private MasterKey _masterKey;
 
         private string _authedUserId;
         private MasterPasswordPolicyOptions _masterPasswordPolicy;
@@ -199,7 +199,7 @@ namespace Bit.Core.Services
         {
             var decKey = await _cryptoService.RsaDecryptAsync(userKeyCiphered, decryptionKey);
             var decPasswordHash = await _cryptoService.RsaDecryptAsync(localHashedPasswordCiphered, decryptionKey);
-            return await LogInHelperAsync(email, accessCode, Encoding.UTF8.GetString(decPasswordHash), null, null, null, new SymmetricCryptoKey(decKey), null, null,
+            return await LogInHelperAsync(email, accessCode, Encoding.UTF8.GetString(decPasswordHash), null, null, null, new MasterKey(decKey), null, null,
                 null, null, authRequestId: authRequestId);
         }
 
@@ -216,7 +216,7 @@ namespace Bit.Core.Services
             {
                 CaptchaToken = captchaToken;
             }
-            var result = await LogInHelperAsync(Email, MasterPasswordHash, LocalMasterPasswordHash, Code, CodeVerifier, SsoRedirectUrl, _key,
+            var result = await LogInHelperAsync(Email, MasterPasswordHash, LocalMasterPasswordHash, Code, CodeVerifier, SsoRedirectUrl, _masterKey,
                 twoFactorProvider, twoFactorToken, remember, CaptchaToken, authRequestId: AuthRequestId);
 
             // If we successfully authenticated and we have a saved _2faForcePasswordResetReason reason from LogInAsync()
@@ -337,7 +337,7 @@ namespace Bit.Core.Services
 
         // Helpers
 
-        private async Task<SymmetricCryptoKey> MakePreloginKeyAsync(string masterPassword, string email)
+        private async Task<MasterKey> MakePreloginKeyAsync(string masterPassword, string email)
         {
             email = email.Trim().ToLower();
             KdfConfig kdfConfig = KdfConfig.Default;
@@ -360,7 +360,7 @@ namespace Bit.Core.Services
         }
 
         private async Task<AuthResult> LogInHelperAsync(string email, string hashedPassword, string localHashedPassword,
-            string code, string codeVerifier, string redirectUrl, SymmetricCryptoKey key,
+            string code, string codeVerifier, string redirectUrl, MasterKey masterKey,
             TwoFactorProviderType? twoFactorProvider = null, string twoFactorToken = null, bool? remember = null,
             string captchaToken = null, string orgId = null, string authRequestId = null)
         {
@@ -426,7 +426,7 @@ namespace Bit.Core.Services
                 Code = code;
                 CodeVerifier = codeVerifier;
                 SsoRedirectUrl = redirectUrl;
-                _key = _setCryptoKeys ? key : null;
+                _masterKey = _setCryptoKeys ? masterKey : null;
                 TwoFactorProvidersData = response.TwoFactorResponse.TwoFactorProviders2;
                 result.TwoFactorProviders = response.TwoFactorResponse.TwoFactorProviders2;
                 CaptchaToken = response.TwoFactorResponse.CaptchaToken;
@@ -470,9 +470,9 @@ namespace Bit.Core.Services
             _messagingService.Send("accountAdded");
             if (_setCryptoKeys)
             {
-                if (key != null)
+                if (masterKey != null)
                 {
-                    await _cryptoService.SetKeyAsync(key);
+                    await _cryptoService.SetMasterKeyAsync(masterKey);
                 }
 
                 if (localHashedPassword != null)
@@ -487,7 +487,7 @@ namespace Bit.Core.Services
                         await _keyConnectorService.GetAndSetKey(tokenResponse.KeyConnectorUrl);
                     }
 
-                    await _cryptoService.SetEncKeyAsync(tokenResponse.Key);
+                    await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(tokenResponse.Key);
 
                     // User doesn't have a key pair yet (old account), let's generate one for them.
                     if (tokenResponse.PrivateKey == null)
@@ -511,13 +511,16 @@ namespace Bit.Core.Services
                 {
                     // SSO Key Connector Onboarding
                     var password = await _cryptoFunctionService.RandomBytesAsync(64);
-                    var masterKey = await _cryptoService.MakeMasterKeyAsync(Convert.ToBase64String(password), _tokenService.GetEmail(), tokenResponse.KdfConfig);
-                    var keyConnectorRequest = new KeyConnectorUserKeyRequest(masterKey.EncKeyB64);
-                    await _cryptoService.SetKeyAsync(masterKey);
+                    var newMasterKey = await _cryptoService.MakeMasterKeyAsync(Convert.ToBase64String(password), _tokenService.GetEmail(), tokenResponse.KdfConfig);
+                    var keyConnectorRequest = new KeyConnectorUserKeyRequest(newMasterKey.EncKeyB64);
+                    await _cryptoService.SetMasterKeyAsync(newMasterKey);
 
-                    var encKey = await _cryptoService.MakeEncKeyAsync(masterKey);
-                    await _cryptoService.SetEncKeyAsync(encKey.Item2.EncryptedString);
-                    var keyPair = await _cryptoService.MakeKeyPairAsync();
+                    var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(
+                        newMasterKey,
+                        await _cryptoService.MakeUserKeyAsync());
+
+                    await _cryptoService.SetUserKeyAsync(newUserKey);
+                    var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync();
 
                     try
                     {
@@ -530,11 +533,11 @@ namespace Bit.Core.Services
 
                     var keys = new KeysRequest
                     {
-                        PublicKey = keyPair.Item1,
-                        EncryptedPrivateKey = keyPair.Item2.EncryptedString
+                        PublicKey = newPublicKey,
+                        EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
                     };
                     var setPasswordRequest = new SetKeyConnectorKeyRequest(
-                        encKey.Item2.EncryptedString, keys, tokenResponse.KdfConfig, orgId
+                        newProtectedPrivateKey.EncryptedString, keys, tokenResponse.KdfConfig, orgId
                     );
                     await _apiService.PostSetKeyConnectorKey(setPasswordRequest);
                 }
@@ -549,7 +552,7 @@ namespace Bit.Core.Services
 
         private void ClearState()
         {
-            _key = null;
+            _masterKey = null;
             Email = null;
             CaptchaToken = null;
             MasterPasswordHash = null;
@@ -590,7 +593,7 @@ namespace Bit.Core.Services
         public async Task<PasswordlessLoginResponse> PasswordlessLoginAsync(string id, string pubKey, bool requestApproved)
         {
             var publicKey = CoreHelpers.Base64UrlDecode(pubKey);
-            var masterKey = await _cryptoService.GetKeyAsync();
+            var masterKey = await _cryptoService.GetMasterKeyAsync();
             var encryptedKey = await _cryptoService.RsaEncryptAsync(masterKey.EncKey, publicKey);
             var encryptedMasterPassword = await _cryptoService.RsaEncryptAsync(Encoding.UTF8.GetBytes(await _stateService.GetKeyHashAsync()), publicKey);
             var deviceId = await _appIdService.GetAppIdAsync();
