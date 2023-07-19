@@ -330,13 +330,16 @@ namespace Bit.App.Pages
                         items.AddRange(itemGroup);
                     }
 
-                    if (Device.RuntimePlatform == Device.iOS)
+                    Device.BeginInvokeOnMainThread(() =>
                     {
-                        // HACK: [PS-536] Fix to avoid blank list after back navigation on unlocking with previous page info
-                        // because of update to XF v5.0.0.2401
-                        GroupedItems.Clear();
-                    }
-                    GroupedItems.ReplaceRange(items);
+                        if (Device.RuntimePlatform == Device.iOS)
+                        {
+                            // HACK: [PS-536] Fix to avoid blank list after back navigation on unlocking with previous page info
+                            // because of update to XF v5.0.0.2401
+                            GroupedItems.Clear();
+                        }
+                        GroupedItems.ReplaceRange(items);
+                    });
                 }
                 else
                 {
@@ -356,21 +359,24 @@ namespace Bit.App.Pages
                         items.AddRange(itemGroup);
                     }
 
-                    if (groupedItems.Any())
+                    Device.BeginInvokeOnMainThread(() =>
                     {
-                        if (Device.RuntimePlatform == Device.iOS)
+                        if (groupedItems.Any())
                         {
-                            // HACK: [PS-536] Fix to avoid blank list after back navigation on unlocking with previous page info
-                            // because of update to XF v5.0.0.2401
+                            if (Device.RuntimePlatform == Device.iOS)
+                            {
+                                // HACK: [PS-536] Fix to avoid blank list after back navigation on unlocking with previous page info
+                                // because of update to XF v5.0.0.2401
+                                GroupedItems.Clear();
+                            }
+                            GroupedItems.ReplaceRange(new List<IGroupingsPageListItem> { new GroupingsPageHeaderListItem(groupedItems[0].Name, groupedItems[0].ItemCount) });
+                            GroupedItems.AddRange(items);
+                        }
+                        else
+                        {
                             GroupedItems.Clear();
                         }
-                        GroupedItems.ReplaceRange(new List<IGroupingsPageListItem> { new GroupingsPageHeaderListItem(groupedItems[0].Name, groupedItems[0].ItemCount) });
-                        GroupedItems.AddRange(items);
-                    }
-                    else
-                    {
-                        GroupedItems.Clear();
-                    }
+                    });
                 }
             }
             finally
@@ -378,9 +384,12 @@ namespace Bit.App.Pages
                 _doingLoad = false;
                 Loaded = true;
                 Loading = false;
-                ShowNoData = (MainPage && !HasCiphers) || !groupedItems.Any();
-                ShowList = !ShowNoData;
-                DisableRefreshing();
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    ShowNoData = (MainPage && !HasCiphers) || !groupedItems.Any();
+                    ShowList = !ShowNoData;
+                    DisableRefreshing();
+                });
             }
         }
 
