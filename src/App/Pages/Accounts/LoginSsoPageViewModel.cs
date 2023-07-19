@@ -9,6 +9,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
@@ -29,6 +30,8 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly ILogger _logger;
         private readonly IOrganizationService _organizationService;
+        private readonly IDeviceTrustCryptoService _deviceTrustCryptoService;
+        private readonly ICryptoService _cryptoService;
 
         private string _orgIdentifier;
 
@@ -45,7 +48,8 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
             _organizationService = ServiceContainer.Resolve<IOrganizationService>();
-
+            _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
+            _cryptoService = ServiceContainer.Resolve<ICryptoService>();
 
             PageTitle = AppResources.Bitwarden;
             LogInCommand = new AsyncCommand(LogInAsync, allowsMultipleExecutions: false);
@@ -197,6 +201,7 @@ namespace Bit.App.Pages
             try
             {
                 var response = await _authService.LogInSsoAsync(code, codeVerifier, REDIRECT_URI, orgId);
+                var decryptOptions = await _stateService.GetAccountDecryptionOptions();
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                 await _stateService.SetRememberedOrgIdentifierAsync(OrgIdentifier);
                 await _deviceActionService.HideLoadingAsync();
@@ -211,6 +216,33 @@ namespace Bit.App.Pages
                 else if (response.ForcePasswordReset)
                 {
                     UpdateTempPasswordAction?.Invoke();
+                }
+                else if (decryptOptions.TrustedDeviceOption != null)
+                {
+                    // TODO MOVE THIS CODE TO AUTH SERVICE
+                    //var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
+                    //if (await _deviceTrustCryptoService.IsDeviceTrustedAsync() && decryptOptions?.TrustedDeviceOption != null)
+                    //{
+                    //    var key = await _deviceTrustCryptoService.DecryptUserKeyWithDeviceKeyAsync(decryptOptions?.TrustedDeviceOption.EncryptedPrivateKey, decryptOptions?.TrustedDeviceOption.EncryptedUserKey);
+                    //    if (key != null)
+                    //    {
+                    //        await _cryptoService.SetEncKeyAsync(key);
+                    //    }
+                    //}
+                    // If user doesn't have a MP, but has reset password permission, they must set a MP
+                    if (!decryptOptions.HasMasterPassword &&
+                        decryptOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
+                    {
+                        StartSetPasswordAction?.Invoke();
+                    }
+                    else if (response.ForcePasswordReset)
+                    {
+                        UpdateTempPasswordAction?.Invoke();
+                    }
+                    else
+                    {
+                        SsoAuthSuccessAction?.Invoke();
+                    }
                 }
                 else
                 {

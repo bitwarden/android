@@ -111,10 +111,6 @@ namespace Bit.App.Pages
             RestoreAppOptionsFromCopy();
             await AppHelpers.ClearPreviousPage();
 
-            // Just for testing the screen
-            Application.Current.MainPage = new NavigationPage(new LoginApproveDevicePage(_appOptions));
-            return;
-
             if (await _vaultTimeoutService.IsLockedAsync())
             {
                 Application.Current.MainPage = new NavigationPage(new LockPage(_appOptions));
