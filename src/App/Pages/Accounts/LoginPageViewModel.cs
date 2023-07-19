@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
-using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Utilities;
-using Bit.App.Utilities.AccountManagement;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
-using Bit.Core.Models.View;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -268,10 +264,18 @@ namespace Bit.App.Pages
                 _captchaToken = null;
                 MasterPassword = string.Empty;
                 await _deviceActionService.HideLoadingAsync();
+
                 if (e?.Error != null)
                 {
-                    await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
-                        AppResources.AnErrorHasOccurred, AppResources.Ok);
+                    if (e.Error.TlsClientAuthRequired)
+                    {
+                        _deviceActionService.Toast(AppResources.ClientCertRequiredToSetup, true);
+                    }
+                    else
+                    {
+                        await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
+                            AppResources.AnErrorHasOccurred, AppResources.Ok);
+                    }
                 }
             }
             finally

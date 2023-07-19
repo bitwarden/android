@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Authentication;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -845,10 +846,13 @@ namespace Bit.Core.Services
 
         private ErrorResponse HandleWebError(Exception e)
         {
+            bool tlsAuthRequired = e?.InnerException is AuthenticationException;
+
             return new ErrorResponse
             {
                 StatusCode = HttpStatusCode.BadGateway,
-                Message = "Exception message: " + e.Message
+                Message = "Exception message: " + e.Message,
+                TlsClientAuthRequired = tlsAuthRequired
             };
         }
 

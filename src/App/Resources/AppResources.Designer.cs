@@ -1511,6 +1511,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A certificate is required to connect to this server. Navigate to advanced settings to set up.
+        /// </summary>
+        public static string ClientCertRequiredToSetup {
+            get {
+                return ResourceManager.GetString("ClientCertRequiredToSetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clone.
         /// </summary>
         public static string Clone {

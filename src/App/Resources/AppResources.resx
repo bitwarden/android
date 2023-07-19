@@ -2664,4 +2664,7 @@ Do you want to switch to this account?</value>
   <data name="PasswordEnterDecryptCert" xml:space="preserve">
     <value>Enter password to decrypt the certificate</value>
   </data>
+  <data name="ClientCertRequiredToSetup" xml:space="preserve">
+    <value>A certificate is required to connect to this server. Navigate to advanced settings to set up</value>
+  </data>
 </root>

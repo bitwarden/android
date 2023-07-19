@@ -34,15 +34,24 @@ namespace Bit.App.Pages
 
         protected void HandleException(Exception ex, string message = null)
         {
+            var tlsAuthRequired = false;
             if (ex is ApiException apiException && apiException.Error != null)
             {
+                tlsAuthRequired = apiException.Error.TlsClientAuthRequired;
                 message = apiException.Error.GetSingleMessage();
             }
 
             Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 await _deviceActionService.Value.HideLoadingAsync();
-                await _platformUtilsService.Value.ShowDialogAsync(message ?? AppResources.GenericErrorMessage);
+                if (tlsAuthRequired)
+                {
+                    _deviceActionService.Value.Toast(AppResources.ClientCertRequiredToSetup, true);
+                }
+                else
+                {                 
+                    await _platformUtilsService.Value.ShowDialogAsync(message ?? AppResources.GenericErrorMessage);
+                }
             }).FireAndForget();
             _logger.Value.Exception(ex);
         }

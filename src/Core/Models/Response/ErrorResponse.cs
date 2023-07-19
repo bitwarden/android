@@ -52,6 +52,8 @@ namespace Bit.Core.Models.Response
         public string CaptchaSiteKey { get; set; }
         public bool CaptchaRequired { get; set; } = false;
 
+        public bool TlsClientAuthRequired { get; set; }
+
         public string GetSingleMessage()
         {
             if (ValidationErrors == null)
