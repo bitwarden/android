@@ -475,8 +475,6 @@ namespace Bit.App.Pages
             }
             if (!_pin)
             {
-                await UpdateVaultTimeoutActionIfNeededAsync();
-                await _cryptoService.ClearPinProtectedKeyAsync();
                 await _vaultTimeoutService.ClearAsync();
             }
             BuildList();
