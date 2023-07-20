@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Bit.Core.Enums;
 
 namespace Bit.Core.Models.View
@@ -21,5 +20,7 @@ namespace Bit.Core.Models.View
         public override List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions => new List<KeyValuePair<string, LinkedIdType>>();
         public bool CanLaunch => !string.IsNullOrEmpty(RpId);
         public string LaunchUri => $"https://{RpId}";
+
+        public bool IsUniqueAgainst(Fido2KeyView fido2View) => fido2View?.RpId != RpId || fido2View?.UserName != UserName;
     }
 }
