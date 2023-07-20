@@ -2635,6 +2635,12 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Pääsalasanan uudelleenkyselyn ohje</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Lukituksen avaus voi epäonnistua riittämättömän keskusmuistin vuoksi. Tämän välttämiseksi voit madaltaa KDF-muistiasetuksiasi.</value>
+    <value>Lukituksen avaus voi epäonnistua riittämättömän keskusmuistin vuoksi. Korjaa madaltamalla KDF-muistiasetuksiasi.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Virheellinen API-avain</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Virheellinen API-tunniste</value>
   </data>
 </root>

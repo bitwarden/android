@@ -2636,4 +2636,10 @@ Voleu canviar a aquest compte?</value>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>El desbloqueig pot fallar a causa de memòria insuficient. Disminueix la configuració de memòria KDF per resoldre-ho</value>
   </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Clau API no vàlida</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Token API no vàlid</value>
+  </data>
 </root>

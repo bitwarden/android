@@ -50,8 +50,7 @@ namespace Bit.Core.Services
             _loggedOutCallback = loggedOutCallback;
         }
 
-        public long? DelayTimeoutMs { get; set; }
-        public bool ResetTimeoutDelay { get; set; }
+        public long? DelayLockAndLogoutMs { get; set; }
 
         public async Task<bool> IsLockedAsync(string userId = null)
         {
@@ -118,7 +117,7 @@ namespace Bit.Core.Services
             {
                 return false;
             }
-            if (vaultTimeoutMinutes == 0 && !DelayTimeoutMs.HasValue)
+            if (vaultTimeoutMinutes == 0 && !DelayLockAndLogoutMs.HasValue)
             {
                 return true;
             }
@@ -128,13 +127,8 @@ namespace Bit.Core.Services
                 return false;
             }
             var diffMs = _platformUtilsService.GetActiveTime() - lastActiveTime;
-            if (DelayTimeoutMs.HasValue && diffMs < DelayTimeoutMs)
+            if (DelayLockAndLogoutMs.HasValue && diffMs < DelayLockAndLogoutMs)
             {
-                if (ResetTimeoutDelay)
-                {
-                    DelayTimeoutMs = null;
-                    ResetTimeoutDelay = false;
-                }
                 return false;
             }
             var vaultTimeoutMs = vaultTimeoutMinutes * 60000;

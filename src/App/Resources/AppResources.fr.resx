@@ -2637,4 +2637,10 @@ Voulez-vous basculer vers ce compte ?</value>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>Le déverrouillage peut échouer en raison d'une mémoire insuffisante. Diminuez les paramètres de mémoire KDF pour y remédier</value>
   </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Clé API invalide</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Jeton API invalide</value>
+  </data>
 </root>
