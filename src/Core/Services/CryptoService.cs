@@ -85,7 +85,7 @@ namespace Bit.Core.Services
 
             // Legacy support: encryption used to be done with the master key (derived from master password).
             // Users who have not migrated will have a null user key and must use the master key instead.
-            return (SymmetricCryptoKey)await GetMasterKeyAsync() as UserKey;
+            return new UserKey((await GetMasterKeyAsync()).Key);
         }
 
         public async Task<bool> HasUserKeyAsync(string userId = null)
@@ -124,7 +124,7 @@ namespace Bit.Core.Services
             if (masterKey == null)
             {
                 // Migration support
-                masterKey = await _stateService.GetKeyDecryptedAsync(userId) as MasterKey;
+                masterKey = new MasterKey((await _stateService.GetKeyDecryptedAsync(userId)).Key);
                 if (masterKey != null)
                 {
                     await SetMasterKeyAsync(masterKey, userId);
