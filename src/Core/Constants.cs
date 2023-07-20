@@ -92,7 +92,6 @@ namespace Bit.Core
         public static string PoliciesKey(string userId) => $"policies_{userId}";
         public static string EncOrgKeysKey(string userId) => $"encOrgKeys_{userId}";
         public static string EncPrivateKeyKey(string userId) => $"encPrivateKey_{userId}";
-        public static string EncKeyKey(string userId) => $"encKey_{userId}";
         public static string DeviceKeyKey(string userId) => $"deviceKey_{userId}";
         public static string KeyHashKey(string userId) => $"keyHash_{userId}";
         public static string UserKeyPinKey(string userId) => $"userKeyPin_{userId}";
