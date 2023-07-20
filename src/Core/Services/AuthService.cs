@@ -470,10 +470,6 @@ namespace Bit.Core.Services
             _messagingService.Send("accountAdded");
             if (_setCryptoKeys)
             {
-                if (masterKey != null)
-                {
-                    await _cryptoService.SetMasterKeyAsync(masterKey);
-                }
 
                 if (localHashedPassword != null)
                 {
@@ -488,6 +484,13 @@ namespace Bit.Core.Services
                     }
 
                     await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(tokenResponse.Key);
+
+                    if (masterKey != null)
+                    {
+                        await _cryptoService.SetMasterKeyAsync(masterKey);
+                        var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
+                        await _cryptoService.SetUserKeyAsync(userKey);
+                    }
 
                     // User doesn't have a key pair yet (old account), let's generate one for them.
                     if (tokenResponse.PrivateKey == null)

@@ -110,14 +110,6 @@ namespace Bit.Core.Services
 
         public async Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null)
         {
-            var option = await _stateService.GetVaultTimeoutAsync();
-            var biometric = await _stateService.GetBiometricUnlockAsync();
-            if (option.HasValue && !biometric.GetValueOrDefault())
-            {
-                // we only store the encrypted user key if the user has a vault timeout set
-                // with no biometric. Otherwise, we need it for auto unlock or biometric unlock
-                return;
-            }
             await _stateService.SetUserKeyMasterKeyAsync(value, userId);
         }
 
@@ -133,16 +125,18 @@ namespace Bit.Core.Services
             if (masterKey == null)
             {
                 // Migration support
-                var encMasterKey = await _stateService.GetKeyEncryptedAsync(userId);
-                masterKey = new MasterKey(Convert.FromBase64String(encMasterKey));
-                await this.SetMasterKeyAsync(masterKey, userId);
+                masterKey = await _stateService.GetKeyDecryptedAsync(userId) as MasterKey;
+                if (masterKey != null)
+                {
+                    await SetMasterKeyAsync(masterKey, userId);
+                }
             }
             return masterKey;
         }
 
         public async Task<MasterKey> MakeMasterKeyAsync(string password, string email, KdfConfig kdfConfig)
         {
-            return await MakeKeyAsync(password, email, kdfConfig) as MasterKey;
+            return await MakeKeyAsync(password, email, kdfConfig, keyBytes => new MasterKey(keyBytes));
         }
 
         public async Task ClearMasterKeyAsync(string userId = null)
@@ -431,7 +425,7 @@ namespace Bit.Core.Services
 
         public async Task<PinKey> MakePinKeyAsync(string pin, string salt, KdfConfig config)
         {
-            var pinKey = await MakeKeyAsync(pin, salt, config);
+            var pinKey = await MakeKeyAsync(pin, salt, config, keyBytes => new PinKey(keyBytes));
             return await StretchKeyAsync(pinKey) as PinKey;
         }
 
@@ -881,7 +875,9 @@ namespace Bit.Core.Services
             return new Tuple<T, EncString>(new SymmetricCryptoKey(encKey) as T, encKeyEnc);
         }
 
-        private async Task<SymmetricCryptoKey> MakeKeyAsync(string password, string salt, KdfConfig kdfConfig)
+        // TODO: This intantiator needs to be moved into each key type in order to get rid of the keyCreator hack
+        private async Task<TKey> MakeKeyAsync<TKey>(string password, string salt, KdfConfig kdfConfig, Func<byte[], TKey> keyCreator)
+        where TKey : SymmetricCryptoKey
         {
             byte[] key = null;
             if (kdfConfig.Type == null || kdfConfig.Type == KdfType.PBKDF2_SHA256)
@@ -926,7 +922,7 @@ namespace Bit.Core.Services
             {
                 throw new Exception("Unknown kdf.");
             }
-            return new SymmetricCryptoKey(key);
+            return keyCreator(key);
         }
 
         private class EncryptedObject

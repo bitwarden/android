@@ -395,16 +395,15 @@ namespace Bit.Core.Services
             await SetValueAsync(Constants.ProtectedPinKey(reconciledOptions.UserId), value, reconciledOptions);
         }
 
-        // TODO(Jake): Does this need to be secure storage?
         public async Task<EncString> GetUserKeyPinAsync(string userId = null)
         {
-            return new EncString(await _storageMediatorService.GetAsync<string>(Constants.UserKeyPinKey(userId), false));
+            var key = await _storageMediatorService.GetAsync<string>(Constants.UserKeyPinKey(userId), false);
+            return key != null ? new EncString(key) : null;
         }
 
-        // TODO(Jake): Does this need to be secure storage?
         public async Task SetUserKeyPinAsync(EncString value, string userId = null)
         {
-            await _storageMediatorService.SaveAsync(Constants.UserKeyPinKey(userId), value.EncryptedString, false);
+            await _storageMediatorService.SaveAsync(Constants.UserKeyPinKey(userId), value?.EncryptedString, false);
         }
 
         public async Task<EncString> GetUserKeyPinEphemeralAsync(string userId = null)
