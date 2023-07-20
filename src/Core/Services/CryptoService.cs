@@ -683,7 +683,6 @@ namespace Bit.Core.Services
             );
             var encPin = await EncryptAsync(userKey.Key, pinKey);
 
-            // TODO(Jake): Does this logic make sense? Should we save something in state to indicate the preference?
             if (await _stateService.GetUserKeyPinAsync(userId) != null)
             {
                 await _stateService.SetUserKeyPinAsync(encPin, userId);
