@@ -70,9 +70,9 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task<UserKey> GetUserKeyAsync(string userId = null)
+        public Task<UserKey> GetUserKeyAsync(string userId = null)
         {
-            return await _stateService.GetUserKeyAsync(userId);
+            return _stateService.GetUserKeyAsync(userId);
         }
 
         public async Task<UserKey> GetUserKeyWithLegacySupportAsync(string userId = null)
@@ -103,20 +103,19 @@ namespace Bit.Core.Services
             return new UserKey(await _cryptoFunctionService.RandomBytesAsync(64));
         }
 
-        public async Task ClearUserKeyAsync(string userId = null)
+        public Task ClearUserKeyAsync(string userId = null)
         {
-            await _stateService.SetUserKeyAsync(null, userId);
+            return _stateService.SetUserKeyAsync(null, userId);
         }
 
-        public async Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null)
+        public Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null)
         {
-            await _stateService.SetUserKeyMasterKeyAsync(value, userId);
+            return _stateService.SetUserKeyMasterKeyAsync(value, userId);
         }
 
-        public async Task SetMasterKeyAsync(MasterKey masterKey, string userId = null)
+        public Task SetMasterKeyAsync(MasterKey masterKey, string userId = null)
         {
-            await _stateService.SetMasterKeyAsync(masterKey, userId);
-
+            return _stateService.SetMasterKeyAsync(masterKey, userId);
         }
 
         public async Task<MasterKey> GetMasterKeyAsync(string userId = null)
@@ -134,14 +133,14 @@ namespace Bit.Core.Services
             return masterKey;
         }
 
-        public async Task<MasterKey> MakeMasterKeyAsync(string password, string email, KdfConfig kdfConfig)
+        public Task<MasterKey> MakeMasterKeyAsync(string password, string email, KdfConfig kdfConfig)
         {
-            return await MakeKeyAsync(password, email, kdfConfig, keyBytes => new MasterKey(keyBytes));
+            return MakeKeyAsync(password, email, kdfConfig, keyBytes => new MasterKey(keyBytes));
         }
 
-        public async Task ClearMasterKeyAsync(string userId = null)
+        public Task ClearMasterKeyAsync(string userId = null)
         {
-            await _stateService.SetMasterKeyAsync(null, userId);
+            return _stateService.SetMasterKeyAsync(null, userId);
         }
 
         public async Task<Tuple<UserKey, EncString>> EncryptUserKeyWithMasterKeyAsync(MasterKey masterKey, UserKey userKey = null)
@@ -228,10 +227,10 @@ namespace Bit.Core.Services
             return Convert.ToBase64String(hash);
         }
 
-        public async Task SetPasswordHashAsync(string keyHash)
+        public Task SetPasswordHashAsync(string keyHash)
         {
             _passwordHash = keyHash;
-            await _stateService.SetKeyHashAsync(keyHash);
+            return _stateService.SetKeyHashAsync(keyHash);
         }
 
         public async Task<string> GetPasswordHashAsync()
@@ -248,10 +247,10 @@ namespace Bit.Core.Services
             return _passwordHash;
         }
 
-        public async Task ClearPasswordHashAsync(string userId = null)
+        public Task ClearPasswordHashAsync(string userId = null)
         {
             _passwordHash = null;
-            await _stateService.SetKeyHashAsync(null, userId);
+            return _stateService.SetKeyHashAsync(null, userId);
         }
 
         // TODO(Jake): Uses Master Key
@@ -277,11 +276,11 @@ namespace Bit.Core.Services
             return false;
         }
 
-        public async Task SetOrgKeysAsync(IEnumerable<ProfileOrganizationResponse> orgs)
+        public Task SetOrgKeysAsync(IEnumerable<ProfileOrganizationResponse> orgs)
         {
             var orgKeys = orgs.ToDictionary(org => org.Id, org => org.Key);
             _orgKeys = null;
-            await _stateService.SetOrgKeysEncryptedAsync(orgKeys);
+            return _stateService.SetOrgKeysEncryptedAsync(orgKeys);
         }
 
         public async Task<OrgKey> GetOrgKeyAsync(string orgId)
@@ -429,12 +428,13 @@ namespace Bit.Core.Services
             return await StretchKeyAsync(pinKey) as PinKey;
         }
 
-        public async Task ClearPinKeysAsync(string userId = null)
+        public Task ClearPinKeysAsync(string userId = null)
         {
-            await _stateService.SetUserKeyPinAsync(null, userId);
-            await _stateService.SetUserKeyPinEphemeralAsync(null, userId);
-            await _stateService.SetProtectedPinAsync(null, userId);
-            await clearDeprecatedPinKeysAsync(userId);
+            return Task.WhenAll(
+                _stateService.SetUserKeyPinAsync(null, userId),
+                _stateService.SetUserKeyPinEphemeralAsync(null, userId),
+                _stateService.SetProtectedPinAsync(null, userId),
+                clearDeprecatedPinKeysAsync(userId));
         }
 
         public async Task<UserKey> DecryptUserKeyWithPinAsync(string pin, string salt, KdfConfig kdfConfig, EncString pinProtectedUserKey = null)
@@ -618,27 +618,27 @@ namespace Bit.Core.Services
             return await AesDecryptToBytesAsync(encType, ctBytes, ivBytes, macBytes, key);
         }
 
-        public async Task<byte[]> DecryptToBytesAsync(EncString encString, SymmetricCryptoKey key = null)
+        public Task<byte[]> DecryptToBytesAsync(EncString encString, SymmetricCryptoKey key = null)
         {
             var iv = Convert.FromBase64String(encString.Iv);
             var data = Convert.FromBase64String(encString.Data);
             var mac = !string.IsNullOrWhiteSpace(encString.Mac) ? Convert.FromBase64String(encString.Mac) : null;
-            return await AesDecryptToBytesAsync(encString.EncryptionType, data, iv, mac, key);
+            return AesDecryptToBytesAsync(encString.EncryptionType, data, iv, mac, key);
         }
 
-        public async Task<string> DecryptToUtf8Async(EncString encString, SymmetricCryptoKey key = null)
+        public Task<string> DecryptToUtf8Async(EncString encString, SymmetricCryptoKey key = null)
         {
-            return await AesDecryptToUtf8Async(encString.EncryptionType, encString.Data,
+            return AesDecryptToUtf8Async(encString.EncryptionType, encString.Data,
                 encString.Iv, encString.Mac, key);
         }
 
-        public async Task<EncString> EncryptAsync(string plainValue, SymmetricCryptoKey key = null)
+        public Task<EncString> EncryptAsync(string plainValue, SymmetricCryptoKey key = null)
         {
             if (plainValue == null)
             {
                 return null;
             }
-            return await EncryptAsync(Encoding.UTF8.GetBytes(plainValue), key);
+            return EncryptAsync(Encoding.UTF8.GetBytes(plainValue), key);
         }
 
         public async Task<EncString> EncryptAsync(byte[] plainValue, SymmetricCryptoKey key = null)
@@ -979,10 +979,11 @@ namespace Bit.Core.Services
             return userKey;
         }
 
-        public async Task clearDeprecatedPinKeysAsync(string userId = null)
+        public Task clearDeprecatedPinKeysAsync(string userId = null)
         {
-            await _stateService.SetPinProtectedAsync(null);
-            await _stateService.SetPinProtectedKeyAsync(null);
+            return Task.WhenAll(
+                _stateService.SetPinProtectedAsync(null, userId),
+                _stateService.SetPinProtectedKeyAsync(null, userId));
         }
     }
 }
