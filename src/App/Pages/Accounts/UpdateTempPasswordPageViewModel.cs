@@ -95,7 +95,7 @@ namespace Bit.App.Pages
 
             // Create new master key and hash new password
             var masterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, email, kdfConfig);
-            var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, masterKey);
+            var masterPasswordHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, masterKey);
 
             // Encrypt user key with new master key
             var (userKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(masterKey);
@@ -155,7 +155,7 @@ namespace Bit.App.Pages
 
         private async Task UpdatePasswordAsync(string newMasterPasswordHash, string newEncKey)
         {
-            var currentPasswordHash = await _cryptoService.HashPasswordAsync(CurrentMasterPassword, null);
+            var currentPasswordHash = await _cryptoService.HashMasterKeyAsync(CurrentMasterPassword, null);
 
             var request = new PasswordRequest
             {

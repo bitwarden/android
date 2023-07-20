@@ -20,7 +20,7 @@ namespace Bit.Core.Services
         private readonly ICryptoFunctionService _cryptoFunctionService;
 
         private SymmetricCryptoKey _legacyEtmKey;
-        private string _passwordHash;
+        private string _masterKeyHash;
         private byte[] _publicKey;
         private byte[] _privateKey;
         private Dictionary<string, OrgKey> _orgKeys;
@@ -37,7 +37,7 @@ namespace Bit.Core.Services
         public void ClearCache()
         {
             _legacyEtmKey = null;
-            _passwordHash = null;
+            _masterKeyHash = null;
             _publicKey = null;
             _privateKey = null;
             _orgKeys = null;
@@ -211,64 +211,62 @@ namespace Bit.Core.Services
             return await BuildProtectedSymmetricKey<SymmetricCryptoKey>(key, newSymKey);
         }
 
-        // TODO(Jake): Uses Master Key
-        public async Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key, HashPurpose hashPurpose = HashPurpose.ServerAuthorization)
+        public async Task<string> HashMasterKeyAsync(string password, MasterKey masterKey, HashPurpose hashPurpose = HashPurpose.ServerAuthorization)
         {
-            if (key == null)
+            if (masterKey == null)
             {
-                key = await GetMasterKeyAsync();
+                masterKey = await GetMasterKeyAsync();
             }
-            if (password == null || key == null)
+            if (password == null || masterKey == null)
             {
                 throw new Exception("Invalid parameters.");
             }
             var iterations = hashPurpose == HashPurpose.LocalAuthorization ? 2 : 1;
-            var hash = await _cryptoFunctionService.Pbkdf2Async(key.Key, password, CryptoHashAlgorithm.Sha256, iterations);
+            var hash = await _cryptoFunctionService.Pbkdf2Async(masterKey.Key, password, CryptoHashAlgorithm.Sha256, iterations);
             return Convert.ToBase64String(hash);
         }
 
-        public Task SetPasswordHashAsync(string keyHash)
+        public Task SetMasterKeyHashAsync(string keyHash)
         {
-            _passwordHash = keyHash;
+            _masterKeyHash = keyHash;
             return _stateService.SetKeyHashAsync(keyHash);
         }
 
-        public async Task<string> GetPasswordHashAsync()
+        public async Task<string> GetMasterKeyHashAsync()
         {
-            if (_passwordHash != null)
+            if (_masterKeyHash != null)
             {
-                return _passwordHash;
+                return _masterKeyHash;
             }
             var passwordHash = await _stateService.GetKeyHashAsync();
             if (passwordHash != null)
             {
-                _passwordHash = passwordHash;
+                _masterKeyHash = passwordHash;
             }
-            return _passwordHash;
+            return _masterKeyHash;
         }
 
-        public Task ClearPasswordHashAsync(string userId = null)
+        public Task ClearMasterKeyHashAsync(string userId = null)
         {
-            _passwordHash = null;
+            _masterKeyHash = null;
             return _stateService.SetKeyHashAsync(null, userId);
         }
 
-        // TODO(Jake): Uses Master Key
-        public async Task<bool> CompareAndUpdatePasswordHashAsync(string masterPassword, MasterKey key)
+        public async Task<bool> CompareAndUpdateKeyHashAsync(string masterPassword, MasterKey key)
         {
-            var storedPasswordHash = await GetPasswordHashAsync();
+            var storedPasswordHash = await GetMasterKeyHashAsync();
             if (masterPassword != null && storedPasswordHash != null)
             {
-                var localPasswordHash = await HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
+                var localPasswordHash = await HashMasterKeyAsync(masterPassword, key, HashPurpose.LocalAuthorization);
                 if (localPasswordHash != null && storedPasswordHash == localPasswordHash)
                 {
                     return true;
                 }
 
-                var serverPasswordHash = await HashPasswordAsync(masterPassword, key, HashPurpose.ServerAuthorization);
+                var serverPasswordHash = await HashMasterKeyAsync(masterPassword, key, HashPurpose.ServerAuthorization);
                 if (serverPasswordHash != null & storedPasswordHash == serverPasswordHash)
                 {
-                    await SetPasswordHashAsync(localPasswordHash);
+                    await SetMasterKeyHashAsync(localPasswordHash);
                     return true;
                 }
             }

@@ -38,7 +38,7 @@ namespace Bit.App.Services
                 return false;
             };
 
-            return await _cryptoService.CompareAndUpdatePasswordHashAsync(password, null);
+            return await _cryptoService.CompareAndUpdateKeyHashAsync(password, null);
         }
 
         public async Task<bool> Enabled()

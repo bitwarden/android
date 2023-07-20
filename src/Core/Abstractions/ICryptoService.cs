@@ -27,11 +27,11 @@ namespace Bit.Core.Abstractions
         Task<UserKey> DecryptUserKeyWithMasterKeyAsync(MasterKey masterKey, EncString encUserKey = null, string userId = null);
         Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(UserKey key);
         Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(OrgKey key);
-        Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key, HashPurpose hashPurpose = HashPurpose.ServerAuthorization);
-        Task SetPasswordHashAsync(string keyHash);
-        Task<string> GetPasswordHashAsync();
-        Task ClearPasswordHashAsync(string userId = null);
-        Task<bool> CompareAndUpdatePasswordHashAsync(string masterPassword, MasterKey key);
+        Task<string> HashMasterKeyAsync(string password, MasterKey key, HashPurpose hashPurpose = HashPurpose.ServerAuthorization);
+        Task SetMasterKeyHashAsync(string keyHash);
+        Task<string> GetMasterKeyHashAsync();
+        Task ClearMasterKeyHashAsync(string userId = null);
+        Task<bool> CompareAndUpdateKeyHashAsync(string masterPassword, MasterKey key);
         Task SetOrgKeysAsync(IEnumerable<ProfileOrganizationResponse> orgs);
         Task<OrgKey> GetOrgKeyAsync(string orgId);
         Task<Dictionary<string, OrgKey>> GetOrgKeysAsync();

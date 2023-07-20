@@ -319,20 +319,20 @@ namespace Bit.App.Pages
             else
             {
                 var masterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, _email, kdfConfig);
-                var storedKeyHash = await _cryptoService.GetPasswordHashAsync();
+                var storedKeyHash = await _cryptoService.GetMasterKeyHashAsync();
                 var passwordValid = false;
                 MasterPasswordPolicyOptions enforcedMasterPasswordOptions = null;
 
                 if (storedKeyHash != null)
                 {
                     // Offline unlock possible
-                    passwordValid = await _cryptoService.CompareAndUpdatePasswordHashAsync(MasterPassword, masterKey);
+                    passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(MasterPassword, masterKey);
                 }
                 else
                 {
                     // Online unlock required
                     await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
-                    var keyHash = await _cryptoService.HashPasswordAsync(MasterPassword, masterKey, HashPurpose.ServerAuthorization);
+                    var keyHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, masterKey, HashPurpose.ServerAuthorization);
                     var request = new PasswordVerificationRequest();
                     request.MasterPasswordHash = keyHash;
 
@@ -341,8 +341,8 @@ namespace Bit.App.Pages
                         var response = await _apiService.PostAccountVerifyPasswordAsync(request);
                         enforcedMasterPasswordOptions = response.MasterPasswordPolicy;
                         passwordValid = true;
-                        var localKeyHash = await _cryptoService.HashPasswordAsync(MasterPassword, masterKey, HashPurpose.LocalAuthorization);
-                        await _cryptoService.SetPasswordHashAsync(localKeyHash);
+                        var localKeyHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, masterKey, HashPurpose.LocalAuthorization);
+                        await _cryptoService.SetMasterKeyHashAsync(localKeyHash);
                     }
                     catch (Exception e)
                     {

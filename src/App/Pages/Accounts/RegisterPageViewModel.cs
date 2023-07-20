@@ -182,7 +182,7 @@ namespace Bit.App.Pages
                 newMasterKey,
                 await _cryptoService.MakeUserKeyAsync()
             );
-            var hashedPassword = await _cryptoService.HashPasswordAsync(MasterPassword, newMasterKey);
+            var hashedPassword = await _cryptoService.HashMasterKeyAsync(MasterPassword, newMasterKey);
             var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync(newUserKey);
             var request = new RegisterRequest
             {
