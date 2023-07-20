@@ -208,6 +208,11 @@ namespace Bit.App.Pages
             }
             else if (selection == AppResources.Autofill || selection == AppResources.AutofillAndSave)
             {
+                if (cipher.Reprompt != CipherRepromptType.None && !await _passwordRepromptService.ShowPasswordPromptAsync())
+                {
+                    return;
+                }
+
                 if (selection == AppResources.AutofillAndSave)
                 {
                     var uris = cipher.Login?.Uris?.ToList();

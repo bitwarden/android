@@ -247,7 +247,7 @@ namespace Bit.Core.Services
 
         public async Task<List<GeneratedPasswordHistory>> GetHistoryAsync()
         {
-            var hasKey = await _cryptoService.HasKeyAsync();
+            var hasKey = await _cryptoService.HasUserKeyAsync();
             if (!hasKey)
             {
                 return new List<GeneratedPasswordHistory>();
@@ -262,7 +262,7 @@ namespace Bit.Core.Services
 
         public async Task AddHistoryAsync(string password, CancellationToken token = default(CancellationToken))
         {
-            var hasKey = await _cryptoService.HasKeyAsync();
+            var hasKey = await _cryptoService.HasUserKeyAsync();
             if (!hasKey)
             {
                 return;

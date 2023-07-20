@@ -139,7 +139,7 @@ namespace Bit.App.Pages
             }
 
             var pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
-            _pin = pinSet.Item1 || pinSet.Item2;
+            _pin = pinSet != PinLockEnum.Disabled;
             _biometric = await _vaultTimeoutService.IsBiometricLockSetAsync();
             _screenCaptureAllowed = await _stateService.GetScreenCaptureAllowedAsync();
 
@@ -437,19 +437,20 @@ namespace Bit.App.Pages
 
                     var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
                     var email = await _stateService.GetEmailAsync();
-                    var pinKey = await _cryptoService.MakePinKeyAysnc(pin, email, kdfConfig);
-                    var key = await _cryptoService.GetKeyAsync();
-                    var pinProtectedKey = await _cryptoService.EncryptAsync(key.Key, pinKey);
+                    var pinKey = await _cryptoService.MakePinKeyAsync(pin, email, kdfConfig);
+                    var userKey = await _cryptoService.GetUserKeyAsync();
+                    var pinProtectedKey = await _cryptoService.EncryptAsync(userKey.Key, pinKey);
+
+                    var encPin = await _cryptoService.EncryptAsync(pin);
+                    await _stateService.SetProtectedPinAsync(encPin.EncryptedString);
 
                     if (masterPassOnRestart)
                     {
-                        var encPin = await _cryptoService.EncryptAsync(pin);
-                        await _stateService.SetProtectedPinAsync(encPin.EncryptedString);
-                        await _stateService.SetPinProtectedKeyAsync(pinProtectedKey);
+                        await _stateService.SetUserKeyPinEphemeralAsync(pinProtectedKey);
                     }
                     else
                     {
-                        await _stateService.SetPinProtectedAsync(pinProtectedKey.EncryptedString);
+                        await _stateService.SetUserKeyPinAsync(pinProtectedKey);
                     }
                 }
                 else
@@ -459,7 +460,6 @@ namespace Bit.App.Pages
             }
             if (!_pin)
             {
-                await _cryptoService.ClearPinProtectedKeyAsync();
                 await _vaultTimeoutService.ClearAsync();
             }
             BuildList();
@@ -491,7 +491,7 @@ namespace Bit.App.Pages
                 await _stateService.SetBiometricUnlockAsync(null);
             }
             await _stateService.SetBiometricLockedAsync(false);
-            await _cryptoService.ToggleKeyAsync();
+            await _cryptoService.ToggleKeysAsync();
             BuildList();
         }
 
