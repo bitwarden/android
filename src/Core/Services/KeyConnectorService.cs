@@ -28,10 +28,10 @@ namespace Bit.Core.Services
         {
             try
             {
-                var userKeyResponse = await _apiService.GetUserKeyFromKeyConnector(url);
-                var keyArr = Convert.FromBase64String(userKeyResponse.Key);
-                var k = new SymmetricCryptoKey(keyArr);
-                await _cryptoService.SetKeyAsync(k);
+                var masterKeyResponse = await _apiService.GetMasterKeyFromKeyConnector(url);
+                var masterKeyArr = Convert.FromBase64String(masterKeyResponse.Key);
+                var masterKey = new MasterKey(masterKeyArr);
+                await _cryptoService.SetMasterKeyAsync(masterKey);
             }
             catch (Exception e)
             {
@@ -60,11 +60,11 @@ namespace Bit.Core.Services
         public async Task MigrateUser()
         {
             var organization = await GetManagingOrganization();
-            var key = await _cryptoService.GetKeyAsync();
+            var masterKey = await _cryptoService.GetMasterKeyAsync();
 
             try
             {
-                var keyConnectorRequest = new KeyConnectorUserKeyRequest(key.EncKeyB64);
+                var keyConnectorRequest = new KeyConnectorUserKeyRequest(masterKey.EncKeyB64);
                 await _apiService.PostUserKeyToKeyConnector(organization.KeyConnectorUrl, keyConnectorRequest);
             }
             catch (Exception e)

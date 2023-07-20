@@ -44,7 +44,7 @@ namespace Bit.Core.Services
             }
             else
             {
-                var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(secret, null);
+                var passwordValid = await _cryptoService.CompareAndUpdatePasswordHashAsync(secret, null);
                 if (!passwordValid)
                 {
                     await InvalidSecretErrorAsync(verificationType);
