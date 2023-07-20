@@ -312,18 +312,18 @@ namespace Bit.iOS.Core.Controllers
                 {
                     var masterKey = await _cryptoService.MakeMasterKeyAsync(inputtedValue, email, kdfConfig);
 
-                    var storedPasswordHash = await _cryptoService.GetPasswordHashAsync();
+                    var storedPasswordHash = await _cryptoService.GetMasterKeyHashAsync();
                     if (storedPasswordHash == null)
                     {
                         var oldKey = await _secureStorageService.GetAsync<string>("oldKey");
                         if (masterKey.KeyB64 == oldKey)
                         {
-                            var localPasswordHash = await _cryptoService.HashPasswordAsync(inputtedValue, masterKey, HashPurpose.LocalAuthorization);
+                            var localPasswordHash = await _cryptoService.HashMasterKeyAsync(inputtedValue, masterKey, HashPurpose.LocalAuthorization);
                             await _secureStorageService.RemoveAsync("oldKey");
-                            await _cryptoService.SetPasswordHashAsync(localPasswordHash);
+                            await _cryptoService.SetMasterKeyHashAsync(localPasswordHash);
                         }
                     }
-                    var passwordValid = await _cryptoService.CompareAndUpdatePasswordHashAsync(inputtedValue, masterKey);
+                    var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(inputtedValue, masterKey);
                     if (passwordValid)
                     {
                         await AppHelpers.ResetInvalidUnlockAttemptsAsync();

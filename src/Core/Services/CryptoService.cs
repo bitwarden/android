@@ -146,7 +146,7 @@ namespace Bit.Core.Services
         public async Task<Tuple<UserKey, EncString>> EncryptUserKeyWithMasterKeyAsync(MasterKey masterKey, UserKey userKey = null)
         {
             userKey ??= await GetUserKeyAsync();
-            return await BuildProtectedSymmetricKey<UserKey>(masterKey, userKey.Key);
+            return await BuildProtectedSymmetricKey(masterKey, userKey.Key, keyBytes => new UserKey(keyBytes));
         }
 
         public async Task<UserKey> DecryptUserKeyWithMasterKeyAsync(MasterKey masterKey, EncString encUserKey = null, string userId = null)
@@ -174,7 +174,7 @@ namespace Bit.Core.Services
             }
             else if (encUserKey.EncryptionType == EncryptionType.AesCbc256_HmacSha256_B64)
             {
-                var newKey = await StretchKeyAsync(masterKey);
+                var newKey = await StretchKeyAsync(masterKey, keyBytes => new MasterKey(keyBytes));
                 decUserKey = await DecryptToBytesAsync(encUserKey, newKey);
             }
             else
@@ -197,7 +197,7 @@ namespace Bit.Core.Services
             }
 
             var newSymKey = await _cryptoFunctionService.RandomBytesAsync(64);
-            return await BuildProtectedSymmetricKey<SymmetricCryptoKey>(key, newSymKey);
+            return await BuildProtectedSymmetricKey(key, newSymKey, keyBytes => new SymmetricCryptoKey(keyBytes));
         }
 
         public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(OrgKey key)
@@ -208,7 +208,7 @@ namespace Bit.Core.Services
             }
 
             var newSymKey = await _cryptoFunctionService.RandomBytesAsync(64);
-            return await BuildProtectedSymmetricKey<SymmetricCryptoKey>(key, newSymKey);
+            return await BuildProtectedSymmetricKey(key, newSymKey, keyBytes => new SymmetricCryptoKey(keyBytes));
         }
 
         public async Task<string> HashMasterKeyAsync(string password, MasterKey masterKey, HashPurpose hashPurpose = HashPurpose.ServerAuthorization)
@@ -423,7 +423,7 @@ namespace Bit.Core.Services
         public async Task<PinKey> MakePinKeyAsync(string pin, string salt, KdfConfig config)
         {
             var pinKey = await MakeKeyAsync(pin, salt, config, keyBytes => new PinKey(keyBytes));
-            return await StretchKeyAsync(pinKey) as PinKey;
+            return await StretchKeyAsync(pinKey, keyBytes => new PinKey(keyBytes));
         }
 
         public Task ClearPinKeysAsync(string userId = null)
@@ -819,14 +819,16 @@ namespace Bit.Core.Services
             return key;
         }
 
-        private async Task<SymmetricCryptoKey> StretchKeyAsync(SymmetricCryptoKey key)
+        // TODO: This needs to be moved into SymmetricCryptoKey model to remove the keyCreator hack
+        private async Task<TKey> StretchKeyAsync<TKey>(SymmetricCryptoKey key, Func<byte[], TKey> keyCreator)
+        where TKey : SymmetricCryptoKey
         {
             var newKey = new byte[64];
             var enc = await _cryptoFunctionService.HkdfExpandAsync(key.Key, Encoding.UTF8.GetBytes("enc"), 32, HkdfAlgorithm.Sha256);
             Buffer.BlockCopy(enc, 0, newKey, 0, 32);
             var mac = await _cryptoFunctionService.HkdfExpandAsync(key.Key, Encoding.UTF8.GetBytes("mac"), 32, HkdfAlgorithm.Sha256);
             Buffer.BlockCopy(mac, 0, newKey, 32, 32);
-            return new SymmetricCryptoKey(newKey);
+            return keyCreator(newKey);
         }
 
         private List<string> HashPhrase(byte[] hash, int minimumEntropy = 64)
@@ -853,13 +855,14 @@ namespace Bit.Core.Services
             return phrase;
         }
 
-        private async Task<Tuple<T, EncString>> BuildProtectedSymmetricKey<T>(SymmetricCryptoKey key,
-            byte[] encKey) where T : SymmetricCryptoKey
+        // TODO: This needs to be moved into SymmetricCryptoKey model to remove the keyCreator hack
+        private async Task<Tuple<TKey, EncString>> BuildProtectedSymmetricKey<TKey>(SymmetricCryptoKey key,
+            byte[] encKey, Func<byte[], TKey> keyCreator) where TKey : SymmetricCryptoKey
         {
             EncString encKeyEnc = null;
             if (key.Key.Length == 32)
             {
-                var newKey = await StretchKeyAsync(key);
+                var newKey = await StretchKeyAsync(key, keyCreator);
                 encKeyEnc = await EncryptAsync(encKey, newKey);
             }
             else if (key.Key.Length == 64)
@@ -870,10 +873,10 @@ namespace Bit.Core.Services
             {
                 throw new Exception("Invalid key size.");
             }
-            return new Tuple<T, EncString>(new SymmetricCryptoKey(encKey) as T, encKeyEnc);
+            return new Tuple<TKey, EncString>(keyCreator(encKey), encKeyEnc);
         }
 
-        // TODO: This intantiator needs to be moved into each key type in order to get rid of the keyCreator hack
+        // TODO: This needs to be moved into SymmetricCryptoKey model to remove the keyCreator hack
         private async Task<TKey> MakeKeyAsync<TKey>(string password, string salt, KdfConfig kdfConfig, Func<byte[], TKey> keyCreator)
         where TKey : SymmetricCryptoKey
         {

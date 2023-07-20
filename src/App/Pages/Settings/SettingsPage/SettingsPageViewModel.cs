@@ -439,18 +439,18 @@ namespace Bit.App.Pages
                     var email = await _stateService.GetEmailAsync();
                     var pinKey = await _cryptoService.MakePinKeyAsync(pin, email, kdfConfig);
                     var userKey = await _cryptoService.GetUserKeyAsync();
-                    var pinProtectedKey = await _cryptoService.EncryptAsync(userKey.Key, pinKey);
+                    var protectedPinKey = await _cryptoService.EncryptAsync(userKey.Key, pinKey);
 
                     var encPin = await _cryptoService.EncryptAsync(pin);
                     await _stateService.SetProtectedPinAsync(encPin.EncryptedString);
 
                     if (masterPassOnRestart)
                     {
-                        await _stateService.SetUserKeyPinEphemeralAsync(pinProtectedKey);
+                        await _stateService.SetUserKeyPinEphemeralAsync(protectedPinKey);
                     }
                     else
                     {
-                        await _stateService.SetUserKeyPinAsync(pinProtectedKey);
+                        await _stateService.SetUserKeyPinAsync(protectedPinKey);
                     }
                 }
                 else
