@@ -1138,6 +1138,11 @@ namespace Bit.Core.Services
                             cipher.Login.Uris.Add(loginUri);
                         }
                     }
+                    if (model.Login.Fido2Key != null)
+                    {
+                        cipher.Login.Fido2Key = new Fido2Key();
+                        await EncryptObjPropertyAsync(model.Login.Fido2Key, cipher.Login.Fido2Key, Fido2Key.EncryptableProperties, key);
+                    }
                     break;
                 case CipherType.SecureNote:
                     cipher.SecureNote = new SecureNote
@@ -1183,19 +1188,7 @@ namespace Bit.Core.Services
                     break;
                 case CipherType.Fido2Key:
                     cipher.Fido2Key = new Fido2Key();
-                    await EncryptObjPropertyAsync(model.Fido2Key, cipher.Fido2Key, new HashSet<string>
-                    {
-                        nameof(Fido2Key.NonDiscoverableId),
-                        nameof(Fido2Key.KeyType),
-                        nameof(Fido2Key.KeyAlgorithm),
-                        nameof(Fido2Key.KeyCurve),
-                        nameof(Fido2Key.KeyValue),
-                        nameof(Fido2Key.RpId),
-                        nameof(Fido2Key.RpName),
-                        nameof(Fido2Key.UserHandle),
-                        nameof(Fido2Key.UserName),
-                        nameof(Fido2Key.Counter)
-                    }, key);
+                    await EncryptObjPropertyAsync(model.Fido2Key, cipher.Fido2Key, Fido2Key.EncryptableProperties, key);
                     break;
                 default:
                     throw new Exception("Unknown cipher type.");
