@@ -2671,9 +2671,6 @@ Do you want to switch to this account?</value>
   <data name="InvalidURI" xml:space="preserve">
     <value>Invalid URI</value>
   </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI saved</value>
-  </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI removed</value>
   </data>
