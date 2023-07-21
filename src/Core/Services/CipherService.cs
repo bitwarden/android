@@ -574,12 +574,16 @@ namespace Bit.Core.Services
             var orgCiphers = decCiphers.Where(c => c.OrganizationId == organizationId);
             if (cipher.Login?.Fido2Key != null)
             {
-                return !orgCiphers.Any(c => c.Login?.Fido2Key?.RpId == cipher.Login.Fido2Key.RpId);
+                return !orgCiphers.Any(c => !cipher.Login.Fido2Key.IsUniqueAgainst(c.Login?.Fido2Key)
+                                            ||
+                                            !cipher.Login.Fido2Key.IsUniqueAgainst(c.Fido2Key));
             }
 
             if (cipher.Fido2Key != null)
             {
-                return !orgCiphers.Any(c => c.Fido2Key?.RpId == cipher.Fido2Key.RpId);
+                return !orgCiphers.Any(c => !cipher.Fido2Key.IsUniqueAgainst(c.Login?.Fido2Key)
+                                            ||
+                                            !cipher.Fido2Key.IsUniqueAgainst(c.Fido2Key));
             }
 
             return true;
