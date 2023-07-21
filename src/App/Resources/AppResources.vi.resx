@@ -584,7 +584,7 @@
     <value>Một gợi ý mật khẩu có thể giúp bạn nhớ lại mật khẩu chủ của bạn nếu bạn quên nó.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Siêu mật khẩu bắt buộc phải dài ít nhất {0} kí tự.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Số chữ số tối thiểu</value>
@@ -1585,9 +1585,6 @@ Quá trình quét sẽ diễn ra tự động.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Tự động điền các URI bị chặn</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Tính năng tự động điền sẽ không được cung cấp cho các URI bị chặn. Phân tách nhiều URI bằng dấu phẩy. Ví dụ: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Yêu cầu thêm thông tin đăng nhập</value>
   </data>
@@ -1753,10 +1750,10 @@ Quá trình quét sẽ diễn ra tự động.</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Mở khóa bằng sinh trắc học cho tài khoản này bị vô hiệu hóa trong khi chờ xác minh mật khẩu chính.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Mở khóa bằng sinh trắc học cho tài khoản này bị vô hiệu hóa trong khi chờ xác minh mật khẩu chính.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Kích hoạt đồng bộ khi làm tươi(refresh)</value>
@@ -2541,13 +2538,13 @@ Do you want to switch to this account?</value>
     <value>Requests declined</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>No pending requests</value>  
+    <value>Không có yêu cầu đang chờ phê duyệt</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>Bật quyền của máy ảnh để sử dụng máy quét</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Ngôn ngữ</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
     <value>The language has been changed to {0}. Please restart the app to see the change</value>
@@ -2556,7 +2553,7 @@ Do you want to switch to this account?</value>
     <value>Language change requires app restart</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>Mặc định (Hệ thống)</value>
   </data>
   <data name="Important" xml:space="preserve">
     <value>Quan trọng</value>
@@ -2580,19 +2577,19 @@ Do you want to switch to this account?</value>
     <value>Mạnh</value>
   </data>
   <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
-    <value>Check known data breaches for this password</value>
+    <value>Kiểm tra xem mật khẩu có thuộc các vụ rò rỉ dữ liệu hay không</value>
   </data>
   <data name="ExposedMasterPassword" xml:space="preserve">
     <value>Mật Khẩu Chính Bị Lộ</value>
   </data>
   <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?</value>
+    <value>Phát hiện mật khẩu này đã bị rò rỉ trong một vụ xâm nhập dữ liệu. Hãy sử dụng một mật khẩu độc nhất để bảo vệ tài khoản của bạn. Bạn có chắc chắn muốn sử dụng mật khẩu đã bị rò rỉ này không?</value>
   </data>
   <data name="WeakAndExposedMasterPassword" xml:space="preserve">
     <value>Weak and Exposed Master Password</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+    <value>Phát hiện mật khẩu yếu này đã bị rò rỉ trong một vụ xâm nhập dữ liệu. Hãy sử dụng một mật khẩu mạnh và độc nhất để bảo vệ tài khoản của bạn. Bạn có chắc chắn muốn sử dụng mật khẩu này không?</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>Organization SSO identifier required.</value>
@@ -2641,5 +2638,51 @@ Do you want to switch to this account?</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Invalid API token</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Block auto-fill</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Auto-fill will not be offered for these URIs.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>New blocked URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI saved</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Invalid format. Use https://, http://, or androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Edit URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Enter URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Format: {0}. Separate multiple URIs with a comma.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Format: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Invalid URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI saved</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI removed</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>There are no blocked URIs</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>The URI {0} is already blocked</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Cannot edit multiple URIs at once</value>
   </data>
 </root>
