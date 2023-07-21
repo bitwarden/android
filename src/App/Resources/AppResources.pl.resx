@@ -1585,9 +1585,6 @@ Skanowanie nastąpi automatycznie.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Autouzupełnianie zablokowanych identyfikatorów URI</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Autouzupełnianie nie będzie oferowane w przypadku zablokowanych identyfikatorów URI. Oddziel wiele identyfikatorów URI przecinkami. Na przykład: „https://twitter.com, androidapp://com.twitter.android”.</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Poproś o dodanie danych logowania</value>
   </data>
@@ -2641,5 +2638,51 @@ Czy chcesz przełączyć się na to konto?</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Nieprawidłowy token API.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Blokuj autouzupełnianie</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Autouzupełnianie nie będzie oferowane dla tych URI.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Nowy zablokowany URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>Zapisano URI</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Nieprawidłowy format. Użyj https://, http://, lub androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Edytuj URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Wpisz URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Format: {0}. Oddziel wiele URI przecinkiem.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Format: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Nieprawidłowy URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>Zapisano URI</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>Usunięto URI</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Brak zablokowanych URI </value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI {0} jest już zablokowany</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Nie można edytować wielu URI na raz</value>
   </data>
 </root>

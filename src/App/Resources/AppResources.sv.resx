@@ -1586,9 +1586,6 @@ Skanningen sker automatiskt.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Fyll automatiskt i blockerade URI:er</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Automatisk ifyllnad kommer inte att erbjudas för blockerade URI:er. Separera flera URI:er med kommatecken. Till exempel: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Be om att lägga till inloggning</value>
   </data>
@@ -1754,10 +1751,10 @@ Skanningen sker automatiskt.</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Biometrisk upplåsning för automatisk ifyllnad är inaktiverad i väntan på bekräftelse av huvudlösenordet.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Den biometriska upplåsningen av automatisk ifyllning för detta konto är inaktiverat i väntan på verifiering av huvudlösenordet.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Aktivera synkronisering vid uppdatering</value>
@@ -2145,10 +2142,10 @@ Skanningen sker automatiskt.</value>
     <value>Dina organisationsprinciper påverkar ditt valvs tid för timeout. Maximal tillåten tid innan timeout är {0} timme(ar) och {1} minut(er)</value>
   </data>
   <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s). Your vault timeout action is set to {2}.</value>
+    <value>Dina organisationsprinciper påverkar ditt valvs tid för timeout. Maximal tillåten tid innan timeout är {0} timme(ar) och {1} minut(er). Ditt valvs timouttid är angivet som {2}.</value>
   </data>
   <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies have set your vault timeout action to {0}.</value>
+    <value>Dina organisationsprinciper har satt din timeout-åtgärd till {0}.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Ditt valvs tid för timeout överskrider de begränsningar som fastställts av din organisation.</value>
@@ -2612,36 +2609,82 @@ Vill du byta till detta konto?</value>
     <value>Det finns inga objekt som matchar sökningen</value>
   </data>
   <data name="US" xml:space="preserve">
-    <value>US</value>
+    <value>USA</value>
   </data>
   <data name="EU" xml:space="preserve">
     <value>EU</value>
   </data>
   <data name="SelfHosted" xml:space="preserve">
-    <value>Self-hosted</value>
+    <value>Lokalt installerad</value>
   </data>
   <data name="DataRegion" xml:space="preserve">
-    <value>Data region</value>
+    <value>Dataområde</value>
   </data>
   <data name="Region" xml:space="preserve">
-    <value>Region</value>
+    <value>Område</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
-    <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>Ditt huvudlösenord följer inte ett eller flera av din organisations regler. För att komma åt ditt valv så måste du ändra ditt huvudlösenord nu. Om du gör det kommer du att loggas du ut ur din nuvarande session så du måste logga in på nytt. Aktiva sessioner på andra enheter kommer fortsatt vara aktiva i upp till en timme.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Nuvarande huvudlösenord</value>
   </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
-    <value>Master password re-prompt help</value>
+    <value>Återupprepa huvudlösenord hjälp</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
+    <value>Upplåsning kan misslyckas på grund av otillräckligt minne. Minska dina KDF-minnesinställningar för att lösa detta.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Ogiltig API-nyckel</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Ogiltig API-token</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Block auto-fill</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Auto-fill will not be offered for these URIs.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Ny blockerad URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI har sparats</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Ogiltigt format. Använd https://, http:// eller androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Redigera URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Ange URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Format: {0}. Separera flera URI:er med ett kommatecken.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Format: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Ogiltig URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI saved</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI har tagits bort</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Det finns inga blockerade URI:er</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI:n {0} har redan blockerats</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Det går inte att redigera flera URI:er samtidigt</value>
   </data>
 </root>
