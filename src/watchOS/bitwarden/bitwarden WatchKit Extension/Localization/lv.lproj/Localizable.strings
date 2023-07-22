@@ -1,0 +1,10 @@
+"ThereAreNoItemsToList" = "Nav vienumu, ko ievietot sarakstā";
+"ToViewVerificationCodesUpgradeToPremium" = "Jāuzlabo uz Premium, lai apskatītu apliecinājuma kodus";
+"Add2FactorAutenticationToAnItemToViewVerificationCodes" = "Vienumam jāpievieno divpakāpju apliecināšana, lai apskatītu apliecinājuma kodus";
+"LogInToBitwardenOnYourIPhoneToViewVerificationCodes" = "Jāpiesakās Bitwarden iPhone, lai apskatītu apliecinājuma kodus";
+"SyncingItemsContainingVerificationCodes" = "Sinhronizē vienumus, kas satur apliecinājuma kodus";
+"UnlockBitwardenOnYourIPhoneToViewVerificationCodes" = "Jāatslēdz Bitwarden iPhone, lai apskatītu apliecinājuma kodus";
+"SetUpBitwardenToViewItemsContainingVerificationCodes" = "Jāuzstāda Bitwarden, lai apskatītu vienumus, kas satur apliecinājuma kodus";
+"Search" = "Meklēt";
+"NoItemsFound" = "Netika atrasti vienumi";
+"SetUpAppleWatchPasscodeInOrderToUseBitwarden" = "Jāuzstāda Apple Watch paroles vārdkopa, lai varētu izmantot Bitwarden";

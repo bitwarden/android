@@ -1585,9 +1585,6 @@ Skan prosesi avtomatik baş tutacaq.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Əngəllənən URI-lərin avto-doldurulması</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Əngəllənən URI-lər üçün avto-doldurma təklif edilmir. Çoxlu URI-ni vergüllə ayırır. Nümunə: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Giriş əlavə etmək üçün soruş</value>
   </data>
@@ -2640,5 +2637,51 @@ Bu hesaba keçmək istəyirsiniz?</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Yararsız API tokeni</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Avto-doldurmanı əngəllə</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Bu URI-lər üçün avto-doldurma təklif olunmayacaq.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Yeni əngəllənən URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI saxlanıldı</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Yararsız format. https://, http:// və ya androidapp:// istifadə edin</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>URI-ə düzəliş et</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>URI-ni daxil et</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Format: {0}. Bir neçə URI-ı vergüllə ayırın.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Format: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Yararsız URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI saxlanıldı</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI silindi</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Əngəllənən URI yoxdur</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI {0} artıq əngəllənib</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Bir dəfəyə bir neçə URI-a düzəliş etmək mümkün deyil</value>
   </data>
 </root>

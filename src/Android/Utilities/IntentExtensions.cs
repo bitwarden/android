@@ -1,5 +1,6 @@
 ﻿using Android.Content;
 using Android.OS;
+using Java.Lang;
 
 namespace Bit.Droid.Utilities
 {
@@ -13,7 +14,12 @@ namespace Bit.Droid.Utilities
                 // Note: getting the bundle like this will cause to call unparcel() internally
                 var b = intent?.Extras?.GetBundle("trashstringwhichhasnousebuttocheckunparcel");
             }
-            catch (BadParcelableException)
+            catch (Exception ex) when
+            (
+                ex is BadParcelableException ||
+                ex is ClassNotFoundException ||
+                ex is RuntimeException
+            )
             {
                 intent.ReplaceExtras((Bundle)null);
             }

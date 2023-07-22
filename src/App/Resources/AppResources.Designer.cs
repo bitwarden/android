@@ -800,15 +800,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Auto-fill will not be offered for blocked URIs. Separate multiple URIs with a comma. For example: &quot;https://twitter.com, androidapp://com.twitter.android&quot;..
-        /// </summary>
-        public static string AutofillBlockedUrisDescription {
-            get {
-                return ResourceManager.GetString("AutofillBlockedUrisDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Do you want to auto-fill or view this item?.
         /// </summary>
         public static string AutofillOrView {
@@ -940,6 +931,15 @@ namespace Bit.App.Resources {
         public static string AutofillTurnOn5 {
             get {
                 return ResourceManager.GetString("AutofillTurnOn5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto-fill will not be offered for these URIs..
+        /// </summary>
+        public static string AutoFillWillNotBeOfferedForTheseURIs {
+            get {
+                return ResourceManager.GetString("AutoFillWillNotBeOfferedForTheseURIs", resourceCulture);
             }
         }
         
@@ -1232,6 +1232,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Block auto-fill.
+        /// </summary>
+        public static string BlockAutoFill {
+            get {
+                return ResourceManager.GetString("BlockAutoFill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Brand.
         /// </summary>
         public static string Brand {
@@ -1264,6 +1273,15 @@ namespace Bit.App.Resources {
         public static string CannotAddAuthenticatorKey {
             get {
                 return ResourceManager.GetString("CannotAddAuthenticatorKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot edit multiple URIs at once.
+        /// </summary>
+        public static string CannotEditMultipleURIsAtOnce {
+            get {
+                return ResourceManager.GetString("CannotEditMultipleURIsAtOnce", resourceCulture);
             }
         }
         
@@ -2159,6 +2177,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit URI.
+        /// </summary>
+        public static string EditURI {
+            get {
+                return ResourceManager.GetString("EditURI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email.
         /// </summary>
         public static string Email {
@@ -2308,6 +2335,15 @@ namespace Bit.App.Resources {
         public static string EnterTheVerificationCodeThatWasSentToYourEmail {
             get {
                 return ResourceManager.GetString("EnterTheVerificationCodeThatWasSentToYourEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter URI.
+        /// </summary>
+        public static string EnterURI {
+            get {
+                return ResourceManager.GetString("EnterURI", resourceCulture);
             }
         }
         
@@ -2960,6 +2996,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Format: {0}.
+        /// </summary>
+        public static string FormatX {
+            get {
+                return ResourceManager.GetString("FormatX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Format: {0}. Separate multiple URIs with a comma..
+        /// </summary>
+        public static string FormatXSeparateMultipleURIsWithAComma {
+            get {
+                return ResourceManager.GetString("FormatXSeparateMultipleURIsWithAComma", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Forwarded email alias.
         /// </summary>
         public static string ForwardedEmailAlias {
@@ -3302,6 +3356,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid format. Use https://, http://, or androidapp://.
+        /// </summary>
+        public static string InvalidFormatUseHttpsHttpOrAndroidApp {
+            get {
+                return ResourceManager.GetString("InvalidFormatUseHttpsHttpOrAndroidApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid master password. Try again..
         /// </summary>
         public static string InvalidMasterPassword {
@@ -3316,6 +3379,15 @@ namespace Bit.App.Resources {
         public static string InvalidPIN {
             get {
                 return ResourceManager.GetString("InvalidPIN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid URI.
+        /// </summary>
+        public static string InvalidURI {
+            get {
+                return ResourceManager.GetString("InvalidURI", resourceCulture);
             }
         }
         
@@ -4227,6 +4299,15 @@ namespace Bit.App.Resources {
         public static string NewAroundHere {
             get {
                 return ResourceManager.GetString("NewAroundHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New blocked URI.
+        /// </summary>
+        public static string NewBlockedURI {
+            get {
+                return ResourceManager.GetString("NewBlockedURI", resourceCulture);
             }
         }
         
@@ -6141,6 +6222,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no blocked URIs.
+        /// </summary>
+        public static string ThereAreNoBlockedURIs {
+            get {
+                return ResourceManager.GetString("ThereAreNoBlockedURIs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no items in your vault that match &quot;{0}&quot;.
         /// </summary>
         public static string ThereAreNoItemsInYourVaultThatMatchX {
@@ -6155,6 +6245,15 @@ namespace Bit.App.Resources {
         public static string ThereAreNoItemsThatMatchTheSearch {
             get {
                 return ResourceManager.GetString("ThereAreNoItemsThatMatchTheSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The URI {0} is already blocked.
+        /// </summary>
+        public static string TheURIXIsAlreadyBlocked {
+            get {
+                return ResourceManager.GetString("TheURIXIsAlreadyBlocked", resourceCulture);
             }
         }
         
@@ -6609,11 +6708,29 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to URI removed.
+        /// </summary>
+        public static string URIRemoved {
+            get {
+                return ResourceManager.GetString("URIRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to URIs.
         /// </summary>
         public static string URIs {
             get {
                 return ResourceManager.GetString("URIs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URI saved.
+        /// </summary>
+        public static string URISaved {
+            get {
+                return ResourceManager.GetString("URISaved", resourceCulture);
             }
         }
         

@@ -1,0 +1,10 @@
+"ThereAreNoItemsToList" = "Det er ingen oppføringar å visa";
+"ToViewVerificationCodesUpgradeToPremium" = "For å sjå verifiseringskodar, oppgrader til premium";
+"Add2FactorAutenticationToAnItemToViewVerificationCodes" = "Legg til 2-faktorautentisering på eit element for å vise verifiseringskodane";
+"LogInToBitwardenOnYourIPhoneToViewVerificationCodes" = "Logg på Bitwarden på din iPhone for å sjå verifiseringskodar";
+"SyncingItemsContainingVerificationCodes" = "Synkroniserer element som inneheld verifiseringskodar";
+"UnlockBitwardenOnYourIPhoneToViewVerificationCodes" = "Lås opp Bitwarden på din iPhone for å sjå verifiseringskodar";
+"SetUpBitwardenToViewItemsContainingVerificationCodes" = "Sett opp Bitwarden for å sjå artiklar som inneheld verifiseringskodar";
+"Search" = "Søk";
+"NoItemsFound" = "Ingen funne";
+"SetUpAppleWatchPasscodeInOrderToUseBitwarden" = "Konfigurer Apple Watch-passkode for å bruke Bitwarden";

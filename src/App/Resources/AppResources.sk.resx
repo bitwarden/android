@@ -1585,9 +1585,6 @@ Skenovanie prebehne automaticky.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Blokované URI pre automatické vypĺňanie</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Automatické vypĺňanie sa nebude ponúkať pre zablokované URI. Viaceré URI oddeľte čiarkou. Napríklad: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Požiadať o pridanie prihlásenia</value>
   </data>
@@ -2641,5 +2638,51 @@ Chcete prepnúť na toto konto?</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Neplatný token API</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Blokovať automatické vypĺňanie</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Pre tieto URI nebude automatické vypĺňanie ponukané.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Nové blokované URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI uložené</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Neplatný formát. Použite https://, http://, alebo androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Upraviť URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Zadať URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Formát: {0}. Viaceré URI oddeľte čiarkou.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Formát: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Neplatné URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI uložené</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI odstránené</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Neexistujú žiadne blokované URI</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI {0} je už blokované</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Nie je možné upravovať viacero URI naraz</value>
   </data>
 </root>
