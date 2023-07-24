@@ -518,6 +518,10 @@ namespace Bit.Core.Services
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
             var deviceKeyB64 = await _storageMediatorService.GetAsync<string>(Constants.DeviceKeyKey(reconciledOptions.UserId), true);
+            if (string.IsNullOrEmpty(deviceKeyB64))
+            {
+                return null;
+            }
             return new SymmetricCryptoKey(Convert.FromBase64String(deviceKeyB64));
         }
 
