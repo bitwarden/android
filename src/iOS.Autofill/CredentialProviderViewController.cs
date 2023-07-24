@@ -17,7 +17,6 @@ using CoreFoundation;
 using CoreNFC;
 using Foundation;
 using UIKit;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 

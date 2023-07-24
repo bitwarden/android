@@ -591,9 +591,9 @@ namespace Bit.Core.Services
             return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Get, $"/auth-requests/{id}/response?code={accessCode}", null, false, true);
         }
 
-        public Task<PasswordlessLoginResponse> PostCreateRequestAsync(PasswordlessCreateLoginRequest passwordlessCreateLoginRequest)
+        public Task<PasswordlessLoginResponse> PostCreateRequestAsync(PasswordlessCreateLoginRequest passwordlessCreateLoginRequest, AuthRequestType authRequestType)
         {
-            return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Post, $"/auth-requests", passwordlessCreateLoginRequest, false, true);
+            return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Post, authRequestType == AuthRequestType.AdminApproval ? $"/auth-requests/admin-request" : $"/auth-requests", passwordlessCreateLoginRequest, false, true);
         }
 
         public Task<PasswordlessLoginResponse> PutAuthRequestAsync(string id, string encKey, string encMasterPasswordHash, string deviceIdentifier, bool requestApproved)

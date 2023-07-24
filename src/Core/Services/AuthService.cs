@@ -632,7 +632,7 @@ namespace Bit.Core.Services
             var publicB64 = Convert.ToBase64String(keyPair.Item1);
             var accessCode = await _passwordGenerationService.GeneratePasswordAsync(PasswordGenerationOptions.CreateDefault.WithLength(25));
             var passwordlessCreateLoginRequest = new PasswordlessCreateLoginRequest(email, publicB64, deviceId, accessCode, authRequestType, fingerprintPhrase);
-            var response = await _apiService.PostCreateRequestAsync(passwordlessCreateLoginRequest);
+            var response = await _apiService.PostCreateRequestAsync(passwordlessCreateLoginRequest, authRequestType);
 
             if (response != null)
             {
