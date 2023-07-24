@@ -27,6 +27,7 @@ namespace Bit.Core.Services
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly IPolicyService _policyService;
+        private readonly IDeviceTrustCryptoService _deviceTrustCryptoService;
         private readonly bool _setCryptoKeys;
 
         private readonly LazyResolve<IWatchDeviceService> _watchDeviceService = new LazyResolve<IWatchDeviceService>();
@@ -50,6 +51,7 @@ namespace Bit.Core.Services
             IKeyConnectorService keyConnectorService,
             IPasswordGenerationService passwordGenerationService,
             IPolicyService policyService,
+            IDeviceTrustCryptoService deviceTrustCryptoService,
             bool setCryptoKeys = true)
         {
             _cryptoService = cryptoService;
@@ -64,6 +66,7 @@ namespace Bit.Core.Services
             _keyConnectorService = keyConnectorService;
             _passwordGenerationService = passwordGenerationService;
             _policyService = policyService;
+            _deviceTrustCryptoService = deviceTrustCryptoService;
             _setCryptoKeys = setCryptoKeys;
 
             TwoFactorProviders = new Dictionary<TwoFactorProviderType, TwoFactorProvider>();
@@ -486,11 +489,23 @@ namespace Bit.Core.Services
 
                     await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(tokenResponse.Key);
 
-                    if (masterKey != null)
+                    var decryptOptions = await _stateService.GetAccountDecryptionOptions();
+                    if (await _deviceTrustCryptoService.IsDeviceTrustedAsync() && decryptOptions?.TrustedDeviceOption != null)
                     {
-                        await _cryptoService.SetMasterKeyAsync(masterKey);
-                        var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
-                        await _cryptoService.SetUserKeyAsync(userKey);
+                        var key = await _deviceTrustCryptoService.DecryptUserKeyWithDeviceKeyAsync(decryptOptions?.TrustedDeviceOption.EncryptedPrivateKey, decryptOptions?.TrustedDeviceOption.EncryptedUserKey);
+                        if (key != null)
+                        {
+                            await _cryptoService.SetUserKeyAsync(key);
+                        }
+                    }
+                    else if (!string.IsNullOrEmpty(tokenResponse.KeyConnectorUrl) || !string.IsNullOrEmpty(decryptOptions?.KeyConnectorOption?.KeyConnectorUrl))
+                    {
+                        if (masterKey != null)
+                        {
+                            await _cryptoService.SetMasterKeyAsync(masterKey);
+                            var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
+                            await _cryptoService.SetUserKeyAsync(userKey);
+                        }
                     }
 
                     // User doesn't have a key pair yet (old account), let's generate one for them.

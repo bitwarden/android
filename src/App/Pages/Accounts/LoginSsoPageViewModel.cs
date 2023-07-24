@@ -232,15 +232,6 @@ namespace Bit.App.Pages
                     }
                     else if (await _deviceTrustCryptoService.IsDeviceTrustedAsync())
                     {
-                        // TODO MOVE THIS CODE TO AUTH SERVICE
-                        //if (await _deviceTrustCryptoService.IsDeviceTrustedAsync() && decryptOptions?.TrustedDeviceOption != null)
-                        //{
-                        //    var key = await _deviceTrustCryptoService.DecryptUserKeyWithDeviceKeyAsync(decryptOptions?.TrustedDeviceOption.EncryptedPrivateKey, decryptOptions?.TrustedDeviceOption.EncryptedUserKey);
-                        //    if (key != null)
-                        //    {
-                        //        await _cryptoService.SetEncKeyAsync(key);
-                        //    }
-                        //}
                         var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
                         SsoAuthSuccessAction?.Invoke();
                     }
