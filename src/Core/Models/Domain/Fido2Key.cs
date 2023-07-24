@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.View;
@@ -8,23 +7,25 @@ namespace Bit.Core.Models.Domain
 {
     public class Fido2Key : Domain
     {
+        public static HashSet<string> EncryptableProperties => new HashSet<string>
+        {
+            nameof(NonDiscoverableId),
+            nameof(KeyType),
+            nameof(KeyAlgorithm),
+            nameof(KeyCurve),
+            nameof(KeyValue),
+            nameof(RpId),
+            nameof(RpName),
+            nameof(UserHandle),
+            nameof(UserName),
+            nameof(Counter)
+        };
+
         public Fido2Key() { }
 
         public Fido2Key(Fido2KeyData data, bool alreadyEncrypted = false)
         {
-            BuildDomainModel(this, data, new HashSet<string>
-            {
-                nameof(NonDiscoverableId),
-                nameof(KeyType),
-                nameof(KeyAlgorithm),
-                nameof(KeyCurve),
-                nameof(KeyValue),
-                nameof(RpId),
-                nameof(RpName),
-                nameof(UserHandle),
-                nameof(UserName),
-                nameof(Counter)
-            }, alreadyEncrypted);
+            BuildDomainModel(this, data, EncryptableProperties, alreadyEncrypted);
         }
 
         public EncString NonDiscoverableId { get; set; }
@@ -40,37 +41,13 @@ namespace Bit.Core.Models.Domain
 
         public async Task<Fido2KeyView> DecryptAsync(string orgId)
         {
-            return await DecryptObjAsync(new Fido2KeyView(), this, new HashSet<string>
-            {
-                nameof(NonDiscoverableId),
-                nameof(KeyType),
-                nameof(KeyAlgorithm),
-                nameof(KeyCurve),
-                nameof(KeyValue),
-                nameof(RpId),
-                nameof(RpName),
-                nameof(UserHandle),
-                nameof(UserName),
-                nameof(Counter)
-            }, orgId);
+            return await DecryptObjAsync(new Fido2KeyView(), this, EncryptableProperties, orgId);
         }
 
         public Fido2KeyData ToFido2KeyData()
         {
             var data = new Fido2KeyData();
-            BuildDataModel(this, data, new HashSet<string>
-            {
-                nameof(NonDiscoverableId),
-                nameof(KeyType),
-                nameof(KeyAlgorithm),
-                nameof(KeyCurve),
-                nameof(KeyValue),
-                nameof(RpId),
-                nameof(RpName),
-                nameof(UserHandle),
-                nameof(UserName),
-                nameof(Counter)
-            });
+            BuildDataModel(this, data, EncryptableProperties);
             return data;
         }
     }
