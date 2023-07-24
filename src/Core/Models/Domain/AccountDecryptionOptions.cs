@@ -19,7 +19,7 @@ namespace Bit.Core.Models.Domain
 
     public class KeyConnectorOption
     {
-        public bool KeyConnectorUrl { get; set; }
+        public string KeyConnectorUrl { get; set; }
     }
 }
 
