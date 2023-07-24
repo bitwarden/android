@@ -490,7 +490,7 @@ namespace Bit.Core.Services
                     await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(tokenResponse.Key);
 
                     var decryptOptions = await _stateService.GetAccountDecryptionOptions();
-                    if (await _deviceTrustCryptoService.IsDeviceTrustedAsync() && decryptOptions?.TrustedDeviceOption != null)
+                    if (decryptOptions?.TrustedDeviceOption != null)
                     {
                         var key = await _deviceTrustCryptoService.DecryptUserKeyWithDeviceKeyAsync(decryptOptions?.TrustedDeviceOption.EncryptedPrivateKey, decryptOptions?.TrustedDeviceOption.EncryptedUserKey);
                         if (key != null)
@@ -498,14 +498,12 @@ namespace Bit.Core.Services
                             await _cryptoService.SetUserKeyAsync(key);
                         }
                     }
-                    else if (!string.IsNullOrEmpty(tokenResponse.KeyConnectorUrl) || !string.IsNullOrEmpty(decryptOptions?.KeyConnectorOption?.KeyConnectorUrl))
+                    else if (masterKey != null &&
+                        (!string.IsNullOrEmpty(tokenResponse.KeyConnectorUrl) || !string.IsNullOrEmpty(decryptOptions?.KeyConnectorOption?.KeyConnectorUrl)))
                     {
-                        if (masterKey != null)
-                        {
-                            await _cryptoService.SetMasterKeyAsync(masterKey);
-                            var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
-                            await _cryptoService.SetUserKeyAsync(userKey);
-                        }
+                        await _cryptoService.SetMasterKeyAsync(masterKey);
+                        var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
+                        await _cryptoService.SetUserKeyAsync(userKey);
                     }
 
                     // User doesn't have a key pair yet (old account), let's generate one for them.

@@ -113,8 +113,8 @@ namespace Bit.Core.Services
 
             if (existingDeviceKey == null)
             {
-              // User doesn't have a device key anymore so device is untrusted
-              return null;
+                // User doesn't have a device key anymore so device is untrusted
+                return null;
             }
 
             // Attempt to decrypt encryptedDevicePrivateKey with device key
