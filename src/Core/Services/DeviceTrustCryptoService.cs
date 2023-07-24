@@ -59,7 +59,7 @@ namespace Bit.Core.Services
             var deviceIdentifier = await _appIdService.GetAppIdAsync();
             var deviceRequest = new TrustedDeviceKeysRequest
             {
-                EncryptedUserKey = (await _cryptoService.RsaEncryptAsync(userKey.EncKey, devicePublicKey)).EncryptedString,
+                EncryptedUserKey = (await _cryptoService.RsaEncryptAsync(userKey.Key, devicePublicKey)).EncryptedString,
                 EncryptedPublicKey = (await _cryptoService.EncryptAsync(devicePublicKey, userKey)).EncryptedString,
                 EncryptedPrivateKey = (await _cryptoService.EncryptAsync(devicePrivateKey, deviceKey)).EncryptedString,
             };
@@ -106,7 +106,7 @@ namespace Bit.Core.Services
             return existingDeviceKey != null;
         }
 
-        public async Task<SymmetricCryptoKey> DecryptUserKeyWithDeviceKeyAsync(string encryptedDevicePrivateKey, string encryptedUserKey)
+        public async Task<UserKey> DecryptUserKeyWithDeviceKeyAsync(string encryptedDevicePrivateKey, string encryptedUserKey)
         {
             // Get device key
             var existingDeviceKey = await GetDeviceKeyAsync();
@@ -125,7 +125,7 @@ namespace Bit.Core.Services
 
             // Attempt to decrypt encryptedUserDataKey with devicePrivateKey
             var userKey = await _cryptoService.RsaDecryptAsync(encryptedUserKey, devicePrivateKey);
-            return new SymmetricCryptoKey(userKey);
+            return new UserKey(userKey);
         }
     }
 }
