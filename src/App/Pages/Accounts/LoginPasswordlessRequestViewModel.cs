@@ -221,6 +221,13 @@ namespace Bit.App.Pages
                 var authResult = await _authService.LogInPasswordlessAsync(Email, _requestAccessCode, _requestId, _requestKeyPair.Item2, response.Key, response.MasterPasswordHash);
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
 
+                if(authResult == null && await _stateService.IsAuthenticatedAsync())
+                {
+                    _syncService.FullSyncAsync(true).FireAndForget();
+                    LogInSuccessAction?.Invoke();
+                    return;
+                }
+
                 if (await HandleCaptchaAsync(authResult.CaptchaSiteKey, authResult.CaptchaNeeded, CheckLoginRequestStatus))
                 {
                     return;
@@ -237,7 +244,6 @@ namespace Bit.App.Pages
                 else
                 {
                     _syncService.FullSyncAsync(true).FireAndForget();
-                    await _deviceTrustCryptoService.TrustDeviceIfNeededAsync();
                     LogInSuccessAction?.Invoke();
                 }
             }
@@ -255,6 +261,15 @@ namespace Bit.App.Pages
             var response = await _authService.PasswordlessCreateLoginRequestAsync(_email, AuthRequestType);
             if (response != null)
             {
+                //TODO TDE if is admin type save to memory to later see if it was approved
+                /*
+                  const adminAuthReqStorable = new AdminAuthRequestStorable({
+                      id: reqResponse.id,
+                      privateKey: this.authRequestKeyPair.privateKey,
+                    });
+
+                    await this.stateService.setAdminAuthRequest(adminAuthReqStorable);
+                */
                 FingerprintPhrase = response.FingerprintPhrase;
                 _requestId = response.Id;
                 _requestAccessCode = response.RequestAccessCode;
