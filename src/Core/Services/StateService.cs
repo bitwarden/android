@@ -1343,12 +1343,12 @@ namespace Bit.Core.Services
             await _storageMediatorService.SaveAsync(Constants.ShouldTrustDevice, value);
         }
 
-        public async Task<PendingAdminAuthRequest> GetAdminAuthRequest(string userId = null)
+        public async Task<PendingAdminAuthRequest> GetPendingAdminAuthRequestAsync(string userId = null)
         {
             return await _storageMediatorService.GetAsync<PendingAdminAuthRequest>(Constants.PendingAdminAuthRequest(userId), true);
         }
 
-        public async Task SetAdminAuthRequest(PendingAdminAuthRequest value, string userId = null)
+        public async Task SetPendingAdminAuthRequestAsync(PendingAdminAuthRequest value, string userId = null)
         {
             await _storageMediatorService.SaveAsync(Constants.PendingAdminAuthRequest(userId), value, true);
         }

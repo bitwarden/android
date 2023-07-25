@@ -13,6 +13,7 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
+using Bit.Core.Models.Response;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -46,6 +47,7 @@ namespace Bit.App.Pages
         private string _email;
         private string _requestId;
         private string _requestAccessCode;
+        private string _activeUserId;
         private AuthRequestType _authRequestType;
         // Item1 publicKey, Item2 privateKey
         private Tuple<byte[], byte[]> _requestKeyPair;
@@ -202,14 +204,22 @@ namespace Bit.App.Pages
 
         private async Task CheckLoginRequestStatus()
         {
-            if (string.IsNullOrEmpty(_requestId) || string.IsNullOrEmpty(_requestAccessCode))
+            if (string.IsNullOrEmpty(_requestId))
             {
                 return;
             }
 
             try
             {
-                var response = await _authService.GetPasswordlessLoginResponseAsync(_requestId, _requestAccessCode);
+                PasswordlessLoginResponse response = null;
+                if (await _stateService.IsAuthenticatedAsync())
+                {
+                    response = await _authService.GetPasswordlessLoginRequestByIdAsync(_requestId);
+                }
+                else
+                {
+                    response = await _authService.GetPasswordlessLoginResponseAsync(_requestId, _requestAccessCode);
+                }
 
                 if (response.RequestApproved == null || !response.RequestApproved.Value)
                 {
@@ -223,8 +233,7 @@ namespace Bit.App.Pages
 
                 if(authResult == null && await _stateService.IsAuthenticatedAsync())
                 {
-                    _syncService.FullSyncAsync(true).FireAndForget();
-                    LogInSuccessAction?.Invoke();
+                    await HandleLoginComplete();
                     return;
                 }
 
@@ -243,8 +252,7 @@ namespace Bit.App.Pages
                 }
                 else
                 {
-                    _syncService.FullSyncAsync(true).FireAndForget();
-                    LogInSuccessAction?.Invoke();
+                    await HandleLoginComplete();
                 }
             }
             catch (Exception ex)
@@ -254,29 +262,61 @@ namespace Bit.App.Pages
             }
         }
 
+        private async Task HandleLoginComplete()
+        {
+            await _stateService.SetPendingAdminAuthRequestAsync(null, _activeUserId);
+            _syncService.FullSyncAsync(true).FireAndForget();
+            LogInSuccessAction?.Invoke();
+        }
+
         private async Task CreatePasswordlessLoginAsync()
         {
             await Device.InvokeOnMainThreadAsync(() => _deviceActionService.ShowLoadingAsync(AppResources.Loading));
+            _activeUserId = await _stateService.GetActiveUserIdAsync();
 
-            var response = await _authService.PasswordlessCreateLoginRequestAsync(_email, AuthRequestType);
-            if (response != null)
+            PasswordlessLoginResponse response = null;
+            var pendingRequest = await _stateService.GetPendingAdminAuthRequestAsync(_activeUserId);
+            if (pendingRequest != null && _authRequestType == AuthRequestType.AdminApproval)
             {
-                //TODO TDE if is admin type save to memory to later see if it was approved
-                /*
-                  const adminAuthReqStorable = new AdminAuthRequestStorable({
-                      id: reqResponse.id,
-                      privateKey: this.authRequestKeyPair.privateKey,
-                    });
-
-                    await this.stateService.setAdminAuthRequest(adminAuthReqStorable);
-                */
-                FingerprintPhrase = response.FingerprintPhrase;
-                _requestId = response.Id;
-                _requestAccessCode = response.RequestAccessCode;
-                _requestKeyPair = response.RequestKeyPair;
+                response = await _authService.GetPasswordlessLoginRequestByIdAsync(pendingRequest.Id);
+                if (response == null || (response.IsAnswered && !response.RequestApproved.Value))
+                {
+                    // handle pending auth request not valid remove it from state
+                    await _stateService.SetPendingAdminAuthRequestAsync(null);
+                    pendingRequest = null;
+                }
+                else
+                {
+                    response.RequestKeyPair = new Tuple<byte[], byte[]>(null, pendingRequest.PrivateKey);
+                }
             }
 
+            if (response == null)
+            {
+                response = await _authService.PasswordlessCreateLoginRequestAsync(_email, AuthRequestType);
+            }
+
+            await HandlePasswordlessLogin(response, pendingRequest == null && _authRequestType == AuthRequestType.AdminApproval);
             await _deviceActionService.HideLoadingAsync();
+        }
+
+        private async Task HandlePasswordlessLogin(PasswordlessLoginResponse response, bool createPendingAdminRequest )
+        {
+            if (response == null)
+            {
+                throw new Exception(AppResources.GenericErrorMessage);
+            }
+
+            if (createPendingAdminRequest)
+            {
+                var pendingAuthRequest = new PendingAdminAuthRequest { Id = response.Id, PrivateKey = response.RequestKeyPair.Item2 };
+                await _stateService.SetPendingAdminAuthRequestAsync(pendingAuthRequest, _activeUserId);
+            }
+
+            FingerprintPhrase = response.FingerprintPhrase;
+            _requestId = response.Id;
+            _requestAccessCode = response.RequestAccessCode;
+            _requestKeyPair = response.RequestKeyPair;
         }
 
         private void HandleException(Exception ex)

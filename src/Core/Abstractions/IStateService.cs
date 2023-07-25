@@ -183,8 +183,8 @@ namespace Bit.Core.Abstractions
         Task<string> GetPreLoginEmailAsync();
         Task SetPreLoginEmailAsync(string value);
         Task<AccountDecryptionOptions> GetAccountDecryptionOptions(string userId = null);
-        Task<PendingAdminAuthRequest> GetAdminAuthRequest(string userId = null);
-        Task SetAdminAuthRequest(PendingAdminAuthRequest value, string userId = null);
+        Task<PendingAdminAuthRequest> GetPendingAdminAuthRequestAsync(string userId = null);
+        Task SetPendingAdminAuthRequestAsync(PendingAdminAuthRequest value, string userId = null);
         string GetLocale();
         void SetLocale(string locale);
         ConfigResponse GetConfigs();
