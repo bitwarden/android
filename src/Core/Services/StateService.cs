@@ -515,7 +515,9 @@ namespace Bit.Core.Services
 
         public async Task<SymmetricCryptoKey> GetDeviceKeyAsync(string userId = null)
         {
-            var deviceKeyB64 = await _storageMediatorService.GetAsync<string>(Constants.DeviceKeyKey(userId), true);
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var deviceKeyB64 = await _storageMediatorService.GetAsync<string>(Constants.DeviceKeyKey(reconciledOptions.UserId), true);
             if (string.IsNullOrEmpty(deviceKeyB64))
             {
                 return null;
@@ -525,7 +527,9 @@ namespace Bit.Core.Services
 
         public async Task SetDeviceKeyAsync(SymmetricCryptoKey value, string userId = null)
         {
-            await _storageMediatorService.SaveAsync(Constants.DeviceKeyKey(userId), value.KeyB64, true);
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            await _storageMediatorService.SaveAsync(Constants.DeviceKeyKey(reconciledOptions.UserId), value.KeyB64, true);
         }
 
         public async Task<List<string>> GetAutofillBlacklistedUrisAsync(string userId = null)

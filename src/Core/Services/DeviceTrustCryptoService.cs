@@ -33,14 +33,12 @@ namespace Bit.Core.Services
 
         public async Task<SymmetricCryptoKey> GetDeviceKeyAsync()
         {
-            var activeUserId = await _stateService.GetActiveUserIdAsync();
-            return await _stateService.GetDeviceKeyAsync(activeUserId);
+            return await _stateService.GetDeviceKeyAsync();
         }
 
         private async Task SetDeviceKeyAsync(SymmetricCryptoKey deviceKey)
         {
-            var activeUserId = await _stateService.GetActiveUserIdAsync();
-            await _stateService.SetDeviceKeyAsync(deviceKey, activeUserId);
+            await _stateService.SetDeviceKeyAsync(deviceKey);
         }
 
         public async Task<DeviceResponse> TrustDeviceAsync()
