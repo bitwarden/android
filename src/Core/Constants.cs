@@ -124,6 +124,7 @@ namespace Bit.Core
         public static string PushCurrentTokenKey(string userId) => $"pushCurrentToken_{userId}";
         public static string ShouldConnectToWatchKey(string userId) => $"shouldConnectToWatch_{userId}";
         public static string ScreenCaptureAllowedKey(string userId) => $"screenCaptureAllowed_{userId}";
+        public static string PendingAdminAuthRequest(string userId) => $"pendingAdminAuthRequest{userId}";
         [Obsolete]
         public static string KeyKey(string userId) => $"key_{userId}";
         [Obsolete]
