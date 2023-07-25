@@ -1345,12 +1345,16 @@ namespace Bit.Core.Services
 
         public async Task<PendingAdminAuthRequest> GetPendingAdminAuthRequestAsync(string userId = null)
         {
-            return await _storageMediatorService.GetAsync<PendingAdminAuthRequest>(Constants.PendingAdminAuthRequest(userId), true);
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            return await _storageMediatorService.GetAsync<PendingAdminAuthRequest>(Constants.PendingAdminAuthRequest(reconciledOptions.UserId), true);
         }
 
         public async Task SetPendingAdminAuthRequestAsync(PendingAdminAuthRequest value, string userId = null)
         {
-            await _storageMediatorService.SaveAsync(Constants.PendingAdminAuthRequest(userId), value, true);
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            await _storageMediatorService.SaveAsync(Constants.PendingAdminAuthRequest(reconciledOptions.UserId), value, true);
         }
 
         public ConfigResponse GetConfigs()

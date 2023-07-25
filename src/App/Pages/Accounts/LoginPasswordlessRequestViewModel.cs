@@ -47,7 +47,6 @@ namespace Bit.App.Pages
         private string _email;
         private string _requestId;
         private string _requestAccessCode;
-        private string _activeUserId;
         private AuthRequestType _authRequestType;
         // Item1 publicKey, Item2 privateKey
         private Tuple<byte[], byte[]> _requestKeyPair;
@@ -264,7 +263,7 @@ namespace Bit.App.Pages
 
         private async Task HandleLoginComplete()
         {
-            await _stateService.SetPendingAdminAuthRequestAsync(null, _activeUserId);
+            await _stateService.SetPendingAdminAuthRequestAsync(null);
             _syncService.FullSyncAsync(true).FireAndForget();
             LogInSuccessAction?.Invoke();
         }
@@ -272,10 +271,9 @@ namespace Bit.App.Pages
         private async Task CreatePasswordlessLoginAsync()
         {
             await Device.InvokeOnMainThreadAsync(() => _deviceActionService.ShowLoadingAsync(AppResources.Loading));
-            _activeUserId = await _stateService.GetActiveUserIdAsync();
 
             PasswordlessLoginResponse response = null;
-            var pendingRequest = await _stateService.GetPendingAdminAuthRequestAsync(_activeUserId);
+            var pendingRequest = await _stateService.GetPendingAdminAuthRequestAsync();
             if (pendingRequest != null && _authRequestType == AuthRequestType.AdminApproval)
             {
                 response = await _authService.GetPasswordlessLoginRequestByIdAsync(pendingRequest.Id);
@@ -310,7 +308,7 @@ namespace Bit.App.Pages
             if (createPendingAdminRequest)
             {
                 var pendingAuthRequest = new PendingAdminAuthRequest { Id = response.Id, PrivateKey = response.RequestKeyPair.Item2 };
-                await _stateService.SetPendingAdminAuthRequestAsync(pendingAuthRequest, _activeUserId);
+                await _stateService.SetPendingAdminAuthRequestAsync(pendingAuthRequest);
             }
 
             FingerprintPhrase = response.FingerprintPhrase;
