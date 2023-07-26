@@ -35,6 +35,8 @@ namespace Bit.App.Pages
         private IEnvironmentService _environmentService;
         private ILogger _logger;
         private IDeviceTrustCryptoService _deviceTrustCryptoService;
+        private readonly ICryptoFunctionService _cryptoFunctionService;
+        private readonly ICryptoService _cryptoService;
 
         protected override II18nService i18nService => _i18nService;
         protected override IEnvironmentService environmentService => _environmentService;
@@ -62,6 +64,8 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>();
             _logger = ServiceContainer.Resolve<ILogger>();
             _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
+            _cryptoFunctionService = ServiceContainer.Resolve<ICryptoFunctionService>();
+            _cryptoService = ServiceContainer.Resolve<ICryptoService>();
 
             PageTitle = AppResources.LogInWithAnotherDevice;
 
@@ -285,7 +289,11 @@ namespace Bit.App.Pages
                 }
                 else
                 {
-                    response.RequestKeyPair = new Tuple<byte[], byte[]>(null, pendingRequest.PrivateKey);
+                    // Derive pubKey from privKey in state to avoid MITM attacks
+                    // Also generate FingerprintPhrase locally for the same reason
+                    var derivedPublicKey = await _cryptoFunctionService.RsaExtractPublicKeyAsync(pendingRequest.PrivateKey);
+                    response.FingerprintPhrase = string.Join("-", await this._cryptoService.GetFingerprintAsync(Email, derivedPublicKey));
+                    response.RequestKeyPair = new Tuple<byte[], byte[]>(derivedPublicKey, pendingRequest.PrivateKey);
                 }
             }
 
