@@ -497,6 +497,9 @@ namespace Bit.Core.Services
                 if (localHashedPassword != null)
                 {
                     await _cryptoService.SetPasswordHashAsync(localHashedPassword);
+                    await _cryptoService.SetMasterKeyAsync(masterKey);
+                    var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
+                    await _cryptoService.SetUserKeyAsync(userKey);
                 }
 
                 if (code == null || tokenResponse.Key != null)
@@ -584,7 +587,6 @@ namespace Bit.Core.Services
                     );
                     await _apiService.PostSetKeyConnectorKey(setPasswordRequest);
                 }
-
             }
 
             _authedUserId = _tokenService.GetUserId();
