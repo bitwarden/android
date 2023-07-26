@@ -336,12 +336,16 @@ namespace Bit.Core.Services
 
         public async Task<string> GetUserKeyMasterKeyAsync(string userId = null)
         {
-            return await _storageMediatorService.GetAsync<string>(Constants.UserKeyKey(userId), false);
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultInMemoryOptionsAsync());
+            return await _storageMediatorService.GetAsync<string>(Constants.UserKeyKey(reconciledOptions.UserId), false);
         }
 
         public async Task SetUserKeyMasterKeyAsync(string value, string userId = null)
         {
-            await _storageMediatorService.SaveAsync(Constants.UserKeyKey(userId), value, false);
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultInMemoryOptionsAsync());
+            await _storageMediatorService.SaveAsync(Constants.UserKeyKey(reconciledOptions.UserId), value, false);
         }
 
         public async Task<bool> CanAccessPremiumAsync(string userId = null)
