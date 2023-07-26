@@ -37,6 +37,8 @@ namespace Bit.App.Pages
             set => SetProperty(ref _cipher, value, additionalPropertyNames: AdditionalPropertiesToRaiseOnCipherChanged);
         }
 
+        public string CreationDate => string.Format(AppResources.CreatedX, Cipher.CreationDate.ToShortDateString());
+
         public AsyncCommand CheckPasswordCommand { get; }
 
         protected async Task CheckPasswordAsync()
