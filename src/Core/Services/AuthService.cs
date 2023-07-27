@@ -487,7 +487,7 @@ namespace Bit.Core.Services
 
                     if (decryptOptions?.TrustedDeviceOption != null)
                     {
-                        var key = await _deviceTrustCryptoService.DecryptUserKeyWithDeviceKeyAsync(decryptOptions?.TrustedDeviceOption.EncryptedPrivateKey, decryptOptions?.TrustedDeviceOption.EncryptedUserKey);
+                        var key = await _deviceTrustCryptoService.DecryptUserKeyWithDeviceKeyAsync(decryptOptions.TrustedDeviceOption.EncryptedPrivateKey, decryptOptions.TrustedDeviceOption.EncryptedUserKey);
                         if (key != null)
                         {
                             await _cryptoService.SetUserKeyAsync(key);

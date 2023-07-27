@@ -218,7 +218,7 @@ namespace Bit.App.Pages
                 {
                     UpdateTempPasswordAction?.Invoke();
                 }
-                else if (decryptOptions.TrustedDeviceOption != null)
+                else if (decryptOptions?.TrustedDeviceOption != null)
                 {
                     // If user doesn't have a MP, but has reset password permission, they must set a MP
                     if (!decryptOptions.HasMasterPassword &&
@@ -232,7 +232,7 @@ namespace Bit.App.Pages
                     }
                     else if (await _deviceTrustCryptoService.IsDeviceTrustedAsync())
                     {
-                        var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
+                        _syncService.FullSyncAsync(true).FireAndForget();
                         SsoAuthSuccessAction?.Invoke();
                     }
                     else
@@ -242,7 +242,7 @@ namespace Bit.App.Pages
                 }
                 else
                 {
-                    var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
+                    _syncService.FullSyncAsync(true).FireAndForget();
                     SsoAuthSuccessAction?.Invoke();
                 }
             }
