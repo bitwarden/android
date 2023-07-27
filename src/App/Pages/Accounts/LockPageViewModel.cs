@@ -34,6 +34,7 @@ namespace Bit.App.Pages
         private readonly IPolicyService _policyService;
         private readonly IPasswordGenerationService _passwordGenerationService;
         private IDeviceTrustCryptoService _deviceTrustCryptoService;
+        private readonly ISyncService _syncService;
         private string _email;
         private string _masterPassword;
         private string _pin;
@@ -65,6 +66,7 @@ namespace Bit.App.Pages
             _policyService = ServiceContainer.Resolve<IPolicyService>();
             _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>();
             _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
+            _syncService = ServiceContainer.Resolve<ISyncService>();
 
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -480,6 +482,7 @@ namespace Bit.App.Pages
 
         private async Task DoContinueAsync()
         {
+            _syncService.FullSyncAsync(false).FireAndForget();
             await _stateService.SetBiometricLockedAsync(false);
             _watchDeviceService.SyncDataToWatchAsync().FireAndForget();
             _messagingService.Send("unlocked");

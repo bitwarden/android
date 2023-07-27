@@ -198,11 +198,34 @@ namespace Bit.Core.Services
             return !await _policyService.EvaluateMasterPassword(strength.Value, masterPassword, _masterPasswordPolicy);
         }
 
-        public async Task<AuthResult> LogInPasswordlessAsync(string email, string accessCode, string authRequestId, byte[] decryptionKey, string userKeyCiphered, string localHashedPasswordCiphered)
+        public async Task<AuthResult> LogInPasswordlessAsync(string email, string accessCode, string authRequestId, byte[] decryptionKey, string encryptedAuthRequestKey, string masterKeyHash)
         {
-            var decKey = await _cryptoService.RsaDecryptAsync(userKeyCiphered, decryptionKey);
-            var decPasswordHash = await _cryptoService.RsaDecryptAsync(localHashedPasswordCiphered, decryptionKey);
-            return await LogInHelperAsync(email, accessCode, Encoding.UTF8.GetString(decPasswordHash), null, null, null, new MasterKey(decKey), null, null,
+            var decryptedKey = await _cryptoService.RsaDecryptAsync(encryptedAuthRequestKey, decryptionKey);
+
+            // On SSO flow user is already AuthN
+            if (await _stateService.IsAuthenticatedAsync())
+            {
+                if (string.IsNullOrEmpty(masterKeyHash))
+                {
+                    await _cryptoService.SetUserKeyAsync(new UserKey(decryptedKey));
+                }
+                else
+                {
+                    var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(new MasterKey(decryptedKey));
+                    await _cryptoService.SetUserKeyAsync(userKey);
+                }
+                await _deviceTrustCryptoService.TrustDeviceIfNeededAsync();
+                return null;
+            }
+
+            if (string.IsNullOrEmpty(masterKeyHash) && decryptionKey != null)
+            {
+                await _cryptoService.SetUserKeyAsync(new UserKey(decryptedKey));
+                return null;
+            }
+
+            var decKeyHash = await _cryptoService.RsaDecryptAsync(masterKeyHash, decryptionKey);
+            return await LogInHelperAsync(email, accessCode, Encoding.UTF8.GetString(decKeyHash), null, null, null, new MasterKey(decryptedKey), null, null,
                 null, null, authRequestId: authRequestId);
         }
 
@@ -474,10 +497,12 @@ namespace Bit.Core.Services
             _messagingService.Send("accountAdded");
             if (_setCryptoKeys)
             {
-
                 if (localHashedPassword != null)
                 {
                     await _cryptoService.SetPasswordHashAsync(localHashedPassword);
+                    await _cryptoService.SetMasterKeyAsync(masterKey);
+                    var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
+                    await _cryptoService.SetUserKeyAsync(userKey);
                 }
 
                 if (code == null || tokenResponse.Key != null)
@@ -503,6 +528,14 @@ namespace Bit.Core.Services
                             var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
                             await _cryptoService.SetUserKeyAsync(userKey);
                         }
+                    }
+
+                    // Login with Device
+                    if (masterKey != null && !string.IsNullOrEmpty(authRequestId))
+                    {
+                        await _cryptoService.SetMasterKeyAsync(masterKey);
+                        var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
+                        await _cryptoService.SetUserKeyAsync(userKey);
                     }
 
                     // User doesn't have a key pair yet (old account), let's generate one for them.
@@ -557,7 +590,6 @@ namespace Bit.Core.Services
                     );
                     await _apiService.PostSetKeyConnectorKey(setPasswordRequest);
                 }
-
             }
 
             _authedUserId = _tokenService.GetUserId();
@@ -594,14 +626,14 @@ namespace Bit.Core.Services
             var activeRequests = requests.Where(r => !r.IsAnswered && !r.IsExpired).OrderByDescending(r => r.CreationDate).ToList();
             return await PopulateFingerprintPhrasesAsync(activeRequests);
         }
-
         public async Task<PasswordlessLoginResponse> GetPasswordlessLoginRequestByIdAsync(string id)
         {
             var response = await _apiService.GetAuthRequestAsync(id);
             return await PopulateFingerprintPhraseAsync(response, await _stateService.GetEmailAsync());
         }
 
-        public async Task<PasswordlessLoginResponse> GetPasswordlessLoginResponseAsync(string id, string accessCode)
+        /// <inheritdoc />
+        public async Task<PasswordlessLoginResponse> GetPasswordlessLoginResquestAsync(string id, string accessCode)
         {
             return await _apiService.GetAuthResponseAsync(id, accessCode);
         }
@@ -631,7 +663,7 @@ namespace Bit.Core.Services
             var publicB64 = Convert.ToBase64String(keyPair.Item1);
             var accessCode = await _passwordGenerationService.GeneratePasswordAsync(PasswordGenerationOptions.CreateDefault.WithLength(25));
             var passwordlessCreateLoginRequest = new PasswordlessCreateLoginRequest(email, publicB64, deviceId, accessCode, authRequestType, fingerprintPhrase);
-            var response = await _apiService.PostCreateRequestAsync(passwordlessCreateLoginRequest);
+            var response = await _apiService.PostCreateRequestAsync(passwordlessCreateLoginRequest, authRequestType);
 
             if (response != null)
             {

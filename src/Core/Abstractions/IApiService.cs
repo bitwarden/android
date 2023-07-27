@@ -91,7 +91,7 @@ namespace Bit.Core.Abstractions
         Task<PasswordlessLoginResponse> GetAuthRequestAsync(string id);
         Task<PasswordlessLoginResponse> GetAuthResponseAsync(string id, string accessCode);
         Task<PasswordlessLoginResponse> PutAuthRequestAsync(string id, string key, string masterPasswordHash, string deviceIdentifier, bool requestApproved);
-        Task<PasswordlessLoginResponse> PostCreateRequestAsync(PasswordlessCreateLoginRequest passwordlessCreateLoginRequest);
+        Task<PasswordlessLoginResponse> PostCreateRequestAsync(PasswordlessCreateLoginRequest passwordlessCreateLoginRequest, AuthRequestType authRequestType);
         Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier);
         Task<DeviceResponse> GetDeviceByIdentifierAsync(string deviceIdentifier);
         Task<DeviceResponse> UpdateTrustedDeviceKeysAsync(string deviceIdentifier, TrustedDeviceKeysRequest deviceRequest);

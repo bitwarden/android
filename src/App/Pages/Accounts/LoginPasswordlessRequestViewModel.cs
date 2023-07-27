@@ -13,6 +13,7 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
+using Bit.Core.Models.Response;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -34,6 +35,8 @@ namespace Bit.App.Pages
         private IEnvironmentService _environmentService;
         private ILogger _logger;
         private IDeviceTrustCryptoService _deviceTrustCryptoService;
+        private readonly ICryptoFunctionService _cryptoFunctionService;
+        private readonly ICryptoService _cryptoService;
 
         protected override II18nService i18nService => _i18nService;
         protected override IEnvironmentService environmentService => _environmentService;
@@ -61,6 +64,8 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>();
             _logger = ServiceContainer.Resolve<ILogger>();
             _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
+            _cryptoFunctionService = ServiceContainer.Resolve<ICryptoFunctionService>();
+            _cryptoService = ServiceContainer.Resolve<ICryptoService>();
 
             PageTitle = AppResources.LogInWithAnotherDevice;
 
@@ -202,14 +207,22 @@ namespace Bit.App.Pages
 
         private async Task CheckLoginRequestStatus()
         {
-            if (string.IsNullOrEmpty(_requestId) || string.IsNullOrEmpty(_requestAccessCode))
+            if (string.IsNullOrEmpty(_requestId))
             {
                 return;
             }
 
             try
             {
-                var response = await _authService.GetPasswordlessLoginResponseAsync(_requestId, _requestAccessCode);
+                PasswordlessLoginResponse response = null;
+                if (await _stateService.IsAuthenticatedAsync())
+                {
+                    response = await _authService.GetPasswordlessLoginRequestByIdAsync(_requestId);
+                }
+                else
+                {
+                    response = await _authService.GetPasswordlessLoginResquestAsync(_requestId, _requestAccessCode);
+                }
 
                 if (response.RequestApproved == null || !response.RequestApproved.Value)
                 {
@@ -220,6 +233,12 @@ namespace Bit.App.Pages
 
                 var authResult = await _authService.LogInPasswordlessAsync(Email, _requestAccessCode, _requestId, _requestKeyPair.Item2, response.Key, response.MasterPasswordHash);
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
+
+                if (authResult == null && await _stateService.IsAuthenticatedAsync())
+                {
+                    await HandleLoginCompleteAsync();
+                    return;
+                }
 
                 if (await HandleCaptchaAsync(authResult.CaptchaSiteKey, authResult.CaptchaNeeded, CheckLoginRequestStatus))
                 {
@@ -236,9 +255,7 @@ namespace Bit.App.Pages
                 }
                 else
                 {
-                    _syncService.FullSyncAsync(true).FireAndForget();
-                    await _deviceTrustCryptoService.TrustDeviceIfNeededAsync();
-                    LogInSuccessAction?.Invoke();
+                    await HandleLoginCompleteAsync();
                 }
             }
             catch (Exception ex)
@@ -248,20 +265,64 @@ namespace Bit.App.Pages
             }
         }
 
+        private async Task HandleLoginCompleteAsync()
+        {
+            await _stateService.SetPendingAdminAuthRequestAsync(null);
+            _syncService.FullSyncAsync(true).FireAndForget();
+            LogInSuccessAction?.Invoke();
+        }
+
         private async Task CreatePasswordlessLoginAsync()
         {
             await Device.InvokeOnMainThreadAsync(() => _deviceActionService.ShowLoadingAsync(AppResources.Loading));
 
-            var response = await _authService.PasswordlessCreateLoginRequestAsync(_email, AuthRequestType);
-            if (response != null)
+            PasswordlessLoginResponse response = null;
+            var pendingRequest = await _stateService.GetPendingAdminAuthRequestAsync();
+            if (pendingRequest != null && _authRequestType == AuthRequestType.AdminApproval)
             {
-                FingerprintPhrase = response.FingerprintPhrase;
-                _requestId = response.Id;
-                _requestAccessCode = response.RequestAccessCode;
-                _requestKeyPair = response.RequestKeyPair;
+                response = await _authService.GetPasswordlessLoginRequestByIdAsync(pendingRequest.Id);
+                if (response == null || (response.IsAnswered && !response.RequestApproved.Value))
+                {
+                    // handle pending auth request not valid remove it from state
+                    await _stateService.SetPendingAdminAuthRequestAsync(null);
+                    pendingRequest = null;
+                }
+                else
+                {
+                    // Derive pubKey from privKey in state to avoid MITM attacks
+                    // Also generate FingerprintPhrase locally for the same reason
+                    var derivedPublicKey = await _cryptoFunctionService.RsaExtractPublicKeyAsync(pendingRequest.PrivateKey);
+                    response.FingerprintPhrase = string.Join("-", await _cryptoService.GetFingerprintAsync(Email, derivedPublicKey));
+                    response.RequestKeyPair = new Tuple<byte[], byte[]>(derivedPublicKey, pendingRequest.PrivateKey);
+                }
             }
 
+            if (response == null)
+            {
+                response = await _authService.PasswordlessCreateLoginRequestAsync(_email, AuthRequestType);
+            }
+
+            await HandlePasswordlessLoginAsync(response, pendingRequest == null && _authRequestType == AuthRequestType.AdminApproval);
             await _deviceActionService.HideLoadingAsync();
+        }
+
+        private async Task HandlePasswordlessLoginAsync(PasswordlessLoginResponse response, bool createPendingAdminRequest)
+        {
+            if (response == null)
+            {
+                throw new ArgumentNullException(nameof(response));
+            }
+
+            if (createPendingAdminRequest)
+            {
+                var pendingAuthRequest = new PendingAdminAuthRequest { Id = response.Id, PrivateKey = response.RequestKeyPair.Item2 };
+                await _stateService.SetPendingAdminAuthRequestAsync(pendingAuthRequest);
+            }
+
+            FingerprintPhrase = response.FingerprintPhrase;
+            _requestId = response.Id;
+            _requestAccessCode = response.RequestAccessCode;
+            _requestKeyPair = response.RequestKeyPair;
         }
 
         private void HandleException(Exception ex)
