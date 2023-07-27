@@ -508,7 +508,7 @@ namespace Bit.Core.Services
                         catch { }
                     }
 
-                    await _cryptoService.SetPrivateKeyAsync(tokenResponse.PrivateKey);
+                    await _cryptoService.SetUserPrivateKeyAsync(tokenResponse.PrivateKey);
                 }
                 else if (tokenResponse.KeyConnectorUrl != null)
                 {

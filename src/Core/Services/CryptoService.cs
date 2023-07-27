@@ -354,7 +354,7 @@ namespace Bit.Core.Services
             {
                 return _publicKey;
             }
-            var privateKey = await GetPrivateKeyAsync();
+            var privateKey = await GetUserPrivateKeyAsync();
             if (privateKey == null)
             {
                 return null;
@@ -363,7 +363,7 @@ namespace Bit.Core.Services
             return _publicKey;
         }
 
-        public async Task SetPrivateKeyAsync(string encPrivateKey)
+        public async Task SetUserPrivateKeyAsync(string encPrivateKey)
         {
             if (encPrivateKey == null)
             {
@@ -373,7 +373,7 @@ namespace Bit.Core.Services
             _privateKey = null;
         }
 
-        public async Task<byte[]> GetPrivateKeyAsync()
+        public async Task<byte[]> GetUserPrivateKeyAsync()
         {
             if (_privateKey != null)
             {
@@ -519,7 +519,7 @@ namespace Bit.Core.Services
 
             if (privateKey is null)
             {
-                privateKey = await GetPrivateKeyAsync();
+                privateKey = await GetUserPrivateKeyAsync();
             }
 
             if (privateKey == null)

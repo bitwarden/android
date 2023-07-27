@@ -37,8 +37,8 @@ namespace Bit.Core.Abstractions
         Task<Dictionary<string, OrgKey>> GetOrgKeysAsync();
         Task ClearOrgKeysAsync(bool memoryOnly = false, string userId = null);
         Task<byte[]> GetPublicKeyAsync();
-        Task SetPrivateKeyAsync(string encPrivateKey);
-        Task<byte[]> GetPrivateKeyAsync();
+        Task SetUserPrivateKeyAsync(string encPrivateKey);
+        Task<byte[]> GetUserPrivateKeyAsync();
         Task<List<string>> GetFingerprintAsync(string userId, byte[] publicKey = null);
         Task<Tuple<string, EncString>> MakeKeyPairAsync(SymmetricCryptoKey key = null);
         Task ClearKeyPairAsync(bool memoryOnly = false, string userId = null);
