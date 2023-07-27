@@ -310,7 +310,7 @@ namespace Bit.App.Pages
         {
             if (response == null)
             {
-                throw new ArgumentNullException(AppResources.GenericErrorMessage);
+                throw new ArgumentNullException(nameof(response));
             }
 
             if (createPendingAdminRequest)
