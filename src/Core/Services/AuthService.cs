@@ -202,7 +202,7 @@ namespace Bit.Core.Services
         {
             AuthResult response = null;
             // On SSO flow user is already AuthN
-            if (await this._stateService.IsAuthenticatedAsync())
+            if (await _stateService.IsAuthenticatedAsync())
             {
                 var decryptedKey = await _cryptoService.RsaDecryptAsync(masterKey, decryptionKey);
                 if (string.IsNullOrEmpty(masterKeyHash))
