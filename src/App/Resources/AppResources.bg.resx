@@ -1585,9 +1585,6 @@
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Блокирани за авт. попълване адреси</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>За посочените блокирани адреси няма да се прави автоматично попълване. Разделяйте отделните адреси със запетая. Пример: „https://twitter.com, androidapp://com.twitter.android“.</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Питане за добавяне на запис</value>
   </data>
@@ -2635,5 +2632,57 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>Отключването може да бъде неуспешно заради недостатъчно памет. Намалете настройките на паметта за KDF, за да разрешите проблема.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Неправилен ключ за ППИ</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Неправилен идентификатор за ППИ</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Блокиране на авт. попълване</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Автоматичното попълване няма да бъде предлагано за тези адреси.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Нов блокиран адрес</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>Адресът е запазен</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Неправилен формат. Използвайте https://, http:// или androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Редактиране на адреса</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Въведете адрес</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Формат: {0}. Ако въвеждате повече адреси, разделяйте ги със запетая.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Формат: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Неправилен адрес</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>Адресът е запазен</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>Адресът е премахнат</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Няма блокирани адреси</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>Адресът {0} вече е блокиран</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Не може да редактирате повече от един адрес едновременно</value>
   </data>
 </root>

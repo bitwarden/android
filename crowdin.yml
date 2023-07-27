@@ -38,3 +38,15 @@ files:
         pt-PT: pt-PT
         en-GB: en-GB
         en-IN: en-IN
+  - source: "/src/watchOS/bitwarden/bitwarden WatchKit Extension/Localization/en.lproj/Localizable.strings"
+    dest: "/src/watchOS/bitwarden/bitwarden WatchKit Extension/Localization/en.lproj/%original_file_name%"
+    translation: "/src/watchOS/bitwarden/bitwarden WatchKit Extension/Localization//%two_letters_code%.lproj/%original_file_name%"
+    update_option: update_as_unapproved
+    languages_mapping:
+      two_letters_code:
+        zh-CN: zh-Hans
+        zh-TW: zh-Hant
+        pt-BR: pt-BR
+        pt-PT: pt-PT
+        en-GB: en-GB
+        en-IN: en-IN

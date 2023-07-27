@@ -10,5 +10,6 @@ namespace Bit.Core.Models.Api
         public string Password { get; set; }
         public DateTime? PasswordRevisionDate { get; set; }
         public string Totp { get; set; }
+        public Fido2KeyApi Fido2Key { get; set; }
     }
 }

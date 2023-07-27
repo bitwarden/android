@@ -1,0 +1,10 @@
+"ThereAreNoItemsToList" = "Nincsenek listázandó elemek.";
+"ToViewVerificationCodesUpgradeToPremium" = "Az ellenőrző kódok megtekintéséhez térjünk át a prémium csomagra.";
+"Add2FactorAutenticationToAnItemToViewVerificationCodes" = "Adjunk hozzá kéttényezős hitelesítést egy elemnél az ellenőrző kódok megtekintéséhez.";
+"LogInToBitwardenOnYourIPhoneToViewVerificationCodes" = "Az ellenőrző kódok megtekintéséhez jelentkezzünk be a Bitwardenbe az iPhone-on.";
+"SyncingItemsContainingVerificationCodes" = "Ellenőrző kódokat tartalmazó elemek szinkronizálása";
+"UnlockBitwardenOnYourIPhoneToViewVerificationCodes" = "Oldjuk fel a Bitwarden zárolását az iPhone-on az ellenőrző kódok megtekintéséhez.";
+"SetUpBitwardenToViewItemsContainingVerificationCodes" = "A Bitwarden beállítása az ellenőrző kódokat tartalmazó elemek megtekintéséhez";
+"Search" = "Keresés";
+"NoItemsFound" = "Nem található elem.";
+"SetUpAppleWatchPasscodeInOrderToUseBitwarden" = "Állítsuk be az Apple Watch jelszót a Bitwarden használatához.";

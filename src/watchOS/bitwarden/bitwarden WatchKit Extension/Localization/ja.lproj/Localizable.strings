@@ -1,0 +1,10 @@
+"ThereAreNoItemsToList" = "表示するアイテムがありません";
+"ToViewVerificationCodesUpgradeToPremium" = "認証コードを表示するには、プレミアムにアップグレードしてください";
+"Add2FactorAutenticationToAnItemToViewVerificationCodes" = "認証コードを表示するために、アイテムに二要素認証を追加します";
+"LogInToBitwardenOnYourIPhoneToViewVerificationCodes" = "認証コードを表示するにはあなたの iPhone で Bitwarden にログインしてください";
+"SyncingItemsContainingVerificationCodes" = "認証コードを含むアイテムを同期中";
+"UnlockBitwardenOnYourIPhoneToViewVerificationCodes" = "認証コードを表示するには、iPhone で Bitwarden をロック解除してください";
+"SetUpBitwardenToViewItemsContainingVerificationCodes" = "認証コードを含んだアイテムを表示するには Bitwarden をセットアップしてください";
+"Search" = "検索";
+"NoItemsFound" = "アイテムが見つかりません";
+"SetUpAppleWatchPasscodeInOrderToUseBitwarden" = "Bitwarden を使うには Apple Watch のパスコードを設定してください";

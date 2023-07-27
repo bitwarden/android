@@ -159,6 +159,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Effects\RemoveFontPaddingEffect.cs" />
     <Compile Include="Services\WatchDeviceService.cs" />
+    <Compile Include="Renderers\CustomLabelRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\bwi-font.ttf" />
@@ -229,6 +230,18 @@
     <AndroidResource Include="Resources\drawable\logo_rounded.xml" />
     <AndroidResource Include="Resources\drawable-night-v26\splash_screen_round.xml" />
     <AndroidResource Include="Resources\drawable\ic_notification.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\validatable_input_dialog_layout.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\empty_uris_placeholder.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\empty_uris_placeholder_dark.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>

@@ -1585,9 +1585,6 @@ Skaneerimine toimub automaatselt.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Täida blokeeritud URId automaatselt</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Blokeeritud URIdele ei pakuta automaattäidet. Eralda erinevad URId komaga. Nt nagu: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Küsi "Lisa konto andmed"</value>
   </data>
@@ -2634,6 +2631,58 @@ Soovid selle konto peale lülituda?</value>
     <value>Master password re-prompt help</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
+    <value>Avamine võib ebapiisava mälu tõttu nurjuda. Probleemi lahendamiseks vähenda KDF mälu seadeid.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Vigane API võti</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Vigane API token</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Automaatse täitmise keelamine</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Automaattäitmist ei pakuta nende URId-e puhul.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Uus blokeeritud URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI salvestatud</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Vale vorming. Kasuta https://, http://, või androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Muuda URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Sisesta URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Vorming: {0}. Eralda mitu URI-t komadega.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Vorming: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Vale URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI salvestatud</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI eemaldatud</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Puuduvad keelatud URI-d</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI {0} on juba keelatud</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Mitme URI korraga muutmine ei toiminud</value>
   </data>
 </root>

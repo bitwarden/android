@@ -156,7 +156,7 @@ namespace Bit.App.Pages
             // Prevent Android from locking if vault timeout set to "immediate"
             if (Device.RuntimePlatform == Device.Android)
             {
-                _vaultTimeoutService.DelayTimeoutMs = 60000;
+                _vaultTimeoutService.DelayLockAndLogoutMs = 60000;
             }
             await _fileService.SelectFileAsync();
         }

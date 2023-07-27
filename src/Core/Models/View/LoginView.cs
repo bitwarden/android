@@ -20,6 +20,8 @@ namespace Bit.Core.Models.View
         public DateTime? PasswordRevisionDate { get; set; }
         public string Totp { get; set; }
         public List<LoginUriView> Uris { get; set; }
+        public Fido2KeyView Fido2Key { get; set; }
+
         public string Uri => HasUris ? Uris[0].Uri : null;
         public string MaskedPassword => Password != null ? "••••••••" : null;
         public override string SubTitle => Username;

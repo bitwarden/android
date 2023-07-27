@@ -153,22 +153,14 @@
                     StyleClass="box-footer-label, box-footer-label-switch" />
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding ShowAndroidAutofillSettings}">
-                <StackLayout StyleClass="box-row, box-row-input">
-                    <Label
-                        Text="{u:I18n AutofillBlockedUris}"
-                        StyleClass="box-label" />
-                    <Editor
-                        x:Name="_autofillBlockedUrisEditor"
-                        Text="{Binding AutofillBlockedUris}"
-                        StyleClass="box-value"
-                        AutoSize="TextChanges"
-                        IsSpellCheckEnabled="False"
-                        IsTextPredictionEnabled="False"
-                        Keyboard="Url"
-                        Unfocused="AutofillBlockedUrisEditor_Unfocused" />
-                </StackLayout>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToBlockAutofillUrisCommand}" />
+                </StackLayout.GestureRecognizers>
                 <Label
-                    Text="{u:I18n AutofillBlockedUrisDescription}"
+                    Text="{u:I18n BlockAutoFill}"
+                    StyleClass="box-label-regular" />
+                <Label
+                    Text="{u:I18n AutoFillWillNotBeOfferedForTheseURIs}"
                     StyleClass="box-footer-label" />
             </StackLayout>
         </StackLayout>

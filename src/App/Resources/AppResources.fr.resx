@@ -1585,9 +1585,6 @@ La numérisation se fera automatiquement.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Saisie automatique des URIs bloqués</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>La saisie automatique ne sera pas proposée pour les URI bloqués. Séparez plusieurs URI par une virgule. Par exemple : "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Demander pour ajouter un identifiant</value>
   </data>
@@ -2636,5 +2633,57 @@ Voulez-vous basculer vers ce compte ?</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>Le déverrouillage peut échouer en raison d'une mémoire insuffisante. Diminuez les paramètres de mémoire KDF pour y remédier</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Clé API invalide</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Jeton API invalide</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Bloquer la saisie automatique</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>La saisie automatique ne sera pas proposée pour ces URI.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Nouveau URI bloqué</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI enregistré</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Format invalide. Utilisez https://, http://, ou androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Modifier l'URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Saisir l'URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Format : {0}. Séparez les URI multiples par une virgule.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Format : {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>URI incorrect</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI enregistré</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI supprimé</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Il n'y a pas d'URI bloqués</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>L'URI {0} est déjà bloqué</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Impossible de modifier des URI multiples à la fois</value>
   </data>
 </root>
