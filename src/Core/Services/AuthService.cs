@@ -631,12 +631,6 @@ namespace Bit.Core.Services
             var activeRequests = requests.Where(r => !r.IsAnswered && !r.IsExpired).OrderByDescending(r => r.CreationDate).ToList();
             return await PopulateFingerprintPhrasesAsync(activeRequests);
         }
-
-        /// <summary>
-        /// Get a passwordless login request by id, the user needs to be authenticated
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public async Task<PasswordlessLoginResponse> GetPasswordlessLoginRequestByIdAsync(string id)
         {
             var response = await _apiService.GetAuthRequestAsync(id);
@@ -644,11 +638,8 @@ namespace Bit.Core.Services
         }
 
         /// <summary>
-        /// Get a passwordless login request by id, doesn't required authentication
+        /// This method doesn't required authentication
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="accessCode"></param>
-        /// <returns></returns>
         public async Task<PasswordlessLoginResponse> GetPasswordlessLoginResquestAsync(string id, string accessCode)
         {
             return await _apiService.GetAuthResponseAsync(id, accessCode);

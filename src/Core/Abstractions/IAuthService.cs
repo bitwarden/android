@@ -31,12 +31,9 @@ namespace Bit.Core.Abstractions
 
         Task<List<PasswordlessLoginResponse>> GetPasswordlessLoginRequestsAsync();
         Task<List<PasswordlessLoginResponse>> GetActivePasswordlessLoginRequestsAsync();
-        /// <summary>
-        /// Get a passwordless login request by id, the user needs to be authenticated
-        /// </summary>
         Task<PasswordlessLoginResponse> GetPasswordlessLoginRequestByIdAsync(string id);
         /// <summary>
-        /// Get a passwordless login request by id, doesn't required authentication
+        /// This method doesn't required authentication
         /// </summary>
         Task<PasswordlessLoginResponse> GetPasswordlessLoginResquestAsync(string id, string accessCode);
         Task<PasswordlessLoginResponse> PasswordlessLoginAsync(string id, string pubKey, bool requestApproved);
