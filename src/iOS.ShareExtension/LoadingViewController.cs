@@ -390,6 +390,7 @@ namespace Bit.iOS.ShareExtension
             {
                 vm.TwoFactorAuthSuccessAction = () => DismissLockAndContinue();
                 vm.StartSetPasswordAction = () => DismissAndLaunch(() => LaunchSetPasswordFlow());
+                vm.StartDeviceApprovalOptionsAction = () => DismissViewController(false, () => LaunchDeviceApprovalOptionsFlow());
                 if (authingWithSso)
                 {
                     vm.CloseAction = () => DismissAndLaunch(() => LaunchLoginSsoFlow());
