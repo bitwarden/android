@@ -249,6 +249,7 @@ namespace Bit.App.Pages
         public double TotpProgress => string.IsNullOrEmpty(TotpSec) ? 0 : double.Parse(TotpSec) * 100 / _totpInterval;
         public bool IsDeleted => Cipher.IsDeleted;
         public bool CanEdit => !Cipher.IsDeleted;
+        public bool CanClone => Cipher.IsClonable;
 
         public async Task<bool> LoadAsync(Action finishedLoadingAction = null)
         {
@@ -707,6 +708,12 @@ namespace Bit.App.Pages
 
         private async Task<bool> CanCloneAsync()
         {
+            if (Cipher.Type == CipherType.Fido2Key)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.PasskeyWillNotBeCopied);
+                return false;
+            }
+
             if (Cipher.Type == CipherType.Login && Cipher.Login?.Fido2Key != null)
             {
                 return await _platformUtilsService.ShowDialogAsync(AppResources.ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem, AppResources.PasskeyWillNotBeCopied, AppResources.Yes, AppResources.No);

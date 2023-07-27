@@ -120,5 +120,7 @@ namespace Bit.Core.Models.View
         public bool CanLaunch => Login?.CanLaunch == true || Fido2Key?.CanLaunch == true;
 
         public string LaunchUri => Login?.LaunchUri ?? Fido2Key?.LaunchUri;
+
+        public bool IsClonable => OrganizationId is null && Type != CipherType.Fido2Key;
     }
 }
