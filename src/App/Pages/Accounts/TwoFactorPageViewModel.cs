@@ -330,7 +330,7 @@ namespace Bit.App.Pages
                 {
                     UpdateTempPasswordAction?.Invoke();
                 }
-                else if (decryptOptions.TrustedDeviceOption != null)
+                else if (decryptOptions?.TrustedDeviceOption != null)
                 {
                     // If user doesn't have a MP, but has reset password permission, they must set a MP
                     if (!decryptOptions.HasMasterPassword &&
