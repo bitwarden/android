@@ -1585,9 +1585,6 @@ Načtení proběhne automaticky.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Automatické vyplňování blokovaných URI</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Automatické vyplňování nebude pro blokované URI nabídnuto. Více URI oddělte čárkou. Například: "https://twitter.com,androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Ptát se na přidání přihlášení</value>
   </data>
@@ -2634,5 +2631,57 @@ Chcete se přepnout na tento účet?</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>Odemknutí může selhat z důvodu nedostatku paměti. Pro vyřešení snižte nastavení paměti KDF.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Neplatný klíč API</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Neplatný token API</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Blokovat automatické vyplňování</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Pro tento URI nebude nabízeno automatické vyplňování.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Nový blokovaný URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI byl uložen</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Neplatný formát. Použijte https://, http:// nebo androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Upravit URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Zadat URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Formát: {0}. Oddělte více URI čárkou.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Formát: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Neplatný URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI byl uložen</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI byl odebrán</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Nejsou žádné blokované URI</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI {0} je již blokován</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Najednou nelze upravovat více URI</value>
   </data>
 </root>

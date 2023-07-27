@@ -1585,9 +1585,6 @@ A leitura será feita automaticamente.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Auto-preencher URIs bloqueadas</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>O preenchimento automático não será oferecido para URIs bloqueados. Separe vários URIs com uma vírgula. Por exemplo: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Pedir para adicionar uma conta</value>
   </data>
@@ -2632,9 +2629,61 @@ Você deseja mudar para esta conta?</value>
     <value>Senha mestra atual</value>
   </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
-    <value>Master password re-prompt help</value>
+    <value>Ajuda com Nova solicitação de senha mestra</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
+    <value>O desbloqueio pode falhar devido à memória insuficiente. Diminua suas configurações de memória KDF para resolver.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Chave da API inválida</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Token de API inválido</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Bloquear preenchimento automático</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>O autopreenchimento não será oferecido para estas URIs.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Nova URI bloqueada</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI salva</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Formato inválido. Use https://, http://, ou androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Editar URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Digitar URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Formato: {0}. Separe vários URIs com uma vírgula.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Formato: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>URL inválida</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI salva</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI removida</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Não há URIs bloqueadas</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>A URI {0} já está bloqueada</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Não é possível editar várias URIs de uma vez</value>
   </data>
 </root>

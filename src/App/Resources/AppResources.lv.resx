@@ -1585,9 +1585,6 @@ Nolasīšana notiks automātiski.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Automātiskā aizpilde aizturētajos URI</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Automātiskā aizpilde aizturētajos URI netiks piedāvāta. Vairākus URI jāatdala ar komatu. Piemēram, "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Vaicāt, lai pievienotu pieteikšanās vienumu</value>
   </data>
@@ -2635,5 +2632,57 @@ Vai pārslēgties uz šo kontu?</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>Atslēgšana var neizdoties nepietiekamas atmiņas dēļ. Lai to novērstu, jāsamazina KDF atmiņas iestatījmi</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Nederīga API atslēga</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Nederīga API pilnvara</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Neļaut automātisko aizpildīšanu</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Šiem URI automātiskā aizpildīšana netiks piedāvāta.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Jauns neatļautais URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI saglabāts</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Nederīga vērtība. Jāizmanto https://, http:// vai androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Labot URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Ievadīt URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Pieraksts: {0}. Vairāki URI ir atdalāmi ar komatu.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Pieraksts: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Nederīgs URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI saglabāts</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI noņemts</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Nav neatļautu URI</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI {0} jau ir neatļauts</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Nevar labot vairākus URI vienlaicīgi</value>
   </data>
 </root>

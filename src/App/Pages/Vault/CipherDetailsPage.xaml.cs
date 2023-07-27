@@ -204,19 +204,6 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void Clone_Clicked(object sender, System.EventArgs e)
-        {
-            if (DoOnce())
-            {
-                if (!await _vm.PromptPasswordAsync())
-                {
-                    return;
-                }
-                var page = new CipherAddEditPage(_vm.CipherId, cloneMode: true, cipherDetailsPage: this);
-                await Navigation.PushModalAsync(new NavigationPage(page));
-            }
-        }
-
         private async void More_Clicked(object sender, System.EventArgs e)
         {
             if (!DoOnce())
@@ -267,8 +254,7 @@ namespace Bit.App.Pages
             }
             else if (selection == AppResources.Clone)
             {
-                var page = new CipherAddEditPage(_vm.CipherId, cloneMode: true, cipherDetailsPage: this);
-                await Navigation.PushModalAsync(new NavigationPage(page));
+                _vm.CloneCommand.Execute(null);
             }
         }
 
@@ -302,13 +288,13 @@ namespace Bit.App.Pages
                 {
                     ToolbarItems.Remove(_collectionsItem);
                 }
-                if (!ToolbarItems.Contains(_cloneItem))
+                if (_vm.Cipher.Type != Core.Enums.CipherType.Fido2Key && !ToolbarItems.Contains(_cloneItem))
                 {
                     ToolbarItems.Insert(1, _cloneItem);
                 }
                 if (!ToolbarItems.Contains(_shareItem))
                 {
-                    ToolbarItems.Insert(2, _shareItem);
+                    ToolbarItems.Insert(_vm.Cipher.Type == Core.Enums.CipherType.Fido2Key ? 1 : 2, _shareItem);
                 }
             }
             else

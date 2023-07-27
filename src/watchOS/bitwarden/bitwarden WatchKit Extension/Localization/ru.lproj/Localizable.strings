@@ -1,0 +1,10 @@
+"ThereAreNoItemsToList" = "Нет элементов для отображения";
+"ToViewVerificationCodesUpgradeToPremium" = "Для просмотра кодов подтверждения перейдите на Премиум";
+"Add2FactorAutenticationToAnItemToViewVerificationCodes" = "Добавить двухэтапную аутентификацию к элементу для отображения кодов подтверждения";
+"LogInToBitwardenOnYourIPhoneToViewVerificationCodes" = "Войдите в Bitwarden на вашем iPhone, для просмотра кодов подтверждения";
+"SyncingItemsContainingVerificationCodes" = "Синхронизация элементов, содержащих коды подтверждения";
+"UnlockBitwardenOnYourIPhoneToViewVerificationCodes" = "Разблокируйте Bitwarden на вашем iPhone, для просмотра кодов подтверждения";
+"SetUpBitwardenToViewItemsContainingVerificationCodes" = "Настроить Bitwarden для просмотра элементов, содержащих коды подтверждения";
+"Search" = "Поиск";
+"NoItemsFound" = "Элементов не найдено";
+"SetUpAppleWatchPasscodeInOrderToUseBitwarden" = "Установите код доступа Apple Watch для использования Bitwarden";

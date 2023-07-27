@@ -65,6 +65,9 @@
         public const int MasterPasswordMinimumChars = 12;
         public const int CipherKeyRandomBytesLength = 64;
         public const string CipherKeyEncryptionMinServerVersion = "2023.5.0";
+        public const string DefaultFido2KeyType = "public-key";
+        public const string DefaultFido2KeyAlgorithm = "ECDSA";
+        public const string DefaultFido2KeyCurve = "P-256";
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {

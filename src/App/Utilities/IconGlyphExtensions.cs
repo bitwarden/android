@@ -8,25 +8,20 @@ namespace Bit.App.Utilities
     {
         public static string GetIcon(this CipherView cipher)
         {
-            string icon = null;
             switch (cipher.Type)
             {
                 case CipherType.Login:
-                    icon = GetLoginIconGlyph(cipher);
-                    break;
+                    return GetLoginIconGlyph(cipher);
                 case CipherType.SecureNote:
-                    icon = BitwardenIcons.StickyNote;
-                    break;
+                    return BitwardenIcons.StickyNote;
                 case CipherType.Card:
-                    icon = BitwardenIcons.CreditCard;
-                    break;
+                    return BitwardenIcons.CreditCard;
                 case CipherType.Identity:
-                    icon = BitwardenIcons.IdCard;
-                    break;
-                default:
-                    break;
+                    return BitwardenIcons.IdCard;
+                case CipherType.Fido2Key:
+                    return BitwardenIcons.Passkey;
             }
-            return icon;
+            return null;
         }
 
         static string GetLoginIconGlyph(CipherView cipher)

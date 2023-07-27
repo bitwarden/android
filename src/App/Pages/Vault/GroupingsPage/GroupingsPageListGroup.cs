@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Bit.App.Utilities.Automation;
 
 namespace Bit.App.Pages
 {
@@ -32,5 +33,6 @@ namespace Bit.App.Pages
         public string Name { get; set; }
         public string NameShort => string.IsNullOrWhiteSpace(Name) || Name.Length == 0 ? "-" : Name[0].ToString();
         public string ItemCount { get; set; }
+        public string AutomationId => AutomationIdsHelper.AddSuffixFor(NameShort, SuffixType.ListGroup);
     }
 }

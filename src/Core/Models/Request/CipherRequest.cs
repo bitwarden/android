@@ -31,7 +31,8 @@ namespace Bit.Core.Models.Request
                         Username = cipher.Login.Username?.EncryptedString,
                         Password = cipher.Login.Password?.EncryptedString,
                         PasswordRevisionDate = cipher.Login.PasswordRevisionDate,
-                        Totp = cipher.Login.Totp?.EncryptedString
+                        Totp = cipher.Login.Totp?.EncryptedString,
+                        Fido2Key = cipher.Login.Fido2Key != null ? new Fido2KeyApi(cipher.Login.Fido2Key) : null
                     };
                     break;
                 case CipherType.Card:
@@ -73,6 +74,9 @@ namespace Bit.Core.Models.Request
                     {
                         Type = cipher.SecureNote.Type
                     };
+                    break;
+                case CipherType.Fido2Key:
+                    Fido2Key = new Fido2KeyApi(cipher.Fido2Key);
                     break;
                 default:
                     break;
@@ -119,6 +123,7 @@ namespace Bit.Core.Models.Request
         public SecureNoteApi SecureNote { get; set; }
         public CardApi Card { get; set; }
         public IdentityApi Identity { get; set; }
+        public Fido2KeyApi Fido2Key { get; set; }
         public List<FieldApi> Fields { get; set; }
         public List<PasswordHistoryRequest> PasswordHistory { get; set; }
         public Dictionary<string, string> Attachments { get; set; }
