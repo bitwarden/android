@@ -200,11 +200,11 @@ namespace Bit.Core.Services
 
         public async Task<AuthResult> LogInPasswordlessAsync(string email, string accessCode, string authRequestId, byte[] decryptionKey, string encryptedAuthRequestKey, string masterKeyHash)
         {
-            AuthResult response = null;
+            var decryptedKey = await _cryptoService.RsaDecryptAsync(encryptedAuthRequestKey, decryptionKey);
+
             // On SSO flow user is already AuthN
             if (await _stateService.IsAuthenticatedAsync())
             {
-                var decryptedKey = await _cryptoService.RsaDecryptAsync(encryptedAuthRequestKey, decryptionKey);
                 if (string.IsNullOrEmpty(masterKeyHash))
                 {
                     await _cryptoService.SetUserKeyAsync(new UserKey(decryptedKey));
@@ -215,22 +215,18 @@ namespace Bit.Core.Services
                     await _cryptoService.SetUserKeyAsync(userKey);
                 }
                 await _deviceTrustCryptoService.TrustDeviceIfNeededAsync();
+                return null;
             }
-            else
+
+            if (string.IsNullOrEmpty(masterKeyHash) && decryptionKey != null)
             {
-                var decryptedKey = await _cryptoService.RsaDecryptAsync(encryptedAuthRequestKey, decryptionKey);
-                if (string.IsNullOrEmpty(masterKeyHash) && decryptionKey != null)
-                {
-                    await _cryptoService.SetUserKeyAsync(new UserKey(decryptedKey));
-                }
-                else
-                {
-                    var decKeyHash = await _cryptoService.RsaDecryptAsync(masterKeyHash, decryptionKey);
-                    response = await LogInHelperAsync(email, accessCode, Encoding.UTF8.GetString(decKeyHash), null, null, null, new MasterKey(decryptedKey), null, null,
-                    null, null, authRequestId: authRequestId);
-                }
+                await _cryptoService.SetUserKeyAsync(new UserKey(decryptedKey));
+                return null;
             }
-            return response;
+
+            var decKeyHash = await _cryptoService.RsaDecryptAsync(masterKeyHash, decryptionKey);
+            return await LogInHelperAsync(email, accessCode, Encoding.UTF8.GetString(decKeyHash), null, null, null, new MasterKey(decryptedKey), null, null,
+                null, null, authRequestId: authRequestId);
         }
 
         public async Task<AuthResult> LogInSsoAsync(string code, string codeVerifier, string redirectUrl, string orgId)
