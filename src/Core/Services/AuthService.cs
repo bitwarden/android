@@ -202,7 +202,7 @@ namespace Bit.Core.Services
         {
             AuthResult response = null;
             // On SSO flow user is already AuthN
-            if (await this._stateService.IsAuthenticatedAsync())
+            if (await _stateService.IsAuthenticatedAsync())
             {
                 var decryptedKey = await _cryptoService.RsaDecryptAsync(masterKey, decryptionKey);
                 if (string.IsNullOrEmpty(masterKeyHash))
@@ -218,10 +218,18 @@ namespace Bit.Core.Services
             }
             else
             {
-                var decKey = await _cryptoService.RsaDecryptAsync(masterKey, decryptionKey);
-                var decKeyHash = await _cryptoService.RsaDecryptAsync(masterKeyHash, decryptionKey);
-                response = await LogInHelperAsync(email, accessCode, Encoding.UTF8.GetString(decKeyHash), null, null, null, new MasterKey(decKey), null, null,
-                null, null, authRequestId: authRequestId);
+                if (string.IsNullOrEmpty(masterKeyHash) && decryptionKey != null)
+                {
+                    var decryptedKey = await _cryptoService.RsaDecryptAsync(masterKey, decryptionKey);
+                    await _cryptoService.SetUserKeyAsync(new UserKey(decryptedKey));
+                }
+                else
+                {
+                    var decKey = await _cryptoService.RsaDecryptAsync(masterKey, decryptionKey);
+                    var decKeyHash = await _cryptoService.RsaDecryptAsync(masterKeyHash, decryptionKey);
+                    response = await LogInHelperAsync(email, accessCode, Encoding.UTF8.GetString(decKeyHash), null, null, null, new MasterKey(decKey), null, null,
+                    null, null, authRequestId: authRequestId);
+                }
             }
             return response;
         }
@@ -509,7 +517,7 @@ namespace Bit.Core.Services
 
                     if (decryptOptions?.TrustedDeviceOption != null)
                     {
-                        var key = await _deviceTrustCryptoService.DecryptUserKeyWithDeviceKeyAsync(decryptOptions?.TrustedDeviceOption.EncryptedPrivateKey, decryptOptions?.TrustedDeviceOption.EncryptedUserKey);
+                        var key = await _deviceTrustCryptoService.DecryptUserKeyWithDeviceKeyAsync(decryptOptions.TrustedDeviceOption.EncryptedPrivateKey, decryptOptions.TrustedDeviceOption.EncryptedUserKey);
                         if (key != null)
                         {
                             await _cryptoService.SetUserKeyAsync(key);
