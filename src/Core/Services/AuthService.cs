@@ -504,6 +504,9 @@ namespace Bit.Core.Services
                 if (localHashedPassword != null)
                 {
                     await _cryptoService.SetPasswordHashAsync(localHashedPassword);
+                    await _cryptoService.SetMasterKeyAsync(masterKey);
+                    var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
+                    await _cryptoService.SetUserKeyAsync(userKey);
                 }
 
                 if (code == null || tokenResponse.Key != null)
@@ -591,7 +594,6 @@ namespace Bit.Core.Services
                     );
                     await _apiService.PostSetKeyConnectorKey(setPasswordRequest);
                 }
-
             }
 
             _authedUserId = _tokenService.GetUserId();
@@ -628,14 +630,14 @@ namespace Bit.Core.Services
             var activeRequests = requests.Where(r => !r.IsAnswered && !r.IsExpired).OrderByDescending(r => r.CreationDate).ToList();
             return await PopulateFingerprintPhrasesAsync(activeRequests);
         }
-
         public async Task<PasswordlessLoginResponse> GetPasswordlessLoginRequestByIdAsync(string id)
         {
             var response = await _apiService.GetAuthRequestAsync(id);
             return await PopulateFingerprintPhraseAsync(response, await _stateService.GetEmailAsync());
         }
 
-        public async Task<PasswordlessLoginResponse> GetPasswordlessLoginResponseAsync(string id, string accessCode)
+        /// <inheritdoc />
+        public async Task<PasswordlessLoginResponse> GetPasswordlessLoginResquestAsync(string id, string accessCode)
         {
             return await _apiService.GetAuthResponseAsync(id, accessCode);
         }

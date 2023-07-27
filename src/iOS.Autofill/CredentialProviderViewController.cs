@@ -568,6 +568,7 @@ namespace Bit.iOS.Autofill
             {
                 vm.TwoFactorAuthSuccessAction = () => DismissLockAndContinue();
                 vm.StartSetPasswordAction = () => DismissViewController(false, () => LaunchSetPasswordFlow());
+                vm.StartDeviceApprovalOptionsAction = () => DismissViewController(false, () => LaunchDeviceApprovalOptionsFlow());
                 if (authingWithSso)
                 {
                     vm.CloseAction = () => DismissViewController(false, () => LaunchLoginSsoFlow());
