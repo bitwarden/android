@@ -172,7 +172,7 @@ namespace Bit.App.Pages
             var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(newMasterKey,
                 await _cryptoService.GetUserKeyAsync() ?? await _cryptoService.MakeUserKeyAsync());
 
-            var keys = await _cryptoService.MakeKeyPairAsync(newUserKey);
+            var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync(newUserKey);
             var request = new SetPasswordRequest
             {
                 MasterPasswordHash = masterPasswordHash,
@@ -185,8 +185,8 @@ namespace Bit.App.Pages
                 OrgIdentifier = OrgIdentifier,
                 Keys = new KeysRequest
                 {
-                    PublicKey = keys.Item1,
-                    EncryptedPrivateKey = keys.Item2.EncryptedString
+                    PublicKey = newPublicKey,
+                    EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
                 }
             };
 
@@ -199,7 +199,7 @@ namespace Bit.App.Pages
                 await _cryptoService.SetMasterKeyAsync(newMasterKey);
                 await _cryptoService.SetMasterKeyHashAsync(localMasterPasswordHash);
                 await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(newProtectedUserKey.EncryptedString);
-                await _cryptoService.SetPrivateKeyAsync(keys.Item2.EncryptedString);
+                await _cryptoService.SetPrivateKeyAsync(newProtectedPrivateKey.EncryptedString);
 
                 if (ResetPasswordAutoEnroll)
                 {
