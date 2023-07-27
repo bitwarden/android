@@ -306,7 +306,7 @@ namespace Bit.App.Pages
             await _deviceActionService.HideLoadingAsync();
         }
 
-        private async Task HandlePasswordlessLogin(PasswordlessLoginResponse response, bool createPendingAdminRequest )
+        private async Task HandlePasswordlessLogin(PasswordlessLoginResponse response, bool createPendingAdminRequest)
         {
             if (response == null)
             {
