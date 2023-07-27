@@ -221,7 +221,7 @@ namespace Bit.App.Pages
                 }
                 else
                 {
-                    response = await _authService.GetPasswordlessLoginResponseAsync(_requestId, _requestAccessCode);
+                    response = await _authService.GetPasswordlessLoginResquestAsync(_requestId, _requestAccessCode);
                 }
 
                 if (response.RequestApproved == null || !response.RequestApproved.Value)
@@ -292,7 +292,7 @@ namespace Bit.App.Pages
                     // Derive pubKey from privKey in state to avoid MITM attacks
                     // Also generate FingerprintPhrase locally for the same reason
                     var derivedPublicKey = await _cryptoFunctionService.RsaExtractPublicKeyAsync(pendingRequest.PrivateKey);
-                    response.FingerprintPhrase = string.Join("-", await this._cryptoService.GetFingerprintAsync(Email, derivedPublicKey));
+                    response.FingerprintPhrase = string.Join("-", await _cryptoService.GetFingerprintAsync(Email, derivedPublicKey));
                     response.RequestKeyPair = new Tuple<byte[], byte[]>(derivedPublicKey, pendingRequest.PrivateKey);
                 }
             }
@@ -302,11 +302,11 @@ namespace Bit.App.Pages
                 response = await _authService.PasswordlessCreateLoginRequestAsync(_email, AuthRequestType);
             }
 
-            await HandlePasswordlessLogin(response, pendingRequest == null && _authRequestType == AuthRequestType.AdminApproval);
+            await HandlePasswordlessLoginAsync(response, pendingRequest == null && _authRequestType == AuthRequestType.AdminApproval);
             await _deviceActionService.HideLoadingAsync();
         }
 
-        private async Task HandlePasswordlessLogin(PasswordlessLoginResponse response, bool createPendingAdminRequest)
+        private async Task HandlePasswordlessLoginAsync(PasswordlessLoginResponse response, bool createPendingAdminRequest)
         {
             if (response == null)
             {

@@ -649,7 +649,7 @@ namespace Bit.Core.Services
         /// <param name="id"></param>
         /// <param name="accessCode"></param>
         /// <returns></returns>
-        public async Task<PasswordlessLoginResponse> GetPasswordlessLoginResponseAsync(string id, string accessCode)
+        public async Task<PasswordlessLoginResponse> GetPasswordlessLoginResquestAsync(string id, string accessCode)
         {
             return await _apiService.GetAuthResponseAsync(id, accessCode);
         }
