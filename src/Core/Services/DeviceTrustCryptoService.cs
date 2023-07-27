@@ -59,7 +59,7 @@ namespace Bit.Core.Services
             var deviceIdentifier = await _appIdService.GetAppIdAsync();
             var deviceRequest = new TrustedDeviceKeysRequest
             {
-                EncryptedUserKey = (await _cryptoService.RsaEncryptAsync(userKey.EncKey, devicePublicKey)).EncryptedString,
+                EncryptedUserKey = (await _cryptoService.RsaEncryptAsync(userKey.Key, devicePublicKey)).EncryptedString,
                 EncryptedPublicKey = (await _cryptoService.EncryptAsync(devicePublicKey, userKey)).EncryptedString,
                 EncryptedPrivateKey = (await _cryptoService.EncryptAsync(devicePrivateKey, deviceKey)).EncryptedString,
             };
@@ -98,6 +98,32 @@ namespace Bit.Core.Services
             var response = await TrustDeviceAsync();
             await SetShouldTrustDeviceAsync(false);
             return response;
+        }
+
+        public async Task<bool> IsDeviceTrustedAsync()
+        {
+            var existingDeviceKey = await GetDeviceKeyAsync();
+            return existingDeviceKey != null;
+        }
+
+        public async Task<UserKey> DecryptUserKeyWithDeviceKeyAsync(string encryptedDevicePrivateKey, string encryptedUserKey)
+        {
+            var existingDeviceKey = await GetDeviceKeyAsync();
+            if (existingDeviceKey == null)
+            {
+                // User doesn't have a device key anymore so device is untrusted
+                return null;
+            }
+
+            // Attempt to decrypt encryptedDevicePrivateKey with device key
+            var devicePrivateKeyBytes = await _cryptoService.DecryptToBytesAsync(
+              new EncString(encryptedDevicePrivateKey),
+              existingDeviceKey
+            );
+
+            // Attempt to decrypt encryptedUserDataKey with devicePrivateKey
+            var userKeyBytes = await _cryptoService.RsaDecryptAsync(encryptedUserKey, devicePrivateKeyBytes);
+            return new UserKey(userKeyBytes);
         }
     }
 }

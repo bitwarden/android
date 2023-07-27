@@ -19,7 +19,7 @@ namespace Bit.App.Pages
         {
             InitializeComponent();
             _vm = BindingContext as LoginApproveDeviceViewModel;
-            _vm.LogInWithMasterPassword = () => StartLogInWithMasterPassword().FireAndForget();
+            _vm.LogInWithMasterPasswordAction = () => StartLogInWithMasterPassword().FireAndForget();
             _vm.LogInWithDeviceAction = () => StartLoginWithDeviceAsync().FireAndForget();
             _vm.RequestAdminApprovalAction = () => RequestAdminApprovalAsync().FireAndForget();
             _vm.CloseAction = () => { Navigation.PopModalAsync(); };

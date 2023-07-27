@@ -11,11 +11,15 @@ namespace Bit.Core.Models.Domain
     public class TrustedDeviceOption
     {
         public bool HasAdminApproval { get; set; }
+        public bool HasLoginApprovingDevice { get; set; }
+        public bool HasManageResetPasswordPermission { get; set; }
+        public string EncryptedPrivateKey { get; set; }
+        public string EncryptedUserKey { get; set; }
     }
 
     public class KeyConnectorOption
     {
-        public bool KeyConnectorUrl { get; set; }
+        public string KeyConnectorUrl { get; set; }
     }
 }
 

@@ -29,6 +29,8 @@ namespace Bit.App.Pages
             _vm.SsoAuthSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await SsoAuthSuccessAsync());
             _vm.UpdateTempPasswordAction =
                 () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
+            _vm.StartDeviceApprovalOptionsAction =
+                () => Device.BeginInvokeOnMainThread(async () => await StartDeviceApprovalOptionsAsync());
             _vm.CloseAction = async () =>
             {
                 await Navigation.PopModalAsync();
@@ -106,14 +108,16 @@ namespace Bit.App.Pages
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
+        private async Task StartDeviceApprovalOptionsAsync()
+        {
+            var page = new LoginApproveDevicePage();
+            await Navigation.PushModalAsync(new NavigationPage(page));
+        }
+
         private async Task SsoAuthSuccessAsync()
         {
             RestoreAppOptionsFromCopy();
             await AppHelpers.ClearPreviousPage();
-
-            // Just for testing the screen
-            Application.Current.MainPage = new NavigationPage(new LoginApproveDevicePage(_appOptions));
-            return;
 
             if (await _vaultTimeoutService.IsLockedAsync())
             {

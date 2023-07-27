@@ -77,9 +77,10 @@ namespace Bit.Core.Utilities
                 });
             var passwordGenerationService = new PasswordGenerationService(cryptoService, stateService, cryptoFunctionService, policyService);
             var totpService = new TotpService(cryptoFunctionService);
+            var deviceTrustCryptoService = new DeviceTrustCryptoService(apiService, appIdService, cryptoFunctionService, cryptoService, stateService);
             var authService = new AuthService(cryptoService, cryptoFunctionService, apiService, stateService,
                 tokenService, appIdService, i18nService, platformUtilsService, messagingService, vaultTimeoutService,
-                keyConnectorService, passwordGenerationService, policyService);
+                keyConnectorService, passwordGenerationService, policyService, deviceTrustCryptoService);
             var exportService = new ExportService(folderService, cipherService, cryptoService);
             var auditService = new AuditService(cryptoFunctionService, apiService);
             var environmentService = new EnvironmentService(apiService, stateService, conditionedRunner);
@@ -88,7 +89,6 @@ namespace Bit.Core.Utilities
                 cryptoService);
             var usernameGenerationService = new UsernameGenerationService(cryptoService, apiService, stateService);
             var configService = new ConfigService(apiService, stateService, logger);
-            var deviceTrustCryptoService = new DeviceTrustCryptoService(apiService, appIdService, cryptoFunctionService, cryptoService, stateService);
 
             Register<IConditionedAwaiterManager>(conditionedRunner);
             Register<ITokenService>("tokenService", tokenService);

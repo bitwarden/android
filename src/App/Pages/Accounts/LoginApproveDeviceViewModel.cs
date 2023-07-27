@@ -32,7 +32,7 @@ namespace Bit.App.Pages
         public ICommand ApproveWithMasterPasswordCommand { get; }
         public ICommand ContinueCommand { get; }
 
-        public Action LogInWithMasterPassword { get; set; }
+        public Action LogInWithMasterPasswordAction { get; set; }
         public Action LogInWithDeviceAction { get; set; }
         public Action RequestAdminApprovalAction { get; set; }
         public Action CloseAction { get; set; }
@@ -53,7 +53,7 @@ namespace Bit.App.Pages
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            ApproveWithMasterPasswordCommand = new AsyncCommand(() => SetDeviceTrustAndInvokeAsync(LogInWithMasterPassword),
+            ApproveWithMasterPasswordCommand = new AsyncCommand(() => SetDeviceTrustAndInvokeAsync(LogInWithMasterPasswordAction),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
@@ -111,15 +111,7 @@ namespace Bit.App.Pages
                 var decryptOptions = await _stateService.GetAccountDecryptionOptions();
                 RequestAdminApprovalEnabled = decryptOptions?.TrustedDeviceOption?.HasAdminApproval ?? false;
                 ApproveWithMasterPasswordEnabled = decryptOptions?.HasMasterPassword ?? false;
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-            }
-
-            try
-            {
-                ApproveWithMyOtherDeviceEnabled = await _apiService.GetDevicesExistenceByTypes(DeviceTypeExtensions.GetDesktopAndMobileTypes().ToArray());
+                ApproveWithMyOtherDeviceEnabled = decryptOptions?.TrustedDeviceOption?.HasLoginApprovingDevice ?? false;
             }
             catch (Exception ex)
             {
