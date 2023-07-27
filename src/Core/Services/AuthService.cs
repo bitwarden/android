@@ -637,9 +637,7 @@ namespace Bit.Core.Services
             return await PopulateFingerprintPhraseAsync(response, await _stateService.GetEmailAsync());
         }
 
-        /// <summary>
-        /// This method doesn't required authentication
-        /// </summary>
+        /// <inheritdoc />
         public async Task<PasswordlessLoginResponse> GetPasswordlessLoginResquestAsync(string id, string accessCode)
         {
             return await _apiService.GetAuthResponseAsync(id, accessCode);
