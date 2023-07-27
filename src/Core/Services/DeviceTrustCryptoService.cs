@@ -108,9 +108,7 @@ namespace Bit.Core.Services
 
         public async Task<UserKey> DecryptUserKeyWithDeviceKeyAsync(string encryptedDevicePrivateKey, string encryptedUserKey)
         {
-            // Get device key
             var existingDeviceKey = await GetDeviceKeyAsync();
-
             if (existingDeviceKey == null)
             {
                 // User doesn't have a device key anymore so device is untrusted
@@ -118,14 +116,14 @@ namespace Bit.Core.Services
             }
 
             // Attempt to decrypt encryptedDevicePrivateKey with device key
-            var devicePrivateKey = await _cryptoService.DecryptToBytesAsync(
+            var devicePrivateKeyBytes = await _cryptoService.DecryptToBytesAsync(
               new EncString(encryptedDevicePrivateKey),
               existingDeviceKey
             );
 
             // Attempt to decrypt encryptedUserDataKey with devicePrivateKey
-            var userKey = await _cryptoService.RsaDecryptAsync(encryptedUserKey, devicePrivateKey);
-            return new UserKey(userKey);
+            var userKeyBytes = await _cryptoService.RsaDecryptAsync(encryptedUserKey, devicePrivateKeyBytes);
+            return new UserKey(userKeyBytes);
         }
     }
 }
