@@ -221,7 +221,7 @@ namespace Bit.App.Pages
                 var authResult = await _authService.LogInPasswordlessAsync(Email, _requestAccessCode, _requestId, _requestKeyPair.Item2, response.Key, response.MasterPasswordHash);
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
 
-                if(authResult == null && await _stateService.IsAuthenticatedAsync())
+                if (authResult == null && await _stateService.IsAuthenticatedAsync())
                 {
                     _syncService.FullSyncAsync(true).FireAndForget();
                     LogInSuccessAction?.Invoke();

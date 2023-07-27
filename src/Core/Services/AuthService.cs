@@ -230,7 +230,6 @@ namespace Bit.Core.Services
                     response = await LogInHelperAsync(email, accessCode, Encoding.UTF8.GetString(decKeyHash), null, null, null, new MasterKey(decKey), null, null,
                     null, null, authRequestId: authRequestId);
                 }
-                    
             }
             return response;
         }
