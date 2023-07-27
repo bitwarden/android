@@ -17,7 +17,7 @@ namespace Bit.Core.Abstractions
         Task<bool> ShouldLockAsync(string userId = null);
         Task<bool> IsLoggedOutByTimeoutAsync(string userId = null);
         Task<bool> ShouldLogOutByTimeoutAsync(string userId = null);
-        Task<PinLockEnum> IsPinLockSetAsync(string userId = null);
+        Task<PinLockType> IsPinLockSetAsync(string userId = null);
         Task<bool> IsBiometricLockSetAsync(string userId = null);
         Task LockAsync(bool allowSoftLock = false, bool userInitiated = false, string userId = null);
         Task LogOutAsync(bool userInitiated = true, string userId = null);

@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
-using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Services
 {
-    public enum PinLockEnum
+    public enum PinLockType
     {
         Disabled,
         Persistent,
@@ -175,8 +173,8 @@ namespace Bit.Core.Services
                 var pinStatus = await IsPinLockSetAsync(userId);
                 var ephemeralPinSet = await _stateService.GetUserKeyPinEphemeralAsync()
                     ?? await _stateService.GetPinProtectedKeyAsync();
-                var pinEnabled = (pinStatus == PinLockEnum.Transient && ephemeralPinSet != null) ||
-                          pinStatus == PinLockEnum.Persistent;
+                var pinEnabled = (pinStatus == PinLockType.Transient && ephemeralPinSet != null) ||
+                          pinStatus == PinLockType.Persistent;
 
                 if (!pinEnabled && !await IsBiometricLockSetAsync())
                 {
@@ -227,7 +225,7 @@ namespace Bit.Core.Services
             await _tokenService.ToggleTokensAsync();
         }
 
-        public async Task<PinLockEnum> IsPinLockSetAsync(string userId = null)
+        public async Task<PinLockType> IsPinLockSetAsync(string userId = null)
         {
             // we can't depend on only the protected pin being set because old
             // versions only used it for MP on Restart
@@ -237,15 +235,15 @@ namespace Bit.Core.Services
 
             if (userKeyPin != null || oldUserKeyPin != null)
             {
-                return PinLockEnum.Persistent;
+                return PinLockType.Persistent;
             }
             else if (pinIsEnabled != null && userKeyPin == null && oldUserKeyPin == null)
             {
-                return PinLockEnum.Transient;
+                return PinLockType.Transient;
             }
             else
             {
-                return PinLockEnum.Disabled;
+                return PinLockType.Disabled;
             }
         }
 

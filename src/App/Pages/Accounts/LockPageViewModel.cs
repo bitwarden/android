@@ -38,7 +38,7 @@ namespace Bit.App.Pages
         private string _masterPassword;
         private string _pin;
         private bool _showPassword;
-        private PinLockEnum _pinStatus;
+        private PinLockType _pinStatus;
         private bool _pinEnabled;
         private bool _biometricEnabled;
         private bool _biometricIntegrityValid = true;
@@ -165,8 +165,8 @@ namespace Bit.App.Pages
 
             var ephemeralPinSet = await _stateService.GetUserKeyPinEphemeralAsync()
                 ?? await _stateService.GetPinProtectedKeyAsync();
-            PinEnabled = (_pinStatus == PinLockEnum.Transient && ephemeralPinSet != null) ||
-                      _pinStatus == PinLockEnum.Persistent;
+            PinEnabled = (_pinStatus == PinLockType.Transient && ephemeralPinSet != null) ||
+                      _pinStatus == PinLockType.Persistent;
 
             BiometricEnabled = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _cryptoService.HasEncryptedUserKeyAsync();
 
@@ -257,13 +257,13 @@ namespace Bit.App.Pages
                 {
                     EncString userKeyPin = null;
                     EncString oldPinProtected = null;
-                    if (_pinStatus == PinLockEnum.Persistent)
+                    if (_pinStatus == PinLockType.Persistent)
                     {
                         userKeyPin = await _stateService.GetUserKeyPinAsync();
                         var oldEncryptedKey = await _stateService.GetPinProtectedAsync();
                         oldPinProtected = oldEncryptedKey != null ? new EncString(oldEncryptedKey) : null;
                     }
-                    else if (_pinStatus == PinLockEnum.Transient)
+                    else if (_pinStatus == PinLockType.Transient)
                     {
                         userKeyPin = await _stateService.GetUserKeyPinEphemeralAsync();
                         oldPinProtected = await _stateService.GetPinProtectedKeyAsync();
@@ -273,7 +273,7 @@ namespace Bit.App.Pages
                     if (oldPinProtected != null)
                     {
                         userKey = await _cryptoService.DecryptAndMigrateOldPinKeyAsync(
-                            _pinStatus == PinLockEnum.Transient,
+                            _pinStatus == PinLockType.Transient,
                             Pin,
                             _email,
                             kdfConfig,
