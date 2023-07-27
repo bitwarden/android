@@ -218,10 +218,19 @@ namespace Bit.Core.Services
             }
             else
             {
-                var decKey = await _cryptoService.RsaDecryptAsync(masterKey, decryptionKey);
-                var decKeyHash = await _cryptoService.RsaDecryptAsync(masterKeyHash, decryptionKey);
-                response = await LogInHelperAsync(email, accessCode, Encoding.UTF8.GetString(decKeyHash), null, null, null, new MasterKey(decKey), null, null,
-                null, null, authRequestId: authRequestId);
+                if (string.IsNullOrEmpty(masterKeyHash) && decryptionKey != null)
+                {
+                    var decryptedKey = await _cryptoService.RsaDecryptAsync(masterKey, decryptionKey);
+                    await _cryptoService.SetUserKeyAsync(new UserKey(decryptedKey));
+                }
+                else
+                {
+                    var decKey = await _cryptoService.RsaDecryptAsync(masterKey, decryptionKey);
+                    var decKeyHash = await _cryptoService.RsaDecryptAsync(masterKeyHash, decryptionKey);
+                    response = await LogInHelperAsync(email, accessCode, Encoding.UTF8.GetString(decKeyHash), null, null, null, new MasterKey(decKey), null, null,
+                    null, null, authRequestId: authRequestId);
+                }
+                    
             }
             return response;
         }
