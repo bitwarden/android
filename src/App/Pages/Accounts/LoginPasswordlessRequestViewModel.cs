@@ -236,7 +236,7 @@ namespace Bit.App.Pages
 
                 if (authResult == null && await _stateService.IsAuthenticatedAsync())
                 {
-                    await HandleLoginComplete();
+                    await HandleLoginCompleteAsync();
                     return;
                 }
 
@@ -255,7 +255,7 @@ namespace Bit.App.Pages
                 }
                 else
                 {
-                    await HandleLoginComplete();
+                    await HandleLoginCompleteAsync();
                 }
             }
             catch (Exception ex)
@@ -265,7 +265,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task HandleLoginComplete()
+        private async Task HandleLoginCompleteAsync()
         {
             await _stateService.SetPendingAdminAuthRequestAsync(null);
             _syncService.FullSyncAsync(true).FireAndForget();
@@ -310,7 +310,7 @@ namespace Bit.App.Pages
         {
             if (response == null)
             {
-                throw new Exception(AppResources.GenericErrorMessage);
+                throw new ArgumentNullException(AppResources.GenericErrorMessage);
             }
 
             if (createPendingAdminRequest)

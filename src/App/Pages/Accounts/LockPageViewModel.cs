@@ -482,7 +482,7 @@ namespace Bit.App.Pages
 
         private async Task DoContinueAsync()
         {
-            var task = Task.Run(async () => await _syncService.FullSyncAsync(false));
+            _syncService.FullSyncAsync(false).FireAndForget();
             await _stateService.SetBiometricLockedAsync(false);
             _watchDeviceService.SyncDataToWatchAsync().FireAndForget();
             _messagingService.Send("unlocked");
