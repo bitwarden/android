@@ -38,6 +38,7 @@ namespace Bit.Core.Abstractions
         Task<PasswordlessLoginResponse> GetPasswordlessLoginResquestAsync(string id, string accessCode);
         Task<PasswordlessLoginResponse> PasswordlessLoginAsync(string id, string pubKey, bool requestApproved);
         Task<PasswordlessLoginResponse> PasswordlessCreateLoginRequestAsync(string email, AuthRequestType authRequestType);
+        Task CreateNewSSOUserAsync();
 
         void LogOut(Action callback);
         void Init();

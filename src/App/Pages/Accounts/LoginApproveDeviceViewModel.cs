@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
@@ -6,6 +7,7 @@ using Bit.App.Resources;
 using Bit.App.Utilities.AccountManagement;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
@@ -26,6 +28,7 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly IApiService _apiService;
         private IDeviceTrustCryptoService _deviceTrustCryptoService;
+        private readonly IAuthService _authService;
 
         public ICommand ApproveWithMyOtherDeviceCommand { get; }
         public ICommand RequestAdminApprovalCommand { get; }
@@ -42,6 +45,7 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>();
             _apiService = ServiceContainer.Resolve<IApiService>();
             _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
+            _authService = ServiceContainer.Resolve<IAuthService>();
 
             PageTitle = AppResources.LoggedIn;
 
@@ -109,17 +113,22 @@ namespace Bit.App.Pages
             {
                 Email = await _stateService.GetRememberedEmailAsync();
                 var decryptOptions = await _stateService.GetAccountDecryptionOptions();
+                var isNewUser = !RequestAdminApprovalEnabled && !ApproveWithMasterPasswordEnabled;
                 RequestAdminApprovalEnabled = decryptOptions?.TrustedDeviceOption?.HasAdminApproval ?? false;
                 ApproveWithMasterPasswordEnabled = decryptOptions?.HasMasterPassword ?? false;
                 ApproveWithMyOtherDeviceEnabled = decryptOptions?.TrustedDeviceOption?.HasLoginApprovingDevice ?? false;
+                ContinueEnabled = isNewUser;
+
+                if (isNewUser)
+                {
+                    await _authService.CreateNewSSOUserAsync();
+                    var enrollStatus = await _apiService.GetOrganizationAutoEnrollStatusAsync(await _stateService.GetRememberedOrgIdentifierAsync());
+                }
             }
             catch (Exception ex)
             {
                 HandleException(ex);
             }
-
-            // TODO: Change this expression to, Appear if the browser is trusted and shared the key with the app
-            ContinueEnabled = !RequestAdminApprovalEnabled && !ApproveWithMasterPasswordEnabled && !ApproveWithMyOtherDeviceEnabled;
         }
 
         private async Task SetDeviceTrustAndInvokeAsync(Action action)

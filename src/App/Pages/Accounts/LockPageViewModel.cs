@@ -172,6 +172,22 @@ namespace Bit.App.Pages
                       _pinStatus == PinLockEnum.Persistent;
 
             BiometricEnabled = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _cryptoService.HasEncryptedUserKeyAsync();
+            // Users with SSO login and a pending request
+            var decryptOptions = await _stateService.GetAccountDecryptionOptions();
+            var pendingRequest = await _stateService.GetPendingAdminAuthRequestAsync();
+            if (pendingRequest != null)
+            {
+                await _vaultTimeoutService.LogOutAsync();
+                return;
+            }
+            if (decryptOptions.TrustedDeviceOption != null && await _stateService.IsAuthenticatedAsync())
+            {
+                if (!decryptOptions.HasMasterPassword && !(BiometricEnabled || PinEnabled))
+                {
+                    await _vaultTimeoutService.LogOutAsync();
+                    return;
+                }
+            }
 
             // Users with key connector and without biometric or pin has no MP to unlock with
             _usingKeyConnector = await _keyConnectorService.GetUsesKeyConnector();

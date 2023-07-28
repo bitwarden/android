@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
@@ -693,6 +694,23 @@ namespace Bit.Core.Services
         {
             passwordlessLogin.FingerprintPhrase = string.Join("-", await _cryptoService.GetFingerprintAsync(userEmail, CoreHelpers.Base64UrlDecode(passwordlessLogin.PublicKey)));
             return passwordlessLogin;
+        }
+
+        public async Task CreateNewSSOUserAsync()
+        {
+            var randomBytes = _cryptoFunctionService.RandomBytes(64);
+            var userKey = new SymmetricCryptoKey(randomBytes) as UserKey;
+            var keyPair = await _cryptoService.MakeKeyPairAsync();
+            await _apiService.PostAccountKeysAsync(new KeysRequest
+            {
+                PublicKey = keyPair.Item1,
+                EncryptedPrivateKey = keyPair.Item2.EncryptedString
+            });
+
+            await _stateService.SetUserKeyAsync(userKey);
+            await _stateService.SetPrivateKeyEncryptedAsync(keyPair.Item2.EncryptedString);
+
+            await _deviceTrustCryptoService.TrustDeviceIfNeededAsync();
         }
     }
 }

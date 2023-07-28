@@ -209,17 +209,12 @@ namespace Bit.App.Pages
                 if (response.TwoFactor)
                 {
                     StartTwoFactorAction?.Invoke();
+                    return;
                 }
-                else if (response.ResetMasterPassword)
+
+                if (decryptOptions?.TrustedDeviceOption != null)
                 {
-                    StartSetPasswordAction?.Invoke();
-                }
-                else if (response.ForcePasswordReset)
-                {
-                    UpdateTempPasswordAction?.Invoke();
-                }
-                else if (decryptOptions?.TrustedDeviceOption != null)
-                {
+                    var pendingRequest = await _stateService.GetPendingAdminAuthRequestAsync();
                     // If user doesn't have a MP, but has reset password permission, they must set a MP
                     if (!decryptOptions.HasMasterPassword &&
                         decryptOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
@@ -235,16 +230,52 @@ namespace Bit.App.Pages
                         _syncService.FullSyncAsync(true).FireAndForget();
                         SsoAuthSuccessAction?.Invoke();
                     }
+                    else if (pendingRequest != null)
+                    {
+                        var authRequest = await _authService.GetPasswordlessLoginRequestByIdAsync(pendingRequest.Id);
+                        if (authRequest != null && authRequest.RequestApproved != null && authRequest.RequestApproved.Value)
+                        {
+                            var authResult = await _authService.LogInPasswordlessAsync(await _stateService.GetActiveUserEmailAsync(), authRequest.RequestAccessCode, pendingRequest.Id, pendingRequest.PrivateKey, authRequest.Key, authRequest.MasterPasswordHash);
+                            if (authResult == null && await _stateService.IsAuthenticatedAsync())
+                            {
+                                await Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(
+                                 () => _platformUtilsService.ShowToast("info", null, AppResources.LoginApproved));
+                                await _stateService.SetPendingAdminAuthRequestAsync(null);
+                                var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
+                                SsoAuthSuccessAction?.Invoke();
+                            }
+                        }
+                        else
+                        {
+                            StartDeviceApprovalOptionsAction?.Invoke();
+                        }
+
+                    }
                     else
                     {
                         StartDeviceApprovalOptionsAction?.Invoke();
                     }
+                    return;
                 }
-                else
+
+                // In the standard, non TDE case, a user must set password if they don't
+                // have one and they aren't using key connector.
+                // Note: TDE & Key connector are mutually exclusive org config options.
+                var requireSetPassword = !decryptOptions.HasMasterPassword && decryptOptions.KeyConnectorOption == null;
+                if (requireSetPassword)
                 {
-                    _syncService.FullSyncAsync(true).FireAndForget();
-                    SsoAuthSuccessAction?.Invoke();
+                    StartSetPasswordAction?.Invoke();
+                    return;
                 }
+
+                if (response.ForcePasswordReset)
+                {
+                    UpdateTempPasswordAction?.Invoke();
+                    return;
+                }
+
+                _syncService.FullSyncAsync(true).FireAndForget();
+                SsoAuthSuccessAction?.Invoke();
             }
             catch (Exception e)
             {
