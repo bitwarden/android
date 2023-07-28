@@ -1,0 +1,2716 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About" xml:space="preserve">
+    <value>Относно</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Добавяне</value>
+    <comment>Add/create a new entity (verb).</comment>
+  </data>
+  <data name="AddFolder" xml:space="preserve">
+    <value>Добавяне на папка</value>
+  </data>
+  <data name="AddItem" xml:space="preserve">
+    <value>Добавяне на елемент</value>
+    <comment>The title for the add item page.</comment>
+  </data>
+  <data name="AnErrorHasOccurred" xml:space="preserve">
+    <value>Възникна грешка.</value>
+    <comment>Alert title when something goes wrong.</comment>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Назад</value>
+    <comment>Navigate back to the previous screen.</comment>
+  </data>
+  <data name="Bitwarden" xml:space="preserve">
+    <value>Bitwarden</value>
+    <comment>App name. Shouldn't ever change.</comment>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отказ</value>
+    <comment>Cancel an operation.</comment>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Копиране</value>
+    <comment>Copy some value to your clipboard.</comment>
+  </data>
+  <data name="CopyPassword" xml:space="preserve">
+    <value>Копиране на паролата</value>
+    <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
+  </data>
+  <data name="CopyUsername" xml:space="preserve">
+    <value>Копиране на потребителското име</value>
+    <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
+  </data>
+  <data name="Credits" xml:space="preserve">
+    <value>Благодарности</value>
+    <comment>Title for page that we use to give credit to resources that we use.</comment>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Изтриване</value>
+    <comment>Delete an entity (verb).</comment>
+  </data>
+  <data name="Deleting" xml:space="preserve">
+    <value>Изтриване…</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="DoYouReallyWantToDelete" xml:space="preserve">
+    <value>Наистина ли искате да го изтриете? Действието не може да бъде отменено.</value>
+    <comment>Confirmation alert message when deleteing something.</comment>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Редактиране</value>
+  </data>
+  <data name="EditFolder" xml:space="preserve">
+    <value>Редактиране на папка</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Имейл</value>
+    <comment>Short label for an email address.</comment>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>Имейл адрес</value>
+    <comment>Full label for a email address.</comment>
+  </data>
+  <data name="EmailUs" xml:space="preserve">
+    <value>Пишете ни</value>
+  </data>
+  <data name="EmailUsDescription" xml:space="preserve">
+    <value>За поддръжка или обратна връзка ни пратете е-поща.</value>
+  </data>
+  <data name="EnterPIN" xml:space="preserve">
+    <value>Въведете своя ПИН.</value>
+  </data>
+  <data name="Favorites" xml:space="preserve">
+    <value>Любими</value>
+    <comment>Title for your favorite items in the vault.</comment>
+  </data>
+  <data name="FileBugReport" xml:space="preserve">
+    <value>Съобщаване за грешка</value>
+  </data>
+  <data name="FileBugReportDescription" xml:space="preserve">
+    <value>Докладване на проблем през GitHub.</value>
+  </data>
+  <data name="FingerprintDirection" xml:space="preserve">
+    <value>Потвърждаване с пръстов отпечатък.</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Папка</value>
+    <comment>Label for a folder.</comment>
+  </data>
+  <data name="FolderCreated" xml:space="preserve">
+    <value>Папката е създадена.</value>
+  </data>
+  <data name="FolderDeleted" xml:space="preserve">
+    <value>Папката е изтрита.</value>
+  </data>
+  <data name="FolderNone" xml:space="preserve">
+    <value>Няма папка</value>
+    <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
+  </data>
+  <data name="Folders" xml:space="preserve">
+    <value>Папки</value>
+  </data>
+  <data name="FolderUpdated" xml:space="preserve">
+    <value>Папката е обновена.</value>
+  </data>
+  <data name="GoToWebsite" xml:space="preserve">
+    <value>Посещаване на сайта</value>
+    <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
+  <data name="HelpAndFeedback" xml:space="preserve">
+    <value>Помощ и обратна връзка</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Скриване</value>
+    <comment>Hide a secret value that is currently shown (password).</comment>
+  </data>
+  <data name="InternetConnectionRequiredMessage" xml:space="preserve">
+    <value>Свържете се с Интернет, за да продължите.</value>
+    <comment>Description message for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="InternetConnectionRequiredTitle" xml:space="preserve">
+    <value>Необходима е връзка към Интернет</value>
+    <comment>Title for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="InvalidMasterPassword" xml:space="preserve">
+    <value>Грешна главна парола. Пробвайте отново.</value>
+  </data>
+  <data name="InvalidPIN" xml:space="preserve">
+    <value>Неправилен ПИН. Пробвайте отново.</value>
+  </data>
+  <data name="Launch" xml:space="preserve">
+    <value>Пускане</value>
+    <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
+  <data name="LogIn" xml:space="preserve">
+    <value>Вход</value>
+    <comment>The login button text (verb).</comment>
+  </data>
+  <data name="LogInNoun" xml:space="preserve">
+    <value>Вход</value>
+    <comment>Title for login page. (noun)</comment>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Отписване</value>
+    <comment>The log out button text (verb).</comment>
+  </data>
+  <data name="LogoutConfirmation" xml:space="preserve">
+    <value>Сигурни ли сте, че искате да се отпишете?</value>
+  </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Премахване на регистрацията</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Наистина ли искате да премахнете тази регистрация?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Регистрацията вече е добавена</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Искате ли да превключите към нея сега?</value>
+  </data>
+  <data name="MasterPassword" xml:space="preserve">
+    <value>Главна парола</value>
+    <comment>Label for a master password.</comment>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>Още</value>
+    <comment>Text to define that there are more options things to see.</comment>
+  </data>
+  <data name="MyVault" xml:space="preserve">
+    <value>Моят трезор</value>
+    <comment>The title for the vault page.</comment>
+  </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Удостоверител</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Име</value>
+    <comment>Label for an entity name.</comment>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Не</value>
+  </data>
+  <data name="Notes" xml:space="preserve">
+    <value>Бележки</value>
+    <comment>Label for notes.</comment>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Добре</value>
+    <comment>Acknowledgement.</comment>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Парола</value>
+    <comment>Label for a password.</comment>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Запазване</value>
+    <comment>Button text for a save operation (verb).</comment>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Преместване</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Запазване…</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Настройки</value>
+    <comment>The title for the settings page.</comment>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Показване</value>
+    <comment>Reveal a hidden value (password).</comment>
+  </data>
+  <data name="ItemDeleted" xml:space="preserve">
+    <value>Елементът беше изтрит.</value>
+    <comment>Confirmation message after successfully deleting a login.</comment>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Подаване</value>
+  </data>
+  <data name="Sync" xml:space="preserve">
+    <value>Синхронизиране</value>
+    <comment>The title for the sync page.</comment>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>Благодарим ви!</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>Инструменти</value>
+    <comment>The title for the tools page.</comment>
+  </data>
+  <data name="URI" xml:space="preserve">
+    <value>Адрес</value>
+    <comment>Label for a uri/url.</comment>
+  </data>
+  <data name="UseFingerprintToUnlock" xml:space="preserve">
+    <value>Отключване с пръстов отпечатък</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Потребителско име</value>
+    <comment>Label for a username.</comment>
+  </data>
+  <data name="ValidationFieldRequired" xml:space="preserve">
+    <value>Полето {0} е задължително.</value>
+    <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
+  </data>
+  <data name="ValueHasBeenCopied" xml:space="preserve">
+    <value>{0} беше копирано.</value>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
+  </data>
+  <data name="VerifyFingerprint" xml:space="preserve">
+    <value>Потвърждаване на пръстовия отпечатък</value>
+  </data>
+  <data name="VerifyMasterPassword" xml:space="preserve">
+    <value>Потвърждаване на главната парола</value>
+  </data>
+  <data name="VerifyPIN" xml:space="preserve">
+    <value>Потвърждаване на ПИН</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Версия</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Преглед</value>
+  </data>
+  <data name="VisitOurWebsite" xml:space="preserve">
+    <value>Посетете нашия сайт</value>
+  </data>
+  <data name="VisitOurWebsiteDescription" xml:space="preserve">
+    <value>Посетете сайта ни за помощ, новини, начини да се свържете с нас и как да ползвате Bitwarden.</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Сайт</value>
+    <comment>Label for a website.</comment>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Регистрация</value>
+  </data>
+  <data name="AccountCreated" xml:space="preserve">
+    <value>Абонаментът ви бе създаден. Вече можете да се впишете.</value>
+  </data>
+  <data name="AddAnItem" xml:space="preserve">
+    <value>Добавяне на елемент</value>
+  </data>
+  <data name="AppExtension" xml:space="preserve">
+    <value>Разширение</value>
+  </data>
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
+    <value>Автоматично дописване на полетата във формулярите в приложенията и уеб чрез услугата за достъпност на Bitwarden.</value>
+  </data>
+  <data name="AutofillService" xml:space="preserve">
+    <value>Услуга за автоматично дописване</value>
+  </data>
+  <data name="AvoidAmbiguousCharacters" xml:space="preserve">
+    <value>Без нееднозначни знаци</value>
+  </data>
+  <data name="BitwardenAppExtension" xml:space="preserve">
+    <value>Разширение за програмите на Bitwarden</value>
+  </data>
+  <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
+    <value>Най-лесният начин да добавяте нови записи в трезора е чрез разширението за програмите на Битуорден. Може да научите повече за него в екрана за настройките.</value>
+  </data>
+  <data name="BitwardenAppExtensionDescription" xml:space="preserve">
+    <value>Автоматично дописване чрез Битуорден при вписване в уеб и различни програми.</value>
+  </data>
+  <data name="BitwardenAutofillService" xml:space="preserve">
+    <value>Услуга за автоматично дописване на Битуорден</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
+    <value>Автоматично дописване на формулярите за вписване с услугата за достъпност на Битуорден.</value>
+  </data>
+  <data name="ChangeEmail" xml:space="preserve">
+    <value>Промяна на имейла</value>
+  </data>
+  <data name="ChangeEmailConfirmation" xml:space="preserve">
+    <value>Адресът ви за е-поща може да се промени чрез сайта bitwarden.com. Искате ли да го посетите?</value>
+  </data>
+  <data name="ChangeMasterPassword" xml:space="preserve">
+    <value>Промяна на главната парола</value>
+  </data>
+  <data name="ChangePasswordConfirmation" xml:space="preserve">
+    <value>Главната парола на трезор може да се промени чрез сайта bitwarden.com. Искате ли да го посетите?</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Затваряне</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Продължаване</value>
+  </data>
+  <data name="CreateAccount" xml:space="preserve">
+    <value>Регистрация</value>
+  </data>
+  <data name="CreatingAccount" xml:space="preserve">
+    <value>Създаване на сметката...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="EditItem" xml:space="preserve">
+    <value>Редактиране на елемента</value>
+  </data>
+  <data name="EnableAutomaticSyncing" xml:space="preserve">
+    <value>Автоматично синхронизиране</value>
+  </data>
+  <data name="EnterEmailForHint" xml:space="preserve">
+    <value>Въведете адреса си на е-поща, за да получите писмо с подсказка за главната парола.</value>
+  </data>
+  <data name="ExntesionReenable" xml:space="preserve">
+    <value>Повторно включване на разширението</value>
+  </data>
+  <data name="ExtensionAlmostDone" xml:space="preserve">
+    <value>Почти готово!</value>
+  </data>
+  <data name="ExtensionEnable" xml:space="preserve">
+    <value>Включване на разширението</value>
+  </data>
+  <data name="ExtensionInSafari" xml:space="preserve">
+    <value>В Safari може да достъпите Битуорден чрез иконата за споделяне (придвижете се надясно в долния ред на менюто).</value>
+    <comment>Safari is the name of apple's web browser</comment>
+  </data>
+  <data name="ExtensionInstantAccess" xml:space="preserve">
+    <value>Незабавен достъп до паролите!</value>
+  </data>
+  <data name="ExtensionReady" xml:space="preserve">
+    <value>Може да се впишете!</value>
+  </data>
+  <data name="ExtensionSetup" xml:space="preserve">
+    <value>Регистрациите ви вече са леснодостъпни от Safari, Chrome и другите поддържани програми.</value>
+  </data>
+  <data name="ExtensionSetup2" xml:space="preserve">
+    <value>В Safari и Chrome може да достъпите Битуорден чрез иконата за споделяне (придвижете се надясно в долния ред на менюто).</value>
+  </data>
+  <data name="ExtensionTapIcon" xml:space="preserve">
+    <value>Докоснете иконата на Битуорден в менюто, за да пуснете приставката.</value>
+  </data>
+  <data name="ExtensionTurnOn" xml:space="preserve">
+    <value>Докоснете иконата за допълнителни (more) в долния ред на менюто, за да достъпите Битуорден.</value>
+  </data>
+  <data name="Favorite" xml:space="preserve">
+    <value>Любими</value>
+  </data>
+  <data name="Fingerprint" xml:space="preserve">
+    <value>Отпечатък</value>
+  </data>
+  <data name="GeneratePassword" xml:space="preserve">
+    <value>Генериране на парола</value>
+  </data>
+  <data name="GetPasswordHint" xml:space="preserve">
+    <value>Получаване на подсказка за главната парола</value>
+  </data>
+  <data name="ImportItems" xml:space="preserve">
+    <value>Импортиране на елементи</value>
+  </data>
+  <data name="ImportItemsConfirmation" xml:space="preserve">
+    <value>Можете да внасяте записи в трезора си през уеб сайта bitwarden.com. Искате ли да се отвори?</value>
+  </data>
+  <data name="ImportItemsDescription" xml:space="preserve">
+    <value>Бързо внасяне в трезора на записи от други програми за управление на пароли.</value>
+  </data>
+  <data name="LastSync" xml:space="preserve">
+    <value>Последно синхронизиране:</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Дължина</value>
+  </data>
+  <data name="Lock" xml:space="preserve">
+    <value>Заключване</value>
+  </data>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 минути</value>
+  </data>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 час</value>
+  </data>
+  <data name="OneMinute" xml:space="preserve">
+    <value>1 минута</value>
+  </data>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 часа</value>
+  </data>
+  <data name="Immediately" xml:space="preserve">
+    <value>Незабавно</value>
+  </data>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>Време за достъп</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Действие при изтичане на времето</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Излизането от трезора изцяло спира достъпа до него след изтичане на времето. Ще ви се наложи отново да се идентифицирате, за да го достъпите. Сигурни ли сте, че искате това действие?</value>
+  </data>
+  <data name="LoggingIn" xml:space="preserve">
+    <value>Вписване…</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="LoginOrCreateNewAccount" xml:space="preserve">
+    <value>Влезте или се регистрирайте, за да имате достъп до вашия защитен трезор.</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Управление</value>
+  </data>
+  <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
+    <value>Потвърждението не съвпада с паролата.</value>
+  </data>
+  <data name="MasterPasswordDescription" xml:space="preserve">
+    <value>С главната парола получавате достъп до трезора си, не я губете! Ако я забравите, не съществува никакъв начин за нейното възстановяване.</value>
+  </data>
+  <data name="MasterPasswordHint" xml:space="preserve">
+    <value>Подсказка за главната парола (по избор)</value>
+  </data>
+  <data name="MasterPasswordHintDescription" xml:space="preserve">
+    <value>Подсказката помага да си спомните паролата, ако сте я забравили.</value>
+  </data>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Главната парола трябва да е дълга поне {0} знака.</value>
+  </data>
+  <data name="MinNumbers" xml:space="preserve">
+    <value>Минимален брой цифри</value>
+    <comment>Minimum numeric characters for password generator settings</comment>
+  </data>
+  <data name="MinSpecial" xml:space="preserve">
+    <value>Минимален брой специални знаци</value>
+    <comment>Minimum special characters for password generator settings</comment>
+  </data>
+  <data name="MoreSettings" xml:space="preserve">
+    <value>Допълнителни настройки</value>
+  </data>
+  <data name="MustLogInMainApp" xml:space="preserve">
+    <value>Трябва да се впишете в основното приложение на Битуорден, за да може да използвате тази приставка.</value>
+  </data>
+  <data name="Never" xml:space="preserve">
+    <value>Никога</value>
+  </data>
+  <data name="NewItemCreated" xml:space="preserve">
+    <value>Създаден е нов елемент.</value>
+  </data>
+  <data name="NoFavorites" xml:space="preserve">
+    <value>Няма любими записи в трезора.</value>
+  </data>
+  <data name="NoItems" xml:space="preserve">
+    <value>Няма записи в трезора.</value>
+  </data>
+  <data name="NoItemsTap" xml:space="preserve">
+    <value>Няма записи в трезора за този сайт или програма. Натиснете, за да добавите.</value>
+  </data>
+  <data name="NoUsernamePasswordConfigured" xml:space="preserve">
+    <value>Името или паролата липсват в този запис за вход.</value>
+  </data>
+  <data name="OkGotIt" xml:space="preserve">
+    <value>Добре, разбрах!</value>
+    <comment>Confirmation, like "Ok, I understand it"</comment>
+  </data>
+  <data name="OptionDefaults" xml:space="preserve">
+    <value>Стандартните настройки се задават от екрана на Битуорден за създаване на пароли.</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Други</value>
+  </data>
+  <data name="PasswordGenerated" xml:space="preserve">
+    <value>Създадена парола.</value>
+  </data>
+  <data name="PasswordGenerator" xml:space="preserve">
+    <value>Създаване на пароли</value>
+  </data>
+  <data name="PasswordHint" xml:space="preserve">
+    <value>Подсказка за паролата</value>
+  </data>
+  <data name="PasswordHintAlert" xml:space="preserve">
+    <value>Пратено ви е е-писмо с подсказка за главната парола.</value>
+  </data>
+  <data name="PasswordOverrideAlert" xml:space="preserve">
+    <value>Сигурни ли сте, че искате да обновите текущата парола?</value>
+  </data>
+  <data name="PushNotificationAlert" xml:space="preserve">
+    <value>Битуорден автоматично синхронизира трезора с изтласкани известия (push), затова ги включете (allow) на следващия екран.</value>
+    <comment>Push notifications for apple products</comment>
+  </data>
+  <data name="RateTheApp" xml:space="preserve">
+    <value>Оценяване на приложението</value>
+  </data>
+  <data name="RateTheAppDescription" xml:space="preserve">
+    <value>Молим да ни помогнете, като оставите положителен отзив!</value>
+  </data>
+  <data name="RegeneratePassword" xml:space="preserve">
+    <value>Друга парола</value>
+  </data>
+  <data name="RetypeMasterPassword" xml:space="preserve">
+    <value>Въведете пак главната парола</value>
+  </data>
+  <data name="SearchVault" xml:space="preserve">
+    <value>Търсене в трезора</value>
+  </data>
+  <data name="Security" xml:space="preserve">
+    <value>Сигурност</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Избор</value>
+  </data>
+  <data name="SetPIN" xml:space="preserve">
+    <value>Задаване на ПИН</value>
+  </data>
+  <data name="SetPINDirection" xml:space="preserve">
+    <value>Въведете 4-цифрен ПИН за отключване на Битуорден.</value>
+  </data>
+  <data name="ItemInformation" xml:space="preserve">
+    <value>Сведения за елемента</value>
+  </data>
+  <data name="ItemUpdated" xml:space="preserve">
+    <value>Елементът е обновен.</value>
+  </data>
+  <data name="Submitting" xml:space="preserve">
+    <value>Подаване…</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="Syncing" xml:space="preserve">
+    <value>Синхронизиране…</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="SyncingComplete" xml:space="preserve">
+    <value>Синхронизацията завърши.</value>
+  </data>
+  <data name="SyncingFailed" xml:space="preserve">
+    <value>Неуспешна синхронизация.</value>
+  </data>
+  <data name="SyncVaultNow" xml:space="preserve">
+    <value>Синхронизиране сега</value>
+  </data>
+  <data name="TouchID" xml:space="preserve">
+    <value>Удостоверяване с докосване (Touch ID)</value>
+    <comment>What Apple calls their fingerprint reader.</comment>
+  </data>
+  <data name="TwoStepLogin" xml:space="preserve">
+    <value>Двустепенно удостоверяване</value>
+  </data>
+  <data name="TwoStepLoginConfirmation" xml:space="preserve">
+    <value>Двустепенното вписване защищава регистрацията ви като ви кара да потвърдите влизането си чрез устройство-ключ, приложение за идентификация, мобилно съобщение, телефонно обаждане или е-поща. Двустепенното вписване може да се включи чрез сайта bitwarden.com. Искате ли да го посетите?</value>
+  </data>
+  <data name="UnlockWith" xml:space="preserve">
+    <value>Отключване с {0}</value>
+  </data>
+  <data name="UnlockWithPIN" xml:space="preserve">
+    <value>Отключване с ПИН</value>
+  </data>
+  <data name="Validating" xml:space="preserve">
+    <value>Потвърждаване</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="VerificationCode" xml:space="preserve">
+    <value>Код за потвърждаване</value>
+  </data>
+  <data name="ViewItem" xml:space="preserve">
+    <value>Преглед на елемента</value>
+  </data>
+  <data name="WebVault" xml:space="preserve">
+    <value>Трезор по уеб</value>
+  </data>
+  <data name="Lost2FAApp" xml:space="preserve">
+    <value>Изгубено приложение за идентификация</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>Елементи</value>
+    <comment>Screen title</comment>
+  </data>
+  <data name="ExtensionActivated" xml:space="preserve">
+    <value>Разширението е включено!</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Иконки</value>
+  </data>
+  <data name="Translations" xml:space="preserve">
+    <value>Преводи</value>
+  </data>
+  <data name="ItemsForUri" xml:space="preserve">
+    <value>Елементи за {0}</value>
+    <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
+  </data>
+  <data name="NoItemsForUri" xml:space="preserve">
+    <value>В трезора липсват елементи за {0}.</value>
+    <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
+  </data>
+  <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
+    <value>При избиране на поле за въвеждане на данни ще се появява изскачащо прозорче на Битуорден. Ако го натиснете, ще задействате услугата за автоматично дописване и имената и паролите ще бъдат попълнени.</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
+    <value>Натиснете известието, за да попълните със запис от трезора.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
+    <value>Отворете настройките за достъпност</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
+    <value>1. Натиснете „Битуорден“ на екрана за достъпност на Андроид в раздела за услуги.</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
+    <value>2. Включете настройката и я приемете, за да се запази.</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Изключено</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Включено</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Изключено</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Включено</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Състояние</value>
+  </data>
+  <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
+    <value>Най-лесният начин да добавяте нови записи към трезора си е с услугата за автоматично дописване на Битуорден. Може да научите повече как да я ползвате от екрана за настройки.</value>
+  </data>
+  <data name="Autofill" xml:space="preserve">
+    <value>Автоматично дописване</value>
+  </data>
+  <data name="AutofillOrView" xml:space="preserve">
+    <value>Искате да разгледате записа или да го ползвате за дописване?</value>
+  </data>
+  <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
+    <value>Сигурни ли сте, че искате да допишете с този запис? Той не е точно съвпадение за „{0}“.</value>
+  </data>
+  <data name="MatchingItems" xml:space="preserve">
+    <value>Съвпадащи записи</value>
+  </data>
+  <data name="PossibleMatchingItems" xml:space="preserve">
+    <value>Възможно съвпадащи записи</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Търсене</value>
+  </data>
+  <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
+    <value>Търсене на запис за автоматично дописване на „{0}“.</value>
+  </data>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Разберете повече за организациите</value>
+  </data>
+  <data name="CannotOpenApp" xml:space="preserve">
+    <value>Програмата „{0}“ не може да се отвори.</value>
+    <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
+  </data>
+  <data name="AuthenticatorAppTitle" xml:space="preserve">
+    <value>Приложение за удостоверяване</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeApp" xml:space="preserve">
+    <value>Въведете шестцифрения код за потвърждение от приложението за удостоверяване.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeEmail" xml:space="preserve">
+    <value>Въведете шестцифрения код за потвърждение, който е бил изпратен на {0}.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="LoginUnavailable" xml:space="preserve">
+    <value>Записът липсва</value>
+    <comment>For 2FA whenever there are no available providers on this device.</comment>
+  </data>
+  <data name="NoTwoStepAvailable" xml:space="preserve">
+    <value>Регистрацията е защитена с двустепенно удостоверяване, но никой от настроените доставчици на удостоверяване не се поддържа от тази система. Пробвайте с друго устройство и/или добавете други доставчици на удостоверяване, които се поддържат по-добре (като специални програми за удостоверяване).</value>
+  </data>
+  <data name="RecoveryCodeTitle" xml:space="preserve">
+    <value>Код за възстановяване</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Запомняне</value>
+    <comment>Remember my two-step login</comment>
+  </data>
+  <data name="SendVerificationCodeAgain" xml:space="preserve">
+    <value>Повторно изпращане на писмото за потвърждение</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="TwoStepLoginOptions" xml:space="preserve">
+    <value>Настройки на двустепенното удостоверяване</value>
+  </data>
+  <data name="UseAnotherTwoStepMethod" xml:space="preserve">
+    <value>Използвайте друг начин на двустепенно удостоверяване</value>
+  </data>
+  <data name="VerificationEmailNotSent" xml:space="preserve">
+    <value>Писмото за потвърждение не може да се изпрати повторно. Пробвайте отново.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="VerificationEmailSent" xml:space="preserve">
+    <value>Писмото за потвърждение е изпратено повторно.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="YubiKeyInstruction" xml:space="preserve">
+    <value>За да продължите, задръжте устройството YubiKey NEO към гърба на телефона или сложете устройството YubiKey в USB порта и натиснете бутона му.</value>
+  </data>
+  <data name="YubiKeyTitle" xml:space="preserve">
+    <value>Устройство YubiKey</value>
+    <comment>"YubiKey" is the product name and should not be translated.</comment>
+  </data>
+  <data name="AddNewAttachment" xml:space="preserve">
+    <value>Прикачване на файл</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Прикачени файлове</value>
+  </data>
+  <data name="UnableToDownloadFile" xml:space="preserve">
+    <value>Файлът не може да се изтегли.</value>
+  </data>
+  <data name="UnableToOpenFile" xml:space="preserve">
+    <value>Устройството ви не поддържа този вид файлове.</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Изтегляне…</value>
+    <comment>Message shown when downloading a file</comment>
+  </data>
+  <data name="AttachmentLargeWarning" xml:space="preserve">
+    <value>Размерът на прикачения файл е {0}. Сигурни ли сте, че искате да го свалите на устройството си?</value>
+    <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
+  </data>
+  <data name="AuthenticatorKey" xml:space="preserve">
+    <value>Удостоверителен ключ (TOTP)</value>
+  </data>
+  <data name="VerificationCodeTotp" xml:space="preserve">
+    <value>Код за потвърждаване (TOTP)</value>
+    <comment>Totp code label</comment>
+  </data>
+  <data name="AuthenticatorKeyAdded" xml:space="preserve">
+    <value>Удостоверителният ключ е добавен.</value>
+  </data>
+  <data name="AuthenticatorKeyReadError" xml:space="preserve">
+    <value>Удостоверителният ключ не може да се прочете.</value>
+  </data>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Насочете камерата към QR кода.
+Сканирането ще се извърши автоматично.</value>
+  </data>
+  <data name="ScanQrTitle" xml:space="preserve">
+    <value>Сканиране на QR код</value>
+  </data>
+  <data name="Camera" xml:space="preserve">
+    <value>Камера</value>
+  </data>
+  <data name="Photos" xml:space="preserve">
+    <value>Снимки</value>
+  </data>
+  <data name="CopyTotp" xml:space="preserve">
+    <value>Копиране на кода за потвърждаване</value>
+  </data>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Ако към вписването има и удостоверителен ключ, кодът за потвърждаване се копира автоматично в буфера при автоматично дописване.</value>
+  </data>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Автоматично копиране на TOTP</value>
+  </data>
+  <data name="PremiumRequired" xml:space="preserve">
+    <value>За да се възползвате от тази възможност, трябва да ползвате платен абонамент.</value>
+  </data>
+  <data name="AttachementAdded" xml:space="preserve">
+    <value>Файлът е прикачен</value>
+  </data>
+  <data name="AttachmentDeleted" xml:space="preserve">
+    <value>Файлът е махнат</value>
+  </data>
+  <data name="ChooseFile" xml:space="preserve">
+    <value>Изберете файл</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="NoFileChosen" xml:space="preserve">
+    <value>Не е избран файл</value>
+  </data>
+  <data name="NoAttachments" xml:space="preserve">
+    <value>Няма прикачени файлове.</value>
+  </data>
+  <data name="FileSource" xml:space="preserve">
+    <value>Източник на файла</value>
+  </data>
+  <data name="FeatureUnavailable" xml:space="preserve">
+    <value>Функцията е недостъпна</value>
+  </data>
+  <data name="MaxFileSize" xml:space="preserve">
+    <value>Големината на файла е най-много 100 MB.</value>
+  </data>
+  <data name="UpdateKey" xml:space="preserve">
+    <value>Трябва да обновите шифриращия си ключ, за да използвате тази възможност.</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Научете повече</value>
+  </data>
+  <data name="ApiUrl" xml:space="preserve">
+    <value>Адрес на ППИ-сървъра</value>
+  </data>
+  <data name="CustomEnvironment" xml:space="preserve">
+    <value>Специална среда</value>
+  </data>
+  <data name="CustomEnvironmentFooter" xml:space="preserve">
+    <value>За специални случаи. Може да укажете основните адреси на всяка ползвана услуга поотделно.</value>
+  </data>
+  <data name="EnvironmentSaved" xml:space="preserve">
+    <value>Средата с адресите е запазена.</value>
+  </data>
+  <data name="FormattedIncorrectly" xml:space="preserve">
+    <value>{0} не е форматиран правилно.</value>
+    <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
+  </data>
+  <data name="IdentityUrl" xml:space="preserve">
+    <value>Адрес на сървъра със самоличности</value>
+    <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
+  </data>
+  <data name="SelfHostedEnvironment" xml:space="preserve">
+    <value>Собствена среда</value>
+  </data>
+  <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
+    <value>Укажете базовия адрес за собствената ви инсталирана среда на Битуорден.</value>
+  </data>
+  <data name="ServerUrl" xml:space="preserve">
+    <value>Адрес на сървъра</value>
+  </data>
+  <data name="WebVaultUrl" xml:space="preserve">
+    <value>Адрес на сървъра с трезора в уеб</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
+    <value>Натиснете това известие, за да видите записите в трезора.</value>
+  </data>
+  <data name="CustomFields" xml:space="preserve">
+    <value>Допълнителни полета</value>
+  </data>
+  <data name="CopyNumber" xml:space="preserve">
+    <value>Копиране на но̀мера</value>
+  </data>
+  <data name="CopySecurityCode" xml:space="preserve">
+    <value>Копиране на кода за сигурност</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Номер</value>
+  </data>
+  <data name="SecurityCode" xml:space="preserve">
+    <value>Код за сигурност</value>
+  </data>
+  <data name="TypeCard" xml:space="preserve">
+    <value>Карта</value>
+  </data>
+  <data name="TypeIdentity" xml:space="preserve">
+    <value>Самоличност</value>
+  </data>
+  <data name="TypeLogin" xml:space="preserve">
+    <value>Запис</value>
+  </data>
+  <data name="TypeSecureNote" xml:space="preserve">
+    <value>Защитена бележка</value>
+  </data>
+  <data name="Address1" xml:space="preserve">
+    <value>Адрес 1</value>
+  </data>
+  <data name="Address2" xml:space="preserve">
+    <value>Адрес 2</value>
+  </data>
+  <data name="Address3" xml:space="preserve">
+    <value>Адрес 3</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>април</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>август</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Вид</value>
+  </data>
+  <data name="CardholderName" xml:space="preserve">
+    <value>Име на притежателя на картата</value>
+  </data>
+  <data name="CityTown" xml:space="preserve">
+    <value>Населено място</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Фирма</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Държава</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>декември</value>
+  </data>
+  <data name="Dr" xml:space="preserve">
+    <value>Д-р</value>
+  </data>
+  <data name="ExpirationMonth" xml:space="preserve">
+    <value>Месец на изтичане</value>
+  </data>
+  <data name="ExpirationYear" xml:space="preserve">
+    <value>Година на изтичане</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>февруари</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Име</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>януари</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>юли</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>юни</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Фамилия</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Пълно име</value>
+  </data>
+  <data name="LicenseNumber" xml:space="preserve">
+    <value>Номер на лиценза</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>март</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>май</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>Презиме</value>
+  </data>
+  <data name="Mr" xml:space="preserve">
+    <value>Г-н</value>
+  </data>
+  <data name="Mrs" xml:space="preserve">
+    <value>Г-жа</value>
+  </data>
+  <data name="Ms" xml:space="preserve">
+    <value>Г-ца</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>ноември</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>октомври</value>
+  </data>
+  <data name="PassportNumber" xml:space="preserve">
+    <value>Номер на паспорта</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Телефон</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>септември</value>
+  </data>
+  <data name="SSN" xml:space="preserve">
+    <value>Номер на осигуровката</value>
+  </data>
+  <data name="StateProvince" xml:space="preserve">
+    <value>Област</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Обръщение</value>
+  </data>
+  <data name="ZipPostalCode" xml:space="preserve">
+    <value>Пощенски код</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Адрес</value>
+  </data>
+  <data name="Expiration" xml:space="preserve">
+    <value>Изтичане</value>
+  </data>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Показване на иконките на уеб сайтовете</value>
+  </data>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Показване на разпознаваемо изображение до всеки запис.</value>
+  </data>
+  <data name="IconsUrl" xml:space="preserve">
+    <value>Адрес на сървъра с иконки</value>
+  </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>Автоматично дописване с Bitwarden</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>Трезорът е заключен</value>
+  </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>Към трезора</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Колекции</value>
+  </data>
+  <data name="NoItemsCollection" xml:space="preserve">
+    <value>Няма елементи в тази колекция.</value>
+  </data>
+  <data name="NoItemsFolder" xml:space="preserve">
+    <value>Няма елементи в тази папка.</value>
+  </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>Няма записи в кошчето.</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>Услуга за автоматично дописване</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>Услугата на Битуорден за автоматично дописване разчита на инфраструктурата на Андроид на устройството ви за дописване, за да може да попълва полета с идентификационна информация и банкови карти.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Използване на услугата на Битуорден за автоматично дописване при вписване, на банкови карти и други данни за идентификация.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>Към настройките на автоматичното дописване</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Идентификация по лице (Face ID)</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>Удостоверяване чрез Face ID.</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>Отключване чрез Face ID</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>Проверка на Face ID</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Идентификация чрез Уиндоус (Windows Hello)</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>Екранът за настройките за автоматично дописване не може да се отвори автоматично. Може да го достигнете през: Настройки (Android Settings) → Системни (System) → Езици и вход (Languages and input) → Допълнителни (Advanced) → Услуга за дописване (Autofill service).</value>
+  </data>
+  <data name="CustomFieldName" xml:space="preserve">
+    <value>Име на допълнителното поле</value>
+  </data>
+  <data name="FieldTypeBoolean" xml:space="preserve">
+    <value>Булево</value>
+  </data>
+  <data name="FieldTypeHidden" xml:space="preserve">
+    <value>Скрито</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Свързано</value>
+  </data>
+  <data name="FieldTypeText" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="NewCustomField" xml:space="preserve">
+    <value>Ново допълнително поле</value>
+  </data>
+  <data name="SelectTypeField" xml:space="preserve">
+    <value>Вид на допълнителното поле.</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Премахване</value>
+  </data>
+  <data name="NewUri" xml:space="preserve">
+    <value>Нов адрес</value>
+  </data>
+  <data name="URIPosition" xml:space="preserve">
+    <value>Адрес {0}</value>
+    <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
+  </data>
+  <data name="BaseDomain" xml:space="preserve">
+    <value>Основен домейн</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Стандартно</value>
+  </data>
+  <data name="Exact" xml:space="preserve">
+    <value>Точно</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Сървър</value>
+    <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>Регулярен израз</value>
+    <comment>A programming term, also known as 'RegEx'.</comment>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Започва с</value>
+  </data>
+  <data name="URIMatchDetection" xml:space="preserve">
+    <value>Откриване на съвпадения в адрес</value>
+  </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>Откриване на съвпадения</value>
+    <comment>URI match detection for auto-fill.</comment>
+  </data>
+  <data name="YesAndSave" xml:space="preserve">
+    <value>Да и обновяване</value>
+  </data>
+  <data name="AutofillAndSave" xml:space="preserve">
+    <value>Дописване и обновяване</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Организация</value>
+    <comment>An entity of multiple related people (ex. a team or business organization).</comment>
+  </data>
+  <data name="HoldYubikeyNearTop" xml:space="preserve">
+    <value>Поставете устройството YubiKey върху телефона си.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Нов опит</value>
+  </data>
+  <data name="YubiKeyInstructionIos" xml:space="preserve">
+    <value>За да продължите, задръжте устройството YubiKey NEO към гърба на телефона.</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
+    <value>Услугата за достъпност може да е полезна, когато програмите не поддържат стандартната услуга за дописване.</value>
+  </data>
+  <data name="DatePasswordUpdated" xml:space="preserve">
+    <value>Обновена парола</value>
+    <comment>ex. Date this password was updated</comment>
+  </data>
+  <data name="DateUpdated" xml:space="preserve">
+    <value>Обновено</value>
+    <comment>ex. Date this item was updated</comment>
+  </data>
+  <data name="AutofillActivated" xml:space="preserve">
+    <value>Автоматично дописване!</value>
+  </data>
+  <data name="MustLogInMainAppAutofill" xml:space="preserve">
+    <value>За да ползвате автоматичното дописване, трябва първо да се впишете в основната програма на Битуорден.</value>
+  </data>
+  <data name="AutofillSetup" xml:space="preserve">
+    <value>Можете лесно да достъпите записите с потребителски имена и пароли от клавиатурата при вписване в програми и сайтове.</value>
+  </data>
+  <data name="AutofillSetup2" xml:space="preserve">
+    <value>Препоръчваме ви да изключите другите услуги за дописване в настройките, ако не ги използвате.</value>
+  </data>
+  <data name="BitwardenAutofillDescription" xml:space="preserve">
+    <value>Бърз достъп до трезора чрез клавиатурата за лесно дописване на пароли.</value>
+  </data>
+  <data name="AutofillTurnOn" xml:space="preserve">
+    <value>За да включите автоматичното дописване на устройството, следвайте следните стъпки:</value>
+  </data>
+  <data name="AutofillTurnOn1" xml:space="preserve">
+    <value>1. Отворете настройките на iOS (Settings)</value>
+  </data>
+  <data name="AutofillTurnOn2" xml:space="preserve">
+    <value>2. Натиснете „Пароли и регистрации“ (Passwords &amp; Accounts)</value>
+  </data>
+  <data name="AutofillTurnOn3" xml:space="preserve">
+    <value>3. Натиснете автоматично дописване на пароли (AutoFill Passwords)</value>
+  </data>
+  <data name="AutofillTurnOn4" xml:space="preserve">
+    <value>4. Включете автоматичното дописване (AutoFill)</value>
+  </data>
+  <data name="AutofillTurnOn5" xml:space="preserve">
+    <value>5. Изберете „Битуорден“ (Bitwarden)</value>
+  </data>
+  <data name="PasswordAutofill" xml:space="preserve">
+    <value>Автоматично дописване на пароли</value>
+  </data>
+  <data name="BitwardenAutofillAlert2" xml:space="preserve">
+    <value>Най-лесният начин да добавяте нови записи към трезора си е с разширението за автоматично дописване на пароли на Битуорден. Може да научите повече, как да я ползвате, от екрана за настройки.</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Грешен адрес на е-поща.</value>
+  </data>
+  <data name="Cards" xml:space="preserve">
+    <value>Карти</value>
+  </data>
+  <data name="Identities" xml:space="preserve">
+    <value>Самоличности</value>
+  </data>
+  <data name="Logins" xml:space="preserve">
+    <value>Записи</value>
+  </data>
+  <data name="SecureNotes" xml:space="preserve">
+    <value>Защитени бележки</value>
+  </data>
+  <data name="AllItems" xml:space="preserve">
+    <value>Всички елементи</value>
+  </data>
+  <data name="URIs" xml:space="preserve">
+    <value>Адреси</value>
+    <comment>Plural form of a URI</comment>
+  </data>
+  <data name="CheckingPassword" xml:space="preserve">
+    <value>Проверка на паролата…</value>
+    <comment>A loading message when doing an exposed password check.</comment>
+  </data>
+  <data name="CheckPassword" xml:space="preserve">
+    <value>Проверка дали паролата е разкрита.</value>
+  </data>
+  <data name="PasswordExposed" xml:space="preserve">
+    <value>Паролата е била разкрита поне {0} път/и в пробиви. Непременно я сменете.</value>
+  </data>
+  <data name="PasswordSafe" xml:space="preserve">
+    <value>Паролата не е била разкрита в известните пробиви. Засега ползването ѝ изглежда безопасно.</value>
+  </data>
+  <data name="IdentityName" xml:space="preserve">
+    <value>Име на самоличността</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Стойност</value>
+  </data>
+  <data name="PasswordHistory" xml:space="preserve">
+    <value>Хронология на паролата</value>
+  </data>
+  <data name="Types" xml:space="preserve">
+    <value>Видове</value>
+  </data>
+  <data name="NoPasswordsToList" xml:space="preserve">
+    <value>Няма пароли за показване.</value>
+  </data>
+  <data name="NoItemsToList" xml:space="preserve">
+    <value>Няма елементи за показване.</value>
+  </data>
+  <data name="SearchCollection" xml:space="preserve">
+    <value>Търсене в колекцията</value>
+  </data>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Търсене в изпратените файлове</value>
+  </data>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Търсене в изпратените текстове</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Търсене на {0}</value>
+    <comment>ex: Search Logins</comment>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Вид</value>
+  </data>
+  <data name="MoveDown" xml:space="preserve">
+    <value>Преместване надолу</value>
+  </data>
+  <data name="MoveUp" xml:space="preserve">
+    <value>Преместване нагоре</value>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Разни</value>
+  </data>
+  <data name="Ownership" xml:space="preserve">
+    <value>Собственост</value>
+  </data>
+  <data name="WhoOwnsThisItem" xml:space="preserve">
+    <value>Кой притежава този запис?</value>
+  </data>
+  <data name="NoCollectionsToList" xml:space="preserve">
+    <value>Няма колекции за показване.</value>
+  </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} се премести в {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
+  <data name="ItemShared" xml:space="preserve">
+    <value>Записът е споделен.</value>
+  </data>
+  <data name="SelectOneCollection" xml:space="preserve">
+    <value>Изберете поне една колекция.</value>
+  </data>
+  <data name="Share" xml:space="preserve">
+    <value>Споделяне</value>
+  </data>
+  <data name="ShareItem" xml:space="preserve">
+    <value>Споделяне на запис</value>
+  </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Преместване в организация</value>
+  </data>
+  <data name="NoOrgsToList" xml:space="preserve">
+    <value>Няма организации за показване.</value>
+  </data>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Изберете организацията, в която искате да преместите записа. Преместването прехвърля собствеността му към новата организация. След това няма вече директно да го притежавате.</value>
+  </data>
+  <data name="NumberOfWords" xml:space="preserve">
+    <value>Брой думи</value>
+  </data>
+  <data name="Passphrase" xml:space="preserve">
+    <value>Парола-фраза</value>
+  </data>
+  <data name="WordSeparator" xml:space="preserve">
+    <value>Разделител за думи</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Изчистване</value>
+    <comment>To clear something out. example: To clear browser history.</comment>
+  </data>
+  <data name="Generator" xml:space="preserve">
+    <value>Генератор</value>
+    <comment>Short for "Password Generator"</comment>
+  </data>
+  <data name="NoFoldersToList" xml:space="preserve">
+    <value>Няма папки за показване.</value>
+  </data>
+  <data name="FingerprintPhrase" xml:space="preserve">
+    <value>Уникална фраза</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="YourAccountsFingerprint" xml:space="preserve">
+    <value>Уникална фраза, идентифицираща абонамента ви</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>Битуорден позволява да споделяте записите в трезора си чрез регистрация на организация. Искате ли да научите повече от сайта bitwarden.com?</value>
+  </data>
+  <data name="ExportVault" xml:space="preserve">
+    <value>Изнасяне на трезора</value>
+  </data>
+  <data name="LockNow" xml:space="preserve">
+    <value>Заключване сега</value>
+  </data>
+  <data name="PIN" xml:space="preserve">
+    <value>ПИН</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Отключване</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Отключване на трезора</value>
+  </data>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 минути</value>
+  </data>
+  <data name="SetPINDescription" xml:space="preserve">
+    <value>Задайте ПИН за отключване на Битуорден. Настройките за ПИН се изчистват при всяко пълно излизане от програмата.</value>
+  </data>
+  <data name="LoggedInAsOn" xml:space="preserve">
+    <value>Влезли сте като {0} в {1}.</value>
+    <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
+  </data>
+  <data name="VaultLockedMasterPassword" xml:space="preserve">
+    <value>Трезорът е заключен — въведете главната си парола, за да продължите.</value>
+  </data>
+  <data name="VaultLockedPIN" xml:space="preserve">
+    <value>Трезорът е заключен. Въведете своя ПИН, за да продължите.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Трезорът е заключен. Потвърдете самоличността си, за да продължите.</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Тъмен</value>
+    <comment>A dark color</comment>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Светъл</value>
+    <comment>A light color</comment>
+  </data>
+  <data name="FiveMinutes" xml:space="preserve">
+    <value>5 минути</value>
+  </data>
+  <data name="TenSeconds" xml:space="preserve">
+    <value>10 секунди</value>
+  </data>
+  <data name="ThirtySeconds" xml:space="preserve">
+    <value>30 секунди</value>
+  </data>
+  <data name="TwentySeconds" xml:space="preserve">
+    <value>20 секунди</value>
+  </data>
+  <data name="TwoMinutes" xml:space="preserve">
+    <value>2 минути</value>
+  </data>
+  <data name="ClearClipboard" xml:space="preserve">
+    <value>Изчистване на буфера</value>
+    <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
+  </data>
+  <data name="ClearClipboardDescription" xml:space="preserve">
+    <value>Автоматично изчистване на буфера след поставяне на стойността.</value>
+    <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
+  </data>
+  <data name="DefaultUriMatchDetection" xml:space="preserve">
+    <value>Стандартно засичане на съвпадения на адреси</value>
+    <comment>Default URI match detection for auto-fill.</comment>
+  </data>
+  <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
+    <value>Изберете начина за засичане на съвпадения на адресите за автоматичното дописване при вписване.</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Облик</value>
+    <comment>Color theme</comment>
+  </data>
+  <data name="ThemeDescription" xml:space="preserve">
+    <value>Промяна на цветовия облик на програмата.</value>
+  </data>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>По подразбиране (от системата)</value>
+  </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Стандартен тъмен облик</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Изберете тъмния облик, който да се ползва, когато е избран стандартният (от системата) облик и тъмният режим на устройството Ви е включен.</value>
+  </data>
+  <data name="CopyNotes" xml:space="preserve">
+    <value>Копиране на бележките</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Изход</value>
+  </data>
+  <data name="ExitConfirmation" xml:space="preserve">
+    <value>Сигурни ли сте, че искате да спрете Битуорден?</value>
+  </data>
+  <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
+    <value>Искате ли да бъдете питани за главната парола при всяко пускане на Битуорден наново?</value>
+  </data>
+  <data name="Black" xml:space="preserve">
+    <value>Запрет</value>
+    <comment>The color black</comment>
+  </data>
+  <data name="Nord" xml:space="preserve">
+    <value>Норд</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Преекспонирано тъмен</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Блокирани за авт. попълване адреси</value>
+  </data>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Питане за добавяне на запис</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Питане за добавяне на запис, ако такъв не бъде намерен в трезора Ви.</value>
+  </data>
+  <data name="OnRestart" xml:space="preserve">
+    <value>При рестартиране на приложението</value>
+  </data>
+  <data name="AutofillServiceNotEnabled" xml:space="preserve">
+    <value>Автоматичното дописване позволява сигурен достъп до трезора от сайтове и приложения. Изглежда не сте включили тази възможност в Битуорден, можете да го направите от екрана за настройките.</value>
+  </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Обликът ще се смени, след пускането на програмата наново.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Главни букви</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>И цифри</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Изтегляне</value>
+  </data>
+  <data name="Shared" xml:space="preserve">
+    <value>Споделено</value>
+  </data>
+  <data name="ToggleVisibility" xml:space="preserve">
+    <value>Превключване на видимостта</value>
+  </data>
+  <data name="LoginExpired" xml:space="preserve">
+    <value>Сесията ви изтече.</value>
+  </data>
+  <data name="BiometricsDirection" xml:space="preserve">
+    <value>Потвърждаване с биометрични данни.</value>
+  </data>
+  <data name="Biometrics" xml:space="preserve">
+    <value>Биометрични данни</value>
+  </data>
+  <data name="UseBiometricsToUnlock" xml:space="preserve">
+    <value>Отключване с биометрични данни</value>
+  </data>
+  <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
+    <value>Битуорден има нужда от внимание. Отворете „Услуга за автоматично дописване“ в настройките му.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
+    <value>3. Отворете настройките за приложения на Android за Битуорден. В раздела „Advanced“ (Допълнителни/За напреднали) изберете „Display over other apps“ (Показване върху другите приложения) и превключете конфигурацията, за да позволите на Битуорден да се появява върху другите приложения.</value>
+  </data>
+  <data name="OverlayPermission" xml:space="preserve">
+    <value>Права</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
+    <value>Отворете настройките за припокриване на приложения</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
+    <value>3. Отворете настройките за приложения на Android за Битуорден. В раздела „Advanced“ (Допълнителни/За напреднали) изберете „Display over other apps“ (Показване върху другите приложения) и превключете конфигурацията, за да позволите на Битуорден да се появява върху другите приложения.</value>
+  </data>
+  <data name="Denied" xml:space="preserve">
+    <value>Отказано право</value>
+  </data>
+  <data name="Granted" xml:space="preserve">
+    <value>Дадено право</value>
+  </data>
+  <data name="FileFormat" xml:space="preserve">
+    <value>Формат на файла</value>
+  </data>
+  <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
+    <value>Въведете главната парола, за да изнесете данните.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Изпращане на код за потвърждаване до Вашата ел. поща</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Кодът е изпратен!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Потвърдете самоличността си, за да продължите.</value>
+  </data>
+  <data name="ExportVaultWarning" xml:space="preserve">
+    <value>Данните от трезора ви ще се изнесат в незащитен формат. Не го пращайте по незащитени канали като е-поща. Изтрийте файла незабавно след като свършите работата си с него.</value>
+  </data>
+  <data name="EncExportKeyWarning" xml:space="preserve">
+    <value>При изнасяне данните се шифрират с ключа ви. Ако го смените, ще трябва наново да ги изнесете, защото няма да може да дешифрирате настоящия файл.</value>
+  </data>
+  <data name="EncExportAccountWarning" xml:space="preserve">
+    <value>Ключовете за шифриране са уникални за всеки потребител, затова не може да внесете шифрирани данни от един потребител в регистрацията на друг.</value>
+  </data>
+  <data name="ExportVaultConfirmationTitle" xml:space="preserve">
+    <value>Потвърждаване на изнасянето на трезора</value>
+    <comment>Title for the alert to confirm vault exports.</comment>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>ВНИМАНИЕ</value>
+  </data>
+  <data name="ExportVaultFailure" xml:space="preserve">
+    <value>Проблем при изнасянето на трезора, пробвайте отново. Ако проблемът пак се прояви, пробвайте през трезора по уеб.</value>
+  </data>
+  <data name="ExportVaultSuccess" xml:space="preserve">
+    <value>Трезорът е изнесен успешно</value>
+  </data>
+  <data name="Clone" xml:space="preserve">
+    <value>Дублиране</value>
+    <comment>Clone an entity (verb).</comment>
+  </data>
+  <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
+    <value>Поне една политика на организация влияе на настройките на генерирането на паролите.</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Отваряне</value>
+    <comment>Button text for an open operation (verb).</comment>
+  </data>
+  <data name="UnableToSaveAttachment" xml:space="preserve">
+    <value>Проблем при прикачането на файл, пробвайте отново. Ако проблемът пак се прояви, пробвайте през трезора по уеб.</value>
+  </data>
+  <data name="SaveAttachmentSuccess" xml:space="preserve">
+    <value>Прикаченият файл беше записан успешно</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Моля, включете услугата за автоматично попълване в настройките на Bitwarden, за да я използвате.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>Не са открити полета за пароли</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Преместване в кошчето…</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Записът е преместен в кошчето.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Възстановяване</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Възстановяване...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Записът бе възстановен.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Кошче</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Търсене в кошчето</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Наистина ли искате да го изтриете? Действието не може да бъде отменено.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Сигурни ли сте, че искате да възстановите записа?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Сигурни ли сте, че искате да преместите записа в кошчето?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
+  </data>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Потвърждаването с биометрични данни е изключено за тази регистрация. Въведете главната парола, за да го включите.</value>
+  </data>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Автоматичното попълване за потвърждаване с биометрични данни е изключено за тази регистрация. Въведете главната парола, за да го включите.</value>
+  </data>
+  <data name="EnableSyncOnRefresh" xml:space="preserve">
+    <value>Синхронизация при опресняване</value>
+  </data>
+  <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
+    <value>Синхронизиране на трезора с жест — провлачване надолу.</value>
+  </data>
+  <data name="LogInSso" xml:space="preserve">
+    <value>Еднократна идентификация (SSO)</value>
+  </data>
+  <data name="LogInSsoSummary" xml:space="preserve">
+    <value>Вписване чрез портала на организацията ви за еднократна идентификация. За да продължите, въведете идентификатора на организацията.</value>
+  </data>
+  <data name="OrgIdentifier" xml:space="preserve">
+    <value>Идентификатор на организация</value>
+  </data>
+  <data name="LoginSsoError" xml:space="preserve">
+    <value>В момента не може да се впишете с еднократна идентификация</value>
+  </data>
+  <data name="SetMasterPassword" xml:space="preserve">
+    <value>Задаване на главна парола</value>
+  </data>
+  <data name="SetMasterPasswordSummary" xml:space="preserve">
+    <value>За да завършите настройките за еднократна идентификация, трябва да зададете главна парола за трезора.</value>
+  </data>
+  <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
+    <value>Поне една политика на организация има следните изисквания към главната ви парола:</value>
+  </data>
+  <data name="PolicyInEffectMinComplexity" xml:space="preserve">
+    <value>Минимална сложност от {0}</value>
+  </data>
+  <data name="PolicyInEffectMinLength" xml:space="preserve">
+    <value>Минимална дължина от {0}</value>
+  </data>
+  <data name="PolicyInEffectUppercase" xml:space="preserve">
+    <value>Поне една главна буква</value>
+  </data>
+  <data name="PolicyInEffectLowercase" xml:space="preserve">
+    <value>Поне една малка буква</value>
+  </data>
+  <data name="PolicyInEffectNumbers" xml:space="preserve">
+    <value>Поне една цифра</value>
+  </data>
+  <data name="PolicyInEffectSpecial" xml:space="preserve">
+    <value>Поне един от следните специални знаци: {0}</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
+    <value>Грешна парола</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
+    <value>Паролата не покрива изискванията на организацията. Проверете политиките и пробвайте отново.</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Зареждане</value>
+  </data>
+  <data name="AcceptPolicies" xml:space="preserve">
+    <value>Чрез тази отметка вие се съгласявате със следното:</value>
+  </data>
+  <data name="AcceptPoliciesError" xml:space="preserve">
+    <value>Условията за използване и политиката за поверителност не бяха приети.</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Общи условия</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Политика за поверителност</value>
+  </data>
+  <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
+    <value>Битуорден има нужда от внимание. Отворете „Изобразяване отгоре“ в „Услуга за автоматично дописване“ в настройките му.</value>
+  </data>
+  <data name="AutofillServices" xml:space="preserve">
+    <value>Услуга за автоматично дописване</value>
+  </data>
+  <data name="InlineAutofill" xml:space="preserve">
+    <value>Дописване вътре</value>
+  </data>
+  <data name="InlineAutofillDescription" xml:space="preserve">
+    <value>Използване на дописване вътре, ако избраният метод за вход (IME/клавиатурна подредба) го поддържа. Ако настройките не позволяват този вариант, ще се ползва стандартното дописване.</value>
+  </data>
+  <data name="Accessibility" xml:space="preserve">
+    <value>Услуги за достъпност</value>
+  </data>
+  <data name="AccessibilityDescription" xml:space="preserve">
+    <value>Използване на технологиите за достъпност на Битуорден за автоматичното дописване в уеб и приложенията. Когато е включено, ще се показва изскачащ прозорец при полетата.</value>
+  </data>
+  <data name="AccessibilityDescription2" xml:space="preserve">
+    <value>Използване на технологиите за достъпност на Битуорден за автоматичното дописване в уеб и приложенията. Изисква включването на изобразяване отгоре</value>
+  </data>
+  <data name="AccessibilityDescription3" xml:space="preserve">
+    <value>Използване на технологиите за достъпност на Битуорден за автоматичното дописване в уеб и приложенията с прозорче за бързо действие или изскачащ прозорец.</value>
+  </data>
+  <data name="AccessibilityDescription4" xml:space="preserve">
+    <value>Изисква се за прозорчето за бързо действие или изскачащия прозорец при ползване на услугите за дописване.</value>
+  </data>
+  <data name="DrawOver" xml:space="preserve">
+    <value>Изобразяване отгоре</value>
+  </data>
+  <data name="DrawOverDescription" xml:space="preserve">
+    <value>Когато е включено, услугата за достъпност на Битуорден ще показват изскачащо прозорче при избор на полета за вписване.</value>
+  </data>
+  <data name="DrawOverDescription2" xml:space="preserve">
+    <value>Когато е включено, услугите за достъпност на Битуорден ще показват изскачащо прозорче, когато са избрани полета за вписване.</value>
+  </data>
+  <data name="DrawOverDescription3" xml:space="preserve">
+    <value>Когато е включено, услугите за достъпност ще показват изскачащо прозорче, когато са избрани полета за вписване в по-стари приложения, които не поддържат системата за достъпност на Android.</value>
+  </data>
+  <data name="PersonalOwnershipSubmitError" xml:space="preserve">
+    <value>Заради някоя политика за голяма организация не може да запазвате елементи в собствения си трезор. Променете собствеността да е на организация и изберете от наличните колекции.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>Политика от някоя организация влияе на вариантите за собственост.</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Изпращане</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AllSends" xml:space="preserve">
+    <value>Всички изпращания</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Sends" xml:space="preserve">
+    <value>Изпращания</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NameInfo" xml:space="preserve">
+    <value>Описателно име за това изпращане.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="TypeText" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="TypeTextInfo" xml:space="preserve">
+    <value>Текст за изпращане.</value>
+  </data>
+  <data name="HideTextByDefault" xml:space="preserve">
+    <value>При достъп до изпращането стандартно текстът да се скрива</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="TypeFile" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="TypeFileInfo" xml:space="preserve">
+    <value>Файл за изпращане.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Избран е файлов тип.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Не е избран файлов тип. Докоснете за избор.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Избран е текстов тип.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Не е избран текстов тип. Докоснете за избор.</value>
+  </data>
+  <data name="DeletionDate" xml:space="preserve">
+    <value>Дата на изтриване</value>
+  </data>
+  <data name="DeletionTime" xml:space="preserve">
+    <value>Време на изтриване</value>
+  </data>
+  <data name="DeletionDateInfo" xml:space="preserve">
+    <value>Изпращането ще бъде окончателно изтрито на зададената дата и време.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="PendingDelete" xml:space="preserve">
+    <value>Предстои изтриване</value>
+  </data>
+  <data name="ExpirationDate" xml:space="preserve">
+    <value>Дата на валидност</value>
+  </data>
+  <data name="ExpirationTime" xml:space="preserve">
+    <value>Време на валидност</value>
+  </data>
+  <data name="ExpirationDateInfo" xml:space="preserve">
+    <value>При задаване — това изпращане ще се изключи на зададената дата и време.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Expired" xml:space="preserve">
+    <value>Изтекъл</value>
+  </data>
+  <data name="MaximumAccessCount" xml:space="preserve">
+    <value>Максимален брой достъпвания.</value>
+  </data>
+  <data name="MaximumAccessCountInfo" xml:space="preserve">
+    <value>При задаване — това изпращане ще се изключи след определен брой достъпвания.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="MaximumAccessCountReached" xml:space="preserve">
+    <value>Достигнат е максималният брой достъпвания</value>
+  </data>
+  <data name="CurrentAccessCount" xml:space="preserve">
+    <value>Текущ брой на достъпванията</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>Нова парола</value>
+  </data>
+  <data name="PasswordInfo" xml:space="preserve">
+    <value>Изискване на парола за достъп до това изпращане.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="RemovePassword" xml:space="preserve">
+    <value>Премахване на парола</value>
+  </data>
+  <data name="AreYouSureRemoveSendPassword" xml:space="preserve">
+    <value>Сигурни ли сте, че искате да премахнете паролата?</value>
+  </data>
+  <data name="RemovingSendPassword" xml:space="preserve">
+    <value>Премахване на парола</value>
+  </data>
+  <data name="SendPasswordRemoved" xml:space="preserve">
+    <value>Паролата е премахната.</value>
+  </data>
+  <data name="NotesInfo" xml:space="preserve">
+    <value>Скрити бележки за това изпращане.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="DisableSend" xml:space="preserve">
+    <value>Пълно спиране на това изпращане — никой няма да има достъп.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NoSends" xml:space="preserve">
+    <value>Няма изпращания.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AddASend" xml:space="preserve">
+    <value>Добавяне на изпращане</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Копиране на връзката</value>
+  </data>
+  <data name="ShareLink" xml:space="preserve">
+    <value>Споделяне на връзката</value>
+  </data>
+  <data name="SendLink" xml:space="preserve">
+    <value>Изпращане на връзката</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SearchSends" xml:space="preserve">
+    <value>Търсене в изпратените</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="EditSend" xml:space="preserve">
+    <value>Редактиране на изпращане</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AddSend" xml:space="preserve">
+    <value>Добавяне на изпращане</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AreYouSureDeleteSend" xml:space="preserve">
+    <value>Сигурни ли сте, че искате да изтриете това изпращане?</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendDeleted" xml:space="preserve">
+    <value>Изпратеното е изтрито.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendUpdated" xml:space="preserve">
+    <value>Изпратеното е редактирано.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NewSendCreated" xml:space="preserve">
+    <value>Създадено е ново изпращане.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="OneDay" xml:space="preserve">
+    <value>1 ден</value>
+  </data>
+  <data name="TwoDays" xml:space="preserve">
+    <value>2 дни</value>
+  </data>
+  <data name="ThreeDays" xml:space="preserve">
+    <value>3 дни</value>
+  </data>
+  <data name="SevenDays" xml:space="preserve">
+    <value>7 дни</value>
+  </data>
+  <data name="ThirtyDays" xml:space="preserve">
+    <value>30 дни</value>
+  </data>
+  <data name="Custom" xml:space="preserve">
+    <value>По избор</value>
+  </data>
+  <data name="ShareOnSave" xml:space="preserve">
+    <value>Споделяне на изпратеното при запис.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendDisabledWarning" xml:space="preserve">
+    <value>Поради политика на организация, може само да изтривате съществуващи изпращания.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AboutSend" xml:space="preserve">
+    <value>Относно изпращането</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="HideEmail" xml:space="preserve">
+    <value>Скриване на е-пощата ми от получателите.</value>
+  </data>
+  <data name="SendOptionsPolicyInEffect" xml:space="preserve">
+    <value>Поне една политика на организация влияе на настройките за изпращане.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFilePremiumRequired" xml:space="preserve">
+    <value>Безплатните регистрации могат да споделят само текст. Необходим е платен абонамент, за да можете да изпращате файлове.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFileEmailVerificationRequired" xml:space="preserve">
+    <value>Трябва да потвърдите е-пощата си, за да можете да изпращате файлове.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="PasswordPrompt" xml:space="preserve">
+    <value>Повторно запитване за главната парола</value>
+  </data>
+  <data name="PasswordConfirmation" xml:space="preserve">
+    <value>Потвърждение на главната парола</value>
+  </data>
+  <data name="PasswordConfirmationDesc" xml:space="preserve">
+    <value>Това действие е защитено. За да продължите, въведете отново главната си парола, за да потвърдите самоличността си.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Проверката е задължителна</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Грешка. Опитайте отново.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Главната парола е променена</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Промяна на главната парола</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Вашата главна парола наскоро е била сменена от администратор в организацията Ви. За да получите достъп до трезора, трябва да промените главната си парола сега. Това означава, че ще бъдете отписан(а) от текущата си сесия и ще трябва да се впишете отново. Активните сесии на други устройства може да продължат да бъдат активни още един час.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Обновяване на паролата</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>В момента паролата не може да бъде обновена</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Премахване на главната парола</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} използва еднократно удостоверяване с шифроване, управлявано от клиента. Ако продължите, главната парола ще бъде премахната от регистрацията Ви и за да се впишете, вече ще трябва да използвате еднократното удостоверяване.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Ако не искате да премахвате главната си парола, ще трябва да напуснете организацията.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Напускане на организацията</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Напускане на {0}?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>To continue, have your FIDO2 WebAuthn compatible security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Идентификация чрез FIDO2 WebAuthn – можете да се идентифицирате чрез външен ключ за сигурност.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Идентификация WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Назад към приложението</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Уверете се, че използваният браузър поддържа WebAuthn и опитайте отново.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>Тази организация включва автоматично новите си потребители в смяната на пароли. Това означава, че администраторите на организацията ще могат да променят главната Ви парола.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Настройките на организацията Ви влияят върху времето за достъп до трезора Ви. Максималното разрешено време за достъп е {0} час(а) и {1} минути</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Настройките на организацията Ви влияят върху времето за достъп до трезора Ви. Максималното разрешено време за достъп е {0} час(а) и {1} минута/и. Зададеното действие при изтичане на това време е {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Настройките на организацията Ви задават следното действие при изтичане на времето за достъп до трезора: {0}.</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Времето за достъп до трезора Ви превишава ограничението, определено от организацията Ви.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
+    <value>Една или повече от настройките на организацията Ви не позволяват да изнасяте личния си трезор.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Добавяне на регистрация</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Отключено</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Заключено</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Отписано</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Превключено към следващата налична регистрация</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Регистрацията е заключена</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Отписването от регистрацията беше успешно</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Регистрацията беше премахната успешно</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Изтриване на регистрацията</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Изтриването на регистрацията е необратимо</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Регистрацията Ви и всички свързани с нея данни ще бъдат изтрити и няма да могат да бъдат възстановени. Наистина ли искате да продължите?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Изтриване на регистрацията Ви</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Регистрацията Ви беше изтрита необратимо</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Грешен код за потвърждаване</value>
+  </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Заявка за еднократна парола</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Изпращане на кода</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Изпращане…</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Копиране на връзката на изпращането при запазване</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Изпращане на кода</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Потвърждаване</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Повторно изпращане на кода</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>На Вашата е-поща беше изпратен код за потвърждаване</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Възникна грешка при изпращането на кода за потвърждаване до Вашата е-поща. Моля, опитайте отново</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Въведете кода за потвърждаване, който беше изпратен на Вашата е-поща</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Изпращане на доклади за сривовете</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Помогнете на Битуордън в подобряването на стабилността на приложението, като изпращате доклади относно сривовете.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Възможностите са разгънати. Докоснете за свиване.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Възможностите са свити. Докоснете за разгъване.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Главни букви (A-Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Малки букви (a-z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Числа (0-9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Специални знаци (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Досокнете за връщане назад</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Паролата е видима. Докоснете за скриване.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Паролата не е видима. Докоснете за показване.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Филтриране на записите по трезор</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Всички трезори</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Трезори</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Трезор: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Всички</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>Кода за потвърждаване</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Кодове за потвърждаване</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Изисква се платен абонамент</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Не можете да добавите удостоверителен ключ? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Сканиране на QR код</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Не можете да сканирате QR кода? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Ключ за удостоверяване</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Ръчно въвеждане на кода</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Добавяне на TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Настройка на TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Once the key is successfully entered,
+select Add TOTP to store the key safely</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Ако изберете „Никога“ като настройка за заключването, трезорът Ви ще бъде достъпен за всеки, който има досег с устройството. Ако използвате тази настройка, трябва да се уверите, че устройството Ви е удачно защитено.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Един или повече от въведените адреси са неправилни. Прегледайте ги и ги поправете, а след това опитайте да запазите отново.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Не може да обработим заявката ви. Моля опитайте отново или се свържете с нас.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Позволяване на заснемане на екрана</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Наистина ли искате да разрешите заснемането на екрана?</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Направена е заявка за вписване</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Опитвате се да се впишете ли?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Опит за вписване от {0} в {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Вид устройство</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP адрес</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Време</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Близо</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Потвърждаване на вписването</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Отказване на вписването</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Току-що</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>Преди {0} минути</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Вписването е потвърдено</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Вписването е отказано</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Одобряване на заявки за вписване</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Използвайте това устройство за одобряване на заявки за вписване направени от други устройства.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Разрешаване на известията</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Получаване на известия при нови заявки за вписване</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Не, благодаря</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Потвърждаване на заявката за вписване за {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Всички известия</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Тип парола</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Какво бихте искали да генерирате?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Тип потребителско име</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Адрес на е-поща с плюс</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Хващаща всичко е-поща</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Псевдоним на препратена е-поща</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Произволна дума</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Е-поща (задължително)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Име на домейн (задължително)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Ключ за API (задължително)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Услуга</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Идентификатор за достъп до API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Наистина ли искате да замените текущото потребителско име?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Генериране на потр. име</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Вид е-поща</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Уеб сайт (задължително)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Възникна неизвестна грешка {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Използвайте възможностите за под-адресиране на е-поща на своя доставчик</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Използвайте конфигурираната входяща кутия за събиране на всичко.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Създайте псевдоним на е-поща с външна услуга за препращане.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Произволно</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Свързване към часовник</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Използване на услугата за достъпност</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Битуорден използва услугата за достъпност, за да разпознава полета за вписване в приложенията и уеб сайтовете и, ако в трезора има съвпадение, да попълва потребителското име и паролата. Никаква информация, предоставена ни от услугата, не се запазва, както и не правим опити да контролираме елементите на екрана, освен въвеждането на данните за идентификация.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Приемане</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Отказване</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Заявката за вписване вече е изтекла.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Опит за вписване от:
+{0}
+Искате ли да превключите към тази регистрация?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>За пръв път ли сте тук?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Получете подсказване за главната парола</value>
+  </data>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Влизате като {0} в {1}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Това не сте Вие?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Вписване с главната парола</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Вписване с друго устройство</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Вписването е стартирано</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Към устройството Ви е изпратено известие.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Уверете се, че трезорът Ви е отключен и че Уникалната фраза съвпада с другото устройство.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Повторно изпращане на известието</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Предпочитате друг вариант?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Вижте всички възможности за вписване</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Тази зявка вече не е приложима</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Чакащи заявки за вписване</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Отказване на всички заявки</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Наистина ли искате да откажете всички чакащи заявки за вписване?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Заявките са отказани</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Няма чакащи заявки</value>  
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Разрешете достъпа до камерата, за да използвате скенера</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Език</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Езикът беше променен на {0}. Рестартирайте приложението, за да влезе промяната в сила</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Промяната на езика изисква рестартиране на приложението</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>По подразбиране (от системата)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Важно</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Главната парола не може да бъде възстановена, ако я забравите! Дължината трябва да е поне {0} знака.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Слаба главна парола</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Разпозната е слаба парола. Използвайте силна парола, за да защитете данните си. Наистина ли искате да използвате слаба парола?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Слаба</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Добра</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Силна</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Проверяване в известните случаи на изтекли данни за тази парола</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Exposed Master Password</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Weak and Exposed Master Password</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Идентификаторът за еднократн идентификация на организация е задължителен.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Добавяне на ключа към съществуващ или нов елемент</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>В трезора липсват елементи, които отговарят на „{0}“</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Търсене на елемент или добавяне на нов</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Няма елементи, които отговарят на търсенето</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>САЩ</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>ЕС</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Собствен хостинг</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Регион на данните</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Регион</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Вашата главна парола не отговаря на една или повече политики на организацията Ви. За да получите достъп до трезора, трябва да промените главната си парола сега. Това означава, че ще бъдете отписан(а) от текущата си сесия и ще трябва да се впишете отново. Активните сесии на други устройства може да продължат да бъдат активни още един час.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Текуща главна парола</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Създадено на {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Приложение</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Passkey will not be copied</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Копиране на приложението</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Available for two-step login</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Помощ за повторното запитване за главната парола</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Отключването може да бъде неуспешно заради недостатъчно памет. Намалете настройките на паметта за KDF, за да разрешите проблема.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Неправилен ключ за ППИ</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Неправилен идентификатор за ППИ</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Блокиране на авт. попълване</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Автоматичното попълване няма да бъде предлагано за тези адреси.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Нов блокиран адрес</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>Адресът е запазен</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Неправилен формат. Използвайте https://, http:// или androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Редактиране на адреса</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Въведете адрес</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Формат: {0}. Ако въвеждате повече адреси, разделяйте ги със запетая.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Формат: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Неправилен адрес</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>Адресът е премахнат</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Няма блокирани адреси</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>Адресът {0} вече е блокиран</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Не може да редактирате повече от един адрес едновременно</value>
+  </data>
+</root>

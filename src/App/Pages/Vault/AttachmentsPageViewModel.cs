@@ -11,7 +11,8 @@ using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -94,7 +95,7 @@ namespace Bit.App.Pages
 
         public async Task<bool> SubmitAsync()
         {
-            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Microsoft.Maui.Networking.Connectivity.NetworkAccess == Microsoft.Maui.Networking.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle);
@@ -154,7 +155,8 @@ namespace Bit.App.Pages
         public async Task ChooseFileAsync()
         {
             // Prevent Android from locking if vault timeout set to "immediate"
-            if (Device.RuntimePlatform == Device.Android)
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
+                        if (Device.RuntimePlatform == Device.Android)
             {
                 _vaultTimeoutService.DelayLockAndLogoutMs = 60000;
             }
@@ -163,7 +165,7 @@ namespace Bit.App.Pages
 
         private async void DeleteAsync(AttachmentView attachment)
         {
-            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Microsoft.Maui.Networking.Connectivity.NetworkAccess == Microsoft.Maui.Networking.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle);

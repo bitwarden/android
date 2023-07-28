@@ -1,0 +1,357 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net7.0-android;net7.0-ios</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
+		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net7.0-tizen</TargetFrameworks> -->
+		<OutputType>Exe</OutputType>
+		<RootNamespace>Bit.App</RootNamespace>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+
+		<!-- Display name -->
+		<ApplicationTitle>Bitwarden</ApplicationTitle>
+
+		<!-- App Identifier -->
+		<ApplicationId>com.x8bit.bitwarden</ApplicationId>
+		<ApplicationIdGuid>ccf4766c-a36c-4647-900c-0ea7d323ccc6</ApplicationIdGuid>
+
+		<!-- Versions -->
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
+
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	</PropertyGroup>
+	<ItemGroup>
+		<!-- App Icon -->
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+
+		<!-- Splash Screen -->
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+
+		<!-- Images -->
+		<MauiImage Include="Resources\Images\*" />
+		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
+
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
+
+		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+		<PackageReference Include="CsvHelper" Version="30.0.1" />
+		<PackageReference Include="LiteDB" Version="5.0.17" />
+		<PackageReference Include="MessagePack" Version="2.5.124" />
+		<PackageReference Include="MessagePack.MSBuild.Tasks" Version="2.5.124">
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		  <PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="zxcvbn-core" Version="7.0.92" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="5.2.0" />
+		<PackageReference Include="Plugin.Fingerprint" Version="2.1.5" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.3" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls.Compatibility" Version="2.88.3" />
+		<PackageReference Include="ZXing.Net.Maui" Version="0.3.0-preview.1" />
+		<PackageReference Include="FFImageLoadingCompat.Maui" Version="0.1.1" />
+		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.3.0-preview.1" />
+		<PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.6" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+		<PackageReference Include="PCLCrypto" Version="2.0.147" />
+		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Controls\AccountViewCell\AccountViewCell.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\DateTime\DateTimePicker.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\AuthenticatorViewCell\AuthenticatorViewCell.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\PasswordStrengthProgressBar\PasswordStrengthProgressBar.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\SendViewCell\SendViewCell.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\IconLabelButton\IconLabelButton.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\CipherViewCell\CipherViewCell.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\AccountSwitchingOverlay\AccountSwitchingOverlayView.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Lists\ItemLayouts\CustomFields\TextCustomFieldItemLayout.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Lists\ItemLayouts\CustomFields\LinkedCustomFieldItemLayout.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Lists\ItemLayouts\CustomFields\BooleanCustomFieldItemLayout.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Lists\ItemLayouts\CustomFields\HiddenCustomFieldItemLayout.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Settings\FolderAddEditPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Settings\AutofillServicesPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Settings\ExtensionPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Settings\FoldersPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Settings\OptionsPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Settings\BlockAutofillUrisPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Settings\LoginPasswordlessRequestsListPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Settings\ExportVaultPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Settings\AutofillPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Settings\SyncPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Settings\SettingsPage\SettingsPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Generator\GeneratorHistoryPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Generator\GeneratorPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Accounts\LoginPasswordlessPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Accounts\LoginPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Accounts\HintPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Accounts\LockPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Accounts\VerificationCodePage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Accounts\LoginPasswordlessRequestPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Accounts\DeleteAccountPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Accounts\UpdateTempPasswordPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Accounts\SetPasswordPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Accounts\TwoFactorPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Accounts\EnvironmentPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Accounts\LoginSsoPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Accounts\RegisterPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Accounts\HomePage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Accounts\RemoveMasterPasswordPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Send\SendAddOnlyPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Send\SendsPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Send\SendAddOnlyOptionsView.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Send\SendAddEditPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Send\SendGroupingsPage\SendGroupingsPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Vault\CollectionsPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Vault\CipherSelectionPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Vault\AttachmentsPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Vault\ScanPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Vault\CiphersPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Vault\CipherAddEditPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Vault\CipherDetailsPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Vault\SharePage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Vault\PasswordHistoryPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Vault\GroupingsPage\GroupingsPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Styles\Android.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Styles\Black.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Styles\Nord.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Styles\iOS.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Styles\Light.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Styles\Variables.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Styles\Base.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Styles\SolarizedDark.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Styles\Dark.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Core\" />
+	  <None Remove="Core\Abstractions\" />
+	  <None Remove="Core\Attributes\" />
+	  <None Remove="Core\Enums\" />
+	  <None Remove="Core\Exceptions\" />
+	  <None Remove="Core\Models\" />
+	  <None Remove="Core\Resources\eff_long_word_list.txt" />
+	  <None Remove="Core\Resources\public_suffix_list.dat" />
+	  <None Remove="Core\Resources\" />
+	  <None Remove="Core\Services\" />
+	  <None Remove="Core\Utilities\" />
+	  <None Remove="Platforms\Android\Resources\mipmap-mdpi\ic_launcher.png" />
+	  <None Remove="Platforms\Android\Resources\mipmap-mdpi\ic_launcher_round.png" />
+	  <None Remove="Platforms\Android\Resources\mipmap-xxhdpi\ic_launcher.png" />
+	  <None Remove="Platforms\Android\Resources\mipmap-xxhdpi\ic_launcher_round.png" />
+	  <None Remove="Platforms\Android\Resources\mipmap-xxxhdpi\ic_launcher.png" />
+	  <None Remove="Platforms\Android\Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
+	  <None Remove="Platforms\Android\Resources\mipmap-hdpi\ic_launcher.png" />
+	  <None Remove="Platforms\Android\Resources\mipmap-hdpi\ic_launcher_round.png" />
+	  <None Remove="Platforms\Android\Resources\drawable-xhdpi\logo_legacy.png" />
+	  <None Remove="Platforms\Android\Resources\drawable-xhdpi\yubikey.png" />
+	  <None Remove="Platforms\Android\Resources\drawable-xhdpi\logo_white_legacy.png" />
+	  <None Remove="Platforms\Android\Resources\drawable-xxhdpi\logo_legacy.png" />
+	  <None Remove="Platforms\Android\Resources\drawable-xxhdpi\yubikey.png" />
+	  <None Remove="Platforms\Android\Resources\drawable-xxhdpi\logo_white_legacy.png" />
+	  <None Remove="Platforms\Android\Resources\drawable-hdpi\logo_legacy.png" />
+	  <None Remove="Platforms\Android\Resources\drawable-hdpi\yubikey.png" />
+	  <None Remove="Platforms\Android\Resources\drawable-hdpi\logo_white_legacy.png" />
+	  <None Remove="Platforms\Android\Resources\mipmap-xhdpi\ic_launcher.png" />
+	  <None Remove="Platforms\Android\Resources\mipmap-xhdpi\ic_launcher_round.png" />
+	  <None Remove="Platforms\Android\google-services.json" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Core\" />
+	  <Folder Include="Core\Abstractions\" />
+	  <Folder Include="Core\Attributes\" />
+	  <Folder Include="Core\Enums\" />
+	  <Folder Include="Core\Exceptions\" />
+	  <Folder Include="Core\Models\" />
+	  <Folder Include="Core\Resources\" />
+	  <Folder Include="Core\Services\" />
+	  <Folder Include="Core\Utilities\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Include="Core\Resources\eff_long_word_list.txt" />
+	  <EmbeddedResource Include="Core\Resources\public_suffix_list.dat" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
+	  <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet" Version="118.0.1.5" />
+	  <PackageReference Include="Plugin.CurrentActivity" Version="2.1.0.4" />
+	  <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.18" />
+	  <PackageReference Include="Xamarin.Firebase.Messaging" Version="123.1.2.2" />
+	</ItemGroup>
+	<ItemGroup>
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-mdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-mdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xxhdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xxhdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xxxhdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-hdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-hdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-mdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-mdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-hdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-hdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xxxhdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xxhdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xxhdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-xhdpi\logo_legacy.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-xhdpi\yubikey.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-xhdpi\logo_white_legacy.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-xxhdpi\logo_legacy.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-xxhdpi\yubikey.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-xxhdpi\logo_white_legacy.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-hdpi\logo_legacy.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-hdpi\yubikey.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-hdpi\logo_white_legacy.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xhdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xhdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\google-services.json" />
+	</ItemGroup>
+</Project>

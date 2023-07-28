@@ -11,8 +11,8 @@ using Bit.Core.Models.Response;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Essentials;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -52,9 +52,9 @@ namespace Bit.App.Pages
             };
             RememberEmailCommand = new Command(() => RememberEmail = !RememberEmail);
             ContinueCommand = new AsyncCommand(ContinueToLoginStepAsync, allowsMultipleExecutions: false);
-            CreateAccountCommand = new AsyncCommand(async () => await Device.InvokeOnMainThreadAsync(StartRegisterAction),
+            CreateAccountCommand = new AsyncCommand(async () => Device.InvokeOnMainThreadAsync(StartRegisterAction),
                 onException: _logger.Exception, allowsMultipleExecutions: false);
-            CloseCommand = new AsyncCommand(async () => await Device.InvokeOnMainThreadAsync(CloseAction),
+            CloseCommand = new AsyncCommand(async () => Device.InvokeOnMainThreadAsync(CloseAction),
                 onException: _logger.Exception, allowsMultipleExecutions: false);
             ShowEnvironmentPickerCommand = new AsyncCommand(ShowEnvironmentPickerAsync,
                 onException: _logger.Exception, allowsMultipleExecutions: false);

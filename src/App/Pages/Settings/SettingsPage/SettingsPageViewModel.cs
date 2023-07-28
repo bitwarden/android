@@ -11,7 +11,8 @@ using Bit.Core.Models.Domain;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -474,6 +475,7 @@ namespace Bit.App.Pages
             }
             else if (await _platformUtilsService.SupportsBiometricAsync())
             {
+                // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
                 _biometric = await _platformUtilsService.AuthenticateBiometricAsync(null,
                     Device.RuntimePlatform == Device.Android ? "." : null);
             }
@@ -499,8 +501,10 @@ namespace Bit.App.Pages
         {
             //TODO: Refactor this once navigation is abstracted so that it doesn't depend on Page, e.g. Page.Navigation.PushModalAsync...
 
-            var doUpper = Device.RuntimePlatform != Device.Android;
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
+                        var doUpper = Device.RuntimePlatform != Device.Android;
             var autofillItems = new List<SettingsPageListItem>();
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
             if (Device.RuntimePlatform == Device.Android)
             {
                 autofillItems.Add(new SettingsPageListItem
@@ -587,6 +591,7 @@ namespace Bit.App.Pages
             if (_supportsBiometric || _biometric)
             {
                 var biometricName = AppResources.Biometrics;
+                // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
                 if (Device.RuntimePlatform == Device.iOS)
                 {
                     biometricName = _deviceActionService.SupportsFaceBiometric() ? AppResources.FaceID :
@@ -641,6 +646,7 @@ namespace Bit.App.Pages
                     });
                 }
             }
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
             if (Device.RuntimePlatform == Device.Android)
             {
                 securityItems.Add(new SettingsPageListItem
@@ -651,6 +657,7 @@ namespace Bit.App.Pages
                 });
             }
             var accountItems = new List<SettingsPageListItem>();
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
             if (Device.RuntimePlatform == Device.iOS)
             {
                 accountItems.Add(new SettingsPageListItem
@@ -754,7 +761,8 @@ namespace Bit.App.Pages
             };
 
             // TODO: refactor this
-            if (Device.RuntimePlatform == Device.Android
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
+                        if (Device.RuntimePlatform == Device.Android
                 ||
                 GroupedItems.Any())
             {
@@ -818,6 +826,7 @@ namespace Bit.App.Pages
 
         private bool IncludeLinksWithSubscriptionInfo()
         {
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
             if (Device.RuntimePlatform == Device.iOS)
             {
                 return false;

@@ -11,7 +11,6 @@ using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Essentials;
 
 namespace Bit.App.Pages
 {

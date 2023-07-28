@@ -8,7 +8,8 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -39,6 +40,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
 
             PageTitle = AppResources.Options;
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
             var iosIos = Device.RuntimePlatform == Device.iOS;
 
             ClearClipboardOptions = new List<KeyValuePair<int?, string>>

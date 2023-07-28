@@ -15,7 +15,8 @@ using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -352,7 +353,7 @@ namespace Bit.App.Pages
 
         public async Task<bool> DeleteAsync()
         {
-            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Microsoft.Maui.Networking.Connectivity.NetworkAccess == Microsoft.Maui.Networking.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle);
@@ -403,7 +404,7 @@ namespace Bit.App.Pages
             {
                 return false;
             }
-            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Microsoft.Maui.Networking.Connectivity.NetworkAccess == Microsoft.Maui.Networking.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle);
@@ -479,7 +480,7 @@ namespace Bit.App.Pages
         {
             try
             {
-                if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+                if (Microsoft.Maui.Networking.Connectivity.NetworkAccess == Microsoft.Maui.Networking.NetworkAccess.None)
                 {
                     await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                         AppResources.InternetConnectionRequiredTitle);
@@ -504,6 +505,7 @@ namespace Bit.App.Pages
                 var canOpenFile = true;
                 if (!_fileService.CanOpenFile(attachment.FileName))
                 {
+                    // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
                     if (Device.RuntimePlatform == Device.iOS)
                     {
                         // iOS is currently hardcoded to always return CanOpenFile == true, but should it ever return false
@@ -529,6 +531,7 @@ namespace Bit.App.Pages
                     return;
                 }
 
+                // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
                 if (Device.RuntimePlatform == Device.Android)
                 {
                     if (canOpenFile)

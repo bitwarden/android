@@ -5,7 +5,8 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
 
 namespace Bit.App.Lists.ItemViewModels.CustomFields
 {

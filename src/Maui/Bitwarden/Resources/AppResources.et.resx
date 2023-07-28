@@ -1,0 +1,2716 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About" xml:space="preserve">
+    <value>Rakenduse info</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Lisa</value>
+    <comment>Add/create a new entity (verb).</comment>
+  </data>
+  <data name="AddFolder" xml:space="preserve">
+    <value>Kausta lisamine</value>
+  </data>
+  <data name="AddItem" xml:space="preserve">
+    <value>Kirje lisamine</value>
+    <comment>The title for the add item page.</comment>
+  </data>
+  <data name="AnErrorHasOccurred" xml:space="preserve">
+    <value>Ilmnes tõrge.</value>
+    <comment>Alert title when something goes wrong.</comment>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Tagasi</value>
+    <comment>Navigate back to the previous screen.</comment>
+  </data>
+  <data name="Bitwarden" xml:space="preserve">
+    <value>Bitwarden</value>
+    <comment>App name. Shouldn't ever change.</comment>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Tühista</value>
+    <comment>Cancel an operation.</comment>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Kopeeri</value>
+    <comment>Copy some value to your clipboard.</comment>
+  </data>
+  <data name="CopyPassword" xml:space="preserve">
+    <value>Kopeeri parool</value>
+    <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
+  </data>
+  <data name="CopyUsername" xml:space="preserve">
+    <value>Kopeeri kasutajanimi</value>
+    <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
+  </data>
+  <data name="Credits" xml:space="preserve">
+    <value>Tänusõnad</value>
+    <comment>Title for page that we use to give credit to resources that we use.</comment>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Kustuta</value>
+    <comment>Delete an entity (verb).</comment>
+  </data>
+  <data name="Deleting" xml:space="preserve">
+    <value>Kustutamine...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="DoYouReallyWantToDelete" xml:space="preserve">
+    <value>Kas soovid kindlasti kustutada? Seda ei saa tagasi võtta.</value>
+    <comment>Confirmation alert message when deleteing something.</comment>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Muuda</value>
+  </data>
+  <data name="EditFolder" xml:space="preserve">
+    <value>Muuda kausta</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-post</value>
+    <comment>Short label for an email address.</comment>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>E-posti aadress</value>
+    <comment>Full label for a email address.</comment>
+  </data>
+  <data name="EmailUs" xml:space="preserve">
+    <value>Kirjuta meile</value>
+  </data>
+  <data name="EmailUsDescription" xml:space="preserve">
+    <value>Kirjuta meile abi saamiseks või tagasiside jätmiseks.</value>
+  </data>
+  <data name="EnterPIN" xml:space="preserve">
+    <value>Sisesta PIN kood.</value>
+  </data>
+  <data name="Favorites" xml:space="preserve">
+    <value>Lemmikud</value>
+    <comment>Title for your favorite items in the vault.</comment>
+  </data>
+  <data name="FileBugReport" xml:space="preserve">
+    <value>Esita tarkvaraviga</value>
+  </data>
+  <data name="FileBugReportDescription" xml:space="preserve">
+    <value>Ava meie GitHubis probleemi kirjeldus.</value>
+  </data>
+  <data name="FingerprintDirection" xml:space="preserve">
+    <value>Kasuta lahtilukustamiseks sõrmejälge.</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Kaust</value>
+    <comment>Label for a folder.</comment>
+  </data>
+  <data name="FolderCreated" xml:space="preserve">
+    <value>Uus kaust on loodud.</value>
+  </data>
+  <data name="FolderDeleted" xml:space="preserve">
+    <value>Kaust on kustutatud.</value>
+  </data>
+  <data name="FolderNone" xml:space="preserve">
+    <value>Kaust puudub</value>
+    <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
+  </data>
+  <data name="Folders" xml:space="preserve">
+    <value>Kaustad</value>
+  </data>
+  <data name="FolderUpdated" xml:space="preserve">
+    <value>Kaust on uuendatud.</value>
+  </data>
+  <data name="GoToWebsite" xml:space="preserve">
+    <value>Külasta veebisaiti</value>
+    <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
+  <data name="HelpAndFeedback" xml:space="preserve">
+    <value>Abi ja tagasiside</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Peida</value>
+    <comment>Hide a secret value that is currently shown (password).</comment>
+  </data>
+  <data name="InternetConnectionRequiredMessage" xml:space="preserve">
+    <value>Jätkamiseks on vajalik internetiühendus.</value>
+    <comment>Description message for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="InternetConnectionRequiredTitle" xml:space="preserve">
+    <value>Vajalik on internetiühendus</value>
+    <comment>Title for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="InvalidMasterPassword" xml:space="preserve">
+    <value>Vale ülemparool. Proovi uuesti.</value>
+  </data>
+  <data name="InvalidPIN" xml:space="preserve">
+    <value>Vale PIN. Proovi uuesti.</value>
+  </data>
+  <data name="Launch" xml:space="preserve">
+    <value>Käivita</value>
+    <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
+  <data name="LogIn" xml:space="preserve">
+    <value>Logi sisse</value>
+    <comment>The login button text (verb).</comment>
+  </data>
+  <data name="LogInNoun" xml:space="preserve">
+    <value>Sisselogimine</value>
+    <comment>Title for login page. (noun)</comment>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Logi välja</value>
+    <comment>The log out button text (verb).</comment>
+  </data>
+  <data name="LogoutConfirmation" xml:space="preserve">
+    <value>Oled kindel, et soovid välja logida?</value>
+  </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Eemalda konto</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Oled kindel, et soovid selle konto eemaldada?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Konto on juba lisatud </value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Kas soovid kohe vahetada? </value>
+  </data>
+  <data name="MasterPassword" xml:space="preserve">
+    <value>Ülemparool</value>
+    <comment>Label for a master password.</comment>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>Rohkem</value>
+    <comment>Text to define that there are more options things to see.</comment>
+  </data>
+  <data name="MyVault" xml:space="preserve">
+    <value>Minu hoidla</value>
+    <comment>The title for the vault page.</comment>
+  </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Autentikaator</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nimi</value>
+    <comment>Label for an entity name.</comment>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Ei</value>
+  </data>
+  <data name="Notes" xml:space="preserve">
+    <value>Märkmed</value>
+    <comment>Label for notes.</comment>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+    <comment>Acknowledgement.</comment>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Parool</value>
+    <comment>Label for a password.</comment>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salvesta</value>
+    <comment>Button text for a save operation (verb).</comment>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Teisalda</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Salvestan...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Seaded</value>
+    <comment>The title for the settings page.</comment>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Näita</value>
+    <comment>Reveal a hidden value (password).</comment>
+  </data>
+  <data name="ItemDeleted" xml:space="preserve">
+    <value>Kirje on kustutatud.</value>
+    <comment>Confirmation message after successfully deleting a login.</comment>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Esita</value>
+  </data>
+  <data name="Sync" xml:space="preserve">
+    <value>Sünkroniseeri</value>
+    <comment>The title for the sync page.</comment>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>Täname teid!</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>Tööriistad</value>
+    <comment>The title for the tools page.</comment>
+  </data>
+  <data name="URI" xml:space="preserve">
+    <value>URI</value>
+    <comment>Label for a uri/url.</comment>
+  </data>
+  <data name="UseFingerprintToUnlock" xml:space="preserve">
+    <value>Kasuta lahtilukustamiseks sõrmejälge</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Kasutajanimi</value>
+    <comment>Label for a username.</comment>
+  </data>
+  <data name="ValidationFieldRequired" xml:space="preserve">
+    <value>Väli {0} on kohustuslik.</value>
+    <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
+  </data>
+  <data name="ValueHasBeenCopied" xml:space="preserve">
+    <value>{0} on kopeeritud.</value>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
+  </data>
+  <data name="VerifyFingerprint" xml:space="preserve">
+    <value>Kinnita sõrmejäljega</value>
+  </data>
+  <data name="VerifyMasterPassword" xml:space="preserve">
+    <value>Autendi ülemparooliga</value>
+  </data>
+  <data name="VerifyPIN" xml:space="preserve">
+    <value>Kinnita PIN</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Versioon</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Vaata</value>
+  </data>
+  <data name="VisitOurWebsite" xml:space="preserve">
+    <value>Külasta meie kodulehte</value>
+  </data>
+  <data name="VisitOurWebsiteDescription" xml:space="preserve">
+    <value>Külasta kodulehte abi saamiseks, meiega kontakteerumiseks, uudiste lugemiseks või Bitwardeni kohta rohkema teabe saamiseks.</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Veebisait</value>
+    <comment>Label for a website.</comment>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Jah</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Konto</value>
+  </data>
+  <data name="AccountCreated" xml:space="preserve">
+    <value>Sinu konto on loodud! Võid nüüd sisse logida.</value>
+  </data>
+  <data name="AddAnItem" xml:space="preserve">
+    <value>Lisa kirje</value>
+  </data>
+  <data name="AppExtension" xml:space="preserve">
+    <value>Rakenduse laiendus</value>
+  </data>
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
+    <value>Kasuta Bitwardeni juurdepääsetavuse teenust, et erinevatel veebilehtedel ja rakendustes kontoandmeid sisestada.</value>
+  </data>
+  <data name="AutofillService" xml:space="preserve">
+    <value>Automaattäite teenus</value>
+  </data>
+  <data name="AvoidAmbiguousCharacters" xml:space="preserve">
+    <value>Väldi ebamääraseid kirjamärke</value>
+  </data>
+  <data name="BitwardenAppExtension" xml:space="preserve">
+    <value>Bitwarden rakenduse laiendus</value>
+  </data>
+  <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
+    <value>Lihtsaim viis uute sisselogimise andmete lisamiseks on kasutada Bitwardeni rakenduse laiendust. Lisateavet Bitwardeni rakenduse laienduse kasutamiseks leiad menüüst "Seaded".</value>
+  </data>
+  <data name="BitwardenAppExtensionDescription" xml:space="preserve">
+    <value>Kasuta Bitwardenit Safaris ja teistes rakendustes kontoandmete sisestamiseks.</value>
+  </data>
+  <data name="BitwardenAutofillService" xml:space="preserve">
+    <value>Bitwardeni automaattäite teenus</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
+    <value>Kasuta kontoandmete sisestamiseks Bitwardeni juurdepääsetavuse teenust.</value>
+  </data>
+  <data name="ChangeEmail" xml:space="preserve">
+    <value>Muuda e-posti</value>
+  </data>
+  <data name="ChangeEmailConfirmation" xml:space="preserve">
+    <value>Saad oma e-posti aadressi muuta bitwarden.com veebihoidlas. Soovid seda kohe teha?</value>
+  </data>
+  <data name="ChangeMasterPassword" xml:space="preserve">
+    <value>Muuda ülemparooli</value>
+  </data>
+  <data name="ChangePasswordConfirmation" xml:space="preserve">
+    <value>Saad oma ülemparooli muuta bitwarden.com veebihoidlas. Soovid seda kohe teha?</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Sulge</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Jätka</value>
+  </data>
+  <data name="CreateAccount" xml:space="preserve">
+    <value>Loo konto</value>
+  </data>
+  <data name="CreatingAccount" xml:space="preserve">
+    <value>Konto loomine...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="EditItem" xml:space="preserve">
+    <value>Kirje muutmine</value>
+  </data>
+  <data name="EnableAutomaticSyncing" xml:space="preserve">
+    <value>Aktiveeri automaatne sünkroonimine</value>
+  </data>
+  <data name="EnterEmailForHint" xml:space="preserve">
+    <value>Ülemparooli vihje saamiseks sisesta oma konto e-posti aadress.</value>
+  </data>
+  <data name="ExntesionReenable" xml:space="preserve">
+    <value>Taas-aktiveeri rakenduse laiendus</value>
+  </data>
+  <data name="ExtensionAlmostDone" xml:space="preserve">
+    <value>Peaaegu valmis!</value>
+  </data>
+  <data name="ExtensionEnable" xml:space="preserve">
+    <value>Aktiveeri rakenduse laiendus</value>
+  </data>
+  <data name="ExtensionInSafari" xml:space="preserve">
+    <value>Safaris pääsed Bitwardenile ligi läbi jagamise ikooni (vihje: vaata jagamise menüüs paremale-alla).</value>
+    <comment>Safari is the name of apple's web browser</comment>
+  </data>
+  <data name="ExtensionInstantAccess" xml:space="preserve">
+    <value>Kiire ligipääs oma paroolidele!</value>
+  </data>
+  <data name="ExtensionReady" xml:space="preserve">
+    <value>Oled sisselogimiseks valmis!</value>
+  </data>
+  <data name="ExtensionSetup" xml:space="preserve">
+    <value>Pääsed nüüd oma kontoandmetele lihtsasti ligi nii Safaris, Chromes kui ka teistes toetatud rakendustes.</value>
+  </data>
+  <data name="ExtensionSetup2" xml:space="preserve">
+    <value>Safaris ja Chromes pääsed Bitwardenile ligi läbi jagamise ikooni (vihje: vaata jagamise menüüs paremale-alla).</value>
+  </data>
+  <data name="ExtensionTapIcon" xml:space="preserve">
+    <value>Lisa käivitamiseks vajuta menüüs Bitwardeni ikoonile.</value>
+  </data>
+  <data name="ExtensionTurnOn" xml:space="preserve">
+    <value>Bitwardeni sisselülitamiseks Safaris ja teistes rakendustes vajuta alumisel menüül "more" ikoonile.</value>
+  </data>
+  <data name="Favorite" xml:space="preserve">
+    <value>Lemmik</value>
+  </data>
+  <data name="Fingerprint" xml:space="preserve">
+    <value>sõrmejäljega</value>
+  </data>
+  <data name="GeneratePassword" xml:space="preserve">
+    <value>Loo parool</value>
+  </data>
+  <data name="GetPasswordHint" xml:space="preserve">
+    <value>Tuleta ülemparooli vihjega meelde</value>
+  </data>
+  <data name="ImportItems" xml:space="preserve">
+    <value>Impordi andmed</value>
+  </data>
+  <data name="ImportItemsConfirmation" xml:space="preserve">
+    <value>Saad suurema koguse kontoandmeid importida Bitwardeni veebihoidlas. Soovid seda kohe teha?</value>
+  </data>
+  <data name="ImportItemsDescription" xml:space="preserve">
+    <value>Kiire viis oma konto- ja muude andmete importimiseks teistest paroolihalduritest.</value>
+  </data>
+  <data name="LastSync" xml:space="preserve">
+    <value>Viimane sünkroniseerimine:</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Pikkus</value>
+  </data>
+  <data name="Lock" xml:space="preserve">
+    <value>Lukusta</value>
+  </data>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 minuti pärast</value>
+  </data>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 tunni pärast</value>
+  </data>
+  <data name="OneMinute" xml:space="preserve">
+    <value>1 minuti pärast</value>
+  </data>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 tunni pärast</value>
+  </data>
+  <data name="Immediately" xml:space="preserve">
+    <value>Koheselt</value>
+  </data>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>Hoidla ajalõpp</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Hoidla ajalõpu tegevus</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Väljalogimine eemaldab hoidlale ligipääsu ning nõuab pärast ajalõpu perioodi uuesti autentimist. Oled kindel, et soovid seda valikut kasutada?</value>
+  </data>
+  <data name="LoggingIn" xml:space="preserve">
+    <value>Sisselogimine...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="LoginOrCreateNewAccount" xml:space="preserve">
+    <value>Logi oma kontosse sisse või loo uus konto.</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Halda</value>
+  </data>
+  <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
+    <value>Parooli kinnitus ei ole õige.</value>
+  </data>
+  <data name="MasterPasswordDescription" xml:space="preserve">
+    <value>Ülemparool on parool, millega pääsed oma kontole ligi. On äärmiselt tähtis, et ülemparool ei ununeks. Selle parooli taastamine ei ole mingil moel võimalik.</value>
+  </data>
+  <data name="MasterPasswordHint" xml:space="preserve">
+    <value>Ülemparooli vihje (ei ole kohustuslik)</value>
+  </data>
+  <data name="MasterPasswordHintDescription" xml:space="preserve">
+    <value>Vihje võib abiks olla olukorras, kui oled ülemparooli unustanud.</value>
+  </data>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Ülemparool peab olema vähemalt {0} tähemärgi pikkune.</value>
+  </data>
+  <data name="MinNumbers" xml:space="preserve">
+    <value>Vähim arv numbreid</value>
+    <comment>Minimum numeric characters for password generator settings</comment>
+  </data>
+  <data name="MinSpecial" xml:space="preserve">
+    <value>Vähim arv spetsiaalmärke</value>
+    <comment>Minimum special characters for password generator settings</comment>
+  </data>
+  <data name="MoreSettings" xml:space="preserve">
+    <value>Rohkem seadeid</value>
+  </data>
+  <data name="MustLogInMainApp" xml:space="preserve">
+    <value>Pead enne lisarakenduse kasutamist Bitwardeni rakendusse sisse logima.</value>
+  </data>
+  <data name="Never" xml:space="preserve">
+    <value>Mitte kunagi</value>
+  </data>
+  <data name="NewItemCreated" xml:space="preserve">
+    <value>Uus kirje on loodud.</value>
+  </data>
+  <data name="NoFavorites" xml:space="preserve">
+    <value>Hoidlas ei ole lemmikuid.</value>
+  </data>
+  <data name="NoItems" xml:space="preserve">
+    <value>Hoidlas ei ole kirjeid.</value>
+  </data>
+  <data name="NoItemsTap" xml:space="preserve">
+    <value>Hoidlas puudub selle veebilehe konto. Vajuta konto lisamiseks.</value>
+  </data>
+  <data name="NoUsernamePasswordConfigured" xml:space="preserve">
+    <value>Selle konto jaoks on kasutajanimi või parool seadistamata.</value>
+  </data>
+  <data name="OkGotIt" xml:space="preserve">
+    <value>Ok, sain aru!</value>
+    <comment>Confirmation, like "Ok, I understand it"</comment>
+  </data>
+  <data name="OptionDefaults" xml:space="preserve">
+    <value>Vaikeväärtused on seatud Bitwardeni paroolide genereerimise tööriista poolt.</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Valikud</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Muu</value>
+  </data>
+  <data name="PasswordGenerated" xml:space="preserve">
+    <value>Parool on loodud.</value>
+  </data>
+  <data name="PasswordGenerator" xml:space="preserve">
+    <value>Parooli genereerimine</value>
+  </data>
+  <data name="PasswordHint" xml:space="preserve">
+    <value>Parooli vihje</value>
+  </data>
+  <data name="PasswordHintAlert" xml:space="preserve">
+    <value>Ülemparooli vihje saadeti Sinu e-postile.</value>
+  </data>
+  <data name="PasswordOverrideAlert" xml:space="preserve">
+    <value>Oled kindel, et soovid olemasolevat parooli asendada?</value>
+  </data>
+  <data name="PushNotificationAlert" xml:space="preserve">
+    <value>Bitwarden hoiab hoidla automaatselt sünkroonis läbi push teavituste. Parima võimaliku kogemuse saamiseks vajuta järgnevas märkekastis "Allow", et sünkroniseerimine lubada.</value>
+    <comment>Push notifications for apple products</comment>
+  </data>
+  <data name="RateTheApp" xml:space="preserve">
+    <value>Hinda rakendust</value>
+  </data>
+  <data name="RateTheAppDescription" xml:space="preserve">
+    <value>Soovi korral võid meid positiivse hinnanguga toetada!</value>
+  </data>
+  <data name="RegeneratePassword" xml:space="preserve">
+    <value>Loo uus</value>
+  </data>
+  <data name="RetypeMasterPassword" xml:space="preserve">
+    <value>Sisesta ülemparool uuesti</value>
+  </data>
+  <data name="SearchVault" xml:space="preserve">
+    <value>Otsi hoidlast</value>
+  </data>
+  <data name="Security" xml:space="preserve">
+    <value>Turvalisus</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Vali</value>
+  </data>
+  <data name="SetPIN" xml:space="preserve">
+    <value>Määra PIN</value>
+  </data>
+  <data name="SetPINDirection" xml:space="preserve">
+    <value>Kasuta lahtilukustamiseks 4 numbrilist koodi.</value>
+  </data>
+  <data name="ItemInformation" xml:space="preserve">
+    <value>Kirje teave</value>
+  </data>
+  <data name="ItemUpdated" xml:space="preserve">
+    <value>Kirje on uuendatud.</value>
+  </data>
+  <data name="Submitting" xml:space="preserve">
+    <value>Saatmine...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="Syncing" xml:space="preserve">
+    <value>Sünkroniseerimine...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="SyncingComplete" xml:space="preserve">
+    <value>Sünkroniseerimine on lõpetatud.</value>
+  </data>
+  <data name="SyncingFailed" xml:space="preserve">
+    <value>Sünkroniseerimine nurjus.</value>
+  </data>
+  <data name="SyncVaultNow" xml:space="preserve">
+    <value>Sünkroniseeri hoidla</value>
+  </data>
+  <data name="TouchID" xml:space="preserve">
+    <value>Touch ID</value>
+    <comment>What Apple calls their fingerprint reader.</comment>
+  </data>
+  <data name="TwoStepLogin" xml:space="preserve">
+    <value>Kaheastmeline kinnitamine</value>
+  </data>
+  <data name="TwoStepLoginConfirmation" xml:space="preserve">
+    <value>Kaheastmeline kinnitamine aitab konto turvalisust tõsta. Lisaks paroolile pead kontole ligipääsemiseks kinnitama sisselogimise päringu SMS-ga, telefonikõnega, autentimise rakendusega või e-postiga. Kaheastmelist kinnitust saab sisse lülitada bitwarden.com veebihoidlas. Soovid seda kohe avada?</value>
+  </data>
+  <data name="UnlockWith" xml:space="preserve">
+    <value>Lukusta lahti {0}</value>
+  </data>
+  <data name="UnlockWithPIN" xml:space="preserve">
+    <value>Lukusta lahti PIN koodiga</value>
+  </data>
+  <data name="Validating" xml:space="preserve">
+    <value>Valideerimine</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="VerificationCode" xml:space="preserve">
+    <value>Kinnituskood</value>
+  </data>
+  <data name="ViewItem" xml:space="preserve">
+    <value>Kirje vaatamine</value>
+  </data>
+  <data name="WebVault" xml:space="preserve">
+    <value>Bitwarden veebihoidla</value>
+  </data>
+  <data name="Lost2FAApp" xml:space="preserve">
+    <value>Kaotasid autentimise rakenduse?</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>Kirjet</value>
+    <comment>Screen title</comment>
+  </data>
+  <data name="ExtensionActivated" xml:space="preserve">
+    <value>Lisa on aktiveeritud!</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Ikoonid</value>
+  </data>
+  <data name="Translations" xml:space="preserve">
+    <value>Tõlkijad</value>
+  </data>
+  <data name="ItemsForUri" xml:space="preserve">
+    <value>{0} kontoandmed</value>
+    <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
+  </data>
+  <data name="NoItemsForUri" xml:space="preserve">
+    <value>Hoidlas puuduvad {0} kontod.</value>
+    <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
+  </data>
+  <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
+    <value>Kui vajutad sisendväljale ning näed Bitwardeni akent, saad sellele vajutada ning kontoandmeid ja paroole sisestada.</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
+    <value>Vajuta andmete automaatseks sisestamiseks.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
+    <value>Ava Juurdepääsetavuse seaded</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
+    <value>1. Vajuta Androidi Juurdepääsetavuse seadete menüüs "Bitwardeni" kirjele.</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
+    <value>2. Lülita valik sisse ja seejärel OK, et sellega nõustuda.</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Keelatud</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Lubatud</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Väljas</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Sees</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Olek:</value>
+  </data>
+  <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
+    <value>Lihtsaim viis hoidlasse kontosid lisada on läbi Bitwardeni automaattäite teenuse. Rohkem infot selle kohta leiad Bitwardeni rakenduse menüüst "Seaded".</value>
+  </data>
+  <data name="Autofill" xml:space="preserve">
+    <value>Täida automaatselt</value>
+  </data>
+  <data name="AutofillOrView" xml:space="preserve">
+    <value>Soovid seda kirjet sisestada või vaadata?</value>
+  </data>
+  <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
+    <value>Oled kindel, et soovid selle kirje automaatselt sisestada? See ei ühti täielikult "{0}"-ga.</value>
+  </data>
+  <data name="MatchingItems" xml:space="preserve">
+    <value>Sobivad kirjed</value>
+  </data>
+  <data name="PossibleMatchingItems" xml:space="preserve">
+    <value>Võimalikud sobivad kirjed</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Otsi</value>
+  </data>
+  <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
+    <value>Otsid "{0}" automaattäite kirjet.</value>
+  </data>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Info organisatsioonide kohta</value>
+  </data>
+  <data name="CannotOpenApp" xml:space="preserve">
+    <value>Rakendust "{0}" ei ole võimalik avada.</value>
+    <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
+  </data>
+  <data name="AuthenticatorAppTitle" xml:space="preserve">
+    <value>Autentimise rakendus</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeApp" xml:space="preserve">
+    <value>Sisesta autentimise rakendusest 6 kohaline number.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeEmail" xml:space="preserve">
+    <value>Sisesta 6 kohaline number, mis saadeti e-posti aadressile {0}.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="LoginUnavailable" xml:space="preserve">
+    <value>Sisselogimine ei ole saadaval</value>
+    <comment>For 2FA whenever there are no available providers on this device.</comment>
+  </data>
+  <data name="NoTwoStepAvailable" xml:space="preserve">
+    <value>Sellel kontol on aktiveeritud kaheastmeline kinnitus. Siiski ei toeta ükski aktiveeritud kaheastmelise kinnitamise teenus seda konkreetset seadet. Palun kasuta ühilduvat seadet ja/või lisa uus kaheastmelise teenuse pakkuja, mis töötab rohkemates seadmetes (näiteks mõni autentimise rakendus).</value>
+  </data>
+  <data name="RecoveryCodeTitle" xml:space="preserve">
+    <value>Taastamise kood</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Jäta mind meelde</value>
+    <comment>Remember my two-step login</comment>
+  </data>
+  <data name="SendVerificationCodeAgain" xml:space="preserve">
+    <value>Saada kinnituskood uuesti e-postile</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="TwoStepLoginOptions" xml:space="preserve">
+    <value>Kaheastmelise sisselogimise valikud</value>
+  </data>
+  <data name="UseAnotherTwoStepMethod" xml:space="preserve">
+    <value>Kasuta teist meetodit</value>
+  </data>
+  <data name="VerificationEmailNotSent" xml:space="preserve">
+    <value>Kinnitus e-kirja saatmine ebaõnnestus. Proovi uuesti.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="VerificationEmailSent" xml:space="preserve">
+    <value>Kinnitus e-kiri on saadetud.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="YubiKeyInstruction" xml:space="preserve">
+    <value>Jätkamiseks hoia oma YubiKey NEO-d vastu seadet või sisesta see seadme USB pessa. Seejärel vajuta sellele nupule.</value>
+  </data>
+  <data name="YubiKeyTitle" xml:space="preserve">
+    <value>YubiKey Security Key</value>
+    <comment>"YubiKey" is the product name and should not be translated.</comment>
+  </data>
+  <data name="AddNewAttachment" xml:space="preserve">
+    <value>Lisa uus manus</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Manused</value>
+  </data>
+  <data name="UnableToDownloadFile" xml:space="preserve">
+    <value>Faili allalaadimine nurjus.</value>
+  </data>
+  <data name="UnableToOpenFile" xml:space="preserve">
+    <value>Sinu seade ei oska seda faili avada.</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Allalaadimine...</value>
+    <comment>Message shown when downloading a file</comment>
+  </data>
+  <data name="AttachmentLargeWarning" xml:space="preserve">
+    <value>See manus on {0} suurusega. Oled kindel, et soovid seda oma seadmesse allalaadida?</value>
+    <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
+  </data>
+  <data name="AuthenticatorKey" xml:space="preserve">
+    <value>Autentimise võti (TOTP)</value>
+  </data>
+  <data name="VerificationCodeTotp" xml:space="preserve">
+    <value>Kinnituskood (TOTP)</value>
+    <comment>Totp code label</comment>
+  </data>
+  <data name="AuthenticatorKeyAdded" xml:space="preserve">
+    <value>Autentimise võti on lisatud.</value>
+  </data>
+  <data name="AuthenticatorKeyReadError" xml:space="preserve">
+    <value>Autentimise võtme lugemine nurjus.</value>
+  </data>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Suuna kaamera QR koodile.
+Skaneerimine toimub automaatselt.</value>
+  </data>
+  <data name="ScanQrTitle" xml:space="preserve">
+    <value>Skanneeri QR kood</value>
+  </data>
+  <data name="Camera" xml:space="preserve">
+    <value>Kaamera</value>
+  </data>
+  <data name="Photos" xml:space="preserve">
+    <value>Fotod</value>
+  </data>
+  <data name="CopyTotp" xml:space="preserve">
+    <value>Kopeeri TOTP</value>
+  </data>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Kui sisselogimise andmetele on juurde lisatud autentimise võti, kopeeri TOTP kood automaattäite kasutamisel lõikepuhvrisse.</value>
+  </data>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>TOTP automaatne kopeerimine</value>
+  </data>
+  <data name="PremiumRequired" xml:space="preserve">
+    <value>Selle funktsiooni kasutamiseks on vajalik tasulist kontot omada.</value>
+  </data>
+  <data name="AttachementAdded" xml:space="preserve">
+    <value>Manus on lisatud</value>
+  </data>
+  <data name="AttachmentDeleted" xml:space="preserve">
+    <value>Manus on kustutatud</value>
+  </data>
+  <data name="ChooseFile" xml:space="preserve">
+    <value>Vali fail</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Fail</value>
+  </data>
+  <data name="NoFileChosen" xml:space="preserve">
+    <value>Faili pole valitud</value>
+  </data>
+  <data name="NoAttachments" xml:space="preserve">
+    <value>Manused puuduvad.</value>
+  </data>
+  <data name="FileSource" xml:space="preserve">
+    <value>Faili allikas</value>
+  </data>
+  <data name="FeatureUnavailable" xml:space="preserve">
+    <value>Funktsioon pole saadaval</value>
+  </data>
+  <data name="MaxFileSize" xml:space="preserve">
+    <value>Maksimaalne faili suurus on 100 MB.</value>
+  </data>
+  <data name="UpdateKey" xml:space="preserve">
+    <value>Seda funktsiooni ei saa enne krüpteerimise võtme uuendamist kasutada.</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Rohkem teavet</value>
+  </data>
+  <data name="ApiUrl" xml:space="preserve">
+    <value>API serveri URL</value>
+  </data>
+  <data name="CustomEnvironment" xml:space="preserve">
+    <value>Kohandatud keskkond</value>
+  </data>
+  <data name="CustomEnvironmentFooter" xml:space="preserve">
+    <value>Ainult edasijõudnud kasutajatele. Siin saad igale kategooriale eraldi URL-i määrata.</value>
+  </data>
+  <data name="EnvironmentSaved" xml:space="preserve">
+    <value>The environment URLs have been saved.</value>
+  </data>
+  <data name="FormattedIncorrectly" xml:space="preserve">
+    <value>{0} ei ole õige formaadiga.</value>
+    <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
+  </data>
+  <data name="IdentityUrl" xml:space="preserve">
+    <value>Identifitseerimise serveri URL</value>
+    <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
+  </data>
+  <data name="SelfHostedEnvironment" xml:space="preserve">
+    <value>Enda majutatud keskkond</value>
+  </data>
+  <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
+    <value>Sisesta baas URL, kus sinu või ettevõtte majutatud Bitwarden asub.</value>
+  </data>
+  <data name="ServerUrl" xml:space="preserve">
+    <value>Serveri URL</value>
+  </data>
+  <data name="WebVaultUrl" xml:space="preserve">
+    <value>Veebihoidla serveri URL</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
+    <value>Vajuta märguandele, et oma hoidla sisu näha.</value>
+  </data>
+  <data name="CustomFields" xml:space="preserve">
+    <value>Kohandatud väljad</value>
+  </data>
+  <data name="CopyNumber" xml:space="preserve">
+    <value>Kopeeri number</value>
+  </data>
+  <data name="CopySecurityCode" xml:space="preserve">
+    <value>Kopeeri turvakood</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="SecurityCode" xml:space="preserve">
+    <value>Turvakood</value>
+  </data>
+  <data name="TypeCard" xml:space="preserve">
+    <value>Pangakaart</value>
+  </data>
+  <data name="TypeIdentity" xml:space="preserve">
+    <value>Identiteet</value>
+  </data>
+  <data name="TypeLogin" xml:space="preserve">
+    <value>Kasutajakonto andmed</value>
+  </data>
+  <data name="TypeSecureNote" xml:space="preserve">
+    <value>Turvaline märkus</value>
+  </data>
+  <data name="Address1" xml:space="preserve">
+    <value>Aadress 1</value>
+  </data>
+  <data name="Address2" xml:space="preserve">
+    <value>Aadress 2</value>
+  </data>
+  <data name="Address3" xml:space="preserve">
+    <value>Aadress 3</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>Aprill</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Väljastaja</value>
+  </data>
+  <data name="CardholderName" xml:space="preserve">
+    <value>Kaardiomaniku nimi</value>
+  </data>
+  <data name="CityTown" xml:space="preserve">
+    <value>Linn / asula</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Ettevõte</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Riik</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>Detsember</value>
+  </data>
+  <data name="Dr" xml:space="preserve">
+    <value>Dr</value>
+  </data>
+  <data name="ExpirationMonth" xml:space="preserve">
+    <value>Aegumise kuu</value>
+  </data>
+  <data name="ExpirationYear" xml:space="preserve">
+    <value>Aegumise aasta</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>Veebruar</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Eesnimi</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>Jaanuar</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>Juuli</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>Juuni</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Perekonnanimi</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Täisnimi</value>
+  </data>
+  <data name="LicenseNumber" xml:space="preserve">
+    <value>Litsentsi number</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>Märts</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>Mai</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>Teine eesnimi</value>
+  </data>
+  <data name="Mr" xml:space="preserve">
+    <value>Hr</value>
+  </data>
+  <data name="Mrs" xml:space="preserve">
+    <value>Mrs</value>
+  </data>
+  <data name="Ms" xml:space="preserve">
+    <value>Pr</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>Oktoober</value>
+  </data>
+  <data name="PassportNumber" xml:space="preserve">
+    <value>Passi number</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Telefoninumber</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="SSN" xml:space="preserve">
+    <value>Isikukood</value>
+  </data>
+  <data name="StateProvince" xml:space="preserve">
+    <value>Maakond / vald</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Pealkiri</value>
+  </data>
+  <data name="ZipPostalCode" xml:space="preserve">
+    <value>Postiindeks</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Aadress</value>
+  </data>
+  <data name="Expiration" xml:space="preserve">
+    <value>Aegumine</value>
+  </data>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Kuva veebilehtede ikoone</value>
+  </data>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Kuva iga kirje kõrval lehekülje ikooni.</value>
+  </data>
+  <data name="IconsUrl" xml:space="preserve">
+    <value>Ikoonide serveri URL</value>
+  </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>Täida Bitwardeniga</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>Hoidla on lukus</value>
+  </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>Ava hoidla</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Kogumikud</value>
+  </data>
+  <data name="NoItemsCollection" xml:space="preserve">
+    <value>Selles kogumikus ei ole kirjeid.</value>
+  </data>
+  <data name="NoItemsFolder" xml:space="preserve">
+    <value>Selles kaustas ei ole kirjeid.</value>
+  </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>Prügikast on tühi.</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>Juurdepääsetavuse teenus</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>Bitwardeni automaattäite teenus kasutab Androidi Autofill raamistikku. See aitab telefonis olevatesse rakendustesse sisestada kontoandmeid, krediitkaardi andmeid ja muud personaalset infot.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Kasuta Bitwardeni automaattäite teenust, et sisestada teistesse rakendustesse kontoandmeid, krediitkaardi andmeid ja muud informatsiooni.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>Ava Automaattäite seaded</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Face ID</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>Kasuta kinnitamiseks Face ID-d.</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>Kasuta lahtilukustamiseks Face ID-d</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>Kinnita Face ID</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>Meil ei õnnestu Androidi sisestusabi seadeid avada. Võid selle ise avada, navigeerides Seaded &gt; Süsteem &gt; Keeled ja sisend &gt; Täpsemad &gt; Sisestusabi.</value>
+  </data>
+  <data name="CustomFieldName" xml:space="preserve">
+    <value>Kohandatud välja nimi</value>
+  </data>
+  <data name="FieldTypeBoolean" xml:space="preserve">
+    <value>Boolean</value>
+  </data>
+  <data name="FieldTypeHidden" xml:space="preserve">
+    <value>Peidetud</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Ühenduses</value>
+  </data>
+  <data name="FieldTypeText" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="NewCustomField" xml:space="preserve">
+    <value>Uus kohandatud väli</value>
+  </data>
+  <data name="SelectTypeField" xml:space="preserve">
+    <value>Millist tüüpi kohandatud välja soovid lisada?</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Eemalda</value>
+  </data>
+  <data name="NewUri" xml:space="preserve">
+    <value>Uus URI</value>
+  </data>
+  <data name="URIPosition" xml:space="preserve">
+    <value>URI {0}</value>
+    <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
+  </data>
+  <data name="BaseDomain" xml:space="preserve">
+    <value>Baasdomeen</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Vaike</value>
+  </data>
+  <data name="Exact" xml:space="preserve">
+    <value>Täpne</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Host</value>
+    <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>RegEx</value>
+    <comment>A programming term, also known as 'RegEx'.</comment>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Algab</value>
+  </data>
+  <data name="URIMatchDetection" xml:space="preserve">
+    <value>URI sobivuse tuvastamine</value>
+  </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>Sobivuse tuvastamine</value>
+    <comment>URI match detection for auto-fill.</comment>
+  </data>
+  <data name="YesAndSave" xml:space="preserve">
+    <value>Jah, ja salvesta</value>
+  </data>
+  <data name="AutofillAndSave" xml:space="preserve">
+    <value>Täida ja salvesta</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organisatsioon</value>
+    <comment>An entity of multiple related people (ex. a team or business organization).</comment>
+  </data>
+  <data name="HoldYubikeyNearTop" xml:space="preserve">
+    <value>Hoia oma Yubikey seadme ülaosa lähedal.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Proovi uuesti</value>
+  </data>
+  <data name="YubiKeyInstructionIos" xml:space="preserve">
+    <value>Jätkamiseks hoia oma YubiKey NEO seadme tagumise poole vastas.</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
+    <value>Juurdepääsetavuse teenus võib abiks olla olukordades, kus rakendused ei toeta standardset automaattäite teenust.</value>
+  </data>
+  <data name="DatePasswordUpdated" xml:space="preserve">
+    <value>Parool on uuendatud</value>
+    <comment>ex. Date this password was updated</comment>
+  </data>
+  <data name="DateUpdated" xml:space="preserve">
+    <value>Uuendatud</value>
+    <comment>ex. Date this item was updated</comment>
+  </data>
+  <data name="AutofillActivated" xml:space="preserve">
+    <value>Automaattäide on aktiveeritud!</value>
+  </data>
+  <data name="MustLogInMainAppAutofill" xml:space="preserve">
+    <value>Pead enne Automaattäite kasutamist Bitwardeni rakendusse sisse logima.</value>
+  </data>
+  <data name="AutofillSetup" xml:space="preserve">
+    <value>Sinu kontoandmed on otse klaviatuurilt ligipääsetavad. Saad nüüd kergemini äppides ja veebilehtedel sisse logida.</value>
+  </data>
+  <data name="AutofillSetup2" xml:space="preserve">
+    <value>Soovitame teised Automaattäite valikud Seadetest välja lülitada, kui sa neid enam ei kasuta.</value>
+  </data>
+  <data name="BitwardenAutofillDescription" xml:space="preserve">
+    <value>Pääse oma hoidlale otse klaviatuurilt ligi ning täida parooliväljad lihtsamini.</value>
+  </data>
+  <data name="AutofillTurnOn" xml:space="preserve">
+    <value>Paroolide automaattäite võimaldamiseks järgi neid juhiseid:</value>
+  </data>
+  <data name="AutofillTurnOn1" xml:space="preserve">
+    <value>1. Mine iOS "Settings" rakendusse</value>
+  </data>
+  <data name="AutofillTurnOn2" xml:space="preserve">
+    <value>2. Vajuta "Passwords &amp; Accounts"</value>
+  </data>
+  <data name="AutofillTurnOn3" xml:space="preserve">
+    <value>3. Vajuta "AutoFill Passwords"</value>
+  </data>
+  <data name="AutofillTurnOn4" xml:space="preserve">
+    <value>4. Lülita AutoFill sisse</value>
+  </data>
+  <data name="AutofillTurnOn5" xml:space="preserve">
+    <value>5. Vali "Bitwarden"</value>
+  </data>
+  <data name="PasswordAutofill" xml:space="preserve">
+    <value>Paroolide Automaatne täitmine</value>
+  </data>
+  <data name="BitwardenAutofillAlert2" xml:space="preserve">
+    <value>Kõige lihtsam viis uute kontoandmete sisestamiseks on kasutada Bitwardeni Automaattäite lisatööriista. Rohkem teavet selle kasutamise kohta leiad menüüst "Seaded".</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Vigane e-posti aadress.</value>
+  </data>
+  <data name="Cards" xml:space="preserve">
+    <value>Kaardid</value>
+  </data>
+  <data name="Identities" xml:space="preserve">
+    <value>Identiteedid</value>
+  </data>
+  <data name="Logins" xml:space="preserve">
+    <value>Kontod</value>
+  </data>
+  <data name="SecureNotes" xml:space="preserve">
+    <value>Turvalised märkmed</value>
+  </data>
+  <data name="AllItems" xml:space="preserve">
+    <value>Kõik kirjed</value>
+  </data>
+  <data name="URIs" xml:space="preserve">
+    <value>URI-d</value>
+    <comment>Plural form of a URI</comment>
+  </data>
+  <data name="CheckingPassword" xml:space="preserve">
+    <value>Parooli kontrollimine...</value>
+    <comment>A loading message when doing an exposed password check.</comment>
+  </data>
+  <data name="CheckPassword" xml:space="preserve">
+    <value>Vaata, kas parool on lekkinud.</value>
+  </data>
+  <data name="PasswordExposed" xml:space="preserve">
+    <value>See parool on erinevates andmeleketes kokku {0} korda lekkinud. Peaksid selle ära muutma.</value>
+  </data>
+  <data name="PasswordSafe" xml:space="preserve">
+    <value>Seda parooli ei õnnestu andmeleketest leida. Parooli edasi kasutamine peaks olema turvaline.</value>
+  </data>
+  <data name="IdentityName" xml:space="preserve">
+    <value>Identiteedi nimi</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Väärtus</value>
+  </data>
+  <data name="PasswordHistory" xml:space="preserve">
+    <value>Paroolide ajalugu</value>
+  </data>
+  <data name="Types" xml:space="preserve">
+    <value>Tüübid</value>
+  </data>
+  <data name="NoPasswordsToList" xml:space="preserve">
+    <value>Puuduvad paroolid, mida kuvada.</value>
+  </data>
+  <data name="NoItemsToList" xml:space="preserve">
+    <value>Puuduvad kirjed, mida kuvada.</value>
+  </data>
+  <data name="SearchCollection" xml:space="preserve">
+    <value>Otsi kogumikku</value>
+  </data>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Otsi failiga Sende</value>
+  </data>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Otsi tekstiga Sende</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Otsi {0}</value>
+    <comment>ex: Search Logins</comment>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Tüüp</value>
+  </data>
+  <data name="MoveDown" xml:space="preserve">
+    <value>Nihuta alla</value>
+  </data>
+  <data name="MoveUp" xml:space="preserve">
+    <value>Nihuta üles</value>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Mitmesugust</value>
+  </data>
+  <data name="Ownership" xml:space="preserve">
+    <value>Omanik</value>
+  </data>
+  <data name="WhoOwnsThisItem" xml:space="preserve">
+    <value>Kes seda kirjet omab?</value>
+  </data>
+  <data name="NoCollectionsToList" xml:space="preserve">
+    <value>Puuduvad kollektsioonid, mida kuvada.</value>
+  </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} teisaldati {1}'sse.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
+  <data name="ItemShared" xml:space="preserve">
+    <value>Kirje on jagatud.</value>
+  </data>
+  <data name="SelectOneCollection" xml:space="preserve">
+    <value>Pead valima vähemalt ühe kogumiku.</value>
+  </data>
+  <data name="Share" xml:space="preserve">
+    <value>Jaga</value>
+  </data>
+  <data name="ShareItem" xml:space="preserve">
+    <value>Jaga kirjet</value>
+  </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Teisalda organisatsiooni</value>
+  </data>
+  <data name="NoOrgsToList" xml:space="preserve">
+    <value>Puuduvad organisatsioonid, mida kuvada.</value>
+  </data>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Vali organisatsioon, kuhu soovid seda kirjet teisaldada. Teisaldamisega saab kirje omanikuks organisatsioon. Pärast kirje teisaldamist ei ole sa enam selle otsene omanik.</value>
+  </data>
+  <data name="NumberOfWords" xml:space="preserve">
+    <value>Sõnade arv</value>
+  </data>
+  <data name="Passphrase" xml:space="preserve">
+    <value>Paroolifraas</value>
+  </data>
+  <data name="WordSeparator" xml:space="preserve">
+    <value>Sõna eraldaja</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Tühjenda</value>
+    <comment>To clear something out. example: To clear browser history.</comment>
+  </data>
+  <data name="Generator" xml:space="preserve">
+    <value>Genereerija</value>
+    <comment>Short for "Password Generator"</comment>
+  </data>
+  <data name="NoFoldersToList" xml:space="preserve">
+    <value>Puuduvad kaustad, mida kuvada.</value>
+  </data>
+  <data name="FingerprintPhrase" xml:space="preserve">
+    <value>Sõrmejälje fraas</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="YourAccountsFingerprint" xml:space="preserve">
+    <value>Konto sõrmejälje fraas</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>Bitwardeniga saad oma hoidla sisu teistega jagada, kasutades selleks organisatsiooni kontot. Kas soovid selle kohta lisateavet ja avada bitwarden.com veebilehe?</value>
+  </data>
+  <data name="ExportVault" xml:space="preserve">
+    <value>Ekspordi hoidla</value>
+  </data>
+  <data name="LockNow" xml:space="preserve">
+    <value>Lukusta paroolihoidla</value>
+  </data>
+  <data name="PIN" xml:space="preserve">
+    <value>PIN</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Lukusta lahti</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Hoidla lahtilukustamine</value>
+  </data>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 minuti pärast</value>
+  </data>
+  <data name="SetPINDescription" xml:space="preserve">
+    <value>Määra Bitwardeni lahtilukustamiseks PIN kood. Rakendusest täielikult välja logides nullitakse ka PIN koodi seaded.</value>
+  </data>
+  <data name="LoggedInAsOn" xml:space="preserve">
+    <value>Sisse logitud kontoga {0} lehel {1}.</value>
+    <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
+  </data>
+  <data name="VaultLockedMasterPassword" xml:space="preserve">
+    <value>Hoidla on lukus. Jätkamiseks sisesta ülemparool.</value>
+  </data>
+  <data name="VaultLockedPIN" xml:space="preserve">
+    <value>Hoidla on lukus. Jätkamiseks sisesta PIN kood.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Hoidla on lukus. Jätkamiseks kinnita oma identiteet.</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Tume</value>
+    <comment>A dark color</comment>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Hele</value>
+    <comment>A light color</comment>
+  </data>
+  <data name="FiveMinutes" xml:space="preserve">
+    <value>5 minuti pärast</value>
+  </data>
+  <data name="TenSeconds" xml:space="preserve">
+    <value>10 sekundi pärast</value>
+  </data>
+  <data name="ThirtySeconds" xml:space="preserve">
+    <value>30 sekundi pärast</value>
+  </data>
+  <data name="TwentySeconds" xml:space="preserve">
+    <value>20 sekundi pärast</value>
+  </data>
+  <data name="TwoMinutes" xml:space="preserve">
+    <value>2 minuti pärast</value>
+  </data>
+  <data name="ClearClipboard" xml:space="preserve">
+    <value>Lõikelaua puhastamine</value>
+    <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
+  </data>
+  <data name="ClearClipboardDescription" xml:space="preserve">
+    <value>Puhastab automaatselt lõikelauale kopeeritud sisu.</value>
+    <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
+  </data>
+  <data name="DefaultUriMatchDetection" xml:space="preserve">
+    <value>Vaike URI sobivuse tuvastamine</value>
+    <comment>Default URI match detection for auto-fill.</comment>
+  </data>
+  <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
+    <value>Vali vaikeviis, kuidas kirje ja URI-i sobivus tuvastatakse. Seda kasutatakse näiteks siis, kui lehele üritatakse automaatselt andmeid sisestada.</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Kujundus</value>
+    <comment>Color theme</comment>
+  </data>
+  <data name="ThemeDescription" xml:space="preserve">
+    <value>Muuda rakenduse värvikujundust.</value>
+  </data>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Vaikeväärtus (süsteem)</value>
+  </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Vaikimisi tume teema</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Kui kasutad vaikimisi (süsteemset) teemat ja seadme tume režiim on sisse lülitatud, siis valitakse vaikimisi tume teema</value>
+  </data>
+  <data name="CopyNotes" xml:space="preserve">
+    <value>Kopeeri märkus</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Välju</value>
+  </data>
+  <data name="ExitConfirmation" xml:space="preserve">
+    <value>Soovid tõesti Bitwardeni sulgeda?</value>
+  </data>
+  <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
+    <value>You you want to require unlocking with your master password when the application is restarted?</value>
+  </data>
+  <data name="Black" xml:space="preserve">
+    <value>Must</value>
+    <comment>The color black</comment>
+  </data>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized tume</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Täida blokeeritud URId automaatselt</value>
+  </data>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Küsi "Lisa konto andmed"</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Pakub kontoandmete salvestamist, kui see on hoidlast puudu.</value>
+  </data>
+  <data name="OnRestart" xml:space="preserve">
+    <value>Äpi taaskäivitamisel</value>
+  </data>
+  <data name="AutofillServiceNotEnabled" xml:space="preserve">
+    <value>Automaattäite teenus võimaldab teistes äppides Bitwardeni kirjetele hõlpsasti ligi pääseda. Paistab, et selles seadmes ei ole Bitwardeni Automaattäite teenus sisselülitatud. Saad selle sisse lülitada menüüst "Seaded".</value>
+  </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Välimuse muudatus rakendatakse äpi taaskäivitamisel.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Suurtäht</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Lisa number</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Laadi alla</value>
+  </data>
+  <data name="Shared" xml:space="preserve">
+    <value>Jagatud</value>
+  </data>
+  <data name="ToggleVisibility" xml:space="preserve">
+    <value>Näita sisu</value>
+  </data>
+  <data name="LoginExpired" xml:space="preserve">
+    <value>Sessioon on aegunud.</value>
+  </data>
+  <data name="BiometricsDirection" xml:space="preserve">
+    <value>Kinnita biomeetriaga.</value>
+  </data>
+  <data name="Biometrics" xml:space="preserve">
+    <value>biomeetriaga</value>
+  </data>
+  <data name="UseBiometricsToUnlock" xml:space="preserve">
+    <value>Lukusta lahti biomeetriaga</value>
+  </data>
+  <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
+    <value>Bitwarden vajab tähelepanu! Vaata Seaded - Juurdepääsetavuse teenuse seaded.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
+    <value>3. Ava Androidi rakenduste seaded. Leia üles Bitwarden, liigu sektsiooni "Täpsemalt" ning vajuta "Kuva peal" valikule ning lülita see sisse.</value>
+  </data>
+  <data name="OverlayPermission" xml:space="preserve">
+    <value>Õigus</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
+    <value>Ava Kuva peal seaded</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
+    <value>3. Ava Androidi rakenduste seaded. Leia üles Bitwarden, liigu sektsiooni "Täpsemalt" ning vajuta "Kuva peal" valikule ning lülita see sisse.</value>
+  </data>
+  <data name="Denied" xml:space="preserve">
+    <value>Keelatud</value>
+  </data>
+  <data name="Granted" xml:space="preserve">
+    <value>Lubatud</value>
+  </data>
+  <data name="FileFormat" xml:space="preserve">
+    <value>Failivorming</value>
+  </data>
+  <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
+    <value>Hoidlas olevate andmete eksportimiseks on vajalik ülemparooli sisestamine.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Saada kinnituskood oma e-postile</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kood on saadetud!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Jätkamiseks kinnita oma identiteet.</value>
+  </data>
+  <data name="ExportVaultWarning" xml:space="preserve">
+    <value>Eksporditav fail sisaldab hoidla sisu, mis on krüpteeringuta. Seda faili ei tohiks kaua käidelda ning mitte mingil juhul ebaturvaliselt saata (näiteks e-postiga). Kustuta see koheselt pärast kasutamist.</value>
+  </data>
+  <data name="EncExportKeyWarning" xml:space="preserve">
+    <value>Eksporditavate andmete krüpteerimiseks kasutatakse kontol olevat krüpteerimisvõtit. Kui sa peaksid seda krüpteerimise võtit roteerima, ei saa sa järgnevalt eksporditavaid andmeid enam dekrüpteerida.</value>
+  </data>
+  <data name="EncExportAccountWarning" xml:space="preserve">
+    <value>Iga Bitwardeni kasutaja krüpteerimisvõti on unikaalne. Eksporditud andmeid ei saa importida teise Bitwardeni kasutajakontosse.</value>
+  </data>
+  <data name="ExportVaultConfirmationTitle" xml:space="preserve">
+    <value>Hoidla eksportimise kinnitamine</value>
+    <comment>Title for the alert to confirm vault exports.</comment>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Hoiatus</value>
+  </data>
+  <data name="ExportVaultFailure" xml:space="preserve">
+    <value>Hoidla eksportimisel ilmnes tõrge. Probleemi jätkumisel teosta eksportimine veebihoidla kaudu.</value>
+  </data>
+  <data name="ExportVaultSuccess" xml:space="preserve">
+    <value>Hoidla on edukalt eksporditud</value>
+  </data>
+  <data name="Clone" xml:space="preserve">
+    <value>Klooni</value>
+    <comment>Clone an entity (verb).</comment>
+  </data>
+  <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
+    <value>Organisatsiooni seaded mõjutavad parooli genereerija sätteid</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Ava</value>
+    <comment>Button text for an open operation (verb).</comment>
+  </data>
+  <data name="UnableToSaveAttachment" xml:space="preserve">
+    <value>Manuse salvestamisel ilmnes tõrge. Probleemi jätkumisel lisa fail läbi veebihoidla.</value>
+  </data>
+  <data name="SaveAttachmentSuccess" xml:space="preserve">
+    <value>Manus on edukalt lisatud</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Palun lülita "Automaattäite juurdepääsetavuse teenus" Bitwardeni seadetest sisse, et Automaattäite kasti kasutada.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>Paroolivälju ei tuvastatud</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Prügikasti teisaldamine...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Kirje on prügikasti saadetud.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Taasta</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Taastamine...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Kirje on taastatud.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Prügikast</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Otsi prügikastist</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Oled kindel, et soovid kirje(d) jäädavalt kustutada? Seda ei saa tagasi võtta.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Oled kindel, et soovid selle kirje taastada?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Oled kindel, et soovid kirje(d) prügikasti teisaldada?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
+  </data>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biomeetriaga lahtilukustamine on keelatud. Oodatakse ülemparooli sisestamist.</value>
+  </data>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Automaattäite ja biomeetrilise avamise kasutamine on keelatud. Oodatakse ülemprooli sisestamist.</value>
+  </data>
+  <data name="EnableSyncOnRefresh" xml:space="preserve">
+    <value>Luba allatõmbel sünkroniseerimine</value>
+  </data>
+  <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
+    <value>Hoidla sünkroonimine ekraanil allatõmbamisel.</value>
+  </data>
+  <data name="LogInSso" xml:space="preserve">
+    <value>Enterprise Single Sign-On</value>
+  </data>
+  <data name="LogInSsoSummary" xml:space="preserve">
+    <value>Kiire sisselogimine läbi organisatsiooni ühekordne sisselogimise portaali. Jätkamiseks sisesta organisatsiooni identifikaator.</value>
+  </data>
+  <data name="OrgIdentifier" xml:space="preserve">
+    <value>Organisatsiooni identifikaator</value>
+  </data>
+  <data name="LoginSsoError" xml:space="preserve">
+    <value>Hetkel pole SSO-ga sisselogimine võimalik</value>
+  </data>
+  <data name="SetMasterPassword" xml:space="preserve">
+    <value>Määra ülemparool</value>
+  </data>
+  <data name="SetMasterPasswordSummary" xml:space="preserve">
+    <value>SSO-ga sisselogimise kinnitamiseks tuleb määrata ülemparool. See kaitseb sinu hoidlat ning võimaldab sellele ligi pääseda.</value>
+  </data>
+  <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
+    <value>Üks või enam organisatsiooni eeskirja nõuavad, et ülemparool vastaks nendele nõudmistele:</value>
+  </data>
+  <data name="PolicyInEffectMinComplexity" xml:space="preserve">
+    <value>Minimaalne keerulisuse skoor {0}</value>
+  </data>
+  <data name="PolicyInEffectMinLength" xml:space="preserve">
+    <value>Minimaalne pikkus {0}</value>
+  </data>
+  <data name="PolicyInEffectUppercase" xml:space="preserve">
+    <value>Sisaldab üht või enamat suurtähte</value>
+  </data>
+  <data name="PolicyInEffectLowercase" xml:space="preserve">
+    <value>Sisaldab üht või enamat väiketähte</value>
+  </data>
+  <data name="PolicyInEffectNumbers" xml:space="preserve">
+    <value>Sisaldab üht või rohkem numbreid</value>
+  </data>
+  <data name="PolicyInEffectSpecial" xml:space="preserve">
+    <value>Sisaldab üht või enamat järgnevatest märkidest: {0}</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
+    <value>Parool on vale</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
+    <value>Parool ei vasta organisatsiooni nõuetele. Vaata see üle ning proovi uuesti.</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Laadimine</value>
+  </data>
+  <data name="AcceptPolicies" xml:space="preserve">
+    <value>Nupu aktiveerimisel nõustud järgnevaga:</value>
+  </data>
+  <data name="AcceptPoliciesError" xml:space="preserve">
+    <value>Kasutustingimuste ja Privaatsuspoliitikaga pole nõustutud.</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Kasutustingimused</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privaatsuspoliitika</value>
+  </data>
+  <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
+    <value>Bitwarden vajab tähelepanu! Vaata Bitwardeni menüüd Seaded -> Automaattäite teenused ning luba valik „Kuva peal“</value>
+  </data>
+  <data name="AutofillServices" xml:space="preserve">
+    <value>Automaattäite teenused</value>
+  </data>
+  <data name="InlineAutofill" xml:space="preserve">
+    <value>Kasuta klaviatuuriülest sisestust</value>
+  </data>
+  <data name="InlineAutofillDescription" xml:space="preserve">
+    <value>Kasuta klaviatuuriülest sisestust, kui sinu klaviatuur seda toetab. Kui klaviatuur seda funktsiooni ei toeta (või see on väljalülitatud), kasutatakse tavalist Automaattäite meetodit.</value>
+  </data>
+  <data name="Accessibility" xml:space="preserve">
+    <value>Kasuta juurdepääsetavust</value>
+  </data>
+  <data name="AccessibilityDescription" xml:space="preserve">
+    <value>Kasuta rakendustes ja veebis andmete sisestamiseks Bitwardeni juurdepääsetavuse teenust. Aktiveerimisel kuvatakse logimisväljadele vajutamisel väike hüpikaken.</value>
+  </data>
+  <data name="AccessibilityDescription2" xml:space="preserve">
+    <value>Kasuta Bitwardeni juurdepääsetavuse teenust, et rakendustes ja veebis kontoandmeid sisestada. (Vajalik on valiku „Kuva peal“ sisselülitamine).</value>
+  </data>
+  <data name="AccessibilityDescription3" xml:space="preserve">
+    <value>Kasuta Bitwardeni juurdepääsetavuse teenust, nägemaks Automaattäite valikute listi ja/või selleks, et näidata hüpikakent, kasutades „Kuva peal“ (kui see on sisse lülitatud).</value>
+  </data>
+  <data name="AccessibilityDescription4" xml:space="preserve">
+    <value>Vajalik Automaattäite valikute listi nägemiseks ning selleks, et toetada Automaattäite teenust läbi valiku „Kuva peal“ (kui see on sisse lülitatud).</value>
+  </data>
+  <data name="DrawOver" xml:space="preserve">
+    <value>Kasuta Kuva peal</value>
+  </data>
+  <data name="DrawOverDescription" xml:space="preserve">
+    <value>Sisselülitatuna lubatakse Bitwardeni juurdepääsetavuse teenusel kuvada hüpikakent (kui valitud on sisselogimise väli).</value>
+  </data>
+  <data name="DrawOverDescription2" xml:space="preserve">
+    <value>Sisselülitatuna lubatakse Bitwardeni juurdepääsetavuse teenusel kuvada hüpikakent (kui valitud on sisselogimise väli). See aitab kontoandmeid lihtsamini sisestada.</value>
+  </data>
+  <data name="DrawOverDescription3" xml:space="preserve">
+    <value>Sisselülitatuna kuvatakse hüpikakent, et võimaldada sisselogimist vanemates äppides, mis ei toeta Androidi Autofill raamistikku.</value>
+  </data>
+  <data name="PersonalOwnershipSubmitError" xml:space="preserve">
+    <value>Ettevõtte poliitika tõttu ei saa sa andmeid oma personaalsesse Hoidlasse salvestada. Vali Omanikuks organisatsioon ja vali mõni saadavaolevatest Kogumikest.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>Organisatsiooni poliitika piirab kirje omaniku valikuvõimalusi.</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AllSends" xml:space="preserve">
+    <value>Kõik Sendid</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Sends" xml:space="preserve">
+    <value>Sendid</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NameInfo" xml:space="preserve">
+    <value>Sisesta Sendi nimi (kohustuslik).</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="TypeText" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="TypeTextInfo" xml:space="preserve">
+    <value>Tekst, mida soovid saata.</value>
+  </data>
+  <data name="HideTextByDefault" xml:space="preserve">
+    <value>Sendi avamisel peida tekst automaatselt</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="TypeFile" xml:space="preserve">
+    <value>Fail</value>
+  </data>
+  <data name="TypeFileInfo" xml:space="preserve">
+    <value>Fail, mida soovid saata.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Failitüüp on valitud.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Failitüüp pole valitud. Vajuta, et valida.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Tekstitüüp on valitud.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Tekstitüüp pole valitud. Vajuta, et valida.</value>
+  </data>
+  <data name="DeletionDate" xml:space="preserve">
+    <value>Kustutamise kuupäev</value>
+  </data>
+  <data name="DeletionTime" xml:space="preserve">
+    <value>Kustutamise aeg</value>
+  </data>
+  <data name="DeletionDateInfo" xml:space="preserve">
+    <value>Send kustutatakse määratud kuupäeval ja kellaajal jäädavalt.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="PendingDelete" xml:space="preserve">
+    <value>Kustutamise ootel</value>
+  </data>
+  <data name="ExpirationDate" xml:space="preserve">
+    <value>Aegumiskuupäev</value>
+  </data>
+  <data name="ExpirationTime" xml:space="preserve">
+    <value>Aegumise kellaaeg</value>
+  </data>
+  <data name="ExpirationDateInfo" xml:space="preserve">
+    <value>Selle valimisel ei pääse sellele Sendile enam pärast määratud kuupäeva ligi.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Expired" xml:space="preserve">
+    <value>Aegunud</value>
+  </data>
+  <data name="MaximumAccessCount" xml:space="preserve">
+    <value>Maksimaalne ligipääsude arv</value>
+  </data>
+  <data name="MaximumAccessCountInfo" xml:space="preserve">
+    <value>Selle valimisel ei saa kasutajad pärast maksimaalse ligipääsude arvu saavutamist sellele Sendile enam ligi.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="MaximumAccessCountReached" xml:space="preserve">
+    <value>Maksimaalne ligipääsude arv on saavutatud</value>
+  </data>
+  <data name="CurrentAccessCount" xml:space="preserve">
+    <value>Hetkeline ligipääsude arv</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>Uus Parool</value>
+  </data>
+  <data name="PasswordInfo" xml:space="preserve">
+    <value>Soovi korral nõua parooli, millega Sendile ligi pääseb.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="RemovePassword" xml:space="preserve">
+    <value>Eemalda parool</value>
+  </data>
+  <data name="AreYouSureRemoveSendPassword" xml:space="preserve">
+    <value>Soovid kindlasti selle parooli eemaldada?</value>
+  </data>
+  <data name="RemovingSendPassword" xml:space="preserve">
+    <value>Parooli eemaldamine</value>
+  </data>
+  <data name="SendPasswordRemoved" xml:space="preserve">
+    <value>Parool on eemaldatud</value>
+  </data>
+  <data name="NotesInfo" xml:space="preserve">
+    <value>Privaatne märkus selle Sendi kohta.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="DisableSend" xml:space="preserve">
+    <value>Keela see Send, et keegi ei pääseks sellele ligi.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NoSends" xml:space="preserve">
+    <value>Kontol pole ühtegi Sendi.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AddASend" xml:space="preserve">
+    <value>Lisa Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Kopeeri link</value>
+  </data>
+  <data name="ShareLink" xml:space="preserve">
+    <value>Jaga linki</value>
+  </data>
+  <data name="SendLink" xml:space="preserve">
+    <value>Sendi link</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SearchSends" xml:space="preserve">
+    <value>Otsi Sende</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="EditSend" xml:space="preserve">
+    <value>Muuda Sendi</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AddSend" xml:space="preserve">
+    <value>Lisa Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AreYouSureDeleteSend" xml:space="preserve">
+    <value>Soovid tõesti selle Sendi kustutada?</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendDeleted" xml:space="preserve">
+    <value>Send on kustutatud.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendUpdated" xml:space="preserve">
+    <value>Send on uuendatud.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NewSendCreated" xml:space="preserve">
+    <value>Uus Send on loodud.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="OneDay" xml:space="preserve">
+    <value>1 päev</value>
+  </data>
+  <data name="TwoDays" xml:space="preserve">
+    <value>2 päeva</value>
+  </data>
+  <data name="ThreeDays" xml:space="preserve">
+    <value>3 päeva</value>
+  </data>
+  <data name="SevenDays" xml:space="preserve">
+    <value>7 päeva</value>
+  </data>
+  <data name="ThirtyDays" xml:space="preserve">
+    <value>30 päeva</value>
+  </data>
+  <data name="Custom" xml:space="preserve">
+    <value>Kohandatud</value>
+  </data>
+  <data name="ShareOnSave" xml:space="preserve">
+    <value>Jaga seda Sendi salvestamise ajal.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendDisabledWarning" xml:space="preserve">
+    <value>Ettevõtte poliitika kohaselt saad ainult olemasolevat Sendi kustutada.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AboutSend" xml:space="preserve">
+    <value>Rohkem infot</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="HideEmail" xml:space="preserve">
+    <value>Ära näita saajatele minu e-posti aadressi.</value>
+  </data>
+  <data name="SendOptionsPolicyInEffect" xml:space="preserve">
+    <value>Organisatsiooni seaded mõjutavad sinu Sendi sätteid.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFilePremiumRequired" xml:space="preserve">
+    <value>Tasuta kontoga on võimalik saata ainult tekste. Failide saatmiseks on vajalik omada tasulist kontot.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFileEmailVerificationRequired" xml:space="preserve">
+    <value>Sendi kasutamiseks pead kinnitama oma e-posti aadressi. Saad seda teha veebihoidlas.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="PasswordPrompt" xml:space="preserve">
+    <value>Nõutav on ülemparool</value>
+  </data>
+  <data name="PasswordConfirmation" xml:space="preserve">
+    <value>Ülemparooli kinnitamine</value>
+  </data>
+  <data name="PasswordConfirmationDesc" xml:space="preserve">
+    <value>See tegevus on kaitstud. Jätkamiseks sisesta oma ülemparool.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Captcha kinnitamine</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Captcha kinnitamine nurjus. Proovi uuesti.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Uuendas ülemparooli</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Ülemparooli uuendamine</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Organisatsiooni administraator muutis hiljuti sinu ülemparooli. Hoidlale ligi pääsemiseks pead ülemparooli uuendama. Jätkates logitakse sind käimasolevast sessioonist välja, misjärel nõutakse uuesti sisselogimist. Teistes seadmetes olevad aktiivsed sessioonid jäävad aktiivseks kuni üheks tunniks.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Parooli uuendamine</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>Parooli uuendamine pole hetkel võimalik</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Eemalda ülemparool</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} kasutab SSO-d koos kliendi poolt hallatava krüpteeringuga. Jätkamisel eemaldatakse sinu kontolt ülemparool ning nõutakse sisselogimist läbi SSO.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Kui sa ei soovi oma ülemparooli eemaldada, saad sellest organisatsioonist lahkuda.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Lahku organisatsioonist</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Lahkud {0}-st?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>Jätkamiseks pane valmis oma FIDO2 WebAuthn võimekusega turvavõti. Seejärel kliki "WebAuthn kinnitamine" ja järgi juhiseid.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>FIDO2 WebAuthn kinnitamiseks pead kasutama välist turvavõtit.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>WebAuthn kinnitamine</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Tagasi rakendusse</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Veendu, et sinu brauser toetab WebAuthn-i ja proovi uuesti.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>Selle organisatsiooni poliitika kohaselt liidetakse sind automaatselt ülemparooli lähtestamise funktsiooniga. Liitumisel saavad organisatsiooni administraatorid sinu ülemparooli muuta.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Organisatsiooni poliitikad mõjutavad sinu hoidla ajalõppu. Maksimaalne lubatud hoidla ajalõpp on {0} tund(i) ja {1} minut(it).</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Organisatsiooni poliitikad mõjutavad sinu hoidla ajalõppu. Maksimaalne lubatud hoidla ajalõpp on {0} tund(i) ja {1} minut(it). Sinu hoidla ajalõpu tegevus on {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Organisatsiooni poliitika on sinu hoidla ajalõpu tegevuse seadistanud {0} peale.</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Valitud hoidla ajalõpp ei ole organisatsiooni poolt määratud reeglitega kooskõlas.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
+    <value>Üks või enam organisatsiooni poliitikat ei võimalda sul oma personaalset hoidlat eksportida.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Lisa konto</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Lukustamata</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Lukustatud</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Välja logitud </value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Vahetati järgmise saadaoleva konto peale</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Kasutajakonto on lukus</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Konto on edukalt välja logitud</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Konto on edukalt eemaldatud</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Kustuta konto</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Konto kustutamist ei saa ennistada</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Konto koos kõikide andmetega kustutatakse ning seda ei saa taastada. Oled kindel, et soovid jätkata? </value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Konto kustutamine </value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Sinu konto on lõplikult kustutatud</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Vale kinnituskood</value>
+  </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Küsi ühekordset parooli</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Saada kood</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Saatmine</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Kopeeri Sendi link ja salvesta</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Koodi saatmine</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Tuvastamine</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Saada kood uuesti</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Kinnituskood on saadetud e-posti aadressile.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Kinnituskoodi saatmisel ilmnes tõrge. Palun proovi uuesti</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Kinnituskood on edukalt e-posti aadressile saadetud.</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Saada krahhiaruandeid</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Aita Bitwardenil rakendust paremaks muuta, teavitades programmi tõrgetest.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Valikud on avatud. Vajuta, et need peita.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Valikud on peidetud. Vajuta, et need kuvada.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Suurtähed (A-Z) </value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Väiketähed (A-Z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Numbrid (0-9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Erimärgid (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Vajuta tagasi minemiseks</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Salasõna on nähtav. Vajuta, et see peita.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Salasõna ei ole nähtav. Vajuta, et seda kuvada.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Sorteeri kirjeid hoidla alusel</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Kõik hoidlad</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Hoidlad</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Hoidla: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Kõik</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Kinnituskoodid</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Vajalik on Premium versioon</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Ei suuda autentimise võtit lisada? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Skanneeri QR kood</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Ei suuda QR koodi skaneerida? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Autentimise võti</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Sisesta kood käsitsi</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Lisa TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Seadista TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Pärast võtme edukat sisestamist vajuta
+"Lisa TOTP", et see võti turvaliselt talletada</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Kõik, kes pääsevad sinu telefoni, saavad valikuga "Mitte kunagi" ka sinu hoidlat vaadata. Veendu, et seda tõesti teha soovid.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Üks või enam sisestatud URLi on valed. Palun kontrolli neid ja proovi seejärel uuesti.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Päringu töötlemine ebaõnnestus. Palun proovi uuesti või võta meiega ühendust.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Luba ekraanikuva salvestamine</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Oled kindel, et soovid lubada ekraanikuva salvestamist?</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Sisselogimise päring</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Oled sisse logimas?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Sisselogimise päring kontolt {0} kuupäeval {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Seadme tüüp</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP aadress</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Aeg</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Asukoht</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Kinnita sisselogimine</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Tühista sisselogimine</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Just praegu</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} minuti eest</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Sisselogimine on kinnitatud</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Sisselogimine on tühistatud</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Sisselogimise päringute kinnitamine</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Kasuta seda seadet, et kinnitada teistes seadmetes tehtavad sisselogimised.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Luba teavitused</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Saa uute sisselogimise päringute kohta teavitusi</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Ei soovi</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Kinnita sisselogimise katse kontole {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Kõik teavitused</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Parooli tüüp</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Mida sa soovid genereerida?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Kasutajanime tüüp</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Plussiga e-posti aadress</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Kogumisaadress</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Edastav e-posti alias</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Juhuslik sõna</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-post (vajalik)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Domeeni nimi (vajalik)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API võti (vajalik)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Teenus</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API ligipääsu võti</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Oled kindel, et soovid praegust kasutajanime üle kirjutada?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Genereeri kasutajanimi</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>E-posti tüüp</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Veebileht (vajalik)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Tekkis tundmatu tõrge {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Kasuta e-posti teenuspakkuja alamadressimise võimalusi</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Kasuta domeenipõhist kogumisaadressi.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Genereeri e-posti alias, kasutades selleks välist teenuspakkujat.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Juhuslik</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Ühenda kellaga</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Accessibility Service Disclosure</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Nõustu</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Keeldu</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Sisselogimise päring on juba aegunud.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Sisselogimise päring:
+{0}
+Soovid selle konto peale lülituda?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Oled siin uus?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Tuleta ülemparooli vihjega meelde</value>
+  </data>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Sisselogimas kui {0} lehel {1}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Pole sina?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Logi sisse ülemparooliga</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Logi sisse läbi teise seadme</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Sisselogimine on käivitatud</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Sinu seadmesse saadeti teavitus.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Veendu, et hoidla on lahti lukustatud ja sõrmejälje fraasid seadmete vahel ühtivad.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Saada märguanne uuesti</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Soovid teist valikut kasutada?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Vaata kõiki valikuid</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>See päring ei ole enam kehtiv</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Ootel sisselogimise taotlused</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Tühista kõik taotlused</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Oled kindel, et soovid tühistada kõik pooleliolevad sisselogimise taotlused?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Taotlused on tagasi lükatud</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Ootel taotlused puuduvad</value>  
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Kaamera kasutamiseks luba ligipääs kaamerale</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Keel</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Rakenduse keel muudeti {0}-ks. Muudatuste rakendamiseks taaskäivita Bitwarden</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Keele muutmiseks on vajalik rakenduse taaskäivitamine</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Vaikeväärtus (süsteem)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Tähtis</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Ülemparooli ei saa kuidagi taastada! Nõutud on vähemalt {0} tähemärki.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Nõrk ülemparool</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Tuvastati nõrk ülemparool. Kasuta konto paremaks turvamiseks tugevamat parooli. Oled kindel, et soovid nõrga parooliga jätkata?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Nõrk</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Hea</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Tugev</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Otsi seda parooli teadaolevatest andmeleketest</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Ülemparool on haavatav</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Ülemparool on varasemalt lekkinud. Kasuta konto kaitsmiseks unikaalset parooli. Oled kindel, et soovid kasutada varem lekkinud parooli?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Nõrk ja haavatav ülemparool</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Tuvastati nõrk ning andmelekkes lekkinud ülemparool. Kasuta konto paremaks turvamiseks tugevamat parooli. Oled kindel, et soovid nõrga parooliga jätkata?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Nõutud on organisatsiooni SSO identifikaator.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Lisa võti olemasolevale või uuele kirjele</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Hoidlas puuduvad kirjed, mis sobituksid sõnaga "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Otsi kirjet või lisa uus kirje</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Otsingusõnale ei vasta kirjeid</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>USA</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EL</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Enda majutatud</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Andmete salvestamise piirkond</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Piirkond</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Sinu ülemparool ei vasta ühele või rohkemale organisatsiooni poolt seatud poliitikale. Hoidlale ligipääsemiseks pead oma ülemaprooli uuendama. Jätkamisel logitakse sind praegusest sessioonist välja, mistõttu pead uuesti sisse logima. Teistes seadmetes olevad aktiivsed sessioonid aeguvad umbes ühe tunni jooksul.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Praegune ülemparool</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Pääsukood</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Pääsukoodid</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Loodud {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Rakendus</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Pääsukoodi rakenduse muutmine ei ole võimalik, sest see muudaks pääsukoodi mitte-töötavaks</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Pääsukoodi ei kopeerita</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Pääsukoodi ei kopeerita kloonitud kirjele. Oled kindel, et soovid jätkata?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Kopeeri rakendus</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Saadaval kaheastmelise kinnitamise jaoks</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Avamine võib ebapiisava mälu tõttu nurjuda. Probleemi lahendamiseks vähenda KDF mälu seadeid.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Vigane API võti</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Vigane API token</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Seda kirjet ei saa organisatsiooniga jagada, sest sama pääsukoodiga kirje juba eksisteerib.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Automaatse täitmise keelamine</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Automaattäitmist ei pakuta nende URId-e puhul.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Uus blokeeritud URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI salvestatud</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Vale vorming. Kasuta https://, http://, või androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Muuda URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Sisesta URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Vorming: {0}. Eralda mitu URI-t komadega.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Vorming: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Vale URI</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI eemaldatud</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Puuduvad keelatud URI-d</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI {0} on juba keelatud</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Mitme URI korraga muutmine ei toiminud</value>
+  </data>
+</root>

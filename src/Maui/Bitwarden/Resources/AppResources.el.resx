@@ -1,0 +1,2716 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About" xml:space="preserve">
+    <value>Σχετικά</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Προσθήκη</value>
+    <comment>Add/create a new entity (verb).</comment>
+  </data>
+  <data name="AddFolder" xml:space="preserve">
+    <value>Προσθήκη Φακέλου</value>
+  </data>
+  <data name="AddItem" xml:space="preserve">
+    <value>Προσθήκη Στοιχείου</value>
+    <comment>The title for the add item page.</comment>
+  </data>
+  <data name="AnErrorHasOccurred" xml:space="preserve">
+    <value>Παρουσιάστηκε σφάλμα.</value>
+    <comment>Alert title when something goes wrong.</comment>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Πίσω</value>
+    <comment>Navigate back to the previous screen.</comment>
+  </data>
+  <data name="Bitwarden" xml:space="preserve">
+    <value>Bitwarden</value>
+    <comment>App name. Shouldn't ever change.</comment>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Ακύρωση</value>
+    <comment>Cancel an operation.</comment>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Αντιγραφή</value>
+    <comment>Copy some value to your clipboard.</comment>
+  </data>
+  <data name="CopyPassword" xml:space="preserve">
+    <value>Αντιγραφή Κωδικού</value>
+    <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
+  </data>
+  <data name="CopyUsername" xml:space="preserve">
+    <value>Αντιγραφή Ονόματος Χρήστη</value>
+    <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
+  </data>
+  <data name="Credits" xml:space="preserve">
+    <value>Συντελεστές</value>
+    <comment>Title for page that we use to give credit to resources that we use.</comment>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Διαγραφή</value>
+    <comment>Delete an entity (verb).</comment>
+  </data>
+  <data name="Deleting" xml:space="preserve">
+    <value>Διαγραφή...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="DoYouReallyWantToDelete" xml:space="preserve">
+    <value>Είστε σίγουροι για τη διαγραφή; Αυτό δεν μπορεί να αναιρεθεί.</value>
+    <comment>Confirmation alert message when deleteing something.</comment>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Επεξεργασία</value>
+  </data>
+  <data name="EditFolder" xml:space="preserve">
+    <value>Επεξεργασία Φακέλου</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+    <comment>Short label for an email address.</comment>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>Διεύθυνση Email</value>
+    <comment>Full label for a email address.</comment>
+  </data>
+  <data name="EmailUs" xml:space="preserve">
+    <value>Στείλτε μας email</value>
+  </data>
+  <data name="EmailUsDescription" xml:space="preserve">
+    <value>Στείλτε μας email για να λάβετε βοήθεια ή να αφήσετε σχόλια.</value>
+  </data>
+  <data name="EnterPIN" xml:space="preserve">
+    <value>Εισαγωγή κωδικού ΡΙΝ.</value>
+  </data>
+  <data name="Favorites" xml:space="preserve">
+    <value>Αγαπημένα</value>
+    <comment>Title for your favorite items in the vault.</comment>
+  </data>
+  <data name="FileBugReport" xml:space="preserve">
+    <value>Υποβολή Αναφοράς Σφάλματος</value>
+  </data>
+  <data name="FileBugReportDescription" xml:space="preserve">
+    <value>Αναφέρετε το προβλήμα στο GitHub.</value>
+  </data>
+  <data name="FingerprintDirection" xml:space="preserve">
+    <value>Χρήση δακτυλικού αποτυπώματος για επαλήθευση.</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Φάκελος</value>
+    <comment>Label for a folder.</comment>
+  </data>
+  <data name="FolderCreated" xml:space="preserve">
+    <value>Ο φάκελος δημιουργήθηκε.</value>
+  </data>
+  <data name="FolderDeleted" xml:space="preserve">
+    <value>Ο φάκελος διαγράφηκε</value>
+  </data>
+  <data name="FolderNone" xml:space="preserve">
+    <value>Δεν υπάρχει φάκελος</value>
+    <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
+  </data>
+  <data name="Folders" xml:space="preserve">
+    <value>Φάκελοι</value>
+  </data>
+  <data name="FolderUpdated" xml:space="preserve">
+    <value>Ο φάκελος ενημερώθηκε.</value>
+  </data>
+  <data name="GoToWebsite" xml:space="preserve">
+    <value>Μετάβαση στην ιστοσελίδα</value>
+    <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
+  <data name="HelpAndFeedback" xml:space="preserve">
+    <value>Βοήθεια και Σχόλια</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Απόκρυψη</value>
+    <comment>Hide a secret value that is currently shown (password).</comment>
+  </data>
+  <data name="InternetConnectionRequiredMessage" xml:space="preserve">
+    <value>Συνδεθείτε στο διαδίκτυο πριν συνεχίσετε.</value>
+    <comment>Description message for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="InternetConnectionRequiredTitle" xml:space="preserve">
+    <value>28/5000
+Απαιτείται σύνδεση στο διαδίκτυο</value>
+    <comment>Title for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="InvalidMasterPassword" xml:space="preserve">
+    <value>Μη έγκυρος κύριος κωδικός, δοκιμάστε ξανά.</value>
+  </data>
+  <data name="InvalidPIN" xml:space="preserve">
+    <value>Μη έγκυρο PIN. Προσπάθηστε ξανά.</value>
+  </data>
+  <data name="Launch" xml:space="preserve">
+    <value>Εκκίνηση</value>
+    <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
+  <data name="LogIn" xml:space="preserve">
+    <value>Σύνδεση</value>
+    <comment>The login button text (verb).</comment>
+  </data>
+  <data name="LogInNoun" xml:space="preserve">
+    <value>Σύνδεση</value>
+    <comment>Title for login page. (noun)</comment>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Αποσύνδεση</value>
+    <comment>The log out button text (verb).</comment>
+  </data>
+  <data name="LogoutConfirmation" xml:space="preserve">
+    <value>Είστε σίγουροι ότι θέλετε να αποσυνδεθείτε;</value>
+  </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Αφαίρεση λογαριασμού</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να καταργήσετε αυτόν τον λογαριασμό?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Ο Λογαριασμός Προστέθηκε Ήδη</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Θα θέλατε να το αλλάξετε τώρα?</value>
+  </data>
+  <data name="MasterPassword" xml:space="preserve">
+    <value>Κύριος κωδικός</value>
+    <comment>Label for a master password.</comment>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>Περισσότερα</value>
+    <comment>Text to define that there are more options things to see.</comment>
+  </data>
+  <data name="MyVault" xml:space="preserve">
+    <value>Το Vault μου</value>
+    <comment>The title for the vault page.</comment>
+  </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Εφαρμογή Επαλήθευσης</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Όνομα</value>
+    <comment>Label for an entity name.</comment>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Όχι</value>
+  </data>
+  <data name="Notes" xml:space="preserve">
+    <value>Σημειώσεις</value>
+    <comment>Label for notes.</comment>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Οκ</value>
+    <comment>Acknowledgement.</comment>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Κωδικός</value>
+    <comment>Label for a password.</comment>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Αποθήκευση</value>
+    <comment>Button text for a save operation (verb).</comment>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Μετακίνηση</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Αποθήκευση...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Ρυθμίσεις</value>
+    <comment>The title for the settings page.</comment>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Εμφάνιση</value>
+    <comment>Reveal a hidden value (password).</comment>
+  </data>
+  <data name="ItemDeleted" xml:space="preserve">
+    <value>Το στοιχείο έχει διαγραφεί.</value>
+    <comment>Confirmation message after successfully deleting a login.</comment>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Υποβολή</value>
+  </data>
+  <data name="Sync" xml:space="preserve">
+    <value>Συγχρονισμός</value>
+    <comment>The title for the sync page.</comment>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>Ευχαριστούμε</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>Εργαλεία</value>
+    <comment>The title for the tools page.</comment>
+  </data>
+  <data name="URI" xml:space="preserve">
+    <value>URI</value>
+    <comment>Label for a uri/url.</comment>
+  </data>
+  <data name="UseFingerprintToUnlock" xml:space="preserve">
+    <value>Χρήση δακτυλικού αποτυπώματος για ξεκλείδωμα</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Όνομα χρήστη</value>
+    <comment>Label for a username.</comment>
+  </data>
+  <data name="ValidationFieldRequired" xml:space="preserve">
+    <value>Το πεδίο {0} είναι υποχρεωτικό.</value>
+    <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
+  </data>
+  <data name="ValueHasBeenCopied" xml:space="preserve">
+    <value>{0} έχει αντιγραφεί.</value>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
+  </data>
+  <data name="VerifyFingerprint" xml:space="preserve">
+    <value>Επαλήθευση Δακτυλικού Αποτυπώματος</value>
+  </data>
+  <data name="VerifyMasterPassword" xml:space="preserve">
+    <value>Επαλήθευση Κύριου Κωδικού</value>
+  </data>
+  <data name="VerifyPIN" xml:space="preserve">
+    <value>Επαλήθευση PIN</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Έκδοση</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Προβολή</value>
+  </data>
+  <data name="VisitOurWebsite" xml:space="preserve">
+    <value>Επισκεφθείτε την ιστοσελίδα μας</value>
+  </data>
+  <data name="VisitOurWebsiteDescription" xml:space="preserve">
+    <value>Επισκευθείτε την ιστοσελίδα μας για να λάβετε βοήθεια, νέα, να μας στείλετε email ή να μάθετε περισσότερα σχετικά με τον τρόπο χρήσης του Bitwarden.</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Ιστοσελίδα</value>
+    <comment>Label for a website.</comment>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ναι</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Λογαριασμός</value>
+  </data>
+  <data name="AccountCreated" xml:space="preserve">
+    <value>Ο λογαριασμός σας έχει δημιουργηθεί! Τώρα μπορείτε να συνδεθείτε.</value>
+  </data>
+  <data name="AddAnItem" xml:space="preserve">
+    <value>Προσθήκη στοιχείου</value>
+  </data>
+  <data name="AppExtension" xml:space="preserve">
+    <value>Επέκταση Εφαρμογής</value>
+  </data>
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
+    <value>Χρησιμοποιείστε την υπηρεσία προσβασιμότητας Bitwarden, για την αυτόματη συμπλήρωση συνδέσεων σε εφαρμογές και στο διαδίκτυο.</value>
+  </data>
+  <data name="AutofillService" xml:space="preserve">
+    <value>Υπηρεσία Αυτόματης Συμπλήρωσης</value>
+  </data>
+  <data name="AvoidAmbiguousCharacters" xml:space="preserve">
+    <value>Αποφυγή Αμφιλεγόμενων Χαρακτήρων</value>
+  </data>
+  <data name="BitwardenAppExtension" xml:space="preserve">
+    <value>Επέκταση Εφαρμογής Bitwarden</value>
+  </data>
+  <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
+    <value>Ο ευκολότερος τρόπος για να προσθέστε νέες συνδέσεις στο vault σας, είναι μέσω της επέκτασης εφαρμογής Bitwarden. Μάθετε περισσότερα σχετικά με τη χρήση της επέκτασης, μεταβαίνοντας στις "Ρυθμίσεις".</value>
+  </data>
+  <data name="BitwardenAppExtensionDescription" xml:space="preserve">
+    <value>Χρήση του Bitwarden στο Safari και σε άλλες εφαρμογές για αυτόματη συμπλήρωση των συνδέσεων σας.</value>
+  </data>
+  <data name="BitwardenAutofillService" xml:space="preserve">
+    <value>Υπηρεσία Αυτόματης Συμπλήρωσης Bitwarden</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
+    <value>Χρησιμοποιείστε την υπηρεσία προσβασιμότητας Bitwarden, για την αυτόματη συμπλήρωση συνδέσεων.</value>
+  </data>
+  <data name="ChangeEmail" xml:space="preserve">
+    <value>Αλλαγή Email</value>
+  </data>
+  <data name="ChangeEmailConfirmation" xml:space="preserve">
+    <value>Μπορείτε να αλλάξετε τη διεύθυνση του email σας στο bitwarden.com. Θέλετε να επισκεφθείτε την ιστοσελίδα τώρα;</value>
+  </data>
+  <data name="ChangeMasterPassword" xml:space="preserve">
+    <value>Αλλαγή Κύριου Κωδικού</value>
+  </data>
+  <data name="ChangePasswordConfirmation" xml:space="preserve">
+    <value>Μπορείτε να αλλάξετε τον κύριο κωδικό στο bitwarden.com. Θέλετε να επισκεφθείτε την ιστοσελίδα τώρα;</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Κλείσιμο</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Συνέχεια</value>
+  </data>
+  <data name="CreateAccount" xml:space="preserve">
+    <value>Δημιουργία Λογαριασμού</value>
+  </data>
+  <data name="CreatingAccount" xml:space="preserve">
+    <value>Δημιουργία λογαριασμού...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="EditItem" xml:space="preserve">
+    <value>Επεξεργασία Στοιχείου</value>
+  </data>
+  <data name="EnableAutomaticSyncing" xml:space="preserve">
+    <value>Ενεργοποίηση Αυτόματου Συγχρονισμού</value>
+  </data>
+  <data name="EnterEmailForHint" xml:space="preserve">
+    <value>Εισάγετε την διεύθυνση email του λογαριασμού σας, προκειμένου για να λάβετε υπόδειξη του κύριου κωδικού.</value>
+  </data>
+  <data name="ExntesionReenable" xml:space="preserve">
+    <value>Ενεργοποιείστε εκ νέου την Επέκτασης Εφαρμογής</value>
+  </data>
+  <data name="ExtensionAlmostDone" xml:space="preserve">
+    <value>Σχεδόν ολοκληρώθηκε!</value>
+  </data>
+  <data name="ExtensionEnable" xml:space="preserve">
+    <value>Ενεργοποίηση Επέκτασης Εφαρμογής</value>
+  </data>
+  <data name="ExtensionInSafari" xml:space="preserve">
+    <value>Στο Safari, βρείτε το Bitwarden χρησιμοποιώντας το εικονίδιο κοινής χρήσης (μετακινηθείτε προς τα δεξιά στην κάτω σειρά του μενού).</value>
+    <comment>Safari is the name of apple's web browser</comment>
+  </data>
+  <data name="ExtensionInstantAccess" xml:space="preserve">
+    <value>Αποκτήστε άμεση πρόσβαση στους κωδικούς σας!</value>
+  </data>
+  <data name="ExtensionReady" xml:space="preserve">
+    <value>Είστε έτοιμοι να συνδεθείτε!</value>
+  </data>
+  <data name="ExtensionSetup" xml:space="preserve">
+    <value>Οι συνδέσεις σας είναι τώρα εύκολα προσβάσιμες από το Safari, το Chrome και απο άλλες υποστηριζόμενες εφαρμογές.</value>
+  </data>
+  <data name="ExtensionSetup2" xml:space="preserve">
+    <value>Στο Safari, βρείτε το Bitwarden χρησιμοποιώντας το εικονίδιο κοινής χρήσης (μετακινηθείτε προς τα δεξιά στην κάτω σειρά του μενού).</value>
+  </data>
+  <data name="ExtensionTapIcon" xml:space="preserve">
+    <value>Πατήστε στο εικονίδιο Bitwarden στο μενού για εκκίνηση της επέκτασης.</value>
+  </data>
+  <data name="ExtensionTurnOn" xml:space="preserve">
+    <value>Για να ενεργοποιήσετε το Bitwarden στο Safari και σε άλλες εφαρμογές, πατήστε στο εικονίδιο "Περισσότερα" στην κάτω σειρά του μενού.</value>
+  </data>
+  <data name="Favorite" xml:space="preserve">
+    <value>Αγαπημένο</value>
+  </data>
+  <data name="Fingerprint" xml:space="preserve">
+    <value>Δακτυλικό αποτύπωμα</value>
+  </data>
+  <data name="GeneratePassword" xml:space="preserve">
+    <value>Δημιουργία Κωδικού</value>
+  </data>
+  <data name="GetPasswordHint" xml:space="preserve">
+    <value>Λήψη υπόδειξης κύριου κωδικού</value>
+  </data>
+  <data name="ImportItems" xml:space="preserve">
+    <value>Εισαγωγή Στοιχείων</value>
+  </data>
+  <data name="ImportItemsConfirmation" xml:space="preserve">
+    <value>Μπορείτε να εισαγάγετε μαζικά στοιχεία διαδικτυακά στο bitwarden.com. Θέλετε να επισκεφθείτε την ιστοσελίδα τώρα;</value>
+  </data>
+  <data name="ImportItemsDescription" xml:space="preserve">
+    <value>Γρήγορη μαζική εισαγωγή των στοιχείων σας από άλλες εφαρμογές διαχείρισης κωδικών.</value>
+  </data>
+  <data name="LastSync" xml:space="preserve">
+    <value>Τελευταίος Συγχρονισμός:</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Μήκος</value>
+  </data>
+  <data name="Lock" xml:space="preserve">
+    <value>Κλείδωμα</value>
+  </data>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 λεπτά</value>
+  </data>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 ώρα</value>
+  </data>
+  <data name="OneMinute" xml:space="preserve">
+    <value>1 λεπτό</value>
+  </data>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 ώρες</value>
+  </data>
+  <data name="Immediately" xml:space="preserve">
+    <value>Άμεσα</value>
+  </data>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>Χρόνος Λήξης Vault</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Ενέργεια Χρόνου Λήξης Vault</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Η αποσύνδεση θα καταργήσει όλη την πρόσβαση στο vault σας και απαιτεί online έλεγχο ταυτότητας μετά το χρονικό όριο λήξης. Είστε βέβαιοι ότι θέλετε να χρησιμοποιήσετε αυτήν τη ρύθμιση;</value>
+  </data>
+  <data name="LoggingIn" xml:space="preserve">
+    <value>Σύνδεση...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="LoginOrCreateNewAccount" xml:space="preserve">
+    <value>Συνδεθείτε ή δημιουργήστε έναν νέο λογαριασμό για να αποκτήσετε πρόσβαση στο ασφαλές vault σας.</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Διαχείριση</value>
+  </data>
+  <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
+    <value>Η επιβεβαίωση του κύριου κωδικού δεν είναι σωστή.</value>
+  </data>
+  <data name="MasterPasswordDescription" xml:space="preserve">
+    <value>Ο κύριος κωδικός χρησιμοποιείται για πρόσβαση στο vault σας. Είναι πολύ σημαντικό να μην τον ξεχάσετε. Δεν υπάρχει τρόπος να τον ανακτήσετε σε αυτή την περίπτωση.</value>
+  </data>
+  <data name="MasterPasswordHint" xml:space="preserve">
+    <value>Υπόδειξη Κύριου Κωδικού (προαιρετικό)</value>
+  </data>
+  <data name="MasterPasswordHintDescription" xml:space="preserve">
+    <value>Η υπόδειξη κύριου κωδικού μπορεί να σας βοηθήσει να θυμηθείτε τον κωδικό σας αν τον ξεχάσετε.</value>
+  </data>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Ο κύριος κωδικός πρέπει να έχει μήκος τουλάχιστον {0} χαρακτήρες.</value>
+  </data>
+  <data name="MinNumbers" xml:space="preserve">
+    <value>Ελάχιστα Αριθμητικά Ψηφία</value>
+    <comment>Minimum numeric characters for password generator settings</comment>
+  </data>
+  <data name="MinSpecial" xml:space="preserve">
+    <value>Ελάχιστο Ειδικών Χαρακτήρων</value>
+    <comment>Minimum special characters for password generator settings</comment>
+  </data>
+  <data name="MoreSettings" xml:space="preserve">
+    <value>Περισσότερες Ρυθμίσεις</value>
+  </data>
+  <data name="MustLogInMainApp" xml:space="preserve">
+    <value>Πρέπει να συνδεθείτε στην κύρια εφαρμογή Bitwarden για να μπορέσετε να χρησιμοποιήσετε την επέκταση.</value>
+  </data>
+  <data name="Never" xml:space="preserve">
+    <value>Ποτέ</value>
+  </data>
+  <data name="NewItemCreated" xml:space="preserve">
+    <value>Δημιουργήθηκε νέο στοιχείο.</value>
+  </data>
+  <data name="NoFavorites" xml:space="preserve">
+    <value>Δεν υπάρχουν αγαπημένα στο vault σας.</value>
+  </data>
+  <data name="NoItems" xml:space="preserve">
+    <value>Δεν υπάρχουν στοιχεία στο vault σας.</value>
+  </data>
+  <data name="NoItemsTap" xml:space="preserve">
+    <value>Δεν υπάρχουν στοιχεία στο vault σας για αυτήν την ιστοσελίδα/εφαρμογή. Πατήστε για προσθήκη.</value>
+  </data>
+  <data name="NoUsernamePasswordConfigured" xml:space="preserve">
+    <value>Αυτή η σύνδεση δεν έχει ρυθμιστεί με όνομα χρήστη ή κωδικό.</value>
+  </data>
+  <data name="OkGotIt" xml:space="preserve">
+    <value>Εντάξει, κατάλαβα!</value>
+    <comment>Confirmation, like "Ok, I understand it"</comment>
+  </data>
+  <data name="OptionDefaults" xml:space="preserve">
+    <value>Οι προεπιλεγμένες επιλογές έχουν οριστεί από το κύριο εργαλείο δημιουργίας κωδικού του Bitwarden.</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Επιλογές</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Άλλες</value>
+  </data>
+  <data name="PasswordGenerated" xml:space="preserve">
+    <value>Ο κωδικός δημιουργήθηκε.</value>
+  </data>
+  <data name="PasswordGenerator" xml:space="preserve">
+    <value>Γεννήτρια Κωδικού</value>
+  </data>
+  <data name="PasswordHint" xml:space="preserve">
+    <value>Υπόδειξη Κωδικού</value>
+  </data>
+  <data name="PasswordHintAlert" xml:space="preserve">
+    <value>Σας στείλαμε ένα email με υπόδειξη του κύριου κωδικού.</value>
+  </data>
+  <data name="PasswordOverrideAlert" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να αντικαταστήσετε τον τρέχον κωδικό;</value>
+  </data>
+  <data name="PushNotificationAlert" xml:space="preserve">
+    <value>Το Bitwarden κρατάει αυτόματα το vault σας, με τη χρήση ειδοποιήσεων push. Για την καλύτερη δυνατή εμπειρία, επιλέξτε "Να επιτρέπεται" στην παρακάτω ερώτηση, όταν σας ζητηθεί να ενεργοποιήσετε τις ειδοποιήσεις push.</value>
+    <comment>Push notifications for apple products</comment>
+  </data>
+  <data name="RateTheApp" xml:space="preserve">
+    <value>Αξιολογήστε την Εφαρμογή</value>
+  </data>
+  <data name="RateTheAppDescription" xml:space="preserve">
+    <value>Παρακαλούμε σκεφτείτε να μας βοηθήσετε με μια καλή κριτική!</value>
+  </data>
+  <data name="RegeneratePassword" xml:space="preserve">
+    <value>Επαναδημιουργία Κωδικού</value>
+  </data>
+  <data name="RetypeMasterPassword" xml:space="preserve">
+    <value>Εισάγετε Ξανά τον Κύριο Κωδικό</value>
+  </data>
+  <data name="SearchVault" xml:space="preserve">
+    <value>Αναζήτηση στο vault</value>
+  </data>
+  <data name="Security" xml:space="preserve">
+    <value>Ασφάλεια</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Επιλογή</value>
+  </data>
+  <data name="SetPIN" xml:space="preserve">
+    <value>Ορισμός PIN</value>
+  </data>
+  <data name="SetPINDirection" xml:space="preserve">
+    <value>Εισαγωγή τετραψήφιου αριθμού PIN για ξεκλείδωμα εφαρμογής.</value>
+  </data>
+  <data name="ItemInformation" xml:space="preserve">
+    <value>Πληροφορίες Στοιχείου</value>
+  </data>
+  <data name="ItemUpdated" xml:space="preserve">
+    <value>Το στοιχείο ενημερώθηκε.</value>
+  </data>
+  <data name="Submitting" xml:space="preserve">
+    <value>Υποβολή...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="Syncing" xml:space="preserve">
+    <value>Συγχρονισμός...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="SyncingComplete" xml:space="preserve">
+    <value>Ο συγχρονισμός ολοκληρώθηκε.</value>
+  </data>
+  <data name="SyncingFailed" xml:space="preserve">
+    <value>Ο συγχρονισμός απέτυχε.</value>
+  </data>
+  <data name="SyncVaultNow" xml:space="preserve">
+    <value>Συγχρονισμός Vault Τώρα</value>
+  </data>
+  <data name="TouchID" xml:space="preserve">
+    <value>Touch ID</value>
+    <comment>What Apple calls their fingerprint reader.</comment>
+  </data>
+  <data name="TwoStepLogin" xml:space="preserve">
+    <value>Σύνδεση σε δύο βήματα</value>
+  </data>
+  <data name="TwoStepLoginConfirmation" xml:space="preserve">
+    <value>Η σύνδεση σε δύο βήματα καθιστά πιο ασφαλή τον λογαριασμό σας, απαιτώντας να επαληθεύσετε τα στοιχεία σας με μια άλλη συσκευή, όπως κλειδί ασφαλείας, εφαρμογή επαλήθευσης, μήνυμα SMS, τηλεφωνική κλήση ή email. Μπορείτε να ενεργοποιήσετε τη σύνδεση σε δύο βήματα στο bitwarden.com. Θέλετε να επισκεφθείτε την ιστοσελίδα τώρα;</value>
+  </data>
+  <data name="UnlockWith" xml:space="preserve">
+    <value>Ξεκλείδωμα με {0}</value>
+  </data>
+  <data name="UnlockWithPIN" xml:space="preserve">
+    <value>Ξεκλείδωμα με PIN</value>
+  </data>
+  <data name="Validating" xml:space="preserve">
+    <value>Επαλήθευση</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="VerificationCode" xml:space="preserve">
+    <value>Κωδικός Επαλήθευσης</value>
+  </data>
+  <data name="ViewItem" xml:space="preserve">
+    <value>Προβολή Στοιχείου</value>
+  </data>
+  <data name="WebVault" xml:space="preserve">
+    <value>Bitwarden Web Vault</value>
+  </data>
+  <data name="Lost2FAApp" xml:space="preserve">
+    <value>Χάσατε την εφαρμογή επαλήθευσης;</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>Στοιχεία</value>
+    <comment>Screen title</comment>
+  </data>
+  <data name="ExtensionActivated" xml:space="preserve">
+    <value>Η Επέκταση Ενεργοποιήθηκε!</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Εικονίδια</value>
+  </data>
+  <data name="Translations" xml:space="preserve">
+    <value>Μεταφράσεις</value>
+  </data>
+  <data name="ItemsForUri" xml:space="preserve">
+    <value>Στοιχεία για {0}</value>
+    <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
+  </data>
+  <data name="NoItemsForUri" xml:space="preserve">
+    <value>Δεν υπάρχουν στοιχεία στην λίστα σας για {0}.</value>
+    <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
+  </data>
+  <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
+    <value>Όταν επιλέξετε ένα πεδίο εισαγωγής και δείτε μια επικάλυψη αυτόματης συμπλήρωσης Bitwarden, μπορείτε να πατήσετε για να ξεκινήσει η υπηρεσία αυτόματης συμπλήρωσης.</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
+    <value>Πατήστε στην ειδοποίηση για να συμπληρώσετε αυτόματα ένα στοιχείο από το vault σας.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
+    <value>Άνοιγμα των Ρυθμίσεων Προσβασιμότητας</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
+    <value>Στις Ρυθμίσεις προσβασιμότητας, πατήστε "Bitwarden" στην επικεφαλίδα Υπηρεσίες.</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
+    <value>Ενεργοποιείστε την εναλλαγή και πατήστε αποδοχή.</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Απενεργοποιημένο</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Ενεργοποιημένο</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Ανενεργό</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Ενεργό</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Κατάσταση</value>
+  </data>
+  <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
+    <value>Ο ευκολότερος τρόπος για να προσθέσετε νέες συνδέσεις στο vault σας, είναι με την υπηρεσία αυτόματης συμπλήρωσης του Bitwarden. Μάθετε περισσότερα σχετικά με τη χρήση της, μεταβαίνοντας στις "Ρυθμίσεις".</value>
+  </data>
+  <data name="Autofill" xml:space="preserve">
+    <value>Αυτόματη συμπλήρωση</value>
+  </data>
+  <data name="AutofillOrView" xml:space="preserve">
+    <value>Θέλετε αυτόματη συμπλήρωση ή να δείτε αυτό το στοιχείο;</value>
+  </data>
+  <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
+    <value>Είστε βέβαιοι για την αυτόματη συμπλήρωση αυτού του στοιχείου; Δεν υπάρχει πλήρης αντιστοιχία για "{0}".</value>
+  </data>
+  <data name="MatchingItems" xml:space="preserve">
+    <value>Αντιστοίχιση Στοιχείων</value>
+  </data>
+  <data name="PossibleMatchingItems" xml:space="preserve">
+    <value>Πιθανά Στοιχεία Αντιστοίχισης</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Αναζήτηση</value>
+  </data>
+  <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
+    <value>Αναζήτηση στοιχείου αυτόματης συμπλήρωσης για "{0}".</value>
+  </data>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Μάθετε για τους Οργανισμούς</value>
+  </data>
+  <data name="CannotOpenApp" xml:space="preserve">
+    <value>Δεν είναι δυνατή η πρόσβαση στην εφαρμογή "{0}".</value>
+    <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
+  </data>
+  <data name="AuthenticatorAppTitle" xml:space="preserve">
+    <value>Εφαρμογή Επαλήθευσης</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeApp" xml:space="preserve">
+    <value>Εισάγετε τον 6ψήφιο κωδικό από την εφαρμογή επαλήθευσης.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeEmail" xml:space="preserve">
+    <value>Εισαγωγή 6ψήφιου κωδικού επαλήθευσης που σταλθηκε με email στο {0}.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="LoginUnavailable" xml:space="preserve">
+    <value>Μη Διαθέσιμη Σύνδεση</value>
+    <comment>For 2FA whenever there are no available providers on this device.</comment>
+  </data>
+  <data name="NoTwoStepAvailable" xml:space="preserve">
+    <value>Αυτός ο λογαριασμός έχει ενεργοποιημένη τη σύνδεση σε δύο βήματα, ωστόσο, σε αυτήν τη συσκευή δεν υποστηρίζεται κανένας από τους διαμορφωμένους παροχείς δύο βημάτων. Χρησιμοποιήστε μια υποστηριζόμενη συσκευή και / ή προσθέστε επιπλέον παρόχους που υποστηρίζονται καλύτερα σε όλες τις συσκευές (όπως μια εφαρμογή επαλήθευσης).</value>
+  </data>
+  <data name="RecoveryCodeTitle" xml:space="preserve">
+    <value>Κωδικός Ανάκτησης</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Να με θυμάσαι</value>
+    <comment>Remember my two-step login</comment>
+  </data>
+  <data name="SendVerificationCodeAgain" xml:space="preserve">
+    <value>Αποστολή email κωδικού επαλήθευσης ξανά</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="TwoStepLoginOptions" xml:space="preserve">
+    <value>Επιλογές σύνδεσης δύο παραγόντων</value>
+  </data>
+  <data name="UseAnotherTwoStepMethod" xml:space="preserve">
+    <value>Χρήση άλλης μεθόδου δύο παραγόντων</value>
+  </data>
+  <data name="VerificationEmailNotSent" xml:space="preserve">
+    <value>Δεν ήταν δυνατή η αποστολή του email επαλήθευσης. Προσπάθησε ξανά.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="VerificationEmailSent" xml:space="preserve">
+    <value>Το email επιβεβαίωσης στάλθηκε.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="YubiKeyInstruction" xml:space="preserve">
+    <value>Για να συνεχίσετε, κρατήστε το YubiKey NEO στο πίσω μέρος της συσκευής ή τοποθετήστε το YubiKey στη θύρα USB της συσκευής σας, και στη συνέχεια πατήστε το κουμπί του.</value>
+  </data>
+  <data name="YubiKeyTitle" xml:space="preserve">
+    <value>Κλειδί Ασφαλείας YubiKey</value>
+    <comment>"YubiKey" is the product name and should not be translated.</comment>
+  </data>
+  <data name="AddNewAttachment" xml:space="preserve">
+    <value>Προσθήκη Νέου Συνημμένου</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Συνημμένα</value>
+  </data>
+  <data name="UnableToDownloadFile" xml:space="preserve">
+    <value>Αδυναμία λήψης αρχείου.</value>
+  </data>
+  <data name="UnableToOpenFile" xml:space="preserve">
+    <value>Η συσκευή σας δεν μπορεί να ανοίξει αυτού του τύπου αρχεία.</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Λήψη...</value>
+    <comment>Message shown when downloading a file</comment>
+  </data>
+  <data name="AttachmentLargeWarning" xml:space="preserve">
+    <value>Αυτό το συνημμένο έχει μέγεθος {0}. Είστε βέβαιοι ότι θέλετε να το κατεβάσετε στη συσκευή σας;</value>
+    <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
+  </data>
+  <data name="AuthenticatorKey" xml:space="preserve">
+    <value>Κλειδί επαλήθευσης (TOTP)</value>
+  </data>
+  <data name="VerificationCodeTotp" xml:space="preserve">
+    <value>Κωδικός Επαλήθευσης (TOTP)</value>
+    <comment>Totp code label</comment>
+  </data>
+  <data name="AuthenticatorKeyAdded" xml:space="preserve">
+    <value>Το κλειδί επαλήθευσης προστέθηκε.</value>
+  </data>
+  <data name="AuthenticatorKeyReadError" xml:space="preserve">
+    <value>Αδυναμία ανάγνωσης κλειδιού επαλήθευσης.</value>
+  </data>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Σημαδέψτε τον κωδικό QR με τη κάμερα. Η σάρωση θα γίνει αυτόματα.</value>
+  </data>
+  <data name="ScanQrTitle" xml:space="preserve">
+    <value>Σάρωση κώδικα QR</value>
+  </data>
+  <data name="Camera" xml:space="preserve">
+    <value>Κάμερα</value>
+  </data>
+  <data name="Photos" xml:space="preserve">
+    <value>Φωτογραφίες</value>
+  </data>
+  <data name="CopyTotp" xml:space="preserve">
+    <value>Αντιγραφή TOTP</value>
+  </data>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Εάν η σύνδεση έχει κάποιο κλειδί επαλήθευσης, αντιγράψτε τον κωδικό επαλήθευσης TOTP στο πρόχειρο κάθε φορά που κάνετε αυτόματη συμπλήρωση τα στοιχεία σύνδεσης.</value>
+  </data>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Αυτόματη αντιγραφή TOTP</value>
+  </data>
+  <data name="PremiumRequired" xml:space="preserve">
+    <value>Για να χρησιμοποιήσετε αυτό το χαρακτηριστικό, απαιτείται η έκδοση premium.</value>
+  </data>
+  <data name="AttachementAdded" xml:space="preserve">
+    <value>Το συνημμένο προστέθηκε</value>
+  </data>
+  <data name="AttachmentDeleted" xml:space="preserve">
+    <value>Το συνημμένο διαγράφηκε</value>
+  </data>
+  <data name="ChooseFile" xml:space="preserve">
+    <value>Επιλογή Αρχείου</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Αρχείο</value>
+  </data>
+  <data name="NoFileChosen" xml:space="preserve">
+    <value>Δεν επιλέχθηκε κανένα αρχείο</value>
+  </data>
+  <data name="NoAttachments" xml:space="preserve">
+    <value>Δεν υπάρχουν συνημμένα.</value>
+  </data>
+  <data name="FileSource" xml:space="preserve">
+    <value>Πηγή Αρχείου</value>
+  </data>
+  <data name="FeatureUnavailable" xml:space="preserve">
+    <value>Μη διαθέσιμο χαρακτηριστικό</value>
+  </data>
+  <data name="MaxFileSize" xml:space="preserve">
+    <value>Το μέγιστο μέγεθος αρχείου είναι 100 MB.</value>
+  </data>
+  <data name="UpdateKey" xml:space="preserve">
+    <value>Δεν μπορείτε να χρησιμοποιήσετε αυτήν τη δυνατότητα μέχρι να ενημερώσετε το κλειδί κρυπτογράφησης.</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Μάθετε Περισσότερα</value>
+  </data>
+  <data name="ApiUrl" xml:space="preserve">
+    <value>URL Διακομιστή API</value>
+  </data>
+  <data name="CustomEnvironment" xml:space="preserve">
+    <value>Προσαρμοσμένο Περιβάλλον</value>
+  </data>
+  <data name="CustomEnvironmentFooter" xml:space="preserve">
+    <value>Για προχωρημένους χρήστες. Μπορείτε να ορίσετε τo URL κάθε υπηρεσίας ανεξάρτητα.</value>
+  </data>
+  <data name="EnvironmentSaved" xml:space="preserve">
+    <value>Τα URL έχουν αποθηκευτεί.</value>
+  </data>
+  <data name="FormattedIncorrectly" xml:space="preserve">
+    <value>{0} δεν έχει μορφοποιηθεί σωστά.</value>
+    <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
+  </data>
+  <data name="IdentityUrl" xml:space="preserve">
+    <value>URL Ταυτότητας Διακομιστή</value>
+    <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
+  </data>
+  <data name="SelfHostedEnvironment" xml:space="preserve">
+    <value>Αυτο-Φιλοξενούμενο Περιβάλλον</value>
+  </data>
+  <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
+    <value>Καθορίστε το URL εγκατάστασης Bitwarden.</value>
+  </data>
+  <data name="ServerUrl" xml:space="preserve">
+    <value>URL Διακομιστή</value>
+  </data>
+  <data name="WebVaultUrl" xml:space="preserve">
+    <value>URL Διακομιστή Web Vault</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
+    <value>Πατήστε στην ειδοποίηση για να συμπληρώσετε αυτόματα ένα στοιχείο από τη λίστα σας.</value>
+  </data>
+  <data name="CustomFields" xml:space="preserve">
+    <value>Προσαρμοσμένα Πεδία</value>
+  </data>
+  <data name="CopyNumber" xml:space="preserve">
+    <value>Αντιγραφή Αριθμού</value>
+  </data>
+  <data name="CopySecurityCode" xml:space="preserve">
+    <value>Αντιγραφή Κωδικού Ασφαλείας</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Αριθμός</value>
+  </data>
+  <data name="SecurityCode" xml:space="preserve">
+    <value>Κωδικός Ασφαλείας</value>
+  </data>
+  <data name="TypeCard" xml:space="preserve">
+    <value>Κάρτα</value>
+  </data>
+  <data name="TypeIdentity" xml:space="preserve">
+    <value>Ταυτότητα</value>
+  </data>
+  <data name="TypeLogin" xml:space="preserve">
+    <value>Σύνδεση</value>
+  </data>
+  <data name="TypeSecureNote" xml:space="preserve">
+    <value>Ασφαλής Σημείωση</value>
+  </data>
+  <data name="Address1" xml:space="preserve">
+    <value>Διεύθυνση 1</value>
+  </data>
+  <data name="Address2" xml:space="preserve">
+    <value>Διεύθυνση 2</value>
+  </data>
+  <data name="Address3" xml:space="preserve">
+    <value>Διεύθυνση 3</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>Απρίλιος</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>Αύγουστος</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Επωνυμία κάρτας</value>
+  </data>
+  <data name="CardholderName" xml:space="preserve">
+    <value>Όνομα κατόχου της κάρτας</value>
+  </data>
+  <data name="CityTown" xml:space="preserve">
+    <value>Πόλη / Κωμόπολη</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Εταιρεία</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Χώρα</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>Δεκέμβριος</value>
+  </data>
+  <data name="Dr" xml:space="preserve">
+    <value>Dr</value>
+  </data>
+  <data name="ExpirationMonth" xml:space="preserve">
+    <value>Μήνας Λήξης</value>
+  </data>
+  <data name="ExpirationYear" xml:space="preserve">
+    <value>Έτος Λήξης</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>Φεβρουάριος</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Όνομα</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>Ιανουάριος</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>Ιούλιος</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>Ιούνιος</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Επίθετο</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Ονοματεπώνυμο</value>
+  </data>
+  <data name="LicenseNumber" xml:space="preserve">
+    <value>Αριθμός Άδειας</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>Μάρτιος</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>Μάιος</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>Μεσαίο Όνομα</value>
+  </data>
+  <data name="Mr" xml:space="preserve">
+    <value>Κος</value>
+  </data>
+  <data name="Mrs" xml:space="preserve">
+    <value>Κα</value>
+  </data>
+  <data name="Ms" xml:space="preserve">
+    <value>Κα</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx στα Ελληνικά</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>Νοέμβριος</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>Οκτώβριος</value>
+  </data>
+  <data name="PassportNumber" xml:space="preserve">
+    <value>Αριθμός Διαβατηρίου</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Τηλέφωνο</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>Σεπτέμβριος</value>
+  </data>
+  <data name="SSN" xml:space="preserve">
+    <value>ΑΜΚΑ</value>
+  </data>
+  <data name="StateProvince" xml:space="preserve">
+    <value>Περιοχή / Νομός</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Τίτλος</value>
+  </data>
+  <data name="ZipPostalCode" xml:space="preserve">
+    <value>Ταχυδρομικός Κώδικας</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Διεύθυνση</value>
+  </data>
+  <data name="Expiration" xml:space="preserve">
+    <value>Λήξη</value>
+  </data>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Εμφάνιση εικονιδίων ιστοσελίδας</value>
+  </data>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Εμφάνιση μιας αναγνωρίσιμης εικόνας δίπλα σε κάθε σύνδεση.</value>
+  </data>
+  <data name="IconsUrl" xml:space="preserve">
+    <value>Εικονίδια Διακομιστή URL</value>
+  </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>Αυτόματη συμπλήρωση με Bitwarden</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>Το Vault είναι κλειδωμένο</value>
+  </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>Μετάβαση στο vault μου</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Συλλογές</value>
+  </data>
+  <data name="NoItemsCollection" xml:space="preserve">
+    <value>Δεν υπάρχουν στοιχεία σε αυτή τη συλλογή.</value>
+  </data>
+  <data name="NoItemsFolder" xml:space="preserve">
+    <value>Δεν υπάρχουν στοιχεία σε αυτόν τον φάκελο.</value>
+  </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>Δεν υπάρχουν αντικείμενα στον κάδο απορριμμάτων.</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>Υπηρεσία προσβασιμότητας αυτόματης συμπλήρωσης</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>Η υπηρεσία αυτόματης συμπλήρωσης Bitwarden, χρησιμοποιεί το Android Autofill Framework για να σας βοηθήσει να συμπληρώσετε στοιχεία σύνδεσης, τις πιστωτικές κάρτες και τις πληροφορίες ταυτότητας σε άλλες εφαρμογές της συσκευής σας.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Χρησιμοποιήστε την υπηρεσία αυτόματης συμπλήρωσης Bitwarden για να συμπληρώσετε τις συνδέσεις, τις πιστωτικές κάρτες και τις πληροφορίες ταυτότητας σε άλλες εφαρμογές.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>Άνοιγμα των Ρυθμίσεων Αυτόματης Συμπλήρωσης</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Face ID</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>Χρήση Face ID για επαλήθευση.</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>Χρήση Face ID για Ξεκλείδωμα</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>Επαλήθευση Face ID</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>Δεν ήταν δυνατό να ανοίξουμε αυτόματα το μενού ρυθμίσεων αυτόματης συμπλήρωσης Android για εσάς. Μπορείτε να πλοηγηθείτε στο μενού ρυθμίσεων αυτόματης συμπλήρωσης με μη αυτόματο τρόπο από τις Ρυθμίσεις Android &gt; Σύστημα &gt; Γλώσσες και εισαγωγή &gt; Σύνθετες &gt; Υπηρεσία αυτόματης συμπλήρωσης.</value>
+  </data>
+  <data name="CustomFieldName" xml:space="preserve">
+    <value>Όνομα Προσαρμοσμένου Πεδίου</value>
+  </data>
+  <data name="FieldTypeBoolean" xml:space="preserve">
+    <value>Δυαδικό</value>
+  </data>
+  <data name="FieldTypeHidden" xml:space="preserve">
+    <value>Κρυφό</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Συνδεδεμένο</value>
+  </data>
+  <data name="FieldTypeText" xml:space="preserve">
+    <value>Κείμενο</value>
+  </data>
+  <data name="NewCustomField" xml:space="preserve">
+    <value>Νέο Προσαρμοσμένο Πεδίο</value>
+  </data>
+  <data name="SelectTypeField" xml:space="preserve">
+    <value>Τι τύπος προσαρμοσμένου πεδίου είναι αυτό που θέλετε να προσθέσετε;</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Διαγραφή</value>
+  </data>
+  <data name="NewUri" xml:space="preserve">
+    <value>Νέο URI</value>
+  </data>
+  <data name="URIPosition" xml:space="preserve">
+    <value>URI {0}</value>
+    <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
+  </data>
+  <data name="BaseDomain" xml:space="preserve">
+    <value>Βασικός τομέας</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Προεπιλογή</value>
+  </data>
+  <data name="Exact" xml:space="preserve">
+    <value>Ακριβής</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Διακομιστής</value>
+    <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>Κανονική έκφραση</value>
+    <comment>A programming term, also known as 'RegEx'.</comment>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Έναρξη με</value>
+  </data>
+  <data name="URIMatchDetection" xml:space="preserve">
+    <value>Εντοπισμός Αντιστοίχισης URI</value>
+  </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>Εντοπισμός Αντιστοίχισης</value>
+    <comment>URI match detection for auto-fill.</comment>
+  </data>
+  <data name="YesAndSave" xml:space="preserve">
+    <value>Αποδοχή και Αποθήκευση</value>
+  </data>
+  <data name="AutofillAndSave" xml:space="preserve">
+    <value>Αυτόματη συμπλήρωση και αποθήκευση</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Οργανισμός</value>
+    <comment>An entity of multiple related people (ex. a team or business organization).</comment>
+  </data>
+  <data name="HoldYubikeyNearTop" xml:space="preserve">
+    <value>Κρατήστε το Yubikey κοντά στην κορυφή της συσκευής.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Προσπαθήστε ξανά</value>
+  </data>
+  <data name="YubiKeyInstructionIos" xml:space="preserve">
+    <value>Για να συνεχίσετε, κρατήστε παρατεταμένα το YubiKey NEO στο πίσω μέρος της συσκευής.</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
+    <value>Η υπηρεσία προσβασιμότητας μπορεί να είναι χρήσιμη όταν οι εφαρμογές δεν υποστηρίζουν την τυπική υπηρεσία αυτόματης συμπλήρωσης.</value>
+  </data>
+  <data name="DatePasswordUpdated" xml:space="preserve">
+    <value>Ο Κωδικός Ενημερώθηκε</value>
+    <comment>ex. Date this password was updated</comment>
+  </data>
+  <data name="DateUpdated" xml:space="preserve">
+    <value>Ενημερώθηκε</value>
+    <comment>ex. Date this item was updated</comment>
+  </data>
+  <data name="AutofillActivated" xml:space="preserve">
+    <value>Η αυτόματη συμπλήρωση ενεργοποιήθηκε!</value>
+  </data>
+  <data name="MustLogInMainAppAutofill" xml:space="preserve">
+    <value>Για να μπορέσετε να χρησιμοποιήσετε την Αυτόματη συμπλήρωση, πρέπει να συνδεθείτε στην κύρια εφαρμογή Bitwarden.</value>
+  </data>
+  <data name="AutofillSetup" xml:space="preserve">
+    <value>Οι συνδέσεις σας είναι πλέον εύκολα προσβάσιμες απευθείας από το πληκτρολόγιό σας κατά τη σύνδεση σε εφαρμογές και ιστοσελίδες.</value>
+  </data>
+  <data name="AutofillSetup2" xml:space="preserve">
+    <value>Σας συνιστούμε να απενεργοποιήσετε οποιαδήποτε άλλη εφαρμογή Αυτόματης Συμπλήρωσης στις Ρυθμίσεις αν δεν σκοπεύετε να τις χρησιμοποιήσετε.</value>
+  </data>
+  <data name="BitwardenAutofillDescription" xml:space="preserve">
+    <value>Αποκτήστε πρόσβαση στη λίστα σας απευθείας από το πληκτρολόγιό σας για γρήγορη αυτόματη συμπλήρωση κωδικών.</value>
+  </data>
+  <data name="AutofillTurnOn" xml:space="preserve">
+    <value>Για να ενεργοποιήσετε την αυτόματη συμπλήρωση του κωδικού στη συσκευή σας, ακολουθήστε αυτές τις οδηγίες:</value>
+  </data>
+  <data name="AutofillTurnOn1" xml:space="preserve">
+    <value>1. Μεταβείτε στις "Ρυθμίσεις" του iOS</value>
+  </data>
+  <data name="AutofillTurnOn2" xml:space="preserve">
+    <value>2. Πατήστε "Κωδικοί &amp; Λογαριασμοί"</value>
+  </data>
+  <data name="AutofillTurnOn3" xml:space="preserve">
+    <value>3. Πατήστε "Αυτόματη συμπλήρωση κωδικών"</value>
+  </data>
+  <data name="AutofillTurnOn4" xml:space="preserve">
+    <value>4. Ενεργοποιήστε την αυτόματη συμπλήρωση</value>
+  </data>
+  <data name="AutofillTurnOn5" xml:space="preserve">
+    <value>5. Επιλέξτε "Bitwarden"</value>
+  </data>
+  <data name="PasswordAutofill" xml:space="preserve">
+    <value>Αυτόματη Συμπλήρωση Κωδικού</value>
+  </data>
+  <data name="BitwardenAutofillAlert2" xml:space="preserve">
+    <value>Ο ευκολότερος τρόπος για να προσθέσετε νέες συνδέσεις στο vault σας, είναι με την επέκταση αυτόματης συμπλήρωσης κωδικών Bitwarden. Μάθετε περισσότερα σχετικά με τη χρήση της επέκτασης αυτής, μεταβαίνοντας στις "Ρυθμίσεις".</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Μη έγκυρη διεύθυνση email.</value>
+  </data>
+  <data name="Cards" xml:space="preserve">
+    <value>Κάρτες</value>
+  </data>
+  <data name="Identities" xml:space="preserve">
+    <value>Ταυτότητες</value>
+  </data>
+  <data name="Logins" xml:space="preserve">
+    <value>Συνδέσεις</value>
+  </data>
+  <data name="SecureNotes" xml:space="preserve">
+    <value>Ασφαλείς Σημειώσεις</value>
+  </data>
+  <data name="AllItems" xml:space="preserve">
+    <value>Όλα τα Στοιχεία</value>
+  </data>
+  <data name="URIs" xml:space="preserve">
+    <value>URIs</value>
+    <comment>Plural form of a URI</comment>
+  </data>
+  <data name="CheckingPassword" xml:space="preserve">
+    <value>Έλεγχος κωδικού...</value>
+    <comment>A loading message when doing an exposed password check.</comment>
+  </data>
+  <data name="CheckPassword" xml:space="preserve">
+    <value>Ελέγξτε εάν ο κωδικός σας έχει εκτεθεί.</value>
+  </data>
+  <data name="PasswordExposed" xml:space="preserve">
+    <value>Ο κωδικός αυτός έχει εκτεθεί {0} φορά (ες) σε διαρροές δεδομένων. Πρέπει να τον αλλάξετε.</value>
+  </data>
+  <data name="PasswordSafe" xml:space="preserve">
+    <value>Ο κωδικός αυτός δεν βρέθηκε σε γνωστές διαρροές δεδομένων. Είναι ασφαλής για χρήση.</value>
+  </data>
+  <data name="IdentityName" xml:space="preserve">
+    <value>Όνομα Ταυτότητας</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Τιμή</value>
+  </data>
+  <data name="PasswordHistory" xml:space="preserve">
+    <value>Ιστορικό Κωδικού</value>
+  </data>
+  <data name="Types" xml:space="preserve">
+    <value>Τύποι</value>
+  </data>
+  <data name="NoPasswordsToList" xml:space="preserve">
+    <value>Δεν υπάρχουν κωδικοί προς εμφάνιση.</value>
+  </data>
+  <data name="NoItemsToList" xml:space="preserve">
+    <value>Δεν υπάρχουν στοιχεία στη λίστα.</value>
+  </data>
+  <data name="SearchCollection" xml:space="preserve">
+    <value>Αναζήτηση στη συλλογή</value>
+  </data>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Αναζήτηση αρχείων Sends</value>
+  </data>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Αναζήτηση Κειμένου Sends</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Αναζήτηση {0}</value>
+    <comment>ex: Search Logins</comment>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Τύπος</value>
+  </data>
+  <data name="MoveDown" xml:space="preserve">
+    <value>Μετακίνηση κάτω</value>
+  </data>
+  <data name="MoveUp" xml:space="preserve">
+    <value>Μετακίνηση πάνω</value>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Διάφορα</value>
+  </data>
+  <data name="Ownership" xml:space="preserve">
+    <value>Ιδιοκτησία</value>
+  </data>
+  <data name="WhoOwnsThisItem" xml:space="preserve">
+    <value>Ποιος κατέχει αυτό το στοιχείο;</value>
+  </data>
+  <data name="NoCollectionsToList" xml:space="preserve">
+    <value>Δεν υπάρχουν επιλογές στη λίστα.</value>
+  </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} μετακινήθηκε στο {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
+  <data name="ItemShared" xml:space="preserve">
+    <value>Το στοιχείο έχει κοινοποιηθεί.</value>
+  </data>
+  <data name="SelectOneCollection" xml:space="preserve">
+    <value>Πρέπει να επιλέξετε τουλάχιστον μία συλλογή.</value>
+  </data>
+  <data name="Share" xml:space="preserve">
+    <value>Κοινοποίηση</value>
+  </data>
+  <data name="ShareItem" xml:space="preserve">
+    <value>Κοινή χρήση στοιχείου</value>
+  </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Μετακίνηση στον Οργανισμό</value>
+  </data>
+  <data name="NoOrgsToList" xml:space="preserve">
+    <value>Δεν υπάρχουν οργανισμοί προς εμφάνιση.</value>
+  </data>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Επιλέξτε έναν οργανισμό στον οποίο θέλετε να μετακινήσετε αυτό το στοιχείο. Η μετακίνηση σε έναν οργανισμό μεταβιβάζει την ιδιοκτησία του στοιχείου σε αυτό τον οργανισμό. Δεν θα είστε πλέον ο άμεσος ιδιοκτήτης αυτού του στοιχείου μόλις το μετακινήσετε.</value>
+  </data>
+  <data name="NumberOfWords" xml:space="preserve">
+    <value>Αριθμός Λέξεων</value>
+  </data>
+  <data name="Passphrase" xml:space="preserve">
+    <value>Συνθηματικό</value>
+  </data>
+  <data name="WordSeparator" xml:space="preserve">
+    <value>Διαχωριστής Λέξεων</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Εκκαθάριση</value>
+    <comment>To clear something out. example: To clear browser history.</comment>
+  </data>
+  <data name="Generator" xml:space="preserve">
+    <value>Γεννήτρια</value>
+    <comment>Short for "Password Generator"</comment>
+  </data>
+  <data name="NoFoldersToList" xml:space="preserve">
+    <value>Δεν υπάρχουν φάκελοι προς εμφάνιση.</value>
+  </data>
+  <data name="FingerprintPhrase" xml:space="preserve">
+    <value>Φράση Δακτυλικών Αποτυπωμάτων</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="YourAccountsFingerprint" xml:space="preserve">
+    <value>Η φράση δακτυλικών αποτυπωμάτων του λογαριασμού σας</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>Το Bitwarden επιτρέπει να μοιράζεστε τα στοιχεία του vault σας με άλλους χρησιμοποιώντας ένα λογαριασμό οργανισμού. Θέλετε να επισκεφθείτε την ιστοσελίδα bitwarden.com για να μάθετε περισσότερα;</value>
+  </data>
+  <data name="ExportVault" xml:space="preserve">
+    <value>Εξαγωγή Vault</value>
+  </data>
+  <data name="LockNow" xml:space="preserve">
+    <value>Κλείδωμα Τώρα</value>
+  </data>
+  <data name="PIN" xml:space="preserve">
+    <value>PIN</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Ξεκλείδωμα</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Ξεκλείδωμα Vault</value>
+  </data>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 λεπτά</value>
+  </data>
+  <data name="SetPINDescription" xml:space="preserve">
+    <value>Ορίστε τον κωδικό PIN για να ξεκλειδώσετε το Bitwarden. Οι ρυθμίσεις PIN θα επαναρυθμιστούν αν αποσυνδεθείτε πλήρως από την εφαρμογή.</value>
+  </data>
+  <data name="LoggedInAsOn" xml:space="preserve">
+    <value>Συνδεθήκατε ως {0} στις {1}.</value>
+    <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
+  </data>
+  <data name="VaultLockedMasterPassword" xml:space="preserve">
+    <value>Το vault σας είναι κλειδωμένο. Επαληθεύστε τον κύριο κωδικό για να συνεχίσετε.</value>
+  </data>
+  <data name="VaultLockedPIN" xml:space="preserve">
+    <value>Το vault σας είναι κλειδωμένο. Επαληθεύστε τον κωδικό PIN για να συνεχίσετε.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Το vault σας είναι κλειδωμένο. Επαληθεύστε την ταυτότητα σας για να συνεχίσετε.</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Σκοτεινό</value>
+    <comment>A dark color</comment>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Φωτεινό</value>
+    <comment>A light color</comment>
+  </data>
+  <data name="FiveMinutes" xml:space="preserve">
+    <value>5 λεπτά</value>
+  </data>
+  <data name="TenSeconds" xml:space="preserve">
+    <value>10 δευτερόλεπτα</value>
+  </data>
+  <data name="ThirtySeconds" xml:space="preserve">
+    <value>30 δευτερόλεπτα</value>
+  </data>
+  <data name="TwentySeconds" xml:space="preserve">
+    <value>20 δευτερόλεπτα</value>
+  </data>
+  <data name="TwoMinutes" xml:space="preserve">
+    <value>2 λεπτά</value>
+  </data>
+  <data name="ClearClipboard" xml:space="preserve">
+    <value>Εκκαθάριση Πρόχειρου</value>
+    <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
+  </data>
+  <data name="ClearClipboardDescription" xml:space="preserve">
+    <value>Αυτόματη εκκαθάριση αντιγραμμένων τιμών προχείρου.</value>
+    <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
+  </data>
+  <data name="DefaultUriMatchDetection" xml:space="preserve">
+    <value>Προεπιλεγμένη Ανίχνευση Αντιστοιχίας URI</value>
+    <comment>Default URI match detection for auto-fill.</comment>
+  </data>
+  <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
+    <value>Επιλέξτε τον προκαθορισμένο τρόπο με τον οποίο αντιμετωπίζεται η ανίχνευση αντιστοίχισης URI για τις συνδέσεις, κατά την εκτέλεση ενεργειών, όπως είναι η αυτόματη συμπλήρωση.</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Θέμα</value>
+    <comment>Color theme</comment>
+  </data>
+  <data name="ThemeDescription" xml:space="preserve">
+    <value>Αλλαγή χρώματος, θέματος εφαρμογής.</value>
+  </data>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Προεπιλογή (σύστημα)</value>
+  </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Προεπιλεγμένο σκοτεινό θέμα</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Επιλέξτε το σκούρο θέμα που θα χρησιμοποιηθεί όταν χρησιμοποιείτε το προεπιλεγμένο (System) θέμα ενώ η σκοτεινή λειτουργία της συσκευής σας είναι ενεργοποιημένη.</value>
+  </data>
+  <data name="CopyNotes" xml:space="preserve">
+    <value>Αντιγραφή Σημειώσεων</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Έξοδος</value>
+  </data>
+  <data name="ExitConfirmation" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να βγείτε από το Bitwarden;</value>
+  </data>
+  <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
+    <value>Θέλετε να απαιτείται ξεκλείδωμα με τον κύριο κωδικό κατά την επανεκκίνηση της εφαρμογής;</value>
+  </data>
+  <data name="Black" xml:space="preserve">
+    <value>Μαύρο</value>
+    <comment>The color black</comment>
+  </data>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Αυτόματη συμπλήρωση μπλοκαρισμένων URIs</value>
+  </data>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Ζητήστε να προσθέστε σύνδεση</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Ζητήστε να προσθέσετε ένα αντικείμενο αν δε βρεθεί στην κρύπτη σας.</value>
+  </data>
+  <data name="OnRestart" xml:space="preserve">
+    <value>Κατά την Επανεκκίνηση Εφαρμογής</value>
+  </data>
+  <data name="AutofillServiceNotEnabled" xml:space="preserve">
+    <value>Η αυτόματη συμπλήρωση διευκολύνει την ασφαλή πρόσβαση στη λίστα από άλλες ιστοσελίδες και εφαρμογές. Φαίνεται ότι δεν έχετε ενεργοποιήσει την υπηρεσία αυτόματης συμπλήρωσης για το Bitwarden. Ενεργοποιήστε την από τις "Ρυθμίσεις".</value>
+  </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Οι αλλαγές θεμάτων θα ισχύουν όταν γίνει επανεκκίνηση της εφαρμογής.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Κεφαλαιοποίηση</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Συμπερίληψη Αριθμών</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Λήψη</value>
+  </data>
+  <data name="Shared" xml:space="preserve">
+    <value>Κοινοποιήθηκε</value>
+  </data>
+  <data name="ToggleVisibility" xml:space="preserve">
+    <value>Εναλλαγή ορατότητας</value>
+  </data>
+  <data name="LoginExpired" xml:space="preserve">
+    <value>Η περίοδος σύνδεσης σας έχει λήξει.</value>
+  </data>
+  <data name="BiometricsDirection" xml:space="preserve">
+    <value>Χρήση βιομετρικής μεθόδου για επαλήθευση.</value>
+  </data>
+  <data name="Biometrics" xml:space="preserve">
+    <value>Βιομετρική</value>
+  </data>
+  <data name="UseBiometricsToUnlock" xml:space="preserve">
+    <value>Χρήση βιομετρικής μεθόδου για ξεκλείδωμα</value>
+  </data>
+  <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
+    <value>Το Bitwarden χρειάζεται προσοχή - Ανατρέξτε στην ενότητα "Υπηρεσία προσβασιμότητας αυτόματης συμπλήρωσης" από τις ρυθμίσεις Bitwarden</value>
+  </data>
+  <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
+    <value>3. Στις Ρυθμίσεις του Bitwarden για Android , μεταβείτε στην ενότητα "Εμφάνιση από άλλες εφαρμογές" (Για προχωρημένους) και πατήστε το διακόπτη για να ενεργοποιήσετε την υποστήριξη επικάλυψης.</value>
+  </data>
+  <data name="OverlayPermission" xml:space="preserve">
+    <value>Άδειες</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
+    <value>Ρυθμίσεις Δικαιωμάτων Επικάλυψης</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
+    <value>3. Στις Ρυθμίσεις του Bitwarden για Android , μεταβείτε στην ενότητα "Εμφάνιση πάνω σε άλλες εφαρμογές" (κάτω απο "Για προχωρημένους") και πατήστε το διακόπτη για να ενεργοποιήσετε την υποστήριξη επικάλυψης.</value>
+  </data>
+  <data name="Denied" xml:space="preserve">
+    <value>Αρνήθηκε</value>
+  </data>
+  <data name="Granted" xml:space="preserve">
+    <value>Χορηγήθηκε</value>
+  </data>
+  <data name="FileFormat" xml:space="preserve">
+    <value>Μορφή Αρχείου</value>
+  </data>
+  <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
+    <value>Εισαγάγετε τον κύριο κωδικό για εξαγωγή των δεδομένων vault.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Στείλτε έναν κωδικό επαλήθευσης στο email σας</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Ο Κωδικός Στάλθηκε</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Επιβεβαιώστε την ταυτότητα σας για να συνεχίσετε.</value>
+  </data>
+  <data name="ExportVaultWarning" xml:space="preserve">
+    <value>Αυτή η εξαγωγή περιέχει τα δεδομένα σε μη κρυπτογραφημένη μορφή. Δεν πρέπει να αποθηκεύετε ή να στείλετε το εξαγόμενο αρχείο μέσω μη ασφαλών τρόπων (όπως μέσω email). Διαγράψτε το αμέσως μόλις τελειώσετε με τη χρήση του.</value>
+  </data>
+  <data name="EncExportKeyWarning" xml:space="preserve">
+    <value>Αυτή η εξαγωγή κρυπτογραφεί τα δεδομένα σας χρησιμοποιώντας το κλειδί κρυπτογράφησης του λογαριασμού σας. Εάν ποτέ περιστρέψετε το κλειδί κρυπτογράφησης του λογαριασμού σας, θα πρέπει να κάνετε εξαγωγή ξανά, καθώς δεν θα μπορείτε να αποκρυπτογραφήσετε αυτό το αρχείο εξαγωγής.</value>
+  </data>
+  <data name="EncExportAccountWarning" xml:space="preserve">
+    <value>Τα κλειδιά κρυπτογράφησης λογαριασμού είναι μοναδικά για κάθε λογαριασμό χρήστη Bitwarden, οπότε δεν μπορείτε να εισάγετε μια κρυπτογραφημένη εξαγωγή σε διαφορετικό λογαριασμό.</value>
+  </data>
+  <data name="ExportVaultConfirmationTitle" xml:space="preserve">
+    <value>Επιβεβαίωση εξαγωγής Vault</value>
+    <comment>Title for the alert to confirm vault exports.</comment>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Προειδοποίηση</value>
+  </data>
+  <data name="ExportVaultFailure" xml:space="preserve">
+    <value>Παρουσιάστηκε πρόβλημα κατά την εξαγωγή της λίστας σας. Εάν το πρόβλημα επιμένει, θα χρειαστεί να εξάγετε το vault μέσω διαδικτύου.</value>
+  </data>
+  <data name="ExportVaultSuccess" xml:space="preserve">
+    <value>Το Vault Εξάχθηκε με Επιτυχία</value>
+  </data>
+  <data name="Clone" xml:space="preserve">
+    <value>Κλωνοποίηση</value>
+    <comment>Clone an entity (verb).</comment>
+  </data>
+  <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
+    <value>Μία ή περισσότερες πολιτικές του οργανισμού επηρεάζουν τις ρυθμίσεις γεννήτριας.</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Άνοιγμα</value>
+    <comment>Button text for an open operation (verb).</comment>
+  </data>
+  <data name="UnableToSaveAttachment" xml:space="preserve">
+    <value>Παρουσιάστηκε πρόβλημα κατά την αποθήκευση αυτού του συνημμένου. Εάν το πρόβλημα επιμένει, μπορείτε να το αποθηκεύσετε μέσω web vault.</value>
+  </data>
+  <data name="SaveAttachmentSuccess" xml:space="preserve">
+    <value>Το συνημμένο αποθηκεύτηκε με επιτυχία</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Ενεργοποιήστε την "Υπηρεσία αυτόματης συμπλήρωσης προσβασιμότητας" από τις ρυθμίσεις Bitwarden για να χρησιμοποιήσετε το εικονίδιο αυτόματης συμπλήρωσης.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>Δεν εντοπίστηκαν πεδία κωδικού πρόσβασης</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Αποστολή στον κάδο απορριμμάτων ...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Το στοιχείο έχει σταλεί στον κάδο απορριμμάτων.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Ανάκτηση</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Γίνεται επαναφορά...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Το στοιχείο έχει ανακτηθεί.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Κάδος</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Αναζήτηση Κάδου</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Θέλετε πραγματικά να διαγράψετε οριστικά; Αυτό δεν μπορεί να αναιρεθεί.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Θέλετε πραγματικά να επαναφέρετε αυτό το στοιχείο;</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Θέλετε πραγματικά να στείλετε στον κάδο απορριμμάτων;</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
+  </data>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Το βιομετρικό ξεκλείδωμα για αυτόν τον λογαριασμό είναι απενεργοποιημένο εν αναμονή της επαλήθευσης του κύριου κωδικού πρόσβασης.</value>
+  </data>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Το βιομετρικό ξεκλείδωμα αυτόματης συμπλήρωσης για αυτό το λογαριασμό είναι απενεργοποιημένο εν αναμονή της επαλήθευσης του κύριου κωδικού πρόσβασης.</value>
+  </data>
+  <data name="EnableSyncOnRefresh" xml:space="preserve">
+    <value>Ενεργοποίηση συγχρονισμού κατά την ανανέωση</value>
+  </data>
+  <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
+    <value>Συγχρονισμός vault με κύληση προς τα κάτω.</value>
+  </data>
+  <data name="LogInSso" xml:space="preserve">
+    <value>Ενιαία είσοδος για επιχειρήσεις</value>
+  </data>
+  <data name="LogInSsoSummary" xml:space="preserve">
+    <value>Συνδεθείτε γρήγορα χρησιμοποιώντας την πύλη μεμονωμένης σύνδεσης του οργανισμού σας. Εισάγετε το αναγνωριστικό του οργανισμού σας για να ξεκινήσετε.</value>
+  </data>
+  <data name="OrgIdentifier" xml:space="preserve">
+    <value>Αναγνωριστικό οργανισμού</value>
+  </data>
+  <data name="LoginSsoError" xml:space="preserve">
+    <value>Δεν είναι δυνατή η σύνδεση με SSO</value>
+  </data>
+  <data name="SetMasterPassword" xml:space="preserve">
+    <value>Ορισμός Κύριου Κωδικού</value>
+  </data>
+  <data name="SetMasterPasswordSummary" xml:space="preserve">
+    <value>Για να ολοκληρώσετε τη σύνδεση με SSO, ορίστε έναν κύριο κωδικό πρόσβασης για πρόσβαση και προστασία του vault σας.</value>
+  </data>
+  <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
+    <value>Σε μία ή περισσότερες πολιτικές του οργανισμού απαιτείται ο κύριος κωδικός να πληρεί τις ακόλουθες απαιτήσεις:</value>
+  </data>
+  <data name="PolicyInEffectMinComplexity" xml:space="preserve">
+    <value>Ελάχιστη βαθμολογία πολυπλοκότητας {0}</value>
+  </data>
+  <data name="PolicyInEffectMinLength" xml:space="preserve">
+    <value>Ελάχιστο μήκος {0}</value>
+  </data>
+  <data name="PolicyInEffectUppercase" xml:space="preserve">
+    <value>Να περιέχει έναν ή περισσότερους κεφαλαίους χαρακτήρες</value>
+  </data>
+  <data name="PolicyInEffectLowercase" xml:space="preserve">
+    <value>Να περιέχει έναν ή περισσότερους πεζούς χαρακτήρες</value>
+  </data>
+  <data name="PolicyInEffectNumbers" xml:space="preserve">
+    <value>Να περιέχει έναν ή περισσότερους αριθμούς</value>
+  </data>
+  <data name="PolicyInEffectSpecial" xml:space="preserve">
+    <value>Να περιέχει έναν ή περισσότερους από τους ακόλουθους ειδικούς χαρακτήρες {0}</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
+    <value>Λανθασμένος Κωδικός</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
+    <value>Ο κωδικός πρόσβασης δεν πληροί τις απαιτήσεις του οργανισμού. Ελέγξτε τις πληροφορίες πολιτικής και δοκιμάστε ξανά.</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Φόρτωση</value>
+  </data>
+  <data name="AcceptPolicies" xml:space="preserve">
+    <value>Ενεργοποιώντας αυτόν τον διακόπτη συμφωνείτε με τα εξής:</value>
+  </data>
+  <data name="AcceptPoliciesError" xml:space="preserve">
+    <value>Οι Όροι Παροχής Υπηρεσιών και η Πολιτική Απορρήτου δεν έχουν αναγνωριστεί.</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Όροι Χρήσης</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Πολιτική Απορρήτου</value>
+  </data>
+  <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
+    <value>Το Bitwarden χρειάζεται προσοχή - Ενεργοποιήστε το "Draw-Over" στις "Υπηρεσίες αυτόματης συμπλήρωσης" από το Bitwarden Settings</value>
+  </data>
+  <data name="AutofillServices" xml:space="preserve">
+    <value>Υπηρεσία Αυτόματης Συμπλήρωσης</value>
+  </data>
+  <data name="InlineAutofill" xml:space="preserve">
+    <value>Χρησιμοποιήστε Inline Αυτόματη συμπλήρωση</value>
+  </data>
+  <data name="InlineAutofillDescription" xml:space="preserve">
+    <value>Χρησιμοποιήστε ενσωματωμένη αυτόματη συμπλήρωση εάν το επιλεγμένο IME (πληκτρολόγιο) το υποστηρίζει. Εάν η διαμόρφωση δεν υποστηρίζεται (ή αυτή η επιλογή είναι απενεργοποιημένη), θα χρησιμοποιηθεί η προεπιλεγμένη επικάλυψη αυτόματης συμπλήρωσης.</value>
+  </data>
+  <data name="Accessibility" xml:space="preserve">
+    <value>Χρησιμοποιήστε την Προσβασιμότητα</value>
+  </data>
+  <data name="AccessibilityDescription" xml:space="preserve">
+    <value>Χρησιμοποιήστε την υπηρεσία προσβασιμότητας Bitwarden για να συμπληρώσετε αυτόματα τις συνδέσεις σας σε εφαρμογές και στον ιστό. Όταν είναι ενεργοποιημένο, θα εμφανιστεί ένα αναδυόμενο παράθυρο όταν επιλέγονται πεδία σύνδεσης</value>
+  </data>
+  <data name="AccessibilityDescription2" xml:space="preserve">
+    <value>Χρησιμοποιήστε την υπηρεσία προσβασιμότητας Bitwarden για να συμπληρώσετε αυτόματα τις συνδέσεις σας σε εφαρμογές και στον ιστό. (Απαιτείται η ενεργοποίηση του Draw-Over)</value>
+  </data>
+  <data name="AccessibilityDescription3" xml:space="preserve">
+    <value>Χρησιμοποιήστε την υπηρεσία προσβασιμότητας Bitwarden για να χρησιμοποιήσετε το Πλακάκι γρήγορης δράσης αυτόματης συμπλήρωσης ή / και να εμφανιστεί ένα αναδυόμενο παράθυρο χρησιμοποιώντας το Draw-Over (εάν είναι ενεργοποιημένο).</value>
+  </data>
+  <data name="AccessibilityDescription4" xml:space="preserve">
+    <value>Απαιτείται να χρησιμοποιήσετε το Πλακάκι αυτόματης συμπλήρωσης αυτόματης συμπλήρωσης ή για να αυξήσετε την υπηρεσία αυτόματης συμπλήρωσης χρησιμοποιώντας το Draw-Over (εάν είναι ενεργοποιημένο).</value>
+  </data>
+  <data name="DrawOver" xml:space="preserve">
+    <value>Χρησιμοποιήστε το Draw-Over</value>
+  </data>
+  <data name="DrawOverDescription" xml:space="preserve">
+    <value>Όταν είναι ενεργοποιημένο, επιτρέπει στην υπηρεσία προσβασιμότητας Bitwarden να εμφανίζει ένα αναδυόμενο παράθυρο όταν επιλέγονται πεδία σύνδεσης.</value>
+  </data>
+  <data name="DrawOverDescription2" xml:space="preserve">
+    <value>Εάν είναι ενεργοποιημένη, η υπηρεσία προσβασιμότητας Bitwarden θα εμφανίσει ένα αναδυόμενο παράθυρο όταν επιλέγονται πεδία σύνδεσης για να βοηθούν στην αυτόματη συμπλήρωση των συνδέσεων σας.</value>
+  </data>
+  <data name="DrawOverDescription3" xml:space="preserve">
+    <value>Εάν είναι ενεργοποιημένη, η προσβασιμότητα θα εμφανίσει ένα αναδυόμενο παράθυρο για την αύξηση της υπηρεσίας αυτόματης συμπλήρωσης για παλαιότερες εφαρμογές που δεν υποστηρίζουν το Android Autofill Framework.</value>
+  </data>
+  <data name="PersonalOwnershipSubmitError" xml:space="preserve">
+    <value>Λόγω μιας Πολιτικής Επιχειρήσεων, δεν επιτρέπεται η αποθήκευση αντικειμένων στο προσωπικό σας vault. Αλλάξτε την επιλογή Ιδιοκτησίας σε έναν οργανισμό και επιλέξτε από τις διαθέσιμες Συλλογές.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>Μια πολιτική οργανισμού, επηρεάζει τις επιλογές ιδιοκτησίας σας.</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AllSends" xml:space="preserve">
+    <value>Όλα τα Sends</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Sends" xml:space="preserve">
+    <value>Sends</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NameInfo" xml:space="preserve">
+    <value>Ένα φιλικό όνομα για την περιγραφή αυτού του Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Κείμενο</value>
+  </data>
+  <data name="TypeText" xml:space="preserve">
+    <value>Κείμενο</value>
+  </data>
+  <data name="TypeTextInfo" xml:space="preserve">
+    <value>Το κείμενο που θέλετε να στείλετε.</value>
+  </data>
+  <data name="HideTextByDefault" xml:space="preserve">
+    <value>Κατά την πρόσβαση σε αυτό το Send, αποκρύψτε το κείμενο από προεπιλογή</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="TypeFile" xml:space="preserve">
+    <value>Αρχείο</value>
+  </data>
+  <data name="TypeFileInfo" xml:space="preserve">
+    <value>Το αρχείο που θέλετε να στείλετε.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Ο τύπος αρχείου είναι επιλεγμένος.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Ο τύπος αρχείου δεν είναι επιλεγμένος, πατήστε για επιλογή.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Ο τύπος κειμένου είναι επιλεγμένος.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Ο τύπος κειμένου δεν είναι επιλεγμένος, πατήστε για επιλογή.</value>
+  </data>
+  <data name="DeletionDate" xml:space="preserve">
+    <value>Ημερομηνία διαγραφής</value>
+  </data>
+  <data name="DeletionTime" xml:space="preserve">
+    <value>Χρόνος Διαγραφής</value>
+  </data>
+  <data name="DeletionDateInfo" xml:space="preserve">
+    <value>Το Send θα διαγραφεί οριστικά την καθορισμένη ημερομηνία και ώρα.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="PendingDelete" xml:space="preserve">
+    <value>Εκκρεμεί διαγραφή</value>
+  </data>
+  <data name="ExpirationDate" xml:space="preserve">
+    <value>Ημερομηνία Λήξης</value>
+  </data>
+  <data name="ExpirationTime" xml:space="preserve">
+    <value>Χρόνος λήξης</value>
+  </data>
+  <data name="ExpirationDateInfo" xml:space="preserve">
+    <value>Εάν οριστεί, η πρόσβαση σε αυτό το Send θα λήξει την καθορισμένη ημερομηνία και ώρα.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Expired" xml:space="preserve">
+    <value>Έληξε</value>
+  </data>
+  <data name="MaximumAccessCount" xml:space="preserve">
+    <value>Μέγιστος Αριθμός Πρόσβασης</value>
+  </data>
+  <data name="MaximumAccessCountInfo" xml:space="preserve">
+    <value>Εάν οριστεί, οι χρήστες δεν θα μπορούν πλέον να έχουν πρόσβαση σε αυτό το send μόλις επιτευχθεί ο μέγιστος αριθμός πρόσβασης.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="MaximumAccessCountReached" xml:space="preserve">
+    <value>Φτάσατε στον μέγιστο αριθμό πρόσβασης</value>
+  </data>
+  <data name="CurrentAccessCount" xml:space="preserve">
+    <value>Τρέχων Αριθμός Πρόσβασης</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>Νέος Κωδικός</value>
+  </data>
+  <data name="PasswordInfo" xml:space="preserve">
+    <value>Προαιρετικά απαιτείται κωδικός πρόσβασης για τους χρήστες για να έχουν πρόσβαση σε αυτό το Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="RemovePassword" xml:space="preserve">
+    <value>Αφαίρεση κωδικού</value>
+  </data>
+  <data name="AreYouSureRemoveSendPassword" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να καταργήσετε τον κωδικό πρόσβασης;</value>
+  </data>
+  <data name="RemovingSendPassword" xml:space="preserve">
+    <value>Αφαίρεση κωδικού...</value>
+  </data>
+  <data name="SendPasswordRemoved" xml:space="preserve">
+    <value>Ο κωδικός έχει αφαιρεθεί.</value>
+  </data>
+  <data name="NotesInfo" xml:space="preserve">
+    <value>Ιδιωτικές σημειώσεις σχετικά με αυτό το Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="DisableSend" xml:space="preserve">
+    <value>Απενεργοποιήστε αυτό το Send έτσι ώστε κανείς να μην μπορεί να έχει πρόσβαση σε αυτό.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NoSends" xml:space="preserve">
+    <value>Δεν υπάρχουν sends στο λογαριασμό σας.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AddASend" xml:space="preserve">
+    <value>Προσθήκη Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Αντιγραφή Συνδέσμου</value>
+  </data>
+  <data name="ShareLink" xml:space="preserve">
+    <value>Κοινοποίηση Συνδέσμου</value>
+  </data>
+  <data name="SendLink" xml:space="preserve">
+    <value>Σύνδεσμος Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SearchSends" xml:space="preserve">
+    <value>Αναζήτηση Sends</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="EditSend" xml:space="preserve">
+    <value>Επεξεργασία Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AddSend" xml:space="preserve">
+    <value>Προσθήκη Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AreYouSureDeleteSend" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να διαγράψετε το Send;</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendDeleted" xml:space="preserve">
+    <value>Το send έχει διαγραφεί.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendUpdated" xml:space="preserve">
+    <value>Το send ενημερώθηκε.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NewSendCreated" xml:space="preserve">
+    <value>Δημιουργήθηκε νέο send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="OneDay" xml:space="preserve">
+    <value>1 ημέρα</value>
+  </data>
+  <data name="TwoDays" xml:space="preserve">
+    <value>2 ημέρες</value>
+  </data>
+  <data name="ThreeDays" xml:space="preserve">
+    <value>3 ημέρες</value>
+  </data>
+  <data name="SevenDays" xml:space="preserve">
+    <value>7 ημέρες</value>
+  </data>
+  <data name="ThirtyDays" xml:space="preserve">
+    <value>30 ημέρες</value>
+  </data>
+  <data name="Custom" xml:space="preserve">
+    <value>Προσαρμοσμένο</value>
+  </data>
+  <data name="ShareOnSave" xml:space="preserve">
+    <value>Κοινοποιήστε αυτό το send κατά την αποθήκευση.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendDisabledWarning" xml:space="preserve">
+    <value>Λόγω μιας επιχειρηματικής πολιτικής, είστε σε θέση να διαγράψετε μόνο ένα υπάρχον Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AboutSend" xml:space="preserve">
+    <value>Σχετικά με το Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="HideEmail" xml:space="preserve">
+    <value>Απόκρυψη της διεύθυνσης email μου από τους παραλήπτες.</value>
+  </data>
+  <data name="SendOptionsPolicyInEffect" xml:space="preserve">
+    <value>Μία ή περισσότερες οργανωτικές πολιτικές επηρεάζουν τις επιλογές send σας.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFilePremiumRequired" xml:space="preserve">
+    <value>Οι δωρεάν λογαριασμοί περιορίζονται μόνο στην κοινή χρήση κειμένου. Μια premium συνδρομή απαιτείται για τη χρήση αρχείων με Αποστολή.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFileEmailVerificationRequired" xml:space="preserve">
+    <value>Πρέπει να επαληθεύσετε το email σας για να χρησιμοποιήσετε τα αρχεία με το send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="PasswordPrompt" xml:space="preserve">
+    <value>Προτροπή κύριου κωδικού πρόσβασης</value>
+  </data>
+  <data name="PasswordConfirmation" xml:space="preserve">
+    <value>Επιβεβαίωση κύριου κωδικού πρόσβασης</value>
+  </data>
+  <data name="PasswordConfirmationDesc" xml:space="preserve">
+    <value>Αυτή η ενέργεια προστατεύεται, για να συνεχίσετε, πληκτρολογήστε ξανά τον κύριο κωδικό πρόσβασης για να επαληθεύσετε την ταυτότητα σας.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Απαιτείται Captcha</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Το Captcha απέτυχε. Παρακαλώ προσπάθησε ξανα.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Ενημερώθηκε ο κύριος κωδικός πρόσβασης</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Ενημερώστε τον κύριο κωδικό πρόσβασης</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Ο Κύριος Κωδικός Πρόσβασής σας άλλαξε πρόσφατα από διαχειριστή στον οργανισμό σας. Για να αποκτήσετε πρόσβαση στο vault, πρέπει να ενημερώσετε το κύριο κωδικό τώρα. Η διαδικασία θα σας αποσυνδέσει από την τρέχουσα συνεδρία σας, απαιτώντας από εσάς να συνδεθείτε ξανά. Οι ενεργές συνεδρίες σε άλλες συσκευές ενδέχεται να συνεχίσουν να είναι ενεργές για μία ώρα.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Ενημέρωση Κωδικού Πρόσβασης</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>Δεν είναι δυνατή η ενημέρωση του κωδικού πρόσβασης</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Αφαίρεση Κύριου Κωδικού Πρόσβασης</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} χρησιμοποιεί SSO με κρυπτογράφηση διαχείρισης πελατών. Συνεχίζοντας θα καταργήσετε τον Κύριο Κωδικό από το λογαριασμό σας και θα απαιτήσετε SSO για να συνδεθείτε.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Αν δεν θέλετε να αφαιρέσετε τον Κύριο Κωδικό Πρόσβασης, μπορείτε να φύγετε από αυτόν τον οργανισμό.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Αποχώρηση από τον οργανισμό</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Αποχώρηση {0}?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>Για να συνεχίσετε, να έχετε το FIDO2 WebAuthn ενεργοποιημένο κλειδί ασφαλείας και στη συνέχεια ακολουθήστε τις οδηγίες αφού κάνετε κλικ στο 'Authn Authn' στην επόμενη οθόνη.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Ταυτοποίηση με χρήση του FIDO2 WebAuthn, μπορείτε να κάνετε έλεγχο ταυτότητας χρησιμοποιώντας ένα εξωτερικό κλειδί ασφαλείας.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Ταυτοποίηση WebAutn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Επιστροφή στην εφαρμογή</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Βεβαιωθείτε ότι ο προεπιλεγμένος περιηγητής σας υποστηρίζει WebAuthn και προσπαθήστε ξανά.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>Αυτός ο οργανισμός έχει μια επιχειρηματική πολιτική που θα σας εγγράψει αυτόματα στην επαναφορά κωδικού. Η εγγραφή θα επιτρέψει στους διαχειριστές του οργανισμού να αλλάξουν τον κύριο κωδικό πρόσβασης σας.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Οι πολιτικές του οργανισμού σας επηρεάζουν το χρονικό όριο vault σας. Το μέγιστο επιτρεπόμενο Χρονικό όριο Vault είναι {0} ώρα(ες) και {1} λεπτό(ά)</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Οι πολιτικές του οργανισμού σας επηρεάζουν το χρονικό όριο του vault σας. Το μέγιστο επιτρεπόμενο χρονικό όριο vault είναι {0} ώρα(ες) και {1} λεπτό(ά). Το χρονικό όριο του vault σας έχει οριστεί σε {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Οι πολιτικές του οργανισμού σας έχουν ορίσει την ενέργεια χρονικού ορίου vault σε {0}.</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Το χρονικό όριο του vault σας υπερβαίνει τους περιορισμούς που έχει ορίσει ο οργανισμός σας.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
+    <value>Μία ή περισσότερες οργανωτικές πολιτικές αποτρέπουν την εξαγωγή του προσωπικού vault.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Προσθήκη Λογαριασμού</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Ξεκλειδώθηκε</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Κλειδωμένο</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Αποσυνδεθήκατε</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Μετάβαση στον επόμενο διαθέσιμο λογαριασμό</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Κλειδωμένος Λογαριασμός</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Ο λογαριασμός αποσυνδέθηκε επιτυχώς</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Ο λογαριασμός αφαιρέθηκε επιτυχώς</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Διαγραφή Λογαριασμού</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Η διαγραφή του λογαριασμού σας είναι μόνιμη</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Ο λογαριασμός σας και όλα τα σχετικά δεδομένα θα διαγραφούν και δεν θα ανακτηθούν. Είστε σίγουροι ότι θέλετε να συνεχίσετε?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Διαγραφή του λογαριασμού σας</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Ο λογαριασμός σας έχει διαγραφεί οριστικά</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Μη Έγκυρος Κωδικός Επαλήθευσης.</value>
+  </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Αιτηθείτε τον κωδικό πρόσβασης μιας χρήσης</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Αποστολή Κωδικού</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Αποστολή....</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Αντιγράψτε το σύνδεσμο αποστολής κατά την αποθήκευση</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Αποστολή κωδικού</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Επαλήθευση</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Επαναποστολή κωδικού</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Ένας κωδικός επαλήθευσης έχει σταλεί στο email σας.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Παρουσιάστηκε σφάλμα κατά την αποστολή κωδικού επαλήθευσης στο email σας. Παρακαλούμε προσπαθήστε ξανά</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Εισάγετε τον κωδικό επαλήθευσης που έχει σταλεί στο email σας</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Υποβολή αρχείου καταγραφής σφαλμάτων</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Βοηθήστε το Bitwarden να βελτιώσει τη σταθερότητα της εφαρμογής υποβάλλοντας αναφορές κολλημάτων.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Οι επιλογές έχουν επεκταθεί, πατήστε για κατάρρευση.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Οι επιλογές έχουν συμπτυχθεί, πατήστε για επέκταση.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Κεφαλαία (A-Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Πεζά (A-Z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Αριθμοί (0-9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Ειδικοί Χαρακτήρες (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Πατήστε για να πάτε πίσω</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Ο κωδικός πρόσβασης είναι ορατός, πατήστε για απόκρυψη.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Ο κωδικός πρόσβασης δεν είναι ορατός, πατήστε για εμφάνιση.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Φιλτράρισμα αντικειμένων ανά κρύπτη</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Όλα τα Vaults</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Vaults</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Vault: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Όλα</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Κωδικοί Επαλήθευσης</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Απαιτείται συνδρομή Premium</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Αδυναμία προσθήκης κλειδιού ταυτοποίησης; </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Σάρωση κωδικού QR</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Αδυναμία σάρωσης κωδικού QR; </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Κλειδί επαλήθευσης</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Χειροκίνητη Εισαγωγή Κλειδιού</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Προσθήκη TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Ρύθμιση TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Μόλις το κλειδί εισαχθεί με επιτυχία,
+επιλέξτε Προσθήκη TOTP για να αποθηκεύσετε το κλειδί με ασφάλεια</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Ρυθμίζοντας τις επιλογές κλειδώματος σε “Ποτέ” κρατά τη κρύπτη σας διαθέσιμη σε οποιονδήποτε με πρόσβαση στη συσκευή σας. Εάν χρησιμοποιείτε αυτήν την επιλογή, θα πρέπει να διασφαλίσετε ότι διατηρείτε τη συσκευή σας σωστά προστατευμένη.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Ένα ή περισσότερα από τα καταχωρημένα URL δεν είναι έγκυρα. Παρακαλώ αναθεωρήστε το και προσπαθήστε να αποθηκεύσετε ξανά.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Δεν μπορούμε να επεξεργαστούμε το αίτημά σας τώρα. Παρακαλούμε προσπαθήστε ξανά ή επικοινωνήστε με την υποστήριξη.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Να επιτρέπεται η καταγραφή οθόνης</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να ενεργοποιήσετε την καταγραφή οθόνης;</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Απαιτείται σύνδεση</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Προσπαθείτε να συνδεθείτε;</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Προσπάθεια σύνδεσης από τον/την {0} στο {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Τύπος συσκευής</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>Διεύθυνση IP</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Ώρα</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Κοντά</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Επιβεβαίωση σύνδεσης</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Άρνηση σύνδεσης</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Μόλις τώρα</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} λεπτά πριν</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Η σύνδεση επιβεβαιώθηκε</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Η σύνδεση απορρίφθηκε</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Έγκριση αιτήσεων σύνδεσης</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Χρησιμοποιήστε αυτήν τη συσκευή για να εγκρίνετε αιτήματα σύνδεσης από άλλες συσκευές.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Να επιτρέπονται οι ειδοποιήσεις</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Λάβετε ειδοποιήσεις push για νέα αιτήματα σύνδεσης</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Όχι ευχαριστώ</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Επιβεβαίωση προσπάθειας σύνδεσης για {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Όλες οι ειδοποιήσεις</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Τύπος Κωδικού</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Τι θα θέλατε να δημιουργήσετε;</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Τύπος Ονόματος Χρήστη</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Συν Διεύθυνση Email</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Catch-all Email</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Προωθημένο Ψευδώνυμο Email</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Τυχαία Λέξη</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Email (απαιτείται)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Όνομα Τομέα (απαιτείται)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Κλειδί API (απαιτείται)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Υπηρεσία</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API Access Token</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να αντικαταστήσετε το τρέχον όνομα χρήστη;</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Δημιουργία Ονόματος Χρήστη</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Τύπος Email</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Ιστοσελίδα (απαιτείται)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Παρουσιάστηκε άγνωστο {0} σφάλμα.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Χρησιμοποιήστε τις δυνατότητες δευτερεύουσας διεύθυνσης του παρόχου email σας</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Χρησιμοποιήστε τα διαμορφωμένα εισερχόμενα catch-all του domain σας.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Δημιουργήστε ένα ψευδώνυμο email με μια εξωτερική υπηρεσία προώθησης.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Τυχαίο</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Σύνδεση με το ρολόι</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Γνωστοποίηση Υπηρεσίας Προσβασιμότητας</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Το Bitwarden χρησιμοποιεί την Υπηρεσία Προσβασιμότητας για να αναζητήσει πεδία σύνδεσης σε εφαρμογές και ιστότοπους και στη συνέχεια να δημιουργήσει τα κατάλληλα αναγνωριστικά πεδίου για την εισαγωγή ονόματος χρήστη και κωδικού πρόσβασης όταν βρεθεί αντιστοιχία για την εφαρμογή ή τον ιστότοπο. Δεν αποθηκεύουμε καμία από τις πληροφορίες που μας παρέχονται από την υπηρεσία, ούτε κάνουμε καμία προσπάθεια ελέγχου οποιωνδήποτε στοιχείων στην οθόνη πέραν της εισαγωγής του κειμένου των διαπιστευτηρίων.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Αποδοχή</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Απόρριψη</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Το αίτημα σύνδεσης έχει ήδη λήξει.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Προσπάθεια σύνδεσης από:
+{0}
+Θέλετε να μεταβείτε σε αυτόν τον λογαριασμό;</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Είστε νέος/α εδώ;</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Λάβετε υπόδειξη κύριου κωδικού</value>
+  </data>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Σύνδεση ως {0} στις {1}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Δεν είστε εσείς;</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Σύνδεση με κύριο κωδικό</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Σύνδεση με τη χρήση συσκευής</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Η σύνδεση ξεκίνησε</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Μια ειδοποίηση έχει σταλεί στη συσκευή σας.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Βεβαιωθείτε ότι το vault σας είναι ξεκλείδωτο και ότι η Φράση δακτυλικών αποτυπωμάτων ταιριάζει στην άλλη συσκευή.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Επαναποστολή ειδοποίησης</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Προσθέστε μια άλλη επιλογή</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Δείτε όλες τις επιλογές σύνδεσης</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Αυτό το αίτημα δεν είναι πλέον έγκυρο</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Εκκρεμούν αιτήματα σύνδεσης</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Απόρριψη όλων των αιτημάτων</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Είστε σίγουροι ότι θέλετε να απορρίψετε όλα τα εκκρεμή αιτήματα σύνδεσης;</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Τα αιτήματα απορρίφθηκαν</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Δεν υπάρχουν εκκρεμή αιτήματα</value>  
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Ενεργοποιήστε την άδεια της κάμερας για χρήση του σαρωτή</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Γλώσσα</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Η γλώσσα έχει αλλάξει σε {0}. Παρακαλούμε επανεκκινήστε την εφαρμογή για να δείτε την αλλαγή</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Η αλλαγή γλώσσας απαιτεί επανεκκίνηση της εφαρμογής</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Προεπιλογή (σύστημα)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Σημαντικό</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Ο κύριος κωδικός δεν μπορεί να ανακτηθεί αν τον ξεχάσετε! Απαιτούνται τουλάχιστον {0} χαρακτήρες.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Αδύναμος Κύριος Κωδικός</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Αδύναμος κωδικός. Χρησιμοποιήστε έναν ισχυρό κωδικό για την προστασία του λογαριασμού σας. Είστε βέβαιοι ότι θέλετε να χρησιμοποιήσετε έναν αδύναμο κωδικό πρόσβασης;</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Αδύναμος</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Καλός</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Ισχυρός</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Ελέγξτε γνωστές παραβιάσεις δεδομένων για αυτόν τον κωδικό</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Εκτεθειμένος Κύριος Κωδικός Πρόσβασης</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Ο κωδικός έχει βρεθεί σε παραβίαση δεδομένων. Χρησιμοποιήστε έναν μοναδικό κωδικό για την προστασία του λογαριασμού σας. Είστε σίγουροι ότι θέλετε να χρησιμοποιήσετε έναν εκτεθειμένο κωδικό πρόσβασης;</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Αδύναμος και Εκτεθειμένος Κύριος Κωδικός</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Αδύναμος κωδικός που έχει εντοπιστεί σε παραβίαση δεδομένων. Χρησιμοποιήστε έναν ισχυρό και μοναδικό κωδικό για την προστασία του λογαριασμού σας. Είστε σίγουροι ότι θέλετε να χρησιμοποιήσετε αυτόν τον κωδικό;</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Απαιτείται αναγνωριστικό οργανισμού SSO.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Προσθέστε το κλειδί σε ένα υπάρχον ή νέο στοιχείο</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Δεν υπάρχουν αντικείμενα στη κρύπτη σας που ταιριάζουν με "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Αναζητήστε ένα στοιχείο ή προσθέστε ένα νέο</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Δεν υπάρχουν στοιχεία που να ταιριάζουν με την αναζήτηση</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>ΗΠΑ</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>ΕΕ</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Αυτο-φιλοξενούμενο</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Περιοχή δεδομένων</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Περιοχή</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Ο κύριος κωδικός πρόσβασής σας δεν πληροί μία ή περισσότερες πολιτικές του οργανισμού σας. Για να αποκτήσετε πρόσβαση στο Vault σας, πρέπει να ενημερώσετε τον κύριο κωδικό πρόσβασής σας τώρα. Η διαδικασία θα σας αποσυνδέσει από την τρέχουσα συνεδρία σας, απαιτώντας από εσάς να συνδεθείτε ξανά. Οι ενεργές συνεδρίες σε άλλες συσκευές ενδέχεται να συνεχίσουν να είναι ενεργές εώς και μία ώρα.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Τρέχων κύριος κωδικός</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Created {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Passkey will not be copied</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Copy application</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Available for two-step login</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Invalid API key</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Invalid API token</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Block auto-fill</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Auto-fill will not be offered for these URIs.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>New blocked URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI saved</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Invalid format. Use https://, http://, or androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Edit URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Enter URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Format: {0}. Separate multiple URIs with a comma.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Format: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Invalid URI</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI removed</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>There are no blocked URIs</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>The URI {0} is already blocked</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Cannot edit multiple URIs at once</value>
+  </data>
+</root>

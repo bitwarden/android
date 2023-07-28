@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+TODO: When API 23 becomes our new minimum, replace 'splash_screen_dark.xml' in 'drawable' with this version, and delete
+ all versions of 'logo_legacy.png' and 'logo_white_legacy.png'. The bitmaps only exist due to a bug in API <23 where
+ vector drawables used in layer-lists (our splash screen) stretch to fill the full height of the parent.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <color android:color="@color/darkgray"/>
+    </item>
+    <item
+        android:drawable="@drawable/logo_white"
+        android:tileMode="disabled"
+        android:gravity="center"/>
+</layer-list>

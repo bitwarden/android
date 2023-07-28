@@ -4,7 +4,8 @@ using System.Windows.Input;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
 
 namespace Bit.App.Controls
 {
@@ -61,7 +62,8 @@ namespace Bit.App.Controls
 
         public ICommand LongPressAccountCommand { get; }
 
-        public int AccountListRowHeight => Device.RuntimePlatform == Device.Android ? 74 : 70;
+        public int AccountListRowHeight => // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
+Device.RuntimePlatform == Device.Android ? 74 : 70;
 
         public bool LongPressAccountEnabled { get; set; } = true;
 

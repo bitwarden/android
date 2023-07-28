@@ -7,10 +7,11 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
-using Xamarin.Forms;
-using Xamarin.Forms.PlatformConfiguration;
-using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
+using Microsoft.Maui.Controls.PlatformConfiguration;
+using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
 using Entry = Xamarin.Forms.Entry;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -39,6 +40,7 @@ namespace Bit.App.Pages
             _vm.SendId = sendId;
             _vm.Type = appOptions?.CreateSend?.Item1 ?? type;
             SetActivityIndicator();
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
             if (Device.RuntimePlatform == Device.Android)
             {
                 if (_vm.EditMode)
@@ -140,6 +142,7 @@ namespace Bit.App.Pages
 
         protected override bool OnBackButtonPressed()
         {
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
             if (_vm.IsAddFromShare && Device.RuntimePlatform == Device.Android)
             {
                 _appOptions.CreateSend = null;
@@ -150,6 +153,7 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
             if (Device.RuntimePlatform != Device.iOS)
             {
                 _broadcasterService.Unsubscribe(nameof(SendAddEditPage));
@@ -307,6 +311,7 @@ namespace Bit.App.Pages
         private void AdjustToolbar()
         {
             _saveItem.IsEnabled = _vm.SendEnabled;
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
             if (!_vm.SendEnabled && _vm.EditMode && Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.Remove(_removePassword);

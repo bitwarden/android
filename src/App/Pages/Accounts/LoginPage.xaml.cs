@@ -7,7 +7,8 @@ using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -48,6 +49,7 @@ namespace Bit.App.Pages
             _vm.Email = email;
             MasterPasswordEntry = _masterPassword;
 
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
             if (Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(_moreItem);
@@ -93,6 +95,7 @@ namespace Bit.App.Pages
                 RequestFocus(_masterPassword);
                 _inputFocused = true;
             }
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
             if (Device.RuntimePlatform == Device.Android && !_vm.CanRemoveAccount)
             {
                 ToolbarItems.Add(_removeAccount);

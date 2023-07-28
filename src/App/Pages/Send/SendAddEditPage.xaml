@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <pages:BaseContentPage
-    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Class="Bit.App.Pages.SendAddEditPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"

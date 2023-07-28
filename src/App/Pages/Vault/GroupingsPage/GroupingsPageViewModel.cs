@@ -14,7 +14,8 @@ using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -223,6 +224,7 @@ namespace Bit.App.Pages
                     NestedFolders = NestedFolders.GetRange(0, NestedFolders.Count - 1);
                 }
 
+                // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
                 var uppercaseGroupNames = Device.RuntimePlatform == Device.iOS;
                 var hasFavorites = FavoriteCiphers?.Any() ?? false;
                 if (hasFavorites)
@@ -302,7 +304,8 @@ namespace Bit.App.Pages
                 }
 
                 // TODO: refactor this
-                if (Device.RuntimePlatform == Device.Android
+                // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
+                                if (Device.RuntimePlatform == Device.Android
                     ||
                     GroupedItems.Any())
                 {
@@ -395,6 +398,7 @@ namespace Bit.App.Pages
 
         private void CreateCipherGroupedItems(List<GroupingsPageListGroup> groupedItems)
         {
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
             var uppercaseGroupNames = Device.RuntimePlatform == Device.iOS;
             _totpTickCts?.Cancel();
             if (ShowTotp)
@@ -509,7 +513,7 @@ namespace Bit.App.Pages
 
         public async Task SyncAsync()
         {
-            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Microsoft.Maui.Networking.Connectivity.NetworkAccess == Microsoft.Maui.Networking.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle);

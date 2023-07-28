@@ -1,17 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>Bit.Core</RootNamespace>
     <AssemblyName>BitwardenCore</AssemblyName>
     <Configurations>Debug;Release;FDroid</Configurations>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="Resources\eff_long_word_list.txt" />
     <None Remove="Resources\public_suffix_list.dat" />
@@ -22,17 +19,13 @@
     <None Remove="MessagePack.MSBuild.Tasks" />
     <None Remove="Services\EmailForwarders\" />
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="Resources\eff_long_word_list.txt" />
     <EmbeddedResource Include="Resources\public_suffix_list.dat" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="30.0.1" />
     <PackageReference Include="LiteDB" Version="5.0.16" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="PCLCrypto" Version="2.0.147" />
     <PackageReference Include="zxcvbn-core" Version="7.0.92" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.1" />
     <PackageReference Include="MessagePack" Version="2.4.59" />
@@ -40,8 +33,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Services\Logging\" />
     <Folder Include="Attributes\" />

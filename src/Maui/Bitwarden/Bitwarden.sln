@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1706.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitwarden", "Bitwarden.csproj", "{58FBB5C6-CBD6-470D-90A6-00E89C0CD817}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		FDroid|Any CPU = FDroid|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{58FBB5C6-CBD6-470D-90A6-00E89C0CD817}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58FBB5C6-CBD6-470D-90A6-00E89C0CD817}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58FBB5C6-CBD6-470D-90A6-00E89C0CD817}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58FBB5C6-CBD6-470D-90A6-00E89C0CD817}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58FBB5C6-CBD6-470D-90A6-00E89C0CD817}.FDroid|Any CPU.ActiveCfg = Debug|Any CPU
+		{58FBB5C6-CBD6-470D-90A6-00E89C0CD817}.FDroid|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F599106B-483D-46B0-BB58-A6F3AE484CE3}
+	EndGlobalSection
+EndGlobal

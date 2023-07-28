@@ -15,8 +15,8 @@ using Bit.Core.Models.Domain;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Essentials;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -182,7 +182,7 @@ namespace Bit.App.Pages
 
         private void HandleException(Exception ex)
         {
-            Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(async () =>
+            Microsoft.Maui.ApplicationModel.MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 await _deviceActionService.HideLoadingAsync();
                 await _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage);

@@ -7,11 +7,12 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using SkiaSharp;
-using SkiaSharp.Views.Forms;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Essentials;
-using Xamarin.Forms;
 using ZXing.Net.Mobile.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
+using SkiaSharp.Views.Maui.Controls;
+using SkiaSharp.Views.Maui;
 
 namespace Bit.App.Pages
 {
@@ -37,6 +38,7 @@ namespace Bit.App.Pages
             _callback = callback;
             ViewModel.InitScannerCommand = new Command(() => InitScanner());
 
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
             if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);

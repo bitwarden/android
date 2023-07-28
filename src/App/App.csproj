@@ -1,33 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>Bit.App</RootNamespace>
     <AssemblyName>BitwardenApp</AssemblyName>
     <Configurations>Debug;Release;FDroid</Configurations>
+    <TargetFrameworks>net7.0-android;net7.0-ios</TargetFrameworks>
+    <UseMaui>True</UseMaui>
+    <OutputType>Library</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <SingleProject>true</SingleProject>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Plugin.Fingerprint" Version="2.1.5" />
-    <PackageReference Include="SkiaSharp.Views.Forms" Version="2.88.3" />
-    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.6" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.5" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2578" />
     <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />
     <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.4.1" />
     <PackageReference Include="MessagePack" Version="2.4.59" />
+    <PackageReference Include="SkiaSharp.Views.Maui.Core" Version="2.88.3" />
+    <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.3" />
+    <PackageReference Include="SkiaSharp.Views.Maui.Controls.Compatibility" Version="2.88.3" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="5.2.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Pages\Accounts\EnvironmentPage.xaml.cs">
       <DependentUpon>EnvironmentPage.xaml</DependentUpon>
@@ -130,7 +125,6 @@
       <DependentUpon>LoginPasswordlessRequestPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Behaviors\" />
@@ -148,11 +142,9 @@
     <Folder Include="Utilities\Automation\" />
     <Folder Include="Utilities\Prompts\" />
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Remove="Pages\Accounts\AccountsPopupPage.xaml" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Styles\Black.xaml.cs">
       <DependentUpon>Black.xaml</DependentUpon>
@@ -176,7 +168,6 @@
       <DependentUpon>Android.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Resources\AppResources.cs.Designer.cs">
       <DependentUpon>AppResources.cs.resx</DependentUpon>
@@ -314,7 +305,6 @@
       <AutoGen>True</AutoGen>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Resources\AppResources.cs.resx">
       <LastGenOutput>AppResources.cs.Designer.cs</LastGenOutput>
@@ -425,7 +415,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <None Remove="Behaviors\" />
     <None Remove="Xamarin.CommunityToolkit" />

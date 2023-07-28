@@ -11,9 +11,10 @@ using Bit.Core.Enums;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Essentials;
-using Xamarin.Forms;
 using DeviceType = Bit.Core.Enums.DeviceType;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -144,6 +145,7 @@ namespace Bit.App.Pages
             {
                 await LoadDataAsync();
 
+                // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
                 var uppercaseGroupNames = Device.RuntimePlatform == Device.iOS;
                 if (MainPage)
                 {
@@ -178,7 +180,8 @@ namespace Bit.App.Pages
                 }
 
                 // TODO: refactor this
-                if (Device.RuntimePlatform == Device.Android
+                // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
+                                if (Device.RuntimePlatform == Device.Android
                     ||
                     GroupedSends.Any())
                 {

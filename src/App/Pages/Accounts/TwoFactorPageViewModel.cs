@@ -14,8 +14,8 @@ using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Essentials;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -84,7 +84,8 @@ namespace Bit.App.Pages
 
         public bool TotpMethod => AuthenticatorMethod || EmailMethod;
 
-        public bool ShowTryAgain => (YubikeyMethod && Device.RuntimePlatform == Device.iOS) || Fido2Method;
+        public bool ShowTryAgain => (YubikeyMethod && // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
+Device.RuntimePlatform == Device.iOS) || Fido2Method;
 
         public bool ShowContinue
         {
@@ -98,7 +99,8 @@ namespace Bit.App.Pages
             set => SetProperty(ref _enableContinue, value);
         }
 
-        public string YubikeyInstruction => Device.RuntimePlatform == Device.iOS ? AppResources.YubiKeyInstructionIos :
+        public string YubikeyInstruction => // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
+Device.RuntimePlatform == Device.iOS ? AppResources.YubiKeyInstructionIos :
             AppResources.YubiKeyInstruction;
 
         public TwoFactorProviderType? SelectedProviderType
@@ -275,7 +277,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Microsoft.Maui.Networking.Connectivity.NetworkAccess == Microsoft.Maui.Networking.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle, AppResources.Ok);
@@ -382,7 +384,7 @@ namespace Bit.App.Pages
             {
                 return false;
             }
-            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Microsoft.Maui.Networking.Connectivity.NetworkAccess == Microsoft.Maui.Networking.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle, AppResources.Ok);

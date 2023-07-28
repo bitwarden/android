@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <!-- Launch theme (for auto dark/light based on system) -->
+  <style name="LaunchTheme" parent="BaseTheme">
+    <item name="android:windowBackground">@drawable/splash_screen</item>
+    <item name="android:windowNoTitle">true</item>
+   <item name="android:windowSplashScreenBackground">@color/ic_launcher_background</item>
+   <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_screen_round</item>
+  </style>
+
+  <style name="BaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <item name="windowNoTitle">true</item>
+    <item name="windowActionBar">false</item>
+    <item name="colorPrimary">@color/primary</item>
+    <item name="colorPrimaryDark">@color/notificationBar</item>
+    <item name="colorAccent">@color/primary</item>
+    <item name="colorControlNormal">@color/border</item>
+    <item name="android:navigationBarColor">@android:color/black</item>
+    <item name="windowActionModeOverlay">true</item>
+    <item name="android:colorActivatedHighlight">@android:color/transparent</item>
+    <item name="android:textCursorDrawable">@null</item>
+    <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    <item name="buttonStyle">@style/ButtonStyle</item>
+  </style>
+
+  <style name="ButtonStyle" parent="Widget.AppCompat.Button">
+    <item name="android:textAllCaps">false</item>
+  </style>      
+</resources>
