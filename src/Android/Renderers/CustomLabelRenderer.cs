@@ -1,10 +1,10 @@
-﻿using System;
-using Bit.App.Controls;
-using System.ComponentModel;
-using Xamarin.Forms.Platform.Android;
+﻿using System.ComponentModel;
 using Android.Content;
-using Xamarin.Forms;
+using Android.OS;
+using Bit.App.Controls;
 using Bit.Droid.Renderers;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(CustomLabel), typeof(CustomLabelRenderer))]
 namespace Bit.Droid.Renderers
@@ -14,6 +14,19 @@ namespace Bit.Droid.Renderers
         public CustomLabelRenderer(Context context)
             : base(context)
         { }
+
+        protected override void OnElementChanged(ElementChangedEventArgs<Label> e)
+        {
+            base.OnElementChanged(e);
+
+            if (Control != null && e.NewElement is CustomLabel label)
+            {
+                if (label.FontWeight.HasValue && Build.VERSION.SdkInt >= BuildVersionCodes.P)
+                {
+                    Control.Typeface = Android.Graphics.Typeface.Create(null, label.FontWeight.Value, false);
+                }
+            }
+        }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -28,4 +41,3 @@ namespace Bit.Droid.Renderers
         }
     }
 }
-

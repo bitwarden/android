@@ -31,7 +31,7 @@ namespace Bit.App.Controls
         public bool ShowIconImage
         {
             get => WebsiteIconsEnabled
-                && !string.IsNullOrWhiteSpace(Cipher.Login?.Uri)
+                && !string.IsNullOrWhiteSpace(Cipher.LaunchUri)
                 && IconImageSource != null;
         }
 
@@ -41,7 +41,7 @@ namespace Bit.App.Controls
             {
                 if (_iconImageSource == string.Empty) // default value since icon source can return null
                 {
-                    _iconImageSource = IconImageHelper.GetLoginIconImage(Cipher);
+                    _iconImageSource = IconImageHelper.GetIconImage(Cipher);
                 }
                 return _iconImageSource;
             }
