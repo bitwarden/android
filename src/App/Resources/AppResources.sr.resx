@@ -1585,9 +1585,6 @@
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Ауто-попуни клокиране УРЛ</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Ауто-пуњење неће радити за блокиране УРЛ. Одвојите више УРЛ са зарезом. Нпр: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Питај да се дода пријава</value>
   </data>
@@ -2639,9 +2636,55 @@
     <value>Откључавање можда неће успети због недовољне меморије. Умањите подешавање KDF меморије за решење</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
-    <value>Invalid API key</value>
+    <value>Неисправан API кључ</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
-    <value>Invalid API token</value>
+    <value>Неисправан API токен</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Блокирати ауто-пуњење</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Ауто-пуњење неће бити понуђено за ове УРЛ.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Нов блокиран УРЛ</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>УРЛ сачуван</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Погрешан формат. Употребити https://, http://, или androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Уредити УРЛ</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Унос УРЛ-а</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Формат: {0}. Одвојите више УРЛ-ове са зарезом.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Формат: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Неисправна адреса</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>УРЛ сачуван</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>УРЛ уклоњен</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Нема блокираних адреса</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>Адреса {0} је већ блокирана</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Не може да се уреди истовремено више адресе</value>
   </data>
 </root>

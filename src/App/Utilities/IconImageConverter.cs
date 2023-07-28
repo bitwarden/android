@@ -13,31 +13,29 @@ namespace Bit.App.Utilities
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var cipher = value as CipherView;
-            return GetIcon(cipher);
+            return IconImageHelper.GetIconImage(cipher);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
-
-        private string GetIcon(CipherView cipher)
-        {
-            string icon = null;
-            switch (cipher.Type)
-            {
-                case CipherType.Login:
-                    icon = IconImageHelper.GetLoginIconImage(cipher);
-                    break;
-                default:
-                    break;
-            }
-            return icon;
-        }
     }
 
     public static class IconImageHelper
     {
+        public static string GetIconImage(CipherView cipher)
+        {
+            switch (cipher.Type)
+            {
+                case CipherType.Login:
+                    return IconImageHelper.GetLoginIconImage(cipher);
+                case CipherType.Fido2Key:
+                    return IconImageHelper.GetFido2KeyIconImage(cipher);
+            }
+            return null;
+        }
+
         public static string GetLoginIconImage(CipherView cipher)
         {
             string image = null;
@@ -67,6 +65,26 @@ namespace Bit.App.Utilities
             return image;
         }
 
+        public static string GetFido2KeyIconImage(CipherView cipher)
+        {
+            var hostnameUri = cipher.Fido2Key.LaunchUri;
+            if (!hostnameUri.Contains("."))
+            {
+                return null;
+            }
+
+            if (!hostnameUri.Contains("://"))
+            {
+                hostnameUri = string.Concat("https://", hostnameUri);
+            }
+            if (hostnameUri.StartsWith("http"))
+            {
+                return GetIconUrl(hostnameUri);
+            }
+
+            return null;
+        }
+
         private static string GetIconUrl(string hostnameUri)
         {
             IEnvironmentService _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
@@ -85,7 +103,6 @@ namespace Bit.App.Utilities
                 }
             }
             return string.Format("{0}/{1}/icon.png", iconsUrl, hostname);
-
         }
     }
 }

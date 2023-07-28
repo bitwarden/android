@@ -1584,9 +1584,6 @@
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Automatikus kitöltés elől blokkolt URI elemek</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>A blokkolt URI elemek esetében az automatikus kitöltés nem kerül felajánlásra. Több URI elemet vesszővel kell elválasztani. Például: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Bejelentkezés hozzáadás kérése</value>
   </data>
@@ -2640,5 +2637,51 @@ Szeretnénk átváltani erre a fiókra?</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Érvénytelen API vezérjel</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Automatikus kitöltés blokkolása</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Az automatikus kitöltés nem kerül felajánlásra ezeknél a webcímeknél.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Új blokkolt URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>Az URI mentésre került.</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>A formátum érvénytelen. Használjuk a https://, http:// vagy androidapp:// elemet.</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>URI szerkesztése</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>URI megadása</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Formátum: {0}. A több URI elemet vesszővel válasszuk el.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Formátum: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Az URI érvénytelen.</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>Az URI mentésre került.</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>Az URI eltávolításra került.</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Nincsenek blokkolt URI elemek.</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>{0} URI már blokkolásra került.</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Nem szerkeszthető több URI egyszerre.</value>
   </data>
 </root>

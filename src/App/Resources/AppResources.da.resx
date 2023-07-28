@@ -1585,9 +1585,6 @@ Skanning vil ske automatisk.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Autoudfyld blokerede URI'er</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Autoudfyldning tilbydes ikke for blokerede URI'er. Adskil flere URI'er med komma. F.eks.: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Spørg om at tilføje login</value>
   </data>
@@ -2641,5 +2638,51 @@ Vil du skifte til denne konto?</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Ugyldigt API-token</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Blokér autoudfyldning</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Autoudfyldning vil ikke blive tilbudt for disse URI'er.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Ny blokeret URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI gemt</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Ugyldigt format. Brug https://, http:// eller androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Redigér URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Angiv URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Format: {0}. Separér flere URI'er med komma.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Format: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Ugyldig URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI gemt</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI fjernet</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Der er ingen blokerede URI'er</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI'en {0} er allerede blokeret</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Kan ikke redigere flere URI'er på én gang</value>
   </data>
 </root>
