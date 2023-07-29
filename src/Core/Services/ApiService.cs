@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
+using Bit.Core.Models;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
@@ -64,19 +65,9 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task ReloadClientAuthCertificateAsync()
+        public void UseClientCertificate(ICertificateChainSpec certificateChainSpec)
         {
-            string clientCertAlias = await _storageService.GetAsync<string>(Core.Constants.ClientAuthCertificateAliasKey);
-            if (!string.IsNullOrEmpty(clientCertAlias))
-            {
-                var certService = _lazyCertificateService.Value;
-                _httpClientHandler
-                    .UseClientCertificate(await certService.GetCertificateAsync(clientCertAlias));
-            }
-            else
-            {
-                _httpClientHandler.UseClientCertificate(null);
-            }
+            _httpClientHandler.UseClientCertificate(certificateChainSpec);
         }
 
         public bool UrlsSet { get; private set; }

@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Bit.Core.Models;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
@@ -95,6 +96,6 @@ namespace Bit.Core.Abstractions
         Task<OrganizationDomainSsoDetailsResponse> GetOrgDomainSsoDetailsAsync(string email);
         Task<ConfigResponse> GetConfigsAsync();
         Task<string> GetFastmailAccountIdAsync(string apiKey);
-        Task ReloadClientAuthCertificateAsync();
+        void UseClientCertificate(ICertificateChainSpec certificateChainSpec);
     }
 }

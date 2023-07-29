@@ -4,6 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.EnvironmentPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     x:DataType="pages:EnvironmentPageViewModel"
     Title="{Binding PageTitle}">
@@ -41,6 +43,7 @@
                     Text="{u:I18n SelfHostedEnvironmentFooter}"
                     StyleClass="box-footer-label" />
             </StackLayout>
+
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">
                     <Label Text="{u:I18n CustomEnvironment, Header=True}"
@@ -95,6 +98,66 @@
                 <Label
                     Text="{u:I18n CustomEnvironmentFooter}"
                     StyleClass="box-footer-label" />
+            </StackLayout>
+
+            <StackLayout StyleClass="box" Margin="0,0,0,40">
+                <StackLayout.Resources>
+                    <u:InverseBoolConverter x:Key="inverseBool" />
+                    <u:IsNullConverter x:Key="null" />
+                    <u:IsNotNullConverter x:Key="notNull" />
+                </StackLayout.Resources>
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n Certificate, Header=True}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <Label Text="{u:I18n CertificateSetupInstruction}"
+                           IsVisible="{Binding CertificateUri, Converter={StaticResource null}}"
+                           StyleClass="box-sub-label"
+                           AutomationId="CertificateSetupInstructionLabel"/>
+                <Grid
+                    IsVisible="{Binding CertificateUri, Converter={StaticResource notNull}}"
+                    StyleClass="box-row">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackLayout StyleClass="box-row"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.RowSpan="2">
+                        <Label
+                            Text="{Binding CertificateAlias}"
+                            StyleClass="box-label"
+                            AutomationId="CertificateAliasLabel" />
+                        <Label
+                            Text="{Binding CertificateDetails}"
+                            Padding="12, 0, 0, 0"
+                            StyleClass="box-sub-label"
+                            AutomationId="CertificateDetailsLabel" />
+                    </StackLayout>
+                    <controls:IconButton
+                        StyleClass="box-row-button, box-row-button-platform, button-danger"
+                        Text="{Binding Source={x:Static core:BitwardenIcons.Trash}}"
+                        Command="{Binding RemoveCertCommand}"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.RowSpan="2"
+                        AutomationId="DeleteCertButton"
+                        />
+                </Grid>
+                <Button Text="{u:I18n CertificateImportDesc}"
+                        StyleClass="btn-primary"
+                        Command="{Binding ImportCertCommand}"
+                        AutomationId="ImportAndUseCertButton"
+                        />
+                <Button Text="{u:I18n CertificateUseFromSystemDesc}"
+                        StyleClass="btn-secondary"
+                        Command="{Binding UseSystemCertCommand}"
+                        AutomationId="UseSystemCertButton"
+                        />
             </StackLayout>
         </StackLayout>
     </ScrollView>

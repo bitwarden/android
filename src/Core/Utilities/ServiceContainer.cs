@@ -114,8 +114,6 @@ namespace Bit.Core.Utilities
             Register<IUserVerificationService>("userVerificationService", userVerificationService);
             Register<IUsernameGenerationService>(usernameGenerationService);
             Register<IConfigService>(configService);
-
-            apiService.ReloadClientAuthCertificateAsync().GetAwaiter().GetResult();
         }
 
         public static void Register<T>(string serviceName, T obj)

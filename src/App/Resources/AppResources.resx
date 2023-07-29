@@ -2646,17 +2646,14 @@ Do you want to switch to this account?</value>
   <data name="ClientCertificate" xml:space="preserve">
     <value>Client Certificate</value>
   </data>
-  <data name="Advanced" xml:space="preserve">
-    <value>Advanced</value>
-  </data>
-  <data name="CertificateImportUseDesc" xml:space="preserve">
-    <value>Import and use a new certificate</value>
+  <data name="CertificateImportDesc" xml:space="preserve">
+    <value>Import certificate</value>
   </data>
   <data name="CertificateSetupInstruction" xml:space="preserve">
-    <value>To setup a new certificate, select either of following options</value>
+    <value>Set up a certificate for TLS client authentication</value>
   </data>
   <data name="CertificateUseFromSystemDesc" xml:space="preserve">
-    <value>Use a system certificate</value>
+    <value>Use system certificate</value>
   </data>
   <data name="PasswordEnterDecryptCert" xml:space="preserve">
     <value>Enter password to decrypt the certificate</value>
@@ -2694,9 +2691,6 @@ Do you want to switch to this account?</value>
   </data>
   <data name="InvalidURI" xml:space="preserve">
     <value>Invalid URI</value>
-  </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI saved</value>
   </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI removed</value>

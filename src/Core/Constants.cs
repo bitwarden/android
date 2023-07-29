@@ -33,7 +33,7 @@
         public const string ThemeKey = "theme";
         public const string AutoDarkThemeKey = "autoDarkTheme";
         public const string DisableFaviconKey = "disableFavicon";
-        public const string ClientAuthCertificateAliasKey = "clientAuthCertificateAliasKey";
+        public const string ClientAuthCertificateUriKey = "clientAuthCertificateUriKey";
         public const string PasswordlessNotificationId = "26072022";
         public const string AndroidNotificationChannelId = "general_notification_channel";
         public const string iOSNotificationCategoryId = "dismissableCategory";

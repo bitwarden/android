@@ -422,15 +422,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Advanced.
-        /// </summary>
-        public static string Advanced {
-            get {
-                return ResourceManager.GetString("Advanced", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
         public static string All {
@@ -1385,16 +1376,16 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import and use a new certificate.
+        ///   Looks up a localized string similar to Import certificate.
         /// </summary>
-        public static string CertificateImportUseDesc {
+        public static string CertificateImportDesc {
             get {
-                return ResourceManager.GetString("CertificateImportUseDesc", resourceCulture);
+                return ResourceManager.GetString("CertificateImportDesc", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To setup a new certificate, select either of following options.
+        ///   Looks up a localized string similar to Set up a certificate for TLS client authentication.
         /// </summary>
         public static string CertificateSetupInstruction {
             get {
@@ -1403,7 +1394,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use a system certificate.
+        ///   Looks up a localized string similar to Use system certificate.
         /// </summary>
         public static string CertificateUseFromSystemDesc {
             get {

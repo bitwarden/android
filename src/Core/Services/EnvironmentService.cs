@@ -14,7 +14,9 @@ namespace Bit.Core.Services
 
         private readonly IApiService _apiService;
         private readonly IStateService _stateService;
+        private readonly ICertificateService _certificateService;
         private readonly IConditionedAwaiterManager _conditionedAwaiterManager;
+        private readonly IStorageService _storageService;
 
         public EnvironmentService(
             IApiService apiService,
@@ -24,6 +26,8 @@ namespace Bit.Core.Services
             _apiService = apiService;
             _stateService = stateService;
             _conditionedAwaiterManager = conditionedAwaiterManager;
+            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _certificateService = ServiceContainer.Resolve<ICertificateService>("certificateService");
         }
 
         public string BaseUrl { get; set; }
@@ -33,6 +37,7 @@ namespace Bit.Core.Services
         public string IconsUrl { get; set; }
         public string NotificationsUrl { get; set; }
         public string EventsUrl { get; set; }
+        public string ClientCertUri { get; set; }
 
         public string GetWebVaultUrl(bool returnNullIfDefault = false)
         {
@@ -58,6 +63,14 @@ namespace Bit.Core.Services
         {
             try
             {
+                ClientCertUri = await GetClientCertificateUriFromStorageAsync();
+
+                if (ClientCertUri != null)
+                {
+                    var certSpec = await _certificateService.GetCertificateAsync(ClientCertUri);
+                    _apiService.UseClientCertificate(certSpec);
+                }
+
                 var urls = await _stateService.GetEnvironmentUrlsAsync();
                 if (urls == null)
                 {
@@ -84,8 +97,9 @@ namespace Bit.Core.Services
                 IconsUrl = urls.Icons;
                 NotificationsUrl = urls.Notifications;
                 EventsUrl = envUrls.Events = urls.Events;
-                _apiService.SetUrls(envUrls);
 
+                _apiService.SetUrls(envUrls);
+                
                 _conditionedAwaiterManager.SetAsCompleted(AwaiterPrecondition.EnvironmentUrlsInited);
             }
             catch (System.Exception ex)
@@ -130,6 +144,27 @@ namespace Bit.Core.Services
             return urls;
         }
 
+        public async Task SetClientCertificate(string certUri)
+        {
+            var certSpec = await _certificateService.GetCertificateAsync(certUri);
+            
+            await _storageService.SaveAsync(Constants.ClientAuthCertificateUriKey, certUri);
+            _apiService.UseClientCertificate(certSpec);
+            ClientCertUri = certUri;
+        }
+
+        private async Task<string> GetClientCertificateUriFromStorageAsync()
+        {
+            try
+            {
+                return await _storageService.GetAsync<string>(Constants.ClientAuthCertificateUriKey);
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
         private string FormatUrl(string url)
         {
             if (string.IsNullOrWhiteSpace(url))
@@ -142,6 +177,18 @@ namespace Bit.Core.Services
                 url = string.Concat("https://", url);
             }
             return url.Trim();
+        }
+
+        public async Task RemoveExistingClientCert() 
+        {
+            var existingCertUri = await GetClientCertificateUriFromStorageAsync();
+            if (existingCertUri != null)
+            {
+                _certificateService.TryRemoveCertificate(existingCertUri);
+                await _storageService.RemoveAsync(Constants.ClientAuthCertificateUriKey);
+                _apiService.UseClientCertificate(null);
+            }
+            ClientCertUri = null;
         }
     }
 }

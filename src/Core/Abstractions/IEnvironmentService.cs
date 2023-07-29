@@ -12,10 +12,13 @@ namespace Bit.Core.Abstractions
         string NotificationsUrl { get; set; }
         string WebVaultUrl { get; set; }
         string EventsUrl { get; set; }
+        string ClientCertUri { get; set; }
 
         string GetWebVaultUrl(bool returnNullIfDefault = false);
         string GetWebSendUrl();
         Task<EnvironmentUrlData> SetUrlsAsync(EnvironmentUrlData urls);
         Task SetUrlsFromStorageAsync();
+        Task SetClientCertificate(string certUri);
+        Task RemoveExistingClientCert();
     }
 }
