@@ -15,7 +15,7 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
-        <ToolbarItem Text="{u:I18n Move}" Clicked="Save_Clicked" />
+        <ToolbarItem Text="{u:I18n Move}" Command="{Binding MoveCommand}" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>

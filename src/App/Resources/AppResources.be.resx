@@ -1584,9 +1584,6 @@
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Аўтазапаўненне заблакіраваных URI</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Аўтазапаўненне не будзе прапаноўвацца для заблакіраваных URI. Раздзяляйце некалькі URI з дапамогай коскі. Напрыклад: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Пытацца пры дадаванні лагіна</value>
   </data>
@@ -2630,6 +2627,34 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Бягучы асноўны пароль</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Created {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Passkey will not be copied</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Copy application</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Available for two-step login</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Дапамога з паўторным запытам асноўнага пароля</value>
   </data>
@@ -2641,5 +2666,51 @@
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Памылковы токен API</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Блакіраваць аўтазапаўненне</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Аўтазапаўненне для гэтых URI прапаноўвацца не будзе.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Новы заблакіраваны URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI захаваны</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Памылковы фармат. Выкарыстоўвайце https://, http:// або androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Рэдагаваць URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Увесці URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Фармат: {0}. Раздзяліце некалькі значэнняў URI коскай.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Фармат: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Памылковы URI</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI выдалены</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Заблакіраваных URI пакуль няма</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>Гэты URI {0} ужо заблакіраваны</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Немагчыма рэдагаваць некалькі URI адначасова</value>
   </data>
 </root>
