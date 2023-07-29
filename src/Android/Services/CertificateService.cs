@@ -133,7 +133,7 @@ namespace Bit.Droid.Services
                     data == null ||
                     data.Data == null)
                 {
-                    return string.Empty;
+                    return null;
                 }
 
                 string chosenCertAlias = string.Empty;
@@ -143,7 +143,7 @@ namespace Bit.Droid.Services
                 
                 if (password == null) 
                 {
-                    return string.Empty;
+                    return null;
                 }
 
                 using (var stream = activity.ContentResolver.OpenInputStream(data.Data))
@@ -158,7 +158,7 @@ namespace Bit.Droid.Services
                     var aliasEnumeration = pkcs12KeyStore.Aliases();
                     if (!aliasEnumeration.HasMoreElements)
                     {
-                        return string.Empty;
+                        return null;
                     }
                     chosenCertAlias = aliasEnumeration.NextElement().ToString();
 
@@ -171,7 +171,7 @@ namespace Bit.Droid.Services
                     if (privateKey == null || certificateChain == null || certificateChain.Length == 0)
                     {
                         // Handle error: unable to extract the private key or certificate
-                        return string.Empty;
+                        return null;
                     }
 
                     if (string.IsNullOrEmpty(chosenCertAlias))
@@ -195,7 +195,7 @@ namespace Bit.Droid.Services
             catch (Exception e)
             {
                 _deviceActionService.Toast($"Failed to import the certificate\n {e.Message}");
-                return string.Empty;
+                return null;
             }
         }
 
@@ -213,7 +213,7 @@ namespace Bit.Droid.Services
                             new ChoosePrivateKeyAliasCallback
                             {
                                 Success = chosenAlias => result.SetResult(VerifyAndFormatCertUri(chosenAlias, true)),
-                                Failed = () => result.SetResult(string.Empty),
+                                Failed = () => result.SetResult(null),
                             },
                             new string[] { "RSA" },
                             null,
