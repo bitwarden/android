@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
-using Android.Media;
 using Android.Nfc;
 using Android.OS;
 using Android.Provider;
@@ -18,14 +17,9 @@ using Bit.App.Utilities;
 using Bit.App.Utilities.Prompts;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
-using Bit.Core.Utilities;
 using Bit.Droid.Utilities;
 using Plugin.CurrentActivity;
 using Xamarin.Forms.Platform.Android;
-using static Android.Icu.Text.CaseMap;
-using static Android.Renderscripts.ScriptGroup;
-using static Android.Util.EventLogTags;
-using static Bit.App.Pages.SettingsPageViewModel;
 
 namespace Bit.Droid.Services
 {
@@ -267,6 +261,7 @@ namespace Bit.Droid.Services
             
             var result = new TaskCompletionSource<ValidatablePromptResponse?>();
 
+            alertBuilder.SetOnCancelListener(new BasicDialogWithResultCancelListener(result));
             alertBuilder.SetPositiveButton(config.OkButtonText ?? AppResources.Ok, listener: null);
             alertBuilder.SetNegativeButton(config.CancelButtonText ?? AppResources.Cancel, (sender, args) => result.TrySetResult(null));
             if (!string.IsNullOrEmpty(config.ThirdButtonText))
@@ -612,6 +607,22 @@ namespace Bit.Droid.Services
 #pragma warning disable CS0618 // Type or member is obsolete
             editText.KeyListener = DigitsKeyListener.GetInstance(false, false);
 #pragma warning restore CS0618 // Type or member is obsolete
+        }
+    }
+
+    class BasicDialogWithResultCancelListener : Java.Lang.Object, IDialogInterfaceOnCancelListener
+    {
+        private readonly TaskCompletionSource<ValidatablePromptResponse?> _taskCompletionSource;
+
+        public BasicDialogWithResultCancelListener(TaskCompletionSource<ValidatablePromptResponse?> taskCompletionSource)
+        {
+            _taskCompletionSource = taskCompletionSource;
+        }
+
+        public void OnCancel(IDialogInterface dialog)
+        {
+            _taskCompletionSource?.TrySetResult(null);
+            dialog?.Dismiss();
         }
     }
 }

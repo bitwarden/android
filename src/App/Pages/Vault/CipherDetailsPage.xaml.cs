@@ -204,20 +204,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void Clone_Clicked(object sender, System.EventArgs e)
-        {
-            if (DoOnce())
-            {
-                if (!await _vm.PromptPasswordAsync())
-                {
-                    return;
-                }
-                var page = new CipherAddEditPage(_vm.CipherId, cloneMode: true, cipherDetailsPage: this);
-                await Navigation.PushModalAsync(new NavigationPage(page));
-            }
-        }
-
-        private async void More_Clicked(object sender, System.EventArgs e)
+        private async void More_Clicked(object sender, EventArgs e)
         {
             if (!DoOnce())
             {
@@ -227,7 +214,11 @@ namespace Bit.App.Pages
             var options = new List<string> { AppResources.Attachments };
             if (_vm.Cipher.OrganizationId == null)
             {
-                options.Add(AppResources.Clone);
+                if (_vm.CanClone)
+                {
+                    options.Add(AppResources.Clone);
+                }
+
                 options.Add(AppResources.MoveToOrganization);
             }
             else
@@ -267,8 +258,7 @@ namespace Bit.App.Pages
             }
             else if (selection == AppResources.Clone)
             {
-                var page = new CipherAddEditPage(_vm.CipherId, cloneMode: true, cipherDetailsPage: this);
-                await Navigation.PushModalAsync(new NavigationPage(page));
+                _vm.CloneCommand.Execute(null);
             }
         }
 
@@ -302,13 +292,13 @@ namespace Bit.App.Pages
                 {
                     ToolbarItems.Remove(_collectionsItem);
                 }
-                if (!ToolbarItems.Contains(_cloneItem))
+                if (_vm.CanClone && !ToolbarItems.Contains(_cloneItem))
                 {
                     ToolbarItems.Insert(1, _cloneItem);
                 }
                 if (!ToolbarItems.Contains(_shareItem))
                 {
-                    ToolbarItems.Insert(2, _shareItem);
+                    ToolbarItems.Insert(_vm.CanClone ? 2 : 1, _shareItem);
                 }
             }
             else

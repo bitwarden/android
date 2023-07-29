@@ -557,6 +557,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application.
+        /// </summary>
+        public static string Application {
+            get {
+                return ResourceManager.GetString("Application", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approve login requests.
         /// </summary>
         public static string ApproveLoginRequests {
@@ -949,6 +958,15 @@ namespace Bit.App.Resources {
         public static string AutofillWithBitwarden {
             get {
                 return ResourceManager.GetString("AutofillWithBitwarden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available for two-step login.
+        /// </summary>
+        public static string AvailableForTwoStepLogin {
+            get {
+                return ResourceManager.GetString("AvailableForTwoStepLogin", resourceCulture);
             }
         }
         
@@ -1574,6 +1592,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy application.
+        /// </summary>
+        public static string CopyApplication {
+            get {
+                return ResourceManager.GetString("CopyApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy link.
         /// </summary>
         public static string CopyLink {
@@ -1678,6 +1705,15 @@ namespace Bit.App.Resources {
         public static string CreateAccount {
             get {
                 return ResourceManager.GetString("CreateAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created {0}.
+        /// </summary>
+        public static string CreatedX {
+            get {
+                return ResourceManager.GetString("CreatedX", resourceCulture);
             }
         }
         
@@ -4799,6 +4835,33 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Passkey.
+        /// </summary>
+        public static string Passkey {
+            get {
+                return ResourceManager.GetString("Passkey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passkeys.
+        /// </summary>
+        public static string Passkeys {
+            get {
+                return ResourceManager.GetString("Passkeys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passkey will not be copied.
+        /// </summary>
+        public static string PasskeyWillNotBeCopied {
+            get {
+                return ResourceManager.GetString("PasskeyWillNotBeCopied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Passphrase.
         /// </summary>
         public static string Passphrase {
@@ -6222,6 +6285,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The passkey will not be copied to the cloned item. Do you want to continue cloning this item?.
+        /// </summary>
+        public static string ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem {
+            get {
+                return ResourceManager.GetString("ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem", resourceCulture);
+        
+            }
+        }
+        
         ///   Looks up a localized string similar to There are no blocked URIs.
         /// </summary>
         public static string ThereAreNoBlockedURIs {
@@ -6281,6 +6353,16 @@ namespace Bit.App.Resources {
         public static string ThirtySeconds {
             get {
                 return ResourceManager.GetString("ThirtySeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This item cannot be shared with the organization because there is one already with the same passkey..
+        /// </summary>
+        public static string ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey {
+            get {
+                return ResourceManager.GetString("ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePassk" +
+                        "ey", resourceCulture);
             }
         }
         
@@ -7253,6 +7335,15 @@ namespace Bit.App.Resources {
         public static string YesAndSave {
             get {
                 return ResourceManager.GetString("YesAndSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot edit passkey application because it would invalidate the passkey.
+        /// </summary>
+        public static string YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey {
+            get {
+                return ResourceManager.GetString("YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey", resourceCulture);
             }
         }
         

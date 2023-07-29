@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Bitwarden – Salasanojen hallinta</value>
+    <value>Bitwarden – Salasanahallinta</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
@@ -155,7 +155,7 @@ Suojaa, käytä ja jaa Bitwarden-holvisi arkaluontoisia tietoja kaikilla selaimi
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>Turvallinen ja ilmainen salasanojen hallinta kaikille laitteillesi</value>
+    <value>Turvallinen ja ilmainen salasanahallinta kaikille laitteillesi</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Hallitse käyttäjätunnuksiasi ja salasanojasi suojatussa holvissa</value>

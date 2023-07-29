@@ -2627,6 +2627,34 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>現在のマスターパスワード</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>パスキー</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>パスキー</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>{0} に作成</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>アプリ</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>パスキーが無効になってしまうため、パスキーアプリを編集することはできません</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>パスキーはコピーされません</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>パスキーは複製されたアイテムにコピーされません。このアイテムを複製しますか？</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>アプリをコピー</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>2段階認証に利用可能です</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>マスターパスワードの再プロンプトヘルプ</value>
   </data>
@@ -2638,6 +2666,9 @@
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>無効な API トークン</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>すでに同じパスキーを持つものがあるため、このアイテムは組織と共有することはできません。</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>自動入力をブロック</value>
@@ -2669,9 +2700,6 @@
   </data>
   <data name="InvalidURI" xml:space="preserve">
     <value>不正な URI です</value>
-  </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI を保存しました</value>
   </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI を削除しました</value>

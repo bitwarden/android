@@ -7,7 +7,7 @@ using Bit.Core.Utilities;
 
 namespace Bit.Core.Models.View
 {
-    public class LoginUriView : View
+    public class LoginUriView : View, ILaunchableView
     {
         private HashSet<string> _canLaunchWhitelist = new HashSet<string>
         {
