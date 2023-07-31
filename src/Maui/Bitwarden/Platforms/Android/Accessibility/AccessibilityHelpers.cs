@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
@@ -11,7 +8,9 @@ using Android.Views;
 using Android.Views.Accessibility;
 using Android.Widget;
 using Bit.App.Resources;
-using Bit.Core;
+using Application = Android.App.Application;
+using Point = Android.Graphics.Point;
+using Rect = Android.Graphics.Rect;
 
 namespace Bit.App.Droid.Accessibility
 {
@@ -686,7 +685,7 @@ namespace Bit.App.Droid.Accessibility
                     {
                         return false;
                     }
-                    var testView = new View(Application.Context);
+                    var testView = new Android.Views.View(Application.Context);
                     var layoutParams = GetOverlayLayoutParams();
                     wm.AddView(testView, layoutParams);
                     wm.RemoveView(testView);

@@ -14,6 +14,7 @@ using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Plugin.CurrentActivity;
+using FileProvider = AndroidX.Core.Content.FileProvider;
 
 namespace Bit.App.Droid.Services
 {

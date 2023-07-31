@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.GroupingsPage"
@@ -7,7 +7,7 @@
     xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    xmlns:core="clr-namespace:Bit.Core"
     x:DataType="pages:GroupingsPageViewModel"
     Title="{Binding PageTitle}"
     x:Name="_page">
@@ -27,7 +27,7 @@
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n Account}"
             AutomationId="AccountIconButton" />
-        <ToolbarItem Icon="search.png" Clicked="Search_Clicked"
+        <ToolbarItem IconImageSource="search.png" Clicked="Search_Clicked"
                      AutomationProperties.IsInAccessibleTree="True"
                      AutomationProperties.Name="{u:I18n Search}" />
     </ContentPage.ToolbarItems>
@@ -42,7 +42,7 @@
                          Clicked="Lock_Clicked" Order="Secondary" />
             <ToolbarItem x:Name="_exitItem" x:Key="exitItem" Text="{u:I18n Exit}"
                          Clicked="Exit_Clicked" Order="Secondary" />
-            <ToolbarItem x:Name="_addItem" x:Key="addItem" Icon="plus.png"
+            <ToolbarItem x:Name="_addItem" x:Key="addItem" IconImageSource="plus.png"
                          Clicked="AddButton_Clicked" Order="Primary"
                          AutomationProperties.IsInAccessibleTree="True"
                          AutomationProperties.Name="{u:I18n AddItem}" />
@@ -191,7 +191,7 @@
         <!-- Android FAB -->
         <Button
             x:Name="_fab"
-            Image="plus.png"
+            ImageSource="plus.png"
             Clicked="AddButton_Clicked"
             Style="{StaticResource btn-fab}"
             AbsoluteLayout.LayoutFlags="PositionProportional"

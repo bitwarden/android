@@ -103,7 +103,7 @@ namespace Bit.App.Pages
 
         public ObservableRangeCollection<ISettingsPageListItem> GroupedItems { get; set; }
 
-        public IAsyncCommand<SettingsPageListItem> ExecuteSettingItemCommand { get; }
+        public AsyncCommand<SettingsPageListItem> ExecuteSettingItemCommand { get; }
 
         public async Task InitAsync()
         {

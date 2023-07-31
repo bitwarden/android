@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:effects="clr-namespace:Bit.App.Effects"
-    xmlns:view="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
+    xmlns:view="clr-namespace:Bit.Core.Models.View"
     x:Name="_mainOverlay"
     x:DataType="controls:AccountSwitchingOverlayViewModel"
     x:Class="Bit.App.Controls.AccountSwitchingOverlayView"
@@ -20,10 +20,13 @@
         <Frame
             Padding="0"
             HorizontalOptions="Fill"
-            VerticalOptions="Start"
-            xct:ShadowEffect.Color="Black"
-            xct:ShadowEffect.Radius="10"
-            xct:ShadowEffect.OffsetY="3">
+            VerticalOptions="Start">
+            <Frame.Shadow>
+                <Shadow
+                    Brush="Black"
+                    Radius="10"
+                    Offset="0,3" />
+            </Frame.Shadow>
             <ListView
                 x:Name="_accountListView"
                 ItemsSource="{Binding BindingContext.AccountViews, Source={x:Reference _mainOverlay}}"

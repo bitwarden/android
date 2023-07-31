@@ -1,14 +1,11 @@
 #if !FDROID
-using System;
 using Android.App;
 using Bit.App.Abstractions;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Firebase.Messaging;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Xamarin.Forms;
 
 namespace Bit.App.Droid.Push
 {

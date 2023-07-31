@@ -4,7 +4,7 @@
     x:Class="Bit.App.Controls.SendViewCell"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
-    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    xmlns:core="clr-namespace:Bit.Core"
     StyleClass="list-row, list-row-platform"
     RowSpacing="0"
     ColumnSpacing="0"

@@ -323,6 +323,7 @@
 	  <PackageReference Include="Plugin.CurrentActivity" Version="2.1.0.4" />
 	  <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.18" />
 	  <PackageReference Include="Xamarin.Firebase.Messaging" Version="123.1.2.2" />
+	  <PackageReference Include="Xamarin.AndroidX.Activity.Ktx" Version="1.7.2.1" />
 	</ItemGroup>
 	<ItemGroup>
 	  <BundleResource Include="Platforms\Android\Resources\mipmap-mdpi\ic_launcher.png" />

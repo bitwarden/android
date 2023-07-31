@@ -14,6 +14,7 @@ using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using View = Bit.Core.Models.View.View;
 
 namespace Bit.Core.Services
 {

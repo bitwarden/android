@@ -8,7 +8,7 @@
    <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_screen_round</item>
   </style>
 
-  <style name="BaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+  <style name="BaseTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
     <item name="colorPrimary">@color/primary</item>

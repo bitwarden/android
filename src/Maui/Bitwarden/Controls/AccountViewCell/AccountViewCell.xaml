@@ -1,19 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ViewCell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-          xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
           x:Class="Bit.App.Controls.AccountViewCell"
+	      xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
           xmlns:controls="clr-namespace:Bit.App.Controls"
           xmlns:u="clr-namespace:Bit.App.Utilities"
           x:Name="_accountView"
           x:DataType="controls:AccountViewCellViewModel">
-    <Grid RowSpacing="0"
-          ColumnSpacing="0"
+    
+          <!--TODO: [MAUI-Migration] add touch effects
           xct:TouchEffect.NativeAnimation="True"
           xct:TouchEffect.Command="{Binding SelectAccountCommand, Source={x:Reference _accountView}}"
           xct:TouchEffect.CommandParameter="{Binding .}"
           xct:TouchEffect.LongPressCommand="{Binding LongPressAccountCommand, Source={x:Reference _accountView}}"
-          xct:TouchEffect.LongPressCommandParameter="{Binding .}">
+          xct:TouchEffect.LongPressCommandParameter="{Binding .}"-->
+
+    <Grid RowSpacing="0"
+          ColumnSpacing="0">
 
         <Grid.Resources>
             <u:InverseBoolConverter x:Key="inverseBool" />
@@ -140,6 +143,9 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
+            <!--TODO: [MAUI-Migration] Check the tint color works as before
+                xct:IconTintColorEffect.TintColor="{DynamicResource TextColor}"-->
+
             <Image
                 Grid.Column="0"
                 VerticalOptions="Center"
@@ -148,8 +154,11 @@
                 WidthRequest="{OnPlatform 24, iOS=24, Android=26}"
                 HeightRequest="{OnPlatform 24, iOS=24, Android=26}"
                 Source="plus.png"
-                xct:IconTintColorEffect.TintColor="{DynamicResource TextColor}"
-                AutomationProperties.IsInAccessibleTree="False" />
+                AutomationProperties.IsInAccessibleTree="False">
+                <Image.Behaviors>
+                    <mct:IconTintColorBehavior TintColor="{DynamicResource TextColor}" />
+                </Image.Behaviors>
+            </Image>
             <Label
                 Text="{u:I18n AddAccount}"
                 StyleClass="accountlist-title, accountlist-title-platform"

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <pages:BaseContentPage 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -6,8 +6,8 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
-    xmlns:domain="clr-namespace:Bit.Core.Models.Domain;assembly=BitwardenCore"
-    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    xmlns:domain="clr-namespace:Bit.Core.Models.Domain"
+    xmlns:core="clr-namespace:Bit.Core"
     x:DataType="pages:GeneratorHistoryPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -29,7 +29,7 @@
                          x:Name="_clearItem"
                          x:Key="clearItem"
                          AutomationId="ClearPasswordList" />
-            <ToolbarItem Icon="more_vert.png"
+            <ToolbarItem IconImageSource="more_vert.png"
                          AutomationProperties.IsInAccessibleTree="True"
                          AutomationProperties.Name="{u:I18n Options}"
                          Clicked="More_Clicked"

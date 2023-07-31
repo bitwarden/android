@@ -1,17 +1,16 @@
-﻿using System.Threading.Tasks;
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Bit.App.Droid.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using Bit.App.Droid.Utilities;
 
 namespace Bit.App.Droid.Autofill
 {
     [Activity(
         NoHistory = true,
         LaunchMode = LaunchMode.SingleTop)]
-    public class AutofillExternalSelectionActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+    public class AutofillExternalSelectionActivity : MauiAppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
         {

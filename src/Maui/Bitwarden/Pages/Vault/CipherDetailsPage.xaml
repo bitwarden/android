@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <pages:BaseContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -7,10 +7,10 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:effects="clr-namespace:Bit.App.Effects"
-    xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
+    xmlns:views="clr-namespace:Bit.Core.Models.View"
     xmlns:dts="clr-namespace:Bit.App.Lists.DataTemplateSelectors"
     xmlns:il="clr-namespace:Bit.App.Lists.ItemLayouts.CustomFields"
-    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    xmlns:core="clr-namespace:Bit.Core"
     x:DataType="pages:CipherDetailsPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -37,7 +37,7 @@
                          x:Name="_closeItem" x:Key="closeItem" />
             <ToolbarItem Clicked="EditToolbarItem_Clicked" Order="Primary"
                          x:Name="_editItem" x:Key="editItem" />
-            <ToolbarItem Icon="more_vert.png" Clicked="More_Clicked" Order="Primary"
+            <ToolbarItem IconImageSource="more_vert.png" Clicked="More_Clicked" Order="Primary"
                          x:Name="_moreItem" x:Key="moreItem"
                          AutomationProperties.IsInAccessibleTree="True"
                          AutomationProperties.Name="{u:I18n Options}" />
@@ -805,7 +805,7 @@
         </ContentView>
         <Button
             x:Name="_fab"
-            Image="pencil.png"
+            ImageSource="pencil.png"
             Clicked="EditButton_Clicked"
             Style="{StaticResource btn-fab}"
             AbsoluteLayout.LayoutFlags="PositionProportional"

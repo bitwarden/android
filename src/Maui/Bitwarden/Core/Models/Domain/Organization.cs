@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
+using Permissions = Bit.Core.Models.Data.Permissions;
 
 namespace Bit.Core.Models.Domain
 {

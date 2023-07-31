@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.SendGroupingsPage"
@@ -15,7 +15,7 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Icon="search.png" Clicked="Search_Clicked"
+        <ToolbarItem IconImageSource="search.png" Clicked="Search_Clicked"
                      AutomationProperties.IsInAccessibleTree="True"
                      AutomationProperties.Name="{u:I18n Search}" />
     </ContentPage.ToolbarItems>
@@ -24,7 +24,7 @@
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
 
-            <ToolbarItem x:Name="_aboutIconItem" x:Key="aboutIconItem" Icon="info.png"
+            <ToolbarItem x:Name="_aboutIconItem" x:Key="aboutIconItem" IconImageSource="info.png"
                          Clicked="About_Clicked" Order="Primary" Priority="-1"
                          AutomationProperties.IsInAccessibleTree="True"
                          AutomationProperties.Name="{u:I18n AboutSend}" />
@@ -34,7 +34,7 @@
                          Clicked="Lock_Clicked" Order="Secondary" />
             <ToolbarItem x:Name="_aboutTextItem" x:Key="aboutTextItem" Text="{u:I18n AboutSend}"
                          Clicked="About_Clicked" Order="Secondary" />
-            <ToolbarItem x:Name="_addItem" x:Key="addItem" Icon="plus.png"
+            <ToolbarItem x:Name="_addItem" x:Key="addItem" IconImageSource="plus.png"
                          Clicked="AddButton_Clicked" Order="Primary"
                          AutomationProperties.IsInAccessibleTree="True"
                          AutomationProperties.Name="{u:I18n AddItem}" />
@@ -159,7 +159,7 @@
             AbsoluteLayout.LayoutBounds="0, 0, 1, 1" />
         <Button
             x:Name="_fab"
-            Image="plus.png"
+            ImageSource="plus.png"
             IsVisible="{Binding SendEnabled}"
             Clicked="AddButton_Clicked"
             Style="{StaticResource btn-fab}"

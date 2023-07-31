@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using SkiaSharp;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
-using SkiaSharp.Views.Maui.Controls;
 using SkiaSharp.Views.Maui;
 using ZXing.Net.Maui;
-using Kotlin.Coroutines.Jvm.Internal;
 
 namespace Bit.App.Pages
 {

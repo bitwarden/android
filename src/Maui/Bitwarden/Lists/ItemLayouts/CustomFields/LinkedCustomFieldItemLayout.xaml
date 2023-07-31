@@ -5,7 +5,7 @@
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:cfvm="clr-namespace:Bit.App.Lists.ItemViewModels.CustomFields"
-    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    xmlns:core="clr-namespace:Bit.Core"
     x:DataType="cfvm:LinkedCustomFieldItemViewModel"
     Spacing="0" Padding="0">
     <StackLayout.Resources>

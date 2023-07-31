@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui;
-
-namespace Bit.App.Utilities
+﻿namespace Bit.App.Utilities
 {
     public static class ProgressBarExtensions
     {
@@ -18,7 +15,7 @@ namespace Bit.App.Utilities
 
         private static void ProgressBarProgressChanged(ProgressBar progressBar, double progress)
         {
-            ViewExtensions.CancelAnimations(progressBar);
+            Microsoft.Maui.Controls.ViewExtensions.CancelAnimations(progressBar);
             progressBar.ProgressTo(progress, 500, Easing.SinIn);
         }
     }

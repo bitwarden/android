@@ -20,6 +20,7 @@ using AndroidX.AutoFill.Inline.V1;
 using Bit.Core.Abstractions;
 using SaveFlags = Android.Service.Autofill.SaveFlags;
 using Bit.App.Droid.Utilities;
+using BlendMode = Android.Graphics.BlendMode;
 
 namespace Bit.App.Droid.Autofill
 {

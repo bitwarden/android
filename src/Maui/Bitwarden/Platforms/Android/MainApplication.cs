@@ -25,6 +25,7 @@ using Bit.Core.Enums;
 using Bit.App;
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
+using DeviceType = Bit.Core.Enums.DeviceType;
 #if !FDROID
 using Android.Gms.Security;
 #endif
@@ -43,8 +44,6 @@ namespace Bit.App.Droid
     public class MainApplication : MauiApplication, ProviderInstaller.IProviderInstallListener
 #endif
     {
-        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
-
         public MainApplication(IntPtr handle, JniHandleOwnership transer)
           : base(handle, transer)
         {
@@ -97,6 +96,17 @@ namespace Bit.App.Droid
                 ProviderInstaller.InstallIfNeededAsync(ApplicationContext, this);
             }
 #endif
+        }
+
+        protected override MauiApp CreateMauiApp()
+        {
+            return MauiProgram.CreateMauiApp(effects =>
+            {
+                effects.Add<Bit.App.Effects.FabShadowEffect, Droid.Effects.FabShadowEffect>();
+                effects.Add<Bit.App.Effects.FixedSizeEffect, Droid.Effects.FixedSizeEffect>();
+                effects.Add<Bit.App.Effects.NoEmojiKeyboardEffect, Droid.Effects.NoEmojiKeyboardEffect>();
+                effects.Add<Bit.App.Effects.TabBarEffect, Droid.Effects.TabBarEffect>();
+            });
         }
 
         public override void OnCreate()

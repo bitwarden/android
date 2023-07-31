@@ -14,7 +14,7 @@ namespace Bit.App.Droid.Utilities
                 // Note: getting the bundle like this will cause to call unparcel() internally
                 var b = intent?.Extras?.GetBundle("trashstringwhichhasnousebuttocheckunparcel");
             }
-            catch (Exception ex) when
+            catch (System.Exception ex) when
             (
                 ex is BadParcelableException ||
                 ex is ClassNotFoundException ||

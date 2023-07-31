@@ -19,6 +19,8 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.App.Droid.Utilities;
 using Plugin.CurrentActivity;
+using Application = Android.App.Application;
+using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 
 namespace Bit.App.Droid.Services
 {
@@ -454,7 +456,7 @@ namespace Bit.App.Droid.Services
         public async Task<string> DisplayActionSheetAsync(string title, string cancel, string destruction,
             params string[] buttons)
         {
-            return await Xamarin.Forms.Application.Current.MainPage.DisplayActionSheet(
+            return await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayActionSheet(
                 title, cancel, destruction, buttons);
         }
 

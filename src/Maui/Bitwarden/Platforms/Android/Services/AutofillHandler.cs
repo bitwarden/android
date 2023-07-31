@@ -13,6 +13,7 @@ using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Bit.App.Droid.Autofill;
 using Plugin.CurrentActivity;
+using Application = Android.App.Application;
 
 namespace Bit.App.Droid.Services
 {
@@ -77,7 +78,7 @@ namespace Bit.App.Droid.Services
 
         public void Autofill(CipherView cipher)
         {
-            var activity = CrossCurrentActivity.Current.Activity as Xamarin.Forms.Platform.Android.FormsAppCompatActivity;
+            var activity = CrossCurrentActivity.Current.Activity as MauiAppCompatActivity;
             if (activity == null)
             {
                 return;

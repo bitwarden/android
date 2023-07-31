@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
@@ -6,7 +6,7 @@
              xmlns:pages="clr-namespace:Bit.App.Pages"
              xmlns:u="clr-namespace:Bit.App.Utilities"
              xmlns:controls="clr-namespace:Bit.App.Controls"
-             xmlns:effects="clr-namespace:Bit.App.Effects;assembly=BitwardenApp"
+             xmlns:effects="clr-namespace:Bit.App.Effects"
              x:DataType="pages:CipherSelectionPageViewModel"
              Title="{Binding PageTitle}"
              x:Name="_page">

@@ -56,11 +56,11 @@ namespace Bit.App.Pages
                 }
             }
             _typePicker.On<Microsoft.Maui.Controls.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
-            _passwordTypePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
-            _usernameTypePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
-            _serviceTypePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
-            _plusAddressedEmailTypePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
-            _catchallEmailTypePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+            _passwordTypePicker.On<Microsoft.Maui.Controls.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+            _usernameTypePicker.On<Microsoft.Maui.Controls.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+            _serviceTypePicker.On<Microsoft.Maui.Controls.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+            _plusAddressedEmailTypePicker.On<Microsoft.Maui.Controls.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+            _catchallEmailTypePicker.On<Microsoft.Maui.Controls.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
         }
 
         public async Task InitAsync()

@@ -65,11 +65,11 @@ namespace Bit.App.Utilities
                 // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
                                 if (Device.RuntimePlatform == Device.Android)
                 {
-                    resources.MergedDictionaries.Add(new Android());
+                    resources.MergedDictionaries.Add(new Styles.Android());
                 }
                 else if (Device.RuntimePlatform == Device.iOS)
                 {
-                    resources.MergedDictionaries.Add(new iOS());
+                    resources.MergedDictionaries.Add(new Styles.iOS());
                 }
             }
             catch (InvalidOperationException ioex) when (ioex.Message != null && ioex.Message.StartsWith("Collection was modified"))

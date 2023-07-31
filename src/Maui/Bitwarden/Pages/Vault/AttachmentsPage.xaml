@@ -4,10 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.AttachmentsPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
-    xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
+    xmlns:views="clr-namespace:Bit.Core.Models.View"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
-    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    xmlns:core="clr-namespace:Bit.Core"
     x:DataType="pages:AttachmentsPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <pages:BaseContentPage 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -6,8 +6,8 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
-    xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
-    xmlns:effects="clr-namespace:Bit.App.Effects;assembly=BitwardenApp"
+    xmlns:views="clr-namespace:Bit.Core.Models.View"
+    xmlns:effects="clr-namespace:Bit.App.Effects"
     x:DataType="pages:FoldersPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -21,7 +21,7 @@
             <u:InverseBoolConverter x:Key="inverseBool" />
             <ToolbarItem x:Name="_closeItem" x:Key="closeItem" Text="{u:I18n Close}"
                          Clicked="Close_Clicked" Order="Primary" Priority="-1" />
-            <ToolbarItem x:Name="_addItem" x:Key="addItem" Icon="plus.png"
+            <ToolbarItem x:Name="_addItem" x:Key="addItem" IconImageSource="plus.png"
                          Clicked="AddButton_Clicked" Order="Primary"
                          AutomationProperties.IsInAccessibleTree="True"
                          AutomationProperties.Name="{u:I18n AddItem}" />
@@ -70,7 +70,7 @@
         </ContentView>
         <Button
             x:Name="_fab"
-            Image="plus.png"
+            ImageSource="plus.png"
             Clicked="AddButton_Clicked"
             Style="{StaticResource btn-fab}"
             AbsoluteLayout.LayoutFlags="PositionProportional"

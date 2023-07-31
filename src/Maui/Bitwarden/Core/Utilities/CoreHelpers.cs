@@ -266,7 +266,7 @@ namespace Bit.Core.Utilities
 
         public static string TextColorFromBgColor(string hexColor, int threshold = 166)
         {
-            if (new ColorConverter().ConvertFromString(hexColor) is Color bgColor)
+            if (new ColorConverter().ConvertFromString(hexColor) is System.Drawing.Color bgColor)
             {
                 var luminance = bgColor.R * 0.299 + bgColor.G * 0.587 + bgColor.B * 0.114;
                 return luminance > threshold ? "#ff000000" : "#ffffffff";

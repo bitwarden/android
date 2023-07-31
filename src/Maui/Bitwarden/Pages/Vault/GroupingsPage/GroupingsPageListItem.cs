@@ -3,6 +3,7 @@ using Bit.App.Utilities.Automation;
 using Bit.Core;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
+using CollectionView = Bit.Core.Models.View.CollectionView;
 
 namespace Bit.App.Pages
 {

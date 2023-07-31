@@ -5,7 +5,7 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
-    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    xmlns:core="clr-namespace:Bit.Core"
     x:DataType="pages:BlockAutofillUrisPageViewModel"
     Title="{u:I18n BlockAutoFill}">
     <ContentPage.BindingContext>

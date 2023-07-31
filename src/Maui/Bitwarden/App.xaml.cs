@@ -45,6 +45,10 @@ namespace Bit.App
         private static bool _pendingCheckPasswordlessLoginRequests;
         private static object _processingLoginRequestLock = new object();
 
+        public App() : this(null)
+        {
+        }
+
         public App(AppOptions appOptions)
         {
             Options = appOptions ?? new AppOptions();

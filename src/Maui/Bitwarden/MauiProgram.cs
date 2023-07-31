@@ -13,7 +13,7 @@ namespace Bit.App;
 
 public static class MauiProgram
 {
-    public static MauiApp CreateMauiApp()
+    public static MauiApp CreateMauiApp(Action<IEffectsBuilder> effectsBuilder)
     {
         var builder = MauiApp.CreateBuilder();
         builder
@@ -23,7 +23,7 @@ public static class MauiProgram
             .UseBarcodeReader()
             .UseSkiaSharp()
             .UseFFImageLoading()
-            //.ConfigureEffects(effectsBuilder)
+            .ConfigureEffects(effectsBuilder)
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

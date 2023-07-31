@@ -1,7 +1,5 @@
-﻿using System.Linq;
+﻿using System.Globalization;
 using CommunityToolkit.Maui.Converters;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Controls
 {
@@ -10,12 +8,13 @@ namespace Bit.App.Controls
         public string ExtraDataForLogging { get; set; }
     }
 
-    public class SelectionChangedEventArgsConverter : BaseNullableConverterOneWay<SelectionChangedEventArgs, object>
+    public class SelectionChangedEventArgsConverter : BaseConverterOneWay<SelectionChangedEventArgs, object>
     {
-        public override object? ConvertFrom(SelectionChangedEventArgs? value)
+        public override object DefaultConvertReturnValue { get; set; } = null;
+
+        public override object ConvertFrom(SelectionChangedEventArgs value, CultureInfo culture)
         {
             return value?.CurrentSelection.FirstOrDefault();
         }
     }
-
 }

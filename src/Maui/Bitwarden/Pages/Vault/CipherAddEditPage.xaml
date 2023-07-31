@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <pages:BaseContentPage 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -6,12 +6,12 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
-    xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
+    xmlns:views="clr-namespace:Bit.Core.Models.View"
     xmlns:behaviors="clr-namespace:Bit.App.Behaviors"
     xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:dts="clr-namespace:Bit.App.Lists.DataTemplateSelectors"
     xmlns:il="clr-namespace:Bit.App.Lists.ItemLayouts.CustomFields"
-    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    xmlns:core="clr-namespace:Bit.Core"
     x:DataType="pages:CipherAddEditPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -40,7 +40,7 @@
                          x:Name="_shareItem"
                          Clicked="Share_Clicked"
                          Order="Secondary" />
-            <ToolbarItem Icon="more_vert.png" Clicked="More_Clicked" Order="Primary" x:Name="_moreItem"
+            <ToolbarItem IconImageSource="more_vert.png" Clicked="More_Clicked" Order="Primary" x:Name="_moreItem"
                          x:Key="moreItem"
                          AutomationProperties.IsInAccessibleTree="True"
                          AutomationProperties.Name="{u:I18n Options}" />

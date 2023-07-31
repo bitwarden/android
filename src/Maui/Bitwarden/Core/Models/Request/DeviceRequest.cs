@@ -1,5 +1,6 @@
 ﻿using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using DeviceType = Bit.Core.Enums.DeviceType;
 
 namespace Bit.Core.Models.Request
 {

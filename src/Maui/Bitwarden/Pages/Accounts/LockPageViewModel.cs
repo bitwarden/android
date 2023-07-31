@@ -14,6 +14,7 @@ using Bit.Core.Utilities;
 using CommunityToolkit.Maui.Converters;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
+using AsyncAwaitBestPractices;
 
 namespace Bit.App.Pages
 {

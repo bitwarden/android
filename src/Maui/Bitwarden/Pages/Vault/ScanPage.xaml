@@ -8,7 +8,7 @@
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:skia="clr-namespace:SkiaSharp.Views.Maui.Controls;assembly=SkiaSharp.Views.Maui.Controls"
     xmlns:core="clr-namespace:Bit.Core"
-    xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI"
+    xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
     x:Name="_page"
     Title="{Binding ScanQrPageTitle}">
 
