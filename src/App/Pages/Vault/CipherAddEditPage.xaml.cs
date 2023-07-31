@@ -21,7 +21,7 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly IAutofillHandler _autofillHandler;
         private readonly IVaultTimeoutService _vaultTimeoutService;
-        private readonly IKeyConnectorService _keyConnectorService;
+        private readonly IUserVerificationService _userVerificationService;
 
         private CipherAddEditPageViewModel _vm;
         private bool _fromAutofill;
@@ -43,7 +43,7 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
-            _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
+            _userVerificationService = ServiceContainer.Resolve<IUserVerificationService>();
 
             _appOptions = appOptions;
             _fromAutofill = fromAutofill;
@@ -175,8 +175,8 @@ namespace Bit.App.Pages
                     RequestFocus(_nameEntry);
                 }
             });
-            // Hide password reprompt option if using key connector
-            _passwordPrompt.IsVisible = !await _keyConnectorService.GetUsesKeyConnector();
+
+            _passwordPrompt.IsVisible = await _userVerificationService.HasMasterPasswordAsync();
         }
 
         protected override void OnDisappearing()

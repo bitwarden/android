@@ -55,9 +55,11 @@ namespace Bit.Core.Utilities
             var policyService = new PolicyService(stateService, organizationService);
             var keyConnectorService = new KeyConnectorService(stateService, cryptoService, tokenService, apiService,
                 organizationService);
+            var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService,
+                cryptoService, stateService, keyConnectorService);
             var vaultTimeoutService = new VaultTimeoutService(cryptoService, stateService, platformUtilsService,
                 folderService, cipherService, collectionService, searchService, messagingService, tokenService,
-                keyConnectorService,
+                userVerificationService,
                 (extras) =>
                 {
                     messagingService.Send("locked", extras);
@@ -85,8 +87,6 @@ namespace Bit.Core.Utilities
             var auditService = new AuditService(cryptoFunctionService, apiService);
             var environmentService = new EnvironmentService(apiService, stateService, conditionedRunner);
             var eventService = new EventService(apiService, stateService, organizationService, cipherService);
-            var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService,
-                cryptoService);
             var usernameGenerationService = new UsernameGenerationService(cryptoService, apiService, stateService);
             var configService = new ConfigService(apiService, stateService, logger);
 
@@ -103,6 +103,8 @@ namespace Bit.Core.Utilities
             Register<ISearchService>("searchService", searchService);
             Register<IPolicyService>("policyService", policyService);
             Register<ISyncService>("syncService", syncService);
+            Register<IKeyConnectorService>("keyConnectorService", keyConnectorService);
+            Register<IUserVerificationService>(userVerificationService);
             Register<IVaultTimeoutService>("vaultTimeoutService", vaultTimeoutService);
             Register<IPasswordGenerationService>("passwordGenerationService", passwordGenerationService);
             Register<ITotpService>("totpService", totpService);
@@ -111,8 +113,6 @@ namespace Bit.Core.Utilities
             Register<IAuditService>("auditService", auditService);
             Register<IEnvironmentService>("environmentService", environmentService);
             Register<IEventService>("eventService", eventService);
-            Register<IKeyConnectorService>("keyConnectorService", keyConnectorService);
-            Register<IUserVerificationService>("userVerificationService", userVerificationService);
             Register<IUsernameGenerationService>(usernameGenerationService);
             Register<IConfigService>(configService);
             Register<IDeviceTrustCryptoService>(deviceTrustCryptoService);

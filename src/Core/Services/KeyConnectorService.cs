@@ -44,7 +44,7 @@ namespace Bit.Core.Services
             await _stateService.SetUsesKeyConnectorAsync(usesKeyConnector);
         }
 
-        public async Task<bool> GetUsesKeyConnector()
+        public async Task<bool> GetUsesKeyConnectorAsync()
         {
             return await _stateService.GetUsesKeyConnectorAsync();
         }
@@ -79,7 +79,7 @@ namespace Bit.Core.Services
         {
             var loggedInUsingSso = await _tokenService.GetIsExternal();
             var requiredByOrganization = await GetManagingOrganization() != null;
-            var userIsNotUsingKeyConnector = !await GetUsesKeyConnector();
+            var userIsNotUsingKeyConnector = !await GetUsesKeyConnectorAsync();
 
             return loggedInUsingSso && requiredByOrganization && userIsNotUsingKeyConnector;
         }
