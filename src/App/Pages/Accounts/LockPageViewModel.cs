@@ -161,7 +161,7 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            _pinStatus = await _vaultTimeoutService.IsPinLockSetAsync();
+            _pinStatus = await _vaultTimeoutService.GetPinLockTypeAsync();
 
             var ephemeralPinSet = await _stateService.GetUserKeyPinEphemeralAsync()
                 ?? await _stateService.GetPinProtectedKeyAsync();

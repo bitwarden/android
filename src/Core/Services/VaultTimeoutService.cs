@@ -170,7 +170,7 @@ namespace Bit.Core.Services
 
             if (await _keyConnectorService.GetUsesKeyConnector())
             {
-                var pinStatus = await IsPinLockSetAsync(userId);
+                var pinStatus = await GetPinLockTypeAsync(userId);
                 var ephemeralPinSet = await _stateService.GetUserKeyPinEphemeralAsync()
                     ?? await _stateService.GetPinProtectedKeyAsync();
                 var pinEnabled = (pinStatus == PinLockType.Transient && ephemeralPinSet != null) ||
@@ -225,7 +225,7 @@ namespace Bit.Core.Services
             await _tokenService.ToggleTokensAsync();
         }
 
-        public async Task<PinLockType> IsPinLockSetAsync(string userId = null)
+        public async Task<PinLockType> GetPinLockTypeAsync(string userId = null)
         {
             // we can't depend on only the protected pin being set because old
             // versions only used it for MP on Restart

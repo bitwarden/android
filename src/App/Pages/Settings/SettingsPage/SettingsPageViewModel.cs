@@ -138,7 +138,7 @@ namespace Bit.App.Pages
                     t.Value != null).ToList();
             }
 
-            var pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
+            var pinSet = await _vaultTimeoutService.GetPinLockTypeAsync();
             _pin = pinSet != PinLockType.Disabled;
             _biometric = await _vaultTimeoutService.IsBiometricLockSetAsync();
             _screenCaptureAllowed = await _stateService.GetScreenCaptureAllowedAsync();

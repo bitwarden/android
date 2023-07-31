@@ -110,7 +110,7 @@ namespace Bit.iOS.Core.Controllers
             }
             else
             {
-                _pinStatus = await _vaultTimeoutService.IsPinLockSetAsync();
+                _pinStatus = await _vaultTimeoutService.GetPinLockTypeAsync();
 
                 var ephemeralPinSet = await _stateService.GetUserKeyPinEphemeralAsync()
                     ?? await _stateService.GetPinProtectedKeyAsync();
