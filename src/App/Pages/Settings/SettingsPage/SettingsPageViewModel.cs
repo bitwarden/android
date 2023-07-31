@@ -491,7 +491,7 @@ namespace Bit.App.Pages
                 await _stateService.SetBiometricUnlockAsync(null);
             }
             await _stateService.SetBiometricLockedAsync(false);
-            await _cryptoService.ToggleKeysAsync();
+            await _cryptoService.RefreshKeysAsync();
             BuildList();
         }
 

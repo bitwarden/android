@@ -10,7 +10,7 @@ namespace Bit.Core.Abstractions
     public interface ICryptoService
     {
         void ClearCache();
-        Task ToggleKeysAsync();
+        Task RefreshKeysAsync();
         Task SetUserKeyAsync(UserKey userKey, string userId = null);
         Task<UserKey> GetUserKeyAsync(string userId = null);
         Task<UserKey> GetUserKeyWithLegacySupportAsync(string userId = null);

@@ -43,15 +43,10 @@ namespace Bit.Core.Services
             _orgKeys = null;
         }
 
-        public async Task ToggleKeysAsync()
+        public async Task RefreshKeysAsync()
         {
             // refresh or clear the pin key
             await SetUserKeyAsync(await GetUserKeyAsync());
-
-            // refresh or clear the encrypted user key
-            var encUserKey = await _stateService.GetUserKeyMasterKeyAsync();
-            await _stateService.SetUserKeyMasterKeyAsync(null);
-            await _stateService.SetUserKeyMasterKeyAsync(encUserKey);
         }
 
         public async Task SetUserKeyAsync(UserKey userKey, string userId = null)

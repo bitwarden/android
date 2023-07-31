@@ -221,7 +221,7 @@ namespace Bit.Core.Services
         {
             await _stateService.SetVaultTimeoutAsync(timeout);
             await _stateService.SetVaultTimeoutActionAsync(action);
-            await _cryptoService.ToggleKeysAsync();
+            await _cryptoService.RefreshKeysAsync();
             await _tokenService.ToggleTokensAsync();
         }
 
