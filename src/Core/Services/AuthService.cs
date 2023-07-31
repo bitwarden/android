@@ -514,13 +514,15 @@ namespace Bit.Core.Services
                 {
                     // SSO Key Connector Onboarding
                     var password = await _cryptoFunctionService.RandomBytesAsync(64);
-                    var newMasterKey = await _cryptoService.MakeMasterKeyAsync(Convert.ToBase64String(password), _tokenService.GetEmail(), tokenResponse.KdfConfig);
+                    var newMasterKey = await _cryptoService.MakeMasterKeyAsync(
+                        Convert.ToBase64String(password),
+                        _tokenService.GetEmail(),
+                        tokenResponse.KdfConfig);
+
                     var keyConnectorRequest = new KeyConnectorUserKeyRequest(newMasterKey.EncKeyB64);
                     await _cryptoService.SetMasterKeyAsync(newMasterKey);
 
-                    var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(
-                        newMasterKey,
-                        await _cryptoService.MakeUserKeyAsync());
+                    var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(newMasterKey);
 
                     await _cryptoService.SetUserKeyAsync(newUserKey);
                     var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync();

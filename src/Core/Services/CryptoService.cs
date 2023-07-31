@@ -143,9 +143,9 @@ namespace Bit.Core.Services
             return _stateService.SetMasterKeyAsync(null, userId);
         }
 
-        public async Task<Tuple<UserKey, EncString>> EncryptUserKeyWithMasterKeyAsync(MasterKey masterKey, UserKey userKey = null)
+        public async Task<Tuple<UserKey, EncString>> EncryptUserKeyWithMasterKeyAsync(MasterKey masterKey)
         {
-            userKey ??= await GetUserKeyAsync();
+            var userKey = await GetUserKeyAsync() ?? await MakeUserKeyAsync();
             return await BuildProtectedSymmetricKey(masterKey, userKey.Key, keyBytes => new UserKey(keyBytes));
         }
 
