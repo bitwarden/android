@@ -229,22 +229,19 @@ namespace Bit.Core.Services
         {
             // we can't depend on only the protected pin being set because old
             // versions only used it for MP on Restart
-            var pinIsEnabled = await _stateService.GetProtectedPinAsync(userId);
-            var userKeyPin = await _stateService.GetUserKeyPinAsync(userId);
-            var oldUserKeyPin = await _stateService.GetPinProtectedAsync(userId);
+            var isPinEnabled = await _stateService.GetProtectedPinAsync(userId) != null;
+            var hasUserKeyPin = await _stateService.GetUserKeyPinAsync(userId) != null;
+            var hasOldUserKeyPin = await _stateService.GetPinProtectedAsync(userId) != null;
 
-            if (userKeyPin != null || oldUserKeyPin != null)
+            if (hasUserKeyPin || hasOldUserKeyPin)
             {
                 return PinLockType.Persistent;
             }
-            else if (pinIsEnabled != null && userKeyPin == null && oldUserKeyPin == null)
+            else if (isPinEnabled && !hasUserKeyPin && !hasOldUserKeyPin)
             {
                 return PinLockType.Transient;
             }
-            else
-            {
-                return PinLockType.Disabled;
-            }
+            return PinLockType.Disabled;
         }
 
         public async Task<bool> IsBiometricLockSetAsync(string userId = null)

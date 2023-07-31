@@ -56,7 +56,7 @@ namespace Bit.Core.Services
             // Refresh the Pin Key if the user has a Pin set
             if (await _stateService.GetProtectedPinAsync(userId) != null)
             {
-                await StorePinKey(userKey, userId);
+                await UpdateUserKeyPinAsync(userKey, userId);
             }
             else
             {
@@ -174,7 +174,7 @@ namespace Bit.Core.Services
             }
             else
             {
-                throw new Exception("Unsupported encKey type.");
+                throw new Exception($"Unsupported encrypted user key type: {encUserKey.EncryptionType}");
             }
 
             if (decUserKey == null)
@@ -184,40 +184,45 @@ namespace Bit.Core.Services
             return new UserKey(decUserKey);
         }
 
-        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(UserKey key)
+        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(UserKey userKey)
         {
-            if (key == null)
+            if (userKey is null)
             {
-                throw new Exception("No user key provided");
+                throw new ArgumentNullException(nameof(userKey));
             }
 
             var newSymKey = await _cryptoFunctionService.RandomBytesAsync(64);
-            return await BuildProtectedSymmetricKey(key, newSymKey, keyBytes => new SymmetricCryptoKey(keyBytes));
+            return await BuildProtectedSymmetricKey(userKey, newSymKey, keyBytes => new SymmetricCryptoKey(keyBytes));
         }
 
-        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(OrgKey key)
+        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(OrgKey orgKey)
         {
-            if (key == null)
+            if (orgKey is null)
             {
-                throw new Exception("No org key provided");
+                throw new ArgumentNullException(nameof(orgKey));
             }
 
             var newSymKey = await _cryptoFunctionService.RandomBytesAsync(64);
-            return await BuildProtectedSymmetricKey(key, newSymKey, keyBytes => new SymmetricCryptoKey(keyBytes));
+            return await BuildProtectedSymmetricKey(orgKey, newSymKey, keyBytes => new SymmetricCryptoKey(keyBytes));
         }
 
         public async Task<string> HashMasterKeyAsync(string password, MasterKey masterKey, HashPurpose hashPurpose = HashPurpose.ServerAuthorization)
         {
-            if (masterKey == null)
+            if (password is null)
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
+
+            if (masterKey is null)
             {
                 masterKey = await GetMasterKeyAsync();
+
+                if (masterKey is null)
+                {
+                    throw new ArgumentNullException(nameof(masterKey));
+                }
             }
-            if (password == null || masterKey == null)
-            {
-                throw new Exception("Invalid parameters.");
-            }
-            var iterations = hashPurpose == HashPurpose.LocalAuthorization ? 2 : 1;
-            var hash = await _cryptoFunctionService.Pbkdf2Async(masterKey.Key, password, CryptoHashAlgorithm.Sha256, iterations);
+            var hash = await _cryptoFunctionService.Pbkdf2Async(masterKey.Key, password, CryptoHashAlgorithm.Sha256, (int)hashPurpose);
             return Convert.ToBase64String(hash);
         }
 
@@ -259,7 +264,7 @@ namespace Bit.Core.Services
                 }
 
                 var serverPasswordHash = await HashMasterKeyAsync(masterPassword, key, HashPurpose.ServerAuthorization);
-                if (serverPasswordHash != null & storedPasswordHash == serverPasswordHash)
+                if (serverPasswordHash != null && storedPasswordHash == serverPasswordHash)
                 {
                     await SetMasterKeyHashAsync(localPasswordHash);
                     return true;
@@ -283,11 +288,11 @@ namespace Bit.Core.Services
                 return null;
             }
             var orgKeys = await GetOrgKeysAsync();
-            if (orgKeys == null || !orgKeys.ContainsKey(orgId))
+            if (orgKeys?.TryGetValue(orgId, out var orgKey) == true)
             {
-                return null;
+                return orgKey;
             }
-            return orgKeys[orgId];
+            return null;
         }
 
         public Task<Dictionary<string, OrgKey>> GetOrgKeysAsync()
@@ -343,7 +348,7 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task<byte[]> GetPublicKeyAsync()
+        public async Task<byte[]> GetUserPublicKeyAsync()
         {
             if (_publicKey != null)
             {
@@ -387,7 +392,7 @@ namespace Bit.Core.Services
         {
             if (publicKey == null)
             {
-                publicKey = await GetPublicKeyAsync();
+                publicKey = await GetUserPublicKeyAsync();
             }
             if (publicKey == null)
             {
@@ -427,7 +432,7 @@ namespace Bit.Core.Services
                 _stateService.SetUserKeyPinAsync(null, userId),
                 _stateService.SetUserKeyPinEphemeralAsync(null, userId),
                 _stateService.SetProtectedPinAsync(null, userId),
-                clearDeprecatedPinKeysAsync(userId));
+                ClearDeprecatedPinKeysAsync(userId));
         }
 
         public async Task<UserKey> DecryptUserKeyWithPinAsync(string pin, string salt, KdfConfig kdfConfig, EncString pinProtectedUserKey = null)
@@ -439,8 +444,8 @@ namespace Bit.Core.Services
                 throw new Exception("No PIN protected user key found.");
             }
             var pinKey = await MakePinKeyAsync(pin, salt, kdfConfig);
-            var userKey = await DecryptToBytesAsync(pinProtectedUserKey, pinKey);
-            return new UserKey(userKey);
+            var userKeyBytes = await DecryptToBytesAsync(pinProtectedUserKey, pinKey);
+            return new UserKey(userKeyBytes);
         }
 
         // Only for migration purposes
@@ -474,7 +479,7 @@ namespace Bit.Core.Services
         {
             if (publicKey == null)
             {
-                publicKey = await GetPublicKeyAsync();
+                publicKey = await GetUserPublicKeyAsync();
             }
             if (publicKey == null)
             {
@@ -668,7 +673,7 @@ namespace Bit.Core.Services
 
         // --HELPER METHODS--
 
-        private async Task StorePinKey(UserKey userKey, string userId = null)
+        private async Task UpdateUserKeyPinAsync(UserKey userKey, string userId = null)
         {
             var pin = await DecryptToUtf8Async(new EncString(await _stateService.GetProtectedPinAsync(userId)));
             var pinKey = await MakePinKeyAsync(
@@ -974,7 +979,7 @@ namespace Bit.Core.Services
             return userKey;
         }
 
-        public Task clearDeprecatedPinKeysAsync(string userId = null)
+        public Task ClearDeprecatedPinKeysAsync(string userId = null)
         {
             return Task.WhenAll(
                 _stateService.SetPinProtectedAsync(null, userId),
