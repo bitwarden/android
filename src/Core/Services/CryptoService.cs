@@ -288,11 +288,11 @@ namespace Bit.Core.Services
                 return null;
             }
             var orgKeys = await GetOrgKeysAsync();
-            if (orgKeys?.TryGetValue(orgId, out var orgKey) == true)
+            if (orgKeys == null || !orgKeys.ContainsKey(orgId))
             {
-                return orgKey;
+                return null;
             }
-            return null;
+            return orgKeys[orgId];
         }
 
         public Task<Dictionary<string, OrgKey>> GetOrgKeysAsync()
