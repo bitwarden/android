@@ -7,6 +7,7 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="pages:BlockAutofillUrisPageViewModel"
+    NavigationPage.HasBackButton="False"
     Title="{u:I18n BlockAutoFill}">
     <ContentPage.BindingContext>
         <pages:BlockAutofillUrisPageViewModel />
