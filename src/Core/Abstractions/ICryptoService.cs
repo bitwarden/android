@@ -25,8 +25,7 @@ namespace Bit.Core.Abstractions
         Task ClearMasterKeyAsync(string userId = null);
         Task<Tuple<UserKey, EncString>> EncryptUserKeyWithMasterKeyAsync(MasterKey masterKey);
         Task<UserKey> DecryptUserKeyWithMasterKeyAsync(MasterKey masterKey, EncString encUserKey = null, string userId = null);
-        Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(UserKey key);
-        Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(OrgKey key);
+        Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync<TKey>(TKey key) where TKey : SymmetricCryptoKey;
         Task<string> HashMasterKeyAsync(string password, MasterKey key, HashPurpose hashPurpose = HashPurpose.ServerAuthorization);
         Task SetMasterKeyHashAsync(string keyHash);
         Task<string> GetMasterKeyHashAsync();

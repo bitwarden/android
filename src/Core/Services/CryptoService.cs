@@ -184,26 +184,20 @@ namespace Bit.Core.Services
             return new UserKey(decUserKey);
         }
 
-        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(UserKey userKey)
+        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync<TKey>(TKey key)
+        where TKey : SymmetricCryptoKey
         {
-            if (userKey is null)
+            if (key is null)
             {
-                throw new ArgumentNullException(nameof(userKey));
+                throw new ArgumentNullException(nameof(key));
+            }
+            if (typeof(TKey) != typeof(UserKey) && typeof(TKey) != typeof(OrgKey))
+            {
+                throw new ArgumentException($"Data encryption keys must be of type UserKey or OrgKey. {typeof(TKey)} unsupported.");
             }
 
             var newSymKey = await _cryptoFunctionService.RandomBytesAsync(64);
-            return await BuildProtectedSymmetricKey(userKey, newSymKey, keyBytes => new SymmetricCryptoKey(keyBytes));
-        }
-
-        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(OrgKey orgKey)
-        {
-            if (orgKey is null)
-            {
-                throw new ArgumentNullException(nameof(orgKey));
-            }
-
-            var newSymKey = await _cryptoFunctionService.RandomBytesAsync(64);
-            return await BuildProtectedSymmetricKey(orgKey, newSymKey, keyBytes => new SymmetricCryptoKey(keyBytes));
+            return await BuildProtectedSymmetricKey(key, newSymKey, keyBytes => new SymmetricCryptoKey(keyBytes));
         }
 
         public async Task<string> HashMasterKeyAsync(string password, MasterKey masterKey, HashPurpose hashPurpose = HashPurpose.ServerAuthorization)
