@@ -556,20 +556,9 @@ namespace Bit.Core.Services
 
         public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, string filename, byte[] data)
         {
-            SymmetricCryptoKey attachmentKey;
-            EncString protectedAttachmentKey;
-            var orgKey = await _cryptoService.GetOrgKeyAsync(cipher.OrganizationId);
-            if (orgKey != null)
-            {
-                (attachmentKey, protectedAttachmentKey) = await _cryptoService.MakeDataEncKeyAsync(orgKey);
-            }
-            else
-            {
-                var userKey = await _cryptoService.GetUserKeyWithLegacySupportAsync();
-                (attachmentKey, protectedAttachmentKey) = await _cryptoService.MakeDataEncKeyAsync(userKey);
-            }
+            var (attachmentKey, protectedAttachmentKey, encKey) = await MakeAttachmentKeyAsync(cipher.OrganizationId);
 
-            var encFileName = await _cryptoService.EncryptAsync(filename, orgKey);
+            var encFileName = await _cryptoService.EncryptAsync(filename, encKey);
             var encFileData = await _cryptoService.EncryptToBytesAsync(data, attachmentKey);
 
             CipherResponse response;
@@ -806,6 +795,21 @@ namespace Bit.Core.Services
 
         // Helpers
 
+        private async Task<Tuple<SymmetricCryptoKey, EncString, SymmetricCryptoKey>> MakeAttachmentKeyAsync(string organizationId)
+        {
+            SymmetricCryptoKey attachmentKey;
+            EncString protectedAttachmentKey;
+            var orgKey = await _cryptoService.GetOrgKeyAsync(organizationId);
+            if (orgKey != null)
+            {
+                (attachmentKey, protectedAttachmentKey) = await _cryptoService.MakeDataEncKeyAsync(orgKey);
+                return new Tuple<SymmetricCryptoKey, EncString, SymmetricCryptoKey>(attachmentKey, protectedAttachmentKey, orgKey);
+            }
+            var userKey = await _cryptoService.GetUserKeyWithLegacySupportAsync();
+            (attachmentKey, protectedAttachmentKey) = await _cryptoService.MakeDataEncKeyAsync(userKey);
+            return new Tuple<SymmetricCryptoKey, EncString, SymmetricCryptoKey>(attachmentKey, protectedAttachmentKey, userKey);
+        }
+
         private async Task ShareAttachmentWithServerAsync(AttachmentView attachmentView, string cipherId,
             string organizationId)
         {
@@ -818,20 +822,9 @@ namespace Bit.Core.Services
             var bytes = await attachmentResponse.Content.ReadAsByteArrayAsync();
             var decBytes = await _cryptoService.DecryptFromBytesAsync(bytes, null);
 
-            SymmetricCryptoKey attachmentKey;
-            EncString protectedAttachmentKey;
-            var orgKey = await _cryptoService.GetOrgKeyAsync(organizationId);
-            if (orgKey != null)
-            {
-                (attachmentKey, protectedAttachmentKey) = await _cryptoService.MakeDataEncKeyAsync(orgKey);
-            }
-            else
-            {
-                var userKey = await _cryptoService.GetUserKeyWithLegacySupportAsync();
-                (attachmentKey, protectedAttachmentKey) = await _cryptoService.MakeDataEncKeyAsync(userKey);
-            }
+            var (attachmentKey, protectedAttachmentKey, encKey) = await MakeAttachmentKeyAsync(organizationId);
 
-            var encFileName = await _cryptoService.EncryptAsync(attachmentView.FileName, orgKey);
+            var encFileName = await _cryptoService.EncryptAsync(attachmentView.FileName, encKey);
             var encFileData = await _cryptoService.EncryptToBytesAsync(decBytes, attachmentKey);
 
             var boundary = string.Concat("--BWMobileFormBoundary", DateTime.UtcNow.Ticks);
