@@ -17,8 +17,8 @@ namespace Bit.Core.Abstractions
         Task SetUserKeyAsync(UserKey value, string userId = null);
         Task<MasterKey> GetMasterKeyAsync(string userId = null);
         Task SetMasterKeyAsync(MasterKey value, string userId = null);
-        Task<string> GetUserKeyMasterKeyAsync(string userId = null);
-        Task SetUserKeyMasterKeyAsync(string value, string userId = null);
+        Task<string> GetMasterKeyEncryptedUserKeyAsync(string userId = null);
+        Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null);
         Task<string> GetActiveUserIdAsync();
         Task<string> GetActiveUserEmailAsync();
         Task<T> GetActiveUserCustomDataAsync<T>(Func<Account, T> dataMapper);
@@ -44,10 +44,10 @@ namespace Bit.Core.Abstractions
         Task<bool> CanAccessPremiumAsync(string userId = null);
         Task<string> GetProtectedPinAsync(string userId = null);
         Task SetPersonalPremiumAsync(bool value, string userId = null);
-        Task<EncString> GetUserKeyPinAsync(string userId = null);
-        Task SetUserKeyPinAsync(EncString value, string userId = null);
-        Task<EncString> GetUserKeyPinEphemeralAsync(string userId = null);
-        Task SetUserKeyPinEphemeralAsync(EncString value, string userId = null);
+        Task<EncString> GetPinKeyEncryptedUserKeyAsync(string userId = null);
+        Task SetPinKeyEncryptedUserKeyAsync(EncString value, string userId = null);
+        Task<EncString> GetPinKeyEncryptedUserKeyEphemeralAsync(string userId = null);
+        Task SetPinKeyEncryptedUserKeyEphemeralAsync(EncString value, string userId = null);
         Task SetProtectedPinAsync(string value, string userId = null);
         [Obsolete("Use GetUserKeyPinAsync instead, left for migration purposes")]
         Task<string> GetPinProtectedAsync(string userId = null);

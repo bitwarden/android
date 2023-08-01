@@ -163,7 +163,7 @@ namespace Bit.App.Pages
         {
             _pinStatus = await _vaultTimeoutService.GetPinLockTypeAsync();
 
-            var ephemeralPinSet = await _stateService.GetUserKeyPinEphemeralAsync()
+            var ephemeralPinSet = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync()
                 ?? await _stateService.GetPinProtectedKeyAsync();
             PinEnabled = (_pinStatus == PinLockType.Transient && ephemeralPinSet != null) ||
                       _pinStatus == PinLockType.Persistent;
@@ -259,13 +259,13 @@ namespace Bit.App.Pages
                     EncString oldPinProtected = null;
                     if (_pinStatus == PinLockType.Persistent)
                     {
-                        userKeyPin = await _stateService.GetUserKeyPinAsync();
+                        userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyAsync();
                         var oldEncryptedKey = await _stateService.GetPinProtectedAsync();
                         oldPinProtected = oldEncryptedKey != null ? new EncString(oldEncryptedKey) : null;
                     }
                     else if (_pinStatus == PinLockType.Transient)
                     {
-                        userKeyPin = await _stateService.GetUserKeyPinEphemeralAsync();
+                        userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync();
                         oldPinProtected = await _stateService.GetPinProtectedKeyAsync();
                     }
 

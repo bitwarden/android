@@ -334,12 +334,12 @@ namespace Bit.Core.Services
             await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<string> GetUserKeyMasterKeyAsync(string userId = null)
+        public async Task<string> GetMasterKeyEncryptedUserKeyAsync(string userId = null)
         {
             return await _storageMediatorService.GetAsync<string>(Constants.UserKeyKey(userId), false);
         }
 
-        public async Task SetUserKeyMasterKeyAsync(string value, string userId = null)
+        public async Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null)
         {
             await _storageMediatorService.SaveAsync(Constants.UserKeyKey(userId), value, false);
         }
@@ -395,25 +395,25 @@ namespace Bit.Core.Services
             await SetValueAsync(Constants.ProtectedPinKey(reconciledOptions.UserId), value, reconciledOptions);
         }
 
-        public async Task<EncString> GetUserKeyPinAsync(string userId = null)
+        public async Task<EncString> GetPinKeyEncryptedUserKeyAsync(string userId = null)
         {
             var key = await _storageMediatorService.GetAsync<string>(Constants.UserKeyPinKey(userId), false);
             return key != null ? new EncString(key) : null;
         }
 
-        public async Task SetUserKeyPinAsync(EncString value, string userId = null)
+        public async Task SetPinKeyEncryptedUserKeyAsync(EncString value, string userId = null)
         {
             await _storageMediatorService.SaveAsync(Constants.UserKeyPinKey(userId), value?.EncryptedString, false);
         }
 
-        public async Task<EncString> GetUserKeyPinEphemeralAsync(string userId = null)
+        public async Task<EncString> GetPinKeyEncryptedUserKeyEphemeralAsync(string userId = null)
         {
             return (await GetAccountAsync(
                 ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultInMemoryOptionsAsync())
             ))?.VolatileData?.UserKeyPinEphemeral;
         }
 
-        public async Task SetUserKeyPinEphemeralAsync(EncString value, string userId = null)
+        public async Task SetPinKeyEncryptedUserKeyEphemeralAsync(EncString value, string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultInMemoryOptionsAsync());
@@ -422,7 +422,7 @@ namespace Bit.Core.Services
             await SaveAccountAsync(account, reconciledOptions);
         }
 
-        [Obsolete("Use GetUserKeyPinAsync instead, left for migration purposes")]
+        [Obsolete("Use GetPinKeyEncryptedUserKeyAsync instead, left for migration purposes")]
         public async Task<string> GetPinProtectedAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
@@ -430,7 +430,7 @@ namespace Bit.Core.Services
             return await GetValueAsync<string>(Constants.PinProtectedKey(reconciledOptions.UserId), reconciledOptions);
         }
 
-        [Obsolete("Use SetUserKeyPinAsync instead")]
+        [Obsolete("Use SetPinKeyEncryptedUserKeyAsync instead")]
         public async Task SetPinProtectedAsync(string value, string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
@@ -438,7 +438,7 @@ namespace Bit.Core.Services
             await SetValueAsync(Constants.PinProtectedKey(reconciledOptions.UserId), value, reconciledOptions);
         }
 
-        [Obsolete("Use GetUserKeyPinEphemeralAsync instead, left for migration purposes")]
+        [Obsolete("Use GetPinKeyEncryptedUserKeyEphemeralAsync instead, left for migration purposes")]
         public async Task<EncString> GetPinProtectedKeyAsync(string userId = null)
         {
             return (await GetAccountAsync(
@@ -446,7 +446,7 @@ namespace Bit.Core.Services
             ))?.VolatileData?.PinProtectedKey;
         }
 
-        [Obsolete("Use SetUserKeyPinEphemeralAsync instead")]
+        [Obsolete("Use SetPinKeyEncryptedUserKeyEphemeralAsync instead")]
         public async Task SetPinProtectedKeyAsync(EncString value, string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },

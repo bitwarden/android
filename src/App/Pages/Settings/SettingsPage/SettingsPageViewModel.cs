@@ -446,11 +446,11 @@ namespace Bit.App.Pages
 
                     if (masterPassOnRestart)
                     {
-                        await _stateService.SetUserKeyPinEphemeralAsync(protectedPinKey);
+                        await _stateService.SetPinKeyEncryptedUserKeyEphemeralAsync(protectedPinKey);
                     }
                     else
                     {
-                        await _stateService.SetUserKeyPinAsync(protectedPinKey);
+                        await _stateService.SetPinKeyEncryptedUserKeyAsync(protectedPinKey);
                     }
                 }
                 else

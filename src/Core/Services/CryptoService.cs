@@ -60,8 +60,8 @@ namespace Bit.Core.Services
             }
             else
             {
-                await _stateService.SetUserKeyPinAsync(null, userId);
-                await _stateService.SetUserKeyPinEphemeralAsync(null, userId);
+                await _stateService.SetPinKeyEncryptedUserKeyAsync(null, userId);
+                await _stateService.SetPinKeyEncryptedUserKeyEphemeralAsync(null, userId);
             }
         }
 
@@ -90,7 +90,7 @@ namespace Bit.Core.Services
 
         public async Task<bool> HasEncryptedUserKeyAsync(string userId = null)
         {
-            return await _stateService.GetUserKeyMasterKeyAsync(userId) != null;
+            return await _stateService.GetMasterKeyEncryptedUserKeyAsync(userId) != null;
         }
 
         public async Task<UserKey> MakeUserKeyAsync()
@@ -105,7 +105,7 @@ namespace Bit.Core.Services
 
         public Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null)
         {
-            return _stateService.SetUserKeyMasterKeyAsync(value, userId);
+            return _stateService.SetMasterKeyEncryptedUserKeyAsync(value, userId);
         }
 
         public Task SetMasterKeyAsync(MasterKey masterKey, string userId = null)
@@ -154,7 +154,7 @@ namespace Bit.Core.Services
 
             if (encUserKey == null)
             {
-                var userKeyMasterKey = await _stateService.GetUserKeyMasterKeyAsync(userId);
+                var userKeyMasterKey = await _stateService.GetMasterKeyEncryptedUserKeyAsync(userId);
                 if (userKeyMasterKey == null)
                 {
                     throw new Exception("No encrypted user key found");
@@ -429,16 +429,16 @@ namespace Bit.Core.Services
         public Task ClearPinKeysAsync(string userId = null)
         {
             return Task.WhenAll(
-                _stateService.SetUserKeyPinAsync(null, userId),
-                _stateService.SetUserKeyPinEphemeralAsync(null, userId),
+                _stateService.SetPinKeyEncryptedUserKeyAsync(null, userId),
+                _stateService.SetPinKeyEncryptedUserKeyEphemeralAsync(null, userId),
                 _stateService.SetProtectedPinAsync(null, userId),
                 ClearDeprecatedPinKeysAsync(userId));
         }
 
         public async Task<UserKey> DecryptUserKeyWithPinAsync(string pin, string salt, KdfConfig kdfConfig, EncString pinProtectedUserKey = null)
         {
-            pinProtectedUserKey ??= await _stateService.GetUserKeyPinAsync();
-            pinProtectedUserKey ??= await _stateService.GetUserKeyPinEphemeralAsync();
+            pinProtectedUserKey ??= await _stateService.GetPinKeyEncryptedUserKeyAsync();
+            pinProtectedUserKey ??= await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync();
             if (pinProtectedUserKey == null)
             {
                 throw new Exception("No PIN protected user key found.");
@@ -683,12 +683,12 @@ namespace Bit.Core.Services
             );
             var encPin = await EncryptAsync(userKey.Key, pinKey);
 
-            if (await _stateService.GetUserKeyPinAsync(userId) != null)
+            if (await _stateService.GetPinKeyEncryptedUserKeyAsync(userId) != null)
             {
-                await _stateService.SetUserKeyPinAsync(encPin, userId);
+                await _stateService.SetPinKeyEncryptedUserKeyAsync(encPin, userId);
                 return;
             }
-            await _stateService.SetUserKeyPinEphemeralAsync(encPin, userId);
+            await _stateService.SetPinKeyEncryptedUserKeyEphemeralAsync(encPin, userId);
         }
 
         private async Task<EncryptedObject> AesEncryptAsync(byte[] data, SymmetricCryptoKey key)
@@ -964,12 +964,12 @@ namespace Bit.Core.Services
             if (masterPasswordOnRestart)
             {
                 await _stateService.SetPinProtectedKeyAsync(null);
-                await _stateService.SetUserKeyPinEphemeralAsync(pinProtectedKey);
+                await _stateService.SetPinKeyEncryptedUserKeyEphemeralAsync(pinProtectedKey);
             }
             else
             {
                 await _stateService.SetPinProtectedAsync(null);
-                await _stateService.SetUserKeyPinAsync(pinProtectedKey);
+                await _stateService.SetPinKeyEncryptedUserKeyAsync(pinProtectedKey);
 
                 // We previously only set the protected pin if MP on Restart was enabled
                 // now we set it regardless
