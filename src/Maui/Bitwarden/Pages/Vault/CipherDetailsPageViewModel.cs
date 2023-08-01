@@ -199,11 +199,14 @@ namespace Bit.App.Pages
                     Text = string.Format("{0}:", AppResources.PasswordHistory),
                     FontAttributes = FontAttributes.Bold
                 });
-                fs.Spans.Add(new Span
+                if (Cipher?.PasswordHistory != null)
                 {
-                    Text = string.Format(" {0}", Cipher.PasswordHistory.Count.ToString()),
-                    TextColor = ThemeManager.GetResourceColor("PrimaryColor")
-                });
+                    fs.Spans.Add(new Span
+                    {
+                        Text = string.Format(" {0}", Cipher.PasswordHistory.Count.ToString()),
+                        TextColor = ThemeManager.GetResourceColor("PrimaryColor")
+                    });
+                }
                 return fs;
             }
         }

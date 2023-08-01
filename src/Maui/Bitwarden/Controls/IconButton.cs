@@ -16,7 +16,7 @@ namespace Bit.App.Controls
                     FontFamily = "bwi-font";
                     break;
                 case Device.Android:
-                    FontFamily = "bwi-font.ttf#bwi-font";
+                    FontFamily = "bwi-font";
                     break;
             }
 

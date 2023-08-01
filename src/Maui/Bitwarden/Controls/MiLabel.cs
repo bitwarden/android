@@ -14,7 +14,7 @@ namespace Bit.App.Controls
                     FontFamily = "Material Icons";
                     break;
                 case Device.Android:
-                    FontFamily = "MaterialIcons_Regular.ttf#Material Icons";
+                    FontFamily = "MaterialIcons_Regular";
                     break;
             }
         }

@@ -59,11 +59,12 @@
         <Setter Property="FontAttributes"
                 Value="Bold" />
     </Style>
+    <!--[MAUI-Migration][Color-default]-->
     <Style TargetType="Label"
            Class="text-html"
            ApplyToDerivedTypes="True">
         <Setter Property="TextColor"
-                Value="Default" />
+                Value="#ffffff" />
         <Setter Property="TextType"
                 Value="Html" />
     </Style>

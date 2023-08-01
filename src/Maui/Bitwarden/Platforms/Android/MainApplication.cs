@@ -98,16 +98,7 @@ namespace Bit.App.Droid
 #endif
         }
 
-        protected override MauiApp CreateMauiApp()
-        {
-            return MauiProgram.CreateMauiApp(effects =>
-            {
-                effects.Add<Bit.App.Effects.FabShadowEffect, Droid.Effects.FabShadowEffect>();
-                effects.Add<Bit.App.Effects.FixedSizeEffect, Droid.Effects.FixedSizeEffect>();
-                effects.Add<Bit.App.Effects.NoEmojiKeyboardEffect, Droid.Effects.NoEmojiKeyboardEffect>();
-                effects.Add<Bit.App.Effects.TabBarEffect, Droid.Effects.TabBarEffect>();
-            });
-        }
+        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 
         public override void OnCreate()
         {

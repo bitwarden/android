@@ -90,7 +90,7 @@ namespace Bit.App.Pages
             base.OnAppearing();
             if (_syncService.SyncInProgress)
             {
-                IsBusy = true;
+                MainThread.BeginInvokeOnMainThread(() => IsBusy = true);
             }
 
             _accountAvatar?.OnAppearing();
@@ -105,7 +105,7 @@ namespace Bit.App.Pages
                 {
                     if (message.Command == "syncStarted")
                     {
-                        Device.BeginInvokeOnMainThread(() => IsBusy = true);
+                        MainThread.BeginInvokeOnMainThread(() => IsBusy = true);
                     }
                     else if (message.Command == "syncCompleted")
                     {
@@ -114,7 +114,7 @@ namespace Bit.App.Pages
                         {
                             _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
                         }
-                        Device.BeginInvokeOnMainThread(() =>
+                        MainThread.BeginInvokeOnMainThread(() =>
                         {
                             IsBusy = false;
                             if (_vm.LoadedOnce)
