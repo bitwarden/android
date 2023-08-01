@@ -797,17 +797,10 @@ namespace Bit.Core.Services
 
         private async Task<Tuple<SymmetricCryptoKey, EncString, SymmetricCryptoKey>> MakeAttachmentKeyAsync(string organizationId)
         {
-            SymmetricCryptoKey attachmentKey;
-            EncString protectedAttachmentKey;
-            var orgKey = await _cryptoService.GetOrgKeyAsync(organizationId);
-            if (orgKey != null)
-            {
-                (attachmentKey, protectedAttachmentKey) = await _cryptoService.MakeDataEncKeyAsync(orgKey);
-                return new Tuple<SymmetricCryptoKey, EncString, SymmetricCryptoKey>(attachmentKey, protectedAttachmentKey, orgKey);
-            }
-            var userKey = await _cryptoService.GetUserKeyWithLegacySupportAsync();
-            (attachmentKey, protectedAttachmentKey) = await _cryptoService.MakeDataEncKeyAsync(userKey);
-            return new Tuple<SymmetricCryptoKey, EncString, SymmetricCryptoKey>(attachmentKey, protectedAttachmentKey, userKey);
+            var encryptionKey = await _cryptoService.GetOrgKeyAsync(organizationId)
+                ?? (SymmetricCryptoKey)await _cryptoService.GetUserKeyWithLegacySupportAsync();
+            var (attachmentKey, protectedAttachmentKey) = await _cryptoService.MakeDataEncKeyAsync(encryptionKey);
+            return new Tuple<SymmetricCryptoKey, EncString, SymmetricCryptoKey>(attachmentKey, protectedAttachmentKey, encryptionKey);
         }
 
         private async Task ShareAttachmentWithServerAsync(AttachmentView attachmentView, string cipherId,

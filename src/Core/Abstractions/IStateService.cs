@@ -49,14 +49,6 @@ namespace Bit.Core.Abstractions
         Task<EncString> GetPinKeyEncryptedUserKeyEphemeralAsync(string userId = null);
         Task SetPinKeyEncryptedUserKeyEphemeralAsync(EncString value, string userId = null);
         Task SetProtectedPinAsync(string value, string userId = null);
-        [Obsolete("Use GetUserKeyPinAsync instead, left for migration purposes")]
-        Task<string> GetPinProtectedAsync(string userId = null);
-        [Obsolete("Use SetUserKeyPinAsync instead")]
-        Task SetPinProtectedAsync(string value, string userId = null);
-        [Obsolete("Use GetUserKeyPinEphemeralAsync instead, left for migration purposes")]
-        Task<EncString> GetPinProtectedKeyAsync(string userId = null);
-        [Obsolete("Use SetUserKeyPinEphemeralAsync instead")]
-        Task SetPinProtectedKeyAsync(EncString value, string userId = null);
         Task SetKdfConfigurationAsync(KdfConfig config, string userId = null);
         Task<string> GetKeyHashAsync(string userId = null);
         Task SetKeyHashAsync(string value, string userId = null);
@@ -184,17 +176,21 @@ namespace Bit.Core.Abstractions
         void SetLocale(string locale);
         ConfigResponse GetConfigs();
         void SetConfigs(ConfigResponse value);
-        [Obsolete("Use GetUserKeyMasterKey instead")]
+        [Obsolete("Use GetPinKeyEncryptedUserKeyAsync instead, left for migration purposes")]
+        Task<string> GetPinProtectedAsync(string userId = null);
+        [Obsolete("Use SetPinKeyEncryptedUserKeyAsync instead, left for migration purposes")]
+        Task SetPinProtectedAsync(string value, string userId = null);
+        [Obsolete("Use GetPinKeyEncryptedUserKeyEphemeralAsync instead, left for migration purposes")]
+        Task<EncString> GetPinProtectedKeyAsync(string userId = null);
+        [Obsolete("Use SetPinKeyEncryptedUserKeyEphemeralAsync instead, left for migration purposes")]
+        Task SetPinProtectedKeyAsync(EncString value, string userId = null);
+        [Obsolete("Use GetMasterKeyEncryptedUserKeyAsync instead, left for migration purposes")]
         Task<string> GetEncKeyEncryptedAsync(string userId = null);
-        [Obsolete("Use SetUserKeyMasterKey instead")]
+        [Obsolete("Use SetMasterKeyEncryptedUserKeyAsync instead, left for migration purposes")]
         Task SetEncKeyEncryptedAsync(string value, string userId = null);
-        [Obsolete]
-        Task<string> GetKeyEncryptedAsync(string userId = null);
-        [Obsolete]
+        [Obsolete("Left for migration purposes")]
         Task SetKeyEncryptedAsync(string value, string userId = null);
-        [Obsolete("Use GetMasterKey instead")]
+        [Obsolete("Use GetMasterKeyAsync instead, left for migration purposes")]
         Task<SymmetricCryptoKey> GetKeyDecryptedAsync(string userId = null);
-        [Obsolete("Use GetMasterKey instead")]
-        Task SetKeyDecryptedAsync(SymmetricCryptoKey value, string userId = null);
     }
 }

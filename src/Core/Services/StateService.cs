@@ -422,39 +422,6 @@ namespace Bit.Core.Services
             await SaveAccountAsync(account, reconciledOptions);
         }
 
-        [Obsolete("Use GetPinKeyEncryptedUserKeyAsync instead, left for migration purposes")]
-        public async Task<string> GetPinProtectedAsync(string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            return await GetValueAsync<string>(Constants.PinProtectedKey(reconciledOptions.UserId), reconciledOptions);
-        }
-
-        [Obsolete("Use SetPinKeyEncryptedUserKeyAsync instead")]
-        public async Task SetPinProtectedAsync(string value, string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            await SetValueAsync(Constants.PinProtectedKey(reconciledOptions.UserId), value, reconciledOptions);
-        }
-
-        [Obsolete("Use GetPinKeyEncryptedUserKeyEphemeralAsync instead, left for migration purposes")]
-        public async Task<EncString> GetPinProtectedKeyAsync(string userId = null)
-        {
-            return (await GetAccountAsync(
-                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultInMemoryOptionsAsync())
-            ))?.VolatileData?.PinProtectedKey;
-        }
-
-        [Obsolete("Use SetPinKeyEncryptedUserKeyEphemeralAsync instead")]
-        public async Task SetPinProtectedKeyAsync(EncString value, string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultInMemoryOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-            account.VolatileData.PinProtectedKey = value;
-            await SaveAccountAsync(account, reconciledOptions);
-        }
 
         public async Task SetKdfConfigurationAsync(KdfConfig config, string userId = null)
         {
@@ -1688,7 +1655,41 @@ namespace Bit.Core.Services
                 shouldConnect ?? await GetShouldConnectToWatchAsync(), await GetDefaultStorageOptionsAsync());
         }
 
-        [Obsolete]
+        [Obsolete("Use GetPinKeyEncryptedUserKeyAsync instead, left for migration purposes")]
+        public async Task<string> GetPinProtectedAsync(string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            return await GetValueAsync<string>(Constants.PinProtectedKey(reconciledOptions.UserId), reconciledOptions);
+        }
+
+        [Obsolete("Use SetPinKeyEncryptedUserKeyAsync instead")]
+        public async Task SetPinProtectedAsync(string value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            await SetValueAsync(Constants.PinProtectedKey(reconciledOptions.UserId), value, reconciledOptions);
+        }
+
+        [Obsolete("Use GetPinKeyEncryptedUserKeyEphemeralAsync instead, left for migration purposes")]
+        public async Task<EncString> GetPinProtectedKeyAsync(string userId = null)
+        {
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultInMemoryOptionsAsync())
+            ))?.VolatileData?.PinProtectedKey;
+        }
+
+        [Obsolete("Use SetPinKeyEncryptedUserKeyEphemeralAsync instead")]
+        public async Task SetPinProtectedKeyAsync(EncString value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultInMemoryOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+            account.VolatileData.PinProtectedKey = value;
+            await SaveAccountAsync(account, reconciledOptions);
+        }
+
+        [Obsolete("Use GetMasterKeyEncryptedUserKeyAsync instead, left for migration purposes")]
         public async Task<string> GetEncKeyEncryptedAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
@@ -1696,7 +1697,7 @@ namespace Bit.Core.Services
             return await GetValueAsync<string>(Constants.EncKeyKey(reconciledOptions.UserId), reconciledOptions);
         }
 
-        [Obsolete]
+        [Obsolete("Use SetMasterKeyEncryptedUserKeyAsync instead, left for migration purposes")]
         public async Task SetEncKeyEncryptedAsync(string value, string userId)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
@@ -1704,15 +1705,7 @@ namespace Bit.Core.Services
             await SetValueAsync(Constants.EncKeyKey(reconciledOptions.UserId), value, reconciledOptions);
         }
 
-        [Obsolete]
-        public async Task<string> GetKeyEncryptedAsync(string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultSecureStorageOptionsAsync());
-            return await GetValueAsync<string>(Constants.KeyKey(reconciledOptions.UserId), reconciledOptions);
-        }
-
-        [Obsolete]
+        [Obsolete("Left for migration purposes")]
         public async Task SetKeyEncryptedAsync(string value, string userId)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
@@ -1720,22 +1713,12 @@ namespace Bit.Core.Services
             await SetValueAsync(Constants.KeyKey(reconciledOptions.UserId), value, reconciledOptions);
         }
 
-        [Obsolete]
+        [Obsolete("Use GetMasterKeyAsync instead, left for migration purposes")]
         public async Task<SymmetricCryptoKey> GetKeyDecryptedAsync(string userId = null)
         {
             return (await GetAccountAsync(
                 ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultInMemoryOptionsAsync())
             ))?.VolatileData?.Key;
-        }
-
-        [Obsolete]
-        public async Task SetKeyDecryptedAsync(SymmetricCryptoKey value, string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultInMemoryOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-            account.VolatileData.Key = value;
-            await SaveAccountAsync(account, reconciledOptions);
         }
     }
 }

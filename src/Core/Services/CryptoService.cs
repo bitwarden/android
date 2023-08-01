@@ -184,16 +184,15 @@ namespace Bit.Core.Services
             return new UserKey(decUserKey);
         }
 
-        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync<TKey>(TKey key)
-        where TKey : SymmetricCryptoKey
+        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(SymmetricCryptoKey key)
         {
             if (key is null)
             {
                 throw new ArgumentNullException(nameof(key));
             }
-            if (typeof(TKey) != typeof(UserKey) && typeof(TKey) != typeof(OrgKey))
+            if (!(key is UserKey) && !(key is OrgKey))
             {
-                throw new ArgumentException($"Data encryption keys must be of type UserKey or OrgKey. {typeof(TKey)} unsupported.");
+                throw new ArgumentException($"Data encryption keys must be of type UserKey or OrgKey. {key.GetType().FullName} unsupported.");
             }
 
             var newSymKey = await _cryptoFunctionService.RandomBytesAsync(64);
@@ -970,6 +969,8 @@ namespace Bit.Core.Services
                 var encPin = await EncryptAsync(pin, userKey);
                 await _stateService.SetProtectedPinAsync(encPin.EncryptedString);
             }
+            // Clear old key
+            await _stateService.SetEncKeyEncryptedAsync(null);
             return userKey;
         }
 
