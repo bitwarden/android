@@ -249,7 +249,6 @@ namespace Bit.App.Pages
                         {
                             StartDeviceApprovalOptionsAction?.Invoke();
                         }
-
                     }
                     else
                     {
