@@ -241,7 +241,7 @@ namespace Bit.App.Pages
                                 await Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(
                                  () => _platformUtilsService.ShowToast("info", null, AppResources.LoginApproved));
                                 await _stateService.SetPendingAdminAuthRequestAsync(null);
-                                var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
+                                _syncService.FullSyncAsync(true).FireAndForget();
                                 SsoAuthSuccessAction?.Invoke();
                             }
                         }
