@@ -130,8 +130,13 @@ namespace Bit.App.Pages
         public async Task CreateNewSsoUserAsync()
         {
             await _authService.CreateNewSsoUserAsync(await _stateService.GetRememberedOrgIdentifierAsync());
-            await SetDeviceTrustAndInvokeAsync(ContinueToVaultAction);
+            if (RememberThisDevice)
+            {
+                await _deviceTrustCryptoService.TrustDeviceAsync();
+            }
+
             _syncService.FullSyncAsync(true).FireAndForget();
+            await Device.InvokeOnMainThreadAsync(ContinueToVaultAction);
         }
 
         private async Task SetDeviceTrustAndInvokeAsync(Action action)

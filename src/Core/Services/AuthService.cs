@@ -715,7 +715,6 @@ namespace Bit.Core.Services
             await _stateService.SetUserKeyAsync(userKey);
             await _stateService.SetPrivateKeyEncryptedAsync(keyPair.Item2.EncryptedString);
             await _passwordResetEnrollmentService.Enroll(orgAutoEnrollStatusResponse.Id);
-            await _deviceTrustCryptoService.TrustDeviceAsync();
         }
     }
 }
