@@ -29,6 +29,7 @@ namespace Bit.App.Pages
         private readonly IApiService _apiService;
         private IDeviceTrustCryptoService _deviceTrustCryptoService;
         private readonly IAuthService _authService;
+        private readonly ISyncService _syncService;
 
         public ICommand ApproveWithMyOtherDeviceCommand { get; }
         public ICommand RequestAdminApprovalCommand { get; }
@@ -38,6 +39,7 @@ namespace Bit.App.Pages
         public Action LogInWithMasterPasswordAction { get; set; }
         public Action LogInWithDeviceAction { get; set; }
         public Action RequestAdminApprovalAction { get; set; }
+        public Action ContinueToVaultAction { get; set; }
         public Action CloseAction { get; set; }
 
         public LoginApproveDeviceViewModel()
@@ -46,6 +48,7 @@ namespace Bit.App.Pages
             _apiService = ServiceContainer.Resolve<IApiService>();
             _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
             _authService = ServiceContainer.Resolve<IAuthService>();
+            _syncService = ServiceContainer.Resolve<ISyncService>();
 
             PageTitle = AppResources.LoggedIn;
 
@@ -61,7 +64,7 @@ namespace Bit.App.Pages
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            ContinueCommand = new AsyncCommand(InitAsync,
+            ContinueCommand = new AsyncCommand(CreateNewSsoUserAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
         }
@@ -92,7 +95,7 @@ namespace Bit.App.Pages
             set => SetProperty(ref _approveWithMasterPasswordEnabled, value);
         }
 
-        public bool ContinueEnabled
+        public bool IsNewUser
         {
             get => _continueEnabled;
             set => SetProperty(ref _continueEnabled, value);
@@ -113,22 +116,22 @@ namespace Bit.App.Pages
             {
                 Email = await _stateService.GetRememberedEmailAsync();
                 var decryptOptions = await _stateService.GetAccountDecryptionOptions();
-                var isNewUser = !RequestAdminApprovalEnabled && !ApproveWithMasterPasswordEnabled;
                 RequestAdminApprovalEnabled = decryptOptions?.TrustedDeviceOption?.HasAdminApproval ?? false;
                 ApproveWithMasterPasswordEnabled = decryptOptions?.HasMasterPassword ?? false;
                 ApproveWithMyOtherDeviceEnabled = decryptOptions?.TrustedDeviceOption?.HasLoginApprovingDevice ?? false;
-                ContinueEnabled = isNewUser;
-
-                if (isNewUser)
-                {
-                    await _authService.CreateNewSSOUserAsync();
-                    var enrollStatus = await _apiService.GetOrganizationAutoEnrollStatusAsync(await _stateService.GetRememberedOrgIdentifierAsync());
-                }
+                IsNewUser = !RequestAdminApprovalEnabled && !ApproveWithMasterPasswordEnabled;
             }
             catch (Exception ex)
             {
                 HandleException(ex);
             }
+        }
+
+        public async Task CreateNewSsoUserAsync()
+        {
+            await _authService.CreateNewSsoUserAsync(await _stateService.GetRememberedOrgIdentifierAsync());
+            await SetDeviceTrustAndInvokeAsync(ContinueToVaultAction);
+            _syncService.FullSyncAsync(true).FireAndForget();
         }
 
         private async Task SetDeviceTrustAndInvokeAsync(Action action)

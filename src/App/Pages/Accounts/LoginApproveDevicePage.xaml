@@ -34,7 +34,7 @@
                 Text="{u:I18n Continue}" 
                 StyleClass="btn-primary"
                 Command="{Binding ContinueCommand}"
-                IsVisible="{Binding ContinueEnabled}"/>
+                IsVisible="{Binding IsNewUser}"/>
             <Button
                 x:Name="_approveWithMyOtherDevice"
                 Text="{u:I18n ApproveWithMyOtherDevice}" 
