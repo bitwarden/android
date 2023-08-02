@@ -180,7 +180,7 @@ namespace Bit.App.Pages
                 await _vaultTimeoutService.LogOutAsync();
                 return;
             }
-            if (decryptOptions.TrustedDeviceOption != null && await _stateService.IsAuthenticatedAsync())
+            if (decryptOptions?.TrustedDeviceOption != null && await _stateService.IsAuthenticatedAsync())
             {
                 if (!decryptOptions.HasMasterPassword && !(BiometricEnabled || PinEnabled))
                 {
