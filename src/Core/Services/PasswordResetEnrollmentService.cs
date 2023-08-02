@@ -45,9 +45,8 @@ namespace Bit.Core.Services
 
             var userId = await _stateService.GetActiveUserIdAsync();
             var userKey = await _cryptoService.GetUserKeyAsync();
-            var publicKey = CoreHelpers.Base64UrlDecode(orgKeyResponse.PublicKey);
-            // RSA Encrypt user's userKey.key with organization public key
-            var encryptedKey = await _cryptoService.RsaEncryptAsync(userKey.Key, publicKey);
+            var orgPublicKey = CoreHelpers.Base64UrlDecode(orgKeyResponse.PublicKey);
+            var encryptedKey = await _cryptoService.RsaEncryptAsync(userKey.Key, orgPublicKey);
 
             var resetRequest = new OrganizationUserResetPasswordEnrollmentRequest();
             resetRequest.ResetPasswordKey = encryptedKey.EncryptedString;
