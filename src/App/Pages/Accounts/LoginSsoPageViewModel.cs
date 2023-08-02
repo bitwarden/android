@@ -260,8 +260,8 @@ namespace Bit.App.Pages
                 // In the standard, non TDE case, a user must set password if they don't
                 // have one and they aren't using key connector.
                 // Note: TDE & Key connector are mutually exclusive org config options.
-                var requireSetPassword = !decryptOptions.HasMasterPassword && decryptOptions.KeyConnectorOption == null;
-                if (requireSetPassword)
+                var requireSetPassword = !decryptOptions?.HasMasterPassword ?? false && decryptOptions?.KeyConnectorOption == null;
+                if (response.ResetMasterPassword || requireSetPassword)
                 {
                     StartSetPasswordAction?.Invoke();
                     return;
@@ -276,7 +276,7 @@ namespace Bit.App.Pages
                 _syncService.FullSyncAsync(true).FireAndForget();
                 SsoAuthSuccessAction?.Invoke();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await _deviceActionService.HideLoadingAsync();
                 await _platformUtilsService.ShowDialogAsync(AppResources.LoginSsoError,
