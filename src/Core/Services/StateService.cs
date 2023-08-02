@@ -336,12 +336,12 @@ namespace Bit.Core.Services
 
         public async Task<string> GetMasterKeyEncryptedUserKeyAsync(string userId = null)
         {
-            return await _storageMediatorService.GetAsync<string>(Constants.UserKeyKey(userId), false);
+            return await _storageMediatorService.GetAsync<string>(Constants.MasterKeyEncryptedUserKeyKey(userId), false);
         }
 
         public async Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null)
         {
-            await _storageMediatorService.SaveAsync(Constants.UserKeyKey(userId), value, false);
+            await _storageMediatorService.SaveAsync(Constants.MasterKeyEncryptedUserKeyKey(userId), value, false);
         }
 
         public async Task<bool> CanAccessPremiumAsync(string userId = null)
@@ -397,13 +397,13 @@ namespace Bit.Core.Services
 
         public async Task<EncString> GetPinKeyEncryptedUserKeyAsync(string userId = null)
         {
-            var key = await _storageMediatorService.GetAsync<string>(Constants.UserKeyPinKey(userId), false);
+            var key = await _storageMediatorService.GetAsync<string>(Constants.PinKeyEncryptedUserKeyKey(userId), false);
             return key != null ? new EncString(key) : null;
         }
 
         public async Task SetPinKeyEncryptedUserKeyAsync(EncString value, string userId = null)
         {
-            await _storageMediatorService.SaveAsync(Constants.UserKeyPinKey(userId), value?.EncryptedString, false);
+            await _storageMediatorService.SaveAsync(Constants.PinKeyEncryptedUserKeyKey(userId), value?.EncryptedString, false);
         }
 
         public async Task<EncString> GetPinKeyEncryptedUserKeyEphemeralAsync(string userId = null)
