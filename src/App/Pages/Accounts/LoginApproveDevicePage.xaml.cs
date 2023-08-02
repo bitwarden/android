@@ -22,7 +22,7 @@ namespace Bit.App.Pages
             _vm.LogInWithMasterPasswordAction = () => StartLogInWithMasterPasswordAsync().FireAndForget();
             _vm.LogInWithDeviceAction = () => StartLoginWithDeviceAsync().FireAndForget();
             _vm.RequestAdminApprovalAction = () => RequestAdminApprovalAsync().FireAndForget();
-            _vm.ContinueToVaultAction = () => ContinueAsync().FireAndForget();
+            _vm.ContinueToVaultAction = () => ContinueToVaultAsync().FireAndForget();
             _vm.CloseAction = () => { Navigation.PopModalAsync(); };
             _vm.Page = this;
             _appOptions = appOptions;
@@ -41,7 +41,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task ContinueAsync()
+        private async Task ContinueToVaultAsync()
         {
             if (AppHelpers.SetAlternateMainPage(_appOptions))
             {
