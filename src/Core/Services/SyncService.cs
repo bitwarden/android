@@ -277,50 +277,37 @@ namespace Bit.Core.Services
         public async Task<bool> SyncUpsertSendAsync(SyncSendNotification notification, bool isEdit)
         {
             SyncStarted();
-            if (await _stateService.IsAuthenticatedAsync())
+            if (!await _stateService.IsAuthenticatedAsync()) return SyncCompleted(false);
+
+            try
             {
-                try
+                var shouldUpdate = true;
+                var localSend = await _sendService.GetAsync(notification.Id);
+                if (localSend != null && localSend.RevisionDate >= notification.RevisionDate)
                 {
-                    var shouldUpdate = true;
-                    var localSend = await _sendService.GetAsync(notification.Id);
-                    if (localSend != null && localSend.RevisionDate >= notification.RevisionDate)
-                    {
-                        shouldUpdate = false;
-                    }
+                    shouldUpdate = false;
+                }
 
-                    if (shouldUpdate)
+                if (shouldUpdate)
+                {
+                    if (isEdit)
                     {
-                        if (isEdit)
-                        {
-                            shouldUpdate = localSend != null;
-                        }
-                        else
-                        {
-                            shouldUpdate = localSend == null;
-                        }
+                        shouldUpdate = localSend != null;
                     }
-
-                    if (shouldUpdate)
+                    else
                     {
-                        var remoteSend = await _apiService.GetSendAsync(notification.Id);
-                        if (remoteSend != null)
-                        {
-                            var userId = await _stateService.GetActiveUserIdAsync();
-                            await _sendService.UpsertAsync(new SendData(remoteSend, userId));
-                            _messagingService.Send("syncedUpsertedSend", new Dictionary<string, string>
-                            {
-                                ["sendId"] = notification.Id
-                            });
-                            return SyncCompleted(true);
-                        }
+                        shouldUpdate = localSend == null;
                     }
                 }
-                catch (ApiException e)
+
+                if (shouldUpdate)
                 {
-                    if (e.Error != null && e.Error.StatusCode == System.Net.HttpStatusCode.NotFound && isEdit)
+                    var remoteSend = await _apiService.GetSendAsync(notification.Id);
+                    if (remoteSend != null)
                     {
-                        await _sendService.DeleteAsync(notification.Id);
-                        _messagingService.Send("syncedDeletedSend", new Dictionary<string, string>
+                        var userId = await _stateService.GetActiveUserIdAsync();
+                        await _sendService.UpsertAsync(new SendData(remoteSend, userId));
+                        _messagingService.Send("syncedUpsertedSend", new Dictionary<string, string>
                         {
                             ["sendId"] = notification.Id
                         });
@@ -328,6 +315,19 @@ namespace Bit.Core.Services
                     }
                 }
             }
+            catch (ApiException e)
+            {
+                if (e.Error != null && e.Error.StatusCode == System.Net.HttpStatusCode.NotFound && isEdit)
+                {
+                    await _sendService.DeleteAsync(notification.Id);
+                    _messagingService.Send("syncedDeletedSend", new Dictionary<string, string>
+                    {
+                        ["sendId"] = notification.Id
+                    });
+                    return SyncCompleted(true);
+                }
+            }
+
             return SyncCompleted(false);
         }
 
