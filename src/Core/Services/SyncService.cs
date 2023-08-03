@@ -285,8 +285,8 @@ namespace Bit.Core.Services
             try
             {
                 var localSend = await _sendService.GetAsync(notification.Id);
-                if (localSend != null && localSend.RevisionDate >= notification.RevisionDate
-                    && ((isEdit && localSend == null) || (!isEdit && localSend != null)))
+                if ((localSend != null && localSend.RevisionDate >= notification.RevisionDate)
+                    || (isEdit && localSend == null) || (!isEdit && localSend != null))
                 {
                     return SyncCompleted(false);
                 }
