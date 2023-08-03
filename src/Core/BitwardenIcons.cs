@@ -114,5 +114,6 @@
         public const string ViewCellMenu = "\xe5d3";
         public const string Device = "\xe986";
         public const string Suitcase = "\xe98c";
+        public const string Passkey = "\xe99f";
     }
 }

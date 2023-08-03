@@ -1585,9 +1585,6 @@
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>自動入力をブロックする URI</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>自動入力をさせない URI を指定してください。複数の URI をコンマで区切ってください。例: "https://twitter.com, androidapp://com.twitter.android"</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>ログイン情報の追加を尋ねる</value>
   </data>
@@ -2630,6 +2627,34 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>現在のマスターパスワード</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>パスキー</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>パスキー</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>{0} に作成</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>アプリ</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>パスキーが無効になってしまうため、パスキーアプリを編集することはできません</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>パスキーはコピーされません</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>パスキーは複製されたアイテムにコピーされません。このアイテムを複製しますか？</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>アプリをコピー</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>2段階認証に利用可能です</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>マスターパスワードの再プロンプトヘルプ</value>
   </data>
@@ -2641,5 +2666,51 @@
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>無効な API トークン</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>すでに同じパスキーを持つものがあるため、このアイテムは組織と共有することはできません。</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>自動入力をブロック</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>これらの URI に対しては自動入力しません。</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>新しくブロックする URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI を保存しました</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>無効な形式です。https://、http://、androidapp:// を使用してください</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>URI を編集</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>URI を入力</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>形式は {0} です。複数の URI をカンマで区切ってください。</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>形式: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>不正な URI です</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI を削除しました</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>ブロックした URI はありません</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI {0} は既にブロックしています</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>一度に複数の URI を編集することはできません</value>
   </data>
 </root>

@@ -1,0 +1,10 @@
+"ThereAreNoItemsToList" = "Puuduvad kirjed, mida kuvada";
+"ToViewVerificationCodesUpgradeToPremium" = "Kinnituskoodide nägemiseks on vajalik Premium versioon";
+"Add2FactorAutenticationToAnItemToViewVerificationCodes" = "Add 2 factor authentication to an item to view the verification codes";
+"LogInToBitwardenOnYourIPhoneToViewVerificationCodes" = "Log in to Bitwarden on your iPhone to view verification codes";
+"SyncingItemsContainingVerificationCodes" = "Syncing items containing verification codes";
+"UnlockBitwardenOnYourIPhoneToViewVerificationCodes" = "Unlock Bitwarden on your iPhone to view verification codes";
+"SetUpBitwardenToViewItemsContainingVerificationCodes" = "Set up Bitwarden to view items containing verification codes";
+"Search" = "Search";
+"NoItemsFound" = "No items found";
+"SetUpAppleWatchPasscodeInOrderToUseBitwarden" = "Set up Apple Watch passcode in order to use Bitwarden";

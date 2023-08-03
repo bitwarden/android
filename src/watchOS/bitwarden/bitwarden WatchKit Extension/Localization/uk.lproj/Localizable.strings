@@ -1,0 +1,10 @@
+"ThereAreNoItemsToList" = "Немає записів для показу";
+"ToViewVerificationCodesUpgradeToPremium" = "Щоб отримати доступ до кодів підтвердження, передплатіть преміум";
+"Add2FactorAutenticationToAnItemToViewVerificationCodes" = "Щоб переглядати коди підтвердження, додайте двоетапну перевірку до запису";
+"LogInToBitwardenOnYourIPhoneToViewVerificationCodes" = "Увійдіть у Bitwarden на своєму iPhone, щоб отримати доступ до кодів підтвердження";
+"SyncingItemsContainingVerificationCodes" = "Триває синхронізація записів з кодами підтвердження";
+"UnlockBitwardenOnYourIPhoneToViewVerificationCodes" = "Розблокуйте Bitwarden на своєму iPhone, щоб отримати доступ до кодів підтвердження";
+"SetUpBitwardenToViewItemsContainingVerificationCodes" = "Налаштуйте Bitwarden, щоб побачити записи з кодами підтвердження";
+"Search" = "Пошук";
+"NoItemsFound" = "Нічого не знайдено";
+"SetUpAppleWatchPasscodeInOrderToUseBitwarden" = "Налаштуйте код допуску Apple Watch, щоб використовувати Bitwarden";

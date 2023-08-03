@@ -29,6 +29,7 @@ namespace Bit.Core.Models.Domain
             Edit = obj.Edit;
             ViewPassword = obj.ViewPassword;
             RevisionDate = obj.RevisionDate;
+            CreationDate = obj.CreationDate;
             CollectionIds = obj.CollectionIds != null ? new HashSet<string>(obj.CollectionIds) : null;
             LocalData = localData;
             Reprompt = obj.Reprompt;
@@ -46,6 +47,9 @@ namespace Bit.Core.Models.Domain
                     break;
                 case Enums.CipherType.Identity:
                     Identity = new Identity(obj.Identity, alreadyEncrypted);
+                    break;
+                case CipherType.Fido2Key:
+                    Fido2Key = new Fido2Key(obj.Fido2Key, alreadyEncrypted);
                     break;
                 default:
                     break;
@@ -68,16 +72,18 @@ namespace Bit.Core.Models.Domain
         public bool Edit { get; set; }
         public bool ViewPassword { get; set; }
         public DateTime RevisionDate { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime? DeletedDate { get; set; }
         public Dictionary<string, object> LocalData { get; set; }
         public Login Login { get; set; }
         public Identity Identity { get; set; }
         public Card Card { get; set; }
         public SecureNote SecureNote { get; set; }
+        public Fido2Key Fido2Key { get; set; }
         public List<Attachment> Attachments { get; set; }
         public List<Field> Fields { get; set; }
         public List<PasswordHistory> PasswordHistory { get; set; }
         public HashSet<string> CollectionIds { get; set; }
-        public DateTime? DeletedDate { get; set; }
         public CipherRepromptType Reprompt { get; set; }
 
         public async Task<CipherView> DecryptAsync()
@@ -102,6 +108,9 @@ namespace Bit.Core.Models.Domain
                     break;
                 case Enums.CipherType.Identity:
                     model.Identity = await Identity.DecryptAsync(OrganizationId);
+                    break;
+                case Enums.CipherType.Fido2Key:
+                    model.Fido2Key = await Fido2Key.DecryptAsync(OrganizationId);
                     break;
                 default:
                     break;
@@ -167,6 +176,7 @@ namespace Bit.Core.Models.Domain
                 OrganizationUseTotp = OrganizationUseTotp,
                 Favorite = Favorite,
                 RevisionDate = RevisionDate,
+                CreationDate = CreationDate,
                 Type = Type,
                 CollectionIds = CollectionIds.ToList(),
                 DeletedDate = DeletedDate,
@@ -190,6 +200,9 @@ namespace Bit.Core.Models.Domain
                     break;
                 case Enums.CipherType.Identity:
                     c.Identity = Identity.ToIdentityData();
+                    break;
+                case Enums.CipherType.Fido2Key:
+                    c.Fido2Key = Fido2Key.ToFido2KeyData();
                     break;
                 default:
                     break;

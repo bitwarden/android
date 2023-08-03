@@ -1585,9 +1585,6 @@ A leitura será feita automaticamente.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Auto-preencher URIs bloqueadas</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>O preenchimento automático não será oferecido para URIs bloqueados. Separe vários URIs com uma vírgula. Por exemplo: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Pedir para adicionar uma conta</value>
   </data>
@@ -2631,6 +2628,34 @@ Você deseja mudar para esta conta?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Senha mestra atual</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Created {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Passkey will not be copied</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Copy application</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Available for two-step login</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Ajuda com Nova solicitação de senha mestra</value>
   </data>
@@ -2642,5 +2667,51 @@ Você deseja mudar para esta conta?</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Token de API inválido</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Bloquear preenchimento automático</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>O autopreenchimento não será oferecido para estas URIs.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Nova URI bloqueada</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI salva</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Formato inválido. Use https://, http://, ou androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Editar URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Digitar URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Formato: {0}. Separe vários URIs com uma vírgula.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Formato: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>URL inválida</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI removida</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Não há URIs bloqueadas</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>A URI {0} já está bloqueada</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Não é possível editar várias URIs de uma vez</value>
   </data>
 </root>

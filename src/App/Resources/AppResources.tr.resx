@@ -1585,9 +1585,6 @@ Kod otomatik olarak taranacaktır.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Engellenmiş URI'leri otomatik doldur</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Engellenen URI'lerde otomatik doldurma önerilmeyecektir. Birden fazla URI'yi virgülle ayırabilirsiniz. Örnek: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Hesap eklemeyi öner</value>
   </data>
@@ -2629,6 +2626,34 @@ Bu hesaba geçmek ister misiniz?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Mevcut ana parola</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Şifre anahtarı</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Şifre anahtarları</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Oluşturma: {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Uygulama</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Şifre anahtarınızı geçersiz kılacağı için şifre anahtarı uygulamanızı düzenleyemezsiniz</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Şifre anahtarı kopyalanmayacak</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Şifre anahtarı, klonlanan kayda kopyalanmayacaktır. Bu kaydı klonlamaya devam etmek istiyor musunuz?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Uygulamayı kopyala</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>İki aşamalı girişte kullanılabilir</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Ana parola yeniden istemi yardımı</value>
   </data>
@@ -2640,5 +2665,51 @@ Bu hesaba geçmek ister misiniz?</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Geçersiz API token'ı</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Aynı şifre anahtarına sahip başka bir kayıt olduğu için bu kaydı kuruluşunuzla paylaşamazsınız.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Otomatik doldurmayı engelle</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Aşağıdaki adresler için otomatik doldurma önerilmeyecektir.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Yeni engelli URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URl kaydedildi</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Geçersiz biçim. https://, http:// veya androidapp:// kullanın</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>URl'yi düzenle</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>URl girin</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Biçim: {0}. Birden fazla URl'yi virgülle ayırabilirsiniz.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Biçim: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Geçersiz URl</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URl kaldırıldı</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Engellenmiş URI yok</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>{0} URl'si zaten engellenmiş</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Aynı anda birden fazla URl düzenlenemez</value>
   </data>
 </root>

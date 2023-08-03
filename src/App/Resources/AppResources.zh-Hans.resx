@@ -273,7 +273,7 @@
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>您确定要退出账户吗？</value>
+    <value>您确定要注销吗？</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
     <value>移除账户</value>
@@ -964,7 +964,7 @@
     <value>自定义环境</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>适用于高级用户。你可以分别指定各个服务的基础 URL。</value>
+    <value>适用于高级用户。您可以分别指定各个服务的基础 URL。</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
     <value>各环境 URL 已保存。</value>
@@ -1584,9 +1584,6 @@
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>自动填充已屏蔽的 URI</value>
-  </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>不会对已阻止的 URI 提供自动填充功能。使用逗号分隔多个 URI。例如：「 https://twitter.com, androidapp://com.twitter.android」。</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>询问添加登录</value>
@@ -2553,7 +2550,7 @@
     <value>语言已更改为 {0}。请重新启动应用程序以查看更改</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
-    <value>更改语言需要重新启动 app</value>
+    <value>更改语言需要重新启动应用程序</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
     <value>默认（系统）</value>
@@ -2630,6 +2627,34 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>当前主密码</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>通行密钥</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>通行密钥</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>已创建 {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>您不能编辑通行密钥应用程序，这会使通行密钥无失效</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>通行密钥不会被复制</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>通行密钥将不会复制到克隆的项目。要继续克隆这个项目吗？</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>复制应用</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>可用于两步登录</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>主密码重新询问帮助</value>
   </data>
@@ -2641,5 +2666,51 @@
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>无效的 API 令牌</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>无法与组织共享此项目，因为已经有一个项目具有相同的通行密钥。</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>阻止自动填充</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>不会为这些 URI 提供自动填充。</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>新增屏蔽的 URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI 已保存</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>无效格式。请使用 https://、http:// 或 androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>编辑 URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>输入 URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>格式：{0}。使用逗号分隔多个 URI。</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>格式：{0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>无效的 URI</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI 已移除</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>没有已屏蔽的 URI</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI {0} 已被屏蔽</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>一次不能编辑多个 URI</value>
   </data>
 </root>

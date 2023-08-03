@@ -2,4 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <dimen name="design_bottom_navigation_text_size" tools:override="true">15sp</dimen>
   <dimen name="design_bottom_navigation_active_text_size" tools:override="true">15sp</dimen>
+  <dimen name="dialog_input_text_size">16sp</dimen>
+  <dimen name="dialog_header_text_size">12sp</dimen>
+  <dimen name="dialog_sub_value_info_text_size">12sp</dimen>
 </resources>
