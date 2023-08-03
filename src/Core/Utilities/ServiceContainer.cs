@@ -53,7 +53,7 @@ namespace Bit.Core.Utilities
                 cryptoFunctionService);
             searchService = new SearchService(cipherService, sendService);
             var policyService = new PolicyService(stateService, organizationService);
-            var keyConnectorService = new KeyConnectorService(stateService, cryptoService, tokenService, apiService,
+            var keyConnectorService = new KeyConnectorService(stateService, cryptoService, tokenService, apiService, cryptoFunctionService,
                 organizationService);
             var vaultTimeoutService = new VaultTimeoutService(cryptoService, stateService, platformUtilsService,
                 folderService, cipherService, collectionService, searchService, messagingService, tokenService,

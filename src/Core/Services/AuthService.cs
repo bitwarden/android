@@ -562,37 +562,15 @@ namespace Bit.Core.Services
                 }
                 else if (tokenResponse.KeyConnectorUrl != null)
                 {
-                    // SSO Key Connector Onboarding
-                    var password = await _cryptoFunctionService.RandomBytesAsync(64);
-                    var newMasterKey = await _cryptoService.MakeMasterKeyAsync(Convert.ToBase64String(password), _tokenService.GetEmail(), tokenResponse.KdfConfig);
-                    var keyConnectorRequest = new KeyConnectorUserKeyRequest(newMasterKey.EncKeyB64);
-                    await _cryptoService.SetMasterKeyAsync(newMasterKey);
-
-                    var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(
-                        newMasterKey,
-                        await _cryptoService.MakeUserKeyAsync());
-
-                    await _cryptoService.SetUserKeyAsync(newUserKey);
-                    var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync();
-
-                    try
+                    // New User has tokenResponse.Key == null
+                    if (tokenResponse.Key == null)
                     {
-                        await _apiService.PostUserKeyToKeyConnector(tokenResponse.KeyConnectorUrl, keyConnectorRequest);
+                        await _keyConnectorService.ConvertNewUserToKeyConnectorAsync(orgId, tokenResponse);
                     }
-                    catch (Exception e)
+                    else
                     {
-                        throw new Exception("Unable to reach Key Connector", e);
+                        await _keyConnectorService.GetAndSetKeyAsync(tokenResponse.KeyConnectorUrl);
                     }
-
-                    var keys = new KeysRequest
-                    {
-                        PublicKey = newPublicKey,
-                        EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
-                    };
-                    var setPasswordRequest = new SetKeyConnectorKeyRequest(
-                        newProtectedPrivateKey.EncryptedString, keys, tokenResponse.KdfConfig, orgId
-                    );
-                    await _apiService.PostSetKeyConnectorKey(setPasswordRequest);
                 }
             }
 
