@@ -1,5 +1,5 @@
 "ThereAreNoItemsToList" = "Det finns inga objekt att visa";
-"ToViewVerificationCodesUpgradeToPremium" = "För att visa verifieringskoder, uppgradera till premium";
+"ToViewVerificationCodesUpgradeToPremium" = "Uppgradera till Premium för att visa verifieringskoder";
 "Add2FactorAutenticationToAnItemToViewVerificationCodes" = "Lägg till tvåfaktorsautentisering på ett objekt för att visa verifieringskoderna";
 "LogInToBitwardenOnYourIPhoneToViewVerificationCodes" = "Logga in på Bitwarden på din iPhone för att visa verifieringskoder";
 "SyncingItemsContainingVerificationCodes" = "Synkroniserar objekt som innehåller verifieringskoder";

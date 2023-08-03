@@ -2626,6 +2626,34 @@ Chcete se přepnout na tento účet?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Aktuální hlavní heslo</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Přístupový klíč</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Přístupové klíče</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Vytvořeno {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Aplikace</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Nemůžete upravovat aplikaci pro přístupové klíče, protože by to zneplatnilo přístupový klíč</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Přístupový klíč nebude zkopírován</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Přístupový klíč nebude zkopírován do duplikované položky. Chete pokračovat v duplikování této položky?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Kopírovat aplikaci</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Dostupné pro dvoufázové přihlášení</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Nápověda pro znovuzeptání se na hlavní heslo</value>
   </data>
@@ -2637,6 +2665,9 @@ Chcete se přepnout na tento účet?</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Neplatný token API</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Tuto položku nelze sdílet s organizací, protože již existuje jedna se stejným přístupovým klíčem.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Blokovat automatické vyplňování</value>
@@ -2668,9 +2699,6 @@ Chcete se přepnout na tento účet?</value>
   </data>
   <data name="InvalidURI" xml:space="preserve">
     <value>Neplatný URI</value>
-  </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI byl uložen</value>
   </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI byl odebrán</value>
