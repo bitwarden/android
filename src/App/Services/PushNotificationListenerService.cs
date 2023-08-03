@@ -138,7 +138,7 @@ namespace Bit.App.Services
                     if (isAuthenticated && sendCreateUpdateMessage.UserId == myUserId)
                     {
                         await _syncService.Value.SyncUpsertSendAsync(sendCreateUpdateMessage,
-                            notification.Type == NotificationType.SyncCipherUpdate);
+                            notification.Type == NotificationType.SyncSendUpdate);
                     }
                     break;
                 case NotificationType.SyncSendDelete:
