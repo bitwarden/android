@@ -625,13 +625,13 @@ namespace Bit.Core.Services
                 encString.Iv, encString.Mac, key);
         }
 
-        public Task<EncString> EncryptAsync(string plainValue, SymmetricCryptoKey key = null)
+        public async Task<EncString> EncryptAsync(string plainValue, SymmetricCryptoKey key = null)
         {
             if (plainValue == null)
             {
                 return null;
             }
-            return EncryptAsync(Encoding.UTF8.GetBytes(plainValue), key);
+            return await EncryptAsync(Encoding.UTF8.GetBytes(plainValue), key);
         }
 
         public async Task<EncString> EncryptAsync(byte[] plainValue, SymmetricCryptoKey key = null)
