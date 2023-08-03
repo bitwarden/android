@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
@@ -705,16 +704,16 @@ namespace Bit.Core.Services
             var orgAutoEnrollStatusResponse = await _apiService.GetOrganizationAutoEnrollStatusAsync(organizationSsoId);
             var randomBytes = _cryptoFunctionService.RandomBytes(64);
             var userKey = new UserKey(randomBytes);
-            var keyPair = await _cryptoService.MakeKeyPairAsync(userKey);
+            var (userPubKey, userPrivKey) = await _cryptoService.MakeKeyPairAsync(userKey);
             await _apiService.PostAccountKeysAsync(new KeysRequest
             {
-                PublicKey = keyPair.Item1,
-                EncryptedPrivateKey = keyPair.Item2.EncryptedString
+                PublicKey = userPubKey,
+                EncryptedPrivateKey = userPrivKey.EncryptedString
             });
 
             await _stateService.SetUserKeyAsync(userKey);
-            await _stateService.SetPrivateKeyEncryptedAsync(keyPair.Item2.EncryptedString);
-            await _passwordResetEnrollmentService.Enroll(orgAutoEnrollStatusResponse.Id);
+            await _stateService.SetPrivateKeyEncryptedAsync(userPrivKey.EncryptedString);
+            await _passwordResetEnrollmentService.EnrollAsync(orgAutoEnrollStatusResponse.Id);
         }
     }
 }

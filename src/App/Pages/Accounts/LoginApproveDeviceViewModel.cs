@@ -23,7 +23,6 @@ namespace Bit.App.Pages
         private bool _approveWithMyOtherDeviceEnabled;
         private bool _requestAdminApprovalEnabled;
         private bool _approveWithMasterPasswordEnabled;
-        private bool _continueEnabled;
         private string _email;
         private readonly IStateService _stateService;
         private readonly IApiService _apiService;
@@ -86,20 +85,18 @@ namespace Bit.App.Pages
         public bool RequestAdminApprovalEnabled
         {
             get => _requestAdminApprovalEnabled;
-            set => SetProperty(ref _requestAdminApprovalEnabled, value);
+            set => SetProperty(ref _requestAdminApprovalEnabled, value,
+                additionalPropertyNames: new[] { nameof(IsNewUser) });
         }
 
         public bool ApproveWithMasterPasswordEnabled
         {
             get => _approveWithMasterPasswordEnabled;
-            set => SetProperty(ref _approveWithMasterPasswordEnabled, value);
+            set => SetProperty(ref _approveWithMasterPasswordEnabled, value,
+                additionalPropertyNames: new[] { nameof(IsNewUser) });
         }
 
-        public bool IsNewUser
-        {
-            get => _continueEnabled;
-            set => SetProperty(ref _continueEnabled, value);
-        }
+        public bool IsNewUser => !RequestAdminApprovalEnabled && !ApproveWithMasterPasswordEnabled;
 
         public string Email
         {
@@ -119,7 +116,6 @@ namespace Bit.App.Pages
                 RequestAdminApprovalEnabled = decryptOptions?.TrustedDeviceOption?.HasAdminApproval ?? false;
                 ApproveWithMasterPasswordEnabled = decryptOptions?.HasMasterPassword ?? false;
                 ApproveWithMyOtherDeviceEnabled = decryptOptions?.TrustedDeviceOption?.HasLoginApprovingDevice ?? false;
-                IsNewUser = !RequestAdminApprovalEnabled && !ApproveWithMasterPasswordEnabled;
             }
             catch (Exception ex)
             {

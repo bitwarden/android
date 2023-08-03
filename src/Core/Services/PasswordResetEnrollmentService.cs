@@ -25,17 +25,17 @@ namespace Bit.Core.Services
             _stateService = stateService;
         }
 
-        public async Task EnrollIfRequired(string organizationSsoId)
+        public async Task EnrollIfRequiredAsync(string organizationSsoId)
         {
             var orgAutoEnrollStatusResponse = await _apiService.GetOrganizationAutoEnrollStatusAsync(organizationSsoId);
 
-            if (!orgAutoEnrollStatusResponse.ResetPasswordEnabled)
+            if (!orgAutoEnrollStatusResponse?.ResetPasswordEnabled ?? false)
             {
-                await this.Enroll(orgAutoEnrollStatusResponse.Id);
+                await EnrollAsync(orgAutoEnrollStatusResponse.Id);
             }
         }
 
-        public async Task Enroll(string organizationId)
+        public async Task EnrollAsync(string organizationId)
         {
             var orgKeyResponse = await _apiService.GetOrganizationKeysAsync(organizationId);
             if (orgKeyResponse == null)

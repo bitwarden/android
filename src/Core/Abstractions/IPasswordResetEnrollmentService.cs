@@ -5,8 +5,8 @@ namespace Bit.Core.Abstractions
 {
     public interface IPasswordResetEnrollmentService
     {
-        Task EnrollIfRequired(string organizationSsoId);
-        Task Enroll(string organizationId);
+        Task EnrollIfRequiredAsync(string organizationSsoId);
+        Task EnrollAsync(string organizationId);
     }
 }
 

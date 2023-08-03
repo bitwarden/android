@@ -6,6 +6,8 @@ namespace Bit.Core.Models.Domain
         public bool HasMasterPassword { get; set; }
         public TrustedDeviceOption TrustedDeviceOption { get; set; }
         public KeyConnectorOption KeyConnectorOption { get; set; }
+
+        public bool RequireSetPassword => !HasMasterPassword && KeyConnectorOption == null;
     }
 
     public class TrustedDeviceOption

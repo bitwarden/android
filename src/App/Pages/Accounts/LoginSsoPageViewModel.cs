@@ -260,8 +260,7 @@ namespace Bit.App.Pages
                 // In the standard, non TDE case, a user must set password if they don't
                 // have one and they aren't using key connector.
                 // Note: TDE & Key connector are mutually exclusive org config options.
-                var requireSetPassword = !decryptOptions?.HasMasterPassword ?? false && decryptOptions?.KeyConnectorOption == null;
-                if (response.ResetMasterPassword || requireSetPassword)
+                if (response.ResetMasterPassword || decryptOptions.RequireSetPassword)
                 {
                     StartSetPasswordAction?.Invoke();
                     return;
