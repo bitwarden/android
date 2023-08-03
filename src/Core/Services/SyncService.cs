@@ -277,17 +277,18 @@ namespace Bit.Core.Services
         public async Task<bool> SyncUpsertSendAsync(SyncSendNotification notification, bool isEdit)
         {
             SyncStarted();
-            if (!await _stateService.IsAuthenticatedAsync()) return SyncCompleted(false);
+            if (!await _stateService.IsAuthenticatedAsync())
+            {
+                return SyncCompleted(false);
+            }
 
             try
             {
                 var localSend = await _sendService.GetAsync(notification.Id);
-                if (localSend != null && localSend.RevisionDate >= notification.RevisionDate)
+                if (localSend != null && localSend.RevisionDate >= notification.RevisionDate
+                    && ((isEdit && localSend == null) || (!isEdit && localSend != null)))
                 {
-                    if ((isEdit && localSend == null) || (!isEdit && localSend != null))
-                    {
-                        return SyncCompleted(false);
-                    }
+                    return SyncCompleted(false);
                 }
 
                 var remoteSend = await _apiService.GetSendAsync(notification.Id);
