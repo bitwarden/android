@@ -179,9 +179,9 @@ namespace Bit.App.Pages
                       _pinStatus == PinLockEnum.Persistent;
 
             BiometricEnabled = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _cryptoService.HasEncryptedUserKeyAsync();
-            
+
             var decryptOptions = await _stateService.GetAccountDecryptionOptions();
-            if (await _stateService.IsAuthenticatedAsync() && decryptOptions?.TrustedDeviceOption != null 
+            if (await _stateService.IsAuthenticatedAsync() && decryptOptions?.TrustedDeviceOption != null
                 && (!decryptOptions?.HasMasterPassword ?? false && !(BiometricEnabled || PinEnabled)))
             {
                 await _vaultTimeoutService.LogOutAsync();
