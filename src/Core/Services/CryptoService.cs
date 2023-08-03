@@ -107,9 +107,9 @@ namespace Bit.Core.Services
 
         public async Task<bool> HasAutoUnlockKeyAsync(string userId = null)
         {
-            return (await GetAutoUnlockKeyAsync(userId) != null);
+            return await GetAutoUnlockKeyAsync(userId) != null;
         }
-        
+
         public Task SetMasterKeyAsync(MasterKey masterKey, string userId = null)
         {
             return _stateService.SetMasterKeyAsync(masterKey, userId);
