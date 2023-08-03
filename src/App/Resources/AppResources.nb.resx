@@ -2628,6 +2628,34 @@ Vil du bytte til denne kontoen?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Nåværende hovedpassord</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passnøkkel</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passnøkler</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Opprettet {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Applikasjon</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Du kan ikke endre tilgangsnøkkel-applikasjonen fordi det vil ugyldiggjøre passnøkkelen</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Passnøkkelen blir ikke kopiert</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Passnøkkelen kopieres ikke til det klonede elementet. Vil du fortsette kloningen av denne gjenstanden?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Kopier applikasjonen</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Tilgjengelig for totrinnsinnlogging</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Master password re-prompt help</value>
   </data>
@@ -2639,6 +2667,9 @@ Vil du bytte til denne kontoen?</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Invalid API token</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Block auto-fill</value>
@@ -2670,9 +2701,6 @@ Vil du bytte til denne kontoen?</value>
   </data>
   <data name="InvalidURI" xml:space="preserve">
     <value>Invalid URI</value>
-  </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI saved</value>
   </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI removed</value>
