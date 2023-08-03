@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
+using Bit.Core.Models.Response;
 
 namespace Bit.Core.Services
 {
@@ -12,19 +13,21 @@ namespace Bit.Core.Services
         private readonly ICryptoService _cryptoService;
         private readonly ITokenService _tokenService;
         private readonly IApiService _apiService;
+        private readonly ICryptoFunctionService _cryptoFunctionService;
         private readonly IOrganizationService _organizationService;
 
         public KeyConnectorService(IStateService stateService, ICryptoService cryptoService,
-            ITokenService tokenService, IApiService apiService, OrganizationService organizationService)
+            ITokenService tokenService, IApiService apiService, ICryptoFunctionService cryptoFunctionService, OrganizationService organizationService)
         {
             _stateService = stateService;
             _cryptoService = cryptoService;
             _tokenService = tokenService;
             _apiService = apiService;
+            _cryptoFunctionService = cryptoFunctionService;
             _organizationService = organizationService;
         }
 
-        public async Task GetAndSetKey(string url)
+        public async Task GetAndSetKeyAsync(string url)
         {
             try
             {
@@ -82,6 +85,41 @@ namespace Bit.Core.Services
             var userIsNotUsingKeyConnector = !await GetUsesKeyConnector();
 
             return loggedInUsingSso && requiredByOrganization && userIsNotUsingKeyConnector;
+        }
+
+        public async Task ConvertNewUserToKeyConnectorAsync(string orgId, IdentityTokenResponse tokenResponse)
+        {
+            // SSO Key Connector Onboarding
+            var password = await _cryptoFunctionService.RandomBytesAsync(64);
+            var newMasterKey = await _cryptoService.MakeMasterKeyAsync(Convert.ToBase64String(password), _tokenService.GetEmail(), tokenResponse.KdfConfig);
+            var keyConnectorRequest = new KeyConnectorUserKeyRequest(newMasterKey.EncKeyB64);
+            await _cryptoService.SetMasterKeyAsync(newMasterKey);
+
+            var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(
+                newMasterKey,
+                await _cryptoService.MakeUserKeyAsync());
+
+            await _cryptoService.SetUserKeyAsync(newUserKey);
+
+            try
+            {
+                await _apiService.PostUserKeyToKeyConnector(tokenResponse.KeyConnectorUrl, keyConnectorRequest);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Unable to reach Key Connector", e);
+            }
+
+            var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync();
+            var keys = new KeysRequest
+            {
+                PublicKey = newPublicKey,
+                EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
+            };
+            var setPasswordRequest = new SetKeyConnectorKeyRequest(
+                newProtectedPrivateKey.EncryptedString, keys, tokenResponse.KdfConfig, orgId
+            );
+            await _apiService.PostSetKeyConnectorKey(setPasswordRequest);
         }
     }
 }

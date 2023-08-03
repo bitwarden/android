@@ -19,9 +19,10 @@ namespace Bit.App.Pages
         {
             InitializeComponent();
             _vm = BindingContext as LoginApproveDeviceViewModel;
-            _vm.LogInWithMasterPasswordAction = () => StartLogInWithMasterPassword().FireAndForget();
+            _vm.LogInWithMasterPasswordAction = () => StartLogInWithMasterPasswordAsync().FireAndForget();
             _vm.LogInWithDeviceAction = () => StartLoginWithDeviceAsync().FireAndForget();
             _vm.RequestAdminApprovalAction = () => RequestAdminApprovalAsync().FireAndForget();
+            _vm.ContinueToVaultAction = () => ContinueToVaultAsync().FireAndForget();
             _vm.CloseAction = () => { Navigation.PopModalAsync(); };
             _vm.Page = this;
             _appOptions = appOptions;
@@ -40,7 +41,17 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task StartLogInWithMasterPassword()
+        private async Task ContinueToVaultAsync()
+        {
+            if (AppHelpers.SetAlternateMainPage(_appOptions))
+            {
+                return;
+            }
+            var previousPage = await AppHelpers.ClearPreviousPage();
+            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
+        }
+
+        private async Task StartLogInWithMasterPasswordAsync()
         {
             var page = new LockPage(_appOptions);
             await Navigation.PushModalAsync(new NavigationPage(page));

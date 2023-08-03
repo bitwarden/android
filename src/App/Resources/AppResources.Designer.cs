@@ -3785,6 +3785,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login approved.
+        /// </summary>
+        public static string LoginApproved {
+            get {
+                return ResourceManager.GetString("LoginApproved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login attempt by {0} on {1}.
         /// </summary>
         public static string LogInAttemptByXOnY {
