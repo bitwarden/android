@@ -11,7 +11,7 @@ namespace Bit.Core.Abstractions
         Task<bool> GetUsesKeyConnector();
         Task<bool> UserNeedsMigration();
         Task MigrateUser();
-        Task GetAndSetKey(string url);
+        Task GetAndSetKeyAsync(string url);
         Task<Organization> GetManagingOrganization();
         Task ConvertNewUserToKeyConnectorAsync(string orgId, IdentityTokenResponse tokenResponse);
     }
