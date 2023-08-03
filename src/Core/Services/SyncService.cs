@@ -281,38 +281,25 @@ namespace Bit.Core.Services
 
             try
             {
-                var shouldUpdate = true;
                 var localSend = await _sendService.GetAsync(notification.Id);
                 if (localSend != null && localSend.RevisionDate >= notification.RevisionDate)
                 {
-                    shouldUpdate = false;
-                }
-
-                if (shouldUpdate)
-                {
-                    if (isEdit)
+                    if ((isEdit && localSend == null) || (!isEdit && localSend != null))
                     {
-                        shouldUpdate = localSend != null;
-                    }
-                    else
-                    {
-                        shouldUpdate = localSend == null;
+                        return SyncCompleted(false);
                     }
                 }
 
-                if (shouldUpdate)
+                var remoteSend = await _apiService.GetSendAsync(notification.Id);
+                if (remoteSend != null)
                 {
-                    var remoteSend = await _apiService.GetSendAsync(notification.Id);
-                    if (remoteSend != null)
+                    var userId = await _stateService.GetActiveUserIdAsync();
+                    await _sendService.UpsertAsync(new SendData(remoteSend, userId));
+                    _messagingService.Send("syncedUpsertedSend", new Dictionary<string, string>
                     {
-                        var userId = await _stateService.GetActiveUserIdAsync();
-                        await _sendService.UpsertAsync(new SendData(remoteSend, userId));
-                        _messagingService.Send("syncedUpsertedSend", new Dictionary<string, string>
-                        {
-                            ["sendId"] = notification.Id
-                        });
-                        return SyncCompleted(true);
-                    }
+                        ["sendId"] = notification.Id
+                    });
+                    return SyncCompleted(true);
                 }
             }
             catch (ApiException e)
