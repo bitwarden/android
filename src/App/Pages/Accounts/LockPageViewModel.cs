@@ -181,8 +181,11 @@ namespace Bit.App.Pages
             BiometricEnabled = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _cryptoService.HasEncryptedUserKeyAsync();
 
             var decryptOptions = await _stateService.GetAccountDecryptionOptions();
-            if (await _stateService.IsAuthenticatedAsync() && decryptOptions?.TrustedDeviceOption != null
-                && (!decryptOptions?.HasMasterPassword ?? false && !(BiometricEnabled || PinEnabled)))
+            if (await _stateService.IsAuthenticatedAsync()
+                 && decryptOptions?.TrustedDeviceOption != null
+                 && !decryptOptions.HasMasterPassword
+                 && !BiometricEnabled
+                 && !PinEnabled)
             {
                 await _vaultTimeoutService.LogOutAsync();
                 return;

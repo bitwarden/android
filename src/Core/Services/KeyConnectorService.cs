@@ -100,7 +100,6 @@ namespace Bit.Core.Services
                 await _cryptoService.MakeUserKeyAsync());
 
             await _cryptoService.SetUserKeyAsync(newUserKey);
-            var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync();
 
             try
             {
@@ -111,6 +110,7 @@ namespace Bit.Core.Services
                 throw new Exception("Unable to reach Key Connector", e);
             }
 
+            var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync();
             var keys = new KeysRequest
             {
                 PublicKey = newPublicKey,
