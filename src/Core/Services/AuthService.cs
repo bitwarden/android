@@ -520,11 +520,13 @@ namespace Bit.Core.Services
                         tokenResponse.KdfConfig);
 
                     var keyConnectorRequest = new KeyConnectorUserKeyRequest(newMasterKey.EncKeyB64);
-                    await _cryptoService.SetMasterKeyAsync(newMasterKey);
 
                     var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(newMasterKey);
 
                     await _cryptoService.SetUserKeyAsync(newUserKey);
+                    await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(newProtectedUserKey.EncryptedString);
+                    await _cryptoService.SetMasterKeyAsync(newMasterKey);
+
                     var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync();
 
                     try
