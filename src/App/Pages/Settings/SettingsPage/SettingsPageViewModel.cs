@@ -323,6 +323,7 @@ namespace Bit.App.Pages
             }
             if (oldTimeout != newTimeout)
             {
+                await _cryptoService.RefreshKeysAsync();
                 await Device.InvokeOnMainThreadAsync(BuildList);
             }
         }

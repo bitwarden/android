@@ -45,24 +45,15 @@ namespace Bit.Core.Services
 
         public async Task RefreshKeysAsync()
         {
-            // refresh or clear the pin key
+            // Refresh or clear additional keys such as
+            // pin and auto unlock keys
             await SetUserKeyAsync(await GetUserKeyAsync());
         }
 
         public async Task SetUserKeyAsync(UserKey userKey, string userId = null)
         {
             await _stateService.SetUserKeyAsync(userKey, userId);
-
-            // Refresh the Pin Key if the user has a Pin set
-            if (await _stateService.GetProtectedPinAsync(userId) != null)
-            {
-                await UpdateUserKeyPinAsync(userKey, userId);
-            }
-            else
-            {
-                await _stateService.SetPinKeyEncryptedUserKeyAsync(null, userId);
-                await _stateService.SetPinKeyEncryptedUserKeyEphemeralAsync(null, userId);
-            }
+            await StoreAdditionalKeysAsync(userKey, userId);
         }
 
         public Task<UserKey> GetUserKeyAsync(string userId = null)
@@ -108,6 +99,17 @@ namespace Bit.Core.Services
             return _stateService.SetMasterKeyEncryptedUserKeyAsync(value, userId);
         }
 
+        public async Task<UserKey> GetAutoUnlockKeyAsync(string userId = null)
+        {
+            await MigrateAutoUnlockKeyIfNeededAsync(userId);
+            return await _stateService.GetUserKeyAutoUnlockAsync(userId);
+        }
+
+        public async Task<bool> HasAutoUnlockKeyAsync(string userId = null)
+        {
+            return (await GetAutoUnlockKeyAsync(userId) != null);
+        }
+        
         public Task SetMasterKeyAsync(MasterKey masterKey, string userId = null)
         {
             return _stateService.SetMasterKeyAsync(masterKey, userId);
@@ -666,6 +668,30 @@ namespace Bit.Core.Services
 
         // --HELPER METHODS--
 
+        private async Task StoreAdditionalKeysAsync(UserKey userKey, string userId = null)
+        {
+            // Refresh, set, or clear the pin key
+            if (await _stateService.GetProtectedPinAsync(userId) != null)
+            {
+                await UpdateUserKeyPinAsync(userKey, userId);
+            }
+            else
+            {
+                await _stateService.SetPinKeyEncryptedUserKeyAsync(null, userId);
+                await _stateService.SetPinKeyEncryptedUserKeyEphemeralAsync(null, userId);
+            }
+
+            // Refresh, set, or clear the auto key
+            if (await _stateService.GetVaultTimeoutAsync(userId) == null)
+            {
+                await _stateService.SetUserKeyAutoUnlockAsync(userKey.KeyB64, userId);
+            }
+            else
+            {
+                await _stateService.SetUserKeyAutoUnlockAsync(null, userId);
+            }
+        }
+
         private async Task UpdateUserKeyPinAsync(UserKey userKey, string userId = null)
         {
             var pin = await DecryptToUtf8Async(new EncString(await _stateService.GetProtectedPinAsync(userId)));
@@ -929,6 +955,27 @@ namespace Bit.Core.Services
         // --MIGRATION METHODS--
         // We previously used the master key for additional keys, but now we use the user key.
         // These methods support migrating the old keys to the new ones.
+
+        private async Task MigrateAutoUnlockKeyIfNeededAsync(string userId = null)
+        {
+            var oldAutoKey = await _stateService.GetKeyEncryptedAsync(userId);
+            if (oldAutoKey == null)
+            {
+                return;
+            }
+            // Decrypt
+            var masterKey = new MasterKey(Convert.FromBase64String(oldAutoKey));
+            var encryptedUserKey = await _stateService.GetEncKeyEncryptedAsync(userId);
+            var userKey = await DecryptUserKeyWithMasterKeyAsync(
+                masterKey,
+                new EncString(encryptedUserKey),
+                userId);
+            // Migrate
+            await _stateService.SetUserKeyAutoUnlockAsync(userKey.KeyB64, userId);
+            await _stateService.SetKeyEncryptedAsync(null, userId);
+            // Set encrypted user key just in case the user locks without syncing
+            await SetMasterKeyEncryptedUserKeyAsync(encryptedUserKey);
+        }
 
         public async Task<UserKey> DecryptAndMigrateOldPinKeyAsync(
             bool masterPasswordOnRestart,

@@ -59,15 +59,26 @@ namespace Bit.Core.Services
 
         public async Task<bool> IsLockedAsync(string userId = null)
         {
-            var hasKey = await _cryptoService.HasUserKeyAsync(userId);
-            if (hasKey)
+            var biometricSet = await IsBiometricLockSetAsync(userId);
+            if (biometricSet && await _stateService.GetBiometricLockedAsync(userId))
             {
-                var biometricSet = await IsBiometricLockSetAsync(userId);
-                if (biometricSet && await _stateService.GetBiometricLockedAsync(userId))
+                return true;
+            }
+
+            if (!await _cryptoService.HasUserKeyAsync(userId))
+            {
+                if (await _cryptoService.HasAutoUnlockKeyAsync(userId))
+                {
+                    await _cryptoService.SetUserKeyAsync(await _cryptoService.GetAutoUnlockKeyAsync(userId));
+                }
+                else
                 {
                     return true;
                 }
             }
+
+            // Check again to verify auto key was set
+            var hasKey = await _cryptoService.HasUserKeyAsync(userId);
             return !hasKey;
         }
 
@@ -196,6 +207,7 @@ namespace Bit.Core.Services
             await Task.WhenAll(
                 _cryptoService.ClearUserKeyAsync(userId),
                 _cryptoService.ClearMasterKeyAsync(userId),
+                _stateService.SetUserKeyAutoUnlockAsync(null, userId),
                 _cryptoService.ClearOrgKeysAsync(true, userId),
                 _cryptoService.ClearKeyPairAsync(true, userId));
 

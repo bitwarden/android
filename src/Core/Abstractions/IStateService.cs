@@ -19,6 +19,8 @@ namespace Bit.Core.Abstractions
         Task SetMasterKeyAsync(MasterKey value, string userId = null);
         Task<string> GetMasterKeyEncryptedUserKeyAsync(string userId = null);
         Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null);
+        Task<UserKey> GetUserKeyAutoUnlockAsync(string userId = null);
+        Task SetUserKeyAutoUnlockAsync(string value, string userId = null);
         Task<string> GetActiveUserIdAsync();
         Task<string> GetActiveUserEmailAsync();
         Task<T> GetActiveUserCustomDataAsync<T>(Func<Account, T> dataMapper);
@@ -190,6 +192,9 @@ namespace Bit.Core.Abstractions
         Task SetEncKeyEncryptedAsync(string value, string userId = null);
         [Obsolete("Left for migration purposes")]
         Task SetKeyEncryptedAsync(string value, string userId = null);
+
+        [Obsolete("Use GetUserKeyAutoUnlock instead, left for migration purposes")]
+        Task<string> GetKeyEncryptedAsync(string userId = null);
         [Obsolete("Use GetMasterKeyAsync instead, left for migration purposes")]
         Task<SymmetricCryptoKey> GetKeyDecryptedAsync(string userId = null);
     }

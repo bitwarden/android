@@ -336,12 +336,27 @@ namespace Bit.Core.Services
 
         public async Task<string> GetMasterKeyEncryptedUserKeyAsync(string userId = null)
         {
-            return await _storageMediatorService.GetAsync<string>(Constants.MasterKeyEncryptedUserKeyKey(userId), false);
+            return await _storageMediatorService.GetAsync<string>(
+                await ComposeKeyAsync(Constants.MasterKeyEncryptedUserKeyKey, userId), false);
         }
 
         public async Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null)
         {
-            await _storageMediatorService.SaveAsync(Constants.MasterKeyEncryptedUserKeyKey(userId), value, false);
+            await _storageMediatorService.SaveAsync(
+                await ComposeKeyAsync(Constants.MasterKeyEncryptedUserKeyKey, userId), value, false);
+        }
+
+        public async Task<UserKey> GetUserKeyAutoUnlockAsync(string userId = null)
+        {
+            var keyB64 = await _storageMediatorService.GetAsync<string>(
+                await ComposeKeyAsync(Constants.UserKeyAutoUnlockKey, userId), true);
+            return keyB64 == null ? null : new UserKey(Convert.FromBase64String(keyB64));
+        }
+
+        public async Task SetUserKeyAutoUnlockAsync(string value, string userId = null)
+        {
+            await _storageMediatorService.SaveAsync(
+                await ComposeKeyAsync(Constants.UserKeyAutoUnlockKey, userId), value, true);
         }
 
         public async Task<bool> CanAccessPremiumAsync(string userId = null)
@@ -350,6 +365,7 @@ namespace Bit.Core.Services
             {
                 userId = await GetActiveUserIdAsync();
             }
+
             if (!await IsAuthenticatedAsync(userId))
             {
                 return false;
@@ -397,13 +413,15 @@ namespace Bit.Core.Services
 
         public async Task<EncString> GetPinKeyEncryptedUserKeyAsync(string userId = null)
         {
-            var key = await _storageMediatorService.GetAsync<string>(Constants.PinKeyEncryptedUserKeyKey(userId), false);
+            var key = await _storageMediatorService.GetAsync<string>(
+                await ComposeKeyAsync(Constants.PinKeyEncryptedUserKeyKey, userId), false);
             return key != null ? new EncString(key) : null;
         }
 
         public async Task SetPinKeyEncryptedUserKeyAsync(EncString value, string userId = null)
         {
-            await _storageMediatorService.SaveAsync(Constants.PinKeyEncryptedUserKeyKey(userId), value?.EncryptedString, false);
+            await _storageMediatorService.SaveAsync(
+                await ComposeKeyAsync(Constants.PinKeyEncryptedUserKeyKey, userId), value?.EncryptedString, false);
         }
 
         public async Task<EncString> GetPinKeyEncryptedUserKeyEphemeralAsync(string userId = null)
@@ -1445,28 +1463,30 @@ namespace Bit.Core.Services
             }
 
             // Non-state storage
-            await SetProtectedPinAsync(null, userId);
-            await SetPinProtectedAsync(null, userId);
-            await SetKeyEncryptedAsync(null, userId);
-            await SetKeyHashAsync(null, userId);
-            await SetEncKeyEncryptedAsync(null, userId);
-            await SetOrgKeysEncryptedAsync(null, userId);
-            await SetPrivateKeyEncryptedAsync(null, userId);
-            await SetLastActiveTimeAsync(null, userId);
-            await SetPreviousPageInfoAsync(null, userId);
-            await SetInvalidUnlockAttemptsAsync(null, userId);
-            await SetLocalDataAsync(null, userId);
-            await SetEncryptedCiphersAsync(null, userId);
-            await SetEncryptedCollectionsAsync(null, userId);
-            await SetLastSyncAsync(null, userId);
-            await SetEncryptedFoldersAsync(null, userId);
-            await SetEncryptedPoliciesAsync(null, userId);
-            await SetUsesKeyConnectorAsync(null, userId);
-            await SetOrganizationsAsync(null, userId);
-            await SetEncryptedPasswordGenerationHistoryAsync(null, userId);
-            await SetEncryptedSendsAsync(null, userId);
-            await SetSettingsAsync(null, userId);
-            await SetApprovePasswordlessLoginsAsync(null, userId);
+            await Task.WhenAll(
+                SetUserKeyAutoUnlockAsync(null, userId),
+                SetProtectedPinAsync(null, userId),
+                SetKeyHashAsync(null, userId),
+                SetOrgKeysEncryptedAsync(null, userId),
+                SetPrivateKeyEncryptedAsync(null, userId),
+                SetLastActiveTimeAsync(null, userId),
+                SetPreviousPageInfoAsync(null, userId),
+                SetInvalidUnlockAttemptsAsync(null, userId),
+                SetLocalDataAsync(null, userId),
+                SetEncryptedCiphersAsync(null, userId),
+                SetEncryptedCollectionsAsync(null, userId),
+                SetLastSyncAsync(null, userId),
+                SetEncryptedFoldersAsync(null, userId),
+                SetEncryptedPoliciesAsync(null, userId),
+                SetUsesKeyConnectorAsync(null, userId),
+                SetOrganizationsAsync(null, userId),
+                SetEncryptedPasswordGenerationHistoryAsync(null, userId),
+                SetEncryptedSendsAsync(null, userId),
+                SetSettingsAsync(null, userId),
+                SetApprovePasswordlessLoginsAsync(null, userId),
+                SetEncKeyEncryptedAsync(null, userId),
+                SetKeyEncryptedAsync(null, userId),
+                SetPinProtectedAsync(null, userId));
         }
 
         private async Task ScaffoldNewAccountAsync(Account account)
@@ -1711,6 +1731,14 @@ namespace Bit.Core.Services
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultSecureStorageOptionsAsync());
             await SetValueAsync(Constants.KeyKey(reconciledOptions.UserId), value, reconciledOptions);
+        }
+
+        [Obsolete("Use GetUserKeyAutoUnlock instead, left for migration purposes")]
+        public async Task<string> GetKeyEncryptedAsync(string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultSecureStorageOptionsAsync());
+            return await GetValueAsync<string>(Constants.KeyKey(reconciledOptions.UserId), reconciledOptions);
         }
 
         [Obsolete("Use GetMasterKeyAsync instead, left for migration purposes")]
