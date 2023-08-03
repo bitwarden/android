@@ -7,17 +7,17 @@ using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
-using Bit.Core.Models.Response;
-using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
     public class HomeViewModel : BaseViewModel
     {
+        private const string LOGGING_IN_ON_US = "bitwarden.com";
+        private const string LOGGING_IN_ON_EU = "bitwarden.eu";
+
         private readonly IStateService _stateService;
         private readonly IMessagingService _messagingService;
         private readonly IPlatformUtilsService _platformUtilsService;
@@ -30,8 +30,6 @@ namespace Bit.App.Pages
         private bool _rememberEmail;
         private string _email;
         private string _selectedEnvironmentName;
-        private bool _isEmailEnabled;
-        private bool _canLogin;
         private bool _displayEuEnvironment;
 
         public HomeViewModel()
@@ -86,7 +84,7 @@ namespace Bit.App.Pages
             set => SetProperty(ref _selectedEnvironmentName, value);
         }
 
-        public string RegionText => $"{AppResources.Region}:";
+        public string RegionText => $"{AppResources.LoggingInOn}:";
         public bool CanContinue => !string.IsNullOrEmpty(Email);
 
         public FormattedString CreateAccountText
@@ -167,12 +165,12 @@ namespace Bit.App.Pages
         {
             _displayEuEnvironment = await _configService.GetFeatureFlagBoolAsync(Constants.DisplayEuEnvironmentFlag);
             var options = _displayEuEnvironment
-                    ? new string[] { AppResources.US, AppResources.EU, AppResources.SelfHosted }
-                    : new string[] { AppResources.US, AppResources.SelfHosted };
+                    ? new string[] { LOGGING_IN_ON_US, LOGGING_IN_ON_EU, AppResources.SelfHosted }
+                    : new string[] { LOGGING_IN_ON_US, AppResources.SelfHosted };
 
             await Device.InvokeOnMainThreadAsync(async () =>
             {
-                var result = await Page.DisplayActionSheet(AppResources.DataRegion, AppResources.Cancel, null, options);
+                var result = await Page.DisplayActionSheet(AppResources.LoggingInOn, AppResources.Cancel, null, options);
 
                 if (result is null || result == AppResources.Cancel)
                 {
@@ -185,7 +183,7 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                await _environmentService.SetUrlsAsync(result == AppResources.EU ? EnvironmentUrlData.DefaultEU : EnvironmentUrlData.DefaultUS);
+                await _environmentService.SetUrlsAsync(result == LOGGING_IN_ON_EU ? EnvironmentUrlData.DefaultEU : EnvironmentUrlData.DefaultUS);
                 await _configService.GetAsync(true);
                 SelectedEnvironmentName = result;
             });
@@ -198,17 +196,17 @@ namespace Bit.App.Pages
             {
                 await _environmentService.SetUrlsAsync(EnvironmentUrlData.DefaultUS);
                 environmentsSaved = EnvironmentUrlData.DefaultUS;
-                SelectedEnvironmentName = AppResources.US;
+                SelectedEnvironmentName = LOGGING_IN_ON_US;
                 return;
             }
 
             if (environmentsSaved.Base == EnvironmentUrlData.DefaultUS.Base)
             {
-                SelectedEnvironmentName = AppResources.US;
+                SelectedEnvironmentName = LOGGING_IN_ON_US;
             }
             else if (environmentsSaved.Base == EnvironmentUrlData.DefaultEU.Base)
             {
-                SelectedEnvironmentName = AppResources.EU;
+                SelectedEnvironmentName = LOGGING_IN_ON_EU;
             }
             else
             {
