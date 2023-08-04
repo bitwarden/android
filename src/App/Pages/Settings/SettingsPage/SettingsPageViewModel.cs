@@ -131,13 +131,13 @@ namespace Bit.App.Pages
             _vaultTimeoutDisplayValue ??= _vaultTimeoutOptions.Where(o => o.Value == CustomVaultTimeoutValue).First().Key;
 
             var savedVaultTimeoutAction = await _vaultTimeoutService.GetVaultTimeoutAction();
-            var action = savedVaultTimeoutAction ?? VaultTimeoutAction.Lock;
-            if (!_hasMasterPassword && savedVaultTimeoutAction == null)
+            var timeoutAction = savedVaultTimeoutAction ?? VaultTimeoutAction.Lock;
+            if (!_hasMasterPassword && timeoutAction == VaultTimeoutAction.Lock)
             {
-                action = VaultTimeoutAction.Logout;
+                timeoutAction = VaultTimeoutAction.Logout;
                 await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(_vaultTimeout, VaultTimeoutAction.Logout);
             }
-            _vaultTimeoutActionDisplayValue = _vaultTimeoutActionOptions.FirstOrDefault(o => o.Value == action).Key;
+            _vaultTimeoutActionDisplayValue = _vaultTimeoutActionOptions.FirstOrDefault(o => o.Value == timeoutAction).Key;
 
             if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout))
             {
