@@ -2627,32 +2627,32 @@ Deseja mudar para esta conta?</value>
     <value>Palavra-passe mestra atual</value>
   </data>
   <data name="Passkey" xml:space="preserve">
-    <value>Passkey</value>
+    <value>Chave de acesso</value>
   </data>
   <data name="Passkeys" xml:space="preserve">
-    <value>Passkeys</value>
+    <value>Chaves de acesso</value>
   </data>
   <data name="CreatedX" xml:space="preserve">
-    <value>Created {0}</value>
+    <value>Criada a {0}</value>
     <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
   </data>
   <data name="Application" xml:space="preserve">
-    <value>Application</value>
+    <value>Aplicação</value>
   </data>
   <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
-    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+    <value>Não é possível editar a aplicação da chave de acesso porque invalidaria a mesma</value>
   </data>
   <data name="PasskeyWillNotBeCopied" xml:space="preserve">
-    <value>Passkey will not be copied</value>
+    <value>A chave de acesso não será copiada</value>
   </data>
   <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
-    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+    <value>A chave de acesso não será copiada para o item duplicado. Pretende ainda assim duplicar este item?</value>
   </data>
   <data name="CopyApplication" xml:space="preserve">
-    <value>Copy application</value>
+    <value>Copiar aplicação</value>
   </data>
   <data name="AvailableForTwoStepLogin" xml:space="preserve">
-    <value>Available for two-step login</value>
+    <value>Disponível para a verificação de dois passos</value>
   </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Ajuda para pedir novamente a palavra-passe mestra</value>
@@ -2667,7 +2667,7 @@ Deseja mudar para esta conta?</value>
     <value>Token da API inválido</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
+    <value>Este item não pode ser partilhado com a organização porque já existe um com a mesma chave de acesso.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Bloquear preenchimento automático</value>
