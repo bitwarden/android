@@ -113,7 +113,7 @@ namespace Bit.iOS.Core.Controllers
                     && await _cryptoService.HasEncryptedUserKeyAsync();
                 _biometricIntegrityValid =
                     await _platformUtilsService.IsBiometricIntegrityValidAsync(BiometricIntegritySourceKey);
-                _usesKeyConnector = await _keyConnectorService.GetUsesKeyConnector();
+                _usesKeyConnector = await _keyConnectorService.GetUsesKeyConnectorAsync();
                 _biometricUnlockOnly = _usesKeyConnector && _biometricEnabled && !_pinEnabled;
             }
 

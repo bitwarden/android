@@ -157,10 +157,26 @@ namespace Bit.Core.Services
             if (encUserKey == null)
             {
                 var userKeyMasterKey = await _stateService.GetMasterKeyEncryptedUserKeyAsync(userId);
-                if (userKeyMasterKey == null)
+
+                if (userKeyMasterKey is null)
                 {
-                    throw new Exception("No encrypted user key found");
+                    // Migrate old key
+                    var oldEncUserKey = await _stateService.GetEncKeyEncryptedAsync(userId);
+
+                    if (oldEncUserKey is null)
+                    {
+                        throw new Exception("No encrypted user key nor old encKeyEncrypted found");
+                    }
+
+                    var userKey = await DecryptUserKeyWithMasterKeyAsync(
+                        masterKey,
+                        new EncString(oldEncUserKey),
+                        userId
+                    );
+                    await SetMasterKeyEncryptedUserKeyAsync(oldEncUserKey, userId);
+                    return userKey;
                 }
+
                 encUserKey = new EncString(userKeyMasterKey);
             }
 
