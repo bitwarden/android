@@ -85,7 +85,8 @@ namespace Bit.Core
 
         public static string VaultTimeoutKey(string userId) => $"vaultTimeout_{userId}";
         public static string VaultTimeoutActionKey(string userId) => $"vaultTimeoutAction_{userId}";
-        public static string UserKeyKey(string userId) => $"userKey_{userId}";
+        public static string MasterKeyEncryptedUserKeyKey(string userId) => $"masterKeyEncryptedUserKey_{userId}";
+        public static string UserKeyAutoUnlockKey(string userId) => $"autoUnlock_{userId}";
         public static string CiphersKey(string userId) => $"ciphers_{userId}";
         public static string FoldersKey(string userId) => $"folders_{userId}";
         public static string CollectionsKey(string userId) => $"collections_{userId}";
@@ -98,7 +99,7 @@ namespace Bit.Core
         public static string EncPrivateKeyKey(string userId) => $"encPrivateKey_{userId}";
         public static string DeviceKeyKey(string userId) => $"deviceKey_{userId}";
         public static string KeyHashKey(string userId) => $"keyHash_{userId}";
-        public static string UserKeyPinKey(string userId) => $"userKeyPin_{userId}";
+        public static string PinKeyEncryptedUserKeyKey(string userId) => $"pinKeyEncryptedUserKey_{userId}";
         public static string PassGenOptionsKey(string userId) => $"passwordGenerationOptions_{userId}";
         public static string PassGenHistoryKey(string userId) => $"generatedPasswordHistory_{userId}";
         public static string TwoFactorTokenKey(string email) => $"twoFactorToken_{email}";

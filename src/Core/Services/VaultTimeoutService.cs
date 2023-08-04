@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
-using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Services
 {
-    public enum PinLockEnum
+    public enum PinLockType
     {
         Disabled,
         Persistent,
@@ -61,15 +59,26 @@ namespace Bit.Core.Services
 
         public async Task<bool> IsLockedAsync(string userId = null)
         {
-            var hasKey = await _cryptoService.HasUserKeyAsync(userId);
-            if (hasKey)
+            var biometricSet = await IsBiometricLockSetAsync(userId);
+            if (biometricSet && await _stateService.GetBiometricLockedAsync(userId))
             {
-                var biometricSet = await IsBiometricLockSetAsync(userId);
-                if (biometricSet && await _stateService.GetBiometricLockedAsync(userId))
+                return true;
+            }
+
+            if (!await _cryptoService.HasUserKeyAsync(userId))
+            {
+                if (await _cryptoService.HasAutoUnlockKeyAsync(userId))
+                {
+                    await _cryptoService.SetUserKeyAsync(await _cryptoService.GetAutoUnlockKeyAsync(userId));
+                }
+                else
                 {
                     return true;
                 }
             }
+
+            // Check again to verify auto key was set
+            var hasKey = await _cryptoService.HasUserKeyAsync(userId);
             return !hasKey;
         }
 
@@ -172,11 +181,11 @@ namespace Bit.Core.Services
 
             if (await _keyConnectorService.GetUsesKeyConnector())
             {
-                var pinStatus = await IsPinLockSetAsync(userId);
-                var ephemeralPinSet = await _stateService.GetUserKeyPinEphemeralAsync()
+                var pinStatus = await GetPinLockTypeAsync(userId);
+                var ephemeralPinSet = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync()
                     ?? await _stateService.GetPinProtectedKeyAsync();
-                var pinEnabled = (pinStatus == PinLockEnum.Transient && ephemeralPinSet != null) ||
-                          pinStatus == PinLockEnum.Persistent;
+                var pinEnabled = (pinStatus == PinLockType.Transient && ephemeralPinSet != null) ||
+                          pinStatus == PinLockType.Persistent;
 
                 if (!pinEnabled && !await IsBiometricLockSetAsync())
                 {
@@ -198,6 +207,7 @@ namespace Bit.Core.Services
             await Task.WhenAll(
                 _cryptoService.ClearUserKeyAsync(userId),
                 _cryptoService.ClearMasterKeyAsync(userId),
+                _stateService.SetUserKeyAutoUnlockAsync(null, userId),
                 _cryptoService.ClearOrgKeysAsync(true, userId),
                 _cryptoService.ClearKeyPairAsync(true, userId));
 
@@ -223,30 +233,27 @@ namespace Bit.Core.Services
         {
             await _stateService.SetVaultTimeoutAsync(timeout);
             await _stateService.SetVaultTimeoutActionAsync(action);
-            await _cryptoService.ToggleKeysAsync();
+            await _cryptoService.RefreshKeysAsync();
             await _tokenService.ToggleTokensAsync();
         }
 
-        public async Task<PinLockEnum> IsPinLockSetAsync(string userId = null)
+        public async Task<PinLockType> GetPinLockTypeAsync(string userId = null)
         {
             // we can't depend on only the protected pin being set because old
             // versions only used it for MP on Restart
-            var pinIsEnabled = await _stateService.GetProtectedPinAsync(userId);
-            var userKeyPin = await _stateService.GetUserKeyPinAsync(userId);
-            var oldUserKeyPin = await _stateService.GetPinProtectedAsync(userId);
+            var isPinEnabled = await _stateService.GetProtectedPinAsync(userId) != null;
+            var hasUserKeyPin = await _stateService.GetPinKeyEncryptedUserKeyAsync(userId) != null;
+            var hasOldUserKeyPin = await _stateService.GetPinProtectedAsync(userId) != null;
 
-            if (userKeyPin != null || oldUserKeyPin != null)
+            if (hasUserKeyPin || hasOldUserKeyPin)
             {
-                return PinLockEnum.Persistent;
+                return PinLockType.Persistent;
             }
-            else if (pinIsEnabled != null && userKeyPin == null && oldUserKeyPin == null)
+            else if (isPinEnabled && !hasUserKeyPin && !hasOldUserKeyPin)
             {
-                return PinLockEnum.Transient;
+                return PinLockType.Transient;
             }
-            else
-            {
-                return PinLockEnum.Disabled;
-            }
+            return PinLockType.Disabled;
         }
 
         public async Task<bool> IsBiometricLockSetAsync(string userId = null)

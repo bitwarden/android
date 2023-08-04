@@ -151,8 +151,8 @@ namespace Bit.Core.Services
             SelectedTwoFactorProviderType = null;
             _2faForcePasswordResetReason = null;
             var key = await MakePreloginKeyAsync(masterPassword, email);
-            var hashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key);
-            var localHashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
+            var hashedPassword = await _cryptoService.HashMasterKeyAsync(masterPassword, key);
+            var localHashedPassword = await _cryptoService.HashMasterKeyAsync(masterPassword, key, HashPurpose.LocalAuthorization);
             var result = await LogInHelperAsync(email, hashedPassword, localHashedPassword, null, null, null, key, null, null, null, captchaToken);
 
             if (await RequirePasswordChangeAsync(email, masterPassword))
@@ -265,8 +265,8 @@ namespace Bit.Core.Services
         {
             SelectedTwoFactorProviderType = null;
             var key = await MakePreloginKeyAsync(masterPassword, email);
-            var hashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key);
-            var localHashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
+            var hashedPassword = await _cryptoService.HashMasterKeyAsync(masterPassword, key);
+            var localHashedPassword = await _cryptoService.HashMasterKeyAsync(masterPassword, key, HashPurpose.LocalAuthorization);
             return await LogInHelperAsync(email, hashedPassword, localHashedPassword, null, null, null, key, twoFactorProvider,
                 twoFactorToken, remember);
         }
@@ -502,7 +502,7 @@ namespace Bit.Core.Services
             {
                 if (localHashedPassword != null)
                 {
-                    await _cryptoService.SetPasswordHashAsync(localHashedPassword);
+                    await _cryptoService.SetMasterKeyHashAsync(localHashedPassword);
                     await _cryptoService.SetMasterKeyAsync(masterKey);
                     var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
                     await _cryptoService.SetUserKeyAsync(userKey);
@@ -558,7 +558,7 @@ namespace Bit.Core.Services
                         catch { }
                     }
 
-                    await _cryptoService.SetPrivateKeyAsync(tokenResponse.PrivateKey);
+                    await _cryptoService.SetUserPrivateKeyAsync(tokenResponse.PrivateKey);
                 }
                 else if (tokenResponse.KeyConnectorUrl != null)
                 {
