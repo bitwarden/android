@@ -297,7 +297,7 @@ namespace Bit.App.Pages
                     {
                         Pin = string.Empty;
                         await AppHelpers.ResetInvalidUnlockAttemptsAsync();
-                        await SetKeyAndContinueAsync(userKey);
+                        await SetUserKeyAndContinueAsync(userKey);
                     }
                 }
                 catch
@@ -364,7 +364,7 @@ namespace Bit.App.Pages
 
                     var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
                     await _cryptoService.SetMasterKeyAsync(masterKey);
-                    await SetKeyAndContinueAsync(userKey);
+                    await SetUserKeyAndContinueAsync(userKey);
 
                     // Re-enable biometrics
                     if (BiometricEnabled & !BiometricIntegrityValid)
@@ -462,11 +462,12 @@ namespace Bit.App.Pages
             await _stateService.SetBiometricLockedAsync(!success);
             if (success)
             {
-                await DoContinueAsync();
+                var userKey = await _stateService.GetUserKeyBiometricUnlockAsync();
+                await SetUserKeyAndContinueAsync(userKey);
             }
         }
 
-        private async Task SetKeyAndContinueAsync(UserKey key)
+        private async Task SetUserKeyAndContinueAsync(UserKey key)
         {
             var hasKey = await _cryptoService.HasUserKeyAsync();
             if (!hasKey)

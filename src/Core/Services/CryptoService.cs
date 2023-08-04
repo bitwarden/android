@@ -670,7 +670,7 @@ namespace Bit.Core.Services
 
         private async Task StoreAdditionalKeysAsync(UserKey userKey, string userId = null)
         {
-            // Refresh, set, or clear the pin key
+            // Set, refresh, or clear the pin key
             if (await _stateService.GetProtectedPinAsync(userId) != null)
             {
                 await UpdatePinKeyAsync(userKey, userId);
@@ -681,7 +681,7 @@ namespace Bit.Core.Services
                 await _stateService.SetPinKeyEncryptedUserKeyEphemeralAsync(null, userId);
             }
 
-            // Refresh, set, or clear the auto key
+            // Set, refresh, or clear the auto unlock key
             if (await _stateService.GetVaultTimeoutAsync(userId) == null)
             {
                 await _stateService.SetUserKeyAutoUnlockAsync(userKey, userId);
@@ -689,6 +689,16 @@ namespace Bit.Core.Services
             else
             {
                 await _stateService.SetUserKeyAutoUnlockAsync(null, userId);
+            }
+
+            // Set, refresh, or clear the biometric unlock key
+            if ((await _stateService.GetBiometricUnlockAsync(userId)).GetValueOrDefault())
+            {
+                await _stateService.SetUserKeyBiometricUnlockAsync(userKey, userId);
+            }
+            else
+            {
+                await _stateService.SetUserKeyBiometricUnlockAsync(null, userId);
             }
         }
 
