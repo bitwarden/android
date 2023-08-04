@@ -24,11 +24,11 @@ namespace Bit.Core.Services
             _organizationService = organizationService;
         }
 
-        public async Task GetAndSetKey(string url)
+        public async Task GetAndSetMasterKeyAsync(string url)
         {
             try
             {
-                var masterKeyResponse = await _apiService.GetMasterKeyFromKeyConnector(url);
+                var masterKeyResponse = await _apiService.GetMasterKeyFromKeyConnectorAsync(url);
                 var masterKeyArr = Convert.FromBase64String(masterKeyResponse.Key);
                 var masterKey = new MasterKey(masterKeyArr);
                 await _cryptoService.SetMasterKeyAsync(masterKey);
@@ -39,17 +39,17 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task SetUsesKeyConnector(bool usesKeyConnector)
+        public async Task SetUsesKeyConnectorAsync(bool usesKeyConnector)
         {
             await _stateService.SetUsesKeyConnectorAsync(usesKeyConnector);
         }
 
-        public async Task<bool> GetUsesKeyConnector()
+        public async Task<bool> GetUsesKeyConnectorAsync()
         {
             return await _stateService.GetUsesKeyConnectorAsync();
         }
 
-        public async Task<Organization> GetManagingOrganization()
+        public async Task<Organization> GetManagingOrganizationAsync()
         {
             var orgs = await _organizationService.GetAllAsync();
             return orgs.Find(o =>
@@ -57,9 +57,9 @@ namespace Bit.Core.Services
                 !o.IsAdmin);
         }
 
-        public async Task MigrateUser()
+        public async Task MigrateUserAsync()
         {
-            var organization = await GetManagingOrganization();
+            var organization = await GetManagingOrganizationAsync();
             var masterKey = await _cryptoService.GetMasterKeyAsync();
 
             try
@@ -75,11 +75,11 @@ namespace Bit.Core.Services
             await _apiService.PostConvertToKeyConnector();
         }
 
-        public async Task<bool> UserNeedsMigration()
+        public async Task<bool> UserNeedsMigrationAsync()
         {
             var loggedInUsingSso = await _tokenService.GetIsExternal();
-            var requiredByOrganization = await GetManagingOrganization() != null;
-            var userIsNotUsingKeyConnector = !await GetUsesKeyConnector();
+            var requiredByOrganization = await GetManagingOrganizationAsync() != null;
+            var userIsNotUsingKeyConnector = !await GetUsesKeyConnectorAsync();
 
             return loggedInUsingSso && requiredByOrganization && userIsNotUsingKeyConnector;
         }

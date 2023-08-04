@@ -94,7 +94,7 @@ namespace Bit.App.Pages
                 }
             });
             await UpdateVaultButtonTitleAsync();
-            if (await _keyConnectorService.UserNeedsMigration())
+            if (await _keyConnectorService.UserNeedsMigrationAsync())
             {
                 _messagingService.Send("convertAccountToKeyConnector");
             }

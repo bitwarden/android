@@ -179,7 +179,7 @@ namespace Bit.Core.Services
                 userId = await _stateService.GetActiveUserIdAsync();
             }
 
-            if (await _keyConnectorService.GetUsesKeyConnector())
+            if (await _keyConnectorService.GetUsesKeyConnectorAsync())
             {
                 var pinStatus = await GetPinLockTypeAsync(userId);
                 var ephemeralPinSet = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync()

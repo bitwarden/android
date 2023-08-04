@@ -107,7 +107,7 @@ namespace Bit.App.Utilities
 
         public async Task ValidateAndExecuteAsync()
         {
-            var verificationType = await _keyConnectorService.GetUsesKeyConnector()
+            var verificationType = await _keyConnectorService.GetUsesKeyConnectorAsync()
                 ? VerificationType.OTP
                 : VerificationType.MasterPassword;
 

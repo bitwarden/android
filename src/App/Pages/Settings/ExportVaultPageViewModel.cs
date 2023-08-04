@@ -67,7 +67,7 @@ namespace Bit.App.Pages
             _initialized = true;
             FileFormatSelectedIndex = FileFormatOptions.FindIndex(k => k.Key == "json");
             DisablePrivateVaultPolicyEnabled = await _policyService.PolicyAppliesToUser(PolicyType.DisablePersonalVaultExport);
-            UseOTPVerification = await _keyConnectorService.GetUsesKeyConnector();
+            UseOTPVerification = await _keyConnectorService.GetUsesKeyConnectorAsync();
 
             if (UseOTPVerification)
             {
@@ -165,7 +165,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var verificationType = await _keyConnectorService.GetUsesKeyConnector()
+            var verificationType = await _keyConnectorService.GetUsesKeyConnectorAsync()
                 ? VerificationType.OTP
                 : VerificationType.MasterPassword;
             if (!await _userVerificationService.VerifyUser(Secret, verificationType))

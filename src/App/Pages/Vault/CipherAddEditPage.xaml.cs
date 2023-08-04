@@ -176,7 +176,7 @@ namespace Bit.App.Pages
                 }
             });
             // Hide password reprompt option if using key connector
-            _passwordPrompt.IsVisible = !await _keyConnectorService.GetUsesKeyConnector();
+            _passwordPrompt.IsVisible = !await _keyConnectorService.GetUsesKeyConnectorAsync();
         }
 
         protected override void OnDisappearing()

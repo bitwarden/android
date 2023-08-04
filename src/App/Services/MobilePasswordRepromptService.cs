@@ -44,7 +44,7 @@ namespace Bit.App.Services
         public async Task<bool> Enabled()
         {
             var keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
-            return !await keyConnectorService.GetUsesKeyConnector();
+            return !await keyConnectorService.GetUsesKeyConnectorAsync();
         }
     }
 }

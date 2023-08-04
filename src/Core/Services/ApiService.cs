@@ -485,7 +485,7 @@ namespace Bit.Core.Services
 
         #region Key Connector
 
-        public async Task<KeyConnectorUserKeyResponse> GetMasterKeyFromKeyConnector(string keyConnectorUrl)
+        public async Task<KeyConnectorUserKeyResponse> GetMasterKeyFromKeyConnectorAsync(string keyConnectorUrl)
         {
             using (var requestMessage = new HttpRequestMessage())
             {

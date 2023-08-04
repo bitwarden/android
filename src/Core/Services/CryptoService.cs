@@ -143,7 +143,7 @@ namespace Bit.Core.Services
         public async Task<Tuple<UserKey, EncString>> EncryptUserKeyWithMasterKeyAsync(MasterKey masterKey)
         {
             var userKey = await GetUserKeyAsync() ?? await MakeUserKeyAsync();
-            return await BuildProtectedSymmetricKey(masterKey, userKey.Key, keyBytes => new UserKey(keyBytes));
+            return await BuildProtectedSymmetricKeyAsync(masterKey, userKey.Key, keyBytes => new UserKey(keyBytes));
         }
 
         public async Task<UserKey> DecryptUserKeyWithMasterKeyAsync(MasterKey masterKey, EncString encUserKey = null, string userId = null)
@@ -198,7 +198,7 @@ namespace Bit.Core.Services
             }
 
             var newSymKey = await _cryptoFunctionService.RandomBytesAsync(64);
-            return await BuildProtectedSymmetricKey(key, newSymKey, keyBytes => new SymmetricCryptoKey(keyBytes));
+            return await BuildProtectedSymmetricKeyAsync(key, newSymKey, keyBytes => new SymmetricCryptoKey(keyBytes));
         }
 
         public async Task<string> HashMasterKeyAsync(string password, MasterKey masterKey, HashPurpose hashPurpose = HashPurpose.ServerAuthorization)
@@ -874,7 +874,7 @@ namespace Bit.Core.Services
         }
 
         // TODO: This needs to be moved into SymmetricCryptoKey model to remove the keyCreator hack
-        private async Task<Tuple<TKey, EncString>> BuildProtectedSymmetricKey<TKey>(SymmetricCryptoKey key,
+        private async Task<Tuple<TKey, EncString>> BuildProtectedSymmetricKeyAsync<TKey>(SymmetricCryptoKey key,
             byte[] encKey, Func<byte[], TKey> keyCreator) where TKey : SymmetricCryptoKey
         {
             EncString encKeyEnc = null;
@@ -898,7 +898,7 @@ namespace Bit.Core.Services
         private async Task<TKey> MakeKeyAsync<TKey>(string password, string salt, KdfConfig kdfConfig, Func<byte[], TKey> keyCreator)
         where TKey : SymmetricCryptoKey
         {
-            byte[] key = null;
+            byte[] key;
             if (kdfConfig.Type == null || kdfConfig.Type == KdfType.PBKDF2_SHA256)
             {
                 var iterations = kdfConfig.Iterations.GetValueOrDefault(5000);

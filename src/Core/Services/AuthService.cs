@@ -46,7 +46,6 @@ namespace Bit.Core.Services
             II18nService i18nService,
             IPlatformUtilsService platformUtilsService,
             IMessagingService messagingService,
-            IVaultTimeoutService vaultTimeoutService,
             IKeyConnectorService keyConnectorService,
             IPasswordGenerationService passwordGenerationService,
             IPolicyService policyService,
@@ -480,7 +479,7 @@ namespace Bit.Core.Services
                 {
                     if (tokenResponse.KeyConnectorUrl != null)
                     {
-                        await _keyConnectorService.GetAndSetKey(tokenResponse.KeyConnectorUrl);
+                        await _keyConnectorService.GetAndSetMasterKeyAsync(tokenResponse.KeyConnectorUrl);
                     }
 
                     await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(tokenResponse.Key);

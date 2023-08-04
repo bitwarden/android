@@ -149,7 +149,7 @@ namespace Bit.App.Pages
             }
 
             _showChangeMasterPassword = IncludeLinksWithSubscriptionInfo() &&
-                !await _keyConnectorService.GetUsesKeyConnector();
+                !await _keyConnectorService.GetUsesKeyConnectorAsync();
             _reportLoggingEnabled = await _loggerService.IsEnabled();
             _approvePasswordlessLoginRequests = await _stateService.GetApprovePasswordlessLoginsAsync();
             _shouldConnectToWatch = await _stateService.GetShouldConnectToWatchAsync();
@@ -429,7 +429,7 @@ namespace Bit.App.Pages
                 if (!string.IsNullOrWhiteSpace(pin))
                 {
                     var masterPassOnRestart = false;
-                    if (!await _keyConnectorService.GetUsesKeyConnector())
+                    if (!await _keyConnectorService.GetUsesKeyConnectorAsync())
                     {
                         masterPassOnRestart = await _platformUtilsService.ShowDialogAsync(
                             AppResources.PINRequireMasterPasswordRestart, AppResources.UnlockWithPIN,
