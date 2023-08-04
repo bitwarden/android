@@ -95,9 +95,7 @@ namespace Bit.Core.Services
             var keyConnectorRequest = new KeyConnectorUserKeyRequest(newMasterKey.EncKeyB64);
             await _cryptoService.SetMasterKeyAsync(newMasterKey);
 
-            var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(
-                newMasterKey,
-                await _cryptoService.MakeUserKeyAsync());
+            var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(newMasterKey);
 
             await _cryptoService.SetUserKeyAsync(newUserKey);
 
