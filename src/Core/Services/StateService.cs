@@ -428,7 +428,7 @@ namespace Bit.Core.Services
         {
             return (await GetAccountAsync(
                 ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultInMemoryOptionsAsync())
-            ))?.VolatileData?.UserKeyPinEphemeral;
+            ))?.VolatileData?.PinKeyEncryptedUserKeyEphemeral;
         }
 
         public async Task SetPinKeyEncryptedUserKeyEphemeralAsync(EncString value, string userId = null)
@@ -436,7 +436,7 @@ namespace Bit.Core.Services
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultInMemoryOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
-            account.VolatileData.UserKeyPinEphemeral = value;
+            account.VolatileData.PinKeyEncryptedUserKeyEphemeral = value;
             await SaveAccountAsync(account, reconciledOptions);
         }
 

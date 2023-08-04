@@ -673,7 +673,7 @@ namespace Bit.Core.Services
             // Refresh, set, or clear the pin key
             if (await _stateService.GetProtectedPinAsync(userId) != null)
             {
-                await UpdateUserKeyPinAsync(userKey, userId);
+                await UpdatePinKeyAsync(userKey, userId);
             }
             else
             {
@@ -692,7 +692,7 @@ namespace Bit.Core.Services
             }
         }
 
-        private async Task UpdateUserKeyPinAsync(UserKey userKey, string userId = null)
+        private async Task UpdatePinKeyAsync(UserKey userKey, string userId = null)
         {
             var pin = await DecryptToUtf8Async(new EncString(await _stateService.GetProtectedPinAsync(userId)));
             var pinKey = await MakePinKeyAsync(
