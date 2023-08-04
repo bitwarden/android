@@ -1343,7 +1343,7 @@ namespace Bit.Core.Services
             {
                 return null;
             }
-            
+
         }
 
         public async Task SetPendingAdminAuthRequestAsync(PendingAdminAuthRequest value, string userId = null)
