@@ -1334,16 +1334,21 @@ namespace Bit.Core.Services
 
         public async Task<PendingAdminAuthRequest> GetPendingAdminAuthRequestAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            return await _storageMediatorService.GetAsync<PendingAdminAuthRequest>(Constants.PendingAdminAuthRequest(reconciledOptions.UserId), true);
+            try
+            {
+                // GetAsync will throw an ArgumentException exception if there isn't a value to deserialize 
+                return await _storageMediatorService.GetAsync<PendingAdminAuthRequest>(await ComposeKeyAsync(Constants.PendingAdminAuthRequest, userId), true);
+            }
+            catch (ArgumentException)
+            {
+                return null;
+            }
+            
         }
 
         public async Task SetPendingAdminAuthRequestAsync(PendingAdminAuthRequest value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            await _storageMediatorService.SaveAsync(Constants.PendingAdminAuthRequest(reconciledOptions.UserId), value, true);
+            await _storageMediatorService.SaveAsync(await ComposeKeyAsync(Constants.PendingAdminAuthRequest, userId), value, true);
         }
 
         public ConfigResponse GetConfigs()
