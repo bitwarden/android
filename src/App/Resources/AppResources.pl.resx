@@ -2656,7 +2656,7 @@ Czy chcesz przełączyć się na to konto?</value>
     <value>Dostępne dla dwustopniowego logowania</value>
   </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
-    <value>Master password re-prompt help</value>
+    <value>Pomoc dotycząca potwierdzania hasłem głównym</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>Odblokowanie może się nie powieść z powodu niewystarczającej ilości pamięci. Zmniejsz ustawienia pamięci KDF, aby to rozwiązać</value>
