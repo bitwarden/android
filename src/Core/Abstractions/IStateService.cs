@@ -20,7 +20,7 @@ namespace Bit.Core.Abstractions
         Task<string> GetMasterKeyEncryptedUserKeyAsync(string userId = null);
         Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null);
         Task<UserKey> GetUserKeyAutoUnlockAsync(string userId = null);
-        Task SetUserKeyAutoUnlockAsync(string value, string userId = null);
+        Task SetUserKeyAutoUnlockAsync(UserKey value, string userId = null);
         Task<string> GetActiveUserIdAsync();
         Task<string> GetActiveUserEmailAsync();
         Task<T> GetActiveUserCustomDataAsync<T>(Func<Account, T> dataMapper);
@@ -35,6 +35,8 @@ namespace Bit.Core.Abstractions
         Task<EnvironmentUrlData> GetPreAuthEnvironmentUrlsAsync();
         Task SetPreAuthEnvironmentUrlsAsync(EnvironmentUrlData value);
         Task<EnvironmentUrlData> GetEnvironmentUrlsAsync(string userId = null);
+        Task<UserKey> GetUserKeyBiometricUnlockAsync(string userId = null);
+        Task SetUserKeyBiometricUnlockAsync(UserKey value, string userId = null);
         Task<bool?> GetBiometricUnlockAsync(string userId = null);
         Task SetBiometricUnlockAsync(bool? value, string userId = null);
         Task<bool> GetBiometricLockedAsync(string userId = null);

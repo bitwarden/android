@@ -241,6 +241,19 @@ namespace Bit.Core.Services
             ))?.Settings?.EnvironmentUrls;
         }
 
+        public async Task<UserKey> GetUserKeyBiometricUnlockAsync(string userId = null)
+        {
+            var keyB64 = await _storageMediatorService.GetAsync<string>(
+                await ComposeKeyAsync(Constants.UserKeyBiometricUnlockKey, userId), true);
+            return keyB64 == null ? null : new UserKey(Convert.FromBase64String(keyB64));
+        }
+
+        public async Task SetUserKeyBiometricUnlockAsync(UserKey value, string userId = null)
+        {
+            await _storageMediatorService.SaveAsync(
+                await ComposeKeyAsync(Constants.UserKeyBiometricUnlockKey, userId), value, true);
+        }
+
         public async Task<bool?> GetBiometricUnlockAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
@@ -353,10 +366,10 @@ namespace Bit.Core.Services
             return keyB64 == null ? null : new UserKey(Convert.FromBase64String(keyB64));
         }
 
-        public async Task SetUserKeyAutoUnlockAsync(string value, string userId = null)
+        public async Task SetUserKeyAutoUnlockAsync(UserKey value, string userId = null)
         {
             await _storageMediatorService.SaveAsync(
-                await ComposeKeyAsync(Constants.UserKeyAutoUnlockKey, userId), value, true);
+                await ComposeKeyAsync(Constants.UserKeyAutoUnlockKey, userId), value.KeyB64, true);
         }
 
         public async Task<bool> CanAccessPremiumAsync(string userId = null)

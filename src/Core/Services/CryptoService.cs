@@ -684,7 +684,7 @@ namespace Bit.Core.Services
             // Refresh, set, or clear the auto key
             if (await _stateService.GetVaultTimeoutAsync(userId) == null)
             {
-                await _stateService.SetUserKeyAutoUnlockAsync(userKey.KeyB64, userId);
+                await _stateService.SetUserKeyAutoUnlockAsync(userKey, userId);
             }
             else
             {
@@ -971,7 +971,7 @@ namespace Bit.Core.Services
                 new EncString(encryptedUserKey),
                 userId);
             // Migrate
-            await _stateService.SetUserKeyAutoUnlockAsync(userKey.KeyB64, userId);
+            await _stateService.SetUserKeyAutoUnlockAsync(userKey, userId);
             await _stateService.SetKeyEncryptedAsync(null, userId);
             // Set encrypted user key just in case the user locks without syncing
             await SetMasterKeyEncryptedUserKeyAsync(encryptedUserKey);
