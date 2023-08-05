@@ -111,7 +111,7 @@ namespace Bit.App.Pages
         {
             try
             {
-                Email = await _stateService.GetRememberedEmailAsync();
+                Email = await _stateService.GetActiveUserEmailAsync();
                 var decryptOptions = await _stateService.GetAccountDecryptionOptions();
                 RequestAdminApprovalEnabled = decryptOptions?.TrustedDeviceOption?.HasAdminApproval ?? false;
                 ApproveWithMasterPasswordEnabled = decryptOptions?.HasMasterPassword ?? false;
