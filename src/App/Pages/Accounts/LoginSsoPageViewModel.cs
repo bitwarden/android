@@ -149,7 +149,6 @@ namespace Bit.App.Pages
                 authResult = await WebAuthenticator.AuthenticateAsync(new Uri(url),
                     new Uri(REDIRECT_URI));
 
-
                 var code = GetResultCode(authResult, state);
                 if (!string.IsNullOrEmpty(code))
                 {
