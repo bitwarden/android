@@ -3931,6 +3931,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Log In With Device.
+        /// </summary>
+        public static string LogInWithDevice {
+            get {
+                return ResourceManager.GetString("LogInWithDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log in with device must be set up in the settings of the Bitwarden app. Need another option?.
         /// </summary>
         public static string LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption {
