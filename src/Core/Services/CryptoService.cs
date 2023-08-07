@@ -101,13 +101,19 @@ namespace Bit.Core.Services
 
         public async Task<UserKey> GetAutoUnlockKeyAsync(string userId = null)
         {
-            await MigrateAutoUnlockKeyIfNeededAsync(userId);
+            await MigrateAutoAndBioKeysIfNeededAsync(userId);
             return await _stateService.GetUserKeyAutoUnlockAsync(userId);
         }
 
         public async Task<bool> HasAutoUnlockKeyAsync(string userId = null)
         {
             return await GetAutoUnlockKeyAsync(userId) != null;
+        }
+
+        public async Task<UserKey> GetBiometricUnlockKeyAsync(string userId = null)
+        {
+            await MigrateAutoAndBioKeysIfNeededAsync(userId);
+            return await _stateService.GetUserKeyBiometricUnlockAsync(userId);
         }
 
         public Task SetMasterKeyAsync(MasterKey masterKey, string userId = null)
@@ -982,23 +988,33 @@ namespace Bit.Core.Services
         // We previously used the master key for additional keys, but now we use the user key.
         // These methods support migrating the old keys to the new ones.
 
-        private async Task MigrateAutoUnlockKeyIfNeededAsync(string userId = null)
+        private async Task MigrateAutoAndBioKeysIfNeededAsync(string userId = null)
         {
-            var oldAutoKey = await _stateService.GetKeyEncryptedAsync(userId);
-            if (oldAutoKey == null)
+            var oldKey = await _stateService.GetKeyEncryptedAsync(userId);
+            if (oldKey == null)
             {
                 return;
             }
+
             // Decrypt
-            var masterKey = new MasterKey(Convert.FromBase64String(oldAutoKey));
+            var masterKey = new MasterKey(Convert.FromBase64String(oldKey));
             var encryptedUserKey = await _stateService.GetEncKeyEncryptedAsync(userId);
             var userKey = await DecryptUserKeyWithMasterKeyAsync(
                 masterKey,
                 new EncString(encryptedUserKey),
                 userId);
+
             // Migrate
-            await _stateService.SetUserKeyAutoUnlockAsync(userKey, userId);
+            if (await _stateService.GetVaultTimeoutAsync(userId) == null)
+            {
+                await _stateService.SetUserKeyAutoUnlockAsync(userKey, userId);
+            }
+            if ((await _stateService.GetBiometricUnlockAsync(userId)).GetValueOrDefault())
+            {
+                await _stateService.SetUserKeyBiometricUnlockAsync(userKey, userId);
+            }
             await _stateService.SetKeyEncryptedAsync(null, userId);
+
             // Set encrypted user key just in case the user locks without syncing
             await SetMasterKeyEncryptedUserKeyAsync(encryptedUserKey);
         }

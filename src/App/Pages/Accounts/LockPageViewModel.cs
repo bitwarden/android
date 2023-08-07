@@ -462,7 +462,7 @@ namespace Bit.App.Pages
             await _stateService.SetBiometricLockedAsync(!success);
             if (success)
             {
-                var userKey = await _stateService.GetUserKeyBiometricUnlockAsync();
+                var userKey = await _cryptoService.GetBiometricUnlockKeyAsync();
                 await SetUserKeyAndContinueAsync(userKey);
             }
         }

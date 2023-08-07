@@ -251,7 +251,7 @@ namespace Bit.Core.Services
         public async Task SetUserKeyBiometricUnlockAsync(UserKey value, string userId = null)
         {
             await _storageMediatorService.SaveAsync(
-                await ComposeKeyAsync(Constants.UserKeyBiometricUnlockKey, userId), value, true);
+                await ComposeKeyAsync(Constants.UserKeyBiometricUnlockKey, userId), value?.KeyB64, true);
         }
 
         public async Task<bool?> GetBiometricUnlockAsync(string userId = null)
@@ -369,7 +369,7 @@ namespace Bit.Core.Services
         public async Task SetUserKeyAutoUnlockAsync(UserKey value, string userId = null)
         {
             await _storageMediatorService.SaveAsync(
-                await ComposeKeyAsync(Constants.UserKeyAutoUnlockKey, userId), value.KeyB64, true);
+                await ComposeKeyAsync(Constants.UserKeyAutoUnlockKey, userId), value?.KeyB64, true);
         }
 
         public async Task<bool> CanAccessPremiumAsync(string userId = null)
@@ -1478,6 +1478,7 @@ namespace Bit.Core.Services
             // Non-state storage
             await Task.WhenAll(
                 SetUserKeyAutoUnlockAsync(null, userId),
+                SetUserKeyBiometricUnlockAsync(null, userId),
                 SetProtectedPinAsync(null, userId),
                 SetKeyHashAsync(null, userId),
                 SetOrgKeysEncryptedAsync(null, userId),
