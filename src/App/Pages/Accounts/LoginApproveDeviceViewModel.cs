@@ -49,7 +49,8 @@ namespace Bit.App.Pages
             _authService = ServiceContainer.Resolve<IAuthService>();
             _syncService = ServiceContainer.Resolve<ISyncService>();
 
-            PageTitle = AppResources.LoggedIn;
+            PageTitle = AppResources.LogInInitiated;
+            RememberThisDevice = true;
 
             ApproveWithMyOtherDeviceCommand = new AsyncCommand(() => SetDeviceTrustAndInvokeAsync(LogInWithDeviceAction),
                 onException: ex => HandleException(ex),
