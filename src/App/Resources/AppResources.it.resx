@@ -172,7 +172,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Vuoi davvero eliminarlo? Non lo potrai ripristinare.</value>
+    <value>Vuoi davvero eliminarlo? Questa operazione non può essere annullata.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
@@ -1584,9 +1584,6 @@
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>URI mai riempiti automaticamente</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Il riempimento automatico non sarà proposto per gli URI bloccati. Separa più URI con una virgola. Per esempio: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Chiedi di aggiungere nuovi login</value>
   </data>
@@ -2630,16 +2627,90 @@ Vuoi passare a questo account?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Password principale corrente</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Creato {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Applicazione</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Non puoi modificare l'applicazione della passkey perché invaliderebbe la passkey</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>La passkey non sarà copiata</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>La passkey non sarà copiata nell'elemento clonato. Vuoi continuare a clonare questo elemento?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Copia applicazione</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Disponibile per la verifica in due passaggi</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Aiuto per chiedere la password principale di nuovo</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Lo sblocco potrebbe fallire a causa di memoria insufficiente. Riduci le impostazioni della memoria KDF per risolvere il problema</value>
+    <value>Lo sblocco potrebbe non riuscire a causa di memoria insufficiente. Riduci le impostazioni della memoria KDF per risolvere il problema.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Chiave API non valida</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Token API non valido</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Questo elemento non può essere condiviso con l'organizzazione perché ne esiste già uno con la stessa passkey.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Bocca riempimento automatico</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Il riempimento automatico non sarà offerto per questi URI.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Nuovo URI bloccato</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI salvato</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Formato non valido. Usa https://, http://, or androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Modifica URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Inserisci URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Formato: {0}. Separa più URI con una virgola.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Formato: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>URI non valido</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI rimosso</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Non ci sono URI bloccati</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>L'URI {0} è già bloccato</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Non puoi modificare più URI contemporaneamente</value>
   </data>
 </root>

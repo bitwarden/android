@@ -1585,9 +1585,6 @@
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Заблоковані для автозаповнення URI</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Автозаповнення не пропонуватиметься для заблокованих URI-адрес. Розділяйте різні URI комою. Наприклад: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Запитувати про додавання запису</value>
   </data>
@@ -1668,7 +1665,7 @@
     <value>Підтвердьте свої облікові дані для продовження.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>Експортовані дані вашого сховища знаходяться в незашифрованому вигляді. Вам не слід зберігати чи надсилати їх через незахищені канали (наприклад, е-поштою). Після використання негайно видаліть їх.</value>
+    <value>Ваші експортовані дані сховища незашифровані. Не зберігайте і не надсилайте їх незахищеними каналами (як-от електронна пошта). Після використання негайно видаліть їх.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
     <value>Цей експорт шифрує ваші дані за допомогою ключа шифрування облікового запису. Якщо ви коли-небудь оновите ключ шифрування облікового запису, необхідно виконати експорт знову, оскільки не зможете розшифрувати цей файл експорту.</value>
@@ -2630,6 +2627,34 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Поточний головний пароль</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Ключ доступу</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Ключі доступу</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Створено {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Програма</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Ви не можете змінити програму для ключа доступу, оскільки це зробить його недійсним</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Ключ доступу не буде скопійовано</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Ключ доступу не буде скопійовано до клонованого запису. Хочете продовжити клонування цього запису?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Копіювати програму</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Доступно для двоетапної перевірки</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Допомога щодо повторного запиту головного пароля</value>
   </data>
@@ -2641,5 +2666,51 @@
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Недійсний токен API</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Цей запис не можна поширити для організації, оскільки там вже є запис із таким самим ключем доступу.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Блокувати автозаповнення</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Автозаповнення не пропонуватиметься для цих URI.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Новий заблокований URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI збережено</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Неправильний формат. Використайте https://, http://, або androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Редагувати URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Введіть URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Формат: {0}. Можна ввести кілька URI, розділивши їх комами.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Формат: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Неприпустимий URI</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI вилучено</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Немає заблокованих URI</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI {0} вже заблоковано</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Неможливо редагувати кілька URI одночасно</value>
   </data>
 </root>

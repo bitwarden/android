@@ -6,7 +6,7 @@ using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Models.View
 {
-    public class CipherView : View
+    public class CipherView : View, ILaunchableView
     {
         public CipherView() { }
 
@@ -23,6 +23,7 @@ namespace Bit.Core.Models.View
             LocalData = c.LocalData;
             CollectionIds = c.CollectionIds;
             RevisionDate = c.RevisionDate;
+            CreationDate = c.CreationDate;
             DeletedDate = c.DeletedDate;
             Reprompt = c.Reprompt;
         }
@@ -42,11 +43,13 @@ namespace Bit.Core.Models.View
         public IdentityView Identity { get; set; }
         public CardView Card { get; set; }
         public SecureNoteView SecureNote { get; set; }
+        public Fido2KeyView Fido2Key { get; set; }
         public List<AttachmentView> Attachments { get; set; }
         public List<FieldView> Fields { get; set; }
         public List<PasswordHistoryView> PasswordHistory { get; set; }
         public HashSet<string> CollectionIds { get; set; }
         public DateTime RevisionDate { get; set; }
+        public DateTime CreationDate { get; set; }
         public DateTime? DeletedDate { get; set; }
         public CipherRepromptType Reprompt { get; set; }
 
@@ -64,6 +67,8 @@ namespace Bit.Core.Models.View
                         return Card;
                     case CipherType.Identity:
                         return Identity;
+                    case CipherType.Fido2Key:
+                        return Fido2Key;
                     default:
                         break;
                 }
@@ -110,5 +115,12 @@ namespace Bit.Core.Models.View
             return LinkedFieldOptions.Find(lfo => lfo.Value == id).Key;
         }
 
+        public string ComparableName => Name + Login?.Username + Fido2Key?.UserName;
+
+        public bool CanLaunch => Login?.CanLaunch == true || Fido2Key?.CanLaunch == true;
+
+        public string LaunchUri => Login?.LaunchUri ?? Fido2Key?.LaunchUri;
+
+        public bool IsClonable => OrganizationId is null && Type != CipherType.Fido2Key;
     }
 }

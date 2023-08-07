@@ -88,7 +88,6 @@ namespace Bit.App.Pages
             _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
             _accountsManager = ServiceContainer.Resolve<IAccountsManager>();
 
-
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardNumberCommand = new Command(ToggleCardNumber);
@@ -297,6 +296,7 @@ namespace Bit.App.Pages
         public bool IsIdentity => Cipher?.Type == CipherType.Identity;
         public bool IsCard => Cipher?.Type == CipherType.Card;
         public bool IsSecureNote => Cipher?.Type == CipherType.SecureNote;
+        public bool IsFido2Key => Cipher?.Type == CipherType.Fido2Key;
         public bool ShowUris => IsLogin && Cipher.Login.HasUris;
         public bool ShowAttachments => Cipher.HasAttachments;
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
@@ -309,6 +309,7 @@ namespace Bit.App.Pages
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public bool HasTotpValue => IsLogin && !string.IsNullOrEmpty(Cipher?.Login?.Totp);
         public string SetupTotpText => $"{BitwardenIcons.Camera} {AppResources.SetupTotp}";
+        public bool ShowPasskeyInfo => Cipher?.Login?.Fido2Key != null && !CloneMode;
 
         public void Init()
         {
@@ -366,6 +367,11 @@ namespace Bit.App.Pages
                         if (Cipher.OrganizationId == null && !AllowPersonal)
                         {
                             Cipher.OrganizationId = OrganizationId;
+                        }
+                        if (Cipher.Type == CipherType.Login)
+                        {
+                            // passkeys can't be cloned
+                            Cipher.Login.Fido2Key = null;
                         }
                     }
                     if (appOptions?.OtpData != null && Cipher.Type == CipherType.Login)
