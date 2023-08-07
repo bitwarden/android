@@ -610,8 +610,16 @@ namespace Bit.Core.Services
         }
         public async Task<PasswordlessLoginResponse> GetPasswordlessLoginRequestByIdAsync(string id)
         {
-            var response = await _apiService.GetAuthRequestAsync(id);
-            return await PopulateFingerprintPhraseAsync(response, await _stateService.GetEmailAsync());
+            try
+            {
+                var response = await _apiService.GetAuthRequestAsync(id);
+                return await PopulateFingerprintPhraseAsync(response, await _stateService.GetEmailAsync());
+            }
+            catch (ApiException ex) when (ex?.Error?.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                // Thrown when request expires and purge job erases it from the db
+                return null;
+            }
         }
 
         /// <inheritdoc />
