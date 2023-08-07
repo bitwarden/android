@@ -67,7 +67,7 @@ namespace Bit.App.Pages
             _cryptoFunctionService = ServiceContainer.Resolve<ICryptoFunctionService>();
             _cryptoService = ServiceContainer.Resolve<ICryptoService>();
 
-            PageTitle = AppResources.LogInWithAnotherDevice;
+            PageTitle = AppResources.LogInInitiated;
 
             CreatePasswordlessLoginCommand = new AsyncCommand(CreatePasswordlessLoginAsync,
                 onException: ex => HandleException(ex),
@@ -141,7 +141,7 @@ namespace Bit.App.Pages
                 switch (_authRequestType)
                 {
                     case AuthRequestType.AuthenticateAndUnlock:
-                        return AppResources.NeedAnotherOption;
+                        return AppResources.LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption;
                     case AuthRequestType.AdminApproval:
                         return AppResources.TroubleLoggingIn;
                     default:
