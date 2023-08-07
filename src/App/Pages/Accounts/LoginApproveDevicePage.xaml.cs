@@ -53,7 +53,7 @@ namespace Bit.App.Pages
 
         private async Task StartLogInWithMasterPasswordAsync()
         {
-            var page = new LockPage(_appOptions);
+            var page = new LockPage(_appOptions, checkPendingAuthRequests: false);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
