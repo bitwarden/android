@@ -48,7 +48,6 @@ namespace Bit.App.Pages
         private string _biometricButtonText;
         private string _loggedInAsText;
         private string _lockedVerifyText;
-        private bool _checkPendingAuthRequests;
 
         public LockPageViewModel()
         {
@@ -150,11 +149,7 @@ namespace Bit.App.Pages
             set => SetProperty(ref _lockedVerifyText, value);
         }
 
-        public bool CheckPendingAuthRequests
-        {
-            get => _checkPendingAuthRequests;
-            set => SetProperty(ref _checkPendingAuthRequests, value);
-        }
+        public bool CheckPendingAuthRequests { get; set; }
 
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
 
