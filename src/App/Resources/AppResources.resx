@@ -2756,5 +2756,4 @@ Do you want to switch to this account?</value>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
     <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
   </data>
-
 </root>

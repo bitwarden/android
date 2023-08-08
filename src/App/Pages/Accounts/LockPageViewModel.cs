@@ -149,6 +149,8 @@ namespace Bit.App.Pages
             set => SetProperty(ref _lockedVerifyText, value);
         }
 
+        public bool CheckPendingAuthRequests { get; set; }
+
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
 
         public Command SubmitCommand { get; }
@@ -165,7 +167,7 @@ namespace Bit.App.Pages
         public async Task InitAsync()
         {
             var pendingRequest = await _stateService.GetPendingAdminAuthRequestAsync();
-            if (pendingRequest != null)
+            if (pendingRequest != null && CheckPendingAuthRequests)
             {
                 await _vaultTimeoutService.LogOutAsync();
                 return;
