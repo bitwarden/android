@@ -3931,7 +3931,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log In With Device.
+        ///   Looks up a localized string similar to Log in with device.
         /// </summary>
         public static string LogInWithDevice {
             get {

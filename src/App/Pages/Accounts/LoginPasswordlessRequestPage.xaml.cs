@@ -21,7 +21,6 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.Email = email;
             _vm.AuthRequestType = authRequestType;
-            _vm.PageTitle = _vm.HeaderTitle;
             _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
             _vm.LogInSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
             _vm.UpdateTempPasswordAction = () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());

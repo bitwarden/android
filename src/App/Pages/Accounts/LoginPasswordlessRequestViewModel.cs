@@ -179,14 +179,18 @@ namespace Bit.App.Pages
         public AuthRequestType AuthRequestType
         {
             get => _authRequestType;
-            set => SetProperty(ref _authRequestType, value, additionalPropertyNames: new string[]
+            set
             {
-                nameof(Title),
-                nameof(SubTitle),
-                nameof(Description),
-                nameof(OtherOptions),
-                nameof(ResendNotificationVisible)
-            });
+                SetProperty(ref _authRequestType, value, additionalPropertyNames: new string[]
+                {
+                    nameof(Title),
+                    nameof(SubTitle),
+                    nameof(Description),
+                    nameof(OtherOptions),
+                    nameof(ResendNotificationVisible)
+                });
+                PageTitle = HeaderTitle;
+            }
         }
 
         public bool ResendNotificationVisible => AuthRequestType == AuthRequestType.AuthenticateAndUnlock;

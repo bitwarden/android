@@ -2757,6 +2757,6 @@ Do you want to switch to this account?</value>
     <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
-    <value>Log In With Device</value>
+    <value>Log in with device</value>
   </data>
 </root>
