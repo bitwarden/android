@@ -46,6 +46,7 @@ namespace Bit.Core.Services
             II18nService i18nService,
             IPlatformUtilsService platformUtilsService,
             IMessagingService messagingService,
+            IKeyConnectorService keyConnectorService,
             IPasswordGenerationService passwordGenerationService,
             IPolicyService policyService,
             bool setCryptoKeys = true)
@@ -59,6 +60,7 @@ namespace Bit.Core.Services
             _i18nService = i18nService;
             _platformUtilsService = platformUtilsService;
             _messagingService = messagingService;
+            _keyConnectorService = keyConnectorService;
             _passwordGenerationService = passwordGenerationService;
             _policyService = policyService;
             _setCryptoKeys = setCryptoKeys;
