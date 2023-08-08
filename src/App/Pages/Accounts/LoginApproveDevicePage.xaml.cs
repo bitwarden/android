@@ -23,7 +23,6 @@ namespace Bit.App.Pages
             _vm.LogInWithDeviceAction = () => StartLoginWithDeviceAsync().FireAndForget();
             _vm.RequestAdminApprovalAction = () => RequestAdminApprovalAsync().FireAndForget();
             _vm.ContinueToVaultAction = () => ContinueToVaultAsync().FireAndForget();
-            _vm.CloseAction = () => { Navigation.PopModalAsync(); };
             _vm.Page = this;
             _appOptions = appOptions;
         }
@@ -31,14 +30,6 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             _vm.InitAsync();
-        }
-
-        private void Cancel_Clicked(object sender, EventArgs e)
-        {
-            if (DoOnce())
-            {
-                _vm.CloseAction();
-            }
         }
 
         private async Task ContinueToVaultAsync()
@@ -53,7 +44,7 @@ namespace Bit.App.Pages
 
         private async Task StartLogInWithMasterPasswordAsync()
         {
-            var page = new LockPage(_appOptions);
+            var page = new LockPage(_appOptions, checkPendingAuthRequests: false);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
