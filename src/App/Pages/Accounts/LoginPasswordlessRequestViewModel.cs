@@ -67,8 +67,6 @@ namespace Bit.App.Pages
             _cryptoFunctionService = ServiceContainer.Resolve<ICryptoFunctionService>();
             _cryptoService = ServiceContainer.Resolve<ICryptoService>();
 
-            PageTitle = AppResources.LogInInitiated;
-
             CreatePasswordlessLoginCommand = new AsyncCommand(CreatePasswordlessLoginAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
@@ -86,7 +84,23 @@ namespace Bit.App.Pages
         public ICommand CreatePasswordlessLoginCommand { get; }
         public ICommand CloseCommand { get; }
 
-        public string Tittle
+        public string HeaderTitle
+        {
+            get
+            {
+                switch (_authRequestType)
+                {
+                    case AuthRequestType.AuthenticateAndUnlock:
+                        return AppResources.LogInWithDevice;
+                    case AuthRequestType.AdminApproval:
+                        return AppResources.LogInInitiated;
+                    default:
+                        return string.Empty;
+                };
+            }
+        }
+
+        public string Title
         {
             get
             {
@@ -102,7 +116,7 @@ namespace Bit.App.Pages
             }
         }
 
-        public string SubTittle
+        public string SubTitle
         {
             get
             {
@@ -165,14 +179,18 @@ namespace Bit.App.Pages
         public AuthRequestType AuthRequestType
         {
             get => _authRequestType;
-            set => SetProperty(ref _authRequestType, value, additionalPropertyNames: new string[]
+            set
             {
-                nameof(Tittle),
-                nameof(SubTittle),
-                nameof(Description),
-                nameof(OtherOptions),
-                nameof(ResendNotificationVisible)
-            });
+                SetProperty(ref _authRequestType, value, additionalPropertyNames: new string[]
+                {
+                    nameof(Title),
+                    nameof(SubTitle),
+                    nameof(Description),
+                    nameof(OtherOptions),
+                    nameof(ResendNotificationVisible)
+                });
+                PageTitle = HeaderTitle;
+            }
         }
 
         public bool ResendNotificationVisible => AuthRequestType == AuthRequestType.AuthenticateAndUnlock;
