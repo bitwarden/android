@@ -615,7 +615,7 @@ namespace Bit.Core.Services
                 var response = await _apiService.GetAuthRequestAsync(id);
                 return await PopulateFingerprintPhraseAsync(response, await _stateService.GetEmailAsync());
             }
-            catch (ApiException ex) when (ex?.Error?.StatusCode == System.Net.HttpStatusCode.NotFound)
+            catch (ApiException ex) when (ex.Error?.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
                 // Thrown when request expires and purge job erases it from the db
                 return null;
