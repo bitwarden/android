@@ -29,17 +29,18 @@ namespace Bit.App.Pages
         private IDeviceTrustCryptoService _deviceTrustCryptoService;
         private readonly IAuthService _authService;
         private readonly ISyncService _syncService;
+        private readonly IMessagingService _messagingService;
 
         public ICommand ApproveWithMyOtherDeviceCommand { get; }
         public ICommand RequestAdminApprovalCommand { get; }
         public ICommand ApproveWithMasterPasswordCommand { get; }
         public ICommand ContinueCommand { get; }
+        public ICommand LogoutCommand { get; }
 
         public Action LogInWithMasterPasswordAction { get; set; }
         public Action LogInWithDeviceAction { get; set; }
         public Action RequestAdminApprovalAction { get; set; }
         public Action ContinueToVaultAction { get; set; }
-        public Action CloseAction { get; set; }
 
         public LoginApproveDeviceViewModel()
         {
@@ -48,6 +49,7 @@ namespace Bit.App.Pages
             _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
             _authService = ServiceContainer.Resolve<IAuthService>();
             _syncService = ServiceContainer.Resolve<ISyncService>();
+            _messagingService = ServiceContainer.Resolve<IMessagingService>();
 
             PageTitle = AppResources.LogInInitiated;
             RememberThisDevice = true;
@@ -67,6 +69,8 @@ namespace Bit.App.Pages
             ContinueCommand = new AsyncCommand(CreateNewSsoUserAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
+
+            LogoutCommand = new Command(() => _messagingService.Send(AccountsManagerMessageCommands.LOGOUT));
         }
 
         public string LoggingInAsText => string.Format(AppResources.LoggingInAsX, Email);
