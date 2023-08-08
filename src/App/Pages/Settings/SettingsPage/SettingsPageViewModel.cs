@@ -130,9 +130,12 @@ namespace Bit.App.Pages
             _vaultTimeoutDisplayValue = _vaultTimeoutOptions.FirstOrDefault(o => o.Value == _vaultTimeout).Key;
             _vaultTimeoutDisplayValue ??= _vaultTimeoutOptions.Where(o => o.Value == CustomVaultTimeoutValue).First().Key;
 
-            var savedVaultTimeoutAction = await _vaultTimeoutService.GetVaultTimeoutAction();
-            var timeoutAction = savedVaultTimeoutAction ?? VaultTimeoutAction.Lock;
-            if (!_hasMasterPassword && timeoutAction == VaultTimeoutAction.Lock)
+
+            var pinSet = await _vaultTimeoutService.GetPinLockTypeAsync();
+            _pin = pinSet != PinLockType.Disabled;
+            _biometric = await _vaultTimeoutService.IsBiometricLockSetAsync();
+            var timeoutAction = await _vaultTimeoutService.GetVaultTimeoutAction() ?? VaultTimeoutAction.Lock;
+            if (!IsVaultTimeoutActionLockAllowed)
             {
                 timeoutAction = VaultTimeoutAction.Logout;
                 await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(_vaultTimeout, VaultTimeoutAction.Logout);
@@ -149,10 +152,6 @@ namespace Bit.App.Pages
                     (t.Value > 0 || t.Value == CustomVaultTimeoutValue) &&
                     t.Value != null).ToList();
             }
-
-            var pinSet = await _vaultTimeoutService.GetPinLockTypeAsync();
-            _pin = pinSet != PinLockType.Disabled;
-            _biometric = await _vaultTimeoutService.IsBiometricLockSetAsync();
             _screenCaptureAllowed = await _stateService.GetScreenCaptureAllowedAsync();
 
             if (_vaultTimeoutDisplayValue == null)
@@ -477,6 +476,7 @@ namespace Bit.App.Pages
             if (!_pin)
             {
                 await _vaultTimeoutService.ClearAsync();
+                await UpdateVaultTimeoutActionIfNeededAsync();
             }
             BuildList();
         }
