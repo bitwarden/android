@@ -477,16 +477,20 @@ namespace Bit.Core.Services
 
                 if (code == null || tokenResponse.Key != null)
                 {
-                    if (tokenResponse.KeyConnectorUrl != null)
-                    {
-                        await _keyConnectorService.GetAndSetMasterKeyAsync(tokenResponse.KeyConnectorUrl);
-                    }
-
                     await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(tokenResponse.Key);
 
                     if (masterKey != null)
                     {
                         await _cryptoService.SetMasterKeyAsync(masterKey);
+                    }
+                    if (tokenResponse.KeyConnectorUrl != null)
+                    {
+                        await _keyConnectorService.GetAndSetMasterKeyAsync(tokenResponse.KeyConnectorUrl);
+                    }
+
+                    masterKey ??= await _stateService.GetMasterKeyAsync();
+                    if (masterKey != null)
+                    {
                         var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
                         await _cryptoService.SetUserKeyAsync(userKey);
                     }
