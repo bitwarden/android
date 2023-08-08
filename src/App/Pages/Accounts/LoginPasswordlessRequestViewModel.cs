@@ -286,6 +286,7 @@ namespace Bit.App.Pages
                     // handle pending auth request not valid remove it from state
                     await _stateService.SetPendingAdminAuthRequestAsync(null);
                     pendingRequest = null;
+                    response = null;
                 }
                 else
                 {
