@@ -440,7 +440,6 @@ namespace Bit.iOS.ShareExtension
                 vm.LogInWithMasterPasswordAction = () => DismissViewController(false, () => PerformSegue("lockPasswordSegue", this));
                 vm.RequestAdminApprovalAction = () => DismissViewController(false, () => LaunchLoginWithDevice(AuthRequestType.AdminApproval, vm.Email));
                 vm.LogInWithDeviceAction = () => DismissViewController(false, () => LaunchLoginWithDevice(AuthRequestType.AuthenticateAndUnlock, vm.Email));
-                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
             var navigationPage = new NavigationPage(loginApproveDevicePage);
