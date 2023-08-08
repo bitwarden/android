@@ -246,6 +246,7 @@ namespace Bit.App.Pages
                         }
                         else
                         {
+                            await _stateService.SetPendingAdminAuthRequestAsync(null);
                             StartDeviceApprovalOptionsAction?.Invoke();
                         }
                     }
