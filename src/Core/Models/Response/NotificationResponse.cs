@@ -33,7 +33,7 @@ namespace Bit.Core.Models.Response
         public string UserId { get; set; }
         public DateTime Date { get; set; }
     }
-    
+
     public class SyncSendNotification
     {
         public string Id { get; set; }
