@@ -53,6 +53,7 @@ namespace Bit.Core.Models.Domain
                 HasPremiumPersonally = copy.HasPremiumPersonally;
                 AvatarColor = copy.AvatarColor;
                 ForcePasswordResetReason = copy.ForcePasswordResetReason;
+                UserDecryptionOptions = copy.UserDecryptionOptions;
             }
 
             public string UserId;
@@ -68,6 +69,7 @@ namespace Bit.Core.Models.Domain
             public bool? EmailVerified;
             public bool? HasPremiumPersonally;
             public ForcePasswordResetReason? ForcePasswordResetReason;
+            public AccountDecryptionOptions UserDecryptionOptions;
         }
 
         public class AccountTokens

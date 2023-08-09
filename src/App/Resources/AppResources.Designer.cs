@@ -419,6 +419,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Admin approval requested.
+        /// </summary>
+        public static string AdminApprovalRequested {
+            get {
+                return ResourceManager.GetString("AdminApprovalRequested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
         public static string All {
@@ -554,11 +563,38 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application.
+        /// </summary>
+        public static string Application {
+            get {
+                return ResourceManager.GetString("Application", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approve login requests.
         /// </summary>
         public static string ApproveLoginRequests {
             get {
                 return ResourceManager.GetString("ApproveLoginRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approve with master password.
+        /// </summary>
+        public static string ApproveWithMasterPassword {
+            get {
+                return ResourceManager.GetString("ApproveWithMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approve with my other device.
+        /// </summary>
+        public static string ApproveWithMyOtherDevice {
+            get {
+                return ResourceManager.GetString("ApproveWithMyOtherDevice", resourceCulture);
             }
         }
         
@@ -946,6 +982,15 @@ namespace Bit.App.Resources {
         public static string AutofillWithBitwarden {
             get {
                 return ResourceManager.GetString("AutofillWithBitwarden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available for two-step login.
+        /// </summary>
+        public static string AvailableForTwoStepLogin {
+            get {
+                return ResourceManager.GetString("AvailableForTwoStepLogin", resourceCulture);
             }
         }
         
@@ -1571,6 +1616,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy application.
+        /// </summary>
+        public static string CopyApplication {
+            get {
+                return ResourceManager.GetString("CopyApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy link.
         /// </summary>
         public static string CopyLink {
@@ -1675,6 +1729,15 @@ namespace Bit.App.Resources {
         public static string CreateAccount {
             get {
                 return ResourceManager.GetString("CreateAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created {0}.
+        /// </summary>
+        public static string CreatedX {
+            get {
+                return ResourceManager.GetString("CreatedX", resourceCulture);
             }
         }
         
@@ -3659,6 +3722,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logged in!.
+        /// </summary>
+        public static string LoggedIn {
+            get {
+                return ResourceManager.GetString("LoggedIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logged in as {0} on {1}..
         /// </summary>
         public static string LoggedInAsOn {
@@ -3673,6 +3745,15 @@ namespace Bit.App.Resources {
         public static string LoggingIn {
             get {
                 return ResourceManager.GetString("LoggingIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logging in as {0}.
+        /// </summary>
+        public static string LoggingInAsX {
+            get {
+                return ResourceManager.GetString("LoggingInAsX", resourceCulture);
             }
         }
         
@@ -3700,6 +3781,15 @@ namespace Bit.App.Resources {
         public static string LogInAccepted {
             get {
                 return ResourceManager.GetString("LogInAccepted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login approved.
+        /// </summary>
+        public static string LoginApproved {
+            get {
+                return ResourceManager.GetString("LoginApproved", resourceCulture);
             }
         }
         
@@ -3837,6 +3927,24 @@ namespace Bit.App.Resources {
         public static string LogInWithAnotherDevice {
             get {
                 return ResourceManager.GetString("LogInWithAnotherDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log in with device.
+        /// </summary>
+        public static string LogInWithDevice {
+            get {
+                return ResourceManager.GetString("LogInWithDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log in with device must be set up in the settings of the Bitwarden app. Need another option?.
+        /// </summary>
+        public static string LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption {
+            get {
+                return ResourceManager.GetString("LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption", resourceCulture);
             }
         }
         
@@ -4787,6 +4895,33 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Passkey.
+        /// </summary>
+        public static string Passkey {
+            get {
+                return ResourceManager.GetString("Passkey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passkeys.
+        /// </summary>
+        public static string Passkeys {
+            get {
+                return ResourceManager.GetString("Passkeys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passkey will not be copied.
+        /// </summary>
+        public static string PasskeyWillNotBeCopied {
+            get {
+                return ResourceManager.GetString("PasskeyWillNotBeCopied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Passphrase.
         /// </summary>
         public static string Passphrase {
@@ -5274,6 +5409,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remember this device.
+        /// </summary>
+        public static string RememberThisDevice {
+            get {
+                return ResourceManager.GetString("RememberThisDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove.
         /// </summary>
         public static string Remove {
@@ -5342,6 +5486,15 @@ namespace Bit.App.Resources {
         public static string RemovingSendPassword {
             get {
                 return ResourceManager.GetString("RemovingSendPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request admin approval.
+        /// </summary>
+        public static string RequestAdminApproval {
+            get {
+                return ResourceManager.GetString("RequestAdminApproval", resourceCulture);
             }
         }
         
@@ -6201,6 +6354,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The passkey will not be copied to the cloned item. Do you want to continue cloning this item?.
+        /// </summary>
+        public static string ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem {
+            get {
+                return ResourceManager.GetString("ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no blocked URIs.
         /// </summary>
         public static string ThereAreNoBlockedURIs {
@@ -6260,6 +6422,16 @@ namespace Bit.App.Resources {
         public static string ThirtySeconds {
             get {
                 return ResourceManager.GetString("ThirtySeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This item cannot be shared with the organization because there is one already with the same passkey..
+        /// </summary>
+        public static string ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey {
+            get {
+                return ResourceManager.GetString("ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePassk" +
+                        "ey", resourceCulture);
             }
         }
         
@@ -6354,11 +6526,29 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Trouble logging in?.
+        /// </summary>
+        public static string TroubleLoggingIn {
+            get {
+                return ResourceManager.GetString("TroubleLoggingIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Try again.
         /// </summary>
         public static string TryAgain {
             get {
                 return ResourceManager.GetString("TryAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turn off using a public device.
+        /// </summary>
+        public static string TurnOffUsingPublicDevice {
+            get {
+                return ResourceManager.GetString("TurnOffUsingPublicDevice", resourceCulture);
             }
         }
         
@@ -6894,6 +7084,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vault timeout action changed to log out.
+        /// </summary>
+        public static string VaultTimeoutActionChangedToLogOut {
+            get {
+                return ResourceManager.GetString("VaultTimeoutActionChangedToLogOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your organization policies have set your vault timeout action to {0}..
         /// </summary>
         public static string VaultTimeoutActionPolicyInEffect {
@@ -7236,6 +7435,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You cannot edit passkey application because it would invalidate the passkey.
+        /// </summary>
+        public static string YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey {
+            get {
+                return ResourceManager.GetString("YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your account has been permanently deleted.
         /// </summary>
         public static string YourAccountHasBeenPermanentlyDeleted {
@@ -7259,6 +7467,24 @@ namespace Bit.App.Resources {
         public static string YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum {
             get {
                 return ResourceManager.GetString("YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your request has been sent to your admin..
+        /// </summary>
+        public static string YourRequestHasBeenSentToYourAdmin {
+            get {
+                return ResourceManager.GetString("YourRequestHasBeenSentToYourAdmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You will be notified once approved. .
+        /// </summary>
+        public static string YouWillBeNotifiedOnceApproved {
+            get {
+                return ResourceManager.GetString("YouWillBeNotifiedOnceApproved", resourceCulture);
             }
         }
         

@@ -1584,9 +1584,6 @@
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Automatikus kitöltés elől blokkolt URI elemek</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>A blokkolt URI elemek esetében az automatikus kitöltés nem kerül felajánlásra. Több URI elemet vesszővel kell elválasztani. Például: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Bejelentkezés hozzáadás kérése</value>
   </data>
@@ -2629,6 +2626,34 @@ Szeretnénk átváltani erre a fiókra?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Jelenlegi mesterjelszó</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Hozzáférési kulcs</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Hozzáférési kulcsok</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Létrehozta {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Alkalmazás</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Nem szerkeszthető a hozzáférési kulcs alkalmazás, mert az érvénytelenítené a hozzáférési kulcsot.</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>A hozzáférési kulcs nem kerül másolásra.</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>A hozzáférési kulcs nem másolódik át a klónozott elembe. Folytatjuk ennek az elemnek a klónozását?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Alkalmazás másolása</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Kétlépcsős bejelentkezéshez érhető el</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Mesterjelszó újbóli bekérés súgó</value>
   </data>
@@ -2640,5 +2665,51 @@ Szeretnénk átváltani erre a fiókra?</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Érvénytelen API vezérjel</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Ez az elem nem osztható meg a szervezettel, mert már van egy ugyanezzel a hozzáférési kulccsal.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Automatikus kitöltés blokkolása</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Az automatikus kitöltés nem kerül felajánlásra ezeknél a webcímeknél.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Új blokkolt URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>Az URI mentésre került.</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>A formátum érvénytelen. Használjuk a https://, http:// vagy androidapp:// elemet.</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>URI szerkesztése</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>URI megadása</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Formátum: {0}. A több URI elemet vesszővel válasszuk el.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Formátum: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Az URI érvénytelen.</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>Az URI eltávolításra került.</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Nincsenek blokkolt URI elemek.</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>{0} URI már blokkolásra került.</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Nem szerkeszthető több URI egyszerre.</value>
   </data>
 </root>

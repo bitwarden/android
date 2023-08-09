@@ -60,6 +60,8 @@ namespace Bit.Core.Abstractions
         Task SetOrgKeysEncryptedAsync(Dictionary<string, string> value, string userId = null);
         Task<string> GetPrivateKeyEncryptedAsync(string userId = null);
         Task SetPrivateKeyEncryptedAsync(string value, string userId = null);
+        Task<SymmetricCryptoKey> GetDeviceKeyAsync(string userId = null);
+        Task SetDeviceKeyAsync(SymmetricCryptoKey value, string userId = null);
         Task<List<string>> GetAutofillBlacklistedUrisAsync(string userId = null);
         Task SetAutofillBlacklistedUrisAsync(List<string> value, string userId = null);
         Task<bool?> GetAutofillTileAddedAsync();
@@ -176,10 +178,15 @@ namespace Bit.Core.Abstractions
         Task<string> GetAvatarColorAsync(string userId = null);
         Task<string> GetPreLoginEmailAsync();
         Task SetPreLoginEmailAsync(string value);
+        Task<AccountDecryptionOptions> GetAccountDecryptionOptions(string userId = null);
+        Task<PendingAdminAuthRequest> GetPendingAdminAuthRequestAsync(string userId = null);
+        Task SetPendingAdminAuthRequestAsync(PendingAdminAuthRequest value, string userId = null);
         string GetLocale();
         void SetLocale(string locale);
         ConfigResponse GetConfigs();
         void SetConfigs(ConfigResponse value);
+        Task<bool> GetShouldTrustDeviceAsync();
+        Task SetShouldTrustDeviceAsync(bool value);
         [Obsolete("Use GetPinKeyEncryptedUserKeyAsync instead, left for migration purposes")]
         Task<string> GetPinProtectedAsync(string userId = null);
         [Obsolete("Use SetPinKeyEncryptedUserKeyAsync instead, left for migration purposes")]

@@ -20,13 +20,14 @@ namespace Bit.App.Pages
         private bool _promptedAfterResume;
         private bool _appeared;
 
-        public LockPage(AppOptions appOptions = null, bool autoPromptBiometric = true)
+        public LockPage(AppOptions appOptions = null, bool autoPromptBiometric = true, bool checkPendingAuthRequests = true)
         {
             _appOptions = appOptions;
             _autoPromptBiometric = autoPromptBiometric;
             InitializeComponent();
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>();
             _vm = BindingContext as LockPageViewModel;
+            _vm.CheckPendingAuthRequests = checkPendingAuthRequests;
             _vm.Page = this;
             _vm.UnlockedAction = () => Device.BeginInvokeOnMainThread(async () => await UnlockedAsync());
 

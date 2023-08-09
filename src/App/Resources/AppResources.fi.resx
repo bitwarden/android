@@ -727,7 +727,7 @@
     <value>Näytä kohde</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Bitwardenin verkkoholvi</value>
+    <value>Bitwarden Verkkoholvi</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Etkö pysty käyttämään todennussovellustasi?</value>
@@ -1489,7 +1489,7 @@ Koodi luetaan automaattisesti.</value>
     <value>30 minuuttia</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Aseta PIN-koodi Bitwardenin avaukselle. PIN-asetukset tyhjentyvät, jos kirjaudut kokonaan ulos sovelluksesta.</value>
+    <value>Aseta PIN-koodi Bitwardenin avaukselle. PIN-asetus tyhjentyy, jos kirjaudut kokonaan ulos sovelluksesta.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
     <value>Kirjautui palvelimelle {1} tunnuksella {0}.</value>
@@ -1585,11 +1585,8 @@ Koodi luetaan automaattisesti.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Täytä estetyt URI:t automaattisesti</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Automaattista täyttöä ei tarjota estetyille URI-osoitteille. Erota useat osoitteet pilkuilla. Esimerkiksi: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
-    <value>Kysy lisätäänkö kirjautimistieto</value>
+    <value>Kysy lisätäänkö kirjautumistieto</value>
   </data>
   <data name="AskToAddLoginDescription" xml:space="preserve">
     <value>Kysy lisätäänkö uusi kohde, jos holvissa ei vielä ole sopivaa kohdetta.</value>
@@ -2367,7 +2364,7 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
     <value>Hyväksy kirjautumispyyntöjä</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Hyväksy laitteiden kirjautumispyyntöjä tältä laitteelta</value>
+    <value>Hyväksy kirjautumispyyntöjä tällä laitteella</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Salli ilmoitukset</value>
@@ -2631,6 +2628,34 @@ Haluatko vaihtaa tähän tiliin?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Nykyinen pääsalasana</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Suojausavain</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Suojausavaimet</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Luotu {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Sovellus</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Et voi muokata suojausavainsovellusta, koska se mitätöisi avaimen.</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Suojausavainta ei kopioida</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Suojausavainta ei kopioida kloonattuun kohteeseen. Haluatko jatkaa kloonausta?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Kopioi sovellus</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Käytettävissä kaksivaiheiseen kirjautumiseen</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Pääsalasanan uudelleenkyselyn ohje</value>
   </data>
@@ -2642,5 +2667,51 @@ Haluatko vaihtaa tähän tiliin?</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Virheellinen API-tunniste</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Kohdetta ei voida jakaa organisaatiolle, koska siellä on jo samaa suojausavainta käyttävä kohde.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Estä automaattinen täyttö</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Automaattista täyttöä ei tarjota näille URI-osoitteille.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Uusi estetty URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI tallennettiin</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Virheellinen muoto. Käytä muotoa https://, http:// tai androidapp://.</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Muokkaa URI:a</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Syötä URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Muoto: {0}. Erota useita URI-osoitteita pilkuilla.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Muoto: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Virheellinen URI</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI poistettiin</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Estettyjä URI-osoitteita ei ole</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI {0} on jo estetty</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Useita URI-osoitteita ei ole mahdollista muokata samanaikaisesti</value>
   </data>
 </root>

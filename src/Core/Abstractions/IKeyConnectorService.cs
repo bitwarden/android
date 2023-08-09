@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Bit.Core.Models.Domain;
+using Bit.Core.Models.Response;
 
 namespace Bit.Core.Abstractions
 {
@@ -12,5 +13,6 @@ namespace Bit.Core.Abstractions
         Task MigrateUserAsync();
         Task GetAndSetMasterKeyAsync(string url);
         Task<Organization> GetManagingOrganizationAsync();
+        Task ConvertNewUserToKeyConnectorAsync(string orgId, IdentityTokenResponse tokenResponse);
     }
 }

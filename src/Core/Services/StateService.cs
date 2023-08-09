@@ -511,6 +511,25 @@ namespace Bit.Core.Services
             await SetValueAsync(Constants.EncPrivateKeyKey(reconciledOptions.UserId), value, reconciledOptions);
         }
 
+        public async Task<SymmetricCryptoKey> GetDeviceKeyAsync(string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var deviceKeyB64 = await _storageMediatorService.GetAsync<string>(Constants.DeviceKeyKey(reconciledOptions.UserId), true);
+            if (string.IsNullOrEmpty(deviceKeyB64))
+            {
+                return null;
+            }
+            return new SymmetricCryptoKey(Convert.FromBase64String(deviceKeyB64));
+        }
+
+        public async Task SetDeviceKeyAsync(SymmetricCryptoKey value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            await _storageMediatorService.SaveAsync(Constants.DeviceKeyKey(reconciledOptions.UserId), value.KeyB64, true);
+        }
+
         public async Task<List<string>> GetAutofillBlacklistedUrisAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
@@ -1307,6 +1326,42 @@ namespace Bit.Core.Services
         {
             var options = await GetDefaultStorageOptionsAsync();
             await SetValueAsync(Constants.PreLoginEmailKey, value, options);
+        }
+
+        public async Task<AccountDecryptionOptions> GetAccountDecryptionOptions(string userId = null)
+        {
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            ))?.Profile?.UserDecryptionOptions;
+        }
+
+        public async Task<bool> GetShouldTrustDeviceAsync()
+        {
+            return await _storageMediatorService.GetAsync<bool>(Constants.ShouldTrustDevice);
+        }
+
+        public async Task SetShouldTrustDeviceAsync(bool value)
+        {
+            await _storageMediatorService.SaveAsync(Constants.ShouldTrustDevice, value);
+        }
+
+        public async Task<PendingAdminAuthRequest> GetPendingAdminAuthRequestAsync(string userId = null)
+        {
+            try
+            {
+                // GetAsync will throw an ArgumentException exception if there isn't a value to deserialize 
+                return await _storageMediatorService.GetAsync<PendingAdminAuthRequest>(await ComposeKeyAsync(Constants.PendingAdminAuthRequest, userId), true);
+            }
+            catch (ArgumentException)
+            {
+                return null;
+            }
+
+        }
+
+        public async Task SetPendingAdminAuthRequestAsync(PendingAdminAuthRequest value, string userId = null)
+        {
+            await _storageMediatorService.SaveAsync(await ComposeKeyAsync(Constants.PendingAdminAuthRequest, userId), value, true);
         }
 
         public ConfigResponse GetConfigs()

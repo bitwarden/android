@@ -55,6 +55,7 @@ namespace Bit.Core
         public const string AppLocaleKey = "appLocale";
         public const string ClearSensitiveFields = "clearSensitiveFields";
         public const string ForceUpdatePassword = "forceUpdatePassword";
+        public const string ShouldTrustDevice = "shouldTrustDevice";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;
@@ -65,6 +66,9 @@ namespace Bit.Core
         public const int Argon2MemoryInMB = 64;
         public const int Argon2Parallelism = 4;
         public const int MasterPasswordMinimumChars = 12;
+        public const string DefaultFido2KeyType = "public-key";
+        public const string DefaultFido2KeyAlgorithm = "ECDSA";
+        public const string DefaultFido2KeyCurve = "P-256";
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {
@@ -94,6 +98,7 @@ namespace Bit.Core
         public static string PoliciesKey(string userId) => $"policies_{userId}";
         public static string EncOrgKeysKey(string userId) => $"encOrgKeys_{userId}";
         public static string EncPrivateKeyKey(string userId) => $"encPrivateKey_{userId}";
+        public static string DeviceKeyKey(string userId) => $"deviceKey_{userId}";
         public static string KeyHashKey(string userId) => $"keyHash_{userId}";
         public static string PinKeyEncryptedUserKeyKey(string userId) => $"pinKeyEncryptedUserKey_{userId}";
         public static string PassGenOptionsKey(string userId) => $"passwordGenerationOptions_{userId}";
@@ -124,6 +129,7 @@ namespace Bit.Core
         public static string PushCurrentTokenKey(string userId) => $"pushCurrentToken_{userId}";
         public static string ShouldConnectToWatchKey(string userId) => $"shouldConnectToWatch_{userId}";
         public static string ScreenCaptureAllowedKey(string userId) => $"screenCaptureAllowed_{userId}";
+        public static string PendingAdminAuthRequest(string userId) => $"pendingAdminAuthRequest_{userId}";
         [Obsolete]
         public static string KeyKey(string userId) => $"key_{userId}";
         [Obsolete]

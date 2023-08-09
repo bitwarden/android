@@ -33,7 +33,8 @@ namespace Bit.App.Pages
         private readonly WeakEventManager<int?> _secretEntryFocusWeakEventManager = new WeakEventManager<int?>();
         private readonly IPolicyService _policyService;
         private readonly IPasswordGenerationService _passwordGenerationService;
-
+        private IDeviceTrustCryptoService _deviceTrustCryptoService;
+        private readonly ISyncService _syncService;
         private string _email;
         private string _masterPassword;
         private string _pin;
@@ -64,6 +65,8 @@ namespace Bit.App.Pages
             _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
             _policyService = ServiceContainer.Resolve<IPolicyService>();
             _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>();
+            _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
+            _syncService = ServiceContainer.Resolve<ISyncService>();
 
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -146,6 +149,8 @@ namespace Bit.App.Pages
             set => SetProperty(ref _lockedVerifyText, value);
         }
 
+        public bool CheckPendingAuthRequests { get; set; }
+
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
 
         public Command SubmitCommand { get; }
@@ -161,6 +166,13 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
+            var pendingRequest = await _stateService.GetPendingAdminAuthRequestAsync();
+            if (pendingRequest != null && CheckPendingAuthRequests)
+            {
+                await _vaultTimeoutService.LogOutAsync();
+                return;
+            }
+
             _pinStatus = await _vaultTimeoutService.GetPinLockTypeAsync();
 
             var ephemeralPinSet = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync()
@@ -169,6 +181,17 @@ namespace Bit.App.Pages
                       _pinStatus == PinLockType.Persistent;
 
             BiometricEnabled = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _biometricService.CanUseBiometricsUnlockAsync();
+
+            var decryptOptions = await _stateService.GetAccountDecryptionOptions();
+            if (await _stateService.IsAuthenticatedAsync()
+                 && decryptOptions?.TrustedDeviceOption != null
+                 && !decryptOptions.HasMasterPassword
+                 && !BiometricEnabled
+                 && !PinEnabled)
+            {
+                await _vaultTimeoutService.LogOutAsync();
+                return;
+            }
 
             // Users with key connector and without biometric or pin has no MP to unlock with
             _usingKeyConnector = await _keyConnectorService.GetUsesKeyConnectorAsync();
@@ -474,11 +497,13 @@ namespace Bit.App.Pages
             {
                 await _cryptoService.SetUserKeyAsync(key);
             }
+            await _deviceTrustCryptoService.TrustDeviceIfNeededAsync();
             await DoContinueAsync();
         }
 
         private async Task DoContinueAsync()
         {
+            _syncService.FullSyncAsync(false).FireAndForget();
             await _stateService.SetBiometricLockedAsync(false);
             _watchDeviceService.SyncDataToWatchAsync().FireAndForget();
             _messagingService.Send("unlocked");

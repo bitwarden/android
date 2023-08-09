@@ -53,7 +53,7 @@ namespace Bit.Core.Utilities
                 cryptoFunctionService);
             searchService = new SearchService(cipherService, sendService);
             var policyService = new PolicyService(stateService, organizationService);
-            var keyConnectorService = new KeyConnectorService(stateService, cryptoService, tokenService, apiService,
+            var keyConnectorService = new KeyConnectorService(stateService, cryptoService, tokenService, apiService, cryptoFunctionService,
                 organizationService);
             var vaultTimeoutService = new VaultTimeoutService(cryptoService, stateService, platformUtilsService,
                 folderService, cipherService, collectionService, searchService, messagingService, tokenService,
@@ -77,9 +77,11 @@ namespace Bit.Core.Utilities
                 });
             var passwordGenerationService = new PasswordGenerationService(cryptoService, stateService, cryptoFunctionService, policyService);
             var totpService = new TotpService(cryptoFunctionService);
+            var deviceTrustCryptoService = new DeviceTrustCryptoService(apiService, appIdService, cryptoFunctionService, cryptoService, stateService);
+            var passwordResetEnrollmentService = new PasswordResetEnrollmentService(apiService, cryptoService, organizationService, stateService);
             var authService = new AuthService(cryptoService, cryptoFunctionService, apiService, stateService,
                 tokenService, appIdService, i18nService, platformUtilsService, messagingService,
-                keyConnectorService, passwordGenerationService, policyService);
+                keyConnectorService, passwordGenerationService, policyService, deviceTrustCryptoService, passwordResetEnrollmentService);
             var exportService = new ExportService(folderService, cipherService, cryptoService);
             var auditService = new AuditService(cryptoFunctionService, apiService);
             var environmentService = new EnvironmentService(apiService, stateService, conditionedRunner);
@@ -114,6 +116,8 @@ namespace Bit.Core.Utilities
             Register<IUserVerificationService>("userVerificationService", userVerificationService);
             Register<IUsernameGenerationService>(usernameGenerationService);
             Register<IConfigService>(configService);
+            Register<IDeviceTrustCryptoService>(deviceTrustCryptoService);
+            Register<IPasswordResetEnrollmentService>(passwordResetEnrollmentService);
         }
 
         public static void Register<T>(string serviceName, T obj)

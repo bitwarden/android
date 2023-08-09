@@ -11,6 +11,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Request;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -33,7 +34,7 @@ namespace Bit.App.Pages
         private readonly II18nService _i18nService;
         private readonly IAppIdService _appIdService;
         private readonly ILogger _logger;
-
+        private readonly IDeviceTrustCryptoService _deviceTrustCryptoService;
         private TwoFactorProviderType? _selectedProviderType;
         private string _totpInstruction;
         private string _webVaultUrl = "https://vault.bitwarden.com";
@@ -55,6 +56,7 @@ namespace Bit.App.Pages
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
             _logger = ServiceContainer.Resolve<ILogger>();
+            _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
 
             PageTitle = AppResources.TwoStepLogin;
             SubmitCommand = new Command(async () => await SubmitAsync());
@@ -118,6 +120,7 @@ namespace Bit.App.Pages
         public Command SubmitCommand { get; }
         public ICommand MoreCommand { get; }
         public Action TwoFactorAuthSuccessAction { get; set; }
+        public Action StartDeviceApprovalOptionsAction { get; set; }
         public Action StartSetPasswordAction { get; set; }
         public Action CloseAction { get; set; }
         public Action UpdateTempPasswordAction { get; set; }
@@ -315,6 +318,7 @@ namespace Bit.App.Pages
 
                 var task = Task.Run(() => _syncService.FullSyncAsync(true));
                 await _deviceActionService.HideLoadingAsync();
+                var decryptOptions = await _stateService.GetAccountDecryptionOptions();
                 _messagingService.Send("listenYubiKeyOTP", false);
                 _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
 
@@ -325,6 +329,27 @@ namespace Bit.App.Pages
                 else if (result.ForcePasswordReset)
                 {
                     UpdateTempPasswordAction?.Invoke();
+                }
+                else if (decryptOptions?.TrustedDeviceOption != null)
+                {
+                    // If user doesn't have a MP, but has reset password permission, they must set a MP
+                    if (!decryptOptions.HasMasterPassword &&
+                        decryptOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
+                    {
+                        StartSetPasswordAction?.Invoke();
+                    }
+                    else if (result.ForcePasswordReset)
+                    {
+                        UpdateTempPasswordAction?.Invoke();
+                    }
+                    else if (await _deviceTrustCryptoService.IsDeviceTrustedAsync())
+                    {
+                        TwoFactorAuthSuccessAction?.Invoke();
+                    }
+                    else
+                    {
+                        StartDeviceApprovalOptionsAction?.Invoke();
+                    }
                 }
                 else
                 {
