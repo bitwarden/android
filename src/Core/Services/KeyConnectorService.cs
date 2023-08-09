@@ -27,13 +27,13 @@ namespace Bit.Core.Services
             _organizationService = organizationService;
         }
 
-        public async Task GetAndSetMasterKeyAsync(string url)
+        public async Task SetMasterKeyFromUrlAsync(string url)
         {
             try
             {
                 var masterKeyResponse = await _apiService.GetMasterKeyFromKeyConnectorAsync(url);
-                var masterKeyArr = Convert.FromBase64String(masterKeyResponse.Key);
-                var masterKey = new MasterKey(masterKeyArr);
+                var masterKeyBytes = Convert.FromBase64String(masterKeyResponse.Key);
+                var masterKey = new MasterKey(masterKeyBytes);
                 await _cryptoService.SetMasterKeyAsync(masterKey);
             }
             catch (Exception e)

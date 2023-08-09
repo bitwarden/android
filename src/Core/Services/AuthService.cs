@@ -527,7 +527,7 @@ namespace Bit.Core.Services
                     if (!string.IsNullOrEmpty(tokenResponse.KeyConnectorUrl) || !string.IsNullOrEmpty(decryptOptions?.KeyConnectorOption?.KeyConnectorUrl))
                     {
                         var url = tokenResponse.KeyConnectorUrl ?? decryptOptions.KeyConnectorOption.KeyConnectorUrl;
-                        await _keyConnectorService.GetAndSetMasterKeyAsync(url);
+                        await _keyConnectorService.SetMasterKeyFromUrlAsync(url);
                     }
 
                     // Login with Device
@@ -571,7 +571,7 @@ namespace Bit.Core.Services
                     }
                     else
                     {
-                        await _keyConnectorService.GetAndSetMasterKeyAsync(tokenResponse.KeyConnectorUrl);
+                        await _keyConnectorService.SetMasterKeyFromUrlAsync(tokenResponse.KeyConnectorUrl);
                     }
                 }
             }
