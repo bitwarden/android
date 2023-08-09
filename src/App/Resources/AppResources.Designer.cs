@@ -3832,7 +3832,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log in initiated.
+        ///   Looks up a localized string similar to Login initiated.
         /// </summary>
         public static string LogInInitiated {
             get {
