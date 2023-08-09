@@ -715,7 +715,7 @@ namespace Bit.Core.Services
             }
 
             // Set, refresh, or clear the biometric unlock key
-            if ((await _stateService.GetBiometricUnlockAsync(userId)).GetValueOrDefault())
+            if (await _stateService.GetBiometricUnlockAsync(userId) is true)
             {
                 await _stateService.SetUserKeyBiometricUnlockAsync(userKey, userId);
             }
@@ -1010,7 +1010,7 @@ namespace Bit.Core.Services
             {
                 await _stateService.SetUserKeyAutoUnlockAsync(userKey, userId);
             }
-            if ((await _stateService.GetBiometricUnlockAsync(userId)).GetValueOrDefault())
+            if (await _stateService.GetBiometricUnlockAsync(userId) is true)
             {
                 await _stateService.SetUserKeyBiometricUnlockAsync(userKey, userId);
             }
