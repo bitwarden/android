@@ -180,6 +180,7 @@ namespace Bit.Core.Services
                         userId
                     );
                     await SetMasterKeyEncryptedUserKeyAsync(oldEncUserKey, userId);
+                    await _stateService.SetEncKeyEncryptedAsync(null, userId);
                     return userKey;
                 }
 
