@@ -39,7 +39,7 @@ namespace Bit.App.Pages
         private string _masterPassword;
         private string _pin;
         private bool _showPassword;
-        private PinLockEnum _pinStatus;
+        private PinLockType _pinStatus;
         private bool _pinEnabled;
         private bool _biometricEnabled;
         private bool _biometricIntegrityValid = true;
@@ -149,6 +149,8 @@ namespace Bit.App.Pages
             set => SetProperty(ref _lockedVerifyText, value);
         }
 
+        public bool CheckPendingAuthRequests { get; set; }
+
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
 
         public Command SubmitCommand { get; }
@@ -164,22 +166,33 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            _pinStatus = await _vaultTimeoutService.IsPinLockSetAsync();
+            var pendingRequest = await _stateService.GetPendingAdminAuthRequestAsync();
+            if (pendingRequest != null && CheckPendingAuthRequests)
+            {
+                await _vaultTimeoutService.LogOutAsync();
+                return;
+            }
 
-            var ephemeralPinSet = await _stateService.GetUserKeyPinEphemeralAsync()
+            _pinStatus = await _vaultTimeoutService.GetPinLockTypeAsync();
+
+            var ephemeralPinSet = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync()
                 ?? await _stateService.GetPinProtectedKeyAsync();
-            PinEnabled = (_pinStatus == PinLockEnum.Transient && ephemeralPinSet != null) ||
-                      _pinStatus == PinLockEnum.Persistent;
+            PinEnabled = (_pinStatus == PinLockType.Transient && ephemeralPinSet != null) ||
+                      _pinStatus == PinLockType.Persistent;
 
             BiometricEnabled = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _cryptoService.HasEncryptedUserKeyAsync();
 
             // Users without MP and without biometric or pin has no MP to unlock with
             _hasMasterPassword = await _userVerificationService.HasMasterPasswordAsync();
-            if (!_hasMasterPassword && !(BiometricEnabled || PinEnabled))
+            if (await _stateService.IsAuthenticatedAsync()
+                 && !_hasMasterPassword
+                 && !BiometricEnabled
+                 && !PinEnabled)
             {
                 await _vaultTimeoutService.LogOutAsync();
                 return;
             }
+            
             _email = await _stateService.GetEmailAsync();
             if (string.IsNullOrWhiteSpace(_email))
             {
@@ -252,15 +265,15 @@ namespace Bit.App.Pages
                 {
                     EncString userKeyPin = null;
                     EncString oldPinProtected = null;
-                    if (_pinStatus == PinLockEnum.Persistent)
+                    if (_pinStatus == PinLockType.Persistent)
                     {
-                        userKeyPin = await _stateService.GetUserKeyPinAsync();
+                        userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyAsync();
                         var oldEncryptedKey = await _stateService.GetPinProtectedAsync();
                         oldPinProtected = oldEncryptedKey != null ? new EncString(oldEncryptedKey) : null;
                     }
-                    else if (_pinStatus == PinLockEnum.Transient)
+                    else if (_pinStatus == PinLockType.Transient)
                     {
-                        userKeyPin = await _stateService.GetUserKeyPinEphemeralAsync();
+                        userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync();
                         oldPinProtected = await _stateService.GetPinProtectedKeyAsync();
                     }
 
@@ -268,7 +281,7 @@ namespace Bit.App.Pages
                     if (oldPinProtected != null)
                     {
                         userKey = await _cryptoService.DecryptAndMigrateOldPinKeyAsync(
-                            _pinStatus == PinLockEnum.Transient,
+                            _pinStatus == PinLockType.Transient,
                             Pin,
                             _email,
                             kdfConfig,
@@ -314,20 +327,20 @@ namespace Bit.App.Pages
             else
             {
                 var masterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, _email, kdfConfig);
-                var storedKeyHash = await _cryptoService.GetPasswordHashAsync();
+                var storedKeyHash = await _cryptoService.GetMasterKeyHashAsync();
                 var passwordValid = false;
                 MasterPasswordPolicyOptions enforcedMasterPasswordOptions = null;
 
                 if (storedKeyHash != null)
                 {
                     // Offline unlock possible
-                    passwordValid = await _cryptoService.CompareAndUpdatePasswordHashAsync(MasterPassword, masterKey);
+                    passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(MasterPassword, masterKey);
                 }
                 else
                 {
                     // Online unlock required
                     await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
-                    var keyHash = await _cryptoService.HashPasswordAsync(MasterPassword, masterKey, HashPurpose.ServerAuthorization);
+                    var keyHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, masterKey, HashPurpose.ServerAuthorization);
                     var request = new PasswordVerificationRequest();
                     request.MasterPasswordHash = keyHash;
 
@@ -336,8 +349,8 @@ namespace Bit.App.Pages
                         var response = await _apiService.PostAccountVerifyPasswordAsync(request);
                         enforcedMasterPasswordOptions = response.MasterPasswordPolicy;
                         passwordValid = true;
-                        var localKeyHash = await _cryptoService.HashPasswordAsync(MasterPassword, masterKey, HashPurpose.LocalAuthorization);
-                        await _cryptoService.SetPasswordHashAsync(localKeyHash);
+                        var localKeyHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, masterKey, HashPurpose.LocalAuthorization);
+                        await _cryptoService.SetMasterKeyHashAsync(localKeyHash);
                     }
                     catch (Exception e)
                     {

@@ -10,7 +10,7 @@ namespace Bit.Core.Abstractions
     public interface ICryptoService
     {
         void ClearCache();
-        Task ToggleKeysAsync();
+        Task RefreshKeysAsync();
         Task SetUserKeyAsync(UserKey userKey, string userId = null);
         Task<UserKey> GetUserKeyAsync(string userId = null);
         Task<UserKey> GetUserKeyWithLegacySupportAsync(string userId = null);
@@ -19,26 +19,27 @@ namespace Bit.Core.Abstractions
         Task<UserKey> MakeUserKeyAsync();
         Task ClearUserKeyAsync(string userId = null);
         Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null);
+        Task<UserKey> GetAutoUnlockKeyAsync(string userId = null);
+        Task<bool> HasAutoUnlockKeyAsync(string userId = null);
         Task SetMasterKeyAsync(MasterKey masterKey, string userId = null);
         Task<MasterKey> GetMasterKeyAsync(string userId = null);
         Task<MasterKey> MakeMasterKeyAsync(string password, string email, KdfConfig kdfConfig);
         Task ClearMasterKeyAsync(string userId = null);
-        Task<Tuple<UserKey, EncString>> EncryptUserKeyWithMasterKeyAsync(MasterKey masterKey, UserKey userKey = null);
+        Task<Tuple<UserKey, EncString>> EncryptUserKeyWithMasterKeyAsync(MasterKey masterKey);
         Task<UserKey> DecryptUserKeyWithMasterKeyAsync(MasterKey masterKey, EncString encUserKey = null, string userId = null);
-        Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(UserKey key);
-        Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(OrgKey key);
-        Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key, HashPurpose hashPurpose = HashPurpose.ServerAuthorization);
-        Task SetPasswordHashAsync(string keyHash);
-        Task<string> GetPasswordHashAsync();
-        Task ClearPasswordHashAsync(string userId = null);
-        Task<bool> CompareAndUpdatePasswordHashAsync(string masterPassword, MasterKey key);
+        Task<Tuple<SymmetricCryptoKey, EncString>> MakeDataEncKeyAsync(SymmetricCryptoKey key);
+        Task<string> HashMasterKeyAsync(string password, MasterKey key, HashPurpose hashPurpose = HashPurpose.ServerAuthorization);
+        Task SetMasterKeyHashAsync(string keyHash);
+        Task<string> GetMasterKeyHashAsync();
+        Task ClearMasterKeyHashAsync(string userId = null);
+        Task<bool> CompareAndUpdateKeyHashAsync(string masterPassword, MasterKey key);
         Task SetOrgKeysAsync(IEnumerable<ProfileOrganizationResponse> orgs);
         Task<OrgKey> GetOrgKeyAsync(string orgId);
         Task<Dictionary<string, OrgKey>> GetOrgKeysAsync();
         Task ClearOrgKeysAsync(bool memoryOnly = false, string userId = null);
-        Task<byte[]> GetPublicKeyAsync();
-        Task SetPrivateKeyAsync(string encPrivateKey);
-        Task<byte[]> GetPrivateKeyAsync();
+        Task<byte[]> GetUserPublicKeyAsync();
+        Task SetUserPrivateKeyAsync(string encPrivateKey);
+        Task<byte[]> GetUserPrivateKeyAsync();
         Task<List<string>> GetFingerprintAsync(string userId, byte[] publicKey = null);
         Task<Tuple<string, EncString>> MakeKeyPairAsync(SymmetricCryptoKey key = null);
         Task ClearKeyPairAsync(bool memoryOnly = false, string userId = null);

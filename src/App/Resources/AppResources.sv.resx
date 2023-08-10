@@ -2528,7 +2528,7 @@ Vill du byta till detta konto?</value>
     <value>Denna förfrågan är inte längre giltig</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Väntande inloggningsbegäran</value>
+    <value>Väntande inloggningsförfrågningar</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
     <value>Avvisa alla förfrågningar</value>
@@ -2561,13 +2561,13 @@ Vill du byta till detta konto?</value>
     <value>Viktigt</value>
   </data>
   <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
-    <value>Ditt huvudlösenord kan inte återställas om du glömmer det! Det måste innehålla minst {0} tecken.</value>
+    <value>Ditt huvudlösenord kan inte återställas om du glömmer det! Minst {0} tecken.</value>
   </data>
   <data name="WeakMasterPassword" xml:space="preserve">
     <value>Svagt huvudlösenord</value>
   </data>
   <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
-    <value>Lösenordet är svagt. Använd ett starkt lösenord för att skydda ditt konto. Är det säkert att du vill använda ett svagt lösenord?</value>
+    <value>Ett svagt lösenord upptäcktes. Skydda ditt konto med ett starkt lösenord. Är du säker på att du vill använda ett svagt lösenord?</value>
   </data>
   <data name="Weak" xml:space="preserve">
     <value>Svagt</value>
@@ -2629,6 +2629,34 @@ Vill du byta till detta konto?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Nuvarande huvudlösenord</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Created {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Passkey will not be copied</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Copy application</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Available for two-step login</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Återupprepa huvudlösenord hjälp</value>
   </data>
@@ -2641,11 +2669,14 @@ Vill du byta till detta konto?</value>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Ogiltig API-token</value>
   </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
+  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Block auto-fill</value>
   </data>
   <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
-    <value>Auto-fill will not be offered for these URIs.</value>
+    <value>Autofyll kommer inte att erbjudas för dessa URI:er.</value>
   </data>
   <data name="NewBlockedURI" xml:space="preserve">
     <value>Ny blockerad URI</value>
@@ -2671,9 +2702,6 @@ Vill du byta till detta konto?</value>
   </data>
   <data name="InvalidURI" xml:space="preserve">
     <value>Ogiltig URI</value>
-  </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI saved</value>
   </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI har tagits bort</value>

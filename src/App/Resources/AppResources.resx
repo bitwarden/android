@@ -2506,7 +2506,7 @@ Do you want to switch to this account?</value>
     <value>Log in with device</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Log in initiated</value>
+    <value>Login initiated</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
     <value>A notification has been sent to your device.</value>
@@ -2749,5 +2749,14 @@ Do you want to switch to this account?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Cannot edit multiple URIs at once</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Login approved</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Log in with device</value>
   </data>
 </root>

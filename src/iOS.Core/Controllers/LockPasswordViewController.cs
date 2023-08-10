@@ -1,20 +1,20 @@
 ﻿using System;
-using UIKit;
-using Foundation;
-using Bit.iOS.Core.Views;
-using Bit.App.Resources;
-using Bit.iOS.Core.Utilities;
-using Bit.App.Abstractions;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
 using System.Threading.Tasks;
-using Bit.App.Utilities;
-using Bit.Core.Models.Domain;
-using Bit.Core.Enums;
-using Bit.App.Pages;
+using Bit.App.Abstractions;
 using Bit.App.Models;
-using Xamarin.Forms;
+using Bit.App.Pages;
+using Bit.App.Resources;
+using Bit.App.Utilities;
+using Bit.Core.Abstractions;
+using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
 using Bit.Core.Services;
+using Bit.Core.Utilities;
+using Bit.iOS.Core.Utilities;
+using Bit.iOS.Core.Views;
+using Foundation;
+using UIKit;
+using Xamarin.Forms;
 
 namespace Bit.iOS.Core.Controllers
 {
@@ -30,7 +30,7 @@ namespace Bit.iOS.Core.Controllers
         private IPlatformUtilsService _platformUtilsService;
         private IBiometricService _biometricService;
         private IUserVerificationService _userVerificationService;
-        private PinLockEnum _pinStatus;
+        private PinLockType _pinStatus;
         private bool _pinEnabled;
         private bool _biometricEnabled;
         private bool _biometricIntegrityValid = true;
@@ -96,18 +96,18 @@ namespace Bit.iOS.Core.Controllers
             if (autofillExtension && await _stateService.GetPasswordRepromptAutofillAsync())
             {
                 _passwordReprompt = true;
-                _pinStatus = PinLockEnum.Disabled;
+                _pinStatus = PinLockType.Disabled;
                 _pinEnabled = false;
                 _biometricEnabled = false;
             }
             else
             {
-                _pinStatus = await _vaultTimeoutService.IsPinLockSetAsync();
+                _pinStatus = await _vaultTimeoutService.GetPinLockTypeAsync();
 
-                var ephemeralPinSet = await _stateService.GetUserKeyPinEphemeralAsync()
+                var ephemeralPinSet = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync()
                     ?? await _stateService.GetPinProtectedKeyAsync();
-                _pinEnabled = (_pinStatus == PinLockEnum.Transient && ephemeralPinSet != null) ||
-                    _pinStatus == PinLockEnum.Persistent;
+                _pinEnabled = (_pinStatus == PinLockType.Transient && ephemeralPinSet != null) ||
+                    _pinStatus == PinLockType.Persistent;
 
                 _biometricEnabled = await _vaultTimeoutService.IsBiometricLockSetAsync()
                     && await _cryptoService.HasEncryptedUserKeyAsync();
@@ -129,7 +129,7 @@ namespace Bit.iOS.Core.Controllers
             {
                 BaseNavItem.Title = AppResources.UnlockVault;
             }
-            
+
             BaseCancelButton.Title = AppResources.Cancel;
 
             if (_biometricUnlockOnly)
@@ -224,15 +224,15 @@ namespace Bit.iOS.Core.Controllers
                 {
                     EncString userKeyPin = null;
                     EncString oldPinProtected = null;
-                    if (_pinStatus == PinLockEnum.Persistent)
+                    if (_pinStatus == PinLockType.Persistent)
                     {
-                        userKeyPin = await _stateService.GetUserKeyPinAsync();
+                        userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyAsync();
                         var oldEncryptedKey = await _stateService.GetPinProtectedAsync();
                         oldPinProtected = oldEncryptedKey != null ? new EncString(oldEncryptedKey) : null;
                     }
-                    else if (_pinStatus == PinLockEnum.Transient)
+                    else if (_pinStatus == PinLockType.Transient)
                     {
-                        userKeyPin = await _stateService.GetUserKeyPinEphemeralAsync();
+                        userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync();
                         oldPinProtected = await _stateService.GetPinProtectedKeyAsync();
                     }
 
@@ -240,7 +240,7 @@ namespace Bit.iOS.Core.Controllers
                     if (oldPinProtected != null)
                     {
                         userKey = await _cryptoService.DecryptAndMigrateOldPinKeyAsync(
-                            _pinStatus == PinLockEnum.Transient,
+                            _pinStatus == PinLockType.Transient,
                             inputtedValue,
                             email,
                             kdfConfig,
@@ -284,19 +284,19 @@ namespace Bit.iOS.Core.Controllers
             else
             {
                 var masterKey = await _cryptoService.MakeMasterKeyAsync(inputtedValue, email, kdfConfig);
-                
-                var storedPasswordHash = await _cryptoService.GetPasswordHashAsync();
+
+                var storedPasswordHash = await _cryptoService.GetMasterKeyHashAsync();
                 if (storedPasswordHash == null)
                 {
                     var oldKey = await _secureStorageService.GetAsync<string>("oldKey");
                     if (masterKey.KeyB64 == oldKey)
                     {
-                        var localPasswordHash = await _cryptoService.HashPasswordAsync(inputtedValue, masterKey, HashPurpose.LocalAuthorization);
+                        var localPasswordHash = await _cryptoService.HashMasterKeyAsync(inputtedValue, masterKey, HashPurpose.LocalAuthorization);
                         await _secureStorageService.RemoveAsync("oldKey");
-                        await _cryptoService.SetPasswordHashAsync(localPasswordHash);
+                        await _cryptoService.SetMasterKeyHashAsync(localPasswordHash);
                     }
                 }
-                var passwordValid = await _cryptoService.CompareAndUpdatePasswordHashAsync(inputtedValue, masterKey);
+                var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(inputtedValue, masterKey);
                 if (passwordValid)
                 {
                     await AppHelpers.ResetInvalidUnlockAttemptsAsync();
@@ -395,7 +395,7 @@ namespace Bit.iOS.Core.Controllers
                     });
             PresentViewController(alert, true, null);
         }
-        
+
         private async Task LogOutAsync()
         {
             await AppHelpers.LogOutAsync(await _stateService.GetActiveUserIdAsync());

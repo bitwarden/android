@@ -28,6 +28,7 @@ namespace Bit.Core.Services
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly IPolicyService _policyService;
         private readonly IDeviceTrustCryptoService _deviceTrustCryptoService;
+        private readonly IPasswordResetEnrollmentService _passwordResetEnrollmentService;
         private readonly bool _setCryptoKeys;
 
         private readonly LazyResolve<IWatchDeviceService> _watchDeviceService = new LazyResolve<IWatchDeviceService>();
@@ -52,6 +53,7 @@ namespace Bit.Core.Services
             IPasswordGenerationService passwordGenerationService,
             IPolicyService policyService,
             IDeviceTrustCryptoService deviceTrustCryptoService,
+            IPasswordResetEnrollmentService passwordResetEnrollmentService,
             bool setCryptoKeys = true)
         {
             _cryptoService = cryptoService;
@@ -67,6 +69,7 @@ namespace Bit.Core.Services
             _passwordGenerationService = passwordGenerationService;
             _policyService = policyService;
             _deviceTrustCryptoService = deviceTrustCryptoService;
+            _passwordResetEnrollmentService = passwordResetEnrollmentService;
             _setCryptoKeys = setCryptoKeys;
 
             TwoFactorProviders = new Dictionary<TwoFactorProviderType, TwoFactorProvider>();
@@ -148,8 +151,8 @@ namespace Bit.Core.Services
             SelectedTwoFactorProviderType = null;
             _2faForcePasswordResetReason = null;
             var key = await MakePreloginKeyAsync(masterPassword, email);
-            var hashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key);
-            var localHashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
+            var hashedPassword = await _cryptoService.HashMasterKeyAsync(masterPassword, key);
+            var localHashedPassword = await _cryptoService.HashMasterKeyAsync(masterPassword, key, HashPurpose.LocalAuthorization);
             var result = await LogInHelperAsync(email, hashedPassword, localHashedPassword, null, null, null, key, null, null, null, captchaToken);
 
             if (await RequirePasswordChangeAsync(email, masterPassword))
@@ -262,8 +265,8 @@ namespace Bit.Core.Services
         {
             SelectedTwoFactorProviderType = null;
             var key = await MakePreloginKeyAsync(masterPassword, email);
-            var hashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key);
-            var localHashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
+            var hashedPassword = await _cryptoService.HashMasterKeyAsync(masterPassword, key);
+            var localHashedPassword = await _cryptoService.HashMasterKeyAsync(masterPassword, key, HashPurpose.LocalAuthorization);
             return await LogInHelperAsync(email, hashedPassword, localHashedPassword, null, null, null, key, twoFactorProvider,
                 twoFactorToken, remember);
         }
@@ -499,26 +502,27 @@ namespace Bit.Core.Services
             {
                 if (localHashedPassword != null)
                 {
-                    await _cryptoService.SetPasswordHashAsync(localHashedPassword);
+                    await _cryptoService.SetMasterKeyHashAsync(localHashedPassword);
                     await _cryptoService.SetMasterKeyAsync(masterKey);
                     var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
                     await _cryptoService.SetUserKeyAsync(userKey);
                 }
 
+                var decryptOptions = await _stateService.GetAccountDecryptionOptions();
+                var hasUserKey = await _cryptoService.HasUserKeyAsync();
+                if (decryptOptions?.TrustedDeviceOption != null && !hasUserKey)
+                {
+                    var key = await _deviceTrustCryptoService.DecryptUserKeyWithDeviceKeyAsync(decryptOptions.TrustedDeviceOption.EncryptedPrivateKey, decryptOptions.TrustedDeviceOption.EncryptedUserKey);
+                    if (key != null)
+                    {
+                        await _cryptoService.SetUserKeyAsync(key);
+                    }
+                }
+
                 if (code == null || tokenResponse.Key != null)
                 {
-                    var decryptOptions = await _stateService.GetAccountDecryptionOptions();
                     await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(tokenResponse.Key);
-
-                    if (decryptOptions?.TrustedDeviceOption != null)
-                    {
-                        var key = await _deviceTrustCryptoService.DecryptUserKeyWithDeviceKeyAsync(decryptOptions.TrustedDeviceOption.EncryptedPrivateKey, decryptOptions.TrustedDeviceOption.EncryptedUserKey);
-                        if (key != null)
-                        {
-                            await _cryptoService.SetUserKeyAsync(key);
-                        }
-                    }
-                    else if (!string.IsNullOrEmpty(tokenResponse.KeyConnectorUrl) || !string.IsNullOrEmpty(decryptOptions?.KeyConnectorOption?.KeyConnectorUrl))
+                    if (!string.IsNullOrEmpty(tokenResponse.KeyConnectorUrl) || !string.IsNullOrEmpty(decryptOptions?.KeyConnectorOption?.KeyConnectorUrl))
                     {
 
                         await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(tokenResponse.Key);
@@ -554,41 +558,19 @@ namespace Bit.Core.Services
                         catch { }
                     }
 
-                    await _cryptoService.SetPrivateKeyAsync(tokenResponse.PrivateKey);
+                    await _cryptoService.SetUserPrivateKeyAsync(tokenResponse.PrivateKey);
                 }
                 else if (tokenResponse.KeyConnectorUrl != null)
                 {
-                    // SSO Key Connector Onboarding
-                    var password = await _cryptoFunctionService.RandomBytesAsync(64);
-                    var newMasterKey = await _cryptoService.MakeMasterKeyAsync(Convert.ToBase64String(password), _tokenService.GetEmail(), tokenResponse.KdfConfig);
-                    var keyConnectorRequest = new KeyConnectorUserKeyRequest(newMasterKey.EncKeyB64);
-                    await _cryptoService.SetMasterKeyAsync(newMasterKey);
-
-                    var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(
-                        newMasterKey,
-                        await _cryptoService.MakeUserKeyAsync());
-
-                    await _cryptoService.SetUserKeyAsync(newUserKey);
-                    var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync();
-
-                    try
+                    // New User has tokenResponse.Key == null
+                    if (tokenResponse.Key == null)
                     {
-                        await _apiService.PostUserKeyToKeyConnector(tokenResponse.KeyConnectorUrl, keyConnectorRequest);
+                        await _keyConnectorService.ConvertNewUserToKeyConnectorAsync(orgId, tokenResponse);
                     }
-                    catch (Exception e)
+                    else
                     {
-                        throw new Exception("Unable to reach Key Connector", e);
+                        await _keyConnectorService.GetAndSetKeyAsync(tokenResponse.KeyConnectorUrl);
                     }
-
-                    var keys = new KeysRequest
-                    {
-                        PublicKey = newPublicKey,
-                        EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
-                    };
-                    var setPasswordRequest = new SetKeyConnectorKeyRequest(
-                        newProtectedPrivateKey.EncryptedString, keys, tokenResponse.KdfConfig, orgId
-                    );
-                    await _apiService.PostSetKeyConnectorKey(setPasswordRequest);
                 }
             }
 
@@ -628,8 +610,16 @@ namespace Bit.Core.Services
         }
         public async Task<PasswordlessLoginResponse> GetPasswordlessLoginRequestByIdAsync(string id)
         {
-            var response = await _apiService.GetAuthRequestAsync(id);
-            return await PopulateFingerprintPhraseAsync(response, await _stateService.GetEmailAsync());
+            try
+            {
+                var response = await _apiService.GetAuthRequestAsync(id);
+                return await PopulateFingerprintPhraseAsync(response, await _stateService.GetEmailAsync());
+            }
+            catch (ApiException ex) when (ex.Error?.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                // Thrown when request expires and purge job erases it from the db
+                return null;
+            }
         }
 
         /// <inheritdoc />
@@ -693,6 +683,23 @@ namespace Bit.Core.Services
         {
             passwordlessLogin.FingerprintPhrase = string.Join("-", await _cryptoService.GetFingerprintAsync(userEmail, CoreHelpers.Base64UrlDecode(passwordlessLogin.PublicKey)));
             return passwordlessLogin;
+        }
+
+        public async Task CreateNewSsoUserAsync(string organizationSsoId)
+        {
+            var orgAutoEnrollStatusResponse = await _apiService.GetOrganizationAutoEnrollStatusAsync(organizationSsoId);
+            var randomBytes = _cryptoFunctionService.RandomBytes(64);
+            var userKey = new UserKey(randomBytes);
+            var (userPubKey, userPrivKey) = await _cryptoService.MakeKeyPairAsync(userKey);
+            await _apiService.PostAccountKeysAsync(new KeysRequest
+            {
+                PublicKey = userPubKey,
+                EncryptedPrivateKey = userPrivKey.EncryptedString
+            });
+
+            await _stateService.SetUserKeyAsync(userKey);
+            await _stateService.SetPrivateKeyEncryptedAsync(userPrivKey.EncryptedString);
+            await _passwordResetEnrollmentService.EnrollAsync(orgAutoEnrollStatusResponse.Id);
         }
     }
 }

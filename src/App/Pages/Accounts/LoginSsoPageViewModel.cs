@@ -149,7 +149,6 @@ namespace Bit.App.Pages
                 authResult = await WebAuthenticator.AuthenticateAsync(new Uri(url),
                     new Uri(REDIRECT_URI));
 
-
                 var code = GetResultCode(authResult, state);
                 if (!string.IsNullOrEmpty(code))
                 {
@@ -209,17 +208,12 @@ namespace Bit.App.Pages
                 if (response.TwoFactor)
                 {
                     StartTwoFactorAction?.Invoke();
+                    return;
                 }
-                else if (response.ResetMasterPassword)
+
+                if (decryptOptions?.TrustedDeviceOption != null)
                 {
-                    StartSetPasswordAction?.Invoke();
-                }
-                else if (response.ForcePasswordReset)
-                {
-                    UpdateTempPasswordAction?.Invoke();
-                }
-                else if (decryptOptions?.TrustedDeviceOption != null)
-                {
+                    var pendingRequest = await _stateService.GetPendingAdminAuthRequestAsync();
                     // If user doesn't have a MP, but has reset password permission, they must set a MP
                     if (!decryptOptions.HasMasterPassword &&
                         decryptOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
@@ -235,18 +229,53 @@ namespace Bit.App.Pages
                         _syncService.FullSyncAsync(true).FireAndForget();
                         SsoAuthSuccessAction?.Invoke();
                     }
+                    else if (pendingRequest != null)
+                    {
+                        var authRequest = await _authService.GetPasswordlessLoginRequestByIdAsync(pendingRequest.Id);
+                        if (authRequest != null && authRequest.RequestApproved != null && authRequest.RequestApproved.Value)
+                        {
+                            var authResult = await _authService.LogInPasswordlessAsync(await _stateService.GetActiveUserEmailAsync(), authRequest.RequestAccessCode, pendingRequest.Id, pendingRequest.PrivateKey, authRequest.Key, authRequest.MasterPasswordHash);
+                            if (authResult == null && await _stateService.IsAuthenticatedAsync())
+                            {
+                                await Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(
+                                 () => _platformUtilsService.ShowToast("info", null, AppResources.LoginApproved));
+                                await _stateService.SetPendingAdminAuthRequestAsync(null);
+                                _syncService.FullSyncAsync(true).FireAndForget();
+                                SsoAuthSuccessAction?.Invoke();
+                            }
+                        }
+                        else
+                        {
+                            await _stateService.SetPendingAdminAuthRequestAsync(null);
+                            StartDeviceApprovalOptionsAction?.Invoke();
+                        }
+                    }
                     else
                     {
                         StartDeviceApprovalOptionsAction?.Invoke();
                     }
+                    return;
                 }
-                else
+
+                // In the standard, non TDE case, a user must set password if they don't
+                // have one and they aren't using key connector.
+                // Note: TDE & Key connector are mutually exclusive org config options.
+                if (response.ResetMasterPassword || (decryptOptions?.RequireSetPassword ?? false))
                 {
-                    _syncService.FullSyncAsync(true).FireAndForget();
-                    SsoAuthSuccessAction?.Invoke();
+                    StartSetPasswordAction?.Invoke();
+                    return;
                 }
+
+                if (response.ForcePasswordReset)
+                {
+                    UpdateTempPasswordAction?.Invoke();
+                    return;
+                }
+
+                _syncService.FullSyncAsync(true).FireAndForget();
+                SsoAuthSuccessAction?.Invoke();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await _deviceActionService.HideLoadingAsync();
                 await _platformUtilsService.ShowDialogAsync(AppResources.LoginSsoError,

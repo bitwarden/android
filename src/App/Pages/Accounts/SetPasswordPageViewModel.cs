@@ -166,13 +166,12 @@ namespace Bit.App.Pages
             var kdfConfig = new KdfConfig(KdfType.PBKDF2_SHA256, Constants.Pbkdf2Iterations, null, null);
             var email = await _stateService.GetEmailAsync();
             var newMasterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, email, kdfConfig);
-            var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, newMasterKey, HashPurpose.ServerAuthorization);
-            var localMasterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, newMasterKey, HashPurpose.LocalAuthorization);
+            var masterPasswordHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, newMasterKey, HashPurpose.ServerAuthorization);
+            var localMasterPasswordHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, newMasterKey, HashPurpose.LocalAuthorization);
 
-            var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(newMasterKey,
-                await _cryptoService.GetUserKeyAsync() ?? await _cryptoService.MakeUserKeyAsync());
+            var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(newMasterKey);
 
-            var keys = await _cryptoService.MakeKeyPairAsync(newUserKey);
+            var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync(newUserKey);
             var request = new SetPasswordRequest
             {
                 MasterPasswordHash = masterPasswordHash,
@@ -185,8 +184,8 @@ namespace Bit.App.Pages
                 OrgIdentifier = OrgIdentifier,
                 Keys = new KeysRequest
                 {
-                    PublicKey = keys.Item1,
-                    EncryptedPrivateKey = keys.Item2.EncryptedString
+                    PublicKey = newPublicKey,
+                    EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
                 }
             };
 
@@ -196,10 +195,11 @@ namespace Bit.App.Pages
                 // Set Password and relevant information
                 await _apiService.SetPasswordAsync(request);
                 await _stateService.SetKdfConfigurationAsync(kdfConfig);
+                await _cryptoService.SetUserKeyAsync(newUserKey);
                 await _cryptoService.SetMasterKeyAsync(newMasterKey);
-                await _cryptoService.SetPasswordHashAsync(localMasterPasswordHash);
+                await _cryptoService.SetMasterKeyHashAsync(localMasterPasswordHash);
                 await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(newProtectedUserKey.EncryptedString);
-                await _cryptoService.SetPrivateKeyAsync(keys.Item2.EncryptedString);
+                await _cryptoService.SetUserPrivateKeyAsync(newProtectedPrivateKey.EncryptedString);
 
                 if (ResetPasswordAutoEnroll)
                 {

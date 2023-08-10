@@ -130,14 +130,17 @@ namespace Bit.App.Pages
             _vaultTimeoutDisplayValue = _vaultTimeoutOptions.FirstOrDefault(o => o.Value == _vaultTimeout).Key;
             _vaultTimeoutDisplayValue ??= _vaultTimeoutOptions.Where(o => o.Value == CustomVaultTimeoutValue).First().Key;
 
-            var savedVaultTimeoutAction = await _vaultTimeoutService.GetVaultTimeoutAction();
-            var action = savedVaultTimeoutAction ?? VaultTimeoutAction.Lock;
-            if (!_hasMasterPassword && savedVaultTimeoutAction == null)
+
+            var pinSet = await _vaultTimeoutService.GetPinLockTypeAsync();
+            _pin = pinSet != PinLockType.Disabled;
+            _biometric = await _vaultTimeoutService.IsBiometricLockSetAsync();
+            var timeoutAction = await _vaultTimeoutService.GetVaultTimeoutAction() ?? VaultTimeoutAction.Lock;
+            if (!IsVaultTimeoutActionLockAllowed && timeoutAction == VaultTimeoutAction.Lock)
             {
-                action = VaultTimeoutAction.Logout;
+                timeoutAction = VaultTimeoutAction.Logout;
                 await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(_vaultTimeout, VaultTimeoutAction.Logout);
             }
-            _vaultTimeoutActionDisplayValue = _vaultTimeoutActionOptions.FirstOrDefault(o => o.Value == action).Key;
+            _vaultTimeoutActionDisplayValue = _vaultTimeoutActionOptions.FirstOrDefault(o => o.Value == timeoutAction).Key;
 
             if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout))
             {
@@ -149,10 +152,6 @@ namespace Bit.App.Pages
                     (t.Value > 0 || t.Value == CustomVaultTimeoutValue) &&
                     t.Value != null).ToList();
             }
-
-            var pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
-            _pin = pinSet != PinLockEnum.Disabled;
-            _biometric = await _vaultTimeoutService.IsBiometricLockSetAsync();
             _screenCaptureAllowed = await _stateService.GetScreenCaptureAllowedAsync();
 
             if (_vaultTimeoutDisplayValue == null)
@@ -334,6 +333,7 @@ namespace Bit.App.Pages
             }
             if (oldTimeout != newTimeout)
             {
+                await _cryptoService.RefreshKeysAsync();
                 await Device.InvokeOnMainThreadAsync(BuildList);
             }
         }
@@ -453,18 +453,18 @@ namespace Bit.App.Pages
                     var email = await _stateService.GetEmailAsync();
                     var pinKey = await _cryptoService.MakePinKeyAsync(pin, email, kdfConfig);
                     var userKey = await _cryptoService.GetUserKeyAsync();
-                    var pinProtectedKey = await _cryptoService.EncryptAsync(userKey.Key, pinKey);
+                    var protectedPinKey = await _cryptoService.EncryptAsync(userKey.Key, pinKey);
 
                     var encPin = await _cryptoService.EncryptAsync(pin);
                     await _stateService.SetProtectedPinAsync(encPin.EncryptedString);
 
                     if (masterPassOnRestart)
                     {
-                        await _stateService.SetUserKeyPinEphemeralAsync(pinProtectedKey);
+                        await _stateService.SetPinKeyEncryptedUserKeyEphemeralAsync(protectedPinKey);
                     }
                     else
                     {
-                        await _stateService.SetUserKeyPinAsync(pinProtectedKey);
+                        await _stateService.SetPinKeyEncryptedUserKeyAsync(protectedPinKey);
                     }
                 }
                 else
@@ -475,6 +475,7 @@ namespace Bit.App.Pages
             if (!_pin)
             {
                 await _vaultTimeoutService.ClearAsync();
+                await UpdateVaultTimeoutActionIfNeededAsync();
             }
             BuildList();
         }
@@ -506,7 +507,7 @@ namespace Bit.App.Pages
                 await UpdateVaultTimeoutActionIfNeededAsync();
             }
             await _stateService.SetBiometricLockedAsync(false);
-            await _cryptoService.ToggleKeysAsync();
+            await _cryptoService.RefreshKeysAsync();
             BuildList();
         }
 

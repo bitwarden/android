@@ -3785,6 +3785,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login approved.
+        /// </summary>
+        public static string LoginApproved {
+            get {
+                return ResourceManager.GetString("LoginApproved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login attempt by {0} on {1}.
         /// </summary>
         public static string LogInAttemptByXOnY {
@@ -3823,7 +3832,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log in initiated.
+        ///   Looks up a localized string similar to Login initiated.
         /// </summary>
         public static string LogInInitiated {
             get {
@@ -3918,6 +3927,24 @@ namespace Bit.App.Resources {
         public static string LogInWithAnotherDevice {
             get {
                 return ResourceManager.GetString("LogInWithAnotherDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log in with device.
+        /// </summary>
+        public static string LogInWithDevice {
+            get {
+                return ResourceManager.GetString("LogInWithDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log in with device must be set up in the settings of the Bitwarden app. Need another option?.
+        /// </summary>
+        public static string LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption {
+            get {
+                return ResourceManager.GetString("LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption", resourceCulture);
             }
         }
         

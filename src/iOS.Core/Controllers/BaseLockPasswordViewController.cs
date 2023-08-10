@@ -30,7 +30,7 @@ namespace Bit.iOS.Core.Controllers
         private IBiometricService _biometricService;
         private IUserVerificationService _userVerificationService;
         private IAccountsManager _accountManager;
-        private PinLockEnum _pinStatus;
+        private PinLockType _pinStatus;
         private bool _pinEnabled;
         private bool _biometricEnabled;
         private bool _biometricIntegrityValid = true;
@@ -104,18 +104,18 @@ namespace Bit.iOS.Core.Controllers
             if (autofillExtension && await _stateService.GetPasswordRepromptAutofillAsync())
             {
                 _passwordReprompt = true;
-                _pinStatus = PinLockEnum.Disabled;
+                _pinStatus = PinLockType.Disabled;
                 _pinEnabled = false;
                 _biometricEnabled = false;
             }
             else
             {
-                _pinStatus = await _vaultTimeoutService.IsPinLockSetAsync();
+                _pinStatus = await _vaultTimeoutService.GetPinLockTypeAsync();
 
-                var ephemeralPinSet = await _stateService.GetUserKeyPinEphemeralAsync()
+                var ephemeralPinSet = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync()
                     ?? await _stateService.GetPinProtectedKeyAsync();
-                _pinEnabled = (_pinStatus == PinLockEnum.Transient && ephemeralPinSet != null) ||
-                    _pinStatus == PinLockEnum.Persistent;
+                _pinEnabled = (_pinStatus == PinLockType.Transient && ephemeralPinSet != null) ||
+                    _pinStatus == PinLockType.Persistent;
 
                 _biometricEnabled = await _vaultTimeoutService.IsBiometricLockSetAsync()
                     && await _cryptoService.HasEncryptedUserKeyAsync();
@@ -257,15 +257,15 @@ namespace Bit.iOS.Core.Controllers
                     {
                         EncString userKeyPin = null;
                         EncString oldPinProtected = null;
-                        if (_pinStatus == PinLockEnum.Persistent)
+                        if (_pinStatus == PinLockType.Persistent)
                         {
-                            userKeyPin = await _stateService.GetUserKeyPinAsync();
+                            userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyAsync();
                             var oldEncryptedKey = await _stateService.GetPinProtectedAsync();
                             oldPinProtected = oldEncryptedKey != null ? new EncString(oldEncryptedKey) : null;
                         }
-                        else if (_pinStatus == PinLockEnum.Transient)
+                        else if (_pinStatus == PinLockType.Transient)
                         {
-                            userKeyPin = await _stateService.GetUserKeyPinEphemeralAsync();
+                            userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync();
                             oldPinProtected = await _stateService.GetPinProtectedKeyAsync();
                         }
 
@@ -273,7 +273,7 @@ namespace Bit.iOS.Core.Controllers
                         if (oldPinProtected != null)
                         {
                             userKey = await _cryptoService.DecryptAndMigrateOldPinKeyAsync(
-                                _pinStatus == PinLockEnum.Transient,
+                                _pinStatus == PinLockType.Transient,
                                 inputtedValue,
                                 email,
                                 kdfConfig,
@@ -312,18 +312,18 @@ namespace Bit.iOS.Core.Controllers
                 {
                     var masterKey = await _cryptoService.MakeMasterKeyAsync(inputtedValue, email, kdfConfig);
 
-                    var storedPasswordHash = await _cryptoService.GetPasswordHashAsync();
+                    var storedPasswordHash = await _cryptoService.GetMasterKeyHashAsync();
                     if (storedPasswordHash == null)
                     {
                         var oldKey = await _secureStorageService.GetAsync<string>("oldKey");
                         if (masterKey.KeyB64 == oldKey)
                         {
-                            var localPasswordHash = await _cryptoService.HashPasswordAsync(inputtedValue, masterKey, HashPurpose.LocalAuthorization);
+                            var localPasswordHash = await _cryptoService.HashMasterKeyAsync(inputtedValue, masterKey, HashPurpose.LocalAuthorization);
                             await _secureStorageService.RemoveAsync("oldKey");
-                            await _cryptoService.SetPasswordHashAsync(localPasswordHash);
+                            await _cryptoService.SetMasterKeyHashAsync(localPasswordHash);
                         }
                     }
-                    var passwordValid = await _cryptoService.CompareAndUpdatePasswordHashAsync(inputtedValue, masterKey);
+                    var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(inputtedValue, masterKey);
                     if (passwordValid)
                     {
                         await AppHelpers.ResetInvalidUnlockAttemptsAsync();

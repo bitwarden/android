@@ -124,7 +124,7 @@ namespace Bit.App.Utilities
                     }
 
                     var parameters = GetParameters();
-                    parameters.Secret = await _cryptoService.HashPasswordAsync(password, null);
+                    parameters.Secret = await _cryptoService.HashMasterKeyAsync(password, null);
                     parameters.VerificationType = VerificationType.MasterPassword;
                     await ExecuteAsync(parameters);
                     break;

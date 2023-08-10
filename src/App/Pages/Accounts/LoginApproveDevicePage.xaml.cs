@@ -19,10 +19,10 @@ namespace Bit.App.Pages
         {
             InitializeComponent();
             _vm = BindingContext as LoginApproveDeviceViewModel;
-            _vm.LogInWithMasterPasswordAction = () => StartLogInWithMasterPassword().FireAndForget();
+            _vm.LogInWithMasterPasswordAction = () => StartLogInWithMasterPasswordAsync().FireAndForget();
             _vm.LogInWithDeviceAction = () => StartLoginWithDeviceAsync().FireAndForget();
             _vm.RequestAdminApprovalAction = () => RequestAdminApprovalAsync().FireAndForget();
-            _vm.CloseAction = () => { Navigation.PopModalAsync(); };
+            _vm.ContinueToVaultAction = () => ContinueToVaultAsync().FireAndForget();
             _vm.Page = this;
             _appOptions = appOptions;
         }
@@ -32,17 +32,19 @@ namespace Bit.App.Pages
             _vm.InitAsync();
         }
 
-        private void Cancel_Clicked(object sender, EventArgs e)
+        private async Task ContinueToVaultAsync()
         {
-            if (DoOnce())
+            if (AppHelpers.SetAlternateMainPage(_appOptions))
             {
-                _vm.CloseAction();
+                return;
             }
+            var previousPage = await AppHelpers.ClearPreviousPage();
+            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
         }
 
-        private async Task StartLogInWithMasterPassword()
+        private async Task StartLogInWithMasterPasswordAsync()
         {
-            var page = new LockPage(_appOptions);
+            var page = new LockPage(_appOptions, checkPendingAuthRequests: false);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 

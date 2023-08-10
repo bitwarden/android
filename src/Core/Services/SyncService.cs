@@ -328,7 +328,7 @@ namespace Bit.Core.Services
                 return;
             }
             await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(response.Key);
-            await _cryptoService.SetPrivateKeyAsync(response.PrivateKey);
+            await _cryptoService.SetUserPrivateKeyAsync(response.PrivateKey);
             await _cryptoService.SetOrgKeysAsync(response.Organizations);
             await _stateService.SetSecurityStampAsync(response.SecurityStamp);
             var organizations = response.Organizations.ToDictionary(o => o.Id, o => new OrganizationData(o));
