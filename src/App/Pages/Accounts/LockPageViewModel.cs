@@ -27,7 +27,7 @@ namespace Bit.App.Pages
         private readonly IEnvironmentService _environmentService;
         private readonly IStateService _stateService;
         private readonly IBiometricService _biometricService;
-        private readonly IKeyConnectorService _keyConnectorService;
+        private readonly IUserVerificationService _userVerificationService;
         private readonly ILogger _logger;
         private readonly IWatchDeviceService _watchDeviceService;
         private readonly WeakEventManager<int?> _secretEntryFocusWeakEventManager = new WeakEventManager<int?>();
@@ -44,7 +44,7 @@ namespace Bit.App.Pages
         private bool _biometricEnabled;
         private bool _biometricIntegrityValid = true;
         private bool _biometricButtonVisible;
-        private bool _usingKeyConnector;
+        private bool _hasMasterPassword;
         private string _biometricButtonText;
         private string _loggedInAsText;
         private string _lockedVerifyText;
@@ -60,7 +60,7 @@ namespace Bit.App.Pages
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
-            _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
+            _userVerificationService = ServiceContainer.Resolve<IUserVerificationService>();
             _logger = ServiceContainer.Resolve<ILogger>("logger");
             _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
             _policyService = ServiceContainer.Resolve<IPolicyService>();
@@ -108,9 +108,9 @@ namespace Bit.App.Pages
             set => SetProperty(ref _pinEnabled, value);
         }
 
-        public bool UsingKeyConnector
+        public bool HasMasterPassword
         {
-            get => _usingKeyConnector;
+            get => _hasMasterPassword;
         }
 
         public bool BiometricEnabled
@@ -182,10 +182,10 @@ namespace Bit.App.Pages
 
             BiometricEnabled = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _cryptoService.HasEncryptedUserKeyAsync();
 
-            var decryptOptions = await _stateService.GetAccountDecryptionOptions();
+            // Users without MP and without biometric or pin has no MP to unlock with
+            _hasMasterPassword = await _userVerificationService.HasMasterPasswordAsync();
             if (await _stateService.IsAuthenticatedAsync()
-                 && decryptOptions?.TrustedDeviceOption != null
-                 && !decryptOptions.HasMasterPassword
+                 && !_hasMasterPassword
                  && !BiometricEnabled
                  && !PinEnabled)
             {
@@ -193,13 +193,6 @@ namespace Bit.App.Pages
                 return;
             }
 
-            // Users with key connector and without biometric or pin has no MP to unlock with
-            _usingKeyConnector = await _keyConnectorService.GetUsesKeyConnector();
-            if (_usingKeyConnector && !(BiometricEnabled || PinEnabled))
-            {
-                await _vaultTimeoutService.LogOutAsync();
-                return;
-            }
             _email = await _stateService.GetEmailAsync();
             if (string.IsNullOrWhiteSpace(_email))
             {
@@ -221,16 +214,8 @@ namespace Bit.App.Pages
             }
             else
             {
-                if (_usingKeyConnector)
-                {
-                    PageTitle = AppResources.UnlockVault;
-                    LockedVerifyText = AppResources.VaultLockedIdentity;
-                }
-                else
-                {
-                    PageTitle = AppResources.VerifyMasterPassword;
-                    LockedVerifyText = AppResources.VaultLockedMasterPassword;
-                }
+                PageTitle = _hasMasterPassword ? AppResources.VerifyMasterPassword : AppResources.UnlockVault;
+                LockedVerifyText = _hasMasterPassword ? AppResources.VaultLockedMasterPassword : AppResources.VaultLockedIdentity;
             }
 
             if (BiometricEnabled)

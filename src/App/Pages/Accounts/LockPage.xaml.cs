@@ -98,7 +98,7 @@ namespace Bit.App.Pages
             }
             else
             {
-                if (_vm.UsingKeyConnector && !_vm.PinEnabled)
+                if (!_vm.HasMasterPassword && !_vm.PinEnabled)
                 {
                     _passwordGrid.IsVisible = false;
                     _unlockButton.IsVisible = false;

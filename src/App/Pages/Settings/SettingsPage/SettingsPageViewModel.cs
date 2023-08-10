@@ -29,7 +29,7 @@ namespace Bit.App.Pages
         private readonly IBiometricService _biometricService;
         private readonly IPolicyService _policyService;
         private readonly ILocalizeService _localizeService;
-        private readonly IKeyConnectorService _keyConnectorService;
+        private readonly IUserVerificationService _userVerificationService;
         private readonly IClipboardService _clipboardService;
         private readonly ILogger _loggerService;
         private readonly IPushNotificationService _pushNotificationService;
@@ -89,7 +89,7 @@ namespace Bit.App.Pages
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
-            _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
+            _userVerificationService = ServiceContainer.Resolve<IUserVerificationService>();
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
             _loggerService = ServiceContainer.Resolve<ILogger>("logger");
             _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
@@ -159,8 +159,7 @@ namespace Bit.App.Pages
                 _vaultTimeoutDisplayValue = AppResources.Custom;
             }
 
-            _showChangeMasterPassword = IncludeLinksWithSubscriptionInfo() &&
-                !await _keyConnectorService.GetUsesKeyConnector();
+            _showChangeMasterPassword = IncludeLinksWithSubscriptionInfo() && await _userVerificationService.HasMasterPasswordAsync();
             _reportLoggingEnabled = await _loggerService.IsEnabled();
             _approvePasswordlessLoginRequests = await _stateService.GetApprovePasswordlessLoginsAsync();
             _shouldConnectToWatch = await _stateService.GetShouldConnectToWatchAsync();
@@ -443,7 +442,7 @@ namespace Bit.App.Pages
                 if (!string.IsNullOrWhiteSpace(pin))
                 {
                     var masterPassOnRestart = false;
-                    if (!await _keyConnectorService.GetUsesKeyConnector())
+                    if (await _userVerificationService.HasMasterPasswordAsync())
                     {
                         masterPassOnRestart = await _platformUtilsService.ShowDialogAsync(
                             AppResources.PINRequireMasterPasswordRestart, AppResources.UnlockWithPIN,
