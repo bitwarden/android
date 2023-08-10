@@ -192,7 +192,7 @@ namespace Bit.App.Pages
                 await _vaultTimeoutService.LogOutAsync();
                 return;
             }
-            
+
             _email = await _stateService.GetEmailAsync();
             if (string.IsNullOrWhiteSpace(_email))
             {
