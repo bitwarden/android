@@ -101,13 +101,19 @@ namespace Bit.Core.Services
 
         public async Task<UserKey> GetAutoUnlockKeyAsync(string userId = null)
         {
-            await MigrateAutoUnlockKeyIfNeededAsync(userId);
+            await MigrateAutoAndBioKeysIfNeededAsync(userId);
             return await _stateService.GetUserKeyAutoUnlockAsync(userId);
         }
 
         public async Task<bool> HasAutoUnlockKeyAsync(string userId = null)
         {
             return await GetAutoUnlockKeyAsync(userId) != null;
+        }
+
+        public async Task<UserKey> GetBiometricUnlockKeyAsync(string userId = null)
+        {
+            await MigrateAutoAndBioKeysIfNeededAsync(userId);
+            return await _stateService.GetUserKeyBiometricUnlockAsync(userId);
         }
 
         public Task SetMasterKeyAsync(MasterKey masterKey, string userId = null)
@@ -149,7 +155,7 @@ namespace Bit.Core.Services
         public async Task<Tuple<UserKey, EncString>> EncryptUserKeyWithMasterKeyAsync(MasterKey masterKey)
         {
             var userKey = await GetUserKeyAsync() ?? await MakeUserKeyAsync();
-            return await BuildProtectedSymmetricKey(masterKey, userKey.Key, keyBytes => new UserKey(keyBytes));
+            return await BuildProtectedSymmetricKeyAsync(masterKey, userKey.Key, keyBytes => new UserKey(keyBytes));
         }
 
         public async Task<UserKey> DecryptUserKeyWithMasterKeyAsync(MasterKey masterKey, EncString encUserKey = null, string userId = null)
@@ -163,10 +169,27 @@ namespace Bit.Core.Services
             if (encUserKey == null)
             {
                 var userKeyMasterKey = await _stateService.GetMasterKeyEncryptedUserKeyAsync(userId);
-                if (userKeyMasterKey == null)
+
+                if (userKeyMasterKey is null)
                 {
-                    throw new Exception("No encrypted user key found");
+                    // Migrate old key
+                    var oldEncUserKey = await _stateService.GetEncKeyEncryptedAsync(userId);
+
+                    if (oldEncUserKey is null)
+                    {
+                        throw new Exception("No encrypted user key nor old encKeyEncrypted found");
+                    }
+
+                    var userKey = await DecryptUserKeyWithMasterKeyAsync(
+                        masterKey,
+                        new EncString(oldEncUserKey),
+                        userId
+                    );
+                    await SetMasterKeyEncryptedUserKeyAsync(oldEncUserKey, userId);
+                    await _stateService.SetEncKeyEncryptedAsync(null, userId);
+                    return userKey;
                 }
+
                 encUserKey = new EncString(userKeyMasterKey);
             }
 
@@ -204,7 +227,7 @@ namespace Bit.Core.Services
             }
 
             var newSymKey = await _cryptoFunctionService.RandomBytesAsync(64);
-            return await BuildProtectedSymmetricKey(key, newSymKey, keyBytes => new SymmetricCryptoKey(keyBytes));
+            return await BuildProtectedSymmetricKeyAsync(key, newSymKey, keyBytes => new SymmetricCryptoKey(keyBytes));
         }
 
         public async Task<string> HashMasterKeyAsync(string password, MasterKey masterKey, HashPurpose hashPurpose = HashPurpose.ServerAuthorization)
@@ -676,10 +699,10 @@ namespace Bit.Core.Services
 
         private async Task StoreAdditionalKeysAsync(UserKey userKey, string userId = null)
         {
-            // Refresh, set, or clear the pin key
+            // Set, refresh, or clear the pin key
             if (await _stateService.GetProtectedPinAsync(userId) != null)
             {
-                await UpdateUserKeyPinAsync(userKey, userId);
+                await UpdatePinKeyAsync(userKey, userId);
             }
             else
             {
@@ -687,18 +710,28 @@ namespace Bit.Core.Services
                 await _stateService.SetPinKeyEncryptedUserKeyEphemeralAsync(null, userId);
             }
 
-            // Refresh, set, or clear the auto key
+            // Set, refresh, or clear the auto unlock key
             if (await _stateService.GetVaultTimeoutAsync(userId) == null)
             {
-                await _stateService.SetUserKeyAutoUnlockAsync(userKey.KeyB64, userId);
+                await _stateService.SetUserKeyAutoUnlockAsync(userKey, userId);
             }
             else
             {
                 await _stateService.SetUserKeyAutoUnlockAsync(null, userId);
             }
+
+            // Set, refresh, or clear the biometric unlock key
+            if (await _stateService.GetBiometricUnlockAsync(userId) is true)
+            {
+                await _stateService.SetUserKeyBiometricUnlockAsync(userKey, userId);
+            }
+            else
+            {
+                await _stateService.SetUserKeyBiometricUnlockAsync(null, userId);
+            }
         }
 
-        private async Task UpdateUserKeyPinAsync(UserKey userKey, string userId = null)
+        private async Task UpdatePinKeyAsync(UserKey userKey, string userId = null)
         {
             var pin = await DecryptToUtf8Async(new EncString(await _stateService.GetProtectedPinAsync(userId)));
             var pinKey = await MakePinKeyAsync(
@@ -880,7 +913,7 @@ namespace Bit.Core.Services
         }
 
         // TODO: This needs to be moved into SymmetricCryptoKey model to remove the keyCreator hack
-        private async Task<Tuple<TKey, EncString>> BuildProtectedSymmetricKey<TKey>(SymmetricCryptoKey key,
+        private async Task<Tuple<TKey, EncString>> BuildProtectedSymmetricKeyAsync<TKey>(SymmetricCryptoKey key,
             byte[] encKey, Func<byte[], TKey> keyCreator) where TKey : SymmetricCryptoKey
         {
             EncString encKeyEnc = null;
@@ -904,7 +937,7 @@ namespace Bit.Core.Services
         private async Task<TKey> MakeKeyAsync<TKey>(string password, string salt, KdfConfig kdfConfig, Func<byte[], TKey> keyCreator)
         where TKey : SymmetricCryptoKey
         {
-            byte[] key = null;
+            byte[] key;
             if (kdfConfig.Type == null || kdfConfig.Type == KdfType.PBKDF2_SHA256)
             {
                 var iterations = kdfConfig.Iterations.GetValueOrDefault(5000);
@@ -962,23 +995,33 @@ namespace Bit.Core.Services
         // We previously used the master key for additional keys, but now we use the user key.
         // These methods support migrating the old keys to the new ones.
 
-        private async Task MigrateAutoUnlockKeyIfNeededAsync(string userId = null)
+        private async Task MigrateAutoAndBioKeysIfNeededAsync(string userId = null)
         {
-            var oldAutoKey = await _stateService.GetKeyEncryptedAsync(userId);
-            if (oldAutoKey == null)
+            var oldKey = await _stateService.GetKeyEncryptedAsync(userId);
+            if (oldKey == null)
             {
                 return;
             }
+
             // Decrypt
-            var masterKey = new MasterKey(Convert.FromBase64String(oldAutoKey));
+            var masterKey = new MasterKey(Convert.FromBase64String(oldKey));
             var encryptedUserKey = await _stateService.GetEncKeyEncryptedAsync(userId);
             var userKey = await DecryptUserKeyWithMasterKeyAsync(
                 masterKey,
                 new EncString(encryptedUserKey),
                 userId);
+
             // Migrate
-            await _stateService.SetUserKeyAutoUnlockAsync(userKey.KeyB64, userId);
+            if (await _stateService.GetVaultTimeoutAsync(userId) == null)
+            {
+                await _stateService.SetUserKeyAutoUnlockAsync(userKey, userId);
+            }
+            if (await _stateService.GetBiometricUnlockAsync(userId) is true)
+            {
+                await _stateService.SetUserKeyBiometricUnlockAsync(userKey, userId);
+            }
             await _stateService.SetKeyEncryptedAsync(null, userId);
+
             // Set encrypted user key just in case the user locks without syncing
             await SetMasterKeyEncryptedUserKeyAsync(encryptedUserKey);
         }

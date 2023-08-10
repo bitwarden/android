@@ -241,6 +241,19 @@ namespace Bit.Core.Services
             ))?.Settings?.EnvironmentUrls;
         }
 
+        public async Task<UserKey> GetUserKeyBiometricUnlockAsync(string userId = null)
+        {
+            var keyB64 = await _storageMediatorService.GetAsync<string>(
+                await ComposeKeyAsync(Constants.UserKeyBiometricUnlockKey, userId), true);
+            return keyB64 == null ? null : new UserKey(Convert.FromBase64String(keyB64));
+        }
+
+        public async Task SetUserKeyBiometricUnlockAsync(UserKey value, string userId = null)
+        {
+            await _storageMediatorService.SaveAsync(
+                await ComposeKeyAsync(Constants.UserKeyBiometricUnlockKey, userId), value?.KeyB64, true);
+        }
+
         public async Task<bool?> GetBiometricUnlockAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
@@ -353,10 +366,10 @@ namespace Bit.Core.Services
             return keyB64 == null ? null : new UserKey(Convert.FromBase64String(keyB64));
         }
 
-        public async Task SetUserKeyAutoUnlockAsync(string value, string userId = null)
+        public async Task SetUserKeyAutoUnlockAsync(UserKey value, string userId = null)
         {
             await _storageMediatorService.SaveAsync(
-                await ComposeKeyAsync(Constants.UserKeyAutoUnlockKey, userId), value, true);
+                await ComposeKeyAsync(Constants.UserKeyAutoUnlockKey, userId), value?.KeyB64, true);
         }
 
         public async Task<bool> CanAccessPremiumAsync(string userId = null)
@@ -428,7 +441,7 @@ namespace Bit.Core.Services
         {
             return (await GetAccountAsync(
                 ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultInMemoryOptionsAsync())
-            ))?.VolatileData?.UserKeyPinEphemeral;
+            ))?.VolatileData?.PinKeyEncryptedUserKeyEphemeral;
         }
 
         public async Task SetPinKeyEncryptedUserKeyEphemeralAsync(EncString value, string userId = null)
@@ -436,7 +449,7 @@ namespace Bit.Core.Services
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultInMemoryOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
-            account.VolatileData.UserKeyPinEphemeral = value;
+            account.VolatileData.PinKeyEncryptedUserKeyEphemeral = value;
             await SaveAccountAsync(account, reconciledOptions);
         }
 
@@ -1520,6 +1533,7 @@ namespace Bit.Core.Services
             // Non-state storage
             await Task.WhenAll(
                 SetUserKeyAutoUnlockAsync(null, userId),
+                SetUserKeyBiometricUnlockAsync(null, userId),
                 SetProtectedPinAsync(null, userId),
                 SetKeyHashAsync(null, userId),
                 SetOrgKeysEncryptedAsync(null, userId),

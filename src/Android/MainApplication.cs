@@ -157,9 +157,9 @@ namespace Bit.Droid
                 messagingService, broadcasterService);
             var autofillHandler = new AutofillHandler(stateService, messagingService, clipboardService,
                 platformUtilsService, new LazyResolve<IEventService>());
-            var biometricService = new BiometricService(stateService);
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);
+            var biometricService = new BiometricService(stateService, cryptoService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
 
             ServiceContainer.Register<ISynchronousStorageService>(preferencesStorage);

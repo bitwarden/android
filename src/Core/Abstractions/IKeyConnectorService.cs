@@ -6,12 +6,12 @@ namespace Bit.Core.Abstractions
 {
     public interface IKeyConnectorService
     {
-        Task SetUsesKeyConnector(bool usesKeyConnector);
+        Task SetUsesKeyConnectorAsync(bool usesKeyConnector);
         Task<bool> GetUsesKeyConnectorAsync();
-        Task<bool> UserNeedsMigration();
-        Task MigrateUser();
-        Task GetAndSetKeyAsync(string url);
-        Task<Organization> GetManagingOrganization();
+        Task<bool> UserNeedsMigrationAsync();
+        Task MigrateUserAsync();
+        Task SetMasterKeyFromUrlAsync(string url);
+        Task<Organization> GetManagingOrganizationAsync();
         Task ConvertNewUserToKeyConnectorAsync(string orgId, IdentityTokenResponse tokenResponse);
     }
 }

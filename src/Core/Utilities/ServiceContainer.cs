@@ -82,7 +82,7 @@ namespace Bit.Core.Utilities
             var deviceTrustCryptoService = new DeviceTrustCryptoService(apiService, appIdService, cryptoFunctionService, cryptoService, stateService);
             var passwordResetEnrollmentService = new PasswordResetEnrollmentService(apiService, cryptoService, organizationService, stateService);
             var authService = new AuthService(cryptoService, cryptoFunctionService, apiService, stateService,
-                tokenService, appIdService, i18nService, platformUtilsService, messagingService, vaultTimeoutService,
+                tokenService, appIdService, i18nService, platformUtilsService, messagingService,
                 keyConnectorService, passwordGenerationService, policyService, deviceTrustCryptoService, passwordResetEnrollmentService);
             var exportService = new ExportService(folderService, cipherService, cryptoService);
             var auditService = new AuditService(cryptoFunctionService, apiService);

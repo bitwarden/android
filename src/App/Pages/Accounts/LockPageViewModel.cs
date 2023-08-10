@@ -180,7 +180,7 @@ namespace Bit.App.Pages
             PinEnabled = (_pinStatus == PinLockType.Transient && ephemeralPinSet != null) ||
                       _pinStatus == PinLockType.Persistent;
 
-            BiometricEnabled = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _cryptoService.HasEncryptedUserKeyAsync();
+            BiometricEnabled = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _biometricService.CanUseBiometricsUnlockAsync();
 
             // Users without MP and without biometric or pin has no MP to unlock with
             _hasMasterPassword = await _userVerificationService.HasMasterPasswordAsync();
@@ -305,7 +305,7 @@ namespace Bit.App.Pages
                     {
                         Pin = string.Empty;
                         await AppHelpers.ResetInvalidUnlockAttemptsAsync();
-                        await SetKeyAndContinueAsync(userKey);
+                        await SetUserKeyAndContinueAsync(userKey);
                     }
                 }
                 catch
@@ -372,7 +372,7 @@ namespace Bit.App.Pages
 
                     var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
                     await _cryptoService.SetMasterKeyAsync(masterKey);
-                    await SetKeyAndContinueAsync(userKey);
+                    await SetUserKeyAndContinueAsync(userKey);
 
                     // Re-enable biometrics
                     if (BiometricEnabled & !BiometricIntegrityValid)
@@ -470,11 +470,12 @@ namespace Bit.App.Pages
             await _stateService.SetBiometricLockedAsync(!success);
             if (success)
             {
-                await DoContinueAsync();
+                var userKey = await _cryptoService.GetBiometricUnlockKeyAsync();
+                await SetUserKeyAndContinueAsync(userKey);
             }
         }
 
-        private async Task SetKeyAndContinueAsync(UserKey key)
+        private async Task SetUserKeyAndContinueAsync(UserKey key)
         {
             var hasKey = await _cryptoService.HasUserKeyAsync();
             if (!hasKey)

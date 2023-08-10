@@ -121,7 +121,7 @@ namespace Bit.Core.Models.Domain
         {
             public UserKey UserKey;
             public MasterKey MasterKey;
-            public EncString UserKeyPinEphemeral;
+            public EncString PinKeyEncryptedUserKeyEphemeral;
             public bool? BiometricLocked;
             [Obsolete("Jul 6 2023: Key has been deprecated. We will use the User Key in the future. It remains here for migration during app upgrade.")]
             public SymmetricCryptoKey Key;

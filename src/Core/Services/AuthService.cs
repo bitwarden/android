@@ -48,7 +48,6 @@ namespace Bit.Core.Services
             II18nService i18nService,
             IPlatformUtilsService platformUtilsService,
             IMessagingService messagingService,
-            IVaultTimeoutService vaultTimeoutService,
             IKeyConnectorService keyConnectorService,
             IPasswordGenerationService passwordGenerationService,
             IPolicyService policyService,
@@ -510,6 +509,7 @@ namespace Bit.Core.Services
                     await _cryptoService.SetUserKeyAsync(userKey);
                 }
 
+                // Trusted Device
                 var decryptOptions = await _stateService.GetAccountDecryptionOptions();
                 var hasUserKey = await _cryptoService.HasUserKeyAsync();
                 if (decryptOptions?.TrustedDeviceOption != null && !hasUserKey)
@@ -524,22 +524,24 @@ namespace Bit.Core.Services
                 if (code == null || tokenResponse.Key != null)
                 {
                     await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(tokenResponse.Key);
+
+                    // Key Connector
                     if (!string.IsNullOrEmpty(tokenResponse.KeyConnectorUrl) || !string.IsNullOrEmpty(decryptOptions?.KeyConnectorOption?.KeyConnectorUrl))
                     {
-
-                        await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(tokenResponse.Key);
-                        if (masterKey != null)
-                        {
-                            await _cryptoService.SetMasterKeyAsync(masterKey);
-                            var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
-                            await _cryptoService.SetUserKeyAsync(userKey);
-                        }
+                        var url = tokenResponse.KeyConnectorUrl ?? decryptOptions.KeyConnectorOption.KeyConnectorUrl;
+                        await _keyConnectorService.SetMasterKeyFromUrlAsync(url);
                     }
 
                     // Login with Device
                     if (masterKey != null && !string.IsNullOrEmpty(authRequestId))
                     {
                         await _cryptoService.SetMasterKeyAsync(masterKey);
+                    }
+
+                    // Decrypt UserKey with MasterKey
+                    masterKey ??= await _stateService.GetMasterKeyAsync();
+                    if (masterKey != null)
+                    {
                         var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
                         await _cryptoService.SetUserKeyAsync(userKey);
                     }
@@ -571,7 +573,7 @@ namespace Bit.Core.Services
                     }
                     else
                     {
-                        await _keyConnectorService.GetAndSetKeyAsync(tokenResponse.KeyConnectorUrl);
+                        await _keyConnectorService.SetMasterKeyFromUrlAsync(tokenResponse.KeyConnectorUrl);
                     }
                 }
             }
