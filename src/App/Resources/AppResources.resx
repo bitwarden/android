@@ -2506,7 +2506,7 @@ Do you want to switch to this account?</value>
     <value>Log in with device</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Log in initiated</value>
+    <value>Login initiated</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
     <value>A notification has been sent to your device.</value>

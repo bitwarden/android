@@ -23,7 +23,7 @@ namespace Bit.Core.Services
         private readonly ISearchService _searchService;
         private readonly IMessagingService _messagingService;
         private readonly ITokenService _tokenService;
-        private readonly IKeyConnectorService _keyConnectorService;
+        private readonly IUserVerificationService _userVerificationService;
         private readonly Func<Tuple<string, bool>, Task> _lockedCallback;
         private readonly Func<Tuple<string, bool, bool>, Task> _loggedOutCallback;
 
@@ -37,7 +37,7 @@ namespace Bit.Core.Services
             ISearchService searchService,
             IMessagingService messagingService,
             ITokenService tokenService,
-            IKeyConnectorService keyConnectorService,
+            IUserVerificationService userVerificationService,
             Func<Tuple<string, bool>, Task> lockedCallback,
             Func<Tuple<string, bool, bool>, Task> loggedOutCallback)
         {
@@ -50,7 +50,7 @@ namespace Bit.Core.Services
             _searchService = searchService;
             _messagingService = messagingService;
             _tokenService = tokenService;
-            _keyConnectorService = keyConnectorService;
+            _userVerificationService = userVerificationService;
             _lockedCallback = lockedCallback;
             _loggedOutCallback = loggedOutCallback;
         }
@@ -179,7 +179,7 @@ namespace Bit.Core.Services
                 userId = await _stateService.GetActiveUserIdAsync();
             }
 
-            if (await _keyConnectorService.GetUsesKeyConnectorAsync())
+            if (!await _userVerificationService.HasMasterPasswordAsync())
             {
                 var pinStatus = await GetPinLockTypeAsync(userId);
                 var ephemeralPinSet = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync()

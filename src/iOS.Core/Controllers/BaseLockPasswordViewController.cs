@@ -28,14 +28,14 @@ namespace Bit.iOS.Core.Controllers
         private IStorageService _secureStorageService;
         private IPlatformUtilsService _platformUtilsService;
         private IBiometricService _biometricService;
-        private IKeyConnectorService _keyConnectorService;
+        private IUserVerificationService _userVerificationService;
         private IAccountsManager _accountManager;
         private PinLockType _pinStatus;
         private bool _pinEnabled;
         private bool _biometricEnabled;
         private bool _biometricIntegrityValid = true;
         private bool _passwordReprompt = false;
-        private bool _usesKeyConnector;
+        private bool _hasMasterPassword;
         private bool _biometricUnlockOnly = false;
         private bool _checkingPassword;
 
@@ -96,7 +96,7 @@ namespace Bit.iOS.Core.Controllers
             _secureStorageService = ServiceContainer.Resolve<IStorageService>("secureStorageService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
-            _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
+            _userVerificationService = ServiceContainer.Resolve<IUserVerificationService>();
             _accountManager = ServiceContainer.Resolve<IAccountsManager>("accountsManager");
 
             // We re-use the lock screen for autofill extension to verify master password
@@ -121,15 +121,15 @@ namespace Bit.iOS.Core.Controllers
                     && await _cryptoService.HasEncryptedUserKeyAsync();
                 _biometricIntegrityValid =
                     await _platformUtilsService.IsBiometricIntegrityValidAsync(BiometricIntegritySourceKey);
-                _usesKeyConnector = await _keyConnectorService.GetUsesKeyConnectorAsync();
-                _biometricUnlockOnly = _usesKeyConnector && _biometricEnabled && !_pinEnabled;
+                _hasMasterPassword = await _userVerificationService.HasMasterPasswordAsync();
+                _biometricUnlockOnly = !_hasMasterPassword && _biometricEnabled && !_pinEnabled;
             }
 
             if (_pinEnabled)
             {
                 BaseNavItem.Title = AppResources.VerifyPIN;
             }
-            else if (_usesKeyConnector)
+            else if (!_hasMasterPassword)
             {
                 BaseNavItem.Title = AppResources.UnlockVault;
             }
@@ -200,7 +200,7 @@ namespace Bit.iOS.Core.Controllers
             base.ViewDidAppear(animated);
 
             // Users with key connector and without biometric or pin has no MP to unlock with
-            if (_usesKeyConnector)
+            if (!_hasMasterPassword)
             {
                 if (!(_pinEnabled || _biometricEnabled) ||
                     (_biometricEnabled && !_biometricIntegrityValid))

@@ -8,7 +8,7 @@ namespace Bit.Core.Models.Request
             bool requestApproved)
         {
             Key = key ?? throw new ArgumentNullException(nameof(key));
-            MasterPasswordHash = masterPasswordHash ?? throw new ArgumentNullException(nameof(masterPasswordHash));
+            MasterPasswordHash = masterPasswordHash;
             DeviceIdentifier = deviceIdentifier ?? throw new ArgumentNullException(nameof(deviceIdentifier));
             RequestApproved = requestApproved;
         }

@@ -9,7 +9,5 @@ namespace Bit.App.Abstractions
         Task<bool> ShowPasswordPromptAsync();
 
         Task<(string password, bool valid)> ShowPasswordPromptAndGetItAsync();
-
-        Task<bool> Enabled();
     }
 }

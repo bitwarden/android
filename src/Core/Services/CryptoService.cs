@@ -126,8 +126,14 @@ namespace Bit.Core.Services
             var masterKey = await _stateService.GetMasterKeyAsync(userId);
             if (masterKey == null)
             {
+                var masterKeyDecrypted = await _stateService.GetKeyDecryptedAsync(userId);
+                if (masterKeyDecrypted == null)
+                {
+                    return null;
+                }
+
                 // Migration support
-                masterKey = new MasterKey((await _stateService.GetKeyDecryptedAsync(userId)).Key);
+                masterKey = new MasterKey(masterKeyDecrypted.Key);
                 if (masterKey != null)
                 {
                     await SetMasterKeyAsync(masterKey, userId);
