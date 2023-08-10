@@ -214,7 +214,9 @@ namespace Bit.Core.Services
                 }
                 else
                 {
-                    var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(new MasterKey(decryptedKey));
+                    var masterKey = new MasterKey(decryptedKey);
+                    var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
+                    await _cryptoService.SetMasterKeyAsync(masterKey);
                     await _cryptoService.SetUserKeyAsync(userKey);
                 }
                 await _deviceTrustCryptoService.TrustDeviceIfNeededAsync();
@@ -632,13 +634,24 @@ namespace Bit.Core.Services
         {
             var publicKey = CoreHelpers.Base64UrlDecode(pubKey);
             var masterKey = await _cryptoService.GetMasterKeyAsync();
-            var encryptedKey = await _cryptoService.RsaEncryptAsync(masterKey.EncKey, publicKey);
-            var keyHash = await _stateService.GetKeyHashAsync();
+            byte[] keyToEncrypt = null;
             EncString encryptedMasterPassword = null;
-            if (!string.IsNullOrEmpty(keyHash))
+
+            if (masterKey == null)
             {
-                encryptedMasterPassword = await _cryptoService.RsaEncryptAsync(Encoding.UTF8.GetBytes(keyHash), publicKey);
+                keyToEncrypt = (await _cryptoService.GetUserKeyAsync()).Key;
             }
+            else
+            {
+                keyToEncrypt = masterKey.Key;
+                var keyHash = await _stateService.GetKeyHashAsync();
+                if (!string.IsNullOrEmpty(keyHash))
+                {
+                    encryptedMasterPassword = await _cryptoService.RsaEncryptAsync(Encoding.UTF8.GetBytes(keyHash), publicKey);
+                }
+            }
+
+            var encryptedKey = await _cryptoService.RsaEncryptAsync(keyToEncrypt, publicKey);
             var deviceId = await _appIdService.GetAppIdAsync();
             var response = await _apiService.PutAuthRequestAsync(id, encryptedKey.EncryptedString, encryptedMasterPassword?.EncryptedString, deviceId, requestApproved);
             return await PopulateFingerprintPhraseAsync(response, await _stateService.GetEmailAsync());
