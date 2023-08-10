@@ -642,7 +642,7 @@ namespace Bit.Core.Services
                 var userKey = await _cryptoService.GetUserKeyAsync();
                 if (userKey == null)
                 {
-                    throw new UserAndMasterKeyNullException();
+                    throw new UserAndMasterKeysNullException();
                 }
                 keyToEncrypt = userKey.Key;
             }
