@@ -505,8 +505,6 @@ namespace Bit.Core.Services
                 {
                     await _cryptoService.SetMasterKeyHashAsync(localHashedPassword);
                     await _cryptoService.SetMasterKeyAsync(masterKey);
-                    var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
-                    await _cryptoService.SetUserKeyAsync(userKey);
                 }
 
                 // Trusted Device
