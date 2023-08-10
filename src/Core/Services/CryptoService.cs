@@ -121,7 +121,7 @@ namespace Bit.Core.Services
             if (masterKey == null)
             {
                 var masterKeyDecrypted = await _stateService.GetKeyDecryptedAsync(userId);
-                if(masterKeyDecrypted == null)
+                if (masterKeyDecrypted == null)
                 {
                     return null;
                 }
