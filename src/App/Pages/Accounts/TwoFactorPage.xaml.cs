@@ -35,7 +35,9 @@ namespace Bit.App.Pages
             _vm.StartSetPasswordAction = () =>
                 Device.BeginInvokeOnMainThread(async () => await StartSetPasswordAsync());
             _vm.TwoFactorAuthSuccessAction = () =>
-                Device.BeginInvokeOnMainThread(async () => await TwoFactorAuthSuccessAsync());
+                Device.BeginInvokeOnMainThread(async () => await TwoFactorAuthSuccessToMainAsync());
+            _vm.LockAction = () =>
+                Device.BeginInvokeOnMainThread(TwoFactorAuthSuccessWithSSOLocked);
             _vm.UpdateTempPasswordAction =
                 () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.StartDeviceApprovalOptionsAction =
@@ -189,21 +191,19 @@ namespace Bit.App.Pages
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
-        private async Task TwoFactorAuthSuccessAsync()
+        private void TwoFactorAuthSuccessWithSSOLocked()
         {
-            if (await _vm.ShouldLock())
+            Application.Current.MainPage = new NavigationPage(new LockPage(_appOptions));
+        }
+
+        private async Task TwoFactorAuthSuccessToMainAsync()
+        {
+            if (AppHelpers.SetAlternateMainPage(_appOptions))
             {
-                Application.Current.MainPage = new NavigationPage(new LockPage(_appOptions));
+                return;
             }
-            else
-            {
-                if (AppHelpers.SetAlternateMainPage(_appOptions))
-                {
-                    return;
-                }
-                var previousPage = await AppHelpers.ClearPreviousPage();
-                Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
-            }
+            var previousPage = await AppHelpers.ClearPreviousPage();
+            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
         }
 
         private void Token_TextChanged(object sender, TextChangedEventArgs e)

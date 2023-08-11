@@ -124,6 +124,7 @@ namespace Bit.App.Pages
         public Command SubmitCommand { get; }
         public ICommand MoreCommand { get; }
         public Action TwoFactorAuthSuccessAction { get; set; }
+        public Action LockAction { get; set; }
         public Action StartDeviceApprovalOptionsAction { get; set; }
         public Action StartSetPasswordAction { get; set; }
         public Action CloseAction { get; set; }
@@ -348,7 +349,7 @@ namespace Bit.App.Pages
                     }
                     else if (await _deviceTrustCryptoService.IsDeviceTrustedAsync())
                     {
-                        TwoFactorAuthSuccessAction?.Invoke();
+                        await TwoFactorAuthSuccessAsync();
                     }
                     else
                     {
@@ -357,7 +358,7 @@ namespace Bit.App.Pages
                 }
                 else
                 {
-                    TwoFactorAuthSuccessAction?.Invoke();
+                    await TwoFactorAuthSuccessAsync();
                 }
             }
             catch (ApiException e)
@@ -452,9 +453,16 @@ namespace Bit.App.Pages
             }
         }
 
-        public async Task<bool> ShouldLock()
+        public async Task TwoFactorAuthSuccessAsync()
         {
-            return AuthingWithSso && await _vaultTimeoutService.IsLockedAsync();
+            if(AuthingWithSso && await _vaultTimeoutService.IsLockedAsync())
+            {
+                LockAction?.Invoke();
+            }
+            else
+            {
+                TwoFactorAuthSuccessAction?.Invoke();
+            }
         }
     }
 }
