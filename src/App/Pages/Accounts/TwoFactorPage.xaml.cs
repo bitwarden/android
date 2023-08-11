@@ -25,13 +25,13 @@ namespace Bit.App.Pages
         {
             InitializeComponent();
             SetActivityIndicator();
-            _vm.AuthingWithSso = authingWithSso ?? false;
             _appOptions = appOptions;
             _orgIdentifier = orgIdentifier;
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _vm = BindingContext as TwoFactorPageViewModel;
             _vm.Page = this;
+            _vm.AuthingWithSso = authingWithSso ?? false;
             _vm.StartSetPasswordAction = () =>
                 Device.BeginInvokeOnMainThread(async () => await StartSetPasswordAsync());
             _vm.TwoFactorAuthSuccessAction = () =>
