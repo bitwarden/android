@@ -33,6 +33,7 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly II18nService _i18nService;
         private readonly IAppIdService _appIdService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly ILogger _logger;
         private readonly IDeviceTrustCryptoService _deviceTrustCryptoService;
         private TwoFactorProviderType? _selectedProviderType;
@@ -55,6 +56,7 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>();
             _logger = ServiceContainer.Resolve<ILogger>();
             _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
 
@@ -70,6 +72,8 @@ namespace Bit.App.Pages
         }
 
         public bool Remember { get; set; }
+
+        public bool AuthingWithSso { get; set; }
 
         public string Token { get; set; }
 
@@ -446,6 +450,11 @@ namespace Bit.App.Pages
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return false;
             }
+        }
+
+        public async Task<bool> ShouldLock()
+        {
+            return AuthingWithSso && await _vaultTimeoutService.IsLockedAsync();
         }
     }
 }
