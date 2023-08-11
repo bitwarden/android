@@ -455,7 +455,7 @@ namespace Bit.App.Pages
 
         public async Task TwoFactorAuthSuccessAsync()
         {
-            if(AuthingWithSso && await _vaultTimeoutService.IsLockedAsync())
+            if (AuthingWithSso && await _vaultTimeoutService.IsLockedAsync())
             {
                 LockAction?.Invoke();
             }
