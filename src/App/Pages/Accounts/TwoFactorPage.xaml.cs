@@ -4,6 +4,7 @@ using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -24,17 +25,19 @@ namespace Bit.App.Pages
         {
             InitializeComponent();
             SetActivityIndicator();
-            _authingWithSso = authingWithSso ?? false;
             _appOptions = appOptions;
             _orgIdentifier = orgIdentifier;
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _vm = BindingContext as TwoFactorPageViewModel;
             _vm.Page = this;
+            _vm.AuthingWithSso = authingWithSso ?? false;
             _vm.StartSetPasswordAction = () =>
                 Device.BeginInvokeOnMainThread(async () => await StartSetPasswordAsync());
             _vm.TwoFactorAuthSuccessAction = () =>
-                Device.BeginInvokeOnMainThread(async () => await TwoFactorAuthSuccessAsync());
+                Device.BeginInvokeOnMainThread(async () => await TwoFactorAuthSuccessToMainAsync());
+            _vm.LockAction = () =>
+                Device.BeginInvokeOnMainThread(TwoFactorAuthSuccessWithSSOLocked);
             _vm.UpdateTempPasswordAction =
                 () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.StartDeviceApprovalOptionsAction =
@@ -188,21 +191,19 @@ namespace Bit.App.Pages
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
-        private async Task TwoFactorAuthSuccessAsync()
+        private void TwoFactorAuthSuccessWithSSOLocked()
         {
-            if (_authingWithSso)
+            Application.Current.MainPage = new NavigationPage(new LockPage(_appOptions));
+        }
+
+        private async Task TwoFactorAuthSuccessToMainAsync()
+        {
+            if (AppHelpers.SetAlternateMainPage(_appOptions))
             {
-                Application.Current.MainPage = new NavigationPage(new LockPage(_appOptions));
+                return;
             }
-            else
-            {
-                if (AppHelpers.SetAlternateMainPage(_appOptions))
-                {
-                    return;
-                }
-                var previousPage = await AppHelpers.ClearPreviousPage();
-                Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
-            }
+            var previousPage = await AppHelpers.ClearPreviousPage();
+            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
         }
 
         private void Token_TextChanged(object sender, TextChangedEventArgs e)
