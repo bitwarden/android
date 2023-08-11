@@ -4,6 +4,7 @@ using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -13,6 +14,7 @@ namespace Bit.App.Pages
     {
         private readonly IBroadcasterService _broadcasterService;
         private readonly IMessagingService _messagingService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly AppOptions _appOptions;
 
         private TwoFactorPageViewModel _vm;
@@ -29,6 +31,7 @@ namespace Bit.App.Pages
             _orgIdentifier = orgIdentifier;
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _vm = BindingContext as TwoFactorPageViewModel;
             _vm.Page = this;
             _vm.StartSetPasswordAction = () =>
@@ -190,7 +193,7 @@ namespace Bit.App.Pages
 
         private async Task TwoFactorAuthSuccessAsync()
         {
-            if (_authingWithSso)
+            if (_authingWithSso && await _vaultTimeoutService.IsLockedAsync())
             {
                 Application.Current.MainPage = new NavigationPage(new LockPage(_appOptions));
             }
