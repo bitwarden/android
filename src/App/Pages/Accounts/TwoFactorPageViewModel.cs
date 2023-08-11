@@ -349,7 +349,15 @@ namespace Bit.App.Pages
                     }
                     else if (await _deviceTrustCryptoService.IsDeviceTrustedAsync())
                     {
-                        await TwoFactorAuthSuccessAsync();
+                        if (decryptOptions.TrustedDeviceOption.EncryptedPrivateKey == null && decryptOptions.TrustedDeviceOption.EncryptedUserKey == null)
+                        {
+                            await _deviceTrustCryptoService.RemoveTrustedDeviceAsync();
+                            StartDeviceApprovalOptionsAction?.Invoke();
+                        }
+                        else
+                        {
+                            await TwoFactorAuthSuccessAsync();
+                        }
                     }
                     else
                     {

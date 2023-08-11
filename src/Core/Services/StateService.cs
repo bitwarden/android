@@ -527,7 +527,7 @@ namespace Bit.Core.Services
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
-            await _storageMediatorService.SaveAsync(Constants.DeviceKeyKey(reconciledOptions.UserId), value.KeyB64, true);
+            await _storageMediatorService.SaveAsync(Constants.DeviceKeyKey(reconciledOptions.UserId), value?.KeyB64, true);
         }
 
         public async Task<List<string>> GetAutofillBlacklistedUrisAsync(string userId = null)

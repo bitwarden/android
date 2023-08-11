@@ -41,6 +41,11 @@ namespace Bit.Core.Services
             await _stateService.SetDeviceKeyAsync(deviceKey);
         }
 
+        public async Task RemoveTrustedDeviceAsync()
+        {
+            await SetDeviceKeyAsync(null);
+        }
+
         public async Task<DeviceResponse> TrustDeviceAsync()
         {
             // Attempt to get user key
