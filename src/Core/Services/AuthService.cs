@@ -510,9 +510,12 @@ namespace Bit.Core.Services
                 // Trusted Device
                 var decryptOptions = await _stateService.GetAccountDecryptionOptions();
                 var hasUserKey = await _cryptoService.HasUserKeyAsync();
-                if (decryptOptions?.TrustedDeviceOption != null && !hasUserKey)
+                if (decryptOptions?.TrustedDeviceOption != null && !hasUserKey &&
+                    decryptOptions.TrustedDeviceOption.EncryptedPrivateKey != null &&
+                    decryptOptions.TrustedDeviceOption.EncryptedUserKey != null)
                 {
-                    var key = await _deviceTrustCryptoService.DecryptUserKeyWithDeviceKeyAsync(decryptOptions.TrustedDeviceOption.EncryptedPrivateKey, decryptOptions.TrustedDeviceOption.EncryptedUserKey);
+                    var key = await _deviceTrustCryptoService.DecryptUserKeyWithDeviceKeyAsync(decryptOptions.TrustedDeviceOption.EncryptedPrivateKey,
+                            decryptOptions.TrustedDeviceOption.EncryptedUserKey);
                     if (key != null)
                     {
                         await _cryptoService.SetUserKeyAsync(key);

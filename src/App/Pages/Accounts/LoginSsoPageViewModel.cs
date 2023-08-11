@@ -226,8 +226,16 @@ namespace Bit.App.Pages
                     }
                     else if (await _deviceTrustCryptoService.IsDeviceTrustedAsync())
                     {
-                        _syncService.FullSyncAsync(true).FireAndForget();
-                        SsoAuthSuccessAction?.Invoke();
+                        if (decryptOptions.TrustedDeviceOption.EncryptedPrivateKey == null && decryptOptions.TrustedDeviceOption.EncryptedUserKey == null)
+                        {
+                            await _deviceTrustCryptoService.RemoveTrustedDeviceAsync();
+                            StartDeviceApprovalOptionsAction?.Invoke();
+                        }
+                        else
+                        {
+                            _syncService.FullSyncAsync(true).FireAndForget();
+                            SsoAuthSuccessAction?.Invoke();
+                        }
                     }
                     else if (pendingRequest != null)
                     {
