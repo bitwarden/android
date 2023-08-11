@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    x:Class="Bit.App.Controls.SwitchItemView"
+    x:Name="_contentView">
+    <StackLayout
+        Orientation="Horizontal">
+        <controls:CustomLabel
+            Text="{Binding Title, Mode=OneWay, Source={x:Reference _contentView}}"
+            HorizontalOptions="StartAndExpand"
+            LineBreakMode="TailTruncation" />
+
+        <Switch
+            IsToggled="{Binding IsToggled, Mode=OneWay, Source={x:Reference _contentView}}"
+            HorizontalOptions="End"
+            VerticalOptions="Center"
+            AutomationId="{Binding SwitchAutomationId, Mode=OneWay, Source={x:Reference _contentView}}"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{Binding Title, Mode=OneWay, Source={x:Reference _contentView}}"/>
+
+    </StackLayout>
+</ContentView>

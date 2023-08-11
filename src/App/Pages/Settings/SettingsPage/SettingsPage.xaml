@@ -6,11 +6,31 @@
              xmlns:controls="clr-namespace:Bit.App.Controls"
              xmlns:u="clr-namespace:Bit.App.Utilities"
              x:DataType="pages:SettingsPageViewModel"
-             Title="{Binding PageTitle}">
+             Title="{u:I18n Settings}"
+             x:Name="_page">
     <ContentPage.BindingContext>
         <pages:SettingsPageViewModel />
     </ContentPage.BindingContext>
 
+    <StackLayout BindableLayout.ItemsSource="{Binding SettingsItems}">
+        <BindableLayout.ItemTemplate>
+            <DataTemplate x:DataType="pages:SettingsPageListItem">
+                <StackLayout>
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BindingContext.ExecuteSettingItemCommand, Source={x:Reference _page}}"
+                                              CommandParameter="{Binding .}"/>
+                    </StackLayout.GestureRecognizers>
+                    <controls:CustomLabel
+                        Text="{Binding Name}"
+                        StyleClass="settings-navigatable-label"
+                        AutomationId="{Binding AutomationId}" />
+                    <BoxView StyleClass="box-row-separator" />
+                </StackLayout>
+            </DataTemplate>
+        </BindableLayout.ItemTemplate>
+    </StackLayout>
+
+    <!--
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
@@ -119,5 +139,5 @@
         SelectionChanged="RowSelected"
         StyleClass="list, list-platform"
         ExtraDataForLogging="Settings Page" />
-
+    -->
 </pages:BaseContentPage>

@@ -38,7 +38,7 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             _timerStarted = null;
-            _settingsPage.BuildList();
+            //_settingsPage.BuildList();
             base.OnDisappearing();
         }
 

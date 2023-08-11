@@ -508,6 +508,7 @@
                 Value="{DynamicResource MutedColor}" />
     </Style>
     <Style TargetType="Label"
+           ApplyToDerivedTypes="True"
            Class="box-footer-label">
         <Setter Property="FontSize"
                 Value="Small" />
@@ -589,4 +590,24 @@
         <Setter Property="StrongColor"
                 Value="{DynamicResource SuccessColor}" />
     </Style>
+
+    <Style TargetType="Label"
+           ApplyToDerivedTypes="True"
+           Class="settings-navigatable-label">
+        <Setter Property="LineBreakMode" Value="TailTruncation" />
+        <Setter Property="Margin" Value="16,12" />
+    </Style>
+
+    <Style TargetType="controls:ExternalLinkItemView"
+           ApplyToDerivedTypes="True"
+           Class="settings-external-link-item">
+        <Setter Property="Padding" Value="16,12" />
+    </Style>
+
+    <Style TargetType="controls:SwitchItemView"
+           ApplyToDerivedTypes="True"
+           Class="settings-switch-item-view">
+        <Setter Property="Padding" Value="16,12" />
+    </Style>
+
 </ResourceDictionary>

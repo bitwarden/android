@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:BaseModalContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    x:DataType="pages:VaultSettingsPageViewModel"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    x:Class="Bit.App.Pages.VaultSettingsPage"
+    Title="{u:I18n Vault}">
+    
+    <ContentPage.BindingContext>
+        <pages:VaultSettingsPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Back}" Clicked="PopModal_Clicked" Order="Primary" Priority="-1" />
+    </ContentPage.ToolbarItems>
+
+    <StackLayout>
+        <controls:CustomLabel
+            Text="{u:I18n Folders}"
+            StyleClass="settings-navigatable-label"
+            AutomationId="FoldersLabel">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoToFoldersCommand}" />
+            </Label.GestureRecognizers>
+        </controls:CustomLabel>
+        <BoxView StyleClass="box-row-separator" />
+
+        <controls:CustomLabel
+            Text="{u:I18n ExportVault}"
+            StyleClass="settings-navigatable-label"
+            AutomationId="ExportVaultLabel">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoToExportVaultCommand}" />
+            </Label.GestureRecognizers>
+        </controls:CustomLabel>
+        <BoxView StyleClass="box-row-separator" />
+
+        <controls:ExternalLinkItemView
+            Title="{u:I18n ImportItems}"
+            GoToLinkCommand="{Binding GoToImportItemsCommand}"
+            StyleClass="settings-external-link-item"
+            HorizontalOptions="FillAndExpand" 
+            AutomationId="ImportItemsLinkItemView" />
+        <BoxView StyleClass="box-row-separator" />
+
+    </StackLayout>
+
+</pages:BaseModalContentPage>
+

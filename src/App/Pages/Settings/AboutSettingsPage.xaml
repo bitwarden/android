@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:BaseModalContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    x:DataType="pages:AboutSettingsPageViewModel"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    x:Class="Bit.App.Pages.AboutSettingsPage"
+    Title="{u:I18n About}">
+    
+    <ContentPage.BindingContext>
+        <pages:AboutSettingsPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Back}" Clicked="PopModal_Clicked" Order="Primary" Priority="-1" />
+    </ContentPage.ToolbarItems>
+
+    <StackLayout>
+        <controls:SwitchItemView
+            Title="{u:I18n SubmitCrashLogs}"
+            HeightRequest="20"
+            AutomationId="SubmitCrashLogsSwitch"
+            StyleClass="settings-switch-item-view"
+            HorizontalOptions="FillAndExpand" />
+        <BoxView StyleClass="box-row-separator" />
+
+        <controls:ExternalLinkItemView
+            Title="{u:I18n BitwardenHelpCenter}"
+            GoToLinkCommand="{Binding GoToHelpCenterCommand}"
+            StyleClass="settings-external-link-item"
+            HorizontalOptions="FillAndExpand" />
+        <BoxView StyleClass="box-row-separator" />
+
+        <controls:ExternalLinkItemView
+            Title="{u:I18n ContactBitwardenSupport}"
+            GoToLinkCommand="{Binding ContactBitwardenSupportCommand}"
+            StyleClass="settings-external-link-item"
+            HorizontalOptions="FillAndExpand" />
+        <BoxView StyleClass="box-row-separator" />
+
+        <controls:ExternalLinkItemView
+            Title="{u:I18n WebVault}"
+            GoToLinkCommand="{Binding GoToWebVaultCommand}"
+            StyleClass="settings-external-link-item"
+            HorizontalOptions="FillAndExpand" />
+        <BoxView StyleClass="box-row-separator" />
+
+        <controls:ExternalLinkItemView
+            Title="{u:I18n LearnOrg}"
+            GoToLinkCommand="{Binding GoToLearnAboutOrgsCommand}"
+            StyleClass="settings-external-link-item"
+            HorizontalOptions="FillAndExpand" />
+        <BoxView StyleClass="box-row-separator" />
+
+        <controls:ExternalLinkItemView
+            Title="{u:I18n RateTheApp}"
+            GoToLinkCommand="{Binding RateTheAppCommand}"
+            StyleClass="settings-external-link-item"
+            HorizontalOptions="FillAndExpand" />
+        <BoxView StyleClass="box-row-separator" />
+
+        <StackLayout
+            Padding="16,12"
+            Orientation="Horizontal">
+            <controls:CustomLabel
+                Text="{Binding AppInfo}"
+                MaxLines="0"
+                StyleClass="box-footer-label"
+                HorizontalOptions="StartAndExpand"
+                LineBreakMode="TailTruncation" />
+
+            <controls:IconLabel
+                Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                TextColor="Black"
+                HorizontalOptions="End"
+                VerticalOptions="Center"
+                AutomationProperties.IsInAccessibleTree="True"
+                AutomationProperties.Name="{u:I18n CopyAppInformation}" />
+
+        </StackLayout>
+    </StackLayout>
+</pages:BaseModalContentPage>

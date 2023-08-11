@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
-using Bit.Core.Services;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -47,5 +49,11 @@ namespace Bit.App.Pages
             _logger.Value.Exception(ex);
         }
 
+        protected ICommand CreateDefaultAsyncCommnad(Func<Task> execute)
+        {
+            return new AsyncCommand(execute,
+                onException: ex => HandleException(ex),
+                allowsMultipleExecutions: false);
+        }
     }
 }

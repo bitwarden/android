@@ -14,7 +14,7 @@ namespace Bit.App.Pages
             {
                 return HeaderTemplate;
             }
-            if (item is SettingsPageListItem listItem)
+            if (item is SettingsPageListItemOld listItem)
             {
                 return listItem.ShowTimeInput ? TimePickerTemplate : RegularTemplate;
             }

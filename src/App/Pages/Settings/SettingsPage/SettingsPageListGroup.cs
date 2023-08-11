@@ -2,9 +2,9 @@
 
 namespace Bit.App.Pages
 {
-    public class SettingsPageListGroup : List<SettingsPageListItem>
+    public class SettingsPageListGroup : List<SettingsPageListItemOld>
     {
-        public SettingsPageListGroup(List<SettingsPageListItem> groupItems, string name, bool doUpper = true,
+        public SettingsPageListGroup(List<SettingsPageListItemOld> groupItems, string name, bool doUpper = true,
             bool first = false)
         {
             AddRange(groupItems);
