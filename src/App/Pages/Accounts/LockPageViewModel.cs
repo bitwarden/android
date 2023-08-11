@@ -179,7 +179,6 @@ namespace Bit.App.Pages
                 ?? await _stateService.GetPinProtectedKeyAsync();
             PinEnabled = (_pinStatus == PinLockType.Transient && ephemeralPinSet != null) ||
                       _pinStatus == PinLockType.Persistent;
-
             BiometricEnabled = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _biometricService.CanUseBiometricsUnlockAsync();
 
             // Users without MP and without biometric or pin has no MP to unlock with
