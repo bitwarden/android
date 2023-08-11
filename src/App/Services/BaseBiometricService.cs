@@ -16,7 +16,7 @@ namespace Bit.App.Services
 
         public async Task<bool> CanUseBiometricsUnlockAsync()
         {
-            return await _cryptoService.HasEncryptedUserKeyAsync() || await _stateService.GetKeyEncryptedAsync() != null;
+            return await _cryptoService.GetBiometricUnlockKeyAsync() != null || await _stateService.GetKeyEncryptedAsync() != null;
         }
 
         public abstract Task<bool> IsSystemBiometricIntegrityValidAsync(string bioIntegritySrcKey = null);
