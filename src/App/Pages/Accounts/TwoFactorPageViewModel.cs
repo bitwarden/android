@@ -327,15 +327,7 @@ namespace Bit.App.Pages
                 _messagingService.Send("listenYubiKeyOTP", false);
                 _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
 
-                if (_authingWithSso && result.ResetMasterPassword)
-                {
-                    StartSetPasswordAction?.Invoke();
-                }
-                else if (result.ForcePasswordReset)
-                {
-                    UpdateTempPasswordAction?.Invoke();
-                }
-                else if (decryptOptions?.TrustedDeviceOption != null)
+                if (decryptOptions?.TrustedDeviceOption != null)
                 {
                     // If user doesn't have a MP, but has reset password permission, they must set a MP
                     if (!decryptOptions.HasMasterPassword &&
@@ -356,6 +348,7 @@ namespace Bit.App.Pages
                         }
                         else
                         {
+                            _syncService.FullSyncAsync(true).FireAndForget();
                             await TwoFactorAuthSuccessAsync();
                         }
                     }
@@ -363,11 +356,26 @@ namespace Bit.App.Pages
                     {
                         StartDeviceApprovalOptionsAction?.Invoke();
                     }
+                    return;
                 }
-                else
+
+                // In the standard, non TDE case, a user must set password if they don't
+                // have one and they aren't using key connector.
+                // Note: TDE & Key connector are mutually exclusive org config options.
+                if (_authingWithSso && (result.ResetMasterPassword || (decryptOptions?.RequireSetPassword ?? false)))
                 {
-                    await TwoFactorAuthSuccessAsync();
+                    StartSetPasswordAction?.Invoke();
+                    return;
                 }
+
+                if (result.ForcePasswordReset)
+                {
+                    UpdateTempPasswordAction?.Invoke();
+                    return;
+                }
+
+                _syncService.FullSyncAsync(true).FireAndForget();
+                await TwoFactorAuthSuccessAsync();
             }
             catch (ApiException e)
             {
