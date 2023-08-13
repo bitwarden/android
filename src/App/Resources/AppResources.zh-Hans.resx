@@ -1601,7 +1601,7 @@
     <value>您的主题将在应用程序重启后生效。</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>大写</value>
+    <value>首字母大写</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
@@ -2634,14 +2634,14 @@
     <value>通行密钥</value>
   </data>
   <data name="CreatedX" xml:space="preserve">
-    <value>已创建 {0}</value>
+    <value>创建于 {0}</value>
     <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
   </data>
   <data name="Application" xml:space="preserve">
     <value>应用</value>
   </data>
   <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
-    <value>您不能编辑通行密钥应用程序，这会使通行密钥无失效</value>
+    <value>您不能编辑通行密钥应用程序，这会使通行密钥失效</value>
   </data>
   <data name="PasskeyWillNotBeCopied" xml:space="preserve">
     <value>通行密钥不会被复制</value>
