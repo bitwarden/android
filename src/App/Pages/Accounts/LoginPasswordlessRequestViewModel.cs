@@ -242,7 +242,7 @@ namespace Bit.App.Pages
                     response = await _authService.GetPasswordlessLoginResquestAsync(_requestId, _requestAccessCode);
                 }
 
-                if (response.RequestApproved == null || !response.RequestApproved.Value)
+                if (response == null || response.RequestApproved == null || !response.RequestApproved.Value)
                 {
                     return;
                 }

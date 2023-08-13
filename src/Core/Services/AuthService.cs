@@ -222,10 +222,12 @@ namespace Bit.Core.Services
                 return null;
             }
 
+            // The approval device may not have a master key hash if it authenticated with a passwordless method
             if (string.IsNullOrEmpty(masterKeyHash) && decryptionKey != null)
             {
+                var authResult = await LogInHelperAsync(email, accessCode, null, null, null, null, null, null, null, null, null, authRequestId: authRequestId);
                 await _cryptoService.SetUserKeyAsync(new UserKey(decryptedKey));
-                return null;
+                return authResult;
             }
 
             var decKeyHash = await _cryptoService.RsaDecryptAsync(masterKeyHash, decryptionKey);
