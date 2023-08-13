@@ -248,33 +248,36 @@ namespace Bit.Core.Services
             }
             async Task<List<CipherView>> doTask()
             {
-                var hashKey = await _cryptoService.HasKeyAsync();
-                if (!hashKey)
-                {
-                    throw new Exception("No key.");
-                }
-                
-                var parallelQuery = (await GetAllAsync()).AsParallel();
-                if (filter != null)
-                {
-                    parallelQuery = parallelQuery.Where(filter);
-                }
-
-                var decCiphers = parallelQuery
-                    .Select(cipher =>  
+                try {
+                    var hashKey = await _cryptoService.HasKeyAsync();
+                    if (!hashKey)
                     {
-                        return cipher.DecryptAsync().Result;
-                    })
-                    .ToList()
-                    .OrderBy(c => c, new CipherLocaleComparer(_i18nService))
-                    .ToList();
-                
-                if (filter == null)
-                {
-                    DecryptedCipherCache = decCiphers;
+                        throw new Exception("No key.");
+                    }
+                    
+                    var parallelQuery = (await GetAllAsync()).AsParallel();
+                    if (filter != null)
+                    {
+                        parallelQuery = parallelQuery.Where(filter);
+                    }
+    
+                    var decCiphers = parallelQuery
+                        .Select(cipher =>  
+                        {
+                            return cipher.DecryptAsync().Result;
+                        })
+                        .ToList()
+                        .OrderBy(c => c, new CipherLocaleComparer(_i18nService))
+                        .ToList();
+                    
+                    if (filter == null)
+                    {
+                        DecryptedCipherCache = decCiphers;
+                    }
+                    
+                    return decCiphers;
                 }
-                
-                return decCiphers;
+                finally {}
             }
             _getAllDecryptedTask = doTask();
             return await _getAllDecryptedTask;
