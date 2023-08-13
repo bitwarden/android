@@ -222,7 +222,7 @@ namespace Bit.Core.Services
         {
             var localData = await _stateService.GetLocalDataAsync();
             var ciphers = await _stateService.GetEncryptedCiphersAsync();
-            var response = ciphers?.Select(c => new Cipher(c.Value, false,
+            var response = ciphers?.AsParallel().Select(c => new Cipher(c.Value, false,
                 localData?.ContainsKey(c.Key) ?? false ? localData[c.Key] : null));
             return response?.ToList() ?? new List<Cipher>();
         }
@@ -248,42 +248,33 @@ namespace Bit.Core.Services
             }
             async Task<List<CipherView>> doTask()
             {
-                try
+                var hashKey = await _cryptoService.HasKeyAsync();
+                if (!hashKey)
                 {
-                    var hashKey = await _cryptoService.HasKeyAsync();
-                    if (!hashKey)
-                    {
-                        throw new Exception("No key.");
-                    }
-                    var decCiphers = new List<CipherView>();
-                    async Task decryptAndAddCipherAsync(Cipher cipher)
-                    {
-                        var c = await cipher.DecryptAsync();
-                        decCiphers.Add(c);
-                    }
-                    var tasks = new List<Task>();
-                    IEnumerable<Cipher> ciphers = await GetAllAsync();
-                    if (filter != null)
-                    {
-                        ciphers = ciphers.Where(filter);
-                    }
-
-                    foreach (var cipher in ciphers)
-                    {
-                        tasks.Add(decryptAndAddCipherAsync(cipher));
-                    }
-                    await Task.WhenAll(tasks);
-                    decCiphers = decCiphers.OrderBy(c => c, new CipherLocaleComparer(_i18nService)).ToList();
-
-                    if (filter != null)
-                    {
-                        return decCiphers;
-                    }
-
-                    DecryptedCipherCache = decCiphers;
-                    return DecryptedCipherCache;
+                    throw new Exception("No key.");
                 }
-                finally { }
+                
+                var parallelQuery = (await GetAllAsync()).AsParallel();
+                if (filter != null)
+                {
+                    parallelQuery = parallelQuery.Where(filter);
+                }
+
+                var decCiphers = parallelQuery
+                    .Select(cipher =>  
+                    {
+                        return cipher.DecryptAsync().Result;
+                    })
+                    .ToList()
+                    .OrderBy(c => c, new CipherLocaleComparer(_i18nService))
+                    .ToList();
+                
+                if (filter == null)
+                {
+                    DecryptedCipherCache = decCiphers;
+                }
+                
+                return decCiphers;
             }
             _getAllDecryptedTask = doTask();
             return await _getAllDecryptedTask;
