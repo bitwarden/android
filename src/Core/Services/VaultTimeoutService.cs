@@ -59,6 +59,13 @@ namespace Bit.Core.Services
 
         public async Task<bool> IsLockedAsync(string userId = null)
         {
+            // When checking if we need to lock inactive account, we don't want to
+            // set the key, so we only check if the account has an auto unlock key
+            if (userId != null && await _stateService.GetActiveUserIdAsync() != userId)
+            {
+                return await _cryptoService.HasAutoUnlockKeyAsync(userId);
+            }
+
             var biometricSet = await IsBiometricLockSetAsync(userId);
             if (biometricSet && await _stateService.GetBiometricLockedAsync(userId))
             {
@@ -69,7 +76,7 @@ namespace Bit.Core.Services
             {
                 if (await _cryptoService.HasAutoUnlockKeyAsync(userId))
                 {
-                    await _cryptoService.SetUserKeyAsync(await _cryptoService.GetAutoUnlockKeyAsync(userId));
+                    await _cryptoService.SetUserKeyAsync(await _cryptoService.GetAutoUnlockKeyAsync(userId), userId);
                 }
                 else
                 {
