@@ -226,6 +226,7 @@ namespace Bit.Core.Services
             if (string.IsNullOrEmpty(masterKeyHash) && decryptionKey != null)
             {
                 var authResult = await LogInHelperAsync(email, accessCode, null, null, null, null, null, null, null, null, null, authRequestId: authRequestId);
+                // Only set the user key after the login helper so we have a user id
                 await _cryptoService.SetUserKeyAsync(new UserKey(decryptedKey));
                 return authResult;
             }
