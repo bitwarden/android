@@ -248,7 +248,8 @@ namespace Bit.Core.Services
             }
             async Task<List<CipherView>> doTask()
             {
-                try {
+                try
+                {
                     var hashKey = await _cryptoService.HasKeyAsync();
                     if (!hashKey)
                     {
@@ -277,7 +278,7 @@ namespace Bit.Core.Services
                     
                     return decCiphers;
                 }
-                finally {}
+                finally { }
             }
             _getAllDecryptedTask = doTask();
             return await _getAllDecryptedTask;
