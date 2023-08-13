@@ -2668,7 +2668,7 @@
     <value>Некорректный токен API</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Этим элементом нельзя поделиться с организацией, поскольку существует другой с тем же ключем.</value>
+    <value>Этим элементом нельзя поделиться с организацией, поскольку существует другой с тем же ключом.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Блокировать автозаполнение</value>

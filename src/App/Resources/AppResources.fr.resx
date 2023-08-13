@@ -2651,7 +2651,7 @@ Voulez-vous basculer vers ce compte ?</value>
     <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
   </data>
   <data name="CopyApplication" xml:space="preserve">
-    <value>Copy application</value>
+    <value>Copier l'application</value>
   </data>
   <data name="AvailableForTwoStepLogin" xml:space="preserve">
     <value>Available for two-step login</value>

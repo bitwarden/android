@@ -131,6 +131,24 @@ namespace Bit.App.Services
                         _messagingService.Value.Send("logout");
                     }
                     break;
+                case NotificationType.SyncSendCreate:
+                case NotificationType.SyncSendUpdate:
+                    var sendCreateUpdateMessage = JsonConvert.DeserializeObject<SyncSendNotification>(
+                        notification.Payload);
+                    if (isAuthenticated && sendCreateUpdateMessage.UserId == myUserId)
+                    {
+                        await _syncService.Value.SyncUpsertSendAsync(sendCreateUpdateMessage,
+                            notification.Type == NotificationType.SyncSendUpdate);
+                    }
+                    break;
+                case NotificationType.SyncSendDelete:
+                    var sendDeleteMessage = JsonConvert.DeserializeObject<SyncSendNotification>(
+                        notification.Payload);
+                    if (isAuthenticated && sendDeleteMessage.UserId == myUserId)
+                    {
+                        await _syncService.Value.SyncDeleteSendAsync(sendDeleteMessage);
+                    }
+                    break;
                 case NotificationType.AuthRequest:
                     var passwordlessLoginMessage = JsonConvert.DeserializeObject<PasswordlessRequestNotification>(notification.Payload);
 

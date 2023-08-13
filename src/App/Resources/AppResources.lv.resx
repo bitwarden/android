@@ -1813,7 +1813,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Ieslēdzot šo slēdzi, Tu piekrīti sekojošajam:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Nav pieņemti izmantošanas nosacījumi un privātuma politika.</value>
+    <value>Nav apstiprināti izmantošanas noteikumi un privātuma nosacījumi.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
     <value>Izmantošanas nosacījumi</value>

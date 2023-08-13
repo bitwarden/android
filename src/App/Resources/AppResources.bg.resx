@@ -2653,7 +2653,7 @@ select Add TOTP to store the key safely</value>
     <value>Копиране на приложението</value>
   </data>
   <data name="AvailableForTwoStepLogin" xml:space="preserve">
-    <value>Available for two-step login</value>
+    <value>Налично за двустепенно удостоверяване</value>
   </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Помощ за повторното запитване за главната парола</value>

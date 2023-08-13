@@ -172,7 +172,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Vuoi davvero eliminarlo? Non lo potrai ripristinare.</value>
+    <value>Vuoi davvero eliminarlo? Questa operazione non può essere annullata.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">

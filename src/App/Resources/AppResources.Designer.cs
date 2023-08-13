@@ -3779,6 +3779,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logging in on.
+        /// </summary>
+        public static string LoggingInOn {
+            get {
+                return ResourceManager.GetString("LoggingInOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log In.
         /// </summary>
         public static string LogIn {
@@ -6335,10 +6344,10 @@ namespace Bit.App.Resources {
         public static string ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem {
             get {
                 return ResourceManager.GetString("ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem", resourceCulture);
-        
             }
         }
         
+        /// <summary>
         ///   Looks up a localized string similar to There are no blocked URIs.
         /// </summary>
         public static string ThereAreNoBlockedURIs {
