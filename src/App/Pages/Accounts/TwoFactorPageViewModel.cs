@@ -39,7 +39,6 @@ namespace Bit.App.Pages
         private TwoFactorProviderType? _selectedProviderType;
         private string _totpInstruction;
         private string _webVaultUrl = "https://vault.bitwarden.com";
-        private bool _authingWithSso = false;
         private bool _enableContinue = false;
         private bool _showContinue = true;
 
@@ -143,8 +142,6 @@ namespace Bit.App.Pages
                 // TODO: dismiss modal?
                 return;
             }
-
-            _authingWithSso = _authService.AuthingWithSso();
 
             if (!string.IsNullOrWhiteSpace(_environmentService.BaseUrl))
             {
@@ -362,7 +359,7 @@ namespace Bit.App.Pages
                 // In the standard, non TDE case, a user must set password if they don't
                 // have one and they aren't using key connector.
                 // Note: TDE & Key connector are mutually exclusive org config options.
-                if (_authingWithSso && (result.ResetMasterPassword || (decryptOptions?.RequireSetPassword ?? false)))
+                if (result.ResetMasterPassword || (decryptOptions?.RequireSetPassword ?? false))
                 {
                     StartSetPasswordAction?.Invoke();
                     return;

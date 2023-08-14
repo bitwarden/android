@@ -18,7 +18,6 @@ namespace Bit.App.Pages
 
         private TwoFactorPageViewModel _vm;
         private bool _inited;
-        private bool _authingWithSso;
         private string _orgIdentifier;
 
         public TwoFactorPage(bool? authingWithSso = false, AppOptions appOptions = null, string orgIdentifier = null)
