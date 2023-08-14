@@ -698,12 +698,12 @@ namespace Bit.App.Pages
 
         public async Task<bool> PromptPasswordAsync()
         {
-            if (Cipher.Reprompt == CipherRepromptType.None || _passwordReprompted)
+            if (_passwordReprompted)
             {
                 return true;
             }
 
-            return _passwordReprompted = await _passwordRepromptService.ShowPasswordPromptAsync();
+            return _passwordReprompted = await _passwordRepromptService.PromptAndCheckPasswordIfNeededAsync(Cipher.Reprompt);
         }
 
         private async Task<bool> CanCloneAsync()
