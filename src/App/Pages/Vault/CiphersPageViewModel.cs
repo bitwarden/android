@@ -191,7 +191,7 @@ namespace Bit.App.Pages
 
             if (_appOptions?.OtpData != null)
             {
-                if (cipher.Reprompt != CipherRepromptType.None && !await _passwordRepromptService.ShowPasswordPromptAsync())
+                if (!await _passwordRepromptService.PromptAndCheckPasswordIfNeededAsync(cipher.Reprompt))
                 {
                     return;
                 }
@@ -208,7 +208,7 @@ namespace Bit.App.Pages
             }
             else if (selection == AppResources.Autofill || selection == AppResources.AutofillAndSave)
             {
-                if (cipher.Reprompt != CipherRepromptType.None && !await _passwordRepromptService.ShowPasswordPromptAsync())
+                if (!await _passwordRepromptService.PromptAndCheckPasswordIfNeededAsync(cipher.Reprompt))
                 {
                     return;
                 }

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Bit.Core.Enums;
 
 namespace Bit.App.Abstractions
 {
@@ -6,7 +7,7 @@ namespace Bit.App.Abstractions
     {
         string[] ProtectedFields { get; }
 
-        Task<bool> ShowPasswordPromptAsync();
+        Task<bool> PromptAndCheckPasswordIfNeededAsync(CipherRepromptType repromptType = CipherRepromptType.Password);
 
         Task<(string password, bool valid)> ShowPasswordPromptAndGetItAsync();
     }

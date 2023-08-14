@@ -82,7 +82,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            if (cipher.Reprompt != CipherRepromptType.None && !await _passwordRepromptService.ShowPasswordPromptAsync())
+            if (!await _passwordRepromptService.PromptAndCheckPasswordIfNeededAsync(cipher.Reprompt))
             {
                 return;
             }

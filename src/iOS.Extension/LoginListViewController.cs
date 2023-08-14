@@ -126,7 +126,7 @@ namespace Bit.iOS.Extension
                     return;
                 }
 
-                if (item.Reprompt != Bit.Core.Enums.CipherRepromptType.None && !await _controller.PasswordRepromptService.ShowPasswordPromptAsync())
+                if (!await _controller.PasswordRepromptService.PromptAndCheckPasswordIfNeededAsync(item.Reprompt))
                 {
                     return;
                 }
