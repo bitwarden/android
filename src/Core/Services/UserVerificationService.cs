@@ -68,15 +68,20 @@ namespace Bit.Core.Services
             await _platformUtilsService.ShowDialogAsync(errorMessage);
         }
 
-        public async Task<bool> HasMasterPasswordAsync()
+        public async Task<bool> HasMasterPasswordAsync(bool checkMasterKeyHash = false)
         {
+            async Task<bool> CheckMasterKeyHashAsync()
+            {
+                return !checkMasterKeyHash && await _cryptoService.GetMasterKeyHashAsync() != null;
+            };
+
             var decryptOptions = await _stateService.GetAccountDecryptionOptions();
             if (decryptOptions != null)
             {
-                return decryptOptions.HasMasterPassword;
+                return decryptOptions.HasMasterPassword && await CheckMasterKeyHashAsync();
             }
 
-            return !await _keyConnectorService.GetUsesKeyConnectorAsync();
+            return !await _keyConnectorService.GetUsesKeyConnectorAsync() && await CheckMasterKeyHashAsync();
         }
     }
 }
