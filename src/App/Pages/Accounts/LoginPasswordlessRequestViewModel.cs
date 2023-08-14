@@ -233,11 +233,11 @@ namespace Bit.App.Pages
             try
             {
                 PasswordlessLoginResponse response = null;
-                if (await _stateService.IsAuthenticatedAsync())
+                if (_authRequestType == AuthRequestType.AdminApproval)
                 {
                     response = await _authService.GetPasswordlessLoginRequestByIdAsync(_requestId);
                 }
-                else
+                else if (_authRequestType == AuthRequestType.AuthenticateAndUnlock)
                 {
                     response = await _authService.GetPasswordlessLoginResquestAsync(_requestId, _requestAccessCode);
                 }
@@ -249,7 +249,7 @@ namespace Bit.App.Pages
 
                 StopCheckLoginRequestStatus();
 
-                var authResult = await _authService.LogInPasswordlessAsync(Email, _requestAccessCode, _requestId, _requestKeyPair.Item2, response.Key, response.MasterPasswordHash);
+                var authResult = await _authService.LogInPasswordlessAsync(_authRequestType, Email, _requestAccessCode, _requestId, _requestKeyPair.Item2, response.Key, response.MasterPasswordHash);
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
 
                 if (authResult == null && await _stateService.IsAuthenticatedAsync())

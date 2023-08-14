@@ -200,12 +200,13 @@ namespace Bit.Core.Services
             return !await _policyService.EvaluateMasterPassword(strength.Value, masterPassword, _masterPasswordPolicy);
         }
 
-        public async Task<AuthResult> LogInPasswordlessAsync(string email, string accessCode, string authRequestId, byte[] decryptionKey, string encryptedAuthRequestKey, string masterKeyHash)
+        public async Task<AuthResult> LogInPasswordlessAsync(AuthRequestType authRequestType, string email, string accessCode, string authRequestId, byte[] decryptionKey, string encryptedAuthRequestKey, string masterKeyHash)
         {
             var decryptedKey = await _cryptoService.RsaDecryptAsync(encryptedAuthRequestKey, decryptionKey);
 
-            // On SSO flow user is already AuthN
-            if (await _stateService.IsAuthenticatedAsync())
+            // If the user is already authenticated, we can just set the key
+            // Note: We can't check for the existance of an access token here because the active user id may not be null
+            if (authRequestType == AuthRequestType.AdminApproval)
             {
                 if (string.IsNullOrEmpty(masterKeyHash))
                 {
