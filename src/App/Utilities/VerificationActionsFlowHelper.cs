@@ -60,7 +60,6 @@ namespace Bit.App.Utilities
     /// </summary>
     public class VerificationActionsFlowHelper : IVerificationActionsFlowHelper
     {
-        private readonly IKeyConnectorService _keyConnectorService;
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly ICryptoService _cryptoService;
         private readonly IUserVerificationService _userVerificationService;
@@ -72,12 +71,11 @@ namespace Bit.App.Utilities
 
         private readonly Dictionary<VerificationFlowAction, IActionFlowExecutioner> _actionExecutionerDictionary = new Dictionary<VerificationFlowAction, IActionFlowExecutioner>();
 
-        public VerificationActionsFlowHelper(IKeyConnectorService keyConnectorService,
+        public VerificationActionsFlowHelper(
             IPasswordRepromptService passwordRepromptService,
             ICryptoService cryptoService,
             IUserVerificationService userVerificationService)
         {
-            _keyConnectorService = keyConnectorService;
             _passwordRepromptService = passwordRepromptService;
             _cryptoService = cryptoService;
             _userVerificationService = userVerificationService;
@@ -110,7 +108,7 @@ namespace Bit.App.Utilities
 
         public async Task ValidateAndExecuteAsync()
         {
-            var verificationType = await _userVerificationService.HasMasterPasswordAsync()
+            var verificationType = await _userVerificationService.HasMasterPasswordAsync(true)
                 ? VerificationType.MasterPassword
                 : VerificationType.OTP;
 

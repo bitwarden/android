@@ -245,7 +245,6 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Register<IDeleteAccountActionFlowExecutioner>("deleteAccountActionFlowExecutioner", deleteAccountActionFlowExecutioner);
 
             var verificationActionsFlowHelper = new VerificationActionsFlowHelper(
-                ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService"),
                 ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
                 ServiceContainer.Resolve<ICryptoService>("cryptoService"),
                 ServiceContainer.Resolve<IUserVerificationService>());
