@@ -72,7 +72,7 @@ namespace Bit.Core.Services
         {
             async Task<bool> CheckMasterKeyHashAsync()
             {
-                return !checkMasterKeyHash && await _cryptoService.GetMasterKeyHashAsync() != null;
+                return !checkMasterKeyHash || await _cryptoService.GetMasterKeyHashAsync() != null;
             };
 
             var decryptOptions = await _stateService.GetAccountDecryptionOptions();
