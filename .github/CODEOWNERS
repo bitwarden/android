@@ -5,8 +5,6 @@
 # The following owners will be the default owners for everything in the repo.
 # Unless a later match takes precedence
 # @bitwarden/team-leads
-src/App/Resources @bitwarden/team-leads-eng
-src/watchOS/bitwarden/bitwarden\ WatchKit\ Extension/Localization @bitwarden/team-leads-eng
 
 ## Auth team files ##
 
@@ -15,11 +13,15 @@ appIcons @bitwarden/team-platform-dev
 build.cake @bitwarden/team-platform-dev
 
 ## Vault team files ##
-
 src/watchOS @bitwarden/team-vault-dev
 
 ## Tools team files ##
 src/Core/Services/EmailForwarders @bitwarden/team-tools-dev
+
+
+## Crowdin Sync files ##
+src/App/Resources @bitwarden/team-leads-eng
+src/watchOS/bitwarden/bitwarden\ WatchKit\ Extension/Localization @bitwarden/team-leads-eng
 
 ## Locales ## 
 src/App/Resources/AppResources.Designer.cs
