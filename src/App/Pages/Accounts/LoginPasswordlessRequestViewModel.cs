@@ -233,13 +233,13 @@ namespace Bit.App.Pages
             try
             {
                 PasswordlessLoginResponse response = null;
-                if (_authRequestType == AuthRequestType.AdminApproval)
-                {
-                    response = await _authService.GetPasswordlessLoginRequestByIdAsync(_requestId);
-                }
-                else if (_authRequestType == AuthRequestType.AuthenticateAndUnlock)
+                if (_authRequestType == AuthRequestType.AuthenticateAndUnlock)
                 {
                     response = await _authService.GetPasswordlessLoginResquestAsync(_requestId, _requestAccessCode);
+                }
+                else
+                {
+                    response = await _authService.GetPasswordlessLoginRequestByIdAsync(_requestId);
                 }
 
                 if (!(response?.RequestApproved ?? false))
