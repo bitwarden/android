@@ -240,7 +240,7 @@ namespace Bit.App.Pages
                     else if (pendingRequest != null)
                     {
                         var authRequest = await _authService.GetPasswordlessLoginRequestByIdAsync(pendingRequest.Id);
-                        if (authRequest?.RequestApproved ?? false)
+                        if (authRequest?.RequestApproved == true)
                         {
                             var authResult = await _authService.LogInPasswordlessAsync(true, await _stateService.GetActiveUserEmailAsync(), authRequest.RequestAccessCode, pendingRequest.Id, pendingRequest.PrivateKey, authRequest.Key, authRequest.MasterPasswordHash);
                             if (authResult == null && await _stateService.IsAuthenticatedAsync())

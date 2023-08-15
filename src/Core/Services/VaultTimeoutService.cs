@@ -74,14 +74,11 @@ namespace Bit.Core.Services
 
             if (!await _cryptoService.HasUserKeyAsync(userId))
             {
-                if (await _cryptoService.HasAutoUnlockKeyAsync(userId))
-                {
-                    await _cryptoService.SetUserKeyAsync(await _cryptoService.GetAutoUnlockKeyAsync(userId), userId);
-                }
-                else
+                if (!await _cryptoService.HasAutoUnlockKeyAsync(userId))
                 {
                     return true;
                 }
+                await _cryptoService.SetUserKeyAsync(await _cryptoService.GetAutoUnlockKeyAsync(userId), userId);
             }
 
             // Check again to verify auto key was set
