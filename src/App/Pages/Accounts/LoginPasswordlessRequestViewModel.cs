@@ -80,6 +80,7 @@ namespace Bit.App.Pages
         public Action LogInSuccessAction { get; set; }
         public Action UpdateTempPasswordAction { get; set; }
         public Action CloseAction { get; set; }
+        public bool AuthingWithSso { get; set; }
 
         public ICommand CreatePasswordlessLoginCommand { get; }
         public ICommand CloseCommand { get; }
@@ -233,7 +234,7 @@ namespace Bit.App.Pages
             try
             {
                 PasswordlessLoginResponse response = null;
-                if (await _stateService.IsAuthenticatedAsync())
+                if (AuthingWithSso)
                 {
                     response = await _authService.GetPasswordlessLoginRequestByIdAsync(_requestId);
                 }
@@ -242,14 +243,14 @@ namespace Bit.App.Pages
                     response = await _authService.GetPasswordlessLoginResquestAsync(_requestId, _requestAccessCode);
                 }
 
-                if (response.RequestApproved == null || !response.RequestApproved.Value)
+                if (response?.RequestApproved != true)
                 {
                     return;
                 }
 
                 StopCheckLoginRequestStatus();
 
-                var authResult = await _authService.LogInPasswordlessAsync(Email, _requestAccessCode, _requestId, _requestKeyPair.Item2, response.Key, response.MasterPasswordHash);
+                var authResult = await _authService.LogInPasswordlessAsync(AuthingWithSso, Email, _requestAccessCode, _requestId, _requestKeyPair.Item2, response.Key, response.MasterPasswordHash);
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
 
                 if (authResult == null && await _stateService.IsAuthenticatedAsync())

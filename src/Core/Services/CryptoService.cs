@@ -63,7 +63,7 @@ namespace Bit.Core.Services
 
         public async Task<UserKey> GetUserKeyWithLegacySupportAsync(string userId = null)
         {
-            var userKey = await GetUserKeyAsync();
+            var userKey = await GetUserKeyAsync(userId);
             if (userKey != null)
             {
                 return userKey;
@@ -71,7 +71,7 @@ namespace Bit.Core.Services
 
             // Legacy support: encryption used to be done with the master key (derived from master password).
             // Users who have not migrated will have a null user key and must use the master key instead.
-            return new UserKey((await GetMasterKeyAsync()).Key);
+            return new UserKey((await GetMasterKeyAsync(userId)).Key);
         }
 
         public async Task<bool> HasUserKeyAsync(string userId = null)
