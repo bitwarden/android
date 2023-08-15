@@ -6,7 +6,7 @@
 # Unless a later match takes precedence
 # @bitwarden/team-leads
 src/App/Resources @bitwarden/team-leads-eng
-src/watchOS/bitwarden/bitwarden WatchKit Extension/Localization @bitwarden/team-leads-eng
+src/watchOS/bitwarden/bitwarden\ WatchKit\ Extension/Localization @bitwarden/team-leads-eng
 
 ## Auth team files ##
 
