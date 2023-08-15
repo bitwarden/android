@@ -50,13 +50,13 @@ namespace Bit.App.Pages
 
         private async Task StartLoginWithDeviceAsync()
         {
-            var page = new LoginPasswordlessRequestPage(_vm.Email, AuthRequestType.Unlock, _appOptions);
+            var page = new LoginPasswordlessRequestPage(_vm.Email, AuthRequestType.AuthenticateAndUnlock, _appOptions, true);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
         private async Task RequestAdminApprovalAsync()
         {
-            var page = new LoginPasswordlessRequestPage(_vm.Email, AuthRequestType.AdminApproval, _appOptions);
+            var page = new LoginPasswordlessRequestPage(_vm.Email, AuthRequestType.AdminApproval, _appOptions, true);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
     }

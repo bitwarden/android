@@ -533,11 +533,11 @@ namespace Bit.iOS.Extension
             LogoutIfAuthed();
         }
 
-        private void LaunchLoginWithDevice(AuthRequestType authRequestType,string email = null)
+        private void LaunchLoginWithDevice(AuthRequestType authRequestType, string email = null, bool authingWithSso = false)
         {
             var appOptions = new AppOptions { IosExtension = true };
             var app = new App.App(appOptions);
-            var loginWithDevicePage = new LoginPasswordlessRequestPage(email, authRequestType, appOptions);
+            var loginWithDevicePage = new LoginPasswordlessRequestPage(email, authRequestType, appOptions, authingWithSso);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(loginWithDevicePage);
             if (loginWithDevicePage.BindingContext is LoginPasswordlessRequestViewModel vm)
@@ -654,8 +654,8 @@ namespace Bit.iOS.Extension
             if (loginApproveDevicePage.BindingContext is LoginApproveDeviceViewModel vm)
             {
                 vm.LogInWithMasterPasswordAction = () => DismissViewController(false, () => PerformSegue("lockPasswordSegue", this));
-                vm.RequestAdminApprovalAction = () => DismissViewController(false, () => LaunchLoginWithDevice(AuthRequestType.AdminApproval, vm.Email));
-                vm.LogInWithDeviceAction = () => DismissViewController(false, () => LaunchLoginWithDevice(AuthRequestType.AuthenticateAndUnlock, vm.Email));
+                vm.RequestAdminApprovalAction = () => DismissViewController(false, () => LaunchLoginWithDevice(AuthRequestType.AdminApproval, vm.Email, true));
+                vm.LogInWithDeviceAction = () => DismissViewController(false, () => LaunchLoginWithDevice(AuthRequestType.AuthenticateAndUnlock, vm.Email, true));
             }
 
             var navigationPage = new NavigationPage(loginApproveDevicePage);
