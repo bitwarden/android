@@ -2658,7 +2658,7 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>Ana parola yeniden istemi yardımı</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Yetersiz bellek nedeniyle kilit açma başarısız olabilir. Sorunu çözmek için KDF bellek ayarlarınızı azaltın.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Geçersiz API anahtarı</value>
@@ -2711,5 +2711,8 @@ Bu hesaba geçmek ister misiniz?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Aynı anda birden fazla URl düzenlenemez</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logging in on</value>
   </data>
 </root>

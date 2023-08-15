@@ -2658,7 +2658,7 @@ Chcete se přepnout na tento účet?</value>
     <value>Nápověda pro znovuzeptání se na hlavní heslo</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Odemknutí může selhat z důvodu nedostatku paměti. Pro vyřešení snižte nastavení paměti KDF.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Neplatný klíč API</value>
@@ -2711,5 +2711,8 @@ Chcete se přepnout na tento účet?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Najednou nelze upravovat více URI</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Přihlašování na</value>
   </data>
 </root>

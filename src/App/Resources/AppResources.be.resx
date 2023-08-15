@@ -2659,7 +2659,7 @@
     <value>Дапамога з паўторным запытам асноўнага пароля</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Па прычыне недахопу памяці можа адбыцца збой разблакіроўкі. Паменшыце налады памяці KDF, каб вырашыць гэту праблему</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Памылковы ключ API</value>
@@ -2712,5 +2712,8 @@
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Немагчыма рэдагаваць некалькі URI адначасова</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logging in on</value>
   </data>
 </root>
