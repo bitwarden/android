@@ -155,7 +155,7 @@ Säkra och dela känsliga data i ditt Bitwardenvalv från alla webbläsare, mobi
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Hantera alla dina inloggningar och lösenord från ett säkert valv</value>
+    <value>Hantera inloggningar och lösenord i ett säkert valv</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
     <value>Skapa automatiskt starka, slumpmässiga och säkra lösenord</value>
@@ -167,6 +167,6 @@ Säkra och dela känsliga data i ditt Bitwardenvalv från alla webbläsare, mobi
     <value>Fyll automatiskt i inloggningar från Safari, Chrome och hundratals andra appar</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Synkronisera och kom åt ditt valv från flera olika enheter</value>
+    <value>Synkronisera och hantera ditt valv på flera enheter</value>
   </data>
 </root>

@@ -2659,7 +2659,7 @@
     <value>主密码重新询问帮助</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>内存不足可能导致解锁失败。可以通过减少 KDF 内存设置来解决。</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>无效的 API 密钥</value>
@@ -2712,5 +2712,8 @@
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>一次不能编辑多个 URI</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>登录到</value>
   </data>
 </root>

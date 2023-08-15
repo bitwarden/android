@@ -2659,7 +2659,7 @@ Wil u na die rekening omskakel?</value>
     <value>Hulpteks vir vra weer vir hoofwagwoord</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Ontgrendeling kan misluk as daar onvoldoende geheue is. Verminder u KDF-geheue-instellings om dit op te los.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Ongeldige API-sleutel</value>
@@ -2712,5 +2712,8 @@ Wil u na die rekening omskakel?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Cannot edit multiple URIs at once</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logging in on</value>
   </data>
 </root>
