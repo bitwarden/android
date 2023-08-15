@@ -2659,7 +2659,7 @@
     <value>Допомога щодо повторного запиту головного пароля</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Розблокування може не працювати через брак пам'яті. Зменште значення KDF у налаштуваннях, щоб розв'язати проблему.</value>
+    <value>Розблокування може не працювати через брак пам'яті. Зменште значення пам'яті KDF або налаштуйте біометричне розблокування, щоб розв'язати проблему.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Недійсний ключ API</value>
@@ -2712,5 +2712,8 @@
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Неможливо редагувати кілька URI одночасно</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Увійти на</value>
   </data>
 </root>

@@ -2660,7 +2660,7 @@
     <value>راهنمای درخواست مجدد کلمه عبور اصلی</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>باز کردن قفل ممکن است به دلیل حافظه ناکافی انجام شود. تنظیمات حافظه KDF خود را کاهش دهید تا حل شود.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>کلید API نامعتبر</value>
@@ -2713,5 +2713,8 @@
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>نمی‌توان چندین نشانی اینترنتی را همزمان ویرایش کرد</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logging in on</value>
   </data>
 </root>

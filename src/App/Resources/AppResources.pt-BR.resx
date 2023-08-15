@@ -2660,7 +2660,7 @@ Você deseja mudar para esta conta?</value>
     <value>Ajuda com Nova solicitação de senha mestra</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>O desbloqueio pode falhar devido à memória insuficiente. Diminua suas configurações de memória KDF para resolver.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Chave da API inválida</value>
@@ -2713,5 +2713,8 @@ Você deseja mudar para esta conta?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Não é possível editar várias URIs de uma vez</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logging in on</value>
   </data>
 </root>

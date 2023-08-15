@@ -2659,7 +2659,7 @@ Vil du skifte til denne konto?</value>
     <value>Hjælp til genanmodning om hovedadgangskode</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Oplåsning kan fejle grundet utilstrækkelig hukommelse. Reducér KDF-hukommelsesindstillinger for at afhjælpe</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Ugyldig API-nøgle</value>
@@ -2712,5 +2712,8 @@ Vil du skifte til denne konto?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Kan ikke redigere flere URI'er på én gang</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logger ind på</value>
   </data>
 </root>

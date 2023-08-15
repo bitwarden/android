@@ -477,7 +477,7 @@
     <value>Inserisci l'indirizzo email del tuo account per ricevere il suggerimento per la password principale.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Riabilita l'estensione app</value>
+    <value>Riattiva l'estensione app</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Quasi fatto!</value>
@@ -1034,7 +1034,7 @@
     <value>Agosto</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Marca</value>
+    <value>Circuito</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
     <value>Titolare della carta</value>
@@ -2659,7 +2659,7 @@ Vuoi passare a questo account?</value>
     <value>Aiuto per chiedere la password principale di nuovo</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Lo sblocco potrebbe non riuscire a causa di memoria insufficiente. Riduci le impostazioni della memoria KDF per risolvere il problema.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Chiave API non valida</value>
@@ -2712,5 +2712,8 @@ Vuoi passare a questo account?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Non puoi modificare più URI contemporaneamente</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Accedendo su</value>
   </data>
 </root>
