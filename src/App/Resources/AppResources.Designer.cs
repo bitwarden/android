@@ -275,6 +275,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account security.
+        /// </summary>
+        public static string AccountSecurity {
+            get {
+                return ResourceManager.GetString("AccountSecurity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Switched to next available account.
         /// </summary>
         public static string AccountSwitchedAutomatically {
@@ -550,6 +559,15 @@ namespace Bit.App.Resources {
         public static string ApiUrl {
             get {
                 return ResourceManager.GetString("ApiUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Appearance.
+        /// </summary>
+        public static string Appearance {
+            get {
+                return ResourceManager.GetString("Appearance", resourceCulture);
             }
         }
         
@@ -1265,6 +1283,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bitwarden Help Center.
+        /// </summary>
+        public static string BitwardenHelpCenter {
+            get {
+                return ResourceManager.GetString("BitwardenHelpCenter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Black.
         /// </summary>
         public static string Black {
@@ -1598,6 +1625,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contact Bitwarden support.
+        /// </summary>
+        public static string ContactBitwardenSupport {
+            get {
+                return ResourceManager.GetString("ContactBitwardenSupport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Continue.
         /// </summary>
         public static string Continue {
@@ -1612,6 +1648,15 @@ namespace Bit.App.Resources {
         public static string Copy {
             get {
                 return ResourceManager.GetString("Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy app information.
+        /// </summary>
+        public static string CopyAppInformation {
+            get {
+                return ResourceManager.GetString("CopyAppInformation", resourceCulture);
             }
         }
         
@@ -6255,6 +6300,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sync now.
+        /// </summary>
+        public static string SyncNow {
+            get {
+                return ResourceManager.GetString("SyncNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sync vault now.
         /// </summary>
         public static string SyncVaultNow {
@@ -6751,7 +6805,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve..
+        ///   Looks up a localized string similar to Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve..
         /// </summary>
         public static string UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve {
             get {
@@ -7017,6 +7071,15 @@ namespace Bit.App.Resources {
         public static string ValueHasBeenCopied {
             get {
                 return ResourceManager.GetString("ValueHasBeenCopied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vault.
+        /// </summary>
+        public static string Vault {
+            get {
+                return ResourceManager.GetString("Vault", resourceCulture);
             }
         }
         

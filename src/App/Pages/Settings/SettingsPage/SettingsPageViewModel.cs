@@ -8,7 +8,6 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
-using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
@@ -16,6 +15,35 @@ using Xamarin.Forms;
 namespace Bit.App.Pages
 {
     public class SettingsPageViewModel : BaseViewModel
+    {
+        public SettingsPageViewModel()
+        {
+            ExecuteSettingItemCommand = new AsyncCommand<SettingsPageListItem>(item => item.ExecuteAsync(),
+                onException: ex => HandleException(ex),
+                allowsMultipleExecutions: false);
+
+            SettingsItems = new List<SettingsPageListItem>
+            {
+                new SettingsPageListItem(nameof(AppResources.AccountSecurity), () => NavigateToAsync(new SecuritySettingsPage())),
+                new SettingsPageListItem(nameof(AppResources.Autofill), () => NavigateToAsync(new AutofillSettingsPage())),
+                new SettingsPageListItem(nameof(AppResources.Vault), () => NavigateToAsync(new VaultSettingsPage())),
+                new SettingsPageListItem(nameof(AppResources.Appearance), () => NavigateToAsync(new AppearanceSettingsPage())),
+                new SettingsPageListItem(nameof(AppResources.Other), () => NavigateToAsync(new OtherSettingsPage())),
+                new SettingsPageListItem(nameof(AppResources.About), () => NavigateToAsync(new AboutSettingsPage()))
+            };
+        }
+
+        public List<SettingsPageListItem> SettingsItems { get; }
+
+        public IAsyncCommand<SettingsPageListItem> ExecuteSettingItemCommand { get; }
+
+        private async Task NavigateToAsync(Page page)
+        {
+            await Page.Navigation.PushModalAsync(new NavigationPage(page));
+        }
+    }
+
+    public class SettingsPageViewModel2 : BaseViewModel
     {
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly ICryptoService _cryptoService;
@@ -75,7 +103,7 @@ namespace Bit.App.Pages
         private List<KeyValuePair<string, int?>> _vaultTimeoutOptions = VaultTimeoutOptions;
         private List<KeyValuePair<string, VaultTimeoutAction>> _vaultTimeoutActionOptions = VaultTimeoutActionOptions;
 
-        public SettingsPageViewModel()
+        public SettingsPageViewModel2()
         {
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
@@ -98,14 +126,14 @@ namespace Bit.App.Pages
             GroupedItems = new ObservableRangeCollection<ISettingsPageListItem>();
             PageTitle = AppResources.Settings;
 
-            ExecuteSettingItemCommand = new AsyncCommand<SettingsPageListItem>(item => item.ExecuteAsync(), onException: _loggerService.Exception, allowsMultipleExecutions: false);
+            ExecuteSettingItemCommand = new AsyncCommand<SettingsPageListItemOld>(item => item.ExecuteAsync(), onException: _loggerService.Exception, allowsMultipleExecutions: false);
         }
 
         private bool IsVaultTimeoutActionLockAllowed => _hasMasterPassword || _biometric || _pin;
 
         public ObservableRangeCollection<ISettingsPageListItem> GroupedItems { get; set; }
 
-        public IAsyncCommand<SettingsPageListItem> ExecuteSettingItemCommand { get; }
+        public IAsyncCommand<SettingsPageListItemOld> ExecuteSettingItemCommand { get; }
 
         public async Task InitAsync()
         {
@@ -132,7 +160,7 @@ namespace Bit.App.Pages
 
 
             var pinSet = await _vaultTimeoutService.GetPinLockTypeAsync();
-            _pin = pinSet != PinLockType.Disabled;
+            _pin = pinSet != Core.Services.PinLockType.Disabled;
             _biometric = await _vaultTimeoutService.IsBiometricLockSetAsync();
             var timeoutAction = await _vaultTimeoutService.GetVaultTimeoutAction() ?? VaultTimeoutAction.Lock;
             if (!IsVaultTimeoutActionLockAllowed && timeoutAction == VaultTimeoutAction.Lock)
@@ -516,10 +544,10 @@ namespace Bit.App.Pages
             //TODO: Refactor this once navigation is abstracted so that it doesn't depend on Page, e.g. Page.Navigation.PushModalAsync...
 
             var doUpper = Device.RuntimePlatform != Device.Android;
-            var autofillItems = new List<SettingsPageListItem>();
+            var autofillItems = new List<SettingsPageListItemOld>();
             if (Device.RuntimePlatform == Device.Android)
             {
-                autofillItems.Add(new SettingsPageListItem
+                autofillItems.Add(new SettingsPageListItemOld
                 {
                     Name = AppResources.AutofillServices,
                     SubLabel = _autofillHandler.AutofillServicesEnabled() ? AppResources.On : AppResources.Off,
@@ -530,63 +558,63 @@ namespace Bit.App.Pages
             {
                 if (_deviceActionService.SystemMajorVersion() >= 12)
                 {
-                    autofillItems.Add(new SettingsPageListItem
+                    autofillItems.Add(new SettingsPageListItemOld
                     {
                         Name = AppResources.PasswordAutofill,
                         ExecuteAsync = () => Page.Navigation.PushModalAsync(new NavigationPage(new AutofillPage()))
                     });
                 }
-                autofillItems.Add(new SettingsPageListItem
+                autofillItems.Add(new SettingsPageListItemOld
                 {
                     Name = AppResources.AppExtension,
                     ExecuteAsync = () => Page.Navigation.PushModalAsync(new NavigationPage(new ExtensionPage()))
                 });
             }
-            var manageItems = new List<SettingsPageListItem>
+            var manageItems = new List<SettingsPageListItemOld>
             {
-                new SettingsPageListItem
+                new SettingsPageListItemOld
                 {
                     Name = AppResources.Folders,
                     ExecuteAsync = () => Page.Navigation.PushModalAsync(new NavigationPage(new FoldersPage()))
                 },
-                new SettingsPageListItem
+                new SettingsPageListItemOld
                 {
                     Name = AppResources.Sync,
                     SubLabel = _lastSyncDate,
                     ExecuteAsync = () => Page.Navigation.PushModalAsync(new NavigationPage(new SyncPage()))
                 }
             };
-            var securityItems = new List<SettingsPageListItem>
+            var securityItems = new List<SettingsPageListItemOld>
             {
-                new SettingsPageListItem
+                new SettingsPageListItemOld
                 {
                     Name = AppResources.VaultTimeout,
                     SubLabel = _vaultTimeoutDisplayValue,
                     ExecuteAsync = () => VaultTimeoutAsync() },
-                new SettingsPageListItem
+                new SettingsPageListItemOld
                 {
                     Name = AppResources.VaultTimeoutAction,
                     SubLabel = _vaultTimeoutActionDisplayValue,
                     ExecuteAsync = () => VaultTimeoutActionAsync()
                 },
-                new SettingsPageListItem
+                new SettingsPageListItemOld
                 {
                     Name = AppResources.UnlockWithPIN,
                     SubLabel = _pin ? AppResources.On : AppResources.Off,
                     ExecuteAsync = () => UpdatePinAsync()
                 },
-                new SettingsPageListItem
+                new SettingsPageListItemOld
                 {
                     Name = AppResources.ApproveLoginRequests,
                     SubLabel = _approvePasswordlessLoginRequests ? AppResources.On : AppResources.Off,
                     ExecuteAsync = () => ApproveLoginRequestsAsync()
                 },
-                new SettingsPageListItem
+                new SettingsPageListItemOld
                 {
                     Name = AppResources.LockNow,
                     ExecuteAsync = () => LockAsync()
                 },
-                new SettingsPageListItem
+                new SettingsPageListItemOld
                 {
                     Name = AppResources.TwoStepLogin,
                     ExecuteAsync = () => TwoStepAsync()
@@ -594,7 +622,7 @@ namespace Bit.App.Pages
             };
             if (_approvePasswordlessLoginRequests)
             {
-                manageItems.Add(new SettingsPageListItem
+                manageItems.Add(new SettingsPageListItemOld
                 {
                     Name = AppResources.PendingLogInRequests,
                     ExecuteAsync = () => PendingLoginRequestsAsync()
@@ -608,7 +636,7 @@ namespace Bit.App.Pages
                     biometricName = _deviceActionService.SupportsFaceBiometric() ? AppResources.FaceID :
                         AppResources.TouchID;
                 }
-                var item = new SettingsPageListItem
+                var item = new SettingsPageListItemOld
                 {
                     Name = string.Format(AppResources.UnlockWith, biometricName),
                     SubLabel = _biometric ? AppResources.On : AppResources.Off,
@@ -618,7 +646,7 @@ namespace Bit.App.Pages
             }
             if (_vaultTimeoutDisplayValue == AppResources.Custom)
             {
-                securityItems.Insert(1, new SettingsPageListItem
+                securityItems.Insert(1, new SettingsPageListItemOld
                 {
                     Name = AppResources.Custom,
                     Time = TimeSpan.FromMinutes(Math.Abs((double)_vaultTimeout.GetValueOrDefault())),
@@ -650,7 +678,7 @@ namespace Bit.App.Pages
                             policyMinutes % 60,
                             policyAction == Policy.ACTION_LOCK ? AppResources.Lock : AppResources.LogOut);
                     }
-                    securityItems.Insert(0, new SettingsPageListItem
+                    securityItems.Insert(0, new SettingsPageListItemOld
                     {
                         Name = policyAlert,
                         UseFrame = true,
@@ -659,49 +687,49 @@ namespace Bit.App.Pages
             }
             if (Device.RuntimePlatform == Device.Android)
             {
-                securityItems.Add(new SettingsPageListItem
+                securityItems.Add(new SettingsPageListItemOld
                 {
                     Name = AppResources.AllowScreenCapture,
                     SubLabel = _screenCaptureAllowed ? AppResources.On : AppResources.Off,
                     ExecuteAsync = () => SetScreenCaptureAllowedAsync()
                 });
             }
-            var accountItems = new List<SettingsPageListItem>();
+            var accountItems = new List<SettingsPageListItemOld>();
             if (Device.RuntimePlatform == Device.iOS)
             {
-                accountItems.Add(new SettingsPageListItem
+                accountItems.Add(new SettingsPageListItemOld
                 {
                     Name = AppResources.ConnectToWatch,
                     SubLabel = _shouldConnectToWatch ? AppResources.On : AppResources.Off,
                     ExecuteAsync = () => ToggleWatchConnectionAsync()
                 });
             }
-            accountItems.Add(new SettingsPageListItem
+            accountItems.Add(new SettingsPageListItemOld
             {
                 Name = AppResources.FingerprintPhrase,
                 ExecuteAsync = () => FingerprintAsync()
             });
-            accountItems.Add(new SettingsPageListItem
+            accountItems.Add(new SettingsPageListItemOld
             {
                 Name = AppResources.LogOut,
                 ExecuteAsync = () => LogOutAsync()
             });
             if (_showChangeMasterPassword)
             {
-                accountItems.Insert(0, new SettingsPageListItem
+                accountItems.Insert(0, new SettingsPageListItemOld
                 {
                     Name = AppResources.ChangeMasterPassword,
                     ExecuteAsync = () => ChangePasswordAsync()
                 });
             }
-            var toolsItems = new List<SettingsPageListItem>
+            var toolsItems = new List<SettingsPageListItemOld>
             {
-                new SettingsPageListItem
+                new SettingsPageListItemOld
                 {
                     Name = AppResources.ImportItems,
                     ExecuteAsync = () => Device.InvokeOnMainThreadAsync(() => Import())
                 },
-                new SettingsPageListItem
+                new SettingsPageListItemOld
                 {
                     Name = AppResources.ExportVault,
                     ExecuteAsync = () => Page.Navigation.PushModalAsync(new NavigationPage(new ExportVaultPage()))
@@ -709,49 +737,49 @@ namespace Bit.App.Pages
             };
             if (IncludeLinksWithSubscriptionInfo())
             {
-                toolsItems.Add(new SettingsPageListItem
+                toolsItems.Add(new SettingsPageListItemOld
                 {
                     Name = AppResources.LearnOrg,
                     ExecuteAsync = () => ShareAsync()
                 });
-                toolsItems.Add(new SettingsPageListItem
+                toolsItems.Add(new SettingsPageListItemOld
                 {
                     Name = AppResources.WebVault,
                     ExecuteAsync = () => Device.InvokeOnMainThreadAsync(() => WebVault())
                 });
             }
 
-            var otherItems = new List<SettingsPageListItem>
+            var otherItems = new List<SettingsPageListItemOld>
             {
-                new SettingsPageListItem
+                new SettingsPageListItemOld
                 {
                     Name = AppResources.Options,
                     ExecuteAsync = () => Page.Navigation.PushModalAsync(new NavigationPage(new OptionsPage()))
                 },
-                new SettingsPageListItem
+                new SettingsPageListItemOld
                 {
                     Name = AppResources.About,
                     ExecuteAsync = () => AboutAsync()
                 },
-                new SettingsPageListItem
+                new SettingsPageListItemOld
                 {
                     Name = AppResources.HelpAndFeedback,
                     ExecuteAsync = () => Device.InvokeOnMainThreadAsync(() => Help())
                 },
 #if !FDROID 
-                new SettingsPageListItem
+                new SettingsPageListItemOld
                 {
                     Name = AppResources.SubmitCrashLogs,
                     SubLabel = _reportLoggingEnabled ? AppResources.On : AppResources.Off,
                     ExecuteAsync = () => LoggerReportingAsync()
                 },
 #endif
-                new SettingsPageListItem
+                new SettingsPageListItemOld
                 {
                     Name = AppResources.RateTheApp,
                     ExecuteAsync = () => Device.InvokeOnMainThreadAsync(() => Rate())
                 },
-                new SettingsPageListItem
+                new SettingsPageListItemOld
                 {
                     Name = AppResources.DeleteAccount,
                     ExecuteAsync = () => Page.Navigation.PushModalAsync(new NavigationPage(new DeleteAccountPage()))

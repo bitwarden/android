@@ -58,6 +58,7 @@ namespace Bit.App.Utilities
 
                 // Base styles
                 resources.MergedDictionaries.Add(new Base());
+                resources.MergedDictionaries.Add(new ControlTemplates());
 
                 // Platform styles
                 if (Device.RuntimePlatform == Device.Android)
