@@ -128,11 +128,11 @@
     <value>Thêm thư mục</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Thêm Mục</value>
+    <value>Thêm mục</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
-    <value>Đã xảy ra lỗi chưa xác định.</value>
+    <value>Đã xảy ra lỗi.</value>
     <comment>Alert title when something goes wrong.</comment>
   </data>
   <data name="Back" xml:space="preserve">
@@ -2194,7 +2194,7 @@ Quá trình quét sẽ diễn ra tự động.</value>
     <value>Mã xác minh không hợp lệ</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+    <value>Yêu cầu mật khẩu một lần (OTP)</value>
   </data>
   <data name="SendCode" xml:space="preserve">
     <value>Gửi mã</value>
@@ -2487,7 +2487,7 @@ chọn Thêm TOTP để lưu khóa an toàn</value>
 Do you want to switch to this account?</value>
   </data>
   <data name="NewAroundHere" xml:space="preserve">
-    <value>New around here?</value>
+    <value>Bạn mới tới đây sao?</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Get master password hint</value>
@@ -2607,10 +2607,10 @@ Do you want to switch to this account?</value>
     <value>There are no items that match the search</value>
   </data>
   <data name="US" xml:space="preserve">
-    <value>US</value>
+    <value>Hoa Kỳ</value>
   </data>
   <data name="EU" xml:space="preserve">
-    <value>EU</value>
+    <value>Châu Âu</value>
   </data>
   <data name="SelfHosted" xml:space="preserve">
     <value>Self-hosted</value>
@@ -2619,7 +2619,7 @@ Do you want to switch to this account?</value>
     <value>Data region</value>
   </data>
   <data name="Region" xml:space="preserve">
-    <value>Region</value>
+    <value>Khu vực</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
@@ -2634,11 +2634,11 @@ Do you want to switch to this account?</value>
     <value>Passkeys</value>
   </data>
   <data name="CreatedX" xml:space="preserve">
-    <value>Created {0}</value>
+    <value>Đã tạo {0}</value>
     <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
   </data>
   <data name="Application" xml:space="preserve">
-    <value>Application</value>
+    <value>Ứng dụng</value>
   </data>
   <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
     <value>You cannot edit passkey application because it would invalidate the passkey</value>
@@ -2659,7 +2659,7 @@ Do you want to switch to this account?</value>
     <value>Master password re-prompt help</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Invalid API key</value>
@@ -2683,7 +2683,7 @@ Do you want to switch to this account?</value>
     <value>URI saved</value>
   </data>
   <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
-    <value>Invalid format. Use https://, http://, or androidapp://</value>
+    <value>Định dạng không hợp lệ. Dùng https://, http://, hoặc androidapp://</value>
     <comment>https://, http://, androidapp:// should not be translated</comment>
   </data>
   <data name="EditURI" xml:space="preserve">
@@ -2712,5 +2712,8 @@ Do you want to switch to this account?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Cannot edit multiple URIs at once</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logging in on</value>
   </data>
 </root>

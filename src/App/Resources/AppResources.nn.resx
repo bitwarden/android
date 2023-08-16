@@ -2660,7 +2660,7 @@ Do you want to switch to this account?</value>
     <value>Master password re-prompt help</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Kunne ikkje låse opp på grunn av utilstrekkeleg minnekapasitet. Reduser KDF-minne-innstillingane for å løyse dette</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Invalid API key</value>
@@ -2713,5 +2713,8 @@ Do you want to switch to this account?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Cannot edit multiple URIs at once</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logging in on</value>
   </data>
 </root>

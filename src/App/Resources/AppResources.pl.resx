@@ -2656,10 +2656,10 @@ Czy chcesz przełączyć się na to konto?</value>
     <value>Dostępne dla dwustopniowego logowania</value>
   </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
-    <value>Master password re-prompt help</value>
+    <value>Pomoc dotycząca potwierdzania hasłem głównym</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Odblokowanie może się nie powieść z powodu niewystarczającej ilości pamięci. Zmniejsz ustawienia pamięci KDF, aby to rozwiązać</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Nieprawidłowy klucz API</value>
@@ -2712,5 +2712,8 @@ Czy chcesz przełączyć się na to konto?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Nie można edytować wielu URI na raz</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logowanie do</value>
   </data>
 </root>

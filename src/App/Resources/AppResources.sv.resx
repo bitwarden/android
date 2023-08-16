@@ -2661,7 +2661,7 @@ Vill du byta till detta konto?</value>
     <value>Återupprepa huvudlösenord hjälp</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Upplåsning kan misslyckas på grund av otillräckligt minne. Minska dina KDF-minnesinställningar för att lösa detta.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Ogiltig API-nyckel</value>
@@ -2714,5 +2714,8 @@ Vill du byta till detta konto?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Det går inte att redigera flera URI:er samtidigt</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logga in på</value>
   </data>
 </root>

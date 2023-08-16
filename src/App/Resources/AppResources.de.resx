@@ -598,7 +598,7 @@
     <value>Weitere Einstellungen</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Du musst dich in der Bitwarden App einloggen, bevor du die Erweiterung benutzen kannst.</value>
+    <value>Du musst dich in der Bitwarden App anmelden, bevor du die Erweiterung benutzen kannst.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Niemals</value>
@@ -838,7 +838,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Eingeloggt bleiben</value>
+    <value>Angemeldet bleiben</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
@@ -1292,7 +1292,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Auto-Ausfüllen aktiviert!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>Du musst dich in der Bitwarden App einloggen, bevor du AutoFill nutzen kannst.</value>
+    <value>Du musst dich in der Bitwarden App anmelden, bevor du AutoFill nutzen kannst.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
     <value>Du kannst nun direkt von der Tastatur auf deine Zugangsdaten zugreifen, wenn du dich auf Webseiten oder in Apps anmeldest.</value>
@@ -2640,25 +2640,25 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Anwendung</value>
   </data>
   <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
-    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+    <value>Du kannst die Passkey-Anwendung nicht bearbeiten, da dies den Passkey ungültig machen würde.</value>
   </data>
   <data name="PasskeyWillNotBeCopied" xml:space="preserve">
     <value>Passkey wird nicht kopiert</value>
   </data>
   <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
-    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+    <value>Der Passkey wird nicht in den duplizierten Eintrag kopiert. Möchtest du mit dem Duplizieren dieses Eintrags fortfahren?</value>
   </data>
   <data name="CopyApplication" xml:space="preserve">
     <value>Anwendung kopieren</value>
   </data>
   <data name="AvailableForTwoStepLogin" xml:space="preserve">
-    <value>Available for two-step login</value>
+    <value>Verfügbar für Zwei-Faktor Authentifizierung</value>
   </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Hilfe zum erneuten Abfragen des Master-Passworts</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Das Entsperren kann aufgrund von unzureichendem Arbeitsspeicher fehlschlagen. Verringere deine KDF-Speichereinstellungen, um das Problem zu beheben.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Ungültiger API-Schlüssel</value>
@@ -2667,7 +2667,7 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Ungültiger API-Token</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
+    <value>Dieser Eintrag kann nicht mit der Organisation geteilt werden, da bereits einer mit dem gleichen Passkey existiert.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Auto-Ausfüllen blockieren</value>
@@ -2711,5 +2711,8 @@ Möchtest du zu diesem Konto wechseln?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Es können nicht mehrere URIs auf einmal bearbeitet werden</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Anmelden bei</value>
   </data>
 </root>

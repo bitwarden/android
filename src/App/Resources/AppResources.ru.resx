@@ -2659,7 +2659,7 @@
     <value>Помощь по повторному запросу мастер-пароля</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Разблокировка может завершиться ошибкой из-за нехватки памяти. Уменьшите настройки памяти KDF для решения этой проблемы.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Некорректный ключ API</value>
@@ -2668,7 +2668,7 @@
     <value>Некорректный токен API</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Этим элементом нельзя поделиться с организацией, поскольку существует другой с тем же ключем.</value>
+    <value>Этим элементом нельзя поделиться с организацией, поскольку существует другой с тем же ключом.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Блокировать автозаполнение</value>
@@ -2712,5 +2712,8 @@
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Невозможно редактировать несколько URI одновременно</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Войти на</value>
   </data>
 </root>
