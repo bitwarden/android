@@ -16,9 +16,9 @@
     <PackageReference Include="Plugin.Fingerprint" Version="2.1.5" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="2.88.3" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.6" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.5" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2578" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2612" />
     <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />
     <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.4.1" />
     <PackageReference Include="MessagePack" Version="2.4.59" />
