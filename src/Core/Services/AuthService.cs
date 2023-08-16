@@ -200,12 +200,13 @@ namespace Bit.Core.Services
             return !await _policyService.EvaluateMasterPassword(strength.Value, masterPassword, _masterPasswordPolicy);
         }
 
-        public async Task<AuthResult> LogInPasswordlessAsync(string email, string accessCode, string authRequestId, byte[] decryptionKey, string encryptedAuthRequestKey, string masterKeyHash)
+        public async Task<AuthResult> LogInPasswordlessAsync(bool authingWithSso, string email, string accessCode, string authRequestId, byte[] decryptionKey, string encryptedAuthRequestKey, string masterKeyHash)
         {
             var decryptedKey = await _cryptoService.RsaDecryptAsync(encryptedAuthRequestKey, decryptionKey);
 
-            // On SSO flow user is already AuthN
-            if (await _stateService.IsAuthenticatedAsync())
+            // If the user is already authenticated, we can just set the key
+            // Note: We can't check for the existance of an access token here because the active user id may not be null
+            if (authingWithSso)
             {
                 if (string.IsNullOrEmpty(masterKeyHash))
                 {
@@ -222,10 +223,13 @@ namespace Bit.Core.Services
                 return null;
             }
 
+            // The approval device may not have a master key hash if it authenticated with a passwordless method
             if (string.IsNullOrEmpty(masterKeyHash) && decryptionKey != null)
             {
+                var authResult = await LogInHelperAsync(email, accessCode, null, null, null, null, null, null, null, null, null, authRequestId: authRequestId);
+                // Only set the user key after the login helper so we have a user id
                 await _cryptoService.SetUserKeyAsync(new UserKey(decryptedKey));
-                return null;
+                return authResult;
             }
 
             var decKeyHash = await _cryptoService.RsaDecryptAsync(masterKeyHash, decryptionKey);

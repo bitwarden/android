@@ -248,9 +248,9 @@ namespace Bit.App.Pages
                     if (pendingRequest != null)
                     {
                         var authRequest = await _authService.GetPasswordlessLoginRequestByIdAsync(pendingRequest.Id);
-                        if (authRequest != null && authRequest.RequestApproved != null && authRequest.RequestApproved.Value)
+                        if (authRequest?.RequestApproved == true)
                         {
-                            var authResult = await _authService.LogInPasswordlessAsync(await _stateService.GetActiveUserEmailAsync(), authRequest.RequestAccessCode, pendingRequest.Id, pendingRequest.PrivateKey, authRequest.Key, authRequest.MasterPasswordHash);
+                            var authResult = await _authService.LogInPasswordlessAsync(true, await _stateService.GetActiveUserEmailAsync(), authRequest.RequestAccessCode, pendingRequest.Id, pendingRequest.PrivateKey, authRequest.Key, authRequest.MasterPasswordHash);
                             if (authResult == null && await _stateService.IsAuthenticatedAsync())
                             {
                                 await Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(
