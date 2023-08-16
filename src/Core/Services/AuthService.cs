@@ -37,6 +37,7 @@ namespace Bit.Core.Services
         private string _authedUserId;
         private MasterPasswordPolicyOptions _masterPasswordPolicy;
         private ForcePasswordResetReason? _2faForcePasswordResetReason;
+        private UserKey _userKey;
 
         public AuthService(
             ICryptoService cryptoService,
@@ -226,10 +227,7 @@ namespace Bit.Core.Services
             // The approval device may not have a master key hash if it authenticated with a passwordless method
             if (string.IsNullOrEmpty(masterKeyHash) && decryptionKey != null)
             {
-                var authResult = await LogInHelperAsync(email, accessCode, null, null, null, null, null, null, null, null, null, authRequestId: authRequestId);
-                // Only set the user key after the login helper so we have a user id
-                await _cryptoService.SetUserKeyAsync(new UserKey(decryptedKey));
-                return authResult;
+                return await LogInHelperAsync(email, accessCode, null, null, null, null, null, null, null, null, null, authRequestId: authRequestId, userKey2FA: new UserKey(decryptedKey));
             }
 
             var decKeyHash = await _cryptoService.RsaDecryptAsync(masterKeyHash, decryptionKey);
@@ -257,7 +255,7 @@ namespace Bit.Core.Services
                 CaptchaToken = captchaToken;
             }
             var result = await LogInHelperAsync(Email, MasterPasswordHash, LocalMasterPasswordHash, Code, CodeVerifier, SsoRedirectUrl, _masterKey,
-                twoFactorProvider, twoFactorToken, remember, CaptchaToken, authRequestId: AuthRequestId);
+                twoFactorProvider, twoFactorToken, remember, CaptchaToken, authRequestId: AuthRequestId, userKey2FA: _userKey);
 
             // If we successfully authenticated and we have a saved _2faForcePasswordResetReason reason from LogInAsync()
             if (!string.IsNullOrEmpty(_authedUserId) && _2faForcePasswordResetReason.HasValue)
@@ -402,7 +400,7 @@ namespace Bit.Core.Services
         private async Task<AuthResult> LogInHelperAsync(string email, string hashedPassword, string localHashedPassword,
             string code, string codeVerifier, string redirectUrl, MasterKey masterKey,
             TwoFactorProviderType? twoFactorProvider = null, string twoFactorToken = null, bool? remember = null,
-            string captchaToken = null, string orgId = null, string authRequestId = null)
+            string captchaToken = null, string orgId = null, string authRequestId = null, UserKey userKey2FA = null)
         {
             var storedTwoFactorToken = await _tokenService.GetTwoFactorTokenAsync(email);
             var appId = await _appIdService.GetAppIdAsync();
@@ -467,6 +465,7 @@ namespace Bit.Core.Services
                 CodeVerifier = codeVerifier;
                 SsoRedirectUrl = redirectUrl;
                 _masterKey = _setCryptoKeys ? masterKey : null;
+                _userKey = userKey2FA;
                 TwoFactorProvidersData = response.TwoFactorResponse.TwoFactorProviders2;
                 result.TwoFactorProviders = response.TwoFactorResponse.TwoFactorProviders2;
                 CaptchaToken = response.TwoFactorResponse.CaptchaToken;
@@ -547,6 +546,10 @@ namespace Bit.Core.Services
                     if (masterKey != null && !string.IsNullOrEmpty(authRequestId))
                     {
                         await _cryptoService.SetMasterKeyAsync(masterKey);
+                    }
+                    else if (userKey2FA != null)
+                    {
+                        await _cryptoService.SetUserKeyAsync(userKey2FA);
                     }
 
                     // Decrypt UserKey with MasterKey
