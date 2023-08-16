@@ -211,33 +211,41 @@ namespace Bit.App.Pages
                     return;
                 }
 
+                // Trusted device option is sent regardless if this is a trusted device or not
+                // If it is trusted, it will have the necessary keys
                 if (decryptOptions?.TrustedDeviceOption != null)
                 {
-                    var pendingRequest = await _stateService.GetPendingAdminAuthRequestAsync();
-                    // If user doesn't have a MP, but has reset password permission, they must set a MP
-                    if (!decryptOptions.HasMasterPassword &&
-                        decryptOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
+                    if (await _deviceTrustCryptoService.IsDeviceTrustedAsync())
                     {
-                        StartSetPasswordAction?.Invoke();
-                    }
-                    else if (response.ForcePasswordReset)
-                    {
-                        UpdateTempPasswordAction?.Invoke();
-                    }
-                    else if (await _deviceTrustCryptoService.IsDeviceTrustedAsync())
-                    {
+                        // If we have a device key but no keys on server, we need to remove the device key
                         if (decryptOptions.TrustedDeviceOption.EncryptedPrivateKey == null && decryptOptions.TrustedDeviceOption.EncryptedUserKey == null)
                         {
                             await _deviceTrustCryptoService.RemoveTrustedDeviceAsync();
                             StartDeviceApprovalOptionsAction?.Invoke();
+                            return;
                         }
-                        else
+                        // If user doesn't have a MP, but has reset password permission, they must set a MP
+                        if (!decryptOptions.HasMasterPassword &&
+                            decryptOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
                         {
-                            _syncService.FullSyncAsync(true).FireAndForget();
-                            SsoAuthSuccessAction?.Invoke();
+                            StartSetPasswordAction?.Invoke();
+                            return;
                         }
+                        // Update temp password only if the device is trusted and therefore has a decrypted User Key set
+                        if (response.ForcePasswordReset)
+                        {
+                            UpdateTempPasswordAction?.Invoke();
+                            return;
+                        }
+                        // Device is trusted and has keys, so we can decrypt
+                        _syncService.FullSyncAsync(true).FireAndForget();
+                        SsoAuthSuccessAction?.Invoke();
+                        return;
                     }
-                    else if (pendingRequest != null)
+
+                    // Check for pending Admin Auth requests before navigating to device approval options
+                    var pendingRequest = await _stateService.GetPendingAdminAuthRequestAsync();
+                    if (pendingRequest != null)
                     {
                         var authRequest = await _authService.GetPasswordlessLoginRequestByIdAsync(pendingRequest.Id);
                         if (authRequest != null && authRequest.RequestApproved != null && authRequest.RequestApproved.Value)
@@ -268,15 +276,11 @@ namespace Bit.App.Pages
                 // In the standard, non TDE case, a user must set password if they don't
                 // have one and they aren't using key connector.
                 // Note: TDE & Key connector are mutually exclusive org config options.
-                if (response.ResetMasterPassword || (decryptOptions?.RequireSetPassword ?? false))
+                if (response.ResetMasterPassword || (decryptOptions?.RequireSetPassword == true))
                 {
+                    // TODO: We need to look into how to handle this when Org removes TDE
+                    // Will we have the User Key by now to set a new password?
                     StartSetPasswordAction?.Invoke();
-                    return;
-                }
-
-                if (response.ForcePasswordReset)
-                {
-                    UpdateTempPasswordAction?.Invoke();
                     return;
                 }
 
