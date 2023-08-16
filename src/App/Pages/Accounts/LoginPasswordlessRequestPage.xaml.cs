@@ -13,7 +13,7 @@ namespace Bit.App.Pages
         private LoginPasswordlessRequestViewModel _vm;
         private readonly AppOptions _appOptions;
 
-        public LoginPasswordlessRequestPage(string email, AuthRequestType authRequestType, AppOptions appOptions = null)
+        public LoginPasswordlessRequestPage(string email, AuthRequestType authRequestType, AppOptions appOptions = null, bool authingWithSso = false)
         {
             InitializeComponent();
             _appOptions = appOptions;
@@ -21,6 +21,7 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.Email = email;
             _vm.AuthRequestType = authRequestType;
+            _vm.AuthingWithSso = authingWithSso;
             _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
             _vm.LogInSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
             _vm.UpdateTempPasswordAction = () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
