@@ -326,33 +326,36 @@ namespace Bit.App.Pages
 
                 if (decryptOptions?.TrustedDeviceOption != null)
                 {
-                    // If user doesn't have a MP, but has reset password permission, they must set a MP
-                    if (!decryptOptions.HasMasterPassword &&
-                        decryptOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
+                    if (await _deviceTrustCryptoService.IsDeviceTrustedAsync())
                     {
-                        StartSetPasswordAction?.Invoke();
-                    }
-                    else if (result.ForcePasswordReset)
-                    {
-                        UpdateTempPasswordAction?.Invoke();
-                    }
-                    else if (await _deviceTrustCryptoService.IsDeviceTrustedAsync())
-                    {
+                        // If we have a device key but no keys on server, we need to remove the device key
                         if (decryptOptions.TrustedDeviceOption.EncryptedPrivateKey == null && decryptOptions.TrustedDeviceOption.EncryptedUserKey == null)
                         {
                             await _deviceTrustCryptoService.RemoveTrustedDeviceAsync();
                             StartDeviceApprovalOptionsAction?.Invoke();
+                            return;
                         }
-                        else
+                        // If user doesn't have a MP, but has reset password permission, they must set a MP
+                        if (!decryptOptions.HasMasterPassword &&
+                            decryptOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
                         {
-                            _syncService.FullSyncAsync(true).FireAndForget();
-                            await TwoFactorAuthSuccessAsync();
+                            StartSetPasswordAction?.Invoke();
+                            return;
                         }
+                        // Update temp password only if the device is trusted and therefore has a decrypted User Key set
+                        if (result.ForcePasswordReset)
+                        {
+                            UpdateTempPasswordAction?.Invoke();
+                            return;
+                        }
+
+                        // Device is trusted and has keys, so we can decrypt
+                        _syncService.FullSyncAsync(true).FireAndForget();
+                        await TwoFactorAuthSuccessAsync();
+                        return;
                     }
-                    else
-                    {
-                        StartDeviceApprovalOptionsAction?.Invoke();
-                    }
+
+                    StartDeviceApprovalOptionsAction?.Invoke();
                     return;
                 }
 
@@ -361,13 +364,9 @@ namespace Bit.App.Pages
                 // Note: TDE & Key connector are mutually exclusive org config options.
                 if (result.ResetMasterPassword || (decryptOptions?.RequireSetPassword ?? false))
                 {
+                    // TODO: We need to look into how to handle this when Org removes TDE
+                    // Will we have the User Key by now to set a new password?
                     StartSetPasswordAction?.Invoke();
-                    return;
-                }
-
-                if (result.ForcePasswordReset)
-                {
-                    UpdateTempPasswordAction?.Invoke();
                     return;
                 }
 
