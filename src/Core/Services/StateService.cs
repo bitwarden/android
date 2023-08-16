@@ -1535,6 +1535,7 @@ namespace Bit.Core.Services
                 SetUserKeyAutoUnlockAsync(null, userId),
                 SetUserKeyBiometricUnlockAsync(null, userId),
                 SetProtectedPinAsync(null, userId),
+                SetPinKeyEncryptedUserKeyAsync(null, userId),
                 SetKeyHashAsync(null, userId),
                 SetOrgKeysEncryptedAsync(null, userId),
                 SetPrivateKeyEncryptedAsync(null, userId),
