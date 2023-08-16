@@ -421,11 +421,11 @@
   <ItemGroup Condition=" '$(Configuration)' == 'Debug' AND Exists('$(WatchAppBundleFullPath)') ">
       <_ResolvedWatchAppReferences Include="$(WatchAppBundleFullPath)" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(Configuration)' != 'Debug' ">
+  <ItemGroup Condition=" '$(Configuration)' != 'Debug' AND '$(Platform)' != 'iPhoneSimulator' ">
       <_ResolvedWatchAppReferences Include="$(WatchAppBundleFullPath)" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(_ResolvedWatchAppReferences)' != '' ">
-      <CodesignExtraArgs>--deep</CodesignExtraArgs>
+      <CodesignExtraArgs>- -deep</CodesignExtraArgs>
   </PropertyGroup>
   <Target Name="PrintWatchAppBundleStatus" BeforeTargets="Build">
       <Message Text="WatchAppBundleFullPath: '$(WatchAppBundleFullPath)' exists" Condition=" Exists('$(WatchAppBundleFullPath)') " />
