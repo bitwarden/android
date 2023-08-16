@@ -48,7 +48,7 @@ namespace Bit.App.Pages
             CopyAppInfoCommand = CreateDefaultAsyncCommnad(
                 () => clipboardService.CopyTextAsync(AppInfo));
         }
-        
+
         public bool ShouldSubmitCrashLogs
         {
             get => _shouldSubmitCrashLogs;
@@ -71,7 +71,7 @@ namespace Bit.App.Pages
                 return $"© Bitwarden Inc. 2015-{DateTime.Now.Year}\n\n{appInfo}";
             }
         }
-        
+
         public ICommand ToggleSubmitCrashLogsCommand { get; }
         public ICommand GoToHelpCenterCommand { get; }
         public ICommand ContactBitwardenSupportCommand { get; }

@@ -17,9 +17,9 @@ namespace Bit.App.Controls
             set { SetValue(DisplayValueProperty, value); }
         }
 
-        public SettingChooserItemView ()
+        public SettingChooserItemView()
         {
-            InitializeComponent ();
+            InitializeComponent();
         }
 
         public ICommand ChooseCommand

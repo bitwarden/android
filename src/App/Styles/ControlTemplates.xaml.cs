@@ -3,10 +3,10 @@
 namespace Bit.App.Styles
 {
     public partial class ControlTemplates : ResourceDictionary
-    {    
-        public ControlTemplates ()
+    {
+        public ControlTemplates()
         {
-            InitializeComponent ();
+            InitializeComponent();
         }
     }
 }

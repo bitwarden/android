@@ -4,7 +4,7 @@ using Xamarin.Forms;
 namespace Bit.App.Controls
 {
     public partial class SwitchItemView : BaseSettingItemView
-    {        
+    {
         public static readonly BindableProperty IsToggledProperty = BindableProperty.Create(
             nameof(IsToggled), typeof(bool), typeof(SwitchItemView), null, BindingMode.TwoWay);
 
@@ -14,11 +14,11 @@ namespace Bit.App.Controls
         public static readonly BindableProperty ToggleSwitchCommandProperty = BindableProperty.Create(
             nameof(ToggleSwitchCommand), typeof(ICommand), typeof(ExternalLinkItemView));
 
-        public SwitchItemView ()
+        public SwitchItemView()
         {
-            InitializeComponent ();
+            InitializeComponent();
         }
-        
+
         public bool IsToggled
         {
             get { return (bool)GetValue(IsToggledProperty); }

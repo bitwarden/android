@@ -11,9 +11,9 @@ namespace Bit.App.Controls
         public static readonly BindableProperty GoToLinkCommandProperty = BindableProperty.Create(
             nameof(GoToLinkCommand), typeof(ICommand), typeof(ExternalLinkItemView));
 
-        public ExternalLinkItemView ()
+        public ExternalLinkItemView()
         {
-            InitializeComponent ();
+            InitializeComponent();
         }
 
         public string Title
