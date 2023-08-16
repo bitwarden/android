@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Response;
 using Bit.Core.Utilities;
@@ -157,7 +158,7 @@ namespace Bit.Core.Services
             userKey ??= await GetUserKeyAsync();
             if (userKey == null)
             {
-                throw new Exception("No user key found");
+                throw new UserKeyNullException();
             }
             return await BuildProtectedSymmetricKeyAsync(masterKey, userKey.Key, keyBytes => new UserKey(keyBytes));
         }
@@ -167,7 +168,7 @@ namespace Bit.Core.Services
             masterKey ??= await GetMasterKeyAsync(userId);
             if (masterKey == null)
             {
-                throw new Exception("No master key found.");
+                throw new MasterKeyNullException();
             }
 
             if (encUserKey == null)
