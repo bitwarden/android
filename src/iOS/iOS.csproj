@@ -425,7 +425,7 @@
       <_ResolvedWatchAppReferences Include="$(WatchAppBundleFullPath)" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(_ResolvedWatchAppReferences)' != '' ">
-      <CodesignExtraArgs>- -deep</CodesignExtraArgs>
+      <CodesignExtraArgs>--deep</CodesignExtraArgs>
   </PropertyGroup>
   <Target Name="PrintWatchAppBundleStatus" BeforeTargets="Build">
       <Message Text="WatchAppBundleFullPath: '$(WatchAppBundleFullPath)' exists" Condition=" Exists('$(WatchAppBundleFullPath)') " />
