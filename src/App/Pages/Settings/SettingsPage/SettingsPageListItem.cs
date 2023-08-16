@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Threading.Tasks;
 using Bit.App.Resources;
 using Bit.App.Utilities;
@@ -8,7 +7,31 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class SettingsPageListItem : ISettingsPageListItem
+    public class SettingsPageListItem
+    {
+        private string _nameResourceKey;
+
+        public SettingsPageListItem(string nameResourceKey, Func<Task> executeAsync)
+        {
+            _nameResourceKey = nameResourceKey;
+            ExecuteAsync = executeAsync;
+        }
+
+        public string Name => AppResources.ResourceManager.GetString(_nameResourceKey);
+
+        public Func<Task> ExecuteAsync { get; }
+
+        public string AutomationId
+        {
+            get
+            {
+                return AutomationIdsHelper.AddSuffixFor(AutomationIdsHelper.ToEnglishTitleCase(_nameResourceKey), SuffixType.Cell);
+            }
+        }
+    }
+
+    [Obsolete("Remove when Settings Reorganization is DONE")]
+    public class SettingsPageListItemOld : ISettingsPageListItem
     {
         public string Icon { get; set; }
         public string Name { get; set; }

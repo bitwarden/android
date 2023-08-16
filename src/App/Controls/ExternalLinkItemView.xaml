@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    x:Class="Bit.App.Controls.ExternalLinkItemView"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    x:Name="_contentView">
+    <ContentView.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding GoToLinkCommand, Mode=OneWay, Source={x:Reference _contentView}}" />
+    </ContentView.GestureRecognizers>
+    <StackLayout
+        Orientation="Horizontal">
+        <controls:CustomLabel
+            Text="{Binding Title, Mode=OneWay, Source={x:Reference _contentView}}"
+            HorizontalOptions="StartAndExpand"
+            LineBreakMode="TailTruncation" />
+
+        <controls:IconLabel
+            Text="{Binding Source={x:Static core:BitwardenIcons.ShareSquare}}"
+            TextColor="Black"
+            HorizontalOptions="End"
+            VerticalOptions="Center"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{Binding Title, Mode=OneWay, Source={x:Reference _contentView}}" />
+
+    </StackLayout>
+</ContentView>
+

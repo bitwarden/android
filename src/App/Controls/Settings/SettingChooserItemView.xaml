@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<controls:BaseSettingItemView
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    x:Class="Bit.App.Controls.SettingChooserItemView"
+    x:Name="_contentView"
+    ControlTemplate="{StaticResource SettingControlTemplate}">
+    <controls:BaseSettingItemView.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding ChooseCommand, Mode=OneWay, Source={x:Reference _contentView}}" />
+    </controls:BaseSettingItemView.GestureRecognizers>
+
+    <controls:CustomLabel
+        Text="{Binding DisplayValue, Source={x:Reference _contentView}}"
+        HorizontalTextAlignment="End"
+        TextColor="{DynamicResource MutedColor}"
+        StyleClass="list-sub" />
+
+</controls:BaseSettingItemView>

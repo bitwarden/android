@@ -20,6 +20,30 @@ namespace Bit.App.Pages
             _vm.Page = this;
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            if (Device.RuntimePlatform == Device.Android && _tabsPage != null)
+            {
+                _tabsPage.ResetToVaultPage();
+                return true;
+            }
+            return base.OnBackButtonPressed();
+        }
+    }
+
+    public partial class SettingsPage2 : BaseContentPage
+    {
+        private readonly TabsPage _tabsPage;
+        private SettingsPageViewModel2 _vm;
+
+        public SettingsPage2(TabsPage tabsPage)
+        {
+            _tabsPage = tabsPage;
+            //InitializeComponent();
+            _vm = BindingContext as SettingsPageViewModel2;
+            _vm.Page = this;
+        }
+
         public async Task InitAsync()
         {
             await _vm.InitAsync();
@@ -43,7 +67,7 @@ namespace Bit.App.Pages
         void ActivateTimePicker(object sender, EventArgs args)
         {
             var stackLayout = (ExtendedStackLayout)sender;
-            SettingsPageListItem item = (SettingsPageListItem)stackLayout.BindingContext;
+            SettingsPageListItemOld item = (SettingsPageListItemOld)stackLayout.BindingContext;
             if (item.ShowTimeInput)
             {
                 var timePicker = stackLayout.Children.Where(x => x is TimePicker).FirstOrDefault();
@@ -64,7 +88,7 @@ namespace Bit.App.Pages
         private void RowSelected(object sender, SelectionChangedEventArgs e)
         {
             ((ExtendedCollectionView)sender).SelectedItem = null;
-            if (e.CurrentSelection?.FirstOrDefault() is SettingsPageListItem item)
+            if (e.CurrentSelection?.FirstOrDefault() is SettingsPageListItemOld item)
             {
                 _vm?.ExecuteSettingItemCommand.Execute(item);
             }

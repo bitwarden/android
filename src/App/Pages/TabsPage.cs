@@ -146,10 +146,10 @@ namespace Bit.App.Pages
                 {
                     await genPage.InitAsync();
                 }
-                else if (navPage.RootPage is SettingsPage settingsPage)
-                {
-                    await settingsPage.InitAsync();
-                }
+                //else if (navPage.RootPage is SettingsPage settingsPage)
+                //{
+                //    //await settingsPage.InitAsync();
+                //}
             }
         }
 

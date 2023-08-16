@@ -147,6 +147,7 @@
     <Folder Include="Controls\PasswordStrengthProgressBar\" />
     <Folder Include="Utilities\Automation\" />
     <Folder Include="Utilities\Prompts\" />
+    <Folder Include="Controls\Settings\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -444,5 +445,6 @@
     <None Remove="Controls\PasswordStrengthProgressBar\" />
     <None Remove="Utilities\Automation\" />
     <None Remove="Utilities\Prompts\" />
+    <None Remove="Controls\Settings\" />
   </ItemGroup>
 </Project>
