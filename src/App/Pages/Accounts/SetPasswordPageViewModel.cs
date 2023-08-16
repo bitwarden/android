@@ -169,7 +169,8 @@ namespace Bit.App.Pages
             var masterPasswordHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, newMasterKey, HashPurpose.ServerAuthorization);
             var localMasterPasswordHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, newMasterKey, HashPurpose.LocalAuthorization);
 
-            var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(newMasterKey);
+            var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(newMasterKey,
+                await _cryptoService.GetUserKeyAsync() ?? await _cryptoService.MakeUserKeyAsync());
 
             var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync(newUserKey);
             var request = new SetPasswordRequest
