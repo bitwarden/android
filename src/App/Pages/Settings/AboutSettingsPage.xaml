@@ -21,9 +21,10 @@
     <StackLayout>
         <controls:SwitchItemView
             Title="{u:I18n SubmitCrashLogs}"
+            IsToggled="{Binding ShouldSubmitCrashLogs, Mode=TwoWay}"
             HeightRequest="20"
             AutomationId="SubmitCrashLogsSwitch"
-            StyleClass="settings-switch-item-view"
+            StyleClass="settings-item-view"
             HorizontalOptions="FillAndExpand" />
         <BoxView StyleClass="box-row-separator" />
 
@@ -78,7 +79,11 @@
                 HorizontalOptions="End"
                 VerticalOptions="Center"
                 AutomationProperties.IsInAccessibleTree="True"
-                AutomationProperties.Name="{u:I18n CopyAppInformation}" />
+                AutomationProperties.Name="{u:I18n CopyAppInformation}">
+                <controls:IconLabel.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CopyAppInfoCommand}" />
+                </controls:IconLabel.GestureRecognizers>
+            </controls:IconLabel>
 
         </StackLayout>
     </StackLayout>

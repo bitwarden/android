@@ -49,10 +49,11 @@ namespace Bit.App.Pages
             _logger.Value.Exception(ex);
         }
 
-        protected ICommand CreateDefaultAsyncCommnad(Func<Task> execute)
+        protected AsyncCommand CreateDefaultAsyncCommnad(Func<Task> execute, Func<object, bool> canExecute = null)
         {
             return new AsyncCommand(execute,
-                onException: ex => HandleException(ex),
+                canExecute,
+                ex => HandleException(ex),
                 allowsMultipleExecutions: false);
         }
     }

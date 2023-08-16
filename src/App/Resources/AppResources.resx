@@ -2780,4 +2780,7 @@ Do you want to switch to this account?</value>
   <data name="CopyAppInformation" xml:space="preserve">
     <value>Copy app information</value>
   </data>
+  <data name="SyncNow" xml:space="preserve">
+    <value>Sync now</value>
+  </data>
 </root>

@@ -604,9 +604,9 @@
         <Setter Property="Padding" Value="16,12" />
     </Style>
 
-    <Style TargetType="controls:SwitchItemView"
+    <Style TargetType="controls:BaseSettingItemView"
            ApplyToDerivedTypes="True"
-           Class="settings-switch-item-view">
+           Class="settings-item-view">
         <Setter Property="Padding" Value="16,12" />
     </Style>
 

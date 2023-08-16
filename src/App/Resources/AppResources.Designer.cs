@@ -6300,6 +6300,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sync now.
+        /// </summary>
+        public static string SyncNow {
+            get {
+                return ResourceManager.GetString("SyncNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sync vault now.
         /// </summary>
         public static string SyncVaultNow {

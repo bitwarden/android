@@ -160,7 +160,7 @@ namespace Bit.App.Pages
 
 
             var pinSet = await _vaultTimeoutService.GetPinLockTypeAsync();
-            _pin = pinSet != PinLockType.Disabled;
+            _pin = pinSet != Core.Services.PinLockType.Disabled;
             _biometric = await _vaultTimeoutService.IsBiometricLockSetAsync();
             var timeoutAction = await _vaultTimeoutService.GetVaultTimeoutAction() ?? VaultTimeoutAction.Lock;
             if (!IsVaultTimeoutActionLockAllowed && timeoutAction == VaultTimeoutAction.Lock)
