@@ -355,7 +355,33 @@ namespace Bit.App.Pages
                         return;
                     }
 
-                    StartDeviceApprovalOptionsAction?.Invoke();
+                    // Check for pending Admin Auth requests before navigating to device approval options
+                    var pendingRequest = await _stateService.GetPendingAdminAuthRequestAsync();
+                    if (pendingRequest != null)
+                    {
+                        var authRequest = await _authService.GetPasswordlessLoginRequestByIdAsync(pendingRequest.Id);
+                        if (authRequest?.RequestApproved == true)
+                        {
+                            var authResult = await _authService.LogInPasswordlessAsync(true, await _stateService.GetActiveUserEmailAsync(), authRequest.RequestAccessCode, pendingRequest.Id, pendingRequest.PrivateKey, authRequest.Key, authRequest.MasterPasswordHash);
+                            if (authResult == null && await _stateService.IsAuthenticatedAsync())
+                            {
+                                await Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(
+                                 () => _platformUtilsService.ShowToast("info", null, AppResources.LoginApproved));
+                                await _stateService.SetPendingAdminAuthRequestAsync(null);
+                                _syncService.FullSyncAsync(true).FireAndForget();
+                                await TwoFactorAuthSuccessAsync();
+                            }
+                        }
+                        else
+                        {
+                            await _stateService.SetPendingAdminAuthRequestAsync(null);
+                            StartDeviceApprovalOptionsAction?.Invoke();
+                        }
+                    }
+                    else
+                    {
+                        StartDeviceApprovalOptionsAction?.Invoke();
+                    }
                     return;
                 }
 
