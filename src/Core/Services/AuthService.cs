@@ -240,7 +240,13 @@ namespace Bit.Core.Services
         public async Task<AuthResult> LogInSsoAsync(string code, string codeVerifier, string redirectUrl, string orgId)
         {
             SelectedTwoFactorProviderType = null;
-            return await LogInHelperAsync(null, null, null, code, codeVerifier, redirectUrl, null, orgId: orgId);
+            var result = await LogInHelperAsync(null, null, null, code, codeVerifier, redirectUrl, null, orgId: orgId);
+            if (result.ForcePasswordReset)
+            {
+                await _stateService.SetForcePasswordResetReasonAsync(ForcePasswordResetReason.AdminForcePasswordReset);
+            }
+
+            return result;
         }
 
         public async Task<AuthResult> LogInTwoFactorAsync(TwoFactorProviderType twoFactorProvider, string twoFactorToken,

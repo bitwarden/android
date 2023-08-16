@@ -72,7 +72,7 @@ namespace Bit.Core.Abstractions
         Task PutOrganizationUserResetPasswordEnrollmentAsync(string orgId, string userId,
             OrganizationUserResetPasswordEnrollmentRequest request);
         Task<KeyConnectorUserKeyResponse> GetMasterKeyFromKeyConnectorAsync(string keyConnectorUrl);
-        Task PostUserKeyToKeyConnector(string keyConnectorUrl, KeyConnectorUserKeyRequest request);
+        Task PostMasterKeyToKeyConnector(string keyConnectorUrl, KeyConnectorUserKeyRequest request);
         Task PostSetKeyConnectorKey(SetKeyConnectorKeyRequest request);
         Task PostConvertToKeyConnector();
         Task PostLeaveOrganization(string id);

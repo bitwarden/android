@@ -541,7 +541,7 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task PostUserKeyToKeyConnector(string keyConnectorUrl, KeyConnectorUserKeyRequest request)
+        public async Task PostMasterKeyToKeyConnector(string keyConnectorUrl, KeyConnectorUserKeyRequest request)
         {
             using (var requestMessage = new HttpRequestMessage())
             {

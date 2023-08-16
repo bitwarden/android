@@ -178,7 +178,10 @@ namespace Bit.App.Pages
             Email = Email.Trim().ToLower();
             var kdfConfig = new KdfConfig(KdfType.PBKDF2_SHA256, Constants.Pbkdf2Iterations, null, null);
             var newMasterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, Email, kdfConfig);
-            var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(newMasterKey);
+            var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(
+                newMasterKey,
+                await _cryptoService.MakeUserKeyAsync()
+            );
             var hashedPassword = await _cryptoService.HashMasterKeyAsync(MasterPassword, newMasterKey);
             var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync(newUserKey);
             var request = new RegisterRequest

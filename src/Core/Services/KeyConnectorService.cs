@@ -68,7 +68,7 @@ namespace Bit.Core.Services
             try
             {
                 var keyConnectorRequest = new KeyConnectorUserKeyRequest(masterKey.EncKeyB64);
-                await _apiService.PostUserKeyToKeyConnector(organization.KeyConnectorUrl, keyConnectorRequest);
+                await _apiService.PostMasterKeyToKeyConnector(organization.KeyConnectorUrl, keyConnectorRequest);
             }
             catch (Exception e)
             {
@@ -95,13 +95,15 @@ namespace Bit.Core.Services
             var keyConnectorRequest = new KeyConnectorUserKeyRequest(newMasterKey.EncKeyB64);
             await _cryptoService.SetMasterKeyAsync(newMasterKey);
 
-            var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(newMasterKey);
+            var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(
+                newMasterKey,
+                await _cryptoService.MakeUserKeyAsync());
 
             await _cryptoService.SetUserKeyAsync(newUserKey);
 
             try
             {
-                await _apiService.PostUserKeyToKeyConnector(tokenResponse.KeyConnectorUrl, keyConnectorRequest);
+                await _apiService.PostMasterKeyToKeyConnector(tokenResponse.KeyConnectorUrl, keyConnectorRequest);
             }
             catch (Exception e)
             {
@@ -115,7 +117,7 @@ namespace Bit.Core.Services
                 EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
             };
             var setPasswordRequest = new SetKeyConnectorKeyRequest(
-                newProtectedPrivateKey.EncryptedString, keys, tokenResponse.KdfConfig, orgId
+                newProtectedUserKey.EncryptedString, keys, tokenResponse.KdfConfig, orgId
             );
             await _apiService.PostSetKeyConnectorKey(setPasswordRequest);
         }
