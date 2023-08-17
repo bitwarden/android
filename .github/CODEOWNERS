@@ -20,8 +20,8 @@ src/Core/Services/EmailForwarders @bitwarden/team-tools-dev
 
 
 ## Crowdin Sync files ##
-src/App/Resources @bitwarden/team-leads-eng
-src/watchOS/bitwarden/bitwarden\ WatchKit\ Extension/Localization @bitwarden/team-leads-eng
+src/App/Resources @bitwarden/tech-leads-eng
+src/watchOS/bitwarden/bitwarden\ WatchKit\ Extension/Localization @bitwarden/tech-leads-eng
 
 ## Locales ## 
 src/App/Resources/AppResources.Designer.cs
