@@ -1585,9 +1585,6 @@ Nolasīšana notiks automātiski.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Automātiskā aizpilde aizturētajos URI</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Automātiskā aizpilde aizturētajos URI netiks piedāvāta. Vairākus URI jāatdala ar komatu. Piemēram, "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Vaicāt, lai pievienotu pieteikšanās vienumu</value>
   </data>
@@ -1816,7 +1813,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Ieslēdzot šo slēdzi, Tu piekrīti sekojošajam:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Nav pieņemti izmantošanas nosacījumi un privātuma politika.</value>
+    <value>Nav apstiprināti izmantošanas noteikumi un privātuma nosacījumi.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
     <value>Izmantošanas nosacījumi</value>
@@ -2630,16 +2627,93 @@ Vai pārslēgties uz šo kontu?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Pašreizējā galvenā parole</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Paroļatslēga</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Paroļatslēgas</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Izveidota {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Lietotne</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Paroļatslēgas lietotni nevar labot, jo tas paroļatslēgu padarītu nederīgu</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Paroļatslēga netiks kopēta</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Paroļatslēga netiks kopēta klonētajā vienumā. Vai turpināt šī vienuma klonēšanu?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Kopēt lietotni</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Pieejams ar divpakāpju pieteikšanos</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Galvenās paroles pārvaicāšanas palīdzība</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Atslēgšana var neizdoties nepietiekamas atmiņas dēļ. Lai to novērstu, jāsamazina KDF atmiņas iestatījmi</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Nederīga API atslēga</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Nederīga API pilnvara</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Šo vienumu nevar kopīgot ar apvienību, jo tur jau ir tāds ar to pašu paroļatslēgu.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Neļaut automātisko aizpildīšanu</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Šiem URI automātiskā aizpildīšana netiks piedāvāta.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Jauns neatļautais URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI saglabāts</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Nederīga vērtība. Jāizmanto https://, http:// vai androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Labot URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Ievadīt URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Pieraksts: {0}. Vairāki URI ir atdalāmi ar komatu.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Pieraksts: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Nederīgs URI</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI noņemts</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Nav neatļautu URI</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI {0} jau ir neatļauts</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Nevar labot vairākus URI vienlaicīgi</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Piesakās</value>
   </data>
 </root>

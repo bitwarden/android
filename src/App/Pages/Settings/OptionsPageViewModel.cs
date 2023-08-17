@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Resources;
 using Bit.App.Utilities;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -19,7 +20,6 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
 
         private bool _autofillSavePrompt;
-        private string _autofillBlockedUris;
         private bool _favicon;
         private bool _autoTotpCopy;
         private int _clearClipboardSelectedIndex;
@@ -84,6 +84,10 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, string>(null, AppResources.DefaultSystem)
             };
             LocalesOptions.AddRange(_i18nService.LocaleNames.ToList());
+
+            GoToBlockAutofillUrisCommand = new AsyncCommand(() => Page.Navigation.PushAsync(new BlockAutofillUrisPage()),
+                onException: ex => HandleException(ex),
+                allowsMultipleExecutions: false);
         }
 
         public List<KeyValuePair<int?, string>> ClearClipboardOptions { get; set; }
@@ -192,24 +196,17 @@ namespace Bit.App.Pages
             }
         }
 
-        public string AutofillBlockedUris
-        {
-            get => _autofillBlockedUris;
-            set => SetProperty(ref _autofillBlockedUris, value);
-        }
-
         public bool ShowAndroidAutofillSettings
         {
             get => _showAndroidAutofillSettings;
             set => SetProperty(ref _showAndroidAutofillSettings, value);
         }
 
+        public ICommand GoToBlockAutofillUrisCommand { get; }
+
         public async Task InitAsync()
         {
             AutofillSavePrompt = !(await _stateService.GetAutofillDisableSavePromptAsync()).GetValueOrDefault();
-
-            var blockedUrisList = await _stateService.GetAutofillBlacklistedUrisAsync();
-            AutofillBlockedUris = blockedUrisList != null ? string.Join(", ", blockedUrisList) : null;
 
             AutoTotpCopy = !(await _stateService.GetDisableAutoTotpCopyAsync() ?? false);
 
@@ -285,41 +282,6 @@ namespace Bit.App.Pages
             {
                 // TODO: [PS-961] Fix negative function names
                 await _stateService.SetAutofillDisableSavePromptAsync(!AutofillSavePrompt);
-            }
-        }
-
-        public async Task UpdateAutofillBlockedUris()
-        {
-            if (_inited)
-            {
-                if (string.IsNullOrWhiteSpace(AutofillBlockedUris))
-                {
-                    await _stateService.SetAutofillBlacklistedUrisAsync(null);
-                    AutofillBlockedUris = null;
-                    return;
-                }
-                try
-                {
-                    var csv = AutofillBlockedUris;
-                    var urisList = new List<string>();
-                    foreach (var uri in csv.Split(','))
-                    {
-                        if (string.IsNullOrWhiteSpace(uri))
-                        {
-                            continue;
-                        }
-                        var cleanedUri = uri.Replace(System.Environment.NewLine, string.Empty).Trim();
-                        if (!cleanedUri.StartsWith("http://") && !cleanedUri.StartsWith("https://") &&
-                            !cleanedUri.StartsWith(Constants.AndroidAppProtocol))
-                        {
-                            continue;
-                        }
-                        urisList.Add(cleanedUri);
-                    }
-                    await _stateService.SetAutofillBlacklistedUrisAsync(urisList);
-                    AutofillBlockedUris = string.Join(", ", urisList);
-                }
-                catch { }
             }
         }
 

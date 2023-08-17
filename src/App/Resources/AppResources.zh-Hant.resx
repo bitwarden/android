@@ -1585,9 +1585,6 @@
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>自動填入已阻止的 URI</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>不會對已阻止的 URI 提供自動填入功能。多個 URI 用逗號分隔，範例：「https://twitter.com, androidapp://com.twitter.android」。</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>詢問新增登入資料</value>
   </data>
@@ -2547,7 +2544,7 @@
     <value>允許相機權限以使用掃描功能</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>語言</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
     <value>The language has been changed to {0}. Please restart the app to see the change</value>
@@ -2610,10 +2607,10 @@
     <value>There are no items that match the search</value>
   </data>
   <data name="US" xml:space="preserve">
-    <value>US</value>
+    <value>美國</value>
   </data>
   <data name="EU" xml:space="preserve">
-    <value>EU</value>
+    <value>歐盟</value>
   </data>
   <data name="SelfHosted" xml:space="preserve">
     <value>Self-hosted</value>
@@ -2622,7 +2619,7 @@
     <value>Data region</value>
   </data>
   <data name="Region" xml:space="preserve">
-    <value>Region</value>
+    <value>區域</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>您的主密碼不符合您的組織政策之一或多個要求。您必須立即更新您的主密碼以存取密碼庫。進行此操作將登出您目前的工作階段，需要您重新登入。其他裝置上的工作階段可能繼續長達一小時。</value>
@@ -2630,16 +2627,93 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>目前主密碼</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Created {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Passkey will not be copied</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Copy application</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Available for two-step login</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Master password re-prompt help</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Invalid API key</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Invalid API token</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>封鎖表單自動填入功能</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>不對下列 URI 提供自動填寫功能。</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>新增要封鎖的 URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>已儲存 URI</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>格式無效，請用 https://、http:// 或 androidapp:// 開頭</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>編輯 URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>輸入 URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>格式：{0}，可用逗號分隔多組 URI。</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>格式：{0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>URI 無效</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>已刪除 URI</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>沒有封鎖的 URI</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>已經封鎖 URI {0}</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>無法一次編輯多組 URI</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logging in on</value>
   </data>
 </root>

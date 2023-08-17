@@ -32,19 +32,6 @@ namespace Bit.App.Pages
             await LoadOnAppearedAsync(_scrollView, true, () => _vm.LoadAsync());
         }
 
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-        }
-
-        private async void Save_Clicked(object sender, System.EventArgs e)
-        {
-            if (DoOnce())
-            {
-                await _vm.SubmitAsync();
-            }
-        }
-
         private async void Close_Clicked(object sender, System.EventArgs e)
         {
             if (DoOnce())

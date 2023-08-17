@@ -430,6 +430,22 @@
     </Style>
     <Style TargetType="Button"
            ApplyToDerivedTypes="True"
+           Class="box-row-button-muted">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="BorderWidth"
+                Value="0" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+        <Setter Property="HorizontalOptions"
+                Value="End" />
+        <Setter Property="VerticalOptions"
+                Value="CenterAndExpand" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
            Class="box-overlay">
         <Setter Property="BackgroundColor"
                 Value="Transparent" />

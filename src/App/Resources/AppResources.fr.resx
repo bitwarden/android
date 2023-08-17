@@ -1585,9 +1585,6 @@ La numérisation se fera automatiquement.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Saisie automatique des URIs bloqués</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>La saisie automatique ne sera pas proposée pour les URI bloqués. Séparez plusieurs URI par une virgule. Par exemple : "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Demander pour ajouter un identifiant</value>
   </data>
@@ -2631,16 +2628,93 @@ Voulez-vous basculer vers ce compte ?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Mot de passe principal actuel</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Clé d'accès</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Clés d'accès</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Créée le {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Vous ne pouvez modifier l'application associée à la clé d'accès car cela l'invaliderait</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>La clé d'accès ne sera pas copiée</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>L'entrée clonée ne contiendra pas la clé d'accès. Continuer quand même ?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Copier l'application</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Disponible pour la validation en deux étapes</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Aide sur la ressaisie du mot de passe principal</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Le déverrouillage peut échouer en raison d'une mémoire insuffisante. Diminuez les paramètres de mémoire KDF pour y remédier</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Clé API invalide</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Jeton API invalide</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Cet élément ne peut pas être déplacé vers l'organisation, car celle-ci dispose déjà d'un élément avec la même clé d'accès.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Bloquer la saisie automatique</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>La saisie automatique ne sera pas proposée pour ces URI.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Nouveau URI bloqué</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI enregistré</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Format invalide. Utilisez https://, http://, ou androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Modifier l'URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Saisir l'URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Format : {0}. Séparez les URI multiples par une virgule.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Format : {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>URI incorrect</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI supprimé</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Il n'y a pas d'URI bloqués</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>L'URI {0} est déjà bloqué</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Impossible de modifier des URI multiples à la fois</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Connexion sur</value>
   </data>
 </root>

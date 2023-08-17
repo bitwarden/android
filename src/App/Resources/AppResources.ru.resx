@@ -1585,9 +1585,6 @@
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Автозаполнение заблокированных URI</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Автозаполнение не будет предлагаться для заблокированных URI. Разделяйте несколько URI запятой. Например: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Спрашивать при добавлении логина</value>
   </data>
@@ -2630,16 +2627,93 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Текущий мастер-пароль</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Ключ доступа</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Ключи доступа</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Создан {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Приложение</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Редактирование ключа доступа невозможно, поскольку это приведет к его аннулированию</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Ключ доступа не будет скопирован</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Ключ доступа не будет скопирован в клонированный элемент. Продолжить клонирование этого элемента?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Скопировать приложение</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Доступно для двухэтапной аутентификации</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
-    <value>Помощь с повторным запросом мастер-пароля</value>
+    <value>Помощь по повторному запросу мастер-пароля</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Разблокировка может завершиться ошибкой из-за нехватки памяти. Уменьшите настройки памяти KDF для решения этой проблемы</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Некорректный ключ API</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Некорректный токен API</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Этим элементом нельзя поделиться с организацией, поскольку существует другой с тем же ключом.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Блокировать автозаполнение</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Автозаполнение для этих URI предлагаться не будет.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Новый блокируемый URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI сохранен</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Недопустимый формат. Используйте https://, http:// или androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Изменить URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Ввести URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Формат: {0}. Разделите несколько URI запятой.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Формат: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Некорректный URI</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI удален</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Нет заблокированных URI</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI {0} уже заблокирован</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Невозможно редактировать несколько URI одновременно</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Войти на</value>
   </data>
 </root>

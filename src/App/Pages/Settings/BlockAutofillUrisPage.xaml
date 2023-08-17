@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.BlockAutofillUrisPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    x:DataType="pages:BlockAutofillUrisPageViewModel"
+    NavigationPage.HasBackButton="False"
+    Title="{u:I18n BlockAutoFill}">
+    <ContentPage.BindingContext>
+        <pages:BlockAutofillUrisPageViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <StackLayout Orientation="Vertical">
+        <Image
+            x:Name="_emptyUrisPlaceholder"
+            HorizontalOptions="Center"
+            WidthRequest="120"
+            HeightRequest="120"
+            Margin="0,100,0,0"
+            IsVisible="{Binding ShowList, Converter={StaticResource inverseBool}}"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{u:I18n ThereAreNoBlockedURIs}" />
+        <controls:CustomLabel
+            StyleClass="box-label-regular"
+            Text="{u:I18n AutoFillWillNotBeOfferedForTheseURIs}"
+            FontWeight="500"
+            HorizontalTextAlignment="Center"
+            Margin="14,10,14,0"/>
+        <controls:ExtendedCollectionView
+            ItemsSource="{Binding BlockedUris}"
+            IsVisible="{Binding ShowList}"
+            VerticalOptions="FillAndExpand"
+            Margin="0,5,0,0"
+            SelectionMode="None"
+            StyleClass="list, list-platform"
+            ExtraDataForLogging="Blocked Autofill Uris"
+            AutomationId="BlockedUrisCellList">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="pages:BlockAutofillUriItemViewModel">
+                    <StackLayout
+                        Orientation="Vertical"
+                        AutomationId="BlockedUriCell">
+                        <StackLayout
+                            Orientation="Horizontal">
+                            <controls:CustomLabel
+                                VerticalOptions="Center"
+                                StyleClass="box-label-regular"
+                                Text="{Binding Uri}"
+                                MaxLines="2"
+                                LineBreakMode="TailTruncation"
+                                FontWeight="500"
+                                Margin="15,0,0,0"
+                                HorizontalOptions="StartAndExpand"/>
+                            <controls:IconButton
+                                StyleClass="box-row-button-muted, box-row-button-platform"
+                                Text="{Binding Source={x:Static core:BitwardenIcons.PencilSquare}}"
+                                Command="{Binding EditUriCommand}"
+                                Margin="5,0,15,0"
+                                AutomationProperties.IsInAccessibleTree="True"
+                                AutomationProperties.Name="{u:I18n EditURI}"
+                                AutomationId="EditUriButton" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </controls:ExtendedCollectionView>
+        <Button
+            Text="{u:I18n NewBlockedURI}"
+            Command="{Binding AddUriCommand}"
+            VerticalOptions="End"
+            HeightRequest="40"
+            Opacity="0.8"
+            Margin="14,5,14,10"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{u:I18n NewBlockedURI}"
+            AutomationId="NewBlockedUriButton" />
+    </StackLayout>
+</pages:BaseContentPage>

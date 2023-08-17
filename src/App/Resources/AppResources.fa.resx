@@ -1585,9 +1585,6 @@
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>پر کردن خودکار نشانی‌های اینترنتی مسدود شده</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>پر کردن خودکار برای نشانی‌های اینترنتی مسدود شده ارائه نمی‌شود. چندین نشانی اینترنتی را با کاما جدا کنید. به عنوان مثال: "https://twitter.com، androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>درخواست افزودن ورود به سیستم</value>
   </data>
@@ -2631,16 +2628,93 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>کلمه عبور اصلی فعلی</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>کلید عبور</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>کلیدهای عبور</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>{0} ایجاد شد</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>درخواست</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>شما نمی‌توانید برنامه کلید عبور را ویرایش کنید زیرا باعث بی اعتباری کلید عبور می‌شود</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>کلید عبور کپی نمی‌شود</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>کلید عبور در مورد شبیه سازی شده کپی نمی‌شود. آیا می‌خواهید به شبیه سازی این مورد ادامه دهید؟</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>درخواست را کپی کنید</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>برای ورود دو مرحله ای موجود است</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>راهنمای درخواست مجدد کلمه عبور اصلی</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>باز کردن قفل ممکن است به دلیل حافظه ناکافی انجام شود. تنظیمات حافظه KDF خود را کاهش دهید تا حل شود.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>کلید API نامعتبر</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
-    <value>کلید توکن API نامعتبر</value>
+    <value>توکن API نامعتبر</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>این مورد را نمی‌توان با سازمان به اشتراک گذاشت زیرا قبلاً موردی با کلید عبور یکسان وجود دارد.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>پر کردن خودکار را مسدود کنید</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>پر کردن خودکار برای این نشانی‌های اینترنتی ارائه نمی‌شود.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>نشانی اینترنتی مسدود شده جدید</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>نشانی اینترنتی ذخیره شد</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>قالب نامعتبر است. از https://، http://، یا androidapp:// استفاده کنید</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>ویرایش نشانی اینترنتی</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>ورود نشانی اینترنتی</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>قالب: {0}. چندین نشانی اینترنتی را با کاما جدا کنید.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>قالب: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>نشانی اینترنتی نامعتبر</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>نشانی اینترنتی حذف شد</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>هیچ نشانی اینترنتی مسدود شده ای وجود ندارد</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>{0} نشانی اینترنتی قبلاً مسدود شده است</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>نمی‌توان چندین نشانی اینترنتی را همزمان ویرایش کرد</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logging in on</value>
   </data>
 </root>

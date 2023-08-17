@@ -203,7 +203,7 @@
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>Rapporteer een fout (bug)</value>
+    <value>Rapporteer een foutmelding</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
     <value>Open een probleem op onze GitHub-repository.</value>
@@ -229,7 +229,7 @@
     <value>Mappen</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Map bijgewerkt</value>
+    <value>Map opgeslagen</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Ga naar website</value>
@@ -247,7 +247,7 @@
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Internetverbinding vereist</value>
+    <value>Internetverbinding is vereist</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
@@ -1585,9 +1585,6 @@ Het scannen gebeurt automatisch.</value>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Automatisch invullen geblokkeerde URI's</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Automatisch invullen niet aanbieden voor geblokkeerde URIs. Scheid meerdere URI's met een komma. Bijvoorbeeld: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Vragen login toe te voegen</value>
   </data>
@@ -2630,16 +2627,93 @@ Wilt u naar dit account wisselen?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Huidig hoofdwachtwoord</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Aangemaakt {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Applicatie</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Je kunt de passkey-applicatie niet bewerken omdat dat de passkey ongeldig zou maken</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Passkey wordt niet gekopieerd</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>De passkey wordt niet gekopieerd naar het gekloonde item. Wilt je doorgaan met het klonen van dit item?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Applicatie kopiëren</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Beschikbaar voor tweestapsaanmelding</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Hulptekst hoofdwachtwoord opnieuw vragen</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Ontgrendelen kan mislukken als er onvoldoende geheugen is. Verminder je KDF-geheugeninstellingen om dit op te lossen</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
-    <value>Invalid API key</value>
+    <value>Ongeldige API-sleutel</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
-    <value>Invalid API token</value>
+    <value>Ongeldige API-token</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Je kunt dit item niet delen met de organisatie omdat er al een met dezelfde passkey is.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Automatisch aanvullen blokkeren</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Automatisch is uitgeschakeld voor deze URIs.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Nieuwe geblokkeerde URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI opgeslagen</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Ongeldig formaat. Gebruik https://, http://, or androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>URI bewerken</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>URI invoeren</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Formaat: {0}. Meerdere URIs scheiden met een komma.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Formaat: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Ongeldige URI</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI verwijderd</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Er zijn geen geblokkeerde URIs</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>De URI {0} is al geblokkeerd</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Meerdere URIs in één keer bewerken kan niet</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logging in on</value>
   </data>
 </root>

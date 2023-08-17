@@ -1585,9 +1585,6 @@
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>تعبئة العناوين المحجوبة تلقائياً</value>
   </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>لن يتم عرض التعبئة التلقائية للعناوين المحجوبة. افصل عناوين متعددة بفاصلة. مثال: "https://twitter.com, androidapp://com.twitter.android".</value>
-  </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>اطلب إضافة تسجيل الدخول</value>
   </data>
@@ -2631,16 +2628,93 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>كلمة المرور الرئيسية الحالية</value>
   </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>مفتاح المرور</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>مفاتيح المرور</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>أُنشِئ {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>تطبيق</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>لا يمكنك تعديل تطبيق مفتاح المرور لأنه سيبطل مفتاح المرور</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>لن يتم نسخ مفتاح المرور</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>لن يتم نسخ مفتاح المرور إلى العنصر المستنسخ. هل تريد الاستمرار في استنساخ هذا العنصر؟</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>نسخ التطبيق</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>متاح لتسجيل الدخول بخطوتين</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
-    <value>Master password re-prompt help</value>
+    <value>مساعدة إعادة طلب كلمة المرور الرئيسية</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
-    <value>Invalid API key</value>
+    <value>مفتاح API غير صالح</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
-    <value>Invalid API token</value>
+    <value>رمز API غير صالح</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>لا يمكن مشاركة هذا العنصر مع المؤسسة لأنه يوجد بالفعل واحد مع نفس مفتاح المرور.</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>حظر التعبئة التلقائية</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>لن يتم تقديم التعبئة التلقائية لعناوين الـ URIs هذه.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>عنوان URL جديد محظور</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>تم حفظ عنوان URI</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>تنسيق غير صالح. استخدم https:// أو http:// أو androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>تعديل عنوان URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>إدخال URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>التنسيق: {0}. افصل العديد من عناوين URIs بفاصلة.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>التنسيق: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>الرابط غير صالح</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>تم حذف الرابط</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>لا يوجد أي عناوين URIs محظورة</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>تم حظر URI {0} بالفعل</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>لا يمكن تعديل العديد من عناوين URIs في وقت واحد</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>جارٍ تسجيل الدخول</value>
   </data>
 </root>
