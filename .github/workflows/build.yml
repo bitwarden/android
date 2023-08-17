@@ -711,8 +711,8 @@ jobs:
           ARCHIVE_PATH="./src/iOS/bin/iPhoneSimulator/Release/BitwardeniOS.app"
           EXPORT_PATH="./bitwarden-export"
 
-          zip -r -q BitwardenTest.app.zip $ARCHIVE_PATH
-          mv BitwardenTest.app.zip $EXPORT_PATH
+          zip -r -q BitwardeniOS.app.zip $ARCHIVE_PATH
+          mv BitwardeniOS.app.zip $EXPORT_PATH
         shell: bash
 
       - name: Copy all dSYMs files to upload
