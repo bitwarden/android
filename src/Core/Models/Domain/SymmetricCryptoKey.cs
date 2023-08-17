@@ -74,4 +74,32 @@ namespace Bit.Core.Models.Domain
         public string EncKeyB64 { get; set; }
         public string MacKeyB64 { get; set; }
     }
+
+    public class UserKey : SymmetricCryptoKey
+    {
+        public UserKey(byte[] key, EncryptionType? encType = null)
+            : base(key, encType)
+        { }
+    }
+
+    public class MasterKey : SymmetricCryptoKey
+    {
+        public MasterKey(byte[] key, EncryptionType? encType = null)
+            : base(key, encType)
+        { }
+    }
+
+    public class PinKey : SymmetricCryptoKey
+    {
+        public PinKey(byte[] key, EncryptionType? encType = null)
+            : base(key, encType)
+        { }
+    }
+
+    public class OrgKey : SymmetricCryptoKey
+    {
+        public OrgKey(byte[] key, EncryptionType? encType = null)
+            : base(key, encType)
+        { }
+    }
 }

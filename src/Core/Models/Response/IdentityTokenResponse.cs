@@ -27,6 +27,7 @@ namespace Bit.Core.Models.Response
         public bool ForcePasswordReset { get; set; }
         public string KeyConnectorUrl { get; set; }
         public MasterPasswordPolicyOptions MasterPasswordPolicy { get; set; }
+        public AccountDecryptionOptions UserDecryptionOptions { get; set; }
         [JsonIgnore]
         public KdfConfig KdfConfig => new KdfConfig(Kdf, KdfIterations, KdfMemory, KdfParallelism);
     }

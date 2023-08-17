@@ -93,12 +93,12 @@ namespace Bit.App.Pages
             var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
             var email = await _stateService.GetEmailAsync();
 
-            // Create new key and hash new password
-            var key = await _cryptoService.MakeKeyAsync(MasterPassword, email, kdfConfig);
-            var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key);
+            // Create new master key and hash new password
+            var masterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, email, kdfConfig);
+            var masterPasswordHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, masterKey);
 
-            // Create new encKey for the User
-            var newEncKey = await _cryptoService.RemakeEncKeyAsync(key);
+            // Encrypt user key with new master key
+            var (userKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(masterKey);
 
             // Initiate API action
             try
@@ -108,10 +108,10 @@ namespace Bit.App.Pages
                 switch (_reason)
                 {
                     case ForcePasswordResetReason.AdminForcePasswordReset:
-                        await UpdateTempPasswordAsync(masterPasswordHash, newEncKey.Item2.EncryptedString);
+                        await UpdateTempPasswordAsync(masterPasswordHash, newProtectedUserKey.EncryptedString);
                         break;
                     case ForcePasswordResetReason.WeakMasterPasswordOnLogin:
-                        await UpdatePasswordAsync(masterPasswordHash, newEncKey.Item2.EncryptedString);
+                        await UpdatePasswordAsync(masterPasswordHash, newProtectedUserKey.EncryptedString);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -155,7 +155,7 @@ namespace Bit.App.Pages
 
         private async Task UpdatePasswordAsync(string newMasterPasswordHash, string newEncKey)
         {
-            var currentPasswordHash = await _cryptoService.HashPasswordAsync(CurrentMasterPassword, null);
+            var currentPasswordHash = await _cryptoService.HashMasterKeyAsync(CurrentMasterPassword, null);
 
             var request = new PasswordRequest
             {

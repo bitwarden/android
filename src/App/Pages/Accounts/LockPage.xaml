@@ -46,7 +46,7 @@
                     <StackLayout StyleClass="box">
                         <Grid
                             StyleClass="box-row"
-                            IsVisible="{Binding PinLock}"
+                            IsVisible="{Binding PinEnabled}"
                             Padding="0, 10, 0, 0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -89,7 +89,7 @@
                         <Grid
                             x:Name="_passwordGrid"
                             StyleClass="box-row"
-                            IsVisible="{Binding PinLock, Converter={StaticResource inverseBool}}"
+                            IsVisible="{Binding PinEnabled, Converter={StaticResource inverseBool}}"
                             Padding="0, 10, 0, 0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />

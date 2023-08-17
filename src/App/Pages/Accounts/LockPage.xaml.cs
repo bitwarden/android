@@ -20,13 +20,14 @@ namespace Bit.App.Pages
         private bool _promptedAfterResume;
         private bool _appeared;
 
-        public LockPage(AppOptions appOptions = null, bool autoPromptBiometric = true)
+        public LockPage(AppOptions appOptions = null, bool autoPromptBiometric = true, bool checkPendingAuthRequests = true)
         {
             _appOptions = appOptions;
             _autoPromptBiometric = autoPromptBiometric;
             InitializeComponent();
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>();
             _vm = BindingContext as LockPageViewModel;
+            _vm.CheckPendingAuthRequests = checkPendingAuthRequests;
             _vm.Page = this;
             _vm.UnlockedAction = () => Device.BeginInvokeOnMainThread(async () => await UnlockedAsync());
 
@@ -44,7 +45,7 @@ namespace Bit.App.Pages
         {
             get
             {
-                if (_vm?.PinLock ?? false)
+                if (_vm?.PinEnabled ?? false)
                 {
                     return _pin;
                 }
@@ -54,7 +55,7 @@ namespace Bit.App.Pages
 
         public async Task PromptBiometricAfterResumeAsync()
         {
-            if (_vm.BiometricLock)
+            if (_vm.BiometricEnabled)
             {
                 await Task.Delay(500);
                 if (!_promptedAfterResume)
@@ -91,13 +92,13 @@ namespace Bit.App.Pages
 
             _vm.FocusSecretEntry += PerformFocusSecretEntry;
 
-            if (!_vm.BiometricLock)
+            if (!_vm.BiometricEnabled)
             {
                 RequestFocus(SecretEntry);
             }
             else
             {
-                if (_vm.UsingKeyConnector && !_vm.PinLock)
+                if (!_vm.HasMasterPassword && !_vm.PinEnabled)
                 {
                     _passwordGrid.IsVisible = false;
                     _unlockButton.IsVisible = false;

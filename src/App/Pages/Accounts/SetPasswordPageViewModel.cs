@@ -165,26 +165,18 @@ namespace Bit.App.Pages
 
             var kdfConfig = new KdfConfig(KdfType.PBKDF2_SHA256, Constants.Pbkdf2Iterations, null, null);
             var email = await _stateService.GetEmailAsync();
-            var key = await _cryptoService.MakeKeyAsync(MasterPassword, email, kdfConfig);
-            var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.ServerAuthorization);
-            var localMasterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.LocalAuthorization);
+            var newMasterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, email, kdfConfig);
+            var masterPasswordHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, newMasterKey, HashPurpose.ServerAuthorization);
+            var localMasterPasswordHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, newMasterKey, HashPurpose.LocalAuthorization);
 
-            Tuple<SymmetricCryptoKey, EncString> encKey;
-            var existingEncKey = await _cryptoService.GetEncKeyAsync();
-            if (existingEncKey == null)
-            {
-                encKey = await _cryptoService.MakeEncKeyAsync(key);
-            }
-            else
-            {
-                encKey = await _cryptoService.RemakeEncKeyAsync(key);
-            }
+            var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(newMasterKey,
+                await _cryptoService.GetUserKeyAsync() ?? await _cryptoService.MakeUserKeyAsync());
 
-            var keys = await _cryptoService.MakeKeyPairAsync(encKey.Item1);
+            var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync(newUserKey);
             var request = new SetPasswordRequest
             {
                 MasterPasswordHash = masterPasswordHash,
-                Key = encKey.Item2.EncryptedString,
+                Key = newProtectedUserKey.EncryptedString,
                 MasterPasswordHint = Hint,
                 Kdf = kdfConfig.Type.GetValueOrDefault(KdfType.PBKDF2_SHA256),
                 KdfIterations = kdfConfig.Iterations.GetValueOrDefault(Constants.Pbkdf2Iterations),
@@ -193,8 +185,8 @@ namespace Bit.App.Pages
                 OrgIdentifier = OrgIdentifier,
                 Keys = new KeysRequest
                 {
-                    PublicKey = keys.Item1,
-                    EncryptedPrivateKey = keys.Item2.EncryptedString
+                    PublicKey = newPublicKey,
+                    EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
                 }
             };
 
@@ -204,19 +196,20 @@ namespace Bit.App.Pages
                 // Set Password and relevant information
                 await _apiService.SetPasswordAsync(request);
                 await _stateService.SetKdfConfigurationAsync(kdfConfig);
-                await _cryptoService.SetKeyAsync(key);
-                await _cryptoService.SetKeyHashAsync(localMasterPasswordHash);
-                await _cryptoService.SetEncKeyAsync(encKey.Item2.EncryptedString);
-                await _cryptoService.SetEncPrivateKeyAsync(keys.Item2.EncryptedString);
+                await _cryptoService.SetUserKeyAsync(newUserKey);
+                await _cryptoService.SetMasterKeyAsync(newMasterKey);
+                await _cryptoService.SetMasterKeyHashAsync(localMasterPasswordHash);
+                await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(newProtectedUserKey.EncryptedString);
+                await _cryptoService.SetUserPrivateKeyAsync(newProtectedPrivateKey.EncryptedString);
 
                 if (ResetPasswordAutoEnroll)
                 {
                     // Grab Organization Keys
                     var response = await _apiService.GetOrganizationKeysAsync(OrgId);
                     var publicKey = CoreHelpers.Base64UrlDecode(response.PublicKey);
-                    // Grab user's Encryption Key and encrypt with Org Public Key
-                    var userEncKey = await _cryptoService.GetEncKeyAsync();
-                    var encryptedKey = await _cryptoService.RsaEncryptAsync(userEncKey.Key, publicKey);
+                    // Grab User Key and encrypt with Org Public Key
+                    var userKey = await _cryptoService.GetUserKeyAsync();
+                    var encryptedKey = await _cryptoService.RsaEncryptAsync(userKey.Key, publicKey);
                     // Request
                     var resetRequest = new OrganizationUserResetPasswordEnrollmentRequest
                     {

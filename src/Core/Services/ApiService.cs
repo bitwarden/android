@@ -211,12 +211,12 @@ namespace Bit.Core.Services
             return SendAsync<DeleteAccountRequest, object>(HttpMethod.Delete, "/accounts", request, true, false);
         }
 
-        public Task PostConvertToKeyConnector()
+        public Task PostConvertToKeyConnectorAsync()
         {
             return SendAsync<object, object>(HttpMethod.Post, "/accounts/convert-to-key-connector", null, true, false);
         }
 
-        public Task PostSetKeyConnectorKey(SetKeyConnectorKeyRequest request)
+        public Task PostSetKeyConnectorKeyAsync(SetKeyConnectorKeyRequest request)
         {
             return SendAsync<SetKeyConnectorKeyRequest>(HttpMethod.Post, "/accounts/set-key-connector-key", request, true);
         }
@@ -397,10 +397,36 @@ namespace Bit.Core.Services
 
         #region Device APIs
 
+
+        public Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier)
+        {
+            return SendAsync<object, bool>(HttpMethod.Get, "/devices/knowndevice", null, false, true, (message) =>
+            {
+                message.Headers.Add("X-Device-Identifier", deviceIdentifier);
+                message.Headers.Add("X-Request-Email", CoreHelpers.Base64UrlEncode(Encoding.UTF8.GetBytes(email)));
+            });
+        }
+
         public Task PutDeviceTokenAsync(string identifier, DeviceTokenRequest request)
         {
             return SendAsync<DeviceTokenRequest, object>(
                 HttpMethod.Put, $"/devices/identifier/{identifier}/token", request, true, false);
+        }
+
+        public Task<bool> GetDevicesExistenceByTypes(DeviceType[] deviceTypes)
+        {
+            return SendAsync<DeviceType[], bool>(
+                HttpMethod.Post, "/devices/exist-by-types", deviceTypes, true, true);
+        }
+
+        public Task<DeviceResponse> GetDeviceByIdentifierAsync(string deviceIdentifier)
+        {
+            return SendAsync<object, DeviceResponse>(HttpMethod.Get, $"/devices/identifier/{deviceIdentifier}", null, true, true);
+        }
+
+        public Task<DeviceResponse> UpdateTrustedDeviceKeysAsync(string deviceIdentifier, TrustedDeviceKeysRequest trustedDeviceKeysRequest)
+        {
+            return SendAsync<TrustedDeviceKeysRequest, DeviceResponse>(HttpMethod.Put, $"/devices/{deviceIdentifier}/keys", trustedDeviceKeysRequest, true, true);
         }
 
         #endregion
@@ -460,7 +486,7 @@ namespace Bit.Core.Services
                 $"/organizations/{identifier}/auto-enroll-status", null, true, true);
         }
 
-        public Task PostLeaveOrganization(string id)
+        public Task PostLeaveOrganizationAsync(string id)
         {
             return SendAsync<object, object>(HttpMethod.Post, $"/organizations/{id}/leave", null, true, false);
         }
@@ -485,7 +511,7 @@ namespace Bit.Core.Services
 
         #region Key Connector
 
-        public async Task<KeyConnectorUserKeyResponse> GetUserKeyFromKeyConnector(string keyConnectorUrl)
+        public async Task<KeyConnectorUserKeyResponse> GetMasterKeyFromKeyConnectorAsync(string keyConnectorUrl)
         {
             using (var requestMessage = new HttpRequestMessage())
             {
@@ -515,7 +541,7 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task PostUserKeyToKeyConnector(string keyConnectorUrl, KeyConnectorUserKeyRequest request)
+        public async Task PostMasterKeyToKeyConnectorAsync(string keyConnectorUrl, KeyConnectorUserKeyRequest request)
         {
             using (var requestMessage = new HttpRequestMessage())
             {
@@ -565,24 +591,15 @@ namespace Bit.Core.Services
             return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Get, $"/auth-requests/{id}/response?code={accessCode}", null, false, true);
         }
 
-        public Task<PasswordlessLoginResponse> PostCreateRequestAsync(PasswordlessCreateLoginRequest passwordlessCreateLoginRequest)
+        public Task<PasswordlessLoginResponse> PostCreateRequestAsync(PasswordlessCreateLoginRequest passwordlessCreateLoginRequest, AuthRequestType authRequestType)
         {
-            return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Post, $"/auth-requests", passwordlessCreateLoginRequest, false, true);
+            return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Post, authRequestType == AuthRequestType.AdminApproval ? "/auth-requests/admin-request" : "/auth-requests", passwordlessCreateLoginRequest, authRequestType == AuthRequestType.AdminApproval, true);
         }
 
         public Task<PasswordlessLoginResponse> PutAuthRequestAsync(string id, string encKey, string encMasterPasswordHash, string deviceIdentifier, bool requestApproved)
         {
             var request = new PasswordlessLoginRequest(encKey, encMasterPasswordHash, deviceIdentifier, requestApproved);
             return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Put, $"/auth-requests/{id}", request, true, true);
-        }
-
-        public Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier)
-        {
-            return SendAsync<object, bool>(HttpMethod.Get, "/devices/knowndevice", null, false, true, (message) =>
-            {
-                message.Headers.Add("X-Device-Identifier", deviceIdentifier);
-                message.Headers.Add("X-Request-Email", CoreHelpers.Base64UrlEncode(Encoding.UTF8.GetBytes(email)));
-            });
         }
 
         #endregion
@@ -610,7 +627,7 @@ namespace Bit.Core.Services
             return accessToken;
         }
 
-        public async Task<SsoPrevalidateResponse> PreValidateSso(string identifier)
+        public async Task<SsoPrevalidateResponse> PreValidateSsoAsync(string identifier)
         {
             var path = "/account/prevalidate?domainHint=" + WebUtility.UrlEncode(identifier);
             using (var requestMessage = new HttpRequestMessage())
