@@ -33,11 +33,11 @@ namespace Bit.Core.Services
 
         private readonly LazyResolve<IWatchDeviceService> _watchDeviceService = new LazyResolve<IWatchDeviceService>();
         private MasterKey _masterKey;
+        private UserKey _userKey;
 
         private string _authedUserId;
         private MasterPasswordPolicyOptions _masterPasswordPolicy;
         private ForcePasswordResetReason? _2faForcePasswordResetReason;
-        private UserKey _userKey;
 
         public AuthService(
             ICryptoService cryptoService,
