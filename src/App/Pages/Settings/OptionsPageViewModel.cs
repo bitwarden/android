@@ -264,7 +264,7 @@ namespace Bit.App.Pages
                 await _stateService.SetThemeAsync(ThemeOptions[ThemeSelectedIndex].Key);
                 await _stateService.SetAutoDarkThemeAsync(AutoDarkThemeOptions[AutoDarkThemeSelectedIndex].Key);
                 ThemeManager.SetTheme(Application.Current.Resources);
-                _messagingService.Send("updatedTheme");
+                _messagingService.Send(ThemeManager.UPDATED_THEME_MESSAGE_KEY);
             }
         }
 

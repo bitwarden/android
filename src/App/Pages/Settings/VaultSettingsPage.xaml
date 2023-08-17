@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<pages:BaseModalContentPage
+<pages:BaseContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:Bit.App.Pages"
@@ -12,10 +12,6 @@
     <ContentPage.BindingContext>
         <pages:VaultSettingsPageViewModel />
     </ContentPage.BindingContext>
-
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Back}" Clicked="PopModal_Clicked" Order="Primary" Priority="-1" />
-    </ContentPage.ToolbarItems>
 
     <StackLayout>
         <controls:CustomLabel
@@ -48,5 +44,5 @@
 
     </StackLayout>
 
-</pages:BaseModalContentPage>
+</pages:BaseContentPage>
 

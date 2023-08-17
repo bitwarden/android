@@ -1,6 +1,6 @@
 ﻿namespace Bit.App.Pages
 {
-    public partial class AboutSettingsPage : BaseModalContentPage
+    public partial class AboutSettingsPage : BaseContentPage
     {
         public AboutSettingsPage()
         {

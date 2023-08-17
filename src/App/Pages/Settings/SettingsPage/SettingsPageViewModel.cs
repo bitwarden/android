@@ -39,7 +39,7 @@ namespace Bit.App.Pages
 
         private async Task NavigateToAsync(Page page)
         {
-            await Page.Navigation.PushModalAsync(new NavigationPage(page));
+            await Page.Navigation.PushAsync(page);
         }
     }
 

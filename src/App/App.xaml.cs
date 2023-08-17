@@ -365,7 +365,7 @@ namespace Bit.App
             await Device.InvokeOnMainThreadAsync(() =>
             {
                 ThemeManager.SetTheme(Current.Resources);
-                _messagingService.Send("updatedTheme");
+                _messagingService.Send(ThemeManager.UPDATED_THEME_MESSAGE_KEY);
             });
         }
 

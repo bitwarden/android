@@ -6,7 +6,7 @@ using Bit.Core.Utilities;
 
 namespace Bit.App.Pages
 {
-    public partial class OtherSettingsPage : BaseModalContentPage
+    public partial class OtherSettingsPage : BaseContentPage
     {
         private OtherSettingsPageViewModel _vm;
 
