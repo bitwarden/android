@@ -137,7 +137,7 @@ namespace Bit.App.Pages
             };
 
             var selectedKey = await _stateService.GetThemeAsync() ?? string.Empty;
-            
+
             ThemePickerViewModel.Init(options, selectedKey, string.Empty);
 
             TriggerPropertyChanged(nameof(ShowDefaultDarkThemePicker));
