@@ -2659,7 +2659,7 @@ select Add TOTP to store the key safely</value>
     <value>Помощ за повторното запитване за главната парола</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Отключването може да бъде неуспешно заради недостатъчно памет. Намалете настройките на паметта за KDF, за да разрешите проблема.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Неправилен ключ за ППИ</value>
@@ -2712,5 +2712,8 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Не може да редактирате повече от един адрес едновременно</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Вписване в</value>
   </data>
 </root>

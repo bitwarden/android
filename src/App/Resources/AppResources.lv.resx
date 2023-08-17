@@ -2659,7 +2659,7 @@ Vai pārslēgties uz šo kontu?</value>
     <value>Galvenās paroles pārvaicāšanas palīdzība</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Atslēgšana var neizdoties nepietiekamas atmiņas dēļ. Lai to novērstu, jāsamazina KDF atmiņas iestatījmi</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Nederīga API atslēga</value>
@@ -2712,5 +2712,8 @@ Vai pārslēgties uz šo kontu?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Nevar labot vairākus URI vienlaicīgi</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Piesakās</value>
   </data>
 </root>

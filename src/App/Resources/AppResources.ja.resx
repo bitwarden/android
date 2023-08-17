@@ -2659,7 +2659,7 @@
     <value>マスターパスワードの再プロンプトヘルプ</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>メモリ不足のためロック解除に失敗することがあります。KDF のメモリ設定を減らして解決してください</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>無効な API キー</value>
@@ -2712,5 +2712,8 @@
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>一度に複数の URI を編集することはできません</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>ログイン先</value>
   </data>
 </root>

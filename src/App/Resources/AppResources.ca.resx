@@ -2659,7 +2659,7 @@ Voleu canviar a aquest compte?</value>
     <value>Ajuda per tornar a demanar la contrasenya mestra</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>El desbloqueig pot fallar a causa de memòria insuficient. Disminueix la configuració de memòria KDF per resoldre-ho</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Clau API no vàlida</value>
@@ -2712,5 +2712,8 @@ Voleu canviar a aquest compte?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>No es poden editar diversos URI alhora</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Inici de sessió en</value>
   </data>
 </root>

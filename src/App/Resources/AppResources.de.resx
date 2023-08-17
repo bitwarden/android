@@ -598,7 +598,7 @@
     <value>Weitere Einstellungen</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Du musst dich in der Bitwarden App einloggen, bevor du die Erweiterung benutzen kannst.</value>
+    <value>Du musst dich in der Bitwarden App anmelden, bevor du die Erweiterung benutzen kannst.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Niemals</value>
@@ -838,7 +838,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Eingeloggt bleiben</value>
+    <value>Angemeldet bleiben</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
@@ -1292,7 +1292,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Auto-Ausfüllen aktiviert!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>Du musst dich in der Bitwarden App einloggen, bevor du AutoFill nutzen kannst.</value>
+    <value>Du musst dich in der Bitwarden App anmelden, bevor du AutoFill nutzen kannst.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
     <value>Du kannst nun direkt von der Tastatur auf deine Zugangsdaten zugreifen, wenn du dich auf Webseiten oder in Apps anmeldest.</value>
@@ -2658,7 +2658,7 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Hilfe zum erneuten Abfragen des Master-Passworts</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Das Entsperren kann aufgrund von unzureichendem Arbeitsspeicher fehlschlagen. Verringere deine KDF-Speichereinstellungen, um das Problem zu beheben.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Ungültiger API-Schlüssel</value>
@@ -2711,5 +2711,8 @@ Möchtest du zu diesem Konto wechseln?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Es können nicht mehrere URIs auf einmal bearbeitet werden</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Anmelden bei</value>
   </data>
 </root>

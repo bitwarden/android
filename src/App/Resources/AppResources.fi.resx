@@ -2660,7 +2660,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Pääsalasanan uudelleenkyselyn ohje</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Lukituksen avaus voi epäonnistua riittämättömän keskusmuistin vuoksi. Korjaa madaltamalla KDF-muistiasetuksiasi.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Virheellinen API-avain</value>
@@ -2713,5 +2713,8 @@ Haluatko vaihtaa tähän tiliin?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Useita URI-osoitteita ei ole mahdollista muokata samanaikaisesti</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Kirjaudutaan sijaintiin</value>
   </data>
 </root>

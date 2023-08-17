@@ -2658,7 +2658,7 @@ Szeretnénk átváltani erre a fiókra?</value>
     <value>Mesterjelszó újbóli bekérés súgó</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>A feloldás meghiúsulhat, mert nincs elegendő memória. A megoldáshoz csökkentsül a KDF memóriabeállításait.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Érvénytelen API kulcs</value>
@@ -2711,5 +2711,8 @@ Szeretnénk átváltani erre a fiókra?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Nem szerkeszthető több URI egyszerre.</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Bejelentkezés:</value>
   </data>
 </root>
