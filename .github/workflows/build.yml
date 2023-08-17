@@ -713,8 +713,6 @@ jobs:
 
           zip -r -q BitwardenTest.app.zip $ARCHIVE_PATH
           mv BitwardenTest.app.zip $EXPORT_PATH
-          xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath $EXPORT_PATH \
-            -exportOptionsPlist $EXPORT_OPTIONS_PATH
         shell: bash
 
       - name: Copy all dSYMs files to upload
