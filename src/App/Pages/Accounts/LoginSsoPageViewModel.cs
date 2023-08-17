@@ -114,7 +114,7 @@ namespace Bit.App.Pages
 
                 await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
 
-                var response = await _apiService.PreValidateSso(OrgIdentifier);
+                var response = await _apiService.PreValidateSsoAsync(OrgIdentifier);
 
                 if (string.IsNullOrWhiteSpace(response?.Token))
                 {

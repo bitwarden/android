@@ -47,7 +47,7 @@ namespace Bit.App.Pages
         {
             await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
 
-            await _apiService.PostLeaveOrganization(Organization.Id);
+            await _apiService.PostLeaveOrganizationAsync(Organization.Id);
             await _syncService.FullSyncAsync(true);
 
             await _deviceActionService.HideLoadingAsync();

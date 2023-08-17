@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
@@ -80,7 +81,7 @@ namespace Bit.Core.Services
             var hasKey = await _cryptoService.HasUserKeyAsync();
             if (!hasKey)
             {
-                throw new Exception("No key.");
+                throw new UserKeyNullException();
             }
             var decFolders = new List<FolderView>();
             async Task decryptAndAddFolderAsync(Folder folder)

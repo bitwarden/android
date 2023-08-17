@@ -211,12 +211,12 @@ namespace Bit.Core.Services
             return SendAsync<DeleteAccountRequest, object>(HttpMethod.Delete, "/accounts", request, true, false);
         }
 
-        public Task PostConvertToKeyConnector()
+        public Task PostConvertToKeyConnectorAsync()
         {
             return SendAsync<object, object>(HttpMethod.Post, "/accounts/convert-to-key-connector", null, true, false);
         }
 
-        public Task PostSetKeyConnectorKey(SetKeyConnectorKeyRequest request)
+        public Task PostSetKeyConnectorKeyAsync(SetKeyConnectorKeyRequest request)
         {
             return SendAsync<SetKeyConnectorKeyRequest>(HttpMethod.Post, "/accounts/set-key-connector-key", request, true);
         }
@@ -486,7 +486,7 @@ namespace Bit.Core.Services
                 $"/organizations/{identifier}/auto-enroll-status", null, true, true);
         }
 
-        public Task PostLeaveOrganization(string id)
+        public Task PostLeaveOrganizationAsync(string id)
         {
             return SendAsync<object, object>(HttpMethod.Post, $"/organizations/{id}/leave", null, true, false);
         }
@@ -541,7 +541,7 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task PostMasterKeyToKeyConnector(string keyConnectorUrl, KeyConnectorUserKeyRequest request)
+        public async Task PostMasterKeyToKeyConnectorAsync(string keyConnectorUrl, KeyConnectorUserKeyRequest request)
         {
             using (var requestMessage = new HttpRequestMessage())
             {
@@ -627,7 +627,7 @@ namespace Bit.Core.Services
             return accessToken;
         }
 
-        public async Task<SsoPrevalidateResponse> PreValidateSso(string identifier)
+        public async Task<SsoPrevalidateResponse> PreValidateSsoAsync(string identifier)
         {
             var path = "/account/prevalidate?domainHint=" + WebUtility.UrlEncode(identifier);
             using (var requestMessage = new HttpRequestMessage())

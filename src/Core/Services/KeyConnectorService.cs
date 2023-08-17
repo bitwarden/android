@@ -68,14 +68,14 @@ namespace Bit.Core.Services
             try
             {
                 var keyConnectorRequest = new KeyConnectorUserKeyRequest(masterKey.EncKeyB64);
-                await _apiService.PostMasterKeyToKeyConnector(organization.KeyConnectorUrl, keyConnectorRequest);
+                await _apiService.PostMasterKeyToKeyConnectorAsync(organization.KeyConnectorUrl, keyConnectorRequest);
             }
             catch (Exception e)
             {
                 throw new Exception("Unable to reach Key Connector", e);
             }
 
-            await _apiService.PostConvertToKeyConnector();
+            await _apiService.PostConvertToKeyConnectorAsync();
         }
 
         public async Task<bool> UserNeedsMigrationAsync()
@@ -103,7 +103,7 @@ namespace Bit.Core.Services
 
             try
             {
-                await _apiService.PostMasterKeyToKeyConnector(tokenResponse.KeyConnectorUrl, keyConnectorRequest);
+                await _apiService.PostMasterKeyToKeyConnectorAsync(tokenResponse.KeyConnectorUrl, keyConnectorRequest);
             }
             catch (Exception e)
             {
@@ -119,7 +119,7 @@ namespace Bit.Core.Services
             var setPasswordRequest = new SetKeyConnectorKeyRequest(
                 newProtectedUserKey.EncryptedString, keys, tokenResponse.KdfConfig, orgId
             );
-            await _apiService.PostSetKeyConnectorKey(setPasswordRequest);
+            await _apiService.PostSetKeyConnectorKeyAsync(setPasswordRequest);
         }
     }
 }

@@ -47,7 +47,7 @@ namespace Bit.Core.Abstractions
         Task PutDeleteCipherAsync(string id);
         Task<CipherResponse> PutRestoreCipherAsync(string id);
         Task RefreshIdentityTokenAsync();
-        Task<SsoPrevalidateResponse> PreValidateSso(string identifier);
+        Task<SsoPrevalidateResponse> PreValidateSsoAsync(string identifier);
         Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path,
             TRequest body, bool authed, bool hasResponse, Action<HttpRequestMessage> alterRequest, bool logoutOnUnauthorized = true);
         Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken = default);
@@ -72,10 +72,10 @@ namespace Bit.Core.Abstractions
         Task PutOrganizationUserResetPasswordEnrollmentAsync(string orgId, string userId,
             OrganizationUserResetPasswordEnrollmentRequest request);
         Task<KeyConnectorUserKeyResponse> GetMasterKeyFromKeyConnectorAsync(string keyConnectorUrl);
-        Task PostMasterKeyToKeyConnector(string keyConnectorUrl, KeyConnectorUserKeyRequest request);
-        Task PostSetKeyConnectorKey(SetKeyConnectorKeyRequest request);
-        Task PostConvertToKeyConnector();
-        Task PostLeaveOrganization(string id);
+        Task PostMasterKeyToKeyConnectorAsync(string keyConnectorUrl, KeyConnectorUserKeyRequest request);
+        Task PostSetKeyConnectorKeyAsync(SetKeyConnectorKeyRequest request);
+        Task PostConvertToKeyConnectorAsync();
+        Task PostLeaveOrganizationAsync(string id);
 
         Task<SendResponse> GetSendAsync(string id);
         Task<SendResponse> PostSendAsync(SendRequest request);

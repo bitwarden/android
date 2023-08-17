@@ -252,7 +252,7 @@ namespace Bit.Core.Services
                 {
                     if (!await _cryptoService.HasUserKeyAsync())
                     {
-                        throw new Exception("No key.");
+                        throw new UserKeyNullException();
                     }
                     var decCiphers = new List<CipherView>();
                     async Task decryptAndAddCipherAsync(Cipher cipher)
