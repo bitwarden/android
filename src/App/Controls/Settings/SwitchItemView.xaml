@@ -12,12 +12,8 @@
 
     <Switch
         x:Name="_switch"
-        Grid.Column="1"
-        Grid.RowSpan="2"
+        HeightRequest="20"
+        Scale="{OnPlatform iOS=0.8, Android=1}"
         IsToggled="{Binding IsToggled, Mode=TwoWay, Source={x:Reference _contentView}}"
-        HorizontalOptions="End"
-        VerticalOptions="Center"
-        AutomationId="{Binding SwitchAutomationId, Mode=OneWay, Source={x:Reference _contentView}}"
-        AutomationProperties.IsInAccessibleTree="True"
-        AutomationProperties.Name="{Binding Title, Mode=OneWay, Source={x:Reference _contentView}}"/>
+        AutomationId="{Binding SwitchAutomationId, Mode=OneWay, Source={x:Reference _contentView}}"/>
 </controls:BaseSettingItemView>

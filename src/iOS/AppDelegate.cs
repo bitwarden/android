@@ -75,7 +75,7 @@ namespace Bit.iOS
                     {
                         var task = StopEventTimerAsync();
                     }
-                    else if (message.Command == "updatedTheme")
+                    else if (message.Command is ThemeManager.UPDATED_THEME_MESSAGE_KEY)
                     {
                         Device.BeginInvokeOnMainThread(() =>
                         {

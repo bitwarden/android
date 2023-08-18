@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<pages:BaseModalContentPage
+<pages:BaseContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:Bit.App.Pages"
@@ -14,15 +14,10 @@
         <pages:AboutSettingsPageViewModel />
     </ContentPage.BindingContext>
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Back}" Clicked="PopModal_Clicked" Order="Primary" Priority="-1" />
-    </ContentPage.ToolbarItems>
-
     <StackLayout>
         <controls:SwitchItemView
             Title="{u:I18n SubmitCrashLogs}"
             IsToggled="{Binding ShouldSubmitCrashLogs, Mode=TwoWay}"
-            HeightRequest="20"
             AutomationId="SubmitCrashLogsSwitch"
             StyleClass="settings-item-view"
             HorizontalOptions="FillAndExpand" />
@@ -68,7 +63,7 @@
             Orientation="Horizontal">
             <controls:CustomLabel
                 Text="{Binding AppInfo}"
-                MaxLines="0"
+                MaxLines="10"
                 StyleClass="box-footer-label"
                 HorizontalOptions="StartAndExpand"
                 LineBreakMode="TailTruncation" />
@@ -87,4 +82,4 @@
 
         </StackLayout>
     </StackLayout>
-</pages:BaseModalContentPage>
+</pages:BaseContentPage>

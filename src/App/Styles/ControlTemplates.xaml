@@ -9,16 +9,19 @@
 
     <ControlTemplate x:Key="SettingControlTemplate">
         <Grid
-            RowDefinitions="Auto,Auto"
-            ColumnDefinitions="*,Auto">
+            RowDefinitions="Auto,*"
+            ColumnDefinitions="*,Auto"
+            ColumnSpacing="10">
             <controls:CustomLabel
+                Grid.Row="0"
+                Grid.Column="0"
                 Text="{TemplateBinding Title}"
                 HorizontalOptions="StartAndExpand"
                 LineBreakMode="TailTruncation" />
 
             <ContentPresenter
                 Grid.Column="1"
-                Grid.RowSpan="2" 
+                Grid.RowSpan="2"
                 HorizontalOptions="End"
                 VerticalOptions="Center" />
 

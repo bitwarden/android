@@ -1,6 +1,6 @@
 ﻿namespace Bit.App.Pages
 {
-    public partial class SecuritySettingsPage : BaseModalContentPage
+    public partial class SecuritySettingsPage : BaseContentPage
     {
         public SecuritySettingsPage()
         {

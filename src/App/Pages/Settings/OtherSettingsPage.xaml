@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<pages:BaseModalContentPage
+<pages:BaseContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:Bit.App.Pages"
@@ -13,10 +13,6 @@
         <pages:OtherSettingsPageViewModel />
     </ContentPage.BindingContext>
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Back}" Clicked="PopModal_Clicked" Order="Primary" Priority="-1" />
-    </ContentPage.ToolbarItems>
-
     <ContentPage.Resources>
         <u:InverseBoolConverter x:Key="inverseBoolConverter" />
     </ContentPage.Resources>
@@ -27,7 +23,6 @@
                 Title="{u:I18n EnableSyncOnRefresh}"
                 IsToggled="{Binding EnableSyncOnRefresh}"
                 Subtitle="{u:I18n EnableSyncOnRefreshDescription}"
-                HeightRequest="20"
                 AutomationId="SubmitCrashLogsSwitch"
                 StyleClass="settings-item-view"
                 HorizontalOptions="FillAndExpand" />
@@ -56,7 +51,6 @@
                 Title="{u:I18n AllowScreenCapture}"
                 IsToggled="{Binding IsScreenCaptureAllowed}"
                 IsEnabled="{Binding CanToggleeScreenCaptureAllowed}"
-                HeightRequest="20"
                 AutomationId="SubmitCrashLogsSwitch"
                 StyleClass="settings-item-view"
                 HorizontalOptions="FillAndExpand" />
@@ -64,4 +58,4 @@
         </StackLayout>
     </ScrollView>
 
-</pages:BaseModalContentPage>
+</pages:BaseContentPage>

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Bit.App.Effects;
 using Bit.App.Models;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
@@ -137,7 +138,7 @@ namespace Bit.App.Pages
                     await groupingsPage.HideAccountSwitchingOverlayAsync();
                 }
 
-                _messagingService.Send("updatedTheme");
+                _messagingService.Send(ThemeManager.UPDATED_THEME_MESSAGE_KEY);
                 if (navPage.RootPage is GroupingsPage)
                 {
                     // Load something?

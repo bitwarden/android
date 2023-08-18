@@ -1,6 +1,6 @@
 ﻿namespace Bit.App.Pages
 {
-    public partial class VaultSettingsPage : BaseModalContentPage
+    public partial class VaultSettingsPage : BaseContentPage
     {
         public VaultSettingsPage()
         {

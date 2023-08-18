@@ -42,7 +42,8 @@ namespace Bit.App.Pages
 
             ClearClipboardPickerViewModel = new PickerViewModel<int>(
                 _deviceActionService,
-                OnClearClipboardChangedAsync,
+                _logger,
+                OnClearClipboardChangingAsync,
                 AppResources.ClearClipboard,
                 _ => _inited,
                 ex => HandleException(ex));
@@ -120,11 +121,6 @@ namespace Bit.App.Pages
             }
 
             var clearClipboard = await _stateService.GetClearClipboardAsync() ?? CLEAR_CLIPBOARD_NEVER_OPTION;
-            if (!clearClipboardOptions.ContainsKey(clearClipboard))
-            {
-                _logger.Error("There is no clear clipboard options for key: " + clearClipboard);
-                clearClipboard = CLEAR_CLIPBOARD_NEVER_OPTION;
-            }
 
             ClearClipboardPickerViewModel.Init(clearClipboardOptions, clearClipboard, CLEAR_CLIPBOARD_NEVER_OPTION);
         }
@@ -175,7 +171,7 @@ namespace Bit.App.Pages
             _platformUtilsService.ShowToast("success", null, AppResources.SyncingComplete);
         }
 
-        private async Task<bool> OnClearClipboardChangedAsync(int optionKey)
+        private async Task<bool> OnClearClipboardChangingAsync(int optionKey)
         {
             await _stateService.SetClearClipboardAsync(optionKey == CLEAR_CLIPBOARD_NEVER_OPTION ? (int?)null : optionKey);
             return true;

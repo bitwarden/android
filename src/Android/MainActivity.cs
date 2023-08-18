@@ -116,7 +116,7 @@ namespace Bit.Droid
                 {
                     ListenYubiKey((bool)message.Data);
                 }
-                else if (message.Command == "updatedTheme")
+                else if (message.Command is ThemeManager.UPDATED_THEME_MESSAGE_KEY)
                 {
                     Xamarin.Forms.Device.BeginInvokeOnMainThread(() => AppearanceAdjustments());
                 }
