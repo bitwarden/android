@@ -676,7 +676,6 @@ jobs:
           Write-Output "########################################"
           Write-Output "##### Done"
           Write-Output "########################################"
-          ls ~/Library/Developer/Xcode/Archives
         shell: pwsh
 
       - name: Archive Build for Mobile Automation
