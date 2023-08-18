@@ -278,9 +278,9 @@ namespace Bit.App.Pages
                     await HandleLoginCompleteAsync();
                 }
             }
-            catch (ApiException ex) when (ex?.Error?.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            catch (ApiException ex) when (ex.Error?.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                HandleException(ex, ex?.Error?.Message);
+                HandleException(ex);
             }
             catch (Exception ex)
             {
@@ -348,16 +348,6 @@ namespace Bit.App.Pages
             _requestId = response.Id;
             _requestAccessCode = response.RequestAccessCode;
             _requestKeyPair = response.RequestKeyPair;
-        }
-
-        private void HandleException(Exception ex)
-        {
-            Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                await _deviceActionService.HideLoadingAsync();
-                await _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage);
-            }).FireAndForget();
-            _logger.Exception(ex);
         }
     }
 }
