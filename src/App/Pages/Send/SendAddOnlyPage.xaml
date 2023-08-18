@@ -94,13 +94,13 @@
                             LineBreakMode="CharacterWrap"
                             StyleClass="text-sm, text-muted"
                             HorizontalOptions="FillAndExpand"
-                            HorizontalTextAlignment="Center" />
+                            HorizontalTextAlignment="Start" />
                         <Label
                             Margin="0, 5, 0, 0"
                             Text="{u:I18n MaxFileSize}"
                             StyleClass="text-sm, text-muted"
                             HorizontalOptions="FillAndExpand"
-                            HorizontalTextAlignment="Center" />
+                            HorizontalTextAlignment="Start" />
                     </StackLayout>
                 </StackLayout>
                 <StackLayout
@@ -144,19 +144,6 @@
                             HorizontalOptions="End"
                             Margin="10,0,0,0" />
                     </StackLayout>
-                </StackLayout>
-                <StackLayout
-                    StyleClass="box-row, box-row-switch">
-                    <Label
-                        Text="{Binding ShareOnSaveText}"
-                        StyleClass="box-label-regular"
-                        VerticalOptions="Center"
-                        HorizontalOptions="StartAndExpand" />
-                    <Switch
-                        IsToggled="{Binding ShareOnSave}"
-                        IsEnabled="{Binding SendEnabled}"
-                        HorizontalOptions="End"
-                        Margin="10,0,0,0" />
                 </StackLayout>
                 <StackLayout
                     Orientation="Horizontal"

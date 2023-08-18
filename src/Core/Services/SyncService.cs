@@ -387,8 +387,8 @@ namespace Bit.Core.Services
                 }
                 return;
             }
-            await _cryptoService.SetEncKeyAsync(response.Key);
-            await _cryptoService.SetEncPrivateKeyAsync(response.PrivateKey);
+            await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(response.Key);
+            await _cryptoService.SetUserPrivateKeyAsync(response.PrivateKey);
             await _cryptoService.SetOrgKeysAsync(response.Organizations);
             await _stateService.SetSecurityStampAsync(response.SecurityStamp);
             var organizations = response.Organizations.ToDictionary(o => o.Id, o => new OrganizationData(o));
@@ -397,7 +397,7 @@ namespace Bit.Core.Services
             await _stateService.SetNameAsync(response.Name);
             await _stateService.SetPersonalPremiumAsync(response.Premium);
             await _stateService.SetAvatarColorAsync(response.AvatarColor);
-            await _keyConnectorService.SetUsesKeyConnector(response.UsesKeyConnector);
+            await _keyConnectorService.SetUsesKeyConnectorAsync(response.UsesKeyConnector);
         }
 
         private async Task SyncFoldersAsync(string userId, List<FolderResponse> response)

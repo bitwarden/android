@@ -33,7 +33,7 @@ namespace Bit.iOS.Autofill.Utilities
                 return;
             }
 
-            if (item.Reprompt != Bit.Core.Enums.CipherRepromptType.None && !await passwordRepromptService.ShowPasswordPromptAsync())
+            if (!await passwordRepromptService.PromptAndCheckPasswordIfNeededAsync(item.Reprompt))
             {
                 return;
             }

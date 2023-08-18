@@ -21,7 +21,6 @@ namespace Bit.App.Pages
         private readonly II18nService _i18nService;
         private readonly IExportService _exportService;
         private readonly IPolicyService _policyService;
-        private readonly IKeyConnectorService _keyConnectorService;
         private readonly IUserVerificationService _userVerificationService;
         private readonly IApiService _apiService;
         private readonly ILogger _logger;
@@ -45,8 +44,7 @@ namespace Bit.App.Pages
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _exportService = ServiceContainer.Resolve<IExportService>("exportService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
-            _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
-            _userVerificationService = ServiceContainer.Resolve<IUserVerificationService>("userVerificationService");
+            _userVerificationService = ServiceContainer.Resolve<IUserVerificationService>();
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
@@ -67,7 +65,7 @@ namespace Bit.App.Pages
             _initialized = true;
             FileFormatSelectedIndex = FileFormatOptions.FindIndex(k => k.Key == "json");
             DisablePrivateVaultPolicyEnabled = await _policyService.PolicyAppliesToUser(PolicyType.DisablePersonalVaultExport);
-            UseOTPVerification = await _keyConnectorService.GetUsesKeyConnector();
+            UseOTPVerification = !await _userVerificationService.HasMasterPasswordAsync(true);
 
             if (UseOTPVerification)
             {
@@ -165,9 +163,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var verificationType = await _keyConnectorService.GetUsesKeyConnector()
-                ? VerificationType.OTP
-                : VerificationType.MasterPassword;
+            var verificationType = await _userVerificationService.HasMasterPasswordAsync(true)
+                ? VerificationType.MasterPassword
+                : VerificationType.OTP;
             if (!await _userVerificationService.VerifyUser(Secret, verificationType))
             {
                 return;

@@ -29,7 +29,7 @@ namespace Bit.Core.Test.Services
                 .Returns(encFileName);
             sutProvider.GetDependency<ICryptoService>().EncryptToBytesAsync(data.Buffer, Arg.Any<SymmetricCryptoKey>())
                 .Returns(data);
-            sutProvider.GetDependency<ICryptoService>().MakeEncKeyAsync(Arg.Any<SymmetricCryptoKey>()).Returns(new Tuple<SymmetricCryptoKey, EncString>(null, encKey));
+            sutProvider.GetDependency<ICryptoService>().MakeDataEncKeyAsync(Arg.Any<UserKey>()).Returns(new Tuple<SymmetricCryptoKey, EncString>(null, encKey));
             sutProvider.GetDependency<IApiService>().PostCipherAttachmentAsync(cipher.Id, Arg.Any<AttachmentRequest>())
                 .Returns(uploadDataResponse);
 
@@ -50,7 +50,7 @@ namespace Bit.Core.Test.Services
                 .Returns(new EncString(fileName));
             sutProvider.GetDependency<ICryptoService>().EncryptToBytesAsync(data.Buffer, Arg.Any<SymmetricCryptoKey>())
                 .Returns(data);
-            sutProvider.GetDependency<ICryptoService>().MakeEncKeyAsync(Arg.Any<SymmetricCryptoKey>()).Returns(new Tuple<SymmetricCryptoKey, EncString>(null, encKey));
+            sutProvider.GetDependency<ICryptoService>().MakeDataEncKeyAsync(Arg.Any<UserKey>()).Returns(new Tuple<SymmetricCryptoKey, EncString>(null, encKey));
             sutProvider.GetDependency<IApiService>().PostCipherAttachmentAsync(cipher.Id, Arg.Any<AttachmentRequest>())
                 .Throws(new ApiException(new ErrorResponse { StatusCode = statusCode }));
             sutProvider.GetDependency<IApiService>().PostCipherAttachmentLegacyAsync(cipher.Id, Arg.Any<MultipartFormDataContent>())
@@ -70,7 +70,7 @@ namespace Bit.Core.Test.Services
                 .Returns(new EncString(fileName));
             sutProvider.GetDependency<ICryptoService>().EncryptToBytesAsync(data.Buffer, Arg.Any<SymmetricCryptoKey>())
                 .Returns(data);
-            sutProvider.GetDependency<ICryptoService>().MakeEncKeyAsync(Arg.Any<SymmetricCryptoKey>())
+            sutProvider.GetDependency<ICryptoService>().MakeDataEncKeyAsync(Arg.Any<UserKey>())
                 .Returns(new Tuple<SymmetricCryptoKey, EncString>(null, encKey));
             var expectedException = new ApiException(new ErrorResponse { StatusCode = HttpStatusCode.BadRequest });
             sutProvider.GetDependency<IApiService>().PostCipherAttachmentAsync(cipher.Id, Arg.Any<AttachmentRequest>())

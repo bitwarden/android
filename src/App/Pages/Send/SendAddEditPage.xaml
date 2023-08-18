@@ -175,7 +175,7 @@
                                     LineBreakMode="CharacterWrap"
                                     StyleClass="text-sm, text-muted"
                                     HorizontalOptions="FillAndExpand"
-                                    HorizontalTextAlignment="Center"
+                                    HorizontalTextAlignment="Start"
                                     AutomationId="SendNoFileChosenLabel" />
                                 <Label
                                     IsVisible="{Binding FileName, Converter={StaticResource notNull}}"
@@ -183,7 +183,7 @@
                                     LineBreakMode="CharacterWrap"
                                     StyleClass="text-sm, text-muted"
                                     HorizontalOptions="FillAndExpand"
-                                    HorizontalTextAlignment="Center"
+                                    HorizontalTextAlignment="Start"
                                     AutomationId="SendCurrentFileNameLabel" />
                                 <Button
                                     Text="{u:I18n ChooseFile}"
@@ -197,7 +197,7 @@
                                     Text="{u:I18n MaxFileSize}"
                                     StyleClass="text-sm, text-muted"
                                     HorizontalOptions="FillAndExpand"
-                                    HorizontalTextAlignment="Center" />
+                                    HorizontalTextAlignment="Start" />
                             </StackLayout>
                             <Label
                                 Text="{u:I18n TypeFileInfo}"
@@ -249,20 +249,6 @@
                                     Margin="10,0,0,0"
                                     AutomationId="SendHideTextByDefaultToggle" />
                             </StackLayout>
-                        </StackLayout>
-                        <StackLayout
-                            StyleClass="box-row, box-row-switch">
-                            <Label
-                                Text="{Binding ShareOnSaveText}"
-                                StyleClass="box-label-regular"
-                                VerticalOptions="Center"
-                                HorizontalOptions="StartAndExpand" />
-                            <Switch
-                                IsToggled="{Binding ShareOnSave}"
-                                IsEnabled="{Binding SendEnabled}"
-                                HorizontalOptions="End"
-                                Margin="10,0,0,0"
-                                AutomationId="SendShareSendAfterSaveToggle" />
                         </StackLayout>
                         <StackLayout
                             Orientation="Horizontal"
