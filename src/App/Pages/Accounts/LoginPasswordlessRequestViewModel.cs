@@ -12,6 +12,7 @@ using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Response;
 using Bit.Core.Services;
@@ -276,6 +277,10 @@ namespace Bit.App.Pages
                 {
                     await HandleLoginCompleteAsync();
                 }
+            }
+            catch (ApiException ex) when (ex?.Error?.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                HandleException(ex, ex?.Error?.Message);
             }
             catch (Exception ex)
             {
