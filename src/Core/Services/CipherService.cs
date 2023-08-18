@@ -262,14 +262,14 @@ namespace Bit.Core.Services
                         parallelQuery = parallelQuery.Where(filter);
                     }
     
-                    var decCiphers = parallelQuery
-                        .Select(cipher =>  
+                    var decCiphers = await Task.WhenAll(parallelQuery
+                        .Select(async cipher =>  
                         {
-                            return cipher.DecryptAsync().Result;
+                            return await cipher.DecryptAsync();
                         })
                         .ToList()
                         .OrderBy(c => c, new CipherLocaleComparer(_i18nService))
-                        .ToList();
+                        .ToList());
                     
                     if (filter == null)
                     {
