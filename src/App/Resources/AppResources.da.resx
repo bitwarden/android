@@ -2627,6 +2627,24 @@ Vil du skifte til denne konto?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Aktuel hovedadgangskode</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Indlogget!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Godkend med min anden enhed</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Anmod om admin-godkendelse</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Godkendt med hovedadgangskode</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Slå fra vha. en offentlig enhed</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Husk denne enhed</value>
+  </data>
   <data name="Passkey" xml:space="preserve">
     <value>Adgangsnøgle</value>
   </data>
@@ -2666,6 +2684,24 @@ Vil du skifte til denne konto?</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Ugyldigt API-token</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Admin-godkendelse udbedt</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Din anmodning er sendt til din gruppe-admin.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Du underrettes, når godkendelse foreligger. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Problemer med at logge ind?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Logger ind som {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Boks-timeouthandling ændret til udlogning</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
     <value>Dette emne kan ikke deles med organisationen, da der allerede er et med den samme adgangsnøgle.</value>
@@ -2712,6 +2748,15 @@ Vil du skifte til denne konto?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Kan ikke redigere flere URI'er på én gang</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Login godkendt</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Indlogning med enhed skal være opsat i indstillingerne i Bitwarden-appen. Behov for en anden mulighed?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Log ind med enhed</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Logger ind på</value>
