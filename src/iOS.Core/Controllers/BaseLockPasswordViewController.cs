@@ -368,18 +368,8 @@ namespace Bit.iOS.Core.Controllers
             if (success)
             {
                 var userKey = await _cryptoService.GetBiometricUnlockKeyAsync();
-                await SetUserKeyAndContinueAsync(userKey);
+                await SetKeyAndContinueAsync(userKey);
             }
-        }
-
-        private async Task SetUserKeyAndContinueAsync(UserKey key)
-        {
-            var hasKey = await _cryptoService.HasUserKeyAsync();
-            if (!hasKey)
-            {
-                await _cryptoService.SetUserKeyAsync(key);
-            }
-            DoContinue();
         }
 
         public void PromptSSO()
