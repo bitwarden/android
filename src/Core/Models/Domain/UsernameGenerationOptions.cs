@@ -22,8 +22,8 @@ namespace Bit.Core.Models.Domain
         public string SimpleLoginApiKey { get; set; }
         public string DuckDuckGoApiKey { get; set; }
         public string FastMailApiKey { get; set; }
-        public string AnonAddyApiAccessToken { get; set; }
-        public string AnonAddyDomainName { get; set; }
+        public string AddyIoApiAccessToken { get; set; }
+        public string AddyIoDomainName { get; set; }
         public string EmailWebsite { get; set; }
 
         public ForwarderOptions GetForwarderOptions()
@@ -35,11 +35,11 @@ namespace Bit.Core.Models.Domain
 
             switch (ServiceType)
             {
-                case ForwardedEmailServiceType.AnonAddy:
-                    return new AnonAddyForwarderOptions
+                case ForwardedEmailServiceType.AddyIo:
+                    return new AddyIoForwarderOptions
                     {
-                        ApiKey = AnonAddyApiAccessToken,
-                        DomainName = AnonAddyDomainName
+                        ApiKey = AddyIoApiAccessToken,
+                        DomainName = AddyIoDomainName
                     };
                 case ForwardedEmailServiceType.DuckDuckGo:
                     return new ForwarderOptions { ApiKey = DuckDuckGoApiKey };

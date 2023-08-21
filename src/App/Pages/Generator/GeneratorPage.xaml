@@ -269,15 +269,15 @@
                                 Grid.Column="1"
                                 AutomationId="ShowForwardedEmailApiSecretButton" />
                         </Grid>
-                        <Label IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.AnonAddy}}"
+                        <Label IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.AddyIo}}"
                             Text="{u:I18n DomainNameRequiredParenthesis}"
                             StyleClass="box-label"
                             Margin="0,10,0,0"/>
-                        <Entry IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.AnonAddy}}"
-                            x:Name="_anonAddyDomainNameEntry"
-                            Text="{Binding AnonAddyDomainName}"
+                        <Entry IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.AddyIo}}"
+                            x:Name="_addyIoDomainNameEntry"
+                            Text="{Binding AddyIoDomainName}"
                             StyleClass="box-value"
-                            AutomationId="AnonAddyDomainNameEntry" />
+                            AutomationId="AddyIoDomainNameEntry" />
                     </StackLayout>                    
                     <!--RANDOM WORD OPTIONS-->
                     <Grid IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.RandomWord}}">

@@ -77,7 +77,7 @@ namespace Bit.App.Pages
             };
 
             ForwardedEmailServiceTypeOptions = new List<ForwardedEmailServiceType> {
-                ForwardedEmailServiceType.AnonAddy,
+                ForwardedEmailServiceType.AddyIo,
                 ForwardedEmailServiceType.DuckDuckGo,
                 ForwardedEmailServiceType.Fastmail,
                 ForwardedEmailServiceType.FirefoxRelay,
@@ -451,8 +451,8 @@ namespace Bit.App.Pages
             {
                 switch (ForwardedEmailServiceSelected)
                 {
-                    case ForwardedEmailServiceType.AnonAddy:
-                        return _usernameOptions.AnonAddyApiAccessToken;
+                    case ForwardedEmailServiceType.AddyIo:
+                        return _usernameOptions.AddyIoApiAccessToken;
                     case ForwardedEmailServiceType.DuckDuckGo:
                         return _usernameOptions.DuckDuckGoApiKey;
                     case ForwardedEmailServiceType.Fastmail:
@@ -470,10 +470,10 @@ namespace Bit.App.Pages
                 bool changed = false;
                 switch (ForwardedEmailServiceSelected)
                 {
-                    case ForwardedEmailServiceType.AnonAddy:
-                        if (_usernameOptions.AnonAddyApiAccessToken != value)
+                    case ForwardedEmailServiceType.AddyIo:
+                        if (_usernameOptions.AddyIoApiAccessToken != value)
                         {
-                            _usernameOptions.AnonAddyApiAccessToken = value;
+                            _usernameOptions.AddyIoApiAccessToken = value;
                             changed = true;
                         }
                         break;
@@ -523,7 +523,7 @@ namespace Bit.App.Pages
             {
                 switch (ForwardedEmailServiceSelected)
                 {
-                    case ForwardedEmailServiceType.AnonAddy:
+                    case ForwardedEmailServiceType.AddyIo:
                     case ForwardedEmailServiceType.FirefoxRelay:
                         return AppResources.APIAccessToken;
                     case ForwardedEmailServiceType.DuckDuckGo:
@@ -545,15 +545,15 @@ namespace Bit.App.Pages
             set => SetProperty(ref _showForwardedEmailApiSecret, value);
         }
 
-        public string AnonAddyDomainName
+        public string AddyIoDomainName
         {
-            get => _usernameOptions.AnonAddyDomainName;
+            get => _usernameOptions.AddyIoDomainName;
             set
             {
-                if (_usernameOptions.AnonAddyDomainName != value)
+                if (_usernameOptions.AddyIoDomainName != value)
                 {
-                    _usernameOptions.AnonAddyDomainName = value;
-                    TriggerPropertyChanged(nameof(AnonAddyDomainName));
+                    _usernameOptions.AddyIoDomainName = value;
+                    TriggerPropertyChanged(nameof(AddyIoDomainName));
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
             }
@@ -793,7 +793,7 @@ namespace Bit.App.Pages
             TriggerPropertyChanged(nameof(CapitalizeRandomWordUsername));
             TriggerPropertyChanged(nameof(ForwardedEmailApiSecret));
             TriggerPropertyChanged(nameof(ForwardedEmailApiSecretLabel));
-            TriggerPropertyChanged(nameof(AnonAddyDomainName));
+            TriggerPropertyChanged(nameof(AddyIoDomainName));
             TriggerPropertyChanged(nameof(CatchAllEmailDomain));
             TriggerPropertyChanged(nameof(ForwardedEmailServiceSelected));
             TriggerPropertyChanged(nameof(UsernameTypeSelected));
@@ -832,7 +832,7 @@ namespace Bit.App.Pages
             {
                 if (ex is ForwardedEmailInvalidSecretException)
                 {
-                    message = ForwardedEmailServiceSelected == ForwardedEmailServiceType.AnonAddy || ForwardedEmailServiceSelected == ForwardedEmailServiceType.FirefoxRelay
+                    message = ForwardedEmailServiceSelected == ForwardedEmailServiceType.AddyIo || ForwardedEmailServiceSelected == ForwardedEmailServiceType.FirefoxRelay
                                 ? AppResources.InvalidAPIToken
                                 : AppResources.InvalidAPIKey;
                 }
