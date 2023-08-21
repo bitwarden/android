@@ -2414,8 +2414,8 @@ kies u Voeg TOTP toe om die sleutel veilig te bewaar</value>
     <value>Diens</value>
   </data>
   <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
