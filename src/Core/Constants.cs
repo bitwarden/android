@@ -86,8 +86,8 @@ namespace Bit.Core
         public static string VaultTimeoutKey(string userId) => $"vaultTimeout_{userId}";
         public static string VaultTimeoutActionKey(string userId) => $"vaultTimeoutAction_{userId}";
         public static string MasterKeyEncryptedUserKeyKey(string userId) => $"masterKeyEncryptedUserKey_{userId}";
-        public static string UserKeyAutoUnlockKey(string userId) => $"autoUnlock_{userId}";
-        public static string UserKeyBiometricUnlockKey(string userId) => $"biometricUnlock_{userId}";
+        public static string UserKeyAutoUnlockKey(string userId) => $"userKeyAutoUnlock_{userId}";
+        public static string UserKeyBiometricUnlockKey(string userId) => $"UserKeyBiometricUnlock_{userId}";
         public static string CiphersKey(string userId) => $"ciphers_{userId}";
         public static string FoldersKey(string userId) => $"folders_{userId}";
         public static string CollectionsKey(string userId) => $"collections_{userId}";
