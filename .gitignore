@@ -3,22 +3,10 @@
 Thumbs.db
 
 # IDEs and editors
+.gradle
 .idea/
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# Visual Studio Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
-
-# Node
-node_modules
-npm-debug.log
+*.iml
+/build
+/captures
+/local.properties
+local.properties
