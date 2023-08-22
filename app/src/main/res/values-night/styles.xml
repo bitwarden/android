@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="BaseTheme" parent="android:Theme.Material">
+        <item name="android:buttonStyle">@style/ButtonStyle</item>
+        <item name="android:colorAccent">@color/dark_primary</item>
+        <item name="android:colorActivatedHighlight">@android:color/transparent</item>
+        <item name="android:colorControlNormal">@color/dark_border</item>
+        <item name="android:colorPrimaryDark">@color/dark_notification_bar</item>
+        <item name="android:navigationBarColor">@color/dark_navigation_bar_background</item>
+        <item name="android:popupTheme">@android:style/ThemeOverlay.Material</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="ButtonStyle" parent="android:Widget.Material.Button">
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!-- Launch theme (for auto dark/light based on system) -->
+    <style name="LaunchTheme" parent="BaseTheme">
+        <item name="android:windowBackground">@drawable/splash_screen_dark</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:ignore="NewApi">
+            @drawable/splash_screen_round
+        </item>
+    </style>
+</resources>
