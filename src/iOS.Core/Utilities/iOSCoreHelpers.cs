@@ -112,9 +112,9 @@ namespace Bit.iOS.Core.Utilities
             var clipboardService = new ClipboardService(stateService);
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, clipboardService,
                 messagingService, broadcasterService);
-            var biometricService = new BiometricService(stateService);
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);
+            var biometricService = new BiometricService(stateService, cryptoService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
 
             ServiceContainer.Register<ISynchronousStorageService>(preferencesStorage);
@@ -245,9 +245,9 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Register<IDeleteAccountActionFlowExecutioner>("deleteAccountActionFlowExecutioner", deleteAccountActionFlowExecutioner);
 
             var verificationActionsFlowHelper = new VerificationActionsFlowHelper(
-                ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService"),
                 ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
-                ServiceContainer.Resolve<ICryptoService>("cryptoService"));
+                ServiceContainer.Resolve<ICryptoService>("cryptoService"),
+                ServiceContainer.Resolve<IUserVerificationService>());
             ServiceContainer.Register<IVerificationActionsFlowHelper>("verificationActionsFlowHelper", verificationActionsFlowHelper);
 
             if (postBootstrapFunc != null)

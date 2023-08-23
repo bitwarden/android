@@ -1,20 +1,19 @@
 ﻿using System.Threading.Tasks;
+using Bit.App.Services;
 using Bit.Core.Abstractions;
 using Foundation;
 using LocalAuthentication;
 
 namespace Bit.iOS.Core.Services
 {
-    public class BiometricService : IBiometricService
+    public class BiometricService : BaseBiometricService
     {
-        private IStateService _stateService;
-
-        public BiometricService(IStateService stateService)
+        public BiometricService(IStateService stateService, ICryptoService cryptoService)
+            : base(stateService, cryptoService)
         {
-            _stateService = stateService;
         }
 
-        public async Task<bool> SetupBiometricAsync(string bioIntegritySrcKey = null)
+        public override async Task<bool> SetupBiometricAsync(string bioIntegritySrcKey = null)
         {
             if (bioIntegritySrcKey == null)
             {
@@ -30,7 +29,7 @@ namespace Bit.iOS.Core.Services
             return true;
         }
 
-        public async Task<bool> IsSystemBiometricIntegrityValidAsync(string bioIntegritySrcKey = null)
+        public override async Task<bool> IsSystemBiometricIntegrityValidAsync(string bioIntegritySrcKey = null)
         {
             var state = GetState();
             if (state == null)

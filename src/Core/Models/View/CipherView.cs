@@ -52,7 +52,7 @@ namespace Bit.Core.Models.View
         public DateTime CreationDate { get; set; }
         public DateTime? DeletedDate { get; set; }
         public CipherRepromptType Reprompt { get; set; }
-        public SymmetricCryptoKey Key { get; set; }
+        public CipherKey Key { get; set; }
 
         public ItemView Item
         {
@@ -121,5 +121,7 @@ namespace Bit.Core.Models.View
         public bool CanLaunch => Login?.CanLaunch == true || Fido2Key?.CanLaunch == true;
 
         public string LaunchUri => Login?.LaunchUri ?? Fido2Key?.LaunchUri;
+
+        public bool IsClonable => OrganizationId is null && Type != CipherType.Fido2Key;
     }
 }

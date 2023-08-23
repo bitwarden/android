@@ -143,7 +143,7 @@ namespace Bit.Core.Services
                 return _decryptedSendsCache;
             }
 
-            var hasKey = await _cryptoService.HasKeyAsync();
+            var hasKey = await _cryptoService.HasUserKeyAsync();
             if (!hasKey)
             {
                 throw new Exception("No Key.");

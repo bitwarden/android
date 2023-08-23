@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Android.OS;
 using Android.Security.Keystore;
+using Bit.App.Services;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Java.Security;
@@ -9,10 +10,8 @@ using Javax.Crypto;
 
 namespace Bit.Droid.Services
 {
-    public class BiometricService : IBiometricService
+    public class BiometricService : BaseBiometricService
     {
-        private readonly IStateService _stateService;
-
         private const string KeyName = "com.8bit.bitwarden.biometric_integrity";
 
         private const string KeyStoreName = "AndroidKeyStore";
@@ -24,14 +23,14 @@ namespace Bit.Droid.Services
 
         private readonly KeyStore _keystore;
 
-        public BiometricService(IStateService stateService)
+        public BiometricService(IStateService stateService, ICryptoService cryptoService)
+            : base(stateService, cryptoService)
         {
-            _stateService = stateService;
             _keystore = KeyStore.GetInstance(KeyStoreName);
             _keystore.Load(null);
         }
 
-        public async Task<bool> SetupBiometricAsync(string bioIntegritySrcKey = null)
+        public override async Task<bool> SetupBiometricAsync(string bioIntegritySrcKey = null)
         {
             if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
             {
@@ -41,7 +40,7 @@ namespace Bit.Droid.Services
             return true;
         }
 
-        public async Task<bool> IsSystemBiometricIntegrityValidAsync(string bioIntegritySrcKey = null)
+        public override async Task<bool> IsSystemBiometricIntegrityValidAsync(string bioIntegritySrcKey = null)
         {
             if (Build.VERSION.SdkInt < BuildVersionCodes.M)
             {

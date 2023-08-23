@@ -2628,17 +2628,84 @@ Voulez-vous basculer vers ce compte ?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Mot de passe principal actuel</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Logged in!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Approve with my other device</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Request admin approval</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Approve with master password</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Turn off using a public device</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Remember this device</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Clé d'accès</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Clés d'accès</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Créée le {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Vous ne pouvez modifier l'application associée à la clé d'accès car cela l'invaliderait</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>La clé d'accès ne sera pas copiée</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>L'entrée clonée ne contiendra pas la clé d'accès. Continuer quand même ?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Copier l'application</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Disponible pour la validation en deux étapes</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Aide sur la ressaisie du mot de passe principal</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Le déverrouillage peut échouer en raison d'une mémoire insuffisante. Diminuez les paramètres de mémoire KDF pour y remédier</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Clé API invalide</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Jeton API invalide</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Admin approval requested</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Your request has been sent to your admin.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>You will be notified once approved. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Trouble logging in?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Logging in as {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Vault timeout action changed to log out</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Cet élément ne peut pas être déplacé vers l'organisation, car celle-ci dispose déjà d'un élément avec la même clé d'accès.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Bloquer la saisie automatique</value>
@@ -2671,9 +2738,6 @@ Voulez-vous basculer vers ce compte ?</value>
   <data name="InvalidURI" xml:space="preserve">
     <value>URI incorrect</value>
   </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI enregistré</value>
-  </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI supprimé</value>
   </data>
@@ -2685,5 +2749,17 @@ Voulez-vous basculer vers ce compte ?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Impossible de modifier des URI multiples à la fois</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Login approved</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Log in with device</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Connexion sur</value>
   </data>
 </root>

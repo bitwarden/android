@@ -13,6 +13,14 @@ namespace Bit.Core.Abstractions
     public interface IStateService
     {
         List<AccountView> AccountViews { get; }
+        Task<UserKey> GetUserKeyAsync(string userId = null);
+        Task SetUserKeyAsync(UserKey value, string userId = null);
+        Task<MasterKey> GetMasterKeyAsync(string userId = null);
+        Task SetMasterKeyAsync(MasterKey value, string userId = null);
+        Task<string> GetMasterKeyEncryptedUserKeyAsync(string userId = null);
+        Task SetMasterKeyEncryptedUserKeyAsync(string value, string userId = null);
+        Task<UserKey> GetUserKeyAutoUnlockAsync(string userId = null);
+        Task SetUserKeyAutoUnlockAsync(UserKey value, string userId = null);
         Task<string> GetActiveUserIdAsync();
         Task<string> GetActiveUserEmailAsync();
         Task<T> GetActiveUserCustomDataAsync<T>(Func<Account, T> dataMapper);
@@ -27,6 +35,8 @@ namespace Bit.Core.Abstractions
         Task<EnvironmentUrlData> GetPreAuthEnvironmentUrlsAsync();
         Task SetPreAuthEnvironmentUrlsAsync(EnvironmentUrlData value);
         Task<EnvironmentUrlData> GetEnvironmentUrlsAsync(string userId = null);
+        Task<UserKey> GetUserKeyBiometricUnlockAsync(string userId = null);
+        Task SetUserKeyBiometricUnlockAsync(UserKey value, string userId = null);
         Task<bool?> GetBiometricUnlockAsync(string userId = null);
         Task SetBiometricUnlockAsync(bool? value, string userId = null);
         Task<bool> GetBiometricLockedAsync(string userId = null);
@@ -36,26 +46,22 @@ namespace Bit.Core.Abstractions
         Task<bool> IsAccountBiometricIntegrityValidAsync(string bioIntegritySrcKey, string userId = null);
         Task SetAccountBiometricIntegrityValidAsync(string bioIntegritySrcKey, string userId = null);
         Task<bool> CanAccessPremiumAsync(string userId = null);
-        Task SetPersonalPremiumAsync(bool value, string userId = null);
         Task<string> GetProtectedPinAsync(string userId = null);
+        Task SetPersonalPremiumAsync(bool value, string userId = null);
+        Task<EncString> GetPinKeyEncryptedUserKeyAsync(string userId = null);
+        Task SetPinKeyEncryptedUserKeyAsync(EncString value, string userId = null);
+        Task<EncString> GetPinKeyEncryptedUserKeyEphemeralAsync(string userId = null);
+        Task SetPinKeyEncryptedUserKeyEphemeralAsync(EncString value, string userId = null);
         Task SetProtectedPinAsync(string value, string userId = null);
-        Task<string> GetPinProtectedAsync(string userId = null);
-        Task SetPinProtectedAsync(string value, string userId = null);
-        Task<EncString> GetPinProtectedKeyAsync(string userId = null);
-        Task SetPinProtectedKeyAsync(EncString value, string userId = null);
         Task SetKdfConfigurationAsync(KdfConfig config, string userId = null);
-        Task<string> GetKeyEncryptedAsync(string userId = null);
-        Task SetKeyEncryptedAsync(string value, string userId = null);
-        Task<SymmetricCryptoKey> GetKeyDecryptedAsync(string userId = null);
-        Task SetKeyDecryptedAsync(SymmetricCryptoKey value, string userId = null);
         Task<string> GetKeyHashAsync(string userId = null);
         Task SetKeyHashAsync(string value, string userId = null);
-        Task<string> GetEncKeyEncryptedAsync(string userId = null);
-        Task SetEncKeyEncryptedAsync(string value, string userId = null);
         Task<Dictionary<string, string>> GetOrgKeysEncryptedAsync(string userId = null);
         Task SetOrgKeysEncryptedAsync(Dictionary<string, string> value, string userId = null);
         Task<string> GetPrivateKeyEncryptedAsync(string userId = null);
         Task SetPrivateKeyEncryptedAsync(string value, string userId = null);
+        Task<SymmetricCryptoKey> GetDeviceKeyAsync(string userId = null);
+        Task SetDeviceKeyAsync(SymmetricCryptoKey value, string userId = null);
         Task<List<string>> GetAutofillBlacklistedUrisAsync(string userId = null);
         Task SetAutofillBlacklistedUrisAsync(List<string> value, string userId = null);
         Task<bool?> GetAutofillTileAddedAsync();
@@ -172,9 +178,33 @@ namespace Bit.Core.Abstractions
         Task<string> GetAvatarColorAsync(string userId = null);
         Task<string> GetPreLoginEmailAsync();
         Task SetPreLoginEmailAsync(string value);
+        Task<AccountDecryptionOptions> GetAccountDecryptionOptions(string userId = null);
+        Task<PendingAdminAuthRequest> GetPendingAdminAuthRequestAsync(string userId = null);
+        Task SetPendingAdminAuthRequestAsync(PendingAdminAuthRequest value, string userId = null);
         string GetLocale();
         void SetLocale(string locale);
         ConfigResponse GetConfigs();
         void SetConfigs(ConfigResponse value);
+        Task<bool> GetShouldTrustDeviceAsync();
+        Task SetShouldTrustDeviceAsync(bool value);
+        [Obsolete("Use GetPinKeyEncryptedUserKeyAsync instead, left for migration purposes")]
+        Task<string> GetPinProtectedAsync(string userId = null);
+        [Obsolete("Use SetPinKeyEncryptedUserKeyAsync instead, left for migration purposes")]
+        Task SetPinProtectedAsync(string value, string userId = null);
+        [Obsolete("Use GetPinKeyEncryptedUserKeyEphemeralAsync instead, left for migration purposes")]
+        Task<EncString> GetPinProtectedKeyAsync(string userId = null);
+        [Obsolete("Use SetPinKeyEncryptedUserKeyEphemeralAsync instead, left for migration purposes")]
+        Task SetPinProtectedKeyAsync(EncString value, string userId = null);
+        [Obsolete("Use GetMasterKeyEncryptedUserKeyAsync instead, left for migration purposes")]
+        Task<string> GetEncKeyEncryptedAsync(string userId = null);
+        [Obsolete("Use SetMasterKeyEncryptedUserKeyAsync instead, left for migration purposes")]
+        Task SetEncKeyEncryptedAsync(string value, string userId = null);
+        [Obsolete("Left for migration purposes")]
+        Task SetKeyEncryptedAsync(string value, string userId = null);
+
+        [Obsolete("Use GetUserKeyAutoUnlock instead, left for migration purposes")]
+        Task<string> GetKeyEncryptedAsync(string userId = null);
+        [Obsolete("Use GetMasterKeyAsync instead, left for migration purposes")]
+        Task<SymmetricCryptoKey> GetKeyDecryptedAsync(string userId = null);
     }
 }

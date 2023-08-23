@@ -49,7 +49,7 @@ namespace Bit.Core.Models.Domain
             }
             if (Fido2Key != null)
             {
-                view.Fido2Key = await Fido2Key.DecryptAsync(orgId);
+                view.Fido2Key = await Fido2Key.DecryptAsync(orgId, key);
             }
             return view;
         }

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
+using Bit.Core.Enums;
 
 namespace Bit.App.Services
 {
@@ -20,8 +19,13 @@ namespace Bit.App.Services
 
         public string[] ProtectedFields { get; } = { "LoginTotp", "LoginPassword", "H_FieldValue", "CardNumber", "CardCode" };
 
-        public async Task<bool> ShowPasswordPromptAsync()
+        public async Task<bool> PromptAndCheckPasswordIfNeededAsync(CipherRepromptType repromptType = CipherRepromptType.Password)
         {
+            if (repromptType == CipherRepromptType.None || await ShouldByPassMasterPasswordRepromptAsync())
+            {
+                return true;
+            }
+
             return await _platformUtilsService.ShowPasswordDialogAsync(AppResources.PasswordConfirmation, AppResources.PasswordConfirmationDesc, ValidatePasswordAsync);
         }
 
@@ -41,10 +45,9 @@ namespace Bit.App.Services
             return await _cryptoService.CompareAndUpdateKeyHashAsync(password, null);
         }
 
-        public async Task<bool> Enabled()
+        private async Task<bool> ShouldByPassMasterPasswordRepromptAsync()
         {
-            var keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
-            return !await keyConnectorService.GetUsesKeyConnector();
+            return await _cryptoService.GetMasterKeyHashAsync() is null;
         }
     }
 }

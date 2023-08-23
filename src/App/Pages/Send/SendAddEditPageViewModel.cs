@@ -127,10 +127,9 @@ namespace Bit.App.Pages
         public SendType? Type { get; set; }
         public byte[] FileData { get; set; }
         public string NewPassword { get; set; }
-        public bool ShareOnSave { get; set; }
         public bool DisableHideEmailControl { get; set; }
         public bool IsAddFromShare { get; set; }
-        public string ShareOnSaveText => CopyInsteadOfShareAfterSaving ? AppResources.CopySendLinkOnSave : AppResources.ShareOnSave;
+        public bool CopyInsteadOfShareAfterSaving { get; set; }
         public string OptionsAccessilibityText => ShowOptions ? AppResources.OptionsExpanded : AppResources.OptionsCollapsed;
         public List<KeyValuePair<string, SendType>> TypeOptions { get; }
         public List<KeyValuePair<string, string>> DeletionTypeOptions { get; }
@@ -182,15 +181,6 @@ namespace Bit.App.Pages
                 {
                     MaxAccessCountChanged();
                 }
-            }
-        }
-        public bool CopyInsteadOfShareAfterSaving
-        {
-            get => _copyInsteadOfShareAfterSaving;
-            set
-            {
-                SetProperty(ref _copyInsteadOfShareAfterSaving, value);
-                TriggerPropertyChanged(nameof(ShareOnSaveText));
             }
         }
         public SendView Send
@@ -412,34 +402,25 @@ namespace Bit.App.Pages
                     _messagingService.Send("sendUpdated");
                 }
 
-                if (!ShareOnSave)
-                {
-                    _platformUtilsService.ShowToast("success", null,
-                    EditMode ? AppResources.SendUpdated : AppResources.NewSendCreated);
-                }
-
                 if (!CopyInsteadOfShareAfterSaving)
                 {
                     await CloseAsync();
                 }
 
-                if (ShareOnSave)
+                var savedSend = await _sendService.GetAsync(sendId);
+                if (savedSend != null)
                 {
-                    var savedSend = await _sendService.GetAsync(sendId);
-                    if (savedSend != null)
+                    var savedSendView = await savedSend.DecryptAsync();
+                    if (CopyInsteadOfShareAfterSaving)
                     {
-                        var savedSendView = await savedSend.DecryptAsync();
-                        if (CopyInsteadOfShareAfterSaving)
-                        {
-                            await AppHelpers.CopySendUrlAsync(savedSendView);
+                        await AppHelpers.CopySendUrlAsync(savedSendView);
 
-                            // wait so that the user sees the message before the view gets dismissed
-                            await Task.Delay(1300);
-                        }
-                        else
-                        {
-                            await AppHelpers.ShareSendUrlAsync(savedSendView);
-                        }
+                        // wait so that the user sees the message before the view gets dismissed
+                        await Task.Delay(1300);
+                    }
+                    else
+                    {
+                        await AppHelpers.ShareSendUrlAsync(savedSendView);
                     }
                 }
 

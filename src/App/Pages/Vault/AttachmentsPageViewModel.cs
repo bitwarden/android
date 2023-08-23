@@ -74,7 +74,7 @@ namespace Bit.App.Pages
             _cipherDomain = await _cipherService.GetAsync(CipherId);
             Cipher = await _cipherDomain.DecryptAsync();
             LoadAttachments();
-            _hasUpdatedKey = await _cryptoService.HasEncKeyAsync();
+            _hasUpdatedKey = await _cryptoService.HasUserKeyAsync();
             var canAccessPremium = await _stateService.CanAccessPremiumAsync();
             _canAccessAttachments = canAccessPremium || Cipher.OrganizationId != null;
             if (!_canAccessAttachments)

@@ -1281,7 +1281,7 @@ A leitura será efetuada automaticamente.</value>
     <value>Pode ser útil utilizar o serviço de acessibilidade quando as aplicações não suportam o serviço de preenchimento automático padrão.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Palavra-passe atualizada</value>
+    <value>Palavra-passe atualizada a</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
@@ -2626,17 +2626,84 @@ Deseja mudar para esta conta?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Palavra-passe mestra atual</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Sessão iniciada!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Aprovado com o meu outro dispositivo</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Pedir aprovação do administrador</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Aprovar com a palavra-passe mestra</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Desativar a utilização de um dispositivo público</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Lembrar este dispositivo</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Chave de acesso</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Chaves de acesso</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Criada a {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Aplicação</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Não é possível editar a aplicação da chave de acesso porque invalidaria a mesma</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>A chave de acesso não será copiada</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>A chave de acesso não será copiada para o item duplicado. Pretende ainda assim duplicar este item?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Copiar aplicação</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Disponível para a verificação de dois passos</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Ajuda para pedir novamente a palavra-passe mestra</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>O desbloqueio pode falhar devido a memória insuficiente. Diminua as definições de memória do KDF para resolver o problema.</value>
+    <value>O desbloqueio pode falhar devido a memória insuficiente. Diminua as definições de memória do KDF ou configure o desbloqueio por biometria para resolver o problema.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Chave da API inválida</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Token da API inválido</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Aprovação do administrador pedida</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>O seu pedido foi enviado ao seu administrador.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Será notificado quando for aprovado. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Problemas a iniciar sessão?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>A iniciar sessão como {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Ação de tempo limite do cofre alterada para terminar sessão</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Este item não pode ser partilhado com a organização porque já existe um com a mesma chave de acesso.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Bloquear preenchimento automático</value>
@@ -2669,9 +2736,6 @@ Deseja mudar para esta conta?</value>
   <data name="InvalidURI" xml:space="preserve">
     <value>URI inválido</value>
   </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI guardado</value>
-  </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI removido</value>
   </data>
@@ -2683,5 +2747,17 @@ Deseja mudar para esta conta?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Não é possível editar vários URIs ao mesmo tempo</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Início de sessão aprovado</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>O início de sessão com o dispositivo deve ser ativado nas definições da aplicação Bitwarden. Precisa de outra opção?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Iniciar sessão com o dispositivo</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>A iniciar sessão em</value>
   </data>
 </root>

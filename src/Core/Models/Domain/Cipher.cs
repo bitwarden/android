@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -108,7 +107,7 @@ namespace Bit.Core.Models.Domain
                 var orgKey = await cryptoService.GetOrgKeyAsync(OrganizationId);
 
                 var key = await cryptoService.DecryptToBytesAsync(Key, orgKey);
-                model.Key = new SymmetricCryptoKey(key);
+                model.Key = new CipherKey(key);
             }
 
             await DecryptObjAsync(model, this, new HashSet<string>
@@ -132,7 +131,7 @@ namespace Bit.Core.Models.Domain
                     model.Identity = await Identity.DecryptAsync(OrganizationId, model.Key);
                     break;
                 case Enums.CipherType.Fido2Key:
-                    model.Fido2Key = await Fido2Key.DecryptAsync(OrganizationId);
+                    model.Fido2Key = await Fido2Key.DecryptAsync(OrganizationId, model.Key);
                     break;
                 default:
                     break;
