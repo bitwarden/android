@@ -687,7 +687,7 @@ jobs:
           Write-Output "##### Archive $configuration Configuration for $platform Platform"
           Write-Output "########################################"
           msbuild "$($env:GITHUB_WORKSPACE + "/src/iOS/iOS.csproj")" "/p:Platform=$platform" `
-          "/p:Configuration=$configuration" "/p:ArchiveOnBuild=true" "/t:`"Build`""
+            "/p:Configuration=$configuration" "/p:ArchiveOnBuild=true" "/t:`"Build`""
 
           Write-Output "########################################"
           Write-Output "##### Done"
