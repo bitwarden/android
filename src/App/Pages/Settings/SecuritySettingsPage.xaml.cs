@@ -1,8 +1,8 @@
-﻿using Bit.App.Resources;
+﻿using System;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
-using System;
 
 namespace Bit.App.Pages
 {

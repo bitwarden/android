@@ -220,7 +220,7 @@ namespace Bit.App.Pages
         public ICommand LockCommand { get; }
         public ICommand LogOutCommand { get; }
         public ICommand DeleteAccountCommand { get; }
-        
+
         public async Task InitAsync()
         {
             var decryptionOptions = await _stateService.GetAccountDecryptionOptions();
@@ -533,7 +533,7 @@ namespace Bit.App.Pages
         public async Task LogOutAsync()
         {
             if (await _platformUtilsService.ShowDialogAsync(AppResources.LogoutConfirmation, AppResources.LogOut, AppResources.Yes, AppResources.Cancel))
-            { 
+            {
                 _messagingService.Send(AccountsManagerMessageCommands.LOGOUT);
             }
         }
