@@ -115,7 +115,7 @@ namespace Bit.iOS.Core.Utilities
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);
             var biometricService = new BiometricService(stateService, cryptoService);
-            var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
+            var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService, stateService, secureStorageService);
 
             ServiceContainer.Register<ISynchronousStorageService>(preferencesStorage);
             ServiceContainer.Register<IBroadcasterService>("broadcasterService", broadcasterService);
