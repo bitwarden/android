@@ -7,6 +7,7 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Essentials;
 
 namespace Bit.App.Pages
 {
@@ -39,22 +40,6 @@ namespace Bit.App.Pages
             SelectOptionCommand = new AsyncCommand(SelectOptionAsync, canExecuteSelectOptionCommand, onSelectOptionCommandException, allowsMultipleExecutions: false);
         }
 
-        public void Init(Dictionary<TKey, string> items, TKey currentSelectedKey, TKey defaultSelectedKeyIfFailsToFind)
-        {
-            _items = items;
-
-            if (!items.ContainsKey(currentSelectedKey))
-            {
-                _logger.Error($"There is no {_title} options for key: {currentSelectedKey}");
-                currentSelectedKey = defaultSelectedKeyIfFailsToFind;
-            }
-
-            _selectedKey = currentSelectedKey;
-            _defaultSelectedKeyIfFailsToFind = defaultSelectedKeyIfFailsToFind;
-
-            TriggerPropertyChanged(nameof(SelectedValue));
-        }
-
         public AsyncCommand SelectOptionCommand { get; }
 
         public TKey SelectedKey => _selectedKey;
@@ -71,6 +56,30 @@ namespace Bit.App.Pages
                 _selectedKey = _defaultSelectedKeyIfFailsToFind;
                 return _items[_selectedKey];
             }
+        }
+
+        public void Init(Dictionary<TKey, string> items, TKey currentSelectedKey, TKey defaultSelectedKeyIfFailsToFind, bool logIfKeyNotFound = true)
+        {
+            _items = items;
+            _defaultSelectedKeyIfFailsToFind = defaultSelectedKeyIfFailsToFind;
+
+            Select(currentSelectedKey, logIfKeyNotFound);
+        }
+
+        public void Select(TKey key, bool logIfKeyNotFound = true)
+        {
+            if (!_items.ContainsKey(key))
+            {
+                if (logIfKeyNotFound)
+                {
+                    _logger.Error($"There is no {_title} options for key: {key}");
+                }
+                key = _defaultSelectedKeyIfFailsToFind;
+            }
+
+            _selectedKey = key;
+
+            MainThread.BeginInvokeOnMainThread(() => TriggerPropertyChanged(nameof(SelectedValue)));
         }
 
         private async Task SelectOptionAsync()
@@ -90,7 +99,9 @@ namespace Bit.App.Pages
             var sanitizedSelection = selection.Replace($"{SELECTED_CHARACTER} ", string.Empty);
             var optionKey = _items.First(o => o.Value == sanitizedSelection).Key;
 
-            if (!await _onSelectionChangingAsync(optionKey))
+            if (EqualityComparer<TKey>.Default.Equals(optionKey, _selectedKey)
+                ||
+                !await _onSelectionChangingAsync(optionKey))
             {
                 return;
             }

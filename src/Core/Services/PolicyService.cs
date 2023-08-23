@@ -50,6 +50,11 @@ namespace Bit.Core.Services
             return _policyCache;
         }
 
+        public async Task<Policy> FirstOrDefault(PolicyType? type, string userId = null)
+        {
+            return (await GetAll(type, userId)).FirstOrDefault();
+        }
+
         public async Task Replace(Dictionary<string, PolicyData> policies, string userId = null)
         {
             await _stateService.SetEncryptedPoliciesAsync(policies, userId);

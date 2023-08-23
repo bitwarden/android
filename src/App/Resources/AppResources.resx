@@ -2364,7 +2364,7 @@ select Add TOTP to store the key safely</value>
     <value>Approve login requests</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Use this device to approve login requests made from other devices.</value>
+    <value>Use this device to approve login requests made from other devices</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Allow notifications</value>
@@ -2782,5 +2782,18 @@ Do you want to switch to this account?</value>
   </data>
   <data name="SyncNow" xml:space="preserve">
     <value>Sync now</value>
+  </data>
+  <data name="UnlockOptions" xml:space="preserve">
+    <value>Unlock options</value>
+  </data>
+  <data name="SessionTimeout" xml:space="preserve">
+    <value>Session timeout</value>
+  </data>
+  <data name="SessionTimeoutAction" xml:space="preserve">
+    <value>Session timeout action</value>
+  </data>
+  <data name="AccountFingerprintPhrase" xml:space="preserve">
+    <value>Account fingerprint phrase</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
 </root>

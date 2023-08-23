@@ -230,6 +230,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account fingerprint phrase.
+        /// </summary>
+        public static string AccountFingerprintPhrase {
+            get {
+                return ResourceManager.GetString("AccountFingerprintPhrase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Locked.
         /// </summary>
         public static string AccountLocked {
@@ -5994,6 +6003,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Session timeout.
+        /// </summary>
+        public static string SessionTimeout {
+            get {
+                return ResourceManager.GetString("SessionTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Session timeout action.
+        /// </summary>
+        public static string SessionTimeoutAction {
+            get {
+                return ResourceManager.GetString("SessionTimeoutAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set master password.
         /// </summary>
         public static string SetMasterPassword {
@@ -6814,6 +6841,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unlock options.
+        /// </summary>
+        public static string UnlockOptions {
+            get {
+                return ResourceManager.GetString("UnlockOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unlock vault.
         /// </summary>
         public static string UnlockVault {
@@ -7030,7 +7066,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use this device to approve login requests made from other devices..
+        ///   Looks up a localized string similar to Use this device to approve login requests made from other devices.
         /// </summary>
         public static string UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices {
             get {

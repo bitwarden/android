@@ -18,7 +18,7 @@
 
         <controls:IconLabel
             Text="{Binding Source={x:Static core:BitwardenIcons.ShareSquare}}"
-            TextColor="Black"
+            TextColor="{DynamicResource TextColor}"
             HorizontalOptions="End"
             VerticalOptions="Center"
             AutomationProperties.IsInAccessibleTree="True"

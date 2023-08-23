@@ -150,10 +150,8 @@ namespace Bit.App.Pages
 
         public async Task SyncAsync()
         {
-            if (Connectivity.NetworkAccess == NetworkAccess.None)
+            if (!await HasConnectivityAsync())
             {
-                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
-                    AppResources.InternetConnectionRequiredTitle);
                 return;
             }
 

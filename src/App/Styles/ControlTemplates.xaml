@@ -15,6 +15,7 @@
             <controls:CustomLabel
                 Grid.Row="0"
                 Grid.Column="0"
+                MaxLines="2"
                 Text="{TemplateBinding Title}"
                 HorizontalOptions="StartAndExpand"
                 LineBreakMode="TailTruncation" />

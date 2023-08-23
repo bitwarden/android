@@ -21,7 +21,6 @@ namespace Bit.Core.Services
         private readonly ICipherService _cipherService;
         private readonly ICollectionService _collectionService;
         private readonly ISearchService _searchService;
-        private readonly IMessagingService _messagingService;
         private readonly ITokenService _tokenService;
         private readonly IUserVerificationService _userVerificationService;
         private readonly Func<Tuple<string, bool>, Task> _lockedCallback;
@@ -35,7 +34,6 @@ namespace Bit.Core.Services
             ICipherService cipherService,
             ICollectionService collectionService,
             ISearchService searchService,
-            IMessagingService messagingService,
             ITokenService tokenService,
             IUserVerificationService userVerificationService,
             Func<Tuple<string, bool>, Task> lockedCallback,
@@ -48,7 +46,6 @@ namespace Bit.Core.Services
             _cipherService = cipherService;
             _collectionService = collectionService;
             _searchService = searchService;
-            _messagingService = messagingService;
             _tokenService = tokenService;
             _userVerificationService = userVerificationService;
             _lockedCallback = lockedCallback;

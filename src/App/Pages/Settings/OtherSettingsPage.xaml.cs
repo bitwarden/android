@@ -31,7 +31,7 @@ namespace Bit.App.Pages
                 LoggerHelper.LogEvenIfCantBeResolved(ex);
                 ServiceContainer.Resolve<IPlatformUtilsService>().ShowToast(null, null, AppResources.AnErrorHasOccurred);
 
-                Navigation.PopModalAsync().FireAndForget();
+                Navigation.PopAsync().FireAndForget();
             }
         }
 
