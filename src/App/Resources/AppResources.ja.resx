@@ -2627,6 +2627,24 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>現在のマスターパスワード</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>ログインしました!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>他のデバイスで承認する</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>管理者の承認を要求する</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>マスターパスワードで承認する</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>パブリックデバイスを使用してオフにする</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>このデバイスを記憶する</value>
+  </data>
   <data name="Passkey" xml:space="preserve">
     <value>パスキー</value>
   </data>
@@ -2666,6 +2684,24 @@
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>無効な API トークン</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>管理者の承認を要求しました</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>要求が管理者に送信されました。</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>承認されると通知されます。 </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>ログインできない場合</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>{0} としてログイン中</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>保管庫のタイムアウトアクションがログアウトに変更されました</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
     <value>すでに同じパスキーを持つものがあるため、このアイテムは組織と共有することはできません。</value>
@@ -2712,6 +2748,15 @@
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>一度に複数の URI を編集することはできません</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>ログインの承認</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Bitwarden アプリで「デバイスでログイン」の設定をする必要があります。別のオプションが必要ですか？</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>デバイスでログイン</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>ログイン先</value>

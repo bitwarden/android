@@ -2629,6 +2629,24 @@ Vill du byta till detta konto?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Nuvarande huvudlösenord</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Inloggad!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Godkänn med min andra enhet</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Request admin approval</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Godkänn med huvudlösenord</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Turn off using a public device</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Remember this device</value>
+  </data>
   <data name="Passkey" xml:space="preserve">
     <value>Passkey</value>
   </data>
@@ -2668,6 +2686,24 @@ Vill du byta till detta konto?</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Ogiltig API-token</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Admin approval requested</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Your request has been sent to your admin.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Du kommer att meddelas vid godkännande. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Trouble logging in?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Loggar in som {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Vault timeout action changed to log out</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
     <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
@@ -2714,6 +2750,15 @@ Vill du byta till detta konto?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Det går inte att redigera flera URI:er samtidigt</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Login approved</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Logga in med enhet</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Logga in på</value>

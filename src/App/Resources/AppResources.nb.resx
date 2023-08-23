@@ -2628,6 +2628,24 @@ Vil du bytte til denne kontoen?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Nåværende hovedpassord</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Logget inn!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Godkjenn med min andre enhet</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Be om administratorgodkjenning</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Godkjenn med hovedpassord</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Skru av ved hjelp av en offentlig enhet</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Husk denne enheten</value>
+  </data>
   <data name="Passkey" xml:space="preserve">
     <value>Passnøkkel</value>
   </data>
@@ -2667,6 +2685,24 @@ Vil du bytte til denne kontoen?</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Invalid API token</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Admin-godkjenning forespurt</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Forespørselen din er sendt til administratoren din.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Du vil bli varslet når det er godkjent. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Problemer med å logge inn?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Logger inn som {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Vault timeout action changed to log out</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
     <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
@@ -2713,6 +2749,15 @@ Vil du bytte til denne kontoen?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Cannot edit multiple URIs at once</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Innlogging godkjent</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Logg inn med enhet</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Logger inn på</value>

@@ -2627,6 +2627,24 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Текущий мастер-пароль</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Вход выполнен!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Одобрить с другим устройством</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Запросить одобрение администратора</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Одобрить с мастер-паролем</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Выключить с помощью публичного устройства</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Запомнить это устройство</value>
+  </data>
   <data name="Passkey" xml:space="preserve">
     <value>Ключ доступа</value>
   </data>
@@ -2666,6 +2684,24 @@
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Некорректный токен API</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Запрошено одобрение администратора</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Ваш запрос был отправлен администратору.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Вас уведомят об одобрении. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Не удалось войти?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Войти как {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Таймаут хранилища изменен на выход</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
     <value>Этим элементом нельзя поделиться с организацией, поскольку существует другой с тем же ключом.</value>
@@ -2712,6 +2748,15 @@
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Невозможно редактировать несколько URI одновременно</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Вход одобрен</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Вход с устройства должен быть настроен в мобильном приложении Bitwarden. Нужен другой вариант?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Войти с устройства</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Войти на</value>
