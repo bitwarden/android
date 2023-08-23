@@ -12,14 +12,12 @@ namespace Bit.App.Services
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly ICryptoService _cryptoService;
         private readonly IStateService _stateService;
-        private readonly IStorageService _secureStorageService;
 
-        public MobilePasswordRepromptService(IPlatformUtilsService platformUtilsService, ICryptoService cryptoService, IStateService stateService, IStorageService storageService)
+        public MobilePasswordRepromptService(IPlatformUtilsService platformUtilsService, ICryptoService cryptoService, IStateService stateService)
         {
             _platformUtilsService = platformUtilsService;
             _cryptoService = cryptoService;
             _stateService = stateService;
-            _secureStorageService = storageService;
         }
 
         public string[] ProtectedFields { get; } = { "LoginTotp", "LoginPassword", "H_FieldValue", "CardNumber", "CardCode" };

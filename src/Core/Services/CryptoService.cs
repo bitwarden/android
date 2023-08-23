@@ -706,7 +706,7 @@ namespace Bit.Core.Services
             return masterKey ?? await this.MakeMasterKeyAsync(
                 password,
                 await _stateService.GetEmailAsync(userId),
-                await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile))); 
+                await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile)));
         }
 
         // --HELPER METHODS--
