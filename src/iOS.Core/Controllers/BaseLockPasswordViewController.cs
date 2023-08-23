@@ -367,7 +367,8 @@ namespace Bit.iOS.Core.Controllers
             await _stateService.SetBiometricLockedAsync(!success);
             if (success)
             {
-                DoContinue();
+                var userKey = await _cryptoService.GetBiometricUnlockKeyAsync();
+                await SetKeyAndContinueAsync(userKey);
             }
         }
 
