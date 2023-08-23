@@ -47,22 +47,7 @@ namespace Bit.App.Services
                 return false;
             };
 
-            var email = await _stateService.GetEmailAsync();
-            var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
-            var masterKey = await _cryptoService.MakeMasterKeyAsync(password, email, kdfConfig);
-
-            var storedPasswordHash = await _cryptoService.GetMasterKeyHashAsync();
-            if (storedPasswordHash == null)
-            {
-                var oldKey = await _secureStorageService.GetAsync<string>("oldKey");
-                if (masterKey.KeyB64 == oldKey)
-                {
-                    var localPasswordHash = await _cryptoService.HashMasterKeyAsync(password, masterKey, HashPurpose.LocalAuthorization);
-                    await _secureStorageService.RemoveAsync("oldKey");
-                    await _cryptoService.SetMasterKeyHashAsync(localPasswordHash);
-                }
-            }
-
+            var masterKey = await _cryptoService.GetOrDeriveMasterKeyAsync(password);
             var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(password, masterKey);
             if (passwordValid)
             {
