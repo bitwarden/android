@@ -466,7 +466,8 @@ namespace Bit.App.Pages
                 {
                     Email = _authService.Email,
                     MasterPasswordHash = _authService.MasterPasswordHash,
-                    DeviceIdentifier = await _appIdService.GetAppIdAsync()
+                    DeviceIdentifier = await _appIdService.GetAppIdAsync(),
+                    SsoEmail2FaSessionToken =  _authService.SsoEmail2FaSessionToken
                 };
                 await _apiService.PostTwoFactorEmailAsync(request);
                 if (showLoading)
