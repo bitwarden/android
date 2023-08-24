@@ -34,6 +34,7 @@ namespace Bit.App.Pages
         private readonly ICryptoService _cryptoService;
 
         private string _orgIdentifier;
+        private bool _useEphemeralWebBrowserSession = false;
 
         public LoginSsoPageViewModel()
         {
@@ -145,9 +146,12 @@ namespace Bit.App.Pages
                           "ssoToken=" + Uri.EscapeDataString(ssoToken);
 
                 WebAuthenticatorResult authResult = null;
-
-                authResult = await WebAuthenticator.AuthenticateAsync(new Uri(url),
-                    new Uri(REDIRECT_URI));
+                authResult = await WebAuthenticator.AuthenticateAsync(new WebAuthenticatorOptions()
+                {
+                    CallbackUrl = new Uri(REDIRECT_URI),
+                    Url = new Uri(url),
+                    PrefersEphemeralWebBrowserSession = _useEphemeralWebBrowserSession,
+                });
 
                 var code = GetResultCode(authResult, state);
                 if (!string.IsNullOrEmpty(code))
@@ -172,6 +176,8 @@ namespace Bit.App.Pages
             {
                 // user canceled
                 await _deviceActionService.HideLoadingAsync();
+                // Workaroung for cached expired sso token PM-3551 
+                _useEphemeralWebBrowserSession = true;
             }
             catch (Exception ex)
             {
