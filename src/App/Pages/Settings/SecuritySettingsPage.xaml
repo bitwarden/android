@@ -116,8 +116,11 @@
                             FontSize="Small"
                             TextColor="{DynamicResource MutedColor}"
                             StyleClass="list-sub" Margin="-5"
+                            HorizontalOptions="End"
                             ios:TimePicker.UpdateMode="WhenFinished"
-                            AutomationId="SettingCustomVaultTimeoutPicker" />
+                            AutomationId="SettingCustomVaultTimeoutPicker"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{Binding CustomVaultTimeoutTimeVerbalized}"/>
             </controls:BaseSettingItemView>
             
             <controls:SettingChooserItemView

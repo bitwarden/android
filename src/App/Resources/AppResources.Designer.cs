@@ -4841,6 +4841,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to One hour and one minute.
+        /// </summary>
+        public static string OneHourAndOneMinute {
+            get {
+                return ResourceManager.GetString("OneHourAndOneMinute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One hour and {0} minutes.
+        /// </summary>
+        public static string OneHourAndXMinute {
+            get {
+                return ResourceManager.GetString("OneHourAndXMinute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 1 minute.
         /// </summary>
         public static string OneMinute {
@@ -7512,6 +7530,33 @@ namespace Bit.App.Resources {
         public static string WordSeparator {
             get {
                 return ResourceManager.GetString("WordSeparator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} hours.
+        /// </summary>
+        public static string XHours {
+            get {
+                return ResourceManager.GetString("XHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} hours and one minute.
+        /// </summary>
+        public static string XHoursAndOneMinute {
+            get {
+                return ResourceManager.GetString("XHoursAndOneMinute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} hours and {1} minutes.
+        /// </summary>
+        public static string XHoursAndYMinutes {
+            get {
+                return ResourceManager.GetString("XHoursAndYMinutes", resourceCulture);
             }
         }
         

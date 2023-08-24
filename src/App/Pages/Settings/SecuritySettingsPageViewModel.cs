@@ -155,7 +155,7 @@ namespace Bit.App.Pages
             {
                 var oldValue = _customVaultTimeoutTime;
 
-                if (SetProperty(ref _customVaultTimeoutTime, value) && value.HasValue)
+                if (SetProperty(ref _customVaultTimeoutTime, value, additionalPropertyNames: new string[] { nameof(CustomVaultTimeoutTimeVerbalized) }) && value.HasValue)
                 {
                     UpdateVaultTimeoutAsync((int)value.Value.TotalMinutes)
                         .FireAndForget(ex =>
@@ -166,6 +166,8 @@ namespace Bit.App.Pages
                 }
             }
         }
+
+        public string CustomVaultTimeoutTimeVerbalized => CustomVaultTimeoutTime?.Verbalize(A11yExtensions.TimeSpanVerbalizationMode.HoursAndMinutes);
 
         public bool ShowCustomVaultTimeoutPicker => VaultTimeoutPickerViewModel.SelectedKey == CUSTOM_VAULT_TIMEOUT_VALUE;
 
@@ -324,7 +326,7 @@ namespace Bit.App.Pages
         {
             if (UseThisDeviceToApproveLoginRequests
                 &&
-                !await Page.DisplayAlert(string.Empty, AppResources.UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices, AppResources.Yes, AppResources.No))
+                !await Page.DisplayAlert(AppResources.ApproveLoginRequests, AppResources.UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices, AppResources.Yes, AppResources.No))
             {
                 _useThisDeviceToApproveLoginRequests = !UseThisDeviceToApproveLoginRequests;
                 TriggerPropertyChanged(nameof(UseThisDeviceToApproveLoginRequests));
