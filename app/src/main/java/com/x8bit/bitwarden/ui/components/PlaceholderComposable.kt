@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
  */
 @Composable
 fun PlaceholderComposable(
-    text: String = "Placeholder Composable"
+    text: String = "Placeholder Composable",
 ) {
     Box(
         modifier = Modifier
