@@ -11,6 +11,7 @@ namespace Bit.Core.Abstractions
     {
         void ClearCache();
         Task<IEnumerable<Policy>> GetAll(PolicyType? type, string userId = null);
+        Task<Policy> FirstOrDefault(PolicyType? type, string userId = null);
         Task Replace(Dictionary<string, PolicyData> policies, string userId = null);
         Task ClearAsync(string userId);
         Task<MasterPasswordPolicyOptions> GetMasterPasswordPolicyOptions(IEnumerable<Policy> policies = null, string userId = null);

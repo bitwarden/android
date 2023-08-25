@@ -24,6 +24,8 @@ namespace Bit.App.Utilities
 {
     public static class AppHelpers
     {
+        public const string VAULT_TIMEOUT_ACTION_CHANGED_MESSAGE_COMMAND = "vaultTimeoutActionChanged";
+
         public static async Task<string> CipherListOptions(ContentPage page, CipherView cipher, IPasswordRepromptService passwordRepromptService)
         {
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");

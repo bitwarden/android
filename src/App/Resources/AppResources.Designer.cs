@@ -230,6 +230,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account fingerprint phrase.
+        /// </summary>
+        public static string AccountFingerprintPhrase {
+            get {
+                return ResourceManager.GetString("AccountFingerprintPhrase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Locked.
         /// </summary>
         public static string AccountLocked {
@@ -4832,6 +4841,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to One hour and one minute.
+        /// </summary>
+        public static string OneHourAndOneMinute {
+            get {
+                return ResourceManager.GetString("OneHourAndOneMinute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One hour and {0} minutes.
+        /// </summary>
+        public static string OneHourAndXMinute {
+            get {
+                return ResourceManager.GetString("OneHourAndXMinute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 1 minute.
         /// </summary>
         public static string OneMinute {
@@ -5994,6 +6021,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Session timeout.
+        /// </summary>
+        public static string SessionTimeout {
+            get {
+                return ResourceManager.GetString("SessionTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Session timeout action.
+        /// </summary>
+        public static string SessionTimeoutAction {
+            get {
+                return ResourceManager.GetString("SessionTimeoutAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set master password.
         /// </summary>
         public static string SetMasterPassword {
@@ -6814,6 +6859,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unlock options.
+        /// </summary>
+        public static string UnlockOptions {
+            get {
+                return ResourceManager.GetString("UnlockOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unlock vault.
         /// </summary>
         public static string UnlockVault {
@@ -7030,7 +7084,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use this device to approve login requests made from other devices..
+        ///   Looks up a localized string similar to Use this device to approve login requests made from other devices.
         /// </summary>
         public static string UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices {
             get {
@@ -7476,6 +7530,33 @@ namespace Bit.App.Resources {
         public static string WordSeparator {
             get {
                 return ResourceManager.GetString("WordSeparator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} hours.
+        /// </summary>
+        public static string XHours {
+            get {
+                return ResourceManager.GetString("XHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} hours and one minute.
+        /// </summary>
+        public static string XHoursAndOneMinute {
+            get {
+                return ResourceManager.GetString("XHoursAndOneMinute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} hours and {1} minutes.
+        /// </summary>
+        public static string XHoursAndYMinutes {
+            get {
+                return ResourceManager.GetString("XHoursAndYMinutes", resourceCulture);
             }
         }
         

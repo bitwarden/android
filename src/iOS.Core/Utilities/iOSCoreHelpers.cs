@@ -115,6 +115,7 @@ namespace Bit.iOS.Core.Utilities
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);
             var biometricService = new BiometricService(stateService, cryptoService);
+            var userPinService = new UserPinService(stateService, cryptoService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
 
             ServiceContainer.Register<ISynchronousStorageService>(preferencesStorage);
@@ -138,6 +139,7 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Register<ICryptoService>("cryptoService", cryptoService);
             ServiceContainer.Register<IPasswordRepromptService>("passwordRepromptService", passwordRepromptService);
             ServiceContainer.Register<IAvatarImageSourcePool>("avatarImageSourcePool", new AvatarImageSourcePool());
+            ServiceContainer.Register<IUserPinService>(userPinService);
         }
 
         public static void RegisterFinallyBeforeBootstrap()

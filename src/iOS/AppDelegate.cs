@@ -164,7 +164,7 @@ namespace Bit.iOS
                     {
                         await ASHelpers.ReplaceAllIdentities();
                     }
-                    else if (message.Command == "vaultTimeoutActionChanged")
+                    else if (message.Command == AppHelpers.VAULT_TIMEOUT_ACTION_CHANGED_MESSAGE_COMMAND)
                     {
                         var timeoutAction = await _stateService.GetVaultTimeoutActionAsync();
                         if (timeoutAction == VaultTimeoutAction.Logout)
