@@ -2627,22 +2627,22 @@ Chcete se přepnout na tento účet?</value>
     <value>Aktuální hlavní heslo</value>
   </data>
   <data name="LoggedIn" xml:space="preserve">
-    <value>Logged in!</value>
+    <value>Přihlášeno!</value>
   </data>
   <data name="ApproveWithMyOtherDevice" xml:space="preserve">
-    <value>Approve with my other device</value>
+    <value>Schválit s mým dalším zařízením</value>
   </data>
   <data name="RequestAdminApproval" xml:space="preserve">
-    <value>Request admin approval</value>
+    <value>Žádost o schválení správcem</value>
   </data>
   <data name="ApproveWithMasterPassword" xml:space="preserve">
-    <value>Approve with master password</value>
+    <value>Schválit hlavním heslem</value>
   </data>
   <data name="TurnOffUsingPublicDevice" xml:space="preserve">
-    <value>Turn off using a public device</value>
+    <value>Vypnout pomocí veřejného zařízení</value>
   </data>
   <data name="RememberThisDevice" xml:space="preserve">
-    <value>Remember this device</value>
+    <value>Zapamatovat toto zařízení</value>
   </data>
   <data name="Passkey" xml:space="preserve">
     <value>Přístupový klíč</value>
@@ -2685,22 +2685,22 @@ Chcete se přepnout na tento účet?</value>
     <value>Neplatný token API</value>
   </data>
   <data name="AdminApprovalRequested" xml:space="preserve">
-    <value>Admin approval requested</value>
+    <value>Bylo vyžádáno schválení správcem</value>
   </data>
   <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
-    <value>Your request has been sent to your admin.</value>
+    <value>Váš požadavek byl odeslán Vašemu správci.</value>
   </data>
   <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
-    <value>You will be notified once approved. </value>
+    <value>Po schválení budete upozorněni. </value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
-    <value>Trouble logging in?</value>
+    <value>Potíže s přihlášením?</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>Přihlášování jako {0}</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
-    <value>Vault timeout action changed to log out</value>
+    <value>Akce časového limitu trezoru byla změněna na odhlášení</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
     <value>Tuto položku nelze sdílet s organizací, protože již existuje jedna se stejným přístupovým klíčem.</value>
@@ -2749,13 +2749,13 @@ Chcete se přepnout na tento účet?</value>
     <value>Najednou nelze upravovat více URI</value>
   </data>
   <data name="LoginApproved" xml:space="preserve">
-    <value>Login approved</value>
+    <value>Přihlášení bylo schváleno</value>
   </data>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
-    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+    <value>Přihlášení zařízením musí být nastaveno v aplikaci Bitwarden. Potřebujete další volby?</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
-    <value>Log in with device</value>
+    <value>Přihlásit se zařízením</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Přihlašování na</value>

@@ -1011,6 +1011,10 @@ namespace Bit.Core.Services
             // Decrypt
             var masterKey = new MasterKey(Convert.FromBase64String(oldKey));
             var encryptedUserKey = await _stateService.GetEncKeyEncryptedAsync(userId);
+            if (encryptedUserKey == null)
+            {
+                return;
+            }
             var userKey = await DecryptUserKeyWithMasterKeyAsync(
                 masterKey,
                 new EncString(encryptedUserKey),
@@ -1070,8 +1074,11 @@ namespace Bit.Core.Services
                 var encPin = await EncryptAsync(pin, userKey);
                 await _stateService.SetProtectedPinAsync(encPin.EncryptedString);
             }
-            // Clear old key
-            await _stateService.SetEncKeyEncryptedAsync(null);
+            // Clear old key only if not needed for bio/auto migration
+            if (await _stateService.GetKeyEncryptedAsync() != null)
+            {
+                await _stateService.SetEncKeyEncryptedAsync(null);
+            }
             return userKey;
         }
 

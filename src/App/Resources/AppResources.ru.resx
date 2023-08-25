@@ -2622,7 +2622,7 @@
     <value>Регион</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
-    <value>Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущая сессия будет завершена и потребуется повторная авторизация. Сессии на других устройствах могут оставаться активными в течение часа.</value>
+    <value>Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущий сеанс будет завершен и потребуется повторная авторизация. Сеансы на других устройствах могут оставаться активными в течение часа.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Текущий мастер-пароль</value>
@@ -2677,7 +2677,7 @@
     <value>Помощь по повторному запросу мастер-пароля</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+    <value>Разблокировка может завершиться ошибкой из-за нехватки памяти. Уменьшите настройки памяти KDF или настройте биометрическую разблокировку для решения этой проблемы.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Некорректный ключ API</value>
@@ -2756,7 +2756,7 @@
     <value>Вход с устройства должен быть настроен в мобильном приложении Bitwarden. Нужен другой вариант?</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
-    <value>Войти с устройства</value>
+    <value>Войти с помощью устройства</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Войти на</value>

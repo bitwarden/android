@@ -2642,10 +2642,10 @@ Vill du byta till detta konto?</value>
     <value>Godkänn med huvudlösenord</value>
   </data>
   <data name="TurnOffUsingPublicDevice" xml:space="preserve">
-    <value>Turn off using a public device</value>
+    <value>Stäng av med en offentlig enhet</value>
   </data>
   <data name="RememberThisDevice" xml:space="preserve">
-    <value>Remember this device</value>
+    <value>Kom ihåg denna enhet</value>
   </data>
   <data name="Passkey" xml:space="preserve">
     <value>Passkey</value>
@@ -2697,7 +2697,7 @@ Vill du byta till detta konto?</value>
     <value>Du kommer att meddelas vid godkännande. </value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
-    <value>Trouble logging in?</value>
+    <value>Problem med att logga in?</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
     <value>Loggar in som {0}</value>
