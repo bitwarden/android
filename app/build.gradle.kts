@@ -100,6 +100,7 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.robolectric.robolectric)
+    testImplementation(libs.square.okhttp.mockwebserver)
     testImplementation(libs.square.turbine)
 
     detektPlugins(libs.detekt.detekt.formatting)
