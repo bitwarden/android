@@ -2627,22 +2627,22 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Aktuelles Master-Passwort</value>
   </data>
   <data name="LoggedIn" xml:space="preserve">
-    <value>Logged in!</value>
+    <value>Angemeldet!</value>
   </data>
   <data name="ApproveWithMyOtherDevice" xml:space="preserve">
-    <value>Approve with my other device</value>
+    <value>Mit meinem anderen Gerät genehmigen</value>
   </data>
   <data name="RequestAdminApproval" xml:space="preserve">
-    <value>Request admin approval</value>
+    <value>Admin-Genehmigung anfordern</value>
   </data>
   <data name="ApproveWithMasterPassword" xml:space="preserve">
-    <value>Approve with master password</value>
+    <value>Mit Master-Passwort genehmigen</value>
   </data>
   <data name="TurnOffUsingPublicDevice" xml:space="preserve">
-    <value>Turn off using a public device</value>
+    <value>Mit einem öffentlichen Gerät ausschalten</value>
   </data>
   <data name="RememberThisDevice" xml:space="preserve">
-    <value>Remember this device</value>
+    <value>Dieses Gerät merken</value>
   </data>
   <data name="Passkey" xml:space="preserve">
     <value>Passkey</value>
@@ -2685,19 +2685,19 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Ungültiger API-Token</value>
   </data>
   <data name="AdminApprovalRequested" xml:space="preserve">
-    <value>Admin approval requested</value>
+    <value>Admin-Genehmigung angefordert</value>
   </data>
   <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
-    <value>Your request has been sent to your admin.</value>
+    <value>Deine Anfrage wurde an deinen Administrator gesendet.</value>
   </data>
   <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
-    <value>You will be notified once approved. </value>
+    <value>Du wirst benachrichtigt, sobald sie genehmigt wurde.</value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
-    <value>Trouble logging in?</value>
+    <value>Probleme beim Einloggen?</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>Anmelden als {0}</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Vault timeout action changed to log out</value>
@@ -2749,13 +2749,13 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Es können nicht mehrere URIs auf einmal bearbeitet werden</value>
   </data>
   <data name="LoginApproved" xml:space="preserve">
-    <value>Login approved</value>
+    <value>Login genehmigt</value>
   </data>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
-    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+    <value>Die Anmeldung über ein Gerät muss in den Einstellungen der Bitwarden App eingerichtet werden. Benötigst du eine andere Option?</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
-    <value>Log in with device</value>
+    <value>Mit Gerät anmelden</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Anmelden bei</value>
