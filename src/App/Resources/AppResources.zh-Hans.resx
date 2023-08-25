@@ -2628,22 +2628,22 @@
     <value>当前主密码</value>
   </data>
   <data name="LoggedIn" xml:space="preserve">
-    <value>Logged in!</value>
+    <value>已登录！</value>
   </data>
   <data name="ApproveWithMyOtherDevice" xml:space="preserve">
-    <value>Approve with my other device</value>
+    <value>通过我的其他设备批准</value>
   </data>
   <data name="RequestAdminApproval" xml:space="preserve">
-    <value>Request admin approval</value>
+    <value>请求管理员批准</value>
   </data>
   <data name="ApproveWithMasterPassword" xml:space="preserve">
-    <value>Approve with master password</value>
+    <value>使用主密码批准</value>
   </data>
   <data name="TurnOffUsingPublicDevice" xml:space="preserve">
-    <value>Turn off using a public device</value>
+    <value>不允许使用公共设备</value>
   </data>
   <data name="RememberThisDevice" xml:space="preserve">
-    <value>Remember this device</value>
+    <value>记住此设备</value>
   </data>
   <data name="Passkey" xml:space="preserve">
     <value>通行密钥</value>
@@ -2659,13 +2659,13 @@
     <value>应用</value>
   </data>
   <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
-    <value>您不能编辑通行密钥应用程序，这会使通行密钥失效</value>
+    <value>您不能编辑通行密钥应用程序，因为这会使通行密钥失效</value>
   </data>
   <data name="PasskeyWillNotBeCopied" xml:space="preserve">
     <value>通行密钥不会被复制</value>
   </data>
   <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
-    <value>通行密钥将不会复制到克隆的项目。要继续克隆这个项目吗？</value>
+    <value>通行密钥将不会被复制到克隆的项目。要继续克隆这个项目吗？</value>
   </data>
   <data name="CopyApplication" xml:space="preserve">
     <value>复制应用</value>
@@ -2677,7 +2677,7 @@
     <value>主密码重新询问帮助</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+    <value>由于内存不足，解锁可能会失败。请减少您的 KDF 内存设置或设置生物识别解锁来解决此问题。</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>无效的 API 密钥</value>
@@ -2686,22 +2686,22 @@
     <value>无效的 API 令牌</value>
   </data>
   <data name="AdminApprovalRequested" xml:space="preserve">
-    <value>Admin approval requested</value>
+    <value>已请求管理员批准</value>
   </data>
   <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
-    <value>Your request has been sent to your admin.</value>
+    <value>您的请求已发送给您的管理员。</value>
   </data>
   <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
-    <value>You will be notified once approved. </value>
+    <value>批准后，您将收到通知。 </value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
-    <value>Trouble logging in?</value>
+    <value>登录遇到问题？</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>正登录为 {0}</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
-    <value>Vault timeout action changed to log out</value>
+    <value>密码库超时动作已更改为注销</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
     <value>无法与组织共享此项目，因为已经有一个项目具有相同的通行密钥。</value>
@@ -2750,13 +2750,13 @@
     <value>一次不能编辑多个 URI</value>
   </data>
   <data name="LoginApproved" xml:space="preserve">
-    <value>Login approved</value>
+    <value>登录已批准</value>
   </data>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
-    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+    <value>设备登录必须在 Bitwarden 应用程序的设置中设启用。需要其他选项吗？</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
-    <value>Log in with device</value>
+    <value>设备登录</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>登录到</value>
