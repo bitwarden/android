@@ -2628,22 +2628,22 @@ select Add TOTP to store the key safely</value>
     <value>Текуща главна парола</value>
   </data>
   <data name="LoggedIn" xml:space="preserve">
-    <value>Logged in!</value>
+    <value>Вписахте се!</value>
   </data>
   <data name="ApproveWithMyOtherDevice" xml:space="preserve">
-    <value>Approve with my other device</value>
+    <value>Одобряване с другото ми устройство</value>
   </data>
   <data name="RequestAdminApproval" xml:space="preserve">
-    <value>Request admin approval</value>
+    <value>Подаване на заявка за одобрение от администратор</value>
   </data>
   <data name="ApproveWithMasterPassword" xml:space="preserve">
-    <value>Approve with master password</value>
+    <value>Одобряване с главната парола</value>
   </data>
   <data name="TurnOffUsingPublicDevice" xml:space="preserve">
-    <value>Turn off using a public device</value>
+    <value>Изключване на използването на публично устройство</value>
   </data>
   <data name="RememberThisDevice" xml:space="preserve">
-    <value>Remember this device</value>
+    <value>Запомняне на това устройство</value>
   </data>
   <data name="Passkey" xml:space="preserve">
     <value>Passkey</value>
@@ -2677,7 +2677,7 @@ select Add TOTP to store the key safely</value>
     <value>Помощ за повторното запитване за главната парола</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+    <value>Отключването може да бъде неуспешно заради недостатъчно памет. Намалете настройките на паметта за KDF или настройте отключването чрез биометрични данни, за да разрешите проблема.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Неправилен ключ за ППИ</value>
@@ -2686,22 +2686,22 @@ select Add TOTP to store the key safely</value>
     <value>Неправилен идентификатор за ППИ</value>
   </data>
   <data name="AdminApprovalRequested" xml:space="preserve">
-    <value>Admin approval requested</value>
+    <value>Заявено е одобрение от администратор</value>
   </data>
   <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
-    <value>Your request has been sent to your admin.</value>
+    <value>Вашата заявка беше изпратена до администратора Ви.</value>
   </data>
   <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
-    <value>You will be notified once approved. </value>
+    <value>Ще получите известие, когато тя бъде одобрена. </value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
-    <value>Trouble logging in?</value>
+    <value>Имате проблем с вписването?</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>Вписване като {0}</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
-    <value>Vault timeout action changed to log out</value>
+    <value>Действието при изтичане на времето за достъп до трезора е променено на отписване</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
     <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
@@ -2750,13 +2750,13 @@ select Add TOTP to store the key safely</value>
     <value>Не може да редактирате повече от един адрес едновременно</value>
   </data>
   <data name="LoginApproved" xml:space="preserve">
-    <value>Login approved</value>
+    <value>Вписването е одобрено</value>
   </data>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
-    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+    <value>Вписването с устройство трябва да е включено в настройките на приложението на Битуорден. Друга настройка ли търсите?</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
-    <value>Log in with device</value>
+    <value>Вписване с устройство</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Вписване в</value>

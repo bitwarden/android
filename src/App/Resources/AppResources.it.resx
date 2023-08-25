@@ -2505,7 +2505,7 @@ Vuoi passare a questo account?</value>
     <value>Accedi con dispositivo</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Login avviato</value>
+    <value>Accesso avviato</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
     <value>Una notifica è stata inviata al tuo dispositivo.</value>
@@ -2637,10 +2637,10 @@ Vuoi passare a questo account?</value>
     <value>Richiedi approvazione dell'amministratore</value>
   </data>
   <data name="ApproveWithMasterPassword" xml:space="preserve">
-    <value>Approva con la password principale</value>
+    <value>Approva con password principale</value>
   </data>
   <data name="TurnOffUsingPublicDevice" xml:space="preserve">
-    <value>Disattiva quando usi un dispositivo pubblico</value>
+    <value>Deseleziona se stai usando un dispositivo pubblico</value>
   </data>
   <data name="RememberThisDevice" xml:space="preserve">
     <value>Ricorda questo dispositivo</value>
@@ -2692,16 +2692,16 @@ Vuoi passare a questo account?</value>
     <value>La tua richiesta è stata inviata al tuo amministratore.</value>
   </data>
   <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
-    <value>Riceverai una notifica al momento dell'approvazione. </value>
+    <value>Riceverai una notifica una volta approvato. </value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
-    <value>Problemi nell'effettuare l'accesso?</value>
+    <value>Problemi ad accedere?</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
     <value>Accedendo come {0}</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
-    <value>Azione timeout cassaforte cambiata per uscire</value>
+    <value>Azione timeout cassaforte impostata su uscire</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
     <value>Questo elemento non può essere condiviso con l'organizzazione perché ne esiste già uno con la stessa passkey.</value>
@@ -2753,10 +2753,10 @@ Vuoi passare a questo account?</value>
     <value>Accesso approvato</value>
   </data>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
-    <value>Accesso con dispositivo deve essere impostato nelle impostazioni dell'app Bitwarden. Hai bisogno di un'altra opzione?</value>
+    <value>L'accesso con dispositivo deve essere abilitato nelle impostazioni dell'app Bitwarden. Ti serve un'altra opzione?</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
-    <value>Accesso con dispositivo</value>
+    <value>Accedi con dispositivo</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Accedendo su</value>
