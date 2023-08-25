@@ -21,11 +21,11 @@ class RootNavViewModel @Inject constructor() : ViewModel() {
 
     init {
         viewModelScope.launch {
+            @Suppress("MagicNumber")
             delay(1000)
             _state.value = RootNavState.Login
         }
     }
-
 }
 
 /**

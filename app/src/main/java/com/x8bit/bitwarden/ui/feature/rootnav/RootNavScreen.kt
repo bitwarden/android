@@ -18,7 +18,7 @@ import com.x8bit.bitwarden.ui.components.PlaceholderComposable
  */
 @Composable
 fun RootNavScreen(
-    viewModel: RootNavViewModel = viewModel()
+    viewModel: RootNavViewModel = viewModel(),
 ) {
     val navController = rememberNavController()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -49,6 +49,7 @@ fun RootNavScreen(
 /**
  * TODO: move to splash package (BIT-147)
  */
+@Suppress("TopLevelPropertyNaming")
 private const val SplashRoute = "splash"
 
 /**
@@ -81,7 +82,8 @@ private fun NavController.navigateToSplashAsRoot() {
 /**
  * TODO move to login package(BIT-146)
  */
-private val LoginRoute = "login"
+@Suppress("TopLevelPropertyNaming")
+private const val LoginRoute = "login"
 
 /**
  * Add login destinations to the nav graph.
