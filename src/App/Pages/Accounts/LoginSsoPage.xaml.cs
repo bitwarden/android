@@ -90,8 +90,7 @@ namespace Bit.App.Pages
 
         private async Task StartTwoFactorAsync()
         {
-            RestoreAppOptionsFromCopy();
-            var page = new TwoFactorPage(true, _appOptions, _vm.OrgIdentifier);
+            var page = new TwoFactorPage(false, _appOptions, _vm.OrgIdentifier);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
