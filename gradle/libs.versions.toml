@@ -77,6 +77,7 @@ nulab-zxcvbn4j = { module = "com.nulab-inc:zxcvbn", version.ref = "zxcvbn4j" }
 robolectric-robolectric = { module = "org.robolectric:robolectric", version.ref = "roboelectric" }
 square-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 square-okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
+square-okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okhttp" }
 square-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 square-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 zxing-zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }
