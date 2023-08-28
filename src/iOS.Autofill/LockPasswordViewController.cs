@@ -38,7 +38,7 @@ namespace Bit.iOS.Autofill
 
             _accountSwitchingOverlayView = _accountSwitchingOverlayHelper.CreateAccountSwitchingOverlayView(OverlayView);
 
-            if (!HasLoginMethod)
+            if (!HasLoginOrUnlockMethod)
             {
                 // user doesn't have a login method
                 // needs to go to homepage and login again

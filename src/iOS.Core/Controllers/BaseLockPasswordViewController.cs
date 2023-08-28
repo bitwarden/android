@@ -60,7 +60,7 @@ namespace Bit.iOS.Core.Controllers
 
         public string BiometricIntegritySourceKey { get; set; }
 
-        public bool HasLoginMethod => _hasMasterPassword || _biometricEnabled || _pinEnabled;
+        public bool HasLoginOrUnlockMethod => _hasMasterPassword || _biometricEnabled || _pinEnabled;
 
         public UITableViewCell BiometricCell
         {
