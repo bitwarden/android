@@ -27,6 +27,7 @@ namespace Bit.iOS.Autofill
         public override UIBarButtonItem BaseSubmitButton => SubmitButton;
         public override Action Success => () => CPViewController.DismissLockAndContinue();
         public override Action Cancel => () => CPViewController.CompleteRequest();
+        public Action LaunchHomePage;
 
         public override async void ViewDidLoad()
         {
@@ -36,6 +37,13 @@ namespace Bit.iOS.Autofill
             AccountSwitchingBarButton.Image = await _accountSwitchingOverlayHelper.CreateAvatarImageAsync();
 
             _accountSwitchingOverlayView = _accountSwitchingOverlayHelper.CreateAccountSwitchingOverlayView(OverlayView);
+
+            if (!HasLoginMethod)
+            {
+                // user doesn't have a login method
+                // needs to go to homepage and login again
+                LaunchHomePage?.Invoke();
+            }
         }
 
         partial void AccountSwitchingBarButton_Activated(UIBarButtonItem sender)
