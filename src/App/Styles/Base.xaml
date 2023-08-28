@@ -597,7 +597,7 @@
         <Setter Property="Padding"
                 Value="10,0,10,0" />
         <Setter Property="Margin"
-                Value="0,5,0,5" />
+                Value="0,2.5,0,2.5" />
         <Setter Property="BackgroundColor"
                 Value="{DynamicResource CardBackgroundColor}" />
     </Style>

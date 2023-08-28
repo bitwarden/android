@@ -58,12 +58,10 @@
 
             <DataTemplate x:Key="authenticatorTemplate"
                           x:DataType="pages:GroupingsPageTOTPListItem">
-                <yummy:PancakeView StyleClass="round-card">
-                    <controls:AuthenticatorViewCell 
-                        Cipher="{Binding Cipher}"
-                        WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
-                        TotpSec="{Binding TotpSec}" />
-                </yummy:PancakeView>
+                <controls:AuthenticatorViewCell 
+                    Cipher="{Binding Cipher}"
+                    WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
+                    TotpSec="{Binding TotpSec}" />
             </DataTemplate>
 
             <DataTemplate x:Key="groupTemplate"
@@ -71,8 +69,8 @@
                 <controls:ExtendedStackLayout Orientation="Horizontal"
                                         Padding="10,0,10,0"
                                         StyleClass="list-row, list-row-platform">
-                    <yummy:PancakeView StyleClass="round-card" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="15">
-                        <controls:ExtendedStackLayout Orientation="Horizontal" 
+                    <yummy:PancakeView StyleClass="round-card" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="15" Margin="0,2.5,0,2.5">
+                        <StackLayout Orientation="Horizontal" 
                                                         AutomationId="{Binding AutomationId}">
                             <controls:IconLabel Text="{Binding Icon, Mode=OneWay}"
                                                 HorizontalOptions="Start"
@@ -95,7 +93,7 @@
                                     HorizontalTextAlignment="End"
                                     StyleClass="list-sub"
                                     AutomationId="ItemCountLabel" />
-                        </controls:ExtendedStackLayout>
+                        </StackLayout>
                     </yummy:PancakeView>
                 </controls:ExtendedStackLayout>
             </DataTemplate>
@@ -105,7 +103,7 @@
                 x:DataType="pages:GroupingsPageHeaderListItem">
                 <StackLayout
                     Spacing="10"
-                    Padding="10"
+                    Padding="10, 10, 0, 0"
                     VerticalOptions="FillAndExpand"
                     StyleClass="list-row-header-container, list-row-header-container-platform"
                     AutomationId="{Binding AutomationId}">
@@ -132,7 +130,7 @@
                     IsVisible="{Binding ShowVaultFilter}"
                     Orientation="Horizontal"
                     HorizontalOptions="FillAndExpand"
-                    Margin="0,5,0,0">
+                    Margin="0,2.5,0,2.5">
                     <Label
                         Text="{Binding VaultFilterDescription}"
                         LineBreakMode="TailTruncation"

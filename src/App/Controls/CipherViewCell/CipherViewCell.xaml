@@ -13,7 +13,7 @@
     x:DataType="controls:CipherViewCellViewModel"
     AutomationId="CipherCell">
 
-    <yummy:PancakeView StyleClass="round-card" Margin="10,5,10,5">
+    <yummy:PancakeView StyleClass="round-card" Margin="10,2.5,10,2.5">
         <Grid RowSpacing="0" ColumnSpacing="0">
             <Grid.Resources>
                 <u:IconGlyphConverter x:Key="iconGlyphConverter"/>
