@@ -1,12 +1,9 @@
 package com.x8bit.bitwarden.ui.feature.rootnav
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,18 +11,20 @@ import javax.inject.Inject
  * Manages root level navigation state of the application.
  */
 @HiltViewModel
-class RootNavViewModel @Inject constructor() : ViewModel() {
-
-    private val _state = MutableStateFlow<RootNavState>(RootNavState.Splash)
-    val state: StateFlow<RootNavState> = _state.asStateFlow()
+class RootNavViewModel @Inject constructor() :
+    BaseViewModel<RootNavState, Unit, Unit>(
+        initialState = RootNavState.Splash,
+    ) {
 
     init {
         viewModelScope.launch {
             @Suppress("MagicNumber")
             delay(1000)
-            _state.value = RootNavState.Login
+            mutableStateFlow.value = RootNavState.Login
         }
     }
+
+    override fun handleAction(action: Unit) = Unit
 }
 
 /**

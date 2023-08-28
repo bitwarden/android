@@ -21,7 +21,7 @@ fun RootNavScreen(
     viewModel: RootNavViewModel = viewModel(),
 ) {
     val navController = rememberNavController()
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
     NavHost(
         navController = navController,
