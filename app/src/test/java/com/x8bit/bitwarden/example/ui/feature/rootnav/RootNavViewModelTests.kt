@@ -12,13 +12,13 @@ class RootNavViewModelTests : BaseViewModelTest() {
     @Test
     fun `initial state should be splash`() {
         val viewModel = RootNavViewModel()
-        assert(viewModel.state.value is RootNavState.Splash)
+        assert(viewModel.stateFlow.value is RootNavState.Splash)
     }
 
     @Test
     fun `state should move from splash to login`() = runTest {
         val viewModel = RootNavViewModel()
-        viewModel.state.test {
+        viewModel.stateFlow.test {
             assert(awaitItem() is RootNavState.Splash)
             assert(awaitItem() is RootNavState.Login)
         }
