@@ -15,7 +15,7 @@
     <Color x:Key="InputPlaceholderColor">#d0d0d0</Color>
     <Color x:Key="DangerPressedColor">#9a0007</Color>
 
-    <Color x:Key="BackgroundColor">#ffffff</Color>
+    <Color x:Key="BackgroundColor">#f0f0f0</Color>
     <Color x:Key="SplashBackgroundColor">#ffffff</Color>
     <Color x:Key="BorderColor">#dddddd</Color>
     <Color x:Key="DisabledIconColor">#c7c7cd</Color>
@@ -73,4 +73,5 @@
     <Color x:Key="HyperlinkColor">#175DDC</Color>
     <Color x:Key="FingerprintPhrase">#C01176</Color>
     <Color x:Key="ScanningToggleModeTextColor">#80BDFF</Color>
+    <Color x:Key="CardBackgroundColor">#ffffff</Color>
 </ResourceDictionary>

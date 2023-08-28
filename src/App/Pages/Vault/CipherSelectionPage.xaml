@@ -7,6 +7,7 @@
              xmlns:u="clr-namespace:Bit.App.Utilities"
              xmlns:controls="clr-namespace:Bit.App.Controls"
              xmlns:effects="clr-namespace:Bit.App.Effects;assembly=BitwardenApp"
+             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
              x:DataType="pages:CipherSelectionPageViewModel"
              Title="{Binding PageTitle}"
              x:Name="_page">
@@ -47,10 +48,12 @@
 
             <DataTemplate x:Key="cipherTemplate"
                           x:DataType="pages:GroupingsPageListItem">
-                <controls:CipherViewCell
-                    Cipher="{Binding Cipher}"
-                    ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}"
-                    WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}" />
+                <yummy:PancakeView StyleClass="round-card">
+                    <controls:CipherViewCell
+                        Cipher="{Binding Cipher}"
+                        ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}"
+                        WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}" />
+                </yummy:PancakeView>
             </DataTemplate>
             
             <DataTemplate

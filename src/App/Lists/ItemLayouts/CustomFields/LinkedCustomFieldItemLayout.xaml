@@ -6,6 +6,7 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:cfvm="clr-namespace:Bit.App.Lists.ItemViewModels.CustomFields"
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     x:DataType="cfvm:LinkedCustomFieldItemViewModel"
     Spacing="0" Padding="0">
     <StackLayout.Resources>
@@ -14,52 +15,53 @@
             <u:BooleanToBoxRowInputPaddingConverter x:Key="booleanToBoxRowInputPaddingConverter" />
         </ResourceDictionary>
     </StackLayout.Resources>
-    <Grid
-        StyleClass="box-row"
-        Padding="{Binding IsEditing, Converter={StaticResource booleanToBoxRowInputPaddingConverter}}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-        <Label
-            Text="{Binding Field.Name, Mode=OneWay}"
-            StyleClass="box-label"
-            Grid.Row="0"
-            Grid.Column="0"
-            AutomationId="LinkedCustomFieldNameLabel" />
-        <controls:IconLabel
-            Text="{Binding ValueText, Mode=OneWay}"
-            StyleClass="box-value"
-            Grid.Row="1"
-            Grid.Column="0"
-            IsVisible="{Binding IsEditing, Mode=OneWay, Converter={StaticResource inverseBool}}"
-            AutomationId="LinkedCustomFieldValueLabel" />
-        <StackLayout
-            StyleClass="box-row, box-row-input"
-            IsVisible="{Binding IsEditing}">
-            <Picker
-                x:Name="_linkedFieldOptionPicker"
-                ItemsSource="{Binding LinkedFieldOptions, Mode=OneTime}"
-                SelectedIndex="{Binding LinkedFieldOptionSelectedIndex}"
-                ItemDisplayBinding="{Binding Key}"
+    <yummy:PancakeView StyleClass="round-card">
+        <Grid
+            StyleClass="box-row"
+            Padding="{Binding IsEditing, Converter={StaticResource booleanToBoxRowInputPaddingConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label
+                Text="{Binding Field.Name, Mode=OneWay}"
+                StyleClass="box-label"
+                Grid.Row="0"
+                Grid.Column="0"
+                AutomationId="LinkedCustomFieldNameLabel" />
+            <controls:IconLabel
+                Text="{Binding ValueText, Mode=OneWay}"
                 StyleClass="box-value"
-                AutomationId="LinkedCustomFieldValuePicker" />
-        </StackLayout>
-        <controls:IconButton 
-            StyleClass="box-row-button, box-row-button-platform"
-            Text="{Binding Source={x:Static core:BitwardenIcons.Cog}}"
-            Command="{Binding FieldOptionsCommand}"
-            IsVisible="{Binding IsEditing}"
-            Grid.Row="0"
-            Grid.Column="1"
-            Grid.RowSpan="2"
-            AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Options}"
-            AutomationId="LinkedCustomFieldOptionsButton" />
-    </Grid>
-    <BoxView StyleClass="box-row-separator" IsVisible="{Binding IsEditing, Mode=OneWay, Converter={StaticResource inverseBool}}" />
+                Grid.Row="1"
+                Grid.Column="0"
+                IsVisible="{Binding IsEditing, Mode=OneWay, Converter={StaticResource inverseBool}}"
+                AutomationId="LinkedCustomFieldValueLabel" />
+            <StackLayout
+                StyleClass="box-row, box-row-input"
+                IsVisible="{Binding IsEditing}">
+                <Picker
+                    x:Name="_linkedFieldOptionPicker"
+                    ItemsSource="{Binding LinkedFieldOptions, Mode=OneTime}"
+                    SelectedIndex="{Binding LinkedFieldOptionSelectedIndex}"
+                    ItemDisplayBinding="{Binding Key}"
+                    StyleClass="box-value"
+                    AutomationId="LinkedCustomFieldValuePicker" />
+            </StackLayout>
+            <controls:IconButton 
+                StyleClass="box-row-button, box-row-button-platform"
+                Text="{Binding Source={x:Static core:BitwardenIcons.Cog}}"
+                Command="{Binding FieldOptionsCommand}"
+                IsVisible="{Binding IsEditing}"
+                Grid.Row="0"
+                Grid.Column="1"
+                Grid.RowSpan="2"
+                AutomationProperties.IsInAccessibleTree="True"
+                AutomationProperties.Name="{u:I18n Options}"
+                AutomationId="LinkedCustomFieldOptionsButton" />
+        </Grid>
+    </yummy:PancakeView>
 </StackLayout>

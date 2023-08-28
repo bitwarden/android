@@ -11,6 +11,7 @@
     xmlns:dts="clr-namespace:Bit.App.Lists.DataTemplateSelectors"
     xmlns:il="clr-namespace:Bit.App.Lists.ItemLayouts.CustomFields"
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     x:DataType="pages:CipherDetailsPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -70,131 +71,119 @@
             <ScrollView x:Key="scrollView" x:Name="_scrollView">
                 <StackLayout Spacing="20" x:Name="_mainLayout">
                     <StackLayout StyleClass="box" AutomationId="ItemInformationSection">
-                        <StackLayout StyleClass="box-row-header">
-                            <Label Text="{u:I18n ItemInformation, Header=True}"
-                                   StyleClass="box-header, box-header-platform" />
-                        </StackLayout>
-                        <StackLayout StyleClass="box-row" AutomationId="ItemRow">
-                            <Label
-                                Text="{u:I18n Name}"
-                                StyleClass="box-label"
-                                AutomationId="ItemName" />
-                            <Label
-                                Text="{Binding Cipher.Name, Mode=OneWay}"
-                                StyleClass="box-value"
-                                AutomationId="ItemValue" />
-                        </StackLayout>
-                        <BoxView StyleClass="box-row-separator" />
+                        <Label 
+                           Text="{Binding Cipher.Name, Mode=OneWay}"
+                           FontSize="30"
+                           Margin="0,15,0,5"
+                           />
                         <StackLayout IsVisible="{Binding IsLogin}" Spacing="0" Padding="0">
-                            <Grid StyleClass="box-row"
-                                  IsVisible="{Binding Cipher.Login.Username, Converter={StaticResource stringHasValue}}"
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding Cipher.Login.Username, Converter={StaticResource stringHasValue}}">
+                                <Grid StyleClass="box-row"
+                                    AutomationId="ItemRow">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        Text="{u:I18n Username}"
+                                        StyleClass="box-label"
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        AutomationId="ItemName" />
+                                    <Label
+                                        Text="{Binding Cipher.Login.Username, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        AutomationId="ItemValue" />
+                                    <controls:IconButton
+                                        StyleClass="box-row-button, box-row-button-platform"
+                                        Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                                        Command="{Binding CopyCommand}"
+                                        CommandParameter="LoginUsername"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Grid.RowSpan="2"
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.Name="{u:I18n CopyUsername}"
+                                        AutomationId="CopyValueButton" />
+                                </Grid>
+                            </yummy:PancakeView>
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding Cipher.Login.Password, Converter={StaticResource stringHasValue}}">
+                                <Grid StyleClass="box-row"
                                   AutomationId="ItemRow">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Label
-                                    Text="{u:I18n Username}"
-                                    StyleClass="box-label"
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    AutomationId="ItemName" />
-                                <Label
-                                    Text="{Binding Cipher.Login.Username, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    AutomationId="ItemValue" />
-                                <controls:IconButton
-                                    StyleClass="box-row-button, box-row-button-platform"
-                                    Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
-                                    Command="{Binding CopyCommand}"
-                                    CommandParameter="LoginUsername"
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
-                                    AutomationProperties.Name="{u:I18n CopyUsername}"
-                                    AutomationId="CopyValueButton" />
-                            </Grid>
-                            <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Login.Username, Converter={StaticResource stringHasValue}}" />
-                            <Grid StyleClass="box-row"
-                                  IsVisible="{Binding Cipher.Login.Password, Converter={StaticResource stringHasValue}}"
-                                  AutomationId="ItemRow">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Label
-                                    Text="{u:I18n Password}"
-                                    StyleClass="box-label"
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    AutomationId="ItemName" />
-                                <controls:MonoLabel
-                                    Text="{Binding Cipher.Login.MaskedPassword, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    IsVisible="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
-                                    AutomationId="ItemValue" />
-                                <controls:MonoLabel
-                                    Text="{Binding ColoredPassword, Mode=OneWay}"
-                                    StyleClass="box-value, text-html"
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    LineBreakMode="CharacterWrap"
-                                    IsVisible="{Binding ShowPassword}"
-                                    AutomationId="ItemValue" />
-                                <controls:IconButton
-                                    StyleClass="box-row-button, box-row-button-platform"
-                                    Text="{Binding Source={x:Static core:BitwardenIcons.CheckCircle}}"
-                                    Command="{Binding CheckPasswordCommand}"
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
-                                    AutomationProperties.Name="{u:I18n CheckPassword}"
-                                    IsVisible="{Binding Cipher.ViewPassword}"
-                                    AutomationId="CheckPasswordButton" />
-                                <controls:IconButton
-                                    StyleClass="box-row-button, box-row-button-platform"
-                                    Text="{Binding ShowPasswordIcon}"
-                                    Command="{Binding TogglePasswordCommand}"
-                                    Grid.Row="0"
-                                    Grid.Column="2"
-                                    Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
-                                    AutomationProperties.Name="{u:I18n ToggleVisibility}"
-                                    AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
-                                    IsVisible="{Binding Cipher.ViewPassword}"
-                                    AutomationId="ShowValueButton" />
-                                <controls:IconButton
-                                    StyleClass="box-row-button, box-row-button-platform"
-                                    Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
-                                    Command="{Binding CopyCommand}"
-                                    CommandParameter="LoginPassword"
-                                    Grid.Row="0"
-                                    Grid.Column="3"
-                                    Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
-                                    AutomationProperties.Name="{u:I18n CopyPassword}"
-                                    IsVisible="{Binding Cipher.ViewPassword}"
-                                    AutomationId="CopyValueButton" />
-                            </Grid>
-                            <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Login.Password, Converter={StaticResource stringHasValue}}" />
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        Text="{u:I18n Password}"
+                                        StyleClass="box-label"
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        AutomationId="ItemName" />
+                                    <controls:MonoLabel
+                                        Text="{Binding Cipher.Login.MaskedPassword, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        IsVisible="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
+                                        AutomationId="ItemValue" />
+                                    <controls:MonoLabel
+                                        Text="{Binding ColoredPassword, Mode=OneWay}"
+                                        StyleClass="box-value, text-html"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        LineBreakMode="CharacterWrap"
+                                        IsVisible="{Binding ShowPassword}"
+                                        AutomationId="ItemValue" />
+                                    <controls:IconButton
+                                        StyleClass="box-row-button, box-row-button-platform"
+                                        Text="{Binding Source={x:Static core:BitwardenIcons.CheckCircle}}"
+                                        Command="{Binding CheckPasswordCommand}"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Grid.RowSpan="2"
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.Name="{u:I18n CheckPassword}"
+                                        IsVisible="{Binding Cipher.ViewPassword}"
+                                        AutomationId="CheckPasswordButton" />
+                                    <controls:IconButton
+                                        StyleClass="box-row-button, box-row-button-platform"
+                                        Text="{Binding ShowPasswordIcon}"
+                                        Command="{Binding TogglePasswordCommand}"
+                                        Grid.Row="0"
+                                        Grid.Column="2"
+                                        Grid.RowSpan="2"
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                                        AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
+                                        IsVisible="{Binding Cipher.ViewPassword}"
+                                        AutomationId="ShowValueButton" />
+                                    <controls:IconButton
+                                        StyleClass="box-row-button, box-row-button-platform"
+                                        Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                                        Command="{Binding CopyCommand}"
+                                        CommandParameter="LoginPassword"
+                                        Grid.Row="0"
+                                        Grid.Column="3"
+                                        Grid.RowSpan="2"
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.Name="{u:I18n CopyPassword}"
+                                        IsVisible="{Binding Cipher.ViewPassword}"
+                                        AutomationId="CopyValueButton" />
+                                </Grid>
+                            </yummy:PancakeView>
                             <Label
                                 Text="{u:I18n Passkey}"
                                 StyleClass="box-label"
@@ -205,379 +194,373 @@
                                 IsEnabled="False"
                                 StyleClass="box-value,text-muted"
                                 IsVisible="{Binding Cipher.Login.Fido2Key, Converter={StaticResource notNull}}" />
-                            <Grid StyleClass="box-row"
-                                  IsVisible="{Binding ShowTotp}"
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding ShowTotp}">
+                                <Grid StyleClass="box-row"
                                   AutomationId="ItemRow">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="40" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Label
-                                    Text="{u:I18n VerificationCodeTotp}"
-                                    StyleClass="box-label"
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    AutomationId="ItemName" />
-                                <controls:MonoLabel
-                                    Text="{Binding TotpCodeFormatted, Mode=OneWay}"
-                                    IsVisible="{Binding ShowUpgradePremiumTotpText, Converter={StaticResource inverseBool}}"
-                                    StyleClass="box-value"
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    VerticalTextAlignment="Start"
-                                    VerticalOptions="Start"
-                                    AutomationId="ItemValue" />
-                                <controls:CircularProgressbarView
-                                    Progress="{Binding TotpProgress}"
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    Grid.RowSpan="2"
-                                    HorizontalOptions="FillAndExpand"
-                                    VerticalOptions="FillAndExpand"
-                                    AutomationId="LoginTotpProgressBar" />
-                                <Label
-                                    Text="{Binding TotpSec, Mode=OneWay}"
-                                    Style="{DynamicResource textTotp}"
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    Grid.RowSpan="2"
-                                    StyleClass="text-sm"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    HorizontalOptions="FillAndExpand"
-                                    VerticalOptions="FillAndExpand" />
-                                <controls:IconButton
-                                    StyleClass="box-row-button, box-row-button-platform"
-                                    Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
-                                    Command="{Binding CopyCommand}"
-                                    IsVisible="{Binding CanAccessPremium}"
-                                    CommandParameter="LoginTotp"
-                                    Grid.Row="0"
-                                    Grid.Column="2"
-                                    Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
-                                    AutomationProperties.Name="{u:I18n CopyTotp}"
-                                    AutomationId="CopyValueButton" />
-                                <Label
-                                    Text="{u:I18n PremiumSubscriptionRequired}"
-                                    StyleClass="box-footer-label"
-                                    IsVisible="{Binding ShowUpgradePremiumTotpText}"
-                                    Margin="0,5,0,2"
-                                    Grid.Column="0"
-                                    Grid.Row="1"
-                                    HorizontalOptions="FillAndExpand"
-                                    AutomationId="ShowUpgradePremiumTotpLabel" />
-                            </Grid>
-                            <BoxView StyleClass="box-row-separator" IsVisible="{Binding ShowTotp}" />
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="40" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        Text="{u:I18n VerificationCodeTotp}"
+                                        StyleClass="box-label"
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        AutomationId="ItemName" />
+                                    <controls:MonoLabel
+                                        Text="{Binding TotpCodeFormatted, Mode=OneWay}"
+                                        IsVisible="{Binding ShowUpgradePremiumTotpText, Converter={StaticResource inverseBool}}"
+                                        StyleClass="box-value"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        VerticalTextAlignment="Start"
+                                        VerticalOptions="Start"
+                                        AutomationId="ItemValue" />
+                                    <controls:CircularProgressbarView
+                                        Progress="{Binding TotpProgress}"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Grid.RowSpan="2"
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="FillAndExpand"
+                                        AutomationId="LoginTotpProgressBar" />
+                                    <Label
+                                        Text="{Binding TotpSec, Mode=OneWay}"
+                                        Style="{DynamicResource textTotp}"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Grid.RowSpan="2"
+                                        StyleClass="text-sm"
+                                        VerticalTextAlignment="Center"
+                                        HorizontalTextAlignment="Center"
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="FillAndExpand" />
+                                    <controls:IconButton
+                                        StyleClass="box-row-button, box-row-button-platform"
+                                        Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                                        Command="{Binding CopyCommand}"
+                                        IsVisible="{Binding CanAccessPremium}"
+                                        CommandParameter="LoginTotp"
+                                        Grid.Row="0"
+                                        Grid.Column="2"
+                                        Grid.RowSpan="2"
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.Name="{u:I18n CopyTotp}"
+                                        AutomationId="CopyValueButton" />
+                                    <Label
+                                        Text="{u:I18n PremiumSubscriptionRequired}"
+                                        StyleClass="box-footer-label"
+                                        IsVisible="{Binding ShowUpgradePremiumTotpText}"
+                                        Margin="0,5,0,2"
+                                        Grid.Column="0"
+                                        Grid.Row="1"
+                                        HorizontalOptions="FillAndExpand"
+                                        AutomationId="ShowUpgradePremiumTotpLabel" />
+                                </Grid>
+                            </yummy:PancakeView>
                         </StackLayout>
                         <StackLayout IsVisible="{Binding IsCard}" Spacing="0" Padding="0">
-                            <StackLayout StyleClass="box-row"
-                                         IsVisible="{Binding Cipher.Card.CardholderName, Converter={StaticResource stringHasValue}}"
-                                         AutomationId="ItemRow">
-                                <Label
-                                    Text="{u:I18n CardholderName}"
-                                    StyleClass="box-label"
-                                    AutomationId="ItemName" />
-                                <Label
-                                    Text="{Binding Cipher.Card.CardholderName, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    AutomationId="ItemValue" />
-                            </StackLayout>
-                            <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Card.CardholderName, Converter={StaticResource stringHasValue}}" />
-                            <Grid StyleClass="box-row"
-                                  IsVisible="{Binding Cipher.Card.Number, Converter={StaticResource stringHasValue}}"
-                                  AutomationId="ItemRow">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Label
-                                    Text="{u:I18n Number}"
-                                    StyleClass="box-label"
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    AutomationId="ItemName" />
-                                <controls:MonoLabel
-                                    Text="{Binding Cipher.Card.MaskedNumber, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    IsVisible="{Binding ShowCardNumber, Converter={StaticResource inverseBool}}"
-                                    AutomationId="ItemValue" />
-                                <controls:MonoLabel
-                                    Text="{Binding Cipher.Card.Number, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    IsVisible="{Binding ShowCardNumber}"
-                                    AutomationId="ItemValue" />
-                                <controls:IconButton
-                                    StyleClass="box-row-button, box-row-button-platform"
-                                    Text="{Binding ShowCardNumberIcon}"
-                                    Command="{Binding ToggleCardNumberCommand}"
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
-                                    AutomationProperties.Name="{u:I18n ToggleVisibility}"
-                                    AutomationId="ShowValueButton" />
-                                <controls:IconButton
-                                    StyleClass="box-row-button, box-row-button-platform"
-                                    Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
-                                    Command="{Binding CopyCommand}"
-                                    CommandParameter="CardNumber"
-                                    Grid.Row="0"
-                                    Grid.Column="2"
-                                    Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
-                                    AutomationProperties.Name="{u:I18n CopyNumber}"
-                                    AutomationId="CopyValueButton" />
-                            </Grid>
-                            <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Card.Number, Converter={StaticResource stringHasValue}}" />
-                            <StackLayout StyleClass="box-row"
-                                         IsVisible="{Binding Cipher.Card.Brand, Converter={StaticResource stringHasValue}}"
-                                         AutomationId="ItemRow">
-                                <Label
-                                    Text="{u:I18n Brand}"
-                                    StyleClass="box-label"
-                                    AutomationId="ItemName" />
-                                <Label
-                                    Text="{Binding Cipher.Card.Brand, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    AutomationId="ItemValue" />
-                            </StackLayout>
-                            <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Card.Brand, Converter={StaticResource stringHasValue}}" />
-                            <StackLayout StyleClass="box-row"
-                                         IsVisible="{Binding Cipher.Card.Expiration, Converter={StaticResource stringHasValue}}"
-                                         AutomationId="ItemRow">
-                                <Label
-                                    Text="{u:I18n Expiration}"
-                                    StyleClass="box-label"
-                                    AutomationId="ItemName" />
-                                <Label
-                                    Text="{Binding Cipher.Card.Expiration, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    AutomationId="ItemValue" />
-                            </StackLayout>
-                            <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Card.Expiration, Converter={StaticResource stringHasValue}}" />
-                            <Grid StyleClass="box-row"
-                                  IsVisible="{Binding Cipher.Card.Code, Converter={StaticResource stringHasValue}}"
-                                  AutomationId="ItemRow">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Label
-                                    Text="{u:I18n SecurityCode}"
-                                    StyleClass="box-label"
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    AutomationId="ItemName" />
-                                <controls:MonoLabel
-                                    Text="{Binding Cipher.Card.MaskedCode, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    IsVisible="{Binding ShowCardCode, Converter={StaticResource inverseBool}}"
-                                    AutomationId="ItemValue" />
-                                <controls:MonoLabel
-                                    Text="{Binding Cipher.Card.Code, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    IsVisible="{Binding ShowCardCode}"
-                                    AutomationId="ItemValue" />
-                                <controls:IconButton
-                                    StyleClass="box-row-button, box-row-button-platform"
-                                    Text="{Binding ShowCardCodeIcon}"
-                                    Command="{Binding ToggleCardCodeCommand}"
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
-                                    AutomationProperties.Name="{u:I18n ToggleVisibility}"
-                                    AutomationId="ShowValueButton" />
-                                <controls:IconButton
-                                    StyleClass="box-row-button, box-row-button-platform"
-                                    Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
-                                    Command="{Binding CopyCommand}"
-                                    CommandParameter="CardCode"
-                                    Grid.Row="0"
-                                    Grid.Column="2"
-                                    Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
-                                    AutomationProperties.Name="{u:I18n CopySecurityCode}"
-                                    AutomationId="CopyValueButton" />
-                            </Grid>
-                            <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Card.Code, Converter={StaticResource stringHasValue}}" />
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding Cipher.Card.CardholderName, Converter={StaticResource stringHasValue}}">
+                                <StackLayout StyleClass="box-row"
+                                            IsVisible="{Binding Cipher.Card.CardholderName, Converter={StaticResource stringHasValue}}"
+                                            AutomationId="ItemRow">
+                                    <Label
+                                        Text="{u:I18n CardholderName}"
+                                        StyleClass="box-label"
+                                        AutomationId="ItemName" />
+                                    <Label
+                                        Text="{Binding Cipher.Card.CardholderName, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        AutomationId="ItemValue" />
+                                </StackLayout>
+                            </yummy:PancakeView>
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding Cipher.Card.Number, Converter={StaticResource stringHasValue}}">
+                                <Grid StyleClass="box-row"
+                                    AutomationId="ItemRow">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        Text="{u:I18n Number}"
+                                        StyleClass="box-label"
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        AutomationId="ItemName" />
+                                    <controls:MonoLabel
+                                        Text="{Binding Cipher.Card.MaskedNumber, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        IsVisible="{Binding ShowCardNumber, Converter={StaticResource inverseBool}}"
+                                        AutomationId="ItemValue" />
+                                    <controls:MonoLabel
+                                        Text="{Binding Cipher.Card.Number, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        IsVisible="{Binding ShowCardNumber}"
+                                        AutomationId="ItemValue" />
+                                    <controls:IconButton
+                                        StyleClass="box-row-button, box-row-button-platform"
+                                        Text="{Binding ShowCardNumberIcon}"
+                                        Command="{Binding ToggleCardNumberCommand}"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Grid.RowSpan="2"
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                                        AutomationId="ShowValueButton" />
+                                    <controls:IconButton
+                                        StyleClass="box-row-button, box-row-button-platform"
+                                        Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                                        Command="{Binding CopyCommand}"
+                                        CommandParameter="CardNumber"
+                                        Grid.Row="0"
+                                        Grid.Column="2"
+                                        Grid.RowSpan="2"
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.Name="{u:I18n CopyNumber}"
+                                        AutomationId="CopyValueButton" />
+                                </Grid>
+                            </yummy:PancakeView>
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding Cipher.Card.Brand, Converter={StaticResource stringHasValue}}">
+                                <StackLayout StyleClass="box-row"
+                                            IsVisible="{Binding Cipher.Card.Brand, Converter={StaticResource stringHasValue}}"
+                                            AutomationId="ItemRow">
+                                    <Label
+                                        Text="{u:I18n Brand}"
+                                        StyleClass="box-label"
+                                        AutomationId="ItemName" />
+                                    <Label
+                                        Text="{Binding Cipher.Card.Brand, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        AutomationId="ItemValue" />
+                                </StackLayout>
+                            </yummy:PancakeView>
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding Cipher.Card.Expiration, Converter={StaticResource stringHasValue}}">
+                                <StackLayout StyleClass="box-row"
+                                            IsVisible="{Binding Cipher.Card.Expiration, Converter={StaticResource stringHasValue}}"
+                                            AutomationId="ItemRow">
+                                    <Label
+                                        Text="{u:I18n Expiration}"
+                                        StyleClass="box-label"
+                                        AutomationId="ItemName" />
+                                    <Label
+                                        Text="{Binding Cipher.Card.Expiration, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        AutomationId="ItemValue" />
+                                </StackLayout>
+                            </yummy:PancakeView>
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding Cipher.Card.Code, Converter={StaticResource stringHasValue}}">
+                                <Grid StyleClass="box-row"
+                                    AutomationId="ItemRow">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        Text="{u:I18n SecurityCode}"
+                                        StyleClass="box-label"
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        AutomationId="ItemName" />
+                                    <controls:MonoLabel
+                                        Text="{Binding Cipher.Card.MaskedCode, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        IsVisible="{Binding ShowCardCode, Converter={StaticResource inverseBool}}"
+                                        AutomationId="ItemValue" />
+                                    <controls:MonoLabel
+                                        Text="{Binding Cipher.Card.Code, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        IsVisible="{Binding ShowCardCode}"
+                                        AutomationId="ItemValue" />
+                                    <controls:IconButton
+                                        StyleClass="box-row-button, box-row-button-platform"
+                                        Text="{Binding ShowCardCodeIcon}"
+                                        Command="{Binding ToggleCardCodeCommand}"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Grid.RowSpan="2"
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                                        AutomationId="ShowValueButton" />
+                                    <controls:IconButton
+                                        StyleClass="box-row-button, box-row-button-platform"
+                                        Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                                        Command="{Binding CopyCommand}"
+                                        CommandParameter="CardCode"
+                                        Grid.Row="0"
+                                        Grid.Column="2"
+                                        Grid.RowSpan="2"
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.Name="{u:I18n CopySecurityCode}"
+                                        AutomationId="CopyValueButton" />
+                                </Grid>
+                            </yummy:PancakeView>
                         </StackLayout>
                         <StackLayout IsVisible="{Binding IsIdentity}" Spacing="0" Padding="0">
-                            <StackLayout StyleClass="box-row"
-                                         IsVisible="{Binding Cipher.Identity.FullName, Converter={StaticResource stringHasValue}}"
-                                         AutomationId="ItemRow">
-                                <Label
-                                    Text="{u:I18n IdentityName}"
-                                    StyleClass="box-label"
-                                    AutomationId="ItemName" />
-                                <Label
-                                    Text="{Binding Cipher.Identity.FullName, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    AutomationId="ItemValue" />
-                            </StackLayout>
-                            <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Identity.FullName, Converter={StaticResource stringHasValue}}" />
-                            <StackLayout StyleClass="box-row"
-                                         IsVisible="{Binding Cipher.Identity.Username, Converter={StaticResource stringHasValue}}"
-                                         AutomationId="ItemRow">
-                                <Label
-                                    Text="{u:I18n Username}"
-                                    StyleClass="box-label"
-                                    AutomationId="ItemName" />
-                                <Label
-                                    Text="{Binding Cipher.Identity.Username, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    AutomationId="ItemValue" />
-                            </StackLayout>
-                            <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Identity.Username, Converter={StaticResource stringHasValue}}" />
-                            <StackLayout StyleClass="box-row"
-                                         IsVisible="{Binding Cipher.Identity.Company, Converter={StaticResource stringHasValue}}"
-                                         AutomationId="ItemRow">
-                                <Label
-                                    Text="{u:I18n Company}"
-                                    StyleClass="box-label"
-                                    AutomationId="ItemName" />
-                                <Label
-                                    Text="{Binding Cipher.Identity.Company, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    AutomationId="ItemValue" />
-                            </StackLayout>
-                            <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Identity.Company, Converter={StaticResource stringHasValue}}" />
-                            <StackLayout StyleClass="box-row"
-                                         IsVisible="{Binding Cipher.Identity.SSN, Converter={StaticResource stringHasValue}}"
-                                         AutomationId="ItemRow">
-                                <Label
-                                    Text="{u:I18n SSN}"
-                                    StyleClass="box-label"
-                                    AutomationId="ItemName" />
-                                <Label
-                                    Text="{Binding Cipher.Identity.SSN, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    AutomationId="ItemValue" />
-                            </StackLayout>
-                            <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Identity.SSN, Converter={StaticResource stringHasValue}}" />
-                            <StackLayout StyleClass="box-row"
-                                         IsVisible="{Binding Cipher.Identity.PassportNumber, Converter={StaticResource stringHasValue}}"
-                                         AutomationId="ItemRow">
-                                <Label
-                                    Text="{u:I18n PassportNumber}"
-                                    StyleClass="box-label"
-                                    AutomationId="ItemName" />
-                                <Label
-                                    Text="{Binding Cipher.Identity.PassportNumber, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    AutomationId="ItemValue" />
-                            </StackLayout>
-                            <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Identity.PassportNumber, Converter={StaticResource stringHasValue}}" />
-                            <StackLayout StyleClass="box-row"
-                                         IsVisible="{Binding Cipher.Identity.LicenseNumber, Converter={StaticResource stringHasValue}}"
-                                         AutomationId="ItemRow">
-                                <Label
-                                    Text="{u:I18n LicenseNumber}"
-                                    StyleClass="box-label"
-                                    AutomationId="ItemName" />
-                                <Label
-                                    Text="{Binding Cipher.Identity.LicenseNumber, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    AutomationId="ItemValue" />
-                            </StackLayout>
-                            <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Identity.LicenseNumber, Converter={StaticResource stringHasValue}}" />
-                            <StackLayout StyleClass="box-row"
-                                         IsVisible="{Binding Cipher.Identity.Email, Converter={StaticResource stringHasValue}}"
-                                         AutomationId="ItemRow">
-                                <Label
-                                    Text="{u:I18n Email}"
-                                    StyleClass="box-label"
-                                    AutomationId="ItemName" />
-                                <Label
-                                    Text="{Binding Cipher.Identity.Email, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    AutomationId="ItemValue" />
-                            </StackLayout>
-                            <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Identity.Email, Converter={StaticResource stringHasValue}}" />
-                            <StackLayout StyleClass="box-row"
-                                         IsVisible="{Binding Cipher.Identity.Phone, Converter={StaticResource stringHasValue}}"
-                                         AutomationId="ItemRow" >
-                                <Label
-                                    Text="{u:I18n Phone}"
-                                    StyleClass="box-label"
-                                    AutomationId="ItemName" />
-                                <Label
-                                    Text="{Binding Cipher.Identity.Phone, Mode=OneWay}"
-                                    StyleClass="box-value"
-                                    AutomationId="ItemValue" />
-                            </StackLayout>
-                            <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Identity.Phone, Converter={StaticResource stringHasValue}}" />
-                            <StackLayout StyleClass="box-row" IsVisible="{Binding ShowIdentityAddress}"
-                                         AutomationId="ItemRow">
-                                <Label
-                                    Text="{u:I18n Address}"
-                                    StyleClass="box-label"
-                                    AutomationId="ItemName" />
-                                <Label
-                                    Text="{Binding Cipher.Identity.Address1, Mode=OneWay}"
-                                    IsVisible="{Binding Cipher.Identity.Address1, Converter={StaticResource stringHasValue}}"
-                                    StyleClass="box-value"
-                                    AutomationId="IdentityAddressOneLabel" />
-                                <Label
-                                    Text="{Binding Cipher.Identity.Address2, Mode=OneWay}"
-                                    IsVisible="{Binding Cipher.Identity.Address2, Converter={StaticResource stringHasValue}}"
-                                    StyleClass="box-value"
-                                    AutomationId="IdentityAddressTwoLabel" />
-                                <Label
-                                    Text="{Binding Cipher.Identity.Address3, Mode=OneWay}"
-                                    IsVisible="{Binding Cipher.Identity.Address3, Converter={StaticResource stringHasValue}}"
-                                    StyleClass="box-value"
-                                    AutomationId="IdentityAddressThreeLabel" />
-                                <Label
-                                    Text="{Binding Cipher.Identity.FullAddressPart2, Mode=OneWay}"
-                                    IsVisible="{Binding Cipher.Identity.FullAddressPart2, Converter={StaticResource stringHasValue}}"
-                                    StyleClass="box-value"
-                                    AutomationId="IdentityFullAddressPartTwoLabel" />
-                                <Label
-                                    Text="{Binding Cipher.Identity.Country, Mode=OneWay}"
-                                    IsVisible="{Binding Cipher.Identity.Country, Converter={StaticResource stringHasValue}}"
-                                    StyleClass="box-value"
-                                    AutomationId="IdentityCountryLabel" />
-                            </StackLayout>
-                            <BoxView StyleClass="box-row-separator" IsVisible="{Binding ShowIdentityAddress}" />
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding Cipher.Identity.FullName, Converter={StaticResource stringHasValue}}">
+                                <StackLayout StyleClass="box-row"
+                                            IsVisible="{Binding Cipher.Identity.FullName, Converter={StaticResource stringHasValue}}"
+                                            AutomationId="ItemRow">
+                                    <Label
+                                        Text="{u:I18n IdentityName}"
+                                        StyleClass="box-label"
+                                        AutomationId="ItemName" />
+                                    <Label
+                                        Text="{Binding Cipher.Identity.FullName, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        AutomationId="ItemValue" />
+                                </StackLayout>
+                            </yummy:PancakeView>
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding Cipher.Identity.Username, Converter={StaticResource stringHasValue}}">
+                                <StackLayout StyleClass="box-row"
+                                            IsVisible="{Binding Cipher.Identity.Username, Converter={StaticResource stringHasValue}}"
+                                            AutomationId="ItemRow">
+                                    <Label
+                                        Text="{u:I18n Username}"
+                                        StyleClass="box-label"
+                                        AutomationId="ItemName" />
+                                    <Label
+                                        Text="{Binding Cipher.Identity.Username, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        AutomationId="ItemValue" />
+                                </StackLayout>
+                            </yummy:PancakeView>
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding Cipher.Identity.Company, Converter={StaticResource stringHasValue}}">
+                                <StackLayout StyleClass="box-row"
+                                            AutomationId="ItemRow">
+                                    <Label
+                                        Text="{u:I18n Company}"
+                                        StyleClass="box-label"
+                                        AutomationId="ItemName" />
+                                    <Label
+                                        Text="{Binding Cipher.Identity.Company, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        AutomationId="ItemValue" />
+                                </StackLayout>
+                            </yummy:PancakeView>
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding Cipher.Identity.SSN, Converter={StaticResource stringHasValue}}">
+                                <StackLayout StyleClass="box-row"
+                                            IsVisible="{Binding Cipher.Identity.SSN, Converter={StaticResource stringHasValue}}"
+                                            AutomationId="ItemRow">
+                                    <Label
+                                        Text="{u:I18n SSN}"
+                                        StyleClass="box-label"
+                                        AutomationId="ItemName" />
+                                    <Label
+                                        Text="{Binding Cipher.Identity.SSN, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        AutomationId="ItemValue" />
+                                </StackLayout>
+                            </yummy:PancakeView>
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding Cipher.Identity.PassportNumber, Converter={StaticResource stringHasValue}}">
+                                <StackLayout StyleClass="box-row"
+                                            AutomationId="ItemRow">
+                                    <Label
+                                        Text="{u:I18n PassportNumber}"
+                                        StyleClass="box-label"
+                                        AutomationId="ItemName" />
+                                    <Label
+                                        Text="{Binding Cipher.Identity.PassportNumber, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        AutomationId="ItemValue" />
+                                </StackLayout>
+                            </yummy:PancakeView>
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding Cipher.Identity.LicenseNumber, Converter={StaticResource stringHasValue}}">
+                                <StackLayout StyleClass="box-row"
+                                            AutomationId="ItemRow">
+                                    <Label
+                                        Text="{u:I18n LicenseNumber}"
+                                        StyleClass="box-label"
+                                        AutomationId="ItemName" />
+                                    <Label
+                                        Text="{Binding Cipher.Identity.LicenseNumber, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        AutomationId="ItemValue" />
+                                </StackLayout>
+                            </yummy:PancakeView>
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding Cipher.Identity.Email, Converter={StaticResource stringHasValue}}">
+                                <StackLayout StyleClass="box-row"
+                                            AutomationId="ItemRow">
+                                    <Label
+                                        Text="{u:I18n Email}"
+                                        StyleClass="box-label"
+                                        AutomationId="ItemName" />
+                                    <Label
+                                        Text="{Binding Cipher.Identity.Email, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        AutomationId="ItemValue" />
+                                </StackLayout>
+                            </yummy:PancakeView>
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding Cipher.Identity.Phone, Converter={StaticResource stringHasValue}}">
+                                <StackLayout StyleClass="box-row"
+                                            AutomationId="ItemRow" >
+                                    <Label
+                                        Text="{u:I18n Phone}"
+                                        StyleClass="box-label"
+                                        AutomationId="ItemName" />
+                                    <Label
+                                        Text="{Binding Cipher.Identity.Phone, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        AutomationId="ItemValue" />
+                                </StackLayout>
+                            </yummy:PancakeView>
+                            <yummy:PancakeView StyleClass="round-card" IsVisible="{Binding ShowIdentityAddress}">
+                                <StackLayout StyleClass="box-row"
+                                            AutomationId="ItemRow">
+                                    <Label
+                                        Text="{u:I18n Address}"
+                                        StyleClass="box-label"
+                                        AutomationId="ItemName" />
+                                    <Label
+                                        Text="{Binding Cipher.Identity.Address1, Mode=OneWay}"
+                                        IsVisible="{Binding Cipher.Identity.Address1, Converter={StaticResource stringHasValue}}"
+                                        StyleClass="box-value"
+                                        AutomationId="IdentityAddressOneLabel" />
+                                    <Label
+                                        Text="{Binding Cipher.Identity.Address2, Mode=OneWay}"
+                                        IsVisible="{Binding Cipher.Identity.Address2, Converter={StaticResource stringHasValue}}"
+                                        StyleClass="box-value"
+                                        AutomationId="IdentityAddressTwoLabel" />
+                                    <Label
+                                        Text="{Binding Cipher.Identity.Address3, Mode=OneWay}"
+                                        IsVisible="{Binding Cipher.Identity.Address3, Converter={StaticResource stringHasValue}}"
+                                        StyleClass="box-value"
+                                        AutomationId="IdentityAddressThreeLabel" />
+                                    <Label
+                                        Text="{Binding Cipher.Identity.FullAddressPart2, Mode=OneWay}"
+                                        IsVisible="{Binding Cipher.Identity.FullAddressPart2, Converter={StaticResource stringHasValue}}"
+                                        StyleClass="box-value"
+                                        AutomationId="IdentityFullAddressPartTwoLabel" />
+                                    <Label
+                                        Text="{Binding Cipher.Identity.Country, Mode=OneWay}"
+                                        IsVisible="{Binding Cipher.Identity.Country, Converter={StaticResource stringHasValue}}"
+                                        StyleClass="box-value"
+                                        AutomationId="IdentityCountryLabel" />
+                                </StackLayout>
+                            </yummy:PancakeView>
                         </StackLayout>
                         <StackLayout
                             IsVisible="{Binding IsFido2Key}"
@@ -646,80 +629,84 @@
                         <controls:RepeaterView ItemsSource="{Binding Cipher.Login.Uris}" AutomationId="CipherUriContainer">
                             <controls:RepeaterView.ItemTemplate>
                                 <DataTemplate x:DataType="views:LoginUriView">
-                                    <StackLayout Spacing="0" Padding="0">
-                                        <Grid StyleClass="box-row" AutomationId="UriRow">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="*" />
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <Label
-                                                Text="{u:I18n URI}"
-                                                StyleClass="box-label"
-                                                Grid.Row="0"
-                                                Grid.Column="0"
-                                                IsVisible="{Binding IsWebsite, Mode=OneWay, Converter={StaticResource inverseBool}}" />
-                                            <Label
-                                                Text="{u:I18n Website}"
-                                                StyleClass="box-label"
-                                                Grid.Row="0"
-                                                Grid.Column="0"
-                                                IsVisible="{Binding IsWebsite, Mode=OneWay}" />
-                                            <Label
-                                                Text="{Binding HostOrUri, Mode=OneWay}"
-                                                StyleClass="box-value"
-                                                Grid.Row="1"
-                                                Grid.Column="0"
-                                                AutomationId="UriValue" />
-                                            <controls:IconButton
-                                                StyleClass="box-row-button, box-row-button-platform"
-                                                Text="{Binding Source={x:Static core:BitwardenIcons.ShareSquare}}"
-                                                Command="{Binding BindingContext.LaunchUriCommand, Source={x:Reference _page}}"
-                                                CommandParameter="{Binding .}"
-                                                Grid.Row="0"
-                                                Grid.Column="1"
-                                                Grid.RowSpan="2"
-                                                IsVisible="{Binding CanLaunch, Mode=OneWay}"
-                                                AutomationProperties.IsInAccessibleTree="True"
-                                                AutomationProperties.Name="{u:I18n Launch}"
-                                                AutomationId="LaunchUriButton" />
-                                            <controls:IconButton
-                                                StyleClass="box-row-button, box-row-button-platform"
-                                                Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
-                                                Command="{Binding BindingContext.CopyUriCommand, Source={x:Reference _page}}"
-                                                CommandParameter="{Binding .}"
-                                                Grid.Row="0"
-                                                Grid.Column="2"
-                                                Grid.RowSpan="2"
-                                                AutomationProperties.IsInAccessibleTree="True"
-                                                AutomationProperties.Name="{u:I18n Copy}"
-                                                AutomationId="CopyUriButton" />
-                                        </Grid>
-                                        <BoxView StyleClass="box-row-separator" />
-                                    </StackLayout>
+                                    <yummy:PancakeView StyleClass="round-card">
+                                        <StackLayout Spacing="0" Padding="0">
+                                            <Grid StyleClass="box-row" AutomationId="UriRow">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Label
+                                                    Text="{u:I18n URI}"
+                                                    StyleClass="box-label"
+                                                    Grid.Row="0"
+                                                    Grid.Column="0"
+                                                    IsVisible="{Binding IsWebsite, Mode=OneWay, Converter={StaticResource inverseBool}}" />
+                                                <Label
+                                                    Text="{u:I18n Website}"
+                                                    StyleClass="box-label"
+                                                    Grid.Row="0"
+                                                    Grid.Column="0"
+                                                    IsVisible="{Binding IsWebsite, Mode=OneWay}" />
+                                                <Label
+                                                    Text="{Binding HostOrUri, Mode=OneWay}"
+                                                    StyleClass="box-value"
+                                                    Grid.Row="1"
+                                                    Grid.Column="0"
+                                                    AutomationId="UriValue" />
+                                                <controls:IconButton
+                                                    StyleClass="box-row-button, box-row-button-platform"
+                                                    Text="{Binding Source={x:Static core:BitwardenIcons.ShareSquare}}"
+                                                    Command="{Binding BindingContext.LaunchUriCommand, Source={x:Reference _page}}"
+                                                    CommandParameter="{Binding .}"
+                                                    Grid.Row="0"
+                                                    Grid.Column="1"
+                                                    Grid.RowSpan="2"
+                                                    IsVisible="{Binding CanLaunch, Mode=OneWay}"
+                                                    AutomationProperties.IsInAccessibleTree="True"
+                                                    AutomationProperties.Name="{u:I18n Launch}"
+                                                    AutomationId="LaunchUriButton" />
+                                                <controls:IconButton
+                                                    StyleClass="box-row-button, box-row-button-platform"
+                                                    Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                                                    Command="{Binding BindingContext.CopyUriCommand, Source={x:Reference _page}}"
+                                                    CommandParameter="{Binding .}"
+                                                    Grid.Row="0"
+                                                    Grid.Column="2"
+                                                    Grid.RowSpan="2"
+                                                    AutomationProperties.IsInAccessibleTree="True"
+                                                    AutomationProperties.Name="{u:I18n Copy}"
+                                                    AutomationId="CopyUriButton" />
+                                            </Grid>
+                                        </StackLayout>
+                                    </yummy:PancakeView>
                                 </DataTemplate>
                             </controls:RepeaterView.ItemTemplate>
                         </controls:RepeaterView>
                     </StackLayout>
                     <StackLayout StyleClass="box"
                                  IsVisible="{Binding Cipher.Notes, Converter={StaticResource stringHasValue}}">
-                        <StackLayout StyleClass="box-row-header">
-                            <Label Text="{u:I18n Notes, Header=True}"
-                                   StyleClass="box-header, box-header-platform" />
+                            <StackLayout StyleClass="box-row-header">
+                                <Label Text="{u:I18n Notes, Header=True}"
+                                    StyleClass="box-header, box-header-platform" />
+                            </StackLayout>
+                        <yummy:PancakeView StyleClass="round-card">
+                            <StackLayout StyleClass="box-row" AutomationId="NotesRow">
+                                <controls:SelectableLabel
+                                    Text="{Binding Cipher.Notes, Mode=OneWay}"
+                                    StyleClass="box-value"
+                                    AutomationId="CipherNotesLabel" />
+                            </StackLayout>
+                        </yummy:PancakeView>
                         </StackLayout>
-                        <StackLayout StyleClass="box-row" AutomationId="NotesRow">
-                            <controls:SelectableLabel
-                                Text="{Binding Cipher.Notes, Mode=OneWay}"
-                                StyleClass="box-value"
-                                AutomationId="CipherNotesLabel" />
-                        </StackLayout>
-                        <BoxView StyleClass="box-row-separator" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box" IsVisible="{Binding Cipher.HasFields}" AutomationId="CustomFieldsContainer">
+                        <StackLayout StyleClass="box" 
+                                IsVisible="{Binding Cipher.HasFields}"
+                                AutomationId="CustomFieldsContainer">
                         <StackLayout StyleClass="box-row-header">
                             <Label Text="{u:I18n CustomFields, Header=True}"
                                    StyleClass="box-header, box-header-platform" />
@@ -737,32 +724,34 @@
                         <controls:RepeaterView ItemsSource="{Binding Cipher.Attachments}" AutomationId="CipherAttachmentsContainer">
                             <controls:RepeaterView.ItemTemplate>
                                 <DataTemplate x:DataType="views:AttachmentView">
-                                    <StackLayout Spacing="0" Padding="0">
-                                        <StackLayout Orientation="Horizontal" StyleClass="box-row" Spacing="10" AutomationId="CipherAttachment">
-                                            <Label
-                                                Text="{Binding FileName, Mode=OneWay}"
-                                                StyleClass="box-value"
-                                                VerticalTextAlignment="Center"
-                                                HorizontalOptions="StartAndExpand"
-                                                AutomationId="CipherAttachmentFileNameLabel" />
-                                            <Label
-                                                Text="{Binding SizeName, Mode=OneWay}"
-                                                StyleClass="box-sub-label"
-                                                HorizontalTextAlignment="End"
-                                                VerticalTextAlignment="Center"
-                                                AutomationId="CipherAttachmentFileSizeLabel" />
-                                            <controls:IconButton
-                                                StyleClass="box-row-button, box-row-button-platform"
-                                                Text="{Binding Source={x:Static core:BitwardenIcons.Download}}"
-                                                Command="{Binding BindingContext.DownloadAttachmentCommand, Source={x:Reference _page}}"
-                                                CommandParameter="{Binding .}"
-                                                VerticalOptions="Center"
-                                                AutomationProperties.IsInAccessibleTree="True"
-                                                AutomationProperties.Name="{u:I18n Download}"
-                                                AutomationId="CipherAttachmentDownloadButton" />
+                                    <yummy:PancakeView StyleClass="round-card">
+                                        <StackLayout Spacing="0" Padding="0">
+                                            <StackLayout Orientation="Horizontal" StyleClass="box-row" Spacing="10" AutomationId="CipherAttachment">
+                                                <Label
+                                                    Text="{Binding FileName, Mode=OneWay}"
+                                                    StyleClass="box-value"
+                                                    VerticalTextAlignment="Center"
+                                                    HorizontalOptions="StartAndExpand"
+                                                    AutomationId="CipherAttachmentFileNameLabel" />
+                                                <Label
+                                                    Text="{Binding SizeName, Mode=OneWay}"
+                                                    StyleClass="box-sub-label"
+                                                    HorizontalTextAlignment="End"
+                                                    VerticalTextAlignment="Center"
+                                                    AutomationId="CipherAttachmentFileSizeLabel" />
+                                                <controls:IconButton
+                                                    StyleClass="box-row-button, box-row-button-platform"
+                                                    Text="{Binding Source={x:Static core:BitwardenIcons.Download}}"
+                                                    Command="{Binding BindingContext.DownloadAttachmentCommand, Source={x:Reference _page}}"
+                                                    CommandParameter="{Binding .}"
+                                                    VerticalOptions="Center"
+                                                    AutomationProperties.IsInAccessibleTree="True"
+                                                    AutomationProperties.Name="{u:I18n Download}"
+                                                    AutomationId="CipherAttachmentDownloadButton" />
+                                            </StackLayout>
+                                            <BoxView StyleClass="box-row-separator" />
                                         </StackLayout>
-                                        <BoxView StyleClass="box-row-separator" />
-                                    </StackLayout>
+                                    </yummy:PancakeView>
                                 </DataTemplate>
                             </controls:RepeaterView.ItemTemplate>
                         </controls:RepeaterView>

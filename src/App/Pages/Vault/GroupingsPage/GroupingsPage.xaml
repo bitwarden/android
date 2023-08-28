@@ -8,6 +8,7 @@
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     x:DataType="pages:GroupingsPageViewModel"
     Title="{Binding PageTitle}"
     x:Name="_page">
@@ -57,38 +58,45 @@
 
             <DataTemplate x:Key="authenticatorTemplate"
                           x:DataType="pages:GroupingsPageTOTPListItem">
-                <controls:AuthenticatorViewCell 
-                    Cipher="{Binding Cipher}"
-                    WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
-                    TotpSec="{Binding TotpSec}" />
+                <yummy:PancakeView StyleClass="round-card">
+                    <controls:AuthenticatorViewCell 
+                        Cipher="{Binding Cipher}"
+                        WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
+                        TotpSec="{Binding TotpSec}" />
+                </yummy:PancakeView>
             </DataTemplate>
 
             <DataTemplate x:Key="groupTemplate"
                           x:DataType="pages:GroupingsPageListItem">
-                <controls:ExtendedStackLayout Orientation="Horizontal" 
-                                                StyleClass="list-row, list-row-platform"
-                                                AutomationId="{Binding AutomationId}">
-                    <controls:IconLabel Text="{Binding Icon, Mode=OneWay}"
-                                        HorizontalOptions="Start"
-                                        VerticalOptions="Center"
-                                        StyleClass="list-icon, list-icon-platform"
-                                        ShouldUpdateFontSizeDynamicallyForAccesibility="True">
-                        <controls:IconLabel.Effects>
-                            <effects:FixedSizeEffect />
-                        </controls:IconLabel.Effects>
-                    </controls:IconLabel>
-                    <Label Text="{Binding Name, Mode=OneWay}"
-                            LineBreakMode="TailTruncation"
-                            HorizontalOptions="FillAndExpand"
-                            VerticalOptions="CenterAndExpand"
-                            StyleClass="list-title"
-                            AutomationId="ItemNameLabel" />
-                    <Label Text="{Binding ItemCount, Mode=OneWay}"
-                            HorizontalOptions="End"
-                            VerticalOptions="CenterAndExpand"
-                            HorizontalTextAlignment="End"
-                            StyleClass="list-sub"
-                            AutomationId="ItemCountLabel" />
+                <controls:ExtendedStackLayout Orientation="Horizontal"
+                                        Padding="10,0,10,0"
+                                        StyleClass="list-row, list-row-platform">
+                    <yummy:PancakeView StyleClass="round-card" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="15">
+                        <controls:ExtendedStackLayout Orientation="Horizontal" 
+                                                        AutomationId="{Binding AutomationId}">
+                            <controls:IconLabel Text="{Binding Icon, Mode=OneWay}"
+                                                HorizontalOptions="Start"
+                                                VerticalOptions="Center"
+                                                StyleClass="list-icon, list-icon-platform"
+                                                ShouldUpdateFontSizeDynamicallyForAccesibility="True">
+                                <controls:IconLabel.Effects>
+                                    <effects:FixedSizeEffect />
+                                </controls:IconLabel.Effects>
+                            </controls:IconLabel>
+                            <Label Text="{Binding Name, Mode=OneWay}"
+                                    LineBreakMode="TailTruncation"
+                                    HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="CenterAndExpand"
+                                    StyleClass="list-title"
+                                    AutomationId="ItemNameLabel" />
+                            <Label Text="{Binding ItemCount, Mode=OneWay}"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="CenterAndExpand"
+                                    HorizontalTextAlignment="End"
+                                    StyleClass="list-sub"
+                                    AutomationId="ItemCountLabel" />
+                        </controls:ExtendedStackLayout>
+                    </yummy:PancakeView>
                 </controls:ExtendedStackLayout>
             </DataTemplate>
 
@@ -96,13 +104,11 @@
                 x:Key="headerTemplate"
                 x:DataType="pages:GroupingsPageHeaderListItem">
                 <StackLayout
-                    Spacing="0"
-                    Padding="0"
+                    Spacing="10"
+                    Padding="10"
                     VerticalOptions="FillAndExpand"
                     StyleClass="list-row-header-container, list-row-header-container-platform"
                     AutomationId="{Binding AutomationId}">
-                    <BoxView
-                        StyleClass="list-section-separator-top, list-section-separator-top-platform" />
                     <StackLayout StyleClass="list-row-header, list-row-header-platform">
                         <Label
                             Text="{Binding Title}"
@@ -112,7 +118,6 @@
                             StyleClass="list-header-sub"
                             AutomationId="SectionItemCount" />
                     </StackLayout>
-                    <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
                 </StackLayout>
 	        </DataTemplate>
 

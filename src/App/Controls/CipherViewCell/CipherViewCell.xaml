@@ -6,122 +6,126 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     StyleClass="list-row, list-row-platform"
     RowSpacing="0"
     ColumnSpacing="0"
     x:DataType="controls:CipherViewCellViewModel"
     AutomationId="CipherCell">
 
-    <Grid.Resources>
-        <u:IconGlyphConverter x:Key="iconGlyphConverter"/>
-        <u:IconImageConverter x:Key="iconImageConverter"/>
-        <u:InverseBoolConverter x:Key="inverseBool" />
-        <u:StringHasValueConverter x:Key="stringHasValueConverter" />
-    </Grid.Resources>
+    <yummy:PancakeView StyleClass="round-card" Margin="10,5,10,5">
+        <Grid RowSpacing="0" ColumnSpacing="0">
+            <Grid.Resources>
+                <u:IconGlyphConverter x:Key="iconGlyphConverter"/>
+                <u:IconImageConverter x:Key="iconImageConverter"/>
+                <u:InverseBoolConverter x:Key="inverseBool" />
+                <u:StringHasValueConverter x:Key="stringHasValueConverter" />
+            </Grid.Resources>
 
-    <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-    </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-    <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="40" x:Name="_iconColumn" />
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="60" />
-    </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40" x:Name="_iconColumn" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="60" />
+            </Grid.ColumnDefinitions>
 
-    <controls:IconLabel
-        Grid.Column="0"
-        HorizontalOptions="Center"
-        VerticalOptions="Center"
-        StyleClass="list-icon, list-icon-platform"
-        IsVisible="{Binding ShowIconImage, Converter={StaticResource inverseBool}}"
-        Text="{Binding Cipher, Converter={StaticResource iconGlyphConverter}}"
-        ShouldUpdateFontSizeDynamicallyForAccesibility="True"
-        AutomationProperties.IsInAccessibleTree="False"
-        AutomationId="CipherTypeIcon" />
+            <controls:IconLabel
+                Grid.Column="0"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                StyleClass="list-icon, list-icon-platform"
+                IsVisible="{Binding ShowIconImage, Converter={StaticResource inverseBool}}"
+                Text="{Binding Cipher, Converter={StaticResource iconGlyphConverter}}"
+                ShouldUpdateFontSizeDynamicallyForAccesibility="True"
+                AutomationProperties.IsInAccessibleTree="False"
+                AutomationId="CipherTypeIcon" />
 
-    <ff:CachedImage
-        x:Name="_iconImage"
-        Grid.Column="0"
-        BitmapOptimizations="True"
-        ErrorPlaceholder="login.png"
-        LoadingPlaceholder="login.png"
-        HorizontalOptions="CenterAndExpand"
-        VerticalOptions="CenterAndExpand"
-        Margin="9"
-        WidthRequest="22"
-        HeightRequest="22"
-        Aspect="AspectFit"
-        IsVisible="{Binding ShowIconImage}"
-        Source="{Binding IconImageSource, Mode=OneTime}"
-        AutomationProperties.IsInAccessibleTree="False"
-        AutomationId="CipherWebsiteIcon" />
+            <ff:CachedImage
+                x:Name="_iconImage"
+                Grid.Column="0"
+                BitmapOptimizations="True"
+                ErrorPlaceholder="login.png"
+                LoadingPlaceholder="login.png"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"
+                Margin="9"
+                WidthRequest="22"
+                HeightRequest="22"
+                Aspect="AspectFit"
+                IsVisible="{Binding ShowIconImage}"
+                Source="{Binding IconImageSource, Mode=OneTime}"
+                AutomationProperties.IsInAccessibleTree="False"
+                AutomationId="CipherWebsiteIcon" />
 
-    <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Padding="0, 7">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+            <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Padding="0, 7">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-        <Label 
-            LineBreakMode="TailTruncation"
-            Grid.Column="0"
-            Grid.Row="0"
-            StyleClass="list-title, list-title-platform"
-            Text="{Binding Cipher.Name}"
-            AutomationId="CipherNameLabel" />
-        <Label
-            LineBreakMode="TailTruncation"
-            Grid.Column="0"
-            Grid.Row="1"
-            Grid.ColumnSpan="3"
-            StyleClass="list-subtitle, list-subtitle-platform"
-            Text="{Binding Cipher.SubTitle}"
-            IsVisible="{Binding Source={RelativeSource Self}, Path=Text,
-                        Converter={StaticResource stringHasValueConverter}}"
-            AutomationId="CipherSubTitleLabel" />
-        <controls:IconLabel
-            Grid.Column="1"
-            Grid.Row="0"
-            HorizontalOptions="Start"
-            VerticalOptions="Center"
-            StyleClass="list-title-icon"
-            Margin="5, 0, 0, 0"
-            Text="{Binding Source={x:Static core:BitwardenIcons.Collection}}"
-            IsVisible="{Binding Cipher.Shared, Mode=OneTime}"
-            AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Shared}"
-            AutomationId="CipherInCollectionIcon" />
-        <controls:IconLabel
-            Grid.Column="2"
-            Grid.Row="0"
-            HorizontalOptions="Start"
-            VerticalOptions="Center"
-            StyleClass="list-title-icon"
-            Margin="5, 0, 0, 0"
-            Text="{Binding Source={x:Static core:BitwardenIcons.Paperclip}}"
-            IsVisible="{Binding Cipher.HasAttachments, Mode=OneTime}"
-            AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Attachments}"
-            AutomationId="CipherWithAttachmentsIcon" />
-    </Grid>
+                <Label 
+                    LineBreakMode="TailTruncation"
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    StyleClass="list-title, list-title-platform"
+                    Text="{Binding Cipher.Name}"
+                    AutomationId="CipherNameLabel" />
+                <Label
+                    LineBreakMode="TailTruncation"
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Grid.ColumnSpan="3"
+                    StyleClass="list-subtitle, list-subtitle-platform"
+                    Text="{Binding Cipher.SubTitle}"
+                    IsVisible="{Binding Source={RelativeSource Self}, Path=Text,
+                                Converter={StaticResource stringHasValueConverter}}"
+                    AutomationId="CipherSubTitleLabel" />
+                <controls:IconLabel
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                    StyleClass="list-title-icon"
+                    Margin="5, 0, 0, 0"
+                    Text="{Binding Source={x:Static core:BitwardenIcons.Collection}}"
+                    IsVisible="{Binding Cipher.Shared, Mode=OneTime}"
+                    AutomationProperties.IsInAccessibleTree="True"
+                    AutomationProperties.Name="{u:I18n Shared}"
+                    AutomationId="CipherInCollectionIcon" />
+                <controls:IconLabel
+                    Grid.Column="2"
+                    Grid.Row="0"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                    StyleClass="list-title-icon"
+                    Margin="5, 0, 0, 0"
+                    Text="{Binding Source={x:Static core:BitwardenIcons.Paperclip}}"
+                    IsVisible="{Binding Cipher.HasAttachments, Mode=OneTime}"
+                    AutomationProperties.IsInAccessibleTree="True"
+                    AutomationProperties.Name="{u:I18n Attachments}"
+                    AutomationId="CipherWithAttachmentsIcon" />
+            </Grid>
 
-    <controls:MiButton
-        Grid.Row="0"
-        Grid.Column="2"
-        Text="{Binding Source={x:Static core:BitwardenIcons.ViewCellMenu}}"
-        StyleClass="list-row-button, list-row-button-platform, btn-disabled"
-        Clicked="MoreButton_Clicked"
-        VerticalOptions="CenterAndExpand"
-        HorizontalOptions="EndAndExpand"
-        AutomationProperties.IsInAccessibleTree="True"
-        AutomationProperties.Name="{u:I18n Options}"
-        AutomationId="CipherOptionsButton" />
-
+            <controls:MiButton
+                Grid.Row="0"
+                Grid.Column="2"
+                Text="{Binding Source={x:Static core:BitwardenIcons.ViewCellMenu}}"
+                StyleClass="list-row-button, list-row-button-platform, btn-disabled"
+                Clicked="MoreButton_Clicked"
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="EndAndExpand"
+                AutomationProperties.IsInAccessibleTree="True"
+                AutomationProperties.Name="{u:I18n Options}"
+                AutomationId="CipherOptionsButton" />
+        </Grid>
+    </yummy:PancakeView>
 </controls:ExtendedGrid>

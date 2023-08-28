@@ -73,4 +73,5 @@
     <Color x:Key="HyperlinkColor">#81a1c1</Color>
     <Color x:Key="FingerprintPhrase">#F08DC7</Color>
     <Color x:Key="ScanningToggleModeTextColor">#80BDFF</Color>
+    <Color x:Key="CardBackgroundColor">#434c5e</Color>
 </ResourceDictionary>

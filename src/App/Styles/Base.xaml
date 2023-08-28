@@ -2,6 +2,7 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:controls="clr-namespace:Bit.App.Controls;assembly=BitwardenApp"
+                    xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
                     x:Class="Bit.App.Styles.Base">
 
     <!-- General -->
@@ -588,5 +589,16 @@
                 Value="{DynamicResource PrimaryColor}" />
         <Setter Property="StrongColor"
                 Value="{DynamicResource SuccessColor}" />
+    </Style>
+
+    <Style TargetType="yummy:PancakeView" Class="round-card">
+        <Setter Property="CornerRadius"
+                Value="10" />
+        <Setter Property="Padding"
+                Value="10,0,10,0" />
+        <Setter Property="Margin"
+                Value="0,5,0,5" />
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource CardBackgroundColor}" />
     </Style>
 </ResourceDictionary>
