@@ -19,12 +19,20 @@ namespace Bit.iOS.Extension
         public override UIBarButtonItem BaseSubmitButton => SubmitButton;
         public override Action Success => () => LoadingController.DismissLockAndContinue();
         public override Action Cancel => () => LoadingController.CompleteRequest(null, null);
+        public Action LaunchHomePage;
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
             CancelButton.TintColor = ThemeHelpers.NavBarTextColor;
             SubmitButton.TintColor = ThemeHelpers.NavBarTextColor;
+
+            if (!HasLoginOrUnlockMethod)
+            {
+                // user doesn't have a login method
+                // needs to go to homepage and login again
+                LaunchHomePage?.Invoke();
+            }
         }
 
         partial void SubmitButton_Activated(UIBarButtonItem sender)
