@@ -21,12 +21,14 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly ISyncService _syncService;
         private readonly ILocalizeService _localizeService;
+        private readonly IWatchDeviceService _watchDeviceService;
         private readonly ILogger _logger;
 
         private string _lastSyncDisplay = "--";
         private bool _inited;
         private bool _syncOnRefresh;
         private bool _isScreenCaptureAllowed;
+        private bool _shouldConnectToWatch;
 
         public OtherSettingsPageViewModel()
         {
@@ -35,10 +37,12 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>();
             _syncService = ServiceContainer.Resolve<ISyncService>();
             _localizeService = ServiceContainer.Resolve<ILocalizeService>();
+            _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
             _logger = ServiceContainer.Resolve<ILogger>();
 
             SyncCommand = CreateDefaultAsyncCommnad(SyncAsync, _ => _inited);
             ToggleIsScreenCaptureAllowedCommand = CreateDefaultAsyncCommnad(ToggleIsScreenCaptureAllowedAsync, _ => _inited);
+            ToggleShouldConnectToWatchCommand = CreateDefaultAsyncCommnad(ToggleShouldConnectToWatchAsync, _ => _inited);
 
             ClearClipboardPickerViewModel = new PickerViewModel<int>(
                 _deviceActionService,
@@ -83,8 +87,23 @@ namespace Bit.App.Pages
 
         public bool CanToggleeScreenCaptureAllowed => ToggleIsScreenCaptureAllowedCommand.CanExecute(null);
 
+        public bool ShouldConnectToWatch
+        {
+            get => _shouldConnectToWatch;
+            set
+            {
+                if (SetProperty(ref _shouldConnectToWatch, value))
+                {
+                    ((ICommand)ToggleShouldConnectToWatchCommand).Execute(null);
+                }
+            }
+        }
+
+        public bool CanToggleShouldConnectToWatch => ToggleShouldConnectToWatchCommand.CanExecute(null);
+
         public AsyncCommand SyncCommand { get; }
         public AsyncCommand ToggleIsScreenCaptureAllowedCommand { get; }
+        public AsyncCommand ToggleShouldConnectToWatchCommand { get; }
 
         public async Task InitAsync()
         {
@@ -94,13 +113,17 @@ namespace Bit.App.Pages
 
             await InitClearClipboardAsync();
 
+            _shouldConnectToWatch = await _stateService.GetShouldConnectToWatchAsync();
+
             _inited = true;
 
             MainThread.BeginInvokeOnMainThread(() =>
             {
+                TriggerPropertyChanged(nameof(ShouldConnectToWatch));
                 SyncCommand.RaiseCanExecuteChanged();
                 ClearClipboardPickerViewModel.SelectOptionCommand.RaiseCanExecuteChanged();
                 ToggleIsScreenCaptureAllowedCommand.RaiseCanExecuteChanged();
+                ToggleShouldConnectToWatchCommand.RaiseCanExecuteChanged();
             });
         }
 
@@ -190,19 +213,31 @@ namespace Bit.App.Pages
             await _deviceActionService.SetScreenCaptureAllowedAsync();
         }
 
+        private async Task ToggleShouldConnectToWatchAsync()
+        {
+            await _watchDeviceService.SetShouldConnectToWatchAsync(ShouldConnectToWatch);
+        }
+
         private void ToggleIsScreenCaptureAllowedCommand_CanExecuteChanged(object sender, EventArgs e)
         {
             TriggerPropertyChanged(nameof(CanToggleeScreenCaptureAllowed));
         }
 
+        private void ToggleShouldConnectToWatchCommand_CanExecuteChanged(object sender, EventArgs e)
+        {
+            TriggerPropertyChanged(nameof(CanToggleShouldConnectToWatch));
+        }
+
         internal void SubscribeEvents()
         {
             ToggleIsScreenCaptureAllowedCommand.CanExecuteChanged += ToggleIsScreenCaptureAllowedCommand_CanExecuteChanged;
+            ToggleShouldConnectToWatchCommand.CanExecuteChanged += ToggleShouldConnectToWatchCommand_CanExecuteChanged;
         }
 
         internal void UnsubscribeEvents()
         {
             ToggleIsScreenCaptureAllowedCommand.CanExecuteChanged -= ToggleIsScreenCaptureAllowedCommand_CanExecuteChanged;
+            ToggleShouldConnectToWatchCommand.CanExecuteChanged -= ToggleShouldConnectToWatchCommand_CanExecuteChanged;
         }
     }
 }

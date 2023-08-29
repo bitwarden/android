@@ -54,6 +54,15 @@
                 AutomationId="SubmitCrashLogsSwitch"
                 StyleClass="settings-item-view"
                 HorizontalOptions="FillAndExpand" />
+            
+            <controls:SwitchItemView
+                Title="{u:I18n ConnectToWatch}"
+                IsToggled="{Binding ShouldConnectToWatch}"
+                IsEnabled="{Binding CanToggleShouldConnectToWatch}"
+                IsVisible="{OnPlatform iOS=True, Android=False}"
+                AutomationId="ConnectToWatchSwitch"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand" />
 
         </StackLayout>
     </ScrollView>
