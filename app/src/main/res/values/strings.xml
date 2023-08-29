@@ -1,3 +1,12 @@
 <resources>
+    <!--Common-->
     <string name="app_name">Bitwarden</string>
+
+    <!--Create Account Screen-->
+    <string name="title_create_account">Create Account</string>
+    <string name="input_label_email">Email address</string>
+    <string name="input_label_master_password">Master password</string>
+    <string name="input_label_re_type_master_password">Re-type master password</string>
+    <string name="input_label_master_password_hint">Master password hint (optional)</string>
+    <string name="button_submit">SUBMIT</string>
 </resources>

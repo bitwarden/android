@@ -64,6 +64,13 @@ abstract class BaseViewModel<S, E, A>(
     protected abstract fun handleAction(action: A): Unit
 
     /**
+     * Convenience method for sending an action to the [actionChannel].
+     */
+    fun trySendAction(action: A) {
+        actionChannel.trySend(action)
+    }
+
+    /**
      * Helper method for sending an internal action.
      */
     protected suspend fun sendAction(action: A) {

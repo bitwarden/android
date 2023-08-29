@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.x8bit.bitwarden.ui.components.PlaceholderComposable
+import com.x8bit.bitwarden.ui.feature.createaccount.CreateAccountScreen
 
 /**
  * Controls root level [NavHost] for the app.
@@ -92,7 +93,7 @@ private const val LoginRoute = "login"
  */
 private fun NavGraphBuilder.loginDestinations() {
     composable(LoginRoute) {
-        PlaceholderComposable(text = "Login")
+        CreateAccountScreen()
     }
 }
 
