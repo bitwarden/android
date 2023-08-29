@@ -391,4 +391,18 @@
         <Setter Property="FontSize"
                 Value="Medium" />
     </Style>
+
+    <Style
+        TargetType="Label"
+        ApplyToDerivedTypes="True"
+        Class="settings-header">
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource ListHeaderBackgroundColor}" />
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="Padding"
+                Value="10,20,5,3" />
+    </Style>
 </ResourceDictionary>

@@ -25,6 +25,7 @@ namespace Bit.App.Utilities
     public static class AppHelpers
     {
         public const string VAULT_TIMEOUT_ACTION_CHANGED_MESSAGE_COMMAND = "vaultTimeoutActionChanged";
+        public const string RESUMED_MESSAGE_COMMAND = "resumed";
 
         public static async Task<string> CipherListOptions(ContentPage page, CipherView cipher, IPasswordRepromptService passwordRepromptService)
         {

@@ -28,6 +28,9 @@ namespace Bit.App.Abstractions
         bool SupportsNfc();
         bool SupportsCamera();
         bool SupportsFido2();
+        bool SupportsAutofillServices();
+        bool SupportsInlineAutofill();
+        bool SupportsDrawOver();
 
         bool LaunchApp(string appName);
         void RateApp();
@@ -41,5 +44,7 @@ namespace Bit.App.Abstractions
         Task SetScreenCaptureAllowedAsync();
         void OpenAppSettings();
         void CloseExtensionPopUp();
+        string GetAutofillAccessibilityDescription();
+        string GetAutofillDrawOverDescription();
     }
 }
