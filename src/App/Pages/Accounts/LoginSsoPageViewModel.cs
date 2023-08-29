@@ -34,7 +34,7 @@ namespace Bit.App.Pages
         private readonly ICryptoService _cryptoService;
 
         private string _orgIdentifier;
-        private bool _useEphemeralWebBrowserSession = false;
+        private bool _useEphemeralWebBrowserSession;
 
         public LoginSsoPageViewModel()
         {
