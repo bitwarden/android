@@ -3,6 +3,7 @@
 ## Contents
 
 * [Style : Kotlin](#style--kotlin)
+* [Style : ViewModels](#style--view-models)
 * [Best Practices : Kotlin](#best-practices--kotlin)
 * [Best Practices : Jetpack Compose](#best-practices--jetpack-compose)
 
@@ -445,6 +446,9 @@ val data = databaseDataSource.getData(id)
 val data = databaseDataSource.getData(id)
 ```
 
+## Style : ViewModels
+
+- Private functions that handle actions should be prefixed with "handle" and suffixed with the name of the action. (ex: `handleSubmitClick`)
 
 ## Best Practices : Kotlin
 
