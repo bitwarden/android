@@ -59,9 +59,6 @@
     <Compile Update="Pages\Settings\ExtensionPage.xaml.cs">
       <DependentUpon>ExtensionPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\Settings\AutofillServicesPage.xaml.cs">
-      <DependentUpon>AutofillServicesPage.xaml</DependentUpon>
-    </Compile>
     <Compile Update="Pages\Settings\FolderAddEditPage.xaml.cs">
       <DependentUpon>FolderAddEditPage.xaml</DependentUpon>
     </Compile>
@@ -70,12 +67,6 @@
     </Compile>
     <Compile Update="Pages\Settings\ExportVaultPage.xaml.cs">
       <DependentUpon>ExportVaultPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Settings\OptionsPage.xaml.cs">
-      <DependentUpon>OptionsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Settings\SyncPage.xaml.cs">
-      <DependentUpon>SyncPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\Vault\AttachmentsPage.xaml.cs">
       <DependentUpon>AttachmentsPage.xaml</DependentUpon>
