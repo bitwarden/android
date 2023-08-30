@@ -91,7 +91,7 @@ namespace Bit.App
                             _messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
                         });
                     }
-                    else if (message.Command == "resumed")
+                    else if (message.Command == AppHelpers.RESUMED_MESSAGE_COMMAND)
                     {
                         if (Device.RuntimePlatform == Device.iOS)
                         {

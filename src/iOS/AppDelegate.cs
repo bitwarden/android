@@ -229,7 +229,7 @@ namespace Bit.iOS
 
         public override void WillEnterForeground(UIApplication uiApplication)
         {
-            _messagingService?.Send("resumed");
+            _messagingService?.Send(AppHelpers.RESUMED_MESSAGE_COMMAND);
             base.WillEnterForeground(uiApplication);
         }
 

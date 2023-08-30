@@ -329,7 +329,7 @@ namespace Bit.App.Pages
                 !await Page.DisplayAlert(AppResources.ApproveLoginRequests, AppResources.UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices, AppResources.Yes, AppResources.No))
             {
                 _useThisDeviceToApproveLoginRequests = !UseThisDeviceToApproveLoginRequests;
-                TriggerPropertyChanged(nameof(UseThisDeviceToApproveLoginRequests));
+                MainThread.BeginInvokeOnMainThread(() => TriggerPropertyChanged(nameof(UseThisDeviceToApproveLoginRequests)));
                 return;
             }
 

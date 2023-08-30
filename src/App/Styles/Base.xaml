@@ -610,4 +610,14 @@
         <Setter Property="Padding" Value="16,12" />
     </Style>
 
+    <Style TargetType="BoxView"
+           Class="settings-box-row-separator">
+        <Setter Property="HeightRequest"
+                Value="1" />
+        <Setter Property="Color"
+                Value="{DynamicResource BoxBorderColor}" />
+        <Setter Property="IsVisible"
+                Value="{OnPlatform Android=True, iOS=False}" />
+    </Style>
+    
 </ResourceDictionary>

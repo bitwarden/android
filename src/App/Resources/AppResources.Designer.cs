@@ -365,6 +365,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Additional options.
+        /// </summary>
+        public static string AdditionalOptions {
+            get {
+                return ResourceManager.GetString("AdditionalOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new attachment.
         /// </summary>
         public static string AddNewAttachment {
@@ -901,6 +910,15 @@ namespace Bit.App.Resources {
         public static string AutofillServices {
             get {
                 return ResourceManager.GetString("AutofillServices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Android Autofill Framework is used to assist in filling login information into other apps on your device..
+        /// </summary>
+        public static string AutofillServicesExplanationLong {
+            get {
+                return ResourceManager.GetString("AutofillServicesExplanationLong", resourceCulture);
             }
         }
         
@@ -7062,6 +7080,15 @@ namespace Bit.App.Resources {
         public static string UseFingerprintToUnlock {
             get {
                 return ResourceManager.GetString("UseFingerprintToUnlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay..
+        /// </summary>
+        public static string UseInlineAutofillExplanationLong {
+            get {
+                return ResourceManager.GetString("UseInlineAutofillExplanationLong", resourceCulture);
             }
         }
         
