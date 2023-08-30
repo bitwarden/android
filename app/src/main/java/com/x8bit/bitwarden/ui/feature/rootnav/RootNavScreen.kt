@@ -1,7 +1,5 @@
 package com.x8bit.bitwarden.ui.feature.rootnav
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -27,8 +25,6 @@ fun RootNavScreen(
     NavHost(
         navController = navController,
         startDestination = SplashRoute,
-        enterTransition = { EnterTransition.None },
-        exitTransition = { ExitTransition.None },
     ) {
         splashDestinations()
         loginDestinations()
