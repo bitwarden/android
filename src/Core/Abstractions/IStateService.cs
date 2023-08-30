@@ -92,14 +92,12 @@ namespace Bit.Core.Abstractions
         Task SetInlineAutofillEnabledAsync(bool? value, string userId = null);
         Task<bool?> GetAutofillDisableSavePromptAsync(string userId = null);
         Task SetAutofillDisableSavePromptAsync(bool? value, string userId = null);
-        Task<Dictionary<string, Dictionary<string, object>>> GetLocalDataAsync(string userId = null);
-        Task SetLocalDataAsync(Dictionary<string, Dictionary<string, object>> value, string userId = null);
+        Task<Dictionary<string, Dictionary<string, object>>> GetCiphersLocalDataAsync(string userId = null);
+        Task SetCiphersLocalDataAsync(Dictionary<string, Dictionary<string, object>> value, string userId = null);
         Task<Dictionary<string, CipherData>> GetEncryptedCiphersAsync(string userId = null);
         Task SetEncryptedCiphersAsync(Dictionary<string, CipherData> value, string userId = null);
         Task<int?> GetDefaultUriMatchAsync(string userId = null);
         Task SetDefaultUriMatchAsync(int? value, string userId = null);
-        Task<HashSet<string>> GetNeverDomainsAsync(string userId = null);
-        Task SetNeverDomainsAsync(HashSet<string> value, string userId = null);
         Task<int?> GetClearClipboardAsync(string userId = null);
         Task SetClearClipboardAsync(int? value, string userId = null);
         Task<Dictionary<string, CollectionData>> GetEncryptedCollectionsAsync(string userId = null);

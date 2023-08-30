@@ -35,7 +35,6 @@ namespace Bit.Core.Abstractions
         Task ReplaceAsync(Dictionary<string, CipherData> ciphers);
         Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, string filename, byte[] data);
         Task SaveCollectionsWithServerAsync(Cipher cipher);
-        Task SaveNeverDomainAsync(string domain);
         Task SaveWithServerAsync(Cipher cipher);
         Task<ShareWithServerError> ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds);
         Task UpdateLastUsedDateAsync(string id);
