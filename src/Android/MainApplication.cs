@@ -160,7 +160,7 @@ namespace Bit.Droid
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);
             var biometricService = new BiometricService(stateService, cryptoService);
             var userPinService = new UserPinService(stateService, cryptoService);
-            var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
+            var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService, stateService);
 
             ServiceContainer.Register<ISynchronousStorageService>(preferencesStorage);
             ServiceContainer.Register<IBroadcasterService>("broadcasterService", broadcasterService);
