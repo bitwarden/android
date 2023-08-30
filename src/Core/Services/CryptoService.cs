@@ -700,6 +700,15 @@ namespace Bit.Core.Services
             return new EncByteArray(encBytes);
         }
 
+        public async Task<MasterKey> GetOrDeriveMasterKeyAsync(string password, string userId = null)
+        {
+            var masterKey = await GetMasterKeyAsync(userId);
+            return masterKey ?? await this.MakeMasterKeyAsync(
+                password,
+                await _stateService.GetEmailAsync(userId),
+                await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile)));
+        }
+
         // --HELPER METHODS--
 
         private async Task StoreAdditionalKeysAsync(UserKey userKey, string userId = null)

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 
@@ -10,11 +11,13 @@ namespace Bit.App.Services
     {
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly ICryptoService _cryptoService;
+        private readonly IStateService _stateService;
 
-        public MobilePasswordRepromptService(IPlatformUtilsService platformUtilsService, ICryptoService cryptoService)
+        public MobilePasswordRepromptService(IPlatformUtilsService platformUtilsService, ICryptoService cryptoService, IStateService stateService)
         {
             _platformUtilsService = platformUtilsService;
             _cryptoService = cryptoService;
+            _stateService = stateService;
         }
 
         public string[] ProtectedFields { get; } = { "LoginTotp", "LoginPassword", "H_FieldValue", "CardNumber", "CardCode" };
@@ -42,7 +45,22 @@ namespace Bit.App.Services
                 return false;
             };
 
-            return await _cryptoService.CompareAndUpdateKeyHashAsync(password, null);
+            var masterKey = await _cryptoService.GetOrDeriveMasterKeyAsync(password);
+            var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(password, masterKey);
+            if (passwordValid)
+            {
+                await AppHelpers.ResetInvalidUnlockAttemptsAsync();
+
+                var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
+                await _cryptoService.SetMasterKeyAsync(masterKey);
+                var hasKey = await _cryptoService.HasUserKeyAsync();
+                if (!hasKey)
+                {
+                    await _cryptoService.SetUserKeyAsync(userKey);
+                }
+            }
+
+            return passwordValid;
         }
 
         private async Task<bool> ShouldByPassMasterPasswordRepromptAsync()
