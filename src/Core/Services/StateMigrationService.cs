@@ -614,7 +614,7 @@ namespace Bit.Core.Services
             await RemoveValueAsync(Storage.LiteDb, V6Keys.LastActiveTimeKey(""));
 
             // Update stored version
-            await SetLastStateVersionAsync(5);
+            await SetLastStateVersionAsync(6);
         }
 
         private class V6Keys
@@ -914,7 +914,10 @@ namespace Bit.Core.Services
                 return;
             }
 
-            await SetValueAsync(Storage.Prefs, key, value);
+            if (await GetValueAsync<T>(Storage.Prefs, key) == null)
+            {
+                await SetValueAsync(Storage.Prefs, key, value);
+            }
             await RemoveValueAsync(Storage.LiteDb, key);
         }
     }

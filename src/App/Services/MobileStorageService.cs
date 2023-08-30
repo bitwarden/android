@@ -24,12 +24,6 @@ namespace Bit.App.Services
             Constants.SettingsKey(""),
         };
 
-        private bool IsLiteDbKey(string key)
-        {
-            return _liteDbStorageKeys.Any(key.StartsWith) ||
-                   _liteDbStorageKeys.Contains(key);
-        }
-
         public MobileStorageService(
             IStorageService preferenceStorageService,
             IStorageService liteDbStorageService)
@@ -45,19 +39,7 @@ namespace Bit.App.Services
                 return await _liteDbStorageService.GetAsync<T>(key);
             }
 
-            var result = await _preferencesStorageService.GetAsync<T>(key);
-            if (result == null)
-            {
-                // If result is expected in prefs but found in LiteDB, migrate it to prefs
-                result = await _liteDbStorageService.GetAsync<T>(key);
-                if (result != null)
-                {
-                    await _preferencesStorageService.SaveAsync(key, result);
-                    await _liteDbStorageService.RemoveAsync(key);
-                }
-            }
-
-            return result;
+            return await _preferencesStorageService.GetAsync<T>(key) ?? await TryMigrateLiteDbToPrefsAsync<T>(key);
         }
 
         public Task SaveAsync<T>(string key, T obj)
@@ -88,6 +70,26 @@ namespace Bit.App.Services
             {
                 disposablePrefService.Dispose();
             }
+        }
+
+        // Helpers
+
+        private bool IsLiteDbKey(string key)
+        {
+            return _liteDbStorageKeys.Any(key.StartsWith) ||
+                   _liteDbStorageKeys.Contains(key);
+        }
+
+        private async Task<T> TryMigrateLiteDbToPrefsAsync<T>(string key)
+        {
+            var currentValue = await _liteDbStorageService.GetAsync<T>(key);
+            if (currentValue != null)
+            {
+                await _preferencesStorageService.SaveAsync(key, currentValue);
+                await _liteDbStorageService.RemoveAsync(key);
+            }
+
+            return currentValue;
         }
     }
 }
