@@ -10,7 +10,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.x8bit.bitwarden.ui.components.PlaceholderComposable
-import com.x8bit.bitwarden.ui.feature.createaccount.CreateAccountScreen
+import com.x8bit.bitwarden.ui.feature.login.loginDestinations
+import com.x8bit.bitwarden.ui.feature.login.navigateToLoginAsRoot
 
 /**
  * Controls root level [NavHost] for the app.
@@ -27,7 +28,7 @@ fun RootNavScreen(
         startDestination = SplashRoute,
     ) {
         splashDestinations()
-        loginDestinations()
+        loginDestinations(navController)
     }
 
     // When state changes, navigate to different root navigation state
@@ -69,38 +70,6 @@ private fun NavGraphBuilder.splashDestinations() {
  */
 private fun NavController.navigateToSplashAsRoot() {
     navigate(SplashRoute) {
-        // When changing root navigation state, pop everything else off the back stack:
-        popUpTo(graph.id) {
-            inclusive = true
-        }
-    }
-}
-
-/**
- * TODO move to login package(BIT-146)
- */
-@Suppress("TopLevelPropertyNaming")
-private const val LoginRoute = "login"
-
-/**
- * Add login destinations to the nav graph.
- *
- * TODO: move to login package (BIT-146)
- */
-private fun NavGraphBuilder.loginDestinations() {
-    composable(LoginRoute) {
-        CreateAccountScreen()
-    }
-}
-
-/**
- * Navigate to the splash screen. Note this will only work if login destination was added
- * via [loginDestinations].
- *
- * TODO: move to login package (BIT-146)
- */
-private fun NavController.navigateToLoginAsRoot() {
-    navigate(LoginRoute) {
         // When changing root navigation state, pop everything else off the back stack:
         popUpTo(graph.id) {
             inclusive = true
