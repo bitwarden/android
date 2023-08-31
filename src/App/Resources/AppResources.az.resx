@@ -2627,22 +2627,22 @@ Bu hesaba keçmək istəyirsiniz?</value>
     <value>Hazırkı ana parol</value>
   </data>
   <data name="LoggedIn" xml:space="preserve">
-    <value>Logged in!</value>
+    <value>Giriş edildi!</value>
   </data>
   <data name="ApproveWithMyOtherDevice" xml:space="preserve">
-    <value>Approve with my other device</value>
+    <value>Digər cihazımla təsdiqlə</value>
   </data>
   <data name="RequestAdminApproval" xml:space="preserve">
-    <value>Request admin approval</value>
+    <value>Admin təsdiqini tələb et</value>
   </data>
   <data name="ApproveWithMasterPassword" xml:space="preserve">
-    <value>Approve with master password</value>
+    <value>Ana parolla təsdiqlə</value>
   </data>
   <data name="TurnOffUsingPublicDevice" xml:space="preserve">
-    <value>Turn off using a public device</value>
+    <value>Hər kəsə açıq bir cihaz istifadə edərək söndür</value>
   </data>
   <data name="RememberThisDevice" xml:space="preserve">
-    <value>Remember this device</value>
+    <value>Bu cihazı xatırla</value>
   </data>
   <data name="Passkey" xml:space="preserve">
     <value>Passkey</value>
@@ -2685,22 +2685,22 @@ Bu hesaba keçmək istəyirsiniz?</value>
     <value>Yararsız API tokeni</value>
   </data>
   <data name="AdminApprovalRequested" xml:space="preserve">
-    <value>Admin approval requested</value>
+    <value>Admin təsdiqi tələb olunur</value>
   </data>
   <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
-    <value>Your request has been sent to your admin.</value>
+    <value>Tələbiniz admininizə göndərildi.</value>
   </data>
   <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
-    <value>You will be notified once approved. </value>
+    <value>Təsdiqləndikdən sonra məlumatlandırılacaqsınız. </value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
-    <value>Trouble logging in?</value>
+    <value>Girişdə problem var?</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>{0} olaraq giriş edilir</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
-    <value>Vault timeout action changed to log out</value>
+    <value>Anbar vaxt bitməsi əməliyyatı "çıxış et" olaraq dəyişdirildi</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
     <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
@@ -2749,13 +2749,13 @@ Bu hesaba keçmək istəyirsiniz?</value>
     <value>Bir dəfəyə bir neçə URI-a düzəliş etmək mümkün deyil</value>
   </data>
   <data name="LoginApproved" xml:space="preserve">
-    <value>Login approved</value>
+    <value>Giriş təsdiqləndi</value>
   </data>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
-    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+    <value>Cihazla giriş etmə, Bitwarden tətbiqinin tənzimləmələrində quraşdırılmalıdır. Başqa bir seçimə ehtiyacınız var?</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
-    <value>Log in with device</value>
+    <value>Cihazla giriş et</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Giriş edilir</value>

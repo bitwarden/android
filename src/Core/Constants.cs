@@ -9,11 +9,12 @@ namespace Bit.Core
         public const string AndroidAppProtocol = "androidapp://";
         public const string iOSAppProtocol = "iosapp://";
         public const string DefaultUsernameGenerated = "-";
+        public const string AppIdKey = "appId";
         public const string StateVersionKey = "stateVersion";
         public const string StateKey = "state";
         public const string PreAuthEnvironmentUrlsKey = "preAuthEnvironmentUrls";
         public const string LastFileCacheClearKey = "lastFileCacheClear";
-        public const string AutofillTileAdded = "autofillTileAdded";
+        public const string AutofillTileAddedKey = "autofillTileAdded";
         public const string PushRegisteredTokenKey = "pushRegisteredToken";
         public const string PushInitialPromptShownKey = "pushInitialPromptShown";
         public const string PushInstallationRegistrationErrorKey = "pushInstallationRegistrationError";
@@ -94,8 +95,7 @@ namespace Bit.Core
         public static string FoldersKey(string userId) => $"folders_{userId}";
         public static string CollectionsKey(string userId) => $"collections_{userId}";
         public static string OrganizationsKey(string userId) => $"organizations_{userId}";
-        public static string LocalDataKey(string userId) => $"ciphersLocalData_{userId}";
-        public static string NeverDomainsKey(string userId) => $"neverDomains_{userId}";
+        public static string CiphersLocalDataKey(string userId) => $"ciphersLocalData_{userId}";
         public static string SendsKey(string userId) => $"sends_{userId}";
         public static string PoliciesKey(string userId) => $"policies_{userId}";
         public static string EncOrgKeysKey(string userId) => $"encOrgKeys_{userId}";

@@ -15,12 +15,7 @@ namespace Bit.Core.Services
 
         public Task<string> GetAppIdAsync()
         {
-            return MakeAndGetAppIdAsync("appId");
-        }
-
-        public Task<string> GetAnonymousAppIdAsync()
-        {
-            return MakeAndGetAppIdAsync("anonymousAppId");
+            return MakeAndGetAppIdAsync(Constants.AppIdKey);
         }
 
         private async Task<string> MakeAndGetAppIdAsync(string key)
