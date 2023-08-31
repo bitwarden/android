@@ -6,6 +6,7 @@ using Microsoft.Maui.Controls.Platform;
 
 namespace Bit.App.Droid.Renderers
 {
+    // TODO: Convert to handler
     public class ExtendedStackLayoutRenderer : ViewRenderer
     {
         public ExtendedStackLayoutRenderer(Context context) : base(context) { }

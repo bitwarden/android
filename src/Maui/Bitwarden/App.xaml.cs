@@ -18,6 +18,7 @@ using Bit.Core.Utilities;
 using Microsoft.Maui.Controls.Xaml;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
+using Bit.App.Handlers;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Bit.App
@@ -51,6 +52,7 @@ namespace Bit.App
 
         public App(AppOptions appOptions)
         {
+            App.SetupHandlers();
             Options = appOptions ?? new AppOptions();
             if (Options.IosExtension)
             {
@@ -198,6 +200,21 @@ namespace Bit.App
                     LoggerHelper.LogEvenIfCantBeResolved(ex);
                 }
             });
+        }
+
+        private static void SetupHandlers()
+        {
+            new EntryHandlerMappings().Setup();
+            new EditorHandlerMappings().Setup();
+            new LabelHandlerMappings().Setup();
+            new PickerHandlerMappings().Setup();
+            new SearchBarHandlerMappings().Setup();
+            new SwitchHandlerMappings().Setup();
+            new DatePickerHandlerMappings().Setup();
+            new SliderHandlerMappings().Setup();
+            new StepperHandlerMappings().Setup();
+            new TimePickerHandlerMappings().Setup();
+            new ButtonHandlerMappings().Setup();
         }
 
         private async Task CheckPasswordlessLoginRequestsAsync()

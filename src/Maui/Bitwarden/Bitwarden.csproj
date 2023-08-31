@@ -304,6 +304,8 @@
 	  <None Remove="Resources\Fonts\bwi-font.ttf" />
 	  <None Remove="Resources\Fonts\MaterialIcons_Regular.ttf" />
 	  <None Remove="Resources\Fonts\RobotoMono_Regular.ttf" />
+	  <None Remove="Handlers\" />
+	  <None Remove="Platforms\Android\Handlers\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Core\" />
@@ -316,6 +318,8 @@
 	  <Folder Include="Core\Services\" />
 	  <Folder Include="Core\Utilities\" />
 	  <Folder Include="Resources\Fonts\" />
+	  <Folder Include="Handlers\" />
+	  <Folder Include="Platforms\Android\Handlers\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <EmbeddedResource Include="Core\Resources\eff_long_word_list.txt" />

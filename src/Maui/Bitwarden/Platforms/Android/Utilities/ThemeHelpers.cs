@@ -1,4 +1,5 @@
-﻿using Android.Graphics;
+﻿using Android.Content.Res;
+using Android.Graphics;
 using Bit.App.Utilities;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Color = Android.Graphics.Color;
@@ -71,6 +72,21 @@ namespace Bit.App.Droid.Utilities
             {
                 LightTheme = true;
             }
+        }
+
+        internal static ColorStateList GetStateFocusedColors()
+        {
+            var states = new[]
+            {
+                new[] { Android.Resource.Attribute.StateFocused }, // focused
+                new[] { -Android.Resource.Attribute.StateFocused }, // unfocused
+            };
+            var colors = new int[]
+            {
+                PrimaryColor,
+                MutedColor
+            };
+            return new ColorStateList(states, colors);
         }
     }
 }

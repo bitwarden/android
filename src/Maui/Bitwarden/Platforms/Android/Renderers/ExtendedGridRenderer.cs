@@ -6,6 +6,7 @@ using Microsoft.Maui.Controls.Platform;
 
 namespace Bit.App.Droid.Renderers
 {
+    // TODO: Convert to handler
     public class ExtendedGridRenderer : ViewRenderer
     {
         public ExtendedGridRenderer(Context context) : base(context) { }

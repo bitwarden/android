@@ -10,6 +10,7 @@ using Microsoft.Maui.Controls.Platform;
 
 namespace Bit.App.Droid.Renderers
 {
+    // TODO: Convert to handler
     public class CustomTabbedRenderer : TabbedPageRenderer, NavigationBarView.IOnItemReselectedListener
     {
         private TabbedPage _page;

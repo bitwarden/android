@@ -20,7 +20,7 @@ namespace Bit.App.Effects
         {
             if (Element is Label label && Control is TextView textView)
             {
-                textView.SetTextSize(Android.Util.ComplexUnitType.Pt, (float)label.FontSize);
+                textView.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)label.FontSize);
             }
         }
 

@@ -132,7 +132,7 @@
                         AutomationProperties.Name="{u:I18n Name}"
                         AutomationId="ItemNameEntry" />
                 </StackLayout>
-                <StackLayout IsVisible="{Binding IsLogin}" Spacing="0" Padding="0">
+                <VerticalStackLayout IsVisible="{Binding IsLogin}" Spacing="0" Padding="0">
                     <Grid StyleClass="box-row, box-row-input"
                         RowDefinitions="Auto,*"
                         ColumnDefinitions="*,Auto">
@@ -308,10 +308,11 @@
                             AutomationProperties.Name="{u:I18n ScanQrTitle}"
                             />
                     </Grid>
-                </StackLayout>
-                <StackLayout IsVisible="{Binding IsCard}" Spacing="0" Padding="0">
+                </VerticalStackLayout>
+                <VerticalStackLayout IsVisible="{Binding IsCard}" Spacing="0" Padding="0">
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
+                            IsVisible="{Binding IsLogin, Mode=OneWay}"
                             Text="{u:I18n CardholderName}"
                             StyleClass="box-label" />
                         <Entry
@@ -430,7 +431,7 @@
                             AutomationProperties.Name="{u:I18n ToggleVisibility}"
                             AutomationId="CardShowSecurityCodeButton" />
                     </Grid>
-                </StackLayout>
+                </VerticalStackLayout>
                 <StackLayout IsVisible="{Binding IsIdentity}" Spacing="0" Padding="0">
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -831,7 +832,7 @@
                         StyleClass="box-label" />
                     <Picker
                         x:Name="_ownershipPicker"
-                        ItemsSource="{Binding OwnershipOptions, Mode=OneTime}"
+                        ItemsSource="{Binding OwnershipOptions, Mode=OneWay}"
                         SelectedIndex="{Binding OwnershipSelectedIndex}"
                         StyleClass="box-value"
                         AutomationId="ItemOwnershipPicker" />
