@@ -5,18 +5,19 @@
 	      xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
           xmlns:controls="clr-namespace:Bit.App.Controls"
           xmlns:u="clr-namespace:Bit.App.Utilities"
+          xmlns:core="clr-namespace:Bit.Core"
           x:Name="_accountView"
           x:DataType="controls:AccountViewCellViewModel">
     
-          <!--TODO: [MAUI-Migration] add touch effects
-          xct:TouchEffect.NativeAnimation="True"
-          xct:TouchEffect.Command="{Binding SelectAccountCommand, Source={x:Reference _accountView}}"
-          xct:TouchEffect.CommandParameter="{Binding .}"
+          <!--TODO: [MAUI-Migration] add long press
           xct:TouchEffect.LongPressCommand="{Binding LongPressAccountCommand, Source={x:Reference _accountView}}"
           xct:TouchEffect.LongPressCommandParameter="{Binding .}"-->
 
     <Grid RowSpacing="0"
           ColumnSpacing="0">
+        <Grid.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding SelectAccountCommand, Source={x:Reference _accountView}}" CommandParameter="{Binding .}" />
+        </Grid.GestureRecognizers>
 
         <Grid.Resources>
             <u:InverseBoolConverter x:Key="inverseBool" />
@@ -39,6 +40,8 @@
             <Image
                 Grid.Column="0"
                 Source="{Binding AvatarImageSource}"
+                WidthRequest="40"
+                HeightRequest="40"
                 HorizontalOptions="Center"
                 Margin="10,0"
                 VerticalOptions="Center" />
@@ -143,22 +146,14 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!--TODO: [MAUI-Migration] Check the tint color works as before
-                xct:IconTintColorEffect.TintColor="{DynamicResource TextColor}"-->
-
-            <Image
+            <controls:IconLabel
                 Grid.Column="0"
                 VerticalOptions="Center"
                 HorizontalOptions="Center"
                 Margin="14,0"
-                WidthRequest="{OnPlatform 24, iOS=24, Android=26}"
-                HeightRequest="{OnPlatform 24, iOS=24, Android=26}"
-                Source="plus.png"
-                AutomationProperties.IsInAccessibleTree="False">
-                <Image.Behaviors>
-                    <mct:IconTintColorBehavior TintColor="{DynamicResource TextColor}" />
-                </Image.Behaviors>
-            </Image>
+                TextColor="{DynamicResource TextColor}"
+                Text="{Binding Source={x:Static core:BitwardenIcons.Plus}}"
+                AutomationProperties.IsInAccessibleTree="False" />
             <Label
                 Text="{u:I18n AddAccount}"
                 StyleClass="accountlist-title, accountlist-title-platform"
