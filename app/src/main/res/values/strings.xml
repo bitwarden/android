@@ -9,4 +9,12 @@
     <string name="input_label_re_type_master_password">Re-type master password</string>
     <string name="input_label_master_password_hint">Master password hint (optional)</string>
     <string name="button_submit">SUBMIT</string>
+
+    <!-- Landing screen -->
+    <string name="continue_button">Continue</string>
+    <string name="create_account">Create account</string>
+    <string name="email_address">Email address</string>
+    <string name="log_in_or_create_account">Log in or create a new account to access your secure vault.</string>
+    <string name="new_around_here">New around here?</string>
+    <string name="remember_me">Remember me</string>
 </resources>
