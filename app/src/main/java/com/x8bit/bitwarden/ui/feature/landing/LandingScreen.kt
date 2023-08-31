@@ -67,7 +67,10 @@ fun LandingScreen(
                 .padding(horizontal = 24.dp),
         )
 
-        BitwardenTextField(label = state.initialEmailAddress)
+        BitwardenTextField(
+            label = stringResource(id = R.string.email_address),
+            initialValue = state.initialEmailAddress,
+        )
 
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
