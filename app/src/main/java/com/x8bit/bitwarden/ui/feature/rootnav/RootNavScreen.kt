@@ -6,12 +6,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
 import com.x8bit.bitwarden.ui.components.PlaceholderComposable
 import com.x8bit.bitwarden.ui.feature.login.loginDestinations
-import com.x8bit.bitwarden.ui.feature.login.navigateToLoginAsRoot
+import com.x8bit.bitwarden.ui.feature.login.navigateToLogin
 
 /**
  * Controls root level [NavHost] for the app.
@@ -32,9 +34,15 @@ fun RootNavScreen(
     }
 
     // When state changes, navigate to different root navigation state
+    val rootNavOptions = navOptions {
+        // When changing root navigation state, pop everything else off the back stack:
+        popUpTo(navController.graph.id) {
+            inclusive = true
+        }
+    }
     when (state) {
-        RootNavState.Login -> navController.navigateToLoginAsRoot()
-        RootNavState.Splash -> navController.navigateToSplashAsRoot()
+        RootNavState.Login -> navController.navigateToLogin(rootNavOptions)
+        RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
     }
 }
 
@@ -68,11 +76,8 @@ private fun NavGraphBuilder.splashDestinations() {
  * TODO: move to splash package (BIT-147)
  *
  */
-private fun NavController.navigateToSplashAsRoot() {
-    navigate(SplashRoute) {
-        // When changing root navigation state, pop everything else off the back stack:
-        popUpTo(graph.id) {
-            inclusive = true
-        }
-    }
+private fun NavController.navigateToSplash(
+    navOptions: NavOptions? = null,
+) {
+    navigate(SplashRoute, navOptions)
 }
