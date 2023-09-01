@@ -272,10 +272,11 @@
                             <StackLayout.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding ToggleOptionsCommand}" />
                             </StackLayout.GestureRecognizers>
-                            <Button
+                            <controls:CustomLabel
                                 Text="{u:I18n Options}"
                                 x:Name="_btnOptions"
                                 StyleClass="box-row-button"
+                                VerticalTextAlignment="Center"
                                 TextColor="{DynamicResource PrimaryColor}"
                                 Margin="0"
                                 AutomationProperties.IsInAccessibleTree="False"
@@ -422,7 +423,7 @@
                                         AutomationId="SendMaxAccessCountEntry" />
                                     <controls:ExtendedStepper
                                         x:Name="_maxAccessCountStepper"
-                                        Value="{Binding MaxAccessCount}"
+                                        Value="{Binding MaxAccessCount, TargetNullValue=0}"
                                         Maximum="999999999"
                                         IsEnabled="{Binding SendEnabled}"
                                         Margin="10,0,0,0"
