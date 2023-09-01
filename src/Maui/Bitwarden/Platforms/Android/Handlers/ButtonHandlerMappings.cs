@@ -1,6 +1,4 @@
-﻿using Bit.App.Controls;
-
-namespace Bit.App.Handlers
+﻿namespace Bit.App.Handlers
 {
     public partial class ButtonHandlerMappings
     {
@@ -8,10 +6,8 @@ namespace Bit.App.Handlers
         {
             Microsoft.Maui.Handlers.ButtonHandler.Mapper.AppendToMapping("CustomButtonHandler", (handler, button) =>
             {
-                if (button is IconButton || button is MiButton)
-                {
-                    handler.PlatformView.SetBackgroundResource(0);
-                }
+                // WORKAROUND applied from https://github.com/dotnet/maui/issues/2918
+                handler.PlatformView.StateListAnimator = null;
             });
         }
     }
