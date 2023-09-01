@@ -124,7 +124,7 @@ namespace Bit.App.Pages
             }
         }
 
-        public bool ShowAutoDarkThemeOptions => ThemeOptions[ThemeSelectedIndex].Key == null;
+        public bool ShowAutoDarkThemeOptions => ThemeSelectedIndex >= 0 ? ThemeOptions[ThemeSelectedIndex].Key == null : false;
 
         public int AutoDarkThemeSelectedIndex
         {
