@@ -38,7 +38,7 @@ namespace Bit.Core.Utilities
         private IEnumerable<string> ReadData()
         {
             var assembly = typeof(EEFLongWordList).GetTypeInfo().Assembly;
-            var stream = assembly.GetManifestResourceStream("Bit.Core.Resources.eff_long_word_list.txt");
+            var stream = assembly.GetManifestResourceStream("Bit.App.Core.Resources.eff_long_word_list.txt");
             string line;
             using (var reader = new StreamReader(stream))
             {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Utilities;
@@ -11,9 +8,6 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
-using Bit.App.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -342,10 +336,10 @@ namespace Bit.App.Pages
 
         public string PlusAddressedEmail
         {
-            get => _usernameOptions.PlusAddressedEmail;
+            get => _usernameOptions?.PlusAddressedEmail;
             set
             {
-                if (_usernameOptions.PlusAddressedEmail != value)
+                if (_usernameOptions != null && _usernameOptions.PlusAddressedEmail != value)
                 {
                     _usernameOptions.PlusAddressedEmail = value;
                     TriggerPropertyChanged(nameof(PlusAddressedEmail));
@@ -364,7 +358,7 @@ namespace Bit.App.Pages
                 });
         }
 
-        public bool IsPolicyInEffect => _enforcedPolicyOptions.InEffect();
+        public bool IsPolicyInEffect => _enforcedPolicyOptions?.InEffect() == true;
 
         public GeneratorType GeneratorTypeSelected
         {
@@ -375,6 +369,7 @@ namespace Bit.App.Pages
                 {
                     IsUsername = value == GeneratorType.Username;
                     TriggerPropertyChanged(nameof(GeneratorTypeSelected));
+                    TriggerPropertyChanged(nameof(UsernameTypeSelected));
                     SaveOptionsAsync().FireAndForget();
                     SaveUsernameOptionsAsync().FireAndForget();
                 }
@@ -398,10 +393,10 @@ namespace Bit.App.Pages
 
         public UsernameType UsernameTypeSelected
         {
-            get => _usernameOptions.Type;
+            get => _usernameOptions?.Type ?? UsernameType.PlusAddressedEmail;
             set
             {
-                if (_usernameOptions.Type != value)
+                if (_usernameOptions != null && _usernameOptions.Type != value)
                 {
                     _usernameOptions.Type = value;
                     Username = Constants.DefaultUsernameGenerated;
@@ -415,10 +410,10 @@ namespace Bit.App.Pages
 
         public ForwardedEmailServiceType ForwardedEmailServiceSelected
         {
-            get => _usernameOptions.ServiceType;
+            get => _usernameOptions?.ServiceType ?? ForwardedEmailServiceType.None;
             set
             {
-                if (_usernameOptions.ServiceType != value)
+                if (_usernameOptions != null && _usernameOptions.ServiceType != value)
                 {
                     _usernameOptions.ServiceType = value;
                     Username = Constants.DefaultUsernameGenerated;
@@ -434,10 +429,10 @@ namespace Bit.App.Pages
 
         public string CatchAllEmailDomain
         {
-            get => _usernameOptions.CatchAllEmailDomain;
+            get => _usernameOptions?.CatchAllEmailDomain;
             set
             {
-                if (_usernameOptions.CatchAllEmailDomain != value)
+                if (_usernameOptions != null && _usernameOptions.CatchAllEmailDomain != value)
                 {
                     _usernameOptions.CatchAllEmailDomain = value;
                     TriggerPropertyChanged(nameof(CatchAllEmailDomain));
@@ -450,6 +445,11 @@ namespace Bit.App.Pages
         {
             get
             {
+                if (_usernameOptions is null)
+                {
+                    return null;
+                }
+
                 switch (ForwardedEmailServiceSelected)
                 {
                     case ForwardedEmailServiceType.AnonAddy:
@@ -468,6 +468,11 @@ namespace Bit.App.Pages
             }
             set
             {
+                if (_usernameOptions is null)
+                {
+                    return;
+                }
+
                 bool changed = false;
                 switch (ForwardedEmailServiceSelected)
                 {
@@ -548,10 +553,10 @@ namespace Bit.App.Pages
 
         public string AnonAddyDomainName
         {
-            get => _usernameOptions.AnonAddyDomainName;
+            get => _usernameOptions?.AnonAddyDomainName;
             set
             {
-                if (_usernameOptions.AnonAddyDomainName != value)
+                if (_usernameOptions != null && _usernameOptions.AnonAddyDomainName != value)
                 {
                     _usernameOptions.AnonAddyDomainName = value;
                     TriggerPropertyChanged(nameof(AnonAddyDomainName));
@@ -562,10 +567,10 @@ namespace Bit.App.Pages
 
         public bool CapitalizeRandomWordUsername
         {
-            get => _usernameOptions.CapitalizeRandomWordUsername;
+            get => _usernameOptions?.CapitalizeRandomWordUsername == true;
             set
             {
-                if (_usernameOptions.CapitalizeRandomWordUsername != value)
+                if (_usernameOptions != null && _usernameOptions.CapitalizeRandomWordUsername != value)
                 {
                     _usernameOptions.CapitalizeRandomWordUsername = value;
                     TriggerPropertyChanged(nameof(CapitalizeRandomWordUsername));
@@ -576,10 +581,10 @@ namespace Bit.App.Pages
 
         public bool IncludeNumberRandomWordUsername
         {
-            get => _usernameOptions.IncludeNumberRandomWordUsername;
+            get => _usernameOptions?.IncludeNumberRandomWordUsername == true;
             set
             {
-                if (_usernameOptions.IncludeNumberRandomWordUsername != value)
+                if (_usernameOptions != null && _usernameOptions.IncludeNumberRandomWordUsername != value)
                 {
                     _usernameOptions.IncludeNumberRandomWordUsername = value;
                     TriggerPropertyChanged(nameof(IncludeNumberRandomWordUsername));
@@ -590,10 +595,10 @@ namespace Bit.App.Pages
 
         public UsernameEmailType PlusAddressedEmailTypeSelected
         {
-            get => _usernameOptions.PlusAddressedEmailType;
+            get => _usernameOptions?.PlusAddressedEmailType ?? UsernameEmailType.Random;
             set
             {
-                if (_usernameOptions.PlusAddressedEmailType != value)
+                if (_usernameOptions != null && _usernameOptions.PlusAddressedEmailType != value)
                 {
                     _usernameOptions.PlusAddressedEmailType = value;
                     TriggerPropertyChanged(nameof(PlusAddressedEmailTypeSelected));
@@ -604,10 +609,10 @@ namespace Bit.App.Pages
 
         public UsernameEmailType CatchAllEmailTypeSelected
         {
-            get => _usernameOptions.CatchAllEmailType;
+            get => _usernameOptions?.CatchAllEmailType ?? UsernameEmailType.Random;
             set
             {
-                if (_usernameOptions.CatchAllEmailType != value)
+                if (_usernameOptions != null && _usernameOptions.CatchAllEmailType != value)
                 {
                     _usernameOptions.CatchAllEmailType = value;
                     TriggerPropertyChanged(nameof(CatchAllEmailTypeSelected));
