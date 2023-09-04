@@ -458,7 +458,7 @@ namespace Bit.Core.Services
             if (result.TwoFactor)
             {
                 // Two factor required.
-                Email = response.TwoFactorResponse.Email;
+                Email = response.TwoFactorResponse.Email ?? email;
                 MasterPasswordHash = hashedPassword;
                 LocalMasterPasswordHash = localHashedPassword;
                 AuthRequestId = authRequestId;
@@ -472,7 +472,7 @@ namespace Bit.Core.Services
                 result.TwoFactorProviders = response.TwoFactorResponse.TwoFactorProviders2;
                 CaptchaToken = response.TwoFactorResponse.CaptchaToken;
                 _masterPasswordPolicy = response.TwoFactorResponse.MasterPasswordPolicy;
-                await _tokenService.ClearTwoFactorTokenAsync(email);
+                await _tokenService.ClearTwoFactorTokenAsync(Email);
                 return result;
             }
 
