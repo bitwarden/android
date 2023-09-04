@@ -107,7 +107,7 @@ namespace Bit.Core.Models.View
             }
         }
 
-        public string LaunchUri => !Uri.Contains("://") && Regex.IsMatch(Uri, CoreHelpers.TldEndingRegex) ?
+        public string LaunchUri => Uri != null && !Uri.Contains("://") && Regex.IsMatch(Uri, CoreHelpers.TldEndingRegex) ?
             string.Concat("http://", Uri) : Uri;
     }
 }
