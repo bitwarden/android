@@ -548,12 +548,12 @@ namespace Bit.Core.Services
 
         public async Task<bool?> GetAutofillTileAddedAsync()
         {
-            return await GetValueAsync<bool?>(Constants.AutofillTileAdded, await GetDefaultStorageOptionsAsync());
+            return await GetValueAsync<bool?>(Constants.AutofillTileAddedKey, await GetDefaultStorageOptionsAsync());
         }
 
         public async Task SetAutofillTileAddedAsync(bool? value)
         {
-            await SetValueAsync(Constants.AutofillTileAdded, value, await GetDefaultStorageOptionsAsync());
+            await SetValueAsync(Constants.AutofillTileAddedKey, value, await GetDefaultStorageOptionsAsync());
         }
 
         public async Task<string> GetEmailAsync(string userId = null)
@@ -751,19 +751,19 @@ namespace Bit.Core.Services
                 reconciledOptions);
         }
 
-        public async Task<Dictionary<string, Dictionary<string, object>>> GetLocalDataAsync(string userId = null)
+        public async Task<Dictionary<string, Dictionary<string, object>>> GetCiphersLocalDataAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
             return await GetValueAsync<Dictionary<string, Dictionary<string, object>>>(
-                Constants.LocalDataKey(reconciledOptions.UserId), reconciledOptions);
+                Constants.CiphersLocalDataKey(reconciledOptions.UserId), reconciledOptions);
         }
 
-        public async Task SetLocalDataAsync(Dictionary<string, Dictionary<string, object>> value, string userId = null)
+        public async Task SetCiphersLocalDataAsync(Dictionary<string, Dictionary<string, object>> value, string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
-            await SetValueAsync(Constants.LocalDataKey(reconciledOptions.UserId), value, reconciledOptions);
+            await SetValueAsync(Constants.CiphersLocalDataKey(reconciledOptions.UserId), value, reconciledOptions);
         }
 
         public async Task<Dictionary<string, CipherData>> GetEncryptedCiphersAsync(string userId = null)
@@ -793,21 +793,6 @@ namespace Bit.Core.Services
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
             await SetValueAsync(Constants.DefaultUriMatchKey(reconciledOptions.UserId), value, reconciledOptions);
-        }
-
-        public async Task<HashSet<string>> GetNeverDomainsAsync(string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            return await GetValueAsync<HashSet<string>>(Constants.NeverDomainsKey(reconciledOptions.UserId),
-                reconciledOptions);
-        }
-
-        public async Task SetNeverDomainsAsync(HashSet<string> value, string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            await SetValueAsync(Constants.NeverDomainsKey(reconciledOptions.UserId), value, reconciledOptions);
         }
 
         public async Task<int?> GetClearClipboardAsync(string userId = null)
@@ -1542,7 +1527,7 @@ namespace Bit.Core.Services
                 SetLastActiveTimeAsync(null, userId),
                 SetPreviousPageInfoAsync(null, userId),
                 SetInvalidUnlockAttemptsAsync(null, userId),
-                SetLocalDataAsync(null, userId),
+                SetCiphersLocalDataAsync(null, userId),
                 SetEncryptedCiphersAsync(null, userId),
                 SetEncryptedCollectionsAsync(null, userId),
                 SetLastSyncAsync(null, userId),

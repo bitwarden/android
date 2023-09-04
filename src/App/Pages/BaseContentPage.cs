@@ -150,6 +150,12 @@ namespace Bit.App.Pages
         private async Task SaveActivityAsync()
         {
             SetServices();
+            if (await _stateService.GetActiveUserIdAsync() == null)
+            {
+                // Fresh install and/or all users logged out won't have an active user, skip saving last active time
+                return;
+            }
+
             await _stateService.SetLastActiveTimeAsync(_deviceActionService.GetActiveTime());
         }
     }
