@@ -38,7 +38,6 @@ namespace Bit.iOS.ShareExtension
             LoadingController?.CompleteRequest();
             LoadingController = null;
         };
-        public Action LaunchHomePage;
 
         public override UITableView TableView => _mainTableView;
 
@@ -53,13 +52,6 @@ namespace Bit.iOS.ShareExtension
             _accountSwitchingButton.Image = await _accountSwitchingOverlayHelper.CreateAvatarImageAsync();
 
             _accountSwitchingOverlayView = _accountSwitchingOverlayHelper.CreateAccountSwitchingOverlayView(_overlayView);
-
-            if (!HasLoginOrUnlockMethod)
-            {
-                // user doesn't have a login method
-                // needs to go to homepage and login again
-                LaunchHomePage?.Invoke();
-            }
         }
 
         protected override void UpdateNavigationBarTheme()
