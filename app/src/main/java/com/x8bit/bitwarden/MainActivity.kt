@@ -3,8 +3,8 @@ package com.x8bit.bitwarden
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.x8bit.bitwarden.ui.feature.rootnav.RootNavScreen
-import com.x8bit.bitwarden.ui.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavScreen
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
