@@ -7,7 +7,7 @@ import com.x8bit.bitwarden.ui.feature.rootnav.RootNavViewModel
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
-class RootNavViewModelTests : BaseViewModelTest() {
+class RootNavViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should be splash`() {

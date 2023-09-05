@@ -15,7 +15,7 @@ import org.junit.Test
 class CreateAccountScreenTest : BaseComposeTest() {
 
     @Test
-    fun `on submit click should send SubmitClick action`() {
+    fun `submit click should send SubmitClick action`() {
         val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
             every { eventFlow } returns emptyFlow()
             every { trySendAction(CreateAccountAction.SubmitClick) } returns Unit

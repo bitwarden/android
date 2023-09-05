@@ -11,7 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.create
 import retrofit2.http.GET
 
-class ResultCallAdapterTests {
+class ResultCallAdapterTest {
 
     private val server: MockWebServer = MockWebServer().apply { start() }
     private val testService: FakeService =

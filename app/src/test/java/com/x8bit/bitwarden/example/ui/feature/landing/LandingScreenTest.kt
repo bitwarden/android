@@ -14,9 +14,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import org.junit.Test
 
-/**
- * Example showing that Compose tests using "junit" imports and Robolectric work.
- */
 class LandingScreenTest : BaseComposeTest() {
 
     @Test
