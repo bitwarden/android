@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 class CreateAccountViewModelTest : BaseViewModelTest() {
 
     @Test
-    fun `on SubmitClick should emit ShowToast`() = runTest {
+    fun `SubmitClick should emit ShowToast`() = runTest {
         val viewModel = CreateAccountViewModel()
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
