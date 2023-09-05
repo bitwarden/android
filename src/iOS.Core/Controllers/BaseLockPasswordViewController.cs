@@ -54,7 +54,7 @@ namespace Bit.iOS.Core.Controllers
         public abstract UIBarButtonItem BaseSubmitButton { get; }
         public abstract Action Success { get; }
         public abstract Action Cancel { get; }
-        public Action LaunchHomePage;
+        public Action LaunchHomePage { get; set; }
 
         public FormEntryTableViewCell MasterPasswordCell { get; set; } = new FormEntryTableViewCell(
             AppResources.MasterPassword, buttonsConfig: FormEntryTableViewCell.ButtonsConfig.One);
