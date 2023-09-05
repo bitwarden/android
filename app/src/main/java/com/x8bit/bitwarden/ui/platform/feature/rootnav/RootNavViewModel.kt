@@ -32,6 +32,11 @@ class RootNavViewModel @Inject constructor() :
  */
 sealed class RootNavState {
     /**
+     * Show the vault unlocked screen.
+     */
+    data object VaultUnlocked : RootNavState()
+
+    /**
      * Show the auth screens.
      */
     data object Auth : RootNavState()
