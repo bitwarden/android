@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
-import com.x8bit.bitwarden.ui.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

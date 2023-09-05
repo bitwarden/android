@@ -1,10 +1,7 @@
-package com.x8bit.bitwarden.example.ui.feature.vaultunlockednavbar
+package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import app.cash.turbine.test
-import com.x8bit.bitwarden.example.ui.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VaultUnlockedNavBarAction
-import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VaultUnlockedNavBarEvent
-import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VaultUnlockedNavBarViewModel
+import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

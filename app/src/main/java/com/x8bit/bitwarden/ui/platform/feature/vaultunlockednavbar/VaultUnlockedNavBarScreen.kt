@@ -1,3 +1,4 @@
+@file:Suppress("TooManyFunctions")
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import android.os.Parcelable
@@ -27,8 +28,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.components.PlaceholderComposable
+import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.components.PlaceholderComposable
 import kotlinx.parcelize.Parcelize
 
 /**
