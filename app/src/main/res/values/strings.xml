@@ -17,4 +17,14 @@
     <string name="log_in_or_create_account">Log in or create a new account to access your secure vault.</string>
     <string name="new_around_here">New around here?</string>
     <string name="remember_me">Remember me</string>
+
+    <!--Bottom Navigation-->
+    <string name="generator_tab_content_description">Press to navigate to the generator screen.</string>
+    <string name="send_tab_content_description">Press to navigate to the send screen.</string>
+    <string name="vault_tab_content_description">Press to navigate to the vault screen.</string>
+    <string name="settings_tab_content_description">Press to navigate to the settings screen.</string>
+    <string name="vault_label">Vaults</string>
+    <string name="send_label">Send</string>
+    <string name="generator_label">Generator</string>
+    <string name="settings_label">Settings</string>
 </resources>

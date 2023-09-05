@@ -14,6 +14,8 @@ import androidx.navigation.navOptions
 import com.x8bit.bitwarden.ui.auth.feature.auth.authDestinations
 import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuth
 import com.x8bit.bitwarden.ui.platform.components.PlaceholderComposable
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.navigateToVaultUnlocked
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.vaultUnlockedDestinations
 
 /**
  * Controls root level [NavHost] for the app.
@@ -31,6 +33,7 @@ fun RootNavScreen(
     ) {
         splashDestinations()
         authDestinations(navController)
+        vaultUnlockedDestinations()
     }
 
     // When state changes, navigate to different root navigation state
@@ -43,6 +46,7 @@ fun RootNavScreen(
     when (state) {
         RootNavState.Auth -> navController.navigateToAuth(rootNavOptions)
         RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
+        RootNavState.VaultUnlocked -> navController.navigateToVaultUnlocked(rootNavOptions)
     }
 }
 
