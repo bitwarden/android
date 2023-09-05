@@ -68,7 +68,7 @@ namespace Bit.Core
         public const int Argon2Parallelism = 4;
         public const int MasterPasswordMinimumChars = 12;
         public const int CipherKeyRandomBytesLength = 64;
-        public const string CipherKeyEncryptionMinServerVersion = "2023.8.0";
+        public const string CipherKeyEncryptionMinServerVersion = "2023.9.0";
         public const string DefaultFido2KeyType = "public-key";
         public const string DefaultFido2KeyAlgorithm = "ECDSA";
         public const string DefaultFido2KeyCurve = "P-256";
