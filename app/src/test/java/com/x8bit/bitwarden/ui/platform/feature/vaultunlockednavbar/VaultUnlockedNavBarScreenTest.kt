@@ -1,11 +1,8 @@
-package com.x8bit.bitwarden.example.ui.feature.vaultunlockednavbar
+package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import com.x8bit.bitwarden.example.ui.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VaultUnlockedNavBarAction
-import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VaultUnlockedNavBarScreen
-import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VaultUnlockedNavBarViewModel
+import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Test
