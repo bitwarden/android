@@ -6,7 +6,7 @@ namespace Bit.Core.Enums
     {
         None = -1,
         [LocalizableEnum("AddyIo")]
-        AddyIo = 0,
+        AnonAddy = 0,
         [LocalizableEnum("FirefoxRelay")]
         FirefoxRelay = 1,
         [LocalizableEnum("SimpleLogin")]

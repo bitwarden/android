@@ -135,10 +135,10 @@ namespace Bit.Core.Services
 
         private async Task<string> GenerateForwardedEmailAliasAsync(UsernameGenerationOptions options)
         {
-            if (options.ServiceType == ForwardedEmailServiceType.AddyIo)
+            if (options.ServiceType == ForwardedEmailServiceType.AnonAddy)
             {
-                return await new AddyIoForwarder()
-                                    .GenerateAsync(_apiService, (AddyIoForwarderOptions)options.GetForwarderOptions());
+                return await new AnonAddyForwarder()
+                                    .GenerateAsync(_apiService, (AnonAddyForwarderOptions)options.GetForwarderOptions());
             }
 
             BaseForwarder<ForwarderOptions> simpleForwarder = null;

@@ -77,7 +77,7 @@ namespace Bit.App.Pages
             };
 
             ForwardedEmailServiceTypeOptions = new List<ForwardedEmailServiceType> {
-                ForwardedEmailServiceType.AddyIo,
+                ForwardedEmailServiceType.AnonAddy,
                 ForwardedEmailServiceType.DuckDuckGo,
                 ForwardedEmailServiceType.Fastmail,
                 ForwardedEmailServiceType.FirefoxRelay,
@@ -451,8 +451,8 @@ namespace Bit.App.Pages
             {
                 switch (ForwardedEmailServiceSelected)
                 {
-                    case ForwardedEmailServiceType.AddyIo:
-                        return _usernameOptions.AddyIoApiAccessToken;
+                    case ForwardedEmailServiceType.AnonAddy:
+                        return _usernameOptions.AnonAddyApiAccessToken;
                     case ForwardedEmailServiceType.DuckDuckGo:
                         return _usernameOptions.DuckDuckGoApiKey;
                     case ForwardedEmailServiceType.Fastmail:
@@ -470,10 +470,10 @@ namespace Bit.App.Pages
                 bool changed = false;
                 switch (ForwardedEmailServiceSelected)
                 {
-                    case ForwardedEmailServiceType.AddyIo:
-                        if (_usernameOptions.AddyIoApiAccessToken != value)
+                    case ForwardedEmailServiceType.AnonAddy:
+                        if (_usernameOptions.AnonAddyApiAccessToken != value)
                         {
-                            _usernameOptions.AddyIoApiAccessToken = value;
+                            _usernameOptions.AnonAddyApiAccessToken = value;
                             changed = true;
                         }
                         break;
@@ -523,7 +523,7 @@ namespace Bit.App.Pages
             {
                 switch (ForwardedEmailServiceSelected)
                 {
-                    case ForwardedEmailServiceType.AddyIo:
+                    case ForwardedEmailServiceType.AnonAddy:
                     case ForwardedEmailServiceType.FirefoxRelay:
                         return AppResources.APIAccessToken;
                     case ForwardedEmailServiceType.DuckDuckGo:
@@ -547,12 +547,12 @@ namespace Bit.App.Pages
 
         public string AddyIoDomainName
         {
-            get => _usernameOptions.AddyIoDomainName;
+            get => _usernameOptions.AnonAddyDomainName;
             set
             {
-                if (_usernameOptions.AddyIoDomainName != value)
+                if (_usernameOptions.AnonAddyDomainName != value)
                 {
-                    _usernameOptions.AddyIoDomainName = value;
+                    _usernameOptions.AnonAddyDomainName = value;
                     TriggerPropertyChanged(nameof(AddyIoDomainName));
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
@@ -832,7 +832,7 @@ namespace Bit.App.Pages
             {
                 if (ex is ForwardedEmailInvalidSecretException)
                 {
-                    message = ForwardedEmailServiceSelected == ForwardedEmailServiceType.AddyIo || ForwardedEmailServiceSelected == ForwardedEmailServiceType.FirefoxRelay
+                    message = ForwardedEmailServiceSelected == ForwardedEmailServiceType.AnonAddy || ForwardedEmailServiceSelected == ForwardedEmailServiceType.FirefoxRelay
                                 ? AppResources.InvalidAPIToken
                                 : AppResources.InvalidAPIKey;
                 }

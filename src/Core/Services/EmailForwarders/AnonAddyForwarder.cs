@@ -7,26 +7,26 @@ using Newtonsoft.Json.Linq;
 
 namespace Bit.Core.Services.EmailForwarders
 {
-    public class AddyIoForwarderOptions : ForwarderOptions
+    public class AnonAddyForwarderOptions : ForwarderOptions
     {
         public string DomainName { get; set; }
     }
 
-    public class AddyIoForwarder : BaseForwarder<AddyIoForwarderOptions>
+    public class AnonAddyForwarder : BaseForwarder<AnonAddyForwarderOptions>
     {
         protected override string RequestUri => "https://app.addy.io/api/v1/aliases";
 
-        protected override bool CanGenerate(AddyIoForwarderOptions options)
+        protected override bool CanGenerate(AnonAddyForwarderOptions options)
         {
             return !string.IsNullOrWhiteSpace(options.ApiKey) && !string.IsNullOrWhiteSpace(options.DomainName);
         }
 
-        protected override void ConfigureHeaders(HttpRequestHeaders headers, AddyIoForwarderOptions options)
+        protected override void ConfigureHeaders(HttpRequestHeaders headers, AnonAddyForwarderOptions options)
         {
             headers.Add("Authorization", $"Bearer {options.ApiKey}");
         }
 
-        protected override Task<HttpContent> GetContentAsync(IApiService apiService, AddyIoForwarderOptions options)
+        protected override Task<HttpContent> GetContentAsync(IApiService apiService, AnonAddyForwarderOptions options)
         {
             return Task.FromResult<HttpContent>(new FormUrlEncodedContent(new Dictionary<string, string>
             {
