@@ -12,8 +12,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.x8bit.bitwarden.ui.components.PlaceholderComposable
-import com.x8bit.bitwarden.ui.feature.login.loginDestinations
-import com.x8bit.bitwarden.ui.feature.login.navigateToLogin
+import com.x8bit.bitwarden.ui.feature.auth.authDestinations
+import com.x8bit.bitwarden.ui.feature.auth.navigateToAuth
 
 /**
  * Controls root level [NavHost] for the app.
@@ -30,7 +30,7 @@ fun RootNavScreen(
         startDestination = SplashRoute,
     ) {
         splashDestinations()
-        loginDestinations(navController)
+        authDestinations(navController)
     }
 
     // When state changes, navigate to different root navigation state
@@ -41,7 +41,7 @@ fun RootNavScreen(
         }
     }
     when (state) {
-        RootNavState.Login -> navController.navigateToLogin(rootNavOptions)
+        RootNavState.Auth -> navController.navigateToAuth(rootNavOptions)
         RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
     }
 }
