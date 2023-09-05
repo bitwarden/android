@@ -20,7 +20,7 @@ class RootNavViewModel @Inject constructor() :
         viewModelScope.launch {
             @Suppress("MagicNumber")
             delay(1000)
-            mutableStateFlow.value = RootNavState.Login
+            mutableStateFlow.value = RootNavState.Auth
         }
     }
 
@@ -32,9 +32,9 @@ class RootNavViewModel @Inject constructor() :
  */
 sealed class RootNavState {
     /**
-     * Show the login screen.
+     * Show the auth screens.
      */
-    data object Login : RootNavState()
+    data object Auth : RootNavState()
 
     /**
      * Show the splash screen.
