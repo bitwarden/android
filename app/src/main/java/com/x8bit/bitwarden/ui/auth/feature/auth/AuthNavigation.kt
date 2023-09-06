@@ -34,5 +34,5 @@ fun NavGraphBuilder.authDestinations(navController: NavHostController) {
 fun NavController.navigateToAuth(
     navOptions: NavOptions? = null,
 ) {
-    navigate(LANDING_ROUTE, navOptions)
+    navigate(AUTH_ROUTE, navOptions)
 }

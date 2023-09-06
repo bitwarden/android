@@ -1,26 +1,48 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
+import android.os.Parcelable
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
+
+private const val KEY_NAV_DESTINATION = "nav_state"
 
 /**
  * Manages root level navigation state of the application.
  */
 @HiltViewModel
-class RootNavViewModel @Inject constructor() :
-    BaseViewModel<RootNavState, Unit, Unit>(
-        initialState = RootNavState.Splash,
-    ) {
+class RootNavViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
+) : BaseViewModel<RootNavState, Unit, Unit>(
+    initialState = RootNavState.Splash,
+) {
+
+    private var savedRootNavState: RootNavState?
+        get() = savedStateHandle[KEY_NAV_DESTINATION]
+        set(value) {
+            savedStateHandle[KEY_NAV_DESTINATION] = value
+        }
 
     init {
+        savedRootNavState?.let { savedState: RootNavState ->
+            mutableStateFlow.update { savedState }
+        }
+        // Every time the nav state changes, update saved state handle:
+        stateFlow
+            .onEach { savedRootNavState = it }
+            .launchIn(viewModelScope)
         viewModelScope.launch {
             @Suppress("MagicNumber")
             delay(1000)
-            mutableStateFlow.value = RootNavState.Auth
+            mutableStateFlow.update { RootNavState.Auth }
         }
     }
 
@@ -28,21 +50,24 @@ class RootNavViewModel @Inject constructor() :
 }
 
 /**
- * Models state of the root level navigation of the app.
+ * Models root level destinations for the app.
  */
-sealed class RootNavState {
+sealed class RootNavState : Parcelable {
     /**
-     * Show the vault unlocked screen.
+     * App should show auth nav graph.
      */
-    data object VaultUnlocked : RootNavState()
-
-    /**
-     * Show the auth screens.
-     */
+    @Parcelize
     data object Auth : RootNavState()
 
     /**
-     * Show the splash screen.
+     * App should show splash nav graph.
      */
+    @Parcelize
     data object Splash : RootNavState()
+
+    /**
+     * App should show vault unlocked nav graph.
+     */
+    @Parcelize
+    data object VaultUnlocked : RootNavState()
 }
