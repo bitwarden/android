@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
@@ -27,7 +27,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
  */
 @Composable
 fun CreateAccountScreen(
-    viewModel: CreateAccountViewModel = viewModel(),
+    viewModel: CreateAccountViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     EventsEffect(viewModel) { event ->
