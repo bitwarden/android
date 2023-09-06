@@ -12,5 +12,7 @@ namespace Bit.Core.Models.Response
         public MasterPasswordPolicyOptions MasterPasswordPolicy { get; set; }
         [JsonProperty("CaptchaBypassToken")]
         public string CaptchaToken { get; set; }
+        public string SsoEmail2faSessionToken { get; set; }
+        public string Email { get; set; }
     }
 }
