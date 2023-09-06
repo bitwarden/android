@@ -147,7 +147,7 @@ jobs:
           name: com.x8bit.bitwarden-fdroid.apk
 
       - name: Set up Node
-        uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561  # v2.5.1
+        uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
         with:
           node-version: '10.x'
 
