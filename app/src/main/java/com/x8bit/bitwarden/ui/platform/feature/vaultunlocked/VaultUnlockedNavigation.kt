@@ -7,7 +7,7 @@ import androidx.navigation.navigation
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VAULT_UNLOCKED_NAV_BAR_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
 
-private const val VAULT_UNLOCKED_ROUTE = "VaultUnlocked"
+const val VAULT_UNLOCKED_ROUTE: String = "VaultUnlocked"
 
 /**
  * Navigate to the vault unlocked screen. Note this will only work if vault unlocked destinations were added
