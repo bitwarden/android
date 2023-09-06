@@ -2,8 +2,8 @@ package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -22,7 +22,7 @@ import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.vaultUnlockedDestin
  */
 @Composable
 fun RootNavScreen(
-    viewModel: RootNavViewModel = viewModel(),
+    viewModel: RootNavViewModel = hiltViewModel(),
 ) {
     val navController = rememberNavController()
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
