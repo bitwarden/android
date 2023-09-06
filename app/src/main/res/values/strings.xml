@@ -1,6 +1,6 @@
 <resources>
     <!--Common-->
-    <string name="app_name">Bitwarden</string>
+    <string name="app_name">Bitwarden Dev</string>
 
     <!--Create Account Screen-->
     <string name="title_create_account">Create Account</string>
