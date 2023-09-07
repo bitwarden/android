@@ -24,7 +24,9 @@ namespace Bit.App.Services
         private readonly IClipboardService _clipboardService;
         private readonly IMessagingService _messagingService;
         private readonly IBroadcasterService _broadcasterService;
-        private readonly IVaultTimeoutService _vaultTimeoutService;
+
+        readonly LazyResolve<IVaultTimeoutService> _vaultTimeoutService = new LazyResolve<IVaultTimeoutService>();
+
         private readonly Dictionary<int, Tuple<TaskCompletionSource<bool>, DateTime>> _showDialogResolves =
             new Dictionary<int, Tuple<TaskCompletionSource<bool>, DateTime>>();
 
@@ -32,15 +34,13 @@ namespace Bit.App.Services
             IDeviceActionService deviceActionService,
             IClipboardService clipboardService,
             IMessagingService messagingService,
-            IBroadcasterService broadcasterService,
-            IVaultTimeoutService vaultTimeoutService
+            IBroadcasterService broadcasterService
             )
         {
             _deviceActionService = deviceActionService;
             _clipboardService = clipboardService;
             _messagingService = messagingService;
             _broadcasterService = broadcasterService;
-            _vaultTimeoutService = vaultTimeoutService;
         }
 
         public void Init()
@@ -276,7 +276,7 @@ namespace Bit.App.Services
                     && logOutOnTooManyAttempts)
                 {
                     await ShowDialogAsync(AppResources.AccountLoggedOut, AppResources.TooManyAttempts, AppResources.Ok);
-                    await _vaultTimeoutService.LogOutAsync();
+                    await _vaultTimeoutService.Value.LogOutAsync();
                 }
             }
             catch { }
