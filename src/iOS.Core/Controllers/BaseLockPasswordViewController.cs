@@ -363,7 +363,9 @@ namespace Bit.iOS.Core.Controllers
             }
             var success = await _platformUtilsService.AuthenticateBiometricAsync(null,
                 _pinEnabled ? AppResources.PIN : AppResources.MasterPassword,
-                () => MasterPasswordCell.TextField.BecomeFirstResponder());
+                () => MasterPasswordCell.TextField.BecomeFirstResponder(),
+                () => BiometricsTooManyAttempts().FireAndForget());
+               
             await _stateService.SetBiometricLockedAsync(!success);
             if (success)
             {
@@ -388,6 +390,16 @@ namespace Bit.iOS.Core.Controllers
             var loginController = navigationPage.CreateViewController();
             loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(loginController, true, null);
+        }
+
+        private async Task BiometricsTooManyAttempts()
+        {
+            if (_hasMasterPassword || _pinEnabled)
+            {
+                return;
+            }
+            await _platformUtilsService.ShowDialogAsync(AppResources.BiometricsLoginExceeded, AppResources.Warning, AppResources.OkGotIt);
+            await _vaultTimeoutService.LogOutAsync();
         }
 
         private async Task SetKeyAndContinueAsync(UserKey userKey, bool masterPassword = false)

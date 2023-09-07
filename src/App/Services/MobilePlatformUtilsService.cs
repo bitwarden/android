@@ -242,7 +242,7 @@ namespace Bit.App.Services
         }
 
         public async Task<bool> AuthenticateBiometricAsync(string text = null, string fallbackText = null,
-            Action fallback = null)
+            Action fallback = null, Action tooManyAttempts = null)
         {
             try
             {
@@ -268,6 +268,10 @@ namespace Bit.App.Services
                 if (result.Status == FingerprintAuthenticationResultStatus.FallbackRequested)
                 {
                     fallback?.Invoke();
+                }
+                if (result.Status == FingerprintAuthenticationResultStatus.TooManyAttempts)
+                {
+                    tooManyAttempts?.Invoke();
                 }
             }
             catch { }

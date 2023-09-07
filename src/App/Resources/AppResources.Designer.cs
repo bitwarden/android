@@ -1049,6 +1049,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have exceeded the number of biometric login attempts. Since you don&apos;t have any login method available you will be logged out..
+        /// </summary>
+        public static string BiometricsLoginExceeded {
+            get {
+                return ResourceManager.GetString("BiometricsLoginExceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bitwarden.
         /// </summary>
         public static string Bitwarden {
@@ -6751,7 +6760,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve..
+        ///   Looks up a localized string similar to Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve..
         /// </summary>
         public static string UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve {
             get {
