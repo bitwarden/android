@@ -2,10 +2,6 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import com.x8bit.bitwarden.ui.auth.feature.landing.LandingAction
-import com.x8bit.bitwarden.ui.auth.feature.landing.LandingScreen
-import com.x8bit.bitwarden.ui.auth.feature.landing.LandingState
-import com.x8bit.bitwarden.ui.auth.feature.landing.LandingViewModel
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import io.mockk.every
 import io.mockk.mockk
