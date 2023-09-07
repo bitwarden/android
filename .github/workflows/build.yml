@@ -676,6 +676,22 @@ jobs:
           Write-Output "########################################"
           Write-Output "##### Done"
           Write-Output "########################################"
+        shell: pwsh
+
+      - name: Archive Build for Mobile Automation
+        run: |
+          $configuration = "Release";
+          $platform = "iPhoneSimulator";
+
+          Write-Output "########################################"
+          Write-Output "##### Archive $configuration Configuration for $platform Platform"
+          Write-Output "########################################"
+          msbuild "$($env:GITHUB_WORKSPACE + "/src/iOS/iOS.csproj")" "/p:Platform=$platform" `
+            "/p:Configuration=$configuration" "/p:ArchiveOnBuild=true" "/t:`"Build`""
+
+          Write-Output "########################################"
+          Write-Output "##### Done"
+          Write-Output "########################################"
           ls ~/Library/Developer/Xcode/Archives
         shell: pwsh
 
@@ -687,6 +703,15 @@ jobs:
 
           xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath $EXPORT_PATH \
             -exportOptionsPlist $EXPORT_OPTIONS_PATH
+        shell: bash
+
+      - name: Export .app for Automation CI
+        run: |
+          ARCHIVE_PATH="./src/iOS/bin/iPhoneSimulator/Release/BitwardeniOS.app"
+          EXPORT_PATH="./bitwarden-export"
+
+          zip -r -q BitwardeniOS.app.zip $ARCHIVE_PATH
+          mv BitwardeniOS.app.zip $EXPORT_PATH
         shell: bash
 
       - name: Copy all dSYMs files to upload
@@ -709,6 +734,13 @@ jobs:
           path: |
             ./bitwarden-export/Bitwarden.ipa
             ./bitwarden-export/dSYMs/*.*
+          if-no-files-found: error
+
+      - name: Upload .app file for Automation CI
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535 # v3.0.0
+        with:
+          name: BitwardeniOS.app.zip
+          path: ./bitwarden-export/BitwardeniOS.app.zip
           if-no-files-found: error
 
       - name: Install AppCenter CLI
