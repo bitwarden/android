@@ -208,7 +208,7 @@ namespace Bit.Core.Services
 
         public async Task<Cipher> GetAsync(string id)
         {
-            var localData = await _stateService.GetLocalDataAsync();
+            var localData = await _stateService.GetCiphersLocalDataAsync();
             var ciphers = await _stateService.GetEncryptedCiphersAsync();
             if (!ciphers?.ContainsKey(id) ?? true)
             {
@@ -220,7 +220,7 @@ namespace Bit.Core.Services
 
         public async Task<List<Cipher>> GetAllAsync()
         {
-            var localData = await _stateService.GetLocalDataAsync();
+            var localData = await _stateService.GetCiphersLocalDataAsync();
             var ciphers = await _stateService.GetEncryptedCiphersAsync();
             var response = ciphers?.Select(c => new Cipher(c.Value, false,
                 localData?.ContainsKey(c.Key) ?? false ? localData[c.Key] : null));
@@ -458,7 +458,7 @@ namespace Bit.Core.Services
 
         public async Task UpdateLastUsedDateAsync(string id)
         {
-            var ciphersLocalData = await _stateService.GetLocalDataAsync();
+            var ciphersLocalData = await _stateService.GetCiphersLocalDataAsync();
             if (ciphersLocalData == null)
             {
                 ciphersLocalData = new Dictionary<string, Dictionary<string, object>>();
@@ -476,7 +476,7 @@ namespace Bit.Core.Services
                 ciphersLocalData[id].Add("lastUsedDate", DateTime.UtcNow);
             }
 
-            await _stateService.SetLocalDataAsync(ciphersLocalData);
+            await _stateService.SetCiphersLocalDataAsync(ciphersLocalData);
             // Update cache
             if (DecryptedCipherCache == null)
             {
@@ -487,21 +487,6 @@ namespace Bit.Core.Services
             {
                 cached.LocalData = ciphersLocalData[id];
             }
-        }
-
-        public async Task SaveNeverDomainAsync(string domain)
-        {
-            if (string.IsNullOrWhiteSpace(domain))
-            {
-                return;
-            }
-            var domains = await _stateService.GetNeverDomainsAsync();
-            if (domains == null)
-            {
-                domains = new HashSet<string>();
-            }
-            domains.Add(domain);
-            await _stateService.SetNeverDomainsAsync(domains);
         }
 
         public async Task SaveWithServerAsync(Cipher cipher)

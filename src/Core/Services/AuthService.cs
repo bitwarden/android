@@ -124,6 +124,7 @@ namespace Bit.Core.Services
         public string Code { get; set; }
         public string CodeVerifier { get; set; }
         public string SsoRedirectUrl { get; set; }
+        public string SsoEmail2FaSessionToken { get; set; }
         public Dictionary<TwoFactorProviderType, TwoFactorProvider> TwoFactorProviders { get; set; }
         public Dictionary<TwoFactorProviderType, Dictionary<string, object>> TwoFactorProvidersData { get; set; }
         public TwoFactorProviderType? SelectedTwoFactorProviderType { get; set; }
@@ -457,20 +458,21 @@ namespace Bit.Core.Services
             if (result.TwoFactor)
             {
                 // Two factor required.
-                Email = email;
+                Email = response.TwoFactorResponse.Email ?? email;
                 MasterPasswordHash = hashedPassword;
                 LocalMasterPasswordHash = localHashedPassword;
                 AuthRequestId = authRequestId;
                 Code = code;
                 CodeVerifier = codeVerifier;
                 SsoRedirectUrl = redirectUrl;
+                SsoEmail2FaSessionToken = response.TwoFactorResponse.SsoEmail2faSessionToken;
                 _masterKey = _setCryptoKeys ? masterKey : null;
                 _userKey = userKey2FA;
                 TwoFactorProvidersData = response.TwoFactorResponse.TwoFactorProviders2;
                 result.TwoFactorProviders = response.TwoFactorResponse.TwoFactorProviders2;
                 CaptchaToken = response.TwoFactorResponse.CaptchaToken;
                 _masterPasswordPolicy = response.TwoFactorResponse.MasterPasswordPolicy;
-                await _tokenService.ClearTwoFactorTokenAsync(email);
+                await _tokenService.ClearTwoFactorTokenAsync(Email);
                 return result;
             }
 

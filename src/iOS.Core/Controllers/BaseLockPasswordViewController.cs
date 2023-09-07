@@ -118,11 +118,15 @@ namespace Bit.iOS.Core.Controllers
                     _pinStatus == PinLockType.Persistent;
 
                 _biometricEnabled = await _vaultTimeoutService.IsBiometricLockSetAsync()
-                    && await _cryptoService.HasEncryptedUserKeyAsync();
-                _biometricIntegrityValid =
-                    await _platformUtilsService.IsBiometricIntegrityValidAsync(BiometricIntegritySourceKey);
+                    && await _biometricService.CanUseBiometricsUnlockAsync();
                 _hasMasterPassword = await _userVerificationService.HasMasterPasswordAsync();
                 _biometricUnlockOnly = !_hasMasterPassword && _biometricEnabled && !_pinEnabled;
+
+                if (_biometricUnlockOnly)
+                {
+                    await EnableBiometricsIfNeeded();
+                }
+                _biometricIntegrityValid = await _platformUtilsService.IsBiometricIntegrityValidAsync(BiometricIntegritySourceKey);
             }
 
             if (_pinEnabled)
