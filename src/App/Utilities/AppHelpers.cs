@@ -594,18 +594,5 @@ namespace Bit.App.Utilities
             searchService.ClearIndex();
             usernameGenerationService.ClearCache();
         }
-
-        public static async Task BiometricsTooManyAttempts(bool hasMasterPassword, bool pinEnabled)
-        {
-            if (hasMasterPassword || pinEnabled)
-            {
-                return;
-            }
-
-            var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
-            var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>();
-            await platformUtilsService.ShowDialogAsync(AppResources.AccountLoggedOut, AppResources.TooManyAttempts, AppResources.Ok);
-            await vaultTimeoutService.LogOutAsync();
-        }
     }
 }

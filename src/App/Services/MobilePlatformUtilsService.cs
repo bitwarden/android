@@ -24,7 +24,7 @@ namespace Bit.App.Services
         private readonly IClipboardService _clipboardService;
         private readonly IMessagingService _messagingService;
         private readonly IBroadcasterService _broadcasterService;
-
+        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly Dictionary<int, Tuple<TaskCompletionSource<bool>, DateTime>> _showDialogResolves =
             new Dictionary<int, Tuple<TaskCompletionSource<bool>, DateTime>>();
 
@@ -32,12 +32,15 @@ namespace Bit.App.Services
             IDeviceActionService deviceActionService,
             IClipboardService clipboardService,
             IMessagingService messagingService,
-            IBroadcasterService broadcasterService)
+            IBroadcasterService broadcasterService,
+            IVaultTimeoutService vaultTimeoutService
+            )
         {
             _deviceActionService = deviceActionService;
             _clipboardService = clipboardService;
             _messagingService = messagingService;
             _broadcasterService = broadcasterService;
+            _vaultTimeoutService = vaultTimeoutService;
         }
 
         public void Init()
@@ -242,7 +245,7 @@ namespace Bit.App.Services
         }
 
         public async Task<bool> AuthenticateBiometricAsync(string text = null, string fallbackText = null,
-            Action fallback = null, Action tooManyAttempts = null)
+            Action fallback = null, bool logOutOnTooManyAttempts = false)
         {
             try
             {
@@ -269,9 +272,11 @@ namespace Bit.App.Services
                 {
                     fallback?.Invoke();
                 }
-                if (result.Status == FingerprintAuthenticationResultStatus.TooManyAttempts)
+                if (result.Status == FingerprintAuthenticationResultStatus.TooManyAttempts
+                    && logOutOnTooManyAttempts)
                 {
-                    tooManyAttempts?.Invoke();
+                    await ShowDialogAsync(AppResources.AccountLoggedOut, AppResources.TooManyAttempts, AppResources.Ok);
+                    await _vaultTimeoutService.LogOutAsync();
                 }
             }
             catch { }
