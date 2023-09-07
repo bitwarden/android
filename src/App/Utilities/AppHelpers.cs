@@ -15,6 +15,7 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.View;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Xamarin.Essentials;
@@ -592,6 +593,19 @@ namespace Bit.App.Utilities
             policyService.ClearCache();
             searchService.ClearIndex();
             usernameGenerationService.ClearCache();
+        }
+
+        public static async Task BiometricsTooManyAttempts(bool hasMasterPassword, bool pinEnabled)
+        {
+            if (hasMasterPassword || pinEnabled)
+            {
+                return;
+            }
+
+            var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
+            var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>();
+            await platformUtilsService.ShowDialogAsync(AppResources.BiometricsLoginExceeded, AppResources.Warning, AppResources.OkGotIt);
+            await vaultTimeoutService.LogOutAsync();
         }
     }
 }

@@ -466,23 +466,13 @@ namespace Bit.App.Pages
             var success = await _platformUtilsService.AuthenticateBiometricAsync(null,
                 PinEnabled ? AppResources.PIN : AppResources.MasterPassword,
                 () => _secretEntryFocusWeakEventManager.RaiseEvent((int?)null, nameof(FocusSecretEntry)),
-                () => BiometricsTooManyAttempts().FireAndForget());
+                () => AppHelpers.BiometricsTooManyAttempts(HasMasterPassword, PinEnabled).FireAndForget());
             await _stateService.SetBiometricLockedAsync(!success);
             if (success)
             {
                 var userKey = await _cryptoService.GetBiometricUnlockKeyAsync();
                 await SetUserKeyAndContinueAsync(userKey);
             }
-        }
-
-        private async Task BiometricsTooManyAttempts()
-        {
-            if (HasMasterPassword || PinEnabled)
-            {
-                return;
-            }
-            await _platformUtilsService.ShowDialogAsync(AppResources.BiometricsLoginExceeded, AppResources.Warning, AppResources.OkGotIt);
-            await _vaultTimeoutService.LogOutAsync();
         }
 
         private async Task SetUserKeyAndContinueAsync(UserKey key)
