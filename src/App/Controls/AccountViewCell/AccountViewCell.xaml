@@ -97,7 +97,7 @@
                     AutomationId="AccountStatusLabel" />
                 <Label
                     Grid.Row="2"
-                    Text="{u:I18n AccountLoggedOut}"
+                    Text="{u:I18n LoggedOut}"
                     IsVisible="{Binding IsLoggedOutAndNotActive}"
                     StyleClass="accountlist-sub, accountlist-sub-platform"
                     FontAttributes="Italic"

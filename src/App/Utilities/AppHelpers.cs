@@ -604,7 +604,7 @@ namespace Bit.App.Utilities
 
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
             var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>();
-            await platformUtilsService.ShowDialogAsync(AppResources.BiometricsLoginExceeded, AppResources.Warning, AppResources.OkGotIt);
+            await platformUtilsService.ShowDialogAsync(AppResources.AccountLoggedOut, AppResources.TooManyAttempts, AppResources.Ok);
             await vaultTimeoutService.LogOutAsync();
         }
     }

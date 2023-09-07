@@ -2161,7 +2161,7 @@ Scanning will happen automatically.</value>
   <data name="AccountLocked" xml:space="preserve">
     <value>Locked</value>
   </data>
-  <data name="AccountLoggedOut" xml:space="preserve">
+  <data name="LoggedOut" xml:space="preserve">
     <value>Logged out</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
@@ -2762,7 +2762,10 @@ Do you want to switch to this account?</value>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Logging in on</value>
   </data>
-  <data name="BiometricsLoginExceeded" xml:space="preserve">
-    <value>You have exceeded the number of biometric login attempts. Since you don't have any login method available you will be logged out.</value>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Too many attempts</value>
   </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Account logged out.</value>
+  </data> 
 </root>

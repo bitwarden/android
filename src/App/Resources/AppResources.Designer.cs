@@ -248,7 +248,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logged out.
+        ///   Looks up a localized string similar to Account logged out..
         /// </summary>
         public static string AccountLoggedOut {
             get {
@@ -1045,15 +1045,6 @@ namespace Bit.App.Resources {
         public static string BiometricsDirection {
             get {
                 return ResourceManager.GetString("BiometricsDirection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You have exceeded the number of biometric login attempts. Since you don&apos;t have any login method available you will be logged out..
-        /// </summary>
-        public static string BiometricsLoginExceeded {
-            get {
-                return ResourceManager.GetString("BiometricsLoginExceeded", resourceCulture);
             }
         }
         
@@ -3745,6 +3736,15 @@ namespace Bit.App.Resources {
         public static string LoggedInAsOn {
             get {
                 return ResourceManager.GetString("LoggedInAsOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logged out.
+        /// </summary>
+        public static string LoggedOut {
+            get {
+                return ResourceManager.GetString("LoggedOut", resourceCulture);
             }
         }
         
@@ -6504,6 +6504,15 @@ namespace Bit.App.Resources {
         public static string Tools {
             get {
                 return ResourceManager.GetString("Tools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many attempts.
+        /// </summary>
+        public static string TooManyAttempts {
+            get {
+                return ResourceManager.GetString("TooManyAttempts", resourceCulture);
             }
         }
         
