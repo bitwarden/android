@@ -25,8 +25,6 @@ namespace Bit.App.Services
         private readonly IMessagingService _messagingService;
         private readonly IBroadcasterService _broadcasterService;
 
-        readonly LazyResolve<IVaultTimeoutService> _vaultTimeoutService = new LazyResolve<IVaultTimeoutService>();
-
         private readonly Dictionary<int, Tuple<TaskCompletionSource<bool>, DateTime>> _showDialogResolves =
             new Dictionary<int, Tuple<TaskCompletionSource<bool>, DateTime>>();
 
@@ -276,7 +274,7 @@ namespace Bit.App.Services
                     && logOutOnTooManyAttempts)
                 {
                     await ShowDialogAsync(AppResources.AccountLoggedOut, AppResources.TooManyAttempts, AppResources.Ok);
-                    await _vaultTimeoutService.Value.LogOutAsync();
+                    _messagingService.Send(AccountsManagerMessageCommands.LOGOUT, new Tuple<string, bool, bool>(null, true, false));
                 }
             }
             catch { }
