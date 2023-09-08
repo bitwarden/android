@@ -274,7 +274,7 @@ namespace Bit.App.Services
                     && logOutOnTooManyAttempts)
                 {
                     await ShowDialogAsync(AppResources.AccountLoggedOutBiometricExceeded, AppResources.TooManyAttempts, AppResources.Ok);
-                    _messagingService.Send(AccountsManagerMessageCommands.LOGOUT, new Tuple<string, bool, bool>(null, true, false));
+                    _messagingService.Send(AccountsManagerMessageCommands.LOGOUT);
                 }
             }
             catch { }
