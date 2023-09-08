@@ -273,7 +273,7 @@ namespace Bit.App.Services
                 if (result.Status == FingerprintAuthenticationResultStatus.TooManyAttempts
                     && logOutOnTooManyAttempts)
                 {
-                    await ShowDialogAsync(AppResources.AccountLoggedOut, AppResources.TooManyAttempts, AppResources.Ok);
+                    await ShowDialogAsync(AppResources.AccountLoggedOutBiometricExceeded, AppResources.TooManyAttempts, AppResources.Ok);
                     _messagingService.Send(AccountsManagerMessageCommands.LOGOUT, new Tuple<string, bool, bool>(null, true, false));
                 }
             }

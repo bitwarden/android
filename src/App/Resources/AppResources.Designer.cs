@@ -248,11 +248,20 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account logged out..
+        ///   Looks up a localized string similar to Logged out.
         /// </summary>
         public static string AccountLoggedOut {
             get {
                 return ResourceManager.GetString("AccountLoggedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account logged out..
+        /// </summary>
+        public static string AccountLoggedOutBiometricExceeded {
+            get {
+                return ResourceManager.GetString("AccountLoggedOutBiometricExceeded", resourceCulture);
             }
         }
         
@@ -3736,15 +3745,6 @@ namespace Bit.App.Resources {
         public static string LoggedInAsOn {
             get {
                 return ResourceManager.GetString("LoggedInAsOn", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Logged out.
-        /// </summary>
-        public static string LoggedOut {
-            get {
-                return ResourceManager.GetString("LoggedOut", resourceCulture);
             }
         }
         
