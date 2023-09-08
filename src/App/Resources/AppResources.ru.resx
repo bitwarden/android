@@ -1471,7 +1471,7 @@
     <value>Bitwarden позволяет делиться элементами вашего хранилища с другими пользователями, используя аккаунт организации. Хотите посетить сайт bitwarden.com, чтобы узнать больше?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Экспортировать хранилище</value>
+    <value>Экспорт хранилища</value>
   </data>
   <data name="LockNow" xml:space="preserve">
     <value>Заблокировать</value>
@@ -2511,7 +2511,7 @@
     <value>На ваше устройство отправлено уведомление.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Убедитесь, что ваше хранилище разблокировано и фраза отпечатка пальца совпадает на другом устройстве.</value>
+    <value>Убедитесь, что ваше хранилище разблокировано и фраза отпечатка совпадает на другом устройстве.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
     <value>Отправить уведомление повторно</value>
@@ -2577,7 +2577,7 @@
     <value>Сильный</value>
   </data>
   <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
-    <value>Проверьте известные случаи утечки данных для этого пароля</value>
+    <value>Проверять известные случаи утечки данных для этого пароля</value>
   </data>
   <data name="ExposedMasterPassword" xml:space="preserve">
     <value>Мастер-пароль скомпрометирован</value>

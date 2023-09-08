@@ -2666,7 +2666,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Suojausavainta ei kopioida</value>
   </data>
   <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
-    <value>Suojausavainta ei kopioida kloonattuun kohteeseen. Haluatko jatkaa kloonausta?</value>
+    <value>Suojausavain ei kopioidu kloonattuun kohteeseen. Haluatko jatkaa kloonausta?</value>
   </data>
   <data name="CopyApplication" xml:space="preserve">
     <value>Kopioi sovellus</value>
@@ -2690,7 +2690,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Hyväksyntää pyydetty ylläpidolta</value>
   </data>
   <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
-    <value>Pyyntösi on välitetty ylläpidolle.</value>
+    <value>Pyyntösi on välitetty ylläpidollesi.</value>
   </data>
   <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
     <value>Saat ilmoituksen heti kun se on hyväksytty.</value>

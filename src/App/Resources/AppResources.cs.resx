@@ -505,7 +505,7 @@
     <value>Pro spuštění rozšíření klepněte  na ikonu Bitwardenu v menu.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Pro zapnutí Bitwardenu v prohlížeči Safari a dalších aplikacích klepněte na ikonu "Více" v dolní části menu.</value>
+    <value>Pro zapnutí Bitwardenu v prohlížeči Safari a dalších aplikacích klepněte na ikonu „Další“ v dolní části menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Oblíbené</value>
@@ -1304,22 +1304,22 @@ Načtení proběhne automaticky.</value>
     <value>Přistupujte k Vašemu trezoru přímo z Vaší klávesnice pro rychlejší automatické vyplnění hesel.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Pokyny pro zapnutí automatického vyplňování hesel na Vašem zařízení:</value>
+    <value>Pokyny pro zapnutí automatického vyplňování hesel na vašem zařízení:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Přejděte do aplikace "Nastavení" v iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Klepněte na "Hesla" > "Volby hesla"</value>
+    <value>2. Klepněte na „Hesla“ > „Volby hesla“</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Zapněte přepínač u položky "Automatické vyplnění hesel"</value>
+    <value>3. Povolte „Automatické vyplnění hesel“</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Najděte sekci "Povolit vyplňování z:"</value>
+    <value>4. Najděte sekci „Povolit vyplňování z“</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Zvolte "Bitwarden"</value>
+    <value>5. Zvolte „Bitwarden“</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
     <value>Automatické vyplňování hesel</value>
@@ -2676,7 +2676,7 @@ Chcete se přepnout na tento účet?</value>
     <value>Nápověda pro znovuzeptání se na hlavní heslo</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+    <value>Odemknutí může selhat z důvodu nedostatku paměti. Snižte nastavení KDF paměti nebo nastavte odemykání pomocí biometrie.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Neplatný klíč API</value>
