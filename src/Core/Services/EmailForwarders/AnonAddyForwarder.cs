@@ -14,7 +14,7 @@ namespace Bit.Core.Services.EmailForwarders
 
     public class AnonAddyForwarder : BaseForwarder<AnonAddyForwarderOptions>
     {
-        protected override string RequestUri => "https://app.anonaddy.com/api/v1/aliases";
+        protected override string RequestUri => "https://app.addy.io/api/v1/aliases";
 
         protected override bool CanGenerate(AnonAddyForwarderOptions options)
         {
