@@ -724,7 +724,7 @@
     <value>Код підтвердження</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>Перегляд запису</value>
+    <value>Переглянути запис</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>Веб сховище Bitwarden</value>
@@ -790,7 +790,7 @@
     <value>Автозаповнення</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Автоматичне заповнення чи перегляд запису?</value>
+    <value>Автоматично заповнити чи переглянути запис?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
     <value>Ви дійсно хочете використати цей запис для автоматичного заповнення? Він не повністю відповідає "{0}".</value>
