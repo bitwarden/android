@@ -4,18 +4,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.x8bit.bitwarden.ui.auth.feature.auth.AUTH_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.auth.authDestinations
 import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuth
-import com.x8bit.bitwarden.ui.platform.components.PlaceholderComposable
+import com.x8bit.bitwarden.ui.platform.feature.splash.SPLASH_ROUTE
+import com.x8bit.bitwarden.ui.platform.feature.splash.navigateToSplash
+import com.x8bit.bitwarden.ui.platform.feature.splash.splashDestinations
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VAULT_UNLOCKED_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.navigateToVaultUnlocked
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.vaultUnlockedDestinations
@@ -91,39 +89,4 @@ private fun NavDestination?.routeLevelRoute(): String? {
         return route
     }
     return parent.routeLevelRoute()
-}
-
-/**
- * The functions below should be moved to their respective feature packages once they exist.
- *
- * For an example of how to setup these nav extensions, see NIA project.
- */
-
-/**
- * TODO: move to splash package (BIT-147)
- */
-private const val SPLASH_ROUTE = "splash"
-
-/**
- * Add splash destinations to the nav graph.
- *
- * TODO: move to splash package (BIT-147)
- */
-private fun NavGraphBuilder.splashDestinations() {
-    composable(SPLASH_ROUTE) {
-        PlaceholderComposable(text = "Splash")
-    }
-}
-
-/**
- * Navigate to the splash screen. Note this will only work if splash destination was added
- * via [splashDestinations].
- *
- * TODO: move to splash package (BIT-147)
- *
- */
-private fun NavController.navigateToSplash(
-    navOptions: NavOptions? = null,
-) {
-    navigate(SPLASH_ROUTE, navOptions)
 }
