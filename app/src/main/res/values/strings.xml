@@ -18,6 +18,27 @@
     <string name="new_around_here">New around here?</string>
     <string name="remember_me">Remember me</string>
 
+    <!-- Generator Screen-->
+    <string name="placeholder_password">PLACEHOLDER</string>
+    <string name="generation_prompt">What would you like to generate?</string>
+    <string name="password">Password</string>
+    <string name="passphrase">Passphrase</string>
+    <string name="password_type">Password type</string>
+    <string name="capital_letters_toggle_text">A–Z</string>
+    <string name="lowercase_letters_toggle_text">a–z</string>
+    <string name="numbers_toggle_text">0–9</string>
+    <string name="special_characters_toggle_text">!@#$%^&amp;*</string>
+    <string name="minimum_numbers">Minimum numbers</string>
+    <string name="minimum_special">Minimum special</string>
+    <string name="avoid_ambiguous_characters">Avoid ambiguous characters</string>
+    <string name="copy">Copy</string>
+    <string name="refresh">Refresh</string>
+    <string name="decrease">Decrease</string>
+    <string name="increase">Increase</string>
+    <string name="options">Options</string>
+    <string name="length">Length</string>
+    <string name="overflow_menu">Overflow menu</string>
+
     <!--Bottom Navigation-->
     <string name="generator_tab_content_description">Press to navigate to the generator screen.</string>
     <string name="send_tab_content_description">Press to navigate to the send screen.</string>
