@@ -39,6 +39,13 @@
     <string name="length">Length</string>
     <string name="overflow_menu">Overflow menu</string>
 
+    <!-- Login screen -->
+    <string name="enterprise_single_sign_on">Enterprise single sign-on</string>
+    <string name="log_in_with_master_password">Log in with master password</string>
+    <string name="logging_in_as">Logging in as %s on bitwarden.com</string>
+    <string name="master_password">Master password</string>
+    <string name="not_you">Not you?</string>
+
     <!--Bottom Navigation-->
     <string name="generator_tab_content_description">Press to navigate to the generator screen.</string>
     <string name="send_tab_content_description">Press to navigate to the send screen.</string>

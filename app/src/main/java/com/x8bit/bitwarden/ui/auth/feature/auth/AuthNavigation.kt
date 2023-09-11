@@ -8,7 +8,10 @@ import androidx.navigation.navigation
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.createAccountDestinations
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.navigateToCreateAccount
 import com.x8bit.bitwarden.ui.auth.feature.landing.LANDING_ROUTE
-import com.x8bit.bitwarden.ui.auth.feature.landing.landingDestination
+import com.x8bit.bitwarden.ui.auth.feature.landing.landingDestinations
+import com.x8bit.bitwarden.ui.auth.feature.landing.navigateToLanding
+import com.x8bit.bitwarden.ui.auth.feature.login.loginDestinations
+import com.x8bit.bitwarden.ui.auth.feature.login.navigateToLogin
 
 const val AUTH_ROUTE: String = "auth"
 
@@ -21,8 +24,12 @@ fun NavGraphBuilder.authDestinations(navController: NavHostController) {
         route = AUTH_ROUTE,
     ) {
         createAccountDestinations()
-        landingDestination(
+        landingDestinations(
             onNavigateToCreateAccount = { navController.navigateToCreateAccount() },
+            onNavigateToLogin = { emailAddress -> navController.navigateToLogin(emailAddress) },
+        )
+        loginDestinations(
+            onNavigateToLanding = { navController.navigateToLanding() },
         )
     }
 }

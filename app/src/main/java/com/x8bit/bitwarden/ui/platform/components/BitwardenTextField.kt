@@ -19,7 +19,10 @@ import androidx.compose.ui.unit.dp
  * @param label label for the text field.
  * @param initialValue initial input text.
  * @param onTextChange callback that is triggered when the input of the text field changes.
+ *
+ * TODO: remove deprecated version: BIT-289
  */
+@Deprecated(message = "Use overloaded BitwardenTextField that takes an input instead of an initialText.")
 @Composable
 fun BitwardenTextField(
     label: String,
@@ -37,5 +40,30 @@ fun BitwardenTextField(
             input = it
             onTextChange.invoke(it)
         },
+    )
+}
+
+/**
+ * Component that allows the user to input text. This composable will manage the state of
+ * the user's input.
+ * @param label label for the text field.
+ * @param value current next on the text field.
+ * @param modifier modifier for the composable.
+ * @param onValueChange callback that is triggered when the input of the text field changes.
+ */
+@Composable
+fun BitwardenTextField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    TextField(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        label = { Text(label) },
+        value = value,
+        onValueChange = onValueChange,
     )
 }
