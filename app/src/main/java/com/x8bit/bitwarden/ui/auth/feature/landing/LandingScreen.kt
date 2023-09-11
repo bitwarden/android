@@ -34,12 +34,14 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 @Suppress("LongMethod")
 fun LandingScreen(
     onNavigateToCreateAccount: () -> Unit,
+    onNavigateToLogin: (emailAddress: String) -> Unit,
     viewModel: LandingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             LandingEvent.NavigateToCreateAccount -> onNavigateToCreateAccount()
+            is LandingEvent.NavigateToLogin -> onNavigateToLogin(event.emailAddress)
         }
     }
 
@@ -68,8 +70,10 @@ fun LandingScreen(
         )
 
         BitwardenTextField(
+            modifier = Modifier.testTag("Email address"),
+            value = state.emailInput,
+            onValueChange = { viewModel.trySendAction(LandingAction.EmailInputChanged(it)) },
             label = stringResource(id = R.string.email_address),
-            initialValue = state.initialEmailAddress,
         )
 
         Row(
@@ -87,6 +91,7 @@ fun LandingScreen(
             )
 
             Switch(
+                modifier = Modifier.testTag("Remember me"),
                 checked = state.isRememberMeEnabled,
                 onCheckedChange = {
                     viewModel.trySendAction(LandingAction.RememberMeToggle(it))
@@ -95,7 +100,9 @@ fun LandingScreen(
         }
 
         Button(
-            onClick = { viewModel.trySendAction(LandingAction.ContinueButtonClick) },
+            onClick = {
+                viewModel.trySendAction(LandingAction.ContinueButtonClick)
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)

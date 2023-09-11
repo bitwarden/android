@@ -17,8 +17,14 @@ fun NavController.navigateToLanding(navOptions: NavOptions? = null) {
 /**
  * Add the Landing screen to the nav graph.
  */
-fun NavGraphBuilder.landingDestination(onNavigateToCreateAccount: () -> Unit) {
+fun NavGraphBuilder.landingDestinations(
+    onNavigateToCreateAccount: () -> Unit,
+    onNavigateToLogin: (String) -> Unit,
+) {
     composable(route = LANDING_ROUTE) {
-        LandingScreen(onNavigateToCreateAccount = onNavigateToCreateAccount)
+        LandingScreen(
+            onNavigateToCreateAccount = onNavigateToCreateAccount,
+            onNavigateToLogin = onNavigateToLogin,
+        )
     }
 }
