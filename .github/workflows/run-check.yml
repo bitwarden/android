@@ -1,0 +1,32 @@
+---
+name: Run Check
+
+on:
+  pull_request:
+
+env:
+  JAVA_VERSION: 17
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+        with:
+          fetch-depth: 0
+          # Allow subsequent steps to trigger GitHub Actions via git push
+          # https://github.community/t/push-from-action-even-with-pat-does-not-trigger-action/17622
+          persist-credentials: false
+
+      - name: Configure JDK
+        uses: actions/setup-java@cd89f46ac9d01407894225f350157564c9c7cee2 # v3.12.0
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Build and Run Check
+        # Run checks while excluding release-build tests, which are not configured to work properly
+        # with the Compose testing library.
+        run: ./gradlew check -x testRelease
