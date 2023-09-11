@@ -275,7 +275,7 @@
                             Margin="0,10,0,0"/>
                         <Entry IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.AnonAddy}}"
                             x:Name="_anonAddyDomainNameEntry"
-                            Text="{Binding AnonAddyDomainName}"
+                            Text="{Binding AddyIoDomainName}"
                             StyleClass="box-value"
                             AutomationId="AnonAddyDomainNameEntry" />
                     </StackLayout>                    

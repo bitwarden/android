@@ -2414,9 +2414,9 @@
   <data name="Service" xml:space="preserve">
     <value>சேவை</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2693,13 +2693,13 @@
     <value>Your request has been sent to your admin.</value>
   </data>
   <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
-    <value>You will be notified once approved. </value>
+    <value>ஏற்கப்பட்ட பின் அறிவிக்கப்படுவீர். </value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
     <value>Trouble logging in?</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>{0} ஆக உள்நுழைகிறது</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Vault timeout action changed to log out</value>
@@ -2751,13 +2751,13 @@
     <value>பல உரலிகளை ஒரே நேரத்தில் திருத்த முடியாது</value>
   </data>
   <data name="LoginApproved" xml:space="preserve">
-    <value>Login approved</value>
+    <value>உள்நுழைவு ஏற்கப்பட்டது</value>
   </data>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
     <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
-    <value>Log in with device</value>
+    <value>சாதனத்துடன் உள்நுழை</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>இதில் உள்நுழைகிறது</value>

@@ -2413,9 +2413,9 @@
   <data name="Service" xml:space="preserve">
     <value>服务</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2753,7 +2753,7 @@
     <value>登录已批准</value>
   </data>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
-    <value>设备登录必须在 Bitwarden 应用程序的设置中设启用。需要其他选项吗？</value>
+    <value>设备登录必须在 Bitwarden 应用程序的设置中启用。需要其他登录选项吗？</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
     <value>设备登录</value>
