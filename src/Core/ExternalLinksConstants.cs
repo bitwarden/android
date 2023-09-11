@@ -13,5 +13,10 @@
         /// Link to go to settings website. Requires to pass website URL as parameter.
         /// </summary>
         public const string WEB_VAULT_SETTINGS_FORMAT = "{0}/#/settings";
+
+        /// <summary>
+        /// General website, not in the full format of a URL given that this is used as parameter of string resources to be shown to the user.
+        /// </summary>
+        public const string BITWARDEN_WEBSITE = "bitwarden.com";
     }
 }

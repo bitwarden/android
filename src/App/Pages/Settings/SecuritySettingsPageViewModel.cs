@@ -84,8 +84,8 @@ namespace Bit.App.Pages
             ToggleCanUnlockWithBiometricsCommand = CreateDefaultAsyncCommnad(ToggleCanUnlockWithBiometricsAsync, _ => _inited);
             ToggleCanUnlockWithPinCommand = CreateDefaultAsyncCommnad(ToggleCanUnlockWithPinAsync, _ => _inited);
             ShowAccountFingerprintPhraseCommand = CreateDefaultAsyncCommnad(ShowAccountFingerprintPhraseAsync);
-            GoToTwoStepLoginCommand = CreateDefaultAsyncCommnad(() => GoToWebVaultSettingsAsync(AppResources.TwoStepLoginConfirmation, AppResources.TwoStepLogin));
-            GoToChangeMasterPasswordCommand = CreateDefaultAsyncCommnad(() => GoToWebVaultSettingsAsync(AppResources.ChangePasswordConfirmation, AppResources.ChangeMasterPassword));
+            GoToTwoStepLoginCommand = CreateDefaultAsyncCommnad(() => GoToWebVaultSettingsAsync(AppResources.TwoStepLoginDescriptionLong, AppResources.ContinueToWebApp));
+            GoToChangeMasterPasswordCommand = CreateDefaultAsyncCommnad(() => GoToWebVaultSettingsAsync(AppResources.ChangeMasterPasswordDescriptionLong, AppResources.ContinueToWebApp));
             LockCommand = CreateDefaultAsyncCommnad(() => _vaultTimeoutService.LockAsync(true, true));
             LogOutCommand = CreateDefaultAsyncCommnad(LogOutAsync);
             DeleteAccountCommand = CreateDefaultAsyncCommnad(() => Page.Navigation.PushModalAsync(new NavigationPage(new DeleteAccountPage())));
@@ -526,7 +526,7 @@ namespace Bit.App.Pages
 
         private async Task GoToWebVaultSettingsAsync(string dialogText, string dialogTitle)
         {
-            if (await _platformUtilsService.ShowDialogAsync(dialogText, dialogTitle, AppResources.Yes, AppResources.Cancel))
+            if (await _platformUtilsService.ShowDialogAsync(dialogText, dialogTitle, AppResources.Continue, AppResources.Cancel))
             {
                 _platformUtilsService.LaunchUri(string.Format(ExternalLinksConstants.WEB_VAULT_SETTINGS_FORMAT, _environmentService.GetWebVaultUrl()));
             }

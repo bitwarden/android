@@ -446,6 +446,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to addy.io.
+        /// </summary>
+        public static string AddyIo {
+            get {
+                return ResourceManager.GetString("AddyIo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Admin approval requested.
         /// </summary>
         public static string AdminApprovalRequested {
@@ -532,15 +541,6 @@ namespace Bit.App.Resources {
         public static string AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain {
             get {
                 return ResourceManager.GetString("AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to addy.io.
-        /// </summary>
-        public static string AddyIo {
-            get {
-                return ResourceManager.GetString("AddyIo", resourceCulture);
             }
         }
         
@@ -1490,6 +1490,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can change your master password on the Bitwarden web app..
+        /// </summary>
+        public static string ChangeMasterPasswordDescriptionLong {
+            get {
+                return ResourceManager.GetString("ChangeMasterPasswordDescriptionLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?.
         /// </summary>
         public static string ChangePasswordConfirmation {
@@ -1661,11 +1670,65 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can’t find what you are looking for? Reach out to Bitwarden support on bitwarden.com..
+        /// </summary>
+        public static string ContactSupportDescriptionLong {
+            get {
+                return ResourceManager.GetString("ContactSupportDescriptionLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Continue.
         /// </summary>
         public static string Continue {
             get {
                 return ResourceManager.GetString("Continue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Continue to app store?.
+        /// </summary>
+        public static string ContinueToAppStore {
+            get {
+                return ResourceManager.GetString("ContinueToAppStore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Continue to contact support?.
+        /// </summary>
+        public static string ContinueToContactSupport {
+            get {
+                return ResourceManager.GetString("ContinueToContactSupport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Continue to Help center?.
+        /// </summary>
+        public static string ContinueToHelpCenter {
+            get {
+                return ResourceManager.GetString("ContinueToHelpCenter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Continue to web app?.
+        /// </summary>
+        public static string ContinueToWebApp {
+            get {
+                return ResourceManager.GetString("ContinueToWebApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Continue to {0}?.
+        /// </summary>
+        public static string ContinueToX {
+            get {
+                return ResourceManager.GetString("ContinueToX", resourceCulture);
             }
         }
         
@@ -2611,6 +2674,15 @@ namespace Bit.App.Resources {
         public static string Expired {
             get {
                 return ResourceManager.GetString("Expired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Explore more features of your Bitwarden account on the web app..
+        /// </summary>
+        public static string ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp {
+            get {
+                return ResourceManager.GetString("ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp", resourceCulture);
             }
         }
         
@@ -3695,11 +3767,29 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bitwarden allows you to share your vault items with others by using an organization. Learn more on the bitwarden.com website..
+        /// </summary>
+        public static string LearnAboutOrganizationsDescriptionLong {
+            get {
+                return ResourceManager.GetString("LearnAboutOrganizationsDescriptionLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Learn more.
         /// </summary>
         public static string LearnMore {
             get {
                 return ResourceManager.GetString("LearnMore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learn more about how to use Bitwarden on the Help center..
+        /// </summary>
+        public static string LearnMoreAboutHowToUseBitwardenOnTheHelpCenter {
+            get {
+                return ResourceManager.GetString("LearnMoreAboutHowToUseBitwardenOnTheHelpCenter", resourceCulture);
             }
         }
         
@@ -5436,6 +5526,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now..
+        /// </summary>
+        public static string RateAppDescriptionLong {
+            get {
+                return ResourceManager.GetString("RateAppDescriptionLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rate the app.
         /// </summary>
         public static string RateTheApp {
@@ -6724,6 +6823,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Make your account more secure by setting up two-step login in the Bitwarden web app..
+        /// </summary>
+        public static string TwoStepLoginDescriptionLong {
+            get {
+                return ResourceManager.GetString("TwoStepLoginDescriptionLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Two-step login options.
         /// </summary>
         public static string TwoStepLoginOptions {
@@ -7611,6 +7719,15 @@ namespace Bit.App.Resources {
         public static string YesAndSave {
             get {
                 return ResourceManager.GetString("YesAndSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can import data to your vault on {0}..
+        /// </summary>
+        public static string YouCanImportDataToYourVaultOnX {
+            get {
+                return ResourceManager.GetString("YouCanImportDataToYourVaultOnX", resourceCulture);
             }
         }
         
