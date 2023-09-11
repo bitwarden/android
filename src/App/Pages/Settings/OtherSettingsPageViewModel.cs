@@ -113,12 +113,14 @@ namespace Bit.App.Pages
 
             await InitClearClipboardAsync();
 
+            _isScreenCaptureAllowed = await _stateService.GetScreenCaptureAllowedAsync();
             _shouldConnectToWatch = await _stateService.GetShouldConnectToWatchAsync();
 
             _inited = true;
 
             MainThread.BeginInvokeOnMainThread(() =>
             {
+                TriggerPropertyChanged(nameof(IsScreenCaptureAllowed));
                 TriggerPropertyChanged(nameof(ShouldConnectToWatch));
                 SyncCommand.RaiseCanExecuteChanged();
                 ClearClipboardPickerViewModel.SelectOptionCommand.RaiseCanExecuteChanged();
