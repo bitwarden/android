@@ -157,7 +157,6 @@
     <Compile Include="Controllers\ExtendedUITableViewCell.cs" />
     <Compile Include="Controllers\ExtendedUIViewController.cs" />
     <Compile Include="Controllers\ExtendedUITableViewSource.cs" />
-    <Compile Include="Controllers\LockPasswordViewController.cs" />
     <Compile Include="Controllers\LoginAddViewController.cs" />
     <Compile Include="Controllers\PasswordGeneratorViewController.cs" />
     <Compile Include="Models\AppExtensionContext.cs" />
