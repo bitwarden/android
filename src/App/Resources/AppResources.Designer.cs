@@ -446,6 +446,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to addy.io.
+        /// </summary>
+        public static string AddyIo {
+            get {
+                return ResourceManager.GetString("AddyIo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Admin approval requested.
         /// </summary>
         public static string AdminApprovalRequested {
@@ -532,15 +541,6 @@ namespace Bit.App.Resources {
         public static string AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain {
             get {
                 return ResourceManager.GetString("AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to addy.io.
-        /// </summary>
-        public static string AddyIo {
-            get {
-                return ResourceManager.GetString("AddyIo", resourceCulture);
             }
         }
         
@@ -1981,6 +1981,15 @@ namespace Bit.App.Resources {
         public static string DefaultDarkThemeDescription {
             get {
                 return ResourceManager.GetString("DefaultDarkThemeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose the dark theme to use when your device’s dark mode is in use.
+        /// </summary>
+        public static string DefaultDarkThemeDescriptionLong {
+            get {
+                return ResourceManager.GetString("DefaultDarkThemeDescriptionLong", resourceCulture);
             }
         }
         
