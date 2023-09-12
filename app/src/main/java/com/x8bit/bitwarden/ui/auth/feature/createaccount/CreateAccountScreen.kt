@@ -54,7 +54,7 @@ fun CreateAccountScreen(
                 modifier = Modifier
                     .weight(1f)
                     .padding(16.dp),
-                text = stringResource(id = R.string.title_create_account),
+                text = stringResource(id = R.string.create_account),
                 color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.titleLarge,
             )
@@ -64,14 +64,14 @@ fun CreateAccountScreen(
                         viewModel.trySendAction(CreateAccountAction.SubmitClick)
                     }
                     .padding(16.dp),
-                text = stringResource(id = R.string.button_submit),
+                text = stringResource(id = R.string.submit),
                 color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
-        BitwardenTextField(label = stringResource(id = R.string.input_label_email))
-        BitwardenTextField(label = stringResource(id = R.string.input_label_master_password))
-        BitwardenTextField(label = stringResource(id = R.string.input_label_re_type_master_password))
-        BitwardenTextField(label = stringResource(id = R.string.input_label_master_password_hint))
+        BitwardenTextField(label = stringResource(id = R.string.email_address))
+        BitwardenTextField(label = stringResource(id = R.string.master_password))
+        BitwardenTextField(label = stringResource(id = R.string.retype_master_password))
+        BitwardenTextField(label = stringResource(id = R.string.master_password_hint))
     }
 }

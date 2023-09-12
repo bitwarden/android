@@ -20,7 +20,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             CreateAccountScreen(viewModel)
         }
-        composeTestRule.onNodeWithText("SUBMIT").performClick()
+        composeTestRule.onNodeWithText("Submit").performClick()
         verify { viewModel.trySendAction(CreateAccountAction.SubmitClick) }
     }
 }

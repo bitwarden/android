@@ -77,14 +77,14 @@ fun LoginScreen(
             enabled = state.isLoginButtonEnabled,
         ) {
             Text(
-                text = stringResource(id = R.string.enterprise_single_sign_on),
+                text = stringResource(id = R.string.log_in_sso),
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
-
+        // TODO Get the "login target" from a dropdown (BIT-202)
         Text(
-            text = stringResource(id = R.string.logging_in_as, state.emailAddress),
+            text = stringResource(id = R.string.log_in_attempt_by_x_on_y, state.emailAddress, "bitwarden.com"),
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.bodySmall,
         )

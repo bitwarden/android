@@ -154,8 +154,8 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
     @Parcelize
     data object Generator : VaultUnlockedNavBarTab() {
         override val iconRes get() = R.drawable.generator_icon
-        override val labelRes get() = R.string.generator_label
-        override val contentDescriptionRes get() = R.string.generator_tab_content_description
+        override val labelRes get() = R.string.generator
+        override val contentDescriptionRes get() = R.string.generator
         override val route get() = GENERATOR_ROUTE
     }
 
@@ -165,8 +165,8 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
     @Parcelize
     data object Send : VaultUnlockedNavBarTab() {
         override val iconRes get() = R.drawable.send_icon
-        override val labelRes get() = R.string.send_label
-        override val contentDescriptionRes get() = R.string.send_tab_content_description
+        override val labelRes get() = R.string.send
+        override val contentDescriptionRes get() = R.string.send
         override val route get() = SEND_ROUTE
     }
 
@@ -176,8 +176,8 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
     @Parcelize
     data object Vault : VaultUnlockedNavBarTab() {
         override val iconRes get() = R.drawable.sheild_icon
-        override val labelRes get() = R.string.vault_label
-        override val contentDescriptionRes get() = R.string.vault_tab_content_description
+        override val labelRes get() = R.string.my_vault
+        override val contentDescriptionRes get() = R.string.my_vault
         override val route get() = VAULT_ROUTE
     }
 
@@ -187,8 +187,8 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
     @Parcelize
     data object Settings : VaultUnlockedNavBarTab() {
         override val iconRes get() = R.drawable.settings_icon
-        override val labelRes get() = R.string.settings_label
-        override val contentDescriptionRes get() = R.string.settings_tab_content_description
+        override val labelRes get() = R.string.settings
+        override val contentDescriptionRes get() = R.string.settings
         override val route get() = SETTINGS_ROUTE
     }
 }
