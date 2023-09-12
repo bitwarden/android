@@ -61,7 +61,7 @@ fun LandingScreen(
         )
 
         Text(
-            text = stringResource(id = R.string.log_in_or_create_account),
+            text = stringResource(id = R.string.login_or_create_new_account),
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier
@@ -110,7 +110,7 @@ fun LandingScreen(
             enabled = state.isContinueButtonEnabled,
         ) {
             Text(
-                text = stringResource(id = R.string.continue_button),
+                text = stringResource(id = R.string.continue_text),
                 color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.bodyMedium,
             )

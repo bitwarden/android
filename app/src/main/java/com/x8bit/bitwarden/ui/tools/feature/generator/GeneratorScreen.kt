@@ -57,7 +57,7 @@ fun GeneratorScreen() {
                 ),
                 title = {
                     Text(
-                        text = stringResource(id = R.string.generator_label),
+                        text = stringResource(id = R.string.generator),
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
                     )
@@ -82,7 +82,7 @@ private fun OverflowMenu() {
     ) {
         Icon(
             imageVector = Icons.Default.MoreVert,
-            contentDescription = stringResource(id = R.string.overflow_menu),
+            contentDescription = stringResource(id = R.string.options),
             tint = MaterialTheme.colorScheme.onPrimary,
         )
     }
@@ -92,15 +92,15 @@ private fun OverflowMenu() {
 private fun ScrollContent(modifier: Modifier = Modifier) {
     LazyColumn(modifier = modifier.fillMaxSize()) {
         item { DynamicStringItem() }
-        item { TextItem(title = stringResource(id = R.string.generation_prompt)) }
+        item { TextItem(title = stringResource(id = R.string.what_would_you_like_to_generate)) }
         item { TextItem(title = stringResource(id = R.string.password_type), showOptions = true) }
         item { LengthSliderItem() }
-        item { ToggleItem(stringResource(id = R.string.capital_letters_toggle_text)) }
-        item { ToggleItem(stringResource(id = R.string.lowercase_letters_toggle_text)) }
-        item { ToggleItem(stringResource(id = R.string.numbers_toggle_text)) }
-        item { ToggleItem(stringResource(id = R.string.special_characters_toggle_text)) }
-        item { CounterItem(label = stringResource(id = R.string.minimum_numbers)) }
-        item { CounterItem(label = stringResource(id = R.string.minimum_special)) }
+        item { ToggleItem(stringResource(id = R.string.uppercase_ato_z)) }
+        item { ToggleItem(stringResource(id = R.string.lowercase_ato_z)) }
+        item { ToggleItem(stringResource(id = R.string.numbers_zero_to_nine)) }
+        item { ToggleItem(stringResource(id = R.string.special_characters)) }
+        item { CounterItem(label = stringResource(id = R.string.min_numbers)) }
+        item { CounterItem(label = stringResource(id = R.string.min_special)) }
         item { ToggleItem(stringResource(id = R.string.avoid_ambiguous_characters)) }
     }
 }
@@ -108,7 +108,7 @@ private fun ScrollContent(modifier: Modifier = Modifier) {
 @Composable
 private fun DynamicStringItem() {
     // TODO(BIT-276): Move this state to ViewModel
-    val placeholderPassword = stringResource(id = R.string.placeholder_password)
+    val placeholderPassword = "PLACEHOLDER"
     val dynamicString = remember { mutableStateOf(placeholderPassword) }
 
     Box(modifier = Modifier.padding(horizontal = 16.dp)) {
@@ -137,7 +137,7 @@ private fun DynamicStringItem() {
                 ) {
                     Icon(
                         imageVector = Icons.Default.Refresh,
-                        contentDescription = stringResource(id = R.string.refresh),
+                        contentDescription = stringResource(id = R.string.generate_password),
                         tint = MaterialTheme.colorScheme.primary,
                     )
                 }
