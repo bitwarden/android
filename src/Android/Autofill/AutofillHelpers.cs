@@ -155,7 +155,7 @@ namespace Bit.Droid.Autofill
 
         public static async Task<List<FilledItem>> GetFillItemsAsync(Parser parser, ICipherService cipherService, IUserVerificationService userVerificationService)
         {
-            var allowReprompt = !await userVerificationService.HasMasterPasswordAsync();
+            var userHasMasterPassword = await userVerificationService.HasMasterPasswordAsync();
             if (parser.FieldCollection.FillableForLogin)
             {
                 var ciphers = await cipherService.GetAllDecryptedByUrlAsync(parser.Uri);
@@ -163,14 +163,14 @@ namespace Bit.Droid.Autofill
                 {
                     var allCiphers = ciphers.Item1.ToList();
                     allCiphers.AddRange(ciphers.Item2.ToList());
-                    var nonPromptCiphers = allCiphers.Where(cipher => allowReprompt || cipher.Reprompt == CipherRepromptType.None);
+                    var nonPromptCiphers = allCiphers.Where(cipher => !userHasMasterPassword || cipher.Reprompt == CipherRepromptType.None);
                     return nonPromptCiphers.Select(c => new FilledItem(c)).ToList();
                 }
             }
             else if (parser.FieldCollection.FillableForCard)
             {
                 var ciphers = await cipherService.GetAllDecryptedAsync();
-                return ciphers.Where(c => c.Type == CipherType.Card && (allowReprompt || c.Reprompt == CipherRepromptType.None)).Select(c => new FilledItem(c)).ToList();
+                return ciphers.Where(c => c.Type == CipherType.Card && (!userHasMasterPassword || c.Reprompt == CipherRepromptType.None)).Select(c => new FilledItem(c)).ToList();
             }
             return new List<FilledItem>();
         }
