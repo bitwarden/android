@@ -13,6 +13,7 @@ namespace Bit.Core.Models.Domain
         [Obsolete("Use AccountDecryptionOptions to determine if the user does not have a MP")]
         public bool ResetMasterPassword { get; set; }
         public bool ForcePasswordReset { get; set; }
+        public bool RequiresEncryptionKeyMigration { get; set; }
         public Dictionary<TwoFactorProviderType, Dictionary<string, object>> TwoFactorProviders { get; set; }
     }
 }
