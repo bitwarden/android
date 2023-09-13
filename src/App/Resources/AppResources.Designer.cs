@@ -419,6 +419,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to addy.io.
+        /// </summary>
+        public static string AddyIo {
+            get {
+                return ResourceManager.GetString("AddyIo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Admin approval requested.
         /// </summary>
         public static string AdminApprovalRequested {
@@ -505,15 +514,6 @@ namespace Bit.App.Resources {
         public static string AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain {
             get {
                 return ResourceManager.GetString("AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to addy.io.
-        /// </summary>
-        public static string AddyIo {
-            get {
-                return ResourceManager.GetString("AddyIo", resourceCulture);
             }
         }
         
@@ -6003,6 +6003,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set up an unlock method to change your vault timeout action..
+        /// </summary>
+        public static string SetUpAnUnlockMethodToChangeYourVaultTimeoutAction {
+            get {
+                return ResourceManager.GetString("SetUpAnUnlockMethodToChangeYourVaultTimeoutAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set up TOTP.
         /// </summary>
         public static string SetupTotp {
@@ -6751,7 +6760,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve..
+        ///   Looks up a localized string similar to Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve..
         /// </summary>
         public static string UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve {
             get {

@@ -7,6 +7,7 @@ namespace Bit.App.Pages
         public DataTemplate HeaderTemplate { get; set; }
         public DataTemplate RegularTemplate { get; set; }
         public DataTemplate TimePickerTemplate { get; set; }
+        public DataTemplate RegularWithDescriptionTemplate { get; set; }
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
@@ -16,6 +17,10 @@ namespace Bit.App.Pages
             }
             if (item is SettingsPageListItem listItem)
             {
+                if (!string.IsNullOrEmpty(listItem.Description))
+                {
+                    return RegularWithDescriptionTemplate;
+                }
                 return listItem.ShowTimeInput ? TimePickerTemplate : RegularTemplate;
             }
             return null;

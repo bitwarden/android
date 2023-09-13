@@ -64,7 +64,7 @@ namespace Bit.App.Pages
         private void RowSelected(object sender, SelectionChangedEventArgs e)
         {
             ((ExtendedCollectionView)sender).SelectedItem = null;
-            if (e.CurrentSelection?.FirstOrDefault() is SettingsPageListItem item)
+            if (e.CurrentSelection?.FirstOrDefault() is SettingsPageListItem item && item.Enabled)
             {
                 _vm?.ExecuteSettingItemCommand.Execute(item);
             }

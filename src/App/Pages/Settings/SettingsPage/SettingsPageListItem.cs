@@ -13,8 +13,10 @@ namespace Bit.App.Pages
         public string Icon { get; set; }
         public string Name { get; set; }
         public string SubLabel { get; set; }
+        public string Description { get; set; }
         public TimeSpan? Time { get; set; }
         public bool UseFrame { get; set; }
+        public bool Enabled { get; set; } = true;
         public Func<Task> ExecuteAsync { get; set; }
 
         public bool SubLabelTextEnabled => SubLabel == AppResources.On;
@@ -23,6 +25,9 @@ namespace Bit.App.Pages
         public bool ShowTimeInput => Time != null;
         public Color SubLabelColor => SubLabelTextEnabled ?
             ThemeManager.GetResourceColor("SuccessColor") :
+            ThemeManager.GetResourceColor("MutedColor");
+        public Color NameColor => Enabled ?
+            ThemeManager.GetResourceColor("TextColor") :
             ThemeManager.GetResourceColor("MutedColor");
 
         public string AutomationIdSettingName

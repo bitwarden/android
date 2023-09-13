@@ -50,6 +50,38 @@
                 </controls:ExtendedStackLayout>
             </DataTemplate>
             <DataTemplate
+                x:Key="regularWithDescriptionTemplate"
+                x:DataType="pages:SettingsPageListItem">
+                <controls:ExtendedStackLayout Orientation="Horizontal"
+                             StyleClass="list-row, list-row-platform">
+                    <StackLayout
+                         HorizontalOptions="StartAndExpand"
+                         VerticalOptions="Center">
+                         <controls:CustomLabel 
+                           Text="{Binding Name, Mode=OneWay}"
+                           LineBreakMode="{Binding LineBreakMode}"
+                           StyleClass="list-title"
+                           TextColor="{Binding NameColor}"
+                           AutomationId="{Binding AutomationIdSettingName}" />
+                        <controls:CustomLabel 
+                           Text="{Binding Description, Mode=OneWay}"
+                           LineBreakMode="{Binding LineBreakMode}"
+                           TextColor="{DynamicResource MutedColor}"
+                           FontSize="Micro"
+                           StyleClass="list-sub"/>
+                    </StackLayout>
+                    <controls:CustomLabel  Text="{Binding SubLabel, Mode=OneWay}"
+                           IsVisible="{Binding ShowSubLabel}"
+                           HorizontalOptions="End"
+                           HorizontalTextAlignment="End"
+                           VerticalOptions="CenterAndExpand"
+                           VerticalTextAlignment="Start"
+                           TextColor="{Binding SubLabelColor}"
+                           StyleClass="list-sub"
+                           AutomationId="{Binding AutomationIdSettingStatus}" />
+                </controls:ExtendedStackLayout>
+            </DataTemplate>
+            <DataTemplate
                 x:Key="timePickerTemplate"
                 x:DataType="pages:SettingsPageListItem">
                 <controls:ExtendedStackLayout Orientation="Horizontal"
@@ -107,6 +139,7 @@
                 x:Key="listItemDataTemplateSelector"
                 HeaderTemplate="{StaticResource headerTemplate}"
                 RegularTemplate="{StaticResource regularTemplate}"
+                RegularWithDescriptionTemplate="{StaticResource regularWithDescriptionTemplate}"
                 TimePickerTemplate="{StaticResource timePickerTemplate}" />
         </ResourceDictionary>
     </ContentPage.Resources>

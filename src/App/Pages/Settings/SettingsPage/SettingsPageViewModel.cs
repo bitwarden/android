@@ -567,6 +567,8 @@ namespace Bit.App.Pages
                 {
                     Name = AppResources.VaultTimeoutAction,
                     SubLabel = _vaultTimeoutActionDisplayValue,
+                    Description = IsVaultTimeoutActionLockAllowed ? null : AppResources.SetUpAnUnlockMethodToChangeYourVaultTimeoutAction,
+                    Enabled = IsVaultTimeoutActionLockAllowed,
                     ExecuteAsync = () => VaultTimeoutActionAsync()
                 },
                 new SettingsPageListItem
@@ -583,15 +585,18 @@ namespace Bit.App.Pages
                 },
                 new SettingsPageListItem
                 {
-                    Name = AppResources.LockNow,
-                    ExecuteAsync = () => LockAsync()
-                },
-                new SettingsPageListItem
-                {
                     Name = AppResources.TwoStepLogin,
                     ExecuteAsync = () => TwoStepAsync()
                 }
             };
+            if (IsVaultTimeoutActionLockAllowed)
+            {
+                securityItems.Insert(4, new SettingsPageListItem
+                {
+                    Name = AppResources.LockNow,
+                    ExecuteAsync = () => LockAsync()
+                });
+            }
             if (_approvePasswordlessLoginRequests)
             {
                 manageItems.Add(new SettingsPageListItem
