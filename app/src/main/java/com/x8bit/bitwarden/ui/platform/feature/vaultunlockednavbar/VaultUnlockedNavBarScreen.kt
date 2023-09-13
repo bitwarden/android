@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
@@ -37,7 +37,7 @@ import kotlinx.parcelize.Parcelize
  */
 @Composable
 fun VaultUnlockedNavBarScreen(
-    viewModel: VaultUnlockedNavBarViewModel = viewModel(),
+    viewModel: VaultUnlockedNavBarViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
 ) {
     EventsEffect(viewModel = viewModel) { event ->
