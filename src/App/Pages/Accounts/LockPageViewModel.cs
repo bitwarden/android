@@ -156,12 +156,12 @@ namespace Bit.App.Pages
 
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
-        
+
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword
             ? AppResources.PasswordIsVisibleTapToHide
             : AppResources.PasswordIsNotVisibleTapToShow;
-        
+
         public Action UnlockedAction { get; set; }
         public event Action<int?> FocusSecretEntry
         {
@@ -290,12 +290,12 @@ namespace Bit.App.Pages
                 switch (_pinStatus)
                 {
                     case PinLockType.Persistent:
-                    {
-                        userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyAsync();
-                        var oldEncryptedKey = await _stateService.GetPinProtectedAsync();
-                        oldPinProtected = oldEncryptedKey != null ? new EncString(oldEncryptedKey) : null;
-                        break;
-                    }
+                        {
+                            userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyAsync();
+                            var oldEncryptedKey = await _stateService.GetPinProtectedAsync();
+                            oldPinProtected = oldEncryptedKey != null ? new EncString(oldEncryptedKey) : null;
+                            break;
+                        }
                     case PinLockType.Transient:
                         userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync();
                         oldPinProtected = await _stateService.GetPinProtectedKeyAsync();
