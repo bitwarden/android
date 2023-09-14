@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Services
@@ -68,19 +69,23 @@ namespace Bit.Core.Services
 
             if (!await _cryptoService.HasUserKeyAsync(userId))
             {
-                if (!await _cryptoService.HasAutoUnlockKeyAsync(userId))
+                try
                 {
-                    return true;
-                }
-                if (userId != null && await _stateService.GetActiveUserIdAsync() != userId)
-                {
-                    var masterKey = await _cryptoService.GetAutoUnlockKeyAsync(userId);
-                    if (await _cryptoService.IsLegacyUserAsync(null, userId))
+                    if (!await _cryptoService.HasAutoUnlockKeyAsync(userId))
                     {
-                        await LogOutAsync();
+                        return true;
                     }
-                    await _cryptoService.SetUserKeyAsync(await _cryptoService.GetAutoUnlockKeyAsync(userId), userId);
+                    if (userId != null && await _stateService.GetActiveUserIdAsync() != userId)
+                    {
+                        await _cryptoService.SetUserKeyAsync(await _cryptoService.GetAutoUnlockKeyAsync(userId),
+                            userId);
+                    }
                 }
+                catch (LegacyUserException)
+                {
+                    await LogOutAsync(false, userId);
+                }
+
             }
 
             // Check again to verify auto key was set

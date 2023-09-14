@@ -1020,7 +1020,7 @@ namespace Bit.Core.Services
                 var privateKey = await DecryptToBytesAsync(new EncString(encPrivateKey), key);
                 await _cryptoFunctionService.RsaExtractPublicKeyAsync(privateKey);
             }
-            catch (Exception) 
+            catch (Exception)
             {
                 return false;
             }
@@ -1052,10 +1052,7 @@ namespace Bit.Core.Services
             var masterKey = new MasterKey(Convert.FromBase64String(oldKey));
             if (await IsLegacyUserAsync(masterKey, userId))
             {
-                // Legacy users don't have a user key, so no need to migrate.
-                // Instead, set the master key for additional isLegacyUser checks that will log the user out.
-                await SetMasterKeyAsync(masterKey);
-                return;
+                throw new LegacyUserException();
             }
             var encryptedUserKey = await _stateService.GetEncKeyEncryptedAsync(userId);
             if (encryptedUserKey == null)
@@ -1096,6 +1093,10 @@ namespace Bit.Core.Services
                 kdfConfig,
                 oldPinKey
             );
+            if (await IsLegacyUserAsync(masterKey))
+            {
+                throw new LegacyUserException();
+            }
             var encUserKey = await _stateService.GetEncKeyEncryptedAsync();
             var userKey = await DecryptUserKeyWithMasterKeyAsync(
                 masterKey,
