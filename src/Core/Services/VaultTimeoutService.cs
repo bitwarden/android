@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Services
 {
@@ -73,6 +74,11 @@ namespace Bit.Core.Services
                 }
                 if (userId != null && await _stateService.GetActiveUserIdAsync() != userId)
                 {
+                    var masterKey = await _cryptoService.GetAutoUnlockKeyAsync(userId);
+                    if (await _cryptoService.IsLegacyUserAsync(null, userId))
+                    {
+                        await LogOutAsync();
+                    }
                     await _cryptoService.SetUserKeyAsync(await _cryptoService.GetAutoUnlockKeyAsync(userId), userId);
                 }
             }

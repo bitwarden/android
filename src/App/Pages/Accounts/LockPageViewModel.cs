@@ -330,6 +330,15 @@ namespace Bit.App.Pages
                 var passwordValid = false;
                 MasterPasswordPolicyOptions enforcedMasterPasswordOptions = null;
 
+                if (await _cryptoService.IsLegacyUserAsync(masterKey))
+                {
+                    // Legacy users must migrate on web vault.
+                    await _platformUtilsService.ShowDialogAsync(AppResources.EncryptionKeyMigrationRequired, AppResources.AnErrorHasOccurred,
+                        AppResources.Ok);
+                    await _vaultTimeoutService.LogOutAsync();
+                    return;
+                }
+
                 if (storedKeyHash != null)
                 {
                     // Offline unlock possible
@@ -476,6 +485,15 @@ namespace Bit.App.Pages
 
         private async Task SetUserKeyAndContinueAsync(UserKey key)
         {
+            if (await _cryptoService.IsLegacyUserAsync(new MasterKey(key.Key)))
+            {
+                // Legacy users must migrate on web vault.
+                await _platformUtilsService.ShowDialogAsync(AppResources.EncryptionKeyMigrationRequired, AppResources.AnErrorHasOccurred,
+                    AppResources.Ok);
+                await _vaultTimeoutService.LogOutAsync();
+                return;
+            }
+
             var hasKey = await _cryptoService.HasUserKeyAsync();
             if (!hasKey)
             {
@@ -493,5 +511,6 @@ namespace Bit.App.Pages
             _messagingService.Send("unlocked");
             UnlockedAction?.Invoke();
         }
+        
     }
 }

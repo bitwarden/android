@@ -62,6 +62,11 @@ namespace Bit.Core.Services
             return _stateService.GetUserKeyAsync(userId);
         }
 
+        public async Task<bool> IsLegacyUserAsync(MasterKey masterKey = null, string userId = null)
+        {
+            return await ValidateUserKeyAsync(new UserKey((masterKey ?? await GetMasterKeyAsync(userId)).Key));
+        }
+
         public async Task<UserKey> GetUserKeyWithLegacySupportAsync(string userId = null)
         {
             var userKey = await GetUserKeyAsync(userId);
@@ -997,6 +1002,32 @@ namespace Bit.Core.Services
             return keyCreator(key);
         }
 
+        private async Task<bool> ValidateUserKeyAsync(UserKey key, string userId = null)
+        {
+            if (key == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                var encPrivateKey = await _stateService.GetPrivateKeyEncryptedAsync(userId);
+                if (encPrivateKey == null)
+                {
+                    return false;
+                }
+
+                var privateKey = await DecryptToBytesAsync(new EncString(encPrivateKey), key);
+                await _cryptoFunctionService.RsaExtractPublicKeyAsync(privateKey);
+            }
+            catch (Exception) 
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         private class EncryptedObject
         {
             public byte[] Iv { get; set; }
@@ -1019,6 +1050,13 @@ namespace Bit.Core.Services
 
             // Decrypt
             var masterKey = new MasterKey(Convert.FromBase64String(oldKey));
+            if (await IsLegacyUserAsync(masterKey, userId))
+            {
+                // Legacy users don't have a user key, so no need to migrate.
+                // Instead, set the master key for additional isLegacyUser checks that will log the user out.
+                await SetMasterKeyAsync(masterKey);
+                return;
+            }
             var encryptedUserKey = await _stateService.GetEncKeyEncryptedAsync(userId);
             if (encryptedUserKey == null)
             {
