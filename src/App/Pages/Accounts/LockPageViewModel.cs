@@ -252,11 +252,11 @@ namespace Bit.App.Pages
                 var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
                 if (PinEnabled)
                 {
-                    await DoUnlockWithPinAsync(kdfConfig);
+                    await UnlockWithPinAsync(kdfConfig);
                 }
                 else
                 {
-                    await DoUnlockWithMasterPasswordAsync(kdfConfig);
+                    await UnlockWithMasterPasswordAsync(kdfConfig);
                 }
 
             }
@@ -272,7 +272,7 @@ namespace Bit.App.Pages
 
         }
 
-        private async Task DoUnlockWithPinAsync(KdfConfig kdfConfig)
+        private async Task UnlockWithPinAsync(KdfConfig kdfConfig)
         {
             if (PinEnabled && string.IsNullOrWhiteSpace(Pin))
             {
@@ -290,12 +290,12 @@ namespace Bit.App.Pages
                 switch (_pinStatus)
                 {
                     case PinLockType.Persistent:
-                        {
-                            userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyAsync();
-                            var oldEncryptedKey = await _stateService.GetPinProtectedAsync();
-                            oldPinProtected = oldEncryptedKey != null ? new EncString(oldEncryptedKey) : null;
-                            break;
-                        }
+                    {
+                        userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyAsync();
+                        var oldEncryptedKey = await _stateService.GetPinProtectedAsync();
+                        oldPinProtected = oldEncryptedKey != null ? new EncString(oldEncryptedKey) : null;
+                        break;
+                    }
                     case PinLockType.Transient:
                         userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync();
                         oldPinProtected = await _stateService.GetPinProtectedKeyAsync();
@@ -336,6 +336,10 @@ namespace Bit.App.Pages
                     await SetUserKeyAndContinueAsync(userKey);
                 }
             }
+            catch (LegacyUserException)
+            {
+                throw;
+            }
             catch
             {
                 failed = true;
@@ -353,7 +357,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task DoUnlockWithMasterPasswordAsync(KdfConfig kdfConfig)
+        private async Task UnlockWithMasterPasswordAsync(KdfConfig kdfConfig)
         {
             if (!PinEnabled && string.IsNullOrWhiteSpace(MasterPassword))
             {
