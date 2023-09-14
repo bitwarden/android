@@ -1,4 +1,3 @@
-@file:Suppress("TooManyFunctions")
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import android.os.Parcelable
@@ -14,12 +13,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
@@ -30,6 +27,9 @@ import androidx.navigation.navOptions
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.PlaceholderComposable
+import com.x8bit.bitwarden.ui.vault.feature.vault.VAULT_ROUTE
+import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVault
+import com.x8bit.bitwarden.ui.vault.feature.vault.vaultDestination
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -44,7 +44,7 @@ fun VaultUnlockedNavBarScreen(
         navController.apply {
             val navOptions = vaultUnlockedNavBarScreenNavOptions()
             when (event) {
-                VaultUnlockedNavBarEvent.NavigateToVaultScreenNavBar -> navigateToVault(navOptions)
+                VaultUnlockedNavBarEvent.NavigateToVaultScreen -> navigateToVault(navOptions)
                 VaultUnlockedNavBarEvent.NavigateToSendScreen -> navigateToSend(navOptions)
                 VaultUnlockedNavBarEvent.NavigateToGeneratorScreen -> navigateToGenerator(navOptions)
                 VaultUnlockedNavBarEvent.NavigateToSettingsScreen -> navigateToSettings(navOptions)
@@ -85,11 +85,12 @@ private fun VaultUnlockedNavBarScaffold(
                 )
                 destinations.forEach { destination ->
                     NavigationBarItem(
-                        modifier = Modifier.testTag(destination.route),
                         icon = {
                             Icon(
                                 painter = painterResource(id = destination.iconRes),
-                                contentDescription = stringResource(id = destination.contentDescriptionRes),
+                                contentDescription = stringResource(
+                                    id = destination.contentDescriptionRes,
+                                ),
                             )
                         },
                         label = {
@@ -198,7 +199,7 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
  */
 private fun NavController.vaultUnlockedNavBarScreenNavOptions(): NavOptions =
     navOptions {
-        popUpTo(graph.findStartDestination().id) {
+        popUpTo(graph.startDestinationId) {
             saveState = true
         }
         launchSingleTop = true
@@ -297,32 +298,3 @@ private fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
     navigate(SETTINGS_ROUTE, navOptions)
 }
 // #endregion Settings
-
-// #region Vault
-/**
- * TODO: move to vault package (BIT-178)
- */
-private const val VAULT_ROUTE = "vault"
-
-/**
- * Add vault destination to the nav graph.
- *
- * TODO: move to vault package (BIT-178)
- */
-private fun NavGraphBuilder.vaultDestination() {
-    composable(VAULT_ROUTE) {
-        PlaceholderComposable(text = "Vault")
-    }
-}
-
-/**
- * Navigate to the vault screen. Note this will only work if vault screen was added
- * via [vaultDestination].
- *
- * TODO: move to vault package (BIT-178)
- *
- */
-private fun NavController.navigateToVault(navOptions: NavOptions? = null) {
-    navigate(VAULT_ROUTE, navOptions)
-}
-// #endregion Vault

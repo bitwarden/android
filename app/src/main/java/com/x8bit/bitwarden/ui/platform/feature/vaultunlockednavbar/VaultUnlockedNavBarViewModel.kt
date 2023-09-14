@@ -37,10 +37,10 @@ class VaultUnlockedNavBarViewModel @Inject constructor() :
     }
 
     /**
-     * Attempts to send [VaultUnlockedNavBarEvent.NavigateToVaultScreenNavBar] event
+     * Attempts to send [VaultUnlockedNavBarEvent.NavigateToVaultScreen] event
      */
     private fun handleVaultTabClicked() {
-        sendEvent(VaultUnlockedNavBarEvent.NavigateToVaultScreenNavBar)
+        sendEvent(VaultUnlockedNavBarEvent.NavigateToVaultScreen)
     }
 
     /**
@@ -94,7 +94,7 @@ sealed class VaultUnlockedNavBarEvent {
     /**
      * Navigate to the Vault screen.
      */
-    data object NavigateToVaultScreenNavBar : VaultUnlockedNavBarEvent()
+    data object NavigateToVaultScreen : VaultUnlockedNavBarEvent()
 
     /**
      * Navigate to the Settings screen.

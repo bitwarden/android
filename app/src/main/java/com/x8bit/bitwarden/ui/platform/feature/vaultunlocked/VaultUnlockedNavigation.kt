@@ -10,8 +10,7 @@ import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlocked
 const val VAULT_UNLOCKED_ROUTE: String = "VaultUnlocked"
 
 /**
- * Navigate to the vault unlocked screen. Note this will only work if vault unlocked destinations were added
- * via [vaultUnlockedDestinations].
+ * Navigate to the vault unlocked screen.
  */
 fun NavController.navigateToVaultUnlocked(navOptions: NavOptions? = null) {
     navigate(VAULT_UNLOCKED_ROUTE, navOptions)
