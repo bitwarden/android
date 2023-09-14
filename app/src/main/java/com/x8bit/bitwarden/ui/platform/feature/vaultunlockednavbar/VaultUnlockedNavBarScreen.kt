@@ -9,19 +9,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.x8bit.bitwarden.R
@@ -71,9 +70,6 @@ private fun VaultUnlockedNavBarScaffold(
     generatorTabClickedAction: () -> Unit,
     settingsTabClickedAction: () -> Unit,
 ) {
-    var state by rememberSaveable {
-        mutableStateOf<VaultUnlockedNavBarTab>(VaultUnlockedNavBarTab.Vault)
-    }
     Scaffold(
         bottomBar = {
             BottomAppBar {
@@ -83,6 +79,8 @@ private fun VaultUnlockedNavBarScaffold(
                     VaultUnlockedNavBarTab.Generator,
                     VaultUnlockedNavBarTab.Settings,
                 )
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
                 destinations.forEach { destination ->
                     NavigationBarItem(
                         icon = {
@@ -96,9 +94,10 @@ private fun VaultUnlockedNavBarScaffold(
                         label = {
                             Text(text = stringResource(id = destination.labelRes))
                         },
-                        selected = destination == state,
+                        selected = currentDestination?.hierarchy?.any {
+                            it.route == destination.route
+                        } == true,
                         onClick = {
-                            state = destination
                             when (destination) {
                                 VaultUnlockedNavBarTab.Vault -> vaultTabClickedAction()
                                 VaultUnlockedNavBarTab.Send -> sendTabClickedAction()
@@ -113,7 +112,7 @@ private fun VaultUnlockedNavBarScaffold(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = state.route,
+            startDestination = VAULT_ROUTE,
             modifier = Modifier.padding(innerPadding),
         ) {
             vaultDestination()
