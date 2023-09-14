@@ -2629,22 +2629,22 @@
     <value>کلمه عبور اصلی فعلی</value>
   </data>
   <data name="LoggedIn" xml:space="preserve">
-    <value>Logged in!</value>
+    <value>وارد شده!</value>
   </data>
   <data name="ApproveWithMyOtherDevice" xml:space="preserve">
-    <value>Approve with my other device</value>
+    <value>تایید با دستگاه دیگرم</value>
   </data>
   <data name="RequestAdminApproval" xml:space="preserve">
-    <value>Request admin approval</value>
+    <value>درخواست تایید مدیر</value>
   </data>
   <data name="ApproveWithMasterPassword" xml:space="preserve">
-    <value>Approve with master password</value>
+    <value>تایید با کلمه عبور اصلی</value>
   </data>
   <data name="TurnOffUsingPublicDevice" xml:space="preserve">
-    <value>Turn off using a public device</value>
+    <value>اگر از دستگاه عمومی استفاده میکنید خاموش کنید</value>
   </data>
   <data name="RememberThisDevice" xml:space="preserve">
-    <value>Remember this device</value>
+    <value>این دستگاه را به خاطر بسپار</value>
   </data>
   <data name="Passkey" xml:space="preserve">
     <value>کلید عبور</value>
@@ -2678,7 +2678,7 @@
     <value>راهنمای درخواست مجدد کلمه عبور اصلی</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+    <value>بازگشایی ممکن است به دلیل حافظه ناکافی انجام نشود. برای انجام تنظیمات حافظه KDF خود را کاهش دهید یا از بازگشایی زیست‌سنجی استفاده کنید.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>کلید API نامعتبر</value>
@@ -2687,22 +2687,22 @@
     <value>توکن API نامعتبر</value>
   </data>
   <data name="AdminApprovalRequested" xml:space="preserve">
-    <value>Admin approval requested</value>
+    <value>تایید مدیر در خواست شد</value>
   </data>
   <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
-    <value>Your request has been sent to your admin.</value>
+    <value>درخواست شما به مدیرتان فرستاده شد.</value>
   </data>
   <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
-    <value>You will be notified once approved. </value>
+    <value>به محض تایید مطلع خواهید شد. </value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
-    <value>Trouble logging in?</value>
+    <value>در ورود مشکلی دارید؟</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>ورود به عنوان {0}</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
-    <value>Vault timeout action changed to log out</value>
+    <value>اقدام پایان زمان گاوصندوق به خروج تغییر کرد</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
     <value>این مورد را نمی‌توان با سازمان به اشتراک گذاشت زیرا قبلاً موردی با کلید عبور یکسان وجود دارد.</value>
@@ -2751,15 +2751,15 @@
     <value>نمی‌توان چندین نشانی اینترنتی را همزمان ویرایش کرد</value>
   </data>
   <data name="LoginApproved" xml:space="preserve">
-    <value>Login approved</value>
+    <value>ورود تایید شد</value>
   </data>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
-    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+    <value>ورود با دستگاه باید در تنظیمات برنامه‌ی Bitwarden تنظیم شود. به گزینه دیگری نیاز دارید؟</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
-    <value>Log in with device</value>
+    <value>ورود با دستگاه</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
-    <value>Logging in on</value>
+    <value>ورود با</value>
   </data>
 </root>
