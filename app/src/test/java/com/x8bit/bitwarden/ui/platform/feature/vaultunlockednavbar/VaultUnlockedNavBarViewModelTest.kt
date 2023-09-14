@@ -12,7 +12,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         val viewModel = VaultUnlockedNavBarViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick)
-            assertEquals(VaultUnlockedNavBarEvent.NavigateToVaultScreenNavBar, awaitItem())
+            assertEquals(VaultUnlockedNavBarEvent.NavigateToVaultScreen, awaitItem())
         }
     }
 

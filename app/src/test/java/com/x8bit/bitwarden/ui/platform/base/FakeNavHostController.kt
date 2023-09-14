@@ -68,6 +68,7 @@ class FakeNavHostController : NavHostController(context = mockk()) {
     private val internalGraph =
         mockk<NavGraph>().apply {
             every { id } returns graphId
+            every { startDestinationId } returns graphId
         }
 
     override var graph: NavGraph
