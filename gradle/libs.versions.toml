@@ -20,6 +20,9 @@ androidxLifecycle = "2.6.1"
 # child navigation destinations (BIT-201).
 androidxNavigation = "2.5.3"
 androidxRoom = "2.5.2"
+# Once the app and SDK reach a critical point of completeness we should begin fixing the version
+# here (BIT-311).
+bitwardenSdk = "ps-maven-SNAPSHOT"
 detekt = "1.23.1"
 firebaseBom = "32.2.2"
 glide = "4.15.1"
@@ -61,6 +64,7 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidxRoom" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidxRoom" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidxRoom" }
+bitwarden-sdk = { module = "com.bitwarden:sdk-android", version.ref = "bitwardenSdk" }
 bumptech-glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 detekt-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-detekt-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }

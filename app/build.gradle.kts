@@ -82,6 +82,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
     implementation(platform(libs.google.firebase.bom))
+    implementation(libs.bitwarden.sdk)
     implementation(libs.bumptech.glide)
     implementation(libs.google.firebase.cloud.messaging)
     implementation(libs.google.firebase.crashlytics)
