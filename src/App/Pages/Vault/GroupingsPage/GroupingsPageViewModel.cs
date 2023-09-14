@@ -569,7 +569,7 @@ namespace Bit.App.Pages
                 {
                     Filter = c => !c.IsDeleted
                                   &&
-                                  Type.Value.IsEqualToOrCanSignIn(c.Type);
+                                  Type.Value == c.Type;
                 }
                 else if (FolderId != null)
                 {
@@ -636,9 +636,7 @@ namespace Bit.App.Pages
                         NoFolderCiphers.Add(c);
                     }
 
-                    // Fido2Key ciphers should be counted as Login ciphers
-                    var countType = c.Type == CipherType.Fido2Key ? CipherType.Login : c.Type;
-                    _typeCounts[countType] = _typeCounts.TryGetValue(countType, out var currentTypeCount)
+                    _typeCounts[c.Type] = _typeCounts.TryGetValue(c.Type, out var currentTypeCount)
                                                 ? currentTypeCount + 1
                                                 : 1;
                 }

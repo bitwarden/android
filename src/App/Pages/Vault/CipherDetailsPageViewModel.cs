@@ -708,18 +708,12 @@ namespace Bit.App.Pages
 
         private async Task<bool> CanCloneAsync()
         {
-            if (Cipher.Type == CipherType.Fido2Key)
+            if (!Cipher.HasFido2Key)
             {
-                await _platformUtilsService.ShowDialogAsync(AppResources.PasskeyWillNotBeCopied);
-                return false;
+                return true;
             }
 
-            if (Cipher.Type == CipherType.Login && Cipher.Login?.Fido2Key != null)
-            {
-                return await _platformUtilsService.ShowDialogAsync(AppResources.ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem, AppResources.PasskeyWillNotBeCopied, AppResources.Yes, AppResources.No);
-            }
-
-            return true;
+            return await _platformUtilsService.ShowDialogAsync(AppResources.ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem, AppResources.PasskeyWillNotBeCopied, AppResources.Yes, AppResources.No);
         }
     }
 }
