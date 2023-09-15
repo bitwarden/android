@@ -43,19 +43,38 @@ fun VaultUnlockedNavBarScreen(
         navController.apply {
             val navOptions = vaultUnlockedNavBarScreenNavOptions()
             when (event) {
-                VaultUnlockedNavBarEvent.NavigateToVaultScreen -> navigateToVault(navOptions)
-                VaultUnlockedNavBarEvent.NavigateToSendScreen -> navigateToSend(navOptions)
-                VaultUnlockedNavBarEvent.NavigateToGeneratorScreen -> navigateToGenerator(navOptions)
-                VaultUnlockedNavBarEvent.NavigateToSettingsScreen -> navigateToSettings(navOptions)
+                VaultUnlockedNavBarEvent.NavigateToVaultScreen -> {
+                    navigateToVault(navOptions)
+                }
+
+                VaultUnlockedNavBarEvent.NavigateToSendScreen -> {
+                    navigateToSend(navOptions)
+                }
+
+                VaultUnlockedNavBarEvent.NavigateToGeneratorScreen -> {
+                    navigateToGenerator(navOptions)
+                }
+
+                VaultUnlockedNavBarEvent.NavigateToSettingsScreen -> {
+                    navigateToSettings(navOptions)
+                }
             }
         }
     }
     VaultUnlockedNavBarScaffold(
         navController = navController,
-        generatorTabClickedAction = { viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick) },
-        sendTabClickedAction = { viewModel.trySendAction(VaultUnlockedNavBarAction.SendTabClick) },
-        vaultTabClickedAction = { viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick) },
-        settingsTabClickedAction = { viewModel.trySendAction(VaultUnlockedNavBarAction.SettingsTabClick) },
+        generatorTabClickedAction = {
+            viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick)
+        },
+        sendTabClickedAction = {
+            viewModel.trySendAction(VaultUnlockedNavBarAction.SendTabClick)
+        },
+        vaultTabClickedAction = {
+            viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick)
+        },
+        settingsTabClickedAction = {
+            viewModel.trySendAction(VaultUnlockedNavBarAction.SettingsTabClick)
+        },
     )
 }
 
