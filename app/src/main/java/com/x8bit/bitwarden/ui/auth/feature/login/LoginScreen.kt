@@ -84,7 +84,11 @@ fun LoginScreen(
         }
         // TODO Get the "login target" from a dropdown (BIT-202)
         Text(
-            text = stringResource(id = R.string.log_in_attempt_by_x_on_y, state.emailAddress, "bitwarden.com"),
+            text = stringResource(
+                id = R.string.log_in_attempt_by_x_on_y,
+                state.emailAddress,
+                "bitwarden.com",
+            ),
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.bodySmall,
         )

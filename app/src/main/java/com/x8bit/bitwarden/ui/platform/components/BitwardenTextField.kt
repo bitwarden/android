@@ -22,7 +22,9 @@ import androidx.compose.ui.unit.dp
  *
  * TODO: remove deprecated version: BIT-289
  */
-@Deprecated(message = "Use overloaded BitwardenTextField that takes an input instead of an initialText.")
+@Deprecated(
+    message = "Use overloaded BitwardenTextField that takes an input instead of an initialText.",
+)
 @Composable
 fun BitwardenTextField(
     label: String,
