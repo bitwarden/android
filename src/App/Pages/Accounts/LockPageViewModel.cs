@@ -562,7 +562,7 @@ namespace Bit.App.Pages
             }
             return false;
         }
-        
+
         private async Task HandleLegacyUserAsync()
         {
             // Legacy users must migrate on web vault.
