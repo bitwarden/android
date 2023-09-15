@@ -831,7 +831,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Šim kontam ir iestatīta divpakāpju pieteikšanās, bet šajā ierīcē netiek nodrošināts neviens no uzstādītajiem divpakāpju pārbaudes nodrošinātājiem. Lūgums izmantot atbalstītu ierīci un/vai pievienot papildus nodrošinātājus, kas tiek labāk atbalstīti dažādās ierīcēs (piemēram, autentificētāja lietotni).</value>
+    <value>Šim kontam ir iestatīta divpakāpju pieteikšanās, bet šajā ierīcē netiek nodrošināts neviens no uzstādītajiem divpakāpju pārbaudes nodrošinātājiem. Lūgums izmantot atbalstītu ierīci un/vai pievienot papildu nodrošinātājus, kas tiek labāk atbalstīti dažādās ierīcēs (piemēram, autentificētāja lietotni).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Atgūšanas kods</value>
@@ -1810,7 +1810,8 @@ Nolasīšana notiks automātiski.</value>
     <value>Ielādē</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>Ieslēdzot šo slēdzi, Tu piekrīti sekojošajam:</value>
+    <value>Ar šī slēdža ieslēgšanu tiek piekrists sekojošajam:
+</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
     <value>Nav apstiprināti izmantošanas noteikumi un privātuma nosacījumi.</value>
@@ -2176,7 +2177,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Konts tika veiksmīgi noņemts</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
-    <value>Dzēst kontu</value>
+    <value>Izdzēst kontu</value>
   </data>
   <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
     <value>Konta dzēšana ir neatgriezeniska</value>
@@ -2677,7 +2678,7 @@ Vai pārslēgties uz šo kontu?</value>
     <value>Galvenās paroles pārvaicāšanas palīdzība</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+    <value>Atslēgšana var neizdoties nepietiekamas atmiņas dēļ. Lai to novērstu, jāsamazina KDF atmiņas iestatījumi vai jāiestata biometriskā atslēgšana.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Nederīga API atslēga</value>
