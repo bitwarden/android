@@ -184,8 +184,8 @@ namespace Bit.App.Pages
                                   ?? await _stateService.GetPinProtectedKeyAsync();
             PinEnabled = (_pinStatus == PinLockType.Transient && ephemeralPinSet != null) ||
                          _pinStatus == PinLockType.Persistent;
-            BiometricEnabled = await _vaultTimeoutService.IsBiometricLockSetAsync() &&
-                               await _biometricService.CanUseBiometricsUnlockAsync();
+
+            BiometricEnabled = await IsBiometricsEnabledAsync();
 
             // Users without MP and without biometric or pin has no MP to unlock with
             _hasMasterPassword = await _userVerificationService.HasMasterPasswordAsync();
@@ -262,11 +262,7 @@ namespace Bit.App.Pages
             }
             catch (LegacyUserException)
             {
-                // Legacy users must migrate on web vault.
-                await _platformUtilsService.ShowDialogAsync(AppResources.EncryptionKeyMigrationRequired,
-                    AppResources.AnErrorHasOccurred,
-                    AppResources.Ok);
-                await _vaultTimeoutService.LogOutAsync();
+                await HandleLegacyUserAsync();
             }
 
 
@@ -529,11 +525,7 @@ namespace Bit.App.Pages
             }
             catch (LegacyUserException)
             {
-                // Legacy users must migrate on web vault.
-                await _platformUtilsService.ShowDialogAsync(AppResources.EncryptionKeyMigrationRequired,
-                    AppResources.AnErrorHasOccurred,
-                    AppResources.Ok);
-                await _vaultTimeoutService.LogOutAsync();
+                await HandleLegacyUserAsync();
             }
         }
 
@@ -556,5 +548,29 @@ namespace Bit.App.Pages
             _messagingService.Send("unlocked");
             UnlockedAction?.Invoke();
         }
+
+        private async Task<bool> IsBiometricsEnabledAsync()
+        {
+            try
+            {
+                return await _vaultTimeoutService.IsBiometricLockSetAsync() &&
+                                   await _biometricService.CanUseBiometricsUnlockAsync();
+            }
+            catch (LegacyUserException)
+            {
+                await HandleLegacyUserAsync();
+            }
+            return false;
+        }
+        
+        private async Task HandleLegacyUserAsync()
+        {
+            // Legacy users must migrate on web vault.
+            await _platformUtilsService.ShowDialogAsync(AppResources.EncryptionKeyMigrationRequired,
+                AppResources.AnErrorHasOccurred,
+                AppResources.Ok);
+            await _vaultTimeoutService.LogOutAsync();
+        }
+
     }
 }
