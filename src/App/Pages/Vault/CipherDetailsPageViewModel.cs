@@ -148,7 +148,6 @@ namespace Bit.App.Pages
         public bool IsIdentity => Cipher?.Type == Core.Enums.CipherType.Identity;
         public bool IsCard => Cipher?.Type == Core.Enums.CipherType.Card;
         public bool IsSecureNote => Cipher?.Type == Core.Enums.CipherType.SecureNote;
-        public bool IsFido2Key => Cipher?.Type == Core.Enums.CipherType.Fido2Key;
         public FormattedString ColoredPassword => GeneratedValueFormatter.Format(Cipher.Login.Password);
         public FormattedString UpdatedText
         {
@@ -648,11 +647,6 @@ namespace Bit.App.Pages
             {
                 text = Cipher.Card.Code;
                 name = AppResources.SecurityCode;
-            }
-            else if (id == "Fido2KeyApplication")
-            {
-                text = Cipher.Fido2Key?.LaunchUri;
-                name = AppResources.Application;
             }
 
             if (text != null)
