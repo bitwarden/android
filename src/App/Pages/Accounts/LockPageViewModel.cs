@@ -264,8 +264,6 @@ namespace Bit.App.Pages
             {
                 await HandleLegacyUserAsync();
             }
-
-
         }
 
         private async Task UnlockWithPinAsync(KdfConfig kdfConfig)
@@ -364,14 +362,14 @@ namespace Bit.App.Pages
             }
 
             var masterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, _email, kdfConfig);
-            var storedKeyHash = await _cryptoService.GetMasterKeyHashAsync();
-            var passwordValid = false;
-            MasterPasswordPolicyOptions enforcedMasterPasswordOptions = null;
-
             if (await _cryptoService.IsLegacyUserAsync(masterKey))
             {
                 throw new LegacyUserException();
             }
+
+            var storedKeyHash = await _cryptoService.GetMasterKeyHashAsync();
+            var passwordValid = false;
+            MasterPasswordPolicyOptions enforcedMasterPasswordOptions = null;
 
             if (storedKeyHash != null)
             {
@@ -554,7 +552,7 @@ namespace Bit.App.Pages
             try
             {
                 return await _vaultTimeoutService.IsBiometricLockSetAsync() &&
-                                   await _biometricService.CanUseBiometricsUnlockAsync();
+                   await _biometricService.CanUseBiometricsUnlockAsync();
             }
             catch (LegacyUserException)
             {
@@ -566,7 +564,7 @@ namespace Bit.App.Pages
         private async Task HandleLegacyUserAsync()
         {
             // Legacy users must migrate on web vault.
-            await _platformUtilsService.ShowDialogAsync(AppResources.EncryptionKeyMigrationRequired,
+            await _platformUtilsService.ShowDialogAsync(AppResources.EncryptionKeyMigrationRequiredDescriptionLong,
                 AppResources.AnErrorHasOccurred,
                 AppResources.Ok);
             await _vaultTimeoutService.LogOutAsync();

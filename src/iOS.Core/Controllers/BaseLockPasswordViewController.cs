@@ -355,8 +355,6 @@ namespace Bit.iOS.Core.Controllers
             {
                 await HandleFailedCredentialsAsync();
             }
-
-            
         }
 
         private async Task UnlockWithMasterPasswordAsync(string inputPassword, string email, KdfConfig kdfConfig)
@@ -486,7 +484,7 @@ namespace Bit.iOS.Core.Controllers
         private async Task HandleLegacyUserAsync()
         {
             // Legacy users must migrate on web vault.
-            await _platformUtilsService.ShowDialogAsync(AppResources.EncryptionKeyMigrationRequired,
+            await _platformUtilsService.ShowDialogAsync(AppResources.EncryptionKeyMigrationRequiredDescriptionLong,
                 AppResources.AnErrorHasOccurred,
                 AppResources.Ok);
             await _vaultTimeoutService.LogOutAsync();

@@ -1569,9 +1569,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string EncryptionKeyMigrationRequired {
+        public static string EncryptionKeyMigrationRequiredDescriptionLong {
             get {
-                return ResourceManager.GetString("EncryptionKeyMigrationRequired", resourceCulture);
+                return ResourceManager.GetString("EncryptionKeyMigrationRequiredDescriptionLong", resourceCulture);
             }
         }
         

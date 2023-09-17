@@ -64,7 +64,12 @@ namespace Bit.Core.Services
 
         public async Task<bool> IsLegacyUserAsync(MasterKey masterKey = null, string userId = null)
         {
-            return await ValidateUserKeyAsync(new UserKey((masterKey ?? await GetMasterKeyAsync(userId)).Key));
+            masterKey ??= await GetMasterKeyAsync(userId);
+            if (masterKey == null)
+            {
+                return false;
+            }
+            return await ValidateUserKeyAsync(new UserKey(masterKey.Key));
         }
 
         public async Task<UserKey> GetUserKeyWithLegacySupportAsync(string userId = null)
@@ -1019,13 +1024,12 @@ namespace Bit.Core.Services
 
                 var privateKey = await DecryptToBytesAsync(new EncString(encPrivateKey), key);
                 await _cryptoFunctionService.RsaExtractPublicKeyAsync(privateKey);
+                return true;
             }
-            catch (Exception)
+            catch
             {
                 return false;
             }
-
-            return true;
         }
 
         private class EncryptedObject

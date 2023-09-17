@@ -251,7 +251,7 @@ namespace Bit.App.Pages
                 if (response.RequiresEncryptionKeyMigration)
                 {
                     // Legacy users must migrate on web vault.
-                    await _platformUtilsService.ShowDialogAsync(AppResources.EncryptionKeyMigrationRequired, AppResources.AnErrorHasOccurred,
+                    await _platformUtilsService.ShowDialogAsync(AppResources.EncryptionKeyMigrationRequiredDescriptionLong, AppResources.AnErrorHasOccurred,
                         AppResources.Ok);
                     return;
                 }
