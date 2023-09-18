@@ -32,20 +32,26 @@ namespace Bit.App.Pages
             ToggleSubmitCrashLogsCommand = CreateDefaultAsyncCommnad(ToggleSubmitCrashLogsAsync);
 
             GoToHelpCenterCommand = CreateDefaultAsyncCommnad(
-                () => MainThread.InvokeOnMainThreadAsync(() => _platformUtilsService.LaunchUri(ExternalLinksConstants.HELP_CENTER)));
+                () => LaunchUriAsync(AppResources.LearnMoreAboutHowToUseBitwardenOnTheHelpCenter,
+                                     AppResources.ContinueToHelpCenter,
+                                     ExternalLinksConstants.HELP_CENTER));
 
             ContactBitwardenSupportCommand = CreateDefaultAsyncCommnad(
-                () => MainThread.InvokeOnMainThreadAsync(() => _platformUtilsService.LaunchUri(ExternalLinksConstants.CONTACT_SUPPORT)));
+                () => LaunchUriAsync(AppResources.ContactSupportDescriptionLong,
+                                     AppResources.ContinueToContactSupport,
+                                     ExternalLinksConstants.CONTACT_SUPPORT));
 
             GoToWebVaultCommand = CreateDefaultAsyncCommnad(
-                () => MainThread.InvokeOnMainThreadAsync(
-                    () => _platformUtilsService.LaunchUri(environmentService.GetWebVaultUrl())));
+                () => LaunchUriAsync(AppResources.ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp,
+                                     AppResources.ContinueToWebApp,
+                                     environmentService.GetWebVaultUrl()));
 
             GoToLearnAboutOrgsCommand = CreateDefaultAsyncCommnad(
-                () => MainThread.InvokeOnMainThreadAsync(() => _platformUtilsService.LaunchUri(ExternalLinksConstants.HELP_ABOUT_ORGANIZATIONS)));
+                () => LaunchUriAsync(AppResources.LearnAboutOrganizationsDescriptionLong,
+                                     string.Format(AppResources.ContinueToX, ExternalLinksConstants.BITWARDEN_WEBSITE),
+                                     ExternalLinksConstants.HELP_ABOUT_ORGANIZATIONS));
 
-            RateTheAppCommand = CreateDefaultAsyncCommnad(
-                () => MainThread.InvokeOnMainThreadAsync(() => _deviceActionService.RateApp()));
+            RateTheAppCommand = CreateDefaultAsyncCommnad(RateAppAsync);
 
             CopyAppInfoCommand = CreateDefaultAsyncCommnad(
                 () => clipboardService.CopyTextAsync(AppInfo));
@@ -101,6 +107,22 @@ namespace Bit.App.Pages
             _shouldSubmitCrashLogs = await _logger.IsEnabled();
 
             MainThread.BeginInvokeOnMainThread(() => TriggerPropertyChanged(nameof(ShouldSubmitCrashLogs)));
+        }
+
+        private async Task LaunchUriAsync(string dialogText, string dialogTitle, string uri)
+        {
+            if (await _platformUtilsService.ShowDialogAsync(dialogText, dialogTitle, AppResources.Continue, AppResources.Cancel))
+            {
+                _platformUtilsService.LaunchUri(uri);
+            }
+        }
+
+        private async Task RateAppAsync()
+        {
+            if (await _platformUtilsService.ShowDialogAsync(AppResources.RateAppDescriptionLong, AppResources.ContinueToAppStore, AppResources.Continue, AppResources.Cancel))
+            {
+                await MainThread.InvokeOnMainThreadAsync(_deviceActionService.RateApp);
+            }
         }
 
         /// INFO: Left here in case we need to debug push notifications

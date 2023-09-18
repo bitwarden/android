@@ -1,6 +1,9 @@
-﻿using System.Windows.Input;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
+using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
@@ -10,9 +13,13 @@ namespace Bit.App.Pages
 {
     public class VaultSettingsPageViewModel : BaseViewModel
     {
+        private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly IEnvironmentService _environmentService;
+
         public VaultSettingsPageViewModel()
         {
-            var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
+            _environmentService = ServiceContainer.Resolve<IEnvironmentService>();
 
             GoToFoldersCommand = new AsyncCommand(() => Page.Navigation.PushModalAsync(new NavigationPage(new FoldersPage())),
                 onException: ex => HandleException(ex),
@@ -22,8 +29,7 @@ namespace Bit.App.Pages
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            GoToImportItemsCommand = new AsyncCommand(
-                () => MainThread.InvokeOnMainThreadAsync(() => platformUtilsService.LaunchUri(ExternalLinksConstants.HELP_IMPORT_DATA)),
+            GoToImportItemsCommand = new AsyncCommand(GoToImportItemsAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
         }
@@ -31,5 +37,14 @@ namespace Bit.App.Pages
         public ICommand GoToFoldersCommand { get; }
         public ICommand GoToExportVaultCommand { get; }
         public ICommand GoToImportItemsCommand { get; }
+
+        private async Task GoToImportItemsAsync()
+        {
+            var body = string.Format(AppResources.YouCanImportDataToYourVaultOnX, _environmentService.GetWebVaultUrl());
+            if (await _platformUtilsService.ShowDialogAsync(body, AppResources.ContinueToWebApp, AppResources.Continue, AppResources.Cancel))
+            {
+                _platformUtilsService.LaunchUri(ExternalLinksConstants.HELP_IMPORT_DATA);
+            }
+        }
     }
 }
