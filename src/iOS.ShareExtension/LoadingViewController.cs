@@ -123,6 +123,7 @@ namespace Bit.iOS.ShareExtension
         {
             var viewController = _storyboard.Value.InstantiateViewController("lockVC") as LockPasswordViewController;
             viewController.LoadingController = this;
+            viewController.LaunchHomePage = () => DismissViewController(false, () => LaunchHomePage());
             viewController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
 
             if (_presentingOnNavigationPage)

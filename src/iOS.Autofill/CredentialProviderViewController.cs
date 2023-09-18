@@ -223,6 +223,7 @@ namespace Bit.iOS.Autofill
                     else if (navController.TopViewController is LockPasswordViewController passwordViewController)
                     {
                         passwordViewController.CPViewController = this;
+                        passwordViewController.LaunchHomePage = () => DismissViewController(false, () => LaunchHomePage());
                         segue.DestinationViewController.PresentationController.Delegate =
                             new CustomPresentationControllerDelegate(passwordViewController.DismissModalAction);
                     }

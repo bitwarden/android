@@ -509,11 +509,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AnonAddy.
+        ///   Looks up a localized string similar to addy.io.
         /// </summary>
-        public static string AnonAddy {
+        public static string AddyIo {
             get {
-                return ResourceManager.GetString("AnonAddy", resourceCulture);
+                return ResourceManager.GetString("AddyIo", resourceCulture);
             }
         }
         

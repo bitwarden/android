@@ -559,7 +559,7 @@
     <value>密码库超时动作</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>超时后退出账户将解除对密码库的所有访问权限，并需要进行在线身份验证。确定使用此设置吗？</value>
+    <value>超时后注销账户将解除对密码库的所有访问权限，并需要进行在线身份验证。确定使用此设置吗？</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>正在登录...</value>
@@ -581,7 +581,7 @@
     <value>主密码提示（可选）</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>主密码提示可以在你忘记密码时帮你回忆起来。</value>
+    <value>主密码提示可以在您忘记密码时帮您回忆起来。</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
     <value>主密码必须至少 $VALUE$ 个字符长度。</value>
@@ -1861,7 +1861,7 @@
     <value>如果开启，无障碍将显示一个弹出窗口以增强不支持 Android 自动填充框架的旧应用的自动填充服务。</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>由于企业策略，您被限制为保存项目到您的个人密码库。将所有权选项更改为组织，然后从可用的集合中选择。</value>
+    <value>由于某个企业策略，您不能将项目保存到您的个人密码库。将所有权选项更改为组织，并从可用的集合中选择。</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
     <value>某个组织策略正影响您的所有权选项。</value>
@@ -2048,7 +2048,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
-    <value>由于企业策略，您只能删除现有的 Send。</value>
+    <value>由于某个企业策略，您只能删除现有的 Send。</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
@@ -2071,7 +2071,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>重新询问主密码</value>
+    <value>主密码重新提示</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
     <value>确认主密码</value>
@@ -2413,9 +2413,9 @@
   <data name="Service" xml:space="preserve">
     <value>服务</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2674,7 +2674,7 @@
     <value>可用于两步登录</value>
   </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
-    <value>主密码重新询问帮助</value>
+    <value>主密码重新提示帮助</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
     <value>由于内存不足，解锁可能会失败。请减少您的 KDF 内存设置或设置生物识别解锁来解决此问题。</value>
@@ -2753,7 +2753,7 @@
     <value>登录已批准</value>
   </data>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
-    <value>设备登录必须在 Bitwarden 应用程序的设置中设启用。需要其他选项吗？</value>
+    <value>设备登录必须在 Bitwarden 应用程序的设置中启用。需要其他登录选项吗？</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
     <value>设备登录</value>

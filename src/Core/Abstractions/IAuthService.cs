@@ -15,6 +15,7 @@ namespace Bit.Core.Abstractions
         string Code { get; set; }
         string CodeVerifier { get; set; }
         string SsoRedirectUrl { get; set; }
+        string SsoEmail2FaSessionToken { get; set; }
         TwoFactorProviderType? SelectedTwoFactorProviderType { get; set; }
         Dictionary<TwoFactorProviderType, TwoFactorProvider> TwoFactorProviders { get; set; }
         Dictionary<TwoFactorProviderType, Dictionary<string, object>> TwoFactorProvidersData { get; set; }

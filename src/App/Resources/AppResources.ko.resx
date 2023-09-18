@@ -1753,7 +1753,7 @@
     <value>Biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>마스터 비밀번호 인증을 하기 전에는 생체 인식을 사용한 자동 채우기가 비활성화됩니다.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>새로고침할 때 동기화 사용</value>
@@ -2413,9 +2413,9 @@
   <data name="Service" xml:space="preserve">
     <value>서비스</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>

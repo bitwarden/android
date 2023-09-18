@@ -38,11 +38,11 @@ jobs:
           fi
 
       - name: Checkout repo
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
       - name: Check Release Version
         id: version
-        uses: bitwarden/gh-actions/release-version-check@34ecb67b2a357795dc893549df0795e7383ff50f
+        uses: bitwarden/gh-actions/release-version-check@4a7ddc1b38ca5cb4e3e43578f4df5cabe4f55a67
         with:
           release-type: ${{ github.event.inputs.release_type }}
           project-type: xamarin
@@ -87,7 +87,7 @@ jobs:
 
       - name: Create release
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: ncipollo/release-action@40bb172bd05f266cf9ba4ff965cb61e9ee5f6d01  # v1.9.0
+        uses: ncipollo/release-action@6c75be85e571768fa31b40abf38de58ba0397db5  # v1.13.0
         with:
           artifacts: "./com.x8bit.bitwarden.aab/com.x8bit.bitwarden.aab,
                       ./com.x8bit.bitwarden.apk/com.x8bit.bitwarden.apk,
@@ -126,7 +126,7 @@ jobs:
     if: inputs.fdroid_publish
     steps:
       - name: Checkout repo
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
       - name: Download F-Droid .apk artifact
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
@@ -147,9 +147,9 @@ jobs:
           name: com.x8bit.bitwarden-fdroid.apk
 
       - name: Set up Node
-        uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561  # v2.5.1
+        uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d  # v3.8.1
         with:
-          node-version: '10.x'
+          node-version: '16.x'
 
       - name: Set up F-Droid server
         run: |

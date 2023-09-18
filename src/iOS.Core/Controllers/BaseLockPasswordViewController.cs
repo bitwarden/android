@@ -54,11 +54,14 @@ namespace Bit.iOS.Core.Controllers
         public abstract UIBarButtonItem BaseSubmitButton { get; }
         public abstract Action Success { get; }
         public abstract Action Cancel { get; }
+        public Action LaunchHomePage { get; set; }
 
         public FormEntryTableViewCell MasterPasswordCell { get; set; } = new FormEntryTableViewCell(
             AppResources.MasterPassword, buttonsConfig: FormEntryTableViewCell.ButtonsConfig.One);
 
         public string BiometricIntegritySourceKey { get; set; }
+
+        public bool HasLoginOrUnlockMethod => _hasMasterPassword || _biometricEnabled || _pinEnabled;
 
         public UITableViewCell BiometricCell
         {
@@ -118,11 +121,23 @@ namespace Bit.iOS.Core.Controllers
                     _pinStatus == PinLockType.Persistent;
 
                 _biometricEnabled = await _vaultTimeoutService.IsBiometricLockSetAsync()
-                    && await _cryptoService.HasEncryptedUserKeyAsync();
-                _biometricIntegrityValid =
-                    await _platformUtilsService.IsBiometricIntegrityValidAsync(BiometricIntegritySourceKey);
+                    && await _biometricService.CanUseBiometricsUnlockAsync();
                 _hasMasterPassword = await _userVerificationService.HasMasterPasswordAsync();
                 _biometricUnlockOnly = !_hasMasterPassword && _biometricEnabled && !_pinEnabled;
+
+                if (_biometricUnlockOnly)
+                {
+                    await EnableBiometricsIfNeeded();
+                }
+                _biometricIntegrityValid = await _platformUtilsService.IsBiometricIntegrityValidAsync(BiometricIntegritySourceKey);
+            }
+
+            if (!HasLoginOrUnlockMethod)
+            {
+                // user doesn't have a login method
+                // needs to go to homepage and login again
+                LaunchHomePage?.Invoke();
+                return;
             }
 
             if (_pinEnabled)
