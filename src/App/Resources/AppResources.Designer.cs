@@ -2048,6 +2048,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose the dark theme to use when your device’s dark mode is in use.
+        /// </summary>
+        public static string DefaultDarkThemeDescriptionLong {
+            get {
+                return ResourceManager.GetString("DefaultDarkThemeDescriptionLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Default (System).
         /// </summary>
         public static string DefaultSystem {

@@ -36,7 +36,7 @@
 
             <controls:SettingChooserItemView
                 Title="{u:I18n DefaultDarkTheme}"
-                Subtitle="{u:I18n DefaultDarkThemeDescription}"
+                Subtitle="{u:I18n DefaultDarkThemeDescriptionLong}"
                 DisplayValue="{Binding DefaultDarkThemePickerViewModel.SelectedValue}"
                 ChooseCommand="{Binding DefaultDarkThemePickerViewModel.SelectOptionCommand}"
                 IsVisible="{Binding ShowDefaultDarkThemePicker}"

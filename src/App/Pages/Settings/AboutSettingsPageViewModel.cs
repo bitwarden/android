@@ -6,6 +6,7 @@ using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 
 namespace Bit.App.Pages
@@ -16,6 +17,7 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly ILogger _logger;
 
+        private bool _inited;
         private bool _shouldSubmitCrashLogs;
 
         public AboutSettingsPageViewModel()
@@ -61,7 +63,7 @@ namespace Bit.App.Pages
             set
             {
                 SetProperty(ref _shouldSubmitCrashLogs, value);
-                ToggleSubmitCrashLogsCommand.Execute(null);
+                ((ICommand)ToggleSubmitCrashLogsCommand).Execute(null);
             }
         }
 
@@ -78,13 +80,26 @@ namespace Bit.App.Pages
             }
         }
 
-        public ICommand ToggleSubmitCrashLogsCommand { get; }
+        public AsyncCommand ToggleSubmitCrashLogsCommand { get; }
         public ICommand GoToHelpCenterCommand { get; }
         public ICommand ContactBitwardenSupportCommand { get; }
         public ICommand GoToWebVaultCommand { get; }
         public ICommand GoToLearnAboutOrgsCommand { get; }
         public ICommand RateTheAppCommand { get; }
         public ICommand CopyAppInfoCommand { get; }
+
+        public async Task InitAsync()
+        {
+            _shouldSubmitCrashLogs = await _logger.IsEnabled();
+
+            _inited = true;
+
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                TriggerPropertyChanged(nameof(ShouldSubmitCrashLogs));
+                ToggleSubmitCrashLogsCommand.RaiseCanExecuteChanged();
+            });
+        }
 
         private async Task ToggleSubmitCrashLogsAsync()
         {

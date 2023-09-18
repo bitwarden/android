@@ -1560,6 +1560,7 @@ Scanning will happen automatically.</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
     <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is in use.</value>
+    <comment>DEPRECATED</comment>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copy note</value>
@@ -2863,5 +2864,8 @@ Do you want to switch to this account?</value>
   </data>
   <data name="RateAppDescriptionLong" xml:space="preserve">
     <value>Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now.</value>
+  </data>
+  <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
+    <value>Choose the dark theme to use when your device’s dark mode is in use</value>
   </data>
 </root>
