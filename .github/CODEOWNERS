@@ -6,6 +6,8 @@
 # Unless a later match takes precedence
 # @bitwarden/tech-leads
 
+@bitwarden/dept-development-mobile
+
 ## Auth team files ##
 
 ## Platform team files ##
