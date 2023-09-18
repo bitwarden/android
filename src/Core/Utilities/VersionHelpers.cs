@@ -4,7 +4,7 @@ namespace Bit.Core.Utilities
 {
     public static class VersionHelpers
     {
-        private const char HOTFIX_SEPARATOR = '-';
+        private const char SUFFIX_SEPARATOR = '-';
 
         /// <summary>
         /// Compares two server versions and gets whether the <paramref name="targetVersion"/>
@@ -18,17 +18,17 @@ namespace Bit.Core.Utilities
         /// </returns>
         public static bool IsServerVersionGreaterThanOrEqualTo(string targetVersion, string compareToVersion)
         {
-            return GetServerVersionWithoutHotfix(targetVersion).CompareTo(GetServerVersionWithoutHotfix(compareToVersion)) >= 0;
+            return new Version(RemoveSuffix(targetVersion)).CompareTo(new Version(RemoveSuffix(compareToVersion))) >= 0;
         }
 
-        public static Version GetServerVersionWithoutHotfix(string version)
+        public static string RemoveSuffix(string version)
         {
             if (string.IsNullOrWhiteSpace(version))
             {
                 throw new ArgumentNullException(nameof(version));
             }
 
-            return new Version(version.Split(HOTFIX_SEPARATOR)[0]);
+            return version.Split(SUFFIX_SEPARATOR)[0];
         }
     }
 }
