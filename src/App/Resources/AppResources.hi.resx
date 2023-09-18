@@ -2415,7 +2415,7 @@ select Add TOTP to store the key safely</value>
     <value>सेवा</value>
   </data>
   <data name="AddyIo" xml:space="preserve">
-    <value>एननऐडी</value>
+    <value>addy.io</value>
     <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
