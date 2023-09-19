@@ -1538,7 +1538,6 @@ namespace Bit.Core.Services
                 SetEncryptedPasswordGenerationHistoryAsync(null, userId),
                 SetEncryptedSendsAsync(null, userId),
                 SetSettingsAsync(null, userId),
-                SetApprovePasswordlessLoginsAsync(null, userId),
                 SetEncKeyEncryptedAsync(null, userId),
                 SetKeyEncryptedAsync(null, userId),
                 SetPinProtectedAsync(null, userId));
