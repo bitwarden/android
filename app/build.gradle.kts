@@ -23,9 +23,19 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        getByName("debug") {
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+            storeFile = file("../keystores/debug.keystore")
+            storePassword = "android"
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix = ".dev"
+            signingConfig = signingConfigs.getByName("debug")
             isDebuggable = true
             isMinifyEnabled = false
         }
