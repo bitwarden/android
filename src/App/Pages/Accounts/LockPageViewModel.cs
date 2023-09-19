@@ -465,7 +465,8 @@ namespace Bit.App.Pages
             }
             var success = await _platformUtilsService.AuthenticateBiometricAsync(null,
                 PinEnabled ? AppResources.PIN : AppResources.MasterPassword,
-                () => _secretEntryFocusWeakEventManager.RaiseEvent((int?)null, nameof(FocusSecretEntry)));
+                () => _secretEntryFocusWeakEventManager.RaiseEvent((int?)null, nameof(FocusSecretEntry)),
+                !PinEnabled && !HasMasterPassword);
             await _stateService.SetBiometricLockedAsync(!success);
             if (success)
             {

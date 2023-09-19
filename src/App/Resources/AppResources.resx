@@ -2868,4 +2868,10 @@ Do you want to switch to this account?</value>
   <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
     <value>Choose the dark theme to use when your device’s dark mode is in use</value>
   </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Too many attempts</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Account logged out.</value>
+  </data>
 </root>

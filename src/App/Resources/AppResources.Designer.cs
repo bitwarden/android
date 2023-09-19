@@ -266,6 +266,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account logged out..
+        /// </summary>
+        public static string AccountLoggedOutBiometricExceeded {
+            get {
+                return ResourceManager.GetString("AccountLoggedOutBiometricExceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account logged out successfully.
         /// </summary>
         public static string AccountLoggedOutSuccessfully {
@@ -6720,6 +6729,15 @@ namespace Bit.App.Resources {
         public static string Tools {
             get {
                 return ResourceManager.GetString("Tools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many attempts.
+        /// </summary>
+        public static string TooManyAttempts {
+            get {
+                return ResourceManager.GetString("TooManyAttempts", resourceCulture);
             }
         }
         
