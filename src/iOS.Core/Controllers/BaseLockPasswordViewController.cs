@@ -378,7 +378,9 @@ namespace Bit.iOS.Core.Controllers
             }
             var success = await _platformUtilsService.AuthenticateBiometricAsync(null,
                 _pinEnabled ? AppResources.PIN : AppResources.MasterPassword,
-                () => MasterPasswordCell.TextField.BecomeFirstResponder());
+                () => MasterPasswordCell.TextField.BecomeFirstResponder(),
+                !_pinEnabled && !_hasMasterPassword);
+
             await _stateService.SetBiometricLockedAsync(!success);
             if (success)
             {

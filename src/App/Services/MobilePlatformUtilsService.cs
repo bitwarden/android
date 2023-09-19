@@ -32,7 +32,8 @@ namespace Bit.App.Services
             IDeviceActionService deviceActionService,
             IClipboardService clipboardService,
             IMessagingService messagingService,
-            IBroadcasterService broadcasterService)
+            IBroadcasterService broadcasterService
+            )
         {
             _deviceActionService = deviceActionService;
             _clipboardService = clipboardService;
@@ -242,7 +243,7 @@ namespace Bit.App.Services
         }
 
         public async Task<bool> AuthenticateBiometricAsync(string text = null, string fallbackText = null,
-            Action fallback = null)
+            Action fallback = null, bool logOutOnTooManyAttempts = false)
         {
             try
             {
@@ -268,6 +269,12 @@ namespace Bit.App.Services
                 if (result.Status == FingerprintAuthenticationResultStatus.FallbackRequested)
                 {
                     fallback?.Invoke();
+                }
+                if (result.Status == FingerprintAuthenticationResultStatus.TooManyAttempts
+                    && logOutOnTooManyAttempts)
+                {
+                    await ShowDialogAsync(AppResources.AccountLoggedOutBiometricExceeded, AppResources.TooManyAttempts, AppResources.Ok);
+                    _messagingService.Send(AccountsManagerMessageCommands.LOGOUT);
                 }
             }
             catch { }

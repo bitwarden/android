@@ -257,6 +257,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account logged out..
+        /// </summary>
+        public static string AccountLoggedOutBiometricExceeded {
+            get {
+                return ResourceManager.GetString("AccountLoggedOutBiometricExceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account logged out successfully.
         /// </summary>
         public static string AccountLoggedOutSuccessfully {
@@ -6499,6 +6508,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Too many attempts.
+        /// </summary>
+        public static string TooManyAttempts {
+            get {
+                return ResourceManager.GetString("TooManyAttempts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TOTP.
         /// </summary>
         public static string Totp {
@@ -6751,7 +6769,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve..
+        ///   Looks up a localized string similar to Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve..
         /// </summary>
         public static string UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve {
             get {
