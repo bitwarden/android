@@ -3,13 +3,13 @@ package com.x8bit.bitwarden.ui.platform.feature.rootnav
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthState
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -20,8 +20,9 @@ private const val KEY_NAV_DESTINATION = "nav_state"
  */
 @HiltViewModel
 class RootNavViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
     private val savedStateHandle: SavedStateHandle,
-) : BaseViewModel<RootNavState, Unit, Unit>(
+) : BaseViewModel<RootNavState, Unit, RootNavAction>(
     initialState = RootNavState.Splash,
 ) {
 
@@ -39,14 +40,25 @@ class RootNavViewModel @Inject constructor(
         stateFlow
             .onEach { savedRootNavState = it }
             .launchIn(viewModelScope)
-        viewModelScope.launch {
-            @Suppress("MagicNumber")
-            delay(1000)
-            mutableStateFlow.update { RootNavState.Auth }
+        authRepository
+            .authStateFlow
+            .onEach { trySendAction(RootNavAction.AuthStateUpdated(it)) }
+            .launchIn(viewModelScope)
+    }
+
+    override fun handleAction(action: RootNavAction) {
+        when (action) {
+            is RootNavAction.AuthStateUpdated -> handleAuthStateUpdated(action)
         }
     }
 
-    override fun handleAction(action: Unit) = Unit
+    private fun handleAuthStateUpdated(action: RootNavAction.AuthStateUpdated) {
+        when (action.newState) {
+            is AuthState.Authenticated -> mutableStateFlow.update { RootNavState.VaultUnlocked }
+            is AuthState.Unauthenticated -> mutableStateFlow.update { RootNavState.Auth }
+            is AuthState.Uninitialized -> mutableStateFlow.update { RootNavState.Splash }
+        }
+    }
 }
 
 /**
@@ -70,4 +82,15 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object VaultUnlocked : RootNavState()
+}
+
+/**
+ * Models root level navigation actions.
+ */
+sealed class RootNavAction {
+
+    /**
+     * Auth state in the repository layer changed.
+     */
+    data class AuthStateUpdated(val newState: AuthState) : RootNavAction()
 }
