@@ -1,4 +1,12 @@
 ################################################################################
+# Bitwarden SDK
+################################################################################
+
+# We need to access the SDK using JNA and this makes it very easy to obfuscate away the SDK unless
+# we keep it here.
+-keep class com.bitwarden.sdk.** { *; }
+
+################################################################################
 # Firebase Crashlytics
 ################################################################################
 
@@ -38,6 +46,21 @@
 
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
+
+################################################################################
+# JNA
+################################################################################
+
+# See https://github.com/java-native-access/jna/blob/fdb8695fb9b05fba467dadfe5735282f8bcc053d/www/FrequentlyAskedQuestions.md#jna-on-android
+-dontwarn java.awt.*
+-keep class com.sun.jna.* { *; }
+-keepclassmembers class * extends com.sun.jna.* { public *; }
+
+# Keep annotated classes
+-keep @com.sun.jna.* class *
+-keepclassmembers class * {
+    @com.sun.jna.* *;
+}
 
 ################################################################################
 # Okhttp/Retrofit https://square.github.io/okhttp/ & https://square.github.io/retrofit/
