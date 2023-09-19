@@ -3,11 +3,14 @@ package com.x8bit.bitwarden.ui.auth.feature.login
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.data.auth.datasource.network.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -18,12 +21,13 @@ private const val KEY_STATE = "state"
  */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginState, LoginEvent, LoginAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: LoginState(
             emailAddress = LoginArgs(savedStateHandle).emailAddress,
-            isLoginButtonEnabled = false,
+            isLoginButtonEnabled = true,
             passwordInput = "",
         ),
 ) {
@@ -45,7 +49,19 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleLoginButtonClicked() {
-        // TODO BIT-133 make login request and allow user to login
+        viewModelScope.launch {
+            // TODO: show progress here BIT-320
+            val result = authRepository.login(
+                email = mutableStateFlow.value.emailAddress,
+                password = mutableStateFlow.value.passwordInput,
+            )
+            when (result) {
+                // TODO: show an error here BIT-320
+                LoginResult.Error -> Unit
+                // No action required on success, root nav will navigate to logged in state
+                LoginResult.Success -> Unit
+            }
+        }
     }
 
     private fun handleNotYouButtonClicked() {
