@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -19,16 +21,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ConfirmPasswordInputChange
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.EmailInputChange
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordHintChange
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.SubmitClick
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 
 /**
  * Top level composable for the create account screen.
  */
+@Suppress("LongMethod")
 @Composable
 fun CreateAccountScreen(
     viewModel: CreateAccountViewModel = hiltViewModel(),
 ) {
+    val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -61,7 +70,7 @@ fun CreateAccountScreen(
             Text(
                 modifier = Modifier
                     .clickable {
-                        viewModel.trySendAction(CreateAccountAction.SubmitClick)
+                        viewModel.trySendAction(SubmitClick)
                     }
                     .padding(16.dp),
                 text = stringResource(id = R.string.submit),
@@ -69,9 +78,25 @@ fun CreateAccountScreen(
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
-        BitwardenTextField(label = stringResource(id = R.string.email_address))
-        BitwardenTextField(label = stringResource(id = R.string.master_password))
-        BitwardenTextField(label = stringResource(id = R.string.retype_master_password))
-        BitwardenTextField(label = stringResource(id = R.string.master_password_hint))
+        BitwardenTextField(
+            label = stringResource(id = R.string.email_address),
+            value = state.emailInput,
+            onValueChange = { viewModel.trySendAction(EmailInputChange(it)) },
+        )
+        BitwardenTextField(
+            label = stringResource(id = R.string.master_password),
+            value = state.passwordInput,
+            onValueChange = { viewModel.trySendAction(PasswordInputChange(it)) },
+        )
+        BitwardenTextField(
+            label = stringResource(id = R.string.retype_master_password),
+            value = state.confirmPasswordInput,
+            onValueChange = { viewModel.trySendAction(ConfirmPasswordInputChange(it)) },
+        )
+        BitwardenTextField(
+            label = stringResource(id = R.string.master_password_hint),
+            value = state.passwordHintInput,
+            onValueChange = { viewModel.trySendAction(PasswordHintChange(it)) },
+        )
     }
 }
