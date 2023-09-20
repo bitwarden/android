@@ -7,6 +7,7 @@ using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Services;
@@ -72,11 +73,12 @@ namespace Bit.App.Pages
             TogglePasswordCommand = new Command(TogglePassword);
             SubmitCommand = new Command(async () => await SubmitAsync());
 
-            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
-            {
-                AllowAddAccountRow = true,
-                AllowActiveAccountSelection = true
-            };
+            AccountSwitchingOverlayViewModel =
+                new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
+                {
+                    AllowAddAccountRow = true,
+                    AllowActiveAccountSelection = true
+                };
         }
 
         public string MasterPassword
@@ -155,8 +157,12 @@ namespace Bit.App.Pages
 
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
+
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
-        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
+        public string PasswordVisibilityAccessibilityText => ShowPassword
+            ? AppResources.PasswordIsVisibleTapToHide
+            : AppResources.PasswordIsNotVisibleTapToShow;
+
         public Action UnlockedAction { get; set; }
         public event Action<int?> FocusSecretEntry
         {
@@ -178,8 +184,9 @@ namespace Bit.App.Pages
             var ephemeralPinSet = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync()
                 ?? await _stateService.GetPinProtectedKeyAsync();
             PinEnabled = (_pinStatus == PinLockType.Transient && ephemeralPinSet != null) ||
-                      _pinStatus == PinLockType.Persistent;
-            BiometricEnabled = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _biometricService.CanUseBiometricsUnlockAsync();
+                _pinStatus == PinLockType.Persistent;
+
+            BiometricEnabled = await IsBiometricsEnabledAsync();
 
             // Users without MP and without biometric or pin has no MP to unlock with
             _hasMasterPassword = await _userVerificationService.HasMasterPasswordAsync();
@@ -214,7 +221,9 @@ namespace Bit.App.Pages
             else
             {
                 PageTitle = _hasMasterPassword ? AppResources.VerifyMasterPassword : AppResources.UnlockVault;
-                LockedVerifyText = _hasMasterPassword ? AppResources.VaultLockedMasterPassword : AppResources.VaultLockedIdentity;
+                LockedVerifyText = _hasMasterPassword
+                    ? AppResources.VaultLockedMasterPassword
+                    : AppResources.VaultLockedIdentity;
             }
 
             if (BiometricEnabled)
@@ -233,11 +242,32 @@ namespace Bit.App.Pages
                     BiometricButtonText = supportsFace ? AppResources.UseFaceIDToUnlock :
                         AppResources.UseFingerprintToUnlock;
                 }
-
             }
         }
 
         public async Task SubmitAsync()
+        {
+            ShowPassword = false;
+            try
+            {
+                var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
+                if (PinEnabled)
+                {
+                    await UnlockWithPinAsync(kdfConfig);
+                }
+                else
+                {
+                    await UnlockWithMasterPasswordAsync(kdfConfig);
+                }
+
+            }
+            catch (LegacyUserException)
+            {
+                await HandleLegacyUserAsync();
+            }
+        }
+
+        private async Task UnlockWithPinAsync(KdfConfig kdfConfig)
         {
             if (PinEnabled && string.IsNullOrWhiteSpace(Pin))
             {
@@ -246,6 +276,84 @@ namespace Bit.App.Pages
                     AppResources.Ok);
                 return;
             }
+
+            var failed = true;
+            try
+            {
+                EncString userKeyPin;
+                EncString oldPinProtected;
+                switch (_pinStatus)
+                {
+                    case PinLockType.Persistent:
+                        {
+                            userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyAsync();
+                            var oldEncryptedKey = await _stateService.GetPinProtectedAsync();
+                            oldPinProtected = oldEncryptedKey != null ? new EncString(oldEncryptedKey) : null;
+                            break;
+                        }
+                    case PinLockType.Transient:
+                        userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync();
+                        oldPinProtected = await _stateService.GetPinProtectedKeyAsync();
+                        break;
+                    case PinLockType.Disabled:
+                    default:
+                        throw new Exception("Pin is disabled");
+                }
+
+                UserKey userKey;
+                if (oldPinProtected != null)
+                {
+                    userKey = await _cryptoService.DecryptAndMigrateOldPinKeyAsync(
+                        _pinStatus == PinLockType.Transient,
+                        Pin,
+                        _email,
+                        kdfConfig,
+                        oldPinProtected
+                    );
+                }
+                else
+                {
+                    userKey = await _cryptoService.DecryptUserKeyWithPinAsync(
+                        Pin,
+                        _email,
+                        kdfConfig,
+                        userKeyPin
+                    );
+                }
+
+                var protectedPin = await _stateService.GetProtectedPinAsync();
+                var decryptedPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), userKey);
+                failed = decryptedPin != Pin;
+                if (!failed)
+                {
+                    Pin = string.Empty;
+                    await AppHelpers.ResetInvalidUnlockAttemptsAsync();
+                    await SetUserKeyAndContinueAsync(userKey);
+                }
+            }
+            catch (LegacyUserException)
+            {
+                throw;
+            }
+            catch
+            {
+                failed = true;
+            }
+            if (failed)
+            {
+                var invalidUnlockAttempts = await AppHelpers.IncrementInvalidUnlockAttemptsAsync();
+                if (invalidUnlockAttempts >= 5)
+                {
+                    _messagingService.Send("logout");
+                    return;
+                }
+                await _platformUtilsService.ShowDialogAsync(AppResources.InvalidPIN,
+                    AppResources.AnErrorHasOccurred);
+            }
+        }
+
+        private async Task UnlockWithMasterPasswordAsync(KdfConfig kdfConfig)
+        {
             if (!PinEnabled && string.IsNullOrWhiteSpace(MasterPassword))
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
@@ -254,142 +362,78 @@ namespace Bit.App.Pages
                 return;
             }
 
-            ShowPassword = false;
-            var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
-
-            if (PinEnabled)
+            var masterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, _email, kdfConfig);
+            if (await _cryptoService.IsLegacyUserAsync(masterKey))
             {
-                var failed = true;
+                throw new LegacyUserException();
+            }
+
+            var storedKeyHash = await _cryptoService.GetMasterKeyHashAsync();
+            var passwordValid = false;
+            MasterPasswordPolicyOptions enforcedMasterPasswordOptions = null;
+
+            if (storedKeyHash != null)
+            {
+                // Offline unlock possible
+                passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(MasterPassword, masterKey);
+            }
+            else
+            {
+                // Online unlock required
+                await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
+                var keyHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, masterKey,
+                    HashPurpose.ServerAuthorization);
+                var request = new PasswordVerificationRequest();
+                request.MasterPasswordHash = keyHash;
+
                 try
                 {
-                    EncString userKeyPin = null;
-                    EncString oldPinProtected = null;
-                    if (_pinStatus == PinLockType.Persistent)
-                    {
-                        userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyAsync();
-                        var oldEncryptedKey = await _stateService.GetPinProtectedAsync();
-                        oldPinProtected = oldEncryptedKey != null ? new EncString(oldEncryptedKey) : null;
-                    }
-                    else if (_pinStatus == PinLockType.Transient)
-                    {
-                        userKeyPin = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync();
-                        oldPinProtected = await _stateService.GetPinProtectedKeyAsync();
-                    }
-
-                    UserKey userKey;
-                    if (oldPinProtected != null)
-                    {
-                        userKey = await _cryptoService.DecryptAndMigrateOldPinKeyAsync(
-                            _pinStatus == PinLockType.Transient,
-                            Pin,
-                            _email,
-                            kdfConfig,
-                            oldPinProtected
-                        );
-                    }
-                    else
-                    {
-                        userKey = await _cryptoService.DecryptUserKeyWithPinAsync(
-                            Pin,
-                            _email,
-                            kdfConfig,
-                            userKeyPin
-                        );
-                    }
-
-                    var protectedPin = await _stateService.GetProtectedPinAsync();
-                    var decryptedPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), userKey);
-                    failed = decryptedPin != Pin;
-                    if (!failed)
-                    {
-                        Pin = string.Empty;
-                        await AppHelpers.ResetInvalidUnlockAttemptsAsync();
-                        await SetUserKeyAndContinueAsync(userKey);
-                    }
+                    var response = await _apiService.PostAccountVerifyPasswordAsync(request);
+                    enforcedMasterPasswordOptions = response.MasterPasswordPolicy;
+                    passwordValid = true;
+                    var localKeyHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, masterKey,
+                        HashPurpose.LocalAuthorization);
+                    await _cryptoService.SetMasterKeyHashAsync(localKeyHash);
                 }
-                catch
+                catch (Exception e)
                 {
-                    failed = true;
+                    System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", e.GetType(), e.StackTrace);
                 }
-                if (failed)
+                await _deviceActionService.HideLoadingAsync();
+            }
+
+            if (passwordValid)
+            {
+                if (await RequirePasswordChangeAsync(enforcedMasterPasswordOptions))
                 {
-                    var invalidUnlockAttempts = await AppHelpers.IncrementInvalidUnlockAttemptsAsync();
-                    if (invalidUnlockAttempts >= 5)
-                    {
-                        _messagingService.Send("logout");
-                        return;
-                    }
-                    await _platformUtilsService.ShowDialogAsync(AppResources.InvalidPIN,
-                        AppResources.AnErrorHasOccurred);
+                    // Save the ForcePasswordResetReason to force a password reset after unlock
+                    await _stateService.SetForcePasswordResetReasonAsync(
+                        ForcePasswordResetReason.WeakMasterPasswordOnLogin);
+                }
+
+                MasterPassword = string.Empty;
+                await AppHelpers.ResetInvalidUnlockAttemptsAsync();
+
+                var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
+                await _cryptoService.SetMasterKeyAsync(masterKey);
+                await SetUserKeyAndContinueAsync(userKey);
+
+                // Re-enable biometrics
+                if (BiometricEnabled & !BiometricIntegrityValid)
+                {
+                    await _biometricService.SetupBiometricAsync();
                 }
             }
             else
             {
-                var masterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, _email, kdfConfig);
-                var storedKeyHash = await _cryptoService.GetMasterKeyHashAsync();
-                var passwordValid = false;
-                MasterPasswordPolicyOptions enforcedMasterPasswordOptions = null;
-
-                if (storedKeyHash != null)
+                var invalidUnlockAttempts = await AppHelpers.IncrementInvalidUnlockAttemptsAsync();
+                if (invalidUnlockAttempts >= 5)
                 {
-                    // Offline unlock possible
-                    passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(MasterPassword, masterKey);
+                    _messagingService.Send("logout");
+                    return;
                 }
-                else
-                {
-                    // Online unlock required
-                    await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
-                    var keyHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, masterKey, HashPurpose.ServerAuthorization);
-                    var request = new PasswordVerificationRequest();
-                    request.MasterPasswordHash = keyHash;
-
-                    try
-                    {
-                        var response = await _apiService.PostAccountVerifyPasswordAsync(request);
-                        enforcedMasterPasswordOptions = response.MasterPasswordPolicy;
-                        passwordValid = true;
-                        var localKeyHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, masterKey, HashPurpose.LocalAuthorization);
-                        await _cryptoService.SetMasterKeyHashAsync(localKeyHash);
-                    }
-                    catch (Exception e)
-                    {
-                        System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", e.GetType(), e.StackTrace);
-                    }
-                    await _deviceActionService.HideLoadingAsync();
-                }
-                if (passwordValid)
-                {
-                    if (await RequirePasswordChangeAsync(enforcedMasterPasswordOptions))
-                    {
-                        // Save the ForcePasswordResetReason to force a password reset after unlock
-                        await _stateService.SetForcePasswordResetReasonAsync(
-                            ForcePasswordResetReason.WeakMasterPasswordOnLogin);
-                    }
-
-                    MasterPassword = string.Empty;
-                    await AppHelpers.ResetInvalidUnlockAttemptsAsync();
-
-                    var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
-                    await _cryptoService.SetMasterKeyAsync(masterKey);
-                    await SetUserKeyAndContinueAsync(userKey);
-
-                    // Re-enable biometrics
-                    if (BiometricEnabled & !BiometricIntegrityValid)
-                    {
-                        await _biometricService.SetupBiometricAsync();
-                    }
-                }
-                else
-                {
-                    var invalidUnlockAttempts = await AppHelpers.IncrementInvalidUnlockAttemptsAsync();
-                    if (invalidUnlockAttempts >= 5)
-                    {
-                        _messagingService.Send("logout");
-                        return;
-                    }
-                    await _platformUtilsService.ShowDialogAsync(AppResources.InvalidMasterPassword,
-                        AppResources.AnErrorHasOccurred);
-                }
+                await _platformUtilsService.ShowDialogAsync(AppResources.InvalidMasterPassword,
+                    AppResources.AnErrorHasOccurred);
             }
         }
 
@@ -452,25 +496,34 @@ namespace Bit.App.Pages
         {
             ShowPassword = !ShowPassword;
             var secret = PinEnabled ? Pin : MasterPassword;
-            _secretEntryFocusWeakEventManager.RaiseEvent(string.IsNullOrEmpty(secret) ? 0 : secret.Length, nameof(FocusSecretEntry));
+            _secretEntryFocusWeakEventManager.RaiseEvent(string.IsNullOrEmpty(secret) ? 0 : secret.Length,
+                nameof(FocusSecretEntry));
         }
 
         public async Task PromptBiometricAsync()
         {
-            BiometricIntegrityValid = await _platformUtilsService.IsBiometricIntegrityValidAsync();
-            BiometricButtonVisible = BiometricIntegrityValid;
-            if (!BiometricEnabled || !BiometricIntegrityValid)
+            try
             {
-                return;
+                BiometricIntegrityValid = await _platformUtilsService.IsBiometricIntegrityValidAsync();
+                BiometricButtonVisible = BiometricIntegrityValid;
+                if (!BiometricEnabled || !BiometricIntegrityValid)
+                {
+                    return;
+                }
+
+                var success = await _platformUtilsService.AuthenticateBiometricAsync(null,
+                    PinEnabled ? AppResources.PIN : AppResources.MasterPassword,
+                    () => _secretEntryFocusWeakEventManager.RaiseEvent((int?)null, nameof(FocusSecretEntry)));
+                await _stateService.SetBiometricLockedAsync(!success);
+                if (success)
+                {
+                    var userKey = await _cryptoService.GetBiometricUnlockKeyAsync();
+                    await SetUserKeyAndContinueAsync(userKey);
+                }
             }
-            var success = await _platformUtilsService.AuthenticateBiometricAsync(null,
-                PinEnabled ? AppResources.PIN : AppResources.MasterPassword,
-                () => _secretEntryFocusWeakEventManager.RaiseEvent((int?)null, nameof(FocusSecretEntry)));
-            await _stateService.SetBiometricLockedAsync(!success);
-            if (success)
+            catch (LegacyUserException)
             {
-                var userKey = await _cryptoService.GetBiometricUnlockKeyAsync();
-                await SetUserKeyAndContinueAsync(userKey);
+                await HandleLegacyUserAsync();
             }
         }
 
@@ -493,5 +546,29 @@ namespace Bit.App.Pages
             _messagingService.Send("unlocked");
             UnlockedAction?.Invoke();
         }
+
+        private async Task<bool> IsBiometricsEnabledAsync()
+        {
+            try
+            {
+                return await _vaultTimeoutService.IsBiometricLockSetAsync() &&
+                   await _biometricService.CanUseBiometricsUnlockAsync();
+            }
+            catch (LegacyUserException)
+            {
+                await HandleLegacyUserAsync();
+            }
+            return false;
+        }
+
+        private async Task HandleLegacyUserAsync()
+        {
+            // Legacy users must migrate on web vault.
+            await _platformUtilsService.ShowDialogAsync(AppResources.EncryptionKeyMigrationRequiredDescriptionLong,
+                AppResources.AnErrorHasOccurred,
+                AppResources.Ok);
+            await _vaultTimeoutService.LogOutAsync();
+        }
+
     }
 }

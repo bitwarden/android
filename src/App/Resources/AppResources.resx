@@ -954,6 +954,9 @@ Scanning will happen automatically.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>You cannot use this feature until you update your encryption key.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Learn more</value>
   </data>
