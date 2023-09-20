@@ -99,7 +99,8 @@ namespace Bit.App.Pages
             set => SetProperty(ref _showPassword, value,
                 additionalPropertyNames: new string[]
                 {
-                    nameof(ShowPasswordIcon), nameof(PasswordVisibilityAccessibilityText),
+                    nameof(ShowPasswordIcon),
+                    nameof(PasswordVisibilityAccessibilityText),
                 });
         }
 
@@ -181,18 +182,18 @@ namespace Bit.App.Pages
             _pinStatus = await _vaultTimeoutService.GetPinLockTypeAsync();
 
             var ephemeralPinSet = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync()
-                                  ?? await _stateService.GetPinProtectedKeyAsync();
-            PinEnabled = (_pinStatus == PinLockType.Transient && ephemeralPinSet != null) ||
-                         _pinStatus == PinLockType.Persistent;
+                ?? await _stateService.GetPinProtectedKeyAsync();
+            PinEnabled = (_pinStatus == PinLockType.Transient && ephemeralPinSet != null) || 
+                _pinStatus == PinLockType.Persistent;
 
             BiometricEnabled = await IsBiometricsEnabledAsync();
 
             // Users without MP and without biometric or pin has no MP to unlock with
             _hasMasterPassword = await _userVerificationService.HasMasterPasswordAsync();
             if (await _stateService.IsAuthenticatedAsync()
-                && !_hasMasterPassword
-                && !BiometricEnabled
-                && !PinEnabled)
+                 && !_hasMasterPassword
+                 && !BiometricEnabled
+                 && !PinEnabled)
             {
                 await _vaultTimeoutService.LogOutAsync();
                 return;
@@ -238,8 +239,8 @@ namespace Bit.App.Pages
                 if (Device.RuntimePlatform == Device.iOS)
                 {
                     var supportsFace = await _deviceActionService.SupportsFaceBiometricAsync();
-                    BiometricButtonText =
-                        supportsFace ? AppResources.UseFaceIDToUnlock : AppResources.UseFingerprintToUnlock;
+                    BiometricButtonText = supportsFace ? AppResources.UseFaceIDToUnlock :
+                        AppResources.UseFingerprintToUnlock;
                 }
             }
         }
@@ -503,7 +504,6 @@ namespace Bit.App.Pages
         {
             try
             {
-
                 BiometricIntegrityValid = await _platformUtilsService.IsBiometricIntegrityValidAsync();
                 BiometricButtonVisible = BiometricIntegrityValid;
                 if (!BiometricEnabled || !BiometricIntegrityValid)
@@ -513,7 +513,9 @@ namespace Bit.App.Pages
 
                 var success = await _platformUtilsService.AuthenticateBiometricAsync(null,
                     PinEnabled ? AppResources.PIN : AppResources.MasterPassword,
-                    () => _secretEntryFocusWeakEventManager.RaiseEvent((int?)null, nameof(FocusSecretEntry)));
+                    () => _secretEntryFocusWeakEventManager.RaiseEvent((int?)null, nameof(FocusSecretEntry)),
+                    !PinEnabled && !HasMasterPassword);
+
                 await _stateService.SetBiometricLockedAsync(!success);
                 if (success)
                 {
