@@ -257,6 +257,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account logged out..
+        /// </summary>
+        public static string AccountLoggedOutBiometricExceeded {
+            get {
+                return ResourceManager.GetString("AccountLoggedOutBiometricExceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account logged out successfully.
         /// </summary>
         public static string AccountLoggedOutSuccessfully {
@@ -2359,6 +2368,15 @@ namespace Bit.App.Resources {
         public static string EncExportKeyWarning {
             get {
                 return ResourceManager.GetString("EncExportKeyWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Encryption key migration required. Please login through the web vault to update your encryption key..
+        /// </summary>
+        public static string EncryptionKeyMigrationRequiredDescriptionLong {
+            get {
+                return ResourceManager.GetString("EncryptionKeyMigrationRequiredDescriptionLong", resourceCulture);
             }
         }
         
@@ -6504,6 +6522,15 @@ namespace Bit.App.Resources {
         public static string Tools {
             get {
                 return ResourceManager.GetString("Tools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many attempts.
+        /// </summary>
+        public static string TooManyAttempts {
+            get {
+                return ResourceManager.GetString("TooManyAttempts", resourceCulture);
             }
         }
         
