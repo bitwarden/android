@@ -183,7 +183,7 @@ namespace Bit.App.Pages
 
             var ephemeralPinSet = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync()
                 ?? await _stateService.GetPinProtectedKeyAsync();
-            PinEnabled = (_pinStatus == PinLockType.Transient && ephemeralPinSet != null) || 
+            PinEnabled = (_pinStatus == PinLockType.Transient && ephemeralPinSet != null) ||
                 _pinStatus == PinLockType.Persistent;
 
             BiometricEnabled = await IsBiometricsEnabledAsync();
