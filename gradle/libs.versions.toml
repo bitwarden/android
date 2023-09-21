@@ -22,7 +22,7 @@ androidxNavigation = "2.5.3"
 androidxRoom = "2.5.2"
 # Once the app and SDK reach a critical point of completeness we should begin fixing the version
 # here (BIT-311).
-bitwardenSdk = "ps-maven-SNAPSHOT"
+bitwardenSdk = "0.3.0-SNAPSHOT"
 detekt = "1.23.1"
 firebaseBom = "32.2.2"
 glide = "4.15.1"
