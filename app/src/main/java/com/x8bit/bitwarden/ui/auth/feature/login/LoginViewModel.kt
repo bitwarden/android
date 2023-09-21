@@ -60,6 +60,8 @@ class LoginViewModel @Inject constructor(
                 LoginResult.Error -> Unit
                 // No action required on success, root nav will navigate to logged in state
                 LoginResult.Success -> Unit
+                // TODO: launch intent with captcha URL BIT-399
+                is LoginResult.CaptchaRequired -> Unit
             }
         }
     }

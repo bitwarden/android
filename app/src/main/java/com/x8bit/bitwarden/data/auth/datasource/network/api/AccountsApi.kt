@@ -6,7 +6,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 /**
- * Defines calls under the /accounts API.
+ * Defines raw calls under the /accounts API.
  */
 interface AccountsApi {
 
