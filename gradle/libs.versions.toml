@@ -14,11 +14,7 @@ androidxComposeBom = "2023.06.01"
 androidxCore = "1.10.1"
 androidxHiltNavigationCompose = "1.0.0"
 androidxLifecycle = "2.6.1"
-# Currently holding navigation at this version because of this bug:
-# https://issuetracker.google.com/issues/298059596
-# When updating, ensure that rememeberSaveable works correctly through process death in
-# child navigation destinations (BIT-201).
-androidxNavigation = "2.5.3"
+androidxNavigation = "2.7.2"
 androidxRoom = "2.5.2"
 # Once the app and SDK reach a critical point of completeness we should begin fixing the version
 # here (BIT-311).
