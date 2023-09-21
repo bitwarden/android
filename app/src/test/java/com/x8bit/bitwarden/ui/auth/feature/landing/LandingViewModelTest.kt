@@ -34,12 +34,21 @@ class LandingViewModelTest : BaseViewModelTest() {
     @Test
     fun `ContinueButtonClick should emit NavigateToLogin`() = runTest {
         val viewModel = LandingViewModel(SavedStateHandle())
+        viewModel.trySendAction(LandingAction.EmailInputChanged("input"))
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(LandingAction.ContinueButtonClick)
             assertEquals(
-                LandingEvent.NavigateToLogin(""),
+                LandingEvent.NavigateToLogin("input"),
                 awaitItem(),
             )
+        }
+    }
+
+    @Test
+    fun `ContinueButtonClick with empty input should do nothing`() = runTest {
+        val viewModel = LandingViewModel(SavedStateHandle())
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(LandingAction.ContinueButtonClick)
         }
     }
 
