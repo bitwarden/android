@@ -24,8 +24,8 @@ class AuthRepositoryImpl @Inject constructor(
     private val bitwardenSdkClient: Client,
 ) : AuthRepository {
 
-    private val mutableAccessTokenFlow = MutableStateFlow<AuthState>(AuthState.Unauthenticated)
-    override val authStateFlow: StateFlow<AuthState> = mutableAccessTokenFlow.asStateFlow()
+    private val mutableAuthStateFlow = MutableStateFlow<AuthState>(AuthState.Unauthenticated)
+    override val authStateFlow: StateFlow<AuthState> = mutableAuthStateFlow.asStateFlow()
 
     /**
      * Attempt to login with the given email.
@@ -55,7 +55,7 @@ class AuthRepositoryImpl @Inject constructor(
                 LoginResult.Error
             },
             onSuccess = {
-                mutableAccessTokenFlow.value = AuthState.Authenticated(it.accessToken)
+                mutableAuthStateFlow.value = AuthState.Authenticated(it.accessToken)
                 LoginResult.Success
             },
         )
