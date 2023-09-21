@@ -14,9 +14,6 @@ import java.util.UUID
  */
 interface IdentityApi {
 
-    /**
-     * Make request to get an access token.
-     */
     @POST
     @Suppress("LongParameterList")
     @FormUrlEncoded
