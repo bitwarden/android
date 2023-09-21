@@ -49,6 +49,10 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleContinueButtonClicked() {
+        // TODO: add actual validation here: BIT-193
+        if (mutableStateFlow.value.emailInput.isBlank()) {
+            return
+        }
         sendEvent(LandingEvent.NavigateToLogin(mutableStateFlow.value.emailInput))
     }
 
