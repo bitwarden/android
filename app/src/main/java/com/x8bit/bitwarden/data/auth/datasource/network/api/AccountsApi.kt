@@ -10,9 +10,6 @@ import retrofit2.http.POST
  */
 interface AccountsApi {
 
-    /**
-     * Make pre login request to get KDF params.
-     */
     @POST("/accounts/prelogin")
     suspend fun preLogin(@Body body: PreLoginRequestJson): Result<PreLoginResponseJson>
 }

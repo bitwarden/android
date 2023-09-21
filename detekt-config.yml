@@ -27,7 +27,7 @@ output-reports:
 
 comments:
   active: true
-  excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
+  excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**', '**ServiceImpl.kt' ]
   AbsentOrWrongFileLicense:
     active: false
     licenseTemplateFile: 'license.template'
@@ -46,7 +46,7 @@ comments:
     searchInInnerInterface: true
   UndocumentedPublicFunction:
     active: true
-    ignoreAnnotated: [ 'Module' ]
+    ignoreAnnotated: [ 'Module', 'POST', 'PUT', 'DELETE', 'GET', 'PATCH' ]
   UndocumentedPublicProperty:
     active: false
 
