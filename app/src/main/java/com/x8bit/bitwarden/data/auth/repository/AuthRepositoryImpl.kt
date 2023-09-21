@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.api.IdentityApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthState
 import com.x8bit.bitwarden.data.auth.datasource.network.model.LoginResult
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginRequestJson
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,6 +23,7 @@ class AuthRepositoryImpl @Inject constructor(
     private val accountsApi: AccountsApi,
     private val identityApi: IdentityApi,
     private val bitwardenSdkClient: Client,
+    private val authTokenInterceptor: AuthTokenInterceptor,
 ) : AuthRepository {
 
     private val mutableAuthStateFlow = MutableStateFlow<AuthState>(AuthState.Unauthenticated)
@@ -55,6 +57,8 @@ class AuthRepositoryImpl @Inject constructor(
                 LoginResult.Error
             },
             onSuccess = {
+                // TODO: Create intermediate class for providing auth token to interceptor (BIT-411)
+                authTokenInterceptor.authToken = it.accessToken
                 mutableAuthStateFlow.value = AuthState.Authenticated(it.accessToken)
                 LoginResult.Success
             },
