@@ -13,6 +13,11 @@ sealed class LoginResult {
     data object Success : LoginResult()
 
     /**
+     * Captcha verification is required.
+     */
+    data class CaptchaRequired(val captchaId: String) : LoginResult()
+
+    /**
      * There was an error logging in.
      */
     data object Error : LoginResult()

@@ -1,8 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.x8bit.bitwarden.data.auth.datasource.network.api.AccountsApi
-import com.x8bit.bitwarden.data.auth.datasource.network.api.IdentityApi
 import com.x8bit.bitwarden.data.platform.datasource.network.api.ConfigApi
 import com.x8bit.bitwarden.data.platform.datasource.network.core.ResultCallAdapterFactory
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
@@ -27,23 +25,23 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val AUTHORIZED = "authorized"
-    private const val UNAUTHORIZED = "unauthorized"
-
-    @Provides
-    @Singleton
-    fun providesAccountsApiService(@Named(UNAUTHORIZED) retrofit: Retrofit): AccountsApi =
-        retrofit.create()
+    const val AUTHORIZED: String = "authorized"
+    const val UNAUTHORIZED: String = "unauthorized"
 
     @Provides
     @Singleton
     fun providesConfigApiService(@Named(UNAUTHORIZED) retrofit: Retrofit): ConfigApi =
         retrofit.create()
 
-    @Provides
-    @Singleton
-    fun providesIdentityApiService(@Named(UNAUTHORIZED) retrofit: Retrofit): IdentityApi =
-        retrofit.create()
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(
+                HttpLoggingInterceptor().apply {
+                    setLevel(HttpLoggingInterceptor.Level.BODY)
+                },
+            )
+            .build()
+    }
 
     @Provides
     @Singleton
