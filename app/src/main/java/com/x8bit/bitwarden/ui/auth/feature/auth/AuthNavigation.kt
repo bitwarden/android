@@ -13,7 +13,7 @@ import com.x8bit.bitwarden.ui.auth.feature.landing.navigateToLanding
 import com.x8bit.bitwarden.ui.auth.feature.login.loginDestinations
 import com.x8bit.bitwarden.ui.auth.feature.login.navigateToLogin
 
-const val AUTH_ROUTE: String = "auth"
+private const val AUTH_ROUTE: String = "auth"
 
 /**
  * Add auth destinations to the nav graph.
