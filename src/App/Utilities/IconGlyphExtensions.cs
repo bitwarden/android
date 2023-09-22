@@ -18,8 +18,6 @@ namespace Bit.App.Utilities
                     return BitwardenIcons.CreditCard;
                 case CipherType.Identity:
                     return BitwardenIcons.IdCard;
-                case CipherType.Fido2Key:
-                    return BitwardenIcons.Passkey;
             }
             return null;
         }

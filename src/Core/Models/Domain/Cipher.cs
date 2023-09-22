@@ -48,9 +48,6 @@ namespace Bit.Core.Models.Domain
                 case Enums.CipherType.Identity:
                     Identity = new Identity(obj.Identity, alreadyEncrypted);
                     break;
-                case CipherType.Fido2Key:
-                    Fido2Key = new Fido2Key(obj.Fido2Key, alreadyEncrypted);
-                    break;
                 default:
                     break;
             }
@@ -66,7 +63,7 @@ namespace Bit.Core.Models.Domain
         public string FolderId { get; set; }
         public EncString Name { get; set; }
         public EncString Notes { get; set; }
-        public Enums.CipherType Type { get; set; }
+        public CipherType Type { get; set; }
         public bool Favorite { get; set; }
         public bool OrganizationUseTotp { get; set; }
         public bool Edit { get; set; }
@@ -79,7 +76,6 @@ namespace Bit.Core.Models.Domain
         public Identity Identity { get; set; }
         public Card Card { get; set; }
         public SecureNote SecureNote { get; set; }
-        public Fido2Key Fido2Key { get; set; }
         public List<Attachment> Attachments { get; set; }
         public List<Field> Fields { get; set; }
         public List<PasswordHistory> PasswordHistory { get; set; }
@@ -108,9 +104,6 @@ namespace Bit.Core.Models.Domain
                     break;
                 case Enums.CipherType.Identity:
                     model.Identity = await Identity.DecryptAsync(OrganizationId);
-                    break;
-                case Enums.CipherType.Fido2Key:
-                    model.Fido2Key = await Fido2Key.DecryptAsync(OrganizationId);
                     break;
                 default:
                     break;
@@ -200,9 +193,6 @@ namespace Bit.Core.Models.Domain
                     break;
                 case Enums.CipherType.Identity:
                     c.Identity = Identity.ToIdentityData();
-                    break;
-                case Enums.CipherType.Fido2Key:
-                    c.Fido2Key = Fido2Key.ToFido2KeyData();
                     break;
                 default:
                     break;
