@@ -954,6 +954,9 @@ L'escaneig es farà automàticament.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>No podeu utilitzar aquesta característica fins que no actualitzeu la vostra clau de xifratge.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Més informació</value>
   </data>
@@ -2760,5 +2763,11 @@ Voleu canviar a aquest compte?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Inici de sessió en</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Too many attempts</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Account logged out.</value>
   </data>
 </root>

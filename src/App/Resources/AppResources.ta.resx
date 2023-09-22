@@ -955,6 +955,9 @@
   <data name="UpdateKey" xml:space="preserve">
     <value>உங்கள் குறியாக்க விசையை புதுப்பிக்கும் வரை இந்த அம்சத்தைப் பயன்படுத்த முடியாது.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>மேலும் அறிக</value>
   </data>
@@ -2761,5 +2764,11 @@
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>இதில் உள்நுழைகிறது</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Too many attempts</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Account logged out.</value>
   </data>
 </root>

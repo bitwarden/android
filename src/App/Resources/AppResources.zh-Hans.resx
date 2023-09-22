@@ -823,7 +823,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>请输入发送到电子邮件 {0} 的 6 位验证码。</value>
+    <value>请输入发送给电子邮件 {0} 的 6 位数验证码。</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
@@ -852,7 +852,7 @@
     <value>使用其他两步登录方式</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>无法发送验证电子邮件。请再试一次。</value>
+    <value>无法发送验证电子邮件。请重试。</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
@@ -867,7 +867,7 @@
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>添加新的附件</value>
+    <value>添加新附件</value>
   </data>
   <data name="Attachments" xml:space="preserve">
     <value>附件</value>
@@ -953,6 +953,9 @@
   </data>
   <data name="UpdateKey" xml:space="preserve">
     <value>在您更新加密密钥前，您不能使用此功能。</value>
+  </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>需要迁移加密密钥。请登录网页版密码库来更新您的加密密钥。</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>了解更多信息</value>
@@ -1489,7 +1492,7 @@
     <value>30 分钟</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>设定您用来解锁 Bitwarden 的 PIN 码。您的 PIN 设置将在您退出账户时被重置。</value>
+    <value>设定您用来解锁 Bitwarden 的 PIN 码。您的 PIN 设置将在您完全注销此应用程序时被重置。</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
     <value>已在 {1} 上以 {0} 身份登录。</value>
@@ -1984,7 +1987,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>新增 Send</value>
+    <value>添加 Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -2170,7 +2173,7 @@
     <value>账户已锁定</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
-    <value>成功退出账户</value>
+    <value>账户注销成功</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
     <value>账户移除成功</value>
@@ -2218,7 +2221,7 @@
     <value>验证码已发送到您的电子邮箱</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>发送验证码到您的电子邮箱时发生错误。请再试一次</value>
+    <value>发送验证码到您的电子邮箱时发生错误。请重试</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>输入发送到您电子邮箱的验证码</value>
@@ -2309,10 +2312,10 @@
     <value>将锁定选项设置为「从不」可让任何能够访问您的设备的人都可以使用您的密码库。如果您使用此选项，则应确保您的设备得到妥善的保护。</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
-    <value>输入的一个或多个 URL 无效。请修改后再次保存。</value>
+    <value>输入的一个或多个 URL 无效。请修改后再次尝试保存。</value>
   </data>
   <data name="GenericErrorMessage" xml:space="preserve">
-    <value>我们无法处理您的请求。请再试一次或联系我们。</value>
+    <value>我们无法处理您的请求。请重试或联系我们。</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
     <value>允许屏幕截图</value>
@@ -2499,7 +2502,7 @@
     <value>不是你？</value>
   </data>
   <data name="LogInWithMasterPassword" xml:space="preserve">
-    <value>使用主密码登录</value>
+    <value>主密码登录</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>设备登录</value>
@@ -2760,5 +2763,11 @@
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>登录到</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>尝试次数过多</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>账户已注销。</value>
   </data>
 </root>

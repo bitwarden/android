@@ -954,6 +954,9 @@ Skanning vil ske automatisk.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Du kan ikke bruge denne funktion, før du opdaterer din krypteringsnøgle.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Krypteringsnøglemigrering nødvendig. Log ind gennem web-boksen for at opdatere krypteringsnøglen.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Få mere at vide</value>
   </data>
@@ -2760,5 +2763,11 @@ Vil du skifte til denne konto?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Logger ind på</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>For mange forsøg</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Konto logget ud.</value>
   </data>
 </root>

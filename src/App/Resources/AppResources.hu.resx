@@ -953,6 +953,9 @@
   <data name="UpdateKey" xml:space="preserve">
     <value>Ez a funkció nem használható, amíg nem frissíted a titkosítási kulcsodat.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Titkosítási kulcs migráció szükséges. Jelentkezzünk be a webes széfen keresztül a titkosítási kulcs frissítéséhez.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>További információ</value>
   </data>
@@ -2759,5 +2762,11 @@ Szeretnénk átváltani erre a fiókra?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Bejelentkezés:</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Túl sok próbálkozás történt</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>A fiók kijelentkezett.</value>
   </data>
 </root>
