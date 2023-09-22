@@ -954,6 +954,9 @@ Skaneerimine toimub automaatselt.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Seda funktsiooni ei saa enne krüpteerimise võtme uuendamist kasutada.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Rohkem teavet</value>
   </data>
@@ -2760,5 +2763,11 @@ Soovid selle konto peale lülituda?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Sisselogimas kui</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Too many attempts</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Account logged out.</value>
   </data>
 </root>

@@ -954,6 +954,9 @@
   <data name="UpdateKey" xml:space="preserve">
     <value>لا يمكنك استخدام هذه الميزة حتى تقوم بتحديث مفتاح التشفير الخاص بك.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>مطلوب ترحيل مفتاح التشفير. الرجاء تسجيل الدخول بواسطة مخزن الويب لتحديث مفتاح التشفير الخاص بك.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>اعرف المزيد</value>
   </data>
@@ -2761,5 +2764,11 @@
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>جارٍ تسجيل الدخول</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>لقد أجريت محاولات كثيرة</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>تم تسجيل الخروج من الحساب.</value>
   </data>
 </root>
