@@ -954,6 +954,9 @@ Skenovanie prebehne automaticky.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Túto funkciu nemožno použiť, kým neaktualizujete svoj šifrovací kľúč.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Vyžaduje sa migrácia šifrovacieho kľúča. Na aktualizáciu šifrovacieho kľúča sa prihláste cez webový trezor.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Zistiť viac</value>
   </data>
@@ -2760,5 +2763,11 @@ Chcete prepnúť na toto konto?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Prihlásenie na</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Príliš veľa pokusov</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Účet bol odhlásený.</value>
   </data>
 </root>

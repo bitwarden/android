@@ -954,6 +954,9 @@ Skanning skjer automatisk.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Du kan ikke bruke denne funksjonen før du oppdaterer krypteringsnøkkelen din.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Lær mer</value>
   </data>
@@ -2761,5 +2764,11 @@ Vil du bytte til denne kontoen?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Logger inn på</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>For mange forsøk</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Konto logget ut.</value>
   </data>
 </root>

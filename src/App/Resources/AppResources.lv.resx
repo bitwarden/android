@@ -954,6 +954,9 @@ Nolasīšana notiks automātiski.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Šo iespēju nevar izmantot, kamēr nav atjaunināta šifrēšanas atslēga.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Nepieciešama šifrēšanas atslēgas nomaiņa. Lūgums pieteikties tīmekļa glabātavā, lai atjauninātu savu šifrēšanas atslēgu.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Uzzināt vairāk</value>
   </data>
@@ -2761,5 +2764,11 @@ Vai pārslēgties uz šo kontu?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Piesakās</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Pārāk daudz mēģinājumu</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Konts tika izrakstīts.</value>
   </data>
 </root>
