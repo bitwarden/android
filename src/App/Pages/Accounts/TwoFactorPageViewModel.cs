@@ -11,6 +11,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Request;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -32,12 +33,12 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly II18nService _i18nService;
         private readonly IAppIdService _appIdService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly ILogger _logger;
-
+        private readonly IDeviceTrustCryptoService _deviceTrustCryptoService;
         private TwoFactorProviderType? _selectedProviderType;
         private string _totpInstruction;
         private string _webVaultUrl = "https://vault.bitwarden.com";
-        private bool _authingWithSso = false;
         private bool _enableContinue = false;
         private bool _showContinue = true;
 
@@ -54,7 +55,9 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>();
             _logger = ServiceContainer.Resolve<ILogger>();
+            _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
 
             PageTitle = AppResources.TwoStepLogin;
             SubmitCommand = new Command(async () => await SubmitAsync());
@@ -68,6 +71,8 @@ namespace Bit.App.Pages
         }
 
         public bool Remember { get; set; }
+
+        public bool AuthingWithSso { get; set; }
 
         public string Token { get; set; }
 
@@ -118,6 +123,8 @@ namespace Bit.App.Pages
         public Command SubmitCommand { get; }
         public ICommand MoreCommand { get; }
         public Action TwoFactorAuthSuccessAction { get; set; }
+        public Action LockAction { get; set; }
+        public Action StartDeviceApprovalOptionsAction { get; set; }
         public Action StartSetPasswordAction { get; set; }
         public Action CloseAction { get; set; }
         public Action UpdateTempPasswordAction { get; set; }
@@ -135,8 +142,6 @@ namespace Bit.App.Pages
                 // TODO: dismiss modal?
                 return;
             }
-
-            _authingWithSso = _authService.AuthingWithSso();
 
             if (!string.IsNullOrWhiteSpace(_environmentService.BaseUrl))
             {
@@ -315,21 +320,84 @@ namespace Bit.App.Pages
 
                 var task = Task.Run(() => _syncService.FullSyncAsync(true));
                 await _deviceActionService.HideLoadingAsync();
+                var decryptOptions = await _stateService.GetAccountDecryptionOptions();
                 _messagingService.Send("listenYubiKeyOTP", false);
                 _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
 
-                if (_authingWithSso && result.ResetMasterPassword)
+                if (decryptOptions?.TrustedDeviceOption != null)
                 {
+                    if (await _deviceTrustCryptoService.IsDeviceTrustedAsync())
+                    {
+                        // If we have a device key but no keys on server, we need to remove the device key
+                        if (decryptOptions.TrustedDeviceOption.EncryptedPrivateKey == null && decryptOptions.TrustedDeviceOption.EncryptedUserKey == null)
+                        {
+                            await _deviceTrustCryptoService.RemoveTrustedDeviceAsync();
+                            StartDeviceApprovalOptionsAction?.Invoke();
+                            return;
+                        }
+                        // If user doesn't have a MP, but has reset password permission, they must set a MP
+                        if (!decryptOptions.HasMasterPassword &&
+                            decryptOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
+                        {
+                            StartSetPasswordAction?.Invoke();
+                            return;
+                        }
+                        // Update temp password only if the device is trusted and therefore has a decrypted User Key set
+                        if (result.ForcePasswordReset)
+                        {
+                            UpdateTempPasswordAction?.Invoke();
+                            return;
+                        }
+
+                        // Device is trusted and has keys, so we can decrypt
+                        _syncService.FullSyncAsync(true).FireAndForget();
+                        await TwoFactorAuthSuccessAsync();
+                        return;
+                    }
+
+                    // Check for pending Admin Auth requests before navigating to device approval options
+                    var pendingRequest = await _stateService.GetPendingAdminAuthRequestAsync();
+                    if (pendingRequest != null)
+                    {
+                        var authRequest = await _authService.GetPasswordlessLoginRequestByIdAsync(pendingRequest.Id);
+                        if (authRequest?.RequestApproved == true)
+                        {
+                            var authResult = await _authService.LogInPasswordlessAsync(true, await _stateService.GetActiveUserEmailAsync(), authRequest.RequestAccessCode, pendingRequest.Id, pendingRequest.PrivateKey, authRequest.Key, authRequest.MasterPasswordHash);
+                            if (authResult == null && await _stateService.IsAuthenticatedAsync())
+                            {
+                                await Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(
+                                 () => _platformUtilsService.ShowToast("info", null, AppResources.LoginApproved));
+                                await _stateService.SetPendingAdminAuthRequestAsync(null);
+                                _syncService.FullSyncAsync(true).FireAndForget();
+                                await TwoFactorAuthSuccessAsync();
+                            }
+                        }
+                        else
+                        {
+                            await _stateService.SetPendingAdminAuthRequestAsync(null);
+                            StartDeviceApprovalOptionsAction?.Invoke();
+                        }
+                    }
+                    else
+                    {
+                        StartDeviceApprovalOptionsAction?.Invoke();
+                    }
+                    return;
+                }
+
+                // In the standard, non TDE case, a user must set password if they don't
+                // have one and they aren't using key connector.
+                // Note: TDE & Key connector are mutually exclusive org config options.
+                if (result.ResetMasterPassword || (decryptOptions?.RequireSetPassword ?? false))
+                {
+                    // TODO: We need to look into how to handle this when Org removes TDE
+                    // Will we have the User Key by now to set a new password?
                     StartSetPasswordAction?.Invoke();
+                    return;
                 }
-                else if (result.ForcePasswordReset)
-                {
-                    UpdateTempPasswordAction?.Invoke();
-                }
-                else
-                {
-                    TwoFactorAuthSuccessAction?.Invoke();
-                }
+
+                _syncService.FullSyncAsync(true).FireAndForget();
+                await TwoFactorAuthSuccessAsync();
             }
             catch (ApiException e)
             {
@@ -398,7 +466,8 @@ namespace Bit.App.Pages
                 {
                     Email = _authService.Email,
                     MasterPasswordHash = _authService.MasterPasswordHash,
-                    DeviceIdentifier = await _appIdService.GetAppIdAsync()
+                    DeviceIdentifier = await _appIdService.GetAppIdAsync(),
+                    SsoEmail2FaSessionToken = _authService.SsoEmail2FaSessionToken
                 };
                 await _apiService.PostTwoFactorEmailAsync(request);
                 if (showLoading)
@@ -420,6 +489,18 @@ namespace Bit.App.Pages
                 await _platformUtilsService.ShowDialogAsync(AppResources.VerificationEmailNotSent,
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return false;
+            }
+        }
+
+        public async Task TwoFactorAuthSuccessAsync()
+        {
+            if (AuthingWithSso && await _vaultTimeoutService.IsLockedAsync())
+            {
+                LockAction?.Invoke();
+            }
+            else
+            {
+                TwoFactorAuthSuccessAction?.Invoke();
             }
         }
     }

@@ -955,6 +955,9 @@ Skanningen sker automatiskt.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Du kan inte använda denna funktion förrän du uppdaterar din krypteringsnyckel.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Migrering av krypteringsnyckel krävs. Logga in på webbvalvet för att uppdatera din krypteringsnyckel.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Läs mer</value>
   </data>
@@ -2415,9 +2418,9 @@ välj Lägg till TOTP för att lagra nyckeln på ett säkert sätt</value>
   <data name="Service" xml:space="preserve">
     <value>Tjänst</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2528,7 +2531,7 @@ Vill du byta till detta konto?</value>
     <value>Denna förfrågan är inte längre giltig</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Väntande inloggningsbegäran</value>
+    <value>Väntande inloggningsförfrågningar</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
     <value>Avvisa alla förfrågningar</value>
@@ -2561,13 +2564,13 @@ Vill du byta till detta konto?</value>
     <value>Viktigt</value>
   </data>
   <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
-    <value>Ditt huvudlösenord kan inte återställas om du glömmer det! Det måste innehålla minst {0} tecken.</value>
+    <value>Ditt huvudlösenord kan inte återställas om du glömmer det! Minst {0} tecken.</value>
   </data>
   <data name="WeakMasterPassword" xml:space="preserve">
     <value>Svagt huvudlösenord</value>
   </data>
   <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
-    <value>Lösenordet är svagt. Använd ett starkt lösenord för att skydda ditt konto. Är det säkert att du vill använda ett svagt lösenord?</value>
+    <value>Ett svagt lösenord upptäcktes. Skydda ditt konto med ett starkt lösenord. Är du säker på att du vill använda ett svagt lösenord?</value>
   </data>
   <data name="Weak" xml:space="preserve">
     <value>Svagt</value>
@@ -2629,11 +2632,57 @@ Vill du byta till detta konto?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Nuvarande huvudlösenord</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Inloggad!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Godkänn med min andra enhet</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Request admin approval</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Godkänn med huvudlösenord</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Stäng av med en offentlig enhet</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Kom ihåg denna enhet</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Created {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Passkey will not be copied</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Copy application</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Available for two-step login</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Återupprepa huvudlösenord hjälp</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Upplåsning kan misslyckas på grund av otillräckligt minne. Minska dina KDF-minnesinställningar för att lösa detta.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Ogiltig API-nyckel</value>
@@ -2641,11 +2690,32 @@ Vill du byta till detta konto?</value>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Ogiltig API-token</value>
   </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Admin approval requested</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Your request has been sent to your admin.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Du kommer att meddelas vid godkännande. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Problem med att logga in?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Loggar in som {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Vault timeout action changed to log out</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
+  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Block auto-fill</value>
   </data>
   <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
-    <value>Auto-fill will not be offered for these URIs.</value>
+    <value>Autofyll kommer inte att erbjudas för dessa URI:er.</value>
   </data>
   <data name="NewBlockedURI" xml:space="preserve">
     <value>Ny blockerad URI</value>
@@ -2672,9 +2742,6 @@ Vill du byta till detta konto?</value>
   <data name="InvalidURI" xml:space="preserve">
     <value>Ogiltig URI</value>
   </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI saved</value>
-  </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI har tagits bort</value>
   </data>
@@ -2686,5 +2753,23 @@ Vill du byta till detta konto?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Det går inte att redigera flera URI:er samtidigt</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Login approved</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Logga in med enhet</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logga in på</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>För många försök</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Account logged out.</value>
   </data>
 </root>

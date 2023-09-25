@@ -954,6 +954,9 @@
   <data name="UpdateKey" xml:space="preserve">
     <value>تا زمانی که کد رمزنگاری را به‌روز نکنید نمی‌توانید از این قابلیت استفاده کنید.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>بیشتر بدانید</value>
   </data>
@@ -2414,9 +2417,9 @@
   <data name="Service" xml:space="preserve">
     <value>سرویس</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>رله فایرفاکس</value>
@@ -2628,11 +2631,57 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>کلمه عبور اصلی فعلی</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>وارد شده!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>تایید با دستگاه دیگرم</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>درخواست تایید مدیر</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>تایید با کلمه عبور اصلی</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>اگر از دستگاه عمومی استفاده میکنید خاموش کنید</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>این دستگاه را به خاطر بسپار</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>کلید عبور</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>کلیدهای عبور</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>{0} ایجاد شد</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>درخواست</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>شما نمی‌توانید برنامه کلید عبور را ویرایش کنید زیرا باعث بی اعتباری کلید عبور می‌شود</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>کلید عبور کپی نمی‌شود</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>کلید عبور در مورد شبیه سازی شده کپی نمی‌شود. آیا می‌خواهید به شبیه سازی این مورد ادامه دهید؟</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>درخواست را کپی کنید</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>برای ورود دو مرحله ای موجود است</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>راهنمای درخواست مجدد کلمه عبور اصلی</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>باز کردن قفل ممکن است به دلیل حافظه ناکافی انجام شود. تنظیمات حافظه KDF خود را کاهش دهید تا حل شود.</value>
+    <value>بازگشایی ممکن است به دلیل حافظه ناکافی انجام نشود. برای انجام تنظیمات حافظه KDF خود را کاهش دهید یا از بازگشایی زیست‌سنجی استفاده کنید.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>کلید API نامعتبر</value>
@@ -2640,50 +2689,86 @@
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>توکن API نامعتبر</value>
   </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>تایید مدیر در خواست شد</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>درخواست شما به مدیرتان فرستاده شد.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>به محض تایید مطلع خواهید شد. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>در ورود مشکلی دارید؟</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>ورود به عنوان {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>اقدام پایان زمان گاوصندوق به خروج تغییر کرد</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>این مورد را نمی‌توان با سازمان به اشتراک گذاشت زیرا قبلاً موردی با کلید عبور یکسان وجود دارد.</value>
+  </data>
   <data name="BlockAutoFill" xml:space="preserve">
-    <value>Block auto-fill</value>
+    <value>پر کردن خودکار را مسدود کنید</value>
   </data>
   <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
-    <value>Auto-fill will not be offered for these URIs.</value>
+    <value>پر کردن خودکار برای این نشانی‌های اینترنتی ارائه نمی‌شود.</value>
   </data>
   <data name="NewBlockedURI" xml:space="preserve">
-    <value>New blocked URI</value>
+    <value>نشانی اینترنتی مسدود شده جدید</value>
   </data>
   <data name="URISaved" xml:space="preserve">
-    <value>URI saved</value>
+    <value>نشانی اینترنتی ذخیره شد</value>
   </data>
   <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
-    <value>Invalid format. Use https://, http://, or androidapp://</value>
+    <value>قالب نامعتبر است. از https://، http://، یا androidapp:// استفاده کنید</value>
     <comment>https://, http://, androidapp:// should not be translated</comment>
   </data>
   <data name="EditURI" xml:space="preserve">
-    <value>Edit URI</value>
+    <value>ویرایش نشانی اینترنتی</value>
   </data>
   <data name="EnterURI" xml:space="preserve">
-    <value>Enter URI</value>
+    <value>ورود نشانی اینترنتی</value>
   </data>
   <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
-    <value>Format: {0}. Separate multiple URIs with a comma.</value>
+    <value>قالب: {0}. چندین نشانی اینترنتی را با کاما جدا کنید.</value>
   </data>
   <data name="FormatX" xml:space="preserve">
-    <value>Format: {0}</value>
+    <value>قالب: {0}</value>
   </data>
   <data name="InvalidURI" xml:space="preserve">
-    <value>Invalid URI</value>
-  </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI saved</value>
+    <value>نشانی اینترنتی نامعتبر</value>
   </data>
   <data name="URIRemoved" xml:space="preserve">
-    <value>URI removed</value>
+    <value>نشانی اینترنتی حذف شد</value>
   </data>
   <data name="ThereAreNoBlockedURIs" xml:space="preserve">
-    <value>There are no blocked URIs</value>
+    <value>هیچ نشانی اینترنتی مسدود شده ای وجود ندارد</value>
   </data>
   <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
-    <value>The URI {0} is already blocked</value>
+    <value>{0} نشانی اینترنتی قبلاً مسدود شده است</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
-    <value>Cannot edit multiple URIs at once</value>
+    <value>نمی‌توان چندین نشانی اینترنتی را همزمان ویرایش کرد</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>ورود تایید شد</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>ورود با دستگاه باید در تنظیمات برنامه‌ی Bitwarden تنظیم شود. به گزینه دیگری نیاز دارید؟</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>ورود با دستگاه</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>ورود با</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Too many attempts</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Account logged out.</value>
   </data>
 </root>

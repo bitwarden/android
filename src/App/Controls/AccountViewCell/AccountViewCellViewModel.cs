@@ -36,7 +36,7 @@ namespace Bit.App.Controls
 
         public bool ShowHostname
         {
-            get => !string.IsNullOrWhiteSpace(AccountView.Hostname) && AccountView.Hostname != "vault.bitwarden.com";
+            get => !string.IsNullOrWhiteSpace(AccountView.Hostname);
         }
 
         public bool IsActive

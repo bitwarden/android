@@ -29,6 +29,7 @@ namespace Bit.Core.Models.Domain
             Edit = obj.Edit;
             ViewPassword = obj.ViewPassword;
             RevisionDate = obj.RevisionDate;
+            CreationDate = obj.CreationDate;
             CollectionIds = obj.CollectionIds != null ? new HashSet<string>(obj.CollectionIds) : null;
             LocalData = localData;
             Reprompt = obj.Reprompt;
@@ -62,12 +63,14 @@ namespace Bit.Core.Models.Domain
         public string FolderId { get; set; }
         public EncString Name { get; set; }
         public EncString Notes { get; set; }
-        public Enums.CipherType Type { get; set; }
+        public CipherType Type { get; set; }
         public bool Favorite { get; set; }
         public bool OrganizationUseTotp { get; set; }
         public bool Edit { get; set; }
         public bool ViewPassword { get; set; }
         public DateTime RevisionDate { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime? DeletedDate { get; set; }
         public Dictionary<string, object> LocalData { get; set; }
         public Login Login { get; set; }
         public Identity Identity { get; set; }
@@ -77,7 +80,6 @@ namespace Bit.Core.Models.Domain
         public List<Field> Fields { get; set; }
         public List<PasswordHistory> PasswordHistory { get; set; }
         public HashSet<string> CollectionIds { get; set; }
-        public DateTime? DeletedDate { get; set; }
         public CipherRepromptType Reprompt { get; set; }
 
         public async Task<CipherView> DecryptAsync()
@@ -167,6 +169,7 @@ namespace Bit.Core.Models.Domain
                 OrganizationUseTotp = OrganizationUseTotp,
                 Favorite = Favorite,
                 RevisionDate = RevisionDate,
+                CreationDate = CreationDate,
                 Type = Type,
                 CollectionIds = CollectionIds.ToList(),
                 DeletedDate = DeletedDate,

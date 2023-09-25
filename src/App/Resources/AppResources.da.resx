@@ -954,6 +954,9 @@ Skanning vil ske automatisk.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Du kan ikke bruge denne funktion, før du opdaterer din krypteringsnøgle.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Krypteringsnøglemigrering nødvendig. Log ind gennem web-boksen for at opdatere krypteringsnøglen.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Få mere at vide</value>
   </data>
@@ -2413,9 +2416,9 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</value>
   <data name="Service" xml:space="preserve">
     <value>Tjeneste</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2627,17 +2630,84 @@ Vil du skifte til denne konto?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Aktuel hovedadgangskode</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Indlogget!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Godkend med min anden enhed</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Anmod om admin-godkendelse</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Godkendt med hovedadgangskode</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Slå fra vha. en offentlig enhed</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Husk denne enhed</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Adgangsnøgle</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Adgangsnøgler</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Oprettet {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Applikation</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Adgangsnøgleapplikationen kan ikke redigeres, da det ville ugyldiggøre adgangsnøglen</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Adgangsnøglen kopieres ikke</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Adgangsnøglen kopieres ikke til det klonede emne. Fortsæt med at klone dette emne alligevel?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Kopiér applikation</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Tilgængelig for totrins-login</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Hjælp til genanmodning om hovedadgangskode</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Oplåsning kan fejle grundet utilstrækkelig hukommelse. Reducér KDF-hukommelsesindstillinger for at afhjælpe</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Ugyldig API-nøgle</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Ugyldigt API-token</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Admin-godkendelse udbedt</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Din anmodning er sendt til din gruppe-admin.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Du underrettes, når godkendelse foreligger. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Problemer med at logge ind?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Logger ind som {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Boks-timeouthandling ændret til udlogning</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Dette emne kan ikke deles med organisationen, da der allerede er et med den samme adgangsnøgle.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Blokér autoudfyldning</value>
@@ -2670,9 +2740,6 @@ Vil du skifte til denne konto?</value>
   <data name="InvalidURI" xml:space="preserve">
     <value>Ugyldig URI</value>
   </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI gemt</value>
-  </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI fjernet</value>
   </data>
@@ -2684,5 +2751,23 @@ Vil du skifte til denne konto?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Kan ikke redigere flere URI'er på én gang</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Login godkendt</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Indlogning med enhed skal være opsat i indstillingerne i Bitwarden-appen. Behov for en anden mulighed?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Log ind med enhed</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logger ind på</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>For mange forsøg</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Konto logget ud.</value>
   </data>
 </root>

@@ -559,7 +559,7 @@
     <value>密码库超时动作</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>超时后退出账户将解除对密码库的所有访问权限，并需要进行在线身份验证。确定使用此设置吗？</value>
+    <value>超时后注销账户将解除对密码库的所有访问权限，并需要进行在线身份验证。确定使用此设置吗？</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>正在登录...</value>
@@ -581,7 +581,7 @@
     <value>主密码提示（可选）</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>主密码提示可以在你忘记密码时帮你回忆起来。</value>
+    <value>主密码提示可以在您忘记密码时帮您回忆起来。</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
     <value>主密码必须至少 $VALUE$ 个字符长度。</value>
@@ -823,7 +823,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>请输入发送到电子邮件 {0} 的 6 位验证码。</value>
+    <value>请输入发送给电子邮件 {0} 的 6 位数验证码。</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
@@ -852,7 +852,7 @@
     <value>使用其他两步登录方式</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>无法发送验证电子邮件。请再试一次。</value>
+    <value>无法发送验证电子邮件。请重试。</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
@@ -867,7 +867,7 @@
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>添加新的附件</value>
+    <value>添加新附件</value>
   </data>
   <data name="Attachments" xml:space="preserve">
     <value>附件</value>
@@ -953,6 +953,9 @@
   </data>
   <data name="UpdateKey" xml:space="preserve">
     <value>在您更新加密密钥前，您不能使用此功能。</value>
+  </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>需要迁移加密密钥。请登录网页版密码库来更新您的加密密钥。</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>了解更多信息</value>
@@ -1489,7 +1492,7 @@
     <value>30 分钟</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>设定您用来解锁 Bitwarden 的 PIN 码。您的 PIN 设置将在您退出账户时被重置。</value>
+    <value>设定您用来解锁 Bitwarden 的 PIN 码。您的 PIN 设置将在您完全注销此应用程序时被重置。</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
     <value>已在 {1} 上以 {0} 身份登录。</value>
@@ -1601,7 +1604,7 @@
     <value>您的主题将在应用程序重启后生效。</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>大写</value>
+    <value>首字母大写</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
@@ -1861,7 +1864,7 @@
     <value>如果开启，无障碍将显示一个弹出窗口以增强不支持 Android 自动填充框架的旧应用的自动填充服务。</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>由于企业策略，您被限制为保存项目到您的个人密码库。将所有权选项更改为组织，然后从可用的集合中选择。</value>
+    <value>由于某个企业策略，您不能将项目保存到您的个人密码库。将所有权选项更改为组织，并从可用的集合中选择。</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
     <value>某个组织策略正影响您的所有权选项。</value>
@@ -1984,7 +1987,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>新增 Send</value>
+    <value>添加 Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -2048,7 +2051,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
-    <value>由于企业策略，您只能删除现有的 Send。</value>
+    <value>由于某个企业策略，您只能删除现有的 Send。</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
@@ -2071,7 +2074,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>重新询问主密码</value>
+    <value>主密码重新提示</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
     <value>确认主密码</value>
@@ -2170,7 +2173,7 @@
     <value>账户已锁定</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
-    <value>成功退出账户</value>
+    <value>账户注销成功</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
     <value>账户移除成功</value>
@@ -2218,7 +2221,7 @@
     <value>验证码已发送到您的电子邮箱</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>发送验证码到您的电子邮箱时发生错误。请再试一次</value>
+    <value>发送验证码到您的电子邮箱时发生错误。请重试</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>输入发送到您电子邮箱的验证码</value>
@@ -2309,10 +2312,10 @@
     <value>将锁定选项设置为「从不」可让任何能够访问您的设备的人都可以使用您的密码库。如果您使用此选项，则应确保您的设备得到妥善的保护。</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
-    <value>输入的一个或多个 URL 无效。请修改后再次保存。</value>
+    <value>输入的一个或多个 URL 无效。请修改后再次尝试保存。</value>
   </data>
   <data name="GenericErrorMessage" xml:space="preserve">
-    <value>我们无法处理您的请求。请再试一次或联系我们。</value>
+    <value>我们无法处理您的请求。请重试或联系我们。</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
     <value>允许屏幕截图</value>
@@ -2413,9 +2416,9 @@
   <data name="Service" xml:space="preserve">
     <value>服务</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2499,7 +2502,7 @@
     <value>不是你？</value>
   </data>
   <data name="LogInWithMasterPassword" xml:space="preserve">
-    <value>使用主密码登录</value>
+    <value>主密码登录</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
     <value>设备登录</value>
@@ -2627,17 +2630,84 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>当前主密码</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>已登录！</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>通过我的其他设备批准</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>请求管理员批准</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>使用主密码批准</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>不允许使用公共设备</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>记住此设备</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>通行密钥</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>通行密钥</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>创建于 {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>您不能编辑通行密钥应用程序，因为这会使通行密钥失效</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>通行密钥不会被复制</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>通行密钥将不会被复制到克隆的项目。要继续克隆这个项目吗？</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>复制应用</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>可用于两步登录</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
-    <value>主密码重新询问帮助</value>
+    <value>主密码重新提示帮助</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>内存不足可能导致解锁失败。可以通过减少 KDF 内存设置来解决。</value>
+    <value>由于内存不足，解锁可能会失败。请减少您的 KDF 内存设置或设置生物识别解锁来解决此问题。</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>无效的 API 密钥</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>无效的 API 令牌</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>已请求管理员批准</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>您的请求已发送给您的管理员。</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>批准后，您将收到通知。 </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>登录遇到问题？</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>正登录为 {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>密码库超时动作已更改为注销</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>无法与组织共享此项目，因为已经有一个项目具有相同的通行密钥。</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>阻止自动填充</value>
@@ -2670,9 +2740,6 @@
   <data name="InvalidURI" xml:space="preserve">
     <value>无效的 URI</value>
   </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI 已保存</value>
-  </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI 已移除</value>
   </data>
@@ -2684,5 +2751,23 @@
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>一次不能编辑多个 URI</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>登录已批准</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>设备登录必须在 Bitwarden 应用程序的设置中启用。需要其他登录选项吗？</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>设备登录</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>登录到</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>尝试次数过多</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>账户已注销。</value>
   </data>
 </root>

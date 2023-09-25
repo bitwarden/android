@@ -954,6 +954,9 @@ Skanowanie nastąpi automatycznie.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Nie możesz używać tej funkcji, dopóki nie zaktualizujesz klucza szyfrowania.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Wymagana jest migracja klucza szyfrowania. Zaloguj się przez sejf internetowy, aby zaktualizować klucz szyfrowania.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Dowiedz się więcej</value>
   </data>
@@ -2413,9 +2416,9 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
   <data name="Service" xml:space="preserve">
     <value>Usługa</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2627,17 +2630,84 @@ Czy chcesz przełączyć się na to konto?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Aktualne hasło główne</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Zalogowano!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Zatwierdź za pomocą mojego innego urządzenia</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Poproś administratora o zatwierdzenie</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Zatwierdź przy użyciu hasła głównego</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Wyłącz za pomocą urządzenia publicznego</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Zapamiętaj to urządzenie</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Utworzono {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Aplikacja</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Nie możesz edytować aplikacji, ponieważ spowodowałoby to unieważnienie passkey'a</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Passkey nie zostanie skopiowany</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Passkey nie zostanie skopiowane do sklonowanego elementu. Czy chcesz kontynuować klonowanie tego elementu?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Kopiuj aplikację</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Dostępne dla dwustopniowego logowania</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
-    <value>Master password re-prompt help</value>
+    <value>Pomoc dotycząca potwierdzania hasłem głównym</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Odblokowanie może się nie powieść z powodu niewystarczającej ilości pamięci. Zmniejsz ustawienia pamięci KDF, aby to rozwiązać</value>
+    <value>Odblokowanie może się nie udać z powodu niewystarczającej ilości pamięci. Zmniejsz ustawienia pamięci KDF lub ustaw odblokowanie biometryczne, aby rozwiązać ten problem.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Nieprawidłowy klucz API</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Nieprawidłowy token API.</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Poproszono administratora o zatwierdzenie</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Twoja prośba została wysłana do Twojego administratora.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Zostaniesz powiadomiony po zatwierdzeniu. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Problem z zalogowaniem?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Logowanie jako {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Vault timeout action changed to log out</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Ten element nie może być współdzielony z organizacją, ponieważ jest już z tym samym passkey'em.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Blokuj autouzupełnianie</value>
@@ -2670,9 +2740,6 @@ Czy chcesz przełączyć się na to konto?</value>
   <data name="InvalidURI" xml:space="preserve">
     <value>Nieprawidłowy URI</value>
   </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>Zapisano URI</value>
-  </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>Usunięto URI</value>
   </data>
@@ -2684,5 +2751,23 @@ Czy chcesz przełączyć się na to konto?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Nie można edytować wielu URI na raz</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Logowanie zatwierdzone</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Logowanie za pomocą urządzenia musi być włączone w ustawieniach aplikacji Bitwarden. Potrzebujesz innej opcji?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Zaloguj się za pomocą urządzenia</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logowanie do</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Zbyt wiele prób</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Konto wylogowane.</value>
   </data>
 </root>

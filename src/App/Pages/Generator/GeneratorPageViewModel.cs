@@ -545,7 +545,7 @@ namespace Bit.App.Pages
             set => SetProperty(ref _showForwardedEmailApiSecret, value);
         }
 
-        public string AnonAddyDomainName
+        public string AddyIoDomainName
         {
             get => _usernameOptions.AnonAddyDomainName;
             set
@@ -553,7 +553,7 @@ namespace Bit.App.Pages
                 if (_usernameOptions.AnonAddyDomainName != value)
                 {
                     _usernameOptions.AnonAddyDomainName = value;
-                    TriggerPropertyChanged(nameof(AnonAddyDomainName));
+                    TriggerPropertyChanged(nameof(AddyIoDomainName));
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
             }
@@ -793,7 +793,7 @@ namespace Bit.App.Pages
             TriggerPropertyChanged(nameof(CapitalizeRandomWordUsername));
             TriggerPropertyChanged(nameof(ForwardedEmailApiSecret));
             TriggerPropertyChanged(nameof(ForwardedEmailApiSecretLabel));
-            TriggerPropertyChanged(nameof(AnonAddyDomainName));
+            TriggerPropertyChanged(nameof(AddyIoDomainName));
             TriggerPropertyChanged(nameof(CatchAllEmailDomain));
             TriggerPropertyChanged(nameof(ForwardedEmailServiceSelected));
             TriggerPropertyChanged(nameof(UsernameTypeSelected));

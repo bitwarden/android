@@ -954,6 +954,9 @@
   <data name="UpdateKey" xml:space="preserve">
     <value>更新加密金鑰前不能使用此功能。</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>深入了解</value>
   </data>
@@ -1354,10 +1357,10 @@
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>檢查密碼是否已外洩。</value>
+    <value>檢查密碼是否已暴露。</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>此密碼已外洩了 {0} 次，應立即變更密碼。</value>
+    <value>此密碼在資料外洩事件中被暴露了 {0} 次，應立即變更它。</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
     <value>任何已知的外洩密碼資料庫中都沒有此密碼，它目前是安全的。</value>
@@ -2413,9 +2416,9 @@
   <data name="Service" xml:space="preserve">
     <value>服務</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2577,16 +2580,16 @@
     <value>高強度</value>
   </data>
   <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
-    <value>在被攻擊的資料庫中搜尋是否有此密碼</value>
+    <value>檢查外洩密碼資料庫中是否有此密碼</value>
   </data>
   <data name="ExposedMasterPassword" xml:space="preserve">
-    <value>Exposed Master Password</value>
+    <value>已暴露的主密碼</value>
   </data>
   <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>在其他資料庫中找到您的密碼。我們建議您使用一個獨特的密碼來保護您的帳號，您確定要用這個密碼嗎？</value>
+    <value>在資料外洩事件中找到了密碼。我們建議您使用一個獨特的密碼來保護您的帳戶，您確定要使用已暴露的密碼嗎？</value>
   </data>
   <data name="WeakAndExposedMasterPassword" xml:space="preserve">
-    <value>主密碼強度不足</value>
+    <value>強度不足且已暴露的主密碼</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
     <value>是密碼強度不足，且在其他資料庫中找到這個密碼。使用一個強度足夠和獨特的密碼來保護您的帳號。請問您確定要用這個密碼嗎？</value>
@@ -2627,17 +2630,84 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>目前主密碼</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Logged in!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Approve with my other device</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Request admin approval</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Approve with master password</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Turn off using a public device</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Remember this device</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Created {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>應用程式</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Passkey will not be copied</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Copy application</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Available for two-step login</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Master password re-prompt help</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Invalid API key</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Invalid API token</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Admin approval requested</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Your request has been sent to your admin.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>You will be notified once approved. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Trouble logging in?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Logging in as {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Vault timeout action changed to log out</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>封鎖表單自動填入功能</value>
@@ -2670,9 +2740,6 @@
   <data name="InvalidURI" xml:space="preserve">
     <value>URI 無效</value>
   </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>已儲存 URI</value>
-  </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>已刪除 URI</value>
   </data>
@@ -2684,5 +2751,23 @@
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>無法一次編輯多組 URI</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Login approved</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Log in with device</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logging in on</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>嘗試次數過多</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>帳號已登出。</value>
   </data>
 </root>

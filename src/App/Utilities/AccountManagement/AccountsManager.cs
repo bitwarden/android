@@ -206,6 +206,7 @@ namespace Bit.App.Utilities.AccountManagement
 
         private async Task AddAccountAsync()
         {
+            await AppHelpers.ClearServiceCacheAsync();
             await Device.InvokeOnMainThreadAsync(() =>
             {
                 Options.HideAccountSwitcher = false;

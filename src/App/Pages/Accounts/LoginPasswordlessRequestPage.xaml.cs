@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.App.Models;
 using Bit.App.Utilities;
+using Bit.Core.Enums;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -12,13 +13,15 @@ namespace Bit.App.Pages
         private LoginPasswordlessRequestViewModel _vm;
         private readonly AppOptions _appOptions;
 
-        public LoginPasswordlessRequestPage(string email, AppOptions appOptions = null)
+        public LoginPasswordlessRequestPage(string email, AuthRequestType authRequestType, AppOptions appOptions = null, bool authingWithSso = false)
         {
             InitializeComponent();
             _appOptions = appOptions;
             _vm = BindingContext as LoginPasswordlessRequestViewModel;
             _vm.Page = this;
             _vm.Email = email;
+            _vm.AuthRequestType = authRequestType;
+            _vm.AuthingWithSso = authingWithSso;
             _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
             _vm.LogInSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
             _vm.UpdateTempPasswordAction = () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());

@@ -13,31 +13,27 @@ namespace Bit.App.Utilities
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var cipher = value as CipherView;
-            return GetIcon(cipher);
+            return IconImageHelper.GetIconImage(cipher);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
-
-        private string GetIcon(CipherView cipher)
-        {
-            string icon = null;
-            switch (cipher.Type)
-            {
-                case CipherType.Login:
-                    icon = IconImageHelper.GetLoginIconImage(cipher);
-                    break;
-                default:
-                    break;
-            }
-            return icon;
-        }
     }
 
     public static class IconImageHelper
     {
+        public static string GetIconImage(CipherView cipher)
+        {
+            if (cipher.Type != CipherType.Login)
+            {
+                return null;
+            }
+
+            return GetLoginIconImage(cipher);
+        }
+
         public static string GetLoginIconImage(CipherView cipher)
         {
             string image = null;
@@ -85,7 +81,6 @@ namespace Bit.App.Utilities
                 }
             }
             return string.Format("{0}/{1}/icon.png", iconsUrl, hostname);
-
         }
     }
 }

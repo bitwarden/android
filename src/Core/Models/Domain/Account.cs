@@ -53,6 +53,7 @@ namespace Bit.Core.Models.Domain
                 HasPremiumPersonally = copy.HasPremiumPersonally;
                 AvatarColor = copy.AvatarColor;
                 ForcePasswordResetReason = copy.ForcePasswordResetReason;
+                UserDecryptionOptions = copy.UserDecryptionOptions;
             }
 
             public string UserId;
@@ -68,6 +69,7 @@ namespace Bit.Core.Models.Domain
             public bool? EmailVerified;
             public bool? HasPremiumPersonally;
             public ForcePasswordResetReason? ForcePasswordResetReason;
+            public AccountDecryptionOptions UserDecryptionOptions;
         }
 
         public class AccountTokens
@@ -117,9 +119,14 @@ namespace Bit.Core.Models.Domain
 
         public class AccountVolatileData
         {
-            public SymmetricCryptoKey Key;
-            public EncString PinProtectedKey;
+            public UserKey UserKey;
+            public MasterKey MasterKey;
+            public EncString PinKeyEncryptedUserKeyEphemeral;
             public bool? BiometricLocked;
+            [Obsolete("Jul 6 2023: Key has been deprecated. We will use the User Key in the future. It remains here for migration during app upgrade.")]
+            public SymmetricCryptoKey Key;
+            [Obsolete("Jul 6 2023: PinProtectedKey has been deprecated in favor of UserKeyPinEphemeral. It remains here for migration during app upgrade.")]
+            public EncString PinProtectedKey;
         }
     }
 }

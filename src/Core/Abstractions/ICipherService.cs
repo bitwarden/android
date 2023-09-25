@@ -10,6 +10,12 @@ namespace Bit.Core.Abstractions
 {
     public interface ICipherService
     {
+        public enum ShareWithServerError
+        {
+            None,
+            DuplicatedPasskeyInOrg
+        }
+
         Task ClearAsync(string userId);
         Task ClearCacheAsync();
         Task DeleteAsync(List<string> ids);
@@ -29,9 +35,8 @@ namespace Bit.Core.Abstractions
         Task ReplaceAsync(Dictionary<string, CipherData> ciphers);
         Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, string filename, byte[] data);
         Task SaveCollectionsWithServerAsync(Cipher cipher);
-        Task SaveNeverDomainAsync(string domain);
         Task SaveWithServerAsync(Cipher cipher);
-        Task ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds);
+        Task<ShareWithServerError> ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds);
         Task UpdateLastUsedDateAsync(string id);
         Task UpsertAsync(CipherData cipher);
         Task UpsertAsync(List<CipherData> cipher);

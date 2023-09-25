@@ -60,9 +60,9 @@ namespace Bit.App.Utilities
     /// </summary>
     public class VerificationActionsFlowHelper : IVerificationActionsFlowHelper
     {
-        private readonly IKeyConnectorService _keyConnectorService;
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly ICryptoService _cryptoService;
+        private readonly IUserVerificationService _userVerificationService;
 
         private VerificationFlowAction? _action;
         private IActionFlowParmeters _parameters;
@@ -71,13 +71,14 @@ namespace Bit.App.Utilities
 
         private readonly Dictionary<VerificationFlowAction, IActionFlowExecutioner> _actionExecutionerDictionary = new Dictionary<VerificationFlowAction, IActionFlowExecutioner>();
 
-        public VerificationActionsFlowHelper(IKeyConnectorService keyConnectorService,
+        public VerificationActionsFlowHelper(
             IPasswordRepromptService passwordRepromptService,
-            ICryptoService cryptoService)
+            ICryptoService cryptoService,
+            IUserVerificationService userVerificationService)
         {
-            _keyConnectorService = keyConnectorService;
             _passwordRepromptService = passwordRepromptService;
             _cryptoService = cryptoService;
+            _userVerificationService = userVerificationService;
 
             _actionExecutionerDictionary.Add(VerificationFlowAction.DeleteAccount, ServiceContainer.Resolve<IDeleteAccountActionFlowExecutioner>("deleteAccountActionFlowExecutioner"));
         }
@@ -107,9 +108,9 @@ namespace Bit.App.Utilities
 
         public async Task ValidateAndExecuteAsync()
         {
-            var verificationType = await _keyConnectorService.GetUsesKeyConnector()
-                ? VerificationType.OTP
-                : VerificationType.MasterPassword;
+            var verificationType = await _userVerificationService.HasMasterPasswordAsync(true)
+                ? VerificationType.MasterPassword
+                : VerificationType.OTP;
 
             switch (verificationType)
             {
@@ -121,7 +122,7 @@ namespace Bit.App.Utilities
                     }
 
                     var parameters = GetParameters();
-                    parameters.Secret = await _cryptoService.HashPasswordAsync(password, null);
+                    parameters.Secret = await _cryptoService.HashMasterKeyAsync(password, null);
                     parameters.VerificationType = VerificationType.MasterPassword;
                     await ExecuteAsync(parameters);
                     break;

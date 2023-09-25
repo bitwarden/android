@@ -88,7 +88,6 @@ namespace Bit.App.Pages
             _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
             _accountsManager = ServiceContainer.Resolve<IAccountsManager>();
 
-
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardNumberCommand = new Command(ToggleCardNumber);
@@ -309,6 +308,7 @@ namespace Bit.App.Pages
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public bool HasTotpValue => IsLogin && !string.IsNullOrEmpty(Cipher?.Login?.Totp);
         public string SetupTotpText => $"{BitwardenIcons.Camera} {AppResources.SetupTotp}";
+        public bool ShowPasskeyInfo => Cipher?.HasFido2Key == true && !CloneMode;
 
         public void Init()
         {
@@ -366,6 +366,11 @@ namespace Bit.App.Pages
                         if (Cipher.OrganizationId == null && !AllowPersonal)
                         {
                             Cipher.OrganizationId = OrganizationId;
+                        }
+                        if (Cipher.Type == CipherType.Login)
+                        {
+                            // passkeys can't be cloned
+                            Cipher.Login.Fido2Keys = null;
                         }
                     }
                     if (appOptions?.OtpData != null && Cipher.Type == CipherType.Login)

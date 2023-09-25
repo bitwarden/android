@@ -209,7 +209,7 @@
     <value>आमच्या गिटहब रेपो मध्ये मुद्दा नोंदवा.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>सत्यापित करण्यासाठी बोटठश्याचा वापर करा.</value>
+    <value>सत्यापित करण्यासाठी अंगुलिमुद्रा वापरा.</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>फोल्डर</value>
@@ -296,67 +296,67 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>My vault</value>
+    <value>माझी तिजोरी</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authenticator</value>
+    <value>अधिप्रमाणक</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>नाव</value>
     <comment>Label for an entity name.</comment>
   </data>
   <data name="No" xml:space="preserve">
-    <value>No</value>
+    <value>नाही</value>
   </data>
   <data name="Notes" xml:space="preserve">
-    <value>Notes</value>
+    <value>टिप</value>
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+    <value>ठीक</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>पासवर्ड</value>
     <comment>Label for a password.</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>साठवा</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>हलवा</value>
   </data>
   <data name="Saving" xml:space="preserve">
-    <value>Saving...</value>
+    <value>साठवत आहे...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>मांडणी</value>
     <comment>The title for the settings page.</comment>
   </data>
   <data name="Show" xml:space="preserve">
-    <value>Show</value>
+    <value>दाखवा</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item deleted</value>
+    <value>वस्तू खोडून टाकली</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
-    <value>Submit</value>
+    <value>पाठवा</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Sync</value>
+    <value>संकालन</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>Thank you</value>
+    <value>आभारी</value>
   </data>
   <data name="Tools" xml:space="preserve">
-    <value>Tools</value>
+    <value>साधने</value>
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
@@ -364,7 +364,7 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Use fingerprint to unlock</value>
+    <value>कुलूप उघडण्यासाठी अंगुलिमुद्रा वापरा</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Username</value>
@@ -379,7 +379,7 @@
     <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Verify fingerprint</value>
+    <value>अंगुलिमुद्रा सत्यापित करा</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
     <value>Verify master password</value>
@@ -511,10 +511,10 @@
     <value>Favorite</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>Fingerprint</value>
+    <value>अंगुलिमुद्रा</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>Generate password</value>
+    <value>पासवर्ड निर्माण करा</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
     <value>Get your master password hint</value>
@@ -587,11 +587,11 @@
     <value>Master password must be at least {0} characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minimum numbers</value>
+    <value>किमान अंक</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Minimum special</value>
+    <value>किमान विशेष</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -632,10 +632,10 @@
     <value>Other</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Password generated</value>
+    <value>पासवर्ड निर्माण झाला</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Password generator</value>
+    <value>पासवर्ड जनित्र</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Password hint</value>
@@ -657,7 +657,7 @@
     <value>Please consider helping us out with a good review!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Regenerate password</value>
+    <value>पासवर्ड पुनर्जनित करा</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
     <value>Re-type master password</value>
@@ -954,6 +954,9 @@ Scanning will happen automatically.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>You cannot use this feature until you update your encryption key.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Learn more</value>
   </data>
@@ -1008,16 +1011,16 @@ Scanning will happen automatically.</value>
     <value>Security code</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>कार्ड</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>ओळख</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>प्रवेश</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure note</value>
+    <value>संरक्षित चिठ्ठी</value>
   </data>
   <data name="Address1" xml:space="preserve">
     <value>Address 1</value>
@@ -1038,7 +1041,7 @@ Scanning will happen automatically.</value>
     <value>Brand</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder name</value>
+    <value>कार्डधारकाचे नाव</value>
   </data>
   <data name="CityTown" xml:space="preserve">
     <value>City / Town</value>
@@ -1158,16 +1161,16 @@ Scanning will happen automatically.</value>
     <value>Go to my vault</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>संग्रह</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>ह्या संग्रहात एकही वस्तू नाही.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
     <value>There are no items in this folder.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
-    <value>There are no items in the trash.</value>
+    <value>कचराकुंडी रिकामी आहे.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Auto-fill Accessibility Service</value>
@@ -1331,7 +1334,7 @@ Scanning will happen automatically.</value>
     <value>Invalid email address.</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Cards</value>
+    <value>कार्ड</value>
   </data>
   <data name="Identities" xml:space="preserve">
     <value>Identities</value>
@@ -1340,7 +1343,7 @@ Scanning will happen automatically.</value>
     <value>Logins</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>Secure notes</value>
+    <value>संरक्षित चिठ्ठ्या</value>
   </data>
   <data name="AllItems" xml:space="preserve">
     <value>All items</value>
@@ -1372,7 +1375,7 @@ Scanning will happen automatically.</value>
     <value>Password history</value>
   </data>
   <data name="Types" xml:space="preserve">
-    <value>Types</value>
+    <value>प्रकार</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
     <value>No passwords to list.</value>
@@ -1381,7 +1384,7 @@ Scanning will happen automatically.</value>
     <value>There are no items to list.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>Search collection</value>
+    <value>संग्रहात शोधा</value>
   </data>
   <data name="SearchFileSends" xml:space="preserve">
     <value>Search file Sends</value>
@@ -1422,7 +1425,7 @@ Scanning will happen automatically.</value>
     <value>Item has been shared.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
-    <value>You must select at least one collection.</value>
+    <value>किमान एक संग्रह तरी निवडला पाहिजे.</value>
   </data>
   <data name="Share" xml:space="preserve">
     <value>Share</value>
@@ -1440,7 +1443,7 @@ Scanning will happen automatically.</value>
     <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
-    <value>Number of words</value>
+    <value>शब्दांची संख्या</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
     <value>Passphrase</value>
@@ -1453,18 +1456,18 @@ Scanning will happen automatically.</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
-    <value>Generator</value>
+    <value>जनित्र</value>
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
     <value>There are no folders to list.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fingerprint phrase</value>
+    <value>अंगुलिमुद्रा वाक्यांश</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Your account's fingerprint phrase</value>
+    <value>तुमच्या खात्याचा अंगुलिमुद्रा वाक्यांश</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
@@ -1601,11 +1604,11 @@ Scanning will happen automatically.</value>
     <value>Your theme changes will apply when the app is restarted.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>पहिले अक्षर मोठे करा</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include number</value>
+    <value>अंक समविष्ट करा</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Download</value>
@@ -1684,7 +1687,7 @@ Scanning will happen automatically.</value>
     <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
-    <value>Vault exported successfully</value>
+    <value>तिजोरी निर्यात यशस्वी</value>
   </data>
   <data name="Clone" xml:space="preserve">
     <value>Clone</value>
@@ -1730,7 +1733,7 @@ Scanning will happen automatically.</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>Trash</value>
+    <value>कचराकुंडी</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
@@ -1868,15 +1871,15 @@ Scanning will happen automatically.</value>
     <value>An organization policy is affecting your ownership options.</value>
   </data>
   <data name="Send" xml:space="preserve">
-    <value>Send</value>
+    <value>पाठवणी</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AllSends" xml:space="preserve">
-    <value>All Sends</value>
+    <value>सर्व पाठवण्या</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
-    <value>Sends</value>
+    <value>पाठवण्या</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NameInfo" xml:space="preserve">
@@ -1985,7 +1988,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Add a Send</value>
+    <value>पाठवणी जोडा</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -2261,10 +2264,10 @@ Scanning will happen automatically.</value>
     <value>Filter items by vault</value>
   </data>
   <data name="AllVaults" xml:space="preserve">
-    <value>All vaults</value>
+    <value>सर्व तिजोऱ्या</value>
   </data>
   <data name="Vaults" xml:space="preserve">
-    <value>Vaults</value>
+    <value>तिजोऱ्या</value>
   </data>
   <data name="VaultFilterDescription" xml:space="preserve">
     <value>Vault: {0}</value>
@@ -2385,7 +2388,7 @@ select Add TOTP to store the key safely</value>
     <value>Password type</value>
   </data>
   <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
-    <value>What would you like to generate?</value>
+    <value>काय निर्माण करायचे?</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
     <value>Username type</value>
@@ -2414,9 +2417,9 @@ select Add TOTP to store the key safely</value>
   <data name="Service" xml:space="preserve">
     <value>Service</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2441,7 +2444,7 @@ select Add TOTP to store the key safely</value>
     <value>Are you sure you want to overwrite the current username?</value>
   </data>
   <data name="GenerateUsername" xml:space="preserve">
-    <value>Generate username</value>
+    <value>वापरकर्ता नाव निर्माण करा</value>
   </data>
   <data name="EmailType" xml:space="preserve">
     <value>Email Type</value>
@@ -2506,13 +2509,13 @@ Do you want to switch to this account?</value>
     <value>Log in with device</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Log in initiated</value>
+    <value>Login initiated</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
     <value>A notification has been sent to your device.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+    <value>तुमच्या तिजोरीचे कुलूप उघडे आहे आणि दुसऱ्या उपकरणावरील अंगुलिमुद्रा वाक्यांश जुळत आहे हे निश्चित करा.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
     <value>Resend notification</value>
@@ -2628,17 +2631,84 @@ Do you want to switch to this account?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Current master password</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Logged in!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Approve with my other device</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Request admin approval</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Approve with master password</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Turn off using a public device</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Remember this device</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Created {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Passkey will not be copied</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Copy application</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Available for two-step login</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Master password re-prompt help</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings to resolve.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Invalid API key</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Invalid API token</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Admin approval requested</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Your request has been sent to your admin.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>You will be notified once approved. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Trouble logging in?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Logging in as {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Vault timeout action changed to log out</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Block auto-fill</value>
@@ -2671,9 +2741,6 @@ Do you want to switch to this account?</value>
   <data name="InvalidURI" xml:space="preserve">
     <value>Invalid URI</value>
   </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI saved</value>
-  </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI removed</value>
   </data>
@@ -2685,5 +2752,23 @@ Do you want to switch to this account?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Cannot edit multiple URIs at once</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Login approved</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Log in with device</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logging in on</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Too many attempts</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Account logged out.</value>
   </data>
 </root>

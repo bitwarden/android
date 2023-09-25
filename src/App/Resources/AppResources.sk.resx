@@ -954,6 +954,9 @@ Skenovanie prebehne automaticky.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Túto funkciu nemožno použiť, kým neaktualizujete svoj šifrovací kľúč.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Vyžaduje sa migrácia šifrovacieho kľúča. Na aktualizáciu šifrovacieho kľúča sa prihláste cez webový trezor.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Zistiť viac</value>
   </data>
@@ -2413,9 +2416,9 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</value>
   <data name="Service" xml:space="preserve">
     <value>Služba</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2627,17 +2630,84 @@ Chcete prepnúť na toto konto?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Súčasné hlavné heslo</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Prihlásený!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Schváliť pomocou môjho druhého zariadenia</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Žiadosť o schválenie správcom</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Schváliť pomocou hlavného hesla</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Vypnúť pomocou verejného zariadenia</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Zapamätať si toto zariadenie</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Prístupový kľúč</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Prístupové kľúče</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Vytvorené {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Aplikácia</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Zmena aplikácie prístupového kódu nie je možná, pretože by sa tým prístupový kód znefunkčnil</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Prístupový kód sa neskopíruje</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Prístupový kľúč sa do klonovanej položky neskopíruje. Chcete pokračovať v klonovaní tejto položky?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Kopírovať aplikáciu</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>K dispozícii pre dvojstupňové prihlásenie</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Pomoc s opätovnou výzvou na zadanie hlavného hesla</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Odomknutie môže zlyhať z dôvodu nedostatku pamäte. Znížte nastavenia pamäte KDF, aby ste vyriešili problém</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Neplatný kľúč API</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Neplatný token API</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Vyžaduje sa schválenie správcom</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Vaša žiadosť bola odoslaná správcovi.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Po schválení budete informovaný. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Máte problémy s prihlásením?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Prihlasujete sa ako {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Akcia pri vypršaní času pre trezor zmenená na odhlásenie</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Túto položku nemožno zdieľať s organizáciou, pretože už existuje jedna s rovnakým prístupovým kľúčom.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Blokovať automatické vypĺňanie</value>
@@ -2670,9 +2740,6 @@ Chcete prepnúť na toto konto?</value>
   <data name="InvalidURI" xml:space="preserve">
     <value>Neplatné URI</value>
   </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI uložené</value>
-  </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI odstránené</value>
   </data>
@@ -2684,5 +2751,23 @@ Chcete prepnúť na toto konto?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Nie je možné upravovať viacero URI naraz</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Schválené prihlásenie</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Prihlásenie pomocou zariadenia musí byť nastavené v nastaveniach aplikácie Bitwarden. Potrebujete inú možnosť?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Prihlásiť pomocou zariadenia</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Prihlásenie na</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Príliš veľa pokusov</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Účet bol odhlásený.</value>
   </data>
 </root>

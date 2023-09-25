@@ -223,6 +223,17 @@
                             AutomationId="RegeneratePasswordButton" />
                     </Grid>
 
+                    <Label
+                        Text="{u:I18n Passkey}"
+                        StyleClass="box-label"
+                        Margin="0,10,0,0"
+                        IsVisible="{Binding ShowPasskeyInfo}"/>
+                    <Entry
+                        Text="{Binding CreationDate}"
+                        IsEnabled="False"
+                        StyleClass="box-value,text-muted" 
+                        IsVisible="{Binding ShowPasskeyInfo}" />
+
                     <Grid StyleClass="box-row, box-row-input">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />

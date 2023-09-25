@@ -954,6 +954,9 @@ Skan prosesi avtomatik baş tutacaq.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Şifrələmə açarınızı güncəlləyənə qədər bu özəlliyi istifadə edə bilməzsiniz.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Şifrələmə açarının daşınması tələb olunur. Şifrələmə açarınızı güncəlləmək üçün zəhmət olmasa veb anbar üzərindən giriş edin.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Daha ətraflı</value>
   </data>
@@ -2412,9 +2415,9 @@ Skan prosesi avtomatik baş tutacaq.</value>
   <data name="Service" xml:space="preserve">
     <value>Xidmət</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2626,17 +2629,84 @@ Bu hesaba keçmək istəyirsiniz?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Hazırkı ana parol</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Giriş edildi!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Digər cihazımla təsdiqlə</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Admin təsdiqini tələb et</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Ana parolla təsdiqlə</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Hər kəsə açıq bir cihaz istifadə edərək söndür</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Bu cihazı xatırla</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Keçid açarı</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Keçid açarı</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>{0} yaradıldı</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Tətbiq</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Keçid açarı tətbiqinə düzəliş edə bilməzsiniz, çünki bu, keçid açarını yararsız edəcək</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Keçid açarı kopyalanmır</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Keçid açarı, klonlanmış elementə kopyalanmayacaq. Bu elementi klonlamağa davam etmək istəyirsiniz?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Tətbiqi kopyala</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>İki addımlı giriş üçün əlçatandır</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Ana parolu təkrar soruş köməyi</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Yetərsiz yaddaşa görə kilid açma uğursuz ola bilər. Həll etmək üçün KDF yaddaş tənzimləmələrinizi azaldın</value>
+    <value>Yetərsiz yaddaşa görə kilid açma uğursuz ola bilər. Həll etmək üçün KDF yaddaş tənzimləmələrinizi azaldın və ya biometrik kilid açmanı quraşdırın.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Yararsız API açarı</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Yararsız API tokeni</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Admin təsdiqi tələb olunur</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Tələbiniz admininizə göndərildi.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Təsdiqləndikdən sonra məlumatlandırılacaqsınız. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Girişdə problem var?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>{0} olaraq giriş edilir</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Anbar vaxt bitməsi əməliyyatı "çıxış et" olaraq dəyişdirildi</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Bu element təşkilatla paylaşıla bilmir, çünki eyni keçid açarına sahib bir element artıq mövcuddur.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Avto-doldurmanı əngəllə</value>
@@ -2669,9 +2739,6 @@ Bu hesaba keçmək istəyirsiniz?</value>
   <data name="InvalidURI" xml:space="preserve">
     <value>Yararsız URI</value>
   </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI saxlanıldı</value>
-  </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI silindi</value>
   </data>
@@ -2683,5 +2750,23 @@ Bu hesaba keçmək istəyirsiniz?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Bir dəfəyə bir neçə URI-a düzəliş etmək mümkün deyil</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Giriş təsdiqləndi</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Cihazla giriş etmə, Bitwarden tətbiqinin tənzimləmələrində quraşdırılmalıdır. Başqa bir seçimə ehtiyacınız var?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Cihazla giriş et</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Giriş edilir</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Həddən artıq cəhd</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Hesabdan çıxış edildi.</value>
   </data>
 </root>

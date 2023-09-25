@@ -505,7 +505,7 @@
     <value>Pro spuštění rozšíření klepněte  na ikonu Bitwardenu v menu.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Pro zapnutí Bitwardenu v prohlížeči Safari a dalších aplikacích klepněte na ikonu "Více" v dolní části menu.</value>
+    <value>Pro zapnutí Bitwardenu v prohlížeči Safari a dalších aplikacích klepněte na ikonu „Další“ v dolní části menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Oblíbené</value>
@@ -954,6 +954,9 @@ Načtení proběhne automaticky.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Dokud neaktualizujete svůj šifrovací klíč, nemůžete tuto funkci použít.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Vyžaduje se migrace šifrovacího klíče. Pro aktualizaci šifrovacího klíče se přihlaste přes webový trezor.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Dozvědět se více</value>
   </data>
@@ -1304,22 +1307,22 @@ Načtení proběhne automaticky.</value>
     <value>Přistupujte k Vašemu trezoru přímo z Vaší klávesnice pro rychlejší automatické vyplnění hesel.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Pokyny pro zapnutí automatického vyplňování hesel na Vašem zařízení:</value>
+    <value>Pokyny pro zapnutí automatického vyplňování hesel na vašem zařízení:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Přejděte do aplikace "Nastavení" v iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Klepněte na "Hesla" > "Volby hesla"</value>
+    <value>2. Klepněte na „Hesla“ > „Volby hesla“</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Zapněte přepínač u položky "Automatické vyplnění hesel"</value>
+    <value>3. Povolte „Automatické vyplnění hesel“</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Najděte sekci "Povolit vyplňování z:"</value>
+    <value>4. Najděte sekci „Povolit vyplňování z“</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Zvolte "Bitwarden"</value>
+    <value>5. Zvolte „Bitwarden“</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
     <value>Automatické vyplňování hesel</value>
@@ -2412,9 +2415,9 @@ Načtení proběhne automaticky.</value>
   <data name="Service" xml:space="preserve">
     <value>Služba</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2626,17 +2629,84 @@ Chcete se přepnout na tento účet?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Aktuální hlavní heslo</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Přihlášeno!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Schválit s mým dalším zařízením</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Žádost o schválení správcem</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Schválit hlavním heslem</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Vypnout pomocí veřejného zařízení</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Zapamatovat toto zařízení</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Přístupový klíč</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Přístupové klíče</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Vytvořeno {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Aplikace</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Nemůžete upravovat aplikaci pro přístupové klíče, protože by to zneplatnilo přístupový klíč</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Přístupový klíč nebude zkopírován</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Přístupový klíč nebude zkopírován do duplikované položky. Chete pokračovat v duplikování této položky?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Kopírovat aplikaci</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Dostupné pro dvoufázové přihlášení</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Nápověda pro znovuzeptání se na hlavní heslo</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Odemknutí může selhat z důvodu nedostatku paměti. Pro vyřešení snižte nastavení paměti KDF.</value>
+    <value>Odemknutí může selhat z důvodu nedostatku paměti. Snižte nastavení KDF paměti nebo nastavte odemykání pomocí biometrie.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Neplatný klíč API</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Neplatný token API</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Bylo vyžádáno schválení správcem</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Váš požadavek byl odeslán Vašemu správci.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Po schválení budete upozorněni. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Potíže s přihlášením?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Přihlášování jako {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Akce časového limitu trezoru byla změněna na odhlášení</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Tuto položku nelze sdílet s organizací, protože již existuje jedna se stejným přístupovým klíčem.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Blokovat automatické vyplňování</value>
@@ -2669,9 +2739,6 @@ Chcete se přepnout na tento účet?</value>
   <data name="InvalidURI" xml:space="preserve">
     <value>Neplatný URI</value>
   </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI byl uložen</value>
-  </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI byl odebrán</value>
   </data>
@@ -2683,5 +2750,23 @@ Chcete se přepnout na tento účet?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Najednou nelze upravovat více URI</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Přihlášení bylo schváleno</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Přihlášení zařízením musí být nastaveno v aplikaci Bitwarden. Potřebujete další volby?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Přihlásit se zařízením</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Přihlašování na</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Příliš mnoho pokusů</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Účet byl odhlášen.</value>
   </data>
 </root>

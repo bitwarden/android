@@ -235,34 +235,17 @@ namespace Bit.App.Pages
                 {
                     AddTotpGroupItem(groupedItems, uppercaseGroupNames);
 
-                    groupedItems.Add(new GroupingsPageListGroup(
-                        AppResources.Types, 4, uppercaseGroupNames, !hasFavorites)
+                    var types = new CipherType[] { CipherType.Login, CipherType.Card, CipherType.Identity, CipherType.SecureNote };
+                    var typesGroup = new GroupingsPageListGroup(AppResources.Types, types.Length, uppercaseGroupNames, !hasFavorites);
+                    foreach (CipherType t in types)
                     {
-                        new GroupingsPageListItem
+                        typesGroup.Add(new GroupingsPageListItem
                         {
-                            Type = CipherType.Login,
-                            ItemCount = (_typeCounts.ContainsKey(CipherType.Login) ?
-                                _typeCounts[CipherType.Login] : 0).ToString("N0")
-                        },
-                        new GroupingsPageListItem
-                        {
-                            Type = CipherType.Card,
-                            ItemCount = (_typeCounts.ContainsKey(CipherType.Card) ?
-                                _typeCounts[CipherType.Card] : 0).ToString("N0")
-                        },
-                        new GroupingsPageListItem
-                        {
-                            Type = CipherType.Identity,
-                            ItemCount = (_typeCounts.ContainsKey(CipherType.Identity) ?
-                                _typeCounts[CipherType.Identity] : 0).ToString("N0")
-                        },
-                        new GroupingsPageListItem
-                        {
-                            Type = CipherType.SecureNote,
-                            ItemCount = (_typeCounts.ContainsKey(CipherType.SecureNote) ?
-                                _typeCounts[CipherType.SecureNote] : 0).ToString("N0")
-                        },
-                    });
+                            Type = t,
+                            ItemCount = _typeCounts.GetValueOrDefault(t).ToString("N0")
+                        });
+                    }
+                    groupedItems.Add(typesGroup);
                 }
                 if (NestedFolders?.Any() ?? false)
                 {
@@ -584,7 +567,9 @@ namespace Bit.App.Pages
                 }
                 else if (Type != null)
                 {
-                    Filter = c => c.Type == Type.Value && !c.IsDeleted;
+                    Filter = c => !c.IsDeleted
+                                  &&
+                                  Type.Value == c.Type;
                 }
                 else if (FolderId != null)
                 {
@@ -651,14 +636,9 @@ namespace Bit.App.Pages
                         NoFolderCiphers.Add(c);
                     }
 
-                    if (_typeCounts.ContainsKey(c.Type))
-                    {
-                        _typeCounts[c.Type] = _typeCounts[c.Type] + 1;
-                    }
-                    else
-                    {
-                        _typeCounts.Add(c.Type, 1);
-                    }
+                    _typeCounts[c.Type] = _typeCounts.TryGetValue(c.Type, out var currentTypeCount)
+                                                ? currentTypeCount + 1
+                                                : 1;
                 }
 
                 if (c.IsDeleted)

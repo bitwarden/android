@@ -68,9 +68,9 @@ namespace Bit.Droid
                 ServiceContainer.Register<IDeleteAccountActionFlowExecutioner>("deleteAccountActionFlowExecutioner", deleteAccountActionFlowExecutioner);
 
                 var verificationActionsFlowHelper = new VerificationActionsFlowHelper(
-                    ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService"),
                     ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
-                    ServiceContainer.Resolve<ICryptoService>("cryptoService"));
+                    ServiceContainer.Resolve<ICryptoService>("cryptoService"),
+                    ServiceContainer.Resolve<IUserVerificationService>());
                 ServiceContainer.Register<IVerificationActionsFlowHelper>("verificationActionsFlowHelper", verificationActionsFlowHelper);
 
                 var accountsManager = new AccountsManager(
@@ -156,10 +156,10 @@ namespace Bit.Droid
                 messagingService, broadcasterService);
             var autofillHandler = new AutofillHandler(stateService, messagingService, clipboardService,
                 platformUtilsService, new LazyResolve<IEventService>());
-            var biometricService = new BiometricService(stateService);
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);
-            var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
+            var biometricService = new BiometricService(stateService, cryptoService);
+            var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService, stateService);
 
             ServiceContainer.Register<ISynchronousStorageService>(preferencesStorage);
             ServiceContainer.Register<IBroadcasterService>("broadcasterService", broadcasterService);

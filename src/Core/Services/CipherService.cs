@@ -176,6 +176,7 @@ namespace Bit.Core.Services
                 OrganizationId = model.OrganizationId,
                 Type = model.Type,
                 CollectionIds = model.CollectionIds,
+                CreationDate = model.CreationDate,
                 RevisionDate = model.RevisionDate,
                 Reprompt = model.Reprompt
             };
@@ -207,7 +208,7 @@ namespace Bit.Core.Services
 
         public async Task<Cipher> GetAsync(string id)
         {
-            var localData = await _stateService.GetLocalDataAsync();
+            var localData = await _stateService.GetCiphersLocalDataAsync();
             var ciphers = await _stateService.GetEncryptedCiphersAsync();
             if (!ciphers?.ContainsKey(id) ?? true)
             {
@@ -219,7 +220,7 @@ namespace Bit.Core.Services
 
         public async Task<List<Cipher>> GetAllAsync()
         {
-            var localData = await _stateService.GetLocalDataAsync();
+            var localData = await _stateService.GetCiphersLocalDataAsync();
             var ciphers = await _stateService.GetEncryptedCiphersAsync();
             var response = ciphers?.Select(c => new Cipher(c.Value, false,
                 localData?.ContainsKey(c.Key) ?? false ? localData[c.Key] : null));
@@ -249,10 +250,9 @@ namespace Bit.Core.Services
             {
                 try
                 {
-                    var hashKey = await _cryptoService.HasKeyAsync();
-                    if (!hashKey)
+                    if (!await _cryptoService.HasUserKeyAsync())
                     {
-                        throw new Exception("No key.");
+                        throw new UserKeyNullException();
                     }
                     var decCiphers = new List<CipherView>();
                     async Task decryptAndAddCipherAsync(Cipher cipher)
@@ -458,7 +458,7 @@ namespace Bit.Core.Services
 
         public async Task UpdateLastUsedDateAsync(string id)
         {
-            var ciphersLocalData = await _stateService.GetLocalDataAsync();
+            var ciphersLocalData = await _stateService.GetCiphersLocalDataAsync();
             if (ciphersLocalData == null)
             {
                 ciphersLocalData = new Dictionary<string, Dictionary<string, object>>();
@@ -476,7 +476,7 @@ namespace Bit.Core.Services
                 ciphersLocalData[id].Add("lastUsedDate", DateTime.UtcNow);
             }
 
-            await _stateService.SetLocalDataAsync(ciphersLocalData);
+            await _stateService.SetCiphersLocalDataAsync(ciphersLocalData);
             // Update cache
             if (DecryptedCipherCache == null)
             {
@@ -487,21 +487,6 @@ namespace Bit.Core.Services
             {
                 cached.LocalData = ciphersLocalData[id];
             }
-        }
-
-        public async Task SaveNeverDomainAsync(string domain)
-        {
-            if (string.IsNullOrWhiteSpace(domain))
-            {
-                return;
-            }
-            var domains = await _stateService.GetNeverDomainsAsync();
-            if (domains == null)
-            {
-                domains = new HashSet<string>();
-            }
-            domains.Add(domain);
-            await _stateService.SetNeverDomainsAsync(domains);
         }
 
         public async Task SaveWithServerAsync(Cipher cipher)
@@ -531,8 +516,13 @@ namespace Bit.Core.Services
             await UpsertAsync(data);
         }
 
-        public async Task ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds)
+        public async Task<ICipherService.ShareWithServerError> ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds)
         {
+            if (!await ValidateCanBeSharedWithOrgAsync(cipher, organizationId))
+            {
+                return ICipherService.ShareWithServerError.DuplicatedPasskeyInOrg;
+            }
+
             var attachmentTasks = new List<Task>();
             if (cipher.Attachments != null)
             {
@@ -553,13 +543,28 @@ namespace Bit.Core.Services
             var userId = await _stateService.GetActiveUserIdAsync();
             var data = new CipherData(response, userId, collectionIds);
             await UpsertAsync(data);
+
+            return ICipherService.ShareWithServerError.None;
+        }
+
+        private async Task<bool> ValidateCanBeSharedWithOrgAsync(CipherView cipher, string organizationId)
+        {
+            if (!cipher.HasFido2Key)
+            {
+                return true;
+            }
+
+            var decCiphers = await GetAllDecryptedAsync();
+            return !decCiphers
+                .Where(c => c.OrganizationId == organizationId)
+                .Any(c => !cipher.Login.MainFido2Key.IsUniqueAgainst(c.Login?.MainFido2Key));
         }
 
         public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, string filename, byte[] data)
         {
-            var orgKey = await _cryptoService.GetOrgKeyAsync(cipher.OrganizationId);
-            var encFileName = await _cryptoService.EncryptAsync(filename, orgKey);
-            var (attachmentKey, orgEncAttachmentKey) = await _cryptoService.MakeEncKeyAsync(orgKey);
+            var (attachmentKey, protectedAttachmentKey, encKey) = await MakeAttachmentKeyAsync(cipher.OrganizationId);
+
+            var encFileName = await _cryptoService.EncryptAsync(filename, encKey);
             var encFileData = await _cryptoService.EncryptToBytesAsync(data, attachmentKey);
 
             CipherResponse response;
@@ -567,7 +572,7 @@ namespace Bit.Core.Services
             {
                 var request = new AttachmentRequest
                 {
-                    Key = orgEncAttachmentKey.EncryptedString,
+                    Key = protectedAttachmentKey.EncryptedString,
                     FileName = encFileName.EncryptedString,
                     FileSize = encFileData.Buffer.Length,
                 };
@@ -578,7 +583,7 @@ namespace Bit.Core.Services
             }
             catch (ApiException e) when (e.Error.StatusCode == System.Net.HttpStatusCode.NotFound || e.Error.StatusCode == System.Net.HttpStatusCode.MethodNotAllowed)
             {
-                response = await LegacyServerAttachmentFileUploadAsync(cipher.Id, encFileName, encFileData, orgEncAttachmentKey);
+                response = await LegacyServerAttachmentFileUploadAsync(cipher.Id, encFileName, encFileData, protectedAttachmentKey);
             }
 
             var userId = await _stateService.GetActiveUserIdAsync();
@@ -796,6 +801,14 @@ namespace Bit.Core.Services
 
         // Helpers
 
+        private async Task<Tuple<SymmetricCryptoKey, EncString, SymmetricCryptoKey>> MakeAttachmentKeyAsync(string organizationId)
+        {
+            var encryptionKey = await _cryptoService.GetOrgKeyAsync(organizationId)
+                ?? (SymmetricCryptoKey)await _cryptoService.GetUserKeyWithLegacySupportAsync();
+            var (attachmentKey, protectedAttachmentKey) = await _cryptoService.MakeDataEncKeyAsync(encryptionKey);
+            return new Tuple<SymmetricCryptoKey, EncString, SymmetricCryptoKey>(attachmentKey, protectedAttachmentKey, encryptionKey);
+        }
+
         private async Task ShareAttachmentWithServerAsync(AttachmentView attachmentView, string cipherId,
             string organizationId)
         {
@@ -807,14 +820,16 @@ namespace Bit.Core.Services
 
             var bytes = await attachmentResponse.Content.ReadAsByteArrayAsync();
             var decBytes = await _cryptoService.DecryptFromBytesAsync(bytes, null);
-            var key = await _cryptoService.GetOrgKeyAsync(organizationId);
-            var encFileName = await _cryptoService.EncryptAsync(attachmentView.FileName, key);
-            var dataEncKey = await _cryptoService.MakeEncKeyAsync(key);
-            var encData = await _cryptoService.EncryptToBytesAsync(decBytes, dataEncKey.Item1);
+
+            var (attachmentKey, protectedAttachmentKey, encKey) = await MakeAttachmentKeyAsync(organizationId);
+
+            var encFileName = await _cryptoService.EncryptAsync(attachmentView.FileName, encKey);
+            var encFileData = await _cryptoService.EncryptToBytesAsync(decBytes, attachmentKey);
+
             var boundary = string.Concat("--BWMobileFormBoundary", DateTime.UtcNow.Ticks);
             var fd = new MultipartFormDataContent(boundary);
-            fd.Add(new StringContent(dataEncKey.Item2.EncryptedString), "key");
-            fd.Add(new StreamContent(new MemoryStream(encData.Buffer)), "data", encFileName.EncryptedString);
+            fd.Add(new StringContent(protectedAttachmentKey.EncryptedString), "key");
+            fd.Add(new StreamContent(new MemoryStream(encFileData.Buffer)), "data", encFileName.EncryptedString);
             await _apiService.PostShareCipherAttachmentAsync(cipherId, attachmentView.Id, fd, organizationId);
         }
 
@@ -1104,6 +1119,16 @@ namespace Bit.Core.Services
                             cipher.Login.Uris.Add(loginUri);
                         }
                     }
+                    if (model.Login.HasFido2Keys)
+                    {
+                        cipher.Login.Fido2Keys = new List<Fido2Key>();
+                        foreach (var fido2Key in model.Login.Fido2Keys)
+                        {
+                            var fido2KeyDomain = new Fido2Key();
+                            await EncryptObjPropertyAsync(fido2Key, fido2KeyDomain, Fido2Key.EncryptableProperties, key);
+                            cipher.Login.Fido2Keys.Add(fido2KeyDomain);
+                        }
+                    }
                     break;
                 case CipherType.SecureNote:
                     cipher.SecureNote = new SecureNote
@@ -1229,8 +1254,8 @@ namespace Bit.Core.Services
 
             public int Compare(CipherView a, CipherView b)
             {
-                var aName = a?.Name;
-                var bName = b?.Name;
+                var aName = a?.ComparableName;
+                var bName = b?.ComparableName;
                 if (aName == null && bName != null)
                 {
                     return -1;
@@ -1242,19 +1267,6 @@ namespace Bit.Core.Services
                 if (aName == null && bName == null)
                 {
                     return 0;
-                }
-                var result = _i18nService.StringComparer.Compare(aName, bName);
-                if (result != 0 || a.Type != CipherType.Login || b.Type != CipherType.Login)
-                {
-                    return result;
-                }
-                if (a.Login.Username != null)
-                {
-                    aName += a.Login.Username;
-                }
-                if (b.Login.Username != null)
-                {
-                    bName += b.Login.Username;
                 }
                 return _i18nService.StringComparer.Compare(aName, bName);
             }

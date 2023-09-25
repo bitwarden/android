@@ -831,7 +831,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Šim kontam ir iestatīta divpakāpju pieteikšanās, bet šajā ierīcē netiek nodrošināts neviens no uzstādītajiem divpakāpju pārbaudes nodrošinātājiem. Lūgums izmantot atbalstītu ierīci un/vai pievienot papildus nodrošinātājus, kas tiek labāk atbalstīti dažādās ierīcēs (piemēram, autentificētāja lietotni).</value>
+    <value>Šim kontam ir iestatīta divpakāpju pieteikšanās, bet šajā ierīcē netiek nodrošināts neviens no uzstādītajiem divpakāpju pārbaudes nodrošinātājiem. Lūgums izmantot atbalstītu ierīci un/vai pievienot papildu nodrošinātājus, kas tiek labāk atbalstīti dažādās ierīcēs (piemēram, autentificētāja lietotni).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Atgūšanas kods</value>
@@ -953,6 +953,9 @@ Nolasīšana notiks automātiski.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
     <value>Šo iespēju nevar izmantot, kamēr nav atjaunināta šifrēšanas atslēga.</value>
+  </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Nepieciešama šifrēšanas atslēgas nomaiņa. Lūgums pieteikties tīmekļa glabātavā, lai atjauninātu savu šifrēšanas atslēgu.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Uzzināt vairāk</value>
@@ -1384,10 +1387,10 @@ Nolasīšana notiks automātiski.</value>
     <value>Meklēt krājumā</value>
   </data>
   <data name="SearchFileSends" xml:space="preserve">
-    <value>Meklēt datņu Sūtījumus</value>
+    <value>Meklēt datņu Send</value>
   </data>
   <data name="SearchTextSends" xml:space="preserve">
-    <value>Meklēt teksta Sūtījumus</value>
+    <value>Meklēt teksta Send</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
     <value>Meklēt {0}</value>
@@ -1496,13 +1499,13 @@ Nolasīšana notiks automātiski.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Glabātava ir slēgta. Nepieciešams norādīt galveno paroli, lai turpinātu.</value>
+    <value>Glabātava ir aizslēgta. Nepieciešams norādīt galveno paroli, lai turpinātu.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Glabātava ir slēgta. Nepieciešams norādīt PIN kodu, lai turpinātu.</value>
+    <value>Glabātava ir aizslēgta. Nepieciešams norādīt PIN kodu, lai turpinātu.</value>
   </data>
   <data name="VaultLockedIdentity" xml:space="preserve">
-    <value>Glabātava ir slēgta. Jāapstiprina identitāte, lai turpinātu.</value>
+    <value>Glabātava ir aizslēgta. Jāapstiprina identitāte, lai turpinātu.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tumšs</value>
@@ -1662,7 +1665,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Kods nosūtīts</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
-    <value>Lai turpinātu, apstipriniet savu identitāti.</value>
+    <value>Jāapstiprina identitāte, lai turpinātu.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Šī izguve satur glabātavas datus nešifrētā veidā. Izdoto datni nevajadzētu glabāt vai sūtīt nedrošos veidos (piemēram, e-pastā). Izdzēst to uzreiz pēc izmantošanas.</value>
@@ -1746,7 +1749,7 @@ Nolasīšana notiks automātiski.</value>
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>Vai tiešām vēlaties sūtīt uz atkritni?</value>
+    <value>Vai tiešām pārvietot uz atkritni?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
@@ -1810,10 +1813,11 @@ Nolasīšana notiks automātiski.</value>
     <value>Ielādē</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>Ieslēdzot šo slēdzi, Tu piekrīti sekojošajam:</value>
+    <value>Ar šī slēdža ieslēgšanu tiek piekrists sekojošajam:
+</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Nav pieņemti izmantošanas nosacījumi un privātuma politika.</value>
+    <value>Nav apstiprināti izmantošanas noteikumi un privātuma nosacījumi.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
     <value>Izmantošanas nosacījumi</value>
@@ -1867,19 +1871,19 @@ Nolasīšana notiks automātiski.</value>
     <value>Apvienības nosacījumi ietekmē Tavas īpašumtiesību iespējas.</value>
   </data>
   <data name="Send" xml:space="preserve">
-    <value>Sūtīt</value>
+    <value>Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AllSends" xml:space="preserve">
-    <value>Visi Sūtījumi</value>
+    <value>Visi Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
-    <value>Sūtījumi</value>
+    <value>Send vienumi</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NameInfo" xml:space="preserve">
-    <value>Draudzīgs nosaukums, lai raksturotu šo Sūtījumu.</value>
+    <value>Lasāms nosaukums, kas apraksta šo Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Text" xml:space="preserve">
@@ -1920,7 +1924,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Dzēšanas laiks</value>
   </data>
   <data name="DeletionDateInfo" xml:space="preserve">
-    <value>Sūtījums tiks neatgriezeniski dzēsts norādītajā datumā un laikā.</value>
+    <value>Send tiks neatgriezeniski izdzēsts norādītajā datumā un laikā.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PendingDelete" xml:space="preserve">
@@ -1933,21 +1937,21 @@ Nolasīšana notiks automātiski.</value>
     <value>Derīguma beigu laiks</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
-    <value>Ja tas ir iestatīts, piekļuve šim Sūtījumam beigsies norādītajā datumā un laikā.</value>
+    <value>Ja iestatīts, piekļuve šim Send beigsies norādītajā datumā un laikā.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
     <value>Beidzies izmantošanas laiks</value>
   </data>
   <data name="MaximumAccessCount" xml:space="preserve">
-    <value>Lielākais pieļaujamais piekļuvju skaits</value>
+    <value>Lielākais pieļaujamais piekļuves reižu skaits</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>Ja tas ir iestatīts, lietotāji vairs nevarēs piekļūt šim Sūtījumam, tiklīdz būs sasniegts maksimālais piekļuves skaits.</value>
+    <value>Ja iestatīts, lietotāji nevarēs piekļūt šim Send, kad tiks sasniegts lielākais pieļaujamais piekļūšanas reižu skaits.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
-    <value>Sasniegts lielākais pieļaujamais piekļuvju skaits</value>
+    <value>Sasniegts lielākais pieļaujamais piekļuves reižu skaits</value>
   </data>
   <data name="CurrentAccessCount" xml:space="preserve">
     <value>Pašreizējais piekļuvju skaits</value>
@@ -1956,14 +1960,14 @@ Nolasīšana notiks automātiski.</value>
     <value>Jauna parole</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>Pēc izvēles pieprasīt paroli, lai lietotāji varētu piekļūt šim Sūtījumam.</value>
+    <value>Pēc izvēles pieprasīt paroli, lai lietotāji varētu piekļūt šim Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
     <value>Noņemt paroli</value>
   </data>
   <data name="AreYouSureRemoveSendPassword" xml:space="preserve">
-    <value>Vai tiešām vēlaties noņemt paroli?</value>
+    <value>Vai tiešām noņemt paroli?</value>
   </data>
   <data name="RemovingSendPassword" xml:space="preserve">
     <value>Noņem paroli</value>
@@ -1972,19 +1976,19 @@ Nolasīšana notiks automātiski.</value>
     <value>Parole ir noņemta</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
-    <value>Privātas piezīmes par šo Sūtījumu.</value>
+    <value>Personīgas piezīmes par šo Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Deaktivizēt šo Sūtījumu, lai neviens tam nevarētu piekļūt</value>
+    <value>Izslēgt šo Send, lai neviens tam nevarētu piekļūt</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
-    <value>Jūsu kontā nav neviena Sūtījuma.</value>
+    <value>Kontā nav neviena Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Pievienot Sūtījumu</value>
+    <value>Pievienot Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -1994,35 +1998,35 @@ Nolasīšana notiks automātiski.</value>
     <value>Kopīgot saiti</value>
   </data>
   <data name="SendLink" xml:space="preserve">
-    <value>Sūtījuma saite</value>
+    <value>Send saite</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
-    <value>Meklēt Sūtījumus</value>
+    <value>Meklēt Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
-    <value>Labot Sūtījumu</value>
+    <value>Labot Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Jauns Sūtījums</value>
+    <value>Jauns Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
-    <value>Vai tiešām vēlaties dzēst šo Sūtījumu?</value>
+    <value>Vai tiešām izdzēst šo Send?</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Sūtījums dzēsts</value>
+    <value>Send izdzēsts</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Sūtījums saglabāts</value>
+    <value>Send saglabāts</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Sūtījums izveidots</value>
+    <value>Send izveidots</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2044,30 +2048,30 @@ Nolasīšana notiks automātiski.</value>
     <value>Pielāgots</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Kopīgojiet šo Sūtījumu pēc saglabāšanas</value>
+    <value>Kopīgot šo Send pēc saglabāšanas</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
-    <value>Organizācijas politikas dēļ jūs varat dzēst tikai esošu Sūtījumu.</value>
+    <value>Uzņēmuma nosacījumu dēļ ir iespējams dzēst tikai esošu Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
-    <value>Par Sūtījumu</value>
+    <value>Par Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
     <value>Slēpt e-pasta adresi no saņēmējiem.</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
-    <value>Viena vai vairākas organizācijas politikas ietekmē jūsu Sūtījuma opcijas.</value>
+    <value>Viens vai vairāki apvienības nosacījumi ietekmē Send iespējas.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>Bezmaksas kontos var kopīgot tikai tekstu. Lai izmantotu failus ar Sūtījumu, ir nepieciešama Premium dalība.</value>
+    <value>Ar bezmaksas kontu ir iespējams kopīgot tikai tekstu. Ir nepieciešama Premium dalība, lai Send izmantotu datnes.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Jums ir jāapstiprina savs e-pasts, lai izmantotu failus ar Sūtījumu. Jūs varat verificēt savu e-pastu tīmekļa glabātuvē.</value>
+    <value>Ir jāapstiprina e-pasta adrese, lai izmantotu datnes ar Send. E-pasta edresi var apstiprināt tīmekļa glabātavā.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
@@ -2176,7 +2180,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Konts tika veiksmīgi noņemts</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
-    <value>Dzēst kontu</value>
+    <value>Izdzēst kontu</value>
   </data>
   <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
     <value>Konta dzēšana ir neatgriezeniska</value>
@@ -2203,7 +2207,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Sūta</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Kopēt Sūtījuma saiti saglabāšanas laikā</value>
+    <value>Saglabāšanas laikā ievietot Send saiti starpliktuvē</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
     <value>Sūta kodu</value>
@@ -2212,13 +2216,13 @@ Nolasīšana notiks automātiski.</value>
     <value>Pārbauda</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Nosūtīt kodu vēlreiz</value>
+    <value>Atkārtoti nosūtīt kodu</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
     <value>Pārbaudes kods tika nosūtīts e-pastā</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>Nosūtot verifikācijas kodu uz jūsu e-pastu, radās kļūda. Lūdzu mēģiniet vēlreiz</value>
+    <value>Atgadījās kļūda, kad apliecinājuma kods tika sūtīts uz e-pastu. Lūgums mēģināt vēlreiz</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Ievadīt pārbaudes kodu, kas tika nosūtīts e-pastā</value>
@@ -2413,9 +2417,9 @@ jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
   <data name="Service" xml:space="preserve">
     <value>Pakalpojums</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2511,7 +2515,7 @@ Vai pārslēgties uz šo kontu?</value>
     <value>Uz ierīci ir nosūtīts paziņojums.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Jāpārliecinās, ka glabātava ir atslēgta un atpazīšanas vārdkopa ir tāda pati arī citā ierīcē.</value>
+    <value>Lūgums pārliecināties, ka glabātava ir atslēgta un atpazīšanas vārdkopa ir tāda pati arī citā ierīcē.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
     <value>Atkārtoti nosūtīt paziņojumu</value>
@@ -2627,17 +2631,84 @@ Vai pārslēgties uz šo kontu?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Pašreizējā galvenā parole</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Pieteicies.</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Apstiprināt ar citu savu ierīci</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Pieprasīt pārvaldītāja apstiprinājumu</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Apstiprināt ar galveno paroli</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Izslēgt izmantojot publisku ierīci</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Atcerēties šo ierīci</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Paroļatslēga</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Paroļatslēgas</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Izveidota {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Lietotne</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Paroļatslēgas lietotni nevar labot, jo tas paroļatslēgu padarītu nederīgu</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Paroļatslēga netiks kopēta</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Paroļatslēga netiks kopēta klonētajā vienumā. Vai turpināt šī vienuma klonēšanu?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Kopēt lietotni</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Pieejams ar divpakāpju pieteikšanos</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Galvenās paroles pārvaicāšanas palīdzība</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Atslēgšana var neizdoties nepietiekamas atmiņas dēļ. Lai to novērstu, jāsamazina KDF atmiņas iestatījmi</value>
+    <value>Atslēgšana var neizdoties nepietiekamas atmiņas dēļ. Lai to novērstu, jāsamazina KDF atmiņas iestatījumi vai jāiestata biometriskā atslēgšana.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Nederīga API atslēga</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Nederīga API pilnvara</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Pieprasīts pārvaldītāja apstiprinājums</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Pieprasījums tika nosūtīts pārvaldītājam.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Tiks saņemts paziņojums, tiklīdz būs apstiprināts. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Neizdodas pieteikties?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Piesakās kā {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Glabātavas noildzes darbība nomainīta uz atteikšanos</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Šo vienumu nevar kopīgot ar apvienību, jo tur jau ir tāds ar to pašu paroļatslēgu.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Neļaut automātisko aizpildīšanu</value>
@@ -2670,9 +2741,6 @@ Vai pārslēgties uz šo kontu?</value>
   <data name="InvalidURI" xml:space="preserve">
     <value>Nederīgs URI</value>
   </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI saglabāts</value>
-  </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI noņemts</value>
   </data>
@@ -2684,5 +2752,23 @@ Vai pārslēgties uz šo kontu?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Nevar labot vairākus URI vienlaicīgi</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Pieteikšanās apstiprināta</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Ir jāuzstāda pieteikšanās ar ierīci Bitwarden lietotnes iestatījumos. Nepieciešama cita iespēja?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Pieteikties ar ierīci</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Piesakās</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Pārāk daudz mēģinājumu</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Konts tika izrakstīts.</value>
   </data>
 </root>

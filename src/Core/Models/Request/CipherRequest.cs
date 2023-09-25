@@ -30,7 +30,8 @@ namespace Bit.Core.Models.Request
                         Username = cipher.Login.Username?.EncryptedString,
                         Password = cipher.Login.Password?.EncryptedString,
                         PasswordRevisionDate = cipher.Login.PasswordRevisionDate,
-                        Totp = cipher.Login.Totp?.EncryptedString
+                        Totp = cipher.Login.Totp?.EncryptedString,
+                        Fido2Keys = cipher.Login.Fido2Keys?.Select(f => new Fido2KeyApi(f)).ToList()
                     };
                     break;
                 case CipherType.Card:

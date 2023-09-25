@@ -954,6 +954,9 @@
   <data name="UpdateKey" xml:space="preserve">
     <value>Не можете да користите ову способност док не промените Ваш кључ за шифровање.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Сазнај више</value>
   </data>
@@ -2415,9 +2418,9 @@
   <data name="Service" xml:space="preserve">
     <value>Сервис</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2629,17 +2632,84 @@
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Тренутна главна лозинка</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Пријављено!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Одобри са мојим другим уређајем</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Затражити одобрење администратора</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Одобрити са главном лозинком</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Искључите ако се користи јавни уређај</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Запамти овај уређај</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkey-ови</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Креирано {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Апликација</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Не може да се уреди passkey апликација јер би то поништило passkey</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Passkey неће бити копиран</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Passkey неће бити копиран на клонирану ставку. Да ли желите да наставите са клонирањем ставке?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Копирај апликацију</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Доступно за пријаву у два корака</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Помоћ поновно тражење главне лозинке</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Откључавање можда неће успети због недовољне меморије. Умањите подешавање KDF меморије за решење</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Неисправан API кључ</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Неисправан API токен</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Захтевано је одобрење администратора</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Ваш захтев је послат вашем администратору.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Бићете обавештени када буде одобрено. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Имате проблема са пријављивањем?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Пријављивање као {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Радња временског ограничења сефа је промењена за одјављивање</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Блокирати ауто-пуњење</value>
@@ -2672,9 +2742,6 @@
   <data name="InvalidURI" xml:space="preserve">
     <value>Неисправна адреса</value>
   </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>УРЛ сачуван</value>
-  </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>УРЛ уклоњен</value>
   </data>
@@ -2686,5 +2753,23 @@
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Не може да се уреди истовремено више адресе</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Пријава је одобрена</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Пријава помоћу уређаја мора бити подешена у подешавањима Bitwarden апликације. Потребна је друга опција?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Пријавите се са уређајем</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logging in on</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Too many attempts</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Account logged out.</value>
   </data>
 </root>

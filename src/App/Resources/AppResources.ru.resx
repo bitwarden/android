@@ -954,6 +954,9 @@
   <data name="UpdateKey" xml:space="preserve">
     <value>Вы не можете использовать эту функцию, пока не обновите свой ключ шифрования.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Требуется миграция ключа шифрования. Чтобы обновить ключ шифрования, войдите через веб-хранилище.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Узнать больше</value>
   </data>
@@ -1471,7 +1474,7 @@
     <value>Bitwarden позволяет делиться элементами вашего хранилища с другими пользователями, используя аккаунт организации. Хотите посетить сайт bitwarden.com, чтобы узнать больше?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Экспортировать хранилище</value>
+    <value>Экспорт хранилища</value>
   </data>
   <data name="LockNow" xml:space="preserve">
     <value>Заблокировать</value>
@@ -2413,9 +2416,9 @@
   <data name="Service" xml:space="preserve">
     <value>Служба</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2511,7 +2514,7 @@
     <value>На ваше устройство отправлено уведомление.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Убедитесь, что ваше хранилище разблокировано и фраза отпечатка пальца совпадает на другом устройстве.</value>
+    <value>Убедитесь, что ваше хранилище разблокировано и фраза отпечатка совпадает на другом устройстве.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
     <value>Отправить уведомление повторно</value>
@@ -2577,7 +2580,7 @@
     <value>Сильный</value>
   </data>
   <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
-    <value>Проверьте известные случаи утечки данных для этого пароля</value>
+    <value>Проверять известные случаи утечки данных для этого пароля</value>
   </data>
   <data name="ExposedMasterPassword" xml:space="preserve">
     <value>Мастер-пароль скомпрометирован</value>
@@ -2622,16 +2625,62 @@
     <value>Регион</value>
   </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
-    <value>Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущая сессия будет завершена и потребуется повторная авторизация. Сессии на других устройствах могут оставаться активными в течение часа.</value>
+    <value>Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущий сеанс будет завершен и потребуется повторная авторизация. Сеансы на других устройствах могут оставаться активными в течение часа.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Текущий мастер-пароль</value>
+  </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Вход выполнен!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Одобрить с другим устройством</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Запросить одобрение администратора</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Одобрить с мастер-паролем</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Выключить с помощью публичного устройства</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Запомнить это устройство</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Ключ доступа</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Ключи доступа</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Создан {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Приложение</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Редактирование ключа доступа невозможно, поскольку это приведет к его аннулированию</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Ключ доступа не будет скопирован</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Ключ доступа не будет скопирован в клонированный элемент. Продолжить клонирование этого элемента?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Скопировать приложение</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Доступно для двухэтапной аутентификации</value>
   </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Помощь по повторному запросу мастер-пароля</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Разблокировка может завершиться ошибкой из-за нехватки памяти. Уменьшите настройки памяти KDF для решения этой проблемы.</value>
+    <value>Разблокировка может завершиться ошибкой из-за нехватки памяти. Уменьшите настройки памяти KDF или настройте биометрическую разблокировку для решения этой проблемы.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Некорректный ключ API</value>
@@ -2639,50 +2688,86 @@
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Некорректный токен API</value>
   </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Запрошено одобрение администратора</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Ваш запрос был отправлен администратору.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Вас уведомят об одобрении. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Не удалось войти?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Войти как {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Таймаут хранилища изменен на выход</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Этим элементом нельзя поделиться с организацией, поскольку существует другой с тем же ключом.</value>
+  </data>
   <data name="BlockAutoFill" xml:space="preserve">
-    <value>Block auto-fill</value>
+    <value>Блокировать автозаполнение</value>
   </data>
   <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
-    <value>Auto-fill will not be offered for these URIs.</value>
+    <value>Автозаполнение для этих URI предлагаться не будет.</value>
   </data>
   <data name="NewBlockedURI" xml:space="preserve">
-    <value>New blocked URI</value>
+    <value>Новый блокируемый URI</value>
   </data>
   <data name="URISaved" xml:space="preserve">
-    <value>URI saved</value>
+    <value>URI сохранен</value>
   </data>
   <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
-    <value>Invalid format. Use https://, http://, or androidapp://</value>
+    <value>Недопустимый формат. Используйте https://, http:// или androidapp://</value>
     <comment>https://, http://, androidapp:// should not be translated</comment>
   </data>
   <data name="EditURI" xml:space="preserve">
-    <value>Edit URI</value>
+    <value>Изменить URI</value>
   </data>
   <data name="EnterURI" xml:space="preserve">
-    <value>Enter URI</value>
+    <value>Ввести URI</value>
   </data>
   <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
-    <value>Format: {0}. Separate multiple URIs with a comma.</value>
+    <value>Формат: {0}. Разделите несколько URI запятой.</value>
   </data>
   <data name="FormatX" xml:space="preserve">
-    <value>Format: {0}</value>
+    <value>Формат: {0}</value>
   </data>
   <data name="InvalidURI" xml:space="preserve">
-    <value>Invalid URI</value>
-  </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI saved</value>
+    <value>Некорректный URI</value>
   </data>
   <data name="URIRemoved" xml:space="preserve">
-    <value>URI removed</value>
+    <value>URI удален</value>
   </data>
   <data name="ThereAreNoBlockedURIs" xml:space="preserve">
-    <value>There are no blocked URIs</value>
+    <value>Нет заблокированных URI</value>
   </data>
   <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
-    <value>The URI {0} is already blocked</value>
+    <value>URI {0} уже заблокирован</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
-    <value>Cannot edit multiple URIs at once</value>
+    <value>Невозможно редактировать несколько URI одновременно</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Вход одобрен</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Вход с устройства должен быть настроен в мобильном приложении Bitwarden. Нужен другой вариант?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Войти с помощью устройства</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Войти на</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Слишком много попыток</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Аккаунт не авторизован.</value>
   </data>
 </root>

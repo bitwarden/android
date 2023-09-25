@@ -38,7 +38,8 @@
                 <Label
                     Text="{u:I18n DisablePersonalVaultExportPolicyInEffect}"
                     StyleClass="text-muted, text-sm, text-bold"
-                    HorizontalTextAlignment="Center" />
+                    HorizontalTextAlignment="Center"
+                    AutomationId="DisablePrivateVaultPolicyLabel" />
             </Frame>
             <Grid
                 RowSpacing="10"
@@ -55,7 +56,8 @@
                         SelectedIndex="{Binding FileFormatSelectedIndex}"
                         SelectedIndexChanged="FileFormat_Changed"
                         StyleClass="box-value"
-                        IsEnabled="{Binding DisablePrivateVaultPolicyEnabled, Converter={StaticResource inverseBool}}" />
+                        IsEnabled="{Binding DisablePrivateVaultPolicyEnabled, Converter={StaticResource inverseBool}}"
+                        AutomationId="FileFormatPicker" />
                 </StackLayout>
                 <StackLayout
                     StyleClass="box-row"
@@ -72,7 +74,8 @@
                         HorizontalOptions="Fill"
                         VerticalOptions="End"
                         IsEnabled="{Binding DisablePrivateVaultPolicyEnabled, Converter={StaticResource inverseBool}}"
-                        Margin="0,0,0,10"/>
+                        Margin="0,0,0,10"
+                        AutomationId="SendTOTPCodeButton" />
                 </StackLayout>
                 <Grid
                     StyleClass="box-row"
@@ -96,7 +99,8 @@
                         Grid.Row="1"
                         Grid.Column="0"
                         ReturnType="Go"
-                        ReturnCommand="{Binding ExportVaultCommand}" />
+                        ReturnCommand="{Binding ExportVaultCommand}"
+                        AutomationId="MasterPasswordEntry" />
                     <controls:IconButton
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="{Binding ShowPasswordIcon}"
@@ -106,7 +110,8 @@
                         AutomationProperties.IsInAccessibleTree="True"
                         AutomationProperties.Name="{u:I18n ToggleVisibility}"
                         AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
-                        IsVisible="{Binding UseOTPVerification, Converter={StaticResource inverseBool}}"/>
+                        IsVisible="{Binding UseOTPVerification, Converter={StaticResource inverseBool}}"
+                        AutomationId="TogglePasswordVisibilityButton" />
                     <Label
                         Text="{u:I18n ConfirmYourIdentity}"
                         StyleClass="box-footer-label"
@@ -128,7 +133,8 @@
                     Clicked="ExportVault_Clicked"
                     HorizontalOptions="Fill"
                     VerticalOptions="End"
-                    IsEnabled="{Binding DisablePrivateVaultPolicyEnabled, Converter={StaticResource inverseBool}}"/>
+                    IsEnabled="{Binding DisablePrivateVaultPolicyEnabled, Converter={StaticResource inverseBool}}"
+                    AutomationId="ExportVaultButton" />
             </StackLayout>
         </StackLayout>
     </ScrollView>

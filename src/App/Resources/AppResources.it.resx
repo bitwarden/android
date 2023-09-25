@@ -172,7 +172,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Vuoi davvero eliminarlo? Non lo potrai ripristinare.</value>
+    <value>Vuoi davvero eliminarlo? Questa operazione non può essere annullata.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
@@ -477,7 +477,7 @@
     <value>Inserisci l'indirizzo email del tuo account per ricevere il suggerimento per la password principale.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Riabilita l'estensione app</value>
+    <value>Riattiva l'estensione app</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Quasi fatto!</value>
@@ -952,6 +952,9 @@
   </data>
   <data name="UpdateKey" xml:space="preserve">
     <value>Non puoi utilizzare questa funzione finché non aggiorni la tua chiave di criptografia.</value>
+  </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Migrazione della chiave di criptografia obbligatoria. Accedi tramite la cassaforte web per aggiornare la tua chiave di criptografia.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Ulteriori informazioni</value>
@@ -2413,9 +2416,9 @@ clicca Aggiungi TOTP per salvare la chiave in modo sicuro</value>
   <data name="Service" xml:space="preserve">
     <value>Servizio</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>FirefoxRelay</value>
@@ -2505,7 +2508,7 @@ Vuoi passare a questo account?</value>
     <value>Accedi con dispositivo</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
-    <value>Login avviato</value>
+    <value>Accesso avviato</value>
   </data>
   <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
     <value>Una notifica è stata inviata al tuo dispositivo.</value>
@@ -2627,17 +2630,84 @@ Vuoi passare a questo account?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Password principale corrente</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Accesso effettuato!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Approva con un altro mio dispositivo</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Richiedi approvazione dell'amministratore</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Approva con password principale</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Deseleziona se stai usando un dispositivo pubblico</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Ricorda questo dispositivo</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Creato {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Applicazione</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Non puoi modificare l'applicazione della passkey perché invaliderebbe la passkey</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>La passkey non sarà copiata</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>La passkey non sarà copiata nell'elemento clonato. Vuoi continuare a clonare questo elemento?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Copia applicazione</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Disponibile per la verifica in due passaggi</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Aiuto per chiedere la password principale di nuovo</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Lo sblocco potrebbe non riuscire a causa di memoria insufficiente. Riduci le impostazioni della memoria KDF per risolvere il problema.</value>
+    <value>Lo sblocco potrebbe non riuscire a causa di memoria insufficiente. Riduci le impostazioni della memoria KDF o imposta lo sbocco biometrico per risolvere il problema.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Chiave API non valida</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Token API non valido</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Approvazione dell'amministratore richiesta</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>La tua richiesta è stata inviata al tuo amministratore.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Riceverai una notifica una volta approvato. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Problemi ad accedere?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Accedendo come {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Azione timeout cassaforte impostata su uscire</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Questo elemento non può essere condiviso con l'organizzazione perché ne esiste già uno con la stessa passkey.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Bocca riempimento automatico</value>
@@ -2652,7 +2722,7 @@ Vuoi passare a questo account?</value>
     <value>URI salvato</value>
   </data>
   <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
-    <value>Formato non valido. Usa https://, http://, or androidapp://</value>
+    <value>Formato non valido. Usa https://, http://, o androidapp://</value>
     <comment>https://, http://, androidapp:// should not be translated</comment>
   </data>
   <data name="EditURI" xml:space="preserve">
@@ -2670,9 +2740,6 @@ Vuoi passare a questo account?</value>
   <data name="InvalidURI" xml:space="preserve">
     <value>URI non valido</value>
   </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI salvato</value>
-  </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>URI rimosso</value>
   </data>
@@ -2684,5 +2751,23 @@ Vuoi passare a questo account?</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Non puoi modificare più URI contemporaneamente</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Accesso approvato</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>L'accesso con dispositivo deve essere abilitato nelle impostazioni dell'app Bitwarden. Ti serve un'altra opzione?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Accedi con dispositivo</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Accedendo su</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Troppi tentativi</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Account uscito.</value>
   </data>
 </root>

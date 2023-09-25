@@ -1,0 +1,31 @@
+# Please sort lines alphabetically, this will ensure we don't accidentally add duplicates.
+#
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# The following owners will be the default owners for everything in the repo.
+# Unless a later match takes precedence
+# @bitwarden/tech-leads
+
+@bitwarden/dept-development-mobile
+
+## Auth team files ##
+
+## Platform team files ##
+appIcons @bitwarden/team-platform-dev
+build.cake @bitwarden/team-platform-dev
+
+## Vault team files ##
+src/watchOS @bitwarden/team-vault-dev
+
+## Tools team files ##
+src/Core/Services/EmailForwarders @bitwarden/team-tools-dev
+
+
+## Crowdin Sync files ##
+src/App/Resources @bitwarden/tech-leads
+src/watchOS/bitwarden/bitwarden\ WatchKit\ Extension/Localization @bitwarden/tech-leads
+
+## Locales ## 
+src/App/Resources/AppResources.Designer.cs
+src/App/Resources/AppResources.resx
+src/watchOS/bitwarden/bitwarden\ WatchKit\ Extension/Localization/en.lproj

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
+using Bit.Core.Enums;
 
 namespace Bit.App.Services
 {
@@ -11,17 +11,24 @@ namespace Bit.App.Services
     {
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly ICryptoService _cryptoService;
+        private readonly IStateService _stateService;
 
-        public MobilePasswordRepromptService(IPlatformUtilsService platformUtilsService, ICryptoService cryptoService)
+        public MobilePasswordRepromptService(IPlatformUtilsService platformUtilsService, ICryptoService cryptoService, IStateService stateService)
         {
             _platformUtilsService = platformUtilsService;
             _cryptoService = cryptoService;
+            _stateService = stateService;
         }
 
         public string[] ProtectedFields { get; } = { "LoginTotp", "LoginPassword", "H_FieldValue", "CardNumber", "CardCode" };
 
-        public async Task<bool> ShowPasswordPromptAsync()
+        public async Task<bool> PromptAndCheckPasswordIfNeededAsync(CipherRepromptType repromptType = CipherRepromptType.Password)
         {
+            if (repromptType == CipherRepromptType.None || await ShouldByPassMasterPasswordRepromptAsync())
+            {
+                return true;
+            }
+
             return await _platformUtilsService.ShowPasswordDialogAsync(AppResources.PasswordConfirmation, AppResources.PasswordConfirmationDesc, ValidatePasswordAsync);
         }
 
@@ -38,13 +45,27 @@ namespace Bit.App.Services
                 return false;
             };
 
-            return await _cryptoService.CompareAndUpdateKeyHashAsync(password, null);
+            var masterKey = await _cryptoService.GetOrDeriveMasterKeyAsync(password);
+            var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(password, masterKey);
+            if (passwordValid)
+            {
+                await AppHelpers.ResetInvalidUnlockAttemptsAsync();
+
+                var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
+                await _cryptoService.SetMasterKeyAsync(masterKey);
+                var hasKey = await _cryptoService.HasUserKeyAsync();
+                if (!hasKey)
+                {
+                    await _cryptoService.SetUserKeyAsync(userKey);
+                }
+            }
+
+            return passwordValid;
         }
 
-        public async Task<bool> Enabled()
+        private async Task<bool> ShouldByPassMasterPasswordRepromptAsync()
         {
-            var keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
-            return !await keyConnectorService.GetUsesKeyConnector();
+            return await _cryptoService.GetMasterKeyHashAsync() is null;
         }
     }
 }

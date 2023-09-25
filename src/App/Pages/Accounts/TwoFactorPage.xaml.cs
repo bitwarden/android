@@ -4,6 +4,7 @@ using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -17,26 +18,29 @@ namespace Bit.App.Pages
 
         private TwoFactorPageViewModel _vm;
         private bool _inited;
-        private bool _authingWithSso;
         private string _orgIdentifier;
 
         public TwoFactorPage(bool? authingWithSso = false, AppOptions appOptions = null, string orgIdentifier = null)
         {
             InitializeComponent();
             SetActivityIndicator();
-            _authingWithSso = authingWithSso ?? false;
             _appOptions = appOptions;
             _orgIdentifier = orgIdentifier;
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _vm = BindingContext as TwoFactorPageViewModel;
             _vm.Page = this;
+            _vm.AuthingWithSso = authingWithSso ?? false;
             _vm.StartSetPasswordAction = () =>
                 Device.BeginInvokeOnMainThread(async () => await StartSetPasswordAsync());
             _vm.TwoFactorAuthSuccessAction = () =>
-                Device.BeginInvokeOnMainThread(async () => await TwoFactorAuthSuccessAsync());
+                Device.BeginInvokeOnMainThread(async () => await TwoFactorAuthSuccessToMainAsync());
+            _vm.LockAction = () =>
+                Device.BeginInvokeOnMainThread(TwoFactorAuthSuccessWithSSOLocked);
             _vm.UpdateTempPasswordAction =
                 () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
+            _vm.StartDeviceApprovalOptionsAction =
+                () => Device.BeginInvokeOnMainThread(async () => await StartDeviceApprovalOptionsAsync());
             _vm.CloseAction = async () => await Navigation.PopModalAsync();
             DuoWebView = _duoWebView;
             if (Device.RuntimePlatform == Device.Android)
@@ -180,21 +184,25 @@ namespace Bit.App.Pages
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
-        private async Task TwoFactorAuthSuccessAsync()
+        private async Task StartDeviceApprovalOptionsAsync()
         {
-            if (_authingWithSso)
+            var page = new LoginApproveDevicePage();
+            await Navigation.PushModalAsync(new NavigationPage(page));
+        }
+
+        private void TwoFactorAuthSuccessWithSSOLocked()
+        {
+            Application.Current.MainPage = new NavigationPage(new LockPage(_appOptions));
+        }
+
+        private async Task TwoFactorAuthSuccessToMainAsync()
+        {
+            if (AppHelpers.SetAlternateMainPage(_appOptions))
             {
-                Application.Current.MainPage = new NavigationPage(new LockPage(_appOptions));
+                return;
             }
-            else
-            {
-                if (AppHelpers.SetAlternateMainPage(_appOptions))
-                {
-                    return;
-                }
-                var previousPage = await AppHelpers.ClearPreviousPage();
-                Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
-            }
+            var previousPage = await AppHelpers.ClearPreviousPage();
+            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
         }
 
         private void Token_TextChanged(object sender, TextChangedEventArgs e)

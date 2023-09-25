@@ -45,7 +45,7 @@
                          x:Name="_attachmentsItem" x:Key="attachmentsItem" />
             <ToolbarItem Text="{u:I18n Delete}" Clicked="Delete_Clicked" Order="Secondary" IsDestructive="True"
                          x:Name="_deleteItem" x:Key="deleteItem" />
-            <ToolbarItem Text="{u:I18n Clone}" Clicked="Clone_Clicked" Order="Secondary"
+            <ToolbarItem Text="{u:I18n Clone}" Command="{Binding CloneCommand}" Order="Secondary"
                          x:Name="_cloneItem" x:Key="cloneItem" />
 
             <DataTemplate x:Key="TextCustomFieldDataTemplate">
@@ -195,6 +195,16 @@
                             </Grid>
                             <BoxView StyleClass="box-row-separator"
                                      IsVisible="{Binding Cipher.Login.Password, Converter={StaticResource stringHasValue}}" />
+                            <Label
+                                Text="{u:I18n Passkey}"
+                                StyleClass="box-label"
+                                Margin="0,10,0,0"
+                                IsVisible="{Binding Cipher.Login.MainFido2Key, Converter={StaticResource notNull}}"/>
+                            <Entry
+                                Text="{Binding CreationDate}"
+                                IsEnabled="False"
+                                StyleClass="box-value,text-muted"
+                                IsVisible="{Binding Cipher.Login.MainFido2Key, Converter={StaticResource notNull}}" />
                             <Grid StyleClass="box-row"
                                   IsVisible="{Binding ShowTotp}"
                                   AutomationId="ItemRow">

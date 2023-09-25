@@ -13,7 +13,7 @@ namespace Bit.Core.Services
 {
     public class StateMigrationService : IStateMigrationService
     {
-        private const int StateVersion = 5;
+        private const int StateVersion = 6;
 
         private readonly DeviceType _deviceType;
         private readonly IStorageService _preferencesStorageService;
@@ -80,9 +80,12 @@ namespace Bit.Core.Services
                     goto case 3;
                 case 3:
                     await MigrateFrom3To4Async();
-                    break;
+                    goto case 4;
                 case 4:
                     await MigrateFrom4To5Async();
+                    goto case 5;
+                case 5:
+                    await MigrateFrom5To6Async();
                     break;
             }
         }
@@ -544,6 +547,296 @@ namespace Bit.Core.Services
 
         #endregion
 
+        #region v5 to v6 Migration
+
+        private async Task MigrateFrom5To6Async()
+        {
+            // global data
+            await MoveToPrefsAsync<string>(V6Keys.AppIdKey);
+            await MoveToPrefsAsync<bool?>(V6Keys.DisableFaviconKey);
+            await MoveToPrefsAsync<string>(V6Keys.ThemeKey);
+            await MoveToPrefsAsync<string>(V6Keys.AutoDarkThemeKey);
+            await MoveToPrefsAsync<V6Keys.PasswordlessRequestNotification>(V6Keys.PasswordlessLoginNotificationKey);
+            await MoveToPrefsAsync<string>(V6Keys.PreLoginEmailKey);
+            await MoveToPrefsAsync<bool?>(V6Keys.LastUserShouldConnectToWatchKey);
+            await MoveToPrefsAsync<string>(V6Keys.PushInstallationRegistrationErrorKey);
+            await MoveToPrefsAsync<bool?>(V6Keys.AutofillNeedsIdentityReplacementKey);
+
+            // account data
+            var state = await GetValueAsync<State>(Storage.LiteDb, Constants.StateKey);
+            if (state?.Accounts != null)
+            {
+                await SetValueAsync(Storage.Prefs, Constants.StateKey, state);
+
+                foreach (var account in state.Accounts.Where(a => a.Value?.Profile?.UserId != null))
+                {
+                    var userId = account.Value.Profile.UserId;
+
+                    await MoveToPrefsAsync<bool?>(V6Keys.BiometricUnlockKey(userId));
+                    await MoveToPrefsAsync<string>(V6Keys.ProtectedPinKey(userId));
+                    await MoveToPrefsAsync<string>(V6Keys.PinKeyEncryptedUserKeyKey(userId));
+                    await MoveToPrefsAsync<string>(V6Keys.KeyHashKey(userId));
+                    await MoveToPrefsAsync<string>(V6Keys.MasterKeyEncryptedUserKeyKey(userId));
+                    await MoveToPrefsAsync<Dictionary<string, string>>(V6Keys.EncOrgKeysKey(userId));
+                    await MoveToPrefsAsync<string>(V6Keys.EncPrivateKeyKey(userId));
+                    await MoveToPrefsAsync<List<string>>(V6Keys.AutofillBlacklistedUrisKey(userId));
+                    await MoveToPrefsAsync<long?>(V6Keys.LastActiveTimeKey(userId));
+                    await MoveToPrefsAsync<int?>(V6Keys.VaultTimeoutKey(userId));
+                    await MoveToPrefsAsync<V6Keys.VaultTimeoutAction?>(V6Keys.VaultTimeoutActionKey(userId));
+                    await MoveToPrefsAsync<bool?>(V6Keys.ScreenCaptureAllowedKey(userId));
+                    await MoveToPrefsAsync<V6Keys.PreviousPageInfo>(V6Keys.PreviousPageKey(userId));
+                    await MoveToPrefsAsync<int>(V6Keys.InvalidUnlockAttemptsKey(userId));
+                    await MoveToPrefsAsync<bool?>(V6Keys.DisableAutoTotpCopyKey(userId));
+                    await MoveToPrefsAsync<bool?>(V6Keys.InlineAutofillEnabledKey(userId));
+                    await MoveToPrefsAsync<bool?>(V6Keys.AutofillDisableSavePromptKey(userId));
+                    await MoveToPrefsAsync<int?>(V6Keys.DefaultUriMatchKey(userId));
+                    await MoveToPrefsAsync<int?>(V6Keys.ClearClipboardKey(userId));
+                    await MoveToPrefsAsync<bool?>(V6Keys.PasswordRepromptAutofillKey(userId));
+                    await MoveToPrefsAsync<bool?>(V6Keys.PasswordVerifiedAutofillKey(userId));
+                    await MoveToPrefsAsync<DateTime?>(V6Keys.LastSyncKey(userId));
+                    await MoveToPrefsAsync<bool?>(V6Keys.SyncOnRefreshKey(userId));
+                    await MoveToPrefsAsync<DateTime?>(V6Keys.PushLastRegistrationDateKey(userId));
+                    await MoveToPrefsAsync<string>(V6Keys.PushCurrentTokenKey(userId));
+                    await MoveToPrefsAsync<Dictionary<string, V6Keys.PolicyData>>(V6Keys.PoliciesKey(userId));
+                    await MoveToPrefsAsync<bool?>(V6Keys.UsesKeyConnectorKey(userId));
+                    await MoveToPrefsAsync<Dictionary<string, V6Keys.OrganizationData>>(
+                        V6Keys.OrganizationsKey(userId));
+                    await MoveToPrefsAsync<V6Keys.PasswordGenerationOptions>(V6Keys.PassGenOptionsKey(userId));
+                    await MoveToPrefsAsync<V6Keys.UsernameGenerationOptions>(V6Keys.UsernameGenOptionsKey(userId));
+                    await MoveToPrefsAsync<string>(V6Keys.TwoFactorTokenKey(userId));
+                    await MoveToPrefsAsync<bool?>(V6Keys.ApprovePasswordlessLoginsKey(userId));
+                    await MoveToPrefsAsync<bool?>(V6Keys.ShouldConnectToWatchKey(userId));
+                    await MoveToPrefsAsync<string>(V6Keys.DeviceKeyKey(userId));
+                }
+            }
+
+            await RemoveValueAsync(Storage.LiteDb, Constants.StateKey);
+            await RemoveValueAsync(Storage.LiteDb, V6Keys.LastActiveTimeKey(""));
+
+            // Update stored version
+            await SetLastStateVersionAsync(6);
+        }
+
+        private class V6Keys
+        {
+            // global keys
+
+            internal const string AppIdKey = "appId";
+            internal const string DisableFaviconKey = "disableFavicon";
+            internal const string ThemeKey = "theme";
+            internal const string AutoDarkThemeKey = "autoDarkTheme";
+            internal const string PasswordlessLoginNotificationKey = "passwordlessLoginNotificationKey";
+            internal const string PreLoginEmailKey = "preLoginEmailKey";
+            internal const string LastUserShouldConnectToWatchKey = "lastUserShouldConnectToWatch";
+            internal const string PushInstallationRegistrationErrorKey = "pushInstallationRegistrationError";
+            internal const string AutofillNeedsIdentityReplacementKey = "autofillNeedsIdentityReplacement";
+
+            // account keys
+
+            internal static string BiometricUnlockKey(string userId) => $"biometricUnlock_{userId}";
+            internal static string ProtectedPinKey(string userId) => $"protectedPin_{userId}";
+            internal static string PinKeyEncryptedUserKeyKey(string userId) => $"pinKeyEncryptedUserKey_{userId}";
+            internal static string KeyHashKey(string userId) => $"keyHash_{userId}";
+            internal static string MasterKeyEncryptedUserKeyKey(string userId) => $"masterKeyEncryptedUserKey_{userId}";
+            internal static string EncOrgKeysKey(string userId) => $"encOrgKeys_{userId}";
+            internal static string EncPrivateKeyKey(string userId) => $"encPrivateKey_{userId}";
+            internal static string AutofillBlacklistedUrisKey(string userId) => $"autofillBlacklistedUris_{userId}";
+            internal static string LastActiveTimeKey(string userId) => $"lastActiveTime_{userId}";
+            internal static string VaultTimeoutKey(string userId) => $"vaultTimeout_{userId}";
+            internal static string VaultTimeoutActionKey(string userId) => $"vaultTimeoutAction_{userId}";
+            internal static string ScreenCaptureAllowedKey(string userId) => $"screenCaptureAllowed_{userId}";
+            internal static string PreviousPageKey(string userId) => $"previousPage_{userId}";
+            internal static string InvalidUnlockAttemptsKey(string userId) => $"invalidUnlockAttempts_{userId}";
+            internal static string DisableAutoTotpCopyKey(string userId) => $"disableAutoTotpCopy_{userId}";
+            internal static string InlineAutofillEnabledKey(string userId) => $"inlineAutofillEnabled_{userId}";
+            internal static string AutofillDisableSavePromptKey(string userId) => $"autofillDisableSavePrompt_{userId}";
+            internal static string DefaultUriMatchKey(string userId) => $"defaultUriMatch_{userId}";
+            internal static string ClearClipboardKey(string userId) => $"clearClipboard_{userId}";
+            internal static string PasswordRepromptAutofillKey(string userId) => $"passwordRepromptAutofillKey_{userId}";
+            internal static string PasswordVerifiedAutofillKey(string userId) => $"passwordVerifiedAutofillKey_{userId}";
+            internal static string LastSyncKey(string userId) => $"lastSync_{userId}";
+            internal static string SyncOnRefreshKey(string userId) => $"syncOnRefresh_{userId}";
+            internal static string PushLastRegistrationDateKey(string userId) => $"pushLastRegistrationDate_{userId}";
+            internal static string PushCurrentTokenKey(string userId) => $"pushCurrentToken_{userId}";
+            internal static string PoliciesKey(string userId) => $"policies_{userId}";
+            internal static string UsesKeyConnectorKey(string userId) => $"usesKeyConnector_{userId}";
+            internal static string OrganizationsKey(string userId) => $"organizations_{userId}";
+            internal static string PassGenOptionsKey(string userId) => $"passwordGenerationOptions_{userId}";
+            internal static string UsernameGenOptionsKey(string userId) => $"usernameGenerationOptions_{userId}";
+            internal static string TwoFactorTokenKey(string email) => $"twoFactorToken_{email}";
+            internal static string ApprovePasswordlessLoginsKey(string userId) => $"approvePasswordlessLogins_{userId}";
+            internal static string ShouldConnectToWatchKey(string userId) => $"shouldConnectToWatch_{userId}";
+            internal static string DeviceKeyKey(string userId) => $"deviceKey_{userId}";
+
+            // objects
+
+            internal class PasswordlessRequestNotification
+            {
+                public string UserId { get; set; }
+                public string Id { get; set; }
+            }
+
+            internal enum VaultTimeoutAction
+            {
+                Lock = 0,
+                Logout = 1,
+            }
+
+            internal class PreviousPageInfo
+            {
+                public string Page { get; set; }
+                public string CipherId { get; set; }
+                public string SendId { get; set; }
+                public string SearchText { get; set; }
+            }
+
+            internal class PolicyData
+            {
+                public string Id { get; set; }
+                public string OrganizationId { get; set; }
+                public V6Keys.PolicyType Type { get; set; }
+                public Dictionary<string, object> Data { get; set; }
+                public bool Enabled { get; set; }
+            }
+
+            internal enum PolicyType : byte
+            {
+                TwoFactorAuthentication = 0,
+                MasterPassword = 1,
+                PasswordGenerator = 2,
+                OnlyOrg = 3,
+                RequireSso = 4,
+                PersonalOwnership = 5,
+                DisableSend = 6,
+                SendOptions = 7,
+                ResetPassword = 8,
+                MaximumVaultTimeout = 9,
+                DisablePersonalVaultExport = 10,
+            }
+
+            internal class OrganizationData
+            {
+                public string Id { get; set; }
+                public string Name { get; set; }
+                public V6Keys.OrganizationUserStatusType Status { get; set; }
+                public V6Keys.OrganizationUserType Type { get; set; }
+                public bool Enabled { get; set; }
+                public bool UseGroups { get; set; }
+                public bool UseDirectory { get; set; }
+                public bool UseEvents { get; set; }
+                public bool UseTotp { get; set; }
+                public bool Use2fa { get; set; }
+                public bool UseApi { get; set; }
+                public bool UsePolicies { get; set; }
+                public bool SelfHost { get; set; }
+                public bool UsersGetPremium { get; set; }
+                public int? Seats { get; set; }
+                public short? MaxCollections { get; set; }
+                public short? MaxStorageGb { get; set; }
+                public V6Keys.Permissions Permissions { get; set; } = new Permissions();
+                public string Identifier { get; set; }
+                public bool UsesKeyConnector { get; set; }
+                public string KeyConnectorUrl { get; set; }
+            }
+
+            internal enum OrganizationUserStatusType : byte
+            {
+                Invited = 0,
+                Accepted = 1,
+                Confirmed = 2
+            }
+
+            internal enum OrganizationUserType : byte
+            {
+                Owner = 0,
+                Admin = 1,
+                User = 2,
+                Manager = 3,
+                Custom = 4,
+            }
+
+            internal class Permissions
+            {
+                public bool AccessBusinessPortal { get; set; }
+                public bool AccessEventLogs { get; set; }
+                public bool AccessImportExport { get; set; }
+                public bool AccessReports { get; set; }
+                public bool EditAssignedCollections { get; set; }
+                public bool DeleteAssignedCollections { get; set; }
+                public bool CreateNewCollections { get; set; }
+                public bool EditAnyCollection { get; set; }
+                public bool DeleteAnyCollection { get; set; }
+                public bool ManageGroups { get; set; }
+                public bool ManagePolicies { get; set; }
+                public bool ManageSso { get; set; }
+                public bool ManageUsers { get; set; }
+            }
+
+            internal class PasswordGenerationOptions
+            {
+                public int? Length { get; set; }
+                public bool? AllowAmbiguousChar { get; set; }
+                public bool? Number { get; set; }
+                public int? MinNumber { get; set; }
+                public bool? Uppercase { get; set; }
+                public int? MinUppercase { get; set; }
+                public bool? Lowercase { get; set; }
+                public int? MinLowercase { get; set; }
+                public bool? Special { get; set; }
+                public int? MinSpecial { get; set; }
+                public string Type { get; set; }
+                public int? NumWords { get; set; }
+                public string WordSeparator { get; set; }
+                public bool? Capitalize { get; set; }
+                public bool? IncludeNumber { get; set; }
+            }
+
+            internal class UsernameGenerationOptions
+            {
+                public V6Keys.UsernameType Type { get; set; }
+                public V6Keys.ForwardedEmailServiceType ServiceType { get; set; }
+                public V6Keys.UsernameEmailType PlusAddressedEmailType { get; set; }
+                public V6Keys.UsernameEmailType CatchAllEmailType { get; set; }
+                public bool CapitalizeRandomWordUsername { get; set; }
+                public bool IncludeNumberRandomWordUsername { get; set; }
+                public string PlusAddressedEmail { get; set; }
+                public string CatchAllEmailDomain { get; set; }
+                public string FirefoxRelayApiAccessToken { get; set; }
+                public string SimpleLoginApiKey { get; set; }
+                public string DuckDuckGoApiKey { get; set; }
+                public string FastMailApiKey { get; set; }
+                public string AnonAddyApiAccessToken { get; set; }
+                public string AnonAddyDomainName { get; set; }
+                public string EmailWebsite { get; set; }
+            }
+
+            internal enum UsernameType
+            {
+                PlusAddressedEmail = 0,
+                CatchAllEmail = 1,
+                ForwardedEmailAlias = 2,
+                RandomWord = 3,
+            }
+
+            internal enum ForwardedEmailServiceType
+            {
+                None = -1,
+                AnonAddy = 0,
+                FirefoxRelay = 1,
+                SimpleLogin = 2,
+                DuckDuckGo = 3,
+                Fastmail = 4,
+            }
+
+            internal enum UsernameEmailType
+            {
+                Random = 0,
+                Website = 1,
+            }
+        }
+
+        #endregion
+
         // Helpers
 
         private async Task<int> GetLastStateVersionAsync()
@@ -611,6 +904,21 @@ namespace Bit.Core.Services
                 default:
                     return _liteDbStorageService;
             }
+        }
+
+        private async Task MoveToPrefsAsync<T>(string key)
+        {
+            var value = await GetValueAsync<T>(Storage.LiteDb, key);
+            if (value == null)
+            {
+                return;
+            }
+
+            if (await GetValueAsync<T>(Storage.Prefs, key) == null)
+            {
+                await SetValueAsync(Storage.Prefs, key, value);
+            }
+            await RemoveValueAsync(Storage.LiteDb, key);
         }
     }
 }

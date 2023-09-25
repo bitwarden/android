@@ -954,6 +954,9 @@ Kod otomatik olarak taranacaktır.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Şifreleme anahtarınızı güncelleştirene kadar bu özelliği kullanamazsınız.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Şifreleme anahtarınızın güncellenmesi gerekiyor. Şifreleme anahtarınızı güncellemek için lütfen web kasasına giriş yapın.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Daha fazla bilgi al</value>
   </data>
@@ -2412,9 +2415,9 @@ Kod otomatik olarak taranacaktır.</value>
   <data name="Service" xml:space="preserve">
     <value>Servis</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2626,17 +2629,84 @@ Bu hesaba geçmek ister misiniz?</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Mevcut ana parola</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Oturum açıldı!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Diğer cihazımla onayla</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Yönetici onayı iste</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Ana parola ile onayla</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Herkese açık bir cihaz kullanarak kapat</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Bu cihazı hatırla</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Şifre anahtarı</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Şifre anahtarları</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Oluşturma: {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Uygulama</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Şifre anahtarınızı geçersiz kılacağı için şifre anahtarı uygulamanızı düzenleyemezsiniz</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Şifre anahtarı kopyalanmayacak</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Şifre anahtarı, klonlanan kayda kopyalanmayacaktır. Bu kaydı klonlamaya devam etmek istiyor musunuz?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Uygulamayı kopyala</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>İki aşamalı girişte kullanılabilir</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Ana parola yeniden istemi yardımı</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Yetersiz bellek nedeniyle kilit açma başarısız olabilir. Sorunu çözmek için KDF bellek ayarlarınızı azaltın.</value>
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Geçersiz API anahtarı</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Geçersiz API token'ı</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Yönetici onayı istendi</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>İsteğiniz yöneticinize gönderildi.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Onaylandıktan sonra bilgilendirileceksiniz. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Giriş yaparken sorun mu yaşıyorsunuz?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>{0} olarak oturum açılıyor</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Kasa zaman aşımı eylemi oturumu kapatmak için değiştirildi</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>Aynı şifre anahtarına sahip başka bir kayıt olduğu için bu kaydı kuruluşunuzla paylaşamazsınız.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Otomatik doldurmayı engelle</value>
@@ -2651,37 +2721,52 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>URl kaydedildi</value>
   </data>
   <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
-    <value>Invalid format. Use https://, http://, or androidapp://</value>
+    <value>Geçersiz biçim. https://, http:// veya androidapp:// kullanın</value>
     <comment>https://, http://, androidapp:// should not be translated</comment>
   </data>
   <data name="EditURI" xml:space="preserve">
-    <value>Edit URI</value>
+    <value>URl'yi düzenle</value>
   </data>
   <data name="EnterURI" xml:space="preserve">
-    <value>Enter URI</value>
+    <value>URl girin</value>
   </data>
   <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
-    <value>Format: {0}. Separate multiple URIs with a comma.</value>
+    <value>Biçim: {0}. Birden fazla URl'yi virgülle ayırabilirsiniz.</value>
   </data>
   <data name="FormatX" xml:space="preserve">
-    <value>Format: {0}</value>
+    <value>Biçim: {0}</value>
   </data>
   <data name="InvalidURI" xml:space="preserve">
-    <value>Invalid URI</value>
-  </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>URI saved</value>
+    <value>Geçersiz URl</value>
   </data>
   <data name="URIRemoved" xml:space="preserve">
-    <value>URI removed</value>
+    <value>URl kaldırıldı</value>
   </data>
   <data name="ThereAreNoBlockedURIs" xml:space="preserve">
-    <value>There are no blocked URIs</value>
+    <value>Engellenmiş URI yok</value>
   </data>
   <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
-    <value>The URI {0} is already blocked</value>
+    <value>{0} URl'si zaten engellenmiş</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
-    <value>Cannot edit multiple URIs at once</value>
+    <value>Aynı anda birden fazla URl düzenlenemez</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Giriş onaylandı</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Cihazla oturum aç, Bitwarden uygulamasının ayarlarında ayarlanmalıdır. Başka bir seçeneğe mi ihtiyacınız var?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Cihazla giriş yap</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logging in on</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Çok fazla deneme</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Hesabın oturumu kapatıldı.</value>
   </data>
 </root>

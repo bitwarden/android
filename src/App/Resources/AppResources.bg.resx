@@ -954,6 +954,9 @@
   <data name="UpdateKey" xml:space="preserve">
     <value>Трябва да обновите шифриращия си ключ, за да използвате тази възможност.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Необходима е промяна на шифриращия ключ. Впишете се в трезора си по уеб, за да обновите своя шифриращ ключ.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Научете повече</value>
   </data>
@@ -2413,9 +2416,9 @@ select Add TOTP to store the key safely</value>
   <data name="Service" xml:space="preserve">
     <value>Услуга</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2627,17 +2630,84 @@ select Add TOTP to store the key safely</value>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Текуща главна парола</value>
   </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Вписахте се!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Одобряване с другото ми устройство</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Подаване на заявка за одобрение от администратор</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Одобряване с главната парола</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Изключване на използването на публично устройство</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Запомняне на това устройство</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="CreatedX" xml:space="preserve">
+    <value>Създадено на {0}</value>
+    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Приложение</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Passkey will not be copied</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Копиране на приложението</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Налично за двустепенно удостоверяване</value>
+  </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Помощ за повторното запитване за главната парола</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Отключването може да бъде неуспешно заради недостатъчно памет. Намалете настройките на паметта за KDF, за да разрешите проблема.</value>
+    <value>Отключването може да бъде неуспешно заради недостатъчно памет. Намалете настройките на паметта за KDF или настройте отключването чрез биометрични данни, за да разрешите проблема.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Неправилен ключ за ППИ</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
     <value>Неправилен идентификатор за ППИ</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Заявено е одобрение от администратор</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Вашата заявка беше изпратена до администратора Ви.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Ще получите известие, когато тя бъде одобрена. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Имате проблем с вписването?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Вписване като {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Действието при изтичане на времето за достъп до трезора е променено на отписване</value>
+  </data>
+  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
+    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Блокиране на авт. попълване</value>
@@ -2670,9 +2740,6 @@ select Add TOTP to store the key safely</value>
   <data name="InvalidURI" xml:space="preserve">
     <value>Неправилен адрес</value>
   </data>
-  <data name="URISaved" xml:space="preserve">
-    <value>Адресът е запазен</value>
-  </data>
   <data name="URIRemoved" xml:space="preserve">
     <value>Адресът е премахнат</value>
   </data>
@@ -2684,5 +2751,23 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
     <value>Не може да редактирате повече от един адрес едновременно</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Вписването е одобрено</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Вписването с устройство трябва да е включено в настройките на приложението на Битуорден. Друга настройка ли търсите?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Вписване с устройство</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Вписване в</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Твърде много опити</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Акаунтът е отписан.</value>
   </data>
 </root>
