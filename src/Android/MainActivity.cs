@@ -239,7 +239,7 @@ namespace Bit.Droid
                 string fileName = null;
                 if (data != null && data.Data != null)
                 {
-                    if (!data.Data.ToString()?.Contains(Constants.PACKAGE_NAME) ?? false)
+                    if (data.Data.ToString()?.Contains(Constants.PACKAGE_NAME) != true)
                     {
                         uri = data.Data;
                         fileName = AndroidHelpers.GetFileName(ApplicationContext, uri);
