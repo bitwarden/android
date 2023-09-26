@@ -6,6 +6,7 @@ import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowLog
 
 /**
  * A base class that can be used for performing Compose-layer testing using Robolectric, Compose
@@ -19,4 +20,8 @@ import org.robolectric.annotation.Config
 abstract class BaseComposeTest {
     @get:Rule
     val composeTestRule = createComposeRule()
+
+    init {
+        ShadowLog.stream = System.out
+    }
 }
