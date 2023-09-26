@@ -1,12 +1,10 @@
 package com.x8bit.bitwarden.ui.platform.components
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 
 /**
  * Component that allows the user to input text. This composable will manage the state of
@@ -23,12 +21,30 @@ fun BitwardenTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    TextField(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        label = { Text(label) },
+    OutlinedTextField(
+        modifier = modifier,
+        label = { Text(text = label) },
         value = value,
         onValueChange = onValueChange,
+    )
+}
+
+@Preview
+@Composable
+private fun BitwardenTextField_preview_withInput() {
+    BitwardenTextField(
+        label = "Label",
+        value = "Input",
+        onValueChange = {},
+    )
+}
+
+@Preview
+@Composable
+private fun BitwardenTextField_preview_withoutInput() {
+    BitwardenTextField(
+        label = "Label",
+        value = "",
+        onValueChange = {},
     )
 }

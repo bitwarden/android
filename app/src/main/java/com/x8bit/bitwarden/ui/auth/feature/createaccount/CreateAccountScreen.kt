@@ -82,21 +82,25 @@ fun CreateAccountScreen(
             label = stringResource(id = R.string.email_address),
             value = state.emailInput,
             onValueChange = { viewModel.trySendAction(EmailInputChange(it)) },
+            modifier = Modifier.fillMaxWidth(),
         )
         BitwardenTextField(
             label = stringResource(id = R.string.master_password),
             value = state.passwordInput,
             onValueChange = { viewModel.trySendAction(PasswordInputChange(it)) },
+            modifier = Modifier.fillMaxWidth(),
         )
         BitwardenTextField(
             label = stringResource(id = R.string.retype_master_password),
             value = state.confirmPasswordInput,
             onValueChange = { viewModel.trySendAction(ConfirmPasswordInputChange(it)) },
+            modifier = Modifier.fillMaxWidth(),
         )
         BitwardenTextField(
             label = stringResource(id = R.string.master_password_hint),
             value = state.passwordHintInput,
             onValueChange = { viewModel.trySendAction(PasswordHintChange(it)) },
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }

@@ -70,7 +70,9 @@ fun LandingScreen(
         )
 
         BitwardenTextField(
-            modifier = Modifier.testTag("Email address"),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("Email address"),
             value = state.emailInput,
             onValueChange = { viewModel.trySendAction(LandingAction.EmailInputChanged(it)) },
             label = stringResource(id = R.string.email_address),

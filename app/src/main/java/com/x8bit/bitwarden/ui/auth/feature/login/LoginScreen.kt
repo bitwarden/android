@@ -47,7 +47,9 @@ fun LoginScreen(
     ) {
 
         BitwardenTextField(
-            modifier = Modifier.testTag("Master password"),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("Master password"),
             value = state.passwordInput,
             onValueChange = { viewModel.trySendAction(LoginAction.PasswordInputChanged(it)) },
             label = stringResource(id = R.string.master_password),
