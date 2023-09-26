@@ -1,5 +1,4 @@
-﻿using System;
-using Bit.Core.Enums;
+﻿using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 
 namespace Bit.Core.Utilities

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
-using Bit.Core.Models.Data;
+using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 
@@ -25,9 +25,9 @@ namespace Bit.App.Pages
 
         public void Init()
         {
-            if (_environmentService.SelectedRegion != Core.Enums.Region.SelfHosted ||
-                _environmentService.BaseUrl == EnvironmentUrlData.DefaultEU.Base ||
-                _environmentService.BaseUrl == EnvironmentUrlData.DefaultUS.Base)
+            if (_environmentService.SelectedRegion != Region.SelfHosted ||
+                _environmentService.BaseUrl == Region.US.BaseUrl() ||
+                _environmentService.BaseUrl == Region.EU.BaseUrl())
             {
                 return;
             }
