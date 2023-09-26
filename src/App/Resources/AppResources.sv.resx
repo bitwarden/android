@@ -955,6 +955,9 @@ Skanningen sker automatiskt.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Du kan inte använda denna funktion förrän du uppdaterar din krypteringsnyckel.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Migrering av krypteringsnyckel krävs. Logga in på webbvalvet för att uppdatera din krypteringsnyckel.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Läs mer</value>
   </data>
@@ -2762,5 +2765,11 @@ Vill du byta till detta konto?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Logga in på</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>För många försök</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Account logged out.</value>
   </data>
 </root>

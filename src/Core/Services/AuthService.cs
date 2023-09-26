@@ -477,6 +477,17 @@ namespace Bit.Core.Services
             }
 
             var tokenResponse = response.TokenResponse;
+            if (localHashedPassword != null && tokenResponse.Key == null)
+            {
+                // Only check for legacy if there is no key on token
+                if (await _cryptoService.IsLegacyUserAsync(masterKey))
+                {
+                    // Legacy users must migrate on web vault;
+                    result.RequiresEncryptionKeyMigration = true;
+                    return result;
+                }
+            }
+
             result.ResetMasterPassword = tokenResponse.ResetMasterPassword;
             result.ForcePasswordReset = tokenResponse.ForcePasswordReset;
             _masterPasswordPolicy = tokenResponse.MasterPasswordPolicy;

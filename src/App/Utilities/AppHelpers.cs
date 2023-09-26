@@ -79,17 +79,6 @@ namespace Bit.App.Utilities
                     options.Add(AppResources.CopyNotes);
                 }
             }
-            if (cipher.Type == Core.Enums.CipherType.Fido2Key)
-            {
-                if (!string.IsNullOrWhiteSpace(cipher.Fido2Key.UserName))
-                {
-                    options.Add(AppResources.CopyUsername);
-                }
-                if (cipher.Fido2Key.CanLaunch)
-                {
-                    options.Add(AppResources.Launch);
-                }
-            }
 
             var selection = await page.DisplayActionSheet(cipher.Name, AppResources.Cancel, null, options.ToArray());
             if (await vaultTimeoutService.IsLockedAsync())
@@ -108,7 +97,7 @@ namespace Bit.App.Utilities
             }
             else if (selection == AppResources.CopyUsername)
             {
-                await clipboardService.CopyTextAsync(cipher.Type == CipherType.Login ? cipher.Login.Username : cipher.Fido2Key.UserName);
+                await clipboardService.CopyTextAsync(cipher.Login.Username);
                 platformUtilsService.ShowToastForCopiedValue(AppResources.Username);
             }
             else if (selection == AppResources.CopyPassword

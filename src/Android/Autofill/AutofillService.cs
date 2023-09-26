@@ -11,6 +11,7 @@ using Android.Widget;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 
 namespace Bit.Droid.Autofill
@@ -26,6 +27,7 @@ namespace Bit.Droid.Autofill
         private IPolicyService _policyService;
         private IStateService _stateService;
         private LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
+        private IUserVerificationService _userVerificationService;
 
         public async override void OnFillRequest(FillRequest request, CancellationSignal cancellationSignal,
             FillCallback callback)
@@ -64,11 +66,9 @@ namespace Bit.Droid.Autofill
                 var locked = await _vaultTimeoutService.IsLockedAsync();
                 if (!locked)
                 {
-                    if (_cipherService == null)
-                    {
-                        _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
-                    }
-                    items = await AutofillHelpers.GetFillItemsAsync(parser, _cipherService);
+                    _cipherService ??= ServiceContainer.Resolve<ICipherService>();
+                    _userVerificationService ??=  ServiceContainer.Resolve<IUserVerificationService>();
+                    items = await AutofillHelpers.GetFillItemsAsync(parser, _cipherService, _userVerificationService);
                 }
 
                 // build response

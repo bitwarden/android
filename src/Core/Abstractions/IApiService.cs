@@ -48,7 +48,7 @@ namespace Bit.Core.Abstractions
         Task RefreshIdentityTokenAsync();
         Task<SsoPrevalidateResponse> PreValidateSsoAsync(string identifier);
         Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path,
-            TRequest body, bool authed, bool hasResponse, Action<HttpRequestMessage> alterRequest, bool logoutOnUnauthorized = true);
+            TRequest body, bool authed, bool hasResponse, Action<HttpRequestMessage> alterRequest, bool logoutOnUnauthorized = true, bool sendToIdentity = false);
         Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken = default);
         void SetUrls(EnvironmentUrlData urls);
         [Obsolete("Mar 25 2021: This method has been deprecated in favor of direct uploads. This method still exists for backward compatibility with old server versions.")]

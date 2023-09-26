@@ -954,6 +954,9 @@
   <data name="UpdateKey" xml:space="preserve">
     <value>暗号キーを更新するまでこの機能は使用できません。</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>暗号化キーの移行が必要です。暗号化キーを更新するには、ウェブ保管庫からログインしてください。</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>詳細情報</value>
   </data>
@@ -2677,7 +2680,7 @@
     <value>マスターパスワードの再プロンプトヘルプ</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+    <value>メモリ不足により、ロック解除に失敗する可能性があります。解決するには、KDF のメモリ設定を減らすか、生体認証によるロック解除を設定してください。</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>無効な API キー</value>
@@ -2760,5 +2763,11 @@
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>ログイン先</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>試行回数が多すぎます</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>アカウントからログアウトしました。</value>
   </data>
 </root>

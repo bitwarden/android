@@ -954,6 +954,9 @@ A leitura será feita automaticamente.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Você não pode usar esse recurso, até você atualizar sua chave de criptografia.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Saiba Mais</value>
   </data>
@@ -2761,5 +2764,11 @@ Você deseja mudar para esta conta?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Entrando em</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Too many attempts</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Account logged out.</value>
   </data>
 </root>
