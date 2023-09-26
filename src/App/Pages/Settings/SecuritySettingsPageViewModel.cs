@@ -270,7 +270,7 @@ namespace Bit.App.Pages
 
             var maximumVaultTimeoutPolicy = await _policyService.FirstOrDefault(PolicyType.MaximumVaultTimeout);
             _maximumVaultTimeoutPolicy = maximumVaultTimeoutPolicy?.GetInt(Policy.MINUTES_KEY);
-            _vaultTimeoutActionPolicy = maximumVaultTimeoutPolicy?.GetString(Policy.ACTION_KEY) ?? Policy.ACTION_LOCK;
+            _vaultTimeoutActionPolicy = maximumVaultTimeoutPolicy?.GetString(Policy.ACTION_KEY);
 
             MainThread.BeginInvokeOnMainThread(VaultTimeoutActionPickerViewModel.SelectOptionCommand.RaiseCanExecuteChanged);
         }
