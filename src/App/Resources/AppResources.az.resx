@@ -954,6 +954,9 @@ Skan prosesi avtomatik baş tutacaq.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Şifrələmə açarınızı güncəlləyənə qədər bu özəlliyi istifadə edə bilməzsiniz.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Şifrələmə açarının daşınması tələb olunur. Şifrələmə açarınızı güncəlləmək üçün zəhmət olmasa veb anbar üzərindən giriş edin.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Daha ətraflı</value>
   </data>
@@ -2645,38 +2648,38 @@ Bu hesaba keçmək istəyirsiniz?</value>
     <value>Bu cihazı xatırla</value>
   </data>
   <data name="Passkey" xml:space="preserve">
-    <value>Passkey</value>
+    <value>Keçid açarı</value>
   </data>
   <data name="Passkeys" xml:space="preserve">
-    <value>Passkeys</value>
+    <value>Keçid açarı</value>
   </data>
   <data name="CreatedX" xml:space="preserve">
-    <value>Created {0}</value>
+    <value>{0} yaradıldı</value>
     <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
   </data>
   <data name="Application" xml:space="preserve">
-    <value>Application</value>
+    <value>Tətbiq</value>
   </data>
   <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
-    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+    <value>Keçid açarı tətbiqinə düzəliş edə bilməzsiniz, çünki bu, keçid açarını yararsız edəcək</value>
   </data>
   <data name="PasskeyWillNotBeCopied" xml:space="preserve">
-    <value>Passkey will not be copied</value>
+    <value>Keçid açarı kopyalanmır</value>
   </data>
   <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
-    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+    <value>Keçid açarı, klonlanmış elementə kopyalanmayacaq. Bu elementi klonlamağa davam etmək istəyirsiniz?</value>
   </data>
   <data name="CopyApplication" xml:space="preserve">
-    <value>Copy application</value>
+    <value>Tətbiqi kopyala</value>
   </data>
   <data name="AvailableForTwoStepLogin" xml:space="preserve">
-    <value>Available for two-step login</value>
+    <value>İki addımlı giriş üçün əlçatandır</value>
   </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Ana parolu təkrar soruş köməyi</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+    <value>Yetərsiz yaddaşa görə kilid açma uğursuz ola bilər. Həll etmək üçün KDF yaddaş tənzimləmələrinizi azaldın və ya biometrik kilid açmanı quraşdırın.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Yararsız API açarı</value>
@@ -2703,7 +2706,7 @@ Bu hesaba keçmək istəyirsiniz?</value>
     <value>Anbar vaxt bitməsi əməliyyatı "çıxış et" olaraq dəyişdirildi</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
+    <value>Bu element təşkilatla paylaşıla bilmir, çünki eyni keçid açarına sahib bir element artıq mövcuddur.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Avto-doldurmanı əngəllə</value>
@@ -2759,5 +2762,11 @@ Bu hesaba keçmək istəyirsiniz?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Giriş edilir</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Həddən artıq cəhd</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Hesabdan çıxış edildi.</value>
   </data>
 </root>

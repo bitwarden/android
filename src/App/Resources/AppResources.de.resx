@@ -954,6 +954,9 @@ Das Scannen erfolgt automatisch.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Du kannst diese Funktion nicht nutzen, solange du deinen Verschlüsselungsschlüssel nicht aktualisiert hast.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Mehr erfahren</value>
   </data>
@@ -2676,7 +2679,7 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Hilfe zum erneuten Abfragen des Master-Passworts</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+    <value>Das Entsperren kann aufgrund unzureichenden Arbeitsspeichers fehlschlagen. Verringere deine KDF-Speichereinstellungen oder richte die biometrische Entsperrung, um dies zu lösen.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Ungültiger API-Schlüssel</value>
@@ -2700,7 +2703,7 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Anmelden als {0}</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
-    <value>Vault timeout action changed to log out</value>
+    <value>Tresor-Timeoutaktion auf "Abmelden" geändert</value>
   </data>
   <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
     <value>Dieser Eintrag kann nicht mit der Organisation geteilt werden, da bereits einer mit dem gleichen Passkey existiert.</value>
@@ -2759,5 +2762,11 @@ Möchtest du zu diesem Konto wechseln?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Anmelden bei</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Zu viele Versuche</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Konto abgemeldet.</value>
   </data>
 </root>

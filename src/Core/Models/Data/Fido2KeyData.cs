@@ -8,7 +8,8 @@ namespace Bit.Core.Models.Data
 
         public Fido2KeyData(Fido2KeyApi apiData)
         {
-            NonDiscoverableId = apiData.NonDiscoverableId;
+            CredentialId = apiData.CredentialId;
+            Discoverable = apiData.Discoverable;
             KeyType = apiData.KeyType;
             KeyAlgorithm = apiData.KeyAlgorithm;
             KeyCurve = apiData.KeyCurve;
@@ -20,7 +21,8 @@ namespace Bit.Core.Models.Data
             Counter = apiData.Counter;
         }
 
-        public string NonDiscoverableId { get; set; }
+        public string CredentialId { get; set; }
+        public string Discoverable { get; set; }
         public string KeyType { get; set; } = Constants.DefaultFido2KeyType;
         public string KeyAlgorithm { get; set; } = Constants.DefaultFido2KeyAlgorithm;
         public string KeyCurve { get; set; } = Constants.DefaultFido2KeyCurve;

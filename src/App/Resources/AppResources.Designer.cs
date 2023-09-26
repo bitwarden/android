@@ -1886,6 +1886,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Created {0}, {1}.
+        /// </summary>
+        public static string CreatedXY {
+            get {
+                return ResourceManager.GetString("CreatedXY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creating account....
         /// </summary>
         public static string CreatingAccount {
@@ -2503,6 +2512,15 @@ namespace Bit.App.Resources {
         public static string EncExportKeyWarning {
             get {
                 return ResourceManager.GetString("EncExportKeyWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Encryption key migration required. Please login through the web vault to update your encryption key..
+        /// </summary>
+        public static string EncryptionKeyMigrationRequiredDescriptionLong {
+            get {
+                return ResourceManager.GetString("EncryptionKeyMigrationRequiredDescriptionLong", resourceCulture);
             }
         }
         

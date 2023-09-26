@@ -1,5 +1,4 @@
 ﻿using Bit.Core.Models.Domain;
-using Bit.Core.Models.Export;
 
 namespace Bit.Core.Models.Api
 {
@@ -11,7 +10,8 @@ namespace Bit.Core.Models.Api
 
         public Fido2KeyApi(Fido2Key fido2Key)
         {
-            NonDiscoverableId = fido2Key.NonDiscoverableId?.EncryptedString;
+            CredentialId = fido2Key.CredentialId?.EncryptedString;
+            Discoverable = fido2Key.Discoverable?.EncryptedString;
             KeyType = fido2Key.KeyType?.EncryptedString;
             KeyAlgorithm = fido2Key.KeyAlgorithm?.EncryptedString;
             KeyCurve = fido2Key.KeyCurve?.EncryptedString;
@@ -23,7 +23,8 @@ namespace Bit.Core.Models.Api
             Counter = fido2Key.Counter?.EncryptedString;
         }
 
-        public string NonDiscoverableId { get; set; }
+        public string CredentialId { get; set; }
+        public string Discoverable { get; set; }
         public string KeyType { get; set; } = Constants.DefaultFido2KeyType;
         public string KeyAlgorithm { get; set; } = Constants.DefaultFido2KeyAlgorithm;
         public string KeyCurve { get; set; } = Constants.DefaultFido2KeyCurve;

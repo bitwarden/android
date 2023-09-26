@@ -26,14 +26,12 @@ namespace Bit.App.Utilities
     {
         public static string GetIconImage(CipherView cipher)
         {
-            switch (cipher.Type)
+            if (cipher.Type != CipherType.Login)
             {
-                case CipherType.Login:
-                    return IconImageHelper.GetLoginIconImage(cipher);
-                case CipherType.Fido2Key:
-                    return IconImageHelper.GetFido2KeyIconImage(cipher);
+                return null;
             }
-            return null;
+
+            return GetLoginIconImage(cipher);
         }
 
         public static string GetLoginIconImage(CipherView cipher)
@@ -63,26 +61,6 @@ namespace Bit.App.Utilities
                 }
             }
             return image;
-        }
-
-        public static string GetFido2KeyIconImage(CipherView cipher)
-        {
-            var hostnameUri = cipher.Fido2Key.LaunchUri;
-            if (!hostnameUri.Contains("."))
-            {
-                return null;
-            }
-
-            if (!hostnameUri.Contains("://"))
-            {
-                hostnameUri = string.Concat("https://", hostnameUri);
-            }
-            if (hostnameUri.StartsWith("http"))
-            {
-                return GetIconUrl(hostnameUri);
-            }
-
-            return null;
         }
 
         private static string GetIconUrl(string hostnameUri)

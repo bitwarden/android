@@ -954,6 +954,9 @@
   <data name="UpdateKey" xml:space="preserve">
     <value>Трябва да обновите шифриращия си ключ, за да използвате тази възможност.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Необходима е промяна на шифриращия ключ. Впишете се в трезора си по уеб, за да обновите своя шифриращ ключ.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Научете повече</value>
   </data>
@@ -2760,5 +2763,11 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Вписване в</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Твърде много опити</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Акаунтът е отписан.</value>
   </data>
 </root>

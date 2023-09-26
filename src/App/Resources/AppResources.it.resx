@@ -953,6 +953,9 @@
   <data name="UpdateKey" xml:space="preserve">
     <value>Non puoi utilizzare questa funzione finché non aggiorni la tua chiave di criptografia.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Migrazione della chiave di criptografia obbligatoria. Accedi tramite la cassaforte web per aggiornare la tua chiave di criptografia.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Ulteriori informazioni</value>
   </data>
@@ -2760,5 +2763,11 @@ Vuoi passare a questo account?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Accedendo su</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Troppi tentativi</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Account uscito.</value>
   </data>
 </root>

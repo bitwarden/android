@@ -954,6 +954,9 @@ A leitura será efetuada automaticamente.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Não pode utilizar esta funcionalidade até atualizar a sua chave de encriptação.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>É necessária a migração da chave de encriptação. Inicie sessão através do cofre Web para atualizar a sua chave de encriptação.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Saber mais</value>
   </data>
@@ -2759,5 +2762,11 @@ Deseja mudar para esta conta?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>A iniciar sessão em</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Demasiadas tentativas</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Conta com sessão terminada.</value>
   </data>
 </root>

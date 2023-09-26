@@ -954,6 +954,9 @@ Koodi luetaan automaattisesti.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Et voi käyttää tätä toimintoa ennen kuin päivität salausavaimesi.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Salausavaimen siirto vaaditaan. Päivitä salausavaimesi kirjautumalla verkkoholviin.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Lue lisää</value>
   </data>
@@ -2761,5 +2764,11 @@ Haluatko vaihtaa tähän tiliin?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Kirjaudutaan sijaintiin</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Liian monta yritystä</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Tili kirjattiin ulos.</value>
   </data>
 </root>
