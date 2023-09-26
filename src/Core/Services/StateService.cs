@@ -1359,6 +1359,39 @@ namespace Bit.Core.Services
             _storageMediatorService.Save(Constants.ConfigsKey, value);
         }
 
+        public async Task<Region?> GetActiveUserRegionAsync(string userId = null)
+        {
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            ))?.Settings?.Region;
+        }
+
+        public async Task UpdateActiveUserEnvironmentAsync(Region region, EnvironmentUrlData urls, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+
+            if (account?.Settings == null)
+            {
+                return;
+            }
+
+            account.Settings.Region = region;
+            account.Settings.EnvironmentUrls = urls;
+            await SaveAccountAsync(account, reconciledOptions);
+        }
+
+        public async Task<Region?> GetPreAuthRegionAsync()
+        {
+            return await _storageMediatorService.GetAsync<Region?>(Constants.RegionEnvironment);
+        }
+
+        public async Task SetPreAuthRegionAsync(Region value)
+        {
+            await _storageMediatorService.SaveAsync(Constants.RegionEnvironment, value);
+        }
+
         // Helpers
 
         [Obsolete("Use IStorageMediatorService instead")]
@@ -1548,6 +1581,7 @@ namespace Bit.Core.Services
             await CheckStateAsync();
 
             account.Settings.EnvironmentUrls = await GetPreAuthEnvironmentUrlsAsync();
+            account.Settings.Region = await GetPreAuthRegionAsync();
 
             // Storage
             var state = await GetStateFromStorageAsync() ?? new State();

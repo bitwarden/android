@@ -428,6 +428,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to addy.io.
+        /// </summary>
+        public static string AddyIo {
+            get {
+                return ResourceManager.GetString("AddyIo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Admin approval requested.
         /// </summary>
         public static string AdminApprovalRequested {
@@ -514,15 +523,6 @@ namespace Bit.App.Resources {
         public static string AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain {
             get {
                 return ResourceManager.GetString("AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to addy.io.
-        /// </summary>
-        public static string AddyIo {
-            get {
-                return ResourceManager.GetString("AddyIo", resourceCulture);
             }
         }
         

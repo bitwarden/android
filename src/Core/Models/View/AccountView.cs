@@ -1,4 +1,5 @@
-﻿using Bit.Core.Enums;
+﻿using System.Linq;
+using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
@@ -27,10 +28,10 @@ namespace Bit.Core.Models.View
 
         private string ParseEndpoint(EnvironmentUrlData urls)
         {
-            var url = urls?.WebVault ?? urls?.Base;
+            var url = urls?.WebVault ?? urls?.Base ?? urls?.Api ?? urls?.Identity;
             if (!string.IsNullOrWhiteSpace(url))
             {
-                if (url.Contains("bitwarden.com") || url.Contains("bitwarden.eu"))
+                if (url.Contains(Region.US.Domain()) || url.Contains(Region.EU.Domain()))
                 {
                     return CoreHelpers.GetDomain(url);
                 }

@@ -19,14 +19,25 @@ namespace Bit.App.Pages
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
 
             PageTitle = AppResources.Settings;
-            BaseUrl = _environmentService.BaseUrl == EnvironmentUrlData.DefaultEU.Base || EnvironmentUrlData.DefaultUS.Base == _environmentService.BaseUrl ?
-                string.Empty : _environmentService.BaseUrl;
+            SubmitCommand = new AsyncCommand(SubmitAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
+            Init();
+        }
+
+        public void Init()
+        {
+            if (_environmentService.SelectedRegion != Core.Enums.Region.SelfHosted ||
+                _environmentService.BaseUrl == EnvironmentUrlData.DefaultEU.Base ||
+                _environmentService.BaseUrl == EnvironmentUrlData.DefaultUS.Base)
+            {
+                return;
+            }
+
+            BaseUrl = _environmentService.BaseUrl;
             WebVaultUrl = _environmentService.WebVaultUrl;
             ApiUrl = _environmentService.ApiUrl;
             IdentityUrl = _environmentService.IdentityUrl;
             IconsUrl = _environmentService.IconsUrl;
             NotificationsUrls = _environmentService.NotificationsUrl;
-            SubmitCommand = new AsyncCommand(SubmitAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
         }
 
         public ICommand SubmitCommand { get; }
