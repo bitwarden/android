@@ -1,0 +1,807 @@
+package com.x8bit.bitwarden.data.vault.datasource.network.model
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+/**
+ * Represents the response model for vault data fetched from the server.
+ *
+ * @property folders A list of folders associated with the vault data (nullable).
+ * @property collections A list of collections associated with the vault data (nullable).
+ * @property profile The profile associated with the vault data (nullable).
+ * @property ciphers A list of ciphers associated with the vault data (nullable).
+ * @property policies A list of policies associated with the vault data (nullable).
+ * @property domains A domains object associated with the vault data.
+ * @property sends A list of send objects associated with the vault data (nullable).
+ */
+// TODO determine encrypted params and rename them to emphasize encryption in BIT-636
+@Serializable
+data class SyncResponseJson(
+    @SerialName("folders")
+    val folders: List<Folder>?,
+    @SerialName("collections")
+    val collections: List<Collection>?,
+    @SerialName("profile")
+    val profile: Profile?,
+    @SerialName("ciphers")
+    val ciphers: List<Cipher>?,
+    @SerialName("policies")
+    val policies: List<Policy>?,
+    @SerialName("domains")
+    val domains: Domains,
+    @SerialName("sends")
+    val sends: List<Send>?,
+) {
+    /**
+     * Represents domains in the vault response.
+     *
+     * @property globalEquivalentDomains A list of global equivalent domains (nullable).
+     * @property equivalentDomains List of equivalent domains (nullable).
+     */
+    @Serializable
+    data class Domains(
+        @SerialName("globalEquivalentDomains")
+        val globalEquivalentDomains: List<GlobalEquivalentDomain>?,
+        @SerialName("equivalentDomains")
+        val equivalentDomains: List<List<String>>?,
+    ) {
+        /**
+         * Represents the global equivalent domain in the vault response.
+         *
+         * @property isExcluded If the global equivalent domain is excluded.
+         * @property domains A List of domains associated with
+         * the global equivalent domain (nullable).
+         * @property type The type of global equivalent domain.
+         */
+        @Serializable
+        data class GlobalEquivalentDomain(
+            @SerialName("excluded")
+            val isExcluded: Boolean,
+            @SerialName("domains")
+            val domains: List<String>?,
+            // TODO Parse type enum in BIT-636
+            @SerialName("type")
+            val type: Int,
+        )
+    }
+
+    /**
+     * Represents a folder in the vault response.
+     *
+     * @property revisionDate The revision date of the folder (nullable).
+     * @property name The name of the folder (nullable).
+     * @property id The ID of the folder.
+     */
+    @Serializable
+    data class Folder(
+        // TODO Serialize revision date in BIT-636
+        @SerialName("revisionDate")
+        val revisionDate: String?,
+        @SerialName("name")
+        val name: String?,
+        @SerialName("id")
+        val id: String,
+    )
+
+    /**
+     * Represents a policy in the vault response.
+     *
+     * @property organizationId The organization ID of the policy.
+     * @property id The ID of the policy.
+     * @property type The type of policy.
+     * @property isEnabled If the policy is enabled or not.
+     */
+    @Serializable
+    data class Policy(
+        @SerialName("organizationId")
+        val organizationId: String,
+        @SerialName("id")
+        val id: String,
+        // TODO Parse type enum in BIT-636
+        @SerialName("type")
+        val type: Int,
+        @SerialName("enabled")
+        val isEnabled: Boolean,
+    )
+
+    /**
+     * Represents a profile in the vault response.
+     *
+     * @property providerOrganizations A list of provider organizations
+     * associated with the profile (nullable).
+     * @property isPremiumFromOrganization If the profile is premium from organization.
+     * @property shouldForcePasswordReset If the profile should force password reset.
+     * @property avatarColor The avatar color of the profile (nullable).
+     * @property isEmailVerified If the profile has a verified email.
+     * @property isTwoFactorEnabled If the profile has two factor authentication enabled.
+     * @property privateKey The private key of the profile (nullable).
+     * @property isPremium If the profile is premium.
+     * @property culture The culture of the profile (nullable).
+     * @property name The name of the profile (nullable).
+     * @property organizations A list of organizations associated with the profile (nullable).
+     * @property shouldUseKeyConnector If the profile should use a key connector.
+     * @property id The ID of the profile.
+     * @property masterPasswordHint The master password hint of the profile (nullable).
+     * @property email The email of the profile (nullable).
+     * @property key The key of the profile (nullable).
+     * @property securityStamp The secure stamp of the profile (nullable).
+     * @property providers A list of providers associated with the profile (nullable).
+     */
+    @Serializable
+    data class Profile(
+        @SerialName("providerOrganizations")
+        val providerOrganizations: List<Organization>?,
+        @SerialName("premiumFromOrganization")
+        val isPremiumFromOrganization: Boolean,
+        @SerialName("forcePasswordReset")
+        val shouldForcePasswordReset: Boolean,
+        @SerialName("avatarColor")
+        val avatarColor: String?,
+        @SerialName("emailVerified")
+        val isEmailVerified: Boolean,
+        @SerialName("twoFactorEnabled")
+        val isTwoFactorEnabled: Boolean,
+        @SerialName("privateKey")
+        val privateKey: String?,
+        @SerialName("premium")
+        val isPremium: Boolean,
+        @SerialName("culture")
+        val culture: String?,
+        @SerialName("name")
+        val name: String?,
+        @SerialName("organizations")
+        val organizations: List<Organization>?,
+        @SerialName("usesKeyConnector")
+        val shouldUseKeyConnector: Boolean,
+        @SerialName("id")
+        val id: String,
+        @SerialName("masterPasswordHint")
+        val masterPasswordHint: String?,
+        @SerialName("email")
+        val email: String?,
+        @SerialName("key")
+        val key: String?,
+        @SerialName("securityStamp")
+        val securityStamp: String?,
+        @SerialName("providers")
+        val providers: List<Provider>?,
+    ) {
+        /**
+         * Represents an organization in the vault response.
+         *
+         * @property shouldUsePolicies If the organization should use policies.
+         * @property keyConnectorUrl The key connector URL of the organization (nullable).
+         * @property type The type of organization.
+         * @property seats The number of seats in the organization (nullable).
+         * @property isEnabled If the organization is enabled.
+         * @property providerType They type of provider for the organization.
+         * @property isResetPasswordEnrolled If reset password has been
+         * enrolled for the organization.
+         * @property shouldUseSecretsManager If the organization should use the secrets manager.
+         * @property maxCollections The max collections of the organization (nullable).
+         * @property isSelfHost If the organization is self hosted.
+         * @property shouldUseKeyConnector If the organization should use a key connector.
+         * @property permissions The permissions of the organization.
+         * @property hasPublicAndPrivateKeys If the organization has public and private keys.
+         * @property providerId The provider ID of the organization (nullable).
+         * @property id The ID of the organization.
+         * @property shouldUseGroups If the organization should use groups.
+         * @property shouldUseDirectory If the organization should use a directory.
+         * @property key The key of the organization (nullable).
+         * @property providerName The provider name of the organization (nullable).
+         * @property shouldUsersGetPremium If users of the organization get premium.
+         * @property maxStorageGb The max storage in Gb of the organization (nullable).
+         * @property identifier The identifier of the organization (nullable).
+         * @property shouldUseSso If the organization should use single sign on.
+         * @property shouldUseCustomPermissions If the organization should use custom permissions.
+         * @property isFamilySponsorshipAvailable If the organization has
+         * family sponsorship available.
+         * @property shouldUseResetPassword If the organization should use reset password.
+         * @property planProductType The plan product type of the organization.
+         * @property accessSecretsManager If the organization can access secrets manager.
+         * @property use2fa If the organization uses 2FA.
+         * @property familySponsorshipToDelete If the organization has a
+         * family sponsorship to delete (nullable).
+         * @property userId The user id (nullable).
+         * @property shouldUseActivateAutofillPolicy If the organization should
+         * use auto fill policy.
+         * @property shouldUseEvents If the organization should use events.
+         * @property isFamilySponsorshipFriendlyName If the family sponsorship is a friendly name.
+         * @property isKeyConnectorEnabled If the key connector is enabled.
+         * @property shouldUseTotp If he organization should use TOTP.
+         * @property familySponsorshipLastSyncDate The last date the family sponsorship
+         * was synced (nullable).
+         * @property shouldUseScim If the organization should use scim.
+         * @property name The name of the organization (nullable).
+         * @property shouldUseApi If the organization should use API.
+         * @property isSsoBound If the organization is sso bound.
+         * @property familySponsorshipValidUntil The family sponsorship valid until
+         * of the organization (nullable).
+         * @property status The status of the organization.
+         */
+        @Serializable
+        data class Organization(
+            @SerialName("usePolicies")
+            val shouldUsePolicies: Boolean,
+            @SerialName("keyConnectorUrl")
+            val keyConnectorUrl: String?,
+            // TODO Parse type enum in BIT-636
+            @SerialName("type")
+            val type: Int,
+            @SerialName("seats")
+            val seats: Int?,
+            @SerialName("enabled")
+            val isEnabled: Boolean,
+            // TODO Parse provider type enum in BIT-636
+            @SerialName("providerType")
+            val providerType: Int,
+            @SerialName("resetPasswordEnrolled")
+            val isResetPasswordEnrolled: Boolean,
+            @SerialName("useSecretsManager")
+            val shouldUseSecretsManager: Boolean,
+            @SerialName("maxCollections")
+            val maxCollections: Int?,
+            @SerialName("selfHost")
+            val isSelfHost: Boolean,
+            @SerialName("useKeyConnector")
+            val shouldUseKeyConnector: Boolean,
+            @SerialName("permissions")
+            val permissions: Permissions,
+            @SerialName("hasPublicAndPrivateKeys")
+            val hasPublicAndPrivateKeys: Boolean,
+            @SerialName("providerId")
+            val providerId: String?,
+            @SerialName("id")
+            val id: String,
+            @SerialName("useGroups")
+            val shouldUseGroups: Boolean,
+            @SerialName("useDirectory")
+            val shouldUseDirectory: Boolean,
+            @SerialName("key")
+            val key: String?,
+            @SerialName("providerName")
+            val providerName: String?,
+            @SerialName("usersGetPremium")
+            val shouldUsersGetPremium: Boolean,
+            @SerialName("maxStorageGb")
+            val maxStorageGb: Int?,
+            @SerialName("identifier")
+            val identifier: String?,
+            @SerialName("useSso")
+            val shouldUseSso: Boolean,
+            @SerialName("useCustomPermissions")
+            val shouldUseCustomPermissions: Boolean,
+            @SerialName("familySponsorshipAvailable")
+            val isFamilySponsorshipAvailable: Boolean,
+            @SerialName("useResetPassword")
+            val shouldUseResetPassword: Boolean,
+            // TODO Parse plan product type enum in BIT-636
+            @SerialName("planProductType")
+            val planProductType: Int,
+            @SerialName("accessSecretsManager")
+            val accessSecretsManager: Boolean,
+            @SerialName("use2fa")
+            val use2fa: Boolean,
+            @SerialName("familySponsorshipToDelete")
+            val familySponsorshipToDelete: Boolean?,
+            @SerialName("userId")
+            val userId: String?,
+            @SerialName("useActivateAutofillPolicy")
+            val shouldUseActivateAutofillPolicy: Boolean,
+            @SerialName("useEvents")
+            val shouldUseEvents: Boolean,
+            @SerialName("familySponsorshipFriendlyName")
+            val isFamilySponsorshipFriendlyName: String?,
+            @SerialName("keyConnectorEnabled")
+            val isKeyConnectorEnabled: Boolean,
+            @SerialName("useTotp")
+            val shouldUseTotp: Boolean,
+            // TODO Serialize family sponsorship last sync date in BIT-636
+            @SerialName("familySponsorshipLastSyncDate")
+            val familySponsorshipLastSyncDate: String?,
+            @SerialName("useScim")
+            val shouldUseScim: Boolean,
+            @SerialName("name")
+            val name: String?,
+            @SerialName("useApi")
+            val shouldUseApi: Boolean,
+            @SerialName("ssoBound")
+            val isSsoBound: Boolean,
+            @SerialName("familySponsorshipValidUntil")
+            val familySponsorshipValidUntil: String?,
+            @SerialName("status")
+            val status: Int,
+        )
+
+        /**
+         * Represents a provider in the vault response.
+         *
+         * @property shouldUseEvents If the provider should use events.
+         * @property permissions The permissions of the provider.
+         * @property name The name of the provider (nullable).
+         * @property id The ID of the provider.
+         * @property type The type of provider.
+         * @property userId The user ID of the provider (nullable).
+         * @property key The key of the provider (nullable).
+         * @property isEnabled If the provider is enabled.
+         * @property status The status of the provider.
+         */
+        @Serializable
+        data class Provider(
+            @SerialName("useEvents")
+            val shouldUseEvents: Boolean,
+            @SerialName("permissions")
+            val permissions: Permissions,
+            @SerialName("name")
+            val name: String?,
+            @SerialName("id")
+            val id: String,
+            // TODO Parse type enum in BIT-636
+            @SerialName("type")
+            val type: Int,
+            @SerialName("userId")
+            val userId: String?,
+            @SerialName("key")
+            val key: String?,
+            @SerialName("enabled")
+            val isEnabled: Boolean,
+            @SerialName("status")
+            val status: Int,
+        )
+
+        /**
+         * Represents permissions in the vault response.
+         *
+         * @property shouldManageGroups If groups should be managed.
+         * @property shouldManageResetPassword If reset password should be managed.
+         * @property shouldAccessReports If reports should be accessed.
+         * @property shouldManagePolicies If policies should be managed.
+         * @property shouldDeleteAnyCollection If collections should be accessed.
+         * @property shouldManageSso If sso should be managed.
+         * @property shouldDeleteAssignedCollections If assigned collection should be deleted.
+         * @property shouldManageUsers If users should be managed.
+         * @property shouldManageScim If scim should be managed.
+         * @property shouldAccessImportExport If import/export should be accessed.
+         * @property shouldEditAnyCollection If any collection should be edited.
+         * @property shouldAccessEventLogs If event logs should be accessed.
+         * @property shouldCreateNewCollections If new collections should be created.
+         * @property shouldEditAssignedCollections If assigned collections should be edited.
+         */
+        @Serializable
+        data class Permissions(
+            @SerialName("manageGroups")
+            val shouldManageGroups: Boolean,
+            @SerialName("manageResetPassword")
+            val shouldManageResetPassword: Boolean,
+            @SerialName("accessReports")
+            val shouldAccessReports: Boolean,
+            @SerialName("managePolicies")
+            val shouldManagePolicies: Boolean,
+            @SerialName("deleteAnyCollection")
+            val shouldDeleteAnyCollection: Boolean,
+            @SerialName("manageSso")
+            val shouldManageSso: Boolean,
+            @SerialName("deleteAssignedCollections")
+            val shouldDeleteAssignedCollections: Boolean,
+            @SerialName("manageUsers")
+            val shouldManageUsers: Boolean,
+            @SerialName("manageScim")
+            val shouldManageScim: Boolean,
+            @SerialName("accessImportExport")
+            val shouldAccessImportExport: Boolean,
+            @SerialName("editAnyCollection")
+            val shouldEditAnyCollection: Boolean,
+            @SerialName("accessEventLogs")
+            val shouldAccessEventLogs: Boolean,
+            @SerialName("createNewCollections")
+            val shouldCreateNewCollections: Boolean,
+            @SerialName("editAssignedCollections")
+            val shouldEditAssignedCollections: Boolean,
+        )
+    }
+
+    /**
+     * Represents a cipher in the vault response.
+     *
+     * @property notes The notes of the cipher (nullable).
+     * @property attachments A list of attachments associated with the cipher (nullable).
+     * @property shouldOrganizationUseTotp If organizations use TOTP for the cipher.
+     * @property reprompt The reprompt of the cipher.
+     * @property shouldEdit If the cipher can edit.
+     * @property passwordHistory A list of password history objects
+     * associated with the cipher (nullable).
+     * @property revisionDate The revision date of the cipher (nullable).
+     * @property type The type of cipher.
+     * @property login The login of the cipher.
+     * @property creationDate The creation date of the cipher (nullable).
+     * @property secureNote The secure note of the cipher.
+     * @property folderId The folder ID of the cipher (nullable).
+     * @property organizationId The organization ID of the cipher (nullable).
+     * @property deletedDate The deleted date of the cipher (nullable).
+     * @property identity The identity of the cipher.
+     * @property collectionIds A list of collection IDs associated with the cipher (nullable).
+     * @property name The name of the cipher (nullable).
+     * @property id The ID of the cipher.
+     * @property fields A list of fields associated with the cipher (nullable).
+     * @property shouldViewPassword If the password can be viewed for the cipher.
+     * @property isFavorite If the cipher is a favorite.
+     * @property card The card of the cipher.
+     */
+    @Serializable
+    data class Cipher(
+        @SerialName("notes")
+        val notes: String?,
+        @SerialName("attachments")
+        val attachments: List<Attachment>?,
+        @SerialName("organizationUseTotp")
+        val shouldOrganizationUseTotp: Boolean,
+        @SerialName("reprompt")
+        val reprompt: Int,
+        @SerialName("edit")
+        val shouldEdit: Boolean,
+        @SerialName("passwordHistory")
+        val passwordHistory: List<PasswordHistory>?,
+        // TODO Serialize revision date in BIT-636
+        @SerialName("revisionDate")
+        val revisionDate: String?,
+        // TODO Parse type enum in BIT-636
+        @SerialName("type")
+        val type: Int,
+        @SerialName("login")
+        val login: Login,
+        // TODO Serialize creation date in BIT-636
+        @SerialName("creationDate")
+        val creationDate: String?,
+        @SerialName("secureNote")
+        val secureNote: SecureNote,
+        @SerialName("folderId")
+        val folderId: String?,
+        @SerialName("organizationId")
+        val organizationId: String?,
+        // TODO Serialize deleted date in BIT-636
+        @SerialName("deletedDate")
+        val deletedDate: String?,
+        @SerialName("identity")
+        val identity: Identity,
+        @SerialName("collectionIds")
+        val collectionIds: List<String>?,
+        @SerialName("name")
+        val name: String?,
+        @SerialName("id")
+        val id: String,
+        @SerialName("fields")
+        val fields: List<Field>?,
+        @SerialName("viewPassword")
+        val shouldViewPassword: Boolean,
+        @SerialName("favorite")
+        val isFavorite: Boolean,
+        @SerialName("card")
+        val card: Card,
+    ) {
+        /**
+         * Represents an attachment in the vault response.
+         *
+         * @property fileName The file name of the attachment (nullable).
+         * @property size The size of the attachment (nullable).
+         * @property sizeName The size name of the attachment (nullable).
+         * @property id The ID of the attachment (nullable).
+         * @property url The URL of the attachment (nullable).
+         * @property key The key of the attachment (nullable).
+         */
+        @Serializable
+        data class Attachment(
+            @SerialName("fileName")
+            val fileName: String?,
+            @SerialName("size")
+            val size: Int,
+            @SerialName("sizeName")
+            val sizeName: String?,
+            @SerialName("id")
+            val id: String?,
+            @SerialName("url")
+            val url: String?,
+            @SerialName("key")
+            val key: String?,
+        )
+
+        /**
+         * Represents a card in the vault response.
+         *
+         * @property number The number of the card (nullable).
+         * @property expMonth The expiration month of the card (nullable).
+         * @property code The code of the card (nullable).
+         * @property expirationYear The expiration year of the card (nullable).
+         * @property cardholderName The name of the card holder (nullable).
+         * @property brand The brand of the card (nullable).
+         */
+        @Serializable
+        data class Card(
+            @SerialName("number")
+            val number: String?,
+            @SerialName("expMonth")
+            val expMonth: String?,
+            @SerialName("code")
+            val code: String?,
+            @SerialName("expYear")
+            val expirationYear: String?,
+            @SerialName("cardholderName")
+            val cardholderName: String?,
+            @SerialName("brand")
+            val brand: String?,
+        )
+
+        /**
+         * Represents a field in the vault response.
+         *
+         * @property linkedId The linked ID of the field (nullable).
+         * @property name The name of the field (nullable).
+         * @property type The type of field.
+         * @property value The value of the field (nullable).
+         */
+        @Serializable
+        data class Field(
+            @SerialName("linkedId")
+            val linkedId: String?,
+            @SerialName("name")
+            val name: String?,
+            // TODO Parse type enum in BIT-636
+            @SerialName("type")
+            val type: Int,
+            @SerialName("value")
+            val value: String?,
+        )
+
+        /**
+         * Represents an identity in the vault response.
+         *
+         * @property passportNumber The passport number of the identity (nullable).
+         * @property lastName The last name of the identity (nullable).
+         * @property country The country of the identity (nullable).
+         * @property address3 The third address of the identity (nullable).
+         * @property address2 The second address of the identity (nullable).
+         * @property city The city of the identity (nullable).
+         * @property address1 The first address of the identity (nullable).
+         * @property postalCode The postal code of the identity (nullable).
+         * @property title The title of the identity (nullable).
+         * @property ssn The social security number of the identity (nullable).
+         * @property firstName The first name of the identity (nullable).
+         * @property phone The phone of the identity (nullable).
+         * @property middleName The middle name of the identity (nullable).
+         * @property company The company of the identity (nullable).
+         * @property licenseNumber The license number of the identity (nullable).
+         * @property state The state of the identity (nullable).
+         * @property email The email of the identity (nullable).
+         * @property username The username of the identity (nullable).
+         */
+        @Serializable
+        data class Identity(
+            @SerialName("passportNumber")
+            val passportNumber: String?,
+            @SerialName("lastName")
+            val lastName: String?,
+            @SerialName("country")
+            val country: String?,
+            @SerialName("address3")
+            val address3: String?,
+            @SerialName("address2")
+            val address2: String?,
+            @SerialName("city")
+            val city: String?,
+            @SerialName("address1")
+            val address1: String?,
+            @SerialName("postalCode")
+            val postalCode: String?,
+            @SerialName("title")
+            val title: String?,
+            @SerialName("ssn")
+            val ssn: String?,
+            @SerialName("firstName")
+            val firstName: String?,
+            @SerialName("phone")
+            val phone: String?,
+            @SerialName("middleName")
+            val middleName: String?,
+            @SerialName("company")
+            val company: String?,
+            @SerialName("licenseNumber")
+            val licenseNumber: String?,
+            @SerialName("state")
+            val state: String?,
+            @SerialName("email")
+            val email: String?,
+            @SerialName("username")
+            val username: String?,
+        )
+
+        /**
+         * Represents a login object in the vault response.
+         *
+         * @property uris A list of URIs (nullable).
+         * @property totp The TOTP (nullable).
+         * @property password The password (nullable).
+         * @property passwordRevisionDate The password revision date (nullable).
+         * @property shouldAutofillOnPageLoad If autofill is used on page load (nullable).
+         * @property uri The URI (nullable).
+         * @property username The username (nullable).
+         */
+        @Serializable
+        data class Login(
+            @SerialName("uris")
+            val uris: List<Uri>?,
+            @SerialName("totp")
+            val totp: String?,
+            @SerialName("password")
+            val password: String?,
+            // TODO Serialize password revision date in BIT-636
+            @SerialName("passwordRevisionDate")
+            val passwordRevisionDate: String?,
+            @SerialName("autofillOnPageLoad")
+            val shouldAutofillOnPageLoad: Boolean?,
+            @SerialName("uri")
+            val uri: String?,
+            @SerialName("username")
+            val username: String?,
+        ) {
+            /**
+             * Represents a URI in the vault response.
+             *
+             * @property match The match of the URI.
+             * @property uri The actual string representing the URI (nullable).
+             */
+            @Serializable
+            data class Uri(
+                @SerialName("match")
+                val match: Int,
+                @SerialName("uri")
+                val uri: String?,
+            )
+        }
+
+        /**
+         * Represents password history in the vault response.
+         *
+         * @property password The password of the password history object.
+         * @property lastUsedDate The last used date of the password history object.
+         */
+        @Serializable
+        data class PasswordHistory(
+            @SerialName("password")
+            val password: String,
+            // TODO Serialize last used date in BIT-636
+            @SerialName("lastUsedDate")
+            val lastUsedDate: String,
+        )
+
+        /**
+         * Represents a secure note in the vault response.
+         *
+         * @property type The type of secure note.
+         */
+        @Serializable
+        data class SecureNote(
+            // TODO Parse type enum in BIT-636
+            @SerialName("type")
+            val type: Int,
+        )
+    }
+
+    /**
+     * Represents a send object in the vault response.
+     *
+     * @property accessCount The access count of the send object.
+     * @property notes The notes of the send object (nullable).
+     * @property revisionDate The revision date of the send object.
+     * @property maxAccessCount The max access count of the send object (nullable).
+     * @property shouldHideEmail If the send object should hide the email.
+     * @property type The type of send object.
+     * @property accessId The access ID of the send object (nullable).
+     * @property password The password of the send object (nullable).
+     * @property file The file of the send object.
+     * @property deletionDate The max access count of the send object.
+     * @property name The name of the send object (nullable).
+     * @property isDisabled If the send object is disabled.
+     * @property id The ID the send object.
+     * @property text The text of the send object.
+     * @property key The key of the send object (nullable).
+     * @property expirationDate The expiration date of the send object (nullable).
+     */
+    @Serializable
+    data class Send(
+        @SerialName("accessCount")
+        val accessCount: Int,
+        @SerialName("notes")
+        val notes: String?,
+        // TODO Serialize revision date in BIT-636
+        @SerialName("revisionDate")
+        val revisionDate: String,
+        @SerialName("maxAccessCount")
+        val maxAccessCount: Int?,
+        @SerialName("hideEmail")
+        val shouldHideEmail: Boolean,
+        // TODO Parse type enum in BIT-636
+        @SerialName("type")
+        val type: Int,
+        @SerialName("accessId")
+        val accessId: String?,
+        @SerialName("password")
+        val password: String?,
+        @SerialName("file")
+        val file: File,
+        // TODO Serialize deletion date in BIT-636
+        @SerialName("deletionDate")
+        val deletionDate: String,
+        @SerialName("name")
+        val name: String?,
+        @SerialName("disabled")
+        val isDisabled: Boolean,
+        @SerialName("id")
+        val id: String,
+        @SerialName("text")
+        val text: Text,
+        @SerialName("key")
+        val key: String?,
+        // TODO Serialize expiration date in BIT-636
+        @SerialName("expirationDate")
+        val expirationDate: String?,
+    ) {
+        /**
+         * Represents a file in the vault response.
+         *
+         * @property fileName The name of the file (nullable).
+         * @property size The size of the file (nullable).
+         * @property sizeName The size name of the file (nullable).
+         * @property id The ID of the file (nullable).
+         */
+        @Serializable
+        data class File(
+            @SerialName("fileName")
+            val fileName: String?,
+            @SerialName("size")
+            val size: Int?,
+            @SerialName("sizeName")
+            val sizeName: String?,
+            @SerialName("id")
+            val id: String?,
+        )
+
+        /**
+         * Represents text in the vault response.
+         *
+         * @property isHidden If the text is hidden or not.
+         * @property text The actual string representing the text (nullable).
+         */
+        @Serializable
+        data class Text(
+            @SerialName("hidden")
+            val isHidden: Boolean,
+            @SerialName("text")
+            val text: String?,
+        )
+    }
+
+    /**
+     * Represents a collection in the vault response.
+     *
+     * @property organizationId The organization ID of the collection.
+     * @property shouldHidePasswords If the collection should hide passwords.
+     * @property name The name of the collection (nullable).
+     * @property externalId The external ID of the collection (nullable).
+     * @property isReadOnly If the collection is marked as read only.
+     * @property id The ID of the collection.
+     */
+    @Serializable
+    data class Collection(
+        @SerialName("organizationId")
+        val organizationId: String,
+        @SerialName("hidePasswords")
+        val shouldHidePasswords: Boolean,
+        @SerialName("name")
+        val name: String?,
+        @SerialName("externalId")
+        val externalId: String?,
+        @SerialName("readOnly")
+        val isReadOnly: Boolean,
+        @SerialName("id")
+        val id: String,
+    )
+}
