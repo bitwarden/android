@@ -76,7 +76,7 @@ namespace Bit.App.Pages
                 _logger,
                 OnVaultTimeoutActionChangingAsync,
                 AppResources.SessionTimeoutAction,
-                _ => _inited,
+                _ => _inited && !HasVaultTimeoutActionPolicy,
                 ex => HandleException(ex));
 
             ToggleUseThisDeviceToApproveLoginRequestsCommand = CreateDefaultAsyncCommnad(ToggleUseThisDeviceToApproveLoginRequestsAsync, _ => _inited);
@@ -171,7 +171,7 @@ namespace Bit.App.Pages
 
         public bool ShowCustomVaultTimeoutPicker => VaultTimeoutPickerViewModel.SelectedKey == CUSTOM_VAULT_TIMEOUT_VALUE;
 
-        public bool ShowVaultTimeoutPolicyInfo => _maximumVaultTimeoutPolicy.HasValue || !string.IsNullOrEmpty(_vaultTimeoutActionPolicy);
+        public bool ShowVaultTimeoutPolicyInfo => _maximumVaultTimeoutPolicy.HasValue || HasVaultTimeoutActionPolicy;
 
         public string VaultTimeoutPolicyDescription
         {
@@ -208,6 +208,8 @@ namespace Bit.App.Pages
         private int? CurrentVaultTimeout => GetRawVaultTimeoutFrom(VaultTimeoutPickerViewModel.SelectedKey);
 
         private bool IncludeLinksWithSubscriptionInfo => Device.RuntimePlatform != Device.iOS;
+
+        private bool HasVaultTimeoutActionPolicy => !string.IsNullOrEmpty(_vaultTimeoutActionPolicy);
 
         public PickerViewModel<int> VaultTimeoutPickerViewModel { get; }
         public PickerViewModel<VaultTimeoutAction> VaultTimeoutActionPickerViewModel { get; }
@@ -268,7 +270,9 @@ namespace Bit.App.Pages
 
             var maximumVaultTimeoutPolicy = await _policyService.FirstOrDefault(PolicyType.MaximumVaultTimeout);
             _maximumVaultTimeoutPolicy = maximumVaultTimeoutPolicy?.GetInt(Policy.MINUTES_KEY);
-            _vaultTimeoutActionPolicy = maximumVaultTimeoutPolicy?.GetString(Policy.ACTION_KEY);
+            _vaultTimeoutActionPolicy = maximumVaultTimeoutPolicy?.GetString(Policy.ACTION_KEY) ?? Policy.ACTION_LOCK;
+
+            MainThread.BeginInvokeOnMainThread(VaultTimeoutActionPickerViewModel.SelectOptionCommand.RaiseCanExecuteChanged);
         }
 
         private async Task InitVaultTimeoutPickerAsync()
@@ -438,14 +442,14 @@ namespace Bit.App.Pages
             if (rawTimeout > _maximumVaultTimeoutPolicy)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.VaultTimeoutToLarge, AppResources.Warning);
-                var timeout = await _vaultTimeoutService.GetVaultTimeout() ?? NEVER_SESSION_TIMEOUT_VALUE;
-                VaultTimeoutPickerViewModel.Select(timeout, false);
+                VaultTimeoutPickerViewModel.Select(_maximumVaultTimeoutPolicy.Value, false);
 
                 if (VaultTimeoutPickerViewModel.SelectedKey == CUSTOM_VAULT_TIMEOUT_VALUE)
                 {
-                    _customVaultTimeoutTime = TimeSpan.FromMinutes(timeout);
-                    MainThread.BeginInvokeOnMainThread(TriggerUpdateCustomVaultTimeoutPicker);
+                    _customVaultTimeoutTime = TimeSpan.FromMinutes(_maximumVaultTimeoutPolicy.Value);
                 }
+
+                MainThread.BeginInvokeOnMainThread(TriggerUpdateCustomVaultTimeoutPicker);
 
                 return false;
             }
