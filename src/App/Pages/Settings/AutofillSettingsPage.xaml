@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:BaseContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    x:DataType="pages:AutofillSettingsPageViewModel"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    x:Class="Bit.App.Pages.AutofillSettingsPage"
+    Title="{u:I18n Autofill}">
+    
+    <ContentPage.BindingContext>
+        <pages:AutofillSettingsPageViewModel />
+    </ContentPage.BindingContext>
+
+     <ScrollView Padding="0, 0, 0, 20">
+        <StackLayout Padding="0" Spacing="5">
+            <controls:CustomLabel
+                Text="{u:I18n Autofill}"
+                StyleClass="settings-header" />
+
+            <controls:SwitchItemView
+                Title="{u:I18n AutofillServices}"
+                Subtitle="{u:I18n AutofillServicesExplanationLong}"
+                IsVisible="{Binding SupportsAndroidAutofillServices}"
+                IsToggled="{Binding UseAutofillServices}"
+                AutomationId="AutofillServicesSwitch"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand" />
+
+            <controls:SwitchItemView
+                Title="{u:I18n InlineAutofill}"
+                Subtitle="{u:I18n UseInlineAutofillExplanationLong}"
+                IsToggled="{Binding UseInlineAutofill}"
+                IsVisible="{Binding ShowUseInlineAutofillToggle}"
+                IsEnabled="{Binding UseAutofillServices}"
+                AutomationId="InlineAutofillSwitch"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand" />
+
+            <controls:SwitchItemView
+                Title="{u:I18n Accessibility}"
+                Subtitle="{Binding UseAccessibilityDescription}"
+                IsToggled="{Binding UseAccessibility}"
+                IsVisible="{Binding ShowUseAccessibilityToggle}"
+                AutomationId="AccessibilitySwitch"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand" />
+
+            <controls:SwitchItemView
+                Title="{u:I18n DrawOver}"
+                Subtitle="{Binding UseDrawOverDescription}"
+                IsToggled="{Binding UseDrawOver}"
+                IsVisible="{Binding ShowUseDrawOverToggle}"
+                IsEnabled="{Binding UseAccessibility}"
+                AutomationId="DrawOverSwitch"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand" />
+
+            <controls:CustomLabel
+                Text="{u:I18n PasswordAutofill}"
+                StyleClass="settings-navigatable-label"
+                IsVisible="{Binding SupportsiOSAutofill}"
+                AutomationId="PasswordAutofillLabel">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToPasswordAutofillCommand}" />
+                </Label.GestureRecognizers>
+            </controls:CustomLabel>
+
+            <controls:CustomLabel
+                Text="{u:I18n AppExtension}"
+                StyleClass="settings-navigatable-label"
+                IsVisible="{OnPlatform iOS=True, Android=False}"
+                AutomationId="AppExtensionLabel">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToAppExtensionCommand}" />
+                </Label.GestureRecognizers>
+            </controls:CustomLabel>
+
+            <BoxView StyleClass="settings-box-row-separator" />
+
+            <controls:CustomLabel
+                Text="{u:I18n AdditionalOptions}"
+                StyleClass="settings-header" />
+
+            <controls:SwitchItemView
+                Title="{u:I18n CopyTotpAutomatically}"
+                Subtitle="{u:I18n CopyTotpAutomaticallyDescription}"
+                IsToggled="{Binding CopyTotpAutomatically}"
+                AutomationId="CopyTotpAutomaticallySwitch"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand" />
+            
+            <controls:SwitchItemView
+                Title="{u:I18n AskToAddLogin}"
+                Subtitle="{u:I18n AskToAddLoginDescription}"
+                IsToggled="{Binding AskToAddLogin}"
+                IsVisible="{Binding SupportsAndroidAutofillServices}"
+                AutomationId="AskToAddLoginSwitch"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand" />
+
+            <controls:SettingChooserItemView
+                Title="{u:I18n DefaultUriMatchDetection}"
+                Subtitle="{u:I18n DefaultUriMatchDetectionDescription}"
+                DisplayValue="{Binding DefaultUriMatchDetectionPickerViewModel.SelectedValue}"
+                ChooseCommand="{Binding DefaultUriMatchDetectionPickerViewModel.SelectOptionCommand}"
+                AutomationId="DefaultUriMatchDetectionChooser"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand"/>
+
+            <StackLayout
+                Spacing="0"
+                Padding="16,12"
+                IsVisible="{Binding SupportsAndroidAutofillServices}"
+                AutomationId="BlockAutoFillView">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToBlockAutofillUrisCommand}" />
+                </StackLayout.GestureRecognizers>
+                <controls:CustomLabel
+                    MaxLines="2"
+                    Text="{u:I18n BlockAutoFill}"
+                    HorizontalOptions="StartAndExpand"
+                    LineBreakMode="TailTruncation" />
+                <Label
+                    Text="{u:I18n AutoFillWillNotBeOfferedForTheseURIs}"
+                    StyleClass="box-footer-label, box-footer-label-switch"
+                    Margin="0,0,0,0"/>
+            </StackLayout>
+
+        </StackLayout>
+    </ScrollView>
+</pages:BaseContentPage>

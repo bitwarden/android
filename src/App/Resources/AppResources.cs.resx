@@ -954,6 +954,9 @@ Načtení proběhne automaticky.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Dokud neaktualizujete svůj šifrovací klíč, nemůžete tuto funkci použít.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Vyžaduje se migrace šifrovacího klíče. Pro aktualizaci šifrovacího klíče se přihlaste přes webový trezor.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Dozvědět se více</value>
   </data>
@@ -2759,5 +2762,11 @@ Chcete se přepnout na tento účet?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Přihlašování na</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Příliš mnoho pokusů</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Účet byl odhlášen.</value>
   </data>
 </root>

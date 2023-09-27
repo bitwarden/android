@@ -9,7 +9,8 @@ namespace Bit.Core.Models.Domain
     {
         public static HashSet<string> EncryptableProperties => new HashSet<string>
         {
-            nameof(NonDiscoverableId),
+            nameof(CredentialId),
+            nameof(Discoverable),
             nameof(KeyType),
             nameof(KeyAlgorithm),
             nameof(KeyCurve),
@@ -28,7 +29,8 @@ namespace Bit.Core.Models.Domain
             BuildDomainModel(this, data, EncryptableProperties, alreadyEncrypted);
         }
 
-        public EncString NonDiscoverableId { get; set; }
+        public EncString CredentialId { get; set; }
+        public EncString Discoverable { get; set; }
         public EncString KeyType { get; set; }
         public EncString KeyAlgorithm { get; set; }
         public EncString KeyCurve { get; set; }

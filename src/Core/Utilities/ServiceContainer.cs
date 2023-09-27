@@ -59,8 +59,7 @@ namespace Bit.Core.Utilities
             var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService,
                 cryptoService, stateService, keyConnectorService);
             var vaultTimeoutService = new VaultTimeoutService(cryptoService, stateService, platformUtilsService,
-                folderService, cipherService, collectionService, searchService, messagingService, tokenService,
-                userVerificationService,
+                folderService, cipherService, collectionService, searchService, tokenService, userVerificationService,
                 (extras) =>
                 {
                     messagingService.Send("locked", extras);

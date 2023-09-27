@@ -15,7 +15,7 @@ namespace Bit.Core.Models.Domain
         {
             PasswordRevisionDate = obj.PasswordRevisionDate;
             Uris = obj.Uris?.Select(u => new LoginUri(u, alreadyEncrypted)).ToList();
-            Fido2Key = obj.Fido2Key != null ? new Fido2Key(obj.Fido2Key, alreadyEncrypted) : null;
+            Fido2Keys = obj.Fido2Keys?.Select(f => new Fido2Key(f, alreadyEncrypted)).ToList();
             BuildDomainModel(this, obj, new HashSet<string>
             {
                 "Username",
@@ -29,7 +29,7 @@ namespace Bit.Core.Models.Domain
         public EncString Password { get; set; }
         public DateTime? PasswordRevisionDate { get; set; }
         public EncString Totp { get; set; }
-        public Fido2Key Fido2Key { get; set; }
+        public List<Fido2Key> Fido2Keys { get; set; }
 
         public async Task<LoginView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
@@ -47,9 +47,13 @@ namespace Bit.Core.Models.Domain
                     view.Uris.Add(await uri.DecryptAsync(orgId, key));
                 }
             }
-            if (Fido2Key != null)
+            if (Fido2Keys != null)
             {
-                view.Fido2Key = await Fido2Key.DecryptAsync(orgId, key);
+                view.Fido2Keys = new List<Fido2KeyView>();
+                foreach (var fido2Key in Fido2Keys)
+                {
+                    view.Fido2Keys.Add(await fido2Key.DecryptAsync(orgId, key));
+                }
             }
             return view;
         }
@@ -68,9 +72,9 @@ namespace Bit.Core.Models.Domain
             {
                 l.Uris = Uris.Select(u => u.ToLoginUriData()).ToList();
             }
-            if (Fido2Key != null)
+            if (Fido2Keys != null)
             {
-                l.Fido2Key = Fido2Key.ToFido2KeyData();
+                l.Fido2Keys = Fido2Keys.Select(f => f.ToFido2KeyData()).ToList();
             }
             return l;
         }

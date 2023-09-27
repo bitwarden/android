@@ -148,7 +148,7 @@ namespace Bit.Core.Services
         public Task<PreloginResponse> PostPreloginAsync(PreloginRequest request)
         {
             return SendAsync<PreloginRequest, PreloginResponse>(HttpMethod.Post, "/accounts/prelogin",
-                request, false, true);
+                request, false, true, sendToIdentity: true);
         }
 
         public Task<long> GetAccountRevisionDateAsync()
@@ -170,7 +170,7 @@ namespace Bit.Core.Services
 
         public Task PostRegisterAsync(RegisterRequest request)
         {
-            return SendAsync<RegisterRequest, object>(HttpMethod.Post, "/accounts/register", request, false, false);
+            return SendAsync<RegisterRequest, object>(HttpMethod.Post, "/accounts/register", request, false, false, sendToIdentity: true);
         }
 
         public Task PostAccountKeysAsync(KeysRequest request)
@@ -663,14 +663,15 @@ namespace Bit.Core.Services
         public Task<TResponse> SendAsync<TResponse>(HttpMethod method, string path, bool authed) =>
             SendAsync<object, TResponse>(method, path, null, authed, true);
         public async Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path, TRequest body,
-            bool authed, bool hasResponse, Action<HttpRequestMessage> alterRequest = null, bool logoutOnUnauthorized = true)
+            bool authed, bool hasResponse, Action<HttpRequestMessage> alterRequest = null, bool logoutOnUnauthorized = true, bool sendToIdentity = false)
         {
             using (var requestMessage = new HttpRequestMessage())
             {
+                var baseUrl = sendToIdentity ? IdentityBaseUrl : ApiBaseUrl;
                 requestMessage.Version = new Version(1, 0);
                 requestMessage.Method = method;
 
-                if (!Uri.IsWellFormedUriString(ApiBaseUrl, UriKind.Absolute))
+                if (!Uri.IsWellFormedUriString(baseUrl, UriKind.Absolute))
                 {
                     throw new ApiException(new ErrorResponse
                     {
@@ -680,7 +681,7 @@ namespace Bit.Core.Services
                     });
                 }
 
-                requestMessage.RequestUri = new Uri(string.Concat(ApiBaseUrl, path));
+                requestMessage.RequestUri = new Uri(string.Concat(baseUrl, path));
 
                 if (body != null)
                 {

@@ -597,28 +597,15 @@ namespace Bit.Core.Services
 
         private async Task<bool> ValidateCanBeSharedWithOrgAsync(CipherView cipher, string organizationId)
         {
-            if (cipher.Login?.Fido2Key is null && cipher.Fido2Key is null)
+            if (!cipher.HasFido2Key)
             {
                 return true;
             }
 
             var decCiphers = await GetAllDecryptedAsync();
-            var orgCiphers = decCiphers.Where(c => c.OrganizationId == organizationId);
-            if (cipher.Login?.Fido2Key != null)
-            {
-                return !orgCiphers.Any(c => !cipher.Login.Fido2Key.IsUniqueAgainst(c.Login?.Fido2Key)
-                                            ||
-                                            !cipher.Login.Fido2Key.IsUniqueAgainst(c.Fido2Key));
-            }
-
-            if (cipher.Fido2Key != null)
-            {
-                return !orgCiphers.Any(c => !cipher.Fido2Key.IsUniqueAgainst(c.Login?.Fido2Key)
-                                            ||
-                                            !cipher.Fido2Key.IsUniqueAgainst(c.Fido2Key));
-            }
-
-            return true;
+            return !decCiphers
+                .Where(c => c.OrganizationId == organizationId)
+                .Any(c => !cipher.Login.MainFido2Key.IsUniqueAgainst(c.Login?.MainFido2Key));
         }
 
         public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, CipherView cipherView, string filename, byte[] data)
@@ -1189,10 +1176,15 @@ namespace Bit.Core.Services
                             cipher.Login.Uris.Add(loginUri);
                         }
                     }
-                    if (model.Login.Fido2Key != null)
+                    if (model.Login.HasFido2Keys)
                     {
-                        cipher.Login.Fido2Key = new Fido2Key();
-                        await EncryptObjPropertyAsync(model.Login.Fido2Key, cipher.Login.Fido2Key, Fido2Key.EncryptableProperties, key);
+                        cipher.Login.Fido2Keys = new List<Fido2Key>();
+                        foreach (var fido2Key in model.Login.Fido2Keys)
+                        {
+                            var fido2KeyDomain = new Fido2Key();
+                            await EncryptObjPropertyAsync(fido2Key, fido2KeyDomain, Fido2Key.EncryptableProperties, key);
+                            cipher.Login.Fido2Keys.Add(fido2KeyDomain);
+                        }
                     }
                     break;
                 case CipherType.SecureNote:
@@ -1236,10 +1228,6 @@ namespace Bit.Core.Services
                         "PassportNumber",
                         "LicenseNumber"
                     }, key);
-                    break;
-                case CipherType.Fido2Key:
-                    cipher.Fido2Key = new Fido2Key();
-                    await EncryptObjPropertyAsync(model.Fido2Key, cipher.Fido2Key, Fido2Key.EncryptableProperties, key);
                     break;
                 default:
                     throw new Exception("Unknown cipher type.");

@@ -954,6 +954,9 @@ Skanowanie nastąpi automatycznie.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Nie możesz używać tej funkcji, dopóki nie zaktualizujesz klucza szyfrowania.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Wymagana jest migracja klucza szyfrowania. Zaloguj się przez sejf internetowy, aby zaktualizować klucz szyfrowania.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Dowiedz się więcej</value>
   </data>
@@ -2760,5 +2763,11 @@ Czy chcesz przełączyć się na to konto?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Logowanie do</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Zbyt wiele prób</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Konto wylogowane.</value>
   </data>
 </root>

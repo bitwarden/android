@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:BaseContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    x:DataType="pages:SecuritySettingsPageViewModel"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    x:Class="Bit.App.Pages.SecuritySettingsPage"
+    Title="{u:I18n AccountSecurity}">
+    
+    <ContentPage.BindingContext>
+        <pages:SecuritySettingsPageViewModel />
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Resources>
+        <u:IsNotNullConverter x:Key="isNotNullConverter" />
+    </ContentPage.Resources>
+
+    <ScrollView Padding="0, 0, 0, 20">
+        <StackLayout Padding="0" Spacing="5">
+            <controls:CustomLabel
+                Text="{u:I18n ApproveLoginRequests}"
+                StyleClass="settings-header" />
+
+            <controls:SwitchItemView
+                Title="{u:I18n UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices}"
+                IsToggled="{Binding UseThisDeviceToApproveLoginRequests}"
+                AutomationId="ApproveLoginRequestsMadeFromOtherDevicesSwitch"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand" />
+
+            <controls:CustomLabel
+                Text="{u:I18n PendingLogInRequests}"
+                StyleClass="settings-navigatable-label"
+                IsVisible="{Binding UseThisDeviceToApproveLoginRequests}"
+                AutomationId="PendingLogInRequestsLabel">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToPendingLogInRequestsCommand}" />
+                </Label.GestureRecognizers>
+            </controls:CustomLabel>
+
+            <BoxView StyleClass="settings-box-row-separator" />
+            
+            <controls:CustomLabel
+                Text="{u:I18n UnlockOptions}"
+                StyleClass="settings-header" />
+                
+            <controls:SwitchItemView
+                Title="{Binding UnlockWithBiometricsTitle}"
+                IsToggled="{Binding CanUnlockWithBiometrics}"
+                IsVisible="{Binding UnlockWithBiometricsTitle, Converter={StaticResource isNotNullConverter}}"
+                AutomationId="CanUnlockWithBiometricsSwitch"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand" />
+
+            <controls:SwitchItemView
+                Title="{u:I18n UnlockWithPIN}"
+                IsToggled="{Binding CanUnlockWithPin}"
+                AutomationId="CanUnlockWithPinSwitch"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand" />
+            
+            <BoxView StyleClass="settings-box-row-separator" />
+            
+            <controls:CustomLabel
+                Text="{u:I18n SessionTimeout}"
+                StyleClass="settings-header" />
+
+            <Frame
+                IsVisible="{Binding ShowVaultTimeoutPolicyInfo}"
+                Padding="10"
+                HasShadow="False"
+                BackgroundColor="Transparent"
+                BorderColor="{DynamicResource PrimaryColor}"
+                AutomationId="VaultTimeoutPolicyLabel"
+                Margin="16,5">
+                <Label
+                    Text="{Binding VaultTimeoutPolicyDescription}"
+                    StyleClass="text-muted, text-sm, text-bold"
+                    HorizontalTextAlignment="Center" />
+            </Frame>
+
+            <controls:SettingChooserItemView
+                Title="{u:I18n SessionTimeout}"
+                DisplayValue="{Binding VaultTimeoutPickerViewModel.SelectedValue}"
+                ChooseCommand="{Binding VaultTimeoutPickerViewModel.SelectOptionCommand}"
+                AutomationId="VaultTimeoutChooser"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand"/>
+
+            <controls:BaseSettingItemView
+                Title="{u:I18n Custom}"
+                IsVisible="{Binding ShowCustomVaultTimeoutPicker}"
+                AutomationId="CustomVaultTimeoutChooser"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand"
+                ControlTemplate="{StaticResource SettingControlTemplate}">
+                <TimePicker Time="{Binding CustomVaultTimeoutTime}" Format="HH:mm"
+                            FontSize="Small"
+                            TextColor="{DynamicResource MutedColor}"
+                            StyleClass="list-sub" Margin="-5"
+                            HorizontalOptions="End"
+                            ios:TimePicker.UpdateMode="WhenFinished"
+                            AutomationId="SettingCustomVaultTimeoutPicker"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{Binding CustomVaultTimeoutTimeVerbalized}"/>
+            </controls:BaseSettingItemView>
+            
+            <controls:SettingChooserItemView
+                Title="{u:I18n SessionTimeoutAction}"
+                DisplayValue="{Binding VaultTimeoutActionPickerViewModel.SelectedValue}"
+                ChooseCommand="{Binding VaultTimeoutActionPickerViewModel.SelectOptionCommand}"
+                AutomationId="VaultTimeoutActionChooser"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand"/>
+            
+            <BoxView StyleClass="settings-box-row-separator" />
+            
+            <controls:CustomLabel
+                Text="{u:I18n Other}"
+                StyleClass="settings-header" />
+            
+            <controls:CustomLabel
+                Text="{u:I18n AccountFingerprintPhrase}"
+                StyleClass="settings-navigatable-label"
+                AutomationId="AccountFingerprintPhraseLabel">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ShowAccountFingerprintPhraseCommand}" />
+                </Label.GestureRecognizers>
+            </controls:CustomLabel>
+
+            <controls:ExternalLinkItemView
+                Title="{u:I18n TwoStepLogin}"
+                GoToLinkCommand="{Binding GoToTwoStepLoginCommand}"
+                StyleClass="settings-external-link-item"
+                HorizontalOptions="FillAndExpand"
+                AutomationId="TwoStepLoginLinkItemView" />
+
+            <controls:ExternalLinkItemView
+                Title="{u:I18n ChangeMasterPassword}"
+                GoToLinkCommand="{Binding GoToChangeMasterPasswordCommand}"
+                IsVisible="{Binding ShowChangeMasterPassword}"
+                StyleClass="settings-external-link-item"
+                HorizontalOptions="FillAndExpand"
+                AutomationId="ChangeMasterPasswordLinkItemView" />
+            
+            <controls:CustomLabel
+                Text="{u:I18n LockNow}"
+                StyleClass="settings-navigatable-label"
+                AutomationId="LockNowLabel">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding LockCommand}" />
+                </Label.GestureRecognizers>
+            </controls:CustomLabel>
+            
+            <controls:CustomLabel
+                Text="{u:I18n LogOut}"
+                StyleClass="settings-navigatable-label"
+                AutomationId="LogOutLabel">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding LogOutCommand}" />
+                </Label.GestureRecognizers>
+            </controls:CustomLabel>
+            
+            <controls:CustomLabel
+                Text="{u:I18n DeleteAccount}"
+                StyleClass="settings-navigatable-label"
+                AutomationId="DeleteAccountLabel">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding DeleteAccountCommand}" />
+                </Label.GestureRecognizers>
+            </controls:CustomLabel>
+
+        </StackLayout>
+    </ScrollView>
+</pages:BaseContentPage>
