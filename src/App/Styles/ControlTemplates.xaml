@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:controls="clr-namespace:Bit.App.Controls;assembly=BitwardenApp"
+                    xmlns:u="clr-namespace:Bit.App.Utilities"
+                    x:Class="Bit.App.Styles.ControlTemplates">
+
+    <u:StringHasValueConverter x:Key="stringHasValueConverter" />
+
+    <ControlTemplate x:Key="SettingControlTemplate">
+        <Grid
+            RowDefinitions="Auto,*"
+            ColumnDefinitions="*,Auto"
+            ColumnSpacing="10">
+            <controls:CustomLabel
+                Grid.Row="0"
+                Grid.Column="0"
+                MaxLines="2"
+                Text="{TemplateBinding Title}"
+                HorizontalOptions="StartAndExpand"
+                LineBreakMode="TailTruncation" />
+
+            <ContentPresenter
+                Grid.Column="1"
+                Grid.RowSpan="2"
+                HorizontalOptions="End"
+                VerticalOptions="Center" />
+
+            <Label
+                Grid.Row="1"
+                Text="{TemplateBinding Subtitle}"
+                IsVisible="{TemplateBinding Subtitle, Converter={StaticResource stringHasValueConverter}}"
+                StyleClass="box-footer-label, box-footer-label-switch"
+                Margin="0,0,0,0"/>
+        </Grid>
+    </ControlTemplate>
+</ResourceDictionary>

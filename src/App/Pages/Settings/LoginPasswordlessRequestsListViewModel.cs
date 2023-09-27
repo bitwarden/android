@@ -9,6 +9,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Models.Response;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -56,16 +57,14 @@ namespace Bit.App.Pages
             set => SetProperty(ref _isRefreshing, value);
         }
 
+        public bool HasLoginRequests => LoginRequests.Any();
+
         public async Task RefreshAsync()
         {
             try
             {
                 IsRefreshing = true;
                 LoginRequests.ReplaceRange(await _authService.GetActivePasswordlessLoginRequestsAsync());
-                if (!LoginRequests.Any())
-                {
-                    Page.Navigation.PopModalAsync().FireAndForget();
-                }
             }
             catch (Exception ex)
             {
@@ -74,6 +73,7 @@ namespace Bit.App.Pages
             finally
             {
                 IsRefreshing = false;
+                MainThread.BeginInvokeOnMainThread(() => TriggerPropertyChanged(nameof(HasLoginRequests)));
             }
         }
 
@@ -136,4 +136,3 @@ namespace Bit.App.Pages
         }
     }
 }
-
