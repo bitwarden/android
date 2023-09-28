@@ -2,29 +2,39 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.Button
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
+import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 
 /**
@@ -45,103 +55,109 @@ fun LandingScreen(
         }
     }
 
+    val scrollState = rememberScrollState()
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(24.dp),
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = 16.dp),
+            .fillMaxHeight()
+            .padding(horizontal = 16.dp)
+            .verticalScroll(scrollState),
     ) {
         Image(
-            painter = painterResource(id = R.drawable.logo_legacy),
+            painter = painterResource(id = R.drawable.logo),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
             contentDescription = null,
             modifier = Modifier
-                .padding(start = 48.dp, top = 48.dp, end = 48.dp)
+                .padding(top = 40.dp, bottom = 8.dp)
+                .width(220.dp)
+                .height(74.dp)
                 .fillMaxWidth(),
         )
 
+        Spacer(modifier = Modifier.weight(1f))
+
         Text(
             text = stringResource(id = R.string.login_or_create_new_account),
-            color = MaterialTheme.colorScheme.primary,
+            textAlign = TextAlign.Center,
             style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
-                .align(alignment = Alignment.CenterHorizontally)
-                .padding(horizontal = 24.dp),
+                .padding(8.dp)
+                .wrapContentHeight(),
         )
+
+        Spacer(modifier = Modifier.weight(1f))
 
         BitwardenTextField(
             modifier = Modifier
-                .fillMaxWidth()
-                .testTag("Email address"),
+                .padding(
+                    top = 32.dp,
+                    bottom = 10.dp,
+                )
+                .fillMaxWidth(),
             value = state.emailInput,
-            onValueChange = { viewModel.trySendAction(LandingAction.EmailInputChanged(it)) },
+            onValueChange = remember(viewModel) {
+                { viewModel.trySendAction(LandingAction.EmailInputChanged(it)) }
+            },
             label = stringResource(id = R.string.email_address),
         )
 
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(horizontal = 16.dp),
-        ) {
-            Text(
-                text = stringResource(id = R.string.remember_me),
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.bodySmall,
-            )
-
-            Switch(
-                modifier = Modifier.testTag("Remember me"),
-                checked = state.isRememberMeEnabled,
-                onCheckedChange = {
-                    viewModel.trySendAction(LandingAction.RememberMeToggle(it))
-                },
-            )
-        }
-
-        Button(
-            onClick = {
-                viewModel.trySendAction(LandingAction.ContinueButtonClick)
+        BitwardenSwitch(
+            label = stringResource(id = R.string.remember_me),
+            isChecked = state.isRememberMeEnabled,
+            onCheckedChange = remember(viewModel) {
+                { viewModel.trySendAction(LandingAction.RememberMeToggle(it)) }
             },
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .testTag("Continue button"),
-            enabled = state.isContinueButtonEnabled,
-        ) {
-            Text(
-                text = stringResource(id = R.string.continue_text),
-                color = MaterialTheme.colorScheme.onPrimary,
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        }
+                .padding(top = 8.dp)
+                .fillMaxWidth(),
+        )
+
+        BitwardenFilledButton(
+            label = stringResource(id = R.string.continue_text),
+            onClick = remember(viewModel) {
+                { viewModel.trySendAction(LandingAction.ContinueButtonClick) }
+            },
+            isEnabled = state.isContinueButtonEnabled,
+            modifier = Modifier
+                .padding(top = 32.dp)
+                .fillMaxWidth(),
+        )
 
         Row(
-            horizontalArrangement = Arrangement.Start,
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
+                .padding(
+                    top = 8.dp,
+                    bottom = 58.dp,
+                )
                 .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(horizontal = 16.dp),
+                .wrapContentHeight(),
         ) {
             Text(
                 text = stringResource(id = R.string.new_around_here),
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface,
             )
 
-            Text(
-                modifier = Modifier
-                    .clickable {
-                        viewModel.trySendAction(LandingAction.CreateAccountClick)
-                    }
-                    .padding(start = 2.dp),
-                text = stringResource(id = R.string.create_account),
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.bodySmall,
+            BitwardenTextButton(
+                label = stringResource(id = R.string.create_account),
+                onClick = remember(viewModel) {
+                    { viewModel.trySendAction(LandingAction.CreateAccountClick) }
+                },
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun LandingScreen_preview() {
+    LandingScreen(
+        onNavigateToCreateAccount = {},
+        onNavigateToLogin = {},
+        viewModel = LandingViewModel(SavedStateHandle()),
+    )
 }
