@@ -954,6 +954,9 @@
   <data name="UpdateKey" xml:space="preserve">
     <value>更新加密金鑰前不能使用此功能。</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>深入了解</value>
   </data>
@@ -2760,5 +2763,11 @@
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Logging in on</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>嘗試次數過多</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>帳號已登出。</value>
   </data>
 </root>

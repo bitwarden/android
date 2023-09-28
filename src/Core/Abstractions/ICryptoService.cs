@@ -13,6 +13,7 @@ namespace Bit.Core.Abstractions
         Task RefreshKeysAsync();
         Task SetUserKeyAsync(UserKey userKey, string userId = null);
         Task<UserKey> GetUserKeyAsync(string userId = null);
+        Task<bool> IsLegacyUserAsync(MasterKey masterKey = null, string userId = null);
         Task<UserKey> GetUserKeyWithLegacySupportAsync(string userId = null);
         Task<bool> HasUserKeyAsync(string userId = null);
         Task<bool> HasEncryptedUserKeyAsync(string userId = null);

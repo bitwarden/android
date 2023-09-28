@@ -183,6 +183,9 @@
     <ImageAsset Include="Resources\Assets.xcassets\empty_items_state.imageset\Empty-items-state-dark.pdf" />
     <ImageAsset Include="Resources\Assets.xcassets\empty_items_state.imageset\Empty-items-state.pdf" />
     <ImageAsset Include="Resources\Assets.xcassets\empty_items_state.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\empty_login_requests.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\empty_login_requests.imageset\empty_login_requests.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\empty_login_requests.imageset\empty_login_requests_dark.pdf" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />

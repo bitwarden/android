@@ -954,6 +954,9 @@ Kod otomatik olarak taranacaktır.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Şifreleme anahtarınızı güncelleştirene kadar bu özelliği kullanamazsınız.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Şifreleme anahtarınızın güncellenmesi gerekiyor. Şifreleme anahtarınızı güncellemek için lütfen web kasasına giriş yapın.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Daha fazla bilgi al</value>
   </data>
@@ -2759,5 +2762,11 @@ Bu hesaba geçmek ister misiniz?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Logging in on</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Çok fazla deneme</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Hesabın oturumu kapatıldı.</value>
   </data>
 </root>

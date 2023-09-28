@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Exceptions;
 
 namespace Bit.Core.Services
 {
@@ -21,7 +22,6 @@ namespace Bit.Core.Services
         private readonly ICipherService _cipherService;
         private readonly ICollectionService _collectionService;
         private readonly ISearchService _searchService;
-        private readonly IMessagingService _messagingService;
         private readonly ITokenService _tokenService;
         private readonly IUserVerificationService _userVerificationService;
         private readonly Func<Tuple<string, bool>, Task> _lockedCallback;
@@ -35,7 +35,6 @@ namespace Bit.Core.Services
             ICipherService cipherService,
             ICollectionService collectionService,
             ISearchService searchService,
-            IMessagingService messagingService,
             ITokenService tokenService,
             IUserVerificationService userVerificationService,
             Func<Tuple<string, bool>, Task> lockedCallback,
@@ -48,7 +47,6 @@ namespace Bit.Core.Services
             _cipherService = cipherService;
             _collectionService = collectionService;
             _searchService = searchService;
-            _messagingService = messagingService;
             _tokenService = tokenService;
             _userVerificationService = userVerificationService;
             _lockedCallback = lockedCallback;
@@ -74,17 +72,26 @@ namespace Bit.Core.Services
 
             if (!await _cryptoService.HasUserKeyAsync(userId))
             {
-                // Filter out accounts without auto key
-                if (!await _cryptoService.HasAutoUnlockKeyAsync(userId))
+                try
                 {
-                    return true;
+                    // Filter out accounts without auto key
+                    if (!await _cryptoService.HasAutoUnlockKeyAsync(userId))
+                    {
+                        return true;
+                    }
+                    // Inactive accounts with an auto key aren't locked, but we shouldn't set user key
+                    if (userId != null && await _stateService.GetActiveUserIdAsync() != userId)
+                    {
+                        return false;
+                    }
+                    await _cryptoService.SetUserKeyAsync(await _cryptoService.GetAutoUnlockKeyAsync(userId), userId);
                 }
-                // Inactive accounts with an auto key aren't locked, but we shouldn't set user key
-                if (userId != null && await _stateService.GetActiveUserIdAsync() != userId)
+                catch (LegacyUserException)
                 {
-                    return false;
+                    // Legacy users must migrate on web vault before login
+                    await LogOutAsync(false, userId);
                 }
-                await _cryptoService.SetUserKeyAsync(await _cryptoService.GetAutoUnlockKeyAsync(userId), userId);
+
             }
 
             // Check again to verify auto key was set

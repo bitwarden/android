@@ -19,6 +19,7 @@ namespace Bit.Core.Models.Request
             Favorite = cipher.Favorite;
             LastKnownRevisionDate = cipher.RevisionDate;
             Reprompt = cipher.Reprompt;
+            Key = cipher.Key?.EncryptedString;
 
             switch (Type)
             {
@@ -31,7 +32,7 @@ namespace Bit.Core.Models.Request
                         Password = cipher.Login.Password?.EncryptedString,
                         PasswordRevisionDate = cipher.Login.PasswordRevisionDate,
                         Totp = cipher.Login.Totp?.EncryptedString,
-                        Fido2Key = cipher.Login.Fido2Key != null ? new Fido2KeyApi(cipher.Login.Fido2Key) : null
+                        Fido2Keys = cipher.Login.Fido2Keys?.Select(f => new Fido2KeyApi(f)).ToList()
                     };
                     break;
                 case CipherType.Card:
@@ -73,9 +74,6 @@ namespace Bit.Core.Models.Request
                     {
                         Type = cipher.SecureNote.Type
                     };
-                    break;
-                case CipherType.Fido2Key:
-                    Fido2Key = new Fido2KeyApi(cipher.Fido2Key);
                     break;
                 default:
                     break;
@@ -122,12 +120,12 @@ namespace Bit.Core.Models.Request
         public SecureNoteApi SecureNote { get; set; }
         public CardApi Card { get; set; }
         public IdentityApi Identity { get; set; }
-        public Fido2KeyApi Fido2Key { get; set; }
         public List<FieldApi> Fields { get; set; }
         public List<PasswordHistoryRequest> PasswordHistory { get; set; }
         public Dictionary<string, string> Attachments { get; set; }
         public Dictionary<string, AttachmentRequest> Attachments2 { get; set; }
         public DateTime LastKnownRevisionDate { get; set; }
         public CipherRepromptType Reprompt { get; set; }
+        public string Key { get; set; }
     }
 }

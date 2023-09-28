@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
-using Bit.Core.Services;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -47,5 +50,24 @@ namespace Bit.App.Pages
             _logger.Value.Exception(ex);
         }
 
+        protected AsyncCommand CreateDefaultAsyncCommnad(Func<Task> execute, Func<object, bool> canExecute = null)
+        {
+            return new AsyncCommand(execute,
+                canExecute,
+                ex => HandleException(ex),
+                allowsMultipleExecutions: false);
+        }
+
+        protected async Task<bool> HasConnectivityAsync()
+        {
+            if (Connectivity.NetworkAccess == NetworkAccess.None)
+            {
+                await _platformUtilsService.Value.ShowDialogAsync(
+                    AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
+                return false;
+            }
+            return true;
+        }
     }
 }

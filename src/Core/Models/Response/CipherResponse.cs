@@ -18,7 +18,6 @@ namespace Bit.Core.Models.Response
         public CardApi Card { get; set; }
         public IdentityApi Identity { get; set; }
         public SecureNoteApi SecureNote { get; set; }
-        public Fido2KeyApi Fido2Key { get; set; }
         public bool Favorite { get; set; }
         public bool Edit { get; set; }
         public bool ViewPassword { get; set; } = true; // Fallback for old server versions
@@ -29,6 +28,7 @@ namespace Bit.Core.Models.Response
         public List<string> CollectionIds { get; set; }
         public DateTime? DeletedDate { get; set; }
         public CipherRepromptType Reprompt { get; set; }
+        public string Key { get; set; }
         public DateTime CreationDate { get; set; }
     }
 }

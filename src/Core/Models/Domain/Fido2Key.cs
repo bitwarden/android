@@ -9,7 +9,8 @@ namespace Bit.Core.Models.Domain
     {
         public static HashSet<string> EncryptableProperties => new HashSet<string>
         {
-            nameof(NonDiscoverableId),
+            nameof(CredentialId),
+            nameof(Discoverable),
             nameof(KeyType),
             nameof(KeyAlgorithm),
             nameof(KeyCurve),
@@ -28,7 +29,8 @@ namespace Bit.Core.Models.Domain
             BuildDomainModel(this, data, EncryptableProperties, alreadyEncrypted);
         }
 
-        public EncString NonDiscoverableId { get; set; }
+        public EncString CredentialId { get; set; }
+        public EncString Discoverable { get; set; }
         public EncString KeyType { get; set; }
         public EncString KeyAlgorithm { get; set; }
         public EncString KeyCurve { get; set; }
@@ -39,9 +41,9 @@ namespace Bit.Core.Models.Domain
         public EncString UserName { get; set; }
         public EncString Counter { get; set; }
 
-        public async Task<Fido2KeyView> DecryptAsync(string orgId)
+        public async Task<Fido2KeyView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
-            return await DecryptObjAsync(new Fido2KeyView(), this, EncryptableProperties, orgId);
+            return await DecryptObjAsync(new Fido2KeyView(), this, EncryptableProperties, orgId, key);
         }
 
         public Fido2KeyData ToFido2KeyData()

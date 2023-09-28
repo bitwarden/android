@@ -62,6 +62,16 @@ namespace Bit.Core.Services
             return _stateService.GetUserKeyAsync(userId);
         }
 
+        public async Task<bool> IsLegacyUserAsync(MasterKey masterKey = null, string userId = null)
+        {
+            masterKey ??= await GetMasterKeyAsync(userId);
+            if (masterKey == null)
+            {
+                return false;
+            }
+            return await ValidateUserKeyAsync(new UserKey(masterKey.Key));
+        }
+
         public async Task<UserKey> GetUserKeyWithLegacySupportAsync(string userId = null)
         {
             var userKey = await GetUserKeyAsync(userId);
@@ -226,9 +236,9 @@ namespace Bit.Core.Services
             {
                 throw new ArgumentNullException(nameof(key));
             }
-            if (!(key is UserKey) && !(key is OrgKey))
+            if (!(key is UserKey) && !(key is OrgKey) && !(key is CipherKey))
             {
-                throw new ArgumentException($"Data encryption keys must be of type UserKey or OrgKey. {key.GetType().FullName} unsupported.");
+                throw new ArgumentException($"Data encryption keys must be of type UserKey or OrgKey or CipherKey. {key.GetType().FullName} unsupported.");
             }
 
             var newSymKey = await _cryptoFunctionService.RandomBytesAsync(64);
@@ -997,6 +1007,31 @@ namespace Bit.Core.Services
             return keyCreator(key);
         }
 
+        private async Task<bool> ValidateUserKeyAsync(UserKey key, string userId = null)
+        {
+            if (key == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                var encPrivateKey = await _stateService.GetPrivateKeyEncryptedAsync(userId);
+                if (encPrivateKey == null)
+                {
+                    return false;
+                }
+
+                var privateKey = await DecryptToBytesAsync(new EncString(encPrivateKey), key);
+                await _cryptoFunctionService.RsaExtractPublicKeyAsync(privateKey);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private class EncryptedObject
         {
             public byte[] Iv { get; set; }
@@ -1019,6 +1054,10 @@ namespace Bit.Core.Services
 
             // Decrypt
             var masterKey = new MasterKey(Convert.FromBase64String(oldKey));
+            if (await IsLegacyUserAsync(masterKey, userId))
+            {
+                throw new LegacyUserException();
+            }
             var encryptedUserKey = await _stateService.GetEncKeyEncryptedAsync(userId);
             if (encryptedUserKey == null)
             {
@@ -1058,6 +1097,10 @@ namespace Bit.Core.Services
                 kdfConfig,
                 oldPinKey
             );
+            if (await IsLegacyUserAsync(masterKey))
+            {
+                throw new LegacyUserException();
+            }
             var encUserKey = await _stateService.GetEncKeyEncryptedAsync();
             var userKey = await DecryptUserKeyWithMasterKeyAsync(
                 masterKey,

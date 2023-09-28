@@ -367,4 +367,18 @@
         <Setter Property="FontSize"
                 Value="Title" />
     </Style>
+
+    <Style
+        TargetType="Label"
+        ApplyToDerivedTypes="True"
+        Class="settings-header">
+        <Setter Property="TextColor"
+                Value="{DynamicResource BoxHeaderTextColor}" />
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="FontAttributes"
+                Value="Bold" />
+        <Setter Property="Margin"
+                Value="16,5,0,0" />
+    </Style>
 </ResourceDictionary>

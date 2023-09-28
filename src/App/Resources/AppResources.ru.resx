@@ -954,6 +954,9 @@
   <data name="UpdateKey" xml:space="preserve">
     <value>Вы не можете использовать эту функцию, пока не обновите свой ключ шифрования.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Требуется миграция ключа шифрования. Чтобы обновить ключ шифрования, войдите через веб-хранилище.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Узнать больше</value>
   </data>
@@ -2760,5 +2763,11 @@
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Войти на</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Слишком много попыток</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Аккаунт не авторизован.</value>
   </data>
 </root>

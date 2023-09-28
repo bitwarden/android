@@ -954,6 +954,9 @@
   <data name="UpdateKey" xml:space="preserve">
     <value>Ви не можете використовувати цю функцію доки не оновите свій ключ шифрування.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Потрібно перенести ключ шифрування. Увійдіть у вебсховище та оновіть свій ключ шифрування.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Докладніше</value>
   </data>
@@ -2760,5 +2763,11 @@
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Увійти на</value>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Забагато спроб</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Ви вийшли з облікового запису.</value>
   </data>
 </root>

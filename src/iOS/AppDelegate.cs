@@ -75,7 +75,7 @@ namespace Bit.iOS
                     {
                         var task = StopEventTimerAsync();
                     }
-                    else if (message.Command == "updatedTheme")
+                    else if (message.Command is ThemeManager.UPDATED_THEME_MESSAGE_KEY)
                     {
                         Device.BeginInvokeOnMainThread(() =>
                         {
@@ -164,7 +164,7 @@ namespace Bit.iOS
                     {
                         await ASHelpers.ReplaceAllIdentities();
                     }
-                    else if (message.Command == "vaultTimeoutActionChanged")
+                    else if (message.Command == AppHelpers.VAULT_TIMEOUT_ACTION_CHANGED_MESSAGE_COMMAND)
                     {
                         var timeoutAction = await _stateService.GetVaultTimeoutActionAsync();
                         if (timeoutAction == VaultTimeoutAction.Logout)
@@ -229,7 +229,7 @@ namespace Bit.iOS
 
         public override void WillEnterForeground(UIApplication uiApplication)
         {
-            _messagingService?.Send("resumed");
+            _messagingService?.Send(AppHelpers.RESUMED_MESSAGE_COMMAND);
             base.WillEnterForeground(uiApplication);
         }
 
