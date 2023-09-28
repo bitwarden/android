@@ -43,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -499,7 +500,9 @@ private fun CounterItem(
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .semantics(mergeDescendants = true) {}
+                .fillMaxWidth(),
         ) {
             Text(label)
             Row(
@@ -510,7 +513,8 @@ private fun CounterItem(
                 ) {
                     Icon(
                         Icons.Default.ArrowBack,
-                        contentDescription = null,
+                        // Unicode for "minus"
+                        contentDescription = "\u2212",
                         tint = MaterialTheme.colorScheme.primary,
                     )
                 }
@@ -522,7 +526,7 @@ private fun CounterItem(
                 ) {
                     Icon(
                         Icons.Default.ArrowForward,
-                        contentDescription = null,
+                        contentDescription = "+",
                         tint = MaterialTheme.colorScheme.primary,
                     )
                 }
@@ -553,6 +557,7 @@ private fun TextInputItem(
     CommonPadding {
         Column(
             modifier = Modifier
+                .semantics(mergeDescendants = true) {}
                 .fillMaxHeight()
                 .padding(top = 4.dp, bottom = 4.dp),
             verticalArrangement = Arrangement.Center,
@@ -596,7 +601,9 @@ private fun SwitchItem(
 ) {
     CommonPadding {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .semantics(mergeDescendants = true) {}
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
