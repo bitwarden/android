@@ -57,8 +57,15 @@ namespace Bit.Core.Services
 
         public long? DelayLockAndLogoutMs { get; set; }
 
+        /// <summary>
+        /// Determine if the current or provided account is locked.
+        /// </summary>
+        /// <param name="userId">
+        /// Optional specified user, must be provided if not the current account.
+        /// </param>
         public async Task<bool> IsLockedAsync(string userId = null)
         {
+            // If biometrics are used, we can use the flag to determine locked state
             var biometricSet = await IsBiometricLockSetAsync(userId);
             if (biometricSet && await _stateService.GetBiometricLockedAsync(userId))
             {
@@ -67,14 +74,17 @@ namespace Bit.Core.Services
 
             if (!await _cryptoService.HasUserKeyAsync(userId))
             {
+                // Filter out accounts without auto key
                 if (!await _cryptoService.HasAutoUnlockKeyAsync(userId))
                 {
                     return true;
                 }
+                // Inactive accounts with an auto key aren't locked, but we shouldn't set user key
                 if (userId != null && await _stateService.GetActiveUserIdAsync() != userId)
                 {
-                    await _cryptoService.SetUserKeyAsync(await _cryptoService.GetAutoUnlockKeyAsync(userId), userId);
+                    return false;
                 }
+                await _cryptoService.SetUserKeyAsync(await _cryptoService.GetAutoUnlockKeyAsync(userId), userId);
             }
 
             // Check again to verify auto key was set
