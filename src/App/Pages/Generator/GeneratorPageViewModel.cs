@@ -81,7 +81,8 @@ namespace Bit.App.Pages
                 ForwardedEmailServiceType.DuckDuckGo,
                 ForwardedEmailServiceType.Fastmail,
                 ForwardedEmailServiceType.FirefoxRelay,
-                ForwardedEmailServiceType.SimpleLogin
+                ForwardedEmailServiceType.SimpleLogin,
+                ForwardedEmailServiceType.ForwardEmail
             };
 
             UsernameEmailTypeOptions = new List<UsernameEmailType>
@@ -461,6 +462,8 @@ namespace Bit.App.Pages
                         return _usernameOptions.FirefoxRelayApiAccessToken;
                     case ForwardedEmailServiceType.SimpleLogin:
                         return _usernameOptions.SimpleLoginApiKey;
+                    case ForwardedEmailServiceType.ForwardEmail:
+                        return _usernameOptions.ForwardEmailApiAccessToken;
                     default:
                         return null;
                 }
@@ -505,6 +508,14 @@ namespace Bit.App.Pages
                             changed = true;
                         }
                         break;
+
+                    case ForwardedEmailServiceType.ForwardEmail:
+                        if (_usernameOptions.ForwardEmailApiAccessToken != value)
+                        {
+                            _usernameOptions.ForwardEmailApiAccessToken = value;
+                            changed = true;
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -529,6 +540,7 @@ namespace Bit.App.Pages
                     case ForwardedEmailServiceType.DuckDuckGo:
                     case ForwardedEmailServiceType.Fastmail:
                     case ForwardedEmailServiceType.SimpleLogin:
+                    case ForwardedEmailServiceType.ForwardEmail:
                         return AppResources.APIKeyRequiredParenthesis;
                     default:
                         return null;
@@ -554,6 +566,20 @@ namespace Bit.App.Pages
                 {
                     _usernameOptions.AnonAddyDomainName = value;
                     TriggerPropertyChanged(nameof(AddyIoDomainName));
+                    SaveUsernameOptionsAsync(false).FireAndForget();
+                }
+            }
+        }
+
+        public string ForwardEmailDomainName
+        {
+            get => _usernameOptions.ForwardEmailDomainName ?? "hideaddress.net";
+            set
+            {
+                if (_usernameOptions.ForwardEmailDomainName != value)
+                {
+                    _usernameOptions.ForwardEmailDomainName = value;
+                    TriggerPropertyChanged(nameof(ForwardEmailDomainName));
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
             }

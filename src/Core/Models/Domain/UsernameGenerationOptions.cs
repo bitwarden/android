@@ -24,6 +24,8 @@ namespace Bit.Core.Models.Domain
         public string FastMailApiKey { get; set; }
         public string AnonAddyApiAccessToken { get; set; }
         public string AnonAddyDomainName { get; set; }
+        public string ForwardEmailApiAccessToken { get; set; }
+        public string ForwardEmailDomainName { get; set; }
         public string EmailWebsite { get; set; }
 
         public ForwarderOptions GetForwarderOptions()
@@ -49,6 +51,12 @@ namespace Bit.Core.Models.Domain
                     return new ForwarderOptions { ApiKey = FirefoxRelayApiAccessToken };
                 case ForwardedEmailServiceType.SimpleLogin:
                     return new ForwarderOptions { ApiKey = SimpleLoginApiKey };
+                case ForwardedEmailServiceType.ForwardEmail:
+                    return new ForwardEmailForwarderOptions
+                    {
+                        ApiKey = ForwardEmailApiAccessToken,
+                        DomainName = ForwardEmailDomainName
+                    };
                 default:
                     return null;
             }
