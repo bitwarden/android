@@ -1,9 +1,11 @@
 package com.x8bit.bitwarden.ui.auth.feature.login
 
+import android.content.Intent
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.auth.datasource.network.model.LoginResult
+import com.x8bit.bitwarden.data.auth.datasource.network.util.generateIntentForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -60,8 +62,13 @@ class LoginViewModel @Inject constructor(
                 LoginResult.Error -> Unit
                 // No action required on success, root nav will navigate to logged in state
                 LoginResult.Success -> Unit
-                // TODO: launch intent with captcha URL BIT-399
-                is LoginResult.CaptchaRequired -> Unit
+                is LoginResult.CaptchaRequired -> {
+                    sendEvent(
+                        event = LoginEvent.NavigateToCaptcha(
+                            intent = result.generateIntentForCaptcha(),
+                        ),
+                    )
+                }
             }
         }
     }
@@ -97,6 +104,11 @@ sealed class LoginEvent {
      * Navigates to the Landing screen.
      */
     data object NavigateToLanding : LoginEvent()
+
+    /**
+     * Navigates to the captcha verification screen.
+     */
+    data class NavigateToCaptcha(val intent: Intent) : LoginEvent()
 }
 
 /**
