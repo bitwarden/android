@@ -1841,7 +1841,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login..
+        ///   Looks up a localized string similar to If a login has an authenticator key, copy the TOTP verification code to your clipboard when you auto-fill the login..
         /// </summary>
         public static string CopyTotpAutomaticallyDescription {
             get {
