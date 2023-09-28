@@ -1,9 +1,11 @@
 package com.x8bit.bitwarden.ui.auth.feature.login
 
+import android.content.Intent
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -84,5 +86,31 @@ class LoginScreenTest : BaseComposeTest() {
             )
         }
         assertTrue(onNavigateToLandingCalled)
+    }
+
+    @Test
+    fun `NavigateToCaptcha should call intentHandler startActivity`() {
+        val intentHandler = mockk<IntentHandler>(relaxed = true) {
+            every { startActivity(any()) } returns Unit
+        }
+        val mockIntent = mockk<Intent>()
+        val viewModel = mockk<LoginViewModel>(relaxed = true) {
+            every { eventFlow } returns flowOf(LoginEvent.NavigateToCaptcha(mockIntent))
+            every { stateFlow } returns MutableStateFlow(
+                LoginState(
+                    emailAddress = "",
+                    isLoginButtonEnabled = false,
+                    passwordInput = "",
+                ),
+            )
+        }
+        composeTestRule.setContent {
+            LoginScreen(
+                onNavigateToLanding = {},
+                intentHandler = intentHandler,
+                viewModel = viewModel,
+            )
+        }
+        verify { intentHandler.startActivity(mockIntent) }
     }
 }

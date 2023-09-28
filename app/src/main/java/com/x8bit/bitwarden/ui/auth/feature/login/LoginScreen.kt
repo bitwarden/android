@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -21,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 
 /**
@@ -31,11 +33,13 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 fun LoginScreen(
     onNavigateToLanding: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
+    intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             LoginEvent.NavigateToLanding -> onNavigateToLanding()
+            is LoginEvent.NavigateToCaptcha -> intentHandler.startActivity(intent = event.intent)
         }
     }
 
