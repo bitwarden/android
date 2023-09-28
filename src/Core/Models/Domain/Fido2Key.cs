@@ -41,9 +41,9 @@ namespace Bit.Core.Models.Domain
         public EncString UserName { get; set; }
         public EncString Counter { get; set; }
 
-        public async Task<Fido2KeyView> DecryptAsync(string orgId)
+        public async Task<Fido2KeyView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
-            return await DecryptObjAsync(new Fido2KeyView(), this, EncryptableProperties, orgId);
+            return await DecryptObjAsync(new Fido2KeyView(), this, EncryptableProperties, orgId, key);
         }
 
         public Fido2KeyData ToFido2KeyData()

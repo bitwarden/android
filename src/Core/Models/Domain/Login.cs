@@ -31,20 +31,20 @@ namespace Bit.Core.Models.Domain
         public EncString Totp { get; set; }
         public List<Fido2Key> Fido2Keys { get; set; }
 
-        public async Task<LoginView> DecryptAsync(string orgId)
+        public async Task<LoginView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
             var view = await DecryptObjAsync(new LoginView(this), this, new HashSet<string>
             {
                 "Username",
                 "Password",
                 "Totp"
-            }, orgId);
+            }, orgId, key);
             if (Uris != null)
             {
                 view.Uris = new List<LoginUriView>();
                 foreach (var uri in Uris)
                 {
-                    view.Uris.Add(await uri.DecryptAsync(orgId));
+                    view.Uris.Add(await uri.DecryptAsync(orgId, key));
                 }
             }
             if (Fido2Keys != null)
@@ -52,7 +52,7 @@ namespace Bit.Core.Models.Domain
                 view.Fido2Keys = new List<Fido2KeyView>();
                 foreach (var fido2Key in Fido2Keys)
                 {
-                    view.Fido2Keys.Add(await fido2Key.DecryptAsync(orgId));
+                    view.Fido2Keys.Add(await fido2Key.DecryptAsync(orgId, key));
                 }
             }
             return view;

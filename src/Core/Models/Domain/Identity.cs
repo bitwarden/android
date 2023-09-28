@@ -55,9 +55,9 @@ namespace Bit.Core.Models.Domain
         public EncString PassportNumber { get; set; }
         public EncString LicenseNumber { get; set; }
 
-        public Task<IdentityView> DecryptAsync(string orgId)
+        public Task<IdentityView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
-            return DecryptObjAsync(new IdentityView(this), this, _map, orgId);
+            return DecryptObjAsync(new IdentityView(this), this, _map, orgId, key);
         }
 
         public IdentityData ToIdentityData()

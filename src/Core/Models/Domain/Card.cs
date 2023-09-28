@@ -31,9 +31,9 @@ namespace Bit.Core.Models.Domain
         public EncString ExpYear { get; set; }
         public EncString Code { get; set; }
 
-        public Task<CardView> DecryptAsync(string orgId)
+        public Task<CardView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
-            return DecryptObjAsync(new CardView(this), this, _map, orgId);
+            return DecryptObjAsync(new CardView(this), this, _map, orgId, key);
         }
 
         public CardData ToCardData()

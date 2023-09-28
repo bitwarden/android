@@ -236,9 +236,9 @@ namespace Bit.Core.Services
             {
                 throw new ArgumentNullException(nameof(key));
             }
-            if (!(key is UserKey) && !(key is OrgKey))
+            if (!(key is UserKey) && !(key is OrgKey) && !(key is CipherKey))
             {
-                throw new ArgumentException($"Data encryption keys must be of type UserKey or OrgKey. {key.GetType().FullName} unsupported.");
+                throw new ArgumentException($"Data encryption keys must be of type UserKey or OrgKey or CipherKey. {key.GetType().FullName} unsupported.");
             }
 
             var newSymKey = await _cryptoFunctionService.RandomBytesAsync(64);
