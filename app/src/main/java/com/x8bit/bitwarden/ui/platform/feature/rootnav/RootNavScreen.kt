@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -23,8 +24,14 @@ import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.vaultUnlockedDestin
 fun RootNavScreen(
     viewModel: RootNavViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
+    onSplashScreenRemoved: () -> Unit = {},
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+
+    val isNotSplashScreen = state != RootNavState.Splash
+    LaunchedEffect(isNotSplashScreen) {
+        if (isNotSplashScreen) onSplashScreenRemoved()
+    }
 
     NavHost(
         navController = navController,

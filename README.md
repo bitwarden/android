@@ -62,6 +62,11 @@ The following is a list of all third-party dependencies included as part of the 
     - Purpose: Supplementary Android Compose features.
     - License: Apache 2.0
 
+- **Core SplashScreen**
+    - https://developer.android.com/jetpack/androidx/releases/core
+    - Purpose: Backwards compatible SplashScreen API implementation.
+    - License: Apache 2.0
+
 - **Dagger Hilt**
     - https://github.com/google/dagger
     - Purpose: Dependency injection framework.
