@@ -8,6 +8,8 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class RootNavScreenTest : BaseComposeTest() {
@@ -47,15 +49,18 @@ class RootNavScreenTest : BaseComposeTest() {
             every { eventFlow } returns emptyFlow()
             every { stateFlow } returns rootNavStateFlow
         }
+        var isSplashScreenRemoved = false
         composeTestRule.setContent {
             RootNavScreen(
                 viewModel = viewModel,
                 navController = fakeNavHostController,
+                onSplashScreenRemoved = { isSplashScreenRemoved = true },
             )
         }
         composeTestRule.runOnIdle {
             fakeNavHostController.assertCurrentRoute("splash")
         }
+        assertFalse(isSplashScreenRemoved)
 
         // Make sure navigating to Auth works as expected:
         rootNavStateFlow.value = RootNavState.Auth
@@ -65,6 +70,7 @@ class RootNavScreenTest : BaseComposeTest() {
                 navOptions = expectedNavOptions,
             )
         }
+        assertTrue(isSplashScreenRemoved)
 
         // Make sure navigating to vault unlocked works as expected:
         rootNavStateFlow.value = RootNavState.VaultUnlocked

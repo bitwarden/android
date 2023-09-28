@@ -16,6 +16,7 @@ androidxHiltNavigationCompose = "1.0.0"
 androidxLifecycle = "2.6.1"
 androidxNavigation = "2.7.2"
 androidxRoom = "2.5.2"
+androidxSplash = "1.1.0-alpha02"
 # Once the app and SDK reach a critical point of completeness we should begin fixing the version
 # here (BIT-311).
 bitwardenSdk = "0.3.0-SNAPSHOT"
@@ -60,6 +61,7 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidxRoom" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidxRoom" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidxRoom" }
+androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxSplash" }
 bitwarden-sdk = { module = "com.bitwarden:sdk-android", version.ref = "bitwardenSdk" }
 bumptech-glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 detekt-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }

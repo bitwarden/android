@@ -91,6 +91,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.splashscreen)
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.bitwarden.sdk)
     implementation(libs.bumptech.glide)

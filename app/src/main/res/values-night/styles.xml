@@ -12,6 +12,7 @@
         <item name="android:textCursorDrawable">@null</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
         <item name="android:windowNoTitle">true</item>
     </style>
 
@@ -20,10 +21,9 @@
     </style>
 
     <!-- Launch theme (for auto dark/light based on system) -->
-    <style name="LaunchTheme" parent="BaseTheme">
-        <item name="android:windowBackground">@drawable/splash_screen_dark</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowSplashScreenAnimatedIcon" tools:ignore="NewApi">
+    <style name="LaunchTheme" parent="Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/BaseTheme</item>
+        <item name="windowSplashScreenAnimatedIcon">
             @drawable/splash_screen_round
         </item>
     </style>
