@@ -59,7 +59,7 @@ fun LandingScreen(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.surface)
             .fillMaxHeight()
             .padding(horizontal = 16.dp)
             .verticalScroll(scrollState),

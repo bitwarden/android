@@ -50,7 +50,7 @@ fun CreateAccountScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(MaterialTheme.colorScheme.surface),
         verticalArrangement = spacedBy(8.dp),
     ) {
         Row(
