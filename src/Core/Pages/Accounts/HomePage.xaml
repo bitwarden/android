@@ -14,7 +14,7 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
-        <!-- <controls:ExtendedToolbarItem
+        <controls:ExtendedToolbarItem
             x:Name="_accountAvatar"
             IconImageSource="{Binding AvatarImageSource}"
             Command="{Binding Source={x:Reference _accountListOverlay}, Path=ToggleVisibililtyCommand}"
@@ -23,11 +23,11 @@
             UseOriginalImage="True"
             AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n Account}"
-            AutomationId="AccountIconButton" /> -->
+            AutomationId="AccountIconButton" />
         <ToolbarItem x:Name="_closeButton" Text="{u:I18n Close}" Command="{Binding CloseCommand}" Order="Primary" Priority="-1"/>
     </ContentPage.ToolbarItems>
 
-    <!--<ContentPage.Resources>
+    <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
             <StackLayout x:Name="_mainLayout" x:Key="mainLayout" Spacing="30" Padding="20, 50, 20, 0">
@@ -122,11 +122,9 @@
                 </Label> 
             </StackLayout>
         </ResourceDictionary>
-    </ContentPage.Resources>-->
+    </ContentPage.Resources>
 
-    <Label Text="Lalala" />
-
-    <!--<AbsoluteLayout
+    <AbsoluteLayout
         x:Name="_absLayout"
         VerticalOptions="FillAndExpand"
         HorizontalOptions="FillAndExpand">
@@ -142,5 +140,5 @@
             AbsoluteLayout.LayoutFlags="All"
             MainPage="{Binding Source={x:Reference _page}}"
             BindingContext="{Binding AccountSwitchingOverlayViewModel}"/> 
-    </AbsoluteLayout>-->
+    </AbsoluteLayout>
 </pages:BaseContentPage>

@@ -14,7 +14,7 @@ namespace Bit.App.Controls
                     FontFamily = "Menlo-Regular";
                     break;
                 case Device.Android:
-                    FontFamily = "RobotoMono_Regular.ttf#Roboto Mono";
+                    FontFamily = "RobotoMono_Regular.ttf";
                     break;
             }
         }

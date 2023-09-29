@@ -27,7 +27,12 @@ namespace Bit.App.Utilities
                 }
             }
 
-            _relayCommand = new AsyncRelayCommand(doAsync, canExecute, allowsMultipleExecutions ? AsyncRelayCommandOptions.AllowConcurrentExecutions : AsyncRelayCommandOptions.None);
+            var safeCanExecute = canExecute;
+            if (canExecute is null)
+            {
+                safeCanExecute = () => true;
+            }
+            _relayCommand = new AsyncRelayCommand(doAsync, safeCanExecute, allowsMultipleExecutions ? AsyncRelayCommandOptions.AllowConcurrentExecutions : AsyncRelayCommandOptions.None);
         }
 
         public event EventHandler CanExecuteChanged;
@@ -58,7 +63,12 @@ namespace Bit.App.Utilities
                 }
             }
 
-            _relayCommand = new AsyncRelayCommand<T>(doAsync, canExecute, allowsMultipleExecutions ? AsyncRelayCommandOptions.AllowConcurrentExecutions : AsyncRelayCommandOptions.None);
+            var safeCanExecute = canExecute;
+            if (canExecute is null)
+            {
+                safeCanExecute = _ => true;
+            }
+            _relayCommand = new AsyncRelayCommand<T>(doAsync, safeCanExecute, allowsMultipleExecutions ? AsyncRelayCommandOptions.AllowConcurrentExecutions : AsyncRelayCommandOptions.None);
         }
 
         public event EventHandler CanExecuteChanged;

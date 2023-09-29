@@ -12,7 +12,7 @@ namespace Bit.App.Utilities
         public object Convert(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
-            return EnumHelper.GetLocalizedValue(value, value.GetType());
+            return value != null ? EnumHelper.GetLocalizedValue(value, value.GetType()) : string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter,

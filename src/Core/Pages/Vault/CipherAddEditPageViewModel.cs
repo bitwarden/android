@@ -288,7 +288,7 @@ namespace Bit.App.Pages
                     nameof(ShowCollections)
                 });
         }
-        public bool ShowCollections => (!EditMode || CloneMode) && Cipher.OrganizationId != null;
+        public bool ShowCollections => (!EditMode || CloneMode) && Cipher?.OrganizationId != null;
         public bool EditMode => !string.IsNullOrWhiteSpace(CipherId);
         public bool ShowOwnershipOptions => !EditMode || CloneMode;
         public bool OwnershipPolicyInEffect => ShowOwnershipOptions && !AllowPersonal;
@@ -298,15 +298,15 @@ namespace Bit.App.Pages
         public bool IsIdentity => Cipher?.Type == CipherType.Identity;
         public bool IsCard => Cipher?.Type == CipherType.Card;
         public bool IsSecureNote => Cipher?.Type == CipherType.SecureNote;
-        public bool ShowUris => IsLogin && Cipher.Login.HasUris;
-        public bool ShowAttachments => Cipher.HasAttachments;
+        public bool ShowUris => IsLogin && Cipher != null && Cipher.Login.HasUris;
+        public bool ShowAttachments => Cipher != null && Cipher.HasAttachments;
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string ShowCardNumberIcon => ShowCardNumber ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string ShowCardCodeIcon => ShowCardCode ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
-        public int PasswordFieldColSpan => Cipher.ViewPassword ? 1 : 4;
-        public int TotpColumnSpan => Cipher.ViewPassword ? 1 : 2;
+        public int PasswordFieldColSpan => Cipher != null && Cipher.ViewPassword ? 1 : 4;
+        public int TotpColumnSpan => Cipher != null && Cipher.ViewPassword ? 1 : 2;
         public bool AllowPersonal { get; set; }
-        public bool PasswordPrompt => Cipher.Reprompt != CipherRepromptType.None;
+        public bool PasswordPrompt => Cipher != null && Cipher.Reprompt != CipherRepromptType.None;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public bool HasTotpValue => IsLogin && !string.IsNullOrEmpty(Cipher?.Login?.Totp);
         public string SetupTotpText => $"{BitwardenIcons.Camera} {AppResources.SetupTotp}";
@@ -458,6 +458,12 @@ namespace Bit.App.Pages
                 var task = _eventService.CollectAsync(EventType.Cipher_ClientViewed, CipherId);
             }
             _previousCipherId = CipherId;
+
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                TriggerPropertyChanged(nameof(OwnershipOptions));
+                TriggerPropertyChanged(nameof(OwnershipSelectedIndex));
+            });
 
             return true;
         }
@@ -892,7 +898,7 @@ namespace Bit.App.Pages
 
         private void TriggerCipherChanged()
         {
-            TriggerPropertyChanged(nameof(Cipher), AdditionalPropertiesToRaiseOnCipherChanged);
+            MainThread.BeginInvokeOnMainThread(() => TriggerPropertyChanged(nameof(Cipher), AdditionalPropertiesToRaiseOnCipherChanged));
         }
 
         private async Task CopyTotpClipboardAsync()

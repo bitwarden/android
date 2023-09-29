@@ -32,7 +32,7 @@ namespace Bit.App.Pages
             _vm.StartEnvironmentAction = () => Device.BeginInvokeOnMainThread(async () => await StartEnvironmentAsync());
             _vm.CloseAction = async () =>
             {
-                // await _accountListOverlay.HideAsync();
+                 await _accountListOverlay.HideAsync();
                 await Navigation.PopModalAsync();
             };
             UpdateLogo();
@@ -43,7 +43,7 @@ namespace Bit.App.Pages
             }
             if (_appOptions?.HideAccountSwitcher ?? false)
             {
-                // ToolbarItems.Remove(_accountAvatar);
+                 ToolbarItems.Remove(_accountAvatar);
             }
         }
 
@@ -56,8 +56,8 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            // _mainContent.Content = _mainLayout;
-            // _accountAvatar?.OnAppearing();
+             _mainContent.Content = _mainLayout;
+            _accountAvatar?.OnAppearing();
 
             if (!_appOptions?.HideAccountSwitcher ?? false)
             {
@@ -85,11 +85,11 @@ namespace Bit.App.Pages
 
         protected override bool OnBackButtonPressed()
         {
-            // if (_accountListOverlay.IsVisible)
-            // {
-            //     _accountListOverlay.HideAsync().FireAndForget();
-            //     return true;
-            // }
+             if (_accountListOverlay.IsVisible)
+            {
+                _accountListOverlay.HideAsync().FireAndForget();
+                return true;
+            }
             return false;
         }
 
@@ -97,12 +97,12 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
             _broadcasterService.Unsubscribe(nameof(HomePage));
-            // _accountAvatar?.OnDisappearing();
+             _accountAvatar?.OnDisappearing();
         }
 
         private void UpdateLogo()
         {
-            // _logo.Source = !ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png";
+             _logo.Source = !ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png";
         }
 
         private void Cancel_Clicked(object sender, EventArgs e)
@@ -141,7 +141,7 @@ namespace Bit.App.Pages
 
         private async Task StartEnvironmentAsync()
         {
-            // await _accountListOverlay.HideAsync();
+             await _accountListOverlay.HideAsync();
             var page = new EnvironmentPage();
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
