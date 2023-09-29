@@ -17,6 +17,8 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui;
 using Bit.App.Utilities;
 
+#nullable enable
+
 namespace Bit.App.Pages
 {
     public class CipherAddEditPageViewModel : BaseCipherViewModel
@@ -883,7 +885,7 @@ namespace Bit.App.Pages
                 Cipher.OrganizationId = OwnershipOptions[OwnershipSelectedIndex].Value;
                 TriggerCipherChanged();
             }
-            if (Cipher.OrganizationId != null)
+            if (Cipher?.OrganizationId != null)
             {
                 var cols = _writeableCollections.Where(c => c.OrganizationId == Cipher.OrganizationId)
                     .Select(c => new CollectionViewModel { Collection = c }).ToList();

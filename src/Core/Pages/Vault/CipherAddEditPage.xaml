@@ -126,7 +126,7 @@
                         StyleClass="box-label" />
                     <Entry
                         x:Name="_nameEntry"
-                        Text="{Binding Cipher.Name}"
+                        Text="{Binding Cipher.Name, FallbackValue=''}"
                         StyleClass="box-value"
                         AutomationProperties.IsInAccessibleTree="True"
                         SemanticProperties.Description="{u:I18n Name}"
@@ -219,7 +219,7 @@
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n GeneratePassword}"
-                            IsVisible="{Binding Cipher.ViewPassword}"
+                            IsVisible="{Binding Cipher.ViewPassword, FallbackValue=False}"
                             AutomationId="RegeneratePasswordButton" />
                     </Grid>
 
