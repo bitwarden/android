@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.EnvironmentPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    x:DataType="pages:EnvironmentPageViewModel"
+    Title="{Binding PageTitle}">
+
+    <ContentPage.BindingContext>
+        <pages:EnvironmentPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
+        <ToolbarItem Text="{u:I18n Save}" Command="{Binding SubmitCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <StackLayout Spacing="20">
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n SelfHostedEnvironment, Header=True}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row">
+                    <Label
+                        Text="{u:I18n ServerUrl}"
+                        StyleClass="box-label" />
+                    <Entry
+                        Text="{Binding BaseUrl}"
+                        Keyboard="Url"
+                        Placeholder="ex. https://bitwarden.company.com"
+                        StyleClass="box-value"
+                        ReturnType="Go"
+                        ReturnCommand="{Binding SubmitCommand}"
+                        AutomationId="ServerUrlEntry"/>
+                </StackLayout>
+                <Label
+                    Text="{u:I18n SelfHostedEnvironmentFooter}"
+                    StyleClass="box-footer-label" />
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n CustomEnvironment, Header=True}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row">
+                    <Label
+                        Text="{u:I18n WebVaultUrl}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_webVaultEntry"
+                        Text="{Binding WebVaultUrl}"
+                        Keyboard="Url"
+                        StyleClass="box-value"
+                        AutomationId="WebVaultUrlEntry"/>
+                </StackLayout>
+                <StackLayout StyleClass="box-row">
+                    <Label
+                        Text="{u:I18n ApiUrl}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_apiEntry"
+                        Text="{Binding ApiUrl}"
+                        Keyboard="Url"
+                        StyleClass="box-value"
+                        AutomationId="ApiUrlEntry"/>
+                </StackLayout>
+                <StackLayout StyleClass="box-row">
+                    <Label
+                        Text="{u:I18n IdentityUrl}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityEntry"
+                        Text="{Binding IdentityUrl}"
+                        Keyboard="Url"
+                        StyleClass="box-value"
+                        AutomationId="IdentityUrlEntry"/>
+                </StackLayout>
+                <StackLayout StyleClass="box-row">
+                    <Label
+                        Text="{u:I18n IconsUrl}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_iconsEntry"
+                        Text="{Binding IconsUrl}"
+                        Keyboard="Url"
+                        StyleClass="box-value"
+                        ReturnType="Go"
+                        ReturnCommand="{Binding SubmitCommand}"
+                        AutomationId="IconsUrlEntry"/>
+                </StackLayout>
+                <Label
+                    Text="{u:I18n CustomEnvironmentFooter}"
+                    StyleClass="box-footer-label" />
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+
+</pages:BaseContentPage>

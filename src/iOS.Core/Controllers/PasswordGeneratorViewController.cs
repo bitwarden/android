@@ -6,7 +6,7 @@ using Foundation;
 using UIKit;
 using CoreGraphics;
 using Bit.iOS.Core.Utilities;
-using Bit.App.Resources;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System.Threading.Tasks;

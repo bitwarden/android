@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Pages;
-using Bit.App.Resources;
+using Bit.Core.Resources.Localization;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -15,8 +15,7 @@ using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using Foundation;
 using UIKit;
-using Xamarin.Essentials;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls.Compatibility;
 
 namespace Bit.iOS.Core.Controllers
 {

@@ -11,7 +11,7 @@ namespace Bit.Core.Abstractions
         /// <summary>
         /// Gets the device type on the server enum
         /// </summary>
-        DeviceType GetDevice();
+        Enums.DeviceType GetDevice();
         string GetDeviceString();
         ClientType GetClientType();
         bool IsSelfHost();

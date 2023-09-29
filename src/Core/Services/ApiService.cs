@@ -16,6 +16,7 @@ using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using DeviceType = Bit.Core.Enums.DeviceType;
 
 namespace Bit.Core.Services
 {

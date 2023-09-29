@@ -1,0 +1,549 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Class="Bit.App.Pages.GeneratorPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:effects="clr-namespace:Bit.App.Effects"
+    xmlns:core="clr-namespace:Bit.Core"
+    xmlns:enums="clr-namespace:Bit.Core.Enums"
+    x:DataType="pages:GeneratorPageViewModel"
+    Title="{Binding PageTitle}">
+    <ContentPage.BindingContext>
+        <pages:GeneratorPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+            <u:LocalizableEnumConverter x:Key="localizableEnum" />
+            <u:IconGlyphConverter x:Key="iconGlyphConverter" />
+            <xct:EnumToBoolConverter x:Key="enumToBool"/>
+            <ToolbarItem Text="{u:I18n Cancel}" Command="{Binding CloseCommand}" Order="Primary" Priority="-1"
+                         x:Name="_closeItem" x:Key="closeItem" />
+            <ToolbarItem Text="{u:I18n Select}"
+                     Clicked="Select_Clicked"
+                     Order="Primary"
+                     x:Name="_selectItem"
+                     x:Key="selectItem" />
+            <ToolbarItem Text="{u:I18n PasswordHistory}"
+                     Clicked="History_Clicked"
+                     Order="Secondary"
+                     x:Name="_historyItem"
+                     x:Key="historyItem" />
+            <ToolbarItem IconImageSource="more_vert.png"
+                         AutomationProperties.IsInAccessibleTree="True"
+                         SemanticProperties.Description="{u:I18n Options}"
+                         Clicked="More_Clicked"
+                         x:Name="_moreItem"
+                         x:Key="moreItem" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <!--WORKAROUND: Wrapped in a ContentView to fix bottom screen but when using large font size on Android.
+        Check when https://github.com/xamarin/Xamarin.Forms/pull/15076 is released that may fix this without wrapping
+        in ContentView.-->
+    <ContentView>
+        <ScrollView Padding="0, 0, 0, 20">
+            <StackLayout Spacing="0"
+                         Padding="10,0">
+                <Grid IsVisible="{Binding IsPolicyInEffect}"
+                        Margin="0, 12, 0, 0"
+                        Padding="10,0"
+                        RowSpacing="0"
+                        ColumnSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Frame Padding="10"
+                            Margin="0"
+                            HasShadow="False"
+                            BackgroundColor="Transparent"
+                            BorderColor="{DynamicResource PrimaryColor}">
+                        <Label
+                            Text="{u:I18n PasswordGeneratorPolicyInEffect}"
+                            StyleClass="text-muted, text-sm, text-bold"
+                            HorizontalTextAlignment="Center"
+                            AutomationId="PasswordGeneratorPolicyInEffectLabel" />
+                    </Frame>
+                </Grid>
+                <Grid IsVisible="{Binding IsUsername, Converter={StaticResource inverseBool}}"
+                        StyleClass="box-row"
+                        RowDefinitions="Auto"
+                        ColumnDefinitions="*,Auto,Auto">
+                    <controls:MonoLabel
+                        x:Name="lblPassword"
+                        StyleClass="text-lg, text-html"
+                        Text="{Binding ColoredPassword, Mode=OneWay}"
+                        Margin="0, 20"
+                        AutomationId="GeneratedPasswordLabel" />
+                    <controls:IconButton 
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                        Command="{Binding CopyCommand}"
+                        Grid.Column="1"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        SemanticProperties.Description="{u:I18n CopyPassword}"
+                        AutomationId="CopyValueButton" />
+                    <controls:IconButton 
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
+                        Command="{Binding RegenerateCommand}"
+                        Grid.Column="2"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        SemanticProperties.Description="{u:I18n GeneratePassword}"
+                        AutomationId="RegenerateValueButton" />
+                </Grid>
+                <Grid IsVisible="{Binding IsUsername}"
+                        StyleClass="box-row"                  
+                        RowDefinitions="Auto"
+                        ColumnDefinitions="*,Auto,Auto">
+                    <controls:MonoLabel
+                        x:Name="lblUsername"
+                        StyleClass="text-lg, text-html"
+                        Text="{Binding ColoredUsername, Mode=OneWay}"
+                        Margin="0, 20"
+                        HorizontalOptions="Start"
+                        AutomationId="GeneratedPasswordLabel" />
+                    <controls:IconButton 
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                        Command="{Binding CopyCommand}"
+                        Grid.Column="1"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        SemanticProperties.Description="{u:I18n CopyUsername}"
+                        AutomationId="CopyValueButton" />
+                    <controls:IconButton 
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
+                        Command="{Binding RegenerateUsernameCommand}"
+                        Grid.Column="2"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        SemanticProperties.Description="{u:I18n GenerateUsername}"
+                        AutomationId="RegenerateValueButton" />
+                </Grid>
+                <BoxView StyleClass="box-row-separator"/>
+                <StackLayout StyleClass="box"
+                             IsVisible="{Binding ShowTypePicker}"
+                             Padding="0,10">
+                    <Label
+                        Text="{u:I18n WhatWouldYouLikeToGenerate}"
+                        StyleClass="box-label" />
+                    <Picker
+                        x:Name="_typePicker"
+                        ItemsSource="{Binding GeneratorTypeOptions, Mode=OneTime}"
+                        SelectedItem="{Binding GeneratorTypeSelected}"
+                        ItemDisplayBinding="{Binding ., Converter={StaticResource localizableEnum}}"
+                        StyleClass="box-value"
+                        AutomationId="GeneratorTypePicker" />
+                </StackLayout>
+                <Label Text="{u:I18n Options, Header=True}"
+                       StyleClass="box-header, box-header-platform"
+                       Margin="0,10,0,0"/>
+                <!--USERNAME OPTIONS-->
+                <StackLayout IsVisible="{Binding IsUsername}">
+                    <StackLayout Orientation="Horizontal">
+                        <Label
+                            Text="{u:I18n UsernameType}"
+                            StyleClass="box-label"
+                            VerticalOptions="Center"/>
+                        <controls:IconButton 
+                            StyleClass="box-row-button, box-row-button-platform"
+                            Text="{Binding Source={x:Static core:BitwardenIcons.QuestionCircle}}"
+                            Command="{Binding UsernameTypePromptHelpCommand}"
+                            TextColor="{DynamicResource HyperlinkColor}"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            SemanticProperties.Description="{u:I18n UsernamePromptHelpLink}"
+                            VerticalOptions="Center"/>
+                    </StackLayout>
+                    <Picker
+                        x:Name="_usernameTypePicker"
+                        ItemsSource="{Binding UsernameTypeOptions, Mode=OneTime}"
+                        SelectedItem="{Binding UsernameTypeSelected}"
+                        ItemDisplayBinding="{Binding ., Converter={StaticResource localizableEnum}}"
+                        StyleClass="box-value"
+                        AutomationId="UsernameTypePicker" />
+                    <Label
+                        StyleClass="box-footer-label"
+                        Text="{Binding UsernameTypeDescriptionLabel}" />
+                    <!--PLUS ADDRESSED EMAIL OPTIONS-->
+                    <StackLayout StyleClass="box-row, box-row-input"
+                                 IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.PlusAddressedEmail}}">
+                        <Label Text="{u:I18n EmailRequiredParenthesis}"
+                            StyleClass="box-label" />
+                        <Entry x:Name="_plusAddressedEmailEntry"
+                            Text="{Binding PlusAddressedEmail}"
+                            StyleClass="box-value"
+                            AutomationId="PlusAddressedEmailEntry" />
+                        <Label IsVisible="{Binding ShowUsernameEmailType}"
+                            Text="{u:I18n EmailType}"
+                            StyleClass="box-label"
+                            Margin="0,10,0,0"/>
+                        <Picker IsVisible="{Binding ShowUsernameEmailType}"
+                            x:Name="_plusAddressedEmailTypePicker"
+                            ItemsSource="{Binding UsernameEmailTypeOptions, Mode=OneTime}"
+                            SelectedItem="{Binding PlusAddressedEmailTypeSelected}"
+                            ItemDisplayBinding="{Binding ., Converter={StaticResource localizableEnum}}"
+                            StyleClass="box-value" />
+                        <Label IsVisible="{Binding ShowUsernameEmailType}"
+                            Text="{u:I18n Website}"
+                            StyleClass="box-label"
+                            Margin="0,10,0,0" />
+                        <Label IsVisible="{Binding ShowUsernameEmailType}"
+                            Text="{Binding EmailWebsite}"
+                            StyleClass="box-value" />
+                        <BoxView IsVisible="{Binding ShowUsernameEmailType}"
+                            StyleClass="box-row-separator"
+                            Margin="0,10,0,0" />
+                    </StackLayout>                    
+                    <!--CATCH-ALL EMAIL OPTIONS-->
+                    <StackLayout StyleClass="box-row, box-row-input"
+                                 IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.CatchAllEmail}}">
+                        <Label
+                            Text="{u:I18n DomainNameRequiredParenthesis}"
+                            StyleClass="box-label" />
+                        <Entry
+                            x:Name="_catchAllEmailDomainNameEntry"
+                            Text="{Binding CatchAllEmailDomain}"
+                            StyleClass="box-value"
+                            AutomationId="CatchAllEmailDomainEntry" />
+                        <Label IsVisible="{Binding ShowUsernameEmailType}"
+                            Text="{u:I18n EmailType}"
+                            StyleClass="box-label" 
+                            Margin="0,10,0,0"/>
+                        <Picker IsVisible="{Binding ShowUsernameEmailType}"
+                            x:Name="_catchallEmailTypePicker"
+                            ItemsSource="{Binding UsernameEmailTypeOptions, Mode=OneTime}"
+                            SelectedItem="{Binding CatchAllEmailTypeSelected}"
+                            ItemDisplayBinding="{Binding ., Converter={StaticResource localizableEnum}}"
+                            StyleClass="box-value" />
+                        <Label IsVisible="{Binding ShowUsernameEmailType}"
+                            Text="{u:I18n Website}"
+                            StyleClass="box-label"
+                            Margin="0,10,0,0" />
+                        <Label IsVisible="{Binding ShowUsernameEmailType}"
+                            Text="{Binding EmailWebsite}"
+                            StyleClass="box-value"/>
+                        <BoxView IsVisible="{Binding ShowUsernameEmailType}"
+                            StyleClass="box-row-separator" 
+                            Margin="0,10,0,0"/>
+                    </StackLayout>
+                    <!--FORWARDED EMAIL OPTIONS-->
+                    <StackLayout StyleClass="box-row, box-row-input"
+                                 IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.ForwardedEmailAlias}}">
+                        <Label
+                            Text="{u:I18n Service}"
+                            StyleClass="box-label" />
+                        <Picker
+                            x:Name="_serviceTypePicker"
+                            ItemsSource="{Binding ForwardedEmailServiceTypeOptions, Mode=OneTime}"
+                            SelectedItem="{Binding ForwardedEmailServiceSelected}"
+                            ItemDisplayBinding="{Binding ., Converter={StaticResource localizableEnum}}"
+                            StyleClass="box-value"
+                            AutomationId="ServiceTypePicker" />
+                        <Grid 
+                            Grid.RowDefinitions="Auto,*"
+                            Grid.ColumnDefinitions="*,Auto">
+                            <Label
+                                Margin="0,10,0,0"
+                                Text="{Binding ForwardedEmailApiSecretLabel}"
+                                StyleClass="box-label"/>
+                            <Entry
+                                Text="{Binding ForwardedEmailApiSecret}"
+                                IsPassword="{Binding ShowForwardedEmailApiSecret, Converter={StaticResource inverseBool}}"
+                                Grid.Row="1"
+                                AutomationId="ForwardedEmailApiSecretEntry" />
+                            <controls:IconButton
+                                StyleClass="box-row-button, box-row-button-platform"
+                                Text="{Binding ShowForwardedEmailApiSecret, Converter={StaticResource inverseBool, iconGlyphConverter}, ConverterParameter={x:Static u:BooleanGlyphType.Eye}}"
+                                Command="{Binding ToggleForwardedEmailHiddenValueCommand}"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                AutomationId="ShowForwardedEmailApiSecretButton" />
+                        </Grid>
+                        <Label IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.AnonAddy}}"
+                            Text="{u:I18n DomainNameRequiredParenthesis}"
+                            StyleClass="box-label"
+                            Margin="0,10,0,0"/>
+                        <Entry IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.AnonAddy}}"
+                            x:Name="_anonAddyDomainNameEntry"
+                            Text="{Binding AddyIoDomainName}"
+                            StyleClass="box-value"
+                            AutomationId="AnonAddyDomainNameEntry" />
+                    </StackLayout>                    
+                    <!--RANDOM WORD OPTIONS-->
+                    <Grid IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.RandomWord}}">
+                        <Label
+                            Text="{u:I18n Capitalize}"
+                            StyleClass="box-label-regular"
+                            HorizontalOptions="StartAndExpand" />
+                        <Switch
+                            IsToggled="{Binding CapitalizeRandomWordUsername}"
+                            StyleClass="box-value"
+                            HorizontalOptions="End"
+                            AutomationId="CapitalizeRandomWordUsernameToggle" />
+                    </Grid>
+                    <BoxView IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.RandomWord}}"
+                        StyleClass="box-row-separator" />
+                    <Grid IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.RandomWord}}">
+                        <Label
+                            Text="{u:I18n IncludeNumber}"
+                            StyleClass="box-label-regular"
+                            HorizontalOptions="StartAndExpand" />
+                        <Switch
+                            IsToggled="{Binding IncludeNumberRandomWordUsername}"
+                            StyleClass="box-value"
+                            HorizontalOptions="End"
+                            AutomationId="IncludeNumberRandomWordUsernameToggle" />
+                    </Grid>
+                    <BoxView IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.RandomWord}}"
+                        StyleClass="box-row-separator" />
+                </StackLayout>
+                <!--PASSWORD OPTIONS-->
+                <StackLayout IsVisible="{Binding IsUsername, Converter={StaticResource inverseBool}}">
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n PasswordType}"
+                            StyleClass="box-label" />
+                        <Picker
+                            x:Name="_passwordTypePicker"
+                            ItemsSource="{Binding PasswordTypeOptions, Mode=OneTime}"
+                            SelectedIndex="{Binding PasswordTypeSelectedIndex}"
+                            StyleClass="box-value"
+                            AutomationId="PasswordTypePicker" />
+                    </StackLayout>
+                    <StackLayout Spacing="0"
+                                 Padding="0"
+                                 IsVisible="{Binding IsPassword, Converter={StaticResource inverseBool}}">
+                        <StackLayout StyleClass="box-row, box-row-stepper">
+                            <Label
+                                Text="{u:I18n NumberOfWords}"
+                                StyleClass="box-label-regular"
+                                VerticalOptions="FillAndExpand"
+                                VerticalTextAlignment="Center" />
+                            <Label
+                                Text="{Binding NumWords}"
+                                StyleClass="box-sub-label"
+                                HorizontalOptions="FillAndExpand"
+                                HorizontalTextAlignment="End"
+                                VerticalOptions="FillAndExpand"
+                                VerticalTextAlignment="Center"
+                                AutomationId="NumberOfWordsLabel" />
+                            <controls:ExtendedStepper
+                                Value="{Binding NumWords}"
+                                Maximum="20"
+                                Minimum="3"
+                                Increment="1"
+                                AutomationId="NumberOfWordsStepper" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-input">
+                            <Label
+                                Text="{u:I18n WordSeparator}"
+                                StyleClass="box-label" />
+                            <Entry
+                                Text="{Binding WordSeparator}"
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
+                                StyleClass="box-value"
+                                AutomationId="WordSeparatorEntry">
+                                <Entry.Effects>
+                                    <effects:NoEmojiKeyboardEffect />
+                                </Entry.Effects>
+                            </Entry>
+                        </StackLayout>
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="{u:I18n Capitalize}"
+                                StyleClass="box-label-regular"
+                                HorizontalOptions="StartAndExpand" />
+                            <Switch
+                                IsToggled="{Binding Capitalize}"
+                                IsEnabled="{Binding EnforcedPolicyOptions.Capitalize,
+                                    Converter={StaticResource inverseBool}}"
+                                StyleClass="box-value"
+                                HorizontalOptions="End"
+                                AutomationId="CapitalizePassphraseToggle" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="{u:I18n IncludeNumber}"
+                                StyleClass="box-label-regular"
+                                HorizontalOptions="StartAndExpand" />
+                            <Switch
+                                IsToggled="{Binding IncludeNumber}"
+                                IsEnabled="{Binding EnforcedPolicyOptions.IncludeNumber,
+                                    Converter={StaticResource inverseBool}}"
+                                StyleClass="box-value"
+                                HorizontalOptions="End"
+                                AutomationId="IncludeNumbersToggle" />
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout Spacing="0" Padding="0" IsVisible="{Binding IsPassword}">
+                        <StackLayout StyleClass="box-row, box-row-slider">
+                            <Label
+                                Text="{u:I18n Length}"
+                                StyleClass="box-label-regular"
+                                VerticalOptions="CenterAndExpand" />
+                            <Label
+                                Text="{Binding Length}"
+                                StyleClass="box-sub-label"
+                                VerticalOptions="CenterAndExpand"
+                                HorizontalTextAlignment="End"
+                                WidthRequest="50"
+                                AutomationId="PasswordLengthLabel" />
+                            <controls:ExtendedSlider
+                                DragCompleted="LengthSlider_DragCompleted"
+                                Value="{Binding Length}"
+                                AutomationProperties.HelpText="{Binding Length}"
+                                StyleClass="box-value"
+                                VerticalOptions="CenterAndExpand"
+                                HorizontalOptions="FillAndExpand"
+                                Maximum="128"
+                                Minimum="5"
+                                AutomationId="PasswordLengthSlider" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="A-Z"
+                                StyleClass="box-label-regular"
+                                HorizontalOptions="StartAndExpand" 
+                                AutomationProperties.IsInAccessibleTree="True"
+                                SemanticProperties.Description="{u:I18n UppercaseAtoZ}"/>
+                            <Switch
+                                IsToggled="{Binding Uppercase}"
+                                IsEnabled="{Binding EnforcedPolicyOptions.UseUppercase,
+                                    Converter={StaticResource inverseBool}}"
+                                StyleClass="box-value"
+                                HorizontalOptions="End" 
+                                AutomationProperties.IsInAccessibleTree="True"
+                                SemanticProperties.Description="{u:I18n UppercaseAtoZ}"
+                                AutomationId="UppercaseAtoZToggle" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="a-z"
+                                StyleClass="box-label-regular"
+                                HorizontalOptions="StartAndExpand" 
+                                AutomationProperties.IsInAccessibleTree="True"
+                                SemanticProperties.Description="{u:I18n LowercaseAtoZ}"/>
+                            <Switch
+                                IsToggled="{Binding Lowercase}"
+                                IsEnabled="{Binding EnforcedPolicyOptions.UseLowercase,
+                                    Converter={StaticResource inverseBool}}"
+                                StyleClass="box-value"
+                                HorizontalOptions="End"
+                                AutomationProperties.IsInAccessibleTree="True"
+                                SemanticProperties.Description="{u:I18n LowercaseAtoZ}"
+                                AutomationId="LowercaseAtoZToggle" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="0-9"
+                                StyleClass="box-label-regular"
+                                HorizontalOptions="StartAndExpand" 
+                                AutomationProperties.IsInAccessibleTree="True"
+                                SemanticProperties.Description="{u:I18n NumbersZeroToNine}"/>
+                            <Switch
+                                IsToggled="{Binding Number}"
+                                IsEnabled="{Binding EnforcedPolicyOptions.UseNumbers,
+                                    Converter={StaticResource inverseBool}}"
+                                StyleClass="box-value"
+                                HorizontalOptions="End" 
+                                AutomationProperties.IsInAccessibleTree="True"
+                                SemanticProperties.Description="{u:I18n NumbersZeroToNine}"
+                                AutomationId="NumbersZeroToNineToggle" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="!@#$%^&amp;*"
+                                StyleClass="box-label-regular"
+                                HorizontalOptions="StartAndExpand" 
+                                AutomationProperties.IsInAccessibleTree="True"
+                                SemanticProperties.Description="{u:I18n SpecialCharacters}"/>
+                            <Switch
+                                IsToggled="{Binding Special}"
+                                IsEnabled="{Binding EnforcedPolicyOptions.UseSpecial,
+                                    Converter={StaticResource inverseBool}}"
+                                StyleClass="box-value"
+                                HorizontalOptions="End"
+                                AutomationProperties.IsInAccessibleTree="True"
+                                SemanticProperties.Description="{u:I18n SpecialCharacters}"
+                                AutomationId="SpecialCharactersToggle" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-stepper">
+                            <Label
+                                Text="{u:I18n MinNumbers}"
+                                StyleClass="box-label-regular"
+                                VerticalOptions="FillAndExpand"
+                                VerticalTextAlignment="Center" />
+                            <Label
+                                Text="{Binding MinNumber}"
+                                StyleClass="box-sub-label"
+                                HorizontalOptions="FillAndExpand"
+                                HorizontalTextAlignment="End"
+                                VerticalOptions="FillAndExpand"
+                                VerticalTextAlignment="Center"
+                                AutomationId="MinNumberValueLabel" />
+                            <controls:ExtendedStepper
+                                Value="{Binding MinNumber}"
+                                Maximum="5"
+                                Minimum="0"
+                                Increment="1"
+                                AutomationId="MinNumberStepper" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-stepper">
+                            <Label
+                                Text="{u:I18n MinSpecial}"
+                                StyleClass="box-label-regular"
+                                VerticalOptions="FillAndExpand"
+                                VerticalTextAlignment="Center" />
+                            <Label
+                                Text="{Binding MinSpecial}"
+                                StyleClass="box-sub-label"
+                                HorizontalOptions="FillAndExpand"
+                                HorizontalTextAlignment="End"
+                                VerticalOptions="FillAndExpand"
+                                VerticalTextAlignment="Center"
+                                AutomationId="MinSpecialValueLabel" />
+                            <controls:ExtendedStepper
+                                Value="{Binding MinSpecial}"
+                                Maximum="5"
+                                Minimum="0"
+                                Increment="1"
+                                AutomationId="MinSpecialStepper" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="{u:I18n AvoidAmbiguousCharacters}"
+                                StyleClass="box-label-regular"
+                                HorizontalOptions="StartAndExpand" />
+                            <Switch
+                                IsToggled="{Binding AvoidAmbiguousChars}"
+                                StyleClass="box-value"
+                                HorizontalOptions="End"
+                                AutomationId="AvoidAmbiguousCharsToggle" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentView>
+</pages:BaseContentPage>

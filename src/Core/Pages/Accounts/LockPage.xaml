@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.LockPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    x:DataType="pages:LockPageViewModel"
+    x:Name="_page"
+    Title="{Binding PageTitle}">
+
+    <ContentPage.BindingContext>
+        <pages:LockPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <controls:ExtendedToolbarItem
+                x:Name="_accountAvatar"
+                IconImageSource="{Binding AvatarImageSource}"
+                Command="{Binding Source={x:Reference _accountListOverlay}, Path=ToggleVisibililtyCommand}"
+                Order="Primary"
+                Priority="-1"
+                UseOriginalImage="True"
+                AutomationProperties.IsInAccessibleTree="True"
+                SemanticProperties.Description="{u:I18n Account}"
+                AutomationId="AccountIconButton" />
+    </ContentPage.ToolbarItems>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+            <ToolbarItem IconImageSource="more_vert.png" Clicked="More_Clicked" Order="Primary"
+                x:Name="_moreItem" x:Key="moreItem"
+                AutomationProperties.IsInAccessibleTree="True"
+                SemanticProperties.Description="{u:I18n Options}" />
+            <ToolbarItem Text="{u:I18n LogOut}"
+                x:Key="logOut"
+                x:Name="_logOut"
+                Clicked="LogOut_Clicked"
+                Order="Secondary"/>
+
+            <ScrollView x:Name="_mainLayout" x:Key="mainLayout">
+                <StackLayout Spacing="20">
+                    <StackLayout StyleClass="box">
+                        <Grid
+                            StyleClass="box-row"
+                            IsVisible="{Binding PinEnabled}"
+                            Padding="0, 10, 0, 0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                Text="{u:I18n PIN}"
+                                StyleClass="box-label"
+                                Grid.Row="0"
+                                Grid.Column="0" />
+                            <controls:MonoEntry
+                                x:Name="_pin"
+                                Text="{Binding Pin}"
+                                StyleClass="box-value"
+                                Keyboard="Numeric"
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
+                                IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                ReturnType="Go"
+                                ReturnCommand="{Binding SubmitCommand}" 
+                                AutomationId="PinEntry" />
+                            <controls:IconButton
+                                StyleClass="box-row-button, box-row-button-platform"
+                                Text="{Binding ShowPasswordIcon}"
+                                Command="{Binding TogglePasswordCommand}"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Grid.RowSpan="2"
+                                AutomationProperties.IsInAccessibleTree="True"
+                                SemanticProperties.Description="{u:I18n ToggleVisibility}" 
+                                AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
+                                AutomationId="PinVisibilityToggle" />
+                        </Grid>
+                        <Grid
+                            x:Name="_passwordGrid"
+                            StyleClass="box-row"
+                            IsVisible="{Binding PinEnabled, Converter={StaticResource inverseBool}}"
+                            Padding="0, 10, 0, 0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                Text="{u:I18n MasterPassword}"
+                                StyleClass="box-label"
+                                Grid.Row="0"
+                                Grid.Column="0" />
+                            <controls:MonoEntry
+                                x:Name="_masterPassword"
+                                Text="{Binding MasterPassword}"
+                                StyleClass="box-value"
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
+                                IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                ReturnType="Go"
+                                ReturnCommand="{Binding SubmitCommand}"
+                                AutomationId="MasterPasswordEntry" />
+                            <controls:IconButton
+                                StyleClass="box-row-button, box-row-button-platform"
+                                Text="{Binding ShowPasswordIcon}"
+                                Command="{Binding TogglePasswordCommand}"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Grid.RowSpan="2"
+                                AutomationProperties.IsInAccessibleTree="True"
+                                SemanticProperties.Description="{u:I18n ToggleVisibility}"
+                                AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
+                                AutomationId="PasswordVisibilityToggle"
+                                />
+                        </Grid>
+                        <StackLayout
+                            StyleClass="box-row"
+                            Padding="0, 10, 0, 0">
+                            <Label
+                                Text="{Binding LockedVerifyText}"
+                                StyleClass="box-footer-label" />
+                            <Label
+                                Text="{Binding LoggedInAsText}"
+                                StyleClass="box-footer-label"
+                                Margin="0, 10, 0, 0" />
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout Padding="10, 0">
+                        <Label
+                            Text="{u:I18n AccountBiometricInvalidated}"
+                            StyleClass="box-footer-label,text-danger,text-bold"
+                            IsVisible="{Binding BiometricIntegrityValid, Converter={StaticResource inverseBool}}" />
+                        <Button Text="{Binding BiometricButtonText}" Clicked="Biometric_Clicked"
+                                IsVisible="{Binding BiometricButtonVisible}">
+                        </Button>
+                        <Button
+                            x:Name="_unlockButton"
+                            Text="{u:I18n Unlock}"
+                            StyleClass="btn-primary"
+                            Clicked="Unlock_Clicked"
+                            AutomationId="UnlockVaultButton" />
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <AbsoluteLayout
+        x:Name="_absLayout"
+        VerticalOptions="FillAndExpand"
+        HorizontalOptions="FillAndExpand">
+        <ContentView
+            x:Name="_mainContent"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
+        </ContentView>
+
+        <controls:AccountSwitchingOverlayView
+            x:Name="_accountListOverlay"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+            AbsoluteLayout.LayoutFlags="All"
+            MainPage="{Binding Source={x:Reference _page}}"
+            BindingContext="{Binding AccountSwitchingOverlayViewModel}"/>
+        
+    </AbsoluteLayout>
+
+</pages:BaseContentPage>

@@ -1,0 +1,624 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:controls="clr-namespace:Bit.App.Controls"
+                    x:Class="Bit.App.Styles.Base">
+
+    <!-- General -->
+    <Style TargetType="Label"
+           ApplyToDerivedTypes="True">
+        <Setter Property="FontSize"
+                Value="Medium" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource TextColor}" />
+    </Style>
+    <Style TargetType="Label"
+           x:Key="text-default">
+        <Setter Property="TextColor"
+                Value="{DynamicResource TextColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-default">
+        <Setter Property="TextColor"
+                Value="{DynamicResource TextColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-muted"
+           ApplyToDerivedTypes="True">
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           x:Key="text-danger">
+        <Setter Property="TextColor"
+                Value="{DynamicResource DangerColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-danger">
+        <Setter Property="TextColor"
+                Value="{DynamicResource DangerColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-success">
+        <Setter Property="TextColor"
+                Value="{DynamicResource SuccessColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-sm">
+        <Setter Property="FontSize"
+                Value="Small" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-lg"
+           ApplyToDerivedTypes="True">
+        <Setter Property="FontSize"
+                Value="Large" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-bold">
+        <Setter Property="FontAttributes"
+                Value="Bold" />
+    </Style>
+    <!--[MAUI-Migration][Color-default]-->
+    <Style TargetType="Label"
+           Class="text-html"
+           ApplyToDerivedTypes="True">
+        <Setter Property="TextColor"
+                Value="#ffffff" />
+        <Setter Property="TextType"
+                Value="Html" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-body">
+        <Setter Property="FontSize"
+                Value="Body" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource TextColor}" />
+    </Style>
+
+    <!-- Pages -->
+    <Style TargetType="TabbedPage"
+           ApplyToDerivedTypes="True">
+        <Setter Property="BarBackgroundColor"
+                Value="{DynamicResource TabBarBackgroundColor}" />
+        <Setter Property="SelectedTabColor"
+                Value="{DynamicResource TabBarSelectedItemColor}" />
+        <Setter Property="UnselectedTabColor"
+                Value="{DynamicResource TabBarItemColor}" />
+    </Style>
+  <Style TargetType="NavigationPage"
+         ApplyToDerivedTypes="True">
+    <Setter Property="BarTextColor"
+            Value="{DynamicResource NavigationBarTextColor}" />
+    <Setter Property="BarBackgroundColor"
+            Value="{DynamicResource NavigationBarBackgroundColor}" />
+  </Style>
+
+    <!-- Buttons -->
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="btn-icon">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+    </Style>
+    <Style TargetType="Button"
+           Class="btn-muted"
+           ApplyToDerivedTypes="True">
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+    </Style>
+    <Style TargetType="Button"
+           Class="btn-disabled"
+           ApplyToDerivedTypes="True">
+        <Setter Property="TextColor"
+                Value="{DynamicResource DisabledIconColor}" />
+    </Style>
+    <Style x:Key="btn-fab" TargetType="Button">
+        <Setter Property="HeightRequest" 
+                Value="56" />
+        <Setter Property="WidthRequest" 
+                Value="56" />
+        <Setter Property="HorizontalOptions" 
+                Value="CenterAndExpand" />
+        <Setter Property="VerticalOptions" 
+                Value="CenterAndExpand" />
+        <Setter Property="Padding" 
+                Value="16" />
+        <Setter Property="Margin" 
+                Value="16" />
+        <Setter Property="CornerRadius" 
+                Value="100" />
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource FabColor}" />
+    </Style>
+    
+    <Style TargetType="controls:IconLabelButton" 
+           ApplyToDerivedTypes="True"
+           Class="btn-icon-secondary">
+        <Setter Property="IconLabelColor"
+                Value="{DynamicResource ButtonTextColorOpacity}" />
+        <Setter Property="IconLabelBorderColor"
+                Value="{DynamicResource ButtonBorderColor}" />
+        <Setter Property="IconLabelBackgroundColor"
+                Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="CornerRadius"
+                Value="5" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="IconLabelColor"
+                                    Value="{DynamicResource ButtonTextColorDisabled}" />
+                            <Setter Property="IconLabelBackgroundColor"
+                                    Value="{DynamicResource ButtonBackgroundColorDisabled}" />
+                            <Setter Property="IconLabelBorderColor"
+                                    Value="{DynamicResource ButtonBackgroundColorDisabled}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+    <!-- Title -->
+    <Style TargetType="Button"
+           Class="btn-title"
+           ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource TitleTextColor}" />
+    </Style>
+
+    <!-- List -->
+    <Style TargetType="CollectionView"
+           Class="list">
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="list-row-header">
+        <Setter Property="Orientation"
+                Value="Horizontal" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-header">
+        <Setter Property="HorizontalOptions"
+                Value="FillAndExpand" />
+        <Setter Property="VerticalOptions"
+                Value="FillAndExpand" />
+        <Setter Property="VerticalTextAlignment"
+                Value="Center" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-header-sub">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="HorizontalTextAlignment"
+                Value="End" />
+        <Setter Property="VerticalTextAlignment"
+                Value="Center" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+        <Setter Property="HorizontalOptions"
+                Value="End" />
+        <Setter Property="VerticalOptions"
+                Value="CenterAndExpand" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="list-row">
+        <Setter Property="Padding"
+                Value="10, 12" />
+    </Style>
+    <Style TargetType="controls:ExtendedStackLayout"
+           Class="list-row">
+        <Setter Property="Padding"
+                Value="10, 12" />
+    </Style>
+    <Style TargetType="Grid"
+           Class="list-row">
+        <Setter Property="Padding"
+                Value="2, 5, 0, 5" />
+    </Style>
+    <Style TargetType="controls:ExtendedGrid"
+           Class="list-row">
+        <Setter Property="Padding"
+                Value="2, 5, 0, 5" />
+    </Style>
+    <Style TargetType="BoxView"
+           Class="list-section-separator-top">
+        <Setter Property="HeightRequest"
+                Value="1" />
+    </Style>
+    <Style TargetType="BoxView"
+           Class="list-section-separator-bottom">
+        <Setter Property="HeightRequest"
+                Value="1" />
+    </Style>
+    <Style TargetType="BoxView"
+           Class="list-item-separator-bottom">
+        <Setter Property="HeightRequest"
+                Value="1" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-title">
+    </Style>
+    <Style TargetType="Label"
+           Class="list-sub">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="accountlist-title">
+    </Style>
+    <Style TargetType="Label"
+           Class="accountlist-sub">
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           ApplyToDerivedTypes="True"
+           Class="list-title-icon">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-subtitle">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-icon"
+           ApplyToDerivedTypes="True">
+        <Setter Property="MinimumWidthRequest"
+                Value="26" />
+        <Setter Property="MinimumHeightRequest"
+                Value="26" />
+        <Setter Property="HorizontalTextAlignment"
+                Value="Center" />
+        <Setter Property="VerticalTextAlignment"
+                Value="Center" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="list-row-button">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource ButtonColor}" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="list-row-button-text">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource ButtonTextColor}" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="segmented-button">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="BorderColor"
+                Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="BorderWidth"
+                Value="1" />
+        <Setter Property="CornerRadius"
+                Value="0" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="FontAttributes"
+                Value="None" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                    Value="{DynamicResource PrimaryColor}" />
+                            <Setter Property="BorderWidth"
+                                    Value="0" />
+                            <Setter Property="TextColor"
+                                    Value="{DynamicResource TitleTextColor}" />
+                            <Setter Property="FontAttributes"
+                                    Value="Bold" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!-- Box -->
+
+    <Style TargetType="StackLayout"
+           Class="box">
+        <Setter Property="Padding"
+                Value="10, 0" />
+        <Setter Property="Spacing"
+                Value="0" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-bottom">
+        <Setter Property="Padding"
+                Value="10, 0, 10, 10" />
+        <Setter Property="Spacing"
+                Value="0" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row-header">
+        <Setter Property="Padding"
+                Value="0, 10, 0, 5" />
+    </Style>
+    <Style TargetType="Label"
+           Class="box-header">
+    </Style>
+    <Style TargetType="Grid"
+           Class="box-row">
+        <Setter Property="Padding"
+                Value="0, 10" />
+        <Setter Property="RowSpacing"
+                Value="0" />
+        <Setter Property="ColumnSpacing"
+                Value="10" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row">
+        <Setter Property="Padding"
+                Value="0, 10" />
+        <Setter Property="Spacing"
+                Value="0" />
+    </Style>
+    <Style TargetType="Grid"
+           Class="box-row-input">
+        <Setter Property="Padding"
+                Value="0, 10, 0, 0" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row-input">
+        <Setter Property="Padding"
+                Value="0, 10, 0, 0" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row-switch">
+        <Setter Property="Orientation"
+                Value="Horizontal" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row-stepper">
+        <Setter Property="Orientation"
+                Value="Horizontal" />
+        <Setter Property="Spacing"
+                Value="10" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row-slider">
+        <Setter Property="Orientation"
+                Value="Horizontal" />
+        <Setter Property="Spacing"
+                Value="5" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="box-row-button">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="BorderWidth"
+                Value="0" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource ButtonColor}" />
+        <Setter Property="HorizontalOptions"
+                Value="End" />
+        <Setter Property="VerticalOptions"
+                Value="CenterAndExpand" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="box-row-button-muted">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="BorderWidth"
+                Value="0" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+        <Setter Property="HorizontalOptions"
+                Value="End" />
+        <Setter Property="VerticalOptions"
+                Value="CenterAndExpand" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="box-overlay">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="BorderWidth"
+                Value="0" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="TextColor"
+                Value="Transparent" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled" />
+                    <VisualState x:Name="Focused" />
+                    <VisualState x:Name="Selected" />
+                    <VisualState x:Name="Pressed" />
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+    <Style TargetType="BoxView"
+           Class="box-row-separator">
+        <Setter Property="HeightRequest"
+                Value="1" />
+        <Setter Property="Color"
+                Value="{DynamicResource BoxBorderColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="box-label">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="FontAttributes"
+                Value="Bold" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="box-label-regular">
+        <Setter Property="FontSize"
+                Value="Medium" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource TextColor}" />
+        <Setter Property="VerticalOptions"
+                Value="Center" />
+    </Style>
+    <Style TargetType="Label"
+           ApplyToDerivedTypes="True"
+           Class="box-value">
+        <Setter Property="LineBreakMode"
+                Value="CharacterWrap" />
+        <Setter Property="Margin"
+                Value="0, 5, 0, 0" />
+    </Style>
+    <Style TargetType="Label"
+           Class="box-sub-label">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           ApplyToDerivedTypes="True"
+           Class="box-footer-label">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="box-footer-label-switch">
+        <Setter Property="Margin"
+                Value="0, -10, 0, 0" />
+    </Style>
+    <Style TargetType="DatePicker"
+           Class="datetime-picker">
+        <Setter Property="FontSize"
+                Value="Medium" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource TextColor}" />
+    </Style>
+
+    <!--Entry-->
+    <Style TargetType="InputView"
+           Class="capitalize-word-input"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Keyboard">
+            <Keyboard x:FactoryMethod="Create">
+                <x:Arguments>
+                    <KeyboardFlags>CapitalizeWord</KeyboardFlags>
+                </x:Arguments>
+            </Keyboard>
+        </Setter>
+    </Style>
+    <Style TargetType="InputView"
+           Class="capitalize-sentence-input"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Keyboard">
+            <Keyboard x:FactoryMethod="Create">
+                <x:Arguments>
+                    <KeyboardFlags>CapitalizeSentence</KeyboardFlags>
+                </x:Arguments>
+            </Keyboard>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="controls:CircularProgressbarView">
+        <Setter Property="ProgressColor"
+                Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="EndingProgressColor"
+                Value="{DynamicResource DangerColor}" />
+        <Setter Property="BackgroundProgressColor"
+                Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="StrokeWidth"
+                Value="3" />
+        <Setter Property="Radius"
+                Value="15" />
+    </Style>
+    
+    <Style TargetType="Entry" Class="entry-visual-disabled">
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor"
+                                    Value="{DynamicResource MutedColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="controls:PasswordStrengthProgressBar">
+        <Setter Property="VeryWeakColor"
+                Value="{DynamicResource DangerColor}" />
+        <Setter Property="WeakColor"
+                Value="{DynamicResource WarningColor}" />
+        <Setter Property="GoodColor"
+                Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="StrongColor"
+                Value="{DynamicResource SuccessColor}" />
+    </Style>
+
+    <Style TargetType="Label"
+           ApplyToDerivedTypes="True"
+           Class="settings-navigatable-label">
+        <Setter Property="LineBreakMode" Value="TailTruncation" />
+        <Setter Property="Margin" Value="16,12" />
+    </Style>
+
+    <Style TargetType="controls:ExternalLinkItemView"
+           ApplyToDerivedTypes="True"
+           Class="settings-external-link-item">
+        <Setter Property="Padding" Value="16,12" />
+    </Style>
+
+    <Style TargetType="controls:BaseSettingItemView"
+           ApplyToDerivedTypes="True"
+           Class="settings-item-view">
+        <Setter Property="Padding" Value="16,12" />
+    </Style>
+
+    <Style TargetType="BoxView"
+           Class="settings-box-row-separator">
+        <Setter Property="HeightRequest"
+                Value="1" />
+        <Setter Property="Color"
+                Value="{DynamicResource BoxBorderColor}" />
+        <Setter Property="IsVisible"
+                Value="{OnPlatform Android=True, iOS=False}" />
+    </Style>
+    
+</ResourceDictionary>

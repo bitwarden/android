@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AuthenticationServices;
 using Bit.App.Models;
 using Bit.App.Pages;
-using Bit.App.Resources;
+using Bit.Core.Resources.Localization;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
@@ -17,7 +17,7 @@ using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using Foundation;
 using UIKit;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls.Compatibility;
 
 namespace Bit.iOS.Core.Controllers
 {

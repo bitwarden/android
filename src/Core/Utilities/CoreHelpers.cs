@@ -7,6 +7,7 @@ using System.Web;
 using Bit.Core.Models.Domain;
 using Bit.Core.Services;
 using Newtonsoft.Json;
+using Color = Microsoft.Maui.Graphics.Color;
 
 namespace Bit.Core.Utilities
 {
@@ -268,7 +269,7 @@ namespace Bit.Core.Utilities
         {
             if (new ColorConverter().ConvertFromString(hexColor) is Color bgColor)
             {
-                var luminance = bgColor.R * 0.299 + bgColor.G * 0.587 + bgColor.B * 0.114;
+                var luminance = bgColor.Red * 0.299 + bgColor.Green * 0.587 + bgColor.Blue * 0.114;
                 return luminance > threshold ? "#ff000000" : "#ffffffff";
             }
 

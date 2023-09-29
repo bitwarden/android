@@ -1,5 +1,6 @@
 ﻿using Bit.Core.Models.View;
 using Newtonsoft.Json;
+using CollectionView = Bit.Core.Models.View.CollectionView;
 
 namespace Bit.Core.Models.Export
 {

@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.AttachmentsPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:views="clr-namespace:Bit.Core.Models.View"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:core="clr-namespace:Bit.Core"
+    x:DataType="pages:AttachmentsPageViewModel"
+    x:Name="_page"
+    Title="{Binding PageTitle}">
+    <ContentPage.BindingContext>
+        <pages:AttachmentsPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
+        <ToolbarItem Text="{u:I18n Save}" Command="{Binding SubmitAsyncCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+            <u:IsNotNullConverter x:Key="notNull" />
+            <u:IsNullConverter x:Key="null" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView x:Name="_scrollView">
+        <StackLayout Spacing="20">
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row" Padding="10, 20"
+                             IsVisible="{Binding HasAttachments, Converter={StaticResource inverseBool}}">
+                    <Label Text="{u:I18n NoAttachments}" HorizontalTextAlignment="Center" AutomationId="NoAttachmentsLabel" />
+                </StackLayout>
+                <controls:RepeaterView ItemsSource="{Binding Attachments}" IsVisible="{Binding HasAttachments}" AutomationId="AttachmentsList">
+                    <controls:RepeaterView.ItemTemplate>
+                        <DataTemplate x:DataType="views:AttachmentView">
+                            <StackLayout Spacing="0" Padding="0">
+                                <StackLayout Orientation="Horizontal" StyleClass="box-row" Spacing="10" AutomationId="AttachmentRow">
+                                    <Label
+                                        Text="{Binding FileName, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        VerticalTextAlignment="Center"
+                                        HorizontalOptions="StartAndExpand"
+                                        AutomationId="AttachmentFileNameLabel" />
+                                    <Label
+                                        Text="{Binding SizeName, Mode=OneWay}"
+                                        StyleClass="box-sub-label"
+                                        HorizontalTextAlignment="End"
+                                        VerticalTextAlignment="Center"
+                                        AutomationId="AttachmentFileSizeLabel" />
+                                    <controls:IconButton 
+                                        StyleClass="box-row-button, box-row-button-platform"
+                                        Text="{Binding Source={x:Static core:BitwardenIcons.Trash}}"
+                                        Command="{Binding BindingContext.DeleteAttachmentCommand, Source={x:Reference _page}}"
+                                        CommandParameter="{Binding .}"
+                                        VerticalOptions="Center"
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        SemanticProperties.Description="{u:I18n Delete}"
+                                        AutomationId="AttachmentDeleteButton" />
+                                </StackLayout>
+                                <BoxView StyleClass="box-row-separator" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </controls:RepeaterView.ItemTemplate>
+                </controls:RepeaterView>
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n AddNewAttachment, Header=True}"
+                            StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row">
+                    <Label
+                        IsVisible="{Binding FileName, Converter={StaticResource null}}"
+                        Text="{u:I18n NoFileChosen}"
+                        LineBreakMode="CharacterWrap"
+                        StyleClass="text-sm, text-muted"
+                        HorizontalOptions="FillAndExpand"
+                        HorizontalTextAlignment="Center"
+                        AutomationId="NoFileChosenLabel" />
+                    <Label
+                        IsVisible="{Binding FileName, Converter={StaticResource notNull}}"
+                        Text="{Binding FileName}"
+                        LineBreakMode="CharacterWrap"
+                        StyleClass="text-sm, text-muted"
+                        HorizontalOptions="FillAndExpand"
+                        HorizontalTextAlignment="Center"
+                        AutomationId="NewAttachmentNameLabel" />
+                </StackLayout>
+                <Button Text="{u:I18n ChooseFile}" StyleClass="box-button-row"
+                        Clicked="ChooseFile_Clicked"
+                        AutomationId="ChooseFileButton"></Button>
+                <Label
+                    Margin="0, 10, 0, 0"
+                    Text="{u:I18n MaxFileSize}"
+                    StyleClass="box-footer-label" />
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+
+</pages:BaseContentPage>

@@ -1,10 +1,9 @@
 ﻿using Bit.App.Utilities;
 using Foundation;
+using Microsoft.Maui.Controls.Compatibility.Platform.iOS;
 using System;
 using System.Diagnostics;
 using UIKit;
-using Xamarin.Forms;
-using Xamarin.Forms.Platform.iOS;
 
 namespace Bit.iOS.Core.Views
 {

@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.CiphersPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:views="clr-namespace:Bit.Core.Models.View"
+    xmlns:core="clr-namespace:Bit.Core"
+    x:DataType="pages:CiphersPageViewModel"
+    x:Name="_page"
+    Title="{Binding PageTitle}">
+
+    <ContentPage.BindingContext>
+        <pages:CiphersPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
+                         x:Name="_closeItem" x:Key="closeItem" />
+            <StackLayout
+                Orientation="Horizontal"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                Spacing="0"
+                Padding="0"
+                x:Name="_titleLayout"
+                x:Key="titleLayout">
+                <controls:MiButton
+                    StyleClass="btn-title, btn-title-platform"
+                    Text="&#xe5c4;"
+                    VerticalOptions="CenterAndExpand"
+                    Clicked="BackButton_Clicked"
+                    x:Name="_backButton"
+                    AutomationProperties.IsInAccessibleTree="True"
+                    SemanticProperties.Description="{u:I18n TapToGoBack}"/>
+                <controls:ExtendedSearchBar
+                    x:Name="_searchBar"
+                    HorizontalOptions="FillAndExpand"
+                    TextChanged="SearchBar_TextChanged"
+                    SearchButtonPressed="SearchBar_SearchButtonPressed"
+                    Placeholder="{Binding PageTitle}"
+                    AutomationId="SearchBar" />
+            </StackLayout>
+            <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform"
+                     x:Name="_separator" x:Key="separator" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout x:Name="_mainLayout" Spacing="0" Padding="0">
+        <StackLayout
+            IsVisible="{Binding ShowVaultFilter}"
+            Orientation="Horizontal"
+            HorizontalOptions="FillAndExpand"
+            Margin="0,5,0,0">
+            <Label
+                Text="{Binding VaultFilterDescription}"
+                LineBreakMode="TailTruncation"
+                Margin="10,0"
+                StyleClass="text-md, text-muted"
+                VerticalOptions="Center"
+                HorizontalOptions="StartAndExpand"
+                AutomationProperties.IsInAccessibleTree="True"
+                SemanticProperties.Description="{u:I18n Filter}" />
+            <controls:MiButton
+                Text="{Binding Source={x:Static core:BitwardenIcons.ViewCellMenu}}"
+                StyleClass="list-row-button-text, list-row-button-platform"
+                Command="{Binding VaultFilterCommand}"
+                VerticalOptions="Center"
+                HorizontalOptions="End"
+                AutomationProperties.IsInAccessibleTree="True"
+                SemanticProperties.Description="{u:I18n Filter}" />
+        </StackLayout>
+        <BoxView StyleClass="box-row-separator" />
+
+        <controls:IconLabel IsVisible="{Binding ShowSearchDirection}"
+               Text="{Binding Source={x:Static core:BitwardenIcons.Search}}"
+               StyleClass="text-muted"
+               FontSize="50"
+               VerticalOptions="CenterAndExpand"
+               HorizontalOptions="CenterAndExpand"
+               HorizontalTextAlignment="Center" />
+        <StackLayout
+            HorizontalOptions="Center"
+            VerticalOptions="StartAndExpand"
+            Margin="20, 80, 20, 0"
+            Spacing="20"
+            IsVisible="{Binding ShowNoData}">
+            <Image
+                Source="empty_items_state" />
+            <Label
+                Text="{u:I18n ThereAreNoItemsThatMatchTheSearch}"
+                HorizontalTextAlignment="Center"
+                AutomationId="NoSearchResultsLabel" />
+            <Button
+                Text="{u:I18n AddAnItem}"
+                Command="{Binding AddCipherCommand}"
+                IsVisible="{Binding ShowAddCipher}"/>
+        </StackLayout>
+        <controls:ExtendedCollectionView
+                IsVisible="{Binding ShowList}"
+                ItemsSource="{Binding Ciphers}"
+                VerticalOptions="FillAndExpand"
+                SelectionMode="Single"
+                SelectionChanged="RowSelected"
+                StyleClass="list, list-platform"
+                ExtraDataForLogging="Ciphers Page"
+                AutomationId="CipherList">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="views:CipherView">
+                    <controls:CipherViewCell
+                        Cipher="{Binding .}"
+                        ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}"
+                        WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
+                        />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </controls:ExtendedCollectionView>
+    </StackLayout>
+
+</pages:BaseContentPage>

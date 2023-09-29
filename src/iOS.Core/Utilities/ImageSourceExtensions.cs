@@ -2,9 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Services;
+using Microsoft.Maui.Controls.Compatibility.Platform.iOS;
 using UIKit;
-using Xamarin.Forms;
-using Xamarin.Forms.Platform.iOS;
 
 namespace Bit.iOS.Core.Utilities
 {
@@ -21,7 +20,7 @@ namespace Bit.iOS.Core.Utilities
                 return null;
             }
 
-            var handler = Xamarin.Forms.Internals.Registrar.Registered.GetHandlerForObject<IImageSourceHandler>(source);
+            var handler = Microsoft.Maui.Controls.Internals.Registrar.Registered.GetHandlerForObject<IImageSourceHandler>(source);
             if (handler == null)
             {
                 LoggerHelper.LogEvenIfCantBeResolved(new InvalidOperationException("GetNativeImageAsync failed cause IImageSourceHandler couldn't be found"));

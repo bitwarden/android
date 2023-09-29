@@ -1,6 +1,6 @@
 ﻿using Bit.App.Utilities;
+using Microsoft.Maui.Controls.Compatibility.Platform.iOS;
 using UIKit;
-using Xamarin.Forms.Platform.iOS;
 
 namespace Bit.iOS.Core.Utilities
 {
@@ -75,8 +75,8 @@ namespace Bit.iOS.Core.Utilities
 
         public static UIFont GetDangerFont()
         {
-            return Xamarin.Forms.Font.SystemFontOfSize(Xamarin.Forms.NamedSize.Small, 
-                Xamarin.Forms.FontAttributes.Bold).ToUIFont();
+            // TODO: [MAUI-Migration] [Deprecated] NamedSizes are deprecated on MAUI
+            return Microsoft.Maui.Font.SystemFontOfSize(Device.GetNamedSize(NamedSize.Small, typeof(UILabel)), FontWeight.Bold).ToUIFont();
         }
 
         private static void SetThemeVariables(string theme, bool osDarkModeEnabled)

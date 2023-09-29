@@ -5,7 +5,7 @@ using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Pages;
-using Bit.App.Resources;
+using Bit.Core.Resources.Localization;
 using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.App.Utilities.AccountManagement;
@@ -17,7 +17,6 @@ using Bit.iOS.Core.Services;
 using CoreNFC;
 using Foundation;
 using UIKit;
-using Xamarin.Forms;
 
 namespace Bit.iOS.Core.Utilities
 {
@@ -36,8 +35,6 @@ namespace Bit.iOS.Core.Utilities
             out IAccountsManager accountsManager)
             where T : UIViewController, IAccountsManagerHost
         {
-            Forms.Init();
-
             if (ServiceContainer.RegisteredServices.Count > 0)
             {
                 ServiceContainer.Reset();
@@ -106,7 +103,7 @@ namespace Bit.iOS.Core.Utilities
             var storageMediatorService = new StorageMediatorService(mobileStorageService, secureStorageService, preferencesStorage);
             var stateService = new StateService(mobileStorageService, secureStorageService, storageMediatorService, messagingService);
             var stateMigrationService =
-                new StateMigrationService(DeviceType.iOS, liteDbStorage, preferencesStorage, secureStorageService);
+                new StateMigrationService(Bit.Core.Enums.DeviceType.iOS, liteDbStorage, preferencesStorage, secureStorageService);
             var deviceActionService = new DeviceActionService();
             var fileService = new FileService(stateService, messagingService);
             var clipboardService = new ClipboardService(stateService);

@@ -3,7 +3,6 @@ using Bit.Core.Abstractions;
 using Foundation;
 using MobileCoreServices;
 using UIKit;
-using Xamarin.Forms;
 
 namespace Bit.iOS.Core.Services
 {

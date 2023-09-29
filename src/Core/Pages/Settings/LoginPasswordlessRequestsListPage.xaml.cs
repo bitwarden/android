@@ -1,0 +1,61 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Bit.App.Utilities;
+using Bit.Core.Abstractions;
+using Bit.Core.Models.Response;
+using Bit.Core.Utilities;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
+
+namespace Bit.App.Pages
+{
+    public partial class LoginPasswordlessRequestsListPage : BaseContentPage
+    {
+        private LoginPasswordlessRequestsListViewModel _vm;
+
+        public LoginPasswordlessRequestsListPage()
+        {
+            InitializeComponent();
+            SetActivityIndicator(_mainContent);
+            _vm = BindingContext as LoginPasswordlessRequestsListViewModel;
+            _vm.Page = this;
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            await LoadOnAppearedAsync(_mainLayout, false, _vm.RefreshAsync, _mainContent);
+
+            UpdatePlaceholder();
+        }
+
+        private async void Close_Clicked(object sender, System.EventArgs e)
+        {
+            if (DoOnce())
+            {
+                await Navigation.PopModalAsync();
+            }
+        }
+
+        public override async Task UpdateOnThemeChanged()
+        {
+            await base.UpdateOnThemeChanged();
+
+            UpdatePlaceholder();
+        }
+
+        private void UpdatePlaceholder()
+        {
+            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                    _emptyPlaceholder.Source = ImageSource.FromFile(ThemeManager.UsingLightTheme ? "empty_login_requests" : "empty_login_requests_dark"));
+            }
+        }
+    }
+}
+

@@ -8,6 +8,7 @@ using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
+using DeviceType = Bit.Core.Enums.DeviceType;
 
 namespace Bit.Core.Abstractions
 {

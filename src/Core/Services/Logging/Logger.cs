@@ -8,8 +8,8 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Crashes;
+//using Microsoft.AppCenter;
+//using Microsoft.AppCenter.Crashes;
 using Newtonsoft.Json;
 
 namespace Bit.Core.Services
@@ -64,35 +64,36 @@ namespace Bit.Core.Services
             _userId = await ServiceContainer.Resolve<IStateService>("stateService").GetActiveUserIdAsync();
             _appId = await ServiceContainer.Resolve<IAppIdService>("appIdService").GetAppIdAsync();
 
-            switch (device)
-            {
-                case Enums.DeviceType.Android:
-                    AppCenter.Start(DroidAppSecret, typeof(Crashes));
-                    break;
-                case Enums.DeviceType.iOS:
-                    AppCenter.Start(iOSAppSecret, typeof(Crashes));
-                    break;
-                default:
-                    throw new AppCenterException("Cannot start AppCenter. Device type is not configured.");
+            // TODO: [MAUI-Migration] [Critical]
+            //switch (device)
+            //{
+            //    case Enums.DeviceType.Android:
+            //        AppCenter.Start(DroidAppSecret, typeof(Crashes));
+            //        break;
+            //    case Enums.DeviceType.iOS:
+            //        AppCenter.Start(iOSAppSecret, typeof(Crashes));
+            //        break;
+            //    default:
+            //        throw new AppCenterException("Cannot start AppCenter. Device type is not configured.");
 
-            }
+            //}
 
-            AppCenter.SetUserId(_userId);
+            //AppCenter.SetUserId(_userId);
 
-            Crashes.GetErrorAttachments = (ErrorReport report) =>
-            {
-                return new ErrorAttachmentLog[]
-                {
-                    ErrorAttachmentLog.AttachmentWithText(Description, "crshdesc.txt"),
-                };
-            };
+            //Crashes.GetErrorAttachments = (ErrorReport report) =>
+            //{
+            //    return new ErrorAttachmentLog[]
+            //    {
+            //        ErrorAttachmentLog.AttachmentWithText(Description, "crshdesc.txt"),
+            //    };
+            //};
 
             _isInitialised = true;
         }
 
-        public async Task<bool> IsEnabled() => await AppCenter.IsEnabledAsync();
+        public async Task<bool> IsEnabled() => false;// await AppCenter.IsEnabledAsync();
 
-        public async Task SetEnabled(bool value) => await AppCenter.SetEnabledAsync(value);
+        public async Task SetEnabled(bool value) { }// await AppCenter.SetEnabledAsync(value);
 
         public void Error(string message,
                           IDictionary<string, string> extraData = null,
@@ -108,28 +109,28 @@ namespace Bit.Core.Services
                 ["Method"] = memberName
             };
 
-            var exception = new Exception(message ?? $"Error found in: {classAndMethod}");
-            if (extraData == null)
-            {
-                Crashes.TrackError(exception, properties);
-            }
-            else
-            {
-                var data = properties.Concat(extraData).ToDictionary(x => x.Key, x => x.Value);
-                Crashes.TrackError(exception, data);
-            }
+            //var exception = new Exception(message ?? $"Error found in: {classAndMethod}");
+            //if (extraData == null)
+            //{
+            //    Crashes.TrackError(exception, properties);
+            //}
+            //else
+            //{
+            //    var data = properties.Concat(extraData).ToDictionary(x => x.Key, x => x.Value);
+            //    Crashes.TrackError(exception, data);
+            //}
         }
 
         public void Exception(Exception exception)
         {
-            try
-            {
-                Crashes.TrackError(exception);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
+            //try
+            //{
+            //    Crashes.TrackError(exception);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Debug.WriteLine(ex.Message);
+            //}
         }
     }
 }

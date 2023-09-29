@@ -22,7 +22,8 @@ namespace Bit.Core.Services
 #if !FDROID
                 // just in case the caller throws the exception in a moment where the logger can't be resolved
                 // we need to track the error as well
-                Microsoft.AppCenter.Crashes.Crashes.TrackError(ex);
+                // [MAUI-Migration] [Critical]
+                //Microsoft.AppCenter.Crashes.Crashes.TrackError(ex);
 #endif
 
             }
