@@ -25,7 +25,7 @@
     <style name="LaunchTheme" parent="Theme.SplashScreen">
         <item name="postSplashScreenTheme">@style/BaseTheme</item>
         <item name="windowSplashScreenAnimatedIcon">
-            @drawable/splash_screen_round
+            @drawable/logo_rounded
         </item>
         <item name="windowSplashScreenBackground">
             @color/ic_launcher_background
