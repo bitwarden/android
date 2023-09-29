@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.theme
 import android.app.Activity
 import android.content.Context
 import android.os.Build
+import androidx.annotation.ColorRes
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
@@ -18,7 +19,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.R.color
 
 /**
  * The overall application theme. This can be configured to support a [darkTheme] and
@@ -61,14 +61,62 @@ fun BitwardenTheme(
 
 private fun darkColorScheme(context: Context): ColorScheme =
     darkColorScheme(
-        primary = Color(context.getColor(color.dark_primary)),
-        secondary = Color(context.getColor(R.color.dark_primary)),
-        tertiary = Color(context.getColor(R.color.dark_primary)),
+        primary = R.color.dark_primary.toColor(context),
+        onPrimary = R.color.dark_on_primary.toColor(context),
+        primaryContainer = R.color.dark_primary_container.toColor(context),
+        onPrimaryContainer = R.color.dark_on_primary_container.toColor(context),
+        secondary = R.color.dark_secondary.toColor(context),
+        onSecondary = R.color.dark_on_secondary.toColor(context),
+        secondaryContainer = R.color.dark_secondary_container.toColor(context),
+        onSecondaryContainer = R.color.dark_on_secondary_container.toColor(context),
+        tertiary = R.color.dark_tertiary.toColor(context),
+        onTertiary = R.color.dark_on_tertiary.toColor(context),
+        tertiaryContainer = R.color.dark_tertiary_container.toColor(context),
+        onTertiaryContainer = R.color.dark_on_tertiary_container.toColor(context),
+        error = R.color.dark_error.toColor(context),
+        onError = R.color.dark_on_error.toColor(context),
+        errorContainer = R.color.dark_error_container.toColor(context),
+        onErrorContainer = R.color.dark_on_error_container.toColor(context),
+        surface = R.color.dark_surface.toColor(context),
+        onSurface = R.color.dark_on_surface.toColor(context),
+        onSurfaceVariant = R.color.dark_on_surface_variant.toColor(context),
+        outline = R.color.dark_outline.toColor(context),
+        outlineVariant = R.color.dark_outline_variant.toColor(context),
+        inverseSurface = R.color.dark_inverse_surface.toColor(context),
+        inverseOnSurface = R.color.dark_inverse_on_surface.toColor(context),
+        inversePrimary = R.color.dark_inverse_primary.toColor(context),
+        scrim = R.color.dark_scrim.toColor(context),
     )
 
 private fun lightColorScheme(context: Context): ColorScheme =
     lightColorScheme(
-        primary = Color(context.getColor(color.primary)),
-        secondary = Color(context.getColor(R.color.primary)),
-        tertiary = Color(context.getColor(R.color.primary)),
+        primary = R.color.primary.toColor(context),
+        onPrimary = R.color.on_primary.toColor(context),
+        primaryContainer = R.color.primary_container.toColor(context),
+        onPrimaryContainer = R.color.on_primary_container.toColor(context),
+        secondary = R.color.secondary.toColor(context),
+        onSecondary = R.color.on_secondary.toColor(context),
+        secondaryContainer = R.color.secondary_container.toColor(context),
+        onSecondaryContainer = R.color.on_secondary_container.toColor(context),
+        tertiary = R.color.tertiary.toColor(context),
+        onTertiary = R.color.on_tertiary.toColor(context),
+        tertiaryContainer = R.color.tertiary_container.toColor(context),
+        onTertiaryContainer = R.color.on_tertiary_container.toColor(context),
+        error = R.color.error.toColor(context),
+        onError = R.color.on_error.toColor(context),
+        errorContainer = R.color.error_container.toColor(context),
+        onErrorContainer = R.color.on_error_container.toColor(context),
+        surface = R.color.surface.toColor(context),
+        onSurface = R.color.on_surface.toColor(context),
+        onSurfaceVariant = R.color.on_surface_variant.toColor(context),
+        outline = R.color.outline.toColor(context),
+        outlineVariant = R.color.outline_variant.toColor(context),
+        inverseSurface = R.color.inverse_surface.toColor(context),
+        inverseOnSurface = R.color.inverse_on_surface.toColor(context),
+        inversePrimary = R.color.inverse_primary.toColor(context),
+        scrim = R.color.scrim.toColor(context),
     )
+
+@ColorRes
+private fun Int.toColor(context: Context): Color =
+    Color(context.getColor(this))
