@@ -123,7 +123,7 @@ namespace Bit.App.Pages
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
                 _cipherDomain = await _cipherService.SaveAttachmentRawWithServerAsync(
-                    _cipherDomain, FileName, FileData);
+                    _cipherDomain, Cipher, FileName, FileData);
                 Cipher = await _cipherDomain.DecryptAsync();
                 await _deviceActionService.HideLoadingAsync();
                 _platformUtilsService.ShowToast("success", null, AppResources.AttachementAdded);

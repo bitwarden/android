@@ -31,25 +31,25 @@ namespace Bit.Core.Models.Domain
         public EncString Totp { get; set; }
         public Fido2Key Fido2Key { get; set; }
 
-        public async Task<LoginView> DecryptAsync(string orgId)
+        public async Task<LoginView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
             var view = await DecryptObjAsync(new LoginView(this), this, new HashSet<string>
             {
                 "Username",
                 "Password",
                 "Totp"
-            }, orgId);
+            }, orgId, key);
             if (Uris != null)
             {
                 view.Uris = new List<LoginUriView>();
                 foreach (var uri in Uris)
                 {
-                    view.Uris.Add(await uri.DecryptAsync(orgId));
+                    view.Uris.Add(await uri.DecryptAsync(orgId, key));
                 }
             }
             if (Fido2Key != null)
             {
-                view.Fido2Key = await Fido2Key.DecryptAsync(orgId);
+                view.Fido2Key = await Fido2Key.DecryptAsync(orgId, key);
             }
             return view;
         }
