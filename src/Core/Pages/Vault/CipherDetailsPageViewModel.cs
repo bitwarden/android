@@ -149,7 +149,7 @@ namespace Bit.App.Pages
         public bool IsIdentity => Cipher?.Type == Core.Enums.CipherType.Identity;
         public bool IsCard => Cipher?.Type == Core.Enums.CipherType.Card;
         public bool IsSecureNote => Cipher?.Type == Core.Enums.CipherType.SecureNote;
-        public FormattedString ColoredPassword => GeneratedValueFormatter.Format(Cipher.Login.Password);
+        public FormattedString ColoredPassword => Cipher?.Login != null ? GeneratedValueFormatter.Format(Cipher.Login.Password) : string.Empty;
         public FormattedString UpdatedText
         {
             get
@@ -251,8 +251,8 @@ namespace Bit.App.Pages
         }
         public double TotpProgress => string.IsNullOrEmpty(TotpSec) ? 0 : double.Parse(TotpSec) * 100 / _totpInterval;
         public bool IsDeleted => Cipher.IsDeleted;
-        public bool CanEdit => !Cipher.IsDeleted;
-        public bool CanClone => Cipher.IsClonable;
+        public bool CanEdit => Cipher != null && !Cipher.IsDeleted;
+        public bool CanClone => Cipher != null && Cipher.IsClonable;
 
         public async Task<bool> LoadAsync(Action finishedLoadingAction = null)
         {
