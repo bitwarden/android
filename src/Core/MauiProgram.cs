@@ -25,7 +25,6 @@ public static class MauiProgram
 #if ANDROID
                 effects.Add<AppEffects.FixedSizeEffect, AppEffects.FixedSizePlatformEffect>();
                 effects.Add<AppEffects.NoEmojiKeyboardEffect, AppEffects.NoEmojiKeyboardPlatformEffect>();
-                effects.Add<AppEffects.TabBarEffect, AppEffects.TabBarPlatformEffect>();
                 effects.Add<AppEffects.RemoveFontPaddingEffect, AppEffects.RemoveFontPaddingPlatformEffect>();
 #endif
                 customEffectsBuilder?.Invoke(effects);

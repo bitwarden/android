@@ -1,4 +1,5 @@
 ﻿using AndroidX.AppCompat.View.Menu;
+using AndroidX.Navigation.UI;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Google.Android.Material.BottomNavigation;
@@ -68,6 +69,7 @@ namespace Bit.App.Handlers
                 }
 
                 _bottomNavigationView = bottomNavigationView;
+                _bottomNavigationView.LabelVisibilityMode = LabelVisibilityMode.LabelVisibilityLabeled;
                 _bottomNavigationView.ItemReselected += BottomNavigationView_ItemReselected;
 			}
         }

@@ -58,8 +58,6 @@ namespace Bit.App.Pages
 
             if (DeviceInfo.Platform == DevicePlatform.Android)
             {
-                Effects.Add(new TabBarEffect());
-
                 Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific.TabbedPage.SetToolbarPlacement(this,
                 Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific.ToolbarPlacement.Bottom);
                 Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific.TabbedPage.SetIsSwipePagingEnabled(this, false);
