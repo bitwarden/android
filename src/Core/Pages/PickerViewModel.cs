@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bit.App.Abstractions;
+﻿using Bit.App.Abstractions;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 
-using Microsoft.Maui.ApplicationModel;
 using Bit.App.Utilities;
 
 namespace Bit.App.Pages
@@ -49,6 +44,8 @@ namespace Bit.App.Pages
         {
             get
             {
+                if (_items == null) { return string.Empty; }
+
                 if (_items.TryGetValue(_selectedKey, out var option))
                 {
                     return option;

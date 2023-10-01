@@ -29,6 +29,8 @@ namespace Bit.App
                     Bit.App.Handlers.StepperHandlerMappings.Setup();
                     Bit.App.Handlers.TimePickerHandlerMappings.Setup();
                     Bit.App.Handlers.ButtonHandlerMappings.Setup();
+
+                    handlers.AddHandler(typeof(TabbedPage), typeof(Bit.App.Handlers.CustomTabbedPageHandler));
 #else
                     iOS.Core.Handlers.ButtonHandlerMappings.Setup();
                     iOS.Core.Handlers.DatePickerHandlerMappings.Setup();

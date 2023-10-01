@@ -338,7 +338,10 @@ namespace Bit.App.Pages
 
         public string PlusAddressedEmail
         {
-            get => _usernameOptions.PlusAddressedEmail;
+            get
+            {
+                return _usernameOptions?.PlusAddressedEmail ?? string.Empty;
+            }
             set
             {
                 if (_usernameOptions != null && _usernameOptions.PlusAddressedEmail != value)
@@ -850,7 +853,7 @@ namespace Bit.App.Pages
                 }
             }
 
-            await Device.InvokeOnMainThreadAsync(() => Page.DisplayAlert(AppResources.AnErrorHasOccurred, message, AppResources.Ok));
+            await MainThread.InvokeOnMainThreadAsync(() => Page.DisplayAlert(AppResources.AnErrorHasOccurred, message, AppResources.Ok));
         }
 
         private string GetUsernameTypeLabelDescription(UsernameType value)

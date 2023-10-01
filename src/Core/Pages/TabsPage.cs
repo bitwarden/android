@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Bit.App.Effects;
+﻿using Bit.App.Effects;
 using Bit.App.Models;
 using Bit.Core.Resources.Localization;
 using Bit.App.Utilities;
@@ -8,8 +6,6 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -60,8 +56,7 @@ namespace Bit.App.Pages
             };
             Children.Add(settingsPage);
 
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.Android)
+            if (DeviceInfo.Platform == DevicePlatform.Android)
             {
                 Effects.Add(new TabBarEffect());
 
@@ -93,7 +88,7 @@ namespace Bit.App.Pages
             {
                 if (message.Command == "syncCompleted")
                 {
-                    Device.BeginInvokeOnMainThread(async () => await UpdateVaultButtonTitleAsync());
+                    MainThread.BeginInvokeOnMainThread(async () => await UpdateVaultButtonTitleAsync());
                 }
             });
             await UpdateVaultButtonTitleAsync();
@@ -131,7 +126,7 @@ namespace Bit.App.Pages
             CurrentPage = _sendGroupingsPage;
         }
 
-        protected async override void OnCurrentPageChanged()
+        protected override async void OnCurrentPageChanged()
         {
             if (CurrentPage is NavigationPage navPage)
             {
