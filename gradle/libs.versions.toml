@@ -10,18 +10,21 @@ minSdk = "28"
 accompanist = "0.30.1"
 androidGradlePlugin = "8.1.0"
 androidxActivity = "1.7.2"
-androidxComposeBom = "2023.06.01"
-androidxCore = "1.10.1"
+androidxComposeBom = "2023.09.02"
+# TODO: Once the Material3 color scheme changes are no longer in alpha, we should remove this
+#   individual dependency version and use the Compose BOM version (BIT-702).
+androidxComposeMaterial3 = "1.2.0-alpha08"
+androidxCore = "1.12.0"
 androidxHiltNavigationCompose = "1.0.0"
-androidxLifecycle = "2.6.1"
-androidxNavigation = "2.7.2"
+androidxLifecycle = "2.6.2"
+androidxNavigation = "2.7.3"
 androidxRoom = "2.5.2"
 androidxSplash = "1.1.0-alpha02"
 # Once the app and SDK reach a critical point of completeness we should begin fixing the version
 # here (BIT-311).
 bitwardenSdk = "0.3.0-SNAPSHOT"
 detekt = "1.23.1"
-firebaseBom = "32.2.2"
+firebaseBom = "32.3.1"
 glide = "4.15.1"
 hilt = "2.47"
 junit5 = "5.8.2"
@@ -45,7 +48,7 @@ zxing = "3.5.2"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-compose-animation = { module = "androidx.compose.animation:animation" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
-androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "androidxComposeMaterial3" }
 androidx-compose-runtime = { module = "androidx.compose.runtime:runtime" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui" }
 androidx-compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
