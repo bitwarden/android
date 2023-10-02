@@ -16,9 +16,10 @@ using Bit.iOS.Core.Views;
 using CoreFoundation;
 using CoreNFC;
 using Foundation;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Compatibility;
+using Microsoft.Maui.Platform;
 using UIKit;
-using Xamarin.Forms;
-using Xamarin.Forms.Platform.iOS;
 
 namespace Bit.iOS.Autofill
 {
@@ -42,7 +43,9 @@ namespace Bit.iOS.Autofill
             try
             {
                 InitApp();
+
                 base.ViewDidLoad();
+
                 Logo.Image = new UIImage(ThemeHelpers.LightTheme ? "logo.png" : "logo_white.png");
                 View.BackgroundColor = ThemeHelpers.SplashBackgroundColor;
                 _context = new Context
@@ -61,6 +64,8 @@ namespace Bit.iOS.Autofill
         {
             try
             {
+                Console.WriteLine("[Bitwarden] PrepareCredentialList");
+
                 InitAppIfNeeded();
                 _context.ServiceIdentifiers = serviceIdentifiers;
                 if (serviceIdentifiers.Length > 0)
@@ -392,9 +397,6 @@ namespace Bit.iOS.Autofill
 
         private void InitApp()
         {
-            // Init Xamarin Forms
-            Forms.Init();
-
             if (ServiceContainer.RegisteredServices.Count > 0)
             {
                 ServiceContainer.Reset();
@@ -444,7 +446,7 @@ namespace Bit.iOS.Autofill
             }
 
             var navigationPage = new NavigationPage(homePage);
-            var loginController = navigationPage.CreateViewController();
+            var loginController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(loginController, true, null);
 
@@ -464,7 +466,7 @@ namespace Bit.iOS.Autofill
             }
 
             var navigationPage = new NavigationPage(environmentPage);
-            var loginController = navigationPage.CreateViewController();
+            var loginController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(loginController, true, null);
         }
@@ -482,7 +484,7 @@ namespace Bit.iOS.Autofill
             }
 
             var navigationPage = new NavigationPage(registerPage);
-            var loginController = navigationPage.CreateViewController();
+            var loginController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(loginController, true, null);
         }
@@ -505,7 +507,7 @@ namespace Bit.iOS.Autofill
             }
 
             var navigationPage = new NavigationPage(loginPage);
-            var loginController = navigationPage.CreateViewController();
+            var loginController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(loginController, true, null);
 
@@ -528,7 +530,7 @@ namespace Bit.iOS.Autofill
             }
 
             var navigationPage = new NavigationPage(loginWithDevicePage);
-            var loginController = navigationPage.CreateViewController();
+            var loginController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(loginController, true, null);
 
@@ -552,7 +554,7 @@ namespace Bit.iOS.Autofill
             }
 
             var navigationPage = new NavigationPage(loginPage);
-            var loginController = navigationPage.CreateViewController();
+            var loginController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(loginController, true, null);
 
@@ -582,7 +584,7 @@ namespace Bit.iOS.Autofill
             }
 
             var navigationPage = new NavigationPage(twoFactorPage);
-            var twoFactorController = navigationPage.CreateViewController();
+            var twoFactorController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             twoFactorController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(twoFactorController, true, null);
         }
@@ -601,7 +603,7 @@ namespace Bit.iOS.Autofill
             }
 
             var navigationPage = new NavigationPage(setPasswordPage);
-            var setPasswordController = navigationPage.CreateViewController();
+            var setPasswordController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             setPasswordController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(setPasswordController, true, null);
         }
@@ -619,7 +621,7 @@ namespace Bit.iOS.Autofill
             }
 
             var navigationPage = new NavigationPage(updateTempPasswordPage);
-            var updateTempPasswordController = navigationPage.CreateViewController();
+            var updateTempPasswordController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             updateTempPasswordController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(updateTempPasswordController, true, null);
         }
@@ -638,7 +640,7 @@ namespace Bit.iOS.Autofill
             }
 
             var navigationPage = new NavigationPage(loginApproveDevicePage);
-            var loginApproveDeviceController = navigationPage.CreateViewController();
+            var loginApproveDeviceController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             loginApproveDeviceController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(loginApproveDeviceController, true, null);
         }

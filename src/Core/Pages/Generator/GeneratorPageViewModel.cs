@@ -338,7 +338,7 @@ namespace Bit.App.Pages
 
         public string PlusAddressedEmail
         {
-            get => _usernameOptions.PlusAddressedEmail;
+            get => _usernameOptions?.PlusAddressedEmail;
             set
             {
                 if (_usernameOptions != null && _usernameOptions.PlusAddressedEmail != value)

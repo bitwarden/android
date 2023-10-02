@@ -3,7 +3,7 @@ using Bit.iOS.Autofill.Models;
 using Foundation;
 using UIKit;
 using Bit.iOS.Core.Controllers;
-using Bit.App.Resources;
+using Bit.Core.Resources.Localization;
 using Bit.iOS.Core.Views;
 using Bit.iOS.Autofill.Utilities;
 using Bit.iOS.Core.Utilities;
