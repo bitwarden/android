@@ -37,7 +37,7 @@ namespace Bit.Core.Services
                     _stateService.SetConfigs(_configs);
                 }
             }
-            catch (ApiException ex) when (ex.Error.StatusCode == System.Net.HttpStatusCode.BadGateway)
+            catch (ApiException ex) when (ex.Error?.StatusCode == System.Net.HttpStatusCode.BadGateway)
             {
                 // ignore if there is no internet connection and return local configs
             }
