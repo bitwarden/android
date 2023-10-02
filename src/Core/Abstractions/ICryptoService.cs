@@ -62,5 +62,6 @@ namespace Bit.Core.Abstractions
         Task<EncByteArray> EncryptToBytesAsync(byte[] plainValue, SymmetricCryptoKey key = null);
         Task<UserKey> DecryptAndMigrateOldPinKeyAsync(bool masterPasswordOnRestart, string pin, string email, KdfConfig kdfConfig, EncString oldPinKey);
         Task<MasterKey> GetOrDeriveMasterKeyAsync(string password, string userId = null);
+        Task UpdateMasterKeyAndUserKeyAsync(MasterKey masterKey);
     }
 }

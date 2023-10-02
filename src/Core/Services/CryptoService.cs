@@ -719,6 +719,17 @@ namespace Bit.Core.Services
                 await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile)));
         }
 
+        public async Task UpdateMasterKeyAndUserKeyAsync(MasterKey masterKey)
+        {
+            var userKey = await DecryptUserKeyWithMasterKeyAsync(masterKey);
+            await SetMasterKeyAsync(masterKey);
+            var hasKey = await HasUserKeyAsync();
+            if (!hasKey)
+            {
+                await SetUserKeyAsync(userKey);
+            }
+        }
+
         // --HELPER METHODS--
 
         private async Task StoreAdditionalKeysAsync(UserKey userKey, string userId = null)
