@@ -1,9 +1,10 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.x8bit.bitwarden.data.platform.datasource.network.api.ConfigApi
 import com.x8bit.bitwarden.data.platform.datasource.network.core.ResultCallAdapterFactory
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
+import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigService
+import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,8 +31,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesConfigApiService(@Named(UNAUTHORIZED) retrofit: Retrofit): ConfigApi =
-        retrofit.create()
+    fun providesConfigService(@Named(UNAUTHORIZED) retrofit: Retrofit): ConfigService =
+        ConfigServiceImpl(retrofit.create())
 
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
