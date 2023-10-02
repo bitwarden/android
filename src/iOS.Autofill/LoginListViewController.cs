@@ -1,8 +1,8 @@
 using System;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
-using Bit.App.Resources;
 using Bit.Core.Abstractions;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
 using Bit.iOS.Autofill.Models;
 using Bit.iOS.Autofill.Utilities;

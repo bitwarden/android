@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
-using Bit.App.Resources;
 using Bit.Core.Abstractions;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;

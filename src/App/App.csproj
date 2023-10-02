@@ -223,12 +223,12 @@
 	  </MauiImage>
 	  <MauiImage Include="Resources\yubikey.png" />
 	</ItemGroup>
-	<!--<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
 		<ProjectReference Include="..\iOS.Autofill\iOS.Autofill.csproj">
 			<IsAppExtension>true</IsAppExtension>
 			<IsWatchApp>false</IsWatchApp>
 		</ProjectReference>
-	</ItemGroup>-->
+	</ItemGroup>
 	<ItemGroup>
 	  <GoogleServicesJson Include="Platforms\Android\google-services.json" />
 	  <GoogleServicesJson Include="Platforms\Android\google-services.json.enc" />
