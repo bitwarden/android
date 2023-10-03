@@ -28,6 +28,7 @@ import androidx.navigation.navOptions
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.PlaceholderComposable
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorScreen
 import com.x8bit.bitwarden.ui.vault.feature.vault.VAULT_ROUTE
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVault
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultDestination
@@ -283,7 +284,7 @@ private const val GENERATOR_ROUTE = "generator"
  */
 private fun NavGraphBuilder.generatorDestination() {
     composable(GENERATOR_ROUTE) {
-        PlaceholderComposable(text = "Generator")
+        GeneratorScreen()
     }
 }
 
