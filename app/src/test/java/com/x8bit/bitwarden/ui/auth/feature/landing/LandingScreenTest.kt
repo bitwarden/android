@@ -28,6 +28,7 @@ class LandingScreenTest : BaseComposeTest() {
                 emailInput = "",
                 isContinueButtonEnabled = true,
                 isRememberMeEnabled = false,
+                selectedRegion = LandingState.RegionOption.BITWARDEN_US,
             ),
         )
         val viewModel = mockk<LandingViewModel>(relaxed = true) {
@@ -37,7 +38,7 @@ class LandingScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             LandingScreen(
                 onNavigateToCreateAccount = {},
-                onNavigateToLogin = {},
+                onNavigateToLogin = { _, _ -> },
                 viewModel = viewModel,
             )
         }
@@ -57,13 +58,14 @@ class LandingScreenTest : BaseComposeTest() {
                     emailInput = "",
                     isContinueButtonEnabled = true,
                     isRememberMeEnabled = false,
+                    selectedRegion = LandingState.RegionOption.BITWARDEN_US,
                 ),
             )
         }
         composeTestRule.setContent {
             LandingScreen(
                 onNavigateToCreateAccount = {},
-                onNavigateToLogin = {},
+                onNavigateToLogin = { _, _ -> },
                 viewModel = viewModel,
             )
         }
@@ -82,13 +84,14 @@ class LandingScreenTest : BaseComposeTest() {
                     emailInput = "",
                     isContinueButtonEnabled = true,
                     isRememberMeEnabled = false,
+                    selectedRegion = LandingState.RegionOption.BITWARDEN_US,
                 ),
             )
         }
         composeTestRule.setContent {
             LandingScreen(
                 onNavigateToCreateAccount = {},
-                onNavigateToLogin = {},
+                onNavigateToLogin = { _, _ -> },
                 viewModel = viewModel,
             )
         }
@@ -111,13 +114,14 @@ class LandingScreenTest : BaseComposeTest() {
                     emailInput = "",
                     isContinueButtonEnabled = true,
                     isRememberMeEnabled = false,
+                    selectedRegion = LandingState.RegionOption.BITWARDEN_US,
                 ),
             )
         }
         composeTestRule.setContent {
             LandingScreen(
                 onNavigateToCreateAccount = {},
-                onNavigateToLogin = {},
+                onNavigateToLogin = { _, _ -> },
                 viewModel = viewModel,
             )
         }
@@ -137,13 +141,14 @@ class LandingScreenTest : BaseComposeTest() {
                     emailInput = "",
                     isContinueButtonEnabled = true,
                     isRememberMeEnabled = false,
+                    selectedRegion = LandingState.RegionOption.BITWARDEN_US,
                 ),
             )
         }
         composeTestRule.setContent {
             LandingScreen(
                 onNavigateToCreateAccount = {},
-                onNavigateToLogin = {},
+                onNavigateToLogin = { _, _ -> },
                 viewModel = viewModel,
             )
         }
@@ -163,13 +168,14 @@ class LandingScreenTest : BaseComposeTest() {
                     emailInput = "",
                     isContinueButtonEnabled = true,
                     isRememberMeEnabled = false,
+                    selectedRegion = LandingState.RegionOption.BITWARDEN_US,
                 ),
             )
         }
         composeTestRule.setContent {
             LandingScreen(
                 onNavigateToCreateAccount = { onNavigateToCreateAccountCalled = true },
-                onNavigateToLogin = {},
+                onNavigateToLogin = { _, _ -> },
                 viewModel = viewModel,
             )
         }
@@ -179,24 +185,69 @@ class LandingScreenTest : BaseComposeTest() {
     @Test
     fun `NavigateToLogin event should call onNavigateToLogin`() {
         val testEmail = "test@test.com"
-        var onNavigateToLoginEmail = ""
+        val testRegion = "bitwarden.com"
+
+        var capturedEmail: String? = null
+        var capturedRegion: String? = null
+
         val viewModel = mockk<LandingViewModel>(relaxed = true) {
-            every { eventFlow } returns flowOf(LandingEvent.NavigateToLogin(testEmail))
+            every { eventFlow } returns flowOf(LandingEvent.NavigateToLogin(testEmail, testRegion))
             every { stateFlow } returns MutableStateFlow(
                 LandingState(
                     emailInput = "",
                     isContinueButtonEnabled = true,
                     isRememberMeEnabled = false,
+                    selectedRegion = LandingState.RegionOption.BITWARDEN_US,
                 ),
             )
         }
+
         composeTestRule.setContent {
             LandingScreen(
                 onNavigateToCreateAccount = { },
-                onNavigateToLogin = { onNavigateToLoginEmail = it },
+                onNavigateToLogin = { email, region ->
+                    capturedEmail = email
+                    capturedRegion = region
+                },
                 viewModel = viewModel,
             )
         }
-        assertEquals(testEmail, onNavigateToLoginEmail)
+
+        assertEquals(testEmail, capturedEmail)
+        assertEquals(testRegion, capturedRegion)
+    }
+
+    @Test
+    fun `selecting region should send RegionOptionSelect action`() {
+        val selectedRegion = LandingState.RegionOption.BITWARDEN_EU
+        val viewModel = mockk<LandingViewModel>(relaxed = true) {
+            every { eventFlow } returns emptyFlow()
+            every { stateFlow } returns MutableStateFlow(
+                LandingState(
+                    emailInput = "",
+                    isContinueButtonEnabled = true,
+                    isRememberMeEnabled = false,
+                    selectedRegion = LandingState.RegionOption.BITWARDEN_US,
+                ),
+            )
+        }
+
+        composeTestRule.setContent {
+            LandingScreen(
+                onNavigateToCreateAccount = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
+        }
+
+        // Clicking to open dropdown
+        composeTestRule.onNodeWithText(LandingState.RegionOption.BITWARDEN_US.label).performClick()
+
+        // Clicking item from the dropdown menu
+        composeTestRule.onNodeWithText(selectedRegion.label).performClick()
+
+        verify {
+            viewModel.trySendAction(LandingAction.RegionOptionSelect(selectedRegion))
+        }
     }
 }

@@ -34,6 +34,7 @@ class LoginViewModel @Inject constructor(
             emailAddress = LoginArgs(savedStateHandle).emailAddress,
             isLoginButtonEnabled = true,
             passwordInput = "",
+            region = LoginArgs(savedStateHandle).regionLabel,
         ),
 ) {
 
@@ -135,6 +136,7 @@ class LoginViewModel @Inject constructor(
 data class LoginState(
     val passwordInput: String,
     val emailAddress: String,
+    val region: String,
     val isLoginButtonEnabled: Boolean,
 ) : Parcelable
 

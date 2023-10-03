@@ -145,7 +145,7 @@ fun LoginScreen(
                 text = stringResource(
                     id = R.string.log_in_attempt_by_x_on_y,
                     state.emailAddress,
-                    "bitwarden.com",
+                    state.region,
                 ),
                 textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.bodyMedium,

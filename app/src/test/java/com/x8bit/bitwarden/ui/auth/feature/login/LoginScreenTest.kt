@@ -34,6 +34,7 @@ class LoginScreenTest : BaseComposeTest() {
                     emailAddress = "",
                     isLoginButtonEnabled = false,
                     passwordInput = "",
+                    region = "",
                 ),
             )
         }
@@ -58,6 +59,7 @@ class LoginScreenTest : BaseComposeTest() {
                     emailAddress = "",
                     isLoginButtonEnabled = false,
                     passwordInput = "",
+                    region = "",
                 ),
             )
         }
@@ -82,6 +84,7 @@ class LoginScreenTest : BaseComposeTest() {
                     emailAddress = "",
                     isLoginButtonEnabled = false,
                     passwordInput = "",
+                    region = "",
                 ),
             )
         }
@@ -106,6 +109,7 @@ class LoginScreenTest : BaseComposeTest() {
                     emailAddress = "",
                     isLoginButtonEnabled = false,
                     passwordInput = "",
+                    region = "",
                 ),
             )
         }
@@ -142,6 +146,7 @@ class LoginScreenTest : BaseComposeTest() {
                     emailAddress = "",
                     isLoginButtonEnabled = false,
                     passwordInput = "",
+                    region = "",
                 ),
             )
         }
@@ -167,6 +172,7 @@ class LoginScreenTest : BaseComposeTest() {
                     emailAddress = "",
                     isLoginButtonEnabled = false,
                     passwordInput = "",
+                    region = "",
                 ),
             )
         }
@@ -192,6 +198,7 @@ class LoginScreenTest : BaseComposeTest() {
                     emailAddress = "",
                     isLoginButtonEnabled = false,
                     passwordInput = "",
+                    region = "",
                 ),
             )
         }

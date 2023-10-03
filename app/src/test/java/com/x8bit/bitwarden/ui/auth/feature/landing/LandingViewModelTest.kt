@@ -38,7 +38,7 @@ class LandingViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(LandingAction.ContinueButtonClick)
             assertEquals(
-                LandingEvent.NavigateToLogin("input"),
+                LandingEvent.NavigateToLogin("input", "bitwarden.com"),
                 awaitItem(),
             )
         }
@@ -106,11 +106,26 @@ class LandingViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `RegionOptionSelect should update value of selected region`() = runTest {
+        val inputRegion = LandingState.RegionOption.BITWARDEN_EU
+        val viewModel = LandingViewModel(SavedStateHandle())
+        viewModel.stateFlow.test {
+            awaitItem()
+            viewModel.trySendAction(LandingAction.RegionOptionSelect(inputRegion))
+            assertEquals(
+                DEFAULT_STATE.copy(selectedRegion = LandingState.RegionOption.BITWARDEN_EU),
+                awaitItem(),
+            )
+        }
+    }
+
     companion object {
         private val DEFAULT_STATE = LandingState(
             emailInput = "",
             isContinueButtonEnabled = false,
             isRememberMeEnabled = false,
+            selectedRegion = LandingState.RegionOption.BITWARDEN_US,
         )
     }
 }
