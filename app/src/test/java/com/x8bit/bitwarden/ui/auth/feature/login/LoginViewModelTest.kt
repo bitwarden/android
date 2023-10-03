@@ -92,7 +92,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `LoginButtonClick login returns error should do nothing`() = runTest {
+    fun `LoginButtonClick login returns error should emit error ShowToast`() = runTest {
         // TODO: handle and display errors (BIT-320)
         val authRepository = mockk<AuthRepository> {
             coEvery {
@@ -111,6 +111,11 @@ class LoginViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(LoginAction.LoginButtonClick)
             assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+            assertEquals(LoginEvent.ShowToast("Loading..."), awaitItem())
+            assertEquals(
+                LoginEvent.ShowToast("Error when logging in"),
+                awaitItem(),
+            )
         }
         coVerify {
             authRepository.login(email = "test@gmail.com", password = "", captchaToken = null)
@@ -118,7 +123,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `LoginButtonClick login returns success should do nothing`() = runTest {
+    fun `LoginButtonClick login returns success should emit loading ShowToast`() = runTest {
         val authRepository = mockk<AuthRepository> {
             coEvery { login("test@gmail.com", "", captchaToken = null) } returns LoginResult.Success
             every { captchaTokenResultFlow } returns flowOf()
@@ -130,6 +135,7 @@ class LoginViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(LoginAction.LoginButtonClick)
             assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+            assertEquals(LoginEvent.ShowToast("Loading..."), awaitItem())
         }
         coVerify {
             authRepository.login(email = "test@gmail.com", password = "", captchaToken = null)
@@ -157,6 +163,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.actionChannel.trySend(LoginAction.LoginButtonClick)
                 assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+                assertEquals(LoginEvent.ShowToast("Loading..."), awaitItem())
                 assertEquals(LoginEvent.NavigateToCaptcha(intent = mockkIntent), awaitItem())
             }
             coVerify {

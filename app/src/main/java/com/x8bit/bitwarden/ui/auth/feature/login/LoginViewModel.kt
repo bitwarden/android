@@ -89,6 +89,11 @@ class LoginViewModel @Inject constructor(
     private fun attemptLogin(captchaToken: String?) {
         viewModelScope.launch {
             // TODO: show progress here BIT-320
+            sendEvent(
+                event = LoginEvent.ShowToast(
+                    message = "Loading...",
+                ),
+            )
             val result = authRepository.login(
                 email = mutableStateFlow.value.emailAddress,
                 password = mutableStateFlow.value.passwordInput,
@@ -96,7 +101,13 @@ class LoginViewModel @Inject constructor(
             )
             when (result) {
                 // TODO: show an error here BIT-320
-                LoginResult.Error -> Unit
+                LoginResult.Error -> {
+                    sendEvent(
+                        event = LoginEvent.ShowToast(
+                            message = "Error when logging in",
+                        ),
+                    )
+                }
                 // No action required on success, root nav will navigate to logged in state
                 LoginResult.Success -> Unit
                 is LoginResult.CaptchaRequired -> {
