@@ -573,7 +573,7 @@ namespace Bit.App.Pages
 
         public string ForwardEmailDomainName
         {
-            get => _usernameOptions.ForwardEmailDomainName ?? "hideaddress.net";
+            get => _usernameOptions.ForwardEmailDomainName;
             set
             {
                 if (_usernameOptions.ForwardEmailDomainName != value)
