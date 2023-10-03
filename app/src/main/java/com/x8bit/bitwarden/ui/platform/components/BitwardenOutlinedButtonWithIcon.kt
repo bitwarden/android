@@ -1,41 +1,58 @@
 package com.x8bit.bitwarden.ui.platform.components
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.x8bit.bitwarden.R
 
 /**
- * Represents a Bitwarden-styled filled [Button].
+ * Represents a Bitwarden-styled filled [OutlinedButton] with an icon.
  *
  * @param label The label for the button.
+ * @param icon The icon for the button.
  * @param onClick The callback when the button is clicked.
  * @param modifier The [Modifier] to be applied to the button.
  * @param isEnabled Whether or not the button is enabled.
  */
 @Composable
-fun BitwardenFilledButton(
+fun BitwardenOutlinedButtonWithIcon(
     label: String,
+    icon: Painter,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
 ) {
-    Button(
+    OutlinedButton(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier
+            .semantics(mergeDescendants = true) { },
         enabled = isEnabled,
         contentPadding = PaddingValues(
             vertical = 10.dp,
             horizontal = 24.dp,
         ),
     ) {
+        Icon(
+            painter = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .padding(end = 8.dp),
+        )
+
         Text(
             text = label,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.labelLarge,
         )
     }
@@ -43,9 +60,10 @@ fun BitwardenFilledButton(
 
 @Preview
 @Composable
-private fun BitwardenFilledButton_preview_isEnabled() {
-    BitwardenFilledButton(
+private fun BitwardenOutlinedButtonWithIcon_preview_isEnabled() {
+    BitwardenOutlinedButtonWithIcon(
         label = "Label",
+        icon = painterResource(id = R.drawable.ic_light_bulb),
         onClick = {},
         isEnabled = true,
     )
@@ -53,9 +71,10 @@ private fun BitwardenFilledButton_preview_isEnabled() {
 
 @Preview
 @Composable
-private fun BitwardenFilledButton_preview_isNotEnabled() {
-    BitwardenFilledButton(
+private fun BitwardenOutlinedButtonWithIcon_preview_isNotEnabled() {
+    BitwardenOutlinedButtonWithIcon(
         label = "Label",
+        icon = painterResource(id = R.drawable.ic_light_bulb),
         onClick = {},
         isEnabled = false,
     )

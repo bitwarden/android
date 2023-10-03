@@ -74,6 +74,23 @@ class LoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `CloseButtonClick should emit NavigateBack`() = runTest {
+        val viewModel = LoginViewModel(
+            authRepository = mockk {
+                every { captchaTokenResultFlow } returns flowOf()
+            },
+            savedStateHandle = savedStateHandle,
+        )
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(LoginAction.CloseButtonClick)
+            assertEquals(
+                LoginEvent.NavigateBack,
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
     fun `LoginButtonClick login returns error should do nothing`() = runTest {
         // TODO: handle and display errors (BIT-320)
         val authRepository = mockk<AuthRepository> {
@@ -147,7 +164,25 @@ class LoginViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `SingleSignOnClick should do nothing`() = runTest {
+    fun `MasterPasswordHintClick should emit ShowToast`() = runTest {
+        val viewModel = LoginViewModel(
+            authRepository = mockk {
+                every { captchaTokenResultFlow } returns flowOf()
+            },
+            savedStateHandle = savedStateHandle,
+        )
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(LoginAction.MasterPasswordHintClick)
+            assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+            assertEquals(
+                LoginEvent.ShowToast("Not yet implemented."),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `SingleSignOnClick should emit ShowToast`() = runTest {
         val viewModel = LoginViewModel(
             authRepository = mockk {
                 every { captchaTokenResultFlow } returns flowOf()
@@ -157,6 +192,10 @@ class LoginViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(LoginAction.SingleSignOnClick)
             assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+            assertEquals(
+                LoginEvent.ShowToast("Not yet implemented."),
+                awaitItem(),
+            )
         }
     }
 

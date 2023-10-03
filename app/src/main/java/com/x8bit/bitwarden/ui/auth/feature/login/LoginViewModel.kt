@@ -55,7 +55,9 @@ class LoginViewModel @Inject constructor(
 
     override fun handleAction(action: LoginAction) {
         when (action) {
+            is LoginAction.CloseButtonClick -> handleCloseButtonClicked()
             LoginAction.LoginButtonClick -> handleLoginButtonClicked()
+            LoginAction.MasterPasswordHintClick -> handleMasterPasswordHintClicked()
             LoginAction.NotYouButtonClick -> handleNotYouButtonClicked()
             LoginAction.SingleSignOnClick -> handleSingleSignOnClicked()
             is LoginAction.PasswordInputChanged -> handlePasswordInputChanged(action)
@@ -73,6 +75,10 @@ class LoginViewModel @Inject constructor(
 
             is CaptchaCallbackTokenResult.Success -> attemptLogin(captchaToken = tokenResult.token)
         }
+    }
+
+    private fun handleCloseButtonClicked() {
+        sendEvent(LoginEvent.NavigateBack)
     }
 
     private fun handleLoginButtonClicked() {
@@ -103,12 +109,18 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    private fun handleMasterPasswordHintClicked() {
+        // TODO: Navigate to master password hint screen (BIT-72)
+        sendEvent(LoginEvent.ShowToast("Not yet implemented."))
+    }
+
     private fun handleNotYouButtonClicked() {
         sendEvent(LoginEvent.NavigateBack)
     }
 
     private fun handleSingleSignOnClicked() {
         // TODO BIT-204 navigate to single sign on
+        sendEvent(LoginEvent.ShowToast("Not yet implemented."))
     }
 
     private fun handlePasswordInputChanged(action: LoginAction.PasswordInputChanged) {
@@ -144,12 +156,22 @@ sealed class LoginEvent {
      * Shows an error pop up with a given message
      */
     data class ShowErrorDialog(@StringRes val messageRes: Int) : LoginEvent()
+
+    /**
+     * Shows a toast with the given [message].
+     */
+    data class ShowToast(val message: String) : LoginEvent()
 }
 
 /**
  * Models actions for the login screen.
  */
 sealed class LoginAction {
+    /**
+     * Indicates that the top-bar close button was clicked.
+     */
+    data object CloseButtonClick : LoginAction()
+
     /**
      * Indicates that the Login button has been clicked.
      */
@@ -159,6 +181,11 @@ sealed class LoginAction {
      * Indicates that the "Not you?" text was clicked.
      */
     data object NotYouButtonClick : LoginAction()
+
+    /**
+     * Indicates that the overflow option for getting a master password hint has been clicked.
+     */
+    data object MasterPasswordHintClick : LoginAction()
 
     /**
      * Indicates that the Enterprise single sign-on button has been clicked.
