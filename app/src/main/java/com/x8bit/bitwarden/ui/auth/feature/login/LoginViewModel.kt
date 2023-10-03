@@ -2,9 +2,12 @@ package com.x8bit.bitwarden.ui.auth.feature.login
 
 import android.content.Intent
 import android.os.Parcelable
+import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.network.model.LoginResult
+import com.x8bit.bitwarden.data.auth.datasource.network.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.datasource.network.util.generateIntentForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -39,6 +42,15 @@ class LoginViewModel @Inject constructor(
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
             .launchIn(viewModelScope)
+        authRepository.captchaTokenResultFlow
+            .onEach {
+                sendAction(
+                    LoginAction.Internal.ReceiveCaptchaToken(
+                        tokenResult = it,
+                    ),
+                )
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: LoginAction) {
@@ -47,15 +59,33 @@ class LoginViewModel @Inject constructor(
             LoginAction.NotYouButtonClick -> handleNotYouButtonClicked()
             LoginAction.SingleSignOnClick -> handleSingleSignOnClicked()
             is LoginAction.PasswordInputChanged -> handlePasswordInputChanged(action)
+            is LoginAction.Internal.ReceiveCaptchaToken -> {
+                handleCaptchaTokenReceived(action.tokenResult)
+            }
+        }
+    }
+
+    private fun handleCaptchaTokenReceived(tokenResult: CaptchaCallbackTokenResult) {
+        when (tokenResult) {
+            CaptchaCallbackTokenResult.MissingToken -> {
+                sendEvent(LoginEvent.ShowErrorDialog(messageRes = R.string.captcha_failed))
+            }
+
+            is CaptchaCallbackTokenResult.Success -> attemptLogin(captchaToken = tokenResult.token)
         }
     }
 
     private fun handleLoginButtonClicked() {
+        attemptLogin(captchaToken = null)
+    }
+
+    private fun attemptLogin(captchaToken: String?) {
         viewModelScope.launch {
             // TODO: show progress here BIT-320
             val result = authRepository.login(
                 email = mutableStateFlow.value.emailAddress,
                 password = mutableStateFlow.value.passwordInput,
+                captchaToken = captchaToken,
             )
             when (result) {
                 // TODO: show an error here BIT-320
@@ -109,6 +139,11 @@ sealed class LoginEvent {
      * Navigates to the captcha verification screen.
      */
     data class NavigateToCaptcha(val intent: Intent) : LoginEvent()
+
+    /**
+     * Shows an error pop up with a given message
+     */
+    data class ShowErrorDialog(@StringRes val messageRes: Int) : LoginEvent()
 }
 
 /**
@@ -134,4 +169,16 @@ sealed class LoginAction {
      * Indicates that the password input has changed.
      */
     data class PasswordInputChanged(val input: String) : LoginAction()
+
+    /**
+     * Models actions that the [LoginViewModel] itself might send.
+     */
+    sealed class Internal : LoginAction() {
+        /**
+         * Indicates a captcha callback token has been received.
+         */
+        data class ReceiveCaptchaToken(
+            val tokenResult: CaptchaCallbackTokenResult,
+        ) : Internal()
+    }
 }

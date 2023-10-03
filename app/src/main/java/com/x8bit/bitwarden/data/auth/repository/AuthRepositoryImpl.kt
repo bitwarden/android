@@ -8,10 +8,14 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJs
 import com.x8bit.bitwarden.data.auth.datasource.network.model.LoginResult
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
+import com.x8bit.bitwarden.data.auth.datasource.network.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.util.flatMap
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,12 +34,15 @@ class AuthRepositoryImpl @Inject constructor(
     private val mutableAuthStateFlow = MutableStateFlow<AuthState>(AuthState.Unauthenticated)
     override val authStateFlow: StateFlow<AuthState> = mutableAuthStateFlow.asStateFlow()
 
-    /**
-     * Attempt to login with the given email.
-     */
+    private val mutableCaptchaTokenFlow =
+        MutableSharedFlow<CaptchaCallbackTokenResult>(extraBufferCapacity = Int.MAX_VALUE)
+    override val captchaTokenResultFlow: Flow<CaptchaCallbackTokenResult> =
+        mutableCaptchaTokenFlow.asSharedFlow()
+
     override suspend fun login(
         email: String,
         password: String,
+        captchaToken: String?,
     ): LoginResult = accountsService
         .preLogin(email = email)
         .flatMap {
@@ -50,6 +57,7 @@ class AuthRepositoryImpl @Inject constructor(
             identityService.getToken(
                 email = email,
                 passwordHash = passwordHash,
+                captchaToken = captchaToken,
             )
         }
         .fold(
@@ -70,4 +78,8 @@ class AuthRepositoryImpl @Inject constructor(
                 }
             },
         )
+
+    override fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult) {
+        mutableCaptchaTokenFlow.tryEmit(tokenResult)
+    }
 }

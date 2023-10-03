@@ -24,21 +24,33 @@ class IdentityServiceTest : BaseServiceTest() {
     @Test
     fun `getToken when request response is Success should return Success`() = runTest {
         server.enqueue(MockResponse().setBody(LOGIN_SUCCESS_JSON))
-        val result = identityService.getToken(email = EMAIL, passwordHash = PASSWORD_HASH)
+        val result = identityService.getToken(
+            email = EMAIL,
+            passwordHash = PASSWORD_HASH,
+            captchaToken = null,
+        )
         assertEquals(Result.success(LOGIN_SUCCESS), result)
     }
 
     @Test
     fun `getToken when request is error should return error`() = runTest {
         server.enqueue(MockResponse().setResponseCode(500))
-        val result = identityService.getToken(email = EMAIL, passwordHash = PASSWORD_HASH)
+        val result = identityService.getToken(
+            email = EMAIL,
+            passwordHash = PASSWORD_HASH,
+            captchaToken = null,
+        )
         assertTrue(result.isFailure)
     }
 
     @Test
     fun `getToken when response is CaptchaRequired should return CaptchaRequired`() = runTest {
         server.enqueue(MockResponse().setResponseCode(400).setBody(CAPTCHA_BODY_JSON))
-        val result = identityService.getToken(email = EMAIL, passwordHash = PASSWORD_HASH)
+        val result = identityService.getToken(
+            email = EMAIL,
+            passwordHash = PASSWORD_HASH,
+            captchaToken = null,
+        )
         assertEquals(Result.success(CAPTCHA_BODY), result)
     }
 

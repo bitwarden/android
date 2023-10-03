@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.datasource.network.model.LoginResult
+import com.x8bit.bitwarden.data.auth.datasource.network.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.datasource.network.util.generateIntentForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -13,6 +14,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -38,7 +40,9 @@ class LoginViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial state should be correct`() = runTest {
         val viewModel = LoginViewModel(
-            authRepository = mockk(),
+            authRepository = mockk {
+                every { captchaTokenResultFlow } returns flowOf()
+            },
             savedStateHandle = savedStateHandle,
         )
         viewModel.stateFlow.test {
@@ -59,7 +63,9 @@ class LoginViewModelTest : BaseViewModelTest() {
             ),
         )
         val viewModel = LoginViewModel(
-            authRepository = mockk(),
+            authRepository = mockk {
+                every { captchaTokenResultFlow } returns flowOf()
+            },
             savedStateHandle = handle,
         )
         viewModel.stateFlow.test {
@@ -71,7 +77,14 @@ class LoginViewModelTest : BaseViewModelTest() {
     fun `LoginButtonClick login returns error should do nothing`() = runTest {
         // TODO: handle and display errors (BIT-320)
         val authRepository = mockk<AuthRepository> {
-            coEvery { login(email = "test@gmail.com", password = "") } returns LoginResult.Error
+            coEvery {
+                login(
+                    email = "test@gmail.com",
+                    password = "",
+                    captchaToken = null,
+                )
+            } returns LoginResult.Error
+            every { captchaTokenResultFlow } returns flowOf()
         }
         val viewModel = LoginViewModel(
             authRepository = authRepository,
@@ -82,14 +95,15 @@ class LoginViewModelTest : BaseViewModelTest() {
             assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
         }
         coVerify {
-            authRepository.login(email = "test@gmail.com", password = "")
+            authRepository.login(email = "test@gmail.com", password = "", captchaToken = null)
         }
     }
 
     @Test
     fun `LoginButtonClick login returns success should do nothing`() = runTest {
         val authRepository = mockk<AuthRepository> {
-            coEvery { login("test@gmail.com", "") } returns LoginResult.Success
+            coEvery { login("test@gmail.com", "", captchaToken = null) } returns LoginResult.Success
+            every { captchaTokenResultFlow } returns flowOf()
         }
         val viewModel = LoginViewModel(
             authRepository = authRepository,
@@ -100,7 +114,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
         }
         coVerify {
-            authRepository.login(email = "test@gmail.com", password = "")
+            authRepository.login(email = "test@gmail.com", password = "", captchaToken = null)
         }
     }
 
@@ -114,8 +128,9 @@ class LoginViewModelTest : BaseViewModelTest() {
                     .generateIntentForCaptcha()
             } returns mockkIntent
             val authRepository = mockk<AuthRepository> {
-                coEvery { login("test@gmail.com", "") } returns
+                coEvery { login("test@gmail.com", "", captchaToken = null) } returns
                     LoginResult.CaptchaRequired(captchaId = "mock_captcha_id")
+                every { captchaTokenResultFlow } returns flowOf()
             }
             val viewModel = LoginViewModel(
                 authRepository = authRepository,
@@ -127,14 +142,16 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(LoginEvent.NavigateToCaptcha(intent = mockkIntent), awaitItem())
             }
             coVerify {
-                authRepository.login(email = "test@gmail.com", password = "")
+                authRepository.login(email = "test@gmail.com", password = "", captchaToken = null)
             }
         }
 
     @Test
     fun `SingleSignOnClick should do nothing`() = runTest {
         val viewModel = LoginViewModel(
-            authRepository = mockk(),
+            authRepository = mockk {
+                every { captchaTokenResultFlow } returns flowOf()
+            },
             savedStateHandle = savedStateHandle,
         )
         viewModel.eventFlow.test {
@@ -146,7 +163,9 @@ class LoginViewModelTest : BaseViewModelTest() {
     @Test
     fun `NotYouButtonClick should emit NavigateToLanding`() = runTest {
         val viewModel = LoginViewModel(
-            authRepository = mockk(),
+            authRepository = mockk {
+                every { captchaTokenResultFlow } returns flowOf()
+            },
             savedStateHandle = savedStateHandle,
         )
         viewModel.eventFlow.test {
@@ -162,7 +181,9 @@ class LoginViewModelTest : BaseViewModelTest() {
     fun `PasswordInputChanged should update password input`() = runTest {
         val input = "input"
         val viewModel = LoginViewModel(
-            authRepository = mockk(),
+            authRepository = mockk {
+                every { captchaTokenResultFlow } returns flowOf()
+            },
             savedStateHandle = savedStateHandle,
         )
         viewModel.eventFlow.test {
@@ -171,6 +192,29 @@ class LoginViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(passwordInput = input),
                 viewModel.stateFlow.value,
             )
+        }
+    }
+
+    @Test
+    fun `captchaTokenFlow success update should trigger a login`() = runTest {
+        val authRepository = mockk<AuthRepository> {
+            every { captchaTokenResultFlow } returns flowOf(
+                CaptchaCallbackTokenResult.Success("token"),
+            )
+            coEvery {
+                login(
+                    "test@gmail.com",
+                    "",
+                    captchaToken = "token",
+                )
+            } returns LoginResult.Success
+        }
+        LoginViewModel(
+            authRepository = authRepository,
+            savedStateHandle = savedStateHandle,
+        )
+        coVerify {
+            authRepository.login(email = "test@gmail.com", password = "", captchaToken = "token")
         }
     }
 

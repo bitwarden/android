@@ -12,9 +12,11 @@ interface IdentityService {
      *
      * @param email user's email address.
      * @param passwordHash password hashed with the Bitwarden SDK.
+     * @param captchaToken captcha token to be passed to the API (nullable).
      */
     suspend fun getToken(
         email: String,
         passwordHash: String,
+        captchaToken: String?,
     ): Result<GetTokenResponseJson>
 }
