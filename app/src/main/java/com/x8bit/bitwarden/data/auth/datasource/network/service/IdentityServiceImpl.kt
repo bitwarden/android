@@ -18,6 +18,7 @@ class IdentityServiceImpl constructor(
     override suspend fun getToken(
         email: String,
         passwordHash: String,
+        captchaToken: String?,
     ): Result<GetTokenResponseJson> = api
         .getToken(
             // TODO: use correct base URL here BIT-328
@@ -33,6 +34,7 @@ class IdentityServiceImpl constructor(
             grantType = "password",
             passwordHash = passwordHash,
             email = email,
+            captchaResponse = captchaToken,
         )
         .fold(
             onSuccess = { Result.success(it) },

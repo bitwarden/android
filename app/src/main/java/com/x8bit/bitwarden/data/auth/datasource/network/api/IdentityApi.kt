@@ -26,5 +26,6 @@ interface IdentityApi {
         @Field(value = "deviceName") deviceName: String,
         @Field(value = "deviceType") deviceType: String,
         @Field(value = "grant_type") grantType: String,
+        @Field(value = "captchaResponse") captchaResponse: String?,
     ): Result<GetTokenResponseJson.Success>
 }
