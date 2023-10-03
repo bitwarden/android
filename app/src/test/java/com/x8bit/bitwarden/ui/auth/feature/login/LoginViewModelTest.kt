@@ -161,7 +161,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `NotYouButtonClick should emit NavigateToLanding`() = runTest {
+    fun `NotYouButtonClick should emit NavigateBack`() = runTest {
         val viewModel = LoginViewModel(
             authRepository = mockk {
                 every { captchaTokenResultFlow } returns flowOf()
@@ -171,7 +171,7 @@ class LoginViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(LoginAction.NotYouButtonClick)
             assertEquals(
-                LoginEvent.NavigateToLanding,
+                LoginEvent.NavigateBack,
                 awaitItem(),
             )
         }

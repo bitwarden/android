@@ -104,7 +104,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleNotYouButtonClicked() {
-        sendEvent(LoginEvent.NavigateToLanding)
+        sendEvent(LoginEvent.NavigateBack)
     }
 
     private fun handleSingleSignOnClicked() {
@@ -131,9 +131,9 @@ data class LoginState(
  */
 sealed class LoginEvent {
     /**
-     * Navigates to the Landing screen.
+     * Navigates back to the previous screen.
      */
-    data object NavigateToLanding : LoginEvent()
+    data object NavigateBack : LoginEvent()
 
     /**
      * Navigates to the captcha verification screen.

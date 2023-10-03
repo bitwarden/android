@@ -9,7 +9,6 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.createAccountDestinatio
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.navigateToCreateAccount
 import com.x8bit.bitwarden.ui.auth.feature.landing.LANDING_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.landing.landingDestinations
-import com.x8bit.bitwarden.ui.auth.feature.landing.navigateToLanding
 import com.x8bit.bitwarden.ui.auth.feature.login.loginDestinations
 import com.x8bit.bitwarden.ui.auth.feature.login.navigateToLogin
 
@@ -29,7 +28,7 @@ fun NavGraphBuilder.authDestinations(navController: NavHostController) {
             onNavigateToLogin = { emailAddress -> navController.navigateToLogin(emailAddress) },
         )
         loginDestinations(
-            onNavigateToLanding = { navController.navigateToLanding() },
+            onNavigateBack = { navController.popBackStack() },
         )
     }
 }

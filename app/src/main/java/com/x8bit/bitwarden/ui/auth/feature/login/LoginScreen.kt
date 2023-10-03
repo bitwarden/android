@@ -32,7 +32,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 @Composable
 @Suppress("LongMethod")
 fun LoginScreen(
-    onNavigateToLanding: () -> Unit,
+    onNavigateBack: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
     intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
 ) {
@@ -40,7 +40,7 @@ fun LoginScreen(
     val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            LoginEvent.NavigateToLanding -> onNavigateToLanding()
+            LoginEvent.NavigateBack -> onNavigateBack()
             is LoginEvent.NavigateToCaptcha -> intentHandler.startActivity(intent = event.intent)
             is LoginEvent.ShowErrorDialog -> {
                 // TODO Show proper error Dialog
