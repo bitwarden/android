@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
@@ -228,7 +229,7 @@ namespace Bit.Core.Utilities
                 // and lower case the 2nd one (index 1)
                 indexToLowerCase = 1;
             }
-            sb.Append(char.ToLower(typeName[indexToLowerCase]));
+            sb.Append(char.ToLower(typeName[indexToLowerCase], new CultureInfo("en-US")));
             sb.Append(typeName.Substring(++indexToLowerCase));
             return sb.ToString();
         }
