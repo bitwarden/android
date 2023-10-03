@@ -34,7 +34,7 @@ fun NavController.navigateToLogin(
  * Add the Login screen to the nav graph.
  */
 fun NavGraphBuilder.loginDestinations(
-    onNavigateToLanding: () -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
     composable(
         route = LOGIN_ROUTE,
@@ -43,7 +43,7 @@ fun NavGraphBuilder.loginDestinations(
         ),
     ) {
         LoginScreen(
-            onNavigateToLanding = { onNavigateToLanding() },
+            onNavigateBack = onNavigateBack,
         )
     }
 }

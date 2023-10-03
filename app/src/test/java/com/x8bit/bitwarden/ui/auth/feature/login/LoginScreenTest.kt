@@ -31,7 +31,7 @@ class LoginScreenTest : BaseComposeTest() {
         }
         composeTestRule.setContent {
             LoginScreen(
-                onNavigateToLanding = {},
+                onNavigateBack = {},
                 viewModel = viewModel,
             )
         }
@@ -56,7 +56,7 @@ class LoginScreenTest : BaseComposeTest() {
         }
         composeTestRule.setContent {
             LoginScreen(
-                onNavigateToLanding = {},
+                onNavigateBack = {},
                 viewModel = viewModel,
             )
         }
@@ -67,10 +67,10 @@ class LoginScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `NavigateToLanding should call onNavigateToLanding`() {
-        var onNavigateToLandingCalled = false
+    fun `NavigateBack should call onNavigateBack`() {
+        var onNavigateBackCalled = false
         val viewModel = mockk<LoginViewModel>(relaxed = true) {
-            every { eventFlow } returns flowOf(LoginEvent.NavigateToLanding)
+            every { eventFlow } returns flowOf(LoginEvent.NavigateBack)
             every { stateFlow } returns MutableStateFlow(
                 LoginState(
                     emailAddress = "",
@@ -81,11 +81,11 @@ class LoginScreenTest : BaseComposeTest() {
         }
         composeTestRule.setContent {
             LoginScreen(
-                onNavigateToLanding = { onNavigateToLandingCalled = true },
+                onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
             )
         }
-        assertTrue(onNavigateToLandingCalled)
+        assertTrue(onNavigateBackCalled)
     }
 
     @Test
@@ -106,7 +106,7 @@ class LoginScreenTest : BaseComposeTest() {
         }
         composeTestRule.setContent {
             LoginScreen(
-                onNavigateToLanding = {},
+                onNavigateBack = {},
                 intentHandler = intentHandler,
                 viewModel = viewModel,
             )
