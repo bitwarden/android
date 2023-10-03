@@ -237,7 +237,8 @@ class GeneratorViewModel @Inject constructor(
         val INITIAL_STATE: GeneratorState = GeneratorState(
             generatedText = PLACEHOLDER_GENERATED_TEXT,
             selectedType = Passcode(
-                selectedType = Password(),
+                // TODO (BIT-634): Update the initial state to Password
+                selectedType = Passphrase(),
             ),
         )
     }
