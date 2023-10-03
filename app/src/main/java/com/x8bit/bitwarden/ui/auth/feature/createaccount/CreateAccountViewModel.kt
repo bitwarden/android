@@ -31,6 +31,7 @@ class CreateAccountViewModel @Inject constructor(
             passwordInput = "",
             confirmPasswordInput = "",
             passwordHintInput = "",
+            isSubmitEnabled = false,
         ),
 ) {
 
@@ -48,7 +49,12 @@ class CreateAccountViewModel @Inject constructor(
             is EmailInputChange -> handleEmailInputChanged(action)
             is PasswordHintChange -> handlePasswordHintChanged(action)
             is PasswordInputChange -> handlePasswordInputChanged(action)
+            is CreateAccountAction.CloseClick -> handleCloseClick()
         }
+    }
+
+    private fun handleCloseClick() {
+        sendEvent(CreateAccountEvent.NavigateBack)
     }
 
     private fun handleEmailInputChanged(action: EmailInputChange) {
@@ -81,12 +87,18 @@ data class CreateAccountState(
     val passwordInput: String,
     val confirmPasswordInput: String,
     val passwordHintInput: String,
+    val isSubmitEnabled: Boolean,
 ) : Parcelable
 
 /**
  * Models events for the create account screen.
  */
 sealed class CreateAccountEvent {
+
+    /**
+     * Navigate back to previous screen.
+     */
+    data object NavigateBack : CreateAccountEvent()
 
     /**
      * Placeholder event for showing a toast. Can be removed once there are real events.
@@ -102,6 +114,11 @@ sealed class CreateAccountAction {
      * User clicked submit.
      */
     data object SubmitClick : CreateAccountAction()
+
+    /**
+     * User clicked close.
+     */
+    data object CloseClick : CreateAccountAction()
 
     /**
      * Email input changed.

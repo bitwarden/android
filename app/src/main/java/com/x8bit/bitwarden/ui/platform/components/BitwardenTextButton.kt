@@ -21,14 +21,20 @@ fun BitwardenTextButton(
     label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    isEnabled: Boolean = true,
 ) {
     TextButton(
         onClick = onClick,
         modifier = modifier,
+        enabled = isEnabled,
     ) {
         Text(
             text = label,
-            color = MaterialTheme.colorScheme.primary,
+            color = if (isEnabled) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.onSurface.copy(alpha = .38f)
+            },
             style = MaterialTheme.typography.labelLarge,
             modifier = Modifier
                 .padding(

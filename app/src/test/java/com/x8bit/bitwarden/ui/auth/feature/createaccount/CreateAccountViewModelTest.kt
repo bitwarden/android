@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.createaccount
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordHintChange
@@ -27,6 +28,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             passwordInput = "password",
             confirmPasswordInput = "confirmPassword",
             passwordHintInput = "hint",
+            isSubmitEnabled = false,
         )
         val handle = SavedStateHandle(mapOf("state" to savedState))
         val viewModel = CreateAccountViewModel(handle)
@@ -39,6 +41,15 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(SubmitClick)
             assert(awaitItem() is CreateAccountEvent.ShowToast)
+        }
+    }
+
+    @Test
+    fun `CloseClick should emit NavigateBack`() = runTest {
+        val viewModel = CreateAccountViewModel(SavedStateHandle())
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(CloseClick)
+            assert(awaitItem() is CreateAccountEvent.NavigateBack)
         }
     }
 
@@ -84,6 +95,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             emailInput = "",
             confirmPasswordInput = "",
             passwordHintInput = "",
+            isSubmitEnabled = false,
         )
     }
 }

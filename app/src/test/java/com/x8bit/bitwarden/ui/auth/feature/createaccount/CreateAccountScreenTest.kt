@@ -1,8 +1,11 @@
 package com.x8bit.bitwarden.ui.auth.feature.createaccount
 
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordHintChange
@@ -14,22 +17,65 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Test
 
 class CreateAccountScreenTest : BaseComposeTest() {
 
     @Test
-    fun `submit click should send SubmitClick action`() {
+    fun `app bar submit click should send SubmitClick action`() {
         val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE.copy(isSubmitEnabled = true))
             every { eventFlow } returns emptyFlow()
             every { trySendAction(SubmitClick) } returns Unit
         }
         composeTestRule.setContent {
-            CreateAccountScreen(viewModel)
+            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
         }
-        composeTestRule.onNodeWithText("Submit").performClick()
+        composeTestRule.onAllNodesWithText("Submit")[0].performClick()
         verify { viewModel.trySendAction(SubmitClick) }
+    }
+
+    @Test
+    fun `bottom button submit click should send SubmitClick action`() {
+        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE.copy(isSubmitEnabled = true))
+            every { eventFlow } returns emptyFlow()
+            every { trySendAction(SubmitClick) } returns Unit
+        }
+        composeTestRule.setContent {
+            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+        }
+        composeTestRule.onAllNodesWithText("Submit")[1].performClick()
+        verify { viewModel.trySendAction(SubmitClick) }
+    }
+
+    @Test
+    fun `close click should send CloseClick action`() {
+        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
+            every { eventFlow } returns emptyFlow()
+            every { trySendAction(CloseClick) } returns Unit
+        }
+        composeTestRule.setContent {
+            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+        }
+        composeTestRule.onNodeWithContentDescription("Close").performClick()
+        verify { viewModel.trySendAction(CloseClick) }
+    }
+
+    @Test
+    fun `NavigateBack event should invoke navigate back lambda`() {
+        var onNavigateBackCalled = false
+        val onNavigateBack = { onNavigateBackCalled = true }
+        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
+            every { eventFlow } returns flowOf(CreateAccountEvent.NavigateBack)
+        }
+        composeTestRule.setContent {
+            CreateAccountScreen(onNavigateBack = onNavigateBack, viewModel = viewModel)
+        }
+        assert(onNavigateBackCalled)
     }
 
     @Test
@@ -40,7 +86,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
             every { trySendAction(EmailInputChange("input")) } returns Unit
         }
         composeTestRule.setContent {
-            CreateAccountScreen(viewModel)
+            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
         }
         composeTestRule.onNodeWithText("Email address").performTextInput(TEST_INPUT)
         verify { viewModel.trySendAction(EmailInputChange(TEST_INPUT)) }
@@ -54,7 +100,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
             every { trySendAction(PasswordInputChange("input")) } returns Unit
         }
         composeTestRule.setContent {
-            CreateAccountScreen(viewModel)
+            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
         }
         composeTestRule.onNodeWithText("Master password").performTextInput(TEST_INPUT)
         verify { viewModel.trySendAction(PasswordInputChange(TEST_INPUT)) }
@@ -68,7 +114,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
             every { trySendAction(ConfirmPasswordInputChange("input")) } returns Unit
         }
         composeTestRule.setContent {
-            CreateAccountScreen(viewModel)
+            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
         }
         composeTestRule.onNodeWithText("Re-type master password").performTextInput(TEST_INPUT)
         verify { viewModel.trySendAction(ConfirmPasswordInputChange(TEST_INPUT)) }
@@ -82,7 +128,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
             every { trySendAction(PasswordHintChange("input")) } returns Unit
         }
         composeTestRule.setContent {
-            CreateAccountScreen(viewModel)
+            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
         }
         composeTestRule
             .onNodeWithText("Master password hint (optional)")
@@ -97,6 +143,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
             passwordInput = "",
             confirmPasswordInput = "",
             passwordHintInput = "",
+            isSubmitEnabled = false,
         )
     }
 }

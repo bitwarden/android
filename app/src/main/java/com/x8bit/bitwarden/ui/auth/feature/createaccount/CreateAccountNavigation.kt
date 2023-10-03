@@ -17,8 +17,10 @@ fun NavController.navigateToCreateAccount(navOptions: NavOptions? = null) {
 /**
  * Add the create account screen to the nav graph.
  */
-fun NavGraphBuilder.createAccountDestinations() {
+fun NavGraphBuilder.createAccountDestinations(
+    onNavigateBack: () -> Unit,
+) {
     composable(route = CREATE_ACCOUNT_ROUTE) {
-        CreateAccountScreen()
+        CreateAccountScreen(onNavigateBack)
     }
 }

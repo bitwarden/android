@@ -22,7 +22,7 @@ fun NavGraphBuilder.authDestinations(navController: NavHostController) {
         startDestination = LANDING_ROUTE,
         route = AUTH_ROUTE,
     ) {
-        createAccountDestinations()
+        createAccountDestinations(onNavigateBack = { navController.popBackStack() })
         landingDestinations(
             onNavigateToCreateAccount = { navController.navigateToCreateAccount() },
             onNavigateToLogin = { emailAddress, regionLabel ->
