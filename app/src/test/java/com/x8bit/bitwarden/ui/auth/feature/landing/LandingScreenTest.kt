@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.landing
 
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.onChildren
@@ -14,10 +16,37 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.update
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 
 class LandingScreenTest : BaseComposeTest() {
+    @Test
+    fun `continue button should be enabled or disabled according to the state`() {
+        val mutableStateFlow = MutableStateFlow(
+            LandingState(
+                emailInput = "",
+                isContinueButtonEnabled = true,
+                isRememberMeEnabled = false,
+            ),
+        )
+        val viewModel = mockk<LandingViewModel>(relaxed = true) {
+            every { eventFlow } returns emptyFlow()
+            every { stateFlow } returns mutableStateFlow
+        }
+        composeTestRule.setContent {
+            LandingScreen(
+                onNavigateToCreateAccount = {},
+                onNavigateToLogin = {},
+                viewModel = viewModel,
+            )
+        }
+        composeTestRule.onNodeWithText("Continue").assertIsEnabled()
+
+        mutableStateFlow.update { it.copy(isContinueButtonEnabled = false) }
+
+        composeTestRule.onNodeWithText("Continue").assertIsNotEnabled()
+    }
 
     @Test
     fun `continue button click should send ContinueButtonClick action`() {

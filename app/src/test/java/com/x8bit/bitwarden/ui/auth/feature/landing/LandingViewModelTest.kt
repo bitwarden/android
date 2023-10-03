@@ -77,23 +77,39 @@ class LandingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `EmailInputUpdated should update value of email input`() = runTest {
-        val input = "input"
-        val viewModel = LandingViewModel(SavedStateHandle())
-        viewModel.stateFlow.test {
-            awaitItem()
-            viewModel.trySendAction(LandingAction.EmailInputChanged(input))
-            assertEquals(
-                DEFAULT_STATE.copy(emailInput = input),
-                awaitItem(),
-            )
+    fun `EmailInputUpdated should update value of email input and continue button state`() =
+        runTest {
+            val viewModel = LandingViewModel(SavedStateHandle())
+            viewModel.stateFlow.test {
+                // Ignore initial state
+                awaitItem()
+
+                val nonEmptyInput = "input"
+                viewModel.trySendAction(LandingAction.EmailInputChanged(nonEmptyInput))
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        emailInput = nonEmptyInput,
+                        isContinueButtonEnabled = true,
+                    ),
+                    awaitItem(),
+                )
+
+                val emptyInput = ""
+                viewModel.trySendAction(LandingAction.EmailInputChanged(emptyInput))
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        emailInput = emptyInput,
+                        isContinueButtonEnabled = false,
+                    ),
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     companion object {
         private val DEFAULT_STATE = LandingState(
             emailInput = "",
-            isContinueButtonEnabled = true,
+            isContinueButtonEnabled = false,
             isRememberMeEnabled = false,
         )
     }
