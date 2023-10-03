@@ -30,7 +30,7 @@ class IdentityServiceImpl constructor(
             deviceIdentifier = UUID.randomUUID().toString(),
             // TODO: use correct values for deviceName and deviceType BIT-326
             deviceName = "Pixel 6",
-            deviceType = "1",
+            deviceType = "0",
             grantType = "password",
             passwordHash = passwordHash,
             email = email,
