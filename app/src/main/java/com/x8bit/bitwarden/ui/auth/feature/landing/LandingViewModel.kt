@@ -23,7 +23,7 @@ class LandingViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: LandingState(
             emailInput = "",
-            isContinueButtonEnabled = true,
+            isContinueButtonEnabled = false,
             isRememberMeEnabled = false,
         ),
 ) {
@@ -45,7 +45,13 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleEmailInputUpdated(action: LandingAction.EmailInputChanged) {
-        mutableStateFlow.update { it.copy(emailInput = action.input) }
+        val email = action.input
+        mutableStateFlow.update {
+            it.copy(
+                emailInput = email,
+                isContinueButtonEnabled = email.isNotBlank(),
+            )
+        }
     }
 
     private fun handleContinueButtonClicked() {
