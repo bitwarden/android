@@ -25,6 +25,7 @@ class LoginViewModelTest : BaseViewModelTest() {
 
     private val savedStateHandle = SavedStateHandle().also {
         it["email_address"] = "test@gmail.com"
+        it["region_label"] = ""
     }
 
     @BeforeEach
@@ -262,6 +263,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             emailAddress = "test@gmail.com",
             passwordInput = "",
             isLoginButtonEnabled = true,
+            region = "",
         )
 
         private const val LOGIN_RESULT_PATH =

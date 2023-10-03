@@ -19,7 +19,7 @@ fun NavController.navigateToLanding(navOptions: NavOptions? = null) {
  */
 fun NavGraphBuilder.landingDestinations(
     onNavigateToCreateAccount: () -> Unit,
-    onNavigateToLogin: (String) -> Unit,
+    onNavigateToLogin: (emailAddress: String, regionLabel: String) -> Unit,
 ) {
     composable(route = LANDING_ROUTE) {
         LandingScreen(

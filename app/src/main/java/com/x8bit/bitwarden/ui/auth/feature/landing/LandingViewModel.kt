@@ -25,6 +25,7 @@ class LandingViewModel @Inject constructor(
             emailInput = "",
             isContinueButtonEnabled = false,
             isRememberMeEnabled = false,
+            selectedRegion = LandingState.RegionOption.BITWARDEN_US,
         ),
 ) {
 
@@ -41,6 +42,7 @@ class LandingViewModel @Inject constructor(
             LandingAction.CreateAccountClick -> handleCreateAccountClicked()
             is LandingAction.RememberMeToggle -> handleRememberMeToggled(action)
             is LandingAction.EmailInputChanged -> handleEmailInputUpdated(action)
+            is LandingAction.RegionOptionSelect -> handleRegionSelect(action)
         }
     }
 
@@ -59,7 +61,9 @@ class LandingViewModel @Inject constructor(
         if (mutableStateFlow.value.emailInput.isBlank()) {
             return
         }
-        sendEvent(LandingEvent.NavigateToLogin(mutableStateFlow.value.emailInput))
+        val email = mutableStateFlow.value.emailInput
+        val selectedRegionLabel = mutableStateFlow.value.selectedRegion.label
+        sendEvent(LandingEvent.NavigateToLogin(email, selectedRegionLabel))
     }
 
     private fun handleCreateAccountClicked() {
@@ -68,6 +72,14 @@ class LandingViewModel @Inject constructor(
 
     private fun handleRememberMeToggled(action: LandingAction.RememberMeToggle) {
         mutableStateFlow.update { it.copy(isRememberMeEnabled = action.isChecked) }
+    }
+
+    private fun handleRegionSelect(action: LandingAction.RegionOptionSelect) {
+        mutableStateFlow.update {
+            it.copy(
+                selectedRegion = action.regionOption,
+            )
+        }
     }
 }
 
@@ -79,7 +91,17 @@ data class LandingState(
     val emailInput: String,
     val isContinueButtonEnabled: Boolean,
     val isRememberMeEnabled: Boolean,
-) : Parcelable
+    val selectedRegion: RegionOption,
+) : Parcelable {
+    /**
+     * Enumerates the possible region options with their corresponding labels.
+     */
+    enum class RegionOption(val label: String) {
+        BITWARDEN_US("bitwarden.com"),
+        BITWARDEN_EU("bitwarden.eu"),
+        SELF_HOSTED("Self-hosted"),
+    }
+}
 
 /**
  * Models events for the landing screen.
@@ -91,10 +113,11 @@ sealed class LandingEvent {
     data object NavigateToCreateAccount : LandingEvent()
 
     /**
-     * Navigates to the Login screen with the given email address.
+     * Navigates to the Login screen with the given email address and region label.
      */
     data class NavigateToLogin(
         val emailAddress: String,
+        val regionLabel: String,
     ) : LandingEvent()
 }
 
@@ -124,5 +147,12 @@ sealed class LandingAction {
      */
     data class EmailInputChanged(
         val input: String,
+    ) : LandingAction()
+
+    /**
+     * Indicates that the selection from the region drop down has changed.
+     */
+    data class RegionOptionSelect(
+        val regionOption: LandingState.RegionOption,
     ) : LandingAction()
 }
