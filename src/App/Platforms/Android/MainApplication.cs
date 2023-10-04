@@ -139,16 +139,8 @@ namespace Bit.Droid
             CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);
 
             var preferencesStorage = new PreferencesStorageService(null);
-            var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-
-            // TODO: [MAUI-Migration] [Critical] HACK in MAUI the Personal folder adds a \Documents at the end that shouldn't be there
-            var lastPartDocumentsPathIndex = documentsPath.IndexOf("Documents") - 1;
-            if (lastPartDocumentsPathIndex >= 0)
-            {
-                documentsPath = documentsPath.Substring(0, lastPartDocumentsPathIndex);
-            }
-
-            var liteDbStorage = new LiteDbStorageService(Path.Combine(documentsPath, "bitwarden.db"));
+            var localAppDataFolderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
+            var liteDbStorage = new LiteDbStorageService(Path.Combine(localAppDataFolderPath, "bitwarden.db"));
             var localizeService = new LocalizeService();
             var broadcasterService = new BroadcasterService(logger);
             var messagingService = new MobileBroadcasterMessagingService(broadcasterService);
