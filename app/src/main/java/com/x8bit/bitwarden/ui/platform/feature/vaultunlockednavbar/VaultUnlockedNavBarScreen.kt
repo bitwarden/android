@@ -28,7 +28,9 @@ import androidx.navigation.navOptions
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.PlaceholderComposable
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorScreen
+import com.x8bit.bitwarden.ui.tools.feature.generator.GENERATOR_ROUTE
+import com.x8bit.bitwarden.ui.tools.feature.generator.generatorDestination
+import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGenerator
 import com.x8bit.bitwarden.ui.vault.feature.vault.VAULT_ROUTE
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVault
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultDestination
@@ -270,35 +272,6 @@ private fun NavController.vaultUnlockedNavBarScreenNavOptions(): NavOptions =
  *
  * For an example of how to setup these nav extensions, see NIA project.
  */
-
-// #region Generator
-/**
- * TODO: move to generator package (BIT-148)
- */
-private const val GENERATOR_ROUTE = "generator"
-
-/**
- * Add generator destination to the nav graph.
- *
- * TODO: move to generator package (BIT-148)
- */
-private fun NavGraphBuilder.generatorDestination() {
-    composable(GENERATOR_ROUTE) {
-        GeneratorScreen()
-    }
-}
-
-/**
- * Navigate to the generator screen. Note this will only work if generator screen was added
- * via [generatorDestination].
- *
- * TODO: move to generator package (BIT-148)
- *
- */
-private fun NavController.navigateToGenerator(navOptions: NavOptions? = null) {
-    navigate(GENERATOR_ROUTE, navOptions)
-}
-// #endregion Generator
 
 // #region Send
 /**
