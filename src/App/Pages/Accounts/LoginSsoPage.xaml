@@ -32,13 +32,15 @@
                         Keyboard="Default"
                         StyleClass="box-value" 
                         ReturnType="Go"
-                        ReturnCommand="{Binding LogInCommand}" />
+                        ReturnCommand="{Binding LogInCommand}" 
+                        AutomationId="OrgIdentifierEntry"/>
                 </StackLayout>
             </StackLayout>
             <StackLayout Padding="10, 0">
                 <Button Text="{u:I18n LogIn}"
                         StyleClass="btn-primary"
-                        Clicked="LogIn_Clicked"></Button>
+                        Clicked="LogIn_Clicked"
+                        AutomationId="LogInButton"></Button>
             </StackLayout>
         </StackLayout>
     </ScrollView>

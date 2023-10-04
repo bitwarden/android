@@ -26,6 +26,7 @@
             <Switch
                 Scale="0.8"
                 IsToggled="{Binding RememberThisDevice}"
+                AutomationId="RememberThisDeviceSwitch"
                 VerticalOptions="Center"/>
         </StackLayout>
         <StackLayout Margin="0, 20, 0, 0">
@@ -34,25 +35,29 @@
                 Text="{u:I18n Continue}" 
                 StyleClass="btn-primary"
                 Command="{Binding ContinueCommand}"
-                IsVisible="{Binding IsNewUser}"/>
+                IsVisible="{Binding IsNewUser}"
+                AutomationId="ContinueButton"/>
             <Button
                 x:Name="_approveWithMyOtherDevice"
                 Text="{u:I18n ApproveWithMyOtherDevice}" 
                 StyleClass="btn-primary"
                 Command="{Binding ApproveWithMyOtherDeviceCommand}"
-                IsVisible="{Binding ApproveWithMyOtherDeviceEnabled}"/>
+                IsVisible="{Binding ApproveWithMyOtherDeviceEnabled}"
+                AutomationId="ApproveWithMyOtherDeviceButton"/>
             <Button
                 x:Name="_requestAdminApproval"
                 Text="{u:I18n RequestAdminApproval}" 
                 StyleClass="box-button-row"
                 Command="{Binding RequestAdminApprovalCommand}"
-                IsVisible="{Binding RequestAdminApprovalEnabled}"/>
+                IsVisible="{Binding RequestAdminApprovalEnabled}"
+                AutomationId="RequestAdminApprovalButton"/>
             <Button
                 x:Name="_approveWithMasterPassword"
                 Text="{u:I18n ApproveWithMasterPassword}" 
                 StyleClass="box-button-row"
                 Command="{Binding ApproveWithMasterPasswordCommand}"
-                IsVisible="{Binding ApproveWithMasterPasswordEnabled}"/>
+                IsVisible="{Binding ApproveWithMasterPasswordEnabled}"
+                AutomationId="ApproveWithMasterPasswordButton"/>
             <Label
                 Text="{Binding LoggingInAsText}"
                 StyleClass="text-sm"
