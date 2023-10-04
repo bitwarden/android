@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Data;
+using Bit.Core.Models.Domain;
 using Bit.Core.Models.Response;
 using Bit.Core.Utilities;
 
@@ -398,6 +399,27 @@ namespace Bit.Core.Services
             await _stateService.SetPersonalPremiumAsync(response.Premium);
             await _stateService.SetAvatarColorAsync(response.AvatarColor);
             await _keyConnectorService.SetUsesKeyConnectorAsync(response.UsesKeyConnector);
+            await SetPasswordSetReasonIfNeededAsync(response);
+        }
+
+        private async Task SetPasswordSetReasonIfNeededAsync(ProfileResponse response)
+        {
+
+            // The `ForcePasswordReset` flag indicates an admin has reset the user's password and must be updated
+            if (response.ForcePasswordReset)
+            {
+                await _stateService.SetForcePasswordResetReasonAsync(ForcePasswordResetReason.AdminForcePasswordReset);
+            }
+
+            var decryptionOptions = await _stateService.GetAccountDecryptionOptions();
+            if (decryptionOptions != null &&
+                !decryptionOptions.HasMasterPassword &&
+                decryptionOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
+            {
+                // TDE user w/out MP went from having no password reset permission to having it.
+                // Must set the force password reset reason so the auth guard will redirect to the set password page.
+                await _stateService.SetForcePasswordResetReasonAsync(ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission);
+            }
         }
 
         private async Task SyncFoldersAsync(string userId, List<FolderResponse> response)
