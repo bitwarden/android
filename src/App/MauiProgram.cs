@@ -10,9 +10,7 @@ namespace Bit.App
 #if ANDROID
                     effects.Add<Effects.FabShadowEffect, Effects.FabShadowPlatformEffect>();
 #else
-                    effects.Add<Effects.NoEmojiKeyboardEffect, Bit.iOS.Core.Effects.NoEmojiKeyboardEffect>();
-                    effects.Add<Effects.ScrollEnabledEffect, Effects.ScrollEnabledPlatformEffect>();
-                    effects.Add<Effects.ScrollViewContentInsetAdjustmentBehaviorEffect, Bit.App.Effects.ScrollViewContentInsetAdjustmentBehaviorPlatformEffect>();
+                    iOS.Core.Utilities.iOSCoreHelpers.ConfigureMAUIEffects(effects);
 #endif
                 },
                 handlers =>
@@ -32,15 +30,7 @@ namespace Bit.App
 
                     handlers.AddHandler(typeof(TabbedPage), typeof(Bit.App.Handlers.CustomTabbedPageHandler));
 #else
-                    iOS.Core.Handlers.ButtonHandlerMappings.Setup();
-                    iOS.Core.Handlers.DatePickerHandlerMappings.Setup();
-                    iOS.Core.Handlers.EditorHandlerMappings.Setup();
-                    iOS.Core.Handlers.EntryHandlerMappings.Setup();
-                    //iOS.Core.Handlers.LabelHandlerMappings.Setup();
-                    iOS.Core.Handlers.PickerHandlerMappings.Setup();
-                    iOS.Core.Handlers.SearchBarHandlerMappings.Setup();
-                    iOS.Core.Handlers.StepperHandlerMappings.Setup();
-                    iOS.Core.Handlers.TimePickerHandlerMappings.Setup();
+                    iOS.Core.Utilities.iOSCoreHelpers.ConfigureMAUIHandlers(handlers);
 #endif
                 }
             ).Build();

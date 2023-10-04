@@ -17,7 +17,6 @@ using CoreFoundation;
 using CoreNFC;
 using Foundation;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls.Compatibility;
 using Microsoft.Maui.Platform;
 using UIKit;
 
@@ -64,8 +63,6 @@ namespace Bit.iOS.Autofill
         {
             try
             {
-                Console.WriteLine("[Bitwarden] PrepareCredentialList");
-
                 InitAppIfNeeded();
                 _context.ServiceIdentifiers = serviceIdentifiers;
                 if (serviceIdentifiers.Length > 0)
@@ -354,7 +351,7 @@ namespace Bit.iOS.Autofill
         {
             if (await IsLocked() || await _stateService.Value.GetPasswordRepromptAutofillAsync())
             {
-                DispatchQueue.MainQueue.DispatchAsync(() =>  PerformSegue("lockPasswordSegue", this));
+                DispatchQueue.MainQueue.DispatchAsync(() => PerformSegue("lockPasswordSegue", this));
             }
             else
             {
@@ -397,28 +394,8 @@ namespace Bit.iOS.Autofill
 
         private void InitApp()
         {
-            if (ServiceContainer.RegisteredServices.Count > 0)
-            {
-                ServiceContainer.Reset();
-            }
-            iOSCoreHelpers.RegisterLocalServices();
-            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            ServiceContainer.Init(deviceActionService.DeviceUserAgent, 
-                Bit.Core.Constants.iOSAutoFillClearCiphersCacheKey, Bit.Core.Constants.iOSAllClearCipherCacheKeys);
-            iOSCoreHelpers.InitLogger();
-            iOSCoreHelpers.RegisterFinallyBeforeBootstrap();
-            iOSCoreHelpers.Bootstrap();
-            var appOptions = new AppOptions { IosExtension = true };
-            var app = new App.App(appOptions);
-            ThemeManager.SetTheme(app.Resources);
-            iOSCoreHelpers.AppearanceAdjustments();
-            _nfcDelegate = new Core.NFCReaderDelegate((success, message) =>
-                messagingService.Send("gotYubiKeyOTP", message));
-            iOSCoreHelpers.SubscribeBroadcastReceiver(this, _nfcSession, _nfcDelegate);
-
-            _accountsManager = ServiceContainer.Resolve<IAccountsManager>("accountsManager");
-            _accountsManager.Init(() => appOptions, this);
+            iOSCoreHelpers.InitApp(this, Bit.Core.Constants.iOSAutoFillClearCiphersCacheKey,
+                _nfcSession, out _nfcDelegate, out _accountsManager);
         }
 
         private void InitAppIfNeeded()

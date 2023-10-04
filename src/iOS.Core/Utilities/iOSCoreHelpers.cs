@@ -1,21 +1,18 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using Bit.App.Abstractions;
+﻿using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Pages;
-using Bit.Core.Resources.Localization;
 using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.App.Utilities.AccountManagement;
 using Bit.Core.Abstractions;
-using Bit.Core.Enums;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Services;
 using CoreNFC;
 using Foundation;
+using Microsoft.Maui.Embedding;
 using UIKit;
 
 namespace Bit.iOS.Core.Utilities
@@ -28,6 +25,37 @@ namespace Bit.iOS.Core.Utilities
         public static string AppGroupId = "group.com.8bit.bitwarden";
         public static string AccessGroup = "LTZ2PFU5D6.com.8bit.bitwarden";
 
+        public static void SetupMaui()
+        {
+            var builder = Bit.Core.MauiProgram.ConfigureBaseMauiAppBuilder(ConfigureMAUIEffects, ConfigureMAUIHandlers)
+                .UseMauiEmbedding<Application>();
+            // Register the Window
+            builder.Services.Add(new ServiceDescriptor(typeof(UIWindow), UIApplication.SharedApplication.KeyWindow));
+            var mauiApp = builder.Build();
+
+            MauiContextSingleton.Instance.Init(new MauiContext(mauiApp.Services));
+        }
+
+        public static void ConfigureMAUIEffects(IEffectsBuilder effects)
+        {
+            effects.Add<App.Effects.NoEmojiKeyboardEffect, Bit.iOS.Core.Effects.NoEmojiKeyboardEffect>();
+            effects.Add<App.Effects.ScrollEnabledEffect, App.Effects.ScrollEnabledPlatformEffect>();
+            effects.Add<App.Effects.ScrollViewContentInsetAdjustmentBehaviorEffect, Bit.App.Effects.ScrollViewContentInsetAdjustmentBehaviorPlatformEffect>();
+        }
+
+        public static void ConfigureMAUIHandlers(IMauiHandlersCollection handlers)
+        {
+            Handlers.ButtonHandlerMappings.Setup();
+            Handlers.DatePickerHandlerMappings.Setup();
+            Handlers.EditorHandlerMappings.Setup();
+            Handlers.EntryHandlerMappings.Setup();
+            //Handlers.LabelHandlerMappings.Setup();
+            Handlers.PickerHandlerMappings.Setup();
+            Handlers.SearchBarHandlerMappings.Setup();
+            Handlers.StepperHandlerMappings.Setup();
+            Handlers.TimePickerHandlerMappings.Setup();
+        }
+
         public static void InitApp<T>(T rootController,
             string clearCipherCacheKey,
             NFCNdefReaderSession nfcSession,
@@ -35,6 +63,8 @@ namespace Bit.iOS.Core.Utilities
             out IAccountsManager accountsManager)
             where T : UIViewController, IAccountsManagerHost
         {
+            SetupMaui();
+
             if (ServiceContainer.RegisteredServices.Count > 0)
             {
                 ServiceContainer.Reset();

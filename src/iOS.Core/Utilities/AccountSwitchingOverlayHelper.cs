@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Bit.App.Controls;
+﻿using Bit.App.Controls;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using Microsoft.Maui.Platform;
 using UIKit;
 
 namespace Bit.iOS.Core.Utilities
@@ -72,17 +71,18 @@ namespace Bit.iOS.Core.Utilities
             //renderer.SetElementSize(new Size(containerView.Frame.Size.Width, containerView.Frame.Size.Height));
 
             //var view = renderer.NativeView;
-            //view.TranslatesAutoresizingMaskIntoConstraints = false;
+            var view = overlay.ToPlatform(MauiContextSingleton.Instance.MauiContext);
+            view.TranslatesAutoresizingMaskIntoConstraints = false;
 
-            //containerView.AddSubview(view);
-            //containerView.AddConstraints(new NSLayoutConstraint[]
-            //{
-            //        NSLayoutConstraint.Create(containerView, NSLayoutAttribute.Trailing, NSLayoutRelation.Equal, view, NSLayoutAttribute.Trailing, 1f, 0f),
-            //        NSLayoutConstraint.Create(containerView, NSLayoutAttribute.Leading, NSLayoutRelation.Equal, view, NSLayoutAttribute.Leading, 1f, 0f),
-            //        NSLayoutConstraint.Create(containerView, NSLayoutAttribute.Top, NSLayoutRelation.Equal, view, NSLayoutAttribute.Top, 1f, 0f),
-            //        NSLayoutConstraint.Create(containerView, NSLayoutAttribute.Bottom, NSLayoutRelation.Equal, view, NSLayoutAttribute.Bottom, 1f, 0f)
-            //});
-            //containerView.Hidden = true;
+            containerView.AddSubview(view);
+            containerView.AddConstraints(new NSLayoutConstraint[]
+            {
+                    NSLayoutConstraint.Create(containerView, NSLayoutAttribute.Trailing, NSLayoutRelation.Equal, view, NSLayoutAttribute.Trailing, 1f, 0f),
+                    NSLayoutConstraint.Create(containerView, NSLayoutAttribute.Leading, NSLayoutRelation.Equal, view, NSLayoutAttribute.Leading, 1f, 0f),
+                    NSLayoutConstraint.Create(containerView, NSLayoutAttribute.Top, NSLayoutRelation.Equal, view, NSLayoutAttribute.Top, 1f, 0f),
+                    NSLayoutConstraint.Create(containerView, NSLayoutAttribute.Bottom, NSLayoutRelation.Equal, view, NSLayoutAttribute.Bottom, 1f, 0f)
+            });
+            containerView.Hidden = true;
 
             return overlay;
         }

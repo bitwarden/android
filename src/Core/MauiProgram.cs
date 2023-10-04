@@ -12,9 +12,13 @@ public static class MauiProgram
 {
     public static MauiAppBuilder ConfigureMauiAppBuilder(Action<IEffectsBuilder> customEffectsBuilder, Action<IMauiHandlersCollection> customHandlers)
     {
+        return ConfigureBaseMauiAppBuilder(customEffectsBuilder, customHandlers)
+            .UseMauiApp<Bit.App.App>();
+    }
+    public static MauiAppBuilder ConfigureBaseMauiAppBuilder(Action<IEffectsBuilder> customEffectsBuilder, Action<IMauiHandlersCollection> customHandlers)
+    {
         var builder = MauiApp.CreateBuilder();
         builder
-            .UseMauiApp<Bit.App.App>()
             .UseMauiCommunityToolkit()
             .UseMauiCompatibility()
             .UseBarcodeReader()
