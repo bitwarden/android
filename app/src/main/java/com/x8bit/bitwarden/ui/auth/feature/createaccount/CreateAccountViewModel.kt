@@ -3,12 +3,15 @@ package com.x8bit.bitwarden.ui.auth.feature.createaccount
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.SubmitClick
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -17,6 +20,7 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
+private const val MIN_PASSWORD_LENGTH = 12
 
 /**
  * Models logic for the create account screen.
@@ -31,7 +35,7 @@ class CreateAccountViewModel @Inject constructor(
             passwordInput = "",
             confirmPasswordInput = "",
             passwordHintInput = "",
-            isSubmitEnabled = false,
+            errorDialogState = BasicDialogState.Hidden,
         ),
 ) {
 
@@ -50,6 +54,13 @@ class CreateAccountViewModel @Inject constructor(
             is PasswordHintChange -> handlePasswordHintChanged(action)
             is PasswordInputChange -> handlePasswordInputChanged(action)
             is CreateAccountAction.CloseClick -> handleCloseClick()
+            is CreateAccountAction.ErrorDialogDismiss -> handleDialogDismiss()
+        }
+    }
+
+    private fun handleDialogDismiss() {
+        mutableStateFlow.update {
+            it.copy(errorDialogState = BasicDialogState.Hidden)
         }
     }
 
@@ -73,8 +84,18 @@ class CreateAccountViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(confirmPasswordInput = action.input) }
     }
 
-    private fun handleSubmitClick() {
-        sendEvent(CreateAccountEvent.ShowToast("TODO: Handle Submit Click"))
+    private fun handleSubmitClick() = when {
+        mutableStateFlow.value.passwordInput.length < MIN_PASSWORD_LENGTH -> {
+            val dialog = BasicDialogState.Shown(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.master_password_length_val_message_x.asText(MIN_PASSWORD_LENGTH),
+            )
+            mutableStateFlow.update { it.copy(errorDialogState = dialog) }
+        }
+
+        else -> {
+            sendEvent(CreateAccountEvent.ShowToast("TODO: Handle Submit Click"))
+        }
     }
 }
 
@@ -87,7 +108,7 @@ data class CreateAccountState(
     val passwordInput: String,
     val confirmPasswordInput: String,
     val passwordHintInput: String,
-    val isSubmitEnabled: Boolean,
+    val errorDialogState: BasicDialogState,
 ) : Parcelable
 
 /**
@@ -139,4 +160,9 @@ sealed class CreateAccountAction {
      * Password hint input changed.
      */
     data class PasswordHintChange(val input: String) : CreateAccountAction()
+
+    /**
+     * User dismissed the error dialog.
+     */
+    data object ErrorDialogDismiss : CreateAccountAction()
 }

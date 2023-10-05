@@ -2,13 +2,15 @@ package com.x8bit.bitwarden.ui.auth.feature.createaccount
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
-import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.SubmitClick
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -28,7 +30,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             passwordInput = "password",
             confirmPasswordInput = "confirmPassword",
             passwordHintInput = "hint",
-            isSubmitEnabled = false,
+            errorDialogState = BasicDialogState.Hidden,
         )
         val handle = SavedStateHandle(mapOf("state" to savedState))
         val viewModel = CreateAccountViewModel(handle)
@@ -36,10 +38,29 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SubmitClick should emit ShowToast`() = runTest {
+    fun `SubmitClick with password below 12 chars should show password length dialog`() = runTest {
         val viewModel = CreateAccountViewModel(SavedStateHandle())
+        val input = "abcdefghikl"
+        viewModel.trySendAction(PasswordInputChange("abcdefghikl"))
+        val expectedState = DEFAULT_STATE.copy(
+            passwordInput = input,
+            errorDialogState = BasicDialogState.Shown(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.master_password_length_val_message_x.asText(12),
+            ),
+        )
+        viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
+        viewModel.stateFlow.test {
+            assertEquals(expectedState, awaitItem())
+        }
+    }
+
+    @Test
+    fun `SubmitClick with long enough password emit ShowToast`() = runTest {
+        val viewModel = CreateAccountViewModel(SavedStateHandle())
+        viewModel.trySendAction(PasswordInputChange("longenoughpassword"))
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(SubmitClick)
+            viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
             assert(awaitItem() is CreateAccountEvent.ShowToast)
         }
     }
@@ -95,7 +116,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             emailInput = "",
             confirmPasswordInput = "",
             passwordHintInput = "",
-            isSubmitEnabled = false,
+            errorDialogState = BasicDialogState.Hidden,
         )
     }
 }

@@ -21,9 +21,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.EmailInputChange
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ErrorDialogDismiss
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButtonTopAppBar
@@ -48,6 +50,10 @@ fun CreateAccountScreen(
             }
         }
     }
+    BitwardenBasicDialog(
+        visibilityState = state.errorDialogState,
+        onDismissRequest = remember(viewModel) { { viewModel.trySendAction(ErrorDialogDismiss) } },
+    )
 
     Column(
         modifier = Modifier
@@ -65,7 +71,7 @@ fun CreateAccountScreen(
             onButtonClick = remember(viewModel) {
                 { viewModel.trySendAction(CreateAccountAction.SubmitClick) }
             },
-            isButtonEnabled = state.isSubmitEnabled,
+            isButtonEnabled = true,
         )
         Column(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -104,7 +110,7 @@ fun CreateAccountScreen(
             BitwardenFilledButton(
                 label = stringResource(id = R.string.submit),
                 onClick = remember { { viewModel.trySendAction(CreateAccountAction.SubmitClick) } },
-                isEnabled = state.isSubmitEnabled,
+                isEnabled = true,
                 modifier = Modifier.fillMaxWidth(),
             )
         }
