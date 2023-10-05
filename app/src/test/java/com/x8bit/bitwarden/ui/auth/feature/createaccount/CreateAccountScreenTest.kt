@@ -1,5 +1,9 @@
 package com.x8bit.bitwarden.ui.auth.feature.createaccount
 
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -12,6 +16,8 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Pas
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.SubmitClick
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -25,7 +31,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
     @Test
     fun `app bar submit click should send SubmitClick action`() {
         val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE.copy(isSubmitEnabled = true))
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
             every { eventFlow } returns emptyFlow()
             every { trySendAction(SubmitClick) } returns Unit
         }
@@ -39,7 +45,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
     @Test
     fun `bottom button submit click should send SubmitClick action`() {
         val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE.copy(isSubmitEnabled = true))
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
             every { eventFlow } returns emptyFlow()
             every { trySendAction(SubmitClick) } returns Unit
         }
@@ -136,6 +142,50 @@ class CreateAccountScreenTest : BaseComposeTest() {
         verify { viewModel.trySendAction(PasswordHintChange(TEST_INPUT)) }
     }
 
+    @Test
+    fun `clicking OK on the error dialog should send ErrorDialogDismiss action`() {
+        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+            every { stateFlow } returns MutableStateFlow(
+                DEFAULT_STATE.copy(
+                    errorDialogState = BasicDialogState.Shown(
+                        title = "title".asText(),
+                        message = "message".asText(),
+                    ),
+                ),
+            )
+            every { eventFlow } returns emptyFlow()
+            every { trySendAction(CreateAccountAction.ErrorDialogDismiss) } returns Unit
+        }
+        composeTestRule.setContent {
+            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+        }
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify { viewModel.trySendAction(CreateAccountAction.ErrorDialogDismiss) }
+    }
+
+    @Test
+    fun `when BasicDialogState is Shown should show dialog`() {
+        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+            every { stateFlow } returns MutableStateFlow(
+                DEFAULT_STATE.copy(
+                    errorDialogState = BasicDialogState.Shown(
+                        title = "title".asText(),
+                        message = "message".asText(),
+                    ),
+                ),
+            )
+            every { eventFlow } returns emptyFlow()
+            every { trySendAction(CreateAccountAction.ErrorDialogDismiss) } returns Unit
+        }
+        composeTestRule.setContent {
+            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+        }
+        composeTestRule.onNode(isDialog()).assertIsDisplayed()
+    }
+
     companion object {
         private const val TEST_INPUT = "input"
         private val DEFAULT_STATE = CreateAccountState(
@@ -143,7 +193,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
             passwordInput = "",
             confirmPasswordInput = "",
             passwordHintInput = "",
-            isSubmitEnabled = false,
+            errorDialogState = BasicDialogState.Hidden,
         )
     }
 }
