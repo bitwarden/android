@@ -8,6 +8,7 @@ using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
+using Newtonsoft.Json;
 
 namespace Bit.Core.Services
 {
@@ -850,6 +851,7 @@ namespace Bit.Core.Services
             internal const string PreAuthEnvironmentUrlsKey = "preAuthEnvironmentUrls";
         }
 
+        // Migrate environment data to use Regions
         private async Task MigrateFrom6To7Async()
         {
             // account data
@@ -857,49 +859,25 @@ namespace Bit.Core.Services
 
             foreach (var account in state.Accounts.Where(a => a.Value?.Profile?.UserId != null && a.Value?.Settings != null))
             {
-                var urls = account.Value.Settings.EnvironmentUrls;
-                if (urls == null || urls.Base == Region.US.BaseUrl())
-                {
-                    account.Value.Settings.EnvironmentUrls = Region.US.GetUrls();
-                    account.Value.Settings.Region = Region.US;
-                    continue;
-                }
-
-                if (urls.Base == Region.EU.BaseUrl())
-                {
-                    account.Value.Settings.EnvironmentUrls = Region.EU.GetUrls();
-                    account.Value.Settings.Region = Region.EU;
-                    continue;
-                }
-
-                account.Value.Settings.Region = Region.SelfHosted;
+                var urls = account.Value.Settings.EnvironmentUrls ?? Region.US.GetUrls();
+                account.Value.Settings.Region = urls.Region;
+                account.Value.Settings.EnvironmentUrls = urls.Region.GetUrls() ?? urls;
                 continue;
             }
 
             await SetValueAsync(Storage.Prefs, Constants.StateKey, state);
 
             // Update pre auth urls and region
-            var preAuthUrls = await GetValueAsync<EnvironmentUrlData>(Storage.Prefs, V7Keys.PreAuthEnvironmentUrlsKey);
-            if (preAuthUrls == null || preAuthUrls.Base == Region.US.BaseUrl())
-            {
-                await SetValueAsync(Storage.Prefs, V7Keys.RegionEnvironmentKey, Region.US);
-                await SetValueAsync(Storage.Prefs, V7Keys.PreAuthEnvironmentUrlsKey, Region.US.GetUrls());
-            }
-            else if (preAuthUrls.Base == Region.EU.BaseUrl())
-            {
-                await SetValueAsync(Storage.Prefs, V7Keys.RegionEnvironmentKey, Region.EU);
-                await SetValueAsync(Storage.Prefs, V7Keys.PreAuthEnvironmentUrlsKey, Region.EU.GetUrls());
-            }
-            else
-            {
-                await SetValueAsync(Storage.Prefs, V7Keys.RegionEnvironmentKey, Region.SelfHosted);
-            }
+            var preAuthUrls = await GetValueAsync<EnvironmentUrlData>(Storage.Prefs, V7Keys.PreAuthEnvironmentUrlsKey) ?? Region.US.GetUrls();
+            await SetValueAsync(Storage.Prefs, V7Keys.RegionEnvironmentKey, preAuthUrls.Region);
+            await SetValueAsync(Storage.Prefs, V7Keys.PreAuthEnvironmentUrlsKey, preAuthUrls.Region.GetUrls() ?? preAuthUrls);
+
 
             // Update stored version
             await SetLastStateVersionAsync(7);
         }
-
         #endregion
+
         // Helpers
 
         private async Task<int> GetLastStateVersionAsync()

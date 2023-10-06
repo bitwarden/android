@@ -1363,27 +1363,9 @@ namespace Bit.Core.Services
             _storageMediatorService.Save(Constants.ConfigsKey, value);
         }
 
-        public async Task<Region?> GetActiveUserRegionAsync(string userId = null)
+        public async Task<Region?> GetActiveUserRegionAsync()
         {
-            return (await GetAccountAsync(
-                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
-            ))?.Settings?.Region;
-        }
-
-        public async Task UpdateActiveUserEnvironmentAsync(Region region, EnvironmentUrlData urls, string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-
-            if (account?.Settings == null)
-            {
-                return;
-            }
-
-            account.Settings.Region = region;
-            account.Settings.EnvironmentUrls = urls;
-            await SaveAccountAsync(account, reconciledOptions);
+            return await GetActiveUserCustomDataAsync(a => a?.Settings?.Region);
         }
 
         public async Task<Region?> GetPreAuthRegionAsync()

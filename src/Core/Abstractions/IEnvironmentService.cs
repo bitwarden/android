@@ -18,7 +18,6 @@ namespace Bit.Core.Abstractions
         string GetWebVaultUrl(bool returnNullIfDefault = false);
         string GetWebSendUrl();
         string GetCurrentDomain();
-        Task<EnvironmentUrlData> SetUrlsAsync(EnvironmentUrlData urls);
         Task SetUrlsFromStorageAsync();
         Task<EnvironmentUrlData> SetRegionAsync(Region region, EnvironmentUrlData selfHostedUrls = null);
     }

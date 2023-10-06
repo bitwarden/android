@@ -22,21 +22,7 @@ namespace Bit.Core.Models.View
             Email = a.Profile?.Email;
             Name = a.Profile?.Name;
             AvatarColor = a.Profile?.AvatarColor;
-            Hostname = ParseEndpoint(a.Settings?.EnvironmentUrls);
-        }
-
-        private string ParseEndpoint(EnvironmentUrlData urls)
-        {
-            var url = urls?.WebVault ?? urls?.Base ?? urls?.Api ?? urls?.Identity;
-            if (!string.IsNullOrWhiteSpace(url))
-            {
-                if (url.Contains(Region.US.Domain()) || url.Contains(Region.EU.Domain()))
-                {
-                    return CoreHelpers.GetDomain(url);
-                }
-                return CoreHelpers.GetHostname(url);
-            }
-            return string.Empty;
+            Hostname = a.Settings?.EnvironmentUrls?.ParseEndpoint();
         }
 
         public bool IsAccount { get; set; }

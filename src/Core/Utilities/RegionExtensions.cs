@@ -13,7 +13,6 @@ namespace Bit.Core.Utilities
                     return EnvironmentUrlData.DefaultUS;
                 case Region.EU:
                     return EnvironmentUrlData.DefaultEU;
-                case Region.SelfHosted:
                 default:
                     return null;
             }
@@ -27,7 +26,6 @@ namespace Bit.Core.Utilities
                     return EnvironmentUrlData.DefaultUS.Base;
                 case Region.EU:
                     return EnvironmentUrlData.DefaultEU.Base;
-                case Region.SelfHosted:
                 default:
                     return null;
             }
@@ -41,7 +39,6 @@ namespace Bit.Core.Utilities
                     return EnvironmentUrlData.DefaultUS.Domain;
                 case Region.EU:
                     return EnvironmentUrlData.DefaultEU.Domain;
-                case Region.SelfHosted:
                 default:
                     return null;
             }

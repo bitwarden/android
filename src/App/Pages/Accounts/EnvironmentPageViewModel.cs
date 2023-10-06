@@ -57,8 +57,7 @@ namespace Bit.App.Pages
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.EnvironmentPageUrlsError, AppResources.Ok);
                 return;
             }
-
-            var resUrls = await _environmentService.SetUrlsAsync(new Core.Models.Data.EnvironmentUrlData
+            var urls = new Core.Models.Data.EnvironmentUrlData
             {
                 Base = BaseUrl,
                 Api = ApiUrl,
@@ -66,7 +65,8 @@ namespace Bit.App.Pages
                 WebVault = WebVaultUrl,
                 Icons = IconsUrl,
                 Notifications = NotificationsUrls
-            });
+            };
+            var resUrls = await _environmentService.SetRegionAsync(urls.Region, urls);
 
             // re-set urls since service can change them, ex: prefixing https://
             BaseUrl = resUrls.Base;

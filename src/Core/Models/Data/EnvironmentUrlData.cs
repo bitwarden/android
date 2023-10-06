@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Text.RegularExpressions;
+using Bit.Core.Enums;
+using Bit.Core.Utilities;
 
 namespace Bit.Core.Models.Data
 {
@@ -44,5 +46,63 @@ namespace Bit.Core.Models.Data
                 && string.IsNullOrEmpty(Notifications)
                 && string.IsNullOrEmpty(WebVault)
                 && string.IsNullOrEmpty(Events);
+
+        public Region Region
+        {
+            get
+            {
+                if (Base == Region.US.BaseUrl())
+                {
+                    return Region.US;
+                }
+                if (Base == Region.EU.BaseUrl())
+                {
+                    return Region.EU;
+                }
+                return Region.SelfHosted;
+            }
+        }
+
+        public EnvironmentUrlData FormatUrls()
+        {
+            return new EnvironmentUrlData
+            {
+                Base = FormatUrl(Base),
+                Api = FormatUrl(Api),
+                Identity = FormatUrl(Identity),
+                Icons = FormatUrl(Icons),
+                Notifications = FormatUrl(Notifications),
+                WebVault = FormatUrl(WebVault),
+                Events = FormatUrl(Events)
+            };
+        }
+
+        private string FormatUrl(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                return null;
+            }
+            url = Regex.Replace(url, "\\/+$", string.Empty);
+            if (!url.StartsWith("http://") && !url.StartsWith("https://"))
+            {
+                url = string.Concat("https://", url);
+            }
+            return url.Trim();
+        }
+
+        public string ParseEndpoint()
+        {
+            var url = WebVault ?? Base ?? Api ?? Identity;
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                if (url.Contains(Region.US.Domain()) || url.Contains(Region.EU.Domain()))
+                {
+                    return CoreHelpers.GetDomain(url);
+                }
+                return CoreHelpers.GetHostname(url);
+            }
+            return string.Empty;
+        }
     }
 }

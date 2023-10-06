@@ -58,16 +58,13 @@ namespace Bit.Core.Services
 
         public string GetCurrentDomain()
         {
-            var url = WebVaultUrl ?? BaseUrl ?? ApiUrl ?? IdentityUrl;
-            if (!string.IsNullOrWhiteSpace(url))
+            return new EnvironmentUrlData
             {
-                if (url.Contains(Region.US.Domain()) || url.Contains(Region.EU.Domain()))
-                {
-                    return CoreHelpers.GetDomain(url);
-                }
-                return CoreHelpers.GetHostname(url);
-            }
-            return string.Empty;
+                WebVault = WebVaultUrl,
+                Base = BaseUrl,
+                Api = ApiUrl,
+                Identity = IdentityUrl
+            }.ParseEndpoint();
         }
 
         public async Task SetUrlsFromStorageAsync()
@@ -85,18 +82,7 @@ namespace Bit.Core.Services
                     return;
                 }
 
-                switch (region)
-                {
-                    case Region.US:
-                    case Region.EU:
-                        await SetRegionAsync(region.Value);
-                        break;
-                    case Region.SelfHosted:
-                    case null:
-                    default:
-                        await SetRegionAsync(Region.SelfHosted, urls);
-                        break;
-                }
+                await SetRegionAsync(region.Value, urls);
                 _conditionedAwaiterManager.SetAsCompleted(AwaiterPrecondition.EnvironmentUrlsInited);
             }
             catch (System.Exception ex)
@@ -107,26 +93,9 @@ namespace Bit.Core.Services
 
         }
 
-        public async Task<EnvironmentUrlData> SetUrlsAsync(EnvironmentUrlData urls)
-        {
-            // format urls for Base comparison
-            urls = FormatUrls(urls);
-            if (urls.Base == Region.EU.BaseUrl())
-            {
-                return await SetRegionAsync(Region.EU);
-            }
-            if (urls.Base == Region.US.BaseUrl())
-            {
-                return await SetRegionAsync(Region.US);
-            }
-            return await SetRegionAsync(Region.SelfHosted, urls);
-        }
-
         public async Task<EnvironmentUrlData> SetRegionAsync(Region region, EnvironmentUrlData selfHostedUrls = null)
         {
             EnvironmentUrlData urls;
-            await _stateService.SetPreAuthRegionAsync(region);
-            SelectedRegion = region;
 
             if (region == Region.SelfHosted)
             {
@@ -135,13 +104,15 @@ namespace Bit.Core.Services
                 {
                     return await SetRegionAsync(Region.US);
                 }
-                urls = FormatUrls(selfHostedUrls);
+                urls = selfHostedUrls.FormatUrls();
             }
             else
             {
                 urls = region.GetUrls();
             }
 
+            SelectedRegion = region;
+            await _stateService.SetPreAuthRegionAsync(region);
             await _stateService.SetPreAuthEnvironmentUrlsAsync(urls);
             BaseUrl = urls.Base;
             WebVaultUrl = urls.WebVault;
@@ -152,32 +123,6 @@ namespace Bit.Core.Services
             EventsUrl = urls.Events;
             _apiService.SetUrls(urls);
             return urls;
-        }
-
-        private EnvironmentUrlData FormatUrls(EnvironmentUrlData urls)
-        {
-            urls.Base = FormatUrl(urls.Base);
-            urls.WebVault = FormatUrl(urls.WebVault);
-            urls.Api = FormatUrl(urls.Api);
-            urls.Identity = FormatUrl(urls.Identity);
-            urls.Icons = FormatUrl(urls.Icons);
-            urls.Notifications = FormatUrl(urls.Notifications);
-            urls.Events = FormatUrl(urls.Events);
-            return urls;
-        }
-
-        private string FormatUrl(string url)
-        {
-            if (string.IsNullOrWhiteSpace(url))
-            {
-                return null;
-            }
-            url = Regex.Replace(url, "\\/+$", string.Empty);
-            if (!url.StartsWith("http://") && !url.StartsWith("https://"))
-            {
-                url = string.Concat("https://", url);
-            }
-            return url.Trim();
         }
     }
 }
