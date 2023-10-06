@@ -26,6 +26,7 @@ fun BitwardenTextField(
         label = { Text(text = label) },
         value = value,
         onValueChange = onValueChange,
+        singleLine = true,
     )
 }
 
