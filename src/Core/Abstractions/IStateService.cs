@@ -181,7 +181,7 @@ namespace Bit.Core.Abstractions
         Task SetPendingAdminAuthRequestAsync(PendingAdminAuthRequest value, string userId = null);
         string GetLocale();
         void SetLocale(string locale);
-        ConfigResponse GetConfigs(); 
+        ConfigResponse GetConfigs();
         void SetConfigs(ConfigResponse value);
         Task<bool> GetShouldTrustDeviceAsync();
         Task SetShouldTrustDeviceAsync(bool value);
