@@ -24,9 +24,9 @@ namespace Bit.Core.Models.Domain
         public EncString Password { get; set; }
         public DateTime LastUsedDate { get; set; }
 
-        public Task<PasswordHistoryView> DecryptAsync(string orgId)
+        public Task<PasswordHistoryView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
-            return DecryptObjAsync(new PasswordHistoryView(this), this, _map, orgId);
+            return DecryptObjAsync(new PasswordHistoryView(this), this, _map, orgId, key);
         }
 
         public PasswordHistoryData ToPasswordHistoryData()

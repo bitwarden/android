@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Styles;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
@@ -79,7 +80,7 @@ namespace Bit.App.Pages
 
             _broadcasterService.Subscribe(nameof(GeneratorPage), (message) =>
             {
-                if (message.Command == "updatedTheme")
+                if (message.Command is ThemeManager.UPDATED_THEME_MESSAGE_KEY)
                 {
                     Device.BeginInvokeOnMainThread(() => _vm.RedrawPassword());
                 }

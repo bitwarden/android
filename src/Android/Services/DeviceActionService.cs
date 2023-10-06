@@ -547,6 +547,12 @@ namespace Bit.Droid.Services
             return true;
         }
 
+        public bool SupportsAutofillServices() => Build.VERSION.SdkInt >= BuildVersionCodes.O;
+
+        public bool SupportsInlineAutofill() => Build.VERSION.SdkInt >= BuildVersionCodes.R;
+
+        public bool SupportsDrawOver() => Build.VERSION.SdkInt >= BuildVersionCodes.M;
+
         private Intent RateIntentForUrl(string url, Activity activity)
         {
             var intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse($"{url}?id={activity.PackageName}"));
@@ -599,6 +605,38 @@ namespace Bit.Droid.Services
         {
             // only used by iOS
             throw new NotImplementedException();
+        }
+
+        public string GetAutofillAccessibilityDescription()
+        {
+            if (Build.VERSION.SdkInt <= BuildVersionCodes.LollipopMr1)
+            {
+                return AppResources.AccessibilityDescription;
+            }
+            if (Build.VERSION.SdkInt <= BuildVersionCodes.M)
+            {
+                return AppResources.AccessibilityDescription2;
+            }
+            if (Build.VERSION.SdkInt <= BuildVersionCodes.NMr1)
+            {
+                return AppResources.AccessibilityDescription3;
+            }
+
+            return AppResources.AccessibilityDescription4;
+        }
+
+        public string GetAutofillDrawOverDescription()
+        {
+            if (Build.VERSION.SdkInt <= BuildVersionCodes.M)
+            {
+                return AppResources.DrawOverDescription;
+            }
+            if (Build.VERSION.SdkInt <= BuildVersionCodes.NMr1)
+            {
+                return AppResources.DrawOverDescription2;
+            }
+
+            return AppResources.DrawOverDescription3;
         }
 
         private void SetNumericKeyboardTo(EditText editText)

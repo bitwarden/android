@@ -64,7 +64,7 @@ namespace Bit.App.Pages
             }
             _broadcasterService.Subscribe(nameof(HomePage), (message) =>
             {
-                if (message.Command == "updatedTheme")
+                if (message.Command is ThemeManager.UPDATED_THEME_MESSAGE_KEY)
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {

@@ -42,7 +42,7 @@ namespace Bit.Core.Services
             var device = (int)_platformUtilsService.GetDevice();
             _httpClient.DefaultRequestHeaders.Add("Device-Type", device.ToString());
             _httpClient.DefaultRequestHeaders.Add("Bitwarden-Client-Name", _platformUtilsService.GetClientType().GetString());
-            _httpClient.DefaultRequestHeaders.Add("Bitwarden-Client-Version", _platformUtilsService.GetApplicationVersion());
+            _httpClient.DefaultRequestHeaders.Add("Bitwarden-Client-Version", VersionHelpers.RemoveSuffix(_platformUtilsService.GetApplicationVersion()));
             if (!string.IsNullOrWhiteSpace(customUserAgent))
             {
                 _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(customUserAgent);

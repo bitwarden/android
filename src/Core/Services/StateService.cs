@@ -695,16 +695,19 @@ namespace Bit.Core.Services
             await SetValueAsync(Constants.LastBuildKey, value, await GetDefaultStorageOptionsAsync());
         }
 
+        // TODO: [PS-961] Fix negative function names
         public async Task<bool?> GetDisableFaviconAsync()
         {
             return await GetValueAsync<bool?>(Constants.DisableFaviconKey, await GetDefaultStorageOptionsAsync());
         }
 
+        // TODO: [PS-961] Fix negative function names
         public async Task SetDisableFaviconAsync(bool? value)
         {
             await SetValueAsync(Constants.DisableFaviconKey, value, await GetDefaultStorageOptionsAsync());
         }
 
+        // TODO: [PS-961] Fix negative function names
         public async Task<bool?> GetDisableAutoTotpCopyAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
@@ -713,6 +716,7 @@ namespace Bit.Core.Services
                 reconciledOptions);
         }
 
+        // TODO: [PS-961] Fix negative function names
         public async Task SetDisableAutoTotpCopyAsync(bool? value, string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },

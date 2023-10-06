@@ -7,5 +7,6 @@ namespace Bit.Core.Abstractions
         Task<bool> CanUseBiometricsUnlockAsync();
         Task<bool> SetupBiometricAsync(string bioIntegritySrcKey = null);
         Task<bool> IsSystemBiometricIntegrityValidAsync(string bioIntegritySrcKey = null);
+        Task SetCanUnlockWithBiometricsAsync(bool canUnlockWithBiometrics);
     }
 }

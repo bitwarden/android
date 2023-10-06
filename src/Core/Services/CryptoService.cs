@@ -236,9 +236,9 @@ namespace Bit.Core.Services
             {
                 throw new ArgumentNullException(nameof(key));
             }
-            if (!(key is UserKey) && !(key is OrgKey))
+            if (!(key is UserKey) && !(key is OrgKey) && !(key is CipherKey))
             {
-                throw new ArgumentException($"Data encryption keys must be of type UserKey or OrgKey. {key.GetType().FullName} unsupported.");
+                throw new ArgumentException($"Data encryption keys must be of type UserKey or OrgKey or CipherKey. {key.GetType().FullName} unsupported.");
             }
 
             var newSymKey = await _cryptoFunctionService.RandomBytesAsync(64);
@@ -717,6 +717,17 @@ namespace Bit.Core.Services
                 password,
                 await _stateService.GetEmailAsync(userId),
                 await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile)));
+        }
+
+        public async Task UpdateMasterKeyAndUserKeyAsync(MasterKey masterKey)
+        {
+            var userKey = await DecryptUserKeyWithMasterKeyAsync(masterKey);
+            await SetMasterKeyAsync(masterKey);
+            var hasKey = await HasUserKeyAsync();
+            if (!hasKey)
+            {
+                await SetUserKeyAsync(userKey);
+            }
         }
 
         // --HELPER METHODS--
