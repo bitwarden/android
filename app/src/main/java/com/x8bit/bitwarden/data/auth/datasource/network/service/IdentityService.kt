@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 
 /**
- * Wraps raw retrofit identity API in a cleaner interface.
+ * Provides an API for querying identity endpoints.
  */
 interface IdentityService {
 
