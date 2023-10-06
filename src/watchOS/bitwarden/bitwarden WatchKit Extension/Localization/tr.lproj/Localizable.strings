@@ -1,10 +1,10 @@
 "ThereAreNoItemsToList" = "Listelenecek kayıt yok";
 "ToViewVerificationCodesUpgradeToPremium" = "Doğrulama kodlarını görmek için premium'a geçin";
-"Add2FactorAutenticationToAnItemToViewVerificationCodes" = "Add 2 factor authentication to an item to view the verification codes";
-"LogInToBitwardenOnYourIPhoneToViewVerificationCodes" = "Log in to Bitwarden on your iPhone to view verification codes";
-"SyncingItemsContainingVerificationCodes" = "Syncing items containing verification codes";
-"UnlockBitwardenOnYourIPhoneToViewVerificationCodes" = "Unlock Bitwarden on your iPhone to view verification codes";
-"SetUpBitwardenToViewItemsContainingVerificationCodes" = "Set up Bitwarden to view items containing verification codes";
+"Add2FactorAutenticationToAnItemToViewVerificationCodes" = "Doğrulama kodlarını görüntülemek için, bir öğeye 2 adımlı doğrulama ekleyin";
+"LogInToBitwardenOnYourIPhoneToViewVerificationCodes" = "Doğrulama kodlarını görmek için Bitwarden'a iPhone'unuzdan giriş yapın";
+"SyncingItemsContainingVerificationCodes" = "Doğrulama kodları içeren kayıtlar eşitleniyor";
+"UnlockBitwardenOnYourIPhoneToViewVerificationCodes" = "Doğrulama kodlarını görmek için iPhone'unuzda Bitwarden'ın kilidini açın";
+"SetUpBitwardenToViewItemsContainingVerificationCodes" = "Doğrulama kodu içeren kayıtları görmek için Bitwarden'ı ayarlayın";
 "Search" = "Ara";
 "NoItemsFound" = "Hiç kayıt bulunamadı";
-"SetUpAppleWatchPasscodeInOrderToUseBitwarden" = "Set up Apple Watch passcode in order to use Bitwarden";
+"SetUpAppleWatchPasscodeInOrderToUseBitwarden" = "Bitwarden'ı kullanmak için Apple Watch parolasını ayarlayın";
