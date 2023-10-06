@@ -51,6 +51,7 @@ fun BitwardenPasswordField(
         } else {
             PasswordVisualTransformation()
         },
+        singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         trailingIcon = {
             IconButton(
