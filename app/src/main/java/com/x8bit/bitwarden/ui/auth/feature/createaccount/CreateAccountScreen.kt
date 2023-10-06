@@ -26,7 +26,6 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Pas
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButtonTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
@@ -105,12 +104,6 @@ fun CreateAccountScreen(
                 label = stringResource(id = R.string.master_password_hint),
                 value = state.passwordHintInput,
                 onValueChange = remember { { viewModel.trySendAction(PasswordHintChange(it)) } },
-                modifier = Modifier.fillMaxWidth(),
-            )
-            BitwardenFilledButton(
-                label = stringResource(id = R.string.submit),
-                onClick = remember { { viewModel.trySendAction(CreateAccountAction.SubmitClick) } },
-                isEnabled = true,
                 modifier = Modifier.fillMaxWidth(),
             )
         }

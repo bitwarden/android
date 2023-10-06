@@ -38,21 +38,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
         }
-        composeTestRule.onAllNodesWithText("Submit")[0].performClick()
-        verify { viewModel.trySendAction(SubmitClick) }
-    }
-
-    @Test
-    fun `bottom button submit click should send SubmitClick action`() {
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(SubmitClick) } returns Unit
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
-        }
-        composeTestRule.onAllNodesWithText("Submit")[1].performClick()
+        composeTestRule.onNodeWithText("Submit").performClick()
         verify { viewModel.trySendAction(SubmitClick) }
     }
 
