@@ -13,7 +13,7 @@ namespace Bit.Core.Services
 {
     public class StateMigrationService : IStateMigrationService
     {
-        private const int StateVersion = 6;
+        private const int StateVersion = 7;
 
         private readonly DeviceType _deviceType;
         private readonly IStorageService _preferencesStorageService;
@@ -86,6 +86,9 @@ namespace Bit.Core.Services
                     goto case 5;
                 case 5:
                     await MigrateFrom5To6Async();
+                    goto case 6;
+                case 6:
+                    await MigrateFrom6To7Async();
                     break;
             }
         }
@@ -837,6 +840,66 @@ namespace Bit.Core.Services
 
         #endregion
 
+        #region v6 to v7 Migration
+
+        private class V7Keys
+        {
+            // global keys
+            internal const string StateKey = "state";
+            internal const string RegionEnvironmentKey = "regionEnvironment";
+            internal const string PreAuthEnvironmentUrlsKey = "preAuthEnvironmentUrls";
+        }
+
+        private async Task MigrateFrom6To7Async()
+        {
+            // account data
+            var state = await GetValueAsync<State>(Storage.Prefs, V7Keys.StateKey);
+
+            foreach (var account in state.Accounts.Where(a => a.Value?.Profile?.UserId != null && a.Value?.Settings != null))
+            {
+                var urls = account.Value.Settings.EnvironmentUrls;
+                if (urls == null || urls.Base == Region.US.BaseUrl())
+                {
+                    account.Value.Settings.EnvironmentUrls = Region.US.GetUrls();
+                    account.Value.Settings.Region = Region.US;
+                    continue;
+                }
+
+                if (urls.Base == Region.EU.BaseUrl())
+                {
+                    account.Value.Settings.EnvironmentUrls = Region.EU.GetUrls();
+                    account.Value.Settings.Region = Region.EU;
+                    continue;
+                }
+
+                account.Value.Settings.Region = Region.SelfHosted;
+                continue;
+            }
+
+            await SetValueAsync(Storage.Prefs, Constants.StateKey, state);
+
+            // Update pre auth urls and region
+            var preAuthUrls = await GetValueAsync<EnvironmentUrlData>(Storage.Prefs, V7Keys.PreAuthEnvironmentUrlsKey);
+            if (preAuthUrls == null || preAuthUrls.Base == Region.US.BaseUrl())
+            {
+                await SetValueAsync(Storage.Prefs, V7Keys.RegionEnvironmentKey, Region.US);
+                await SetValueAsync(Storage.Prefs, V7Keys.PreAuthEnvironmentUrlsKey, Region.US.GetUrls());
+            }
+            else if (preAuthUrls.Base == Region.EU.BaseUrl())
+            {
+                await SetValueAsync(Storage.Prefs, V7Keys.RegionEnvironmentKey, Region.EU);
+                await SetValueAsync(Storage.Prefs, V7Keys.PreAuthEnvironmentUrlsKey, Region.EU.GetUrls());
+            }
+            else
+            {
+                await SetValueAsync(Storage.Prefs, V7Keys.RegionEnvironmentKey, Region.SelfHosted);
+            }
+
+            // Update stored version
+            await SetLastStateVersionAsync(7);
+        }
+
+        #endregion
         // Helpers
 
         private async Task<int> GetLastStateVersionAsync()

@@ -85,9 +85,6 @@ namespace Bit.Core.Services
                     return;
                 }
 
-                // Migrate old users to regions
-                region ??= await MigrateToRegionsAsync(urls);
-
                 switch (region)
                 {
                     case Region.US:
@@ -108,22 +105,6 @@ namespace Bit.Core.Services
                 throw;
             }
 
-        }
-
-        private async Task<Region?> MigrateToRegionsAsync(EnvironmentUrlData urls)
-        {
-            if (urls.Base == Region.US.BaseUrl())
-            {
-                await _stateService.UpdateActiveUserEnvironmentAsync(Region.US, Region.US.GetUrls());
-                return Region.US;
-            }
-            if (urls.Base == Region.EU.BaseUrl())
-            {
-                await _stateService.UpdateActiveUserEnvironmentAsync(Region.EU, Region.EU.GetUrls());
-                return Region.EU;
-            }
-            await _stateService.UpdateActiveUserEnvironmentAsync(Region.SelfHosted, urls);
-            return Region.SelfHosted;
         }
 
         public async Task<EnvironmentUrlData> SetUrlsAsync(EnvironmentUrlData urls)

@@ -46,7 +46,7 @@ namespace Bit.Core
         public const string PreLoginEmailKey = "preLoginEmailKey";
         public const string ConfigsKey = "configsKey";
         public const string DisplayEuEnvironmentFlag = "display-eu-environment";
-        public const string RegionEnvironment = "RegionEnvironment";
+        public const string RegionEnvironment = "regionEnvironment";
 
         /// <summary>
         /// This key is used to store the value of "ShouldConnectToWatch" of the last user that had logged in
