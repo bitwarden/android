@@ -21,7 +21,7 @@
             <StackLayout StyleClass="box">
                 <Label Text="{u:I18n LogInSsoSummary}"
                    StyleClass="text-md"
-                   HorizontalTextAlignment="Start"></Label>
+                   HorizontalTextAlignment="Start" />
                 <StackLayout StyleClass="box-row">
                     <Label
                         Text="{u:I18n OrgIdentifier}"
@@ -33,14 +33,14 @@
                         StyleClass="box-value" 
                         ReturnType="Go"
                         ReturnCommand="{Binding LogInCommand}" 
-                        AutomationId="OrgIdentifierEntry"/>
+                        AutomationId="OrgIdentifierEntry" />
                 </StackLayout>
             </StackLayout>
             <StackLayout Padding="10, 0">
                 <Button Text="{u:I18n LogIn}"
                         StyleClass="btn-primary"
                         Clicked="LogIn_Clicked"
-                        AutomationId="LogInButton"></Button>
+                        AutomationId="LogInButton" />
             </StackLayout>
         </StackLayout>
     </ScrollView>
