@@ -1,15 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using Bit.App.Abstractions;
+﻿using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
-using Microsoft.Maui.ApplicationModel.Communication;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -23,8 +18,7 @@ namespace Bit.App.Pages
 
         public BaseContentPage()
         {
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.iOS)
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
                 On<iOS>().SetUseSafeArea(true);
                 On<iOS>().SetModalPresentationStyle(UIModalPresentationStyle.FullScreen);
@@ -35,7 +29,7 @@ namespace Bit.App.Pages
 
         public bool IsThemeDirty { get; set; }
 
-        protected async override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
 
@@ -70,7 +64,7 @@ namespace Bit.App.Pages
             var indicator = new ActivityIndicator
             {
                 IsRunning = true,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
+                VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.Center,
                 Color = ThemeManager.GetResourceColor("PrimaryColor"),
             };
@@ -102,8 +96,7 @@ namespace Bit.App.Pages
                     }
                 }
             }
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.iOS)
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
                 await DoWorkAsync();
                 return;
@@ -111,7 +104,7 @@ namespace Bit.App.Pages
             await Task.Run(async () =>
             {
                 await Task.Delay(fromModal ? ShowModalAnimationDelay : ShowPageAnimationDelay);
-                Device.BeginInvokeOnMainThread(async () => await DoWorkAsync());
+                MainThread.BeginInvokeOnMainThread(async () => await DoWorkAsync());
             });
         }
 
@@ -120,7 +113,7 @@ namespace Bit.App.Pages
             Task.Run(async () =>
             {
                 await Task.Delay(ShowModalAnimationDelay);
-                Device.BeginInvokeOnMainThread(() => input.Focus());
+                MainThread.BeginInvokeOnMainThread(() => input.Focus());
             });
         }
 

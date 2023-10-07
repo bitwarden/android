@@ -1,5 +1,4 @@
 ﻿using AndroidX.AppCompat.View.Menu;
-using AndroidX.Navigation.UI;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Google.Android.Material.BottomNavigation;
@@ -95,6 +94,7 @@ namespace Bit.App.Handlers
 			}
         }
 
+        //Currently the Disconnect Handler needs to be manually called from the App: https://github.com/dotnet/maui/issues/3604
         protected override void DisconnectHandler(global::Android.Views.View platformView) 
         {
             if(_bottomNavigationViewGroup != null)

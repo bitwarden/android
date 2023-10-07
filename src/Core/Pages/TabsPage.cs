@@ -56,6 +56,8 @@ namespace Bit.App.Pages
             };
             Children.Add(settingsPage);
 
+            Unloaded += OnUnloaded;
+
             if (DeviceInfo.Platform == DevicePlatform.Android)
             {
                 Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific.TabbedPage.SetToolbarPlacement(this,
@@ -107,6 +109,11 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
             _broadcasterService.Unsubscribe(nameof(TabsPage));
+        }
+
+        private void OnUnloaded(object sender, EventArgs e)
+        {
+            Handler?.DisconnectHandler();
         }
 
         public void ResetToVaultPage()

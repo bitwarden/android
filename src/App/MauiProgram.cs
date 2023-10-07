@@ -1,4 +1,4 @@
-namespace Bit.App
+﻿namespace Bit.App
 {
     public class MauiProgram
     {
@@ -28,7 +28,8 @@ namespace Bit.App
                     Bit.App.Handlers.TimePickerHandlerMappings.Setup();
                     Bit.App.Handlers.ButtonHandlerMappings.Setup();
 
-                    handlers.AddHandler(typeof(TabbedPage), typeof(Bit.App.Handlers.CustomTabbedPageHandler));
+                    handlers.AddHandler(typeof(Bit.App.Pages.TabsPage), typeof(Bit.App.Handlers.CustomTabbedPageHandler));
+                    handlers.AddHandler(typeof(Bit.App.Controls.HybridWebView), typeof(Bit.App.Handlers.HybridWebViewHandler));
 #else
                     iOS.Core.Utilities.iOSCoreHelpers.ConfigureMAUIHandlers(handlers);
 #endif

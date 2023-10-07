@@ -1,13 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Bit.App.Controls;
+﻿using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
-using Bit.Core.Services;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -33,24 +28,23 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.AuthingWithSso = authingWithSso ?? false;
             _vm.StartSetPasswordAction = () =>
-                Device.BeginInvokeOnMainThread(async () => await StartSetPasswordAsync());
+                MainThread.BeginInvokeOnMainThread(async () => await StartSetPasswordAsync());
             _vm.TwoFactorAuthSuccessAction = () =>
-                Device.BeginInvokeOnMainThread(async () => await TwoFactorAuthSuccessToMainAsync());
+                MainThread.BeginInvokeOnMainThread(async () => await TwoFactorAuthSuccessToMainAsync());
             _vm.LockAction = () =>
-                Device.BeginInvokeOnMainThread(TwoFactorAuthSuccessWithSSOLocked);
+                MainThread.BeginInvokeOnMainThread(TwoFactorAuthSuccessWithSSOLocked);
             _vm.UpdateTempPasswordAction =
-                () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
+                () => MainThread.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.StartDeviceApprovalOptionsAction =
-                () => Device.BeginInvokeOnMainThread(async () => await StartDeviceApprovalOptionsAsync());
+                () => MainThread.BeginInvokeOnMainThread(async () => await StartDeviceApprovalOptionsAsync());
             _vm.CloseAction = async () => await Navigation.PopModalAsync();
             DuoWebView = _duoWebView;
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.Android)
+
+            if (DeviceInfo.Platform == DevicePlatform.Android)
             {
                 ToolbarItems.Remove(_cancelItem);
             }
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.iOS)
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
                 ToolbarItems.Add(_moreItem);
             }
@@ -62,7 +56,7 @@ namespace Bit.App.Pages
 
         public HybridWebView DuoWebView { get; set; }
 
-        protected async override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
             _broadcasterService.Subscribe(nameof(TwoFactorPage), (message) =>
@@ -73,7 +67,7 @@ namespace Bit.App.Pages
                     if (_vm.YubikeyMethod && !string.IsNullOrWhiteSpace(token) &&
                         token.Length == 44 && !token.Contains(" "))
                     {
-                        Device.BeginInvokeOnMainThread(async () =>
+                        MainThread.BeginInvokeOnMainThread(async () =>
                         {
                             _vm.Token = token;
                             await _vm.SubmitAsync();
@@ -107,7 +101,7 @@ namespace Bit.App.Pages
                 return Task.FromResult(0);
             });
         }
-
+        
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
@@ -117,6 +111,12 @@ namespace Bit.App.Pages
                 _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
             }
         }
+
+        private void TwoFactorPage_OnUnloaded(object sender, EventArgs e)
+        {
+            _duoWebView?.Handler?.DisconnectHandler();
+        }
+
         protected override bool OnBackButtonPressed()
         {
             if (_vm.YubikeyMethod)
