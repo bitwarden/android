@@ -25,7 +25,7 @@ namespace Bit.App.Handlers
 
         public static void MapUri(HybridWebViewHandler handler, HybridWebView view)
         {
-            if (view != null && view.Uri != null)
+            if (view != null && view?.Uri != null)
             {
                 handler?.PlatformView?.LoadUrl(view.Uri);
             }
