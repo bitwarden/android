@@ -32,7 +32,8 @@ namespace Bit.App
 #else
                     iOS.Core.Utilities.iOSCoreHelpers.ConfigureMAUIHandlers(handlers);
 #endif
-                }
+                },
+               initUseMauiApp: true
             ).Build();
         }
     }

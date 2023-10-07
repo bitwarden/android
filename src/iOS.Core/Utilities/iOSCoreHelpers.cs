@@ -27,7 +27,7 @@ namespace Bit.iOS.Core.Utilities
 
         public static void SetupMaui()
         {
-            var builder = Bit.Core.MauiProgram.ConfigureBaseMauiAppBuilder(ConfigureMAUIEffects, ConfigureMAUIHandlers)
+            var builder = Bit.Core.MauiProgram.ConfigureMauiAppBuilder(ConfigureMAUIEffects, ConfigureMAUIHandlers)
                 .UseMauiEmbedding<Application>();
             // Register the Window
             builder.Services.Add(new ServiceDescriptor(typeof(UIWindow), UIApplication.SharedApplication.KeyWindow));

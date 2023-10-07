@@ -10,14 +10,13 @@ namespace Bit.Core;
 
 public static class MauiProgram
 {
-    public static MauiAppBuilder ConfigureMauiAppBuilder(Action<IEffectsBuilder> customEffectsBuilder, Action<IMauiHandlersCollection> customHandlers)
-    {
-        return ConfigureBaseMauiAppBuilder(customEffectsBuilder, customHandlers)
-            .UseMauiApp<Bit.App.App>();
-    }
-    public static MauiAppBuilder ConfigureBaseMauiAppBuilder(Action<IEffectsBuilder> customEffectsBuilder, Action<IMauiHandlersCollection> customHandlers)
+    public static MauiAppBuilder ConfigureMauiAppBuilder(Action<IEffectsBuilder> customEffectsBuilder, Action<IMauiHandlersCollection> customHandlers, bool initUseMauiApp = false)
     {
         var builder = MauiApp.CreateBuilder();
+        if(initUseMauiApp)
+        {
+            builder.UseMauiApp<Bit.App.App>();
+        }
         builder
             .UseMauiCommunityToolkit()
             .UseMauiCompatibility()
