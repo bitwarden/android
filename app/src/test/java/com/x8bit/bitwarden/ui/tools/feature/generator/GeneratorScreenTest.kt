@@ -7,11 +7,10 @@ import androidx.compose.ui.semantics.SemanticsProperties.Role
 import androidx.compose.ui.test.SemanticsMatcher.Companion.expectValue
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasContentDescription
-import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
-import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onLast
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -44,10 +43,15 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
 
         // Opens the menu
-        composeTestRule.onAllNodesWithText(text = "Password").onFirst().performClick()
+        composeTestRule
+            .onNodeWithContentDescription(label = "What would you like to generate?, Password")
+            .performClick()
 
         // Choose the option from the menu
-        composeTestRule.onAllNodesWithText(text = "Password").onLast().performClick()
+        composeTestRule.onAllNodesWithText(text = "Password")
+            .onLast()
+            .performScrollTo()
+            .performClick()
 
         verify {
             viewModel.trySendAction(GeneratorAction.MainTypeOptionSelect(GeneratorState.MainTypeOption.PASSWORD))
@@ -61,7 +65,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
 
         // Opens the menu
-        composeTestRule.onAllNodesWithText(text = "Password").onLast().performClick()
+        composeTestRule.onNodeWithContentDescription(label = "Password, Password").performClick()
 
         // Choose the option from the menu
         composeTestRule.onAllNodesWithText(text = "Passphrase").onLast().performClick()
@@ -91,9 +95,10 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         // Unicode for "minus" used for content description
         composeTestRule
-            .onNodeWithText("Number of words")
+            .onNodeWithContentDescription("Number of words, 3")
             .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
+            .performScrollTo()
             .performClick()
 
         verify {
@@ -120,9 +125,10 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Number of words")
+            .onNodeWithContentDescription("Number of words, 3")
             .onChildren()
             .filterToOne(hasContentDescription("+"))
+            .performScrollTo()
             .performClick()
 
         verify {
@@ -204,9 +210,9 @@ class GeneratorScreenTest : BaseComposeTest() {
             GeneratorScreen(viewModel = viewModel)
         }
 
-        composeTestRule.onNodeWithText("Word separator")
-            .onChildren()
-            .filterToOne(hasSetTextAction())
+        composeTestRule
+            .onNodeWithText("Word separator")
+            .performScrollTo()
             .performTextInput("a")
 
         verify {

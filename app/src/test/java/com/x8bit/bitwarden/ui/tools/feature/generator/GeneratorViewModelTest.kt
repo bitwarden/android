@@ -25,6 +25,27 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `RegenerateClick refreshes the generated text`() = runTest {
+        val viewModel = GeneratorViewModel(initialSavedStateHandle)
+        val initialText = viewModel.stateFlow.value.generatedText
+        val action = GeneratorAction.RegenerateClick
+
+        viewModel.actionChannel.trySend(action)
+
+        val reversedText = viewModel.stateFlow.value.generatedText
+        assertEquals(initialText.reversed(), reversedText)
+    }
+
+    @Test
+    fun `CopyClick should emit ShowToast`() = runTest {
+        val viewModel = GeneratorViewModel(initialSavedStateHandle)
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(GeneratorAction.CopyClick)
+            assertEquals(GeneratorEvent.ShowToast("Copied"), awaitItem())
+        }
+    }
+
+    @Test
     fun `MainTypeOptionSelect PASSWORD should switch to Passcode`() = runTest {
         val viewModel = GeneratorViewModel(initialSavedStateHandle)
         val action = GeneratorAction.MainTypeOptionSelect(GeneratorState.MainTypeOption.PASSWORD)
