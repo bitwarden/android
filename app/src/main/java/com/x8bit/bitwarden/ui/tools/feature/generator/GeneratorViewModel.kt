@@ -51,6 +51,14 @@ class GeneratorViewModel @Inject constructor(
 
     override fun handleAction(action: GeneratorAction) {
         when (action) {
+            is GeneratorAction.RegenerateClick -> {
+                handleRegenerationClick()
+            }
+
+            is GeneratorAction.CopyClick -> {
+                handleCopyClick()
+            }
+
             is GeneratorAction.MainTypeOptionSelect -> {
                 handleMainTypeOptionSelect(action)
             }
@@ -66,6 +74,29 @@ class GeneratorViewModel @Inject constructor(
     }
 
     //endregion Initialization and Overrides
+
+    //region Generated Field Handlers
+
+    private fun handleRegenerationClick() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                // TODO(BIT-277): Replace placeholder text with function to generate new text
+                generatedText = currentState.generatedText.reversed(),
+            )
+        }
+    }
+
+    private fun handleCopyClick() {
+        viewModelScope.launch {
+            sendEvent(
+                event = GeneratorEvent.ShowToast(
+                    message = "Copied",
+                ),
+            )
+        }
+    }
+
+    //endregion Generated Field Handlers
 
     //region Main Type Option Handlers
 
@@ -394,6 +425,16 @@ data class GeneratorState(
 sealed class GeneratorAction {
 
     /**
+     * Represents the action to regenerate a new passcode or username.
+     */
+    data object RegenerateClick : GeneratorAction()
+
+    /**
+     * Represents the action to copy the generated field.
+     */
+    data object CopyClick : GeneratorAction()
+
+    /**
      * Represents the action of selecting a main type option.
      *
      * @property mainTypeOption The selected main type option.
@@ -484,5 +525,9 @@ sealed class GeneratorAction {
  * the generator screen.
  */
 sealed class GeneratorEvent {
-    // TODO(BIT-317): Setup data objects to represent UI events that can be triggered
+
+    /**
+     * Shows a toast with the given [message].
+     */
+    data class ShowToast(val message: String) : GeneratorEvent()
 }
