@@ -14,6 +14,8 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -35,6 +37,8 @@ class LoginScreenTest : BaseComposeTest() {
                     isLoginButtonEnabled = false,
                     passwordInput = "",
                     region = "",
+                    loadingDialogState = LoadingDialogState.Hidden,
+                    errorDialogState = BasicDialogState.Hidden,
                 ),
             )
         }
@@ -60,6 +64,8 @@ class LoginScreenTest : BaseComposeTest() {
                     isLoginButtonEnabled = false,
                     passwordInput = "",
                     region = "",
+                    loadingDialogState = LoadingDialogState.Hidden,
+                    errorDialogState = BasicDialogState.Hidden,
                 ),
             )
         }
@@ -85,6 +91,8 @@ class LoginScreenTest : BaseComposeTest() {
                     isLoginButtonEnabled = false,
                     passwordInput = "",
                     region = "",
+                    loadingDialogState = LoadingDialogState.Hidden,
+                    errorDialogState = BasicDialogState.Hidden,
                 ),
             )
         }
@@ -110,6 +118,8 @@ class LoginScreenTest : BaseComposeTest() {
                     isLoginButtonEnabled = false,
                     passwordInput = "",
                     region = "",
+                    loadingDialogState = LoadingDialogState.Hidden,
+                    errorDialogState = BasicDialogState.Hidden,
                 ),
             )
         }
@@ -147,6 +157,8 @@ class LoginScreenTest : BaseComposeTest() {
                     isLoginButtonEnabled = false,
                     passwordInput = "",
                     region = "",
+                    loadingDialogState = LoadingDialogState.Hidden,
+                    errorDialogState = BasicDialogState.Hidden,
                 ),
             )
         }
@@ -173,6 +185,8 @@ class LoginScreenTest : BaseComposeTest() {
                     isLoginButtonEnabled = false,
                     passwordInput = "",
                     region = "",
+                    loadingDialogState = LoadingDialogState.Hidden,
+                    errorDialogState = BasicDialogState.Hidden,
                 ),
             )
         }
@@ -199,6 +213,8 @@ class LoginScreenTest : BaseComposeTest() {
                     isLoginButtonEnabled = false,
                     passwordInput = "",
                     region = "",
+                    loadingDialogState = LoadingDialogState.Hidden,
+                    errorDialogState = BasicDialogState.Hidden,
                 ),
             )
         }

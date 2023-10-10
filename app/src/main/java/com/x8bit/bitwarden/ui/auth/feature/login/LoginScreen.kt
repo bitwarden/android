@@ -27,9 +27,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
-import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOutlinedButtonWithIcon
+import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
 
 /**
@@ -48,11 +50,6 @@ fun LoginScreen(
         when (event) {
             LoginEvent.NavigateBack -> onNavigateBack()
             is LoginEvent.NavigateToCaptcha -> intentHandler.startActivity(intent = event.intent)
-            is LoginEvent.ShowErrorDialog -> {
-                // TODO Show proper error Dialog
-                Toast.makeText(context, event.messageRes, Toast.LENGTH_SHORT).show()
-            }
-
             is LoginEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
             }
@@ -67,6 +64,13 @@ fun LoginScreen(
             .background(MaterialTheme.colorScheme.surface)
             .verticalScroll(scrollState),
     ) {
+        BitwardenLoadingDialog(
+            visibilityState = state.loadingDialogState,
+        )
+        BitwardenBasicDialog(
+            visibilityState = state.errorDialogState,
+            onDismissRequest = { viewModel.trySendAction(LoginAction.ErrorDialogDismiss) },
+        )
         BitwardenOverflowTopAppBar(
             title = stringResource(id = R.string.app_name),
             navigationIcon = painterResource(id = R.drawable.ic_close),

@@ -54,6 +54,17 @@ class IdentityServiceTest : BaseServiceTest() {
         assertEquals(Result.success(CAPTCHA_BODY), result)
     }
 
+    @Test
+    fun `getToken when response is a 400 with an error body should return Invalid`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(400).setBody(INVALID_LOGIN_JSON))
+        val result = identityService.getToken(
+            email = EMAIL,
+            passwordHash = PASSWORD_HASH,
+            captchaToken = null,
+        )
+        assertEquals(Result.success(INVALID_LOGIN), result)
+    }
+
     companion object {
         private const val EMAIL = "email"
         private const val PASSWORD_HASH = "passwordHash"
@@ -73,3 +84,17 @@ private const val LOGIN_SUCCESS_JSON = """
 }    
 """
 private val LOGIN_SUCCESS = GetTokenResponseJson.Success("123")
+
+private const val INVALID_LOGIN_JSON = """
+{
+  "ErrorModel": {
+    "Message": "123"
+  }
+}
+"""
+
+private val INVALID_LOGIN = GetTokenResponseJson.Invalid(
+    errorModel = GetTokenResponseJson.Invalid.ErrorModel(
+        errorMessage = "123",
+    ),
+)
