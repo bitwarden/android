@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -18,13 +19,14 @@ private const val KEY_STATE = "state"
  */
 @HiltViewModel
 class LandingViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LandingState, LandingEvent, LandingAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: LandingState(
-            emailInput = "",
-            isContinueButtonEnabled = false,
-            isRememberMeEnabled = false,
+            emailInput = authRepository.rememberedEmailAddress.orEmpty(),
+            isContinueButtonEnabled = authRepository.rememberedEmailAddress != null,
+            isRememberMeEnabled = authRepository.rememberedEmailAddress != null,
             selectedRegion = LandingState.RegionOption.BITWARDEN_US,
         ),
 ) {
@@ -61,8 +63,14 @@ class LandingViewModel @Inject constructor(
         if (mutableStateFlow.value.emailInput.isBlank()) {
             return
         }
+
         val email = mutableStateFlow.value.emailInput
+        val isRememberMeEnabled = mutableStateFlow.value.isRememberMeEnabled
         val selectedRegionLabel = mutableStateFlow.value.selectedRegion.label
+
+        // Update the remembered email address
+        authRepository.rememberedEmailAddress = email.takeUnless { !isRememberMeEnabled }
+
         sendEvent(LandingEvent.NavigateToLogin(email, selectedRegionLabel))
     }
 

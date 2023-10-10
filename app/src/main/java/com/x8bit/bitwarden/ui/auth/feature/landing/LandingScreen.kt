@@ -32,10 +32,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
@@ -43,7 +41,6 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * The top level composable for the Landing screen.
@@ -232,17 +229,5 @@ private fun RegionSelector(
                 )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun LandingScreen_preview() {
-    BitwardenTheme {
-        LandingScreen(
-            onNavigateToCreateAccount = {},
-            onNavigateToLogin = { _, _ -> },
-            viewModel = LandingViewModel(SavedStateHandle()),
-        )
     }
 }
