@@ -1,8 +1,9 @@
+@file:Suppress("TooManyFunctions")
+
 package com.x8bit.bitwarden.ui.auth.feature.login
 
 import android.content.Intent
 import android.os.Parcelable
-import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
@@ -11,6 +12,9 @@ import com.x8bit.bitwarden.data.auth.datasource.network.util.CaptchaCallbackToke
 import com.x8bit.bitwarden.data.auth.datasource.network.util.generateIntentForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -35,6 +39,8 @@ class LoginViewModel @Inject constructor(
             isLoginButtonEnabled = true,
             passwordInput = "",
             region = LoginArgs(savedStateHandle).regionLabel,
+            loadingDialogState = LoadingDialogState.Hidden,
+            errorDialogState = BasicDialogState.Hidden,
         ),
 ) {
 
@@ -62,16 +68,59 @@ class LoginViewModel @Inject constructor(
             LoginAction.NotYouButtonClick -> handleNotYouButtonClicked()
             LoginAction.SingleSignOnClick -> handleSingleSignOnClicked()
             is LoginAction.PasswordInputChanged -> handlePasswordInputChanged(action)
+            is LoginAction.ErrorDialogDismiss -> handleErrorDialogDismiss()
             is LoginAction.Internal.ReceiveCaptchaToken -> {
                 handleCaptchaTokenReceived(action.tokenResult)
             }
+            is LoginAction.Internal.ReceiveLoginResult -> {
+                handleReceiveLoginResult(action = action)
+            }
         }
+    }
+
+    private fun handleReceiveLoginResult(action: LoginAction.Internal.ReceiveLoginResult) {
+        when (val loginResult = action.loginResult) {
+            is LoginResult.CaptchaRequired -> {
+                mutableStateFlow.update { it.copy(loadingDialogState = LoadingDialogState.Hidden) }
+                sendEvent(
+                    event = LoginEvent.NavigateToCaptcha(
+                        intent = loginResult.generateIntentForCaptcha(),
+                    ),
+                )
+            }
+            is LoginResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        errorDialogState = BasicDialogState.Shown(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = (loginResult.errorMessage)?.asText()
+                                ?: R.string.generic_error_message.asText(),
+                        ),
+                        loadingDialogState = LoadingDialogState.Hidden,
+                    )
+                }
+            }
+            is LoginResult.Success -> {
+                mutableStateFlow.update { it.copy(loadingDialogState = LoadingDialogState.Hidden) }
+            }
+        }
+    }
+
+    private fun handleErrorDialogDismiss() {
+        mutableStateFlow.update { it.copy(errorDialogState = BasicDialogState.Hidden) }
     }
 
     private fun handleCaptchaTokenReceived(tokenResult: CaptchaCallbackTokenResult) {
         when (tokenResult) {
             CaptchaCallbackTokenResult.MissingToken -> {
-                sendEvent(LoginEvent.ShowErrorDialog(messageRes = R.string.captcha_failed))
+                mutableStateFlow.update {
+                    it.copy(
+                        errorDialogState = BasicDialogState.Shown(
+                            title = R.string.log_in_denied.asText(),
+                            message = R.string.captcha_failed.asText(),
+                        ),
+                    )
+                }
             }
 
             is CaptchaCallbackTokenResult.Success -> attemptLogin(captchaToken = tokenResult.token)
@@ -87,37 +136,24 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun attemptLogin(captchaToken: String?) {
-        viewModelScope.launch {
-            // TODO: show progress here BIT-320
-            sendEvent(
-                event = LoginEvent.ShowToast(
-                    message = "Loading...",
+        mutableStateFlow.update {
+            it.copy(
+                loadingDialogState = LoadingDialogState.Shown(
+                    text = R.string.logging_in.asText(),
                 ),
             )
+        }
+        viewModelScope.launch {
             val result = authRepository.login(
                 email = mutableStateFlow.value.emailAddress,
                 password = mutableStateFlow.value.passwordInput,
                 captchaToken = captchaToken,
             )
-            when (result) {
-                // TODO: show an error here BIT-320
-                LoginResult.Error -> {
-                    sendEvent(
-                        event = LoginEvent.ShowToast(
-                            message = "Error when logging in",
-                        ),
-                    )
-                }
-                // No action required on success, root nav will navigate to logged in state
-                LoginResult.Success -> Unit
-                is LoginResult.CaptchaRequired -> {
-                    sendEvent(
-                        event = LoginEvent.NavigateToCaptcha(
-                            intent = result.generateIntentForCaptcha(),
-                        ),
-                    )
-                }
-            }
+            sendAction(
+                LoginAction.Internal.ReceiveLoginResult(
+                    loginResult = result,
+                ),
+            )
         }
     }
 
@@ -149,6 +185,8 @@ data class LoginState(
     val emailAddress: String,
     val region: String,
     val isLoginButtonEnabled: Boolean,
+    val loadingDialogState: LoadingDialogState,
+    val errorDialogState: BasicDialogState,
 ) : Parcelable
 
 /**
@@ -164,11 +202,6 @@ sealed class LoginEvent {
      * Navigates to the captcha verification screen.
      */
     data class NavigateToCaptcha(val intent: Intent) : LoginEvent()
-
-    /**
-     * Shows an error pop up with a given message
-     */
-    data class ShowErrorDialog(@StringRes val messageRes: Int) : LoginEvent()
 
     /**
      * Shows a toast with the given [message].
@@ -206,6 +239,11 @@ sealed class LoginAction {
     data object SingleSignOnClick : LoginAction()
 
     /**
+     * Indicates that the error dialog has been dismissed.
+     */
+    data object ErrorDialogDismiss : LoginAction()
+
+    /**
      * Indicates that the password input has changed.
      */
     data class PasswordInputChanged(val input: String) : LoginAction()
@@ -219,6 +257,13 @@ sealed class LoginAction {
          */
         data class ReceiveCaptchaToken(
             val tokenResult: CaptchaCallbackTokenResult,
+        ) : Internal()
+
+        /**
+         * Indicates a login result has been received.
+         */
+        data class ReceiveLoginResult(
+            val loginResult: LoginResult,
         ) : Internal()
     }
 }

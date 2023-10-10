@@ -2,8 +2,9 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.x8bit.bitwarden.data.auth.datasource.network.api.IdentityApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
+import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
-import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyAsResult
+import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import kotlinx.serialization.json.Json
 import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import java.util.UUID
@@ -36,13 +37,14 @@ class IdentityServiceImpl constructor(
             email = email,
             captchaResponse = captchaToken,
         )
-        .fold(
-            onSuccess = { Result.success(it) },
-            onFailure = {
-                it.parseErrorBodyAsResult<GetTokenResponseJson.CaptchaRequired>(
-                    code = HTTP_BAD_REQUEST,
-                    json = json,
-                )
-            },
-        )
+        .recoverCatching { throwable ->
+            val bitwardenError = throwable.toBitwardenError()
+            bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.CaptchaRequired>(
+                code = HTTP_BAD_REQUEST,
+                json = json,
+            ) ?: bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.Invalid>(
+                code = HTTP_BAD_REQUEST,
+                json = json,
+            ) ?: throw throwable
+        }
 }

@@ -50,18 +50,18 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `login when pre login fails should return Error`() = runTest {
+    fun `login when pre login fails should return Error with no message`() = runTest {
         coEvery {
             accountsService.preLogin(email = EMAIL)
         } returns (Result.failure(RuntimeException()))
         val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
-        assertEquals(LoginResult.Error, result)
+        assertEquals(LoginResult.Error(errorMessage = null), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
         coVerify { accountsService.preLogin(email = EMAIL) }
     }
 
     @Test
-    fun `login get token fails should return Error`() = runTest {
+    fun `login get token fails should return Error with no message`() = runTest {
         coEvery {
             accountsService.preLogin(email = EMAIL)
         } returns Result.success(PRE_LOGIN_SUCCESS)
@@ -74,7 +74,41 @@ class AuthRepositoryTest {
         }
             .returns(Result.failure(RuntimeException()))
         val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
-        assertEquals(LoginResult.Error, result)
+        assertEquals(LoginResult.Error(errorMessage = null), result)
+        assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+        coVerify { accountsService.preLogin(email = EMAIL) }
+        coVerify {
+            identityService.getToken(
+                email = EMAIL,
+                passwordHash = PASSWORD_HASH,
+                captchaToken = null,
+            )
+        }
+    }
+
+    @Test
+    fun `login get token returns Invalid should return Error with correct message`() = runTest {
+        coEvery {
+            accountsService.preLogin(email = EMAIL)
+        } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                passwordHash = PASSWORD_HASH,
+                captchaToken = null,
+            )
+        }
+            .returns(
+                Result.success(
+                    GetTokenResponseJson.Invalid(
+                        errorModel = GetTokenResponseJson.Invalid.ErrorModel(
+                            errorMessage = "mock_error_message",
+                        ),
+                    ),
+                ),
+            )
+        val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+        assertEquals(LoginResult.Error(errorMessage = "mock_error_message"), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
         coVerify { accountsService.preLogin(email = EMAIL) }
         coVerify {

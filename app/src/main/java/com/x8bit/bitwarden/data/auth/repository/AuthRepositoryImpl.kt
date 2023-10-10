@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.repository
 import com.bitwarden.core.Kdf
 import com.bitwarden.sdk.Client
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthState
+import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.CaptchaRequired
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.Success
 import com.x8bit.bitwarden.data.auth.datasource.network.model.LoginResult
@@ -61,10 +62,7 @@ class AuthRepositoryImpl @Inject constructor(
             )
         }
         .fold(
-            onFailure = {
-                // TODO: Add more detail to error case to expose server error messages (BIT-320)
-                LoginResult.Error
-            },
+            onFailure = { LoginResult.Error(errorMessage = null) },
             onSuccess = {
                 when (it) {
                     is CaptchaRequired -> LoginResult.CaptchaRequired(it.captchaKey)
@@ -74,6 +72,10 @@ class AuthRepositoryImpl @Inject constructor(
                         authTokenInterceptor.authToken = it.accessToken
                         mutableAuthStateFlow.value = AuthState.Authenticated(it.accessToken)
                         LoginResult.Success
+                    }
+
+                    is GetTokenResponseJson.Invalid -> {
+                        LoginResult.Error(errorMessage = it.errorModel.errorMessage)
                     }
                 }
             },

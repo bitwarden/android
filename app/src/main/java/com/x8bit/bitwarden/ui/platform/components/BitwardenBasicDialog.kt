@@ -6,8 +6,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -46,6 +49,21 @@ fun BitwardenBasicDialog(
                     style = MaterialTheme.typography.bodyMedium,
                 )
             },
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun BitwardenBasicDialog_preview() {
+    BitwardenTheme {
+        BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = "An error has occurred.".asText(),
+                message = "Username or password is incorrect. Try again.".asText(),
+            ),
+            onDismissRequest = {},
         )
     }
 }

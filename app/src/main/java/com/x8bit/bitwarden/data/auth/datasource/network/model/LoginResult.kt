@@ -2,8 +2,6 @@ package com.x8bit.bitwarden.data.auth.datasource.network.model
 
 /**
  * Models result of logging in.
- *
- * TODO: Add more detail to these cases to expose server error messages (BIT-320)
  */
 sealed class LoginResult {
 
@@ -20,5 +18,5 @@ sealed class LoginResult {
     /**
      * There was an error logging in.
      */
-    data object Error : LoginResult()
+    data class Error(val errorMessage: String?) : LoginResult()
 }

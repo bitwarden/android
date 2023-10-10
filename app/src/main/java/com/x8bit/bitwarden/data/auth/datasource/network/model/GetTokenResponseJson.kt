@@ -26,4 +26,23 @@ sealed class GetTokenResponseJson {
         @SerialName("HCaptcha_SiteKey")
         val captchaKey: String,
     ) : GetTokenResponseJson()
+
+    /**
+     * Models json body of an invalid request.
+     */
+    @Serializable
+    data class Invalid(
+        @SerialName("ErrorModel")
+        val errorModel: ErrorModel,
+    ) : GetTokenResponseJson() {
+
+        /**
+         * The error body of an invalid request containing a message.
+         */
+        @Serializable
+        data class ErrorModel(
+            @SerialName("Message")
+            val errorMessage: String,
+        )
+    }
 }

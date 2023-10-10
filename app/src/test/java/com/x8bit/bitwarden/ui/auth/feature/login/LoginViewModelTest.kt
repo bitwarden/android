@@ -3,11 +3,15 @@ package com.x8bit.bitwarden.ui.auth.feature.login
 import android.content.Intent
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.network.model.LoginResult
 import com.x8bit.bitwarden.data.auth.datasource.network.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.datasource.network.util.generateIntentForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -92,8 +96,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `LoginButtonClick login returns error should emit error ShowToast`() = runTest {
-        // TODO: handle and display errors (BIT-320)
+    fun `LoginButtonClick login returns error should update errorDialogState`() = runTest {
         val authRepository = mockk<AuthRepository> {
             coEvery {
                 login(
@@ -101,19 +104,32 @@ class LoginViewModelTest : BaseViewModelTest() {
                     password = "",
                     captchaToken = null,
                 )
-            } returns LoginResult.Error
+            } returns LoginResult.Error(errorMessage = "mock_error")
             every { captchaTokenResultFlow } returns flowOf()
         }
         val viewModel = LoginViewModel(
             authRepository = authRepository,
             savedStateHandle = savedStateHandle,
         )
-        viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(LoginAction.LoginButtonClick)
-            assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-            assertEquals(LoginEvent.ShowToast("Loading..."), awaitItem())
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            viewModel.trySendAction(LoginAction.LoginButtonClick)
             assertEquals(
-                LoginEvent.ShowToast("Error when logging in"),
+                DEFAULT_STATE.copy(
+                    loadingDialogState = LoadingDialogState.Shown(
+                        text = R.string.logging_in.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    errorDialogState = BasicDialogState.Shown(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = "mock_error".asText(),
+                    ),
+                    loadingDialogState = LoadingDialogState.Hidden,
+                ),
                 awaitItem(),
             )
         }
@@ -123,19 +139,32 @@ class LoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `LoginButtonClick login returns success should emit loading ShowToast`() = runTest {
+    fun `LoginButtonClick login returns success should update loadingDialogState`() = runTest {
         val authRepository = mockk<AuthRepository> {
-            coEvery { login("test@gmail.com", "", captchaToken = null) } returns LoginResult.Success
+            coEvery {
+                login("test@gmail.com", "", captchaToken = null)
+            } returns LoginResult.Success
             every { captchaTokenResultFlow } returns flowOf()
         }
         val viewModel = LoginViewModel(
             authRepository = authRepository,
             savedStateHandle = savedStateHandle,
         )
-        viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(LoginAction.LoginButtonClick)
-            assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-            assertEquals(LoginEvent.ShowToast("Loading..."), awaitItem())
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            viewModel.trySendAction(LoginAction.LoginButtonClick)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    loadingDialogState = LoadingDialogState.Shown(
+                        text = R.string.logging_in.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+            assertEquals(
+                DEFAULT_STATE.copy(loadingDialogState = LoadingDialogState.Hidden),
+                awaitItem(),
+            )
         }
         coVerify {
             authRepository.login(email = "test@gmail.com", password = "", captchaToken = null)
@@ -163,7 +192,6 @@ class LoginViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.actionChannel.trySend(LoginAction.LoginButtonClick)
                 assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-                assertEquals(LoginEvent.ShowToast("Loading..."), awaitItem())
                 assertEquals(LoginEvent.NavigateToCaptcha(intent = mockkIntent), awaitItem())
             }
             coVerify {
@@ -271,6 +299,8 @@ class LoginViewModelTest : BaseViewModelTest() {
             passwordInput = "",
             isLoginButtonEnabled = true,
             region = "",
+            loadingDialogState = LoadingDialogState.Hidden,
+            errorDialogState = BasicDialogState.Hidden,
         )
 
         private const val LOGIN_RESULT_PATH =
