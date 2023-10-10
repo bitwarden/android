@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.repository
 import app.cash.turbine.test
 import com.bitwarden.core.Kdf
 import com.bitwarden.sdk.Client
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthState
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.LoginResult
@@ -19,6 +20,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -27,6 +29,7 @@ class AuthRepositoryTest {
     private val accountsService: AccountsService = mockk()
     private val identityService: IdentityService = mockk()
     private val authInterceptor = mockk<AuthTokenInterceptor>()
+    private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val mockBitwardenSdk = mockk<Client> {
         coEvery {
             auth().hashPassword(
@@ -41,12 +44,28 @@ class AuthRepositoryTest {
         accountsService = accountsService,
         identityService = identityService,
         bitwardenSdkClient = mockBitwardenSdk,
+        authDiskSource = fakeAuthDiskSource,
         authTokenInterceptor = authInterceptor,
     )
 
     @BeforeEach
     fun beforeEach() {
         clearMocks(identityService, accountsService, authInterceptor)
+    }
+
+    @Test
+    fun `rememberedEmailAddress should pull from and update AuthDiskSource`() {
+        // AuthDiskSource and the repository start with the same value.
+        assertNull(repository.rememberedEmailAddress)
+        assertNull(fakeAuthDiskSource.rememberedEmailAddress)
+
+        // Updating the repository updates AuthDiskSource
+        repository.rememberedEmailAddress = "remembered@gmail.com"
+        assertEquals("remembered@gmail.com", fakeAuthDiskSource.rememberedEmailAddress)
+
+        // Updating AuthDiskSource updates the repository
+        fakeAuthDiskSource.rememberedEmailAddress = null
+        assertNull(repository.rememberedEmailAddress)
     }
 
     @Test
@@ -196,4 +215,8 @@ class AuthRepositoryTest {
             kdfParallelism = null,
         )
     }
+}
+
+private class FakeAuthDiskSource : AuthDiskSource {
+    override var rememberedEmailAddress: String? = null
 }

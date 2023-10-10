@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository
 
 import com.bitwarden.core.Kdf
 import com.bitwarden.sdk.Client
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthState
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.CaptchaRequired
@@ -21,6 +22,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
+private const val REMEMBERED_EMAIL_ADDRESS_KEY = "bwPreferencesStorage:rememberedEmail"
+
 /**
  * Default implementation of [AuthRepository].
  */
@@ -29,6 +32,7 @@ class AuthRepositoryImpl @Inject constructor(
     private val accountsService: AccountsService,
     private val identityService: IdentityService,
     private val bitwardenSdkClient: Client,
+    private val authDiskSource: AuthDiskSource,
     private val authTokenInterceptor: AuthTokenInterceptor,
 ) : AuthRepository {
 
@@ -39,6 +43,12 @@ class AuthRepositoryImpl @Inject constructor(
         MutableSharedFlow<CaptchaCallbackTokenResult>(extraBufferCapacity = Int.MAX_VALUE)
     override val captchaTokenResultFlow: Flow<CaptchaCallbackTokenResult> =
         mutableCaptchaTokenFlow.asSharedFlow()
+
+    override var rememberedEmailAddress: String?
+        get() = authDiskSource.rememberedEmailAddress
+        set(value) {
+            authDiskSource.rememberedEmailAddress = value
+        }
 
     override suspend fun login(
         email: String,

@@ -22,6 +22,11 @@ interface AuthRepository {
     val captchaTokenResultFlow: Flow<CaptchaCallbackTokenResult>
 
     /**
+     * The currently persisted saved email address (or `null` if not set).
+     */
+    var rememberedEmailAddress: String?
+
+    /**
      * Attempt to login with the given email and password. Updated access token will be reflected
      * in [authStateFlow].
      */
