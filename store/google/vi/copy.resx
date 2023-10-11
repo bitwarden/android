@@ -126,31 +126,31 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, Inc là công ty mẹ của 8bit Solutions LLC
+    <value>Bitwarden, Inc. là công ty mẹ của 8bit Solutions LLC.
 
-ĐƯỢC ĐÁNH GIÁ LÀ TRÌNH QUẢN LÝ MẬT KHẨU TỐT NHẤT BỞI NHÀ BÁO LỚN NHƯ THE VERGE, CNET, U.S. NEWS &amp; WORLD REPORT VÀ HƠN NỮA
+LÀ TRÌNH QUẢN LÝ MẬT KHẨU TỐT NHẤT THEO THE VERGE, CNET, U.S. NEWS &amp; WORLD REPORT VÀ HƠN THẾ NỮA.
 
-Quản lý, lưu trữ, bảo mật và chia sẻ mật khẩu không giới hạn trên các thiết bị không giới hạn mọi lúc, mọi nơi. Bitwarden cung cấp các giải pháp quản lý mật khẩu mã nguồn mở cho tất cả mọi người, cho dù ở nhà, tại cơ quan hay khi đang di chuyển.
+Quản lý, lưu trữ, bảo vệ và chia sẻ mật khẩu không hạn chế trên các thiết bị mọi lúc, mọi nơi. Bitwarden cung cấp các giải pháp quản lý mật khẩu mã nguồn mở cho tất cả mọi người, cho dù ở nhà, tại cơ quan hay khi đang di chuyển.
 
 Tạo mật khẩu mạnh, không bị trùng và ngẫu nhiên dựa trên các yêu cầu bảo mật cho mọi trang web bạn thường xuyên sử dụng.
 
-Tính năng 'Bitwarden Send' nhanh chóng truyền thông tin được mã hóa --- tệp và bản rõ - trực tiếp đến bất kỳ ai.
+Tính năng 'Gửi' nhanh chóng truyền thông tin được mã hóa --- tập tin và văn bản --- đến bất kỳ ai.
 
-Bitwarden cung cấp các gói 'Nhóm' và 'Doanh nghiệp' cho các công ty để bạn có thể chia sẻ mật khẩu với đồng nghiệp một cách an toàn.
+Bitwarden cung cấp các gói Nhóm và Doanh nghiệp cho các công ty để bạn có thể chia sẻ mật khẩu với đồng nghiệp một cách an toàn.
 
 Tại sao bạn nên chọn Bitwarden:
 
 Mã hóa tốt nhất thế giới
-Mật khẩu được bảo vệ bằng mã hóa đầu cuối (end-to-end encryption) tiên tiến như AES-256 bit, salted hashtag, và PBKDF2 SHA-256 nên dữ liệu của bạn luôn an toàn và riêng tư. 
+Mật khẩu được bảo vệ bằng mã hóa đầu cuối tiên tiến như AES-256 bit, salted hashtag và PBKDF2 SHA-256 nên dữ liệu của bạn luôn an toàn và riêng tư.
 
 Trình tạo mật khẩu tích hợp
 Tạo mật khẩu mạnh, không bị trùng và ngẫu nhiên dựa trên các yêu cầu bảo mật cho mọi trang web bạn thường xuyên sử dụng.
 
 Bản dịch ngôn ngữ từ cộng đồng
-Bitwarden đã có bản dịch 40 ngôn ngữ và đang phát triển nhờ vào cộng đồng toàn cầu của chúng tôi.
+Bitwarden đã có 40 ngôn ngữ nhờ vào cộng đồng toàn cầu của chúng tôi.
 
 Ứng dụng đa nền tảng
-Bảo mật và chia sẻ dữ liệu nhạy cảm trong kho lưu trữ Bitwarden của bạn từ bất kỳ trình duyệt, điện thoại thông minh hoặc hệ điều hành máy tính nào, vân vân.
+Bảo mật và chia sẻ dữ liệu nhạy cảm trong kho lưu trữ Bitwarden của bạn từ bất kỳ trình duyệt, điện thoại thông minh hoặc hệ điều hành máy tính nào.
 </value>
   <comment>Max 4000 characters</comment>
   </data>

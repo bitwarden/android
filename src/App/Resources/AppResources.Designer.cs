@@ -1508,15 +1508,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?.
-        /// </summary>
-        public static string ChangePasswordConfirmation {
-            get {
-                return ResourceManager.GetString("ChangePasswordConfirmation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Checking password....
         /// </summary>
         public static string CheckingPassword {
@@ -1877,15 +1868,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Created {0}.
-        /// </summary>
-        public static string CreatedX {
-            get {
-                return ResourceManager.GetString("CreatedX", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Created {0}, {1}.
         /// </summary>
         public static string CreatedXY {
@@ -2053,15 +2035,6 @@ namespace Bit.App.Resources {
         public static string DefaultDarkTheme {
             get {
                 return ResourceManager.GetString("DefaultDarkTheme", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Choose the dark theme to use when using Default (System) theme while your device&apos;s dark mode is in use..
-        /// </summary>
-        public static string DefaultDarkThemeDescription {
-            get {
-                return ResourceManager.GetString("DefaultDarkThemeDescription", resourceCulture);
             }
         }
         
@@ -6859,15 +6832,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be set up on the bitwarden.com web vault. Do you want to visit the website now?.
-        /// </summary>
-        public static string TwoStepLoginConfirmation {
-            get {
-                return ResourceManager.GetString("TwoStepLoginConfirmation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Make your account more secure by setting up two-step login in the Bitwarden web app..
         /// </summary>
         public static string TwoStepLoginDescriptionLong {
@@ -7575,15 +7539,6 @@ namespace Bit.App.Resources {
         public static string VisitOurWebsite {
             get {
                 return ResourceManager.GetString("VisitOurWebsite", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Visit our website to get help, news, email us, and/or learn more about how to use Bitwarden..
-        /// </summary>
-        public static string VisitOurWebsiteDescription {
-            get {
-                return ResourceManager.GetString("VisitOurWebsiteDescription", resourceCulture);
             }
         }
         

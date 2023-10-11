@@ -130,24 +130,27 @@ namespace Bit.App.Pages
 
             await LoadOnAppearedAsync(_mainLayout, false, async () =>
             {
-                if (!_syncService.SyncInProgress || (await _cipherService.GetAllAsync()).Any())
+                if (_previousPage == null)
                 {
-                    try
+                    if (!_syncService.SyncInProgress || (await _cipherService.GetAllAsync()).Any())
                     {
-                        await _vm.LoadAsync();
+                        try
+                        {
+                            await _vm.LoadAsync();
+                        }
+                        catch (Exception e) when (e.Message.Contains("No key."))
+                        {
+                            await Task.Delay(1000);
+                            await _vm.LoadAsync();
+                        }
                     }
-                    catch (Exception e) when (e.Message.Contains("No key."))
+                    else
                     {
-                        await Task.Delay(1000);
-                        await _vm.LoadAsync();
-                    }
-                }
-                else
-                {
-                    await Task.Delay(5000);
-                    if (!_vm.Loaded)
-                    {
-                        await _vm.LoadAsync();
+                        await Task.Delay(5000);
+                        if (!_vm.Loaded)
+                        {
+                            await _vm.LoadAsync();
+                        }
                     }
                 }
                 await ShowPreviousPageAsync();
