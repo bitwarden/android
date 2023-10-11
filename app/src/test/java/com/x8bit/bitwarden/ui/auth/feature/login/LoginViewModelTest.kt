@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.ui.auth.feature.login
 
-import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.network.model.LoginResult
 import com.x8bit.bitwarden.data.auth.datasource.network.util.CaptchaCallbackTokenResult
-import com.x8bit.bitwarden.data.auth.datasource.network.util.generateIntentForCaptcha
+import com.x8bit.bitwarden.data.auth.datasource.network.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -174,12 +174,12 @@ class LoginViewModelTest : BaseViewModelTest() {
     @Test
     fun `LoginButtonClick login returns CaptchaRequired should emit NavigateToCaptcha`() =
         runTest {
-            val mockkIntent = mockk<Intent>()
+            val mockkUri = mockk<Uri>()
             every {
                 LoginResult
                     .CaptchaRequired(captchaId = "mock_captcha_id")
-                    .generateIntentForCaptcha()
-            } returns mockkIntent
+                    .generateUriForCaptcha()
+            } returns mockkUri
             val authRepository = mockk<AuthRepository> {
                 coEvery { login("test@gmail.com", "", captchaToken = null) } returns
                     LoginResult.CaptchaRequired(captchaId = "mock_captcha_id")
@@ -192,7 +192,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.actionChannel.trySend(LoginAction.LoginButtonClick)
                 assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-                assertEquals(LoginEvent.NavigateToCaptcha(intent = mockkIntent), awaitItem())
+                assertEquals(LoginEvent.NavigateToCaptcha(uri = mockkUri), awaitItem())
             }
             coVerify {
                 authRepository.login(email = "test@gmail.com", password = "", captchaToken = null)

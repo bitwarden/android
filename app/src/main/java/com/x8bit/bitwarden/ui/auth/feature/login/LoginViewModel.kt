@@ -2,14 +2,14 @@
 
 package com.x8bit.bitwarden.ui.auth.feature.login
 
-import android.content.Intent
+import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.network.model.LoginResult
 import com.x8bit.bitwarden.data.auth.datasource.network.util.CaptchaCallbackTokenResult
-import com.x8bit.bitwarden.data.auth.datasource.network.util.generateIntentForCaptcha
+import com.x8bit.bitwarden.data.auth.datasource.network.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -84,7 +84,7 @@ class LoginViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(loadingDialogState = LoadingDialogState.Hidden) }
                 sendEvent(
                     event = LoginEvent.NavigateToCaptcha(
-                        intent = loginResult.generateIntentForCaptcha(),
+                        uri = loginResult.generateUriForCaptcha(),
                     ),
                 )
             }
@@ -201,7 +201,7 @@ sealed class LoginEvent {
     /**
      * Navigates to the captcha verification screen.
      */
-    data class NavigateToCaptcha(val intent: Intent) : LoginEvent()
+    data class NavigateToCaptcha(val uri: Uri) : LoginEvent()
 
     /**
      * Shows a toast with the given [message].

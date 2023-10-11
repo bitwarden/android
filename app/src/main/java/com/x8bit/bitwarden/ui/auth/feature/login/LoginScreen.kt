@@ -49,7 +49,9 @@ fun LoginScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             LoginEvent.NavigateBack -> onNavigateBack()
-            is LoginEvent.NavigateToCaptcha -> intentHandler.startActivity(intent = event.intent)
+            is LoginEvent.NavigateToCaptcha -> {
+                intentHandler.startCustomTabsActivity(uri = event.uri)
+            }
             is LoginEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
             }

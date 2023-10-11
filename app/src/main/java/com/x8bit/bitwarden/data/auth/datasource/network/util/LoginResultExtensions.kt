@@ -13,9 +13,9 @@ private const val CAPTCHA_HOST: String = "captcha-callback"
 private const val CALLBACK_URI = "bitwarden://$CAPTCHA_HOST"
 
 /**
- * Generates an [Intent] to display a CAPTCHA challenge for Bitwarden authentication.
+ * Generates a [Uri] to display a CAPTCHA challenge for Bitwarden authentication.
  */
-fun LoginResult.CaptchaRequired.generateIntentForCaptcha(): Intent {
+fun LoginResult.CaptchaRequired.generateUriForCaptcha(): Uri {
     val json = buildJsonObject {
         put(key = "siteKey", value = captchaId)
         put(key = "locale", value = Locale.getDefault().toString())
@@ -32,7 +32,7 @@ fun LoginResult.CaptchaRequired.generateIntentForCaptcha(): Intent {
     val parentParam = URLEncoder.encode(CALLBACK_URI, "UTF-8")
     val url = "https://vault.bitwarden.com/captcha-mobile-connector.html" +
         "?data=$base64Data&parent=$parentParam&v=1"
-    return Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    return Uri.parse(url)
 }
 
 /**
