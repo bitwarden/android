@@ -862,7 +862,6 @@ namespace Bit.Core.Services
                 var urls = account.Value.Settings.EnvironmentUrls ?? Region.US.GetUrls();
                 account.Value.Settings.Region = urls.Region;
                 account.Value.Settings.EnvironmentUrls = urls.Region.GetUrls() ?? urls;
-                continue;
             }
 
             await SetValueAsync(Storage.Prefs, Constants.StateKey, state);
