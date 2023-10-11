@@ -851,12 +851,12 @@ namespace Bit.Core.Services
             internal const string PreAuthEnvironmentUrlsKey = "preAuthEnvironmentUrls";
         }
 
-        // Migrate environment data to use Regions
         private async Task MigrateFrom6To7Async()
         {
             // account data
             var state = await GetValueAsync<State>(Storage.Prefs, V7Keys.StateKey);
 
+            // Migrate environment data to use Regions
             foreach (var account in state.Accounts.Where(a => a.Value?.Profile?.UserId != null && a.Value?.Settings != null))
             {
                 var urls = account.Value.Settings.EnvironmentUrls ?? Region.US.GetUrls();
