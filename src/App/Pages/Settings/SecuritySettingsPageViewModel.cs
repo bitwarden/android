@@ -348,7 +348,7 @@ namespace Bit.App.Pages
             }
 
             VaultTimeoutActionPickerViewModel.Init(options, timeoutAction, IsVaultTimeoutActionLockAllowed ? VaultTimeoutAction.Lock : VaultTimeoutAction.Logout);
-            MainThread.BeginInvokeOnMainThread(() => {TriggerPropertyChanged(nameof(IsVaultTimeoutActionLockAllowed));});
+            MainThread.BeginInvokeOnMainThread(() => { TriggerPropertyChanged(nameof(IsVaultTimeoutActionLockAllowed)); });
         }
 
         private async Task ToggleUseThisDeviceToApproveLoginRequestsAsync()

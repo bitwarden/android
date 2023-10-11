@@ -35,7 +35,7 @@ namespace Bit.App.Controls
         public bool ItemEnabled
         {
             get { return (bool)GetValue(ItemEnabledProperty); }
-            set {SetValue(ItemEnabledProperty, value);}
+            set { SetValue(ItemEnabledProperty, value); }
         }
 
         public Color ItemTextColor
