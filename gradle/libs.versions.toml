@@ -10,6 +10,7 @@ minSdk = "28"
 accompanist = "0.30.1"
 androidGradlePlugin = "8.1.0"
 androidxActivity = "1.7.2"
+androidxBrowser = "1.6.0"
 androidxComposeBom = "2023.09.02"
 # TODO: Once the Material3 color scheme changes are no longer in alpha, we should remove this
 #   individual dependency version and use the Compose BOM version (BIT-702).
@@ -46,6 +47,7 @@ zxing = "3.5.2"
 [libraries]
 # Format: <maintainer>-<artifact-name>
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
+androidx-browser = {module = "androidx.browser:browser", version.ref = "androidxBrowser"}
 androidx-compose-animation = { module = "androidx.compose.animation:animation" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "androidxComposeMaterial3" }

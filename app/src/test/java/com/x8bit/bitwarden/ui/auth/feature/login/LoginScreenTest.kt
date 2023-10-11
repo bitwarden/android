@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.login
 
-import android.content.Intent
+import android.net.Uri
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.filterToOne
@@ -200,13 +200,13 @@ class LoginScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `NavigateToCaptcha should call intentHandler startActivity`() {
+    fun `NavigateToCaptcha should call intentHandler startCustomTabsActivity`() {
         val intentHandler = mockk<IntentHandler>(relaxed = true) {
-            every { startActivity(any()) } returns Unit
+            every { startCustomTabsActivity(any()) } returns Unit
         }
-        val mockIntent = mockk<Intent>()
+        val mockUri = mockk<Uri>()
         val viewModel = mockk<LoginViewModel>(relaxed = true) {
-            every { eventFlow } returns flowOf(LoginEvent.NavigateToCaptcha(mockIntent))
+            every { eventFlow } returns flowOf(LoginEvent.NavigateToCaptcha(mockUri))
             every { stateFlow } returns MutableStateFlow(
                 LoginState(
                     emailAddress = "",
@@ -225,6 +225,6 @@ class LoginScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
             )
         }
-        verify { intentHandler.startActivity(mockIntent) }
+        verify { intentHandler.startCustomTabsActivity(mockUri) }
     }
 }
