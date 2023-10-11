@@ -94,15 +94,15 @@ namespace Bit.Core.Models.Data
         public string ParseEndpoint()
         {
             var url = WebVault ?? Base ?? Api ?? Identity;
-            if (!string.IsNullOrWhiteSpace(url))
+            if (string.IsNullOrWhiteSpace(url))
             {
-                if (url.Contains(Region.US.Domain()) || url.Contains(Region.EU.Domain()))
-                {
-                    return CoreHelpers.GetDomain(url);
-                }
-                return CoreHelpers.GetHostname(url);
+                return string.Empty;
             }
-            return string.Empty;
+            if (url.Contains(Region.US.Domain()) || url.Contains(Region.EU.Domain()))
+            {
+                return CoreHelpers.GetDomain(url);
+            }
+            return CoreHelpers.GetHostname(url);
         }
     }
 }
