@@ -34,16 +34,6 @@ object NetworkModule {
     fun providesConfigService(@Named(UNAUTHORIZED) retrofit: Retrofit): ConfigService =
         ConfigServiceImpl(retrofit.create())
 
-    fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    setLevel(HttpLoggingInterceptor.Level.BODY)
-                },
-            )
-            .build()
-    }
-
     @Provides
     @Singleton
     fun providesAuthTokenInterceptor(): AuthTokenInterceptor = AuthTokenInterceptor()
