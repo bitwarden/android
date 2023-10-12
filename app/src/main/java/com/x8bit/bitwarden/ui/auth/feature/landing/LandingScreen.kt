@@ -27,10 +27,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,6 +49,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 /**
  * The top level composable for the Landing screen.
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 @Suppress("LongMethod")
 fun LandingScreen(
@@ -67,6 +72,7 @@ fun LandingScreen(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
+            .semantics { testTagsAsResourceId = true }
             .background(MaterialTheme.colorScheme.surface)
             .fillMaxHeight()
             .padding(horizontal = 16.dp)
@@ -99,6 +105,7 @@ fun LandingScreen(
 
         BitwardenTextField(
             modifier = Modifier
+                .semantics { testTag = "EmailAddressEntry" }
                 .padding(
                     top = 32.dp,
                     bottom = 10.dp,
@@ -113,10 +120,12 @@ fun LandingScreen(
 
         RegionSelector(
             selectedOption = state.selectedRegion,
-            options = LandingState.RegionOption.values().toList(),
             onOptionSelected = remember(viewModel) {
                 { viewModel.trySendAction(LandingAction.RegionOptionSelect(it)) }
             },
+            modifier = Modifier
+                .semantics { testTag = "RegionSelectorDropdown" }
+                .fillMaxWidth(),
         )
 
         BitwardenSwitch(
@@ -126,6 +135,7 @@ fun LandingScreen(
                 { viewModel.trySendAction(LandingAction.RememberMeToggle(it)) }
             },
             modifier = Modifier
+                .semantics { testTag = "RememberMeSwitch" }
                 .padding(top = 8.dp)
                 .fillMaxWidth(),
         )
@@ -137,6 +147,7 @@ fun LandingScreen(
             },
             isEnabled = state.isContinueButtonEnabled,
             modifier = Modifier
+                .semantics { testTag = "ContinueButton" }
                 .padding(top = 32.dp)
                 .fillMaxWidth(),
         )
@@ -163,6 +174,8 @@ fun LandingScreen(
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(LandingAction.CreateAccountClick) }
                 },
+                modifier = Modifier
+                    .semantics { testTag = "CreateAccountLabel" },
             )
         }
     }
@@ -176,20 +189,21 @@ fun LandingScreen(
  * and displays the currently selected region on the UI.
  *
  * @param selectedOption The currently selected region option.
- * @param options A list of region options available for selection.
  * @param onOptionSelected A callback that gets invoked when a region option is selected
  * and passes the selected option as an argument.
+ * @param modifier A [Modifier] for the composable.
  *
  */
 @Composable
 private fun RegionSelector(
     selectedOption: LandingState.RegionOption,
-    options: List<LandingState.RegionOption>,
     onOptionSelected: (LandingState.RegionOption) -> Unit,
+    modifier: Modifier,
 ) {
+    val options = LandingState.RegionOption.values().toList()
     var expanded by remember { mutableStateOf(false) }
 
-    Box(modifier = Modifier.fillMaxWidth()) {
+    Box(modifier = modifier) {
         Row(
             modifier = Modifier
                 .clickable { expanded = !expanded }
