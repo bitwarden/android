@@ -339,6 +339,10 @@ namespace Bit.iOS.Core.Services
             return false;
         }
 
+        public bool SupportsAutofillServices() => UIDevice.CurrentDevice.CheckSystemVersion(12, 0);
+        public bool SupportsInlineAutofill() => false;
+        public bool SupportsDrawOver() => false;
+
         private UIViewController GetPresentedViewController()
         {
             var window = UIApplication.SharedApplication.KeyWindow;
@@ -390,5 +394,8 @@ namespace Bit.iOS.Core.Services
         {
             GetPresentedViewController().DismissViewController(true, null);
         }
+
+        public string GetAutofillAccessibilityDescription() => null;
+        public string GetAutofillDrawOverDescription() => null;
     }
 }

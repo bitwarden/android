@@ -33,7 +33,7 @@ namespace Bit.Core.Abstractions
         Task<Cipher> GetAsync(string id);
         Task<CipherView> GetLastUsedForUrlAsync(string url);
         Task ReplaceAsync(Dictionary<string, CipherData> ciphers);
-        Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, string filename, byte[] data);
+        Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, CipherView cipherView, string filename, byte[] data);
         Task SaveCollectionsWithServerAsync(Cipher cipher);
         Task SaveWithServerAsync(Cipher cipher);
         Task<ShareWithServerError> ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds);

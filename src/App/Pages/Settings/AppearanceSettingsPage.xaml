@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:BaseContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    x:DataType="pages:AppearanceSettingsPageViewModel"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    x:Class="Bit.App.Pages.AppearanceSettingsPage"
+    Title="{u:I18n Appearance}">
+    
+    <ContentPage.BindingContext>
+        <pages:AppearanceSettingsPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView Padding="0, 0, 0, 20">
+        <StackLayout Padding="0" Spacing="5">
+            
+            <controls:SettingChooserItemView
+                Title="{u:I18n Language}"
+                Subtitle="{u:I18n LanguageChangeRequiresAppRestart}"
+                DisplayValue="{Binding LanguagePickerViewModel.SelectedValue}"
+                ChooseCommand="{Binding LanguagePickerViewModel.SelectOptionCommand}"
+                AutomationId="LanguageChooser"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand"/>
+            
+            <controls:SettingChooserItemView
+                Title="{u:I18n Theme}"
+                Subtitle="{u:I18n ThemeDescription}"
+                DisplayValue="{Binding ThemePickerViewModel.SelectedValue}"
+                ChooseCommand="{Binding ThemePickerViewModel.SelectOptionCommand}"
+                AutomationId="ThemeChooser"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand"/>
+
+            <controls:SettingChooserItemView
+                Title="{u:I18n DefaultDarkTheme}"
+                Subtitle="{u:I18n DefaultDarkThemeDescriptionLong}"
+                DisplayValue="{Binding DefaultDarkThemePickerViewModel.SelectedValue}"
+                ChooseCommand="{Binding DefaultDarkThemePickerViewModel.SelectOptionCommand}"
+                IsVisible="{Binding ShowDefaultDarkThemePicker}"
+                AutomationId="DefaultDarkThemeChooser"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand"/>
+            
+            <controls:SwitchItemView
+                Title="{u:I18n ShowWebsiteIcons}"
+                Subtitle="{u:I18n ShowWebsiteIconsDescription}"
+                IsToggled="{Binding ShowWebsiteIcons}"
+                IsEnabled="{Binding IsShowWebsiteIconsEnabled}"
+                AutomationId="ShowWebsiteIconsSwitch"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand" />
+
+        </StackLayout>
+    </ScrollView>
+</pages:BaseContentPage>

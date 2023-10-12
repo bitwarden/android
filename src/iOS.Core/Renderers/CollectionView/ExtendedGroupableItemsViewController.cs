@@ -38,6 +38,10 @@ namespace Bit.iOS.Core.Renderers.CollectionView
                     // Do nothing in here, this is temporary to get more info about the crash, if the logger fails, we want to get the info
                     // by crashing with the original exception and not the logger one
                 }
+                if (ex is IndexOutOfRangeException)
+                {
+                    return;
+                }
                 throw colEx;
             }
         }

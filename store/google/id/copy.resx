@@ -126,31 +126,31 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>Bitwarden, Inc. adalah perusahaan induk dari 8bit Solutions LLC.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+DINOBATKAN SEBAGAI PENGELOLA KATA SANDI TERBAIK OLEH THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, DAN BANYAK LAGI.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+Kelola, simpan, amankan, dan bagikan kata sandi tanpa batas di perangkat tanpa batas dari mana saja. Bitwarden memberikan solusi manajemen kata sandi sumber terbuka untuk semua orang, baik di rumah, di tempat kerja, atau di perjalanan.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Buat kata sandi yang kuat, unik, dan acak berdasarkan persyaratan keamanan untuk setiap situs web yang sering Anda kunjungi.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+Bitwarden Send dengan cepat mengirimkan informasi terenkripsi - file dan teks biasa - langsung ke siapa saja.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+Bitwarden menawarkan paket Teams dan Enterprise untuk perusahaan sehingga Anda dapat berbagi kata sandi dengan rekan kerja dengan aman.
 
-Why Choose Bitwarden:
+Mengapa Memilih Bitwarden:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+Enkripsi Kelas Dunia
+Kata sandi dilindungi dengan enkripsi end-to-end yang canggih (AES-256 bit, salted hash, dan PBKDF2 SHA-256) sehingga data Anda tetap aman dan pribadi.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Pembuat Kata Sandi Internal
+Hasilkan kata sandi yang kuat, unik, dan acak berdasarkan persyaratan keamanan untuk setiap situs web yang sering Anda kunjungi.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+Terjemahan Global
+Terjemahan Bitwarden tersedia dalam 40 bahasa dan terus bertambah, berkat komunitas global kami.
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+Aplikasi Lintas Platform
+Amankan dan bagikan data sensitif di dalam Bitwarden Vault Anda dari browser, perangkat seluler, atau OS desktop apa pun, dan banyak lagi.
 </value>
   <comment>Max 4000 characters</comment>
   </data>

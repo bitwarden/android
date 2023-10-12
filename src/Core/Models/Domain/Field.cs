@@ -28,9 +28,9 @@ namespace Bit.Core.Models.Domain
         public FieldType Type { get; set; }
         public LinkedIdType? LinkedId { get; set; }
 
-        public Task<FieldView> DecryptAsync(string orgId)
+        public Task<FieldView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
-            return DecryptObjAsync(new FieldView(this), this, _map, orgId);
+            return DecryptObjAsync(new FieldView(this), this, _map, orgId, key);
         }
 
         public FieldData ToFieldData()
