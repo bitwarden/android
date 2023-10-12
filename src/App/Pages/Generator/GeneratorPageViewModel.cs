@@ -81,8 +81,8 @@ namespace Bit.App.Pages
                 ForwardedEmailServiceType.DuckDuckGo,
                 ForwardedEmailServiceType.Fastmail,
                 ForwardedEmailServiceType.FirefoxRelay,
-                ForwardedEmailServiceType.SimpleLogin,
-                ForwardedEmailServiceType.ForwardEmail
+                ForwardedEmailServiceType.ForwardEmail,
+                ForwardedEmailServiceType.SimpleLogin
             };
 
             UsernameEmailTypeOptions = new List<UsernameEmailType>
