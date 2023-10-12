@@ -100,11 +100,12 @@ namespace Bit.App.Pages
         public Action CloseAction { get; set; }
         public string OrgIdentifier { get; set; }
         public string OrgId { get; set; }
+        public ForcePasswordResetReason? ForceSetPasswordReason { get; private set; }
 
         public async Task InitAsync()
         {
             await CheckPasswordPolicy();
-
+            ForceSetPasswordReason = await _stateService.GetForcePasswordResetReasonAsync();
             try
             {
                 var response = await _apiService.GetOrganizationAutoEnrollStatusAsync(OrgIdentifier);
@@ -171,8 +172,17 @@ namespace Bit.App.Pages
 
             var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(newMasterKey,
                 await _cryptoService.GetUserKeyAsync() ?? await _cryptoService.MakeUserKeyAsync());
+            KeysRequest keysRequest = null;
+            if (ForceSetPasswordReason != ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission)
+            {
+                var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync(newUserKey);
+                keysRequest = new KeysRequest
+                {
+                    PublicKey = newPublicKey,
+                    EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
+                };
 
-            var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync(newUserKey);
+            }
             var request = new SetPasswordRequest
             {
                 MasterPasswordHash = masterPasswordHash,
@@ -183,11 +193,7 @@ namespace Bit.App.Pages
                 KdfMemory = kdfConfig.Memory,
                 KdfParallelism = kdfConfig.Parallelism,
                 OrgIdentifier = OrgIdentifier,
-                Keys = new KeysRequest
-                {
-                    PublicKey = newPublicKey,
-                    EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
-                }
+                Keys = keysRequest
             };
 
             try
@@ -200,7 +206,14 @@ namespace Bit.App.Pages
                 await _cryptoService.SetMasterKeyAsync(newMasterKey);
                 await _cryptoService.SetMasterKeyHashAsync(localMasterPasswordHash);
                 await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(newProtectedUserKey.EncryptedString);
-                await _cryptoService.SetUserPrivateKeyAsync(newProtectedPrivateKey.EncryptedString);
+
+                // Set private key only for new JIT provisioned users in MP encryption orgs
+                // Existing TDE users will have private key set on sync or on login
+                if (keysRequest != null && ForceSetPasswordReason != ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission)
+                {
+
+                    await _cryptoService.SetUserPrivateKeyAsync(keysRequest.EncryptedPrivateKey);
+                }
 
                 if (ResetPasswordAutoEnroll)
                 {

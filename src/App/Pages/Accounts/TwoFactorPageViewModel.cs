@@ -335,20 +335,18 @@ namespace Bit.App.Pages
                             StartDeviceApprovalOptionsAction?.Invoke();
                             return;
                         }
-                        // If user doesn't have a MP, but has reset password permission, they must set a MP
-                        if (!decryptOptions.HasMasterPassword &&
-                            decryptOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
-                        {
-                            StartSetPasswordAction?.Invoke();
-                            return;
-                        }
                         // Update temp password only if the device is trusted and therefore has a decrypted User Key set
                         if (result.ForcePasswordReset)
                         {
                             UpdateTempPasswordAction?.Invoke();
                             return;
                         }
-
+                        // If user doesn't have a MP, but has reset password permission, they must set a MP
+                        if (!decryptOptions.HasMasterPassword &&
+                            decryptOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
+                        {
+                            await _stateService.SetForcePasswordResetReasonAsync(Core.Models.Domain.ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission);
+                        }
                         // Device is trusted and has keys, so we can decrypt
                         _syncService.FullSyncAsync(true).FireAndForget();
                         await TwoFactorAuthSuccessAsync();

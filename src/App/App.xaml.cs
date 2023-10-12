@@ -171,6 +171,14 @@ namespace Bit.App
                                 new NavigationPage(new UpdateTempPasswordPage()));
                         });
                     }
+                    else if (message.Command == Constants.ForceSetPassword)
+                    {
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            await Application.Current.MainPage.Navigation.PushModalAsync(
+                                new NavigationPage(new SetPasswordPage()));
+                        });
+                    }
                     else if (message.Command == "syncCompleted")
                     {
                         await _configService.GetAsync(true);

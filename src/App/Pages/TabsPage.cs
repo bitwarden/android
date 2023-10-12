@@ -104,7 +104,14 @@ namespace Bit.App.Pages
 
             if (forcePasswordResetReason.HasValue)
             {
-                _messagingService.Send(Constants.ForceUpdatePassword);
+                if(forcePasswordResetReason.Value == Core.Models.Domain.ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission)
+                {
+                    _messagingService.Send(Constants.ForceSetPassword);
+                }
+                else
+                {
+                    _messagingService.Send(Constants.ForceUpdatePassword);
+                }
             }
         }
 

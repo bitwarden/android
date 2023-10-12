@@ -56,6 +56,7 @@ namespace Bit.Core
         public const string AppLocaleKey = "appLocale";
         public const string ClearSensitiveFields = "clearSensitiveFields";
         public const string ForceUpdatePassword = "forceUpdatePassword";
+        public const string ForceSetPassword = "forceSetPassword";
         public const string ShouldTrustDevice = "shouldTrustDevice";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
