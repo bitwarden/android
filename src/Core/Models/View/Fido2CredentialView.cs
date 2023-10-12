@@ -3,13 +3,13 @@ using Bit.Core.Enums;
 
 namespace Bit.Core.Models.View
 {
-    public class Fido2KeyView : ItemView, ILaunchableView
+    public class Fido2CredentialView : ItemView, ILaunchableView
     {
         public string CredentialId { get; set; }
         public string Discoverable { get; set; }
-        public string KeyType { get; set; } = Constants.DefaultFido2KeyType;
-        public string KeyAlgorithm { get; set; } = Constants.DefaultFido2KeyAlgorithm;
-        public string KeyCurve { get; set; } = Constants.DefaultFido2KeyCurve;
+        public string KeyType { get; set; } = Constants.DefaultFido2CredentialType;
+        public string KeyAlgorithm { get; set; } = Constants.DefaultFido2CredentialAlgorithm;
+        public string KeyCurve { get; set; } = Constants.DefaultFido2CredentialCurve;
         public string KeyValue { get; set; }
         public string RpId { get; set; }
         public string RpName { get; set; }
@@ -23,6 +23,6 @@ namespace Bit.Core.Models.View
         public bool CanLaunch => !string.IsNullOrEmpty(RpId);
         public string LaunchUri => $"https://{RpId}";
 
-        public bool IsUniqueAgainst(Fido2KeyView fido2View) => fido2View?.RpId != RpId || fido2View?.UserName != UserName;
+        public bool IsUniqueAgainst(Fido2CredentialView fido2View) => fido2View?.RpId != RpId || fido2View?.UserName != UserName;
     }
 }

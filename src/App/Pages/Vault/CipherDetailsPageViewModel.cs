@@ -702,7 +702,7 @@ namespace Bit.App.Pages
 
         private async Task<bool> CanCloneAsync()
         {
-            if (!Cipher.HasFido2Key)
+            if (!Cipher.HasFido2Credential)
             {
                 return true;
             }

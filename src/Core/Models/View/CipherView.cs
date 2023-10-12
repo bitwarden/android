@@ -121,6 +121,6 @@ namespace Bit.Core.Models.View
 
         public bool IsClonable => OrganizationId is null;
 
-        public bool HasFido2Key => Type == CipherType.Login && Login?.HasFido2Keys == true;
+        public bool HasFido2Credential => Type == CipherType.Login && Login?.HasFido2Credentials == true;
     }
 }
