@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Pa
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MAX_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MIN_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_COUNTER_MAX
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_COUNTER_MIN
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeTypeOption
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -65,6 +67,10 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.MainType.Passcode.PasscodeTypeOptionSelect -> {
                 handlePasscodeTypeOptionSelect(action)
+            }
+
+            is GeneratorAction.MainType.Passcode.PasscodeType.Password -> {
+                handlePasswordSpecificAction(action)
             }
 
             is GeneratorAction.MainType.Passcode.PasscodeType.Passphrase -> {
@@ -158,6 +164,139 @@ class GeneratorViewModel @Inject constructor(
 
     //endregion Passcode Type Handlers
 
+    //region Password Specific Handlers
+
+    private fun handlePasswordSpecificAction(
+        action: GeneratorAction.MainType.Passcode.PasscodeType.Password,
+    ) {
+        when (action) {
+            is GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange,
+            -> {
+                handlePasswordLengthSliderChange(action)
+            }
+
+            is GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleCapitalLettersChange,
+            -> {
+                handleToggleCapitalLetters(action)
+            }
+
+            is GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleLowercaseLettersChange,
+            -> {
+                handleToggleLowercaseLetters(action)
+            }
+
+            is GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange,
+            -> {
+                handleToggleNumbers(action)
+            }
+
+            is GeneratorAction.MainType.Passcode.PasscodeType.Password
+            .ToggleSpecialCharactersChange,
+            -> {
+                handleToggleSpecialChars(action)
+            }
+
+            is GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange,
+            -> {
+                handleMinNumbersChange(action)
+            }
+
+            is GeneratorAction.MainType.Passcode.PasscodeType.Password.MinSpecialCharactersChange,
+            -> {
+                handleMinSpecialChange(action)
+            }
+
+            is GeneratorAction.MainType.Passcode.PasscodeType.Password
+            .ToggleAvoidAmbigousCharactersChange,
+            -> {
+                handleToggleAmbiguousChars(action)
+            }
+        }
+    }
+
+    private fun handlePasswordLengthSliderChange(
+        action: GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange,
+    ) {
+        val adjustedLength = action.length
+
+        updatePasswordType { currentPasswordType ->
+            currentPasswordType.copy(length = adjustedLength)
+        }
+    }
+
+    private fun handleToggleCapitalLetters(
+        action: GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleCapitalLettersChange,
+    ) {
+        updatePasswordType { currentPasswordType ->
+            currentPasswordType.copy(
+                useCapitals = action.useCapitals,
+            )
+        }
+    }
+
+    private fun handleToggleLowercaseLetters(
+        action: GeneratorAction.MainType.Passcode.PasscodeType.Password
+        .ToggleLowercaseLettersChange,
+    ) {
+        updatePasswordType { currentPasswordType ->
+            currentPasswordType.copy(useLowercase = action.useLowercase)
+        }
+    }
+
+    private fun handleToggleNumbers(
+        action: GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange,
+    ) {
+        updatePasswordType { currentPasswordType ->
+            currentPasswordType.copy(useNumbers = action.useNumbers)
+        }
+    }
+
+    private fun handleToggleSpecialChars(
+        action: GeneratorAction.MainType.Passcode.PasscodeType.Password
+        .ToggleSpecialCharactersChange,
+    ) {
+        updatePasswordType { currentPasswordType ->
+            currentPasswordType.copy(useSpecialChars = action.useSpecialChars)
+        }
+    }
+
+    private fun handleMinNumbersChange(
+        action: GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange,
+    ) {
+        val adjustedMinNumbers = action
+            .minNumbers
+            .coerceIn(PASSWORD_COUNTER_MIN, PASSWORD_COUNTER_MAX)
+
+        updatePasswordType { currentPasswordType ->
+            currentPasswordType.copy(minNumbers = adjustedMinNumbers)
+        }
+    }
+
+    private fun handleMinSpecialChange(
+        action: GeneratorAction.MainType.Passcode.PasscodeType.Password.MinSpecialCharactersChange,
+    ) {
+        val adjustedMinSpecial = action
+            .minSpecial
+            .coerceIn(PASSWORD_COUNTER_MIN, PASSWORD_COUNTER_MAX)
+
+        updatePasswordType { currentPasswordType ->
+            currentPasswordType.copy(minSpecial = adjustedMinSpecial)
+        }
+    }
+
+    private fun handleToggleAmbiguousChars(
+        action: GeneratorAction.MainType.Passcode.PasscodeType.Password
+        .ToggleAvoidAmbigousCharactersChange,
+    ) {
+        updatePasswordType { currentPasswordType ->
+            currentPasswordType.copy(
+                avoidAmbiguousChars = action.avoidAmbiguousChars,
+            )
+        }
+    }
+
+    //endregion Password Specific Handlers
+
     //region Passphrase Specific Handlers
 
     private fun handlePassphraseSpecificAction(
@@ -248,6 +387,18 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
+    private inline fun updatePasswordType(
+        crossinline block: (Password) -> Password,
+    ) {
+        updateGeneratorMainTypePassword { currentSelectedType ->
+            val currentPasswordType = currentSelectedType.selectedType
+            if (currentPasswordType !is Password) {
+                return@updateGeneratorMainTypePassword currentSelectedType
+            }
+            currentSelectedType.copy(selectedType = block(currentPasswordType))
+        }
+    }
+
     private inline fun updatePassphraseType(
         crossinline block: (Passphrase) -> Passphrase,
     ) {
@@ -268,8 +419,7 @@ class GeneratorViewModel @Inject constructor(
         val INITIAL_STATE: GeneratorState = GeneratorState(
             generatedText = PLACEHOLDER_GENERATED_TEXT,
             selectedType = Passcode(
-                // TODO (BIT-634): Update the initial state to Password
-                selectedType = Passphrase(),
+                selectedType = Password(),
             ),
         )
     }
@@ -358,19 +508,41 @@ data class GeneratorState(
                 abstract val displayStringResId: Int
 
                 /**
-                 * Represents a standard PASSWORD type, with a specified length.
+                 * Represents a standard PASSWORD type, with configurable options for
+                 * length, character types, and requirements.
                  *
                  * @property length The length of the generated password.
+                 * @property useCapitals Whether to include capital letters.
+                 * @property useLowercase Whether to include lowercase letters.
+                 * @property useNumbers Whether to include numbers.
+                 * @property useSpecialChars Whether to include special characters.
+                 * @property minNumbers The minimum number of numeric characters.
+                 * @property minSpecial The minimum number of special characters.
+                 * @property avoidAmbiguousChars Whether to avoid characters that look similar.
                  */
                 @Parcelize
                 data class Password(
                     val length: Int = DEFAULT_PASSWORD_LENGTH,
+                    val useCapitals: Boolean = true,
+                    val useLowercase: Boolean = true,
+                    val useNumbers: Boolean = true,
+                    val useSpecialChars: Boolean = false,
+                    val minNumbers: Int = MIN_NUMBERS,
+                    val minSpecial: Int = MIN_SPECIAL,
+                    val avoidAmbiguousChars: Boolean = false,
                 ) : PasscodeType(), Parcelable {
                     override val displayStringResId: Int
                         get() = PasscodeTypeOption.PASSWORD.labelRes
 
                     companion object {
-                        const val DEFAULT_PASSWORD_LENGTH: Int = 10
+                        private const val DEFAULT_PASSWORD_LENGTH: Int = 14
+                        private const val MIN_NUMBERS: Int = 1
+                        private const val MIN_SPECIAL: Int = 1
+
+                        const val PASSWORD_LENGTH_SLIDER_MIN: Int = 5
+                        const val PASSWORD_LENGTH_SLIDER_MAX: Int = 128
+                        const val PASSWORD_COUNTER_MIN: Int = 0
+                        const val PASSWORD_COUNTER_MAX: Int = 5
                     }
                 }
 
@@ -470,7 +642,94 @@ sealed class GeneratorAction {
                 /**
                  * Represents actions specifically related to passwords, a subtype of passcode.
                  */
-                sealed class Password : PasscodeType()
+                sealed class Password : PasscodeType() {
+                    /**
+                     * Represents a change action for the length of the password,
+                     * adjusted using a slider.
+                     *
+                     * @property length The new desired length for the password.
+                     */
+                    data class SliderLengthChange(
+                        val length: Int,
+                    ) : Password()
+
+                    /**
+                     * Represents a change action to toggle the usage of
+                     * capital letters in the password.
+                     *
+                     * @property useCapitals Flag indicating whether capital letters
+                     * should be used.
+                     */
+                    data class ToggleCapitalLettersChange(
+                        val useCapitals: Boolean,
+                    ) : Password()
+
+                    /**
+                     * Represents a change action to toggle the usage of lowercase letters
+                     * in the password.
+                     *
+                     * @property useLowercase Flag indicating whether lowercase letters
+                     * should be used.
+                     */
+                    data class ToggleLowercaseLettersChange(
+                        val useLowercase: Boolean,
+                    ) : Password()
+
+                    /**
+                     * Represents a change action to toggle the inclusion of numbers
+                     * in the password.
+                     *
+                     * @property useNumbers Flag indicating whether numbers
+                     * should be used.
+                     */
+                    data class ToggleNumbersChange(
+                        val useNumbers: Boolean,
+                    ) : Password()
+
+                    /**
+                     * Represents a change action to toggle the usage of special characters
+                     * in the password.
+                     *
+                     * @property useSpecialChars Flag indicating whether special characters
+                     * should be used.
+                     */
+                    data class ToggleSpecialCharactersChange(
+                        val useSpecialChars: Boolean,
+                    ) : Password()
+
+                    /**
+                     * Represents a change action for the minimum required number of numbers
+                     * in the password.
+                     *
+                     * @property minNumbers The minimum required number of numbers
+                     * for the password.
+                     */
+                    data class MinNumbersCounterChange(
+                        val minNumbers: Int,
+                    ) : Password()
+
+                    /**
+                     * Represents a change action for the minimum required number of special
+                     * characters in the password.
+                     *
+                     * @property minSpecial The minimum required number of special characters
+                     * for the password.
+                     */
+                    data class MinSpecialCharactersChange(
+                        val minSpecial: Int,
+                    ) : Password()
+
+                    /**
+                     * Represents a change action to toggle the avoidance of ambiguous
+                     * characters in the password.
+                     *
+                     * @property avoidAmbiguousChars Flag indicating whether ambiguous characters
+                     * should be avoided.
+                     */
+                    data class ToggleAvoidAmbigousCharactersChange(
+                        val avoidAmbiguousChars: Boolean,
+                    ) : Password()
+                }
 
                 /**
                  * Represents actions specifically related to passphrases, a subtype of passcode.

@@ -2,19 +2,29 @@
 
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.Role.Companion.Switch
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.SemanticsProperties.Role
 import androidx.compose.ui.test.SemanticsMatcher.Companion.expectValue
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasProgressBarRangeInfo
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeRight
+import androidx.compose.ui.text.AnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import io.mockk.every
 import io.mockk.mockk
@@ -78,6 +88,333 @@ class GeneratorScreenTest : BaseComposeTest() {
             )
         }
     }
+
+    //region Passcode Password Tests
+
+    @Test
+    fun `in Passcode_Password state, the ViewModel state should update the UI correctly`() {
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "What would you like to generate?, Password")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Password, Password")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNode(
+                expectValue(
+                    SemanticsProperties.EditableText, AnnotatedString("14"),
+                ),
+            )
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithText("Uppercase (A to Z)")
+            .onChildren()
+            .filterToOne(expectValue(Role, Switch))
+            .assertIsOn()
+
+        composeTestRule
+            .onNodeWithText("Lowercase (A to Z)")
+            .onChildren()
+            .filterToOne(expectValue(Role, Switch))
+            .assertIsOn()
+
+        composeTestRule
+            .onNodeWithText("Numbers (0 to 9)")
+            .onChildren()
+            .filterToOne(expectValue(Role, Switch))
+            .assertIsOn()
+
+        composeTestRule
+            .onNodeWithText("Special characters (!@#$%^*)")
+            .onChildren()
+            .filterToOne(expectValue(Role, Switch))
+            .assertIsOff()
+
+        composeTestRule
+            .onNodeWithContentDescription("Minimum numbers, 1")
+            .onChildren()
+            .filterToOne(hasContentDescription("\u2212"))
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithContentDescription("Minimum numbers, 1")
+            .onChildren()
+            .filterToOne(hasContentDescription("+"))
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Avoid ambiguous characters")
+            .onChildren()
+            .filterToOne(expectValue(Role, Switch))
+            .performScrollTo()
+            .assertIsOff()
+    }
+
+    @Test
+    fun `in Passcode_Password state, adjusting the slider should send SliderLengthChange action with length not equal to default`() {
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule
+            .onNodeWithText("Length")
+            .onSiblings()
+            .filterToOne(
+                hasProgressBarRangeInfo(
+                    ProgressBarRangeInfo(
+                        current = 13.6484375f,
+                        range = 5.0f..128.0f,
+                        steps = 127,
+                    ),
+                ),
+            )
+            .performScrollTo()
+            .performTouchInput {
+                swipeRight(50f, 800f)
+            }
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange(
+                    length = 128,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in Passcode_Password state, toggling the capital letters toggle should send ToggleCapitalLettersChange action`() {
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithText("Uppercase (A to Z)")
+            .onChildren()
+            .filterToOne(expectValue(Role, Switch))
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleCapitalLettersChange(
+                    useCapitals = false,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in Passcode_Password state, toggling the use lowercase toggle should send ToggleLowercaseLettersChange action`() {
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithText("Lowercase (A to Z)")
+            .onChildren()
+            .filterToOne(expectValue(Role, Switch))
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleLowercaseLettersChange(
+                    useLowercase = false,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in Passcode_Password state, toggling the use numbers toggle should send ToggleNumbersChange action`() {
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithText("Numbers (0 to 9)")
+            .onChildren()
+            .filterToOne(expectValue(Role, Switch))
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange(
+                    useNumbers = false,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in Passcode_Password state, toggling the use special characters toggle should send ToggleSpecialCharactersChange action`() {
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithText("Special characters (!@#$%^*)")
+            .onChildren()
+            .filterToOne(expectValue(Role, Switch))
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleSpecialCharactersChange(
+                    useSpecialChars = true,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in Passcode_Password state, decrementing the minimum numbers counter should send MinNumbersCounterChange action`() {
+        val initialMinNumbers = 1
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState.MainType.Passcode(GeneratorState.MainType.Passcode.PasscodeType.Password()),
+            ),
+        )
+
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithContentDescription("Minimum numbers, 1")
+            .onChildren()
+            .filterToOne(hasContentDescription("\u2212"))
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange(
+                    minNumbers = initialMinNumbers - 1,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in Passcode_Password state, incrementing the minimum numbers counter should send MinNumbersCounterChange action`() {
+        val initialMinNumbers = 1
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState.MainType.Passcode(GeneratorState.MainType.Passcode.PasscodeType.Password()),
+            ),
+        )
+
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithContentDescription("Minimum numbers, 1")
+            .onChildren()
+            .filterToOne(hasContentDescription("+"))
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange(
+                    minNumbers = initialMinNumbers + 1,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in Passcode_Password state, decrementing the minimum special characters counter should send MinSpecialCharactersChange action`() {
+        val initialSpecialChars = 1
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState.MainType.Passcode(GeneratorState.MainType.Passcode.PasscodeType.Password()),
+            ),
+        )
+
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithContentDescription("Minimum special, 1")
+            .onChildren()
+            .filterToOne(hasContentDescription("\u2212"))
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.MinSpecialCharactersChange(
+                    minSpecial = initialSpecialChars - 1,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in Passcode_Password state, incrementing the minimum special characters counter should send MinSpecialCharactersChange action`() {
+        val initialSpecialChars = 1
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState.MainType.Passcode(GeneratorState.MainType.Passcode.PasscodeType.Password()),
+            ),
+        )
+
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithContentDescription("Minimum special, 1")
+            .onChildren()
+            .filterToOne(hasContentDescription("+"))
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.MinSpecialCharactersChange(
+                    minSpecial = initialSpecialChars + 1,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in Passcode_Password state, toggling the use avoid ambiguous characters toggle should send ToggleSpecialCharactersChange action`() {
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithText("Avoid ambiguous characters")
+            .onChildren()
+            .filterToOne(expectValue(Role, Switch))
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleAvoidAmbigousCharactersChange(
+                    avoidAmbiguousChars = true,
+                ),
+            )
+        }
+    }
+
+    //endregion Passcode Password Tests
+
+    //region Passcode Passphrase Tests
 
     @Test
     fun `in Passcode_Passphrase state, decrementing number of words should send NumWordsCounterChange action with decremented value`() {
@@ -223,6 +560,8 @@ class GeneratorScreenTest : BaseComposeTest() {
             )
         }
     }
+
+    //endregion Passcode Passphrase Tests
 
     private fun updateState(state: GeneratorState) {
         mutableStateFlow.value = state
