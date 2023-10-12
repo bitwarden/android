@@ -107,6 +107,210 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class PasswordActions {
+        private val defaultPasswordState = createPasswordState()
+        private lateinit var viewModel: GeneratorViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = GeneratorViewModel(initialSavedStateHandle)
+        }
+
+        @Test
+        fun `SliderLengthChange should update password length correctly to new value`() = runTest {
+            viewModel.eventFlow.test {
+                val newLength = 16
+
+                viewModel.actionChannel.trySend(
+                    GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange(
+                        length = newLength,
+                    ),
+                )
+
+                val expectedState = defaultPasswordState.copy(
+                    generatedText = "redlohecalP",
+                    selectedType = GeneratorState.MainType.Passcode(
+                        GeneratorState.MainType.Passcode.PasscodeType.Password(
+                            length = newLength,
+                        ),
+                    ),
+                )
+
+                assertEquals(expectedState, viewModel.stateFlow.value)
+            }
+        }
+
+        @Test
+        fun `ToggleCapitalLettersChange should update useCapitals correctly`() = runTest {
+            viewModel.eventFlow.test {
+                val useCapitals = true
+
+                viewModel.actionChannel.trySend(
+                    GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleCapitalLettersChange(
+                        useCapitals = useCapitals,
+                    ),
+                )
+
+                val expectedState = defaultPasswordState.copy(
+                    generatedText = "redlohecalP",
+                    selectedType = GeneratorState.MainType.Passcode(
+                        GeneratorState.MainType.Passcode.PasscodeType.Password(
+                            useCapitals = useCapitals,
+                        ),
+                    ),
+                )
+
+                assertEquals(expectedState, viewModel.stateFlow.value)
+            }
+        }
+
+        @Test
+        fun `ToggleLowercaseLettersChange should update useLowercase correctly`() = runTest {
+            viewModel.eventFlow.test {
+                val useLowercase = true
+
+                viewModel.actionChannel.trySend(
+                    GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleLowercaseLettersChange(
+                        useLowercase = useLowercase,
+                    ),
+                )
+
+                val expectedState = defaultPasswordState.copy(
+                    generatedText = "redlohecalP",
+                    selectedType = GeneratorState.MainType.Passcode(
+                        GeneratorState.MainType.Passcode.PasscodeType.Password(
+                            useLowercase = useLowercase,
+                        ),
+                    ),
+                )
+
+                assertEquals(expectedState, viewModel.stateFlow.value)
+            }
+        }
+
+        @Test
+        fun `ToggleNumbersChange should update useNumbers correctly`() = runTest {
+            viewModel.eventFlow.test {
+                val useNumbers = true
+
+                viewModel.actionChannel.trySend(
+                    GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange(
+                        useNumbers = useNumbers,
+                    ),
+                )
+
+                val expectedState = defaultPasswordState.copy(
+                    generatedText = "redlohecalP",
+                    selectedType = GeneratorState.MainType.Passcode(
+                        GeneratorState.MainType.Passcode.PasscodeType.Password(
+                            useNumbers = useNumbers,
+                        ),
+                    ),
+                )
+
+                assertEquals(expectedState, viewModel.stateFlow.value)
+            }
+        }
+
+        @Test
+        fun `ToggleSpecialCharactersChange should update useSpecialChars correctly`() = runTest {
+            viewModel.eventFlow.test {
+                val useSpecialChars = true
+
+                viewModel.actionChannel.trySend(
+                    GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleSpecialCharactersChange(
+                        useSpecialChars = useSpecialChars,
+                    ),
+                )
+
+                val expectedState = defaultPasswordState.copy(
+                    generatedText = "redlohecalP",
+                    selectedType = GeneratorState.MainType.Passcode(
+                        GeneratorState.MainType.Passcode.PasscodeType.Password(
+                            useSpecialChars = useSpecialChars,
+                        ),
+                    ),
+                )
+
+                assertEquals(expectedState, viewModel.stateFlow.value)
+            }
+        }
+
+        @Test
+        fun `MinNumbersCounterChange should update minNumbers correctly`() = runTest {
+            viewModel.eventFlow.test {
+                val minNumbers = 4
+
+                viewModel.actionChannel.trySend(
+                    GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange(
+                        minNumbers = minNumbers,
+                    ),
+                )
+
+                val expectedState = defaultPasswordState.copy(
+                    generatedText = "redlohecalP",
+                    selectedType = GeneratorState.MainType.Passcode(
+                        GeneratorState.MainType.Passcode.PasscodeType.Password(
+                            minNumbers = minNumbers,
+                        ),
+                    ),
+                )
+
+                assertEquals(expectedState, viewModel.stateFlow.value)
+            }
+        }
+
+        @Test
+        fun `MinSpecialCharactersChange should update minSpecial correctly`() = runTest {
+            viewModel.eventFlow.test {
+                val minSpecial = 2
+
+                viewModel.actionChannel.trySend(
+                    GeneratorAction.MainType.Passcode.PasscodeType.Password.MinSpecialCharactersChange(
+                        minSpecial = minSpecial,
+                    ),
+                )
+
+                val expectedState = defaultPasswordState.copy(
+                    generatedText = "redlohecalP",
+                    selectedType = GeneratorState.MainType.Passcode(
+                        GeneratorState.MainType.Passcode.PasscodeType.Password(
+                            minSpecial = minSpecial,
+                        ),
+                    ),
+                )
+
+                assertEquals(expectedState, viewModel.stateFlow.value)
+            }
+        }
+
+        @Test
+        fun `ToggleAvoidAmbigousCharactersChange should update avoidAmbiguousChars correctly`() =
+            runTest {
+                viewModel.eventFlow.test {
+                    val avoidAmbiguousChars = true
+
+                    viewModel.actionChannel.trySend(
+                        GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleAvoidAmbigousCharactersChange(
+                            avoidAmbiguousChars = avoidAmbiguousChars,
+                        ),
+                    )
+
+                    val expectedState = defaultPasswordState.copy(
+                        generatedText = "redlohecalP",
+                        selectedType = GeneratorState.MainType.Passcode(
+                            GeneratorState.MainType.Passcode.PasscodeType.Password(
+                                avoidAmbiguousChars = avoidAmbiguousChars,
+                            ),
+                        ),
+                    )
+
+                    assertEquals(expectedState, viewModel.stateFlow.value)
+                }
+            }
+    }
+
+    @Nested
     inner class PassphraseActions {
 
         private val defaultPassphraseState = createPassphraseState()
@@ -221,14 +425,32 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     }
     //region Helper Functions
 
+    @Suppress("LongParameterList")
+
     private fun createPasswordState(
         generatedText: String = "Placeholder",
-        length: Int = 10,
+        length: Int = 14,
+        useCapitals: Boolean = true,
+        useLowercase: Boolean = true,
+        useNumbers: Boolean = true,
+        useSpecialChars: Boolean = false,
+        minNumbers: Int = 1,
+        minSpecial: Int = 1,
+        avoidAmbiguousChars: Boolean = false,
     ): GeneratorState =
         GeneratorState(
             generatedText = generatedText,
             selectedType = GeneratorState.MainType.Passcode(
-                GeneratorState.MainType.Passcode.PasscodeType.Password(length = length),
+                GeneratorState.MainType.Passcode.PasscodeType.Password(
+                    length = length,
+                    useCapitals = useCapitals,
+                    useLowercase = useLowercase,
+                    useNumbers = useNumbers,
+                    useSpecialChars = useSpecialChars,
+                    minNumbers = minNumbers,
+                    minSpecial = minSpecial,
+                    avoidAmbiguousChars = avoidAmbiguousChars,
+                ),
             ),
         )
 
