@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.createaccount
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
@@ -8,7 +10,11 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import androidx.core.net.toUri
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.AcceptPoliciesToggle
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CheckDataBreachesToggle
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.EmailInputChange
@@ -16,6 +22,7 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Pas
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.SubmitClick
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import io.mockk.every
@@ -57,6 +64,40 @@ class CreateAccountScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `check data breaches click should send CheckDataBreachesToggle action`() {
+        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
+            every { eventFlow } returns emptyFlow()
+            every { trySendAction(CheckDataBreachesToggle(true)) } returns Unit
+        }
+        composeTestRule.setContent {
+            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+        }
+        composeTestRule
+            .onNodeWithText("Check known data breaches for this password")
+            .performScrollTo()
+            .performClick()
+        verify { viewModel.trySendAction(CheckDataBreachesToggle(true)) }
+    }
+
+    @Test
+    fun `accept policies click should send AcceptPoliciesToggle action`() {
+        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
+            every { eventFlow } returns emptyFlow()
+            every { trySendAction(AcceptPoliciesToggle(true)) } returns Unit
+        }
+        composeTestRule.setContent {
+            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+        }
+        composeTestRule
+            .onNodeWithText("By activating this switch you agree", substring = true)
+            .performScrollTo()
+            .performClick()
+        verify { viewModel.trySendAction(AcceptPoliciesToggle(true)) }
+    }
+
+    @Test
     fun `NavigateBack event should invoke navigate back lambda`() {
         var onNavigateBackCalled = false
         val onNavigateBack = { onNavigateBackCalled = true }
@@ -68,6 +109,52 @@ class CreateAccountScreenTest : BaseComposeTest() {
             CreateAccountScreen(onNavigateBack = onNavigateBack, viewModel = viewModel)
         }
         assert(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `NavigateToPrivacyPolicy event should invoke intent handler`() {
+        val expectedIntent =
+            Intent(Intent.ACTION_VIEW, Uri.parse("https://bitwarden.com/privacy/"))
+        val intentHandler = mockk<IntentHandler>(relaxed = true) {
+            every { startActivity(expectedIntent) } returns Unit
+        }
+        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
+            every { eventFlow } returns flowOf(CreateAccountEvent.NavigateToPrivacyPolicy)
+        }
+        composeTestRule.setContent {
+            CreateAccountScreen(
+                onNavigateBack = {},
+                viewModel = viewModel,
+                intentHandler = intentHandler,
+            )
+        }
+        verify {
+            intentHandler.launchUri("https://bitwarden.com/privacy/".toUri())
+        }
+    }
+
+    @Test
+    fun `NavigateToTerms event should invoke intent handler`() {
+        val expectedIntent =
+            Intent(Intent.ACTION_VIEW, Uri.parse("https://bitwarden.com/terms/"))
+        val intentHandler = mockk<IntentHandler>(relaxed = true) {
+            every { startActivity(expectedIntent) } returns Unit
+        }
+        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
+            every { eventFlow } returns flowOf(CreateAccountEvent.NavigateToTerms)
+        }
+        composeTestRule.setContent {
+            CreateAccountScreen(
+                onNavigateBack = {},
+                viewModel = viewModel,
+                intentHandler = intentHandler,
+            )
+        }
+        verify {
+            intentHandler.launchUri("https://bitwarden.com/terms/".toUri())
+        }
     }
 
     @Test
@@ -179,6 +266,8 @@ class CreateAccountScreenTest : BaseComposeTest() {
             passwordInput = "",
             confirmPasswordInput = "",
             passwordHintInput = "",
+            isCheckDataBreachesToggled = false,
+            isAcceptPoliciesToggled = false,
             errorDialogState = BasicDialogState.Hidden,
         )
     }

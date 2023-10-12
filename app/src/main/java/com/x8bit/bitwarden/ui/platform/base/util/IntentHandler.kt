@@ -26,4 +26,11 @@ class IntentHandler(private val context: Context) {
             .build()
             .launchUrl(context, uri)
     }
+
+    /**
+     * Start an activity to view the given [uri] in an external browser.
+     */
+    fun launchUri(uri: Uri) {
+        startActivity(Intent(Intent.ACTION_VIEW, uri))
+    }
 }
