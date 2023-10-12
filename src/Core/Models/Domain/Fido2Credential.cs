@@ -5,7 +5,7 @@ using Bit.Core.Models.View;
 
 namespace Bit.Core.Models.Domain
 {
-    public class Fido2Key : Domain
+    public class Fido2Credential : Domain
     {
         public static HashSet<string> EncryptableProperties => new HashSet<string>
         {
@@ -22,9 +22,9 @@ namespace Bit.Core.Models.Domain
             nameof(Counter)
         };
 
-        public Fido2Key() { }
+        public Fido2Credential() { }
 
-        public Fido2Key(Fido2KeyData data, bool alreadyEncrypted = false)
+        public Fido2Credential(Fido2CredentialData data, bool alreadyEncrypted = false)
         {
             BuildDomainModel(this, data, EncryptableProperties, alreadyEncrypted);
         }
@@ -41,14 +41,14 @@ namespace Bit.Core.Models.Domain
         public EncString UserName { get; set; }
         public EncString Counter { get; set; }
 
-        public async Task<Fido2KeyView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
+        public async Task<Fido2CredentialView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
-            return await DecryptObjAsync(new Fido2KeyView(), this, EncryptableProperties, orgId, key);
+            return await DecryptObjAsync(new Fido2CredentialView(), this, EncryptableProperties, orgId, key);
         }
 
-        public Fido2KeyData ToFido2KeyData()
+        public Fido2CredentialData ToFido2CredentialData()
         {
-            var data = new Fido2KeyData();
+            var data = new Fido2CredentialData();
             BuildDataModel(this, data, EncryptableProperties);
             return data;
         }

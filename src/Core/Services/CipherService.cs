@@ -597,7 +597,7 @@ namespace Bit.Core.Services
 
         private async Task<bool> ValidateCanBeSharedWithOrgAsync(CipherView cipher, string organizationId)
         {
-            if (!cipher.HasFido2Key)
+            if (!cipher.HasFido2Credential)
             {
                 return true;
             }
@@ -605,7 +605,7 @@ namespace Bit.Core.Services
             var decCiphers = await GetAllDecryptedAsync();
             return !decCiphers
                 .Where(c => c.OrganizationId == organizationId)
-                .Any(c => !cipher.Login.MainFido2Key.IsUniqueAgainst(c.Login?.MainFido2Key));
+                .Any(c => !cipher.Login.MainFido2Credential.IsUniqueAgainst(c.Login?.MainFido2Credential));
         }
 
         public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, CipherView cipherView, string filename, byte[] data)
@@ -1176,14 +1176,14 @@ namespace Bit.Core.Services
                             cipher.Login.Uris.Add(loginUri);
                         }
                     }
-                    if (model.Login.HasFido2Keys)
+                    if (model.Login.HasFido2Credentials)
                     {
-                        cipher.Login.Fido2Keys = new List<Fido2Key>();
-                        foreach (var fido2Key in model.Login.Fido2Keys)
+                        cipher.Login.Fido2Credentials = new List<Fido2Credential>();
+                        foreach (var fido2Credential in model.Login.Fido2Credentials)
                         {
-                            var fido2KeyDomain = new Fido2Key();
-                            await EncryptObjPropertyAsync(fido2Key, fido2KeyDomain, Fido2Key.EncryptableProperties, key);
-                            cipher.Login.Fido2Keys.Add(fido2KeyDomain);
+                            var fido2CredentialDomain = new Fido2Credential();
+                            await EncryptObjPropertyAsync(fido2Credential, fido2CredentialDomain, Fido2Credential.EncryptableProperties, key);
+                            cipher.Login.Fido2Credentials.Add(fido2CredentialDomain);
                         }
                     }
                     break;
