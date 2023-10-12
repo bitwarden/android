@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Con
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountEvent.ShowToast
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
@@ -30,6 +31,8 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             passwordInput = "password",
             confirmPasswordInput = "confirmPassword",
             passwordHintInput = "hint",
+            isCheckDataBreachesToggled = false,
+            isAcceptPoliciesToggled = false,
             errorDialogState = BasicDialogState.Hidden,
         )
         val handle = SavedStateHandle(mapOf("state" to savedState))
@@ -61,7 +64,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(PasswordInputChange("longenoughpassword"))
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
-            assert(awaitItem() is CreateAccountEvent.ShowToast)
+            assertEquals(ShowToast("TODO: Handle Submit Click"), awaitItem())
         }
     }
 
@@ -70,7 +73,25 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         val viewModel = CreateAccountViewModel(SavedStateHandle())
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(CloseClick)
-            assert(awaitItem() is CreateAccountEvent.NavigateBack)
+            assertEquals(CreateAccountEvent.NavigateBack, awaitItem())
+        }
+    }
+
+    @Test
+    fun `PrivacyPolicyClick should emit NavigatePrivacyPolicy`() = runTest {
+        val viewModel = CreateAccountViewModel(SavedStateHandle())
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(CreateAccountAction.PrivacyPolicyClick)
+            assertEquals(CreateAccountEvent.NavigateToPrivacyPolicy, awaitItem())
+        }
+    }
+
+    @Test
+    fun `TermsClick should emit NavigateToTerms`() = runTest {
+        val viewModel = CreateAccountViewModel(SavedStateHandle())
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(CreateAccountAction.TermsClick)
+            assertEquals(CreateAccountEvent.NavigateToTerms, awaitItem())
         }
     }
 
@@ -110,12 +131,32 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `CheckDataBreachesToggle should change isCheckDataBreachesToggled`() = runTest {
+        val viewModel = CreateAccountViewModel(SavedStateHandle())
+        viewModel.trySendAction(CreateAccountAction.CheckDataBreachesToggle(true))
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE.copy(isCheckDataBreachesToggled = true), awaitItem())
+        }
+    }
+
+    @Test
+    fun `AcceptPoliciesToggle should change isAcceptPoliciesToggled`() = runTest {
+        val viewModel = CreateAccountViewModel(SavedStateHandle())
+        viewModel.trySendAction(CreateAccountAction.AcceptPoliciesToggle(true))
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE.copy(isAcceptPoliciesToggled = true), awaitItem())
+        }
+    }
+
     companion object {
         private val DEFAULT_STATE = CreateAccountState(
             passwordInput = "",
             emailInput = "",
             confirmPasswordInput = "",
             passwordHintInput = "",
+            isCheckDataBreachesToggled = false,
+            isAcceptPoliciesToggled = false,
             errorDialogState = BasicDialogState.Hidden,
         )
     }

@@ -4,11 +4,15 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.AcceptPoliciesToggle
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CheckDataBreachesToggle
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PrivacyPolicyClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.SubmitClick
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.TermsClick
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
@@ -25,6 +29,7 @@ private const val MIN_PASSWORD_LENGTH = 12
 /**
  * Models logic for the create account screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class CreateAccountViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -35,6 +40,8 @@ class CreateAccountViewModel @Inject constructor(
             passwordInput = "",
             confirmPasswordInput = "",
             passwordHintInput = "",
+            isAcceptPoliciesToggled = false,
+            isCheckDataBreachesToggled = false,
             errorDialogState = BasicDialogState.Hidden,
         ),
 ) {
@@ -55,6 +62,26 @@ class CreateAccountViewModel @Inject constructor(
             is PasswordInputChange -> handlePasswordInputChanged(action)
             is CreateAccountAction.CloseClick -> handleCloseClick()
             is CreateAccountAction.ErrorDialogDismiss -> handleDialogDismiss()
+            is AcceptPoliciesToggle -> handleAcceptPoliciesToggle(action)
+            is CheckDataBreachesToggle -> handleCheckDataBreachesToggle(action)
+            is PrivacyPolicyClick -> handlePrivacyPolicyClick()
+            is TermsClick -> handleTermsClick()
+        }
+    }
+
+    private fun handlePrivacyPolicyClick() = sendEvent(CreateAccountEvent.NavigateToPrivacyPolicy)
+
+    private fun handleTermsClick() = sendEvent(CreateAccountEvent.NavigateToTerms)
+
+    private fun handleAcceptPoliciesToggle(action: AcceptPoliciesToggle) {
+        mutableStateFlow.update {
+            it.copy(isAcceptPoliciesToggled = action.newState)
+        }
+    }
+
+    private fun handleCheckDataBreachesToggle(action: CheckDataBreachesToggle) {
+        mutableStateFlow.update {
+            it.copy(isCheckDataBreachesToggled = action.newState)
         }
     }
 
@@ -108,6 +135,8 @@ data class CreateAccountState(
     val passwordInput: String,
     val confirmPasswordInput: String,
     val passwordHintInput: String,
+    val isCheckDataBreachesToggled: Boolean,
+    val isAcceptPoliciesToggled: Boolean,
     val errorDialogState: BasicDialogState,
 ) : Parcelable
 
@@ -125,6 +154,16 @@ sealed class CreateAccountEvent {
      * Placeholder event for showing a toast. Can be removed once there are real events.
      */
     data class ShowToast(val text: String) : CreateAccountEvent()
+
+    /**
+     * Navigate to terms and conditions.
+     */
+    data object NavigateToTerms : CreateAccountEvent()
+
+    /**
+     * Navigate to privacy policy.
+     */
+    data object NavigateToPrivacyPolicy : CreateAccountEvent()
 }
 
 /**
@@ -165,4 +204,24 @@ sealed class CreateAccountAction {
      * User dismissed the error dialog.
      */
     data object ErrorDialogDismiss : CreateAccountAction()
+
+    /**
+     * User tapped check data breaches toggle.
+     */
+    data class CheckDataBreachesToggle(val newState: Boolean) : CreateAccountAction()
+
+    /**
+     * User tapped accept policies toggle.
+     */
+    data class AcceptPoliciesToggle(val newState: Boolean) : CreateAccountAction()
+
+    /**
+     * User tapped privacy policy link.
+     */
+    data object PrivacyPolicyClick : CreateAccountAction()
+
+    /**
+     * User tapped terms link.
+     */
+    data object TermsClick : CreateAccountAction()
 }

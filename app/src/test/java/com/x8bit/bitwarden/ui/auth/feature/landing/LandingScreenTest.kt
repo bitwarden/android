@@ -2,9 +2,6 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
-import androidx.compose.ui.test.filterToOne
-import androidx.compose.ui.test.hasClickAction
-import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -69,7 +66,7 @@ class LandingScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
             )
         }
-        composeTestRule.onNodeWithText("Continue").performClick()
+        composeTestRule.onNodeWithText("Continue").performScrollTo().performClick()
         verify {
             viewModel.trySendAction(LandingAction.ContinueButtonClick)
         }
@@ -97,8 +94,6 @@ class LandingScreenTest : BaseComposeTest() {
         }
         composeTestRule
             .onNodeWithText("Remember me")
-            .onChildren()
-            .filterToOne(hasClickAction())
             .performClick()
         verify {
             viewModel.trySendAction(LandingAction.RememberMeToggle(true))
