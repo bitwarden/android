@@ -150,7 +150,7 @@ namespace Bit.App.Pages
             }
         }
 
-        public bool IsVaultTimeoutActionLockAllowed =>  _hasMasterPassword || _canUnlockWithBiometrics || _canUnlockWithPin;
+        public bool IsVaultTimeoutActionLockAllowed => _hasMasterPassword || _canUnlockWithBiometrics || _canUnlockWithPin;
 
         public string SetUpUnlockMethodLabel => IsVaultTimeoutActionLockAllowed ? null : AppResources.SetUpAnUnlockOptionToChangeYourVaultTimeoutAction;
 
