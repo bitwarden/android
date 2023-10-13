@@ -829,6 +829,7 @@ namespace Bit.App.Pages
             TriggerPropertyChanged(nameof(GeneratorTypeSelected));
             TriggerPropertyChanged(nameof(UsernameTypeDescriptionLabel));
             TriggerPropertyChanged(nameof(EmailWebsite));
+            TriggerPropertyChanged(nameof(ForwardEmailDomainName));
         }
 
         private void SetOptions()
