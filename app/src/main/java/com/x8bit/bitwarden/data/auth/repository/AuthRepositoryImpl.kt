@@ -22,8 +22,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private const val REMEMBERED_EMAIL_ADDRESS_KEY = "bwPreferencesStorage:rememberedEmail"
-
 /**
  * Default implementation of [AuthRepository].
  */
