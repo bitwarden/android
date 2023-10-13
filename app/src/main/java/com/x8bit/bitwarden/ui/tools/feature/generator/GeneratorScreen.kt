@@ -93,128 +93,9 @@ fun GeneratorScreen(viewModel: GeneratorViewModel = hiltViewModel()) {
             }
         }
 
-    val onPasswordSliderLengthChange: (Int) -> Unit = remember(viewModel) {
-        { newLength ->
-            viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange(
-                    length = newLength,
-                ),
-            )
-        }
-    }
+    val passwordHandlers = PasswordHandlers.create(viewModel = viewModel)
 
-    val onPasswordToggleCapitalLettersChange: (Boolean) -> Unit = remember(viewModel) {
-        { shouldUseCapitals ->
-            viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleCapitalLettersChange(
-                    useCapitals = shouldUseCapitals,
-                ),
-            )
-        }
-    }
-
-    val onPasswordToggleLowercaseLettersChange: (Boolean) -> Unit = remember(viewModel) {
-        { shouldUseLowercase ->
-            viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password
-                    .ToggleLowercaseLettersChange(
-                        useLowercase = shouldUseLowercase,
-                    ),
-            )
-        }
-    }
-
-    val onPasswordToggleNumbersChange: (Boolean) -> Unit = remember(viewModel) {
-        { shouldUseNumbers ->
-            viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange(
-                    useNumbers = shouldUseNumbers,
-                ),
-            )
-        }
-    }
-
-    val onPasswordToggleSpecialCharactersChange: (Boolean) -> Unit = remember(viewModel) {
-        { shouldUseSpecialChars ->
-            viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password
-                    .ToggleSpecialCharactersChange(
-                        useSpecialChars = shouldUseSpecialChars,
-                    ),
-            )
-        }
-    }
-
-    val onPasswordMinNumbersCounterChange: (Int) -> Unit = remember(viewModel) {
-        { newMinNumbers ->
-            viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange(
-                    minNumbers = newMinNumbers,
-                ),
-            )
-        }
-    }
-
-    val onPasswordMinSpecialCharactersChange: (Int) -> Unit = remember(viewModel) {
-        { newMinSpecial ->
-            viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.MinSpecialCharactersChange(
-                    minSpecial = newMinSpecial,
-                ),
-            )
-        }
-    }
-
-    val onPasswordToggleAvoidAmbiguousCharsChange: (Boolean) -> Unit = remember(viewModel) {
-        { shouldAvoidAmbiguousChars ->
-            viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password
-                    .ToggleAvoidAmbigousCharactersChange(
-                        avoidAmbiguousChars = shouldAvoidAmbiguousChars,
-                    ),
-            )
-        }
-    }
-
-    val onPassphraseNumWordsCounterChange: (Int) -> Unit = remember(viewModel) {
-        { changeInCounter ->
-            viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.NumWordsCounterChange(
-                    numWords = changeInCounter,
-                ),
-            )
-        }
-    }
-
-    val onPassphraseCapitalizeToggleChange: (Boolean) -> Unit = remember(viewModel) {
-        { shouldCapitalize ->
-            viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.ToggleCapitalizeChange(
-                    capitalize = shouldCapitalize,
-                ),
-            )
-        }
-    }
-
-    val onPassphraseIncludeNumberToggleChange: (Boolean) -> Unit = remember(viewModel) {
-        { shouldIncludeNumber ->
-            viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.ToggleIncludeNumberChange(
-                    includeNumber = shouldIncludeNumber,
-                ),
-            )
-        }
-    }
-
-    val onPassphraseWordSeparatorChange: (Char?) -> Unit = remember(viewModel) {
-        { newSeparator ->
-            viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.WordSeparatorTextChange(
-                    wordSeparator = newSeparator,
-                ),
-            )
-        }
-    }
+    val passphraseHandlers = PassphraseHandlers.create(viewModel = viewModel)
 
     val scrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
@@ -234,23 +115,8 @@ fun GeneratorScreen(viewModel: GeneratorViewModel = hiltViewModel()) {
             onCopyClick = onCopyClick,
             onMainStateOptionClicked = onMainStateOptionClicked,
             onSubStateOptionClicked = onPasscodeOptionClicked,
-
-            // Password handlers
-            onPasswordSliderLengthChange = onPasswordSliderLengthChange,
-            onPasswordToggleCapitalLettersChange = onPasswordToggleCapitalLettersChange,
-            onPasswordToggleLowercaseLettersChange = onPasswordToggleLowercaseLettersChange,
-            onPasswordToggleNumbersChange = onPasswordToggleNumbersChange,
-            onPasswordToggleSpecialCharactersChange = onPasswordToggleSpecialCharactersChange,
-            onPasswordMinNumbersCounterChange = onPasswordMinNumbersCounterChange,
-            onPasswordMinSpecialCharactersChange = onPasswordMinSpecialCharactersChange,
-            onPasswordToggleAvoidAmbiguousCharsChange = onPasswordToggleAvoidAmbiguousCharsChange,
-
-            // Passphrase handlers
-            onPassphraseNumWordsCounterChange = onPassphraseNumWordsCounterChange,
-            onPassphraseWordSeparatorChange = onPassphraseWordSeparatorChange,
-            onPassphraseCapitalizeToggleChange = onPassphraseCapitalizeToggleChange,
-            onPassphraseIncludeNumberToggleChange = onPassphraseIncludeNumberToggleChange,
-
+            passwordHandlers = passwordHandlers,
+            passphraseHandlers = passphraseHandlers,
             modifier = Modifier.padding(innerPadding),
         )
     }
@@ -266,18 +132,8 @@ private fun ScrollContent(
     onCopyClick: () -> Unit,
     onMainStateOptionClicked: (GeneratorState.MainTypeOption) -> Unit,
     onSubStateOptionClicked: (GeneratorState.MainType.Passcode.PasscodeTypeOption) -> Unit,
-    onPasswordSliderLengthChange: (Int) -> Unit,
-    onPasswordToggleCapitalLettersChange: (Boolean) -> Unit,
-    onPasswordToggleLowercaseLettersChange: (Boolean) -> Unit,
-    onPasswordToggleNumbersChange: (Boolean) -> Unit,
-    onPasswordToggleSpecialCharactersChange: (Boolean) -> Unit,
-    onPasswordMinNumbersCounterChange: (Int) -> Unit,
-    onPasswordMinSpecialCharactersChange: (Int) -> Unit,
-    onPasswordToggleAvoidAmbiguousCharsChange: (Boolean) -> Unit,
-    onPassphraseNumWordsCounterChange: (Int) -> Unit,
-    onPassphraseWordSeparatorChange: (Char?) -> Unit,
-    onPassphraseCapitalizeToggleChange: (Boolean) -> Unit,
-    onPassphraseIncludeNumberToggleChange: (Boolean) -> Unit,
+    passwordHandlers: PasswordHandlers,
+    passphraseHandlers: PassphraseHandlers,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -317,24 +173,8 @@ private fun ScrollContent(
                 PasscodeTypeItems(
                     passcodeState = selectedType,
                     onSubStateOptionClicked = onSubStateOptionClicked,
-
-                    // Password handlers
-                    onPasswordSliderLengthChange = onPasswordSliderLengthChange,
-                    onPasswordToggleCapitalLettersChange = onPasswordToggleCapitalLettersChange,
-                    onPasswordToggleLowercaseLettersChange = onPasswordToggleLowercaseLettersChange,
-                    onPasswordToggleNumbersChange = onPasswordToggleNumbersChange,
-                    onPasswordToggleSpecialCharactersChange =
-                    onPasswordToggleSpecialCharactersChange,
-                    onPasswordMinNumbersCounterChange = onPasswordMinNumbersCounterChange,
-                    onPasswordMinSpecialCharactersChange = onPasswordMinSpecialCharactersChange,
-                    onPasswordToggleAvoidAmbiguousCharsChange =
-                    onPasswordToggleAvoidAmbiguousCharsChange,
-
-                    // Passphrase handlers
-                    onPassphraseNumWordsCounterChange = onPassphraseNumWordsCounterChange,
-                    onPassphraseWordSeparatorChange = onPassphraseWordSeparatorChange,
-                    onPassphraseCapitalizeToggleChange = onPassphraseCapitalizeToggleChange,
-                    onPassphraseIncludeNumberToggleChange = onPassphraseIncludeNumberToggleChange,
+                    passwordHandlers = passwordHandlers,
+                    passphraseHandlers = passphraseHandlers,
                 )
             }
 
@@ -396,18 +236,8 @@ private fun MainStateOptionsItem(
 private fun PasscodeTypeItems(
     passcodeState: GeneratorState.MainType.Passcode,
     onSubStateOptionClicked: (GeneratorState.MainType.Passcode.PasscodeTypeOption) -> Unit,
-    onPasswordSliderLengthChange: (Int) -> Unit,
-    onPasswordToggleCapitalLettersChange: (Boolean) -> Unit,
-    onPasswordToggleLowercaseLettersChange: (Boolean) -> Unit,
-    onPasswordToggleNumbersChange: (Boolean) -> Unit,
-    onPasswordToggleSpecialCharactersChange: (Boolean) -> Unit,
-    onPasswordMinNumbersCounterChange: (Int) -> Unit,
-    onPasswordMinSpecialCharactersChange: (Int) -> Unit,
-    onPasswordToggleAvoidAmbiguousCharsChange: (Boolean) -> Unit,
-    onPassphraseNumWordsCounterChange: (Int) -> Unit,
-    onPassphraseWordSeparatorChange: (Char?) -> Unit,
-    onPassphraseCapitalizeToggleChange: (Boolean) -> Unit,
-    onPassphraseIncludeNumberToggleChange: (Boolean) -> Unit,
+    passwordHandlers: PasswordHandlers,
+    passphraseHandlers: PassphraseHandlers,
 ) {
     PasscodeOptionsItem(passcodeState, onSubStateOptionClicked)
 
@@ -415,25 +245,14 @@ private fun PasscodeTypeItems(
         is GeneratorState.MainType.Passcode.PasscodeType.Password -> {
             PasswordTypeContent(
                 passwordTypeState = selectedType,
-                onPasswordSliderLengthChange = onPasswordSliderLengthChange,
-                onPasswordToggleCapitalLettersChange = onPasswordToggleCapitalLettersChange,
-                onPasswordToggleLowercaseLettersChange = onPasswordToggleLowercaseLettersChange,
-                onPasswordToggleNumbersChange = onPasswordToggleNumbersChange,
-                onPasswordToggleSpecialCharactersChange = onPasswordToggleSpecialCharactersChange,
-                onPasswordMinNumbersCounterChange = onPasswordMinNumbersCounterChange,
-                onPasswordMinSpecialCharactersChange = onPasswordMinSpecialCharactersChange,
-                onPasswordToggleAvoidAmbiguousCharsChange =
-                onPasswordToggleAvoidAmbiguousCharsChange,
+                passwordHandlers = passwordHandlers,
             )
         }
 
         is GeneratorState.MainType.Passcode.PasscodeType.Passphrase -> {
             PassphraseTypeContent(
                 passphraseTypeState = selectedType,
-                onPassphraseNumWordsCounterChange = onPassphraseNumWordsCounterChange,
-                onPassphraseWordSeparatorChange = onPassphraseWordSeparatorChange,
-                onPassphraseCapitalizeToggleChange = onPassphraseCapitalizeToggleChange,
-                onPassphraseIncludeNumberToggleChange = onPassphraseIncludeNumberToggleChange,
+                passphraseHandlers = passphraseHandlers,
             )
         }
     }
@@ -467,18 +286,12 @@ private fun PasscodeOptionsItem(
 @Composable
 private fun PasswordTypeContent(
     passwordTypeState: GeneratorState.MainType.Passcode.PasscodeType.Password,
-    onPasswordSliderLengthChange: (Int) -> Unit,
-    onPasswordToggleCapitalLettersChange: (Boolean) -> Unit,
-    onPasswordToggleLowercaseLettersChange: (Boolean) -> Unit,
-    onPasswordToggleNumbersChange: (Boolean) -> Unit,
-    onPasswordToggleSpecialCharactersChange: (Boolean) -> Unit,
-    onPasswordMinNumbersCounterChange: (Int) -> Unit,
-    onPasswordMinSpecialCharactersChange: (Int) -> Unit,
-    onPasswordToggleAvoidAmbiguousCharsChange: (Boolean) -> Unit,
+    passwordHandlers: PasswordHandlers,
 ) {
     PasswordLengthSliderItem(
         length = passwordTypeState.length,
-        onPasswordSliderLengthChange = onPasswordSliderLengthChange,
+        onPasswordSliderLengthChange =
+        passwordHandlers.onPasswordSliderLengthChange,
     )
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -486,32 +299,39 @@ private fun PasswordTypeContent(
 
         PasswordCapitalLettersToggleItem(
             useCapitals = passwordTypeState.useCapitals,
-            onPasswordToggleCapitalLettersChange = onPasswordToggleCapitalLettersChange,
+            onPasswordToggleCapitalLettersChange =
+            passwordHandlers.onPasswordToggleCapitalLettersChange,
         )
         PasswordLowercaseLettersToggleItem(
             useLowercase = passwordTypeState.useLowercase,
-            onPasswordToggleLowercaseLettersChange = onPasswordToggleLowercaseLettersChange,
+            onPasswordToggleLowercaseLettersChange =
+            passwordHandlers.onPasswordToggleLowercaseLettersChange,
         )
         PasswordNumbersToggleItem(
             useNumbers = passwordTypeState.useNumbers,
-            onPasswordToggleNumbersChange = onPasswordToggleNumbersChange,
+            onPasswordToggleNumbersChange =
+            passwordHandlers.onPasswordToggleNumbersChange,
         )
         PasswordSpecialCharactersToggleItem(
             useSpecialChars = passwordTypeState.useSpecialChars,
-            onPasswordToggleSpecialCharactersChange = onPasswordToggleSpecialCharactersChange,
+            onPasswordToggleSpecialCharactersChange =
+            passwordHandlers.onPasswordToggleSpecialCharactersChange,
         )
     }
     PasswordMinNumbersCounterItem(
         minNumbers = passwordTypeState.minNumbers,
-        onPasswordMinNumbersCounterChange = onPasswordMinNumbersCounterChange,
+        onPasswordMinNumbersCounterChange =
+        passwordHandlers.onPasswordMinNumbersCounterChange,
     )
     PasswordMinSpecialCharactersCounterItem(
         minSpecial = passwordTypeState.minSpecial,
-        onPasswordMinSpecialCharactersChange = onPasswordMinSpecialCharactersChange,
+        onPasswordMinSpecialCharactersChange =
+        passwordHandlers.onPasswordMinSpecialCharactersChange,
     )
     PasswordAvoidAmbiguousCharsToggleItem(
         avoidAmbiguousChars = passwordTypeState.avoidAmbiguousChars,
-        onPasswordToggleAvoidAmbiguousCharsChange = onPasswordToggleAvoidAmbiguousCharsChange,
+        onPasswordToggleAvoidAmbiguousCharsChange =
+        passwordHandlers.onPasswordToggleAvoidAmbiguousCharsChange,
     )
 }
 
@@ -671,29 +491,30 @@ private fun PasswordAvoidAmbiguousCharsToggleItem(
 @Composable
 private fun PassphraseTypeContent(
     passphraseTypeState: GeneratorState.MainType.Passcode.PasscodeType.Passphrase,
-    onPassphraseNumWordsCounterChange: (Int) -> Unit,
-    onPassphraseWordSeparatorChange: (Char?) -> Unit,
-    onPassphraseCapitalizeToggleChange: (Boolean) -> Unit,
-    onPassphraseIncludeNumberToggleChange: (Boolean) -> Unit,
+    passphraseHandlers: PassphraseHandlers,
 ) {
     PassphraseNumWordsCounterItem(
         numWords = passphraseTypeState.numWords,
-        onPassphraseNumWordsCounterChange = onPassphraseNumWordsCounterChange,
+        onPassphraseNumWordsCounterChange =
+        passphraseHandlers.onPassphraseNumWordsCounterChange,
     )
     PassphraseWordSeparatorInputItem(
         wordSeparator = passphraseTypeState.wordSeparator,
-        onPassphraseWordSeparatorChange = onPassphraseWordSeparatorChange,
+        onPassphraseWordSeparatorChange =
+        passphraseHandlers.onPassphraseWordSeparatorChange,
     )
     Column(
         modifier = Modifier.fillMaxWidth(),
     ) {
         PassphraseCapitalizeToggleItem(
             capitalize = passphraseTypeState.capitalize,
-            onPassphraseCapitalizeToggleChange = onPassphraseCapitalizeToggleChange,
+            onPassphraseCapitalizeToggleChange =
+            passphraseHandlers.onPassphraseCapitalizeToggleChange,
         )
         PassphraseIncludeNumberToggleItem(
             includeNumber = passphraseTypeState.includeNumber,
-            onPassphraseIncludeNumberToggleChange = onPassphraseIncludeNumberToggleChange,
+            onPassphraseIncludeNumberToggleChange =
+            passphraseHandlers.onPassphraseIncludeNumberToggleChange,
         )
     }
 }
@@ -769,5 +590,145 @@ private fun PassphraseIncludeNumberToggleItem(
 private fun GeneratorPreview() {
     BitwardenTheme {
         GeneratorScreen()
+    }
+}
+
+/**
+ * A class dedicated to handling user interactions related to password configuration.
+ * Each lambda corresponds to a specific user action, allowing for easy delegation of
+ * logic when user input is detected.
+ */
+@Suppress("LongParameterList")
+private class PasswordHandlers(
+    val onPasswordSliderLengthChange: (Int) -> Unit,
+    val onPasswordToggleCapitalLettersChange: (Boolean) -> Unit,
+    val onPasswordToggleLowercaseLettersChange: (Boolean) -> Unit,
+    val onPasswordToggleNumbersChange: (Boolean) -> Unit,
+    val onPasswordToggleSpecialCharactersChange: (Boolean) -> Unit,
+    val onPasswordMinNumbersCounterChange: (Int) -> Unit,
+    val onPasswordMinSpecialCharactersChange: (Int) -> Unit,
+    val onPasswordToggleAvoidAmbiguousCharsChange: (Boolean) -> Unit,
+) {
+    companion object {
+        @Suppress("LongMethod")
+        fun create(viewModel: GeneratorViewModel): PasswordHandlers {
+            return PasswordHandlers(
+                onPasswordSliderLengthChange = { newLength ->
+                    viewModel.trySendAction(
+                        GeneratorAction.MainType.Passcode.PasscodeType.Password
+                            .SliderLengthChange(
+                                length = newLength,
+                            ),
+                    )
+                },
+                onPasswordToggleCapitalLettersChange = { shouldUseCapitals ->
+                    viewModel.trySendAction(
+                        GeneratorAction.MainType.Passcode.PasscodeType.Password
+                            .ToggleCapitalLettersChange(
+                                useCapitals = shouldUseCapitals,
+                            ),
+                    )
+                },
+                onPasswordToggleLowercaseLettersChange = { shouldUseLowercase ->
+                    viewModel.trySendAction(
+                        GeneratorAction.MainType.Passcode.PasscodeType.Password
+                            .ToggleLowercaseLettersChange(
+                                useLowercase = shouldUseLowercase,
+                            ),
+                    )
+                },
+                onPasswordToggleNumbersChange = { shouldUseNumbers ->
+                    viewModel.trySendAction(
+                        GeneratorAction.MainType.Passcode.PasscodeType.Password
+                            .ToggleNumbersChange(
+                                useNumbers = shouldUseNumbers,
+                            ),
+                    )
+                },
+                onPasswordToggleSpecialCharactersChange = { shouldUseSpecialChars ->
+                    viewModel.trySendAction(
+                        GeneratorAction.MainType.Passcode.PasscodeType.Password
+                            .ToggleSpecialCharactersChange(
+                                useSpecialChars = shouldUseSpecialChars,
+                            ),
+                    )
+                },
+                onPasswordMinNumbersCounterChange = { newMinNumbers ->
+                    viewModel.trySendAction(
+                        GeneratorAction.MainType.Passcode.PasscodeType.Password
+                            .MinNumbersCounterChange(
+                                minNumbers = newMinNumbers,
+                            ),
+                    )
+                },
+                onPasswordMinSpecialCharactersChange = { newMinSpecial ->
+                    viewModel.trySendAction(
+                        GeneratorAction.MainType.Passcode.PasscodeType.Password
+                            .MinSpecialCharactersChange(
+                                minSpecial = newMinSpecial,
+                            ),
+                    )
+                },
+                onPasswordToggleAvoidAmbiguousCharsChange = { shouldAvoidAmbiguousChars ->
+                    viewModel.trySendAction(
+                        GeneratorAction.MainType.Passcode.PasscodeType.Password
+                            .ToggleAvoidAmbigousCharactersChange(
+                                avoidAmbiguousChars = shouldAvoidAmbiguousChars,
+                            ),
+                    )
+                },
+            )
+        }
+    }
+}
+
+/**
+ * A class dedicated to handling user interactions related to passphrase configuration.
+ * Each lambda corresponds to a specific user action, allowing for easy delegation of
+ * logic when user input is detected.
+ */
+private class PassphraseHandlers(
+    val onPassphraseNumWordsCounterChange: (Int) -> Unit,
+    val onPassphraseWordSeparatorChange: (Char?) -> Unit,
+    val onPassphraseCapitalizeToggleChange: (Boolean) -> Unit,
+    val onPassphraseIncludeNumberToggleChange: (Boolean) -> Unit,
+) {
+    companion object {
+        fun create(viewModel: GeneratorViewModel): PassphraseHandlers {
+            return PassphraseHandlers(
+                onPassphraseNumWordsCounterChange = { changeInCounter ->
+                    viewModel.trySendAction(
+                        GeneratorAction.MainType.Passcode.PasscodeType.Passphrase
+                            .NumWordsCounterChange(
+                                numWords = changeInCounter,
+                            ),
+                    )
+                },
+                onPassphraseWordSeparatorChange = { newSeparator ->
+                    viewModel.trySendAction(
+                        GeneratorAction.MainType.Passcode.PasscodeType.Passphrase
+                            .WordSeparatorTextChange(
+                                wordSeparator = newSeparator,
+                            ),
+                    )
+                },
+                onPassphraseCapitalizeToggleChange = { shouldCapitalize ->
+                    viewModel.trySendAction(
+                        GeneratorAction.MainType.Passcode.PasscodeType.Passphrase
+                            .ToggleCapitalizeChange(
+                                capitalize = shouldCapitalize,
+                            ),
+                    )
+                },
+                onPassphraseIncludeNumberToggleChange = { shouldIncludeNumber ->
+                    viewModel.trySendAction(
+                        GeneratorAction.MainType.Passcode.PasscodeType.Passphrase
+                            .ToggleIncludeNumberChange(
+                                includeNumber = shouldIncludeNumber,
+                            ),
+                    )
+                },
+            )
+        }
     }
 }
