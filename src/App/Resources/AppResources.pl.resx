@@ -2801,7 +2801,7 @@ Czy chcesz przełączyć się na to konto?</value>
     <value>Android Autofill Framework jest używany do uzupełniania danych logowania w innych aplikacjach na twoim urządzeniu.</value>
   </data>
   <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
-    <value>Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</value>
+    <value>Użyj bezpośredniego autouzupełniania, jeśli wybrana klawiatura je obsługuje. W przeciwnym razie użyj domyślnej nakładki.</value>
   </data>
   <data name="AdditionalOptions" xml:space="preserve">
     <value>Dodatkowe opcje</value>
@@ -2817,38 +2817,38 @@ Czy chcesz przełączyć się na to konto?</value>
     <value>Kontynuować do centrum pomocy?</value>
   </data>
   <data name="ContinueToContactSupport" xml:space="preserve">
-    <value>Continue to contact support?</value>
+    <value>Kontynuować kontakt z pomocą techniczną?</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
-    <value>Continue to app store?</value>
+    <value>Kontynuować do sklepu aplikacji?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
-    <value>Make your account more secure by setting up two-step login in the Bitwarden web app.</value>
+    <value>Spraw, aby Twoje konto było bezpieczniejsze poprzez skonfigurowanie dwustopniowego logowania w aplikacji internetowej Bitwarden.</value>
   </data>
   <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
-    <value>You can change your master password on the Bitwarden web app.</value>
+    <value>Możesz zmienić swoje hasło główne w aplikacji internetowej Bitwarden.</value>
   </data>
   <data name="YouCanImportDataToYourVaultOnX" xml:space="preserve">
-    <value>You can import data to your vault on {0}.</value>
+    <value>Możesz zaimportować dane do swojego sejfu na {0}.</value>
     <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
   </data>
   <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
-    <value>Learn more about how to use Bitwarden on the Help center.</value>
+    <value>Dowiedz się więcej o tym, jak korzystać z centrum pomocy Bitwarden.</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
-    <value>Can’t find what you are looking for? Reach out to Bitwarden support on bitwarden.com.</value>
+    <value>Nie możesz znaleźć tego, czego szukasz? Skontaktuj się z pomocą na bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
-    <value>Explore more features of your Bitwarden account on the web app.</value>
+    <value>Odkryj więcej funkcji swojego konta Bitwarden w aplikacji internetowej.</value>
   </data>
   <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault items with others by using an organization. Learn more on the bitwarden.com website.</value>
+    <value>Bitwarden pozwala na udostępnianie zawartości sejfu innym osobom za pośrednictwem organizacji. Dowiedz się wiecej na bitwarden.com.</value>
   </data>
   <data name="RateAppDescriptionLong" xml:space="preserve">
-    <value>Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now.</value>
+    <value>Pomóż innym dowiedzieć się, czy Bitwarden jest dla nich odpowiedni. Odwiedź sklep z aplikacją i zostaw ocenę.</value>
   </data>
   <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
-    <value>Choose the dark theme to use when your device’s dark mode is in use</value>
+    <value>Wybierz ciemny motyw, gdy używany jest tryb ciemny urządzenia</value>
   </data>
   <data name="CreatedXY" xml:space="preserve">
     <value>Utworzono {0}, {1}</value>

@@ -69,9 +69,9 @@ namespace Bit.Core
         public const int MasterPasswordMinimumChars = 12;
         public const int CipherKeyRandomBytesLength = 64;
         public const string CipherKeyEncryptionMinServerVersion = "2023.9.1";
-        public const string DefaultFido2KeyType = "public-key";
-        public const string DefaultFido2KeyAlgorithm = "ECDSA";
-        public const string DefaultFido2KeyCurve = "P-256";
+        public const string DefaultFido2CredentialType = "public-key";
+        public const string DefaultFido2CredentialAlgorithm = "ECDSA";
+        public const string DefaultFido2CredentialCurve = "P-256";
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {

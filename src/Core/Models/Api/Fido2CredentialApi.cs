@@ -2,13 +2,13 @@
 
 namespace Bit.Core.Models.Api
 {
-    public class Fido2KeyApi
+    public class Fido2CredentialApi
     {
-        public Fido2KeyApi()
+        public Fido2CredentialApi()
         {
         }
 
-        public Fido2KeyApi(Fido2Key fido2Key)
+        public Fido2CredentialApi(Fido2Credential fido2Key)
         {
             CredentialId = fido2Key.CredentialId?.EncryptedString;
             Discoverable = fido2Key.Discoverable?.EncryptedString;
@@ -25,9 +25,9 @@ namespace Bit.Core.Models.Api
 
         public string CredentialId { get; set; }
         public string Discoverable { get; set; }
-        public string KeyType { get; set; } = Constants.DefaultFido2KeyType;
-        public string KeyAlgorithm { get; set; } = Constants.DefaultFido2KeyAlgorithm;
-        public string KeyCurve { get; set; } = Constants.DefaultFido2KeyCurve;
+        public string KeyType { get; set; } = Constants.DefaultFido2CredentialType;
+        public string KeyAlgorithm { get; set; } = Constants.DefaultFido2CredentialAlgorithm;
+        public string KeyCurve { get; set; } = Constants.DefaultFido2CredentialCurve;
         public string KeyValue { get; set; }
         public string RpId { get; set; }
         public string RpName { get; set; }
