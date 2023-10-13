@@ -23,7 +23,7 @@
                 Title="{u:I18n EnableSyncOnRefresh}"
                 IsToggled="{Binding EnableSyncOnRefresh}"
                 Subtitle="{u:I18n EnableSyncOnRefreshDescription}"
-                AutomationId="SubmitCrashLogsSwitch"
+                AutomationId="SyncOnRefreshSwitch"
                 StyleClass="settings-item-view"
                 HorizontalOptions="FillAndExpand" />
 
@@ -53,7 +53,7 @@
                 Title="{u:I18n AllowScreenCapture}"
                 IsToggled="{Binding IsScreenCaptureAllowed}"
                 IsEnabled="{Binding CanToggleeScreenCaptureAllowed}"
-                AutomationId="SubmitCrashLogsSwitch"
+                AutomationId="AllowScreenCaptureSwitch"
                 StyleClass="settings-item-view"
                 HorizontalOptions="FillAndExpand" />
             
