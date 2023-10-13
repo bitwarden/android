@@ -10,7 +10,8 @@ namespace Bit.Droid.Autofill
 {
     [Activity(
         NoHistory = true,
-        LaunchMode = LaunchMode.SingleTop)]
+        LaunchMode = LaunchMode.SingleInstance,
+        Exported = false)]
     public class AutofillExternalSelectionActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
