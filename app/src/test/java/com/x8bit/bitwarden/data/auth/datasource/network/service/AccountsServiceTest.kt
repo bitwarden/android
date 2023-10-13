@@ -15,29 +15,85 @@ class AccountsServiceTest : BaseServiceTest() {
     private val service = AccountsServiceImpl(accountsApi)
 
     @Test
-    fun `preLogin should call API`() = runTest {
-        val response = MockResponse().setBody(PRE_LOGIN_RESPONSE_JSON)
+    fun `preLogin with unknown kdf type be failure`() = runTest {
+        val json = """
+            {
+              "kdf": 2,
+              "kdfIterations": 1,
+            }
+            """
+        val response = MockResponse().setBody(json)
         server.enqueue(response)
-        assertEquals(Result.success(PRE_LOGIN_RESPONSE), service.preLogin(EMAIL))
+        assert(service.preLogin(EMAIL).isFailure)
+    }
+
+    @Test
+    fun `preLogin Argon2 without memory property should be failure`() = runTest {
+        val json = """
+            {
+              "kdf": 1,
+              "kdfIterations": 1,
+              "kdfParallelism": 1
+            }
+            """
+        val response = MockResponse().setBody(json)
+        server.enqueue(response)
+        assert(service.preLogin(EMAIL).isFailure)
+    }
+
+    @Test
+    fun `preLogin Argon2 without parallelism property should be failure`() = runTest {
+        val json = """
+            {
+              "kdf": 1,
+              "kdfIterations": 1,
+              "kdfMemory": 1
+            }
+            """
+        val response = MockResponse().setBody(json)
+        server.enqueue(response)
+        assert(service.preLogin(EMAIL).isFailure)
+    }
+
+    @Test
+    fun `preLogin Argon2 should be success`() = runTest {
+        val json = """
+            {
+              "kdf": 1,
+              "kdfIterations": 1,
+              "kdfMemory": 1,
+              "kdfParallelism": 1
+            }
+            """
+        val expectedResponse = PreLoginResponseJson(
+            kdfParams = PreLoginResponseJson.KdfParams.Argon2ID(
+                iterations = 1u,
+                memory = 1u,
+                parallelism = 1u,
+            ),
+        )
+        val response = MockResponse().setBody(json)
+        server.enqueue(response)
+        assertEquals(Result.success(expectedResponse), service.preLogin(EMAIL))
+    }
+
+    @Test
+    fun `preLogin Pbkdf2 should be success`() = runTest {
+        val json = """
+            {
+              "kdf": 0,
+              "kdfIterations": 1
+            }
+            """
+        val expectedResponse = PreLoginResponseJson(
+            kdfParams = PreLoginResponseJson.KdfParams.Pbkdf2(1u),
+        )
+        val response = MockResponse().setBody(json)
+        server.enqueue(response)
+        assertEquals(Result.success(expectedResponse), service.preLogin(EMAIL))
     }
 
     companion object {
         private const val EMAIL = "email"
     }
 }
-
-private const val PRE_LOGIN_RESPONSE_JSON = """
-{
-  "kdf": 1,
-  "kdfIterations": 1,
-  "kdfMemory": 1,
-  "kdfParallelism": 1
-}        
-"""
-
-private val PRE_LOGIN_RESPONSE = PreLoginResponseJson(
-    kdf = 1,
-    kdfIterations = 1u,
-    kdfMemory = 1,
-    kdfParallelism = 1,
-)

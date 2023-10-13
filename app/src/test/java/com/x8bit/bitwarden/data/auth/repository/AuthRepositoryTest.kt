@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import app.cash.turbine.test
-import com.bitwarden.core.Kdf
 import com.bitwarden.sdk.Client
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthState
@@ -11,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJs
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.network.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import io.mockk.clearMocks
 import io.mockk.coEvery
@@ -35,7 +35,7 @@ class AuthRepositoryTest {
             auth().hashPassword(
                 email = EMAIL,
                 password = PASSWORD,
-                kdfParams = Kdf.Pbkdf2(iterations = PRE_LOGIN_SUCCESS.kdfIterations),
+                kdfParams = PRE_LOGIN_SUCCESS.kdfParams.toSdkParams(),
             )
         } returns PASSWORD_HASH
     }
@@ -209,10 +209,7 @@ class AuthRepositoryTest {
         private const val ACCESS_TOKEN = "accessToken"
         private const val CAPTCHA_KEY = "captcha"
         private val PRE_LOGIN_SUCCESS = PreLoginResponseJson(
-            kdf = 1,
-            kdfIterations = 1u,
-            kdfMemory = null,
-            kdfParallelism = null,
+            kdfParams = PreLoginResponseJson.KdfParams.Pbkdf2(iterations = 1u),
         )
     }
 }
