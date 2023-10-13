@@ -39,6 +39,8 @@
                 Grid.Column="0"
                 Source="{Binding AvatarImageSource}"
                 HorizontalOptions="Center"
+                HeightRequest="40"
+                WidthRequest="40"
                 Margin="10,0"
                 VerticalOptions="Center" />
 
