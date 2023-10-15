@@ -45,6 +45,9 @@ namespace Bit.iOS.Core.Utilities
 
         public static void ConfigureMAUIHandlers(IMauiHandlersCollection handlers)
         {
+            handlers.AddHandler(typeof(TabsPage), typeof(Handlers.CustomTabbedHandler));
+            handlers.AddHandler(typeof(NavigationPage), typeof(Handlers.CustomNavigationHandler));
+            handlers.AddHandler(typeof(ContentPage), typeof(Handlers.CustomContentPageHandler));
             Handlers.ButtonHandlerMappings.Setup();
             Handlers.DatePickerHandlerMappings.Setup();
             Handlers.EditorHandlerMappings.Setup();

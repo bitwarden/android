@@ -1,13 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using Bit.App.Models;
+﻿using Bit.App.Models;
 using Bit.Core.Resources.Localization;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -30,10 +26,9 @@ namespace Bit.App.Pages
             _vm = BindingContext as LockPageViewModel;
             _vm.CheckPendingAuthRequests = checkPendingAuthRequests;
             _vm.Page = this;
-            _vm.UnlockedAction = () => Device.BeginInvokeOnMainThread(async () => await UnlockedAsync());
+            _vm.UnlockedAction = () => MainThread.BeginInvokeOnMainThread(async () => await UnlockedAsync());
 
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.iOS)
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
                 ToolbarItems.Add(_moreItem);
             }
@@ -75,7 +70,7 @@ namespace Bit.App.Pages
             {
                 if (message.Command == Constants.ClearSensitiveFields)
                 {
-                    Device.BeginInvokeOnMainThread(_vm.ResetPinPasswordFields);
+                    MainThread.BeginInvokeOnMainThread(_vm.ResetPinPasswordFields);
                 }
             });
             if (_appeared)
@@ -85,6 +80,9 @@ namespace Bit.App.Pages
 
             _appeared = true;
             _mainContent.Content = _mainLayout;
+
+            //Workaround: This delay allows the Avatar to correctly load on iOS. The cause of this issue is also likely connected with the race conditions issue when using loading modals in iOS
+            await Task.Delay(50);
 
             _accountAvatar?.OnAppearing();
 
@@ -110,7 +108,7 @@ namespace Bit.App.Pages
                     var tasks = Task.Run(async () =>
                     {
                         await Task.Delay(500);
-                        Device.BeginInvokeOnMainThread(async () => await _vm.PromptBiometricAsync());
+                        MainThread.BeginInvokeOnMainThread(async () => await _vm.PromptBiometricAsync());
                     });
                 }
             }
@@ -118,7 +116,7 @@ namespace Bit.App.Pages
 
         private void PerformFocusSecretEntry(int? cursorPosition)
         {
-            Device.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(() =>
             {
                 SecretEntry.Focus();
                 if (cursorPosition.HasValue)
@@ -153,7 +151,7 @@ namespace Bit.App.Pages
                 var tasks = Task.Run(async () =>
                 {
                     await Task.Delay(50);
-                    Device.BeginInvokeOnMainThread(async () => await _vm.SubmitAsync());
+                    MainThread.BeginInvokeOnMainThread(async () => await _vm.SubmitAsync());
                 });
             }
         }

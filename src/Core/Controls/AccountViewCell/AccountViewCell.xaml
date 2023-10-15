@@ -8,7 +8,7 @@
           xmlns:core="clr-namespace:Bit.Core"
           x:Name="_accountView"
           x:DataType="controls:AccountViewCellViewModel">
-    <!--TODO: [MAUI-Migration] add long press
+    <!--TODO: [MAUI-Migration] add long press ( https://github.com/CommunityToolkit/Maui/issues/86 )
           xct:TouchEffect.LongPressCommand="{Binding LongPressAccountCommand, Source={x:Reference _accountView}}"
           xct:TouchEffect.LongPressCommandParameter="{Binding .}"-->
     <Grid RowSpacing="0"
@@ -144,17 +144,6 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!--TODO: [MAUI-Migration] check that is the same-->
-            <!--<Image
-                Grid.Column="0"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-                Margin="14,0"
-                WidthRequest="{OnPlatform 24, iOS=24, Android=26}"
-                HeightRequest="{OnPlatform 24, iOS=24, Android=26}"
-                Source="plus.png"
-                xct:IconTintColorEffect.TintColor="{DynamicResource TextColor}"
-                AutomationProperties.IsInAccessibleTree="False" />-->
             <controls:IconLabel
                 Grid.Column="0"
                 VerticalOptions="Center"
