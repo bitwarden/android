@@ -166,11 +166,7 @@
             AbsoluteLayout.LayoutFlags="PositionProportional"
             AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
             AutomationProperties.IsInAccessibleTree="True"
-            SemanticProperties.Description="{u:I18n AddItem}">
-            <Button.Effects>
-                <effects:FabShadowEffect />
-            </Button.Effects>
-        </Button>
+            SemanticProperties.Description="{u:I18n AddItem}"/>
     </AbsoluteLayout>
 
 </pages:BaseContentPage>

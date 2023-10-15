@@ -7,9 +7,7 @@
             return Core.MauiProgram.ConfigureMauiAppBuilder(
                 effects =>
                 {
-#if ANDROID
-                    effects.Add<Effects.FabShadowEffect, Effects.FabShadowPlatformEffect>();
-#else
+#if IOS
                     iOS.Core.Utilities.iOSCoreHelpers.ConfigureMAUIEffects(effects);
 #endif
                 },

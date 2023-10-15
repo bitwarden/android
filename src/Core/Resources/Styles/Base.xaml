@@ -130,6 +130,12 @@
                 Value="100" />
         <Setter Property="BackgroundColor"
                 Value="{DynamicResource FabColor}" />
+        <Setter Property="Shadow">
+            <Shadow Brush="Black"
+                    Offset="1,2"
+                    Radius="5"
+                    Opacity="0.1" />
+        </Setter>
     </Style>
     
     <Style TargetType="controls:IconLabelButton" 

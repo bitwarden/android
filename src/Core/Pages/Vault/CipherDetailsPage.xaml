@@ -755,11 +755,7 @@
             AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n EditItem}"
             AutomationId="CipherEditButton"
-            IsVisible="{Binding CanEdit}">
-            <Button.Effects>
-                <effects:FabShadowEffect />
-            </Button.Effects>
-        </Button>
+            IsVisible="{Binding CanEdit}"/>
     </AbsoluteLayout>
 
 </pages:BaseContentPage>
