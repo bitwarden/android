@@ -26,6 +26,7 @@
                     Bit.App.Handlers.StepperHandlerMappings.Setup();
                     Bit.App.Handlers.TimePickerHandlerMappings.Setup();
                     Bit.App.Handlers.ButtonHandlerMappings.Setup();
+                    Bit.App.Handlers.ToolbarHandlerMappings.Setup();
 
                     handlers.AddHandler(typeof(Bit.App.Pages.TabsPage), typeof(Bit.App.Handlers.CustomTabbedPageHandler));
 #else
