@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJs
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
+import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
 import kotlinx.serialization.json.Json
 import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import java.util.UUID
@@ -14,6 +15,7 @@ class IdentityServiceImpl constructor(
     private val json: Json,
     // TODO: use correct base URL here BIT-328
     private val baseUrl: String = "https://vault.bitwarden.com",
+    private val deviceModelProvider: DeviceModelProvider = DeviceModelProvider(),
 ) : IdentityService {
 
     override suspend fun getToken(
@@ -29,8 +31,7 @@ class IdentityServiceImpl constructor(
             authEmail = email.base64UrlEncode(),
             // TODO: use correct device identifier here BIT-325
             deviceIdentifier = UUID.randomUUID().toString(),
-            // TODO: use correct values for deviceName and deviceType BIT-326
-            deviceName = "Pixel 6",
+            deviceName = deviceModelProvider.deviceModel,
             deviceType = "0",
             grantType = "password",
             passwordHash = passwordHash,

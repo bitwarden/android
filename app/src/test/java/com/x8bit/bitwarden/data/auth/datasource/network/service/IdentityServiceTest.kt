@@ -3,6 +3,9 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 import com.x8bit.bitwarden.data.auth.datasource.network.api.IdentityApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
+import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import okhttp3.mockwebserver.MockResponse
@@ -14,11 +17,15 @@ import retrofit2.create
 class IdentityServiceTest : BaseServiceTest() {
 
     private val identityApi: IdentityApi = retrofit.create()
+    private val deviceModelProvider = mockk<DeviceModelProvider>() {
+        every { deviceModel } returns "Test Device"
+    }
 
     private val identityService = IdentityServiceImpl(
         api = identityApi,
         json = Json,
         baseUrl = server.url("/").toString(),
+        deviceModelProvider = deviceModelProvider,
     )
 
     @Test
