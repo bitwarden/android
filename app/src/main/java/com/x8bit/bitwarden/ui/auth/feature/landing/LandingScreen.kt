@@ -75,19 +75,22 @@ fun LandingScreen(
             .semantics { testTagsAsResourceId = true }
             .background(MaterialTheme.colorScheme.surface)
             .fillMaxHeight()
-            .padding(horizontal = 16.dp)
             .verticalScroll(scrollState),
     ) {
+        Spacer(modifier = Modifier.height(40.dp))
+
         Image(
             painter = painterResource(id = R.drawable.logo),
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
             contentDescription = null,
             modifier = Modifier
-                .padding(top = 40.dp, bottom = 8.dp)
+                .padding(horizontal = 16.dp)
                 .width(220.dp)
                 .height(74.dp)
                 .fillMaxWidth(),
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -97,19 +100,21 @@ fun LandingScreen(
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
-                .padding(8.dp)
+                .padding(
+                    horizontal = 24.dp,
+                    vertical = 8.dp,
+                )
                 .wrapContentHeight(),
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
+        Spacer(modifier = Modifier.height(32.dp))
+
         BitwardenTextField(
             modifier = Modifier
                 .semantics { testTag = "EmailAddressEntry" }
-                .padding(
-                    top = 32.dp,
-                    bottom = 10.dp,
-                )
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
             value = state.emailInput,
             onValueChange = remember(viewModel) {
@@ -118,6 +123,8 @@ fun LandingScreen(
             label = stringResource(id = R.string.email_address),
         )
 
+        Spacer(modifier = Modifier.height(10.dp))
+
         RegionSelector(
             selectedOption = state.selectedRegion,
             onOptionSelected = remember(viewModel) {
@@ -125,8 +132,11 @@ fun LandingScreen(
             },
             modifier = Modifier
                 .semantics { testTag = "RegionSelectorDropdown" }
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         BitwardenSwitch(
             label = stringResource(id = R.string.remember_me),
@@ -136,9 +146,11 @@ fun LandingScreen(
             },
             modifier = Modifier
                 .semantics { testTag = "RememberMeSwitch" }
-                .padding(top = 8.dp)
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
+
+        Spacer(modifier = Modifier.height(32.dp))
 
         BitwardenFilledButton(
             label = stringResource(id = R.string.continue_text),
@@ -148,18 +160,17 @@ fun LandingScreen(
             isEnabled = state.isContinueButtonEnabled,
             modifier = Modifier
                 .semantics { testTag = "ContinueButton" }
-                .padding(top = 32.dp)
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(
-                    top = 8.dp,
-                    bottom = 58.dp,
-                )
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth()
                 .wrapContentHeight(),
         ) {
@@ -178,6 +189,8 @@ fun LandingScreen(
                     .semantics { testTag = "CreateAccountLabel" },
             )
         }
+
+        Spacer(modifier = Modifier.height(58.dp))
     }
 }
 
