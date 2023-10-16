@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import app.cash.turbine.test
-import com.bitwarden.sdk.Client
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthState
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
@@ -10,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJs
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.network.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import io.mockk.clearMocks
@@ -30,20 +30,20 @@ class AuthRepositoryTest {
     private val identityService: IdentityService = mockk()
     private val authInterceptor = mockk<AuthTokenInterceptor>()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
-    private val mockBitwardenSdk = mockk<Client> {
+    private val authSdkSource = mockk<AuthSdkSource> {
         coEvery {
-            auth().hashPassword(
+            hashPassword(
                 email = EMAIL,
                 password = PASSWORD,
-                kdfParams = PRE_LOGIN_SUCCESS.kdfParams.toSdkParams(),
+                kdf = PRE_LOGIN_SUCCESS.kdfParams.toSdkParams(),
             )
-        } returns PASSWORD_HASH
+        } returns Result.success(PASSWORD_HASH)
     }
 
     private val repository = AuthRepositoryImpl(
         accountsService = accountsService,
         identityService = identityService,
-        bitwardenSdkClient = mockBitwardenSdk,
+        authSdkSource = authSdkSource,
         authDiskSource = fakeAuthDiskSource,
         authTokenInterceptor = authInterceptor,
     )

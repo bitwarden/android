@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.auth.repository
 
-import com.bitwarden.sdk.Client
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthState
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
@@ -10,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.LoginResult
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.network.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.util.flatMap
@@ -29,7 +29,7 @@ import javax.inject.Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val accountsService: AccountsService,
     private val identityService: IdentityService,
-    private val bitwardenSdkClient: Client,
+    private val authSdkSource: AuthSdkSource,
     private val authDiskSource: AuthDiskSource,
     private val authTokenInterceptor: AuthTokenInterceptor,
 ) : AuthRepository {
@@ -55,13 +55,13 @@ class AuthRepositoryImpl @Inject constructor(
     ): LoginResult = accountsService
         .preLogin(email = email)
         .flatMap {
-            val passwordHash = bitwardenSdkClient
-                .auth()
-                .hashPassword(
-                    email = email,
-                    password = password,
-                    kdfParams = it.kdfParams.toSdkParams(),
-                )
+            authSdkSource.hashPassword(
+                email = email,
+                password = password,
+                kdf = it.kdfParams.toSdkParams(),
+            )
+        }
+        .flatMap { passwordHash ->
             identityService.getToken(
                 email = email,
                 passwordHash = passwordHash,
