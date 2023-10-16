@@ -149,7 +149,8 @@ koverReport {
                 "*.*NavigationKt*",
                 // Composable singletons
                 "*.*ComposableSingletons*",
-
+                // Generated classes related to interfaces with default values
+                "*.*DefaultImpls*",
                 // OS-level components
                 "com.x8bit.bitwarden.BitwardenApplication",
                 "com.x8bit.bitwarden.MainActivity*",

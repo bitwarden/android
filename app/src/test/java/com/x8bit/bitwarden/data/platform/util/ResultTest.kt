@@ -49,4 +49,21 @@ class ResultTest {
         assertTrue(stringResult.isFailure)
         assertEquals(expectedException, stringResult.exceptionOrNull())
     }
+
+    @Test
+    fun `asSuccess returns a success Result with the correct content`() {
+        assertEquals(
+            Result.success("Test"),
+            "Test".asSuccess(),
+        )
+    }
+
+    @Test
+    fun `asFailure returns a failure Result with the correct content`() {
+        val throwable = IllegalStateException("Test")
+        assertEquals(
+            Result.failure<Nothing>(throwable),
+            throwable.asFailure(),
+        )
+    }
 }
