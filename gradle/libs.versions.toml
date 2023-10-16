@@ -34,6 +34,7 @@ kotlin = "1.9.0"
 kotlinCompilerExtensionVersion = "1.5.1"
 kotlinxCoroutines = "1.7.3"
 kotlinxSerialization = "1.5.1"
+kotlinxKover = "0.7.3"
 ksp = "1.9.0-1.0.11"
 mockk = "1.13.5"
 okhttp = "4.11.0"
@@ -100,4 +101,5 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinxKover" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

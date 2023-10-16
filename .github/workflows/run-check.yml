@@ -7,6 +7,7 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   JAVA_VERSION: 17
+  RUBY_VERSION: 3.2.2
 
 jobs:
   test:
@@ -21,6 +22,12 @@ jobs:
           # https://github.community/t/push-from-action-even-with-pat-does-not-trigger-action/17622
           persist-credentials: false
 
+      - name: Configure Ruby
+        uses: ruby/setup-ruby@52b8784594ec115fd17094752708121dc5dabb47 # v1.154.0
+        with:
+          bundler-cache: true
+          ruby-version: ${{ env.RUBY_VERSION }}
+
       - name: Configure JDK
         uses: actions/setup-java@0ab4596768b603586c0de567f2430c30f5b0d2b0 # v3.13.0
         with:
@@ -30,4 +37,9 @@ jobs:
       - name: Build and Run Check
         # Run checks while excluding release-build tests, which are not configured to work properly
         # with the Compose testing library.
-        run: ./gradlew check -x testRelease
+        run: ./gradlew check -x testRelease koverXmlReportDebug
+
+      - name: Danger
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bundle exec danger

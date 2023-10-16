@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.ksp)
     kotlin("kapt")
 }
@@ -130,6 +131,43 @@ dependencies {
 detekt {
     autoCorrect = true
     config.from(files("$rootDir/detekt-config.yml"))
+}
+
+kover {
+    excludeJavaCode()
+}
+
+koverReport {
+    filters {
+        excludes {
+            annotatedBy(
+                // Compose previews
+                "androidx.compose.ui.tooling.preview.Preview"
+            )
+            classes(
+                // Navigation helpers
+                "*.*NavigationKt*",
+                // Composable singletons
+                "*.*ComposableSingletons*",
+
+                // OS-level components
+                "com.x8bit.bitwarden.BitwardenApplication",
+                "com.x8bit.bitwarden.MainActivity*",
+                // Empty Composables
+                "com.x8bit.bitwarden.ui.platform.feature.splash.SplashScreenKt",
+            )
+            packages(
+                // Dependency injection
+                "*.di",
+                // Models
+                "*.model",
+                // Custom UI components
+                "com.x8bit.bitwarden.ui.platform.components",
+                // Theme-related code
+                "com.x8bit.bitwarden.ui.platform.theme",
+            )
+        }
+    }
 }
 
 tasks {
