@@ -22,7 +22,7 @@ namespace Bit.Core.Models.View
             Email = a.Profile?.Email;
             Name = a.Profile?.Name;
             AvatarColor = a.Profile?.AvatarColor;
-            Hostname = a.Settings?.EnvironmentUrls?.ParseEndpoint();
+            Hostname = a.Settings?.EnvironmentUrls?.GetDomainOrHost();
         }
 
         public bool IsAccount { get; set; }
