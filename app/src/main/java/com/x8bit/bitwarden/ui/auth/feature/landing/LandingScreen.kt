@@ -227,6 +227,7 @@ private fun RegionSelector(
             Text(
                 text = stringResource(id = R.string.logging_in_on),
                 style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(end = 12.dp),
             )
             Text(
