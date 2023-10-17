@@ -47,6 +47,7 @@ namespace Bit.iOS.Core.Utilities
         {
             handlers.AddHandler(typeof(TabsPage), typeof(Handlers.CustomTabbedHandler));
             handlers.AddHandler(typeof(NavigationPage), typeof(Handlers.CustomNavigationHandler));
+            handlers.AddHandler(typeof(ViewCell), typeof(Handlers.CustomViewCellHandler));
             handlers.AddHandler(typeof(ContentPage), typeof(Handlers.CustomContentPageHandler));
             Handlers.ButtonHandlerMappings.Setup();
             Handlers.DatePickerHandlerMappings.Setup();

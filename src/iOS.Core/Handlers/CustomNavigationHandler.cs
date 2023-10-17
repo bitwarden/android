@@ -5,7 +5,7 @@ using UIKit;
 
 namespace Bit.iOS.Core.Handlers
 {
-    //This is a Compatibility verion of the NavigationRenderer. Eventually we should see if there's a better way to implement this behavior.
+    //This is a Compatibility version of the NavigationRenderer. Eventually we should see if there's a better way to implement this behavior.
     public class CustomNavigationHandler : Microsoft.Maui.Controls.Handlers.Compatibility.NavigationRenderer
     {
         public override void PushViewController(UIViewController viewController, bool animated)
