@@ -48,7 +48,9 @@ class GeneratorScreenTest : BaseComposeTest() {
             GeneratorScreen(viewModel = viewModel)
         }
 
-        composeTestRule.onNodeWithContentDescription(label = "Generate password").performClick()
+        composeTestRule
+            .onNodeWithContentDescription(label = "Generate password")
+            .performClick()
 
         verify {
             viewModel.trySendAction(GeneratorAction.RegenerateClick)
@@ -61,7 +63,9 @@ class GeneratorScreenTest : BaseComposeTest() {
             GeneratorScreen(viewModel = viewModel)
         }
 
-        composeTestRule.onNodeWithContentDescription(label = "Copy").performClick()
+        composeTestRule
+            .onNodeWithContentDescription(label = "Copy")
+            .performClick()
 
         verify {
             viewModel.trySendAction(GeneratorAction.CopyClick)
@@ -80,7 +84,8 @@ class GeneratorScreenTest : BaseComposeTest() {
             .performClick()
 
         // Choose the option from the menu
-        composeTestRule.onAllNodesWithText(text = "Password")
+        composeTestRule
+            .onAllNodesWithText(text = "Password")
             .onLast()
             .performScrollTo()
             .performClick()
@@ -97,10 +102,15 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
 
         // Opens the menu
-        composeTestRule.onNodeWithContentDescription(label = "Password, Password").performClick()
+        composeTestRule
+            .onNodeWithContentDescription(label = "Password type, Password")
+            .performClick()
 
         // Choose the option from the menu
-        composeTestRule.onAllNodesWithText(text = "Passphrase").onLast().performClick()
+        composeTestRule
+            .onAllNodesWithText(text = "Passphrase")
+            .onLast()
+            .performClick()
 
         verify {
             viewModel.trySendAction(
@@ -124,7 +134,7 @@ class GeneratorScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Password, Password")
+            .onNodeWithContentDescription(label = "Password type, Password")
             .assertIsDisplayed()
 
         composeTestRule
@@ -136,22 +146,22 @@ class GeneratorScreenTest : BaseComposeTest() {
             .assertExists()
 
         composeTestRule
-            .onNodeWithText("Uppercase (A to Z)")
+            .onNodeWithText("A—Z")
             .performScrollTo()
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("Lowercase (A to Z)")
+            .onNodeWithText("a—z")
             .performScrollTo()
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("Numbers (0 to 9)")
+            .onNodeWithText("0-9")
             .performScrollTo()
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("Special characters (!@#$%^*)")
+            .onNodeWithText("!@#$%^&*")
             .performScrollTo()
             .assertIsDisplayed()
 
@@ -213,7 +223,7 @@ class GeneratorScreenTest : BaseComposeTest() {
             GeneratorScreen(viewModel = viewModel)
         }
 
-        composeTestRule.onNodeWithText("Uppercase (A to Z)")
+        composeTestRule.onNodeWithText("A—Z")
             .performScrollTo()
             .performClick()
 
@@ -232,7 +242,7 @@ class GeneratorScreenTest : BaseComposeTest() {
             GeneratorScreen(viewModel = viewModel)
         }
 
-        composeTestRule.onNodeWithText("Lowercase (A to Z)")
+        composeTestRule.onNodeWithText("a—z")
             .performScrollTo()
             .performClick()
 
@@ -251,7 +261,7 @@ class GeneratorScreenTest : BaseComposeTest() {
             GeneratorScreen(viewModel = viewModel)
         }
 
-        composeTestRule.onNodeWithText("Numbers (0 to 9)")
+        composeTestRule.onNodeWithText("0-9")
             .performScrollTo()
             .performClick()
 
@@ -270,7 +280,7 @@ class GeneratorScreenTest : BaseComposeTest() {
             GeneratorScreen(viewModel = viewModel)
         }
 
-        composeTestRule.onNodeWithText("Special characters (!@#$%^*)")
+        composeTestRule.onNodeWithText("!@#$%^&*")
             .performScrollTo()
             .performClick()
 

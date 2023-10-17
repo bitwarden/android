@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,6 +28,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param isChecked The current state of the switch (either checked or unchecked).
  * @param onCheckedChange A lambda that is invoked when the switch's state changes.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
+ * @param contentDescription A description of the switch's UI for accessibility purposes.
  */
 @Composable
 fun BitwardenWideSwitch(
@@ -34,6 +36,7 @@ fun BitwardenWideSwitch(
     isChecked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
     modifier: Modifier = Modifier,
+    contentDescription: String? = null,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -46,7 +49,11 @@ fun BitwardenWideSwitch(
                 indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
                 onClick = { onCheckedChange?.invoke(!isChecked) },
             )
-            .semantics(mergeDescendants = true) { }
+            .semantics(mergeDescendants = true) {
+                if (contentDescription != null) {
+                    this.contentDescription = contentDescription
+                }
+            }
             .then(modifier),
     ) {
         Text(
