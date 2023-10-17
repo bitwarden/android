@@ -1,10 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.model
 
-import kotlinx.serialization.KSerializer
+import com.x8bit.bitwarden.data.platform.datasource.network.serializer.BaseSurrogateSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
 
 private const val KDF_TYPE_ARGON2_ID = 1
 private const val KDF_TYPE_PBKDF2_SHA256 = 0
@@ -40,38 +37,37 @@ data class PreLoginResponseJson(
     }
 }
 
-private class PreLoginResponseSerializer : KSerializer<PreLoginResponseJson> {
+private class PreLoginResponseSerializer :
+    BaseSurrogateSerializer<PreLoginResponseJson, InternalPreLoginResponseJson>() {
 
-    private val surrogateSerializer = InternalPreLoginResponseJson.serializer()
+    override val surrogateSerializer = InternalPreLoginResponseJson.serializer()
 
-    override val descriptor: SerialDescriptor = surrogateSerializer.descriptor
+    override fun InternalPreLoginResponseJson.toExternalType(): PreLoginResponseJson =
+        PreLoginResponseJson(
+            kdfParams = when (this.kdfType) {
+                KDF_TYPE_PBKDF2_SHA256 -> {
+                    PreLoginResponseJson.KdfParams.Pbkdf2(
+                        iterations = this.kdfIterations,
+                    )
+                }
 
-    override fun deserialize(decoder: Decoder): PreLoginResponseJson {
-        val surrogate = decoder.decodeSerializableValue(surrogateSerializer)
-        val kdfParams = when (surrogate.kdfType) {
-            KDF_TYPE_PBKDF2_SHA256 -> {
-                PreLoginResponseJson.KdfParams.Pbkdf2(
-                    iterations = surrogate.kdfIterations,
+                KDF_TYPE_ARGON2_ID -> {
+                    @Suppress("UnsafeCallOnNullableType")
+                    PreLoginResponseJson.KdfParams.Argon2ID(
+                        iterations = this.kdfIterations,
+                        memory = this.kdfMemory!!,
+                        parallelism = this.kdfParallelism!!,
+                    )
+                }
+
+                else -> throw IllegalStateException(
+                    "Unable to parse KDF params for unknown kdfType: ${this.kdfType}",
                 )
-            }
+            },
+        )
 
-            KDF_TYPE_ARGON2_ID -> {
-                PreLoginResponseJson.KdfParams.Argon2ID(
-                    iterations = surrogate.kdfIterations,
-                    memory = surrogate.kdfMemory!!,
-                    parallelism = surrogate.kdfParallelism!!,
-                )
-            }
-
-            else -> throw IllegalStateException(
-                "Unable to parse KDF params for unknown kdfType: ${surrogate.kdfType}",
-            )
-        }
-        return PreLoginResponseJson(kdfParams = kdfParams)
-    }
-
-    override fun serialize(encoder: Encoder, value: PreLoginResponseJson) {
-        val surrogate = when (val params = value.kdfParams) {
+    override fun PreLoginResponseJson.toSurrogateType(): InternalPreLoginResponseJson =
+        when (val params = this.kdfParams) {
             is PreLoginResponseJson.KdfParams.Argon2ID -> {
                 InternalPreLoginResponseJson(
                     kdfType = KDF_TYPE_ARGON2_ID,
@@ -88,9 +84,4 @@ private class PreLoginResponseSerializer : KSerializer<PreLoginResponseJson> {
                 )
             }
         }
-        encoder.encodeSerializableValue(
-            surrogateSerializer,
-            surrogate,
-        )
-    }
 }
