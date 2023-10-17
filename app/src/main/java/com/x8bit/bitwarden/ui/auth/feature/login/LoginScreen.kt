@@ -149,7 +149,7 @@ fun LoginScreen(
             // TODO Get the "login target" from a dropdown (BIT-202)
             Text(
                 text = stringResource(
-                    id = R.string.log_in_attempt_by_x_on_y,
+                    id = R.string.logging_in_as_x_on_y,
                     state.emailAddress,
                     state.region,
                 ),
