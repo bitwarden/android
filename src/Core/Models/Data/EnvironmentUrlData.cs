@@ -91,7 +91,7 @@ namespace Bit.Core.Models.Data
             return url.Trim();
         }
 
-        public string GetDomainOrHost()
+        public string GetDomainOrHostname()
         {
             var url = WebVault ?? Base ?? Api ?? Identity;
             if (string.IsNullOrWhiteSpace(url))
