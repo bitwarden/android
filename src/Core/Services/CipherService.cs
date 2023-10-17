@@ -564,13 +564,8 @@ namespace Bit.Core.Services
             await UpsertAsync(data);
         }
 
-        public async Task<ICipherService.ShareWithServerError> ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds)
+        public async Task ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds)
         {
-            if (!await ValidateCanBeSharedWithOrgAsync(cipher, organizationId))
-            {
-                return ICipherService.ShareWithServerError.DuplicatedPasskeyInOrg;
-            }
-
             var attachmentTasks = new List<Task>();
             if (cipher.Attachments != null)
             {
@@ -591,21 +586,6 @@ namespace Bit.Core.Services
             var userId = await _stateService.GetActiveUserIdAsync();
             var data = new CipherData(response, userId, collectionIds);
             await UpsertAsync(data);
-
-            return ICipherService.ShareWithServerError.None;
-        }
-
-        private async Task<bool> ValidateCanBeSharedWithOrgAsync(CipherView cipher, string organizationId)
-        {
-            if (!cipher.HasFido2Credential)
-            {
-                return true;
-            }
-
-            var decCiphers = await GetAllDecryptedAsync();
-            return !decCiphers
-                .Where(c => c.OrganizationId == organizationId)
-                .Any(c => !cipher.Login.MainFido2Credential.IsUniqueAgainst(c.Login?.MainFido2Credential));
         }
 
         public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, CipherView cipherView, string filename, byte[] data)
