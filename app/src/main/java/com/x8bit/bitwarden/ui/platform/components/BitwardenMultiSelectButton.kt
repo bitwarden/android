@@ -67,11 +67,11 @@ fun BitwardenMultiSelectButton(
 
     Box(
         modifier = modifier
-        .semantics(mergeDescendants = true) {}
-        .fillMaxWidth()) {
+            .semantics(mergeDescendants = true) {},
+    ) {
         OutlinedTextField(
             // TODO: Update with final accessibility reading (BIT-752)
-            modifier = modifier
+            modifier = Modifier
                 .clearAndSetSemantics {
                     this.role = Role.DropdownList
                     contentDescription = "$label, $selectedOption"

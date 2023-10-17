@@ -47,13 +47,13 @@ fun BitwardenTextFieldWithTwoIcons(
     onSecondIconClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = Modifier.semantics(mergeDescendants = true) {}) {
+    Box(modifier = modifier.semantics(mergeDescendants = true) {}) {
         Row(
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             OutlinedTextField(
-                modifier = modifier
+                modifier = Modifier
                     .weight(1f)
                     .clearAndSetSemantics {
                         contentDescription = "$label, $value"
@@ -70,7 +70,6 @@ fun BitwardenTextFieldWithTwoIcons(
                 },
             )
             RowOfIconButtons(
-                modifier = modifier,
                 firstIconResource = firstIconResource,
                 onFirstIconClick = onFirstIconClick,
                 secondIconResource = secondIconResource,
@@ -83,7 +82,6 @@ fun BitwardenTextFieldWithTwoIcons(
 /**
  * A row of two customizable icon buttons.
  *
- * @param modifier Modifier for the Row.
  * @param firstIconResource The resource data for the first icon button.
  * @param onFirstIconClick Callback for when the first icon button is clicked.
  * @param secondIconResource The resource data for the second icon button.
@@ -91,14 +89,13 @@ fun BitwardenTextFieldWithTwoIcons(
  */
 @Composable
 private fun RowOfIconButtons(
-    modifier: Modifier,
     firstIconResource: IconResource,
     onFirstIconClick: () -> Unit,
     secondIconResource: IconResource,
     onSecondIconClick: () -> Unit,
 ) {
     Row(
-        modifier = modifier.padding(start = 8.dp),
+        modifier = Modifier.padding(start = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -126,7 +123,6 @@ private fun IconButtonWithResource(iconRes: IconResource, onClick: () -> Unit) {
         Icon(
             painter = iconRes.iconPainter,
             contentDescription = iconRes.contentDescription,
-            modifier = Modifier.padding(8.dp),
         )
     }
 }

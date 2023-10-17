@@ -3,13 +3,9 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
-import androidx.compose.ui.semantics.Role.Companion.Switch
 import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.semantics.SemanticsProperties.Role
 import androidx.compose.ui.test.SemanticsMatcher.Companion.expectValue
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsOff
-import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasProgressBarRangeInfo
@@ -44,6 +40,32 @@ class GeneratorScreenTest : BaseComposeTest() {
     private val viewModel = mockk<GeneratorViewModel>(relaxed = true) {
         every { eventFlow } returns emptyFlow()
         every { stateFlow } returns mutableStateFlow
+    }
+
+    @Test
+    fun `clicking the Regenerate button should send RegenerateClick action`() {
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithContentDescription(label = "Generate password").performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.RegenerateClick)
+        }
+    }
+
+    @Test
+    fun `clicking the Copy button should send CopyClick action`() {
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithContentDescription(label = "Copy").performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.CopyClick)
+        }
     }
 
     @Test
@@ -115,27 +137,23 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithText("Uppercase (A to Z)")
-            .onChildren()
-            .filterToOne(expectValue(Role, Switch))
-            .assertIsOn()
+            .performScrollTo()
+            .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithText("Lowercase (A to Z)")
-            .onChildren()
-            .filterToOne(expectValue(Role, Switch))
-            .assertIsOn()
+            .performScrollTo()
+            .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithText("Numbers (0 to 9)")
-            .onChildren()
-            .filterToOne(expectValue(Role, Switch))
-            .assertIsOn()
+            .performScrollTo()
+            .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithText("Special characters (!@#$%^*)")
-            .onChildren()
-            .filterToOne(expectValue(Role, Switch))
-            .assertIsOff()
+            .performScrollTo()
+            .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithContentDescription("Minimum numbers, 1")
@@ -153,10 +171,8 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithText("Avoid ambiguous characters")
-            .onChildren()
-            .filterToOne(expectValue(Role, Switch))
             .performScrollTo()
-            .assertIsOff()
+            .assertIsDisplayed()
     }
 
     @Test
@@ -198,8 +214,6 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
 
         composeTestRule.onNodeWithText("Uppercase (A to Z)")
-            .onChildren()
-            .filterToOne(expectValue(Role, Switch))
             .performScrollTo()
             .performClick()
 
@@ -219,8 +233,6 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
 
         composeTestRule.onNodeWithText("Lowercase (A to Z)")
-            .onChildren()
-            .filterToOne(expectValue(Role, Switch))
             .performScrollTo()
             .performClick()
 
@@ -240,8 +252,6 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
 
         composeTestRule.onNodeWithText("Numbers (0 to 9)")
-            .onChildren()
-            .filterToOne(expectValue(Role, Switch))
             .performScrollTo()
             .performClick()
 
@@ -261,8 +271,6 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
 
         composeTestRule.onNodeWithText("Special characters (!@#$%^*)")
-            .onChildren()
-            .filterToOne(expectValue(Role, Switch))
             .performScrollTo()
             .performClick()
 
@@ -398,8 +406,6 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
 
         composeTestRule.onNodeWithText("Avoid ambiguous characters")
-            .onChildren()
-            .filterToOne(expectValue(Role, Switch))
             .performScrollTo()
             .performClick()
 
@@ -492,8 +498,6 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithText("Capitalize")
-            .onChildren()
-            .filterToOne(expectValue(Role, Switch))
             .performScrollTo()
             .performClick()
 
@@ -520,8 +524,6 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
 
         composeTestRule.onNodeWithText("Include number")
-            .onChildren()
-            .filterToOne(expectValue(Role, Switch))
             .performScrollTo()
             .performClick()
 

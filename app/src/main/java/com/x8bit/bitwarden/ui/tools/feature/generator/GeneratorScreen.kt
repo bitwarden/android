@@ -141,7 +141,6 @@ private fun ScrollContent(
         modifier = modifier
             .fillMaxHeight()
             .background(color = MaterialTheme.colorScheme.surface)
-            .padding(start = 16.dp, end = 16.dp)
             .verticalScroll(rememberScrollState()),
     ) {
 
@@ -165,6 +164,7 @@ private fun ScrollContent(
                 text = stringResource(id = R.string.options),
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 16.dp),
             )
         }
 
@@ -204,6 +204,7 @@ private fun GeneratedStringItem(
             contentDescription = stringResource(id = R.string.generate_password),
         ),
         onSecondIconClick = onRegenerateClick,
+        modifier = Modifier.padding(horizontal = 16.dp),
     )
 }
 
@@ -225,6 +226,9 @@ private fun MainStateOptionsItem(
                 optionsWithStrings.entries.first { it.value == selectedOption }.key
             onMainStateOptionClicked(selectedOptionId)
         },
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(),
     )
 }
 
@@ -276,6 +280,9 @@ private fun PasscodeOptionsItem(
                 optionsWithStrings.entries.first { it.value == selectedOption }.key
             onSubStateOptionClicked(selectedOptionId)
         },
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(),
     )
 }
 
@@ -344,6 +351,7 @@ private fun PasswordLengthSliderItem(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 16.dp)
             .semantics(mergeDescendants = true) {},
     ) {
         OutlinedTextField(
@@ -383,6 +391,7 @@ private fun PasswordCapitalLettersToggleItem(
         label = stringResource(id = R.string.uppercase_ato_z),
         isChecked = useCapitals,
         onCheckedChange = onPasswordToggleCapitalLettersChange,
+        modifier = Modifier.padding(horizontal = 16.dp),
     )
 }
 
@@ -395,6 +404,7 @@ private fun PasswordLowercaseLettersToggleItem(
         label = stringResource(id = R.string.lowercase_ato_z),
         isChecked = useLowercase,
         onCheckedChange = onPasswordToggleLowercaseLettersChange,
+        modifier = Modifier.padding(horizontal = 16.dp),
     )
 }
 
@@ -407,6 +417,7 @@ private fun PasswordNumbersToggleItem(
         label = stringResource(id = R.string.numbers_zero_to_nine),
         isChecked = useNumbers,
         onCheckedChange = onPasswordToggleNumbersChange,
+        modifier = Modifier.padding(horizontal = 16.dp),
     )
 }
 
@@ -419,6 +430,7 @@ private fun PasswordSpecialCharactersToggleItem(
         label = stringResource(id = R.string.special_characters),
         isChecked = useSpecialChars,
         onCheckedChange = onPasswordToggleSpecialCharactersChange,
+        modifier = Modifier.padding(horizontal = 16.dp),
     )
 }
 
@@ -444,6 +456,7 @@ private fun PasswordMinNumbersCounterItem(
         onSecondIconClick = {
             onPasswordMinNumbersCounterChange(minNumbers + 1)
         },
+        modifier = Modifier.padding(horizontal = 16.dp),
     )
 }
 
@@ -469,6 +482,7 @@ private fun PasswordMinSpecialCharactersCounterItem(
         onSecondIconClick = {
             onPasswordMinSpecialCharactersChange(minSpecial + 1)
         },
+        modifier = Modifier.padding(horizontal = 16.dp),
     )
 }
 
@@ -481,6 +495,7 @@ private fun PasswordAvoidAmbiguousCharsToggleItem(
         label = stringResource(id = R.string.avoid_ambiguous_characters),
         isChecked = avoidAmbiguousChars,
         onCheckedChange = onPasswordToggleAvoidAmbiguousCharsChange,
+        modifier = Modifier.padding(horizontal = 16.dp),
     )
 }
 
@@ -541,6 +556,7 @@ private fun PassphraseNumWordsCounterItem(
         onSecondIconClick = {
             onPassphraseNumWordsCounterChange(numWords + 1)
         },
+        modifier = Modifier.padding(horizontal = 16.dp),
     )
 }
 
@@ -555,7 +571,9 @@ private fun PassphraseWordSeparatorInputItem(
         onValueChange = {
             onPassphraseWordSeparatorChange(it.toCharArray().firstOrNull())
         },
-        modifier = Modifier.width(267.dp),
+        modifier = Modifier
+            .width(267.dp)
+            .padding(horizontal = 16.dp),
     )
 }
 
@@ -568,6 +586,7 @@ private fun PassphraseCapitalizeToggleItem(
         label = stringResource(id = R.string.capitalize),
         isChecked = capitalize,
         onCheckedChange = onPassphraseCapitalizeToggleChange,
+        modifier = Modifier.padding(horizontal = 16.dp),
     )
 }
 
@@ -580,6 +599,7 @@ private fun PassphraseIncludeNumberToggleItem(
         label = stringResource(id = R.string.include_number),
         isChecked = includeNumber,
         onCheckedChange = onPassphraseIncludeNumberToggleChange,
+        modifier = Modifier.padding(horizontal = 16.dp),
     )
 }
 
