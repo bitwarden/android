@@ -8,6 +8,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -37,14 +38,14 @@ import com.x8bit.bitwarden.R
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BitwardenLargeTopAppBar(
+fun BitwardenMediumTopAppBar(
     title: String,
     dropdownMenuItemContent: @Composable ColumnScope.() -> Unit = {},
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
     var isOverflowMenuVisible by remember { mutableStateOf(false) }
 
-    LargeTopAppBar(
+    MediumTopAppBar(
         colors = TopAppBarDefaults.largeTopAppBarColors(
             scrolledContainerColor = MaterialTheme.colorScheme.surface,
         ),

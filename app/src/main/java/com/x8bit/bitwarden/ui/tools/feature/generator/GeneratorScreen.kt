@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -27,22 +26,28 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.components.BitwardenLargeTopAppBar
+import com.x8bit.bitwarden.ui.platform.base.util.toDp
+import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextFieldWithTwoIcons
@@ -102,7 +107,7 @@ fun GeneratorScreen(viewModel: GeneratorViewModel = hiltViewModel()) {
 
     Scaffold(
         topBar = {
-            BitwardenLargeTopAppBar(
+            BitwardenMediumTopAppBar(
                 title = stringResource(id = R.string.generator),
                 scrollBehavior = scrollBehavior,
             )
@@ -272,7 +277,7 @@ private fun PasscodeOptionsItem(
         possibleSubStates.associateBy({ it }, { stringResource(id = it.labelRes) })
 
     BitwardenMultiSelectButton(
-        label = stringResource(id = currentSubState.selectedType.displayStringResId),
+        label = stringResource(id = R.string.password_type),
         options = optionsWithStrings.values.toList(),
         selectedOption = stringResource(id = currentSubState.selectedType.displayStringResId),
         onOptionSelected = { selectedOption ->
@@ -347,6 +352,9 @@ private fun PasswordLengthSliderItem(
     length: Int,
     onPasswordSliderLengthChange: (Int) -> Unit,
 ) {
+    var labelTextWidth by remember { mutableStateOf(Dp.Unspecified) }
+
+    val density = LocalDensity.current
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -362,12 +370,21 @@ private fun PasswordLengthSliderItem(
                     onPasswordSliderLengthChange(newValue)
                 }
             },
-            label = { Text(stringResource(id = R.string.length)) },
+            label = {
+                Text(
+                    text = stringResource(id = R.string.length),
+                    modifier = Modifier
+                        .onGloballyPositioned {
+                            labelTextWidth = it.size.width.toDp(density)
+                        },
+                )
+            },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
                 .wrapContentWidth()
-                .widthIn(max = 71.dp),
+                // We want the width to be no wider than the label + 16dp on either side
+                .width(labelTextWidth + 16.dp + 16.dp),
         )
 
         Slider(
@@ -378,6 +395,7 @@ private fun PasswordLengthSliderItem(
             valueRange =
             PASSWORD_LENGTH_SLIDER_MIN.toFloat()..PASSWORD_LENGTH_SLIDER_MAX.toFloat(),
             steps = PASSWORD_LENGTH_SLIDER_MAX - 1,
+            modifier = Modifier.weight(1f),
         )
     }
 }
@@ -388,10 +406,11 @@ private fun PasswordCapitalLettersToggleItem(
     onPasswordToggleCapitalLettersChange: (Boolean) -> Unit,
 ) {
     BitwardenWideSwitch(
-        label = stringResource(id = R.string.uppercase_ato_z),
+        label = "A—Z",
         isChecked = useCapitals,
         onCheckedChange = onPasswordToggleCapitalLettersChange,
         modifier = Modifier.padding(horizontal = 16.dp),
+        contentDescription = stringResource(id = R.string.uppercase_ato_z),
     )
 }
 
@@ -401,10 +420,11 @@ private fun PasswordLowercaseLettersToggleItem(
     onPasswordToggleLowercaseLettersChange: (Boolean) -> Unit,
 ) {
     BitwardenWideSwitch(
-        label = stringResource(id = R.string.lowercase_ato_z),
+        label = "a—z",
         isChecked = useLowercase,
         onCheckedChange = onPasswordToggleLowercaseLettersChange,
         modifier = Modifier.padding(horizontal = 16.dp),
+        contentDescription = stringResource(id = R.string.lowercase_ato_z),
     )
 }
 
@@ -414,10 +434,11 @@ private fun PasswordNumbersToggleItem(
     onPasswordToggleNumbersChange: (Boolean) -> Unit,
 ) {
     BitwardenWideSwitch(
-        label = stringResource(id = R.string.numbers_zero_to_nine),
+        label = "0-9",
         isChecked = useNumbers,
         onCheckedChange = onPasswordToggleNumbersChange,
         modifier = Modifier.padding(horizontal = 16.dp),
+        contentDescription = stringResource(id = R.string.numbers_zero_to_nine),
     )
 }
 
@@ -427,10 +448,11 @@ private fun PasswordSpecialCharactersToggleItem(
     onPasswordToggleSpecialCharactersChange: (Boolean) -> Unit,
 ) {
     BitwardenWideSwitch(
-        label = stringResource(id = R.string.special_characters),
+        label = "!@#$%^&*",
         isChecked = useSpecialChars,
         onCheckedChange = onPasswordToggleSpecialCharactersChange,
         modifier = Modifier.padding(horizontal = 16.dp),
+        contentDescription = stringResource(id = R.string.special_characters),
     )
 }
 
