@@ -176,7 +176,7 @@ namespace Bit.App
                         Device.BeginInvokeOnMainThread(async () =>
                         {
                             await Application.Current.MainPage.Navigation.PushModalAsync(
-                                new NavigationPage(new SetPasswordPage()));
+                                new NavigationPage(new SetPasswordPage(orgIdentifier: (string)message.Data)));
                         });
                     }
                     else if (message.Command == "syncCompleted")

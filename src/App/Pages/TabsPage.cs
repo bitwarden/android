@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Effects;
 using Bit.App.Models;
@@ -106,7 +107,9 @@ namespace Bit.App.Pages
             {
                 if(forcePasswordResetReason.Value == Core.Models.Domain.ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission)
                 {
-                    _messagingService.Send(Constants.ForceSetPassword);
+                    // TDE users only have one org
+                    var orgId = (await _stateService.GetOrganizationsAsync()).FirstOrDefault().Value.Identifier;
+                    _messagingService.Send(Constants.ForceSetPassword, orgId);
                 }
                 else
                 {

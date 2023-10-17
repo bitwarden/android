@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -28,6 +30,7 @@ namespace Bit.App.Pages
         private readonly IPolicyService _policyService;
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly II18nService _i18nService;
+        private readonly ISyncService _syncService;
 
         private bool _showPassword;
         private bool _isPolicyInEffect;
@@ -46,6 +49,7 @@ namespace Bit.App.Pages
             _passwordGenerationService =
                 ServiceContainer.Resolve<IPasswordGenerationService>("passwordGenerationService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
+            _syncService = ServiceContainer.Resolve<ISyncService>();
 
             PageTitle = AppResources.SetMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -234,6 +238,8 @@ namespace Bit.App.Pages
                     await _apiService.PutOrganizationUserResetPasswordEnrollmentAsync(OrgId, userId, resetRequest);
                 }
 
+                await _stateService.SetForcePasswordResetReasonAsync(null);
+                await _syncService.FullSyncAsync(true);
                 await _deviceActionService.HideLoadingAsync();
                 SetPasswordSuccessAction?.Invoke();
             }
