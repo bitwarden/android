@@ -1,5 +1,3 @@
-@file:Suppress("MaxLineLength")
-
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
@@ -33,7 +31,15 @@ class GeneratorScreenTest : BaseComposeTest() {
     private val mutableStateFlow = MutableStateFlow(
         GeneratorState(
             generatedText = "Placeholder",
-            selectedType = GeneratorState.MainType.Passcode(GeneratorState.MainType.Passcode.PasscodeType.Password()),
+            selectedType = GeneratorState
+                .MainType
+                .Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Password(),
+                ),
         ),
     )
 
@@ -91,7 +97,9 @@ class GeneratorScreenTest : BaseComposeTest() {
             .performClick()
 
         verify {
-            viewModel.trySendAction(GeneratorAction.MainTypeOptionSelect(GeneratorState.MainTypeOption.PASSWORD))
+            viewModel.trySendAction(
+                GeneratorAction.MainTypeOptionSelect(GeneratorState.MainTypeOption.PASSWORD),
+            )
         }
     }
 
@@ -185,6 +193,7 @@ class GeneratorScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, adjusting the slider should send SliderLengthChange action with length not equal to default`() {
         composeTestRule.setContent {
@@ -217,6 +226,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, toggling the capital letters toggle should send ToggleCapitalLettersChange action`() {
         composeTestRule.setContent {
@@ -236,6 +246,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, toggling the use lowercase toggle should send ToggleLowercaseLettersChange action`() {
         composeTestRule.setContent {
@@ -248,13 +259,19 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleLowercaseLettersChange(
-                    useLowercase = false,
-                ),
+                GeneratorAction
+                    .MainType
+                    .Passcode
+                    .PasscodeType
+                    .Password
+                    .ToggleLowercaseLettersChange(
+                        useLowercase = false,
+                    ),
             )
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, toggling the use numbers toggle should send ToggleNumbersChange action`() {
         composeTestRule.setContent {
@@ -274,6 +291,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, toggling the use special characters toggle should send ToggleSpecialCharactersChange action`() {
         composeTestRule.setContent {
@@ -286,20 +304,34 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleSpecialCharactersChange(
-                    useSpecialChars = true,
-                ),
+                GeneratorAction
+                    .MainType
+                    .Passcode
+                    .PasscodeType
+                    .Password
+                    .ToggleSpecialCharactersChange(
+                        useSpecialChars = true,
+                    ),
             )
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, decrementing the minimum numbers counter should send MinNumbersCounterChange action`() {
         val initialMinNumbers = 1
         updateState(
             GeneratorState(
                 generatedText = "Placeholder",
-                selectedType = GeneratorState.MainType.Passcode(GeneratorState.MainType.Passcode.PasscodeType.Password()),
+                selectedType = GeneratorState
+                    .MainType
+                    .Passcode(
+                        GeneratorState
+                            .MainType
+                            .Passcode
+                            .PasscodeType
+                            .Password(),
+                    ),
             ),
         )
 
@@ -322,13 +354,22 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, incrementing the minimum numbers counter should send MinNumbersCounterChange action`() {
         val initialMinNumbers = 1
         updateState(
             GeneratorState(
                 generatedText = "Placeholder",
-                selectedType = GeneratorState.MainType.Passcode(GeneratorState.MainType.Passcode.PasscodeType.Password()),
+                selectedType = GeneratorState
+                    .MainType
+                    .Passcode(
+                        GeneratorState
+                            .MainType
+                            .Passcode
+                            .PasscodeType
+                            .Password(),
+                    ),
             ),
         )
 
@@ -351,13 +392,22 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, decrementing the minimum special characters counter should send MinSpecialCharactersChange action`() {
         val initialSpecialChars = 1
         updateState(
             GeneratorState(
                 generatedText = "Placeholder",
-                selectedType = GeneratorState.MainType.Passcode(GeneratorState.MainType.Passcode.PasscodeType.Password()),
+                selectedType = GeneratorState
+                    .MainType
+                    .Passcode(
+                        GeneratorState
+                            .MainType
+                            .Passcode
+                            .PasscodeType
+                            .Password(),
+                    ),
             ),
         )
 
@@ -380,13 +430,22 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, incrementing the minimum special characters counter should send MinSpecialCharactersChange action`() {
         val initialSpecialChars = 1
         updateState(
             GeneratorState(
                 generatedText = "Placeholder",
-                selectedType = GeneratorState.MainType.Passcode(GeneratorState.MainType.Passcode.PasscodeType.Password()),
+                selectedType = GeneratorState
+                    .MainType
+                    .Passcode(
+                        GeneratorState
+                            .MainType
+                            .Passcode
+                            .PasscodeType
+                            .Password(),
+                    ),
             ),
         )
 
@@ -409,6 +468,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, toggling the use avoid ambiguous characters toggle should send ToggleSpecialCharactersChange action`() {
         composeTestRule.setContent {
@@ -421,9 +481,14 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleAvoidAmbigousCharactersChange(
-                    avoidAmbiguousChars = true,
-                ),
+                GeneratorAction
+                    .MainType
+                    .Passcode
+                    .PasscodeType
+                    .Password
+                    .ToggleAvoidAmbigousCharactersChange(
+                        avoidAmbiguousChars = true,
+                    ),
             )
         }
     }
@@ -432,13 +497,22 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     //region Passcode Passphrase Tests
 
+    @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Passphrase state, decrementing number of words should send NumWordsCounterChange action with decremented value`() {
         val initialNumWords = 3
         updateState(
             GeneratorState(
                 generatedText = "Placeholder",
-                selectedType = GeneratorState.MainType.Passcode(GeneratorState.MainType.Passcode.PasscodeType.Passphrase()),
+                selectedType = GeneratorState
+                    .MainType
+                    .Passcode(
+                        GeneratorState
+                            .MainType
+                            .Passcode
+                            .PasscodeType
+                            .Passphrase(),
+                    ),
             ),
         )
 
@@ -463,13 +537,22 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Passphrase state, incrementing number of words should send NumWordsCounterChange action with incremented value`() {
         val initialNumWords = 3
         updateState(
             GeneratorState(
                 generatedText = "Placeholder",
-                selectedType = GeneratorState.MainType.Passcode(GeneratorState.MainType.Passcode.PasscodeType.Passphrase()),
+                selectedType = GeneratorState
+                    .MainType
+                    .Passcode(
+                        GeneratorState
+                            .MainType
+                            .Passcode
+                            .PasscodeType
+                            .Passphrase(),
+                    ),
             ),
         )
 
@@ -493,12 +576,21 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Passphrase state, toggling capitalize should send ToggleCapitalizeChange action`() {
         updateState(
             GeneratorState(
                 generatedText = "Placeholder",
-                selectedType = GeneratorState.MainType.Passcode(GeneratorState.MainType.Passcode.PasscodeType.Passphrase()),
+                selectedType = GeneratorState
+                    .MainType
+                    .Passcode(
+                        GeneratorState
+                            .MainType
+                            .Passcode
+                            .PasscodeType
+                            .Passphrase(),
+                    ),
             ),
         )
 
@@ -520,12 +612,21 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Passphrase state, toggling the include number toggle should send ToggleIncludeNumberChange action`() {
         updateState(
             GeneratorState(
                 generatedText = "Placeholder",
-                selectedType = GeneratorState.MainType.Passcode(GeneratorState.MainType.Passcode.PasscodeType.Passphrase()),
+                selectedType = GeneratorState
+                    .MainType
+                    .Passcode(
+                        GeneratorState
+                            .MainType
+                            .Passcode
+                            .PasscodeType
+                            .Passphrase(),
+                    ),
             ),
         )
 
@@ -546,12 +647,21 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Passphrase state, updating text in word separator should send WordSeparatorTextChange action`() {
         updateState(
             GeneratorState(
                 generatedText = "Placeholder",
-                selectedType = GeneratorState.MainType.Passcode(GeneratorState.MainType.Passcode.PasscodeType.Passphrase()),
+                selectedType = GeneratorState
+                    .MainType
+                    .Passcode(
+                        GeneratorState
+                            .MainType
+                            .Passcode
+                            .PasscodeType
+                            .Passphrase(),
+                    ),
             ),
         )
 
