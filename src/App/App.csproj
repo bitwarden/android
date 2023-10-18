@@ -65,6 +65,12 @@
 		<MtouchExtraArgs>-gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>
 	</PropertyGroup>
 	<ItemGroup>
+	  <AndroidNativeLibrary Include="Platforms\Android\lib\arm64-v8a\libargon2.so" />
+	  <AndroidNativeLibrary Include="Platforms\Android\lib\armeabi-v7a\libargon2.so" />
+	  <AndroidNativeLibrary Include="Platforms\Android\lib\x86\libargon2.so" />
+	  <AndroidNativeLibrary Include="Platforms\Android\lib\x86_64\libargon2.so" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
