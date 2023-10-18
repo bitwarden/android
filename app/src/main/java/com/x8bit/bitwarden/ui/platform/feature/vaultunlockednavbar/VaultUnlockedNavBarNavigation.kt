@@ -20,8 +20,12 @@ fun NavController.navigateToVaultUnlockedNavBar(navOptions: NavOptions? = null) 
 /**
  * Add vault unlocked destination to the root nav graph.
  */
-fun NavGraphBuilder.vaultUnlockedNavBarDestination() {
+fun NavGraphBuilder.vaultUnlockedNavBarDestination(
+    onNavigateToAccountSecurity: () -> Unit,
+) {
     composable(VAULT_UNLOCKED_NAV_BAR_ROUTE) {
-        VaultUnlockedNavBarScreen()
+        VaultUnlockedNavBarScreen(
+            onNavigateToAccountSecurity = onNavigateToAccountSecurity,
+        )
     }
 }

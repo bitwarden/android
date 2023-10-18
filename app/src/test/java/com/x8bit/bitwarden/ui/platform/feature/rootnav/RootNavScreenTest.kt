@@ -19,10 +19,10 @@ class RootNavScreenTest : BaseComposeTest() {
         // When changing root navigation state, pop everything else off the back stack:
         popUpTo(fakeNavHostController.graphId) {
             inclusive = false
-            saveState = true
+            saveState = false
         }
         launchSingleTop = true
-        restoreState = true
+        restoreState = false
     }
 
     @Test
