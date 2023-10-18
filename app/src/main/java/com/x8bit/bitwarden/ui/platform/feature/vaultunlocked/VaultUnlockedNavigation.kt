@@ -5,8 +5,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
-import com.x8bit.bitwarden.ui.platform.feature.settings.accountSecurityDestination
-import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToAccountSecurity
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VAULT_UNLOCKED_NAV_BAR_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
 
@@ -27,11 +25,6 @@ fun NavGraphBuilder.vaultUnlockedDestinations(navController: NavHostController) 
         startDestination = VAULT_UNLOCKED_NAV_BAR_ROUTE,
         route = VAULT_UNLOCKED_ROUTE,
     ) {
-        vaultUnlockedNavBarDestination(
-            onNavigateToAccountSecurity = { navController.navigateToAccountSecurity() },
-        )
-        accountSecurityDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
+        vaultUnlockedNavBarDestination()
     }
 }
