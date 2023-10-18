@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace Bit.App.Utilities
 {
-    public class BoolToColorConverter : IValueConverter
+    public class BoolEnablementToTextColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
