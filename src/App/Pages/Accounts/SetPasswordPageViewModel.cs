@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
-using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
-using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -106,10 +103,14 @@ namespace Bit.App.Pages
         public string OrgId { get; set; }
         public ForcePasswordResetReason? ForceSetPasswordReason { get; private set; }
 
+        public string SetMasterPasswordSummary => ForceSetPasswordReason == ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission ?
+            AppResources.YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword: AppResources.YourOrganizationRequiresYouToSetAMasterPassword;
+
         public async Task InitAsync()
         {
             await CheckPasswordPolicy();
             ForceSetPasswordReason = await _stateService.GetForcePasswordResetReasonAsync();
+            TriggerPropertyChanged(nameof(SetMasterPasswordSummary));
             try
             {
                 var response = await _apiService.GetOrganizationAutoEnrollStatusAsync(OrgIdentifier);
