@@ -32,7 +32,6 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                 VaultUnlockedNavBarScreen(
                     viewModel = viewModel,
                     navController = fakeNavHostController,
-                    onNavigateToAccountSecurity = {},
                 )
             }
             onNodeWithText("My vault").performClick()
@@ -53,7 +52,6 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                 VaultUnlockedNavBarScreen(
                     viewModel = viewModel,
                     navController = fakeNavHostController,
-                    onNavigateToAccountSecurity = {},
                 )
             }
             runOnIdle { fakeNavHostController.assertCurrentRoute("vault") }
@@ -75,7 +73,6 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                 VaultUnlockedNavBarScreen(
                     viewModel = viewModel,
                     navController = fakeNavHostController,
-                    onNavigateToAccountSecurity = {},
                 )
             }
             onNodeWithText("Send").performClick()
@@ -96,7 +93,6 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                 VaultUnlockedNavBarScreen(
                     viewModel = viewModel,
                     navController = fakeNavHostController,
-                    onNavigateToAccountSecurity = {},
                 )
             }
             runOnIdle { fakeNavHostController.assertCurrentRoute("vault") }
@@ -118,7 +114,6 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                 VaultUnlockedNavBarScreen(
                     viewModel = viewModel,
                     navController = fakeNavHostController,
-                    onNavigateToAccountSecurity = {},
                 )
             }
             onNodeWithText("Generator").performClick()
@@ -139,7 +134,6 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                 VaultUnlockedNavBarScreen(
                     viewModel = viewModel,
                     navController = fakeNavHostController,
-                    onNavigateToAccountSecurity = {},
                 )
             }
             runOnIdle { fakeNavHostController.assertCurrentRoute("vault") }
@@ -161,7 +155,6 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                 VaultUnlockedNavBarScreen(
                     viewModel = viewModel,
                     navController = fakeNavHostController,
-                    onNavigateToAccountSecurity = {},
                 )
             }
             onNodeWithText("Settings").performClick()
@@ -182,14 +175,13 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                 VaultUnlockedNavBarScreen(
                     viewModel = viewModel,
                     navController = fakeNavHostController,
-                    onNavigateToAccountSecurity = {},
                 )
             }
             runOnIdle { fakeNavHostController.assertCurrentRoute("vault") }
             vaultUnlockedNavBarEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToSettingsScreen)
             runOnIdle {
                 fakeNavHostController.assertLastNavigation(
-                    route = "settings",
+                    route = "settings_graph",
                     navOptions = expectedNavOptions,
                 )
             }

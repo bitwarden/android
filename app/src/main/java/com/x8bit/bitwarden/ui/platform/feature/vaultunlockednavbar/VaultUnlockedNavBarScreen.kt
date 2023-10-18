@@ -28,9 +28,9 @@ import androidx.navigation.navOptions
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.PlaceholderComposable
-import com.x8bit.bitwarden.ui.platform.feature.settings.SETTINGS_ROUTE
-import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettings
-import com.x8bit.bitwarden.ui.platform.feature.settings.settingsDestinations
+import com.x8bit.bitwarden.ui.platform.feature.settings.SETTINGS_GRAPH_ROUTE
+import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
+import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
 import com.x8bit.bitwarden.ui.tools.feature.generator.GENERATOR_ROUTE
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGenerator
@@ -44,7 +44,6 @@ import kotlinx.parcelize.Parcelize
  */
 @Composable
 fun VaultUnlockedNavBarScreen(
-    onNavigateToAccountSecurity: () -> Unit,
     viewModel: VaultUnlockedNavBarViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
 ) {
@@ -65,14 +64,13 @@ fun VaultUnlockedNavBarScreen(
                 }
 
                 VaultUnlockedNavBarEvent.NavigateToSettingsScreen -> {
-                    navigateToSettings(navOptions)
+                    navigateToSettingsGraph(navOptions)
                 }
             }
         }
     }
     VaultUnlockedNavBarScaffold(
         navController = navController,
-        onNavigateToAccountSecurity = onNavigateToAccountSecurity,
         generatorTabClickedAction = {
             viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick)
         },
@@ -94,7 +92,6 @@ fun VaultUnlockedNavBarScreen(
 @Composable
 @Suppress("LongMethod")
 private fun VaultUnlockedNavBarScaffold(
-    onNavigateToAccountSecurity: () -> Unit,
     navController: NavHostController,
     vaultTabClickedAction: () -> Unit,
     sendTabClickedAction: () -> Unit,
@@ -168,9 +165,7 @@ private fun VaultUnlockedNavBarScaffold(
             vaultDestination()
             sendDestination()
             generatorDestination()
-            settingsDestinations(
-                onNavigateToAccountSecurity = onNavigateToAccountSecurity,
-            )
+            settingsGraph(navController)
         }
     }
 }
@@ -259,7 +254,7 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
         override val iconRes get() = R.drawable.ic_settings
         override val labelRes get() = R.string.settings
         override val contentDescriptionRes get() = R.string.settings
-        override val route get() = SETTINGS_ROUTE
+        override val route get() = SETTINGS_GRAPH_ROUTE
     }
 }
 
