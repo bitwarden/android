@@ -19,16 +19,22 @@ import kotlinx.serialization.Serializable
 data class SyncResponseJson(
     @SerialName("folders")
     val folders: List<Folder>?,
+
     @SerialName("collections")
     val collections: List<Collection>?,
+
     @SerialName("profile")
     val profile: Profile?,
+
     @SerialName("ciphers")
     val ciphers: List<Cipher>?,
+
     @SerialName("policies")
     val policies: List<Policy>?,
+
     @SerialName("domains")
     val domains: Domains,
+
     @SerialName("sends")
     val sends: List<Send>?,
 ) {
@@ -42,6 +48,7 @@ data class SyncResponseJson(
     data class Domains(
         @SerialName("globalEquivalentDomains")
         val globalEquivalentDomains: List<GlobalEquivalentDomain>?,
+
         @SerialName("equivalentDomains")
         val equivalentDomains: List<List<String>>?,
     ) {
@@ -57,8 +64,10 @@ data class SyncResponseJson(
         data class GlobalEquivalentDomain(
             @SerialName("excluded")
             val isExcluded: Boolean,
+
             @SerialName("domains")
             val domains: List<String>?,
+
             // TODO Parse type enum in BIT-636
             @SerialName("type")
             val type: Int,
@@ -77,8 +86,10 @@ data class SyncResponseJson(
         // TODO Serialize revision date in BIT-636
         @SerialName("revisionDate")
         val revisionDate: String?,
+
         @SerialName("name")
         val name: String?,
+
         @SerialName("id")
         val id: String,
     )
@@ -95,11 +106,14 @@ data class SyncResponseJson(
     data class Policy(
         @SerialName("organizationId")
         val organizationId: String,
+
         @SerialName("id")
         val id: String,
+
         // TODO Parse type enum in BIT-636
         @SerialName("type")
         val type: Int,
+
         @SerialName("enabled")
         val isEnabled: Boolean,
     )
@@ -131,38 +145,55 @@ data class SyncResponseJson(
     data class Profile(
         @SerialName("providerOrganizations")
         val providerOrganizations: List<Organization>?,
+
         @SerialName("premiumFromOrganization")
         val isPremiumFromOrganization: Boolean,
+
         @SerialName("forcePasswordReset")
         val shouldForcePasswordReset: Boolean,
+
         @SerialName("avatarColor")
         val avatarColor: String?,
+
         @SerialName("emailVerified")
         val isEmailVerified: Boolean,
+
         @SerialName("twoFactorEnabled")
         val isTwoFactorEnabled: Boolean,
+
         @SerialName("privateKey")
         val privateKey: String?,
+
         @SerialName("premium")
         val isPremium: Boolean,
+
         @SerialName("culture")
         val culture: String?,
+
         @SerialName("name")
         val name: String?,
+
         @SerialName("organizations")
         val organizations: List<Organization>?,
+
         @SerialName("usesKeyConnector")
         val shouldUseKeyConnector: Boolean,
+
         @SerialName("id")
         val id: String,
+
         @SerialName("masterPasswordHint")
         val masterPasswordHint: String?,
+
         @SerialName("email")
         val email: String?,
+
         @SerialName("key")
         val key: String?,
+
         @SerialName("securityStamp")
         val securityStamp: String?,
+
         @SerialName("providers")
         val providers: List<Provider>?,
     ) {
@@ -223,92 +254,133 @@ data class SyncResponseJson(
         data class Organization(
             @SerialName("usePolicies")
             val shouldUsePolicies: Boolean,
+
             @SerialName("keyConnectorUrl")
             val keyConnectorUrl: String?,
             // TODO Parse type enum in BIT-636
             @SerialName("type")
             val type: Int,
+
             @SerialName("seats")
             val seats: Int?,
+
             @SerialName("enabled")
             val isEnabled: Boolean,
+
             // TODO Parse provider type enum in BIT-636
             @SerialName("providerType")
             val providerType: Int,
+
             @SerialName("resetPasswordEnrolled")
             val isResetPasswordEnrolled: Boolean,
+
             @SerialName("useSecretsManager")
             val shouldUseSecretsManager: Boolean,
+
             @SerialName("maxCollections")
             val maxCollections: Int?,
+
             @SerialName("selfHost")
             val isSelfHost: Boolean,
+
             @SerialName("useKeyConnector")
             val shouldUseKeyConnector: Boolean,
+
             @SerialName("permissions")
             val permissions: Permissions,
+
             @SerialName("hasPublicAndPrivateKeys")
             val hasPublicAndPrivateKeys: Boolean,
+
             @SerialName("providerId")
             val providerId: String?,
+
             @SerialName("id")
             val id: String,
+
             @SerialName("useGroups")
             val shouldUseGroups: Boolean,
+
             @SerialName("useDirectory")
             val shouldUseDirectory: Boolean,
+
             @SerialName("key")
             val key: String?,
+
             @SerialName("providerName")
             val providerName: String?,
+
             @SerialName("usersGetPremium")
             val shouldUsersGetPremium: Boolean,
+
             @SerialName("maxStorageGb")
             val maxStorageGb: Int?,
+
             @SerialName("identifier")
             val identifier: String?,
+
             @SerialName("useSso")
             val shouldUseSso: Boolean,
+
             @SerialName("useCustomPermissions")
             val shouldUseCustomPermissions: Boolean,
+
             @SerialName("familySponsorshipAvailable")
             val isFamilySponsorshipAvailable: Boolean,
+
             @SerialName("useResetPassword")
             val shouldUseResetPassword: Boolean,
+
             // TODO Parse plan product type enum in BIT-636
             @SerialName("planProductType")
             val planProductType: Int,
+
             @SerialName("accessSecretsManager")
             val accessSecretsManager: Boolean,
+
             @SerialName("use2fa")
             val use2fa: Boolean,
+
             @SerialName("familySponsorshipToDelete")
             val familySponsorshipToDelete: Boolean?,
+
             @SerialName("userId")
             val userId: String?,
+
             @SerialName("useActivateAutofillPolicy")
             val shouldUseActivateAutofillPolicy: Boolean,
+
             @SerialName("useEvents")
             val shouldUseEvents: Boolean,
+
             @SerialName("familySponsorshipFriendlyName")
             val isFamilySponsorshipFriendlyName: String?,
+
             @SerialName("keyConnectorEnabled")
             val isKeyConnectorEnabled: Boolean,
+
             @SerialName("useTotp")
             val shouldUseTotp: Boolean,
+
             // TODO Serialize family sponsorship last sync date in BIT-636
             @SerialName("familySponsorshipLastSyncDate")
             val familySponsorshipLastSyncDate: String?,
+
             @SerialName("useScim")
             val shouldUseScim: Boolean,
+
             @SerialName("name")
             val name: String?,
+
             @SerialName("useApi")
             val shouldUseApi: Boolean,
+
             @SerialName("ssoBound")
             val isSsoBound: Boolean,
+
             @SerialName("familySponsorshipValidUntil")
             val familySponsorshipValidUntil: String?,
+
             @SerialName("status")
             val status: Int,
         )
@@ -330,21 +402,29 @@ data class SyncResponseJson(
         data class Provider(
             @SerialName("useEvents")
             val shouldUseEvents: Boolean,
+
             @SerialName("permissions")
             val permissions: Permissions,
+
             @SerialName("name")
             val name: String?,
+
             @SerialName("id")
             val id: String,
+
             // TODO Parse type enum in BIT-636
             @SerialName("type")
             val type: Int,
+
             @SerialName("userId")
             val userId: String?,
+
             @SerialName("key")
             val key: String?,
+
             @SerialName("enabled")
             val isEnabled: Boolean,
+
             @SerialName("status")
             val status: Int,
         )
@@ -371,30 +451,43 @@ data class SyncResponseJson(
         data class Permissions(
             @SerialName("manageGroups")
             val shouldManageGroups: Boolean,
+
             @SerialName("manageResetPassword")
             val shouldManageResetPassword: Boolean,
+
             @SerialName("accessReports")
             val shouldAccessReports: Boolean,
+
             @SerialName("managePolicies")
             val shouldManagePolicies: Boolean,
+
             @SerialName("deleteAnyCollection")
             val shouldDeleteAnyCollection: Boolean,
+
             @SerialName("manageSso")
             val shouldManageSso: Boolean,
+
             @SerialName("deleteAssignedCollections")
             val shouldDeleteAssignedCollections: Boolean,
+
             @SerialName("manageUsers")
             val shouldManageUsers: Boolean,
+
             @SerialName("manageScim")
             val shouldManageScim: Boolean,
+
             @SerialName("accessImportExport")
             val shouldAccessImportExport: Boolean,
+
             @SerialName("editAnyCollection")
             val shouldEditAnyCollection: Boolean,
+
             @SerialName("accessEventLogs")
             val shouldAccessEventLogs: Boolean,
+
             @SerialName("createNewCollections")
             val shouldCreateNewCollections: Boolean,
+
             @SerialName("editAssignedCollections")
             val shouldEditAssignedCollections: Boolean,
         )
@@ -431,50 +524,71 @@ data class SyncResponseJson(
     data class Cipher(
         @SerialName("notes")
         val notes: String?,
+
         @SerialName("attachments")
         val attachments: List<Attachment>?,
+
         @SerialName("organizationUseTotp")
         val shouldOrganizationUseTotp: Boolean,
+
         @SerialName("reprompt")
         val reprompt: Int,
+
         @SerialName("edit")
         val shouldEdit: Boolean,
+
         @SerialName("passwordHistory")
         val passwordHistory: List<PasswordHistory>?,
+
         // TODO Serialize revision date in BIT-636
         @SerialName("revisionDate")
         val revisionDate: String?,
+
         // TODO Parse type enum in BIT-636
         @SerialName("type")
         val type: Int,
+
         @SerialName("login")
         val login: Login,
+
         // TODO Serialize creation date in BIT-636
         @SerialName("creationDate")
         val creationDate: String?,
+
         @SerialName("secureNote")
         val secureNote: SecureNote,
+
         @SerialName("folderId")
         val folderId: String?,
+
         @SerialName("organizationId")
         val organizationId: String?,
+
         // TODO Serialize deleted date in BIT-636
         @SerialName("deletedDate")
         val deletedDate: String?,
+
         @SerialName("identity")
         val identity: Identity,
+
         @SerialName("collectionIds")
         val collectionIds: List<String>?,
+
         @SerialName("name")
         val name: String?,
+
         @SerialName("id")
         val id: String,
+
         @SerialName("fields")
         val fields: List<Field>?,
+
         @SerialName("viewPassword")
         val shouldViewPassword: Boolean,
+
         @SerialName("favorite")
         val isFavorite: Boolean,
+
         @SerialName("card")
         val card: Card,
     ) {
@@ -492,14 +606,19 @@ data class SyncResponseJson(
         data class Attachment(
             @SerialName("fileName")
             val fileName: String?,
+
             @SerialName("size")
             val size: Int,
+
             @SerialName("sizeName")
             val sizeName: String?,
+
             @SerialName("id")
             val id: String?,
+
             @SerialName("url")
             val url: String?,
+
             @SerialName("key")
             val key: String?,
         )
@@ -518,14 +637,19 @@ data class SyncResponseJson(
         data class Card(
             @SerialName("number")
             val number: String?,
+
             @SerialName("expMonth")
             val expMonth: String?,
+
             @SerialName("code")
             val code: String?,
+
             @SerialName("expYear")
             val expirationYear: String?,
+
             @SerialName("cardholderName")
             val cardholderName: String?,
+
             @SerialName("brand")
             val brand: String?,
         )
@@ -542,11 +666,14 @@ data class SyncResponseJson(
         data class Field(
             @SerialName("linkedId")
             val linkedId: String?,
+
             @SerialName("name")
             val name: String?,
+
             // TODO Parse type enum in BIT-636
             @SerialName("type")
             val type: Int,
+
             @SerialName("value")
             val value: String?,
         )
@@ -577,38 +704,55 @@ data class SyncResponseJson(
         data class Identity(
             @SerialName("passportNumber")
             val passportNumber: String?,
+
             @SerialName("lastName")
             val lastName: String?,
+
             @SerialName("country")
             val country: String?,
+
             @SerialName("address3")
             val address3: String?,
+
             @SerialName("address2")
             val address2: String?,
+
             @SerialName("city")
             val city: String?,
+
             @SerialName("address1")
             val address1: String?,
+
             @SerialName("postalCode")
             val postalCode: String?,
+
             @SerialName("title")
             val title: String?,
+
             @SerialName("ssn")
             val ssn: String?,
+
             @SerialName("firstName")
             val firstName: String?,
+
             @SerialName("phone")
             val phone: String?,
+
             @SerialName("middleName")
             val middleName: String?,
+
             @SerialName("company")
             val company: String?,
+
             @SerialName("licenseNumber")
             val licenseNumber: String?,
+
             @SerialName("state")
             val state: String?,
+
             @SerialName("email")
             val email: String?,
+
             @SerialName("username")
             val username: String?,
         )
@@ -628,17 +772,23 @@ data class SyncResponseJson(
         data class Login(
             @SerialName("uris")
             val uris: List<Uri>?,
+
             @SerialName("totp")
             val totp: String?,
+
             @SerialName("password")
             val password: String?,
+
             // TODO Serialize password revision date in BIT-636
             @SerialName("passwordRevisionDate")
             val passwordRevisionDate: String?,
+
             @SerialName("autofillOnPageLoad")
             val shouldAutofillOnPageLoad: Boolean?,
+
             @SerialName("uri")
             val uri: String?,
+
             @SerialName("username")
             val username: String?,
         ) {
@@ -652,6 +802,7 @@ data class SyncResponseJson(
             data class Uri(
                 @SerialName("match")
                 val match: Int,
+
                 @SerialName("uri")
                 val uri: String?,
             )
@@ -667,6 +818,7 @@ data class SyncResponseJson(
         data class PasswordHistory(
             @SerialName("password")
             val password: String,
+
             // TODO Serialize last used date in BIT-636
             @SerialName("lastUsedDate")
             val lastUsedDate: String,
@@ -709,37 +861,52 @@ data class SyncResponseJson(
     data class Send(
         @SerialName("accessCount")
         val accessCount: Int,
+
         @SerialName("notes")
         val notes: String?,
+
         // TODO Serialize revision date in BIT-636
         @SerialName("revisionDate")
         val revisionDate: String,
+
         @SerialName("maxAccessCount")
         val maxAccessCount: Int?,
+
         @SerialName("hideEmail")
         val shouldHideEmail: Boolean,
+
         // TODO Parse type enum in BIT-636
         @SerialName("type")
         val type: Int,
+
         @SerialName("accessId")
         val accessId: String?,
+
         @SerialName("password")
         val password: String?,
+
         @SerialName("file")
         val file: File,
+
         // TODO Serialize deletion date in BIT-636
         @SerialName("deletionDate")
         val deletionDate: String,
+
         @SerialName("name")
         val name: String?,
+
         @SerialName("disabled")
         val isDisabled: Boolean,
+
         @SerialName("id")
         val id: String,
+
         @SerialName("text")
         val text: Text,
+
         @SerialName("key")
         val key: String?,
+
         // TODO Serialize expiration date in BIT-636
         @SerialName("expirationDate")
         val expirationDate: String?,
@@ -756,10 +923,13 @@ data class SyncResponseJson(
         data class File(
             @SerialName("fileName")
             val fileName: String?,
+
             @SerialName("size")
             val size: Int?,
+
             @SerialName("sizeName")
             val sizeName: String?,
+
             @SerialName("id")
             val id: String?,
         )
@@ -774,6 +944,7 @@ data class SyncResponseJson(
         data class Text(
             @SerialName("hidden")
             val isHidden: Boolean,
+
             @SerialName("text")
             val text: String?,
         )
@@ -793,14 +964,19 @@ data class SyncResponseJson(
     data class Collection(
         @SerialName("organizationId")
         val organizationId: String,
+
         @SerialName("hidePasswords")
         val shouldHidePasswords: Boolean,
+
         @SerialName("name")
         val name: String?,
+
         @SerialName("externalId")
         val externalId: String?,
+
         @SerialName("readOnly")
         val isReadOnly: Boolean,
+
         @SerialName("id")
         val id: String,
     )
