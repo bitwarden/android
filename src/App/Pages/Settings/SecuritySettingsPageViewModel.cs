@@ -485,6 +485,7 @@ namespace Bit.App.Pages
             {
                 TriggerPropertyChanged(nameof(IsVaultTimeoutActionLockAllowed));
                 TriggerPropertyChanged(nameof(SetUpUnlockMethodLabel));
+                VaultTimeoutActionPickerViewModel.SelectOptionCommand.RaiseCanExecuteChanged();
             });
         }
 
