@@ -63,7 +63,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         viewModel.actionChannel.trySend(action)
 
-        val expectedState = initialState.copy(selectedType = GeneratorState.MainType.Username)
+        val expectedState = initialState.copy(selectedType = GeneratorState.MainType.Username())
 
         assertEquals(expectedState, viewModel.stateFlow.value)
     }
