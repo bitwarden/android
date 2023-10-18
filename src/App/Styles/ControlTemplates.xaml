@@ -6,7 +6,7 @@
                     x:Class="Bit.App.Styles.ControlTemplates">
 
     <u:StringHasValueConverter x:Key="stringHasValueConverter" />
-    <u:BoolToColorConverter x:Key="boolToColorConverter" />
+    <u:BoolEnablementToTextColorConverter x:Key="boolToColorConverter" />
 
     <ControlTemplate x:Key="SettingControlTemplate">
         <Grid
