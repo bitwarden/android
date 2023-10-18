@@ -15,6 +15,9 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Pa
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_COUNTER_MAX
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_COUNTER_MIN
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeTypeOption
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.AnonAddy
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -124,7 +127,7 @@ class GeneratorViewModel @Inject constructor(
     private fun handleSwitchToUsername() {
         mutableStateFlow.update { currentState ->
             currentState.copy(
-                selectedType = GeneratorState.MainType.Username,
+                selectedType = Username(),
             )
         }
     }
@@ -581,9 +584,199 @@ data class GeneratorState(
          * and properties for generating usernames.
          */
         @Parcelize
-        data object Username : MainType() {
+        data class Username(
+            val selectedType: UsernameType = PlusAddressedEmail(),
+        ) : MainType(), Parcelable {
             override val displayStringResId: Int
                 get() = MainTypeOption.USERNAME.labelRes
+
+            /**
+             * Enum representing the types of usernames,
+             * allowing for different username configurations.
+             *
+             * @property labelRes The ID of the string that represents the label for each type.
+             */
+            enum class UsernameTypeOption(val labelRes: Int) {
+                PLUS_ADDRESSED_EMAIL(R.string.plus_addressed_email),
+                CATCH_ALL_EMAIL(R.string.catch_all_email),
+                FORWARDED_EMAIL_ALIAS(R.string.forwarded_email_alias),
+                RANDOM_WORD(R.string.random_word),
+            }
+
+            /**
+             * A sealed class representing the different types of USERNAME
+             * each with its own properties.
+             */
+            @Parcelize
+            sealed class UsernameType : Parcelable {
+
+                /**
+                 * Represents the resource ID for the display string specific to each
+                 * PasscodeType subclass. Every subclass of UsernameType must override
+                 * this property to provide the appropriate string resource ID for
+                 * its display string.
+                 */
+                abstract val displayStringResId: Int
+
+                /**
+                 * Represents a PlusAddressedEmail type.
+                 *
+                 * @property email The email used to generate a plus addressed email.
+                 */
+                @Parcelize
+                data class PlusAddressedEmail(
+                    val email: String = "PLACEHOLDER",
+                ) : UsernameType(), Parcelable {
+                    override val displayStringResId: Int
+                        get() = UsernameTypeOption.PLUS_ADDRESSED_EMAIL.labelRes
+                }
+
+                /**
+                 * Represents a Catch All Email type, with a configurable option for
+                 * domain name.
+                 *
+                 * @property domainName The domain name used for generation.
+                 */
+                @Parcelize
+                data class CatchAllEmail(
+                    val domainName: String = "",
+                ) : UsernameType(), Parcelable {
+                    override val displayStringResId: Int
+                        get() = UsernameTypeOption.CATCH_ALL_EMAIL.labelRes
+                }
+
+                /**
+                 * Represents a Random word type, with a configurable option for
+                 * capitalizing letters and including numbers
+                 *
+                 * @property capitalize Whether to capitalize the first letter of each word.
+                 * @property includeNumber Whether to include a numbers in the random words.
+                 */
+                @Parcelize
+                data class RandomWord(
+                    val capitalize: Boolean = false,
+                    val includeNumber: Boolean = false,
+                ) : UsernameType(), Parcelable {
+                    override val displayStringResId: Int
+                        get() = UsernameTypeOption.RANDOM_WORD.labelRes
+                }
+
+                /**
+                 * Represents a Forwarded email alias type, with a configurable option for
+                 * service and api key.
+                 *
+                 * @property selectedServiceType The service name used for generation.
+                 */
+                @Parcelize
+                data class ForwardedEmailAlias(
+                    val selectedServiceType: ServiceType = AnonAddy(),
+                ) : UsernameType(), Parcelable {
+                    override val displayStringResId: Int
+                        get() = UsernameTypeOption.FORWARDED_EMAIL_ALIAS.labelRes
+
+                    /**
+                     * Enum representing the types of services,
+                     * allowing for different service configurations.
+                     *
+                     * @property labelRes The ID of the string that represents
+                     * the label for each type.
+                     */
+                    enum class ServiceTypeOption(val labelRes: Int) {
+                        ANON_ADDY(R.string.anon_addy),
+                        DUCK_DUCK_GO(R.string.duck_duck_go),
+                        FAST_MAIL(R.string.fastmail),
+                        FIREFOX_RELAY(R.string.firefox_relay),
+                        SIMPLE_LOGIN(R.string.simple_login),
+                    }
+
+                    /**
+                     * A sealed class representing the different types of services.
+                     */
+                    @Parcelize
+                    sealed class ServiceType : Parcelable {
+
+                        /**
+                         * Represents the resource ID for the display string specific to each
+                         * ServiceType subclass. Every subclass of ServiceType must override
+                         * this property to provide the appropriate string resource ID for
+                         * its display string.
+                         */
+                        abstract val displayStringResId: Int
+
+                        /**
+                         * Represents the Anon Addy service type, with a configurable option for
+                         * service and api key.
+                         *
+                         * @property apiAccessToken The token used for generation.
+                         * @property domainName The domain name used for generation.
+                         */
+                        @Parcelize
+                        data class AnonAddy(
+                            val apiAccessToken: String = "",
+                            val domainName: String = "",
+                        ) : ServiceType(), Parcelable {
+                            override val displayStringResId: Int
+                                get() = ServiceTypeOption.ANON_ADDY.labelRes
+                        }
+
+                        /**
+                         * Represents the Duck Duck Go service type, with a configurable option for
+                         * api key.
+                         *
+                         * @property apiKey The api key used for generation.
+                         */
+                        @Parcelize
+                        data class DuckDuckGo(
+                            val apiKey: String = "",
+                        ) : ServiceType(), Parcelable {
+                            override val displayStringResId: Int
+                                get() = ServiceTypeOption.DUCK_DUCK_GO.labelRes
+                        }
+
+                        /**
+                         * Represents the Fast Mail service type, with a configurable option for
+                         * api key.
+                         *
+                         * @property apiKey The api key used for generation.
+                         */
+                        @Parcelize
+                        data class FastMail(
+                            val apiKey: String = "",
+                        ) : ServiceType(), Parcelable {
+                            override val displayStringResId: Int
+                                get() = ServiceTypeOption.FAST_MAIL.labelRes
+                        }
+
+                        /**
+                         * Represents the Firefox Relay service type, with a configurable option for
+                         * api access token.
+                         *
+                         * @property apiAccessToken The api access token used for generation.
+                         */
+                        @Parcelize
+                        data class FirefoxRelay(
+                            val apiAccessToken: String = "",
+                        ) : ServiceType(), Parcelable {
+                            override val displayStringResId: Int
+                                get() = ServiceTypeOption.FIREFOX_RELAY.labelRes
+                        }
+
+                        /**
+                         * Represents the SimpleLogin service type, with a configurable option for
+                         * api key.
+                         *
+                         * @property apiKey The api key used for generation.
+                         */
+                        @Parcelize
+                        data class SimpleLogin(
+                            val apiKey: String = "",
+                        ) : ServiceType(), Parcelable {
+                            override val displayStringResId: Int
+                                get() = ServiceTypeOption.SIMPLE_LOGIN.labelRes
+                        }
+                    }
+                }
+            }
         }
     }
 }
