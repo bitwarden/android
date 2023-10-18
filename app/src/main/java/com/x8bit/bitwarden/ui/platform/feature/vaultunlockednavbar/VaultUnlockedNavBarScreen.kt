@@ -28,6 +28,9 @@ import androidx.navigation.navOptions
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.PlaceholderComposable
+import com.x8bit.bitwarden.ui.platform.feature.settings.SETTINGS_ROUTE
+import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettings
+import com.x8bit.bitwarden.ui.platform.feature.settings.settingsDestinations
 import com.x8bit.bitwarden.ui.tools.feature.generator.GENERATOR_ROUTE
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGenerator
@@ -41,6 +44,7 @@ import kotlinx.parcelize.Parcelize
  */
 @Composable
 fun VaultUnlockedNavBarScreen(
+    onNavigateToAccountSecurity: () -> Unit,
     viewModel: VaultUnlockedNavBarViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
 ) {
@@ -68,6 +72,7 @@ fun VaultUnlockedNavBarScreen(
     }
     VaultUnlockedNavBarScaffold(
         navController = navController,
+        onNavigateToAccountSecurity = onNavigateToAccountSecurity,
         generatorTabClickedAction = {
             viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick)
         },
@@ -89,6 +94,7 @@ fun VaultUnlockedNavBarScreen(
 @Composable
 @Suppress("LongMethod")
 private fun VaultUnlockedNavBarScaffold(
+    onNavigateToAccountSecurity: () -> Unit,
     navController: NavHostController,
     vaultTabClickedAction: () -> Unit,
     sendTabClickedAction: () -> Unit,
@@ -162,7 +168,9 @@ private fun VaultUnlockedNavBarScaffold(
             vaultDestination()
             sendDestination()
             generatorDestination()
-            settingsDestination()
+            settingsDestinations(
+                onNavigateToAccountSecurity = onNavigateToAccountSecurity,
+            )
         }
     }
 }
@@ -301,32 +309,3 @@ private fun NavController.navigateToSend(navOptions: NavOptions? = null) {
     navigate(SEND_ROUTE, navOptions)
 }
 // #endregion Send
-
-// #region Settings
-/**
- * TODO: move to settings package (BIT-147)
- */
-private const val SETTINGS_ROUTE = "settings"
-
-/**
- * Add settings destination to the nav graph.
- *
- * TODO: move to settings package (BIT-147)
- */
-private fun NavGraphBuilder.settingsDestination() {
-    composable(SETTINGS_ROUTE) {
-        PlaceholderComposable(text = "Settings")
-    }
-}
-
-/**
- * Navigate to the generator screen. Note this will only work if generator screen was added
- * via [settingsDestination].
- *
- * TODO: move to settings package (BIT-147)
- *
- */
-private fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
-    navigate(SETTINGS_ROUTE, navOptions)
-}
-// #endregion Settings

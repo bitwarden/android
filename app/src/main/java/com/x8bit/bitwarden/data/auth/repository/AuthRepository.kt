@@ -37,6 +37,11 @@ interface AuthRepository {
     ): LoginResult
 
     /**
+     * Log out the current user.
+     */
+    fun logout()
+
+    /**
      * Set the value of [captchaTokenResultFlow].
      */
     fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult)

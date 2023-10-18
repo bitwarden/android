@@ -202,6 +202,31 @@ class AuthRepositoryTest {
         }
     }
 
+    @Test
+    fun `logout should change AuthState to be Unauthenticated`() = runTest {
+        // First login:
+        coEvery {
+            accountsService.preLogin(email = EMAIL)
+        } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                passwordHash = PASSWORD_HASH,
+                captchaToken = null,
+            )
+        }
+            .returns(Result.success(GetTokenResponseJson.Success(accessToken = ACCESS_TOKEN)))
+        every { authInterceptor.authToken = ACCESS_TOKEN } returns Unit
+        repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+
+        // Then call logout:
+        repository.authStateFlow.test {
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), awaitItem())
+            repository.logout()
+            assertEquals(AuthState.Unauthenticated, awaitItem())
+        }
+    }
+
     companion object {
         private const val EMAIL = "test@test.com"
         private const val PASSWORD = "password"
