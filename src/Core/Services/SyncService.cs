@@ -411,10 +411,15 @@ namespace Bit.Core.Services
                 await _stateService.SetForcePasswordResetReasonAsync(ForcePasswordResetReason.AdminForcePasswordReset);
             }
 
+            var hasManageResetPasswordPermission = response.Organizations.Any(org =>
+                org.Type == Enums.OrganizationUserType.Owner ||
+                org.Type == Enums.OrganizationUserType.Admin ||
+                (org.Permissions?.ManageResetPassword ?? false));
+
             var decryptionOptions = await _stateService.GetAccountDecryptionOptions();
             if (decryptionOptions != null &&
                 !decryptionOptions.HasMasterPassword &&
-                decryptionOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
+                hasManageResetPasswordPermission)
             {
                 // TDE user w/out MP went from having no password reset permission to having it.
                 // Must set the force password reset reason so the auth guard will redirect to the set password page.

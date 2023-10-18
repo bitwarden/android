@@ -8,6 +8,7 @@ using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
+using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -105,7 +106,7 @@ namespace Bit.App.Pages
 
             if (forcePasswordResetReason.HasValue)
             {
-                if(forcePasswordResetReason.Value == Core.Models.Domain.ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission)
+                if (forcePasswordResetReason.Value == ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission)
                 {
                     // TDE users only have one org
                     var orgId = (await _stateService.GetOrganizationsAsync()).FirstOrDefault().Value.Identifier;

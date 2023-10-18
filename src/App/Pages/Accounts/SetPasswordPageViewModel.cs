@@ -104,7 +104,7 @@ namespace Bit.App.Pages
         public ForcePasswordResetReason? ForceSetPasswordReason { get; private set; }
 
         public string SetMasterPasswordSummary => ForceSetPasswordReason == ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission ?
-            AppResources.YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword: AppResources.YourOrganizationRequiresYouToSetAMasterPassword;
+            AppResources.YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword : AppResources.YourOrganizationRequiresYouToSetAMasterPassword;
 
         public async Task InitAsync()
         {
