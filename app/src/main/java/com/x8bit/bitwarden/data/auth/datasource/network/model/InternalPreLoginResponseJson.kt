@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class InternalPreLoginResponseJson(
     @SerialName("kdf")
-    val kdfType: Int,
+    val kdfType: KdfTypeJson,
     @SerialName("kdfIterations")
     val kdfIterations: UInt,
     @SerialName("kdfMemory")
