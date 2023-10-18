@@ -1,0 +1,43 @@
+package com.x8bit.bitwarden.data.platform.datasource.network.util
+
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Test
+
+class NetworkUtilsTest {
+    @Test
+    fun `base64UrlEncode should Base64 encode the string and make the relevant replacements`() {
+        // Checks replacement of + to - and removal of =
+        assertEquals(
+            "dis-ZA",
+            "v+>d".base64UrlEncode(),
+        )
+        // Checks replacement of \ to _
+        assertEquals(
+            "NmI_ImE4",
+            "6b?\"a8".base64UrlEncode(),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `base64UrlDecodeOrNull should Base64 decode the string and make the relevant replacements`() {
+        // Checks replacement of - to +
+        assertEquals(
+            "v+>d",
+            "dis-ZA==".base64UrlDecodeOrNull(),
+        )
+        // Checks replacement of _ to \
+        assertEquals(
+            "6b?\"a8",
+            "NmI_ImE4".base64UrlDecodeOrNull(),
+        )
+    }
+
+    @Test
+    fun `base64UrlDecodeOrNull should return null value a non-encoded String`() {
+        assertNull(
+            "*.*".base64UrlDecodeOrNull(),
+        )
+    }
+}

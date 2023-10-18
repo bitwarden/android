@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.util
 
+import okio.ByteString.Companion.decodeBase64
+import java.nio.charset.Charset
 import java.util.Base64
 
 /**
@@ -15,3 +17,18 @@ fun String.base64UrlEncode(): String =
         .replace("+", "-")
         .replace("/", "_")
         .replace("=", "")
+
+/**
+ * Base 64 decode the given string after making the following replacements:
+ *
+ * - replace all "-" with "+"
+ * - replace all "_" with "/"
+ *
+ * A value of `null` will be returned if the decoding fails.
+ */
+fun String.base64UrlDecodeOrNull(): String? =
+    this
+        .replace("-", "+")
+        .replace("_", "/")
+        .decodeBase64()
+        ?.string(Charset.defaultCharset())
