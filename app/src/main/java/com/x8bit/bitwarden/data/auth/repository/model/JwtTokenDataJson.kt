@@ -19,16 +19,22 @@ import kotlinx.serialization.Serializable
 data class JwtTokenDataJson(
     @SerialName("sub")
     val userId: String,
+
     @SerialName("email")
     val email: String,
+
     @SerialName("email_verified")
     val isEmailVerified: Boolean,
+
     @SerialName("name")
     val name: String?,
+
     @SerialName("exp")
     val expirationAsEpochTime: Int,
+
     @SerialName("premium")
     val hasPremium: Boolean,
+
     @SerialName("amr")
     val authenticationMethodsReference: List<String>,
 )

@@ -17,14 +17,19 @@ import kotlinx.serialization.Serializable
 data class ConfigResponseJson(
     @SerialName("object")
     val type: String?,
+
     @SerialName("version")
     val version: String?,
+
     @SerialName("gitHash")
     val gitHash: String?,
+
     @SerialName("server")
     val server: ServerJson?,
+
     @SerialName("environment")
     val environment: EnvironmentJson?,
+
     @SerialName("featureStates")
     val featureStates: Map<String, Boolean>?,
 ) {
@@ -38,6 +43,7 @@ data class ConfigResponseJson(
     data class ServerJson(
         @SerialName("name")
         val name: String?,
+
         @SerialName("url")
         val url: String?,
     )
@@ -56,14 +62,19 @@ data class ConfigResponseJson(
     data class EnvironmentJson(
         @SerialName("cloudRegion")
         val cloudRegion: String?,
+
         @SerialName("vault")
         val vaultUrl: String?,
+
         @SerialName("api")
         val apiUrl: String?,
+
         @SerialName("identity")
         val identityUrl: String?,
+
         @SerialName("notifications")
         val notificationsUrl: String?,
+
         @SerialName("sso")
         val ssoUrl: String?,
     )

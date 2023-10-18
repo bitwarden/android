@@ -145,7 +145,7 @@ When there is only one argument but the function call must wrap to multiple line
 
 #### Annotation-related formatting
 
-When annotating properties, the annotations should be on their own lines and there may optionally be a space between each annotated property. The following is correct:
+When annotating properties, the annotations should be on their own lines and there must be a space between each annotated property. The following is correct:
 
 ```kotlin
 // Good

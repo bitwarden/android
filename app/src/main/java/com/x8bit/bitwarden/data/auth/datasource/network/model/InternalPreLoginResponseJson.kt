@@ -12,10 +12,13 @@ import kotlinx.serialization.Serializable
 data class InternalPreLoginResponseJson(
     @SerialName("kdf")
     val kdfType: KdfTypeJson,
+
     @SerialName("kdfIterations")
     val kdfIterations: UInt,
+
     @SerialName("kdfMemory")
     val kdfMemory: UInt? = null,
+
     @SerialName("kdfParallelism")
     val kdfParallelism: UInt? = null,
 )
