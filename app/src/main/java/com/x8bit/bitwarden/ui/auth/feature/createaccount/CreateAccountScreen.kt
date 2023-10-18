@@ -23,7 +23,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -124,8 +127,11 @@ fun CreateAccountScreen(
                 .padding(horizontal = 16.dp),
         )
         Spacer(modifier = Modifier.height(16.dp))
+        var showPassword by rememberSaveable { mutableStateOf(false) }
         BitwardenPasswordField(
             label = stringResource(id = R.string.master_password),
+            showPassword = showPassword,
+            showPasswordChange = { showPassword = it },
             value = state.passwordInput,
             onValueChange = remember(viewModel) {
                 { viewModel.trySendAction(PasswordInputChange(it)) }
@@ -138,6 +144,8 @@ fun CreateAccountScreen(
         BitwardenPasswordField(
             label = stringResource(id = R.string.retype_master_password),
             value = state.confirmPasswordInput,
+            showPassword = showPassword,
+            showPasswordChange = { showPassword = it },
             onValueChange = remember(viewModel) {
                 { viewModel.trySendAction(ConfirmPasswordInputChange(it)) }
             },

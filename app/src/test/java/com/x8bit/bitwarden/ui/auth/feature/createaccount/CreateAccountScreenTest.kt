@@ -2,10 +2,12 @@ package com.x8bit.bitwarden.ui.auth.feature.createaccount
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -257,6 +259,41 @@ class CreateAccountScreenTest : BaseComposeTest() {
             CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
         }
         composeTestRule.onNode(isDialog()).assertIsDisplayed()
+    }
+
+    @Test
+    fun `toggling one password field visibility should toggle the other`() {
+        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
+            every { eventFlow } returns emptyFlow()
+        }
+        composeTestRule.setContent {
+            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+        }
+
+        // should start with 2 Show buttons:
+        composeTestRule
+            .onAllNodesWithContentDescription("Show")
+            .assertCountEquals(2)
+            .get(0)
+            .performClick()
+
+        // after clicking there should be no Show buttons:
+        composeTestRule
+            .onAllNodesWithContentDescription("Show")
+            .assertCountEquals(0)
+
+        // and there should be 2 hide buttons now, and we'll click the second one:
+        composeTestRule
+            .onAllNodesWithContentDescription("Hide")
+            .assertCountEquals(2)
+            .get(1)
+            .performClick()
+
+        // then there should be two show buttons again
+        composeTestRule
+            .onAllNodesWithContentDescription("Show")
+            .assertCountEquals(2)
     }
 
     companion object {
