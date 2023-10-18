@@ -49,11 +49,11 @@ namespace Bit.iOS.Core.Utilities
             handlers.AddHandler(typeof(NavigationPage), typeof(Handlers.CustomNavigationHandler));
             handlers.AddHandler(typeof(ViewCell), typeof(Handlers.CustomViewCellHandler));
             handlers.AddHandler(typeof(ContentPage), typeof(Handlers.CustomContentPageHandler));
-            Handlers.ButtonHandlerMappings.Setup();
+            handlers.AddHandler(typeof(SelectableLabel), typeof(Handlers.SelectableLabelHandler));
             Handlers.DatePickerHandlerMappings.Setup();
             Handlers.EditorHandlerMappings.Setup();
             Handlers.EntryHandlerMappings.Setup();
-            //Handlers.LabelHandlerMappings.Setup();
+            Handlers.LabelHandlerMappings.Setup();
             Handlers.PickerHandlerMappings.Setup();
             Handlers.SearchBarHandlerMappings.Setup();
             Handlers.StepperHandlerMappings.Setup();

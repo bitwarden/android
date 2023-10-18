@@ -14,8 +14,6 @@ namespace Bit.iOS.Core.Handlers
                 handler.PlatformView.ClearButtonMode = UITextFieldViewMode.WhileEditing;
                 UpdateTintColor(handler, editor);
                 iOSHelpers.SetBottomBorder(handler.PlatformView);
-                // TODO: [Maui-Migration] Check if needed given that MAUI should be automatically change the font size based on OS accessbiility
-                //UpdateFontSize();
 
                 if (!ThemeHelpers.LightTheme)
                 {
