@@ -1,7 +1,4 @@
-﻿using System;
-using System.Web;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
+﻿using System.Web;
 
 namespace Bit.App.Utilities
 {
@@ -39,8 +36,7 @@ namespace Bit.App.Utilities
 
             // iOS won't hide the zero-width space char without these div attrs, but Android won't respect
             // display:inline-block and adds a newline after the password/username.  Hence, only iOS gets the div.
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-                                    if (Device.RuntimePlatform == Device.iOS)
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
                 result += "<div style=\"display:inline-block; align-items:center; justify-content:center; text-align:center; word-break:break-all; white-space:pre-wrap; min-width:0\">";
             }
@@ -114,8 +110,7 @@ namespace Bit.App.Utilities
             }
 
             // Close off iOS div
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-                        if (Device.RuntimePlatform == Device.iOS)
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
                 result += "</div>";
             }
