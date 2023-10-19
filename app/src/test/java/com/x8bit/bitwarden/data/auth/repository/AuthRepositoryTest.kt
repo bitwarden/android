@@ -141,6 +141,9 @@ class AuthRepositoryTest {
 
     @Test
     fun `login get token succeeds should return Success and update AuthState`() = runTest {
+        val successResponse = mockk<GetTokenResponseJson.Success> {
+            every { accessToken } returns ACCESS_TOKEN
+        }
         coEvery {
             accountsService.preLogin(email = EMAIL)
         } returns Result.success(PRE_LOGIN_SUCCESS)
@@ -151,7 +154,7 @@ class AuthRepositoryTest {
                 captchaToken = null,
             )
         }
-            .returns(Result.success(GetTokenResponseJson.Success(accessToken = ACCESS_TOKEN)))
+            .returns(Result.success(successResponse))
         every { authInterceptor.authToken = ACCESS_TOKEN } returns Unit
         val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
         assertEquals(LoginResult.Success, result)
@@ -205,6 +208,9 @@ class AuthRepositoryTest {
     @Test
     fun `logout should change AuthState to be Unauthenticated`() = runTest {
         // First login:
+        val successResponse = mockk<GetTokenResponseJson.Success> {
+            every { accessToken } returns ACCESS_TOKEN
+        }
         coEvery {
             accountsService.preLogin(email = EMAIL)
         } returns Result.success(PRE_LOGIN_SUCCESS)
@@ -215,7 +221,8 @@ class AuthRepositoryTest {
                 captchaToken = null,
             )
         }
-            .returns(Result.success(GetTokenResponseJson.Success(accessToken = ACCESS_TOKEN)))
+            .returns(Result.success(successResponse))
+
         every { authInterceptor.authToken = ACCESS_TOKEN } returns Unit
         repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
 

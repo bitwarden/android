@@ -10,12 +10,65 @@ sealed class GetTokenResponseJson {
     /**
      * Models json response of the get token request.
      *
-     * @param accessToken the access token.
+     * @property accessToken The user's access token.
+     * @property refreshToken The user's refresh token.
+     * @property tokenType The type of token (ex: "Bearer").
+     * @property expiresInSeconds The amount of time (in seconds) before the [accessToken] expires.
+     * @property key The user's key.
+     * @property privateKey The user's private key.
+     * @property kdfType The KDF type.
+     * @property kdfIterations The number of iterations when calculating a user's password.
+     * @property kdfMemory The amount of memory to use when calculating a password hash (MB).
+     * @property kdfParallelism The number of threads to use when calculating a password hash.
+     * @property shouldForcePasswordReset Whether or not the app must force a password reset.
+     * @property shouldResetMasterPassword Whether or not the user is required to reset their
+     * master password.
+     * @property masterPasswordPolicyOptions The options available for a user's master password.
+     * @property userDecryptionOptions The options available to a user for decryption.
      */
     @Serializable
     data class Success(
         @SerialName("access_token")
         val accessToken: String,
+
+        @SerialName("refresh_token")
+        val refreshToken: String,
+
+        @SerialName("token_type")
+        val tokenType: String,
+
+        @SerialName("expires_in")
+        val expiresInSeconds: Int,
+
+        @SerialName("Key")
+        val key: String,
+
+        @SerialName("PrivateKey")
+        val privateKey: String,
+
+        @SerialName("Kdf")
+        val kdfType: KdfTypeJson,
+
+        @SerialName("KdfIterations")
+        val kdfIterations: Int?,
+
+        @SerialName("KdfMemory")
+        val kdfMemory: Int?,
+
+        @SerialName("KdfParallelism")
+        val kdfParallelism: Int?,
+
+        @SerialName("ForcePasswordReset")
+        val shouldForcePasswordReset: Boolean,
+
+        @SerialName("ResetMasterPassword")
+        val shouldResetMasterPassword: Boolean,
+
+        @SerialName("MasterPasswordPolicy")
+        val masterPasswordPolicyOptions: MasterPasswordPolicyOptionsJson?,
+
+        @SerialName("UserDecryptionOptions")
+        val userDecryptionOptions: UserDecryptionOptionsJson?,
     ) : GetTokenResponseJson()
 
     /**
