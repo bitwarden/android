@@ -66,7 +66,7 @@ class RootNavScreenTest : BaseComposeTest() {
         rootNavStateFlow.value = RootNavState.Auth
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
-                route = "auth",
+                route = "auth_graph",
                 navOptions = expectedNavOptions,
             )
         }
@@ -76,7 +76,7 @@ class RootNavScreenTest : BaseComposeTest() {
         rootNavStateFlow.value = RootNavState.VaultUnlocked
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
-                route = "VaultUnlocked",
+                route = "vault_unlocked_graph",
                 navOptions = expectedNavOptions,
             )
         }

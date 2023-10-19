@@ -12,15 +12,15 @@ import com.x8bit.bitwarden.ui.auth.feature.landing.landingDestinations
 import com.x8bit.bitwarden.ui.auth.feature.login.loginDestinations
 import com.x8bit.bitwarden.ui.auth.feature.login.navigateToLogin
 
-const val AUTH_ROUTE: String = "auth"
+const val AUTH_GRAPH_ROUTE: String = "auth_graph"
 
 /**
  * Add auth destinations to the nav graph.
  */
-fun NavGraphBuilder.authDestinations(navController: NavHostController) {
+fun NavGraphBuilder.authGraph(navController: NavHostController) {
     navigation(
         startDestination = LANDING_ROUTE,
-        route = AUTH_ROUTE,
+        route = AUTH_GRAPH_ROUTE,
     ) {
         createAccountDestinations(onNavigateBack = { navController.popBackStack() })
         landingDestinations(
@@ -37,10 +37,10 @@ fun NavGraphBuilder.authDestinations(navController: NavHostController) {
 
 /**
  * Navigate to the auth screen. Note this will only work if auth destination was added
- * via [authDestinations].
+ * via [authGraph].
  */
-fun NavController.navigateToAuth(
+fun NavController.navigateToAuthGraph(
     navOptions: NavOptions? = null,
 ) {
-    navigate(AUTH_ROUTE, navOptions)
+    navigate(AUTH_GRAPH_ROUTE, navOptions)
 }
