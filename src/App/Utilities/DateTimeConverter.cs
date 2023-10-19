@@ -7,6 +7,8 @@ namespace Bit.App.Utilities
 {
     public class DateTimeConverter : IValueConverter
     {
+        public string Format { get; set; } = "{0} {1}";
+
         private readonly ILocalizeService _localizeService;
 
         public DateTimeConverter()
@@ -26,7 +28,7 @@ namespace Bit.App.Utilities
                 return string.Empty;
             }
             var d = ((DateTime)value).ToLocalTime();
-            return string.Format("{0} {1}",
+            return string.Format(Format,
                 _localizeService.GetLocaleShortDate(d),
                 _localizeService.GetLocaleShortTime(d));
         }

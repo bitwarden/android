@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.View;
@@ -7,7 +9,7 @@ namespace Bit.Core.Models.Domain
 {
     public class Fido2Credential : Domain
     {
-        public static HashSet<string> EncryptableProperties => new HashSet<string>
+        public static HashSet<string> EncryptablePropertiesToMap => new HashSet<string>
         {
             nameof(CredentialId),
             nameof(Discoverable),
@@ -22,11 +24,18 @@ namespace Bit.Core.Models.Domain
             nameof(Counter)
         };
 
+        public static HashSet<string> NonEncryptablePropertiesToMap => new HashSet<string>
+        {
+            nameof(CreationDate)
+        };
+
+        public static HashSet<string> AllPropertiesToMap => new HashSet<string>(EncryptablePropertiesToMap.Concat(NonEncryptablePropertiesToMap));
+
         public Fido2Credential() { }
 
         public Fido2Credential(Fido2CredentialData data, bool alreadyEncrypted = false)
         {
-            BuildDomainModel(this, data, EncryptableProperties, alreadyEncrypted);
+            BuildDomainModel(this, data, AllPropertiesToMap, alreadyEncrypted, NonEncryptablePropertiesToMap);
         }
 
         public EncString CredentialId { get; set; }
@@ -40,16 +49,17 @@ namespace Bit.Core.Models.Domain
         public EncString UserHandle { get; set; }
         public EncString UserName { get; set; }
         public EncString Counter { get; set; }
+        public DateTime CreationDate { get; set; }
 
         public async Task<Fido2CredentialView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
-            return await DecryptObjAsync(new Fido2CredentialView(), this, EncryptableProperties, orgId, key);
+            return await DecryptObjAsync(new Fido2CredentialView(this), this, EncryptablePropertiesToMap, orgId, key);
         }
 
         public Fido2CredentialData ToFido2CredentialData()
         {
             var data = new Fido2CredentialData();
-            BuildDataModel(this, data, EncryptableProperties);
+            BuildDataModel(this, data, AllPropertiesToMap, NonEncryptablePropertiesToMap);
             return data;
         }
     }
