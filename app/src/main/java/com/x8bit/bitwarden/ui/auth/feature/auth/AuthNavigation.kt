@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
+import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.createAccountDestinations
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.navigateToCreateAccount
@@ -22,11 +23,25 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
         startDestination = LANDING_ROUTE,
         route = AUTH_GRAPH_ROUTE,
     ) {
-        createAccountDestinations(onNavigateBack = { navController.popBackStack() })
+        createAccountDestinations(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToLogin = { emailAddress, captchaToken ->
+                navController.navigateToLogin(
+                    emailAddress = emailAddress,
+                    captchaToken = captchaToken,
+                    navOptions = navOptions {
+                        popUpTo(LANDING_ROUTE)
+                    },
+                )
+            },
+        )
         landingDestinations(
             onNavigateToCreateAccount = { navController.navigateToCreateAccount() },
-            onNavigateToLogin = { emailAddress, regionLabel ->
-                navController.navigateToLogin(emailAddress, regionLabel)
+            onNavigateToLogin = { emailAddress ->
+                navController.navigateToLogin(
+                    emailAddress = emailAddress,
+                    captchaToken = null,
+                )
             },
         )
         loginDestinations(

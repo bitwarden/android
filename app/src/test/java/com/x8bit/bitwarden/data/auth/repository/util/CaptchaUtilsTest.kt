@@ -1,20 +1,18 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.util
+package com.x8bit.bitwarden.data.auth.repository.util
 
 import android.content.Intent
 import android.net.Uri
-import com.x8bit.bitwarden.data.auth.datasource.network.model.LoginResult
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class LoginResultExtensionsTest : BaseComposeTest() {
+class CaptchaUtilsTest : BaseComposeTest() {
 
     @Test
     fun `generateIntentForCaptcha should return valid Uri`() {
-        val captchaRequired = LoginResult.CaptchaRequired("testCaptchaId")
-        val actualUri = captchaRequired.generateUriForCaptcha()
+        val actualUri = generateUriForCaptcha(captchaId = "testCaptchaId")
         val expectedUrl = "https://vault.bitwarden.com/captcha-mobile-connector.html" +
             "?data=eyJzaXRlS2V5IjoidGVzdENhcHRjaGFJZCIsImxvY2FsZSI6ImVuX1VTIiwiY2Fsb" +
             "GJhY2tVcmkiOiJiaXR3YXJkZW46Ly9jYXB0Y2hhLWNhbGxiYWNrIiwiY2FwdGNoYVJlcXVp" +

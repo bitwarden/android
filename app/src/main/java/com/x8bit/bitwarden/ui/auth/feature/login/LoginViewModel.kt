@@ -7,9 +7,9 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.auth.datasource.network.model.LoginResult
-import com.x8bit.bitwarden.data.auth.datasource.network.util.CaptchaCallbackTokenResult
-import com.x8bit.bitwarden.data.auth.datasource.network.util.generateUriForCaptcha
+import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -38,9 +38,10 @@ class LoginViewModel @Inject constructor(
             emailAddress = LoginArgs(savedStateHandle).emailAddress,
             isLoginButtonEnabled = true,
             passwordInput = "",
-            region = LoginArgs(savedStateHandle).regionLabel,
+            region = authRepository.selectedRegionLabel,
             loadingDialogState = LoadingDialogState.Hidden,
             errorDialogState = BasicDialogState.Hidden,
+            captchaToken = LoginArgs(savedStateHandle).captchaToken,
         ),
 ) {
 
@@ -84,7 +85,7 @@ class LoginViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(loadingDialogState = LoadingDialogState.Hidden) }
                 sendEvent(
                     event = LoginEvent.NavigateToCaptcha(
-                        uri = loginResult.generateUriForCaptcha(),
+                        uri = generateUriForCaptcha(captchaId = loginResult.captchaId),
                     ),
                 )
             }
@@ -123,7 +124,12 @@ class LoginViewModel @Inject constructor(
                 }
             }
 
-            is CaptchaCallbackTokenResult.Success -> attemptLogin(captchaToken = tokenResult.token)
+            is CaptchaCallbackTokenResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(captchaToken = tokenResult.token)
+                }
+                attemptLogin()
+            }
         }
     }
 
@@ -132,10 +138,10 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleLoginButtonClicked() {
-        attemptLogin(captchaToken = null)
+        attemptLogin()
     }
 
-    private fun attemptLogin(captchaToken: String?) {
+    private fun attemptLogin() {
         mutableStateFlow.update {
             it.copy(
                 loadingDialogState = LoadingDialogState.Shown(
@@ -147,7 +153,7 @@ class LoginViewModel @Inject constructor(
             val result = authRepository.login(
                 email = mutableStateFlow.value.emailAddress,
                 password = mutableStateFlow.value.passwordInput,
-                captchaToken = captchaToken,
+                captchaToken = mutableStateFlow.value.captchaToken,
             )
             sendAction(
                 LoginAction.Internal.ReceiveLoginResult(
@@ -183,6 +189,7 @@ class LoginViewModel @Inject constructor(
 data class LoginState(
     val passwordInput: String,
     val emailAddress: String,
+    val captchaToken: String?,
     val region: String,
     val isLoginButtonEnabled: Boolean,
     val loadingDialogState: LoadingDialogState,

@@ -1,8 +1,9 @@
 package com.x8bit.bitwarden.data.auth.repository
 
-import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthState
-import com.x8bit.bitwarden.data.auth.datasource.network.model.LoginResult
-import com.x8bit.bitwarden.data.auth.datasource.network.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -27,6 +28,12 @@ interface AuthRepository {
     var rememberedEmailAddress: String?
 
     /**
+     * The currently selected region label (`null` if not set).
+     */
+    // TODO replace this with a more robust selected region object BIT-725
+    var selectedRegionLabel: String
+
+    /**
      * Attempt to login with the given email and password. Updated access token will be reflected
      * in [authStateFlow].
      */
@@ -40,6 +47,16 @@ interface AuthRepository {
      * Log out the current user.
      */
     fun logout()
+
+    /**
+     * Attempt to register a new account with the given parameters.
+     */
+    suspend fun register(
+        email: String,
+        masterPassword: String,
+        masterPasswordHint: String?,
+        captchaToken: String?,
+    ): RegisterResult
 
     /**
      * Set the value of [captchaTokenResultFlow].
