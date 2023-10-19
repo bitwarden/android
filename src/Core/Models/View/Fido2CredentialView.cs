@@ -1,10 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Models.View
 {
     public class Fido2CredentialView : ItemView, ILaunchableView
     {
+        public Fido2CredentialView()
+        {
+        }
+
+        public Fido2CredentialView(Fido2Credential fido2Credential)
+        {
+            CreationDate = fido2Credential.CreationDate;
+        }
+
         public string CredentialId { get; set; }
         public string Discoverable { get; set; }
         public string KeyType { get; set; } = Constants.DefaultFido2CredentialType;
@@ -16,6 +27,7 @@ namespace Bit.Core.Models.View
         public string UserHandle { get; set; }
         public string UserName { get; set; }
         public string Counter { get; set; }
+        public DateTime CreationDate { get; set; }
 
         public override string SubTitle => UserName;
         public override List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions => new List<KeyValuePair<string, LinkedIdType>>();
