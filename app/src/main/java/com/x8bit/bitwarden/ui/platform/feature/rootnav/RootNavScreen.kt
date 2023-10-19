@@ -10,15 +10,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.x8bit.bitwarden.ui.auth.feature.auth.AUTH_ROUTE
-import com.x8bit.bitwarden.ui.auth.feature.auth.authDestinations
-import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuth
+import com.x8bit.bitwarden.ui.auth.feature.auth.AUTH_GRAPH_ROUTE
+import com.x8bit.bitwarden.ui.auth.feature.auth.authGraph
+import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuthGraph
 import com.x8bit.bitwarden.ui.platform.feature.splash.SPLASH_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.splash.navigateToSplash
-import com.x8bit.bitwarden.ui.platform.feature.splash.splashDestinations
-import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VAULT_UNLOCKED_ROUTE
-import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.navigateToVaultUnlocked
-import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.vaultUnlockedDestinations
+import com.x8bit.bitwarden.ui.platform.feature.splash.splashDestination
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VAULT_UNLOCKED_GRAPH_ROUTE
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.navigateToVaultUnlockedGraph
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.vaultUnlockedGraph
 
 /**
  * Controls root level [NavHost] for the app.
@@ -40,15 +40,15 @@ fun RootNavScreen(
         navController = navController,
         startDestination = SPLASH_ROUTE,
     ) {
-        splashDestinations()
-        authDestinations(navController)
-        vaultUnlockedDestinations(navController)
+        splashDestination()
+        authGraph(navController)
+        vaultUnlockedGraph()
     }
 
     val targetRoute = when (state) {
-        RootNavState.Auth -> AUTH_ROUTE
+        RootNavState.Auth -> AUTH_GRAPH_ROUTE
         RootNavState.Splash -> SPLASH_ROUTE
-        RootNavState.VaultUnlocked -> VAULT_UNLOCKED_ROUTE
+        RootNavState.VaultUnlocked -> VAULT_UNLOCKED_GRAPH_ROUTE
     }
     val currentRoute = navController.currentDestination?.rootLevelRoute()
 
@@ -70,9 +70,9 @@ fun RootNavScreen(
     }
 
     when (state) {
-        RootNavState.Auth -> navController.navigateToAuth(rootNavOptions)
+        RootNavState.Auth -> navController.navigateToAuthGraph(rootNavOptions)
         RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
-        RootNavState.VaultUnlocked -> navController.navigateToVaultUnlocked(rootNavOptions)
+        RootNavState.VaultUnlocked -> navController.navigateToVaultUnlockedGraph(rootNavOptions)
     }
 }
 
