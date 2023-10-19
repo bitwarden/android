@@ -1363,6 +1363,15 @@ namespace Bit.Core.Services
             _storageMediatorService.Save(Constants.ConfigsKey, value);
         }
 
+        public async Task SetUserHasMasterPasswordAsync(bool value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+            account.Profile.UserDecryptionOptions.HasMasterPassword = value;
+            await SaveAccountAsync(account, reconciledOptions);
+        }
+
         // Helpers
 
         [Obsolete("Use IStorageMediatorService instead")]

@@ -240,6 +240,7 @@ namespace Bit.App.Pages
                 }
 
                 await _stateService.SetForcePasswordResetReasonAsync(null);
+                await _stateService.SetUserHasMasterPasswordAsync(true);
                 await _syncService.FullSyncAsync(true);
                 await _deviceActionService.HideLoadingAsync();
                 SetPasswordSuccessAction?.Invoke();
