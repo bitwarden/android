@@ -27,12 +27,14 @@ import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CreateAccountScreenTest : BaseComposeTest() {
@@ -45,7 +47,11 @@ class CreateAccountScreenTest : BaseComposeTest() {
             every { trySendAction(SubmitClick) } returns Unit
         }
         composeTestRule.setContent {
-            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
         }
         composeTestRule.onNodeWithText("Submit").performClick()
         verify { viewModel.trySendAction(SubmitClick) }
@@ -59,7 +65,11 @@ class CreateAccountScreenTest : BaseComposeTest() {
             every { trySendAction(CloseClick) } returns Unit
         }
         composeTestRule.setContent {
-            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
         }
         composeTestRule.onNodeWithContentDescription("Close").performClick()
         verify { viewModel.trySendAction(CloseClick) }
@@ -73,7 +83,11 @@ class CreateAccountScreenTest : BaseComposeTest() {
             every { trySendAction(CheckDataBreachesToggle(true)) } returns Unit
         }
         composeTestRule.setContent {
-            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
         }
         composeTestRule
             .onNodeWithText("Check known data breaches for this password")
@@ -90,7 +104,11 @@ class CreateAccountScreenTest : BaseComposeTest() {
             every { trySendAction(AcceptPoliciesToggle(true)) } returns Unit
         }
         composeTestRule.setContent {
-            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
         }
         composeTestRule
             .onNodeWithText("By activating this switch you agree", substring = true)
@@ -108,9 +126,63 @@ class CreateAccountScreenTest : BaseComposeTest() {
             every { eventFlow } returns flowOf(CreateAccountEvent.NavigateBack)
         }
         composeTestRule.setContent {
-            CreateAccountScreen(onNavigateBack = onNavigateBack, viewModel = viewModel)
+            CreateAccountScreen(
+                onNavigateBack = onNavigateBack,
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
         }
-        assert(onNavigateBackCalled)
+        assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `NavigateToLogin event should invoke navigate login lambda`() {
+        var onNavigateToLoginCalled = false
+        val onNavigateToLogin = { _: String, _: String -> onNavigateToLoginCalled = true }
+        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
+            every { eventFlow } returns flowOf(
+                CreateAccountEvent.NavigateToLogin(
+                    email = "",
+                    captchaToken = "",
+                ),
+            )
+        }
+        composeTestRule.setContent {
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = onNavigateToLogin,
+                viewModel = viewModel,
+            )
+        }
+        assertTrue(onNavigateToLoginCalled)
+    }
+
+    @Test
+    fun `NavigateToCaptcha event should invoke intent handler`() {
+        val mockUri = mockk<Uri>()
+        val intentHandler = mockk<IntentHandler>(relaxed = true) {
+            every { startCustomTabsActivity(mockUri) } returns Unit
+        }
+        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
+            every { eventFlow } returns flowOf(
+                CreateAccountEvent.NavigateToCaptcha(
+                    uri = mockUri,
+                ),
+            )
+        }
+        composeTestRule.setContent {
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+                intentHandler = intentHandler,
+            )
+        }
+        verify {
+            intentHandler.startCustomTabsActivity(mockUri)
+        }
     }
 
     @Test
@@ -127,6 +199,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             CreateAccountScreen(
                 onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
                 viewModel = viewModel,
                 intentHandler = intentHandler,
             )
@@ -150,6 +223,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             CreateAccountScreen(
                 onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
                 viewModel = viewModel,
                 intentHandler = intentHandler,
             )
@@ -167,7 +241,11 @@ class CreateAccountScreenTest : BaseComposeTest() {
             every { trySendAction(EmailInputChange("input")) } returns Unit
         }
         composeTestRule.setContent {
-            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
         }
         composeTestRule.onNodeWithText("Email address").performTextInput(TEST_INPUT)
         verify { viewModel.trySendAction(EmailInputChange(TEST_INPUT)) }
@@ -181,7 +259,11 @@ class CreateAccountScreenTest : BaseComposeTest() {
             every { trySendAction(PasswordInputChange("input")) } returns Unit
         }
         composeTestRule.setContent {
-            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
         }
         composeTestRule.onNodeWithText("Master password").performTextInput(TEST_INPUT)
         verify { viewModel.trySendAction(PasswordInputChange(TEST_INPUT)) }
@@ -195,7 +277,11 @@ class CreateAccountScreenTest : BaseComposeTest() {
             every { trySendAction(ConfirmPasswordInputChange("input")) } returns Unit
         }
         composeTestRule.setContent {
-            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
         }
         composeTestRule.onNodeWithText("Re-type master password").performTextInput(TEST_INPUT)
         verify { viewModel.trySendAction(ConfirmPasswordInputChange(TEST_INPUT)) }
@@ -209,7 +295,11 @@ class CreateAccountScreenTest : BaseComposeTest() {
             every { trySendAction(PasswordHintChange("input")) } returns Unit
         }
         composeTestRule.setContent {
-            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
         }
         composeTestRule
             .onNodeWithText("Master password hint (optional)")
@@ -232,7 +322,11 @@ class CreateAccountScreenTest : BaseComposeTest() {
             every { trySendAction(CreateAccountAction.ErrorDialogDismiss) } returns Unit
         }
         composeTestRule.setContent {
-            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
         }
         composeTestRule
             .onAllNodesWithText("Ok")
@@ -256,7 +350,11 @@ class CreateAccountScreenTest : BaseComposeTest() {
             every { trySendAction(CreateAccountAction.ErrorDialogDismiss) } returns Unit
         }
         composeTestRule.setContent {
-            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
         }
         composeTestRule.onNode(isDialog()).assertIsDisplayed()
     }
@@ -268,7 +366,11 @@ class CreateAccountScreenTest : BaseComposeTest() {
             every { eventFlow } returns emptyFlow()
         }
         composeTestRule.setContent {
-            CreateAccountScreen(onNavigateBack = {}, viewModel = viewModel)
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
         }
 
         // should start with 2 Show buttons:
@@ -306,6 +408,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
             isCheckDataBreachesToggled = false,
             isAcceptPoliciesToggled = false,
             errorDialogState = BasicDialogState.Hidden,
+            loadingDialogState = LoadingDialogState.Hidden,
         )
     }
 }

@@ -9,16 +9,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
 private const val EMAIL_ADDRESS: String = "email_address"
-private const val REGION_LABEL: String = "region_label"
-private const val LOGIN_ROUTE: String = "login/{$EMAIL_ADDRESS}/{$REGION_LABEL}"
+private const val CAPTCHA_TOKEN = "captcha_token"
+private const val LOGIN_ROUTE: String = "login/{$EMAIL_ADDRESS}/{$CAPTCHA_TOKEN}"
 
 /**
  * Class to retrieve login arguments from the [SavedStateHandle].
  */
-class LoginArgs(val emailAddress: String, val regionLabel: String) {
+class LoginArgs(val emailAddress: String, val captchaToken: String?) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         checkNotNull(savedStateHandle[EMAIL_ADDRESS]) as String,
-        checkNotNull(savedStateHandle[REGION_LABEL]) as String,
+        savedStateHandle[CAPTCHA_TOKEN],
     )
 }
 
@@ -27,10 +27,10 @@ class LoginArgs(val emailAddress: String, val regionLabel: String) {
  */
 fun NavController.navigateToLogin(
     emailAddress: String,
-    regionLabel: String,
+    captchaToken: String?,
     navOptions: NavOptions? = null,
 ) {
-    this.navigate("login/$emailAddress/$regionLabel", navOptions)
+    this.navigate("login/$emailAddress/$captchaToken", navOptions)
 }
 
 /**

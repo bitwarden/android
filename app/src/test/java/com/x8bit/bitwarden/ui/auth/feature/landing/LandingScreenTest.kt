@@ -35,7 +35,7 @@ class LandingScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             LandingScreen(
                 onNavigateToCreateAccount = {},
-                onNavigateToLogin = { _, _ -> },
+                onNavigateToLogin = { _ -> },
                 viewModel = viewModel,
             )
         }
@@ -62,7 +62,7 @@ class LandingScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             LandingScreen(
                 onNavigateToCreateAccount = {},
-                onNavigateToLogin = { _, _ -> },
+                onNavigateToLogin = { _ -> },
                 viewModel = viewModel,
             )
         }
@@ -88,7 +88,7 @@ class LandingScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             LandingScreen(
                 onNavigateToCreateAccount = {},
-                onNavigateToLogin = { _, _ -> },
+                onNavigateToLogin = { _ -> },
                 viewModel = viewModel,
             )
         }
@@ -116,7 +116,7 @@ class LandingScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             LandingScreen(
                 onNavigateToCreateAccount = {},
-                onNavigateToLogin = { _, _ -> },
+                onNavigateToLogin = { _ -> },
                 viewModel = viewModel,
             )
         }
@@ -143,7 +143,7 @@ class LandingScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             LandingScreen(
                 onNavigateToCreateAccount = {},
-                onNavigateToLogin = { _, _ -> },
+                onNavigateToLogin = { _ -> },
                 viewModel = viewModel,
             )
         }
@@ -170,7 +170,7 @@ class LandingScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             LandingScreen(
                 onNavigateToCreateAccount = { onNavigateToCreateAccountCalled = true },
-                onNavigateToLogin = { _, _ -> },
+                onNavigateToLogin = { _ -> },
                 viewModel = viewModel,
             )
         }
@@ -180,13 +180,11 @@ class LandingScreenTest : BaseComposeTest() {
     @Test
     fun `NavigateToLogin event should call onNavigateToLogin`() {
         val testEmail = "test@test.com"
-        val testRegion = "bitwarden.com"
 
         var capturedEmail: String? = null
-        var capturedRegion: String? = null
 
         val viewModel = mockk<LandingViewModel>(relaxed = true) {
-            every { eventFlow } returns flowOf(LandingEvent.NavigateToLogin(testEmail, testRegion))
+            every { eventFlow } returns flowOf(LandingEvent.NavigateToLogin(testEmail))
             every { stateFlow } returns MutableStateFlow(
                 LandingState(
                     emailInput = "",
@@ -200,16 +198,14 @@ class LandingScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             LandingScreen(
                 onNavigateToCreateAccount = { },
-                onNavigateToLogin = { email, region ->
+                onNavigateToLogin = { email ->
                     capturedEmail = email
-                    capturedRegion = region
                 },
                 viewModel = viewModel,
             )
         }
 
         assertEquals(testEmail, capturedEmail)
-        assertEquals(testRegion, capturedRegion)
     }
 
     @Test
@@ -230,7 +226,7 @@ class LandingScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             LandingScreen(
                 onNavigateToCreateAccount = {},
-                onNavigateToLogin = { _, _ -> },
+                onNavigateToLogin = { _ -> },
                 viewModel = viewModel,
             )
         }

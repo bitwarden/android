@@ -57,6 +57,7 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountEvent.Navi
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButtonTopAppBar
@@ -70,6 +71,7 @@ import com.x8bit.bitwarden.ui.platform.theme.clickableSpanStyle
 @Composable
 fun CreateAccountScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToLogin: (emailAddress: String, captchaToken: String) -> Unit,
     intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
     viewModel: CreateAccountViewModel = hiltViewModel(),
 ) {
@@ -89,13 +91,26 @@ fun CreateAccountScreen(
             is CreateAccountEvent.ShowToast -> {
                 Toast.makeText(context, event.text, Toast.LENGTH_SHORT).show()
             }
+
+            is CreateAccountEvent.NavigateToCaptcha -> {
+                intentHandler.startCustomTabsActivity(uri = event.uri)
+            }
+
+            is CreateAccountEvent.NavigateToLogin -> {
+                onNavigateToLogin(
+                    event.email,
+                    event.captchaToken,
+                )
+            }
         }
     }
     BitwardenBasicDialog(
         visibilityState = state.errorDialogState,
         onDismissRequest = remember(viewModel) { { viewModel.trySendAction(ErrorDialogDismiss) } },
     )
-
+    BitwardenLoadingDialog(
+        visibilityState = state.loadingDialogState,
+    )
     Column(
         modifier = Modifier
             .fillMaxSize()

@@ -54,7 +54,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 @Suppress("LongMethod")
 fun LandingScreen(
     onNavigateToCreateAccount: () -> Unit,
-    onNavigateToLogin: (emailAddress: String, regionLabel: String) -> Unit,
+    onNavigateToLogin: (emailAddress: String) -> Unit,
     viewModel: LandingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -63,7 +63,6 @@ fun LandingScreen(
             LandingEvent.NavigateToCreateAccount -> onNavigateToCreateAccount()
             is LandingEvent.NavigateToLogin -> onNavigateToLogin(
                 event.emailAddress,
-                event.regionLabel,
             )
         }
     }

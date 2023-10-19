@@ -19,8 +19,12 @@ fun NavController.navigateToCreateAccount(navOptions: NavOptions? = null) {
  */
 fun NavGraphBuilder.createAccountDestinations(
     onNavigateBack: () -> Unit,
+    onNavigateToLogin: (emailAddress: String, captchaToken: String) -> Unit,
 ) {
     composable(route = CREATE_ACCOUNT_ROUTE) {
-        CreateAccountScreen(onNavigateBack)
+        CreateAccountScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateToLogin = onNavigateToLogin,
+        )
     }
 }

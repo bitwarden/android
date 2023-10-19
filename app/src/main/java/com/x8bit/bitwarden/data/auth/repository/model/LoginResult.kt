@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.model
+package com.x8bit.bitwarden.data.auth.repository.model
 
 /**
  * Models result of logging in.

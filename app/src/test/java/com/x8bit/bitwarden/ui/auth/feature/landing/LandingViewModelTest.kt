@@ -55,7 +55,7 @@ class LandingViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(LandingAction.ContinueButtonClick)
             assertEquals(
-                LandingEvent.NavigateToLogin("input", "bitwarden.com"),
+                LandingEvent.NavigateToLogin("input"),
                 awaitItem(),
             )
         }

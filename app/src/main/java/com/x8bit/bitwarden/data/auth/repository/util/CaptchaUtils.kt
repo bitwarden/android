@@ -1,8 +1,7 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.util
+package com.x8bit.bitwarden.data.auth.repository.util
 
 import android.content.Intent
 import android.net.Uri
-import com.x8bit.bitwarden.data.auth.datasource.network.model.LoginResult
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import java.net.URLEncoder
@@ -15,7 +14,7 @@ private const val CALLBACK_URI = "bitwarden://$CAPTCHA_HOST"
 /**
  * Generates a [Uri] to display a CAPTCHA challenge for Bitwarden authentication.
  */
-fun LoginResult.CaptchaRequired.generateUriForCaptcha(): Uri {
+fun generateUriForCaptcha(captchaId: String): Uri {
     val json = buildJsonObject {
         put(key = "siteKey", value = captchaId)
         put(key = "locale", value = Locale.getDefault().toString())

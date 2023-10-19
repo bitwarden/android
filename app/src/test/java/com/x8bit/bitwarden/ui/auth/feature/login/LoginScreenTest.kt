@@ -34,6 +34,7 @@ class LoginScreenTest : BaseComposeTest() {
             every { stateFlow } returns MutableStateFlow(
                 LoginState(
                     emailAddress = "",
+                    captchaToken = null,
                     isLoginButtonEnabled = false,
                     passwordInput = "",
                     region = "",
@@ -61,6 +62,7 @@ class LoginScreenTest : BaseComposeTest() {
             every { stateFlow } returns MutableStateFlow(
                 LoginState(
                     emailAddress = "",
+                    captchaToken = null,
                     isLoginButtonEnabled = false,
                     passwordInput = "",
                     region = "",
@@ -88,6 +90,7 @@ class LoginScreenTest : BaseComposeTest() {
             every { stateFlow } returns MutableStateFlow(
                 LoginState(
                     emailAddress = "",
+                    captchaToken = null,
                     isLoginButtonEnabled = false,
                     passwordInput = "",
                     region = "",
@@ -115,6 +118,7 @@ class LoginScreenTest : BaseComposeTest() {
             every { stateFlow } returns MutableStateFlow(
                 LoginState(
                     emailAddress = "",
+                    captchaToken = null,
                     isLoginButtonEnabled = false,
                     passwordInput = "",
                     region = "",
@@ -154,6 +158,7 @@ class LoginScreenTest : BaseComposeTest() {
             every { stateFlow } returns MutableStateFlow(
                 LoginState(
                     emailAddress = "",
+                    captchaToken = null,
                     isLoginButtonEnabled = false,
                     passwordInput = "",
                     region = "",
@@ -182,6 +187,7 @@ class LoginScreenTest : BaseComposeTest() {
             every { stateFlow } returns MutableStateFlow(
                 LoginState(
                     emailAddress = "",
+                    captchaToken = null,
                     isLoginButtonEnabled = false,
                     passwordInput = "",
                     region = "",
@@ -210,6 +216,7 @@ class LoginScreenTest : BaseComposeTest() {
             every { stateFlow } returns MutableStateFlow(
                 LoginState(
                     emailAddress = "",
+                    captchaToken = null,
                     isLoginButtonEnabled = false,
                     passwordInput = "",
                     region = "",

@@ -26,7 +26,8 @@ object NetworkModule {
     @Singleton
     fun providesAccountService(
         @Named(NetworkModule.UNAUTHORIZED) retrofit: Retrofit,
-    ): AccountsService = AccountsServiceImpl(retrofit.create())
+        json: Json,
+    ): AccountsService = AccountsServiceImpl(retrofit.create(), json)
 
     @Provides
     @Singleton

@@ -66,12 +66,13 @@ class LandingViewModel @Inject constructor(
 
         val email = mutableStateFlow.value.emailInput
         val isRememberMeEnabled = mutableStateFlow.value.isRememberMeEnabled
-        val selectedRegionLabel = mutableStateFlow.value.selectedRegion.label
 
         // Update the remembered email address
         authRepository.rememberedEmailAddress = email.takeUnless { !isRememberMeEnabled }
+        // Update the selected region selectedRegionLabel
+        authRepository.selectedRegionLabel = mutableStateFlow.value.selectedRegion.label
 
-        sendEvent(LandingEvent.NavigateToLogin(email, selectedRegionLabel))
+        sendEvent(LandingEvent.NavigateToLogin(email))
     }
 
     private fun handleCreateAccountClicked() {
@@ -125,7 +126,6 @@ sealed class LandingEvent {
      */
     data class NavigateToLogin(
         val emailAddress: String,
-        val regionLabel: String,
     ) : LandingEvent()
 }
 
