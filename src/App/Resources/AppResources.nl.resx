@@ -2690,9 +2690,6 @@ Wilt u naar dit account wisselen?</value>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Vault timeout action changed to log out</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Je kunt dit item niet delen met de organisatie omdat er al een met dezelfde passkey is.</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Automatisch aanvullen blokkeren</value>
   </data>

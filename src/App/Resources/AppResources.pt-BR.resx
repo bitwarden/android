@@ -2691,9 +2691,6 @@ Você deseja mudar para esta conta?</value>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>A ação ao acabar o tempo do Cofre mudada para encerrar a sessão</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Este item não pode ser compartilhado com a organização porque já existe um com a mesma senha.</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Bloquear preenchimento automático</value>
   </data>

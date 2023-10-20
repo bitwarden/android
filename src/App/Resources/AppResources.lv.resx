@@ -375,7 +375,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} ir ievietots starpliktuvē.</value>
+    <value>{0} ir starpliktuvē</value>
     <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -907,7 +907,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Ievietot TOTP starpliktuvē</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>Ja pieteikšanās vienumam ir pievienota autentificētāja atslēga, TOTP apstiprinājuma kods tiks automātiski pārkopēts uz starpliktuvi, kad vien tiks automātiski aizpildīta pieteikšanās veidne.</value>
+    <value>Ja pieteikšanās vienumam ir pievienota autentificētāja atslēga, TOTP apstiprinājuma kods tiks automātiski ievietots starpliktuvē, kad vien tiks automātiski aizpildīta pieteikšanās veidne.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>Automātiski ievietot TOTP starpliktuvē</value>
@@ -2638,22 +2638,22 @@ Vai pārslēgties uz šo kontu?</value>
     <value>Atcerēties šo ierīci</value>
   </data>
   <data name="Passkey" xml:space="preserve">
-    <value>Paroļatslēga</value>
+    <value>Piekļuves atslēga</value>
   </data>
   <data name="Passkeys" xml:space="preserve">
-    <value>Paroļatslēgas</value>
+    <value>Piekļuves atslēgas</value>
   </data>
   <data name="Application" xml:space="preserve">
     <value>Lietotne</value>
   </data>
   <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
-    <value>Paroļatslēgas lietotni nevar labot, jo tas paroļatslēgu padarītu nederīgu</value>
+    <value>Piekļuves atslēgas lietotni nevar labot, jo tas piekļuves atslēgu padarītu nederīgu</value>
   </data>
   <data name="PasskeyWillNotBeCopied" xml:space="preserve">
-    <value>Paroļatslēga netiks kopēta</value>
+    <value>Piekļuves atslēga netiks ievietota starpliktuvē</value>
   </data>
   <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
-    <value>Paroļatslēga netiks kopēta klonētajā vienumā. Vai turpināt šī vienuma klonēšanu?</value>
+    <value>Piekļuves atslēga netiks ievietota klonētajā vienumā. Vai turpināt šī vienuma klonēšanu?</value>
   </data>
   <data name="CopyApplication" xml:space="preserve">
     <value>Kopēt lietotni</value>
@@ -2690,9 +2690,6 @@ Vai pārslēgties uz šo kontu?</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Glabātavas noildzes darbība nomainīta uz atteikšanos</value>
-  </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Šo vienumu nevar kopīgot ar apvienību, jo tur jau ir tāds ar to pašu paroļatslēgu.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Neļaut automātisko aizpildīšanu</value>

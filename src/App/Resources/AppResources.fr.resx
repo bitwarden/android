@@ -2691,9 +2691,6 @@ Voulez-vous basculer vers ce compte ?</value>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Délai d'expiration du coffre a été changé pour se déconnecter</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Cet élément ne peut pas être déplacé vers l'organisation, car celle-ci dispose déjà d'un élément avec la même clé d'accès.</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Bloquer la saisie automatique</value>
   </data>

@@ -2691,9 +2691,6 @@
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>تَغيير إجراء مهلة المخزن لتسجيل الخروج</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>لا يمكن مشاركة هذا العنصر مع المؤسسة لأنه يوجد بالفعل واحد مع نفس مفتاح المرور.</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>حظر التعبئة التلقائية</value>
   </data>
