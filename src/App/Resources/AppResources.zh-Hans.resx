@@ -2690,9 +2690,6 @@
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>密码库超时动作已更改为注销</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>无法与组织共享此项目，因为已经有一个项目具有相同的通行密钥。</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>阻止自动填充</value>
   </data>

@@ -2690,9 +2690,6 @@
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Тайм-аут хранилища изменен на выход</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Этим элементом нельзя поделиться с организацией, поскольку существует другой с тем же ключом.</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Блокировать автозаполнение</value>
   </data>

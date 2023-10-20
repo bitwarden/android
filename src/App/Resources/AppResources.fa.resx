@@ -560,7 +560,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>وارد شوید یا یک حساب کاربری بسازید تا به گاوصندوق امنتان دسترسی یابید.</value>
+    <value>وارد شوید یا یک حساب کاربری بسازید تا به گاوصندوق امن‌تان دسترسی یابید.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>مدیریت</value>
@@ -2479,7 +2479,7 @@
 آیا می‌خواهید به این حساب تغییر دهید؟</value>
   </data>
   <data name="NewAroundHere" xml:space="preserve">
-    <value>اینجا جدیده؟</value>
+    <value>اینجا تازه واردی؟</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>دریافت یادآور کلمه عبور اصلی</value>
@@ -2690,9 +2690,6 @@
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>اقدام پایان زمان گاوصندوق به خروج تغییر کرد</value>
-  </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>این مورد را نمی‌توان با سازمان به اشتراک گذاشت زیرا قبلاً موردی با کلید عبور یکسان وجود دارد.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>پر کردن خودکار را مسدود کنید</value>

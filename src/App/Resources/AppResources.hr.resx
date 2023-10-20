@@ -2688,9 +2688,6 @@
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Radnja isteka trezora promijenjena je u odjavu</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Ova se stavka ne može dijeliti s organizacijom jer već postoji stavka s istim pristupnim ključem.</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Blokiraj auto-ispunu</value>
   </data>

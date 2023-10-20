@@ -5,6 +5,6 @@
 "SyncingItemsContainingVerificationCodes" = "Vahvistuskoodeja sisältäviä kohteita synkronoidaan.";
 "UnlockBitwardenOnYourIPhoneToViewVerificationCodes" = "Näytä vahvistuskoodit avaamalla Bitwarden iPhonessa.";
 "SetUpBitwardenToViewItemsContainingVerificationCodes" = "Määritä Bitwarden nähdäksesi vahvistuskoodeja sisältävät kohteet.";
-"Search" = "Etsi";
+"Search" = "Haku";
 "NoItemsFound" = "Kohteita ei löytynyt.";
 "SetUpAppleWatchPasscodeInOrderToUseBitwarden" = "Määritä Apple Watch- lukituskoodi Bitwardenn käyttämiseksi.";

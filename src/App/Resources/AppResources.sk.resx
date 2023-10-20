@@ -2690,9 +2690,6 @@ Chcete prepnúť na toto konto?</value>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Akcia pri vypršaní času pre trezor zmenená na odhlásenie</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Túto položku nemožno zdieľať s organizáciou, pretože už existuje jedna s rovnakým prístupovým kľúčom.</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Blokovať automatické vypĺňanie</value>
   </data>

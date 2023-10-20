@@ -2690,9 +2690,6 @@
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Час очікування сховища змінено на вихід</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Цей запис не можна поширити для організації, оскільки там вже є запис із таким самим ключем доступу.</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Блокувати автозаповнення</value>
   </data>

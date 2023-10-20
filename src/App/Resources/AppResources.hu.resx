@@ -2689,9 +2689,6 @@ Szeretnénk átváltani erre a fiókra?</value>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>A széf időkifutási művelete kijelentkezésre módosult.</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Ez az elem nem osztható meg a szervezettel, mert már van egy ugyanezzel a hozzáférési kulccsal.</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Automatikus kitöltés blokkolása</value>
   </data>

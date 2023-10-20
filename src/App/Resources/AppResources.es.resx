@@ -2691,9 +2691,6 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Vault timeout action changed to log out</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Block auto-fill</value>
   </data>
