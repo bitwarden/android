@@ -5,7 +5,10 @@ import com.bitwarden.core.Kdf
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RsaKeyPair
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson.PBKDF2_SHA256
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
@@ -17,6 +20,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import io.mockk.clearMocks
@@ -24,8 +28,15 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.onSubscription
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
@@ -35,7 +46,7 @@ class AuthRepositoryTest {
 
     private val accountsService: AccountsService = mockk()
     private val identityService: IdentityService = mockk()
-    private val authInterceptor = mockk<AuthTokenInterceptor>()
+    private val authInterceptor = AuthTokenInterceptor()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val authSdkSource = mockk<AuthSdkSource> {
         coEvery {
@@ -63,17 +74,25 @@ class AuthRepositoryTest {
         )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private val repository = AuthRepositoryImpl(
         accountsService = accountsService,
         identityService = identityService,
         authSdkSource = authSdkSource,
         authDiskSource = fakeAuthDiskSource,
         authTokenInterceptor = authInterceptor,
+        dispatcher = UnconfinedTestDispatcher(),
     )
 
     @BeforeEach
     fun beforeEach() {
-        clearMocks(identityService, accountsService, authInterceptor)
+        clearMocks(identityService, accountsService)
+        mockkStatic(GET_TOKEN_RESPONSE_EXTENSIONS_PATH)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(GET_TOKEN_RESPONSE_EXTENSIONS_PATH)
     }
 
     @Test
@@ -162,9 +181,7 @@ class AuthRepositoryTest {
 
     @Test
     fun `login get token succeeds should return Success and update AuthState`() = runTest {
-        val successResponse = mockk<GetTokenResponseJson.Success> {
-            every { accessToken } returns ACCESS_TOKEN
-        }
+        val successResponse = GET_TOKEN_RESPONSE_SUCCESS
         coEvery {
             accountsService.preLogin(email = EMAIL)
         } returns Result.success(PRE_LOGIN_SUCCESS)
@@ -176,11 +193,13 @@ class AuthRepositoryTest {
             )
         }
             .returns(Result.success(successResponse))
-        every { authInterceptor.authToken = ACCESS_TOKEN } returns Unit
+        every {
+            GET_TOKEN_RESPONSE_SUCCESS.toUserState(previousUserState = null)
+        } returns SINGLE_USER_STATE_1
         val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
         assertEquals(LoginResult.Success, result)
         assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
-        verify { authInterceptor.authToken = ACCESS_TOKEN }
+        assertEquals(ACCESS_TOKEN, authInterceptor.authToken)
         coVerify { accountsService.preLogin(email = EMAIL) }
         coVerify {
             identityService.getToken(
@@ -365,11 +384,9 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `logout should change AuthState to be Unauthenticated`() = runTest {
+    fun `logout for single account should clear the access token`() = runTest {
         // First login:
-        val successResponse = mockk<GetTokenResponseJson.Success> {
-            every { accessToken } returns ACCESS_TOKEN
-        }
+        val successResponse = GET_TOKEN_RESPONSE_SUCCESS
         coEvery {
             accountsService.preLogin(email = EMAIL)
         } returns Result.success(PRE_LOGIN_SUCCESS)
@@ -379,36 +396,189 @@ class AuthRepositoryTest {
                 passwordHash = PASSWORD_HASH,
                 captchaToken = null,
             )
-        }
-            .returns(Result.success(successResponse))
+        } returns Result.success(successResponse)
+        every {
+            GET_TOKEN_RESPONSE_SUCCESS.toUserState(previousUserState = null)
+        } returns SINGLE_USER_STATE_1
 
-        every { authInterceptor.authToken = ACCESS_TOKEN } returns Unit
         repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+
+        assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+        assertEquals(ACCESS_TOKEN, authInterceptor.authToken)
+        assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
 
         // Then call logout:
         repository.authStateFlow.test {
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), awaitItem())
+
             repository.logout()
+
             assertEquals(AuthState.Unauthenticated, awaitItem())
+            assertNull(authInterceptor.authToken)
+            assertNull(fakeAuthDiskSource.userState)
+        }
+    }
+
+    @Test
+    fun `logout for multiple accounts should update current access token`() = runTest {
+        // First populate multiple user accounts
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
+
+        // Then login:
+        val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+        coEvery {
+            accountsService.preLogin(email = EMAIL)
+        } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                passwordHash = PASSWORD_HASH,
+                captchaToken = null,
+            )
+        } returns Result.success(successResponse)
+        every {
+            GET_TOKEN_RESPONSE_SUCCESS.toUserState(previousUserState = SINGLE_USER_STATE_2)
+        } returns MULTI_USER_STATE
+
+        repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+
+        assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+        assertEquals(ACCESS_TOKEN, authInterceptor.authToken)
+        assertEquals(MULTI_USER_STATE, fakeAuthDiskSource.userState)
+
+        // Then call logout:
+        repository.authStateFlow.test {
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), awaitItem())
+
+            repository.logout()
+
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN_2), awaitItem())
+            assertEquals(ACCESS_TOKEN_2, authInterceptor.authToken)
+            assertEquals(SINGLE_USER_STATE_2, fakeAuthDiskSource.userState)
         }
     }
 
     companion object {
-        private const val EMAIL = "test@test.com"
+        private const val GET_TOKEN_RESPONSE_EXTENSIONS_PATH =
+            "com.x8bit.bitwarden.data.auth.repository.util.GetTokenResponseExtensionsKt"
+        private const val EMAIL = "test@bitwarden.com"
         private const val PASSWORD = "password"
         private const val PASSWORD_HASH = "passwordHash"
         private const val ACCESS_TOKEN = "accessToken"
+        private const val ACCESS_TOKEN_2 = "accessToken2"
         private const val CAPTCHA_KEY = "captcha"
         private const val DEFAULT_KDF_ITERATIONS = 600000
         private const val ENCRYPTED_USER_KEY = "encryptedUserKey"
         private const val PUBLIC_KEY = "PublicKey"
         private const val PRIVATE_KEY = "privateKey"
+        private const val USER_ID_1 = "2a135b23-e1fb-42c9-bec3-573857bc8181"
+        private const val USER_ID_2 = "b9d32ec0-6497-4582-9798-b350f53bfa02"
         private val PRE_LOGIN_SUCCESS = PreLoginResponseJson(
             kdfParams = PreLoginResponseJson.KdfParams.Pbkdf2(iterations = 1u),
+        )
+        private val GET_TOKEN_RESPONSE_SUCCESS = GetTokenResponseJson.Success(
+            accessToken = ACCESS_TOKEN,
+            refreshToken = "refreshToken",
+            tokenType = "Bearer",
+            expiresInSeconds = 3600,
+            key = "key",
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            privateKey = "privateKey",
+            shouldForcePasswordReset = true,
+            shouldResetMasterPassword = true,
+            masterPasswordPolicyOptions = null,
+            userDecryptionOptions = null,
+        )
+        private val ACCOUNT_1 = AccountJson(
+            profile = AccountJson.Profile(
+                userId = USER_ID_1,
+                email = "test@bitwarden.com",
+                isEmailVerified = true,
+                name = "Bitwarden Tester",
+                hasPremium = false,
+                stamp = null,
+                organizationId = null,
+                avatarColorHex = null,
+                forcePasswordResetReason = null,
+                kdfType = KdfTypeJson.ARGON2_ID,
+                kdfIterations = 600000,
+                kdfMemory = 16,
+                kdfParallelism = 4,
+                userDecryptionOptions = null,
+            ),
+            tokens = AccountJson.Tokens(
+                accessToken = ACCESS_TOKEN,
+                refreshToken = "refreshToken",
+            ),
+            settings = AccountJson.Settings(
+                environmentUrlData = null,
+            ),
+        )
+        private val ACCOUNT_2 = AccountJson(
+            profile = AccountJson.Profile(
+                userId = USER_ID_2,
+                email = "test2@bitwarden.com",
+                isEmailVerified = true,
+                name = "Bitwarden Tester 2",
+                hasPremium = false,
+                stamp = null,
+                organizationId = null,
+                avatarColorHex = null,
+                forcePasswordResetReason = null,
+                kdfType = KdfTypeJson.PBKDF2_SHA256,
+                kdfIterations = 400000,
+                kdfMemory = null,
+                kdfParallelism = null,
+                userDecryptionOptions = null,
+            ),
+            tokens = AccountJson.Tokens(
+                accessToken = ACCESS_TOKEN_2,
+                refreshToken = "refreshToken",
+            ),
+            settings = AccountJson.Settings(
+                environmentUrlData = null,
+            ),
+        )
+        private val SINGLE_USER_STATE_1 = UserStateJson(
+            activeUserId = USER_ID_1,
+            accounts = mapOf(
+                USER_ID_1 to ACCOUNT_1,
+            ),
+        )
+        private val SINGLE_USER_STATE_2 = UserStateJson(
+            activeUserId = USER_ID_2,
+            accounts = mapOf(
+                USER_ID_2 to ACCOUNT_2,
+            ),
+        )
+        private val MULTI_USER_STATE = UserStateJson(
+            activeUserId = USER_ID_1,
+            accounts = mapOf(
+                USER_ID_1 to ACCOUNT_1,
+                USER_ID_2 to ACCOUNT_2,
+            ),
         )
     }
 }
 
 private class FakeAuthDiskSource : AuthDiskSource {
     override var rememberedEmailAddress: String? = null
+
+    override var userState: UserStateJson? = null
+        set(value) {
+            field = value
+            mutableUserStateFlow.tryEmit(value)
+        }
+
+    override val userStateFlow: Flow<UserStateJson?>
+        get() = mutableUserStateFlow.onSubscription { emit(userState) }
+
+    private val mutableUserStateFlow =
+        MutableSharedFlow<UserStateJson?>(
+            replay = 1,
+            extraBufferCapacity = Int.MAX_VALUE,
+        )
 }
