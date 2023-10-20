@@ -5,10 +5,10 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.AcceptPoliciesToggle
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CheckDataBreachesToggle
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ConfirmPasswordInputChange
@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Sub
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.TermsClick
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -130,7 +131,7 @@ class CreateAccountViewModel @Inject constructor(
             }
 
             is RegisterResult.Error -> {
-                // TODO show more robust error messages BIT-763
+                // TODO parse and display server errors BIT-910
                 mutableStateFlow.update {
                     it.copy(
                         loadingDialogState = LoadingDialogState.Hidden,
@@ -198,10 +199,43 @@ class CreateAccountViewModel @Inject constructor(
     }
 
     private fun handleSubmitClick() = when {
+        mutableStateFlow.value.emailInput.isBlank() -> {
+            val dialog = BasicDialogState.Shown(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.validation_field_required
+                    .asText(R.string.email_address.asText()),
+            )
+            mutableStateFlow.update { it.copy(errorDialogState = dialog) }
+        }
+
+        !mutableStateFlow.value.emailInput.isValidEmail() -> {
+            val dialog = BasicDialogState.Shown(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.invalid_email.asText(),
+            )
+            mutableStateFlow.update { it.copy(errorDialogState = dialog) }
+        }
+
         mutableStateFlow.value.passwordInput.length < MIN_PASSWORD_LENGTH -> {
             val dialog = BasicDialogState.Shown(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.master_password_length_val_message_x.asText(MIN_PASSWORD_LENGTH),
+            )
+            mutableStateFlow.update { it.copy(errorDialogState = dialog) }
+        }
+
+        mutableStateFlow.value.passwordInput != mutableStateFlow.value.confirmPasswordInput -> {
+            val dialog = BasicDialogState.Shown(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.master_password_confirmation_val_message.asText(),
+            )
+            mutableStateFlow.update { it.copy(errorDialogState = dialog) }
+        }
+
+        !mutableStateFlow.value.isAcceptPoliciesToggled -> {
+            val dialog = BasicDialogState.Shown(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.accept_policies_error.asText(),
             )
             mutableStateFlow.update { it.copy(errorDialogState = dialog) }
         }
