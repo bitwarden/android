@@ -9,6 +9,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -85,6 +86,7 @@ object NetworkModule {
             )
             .build()
 
+    @OptIn(ExperimentalSerializationApi::class)
     @Provides
     @Singleton
     fun providesJson(): Json = Json {
@@ -93,5 +95,8 @@ object NetworkModule {
         // ignore them.
         // This makes additive server changes non-breaking.
         ignoreUnknownKeys = true
+
+        // We allow for nullable values to have keys missing in the JSON response.
+        explicitNulls = false
     }
 }

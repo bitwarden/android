@@ -15,16 +15,20 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.util.flatMap
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -40,10 +44,38 @@ class AuthRepositoryImpl @Inject constructor(
     private val authSdkSource: AuthSdkSource,
     private val authDiskSource: AuthDiskSource,
     private val authTokenInterceptor: AuthTokenInterceptor,
+    dispatcher: CoroutineDispatcher,
 ) : AuthRepository {
+    private val scope = CoroutineScope(dispatcher)
 
-    private val mutableAuthStateFlow = MutableStateFlow<AuthState>(AuthState.Unauthenticated)
-    override val authStateFlow: StateFlow<AuthState> = mutableAuthStateFlow.asStateFlow()
+    override val authStateFlow: StateFlow<AuthState> = authDiskSource
+        .userStateFlow
+        .map { userState ->
+            userState
+                ?.let {
+                    @Suppress("UnsafeCallOnNullableType")
+                    AuthState.Authenticated(
+                        userState
+                            .activeAccount
+                            .tokens
+                            .accessToken,
+                    )
+                }
+                ?: AuthState.Unauthenticated
+        }
+        .onEach {
+            // TODO: Create intermediate class for providing auth token to interceptor (BIT-411)
+            authTokenInterceptor.authToken = when (it) {
+                is AuthState.Authenticated -> it.accessToken
+                AuthState.Unauthenticated -> null
+                AuthState.Uninitialized -> null
+            }
+        }
+        .stateIn(
+            scope = scope,
+            started = SharingStarted.Eagerly,
+            initialValue = AuthState.Uninitialized,
+        )
 
     private val mutableCaptchaTokenFlow =
         MutableSharedFlow<CaptchaCallbackTokenResult>(extraBufferCapacity = Int.MAX_VALUE)
@@ -85,10 +117,10 @@ class AuthRepositoryImpl @Inject constructor(
                 when (it) {
                     is CaptchaRequired -> LoginResult.CaptchaRequired(it.captchaKey)
                     is Success -> {
-                        // TODO: Create intermediate class for providing auth token
-                        // to interceptor (BIT-411)
-                        authTokenInterceptor.authToken = it.accessToken
-                        mutableAuthStateFlow.value = AuthState.Authenticated(it.accessToken)
+                        authDiskSource.userState = it
+                            .toUserState(
+                                previousUserState = authDiskSource.userState,
+                            )
                         LoginResult.Success
                     }
 
@@ -100,7 +132,29 @@ class AuthRepositoryImpl @Inject constructor(
         )
 
     override fun logout() {
-        mutableAuthStateFlow.update { AuthState.Unauthenticated }
+        val currentUserState = authDiskSource.userState ?: return
+
+        val activeUserId = currentUserState.activeUserId
+
+        // Remove the active user from the accounts map
+        val updatedAccounts = currentUserState
+            .accounts
+            .filterKeys { it != activeUserId }
+
+        // Check if there is a new active user
+        if (updatedAccounts.isNotEmpty()) {
+            val (updatedActiveUserId, updatedActiveAccount) =
+                updatedAccounts.entries.first()
+
+            // Update the user information and emit an updated token
+            authDiskSource.userState = currentUserState.copy(
+                activeUserId = updatedActiveUserId,
+                accounts = updatedAccounts,
+            )
+        } else {
+            // Update the user information and log out
+            authDiskSource.userState = null
+        }
     }
 
     override suspend fun register(

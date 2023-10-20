@@ -7,6 +7,7 @@ import android.content.SharedPreferences
  */
 class FakeSharedPreferences : SharedPreferences {
     private val sharedPreferences: MutableMap<String, Any?> = mutableMapOf()
+    private val listeners = mutableSetOf<SharedPreferences.OnSharedPreferenceChangeListener>()
 
     override fun contains(key: String): Boolean =
         sharedPreferences.containsKey(key)
@@ -36,17 +37,13 @@ class FakeSharedPreferences : SharedPreferences {
     override fun registerOnSharedPreferenceChangeListener(
         listener: SharedPreferences.OnSharedPreferenceChangeListener,
     ) {
-        throw NotImplementedError(
-            "registerOnSharedPreferenceChangeListener is not currently implemented.",
-        )
+        listeners += listener
     }
 
     override fun unregisterOnSharedPreferenceChangeListener(
         listener: SharedPreferences.OnSharedPreferenceChangeListener,
     ) {
-        throw NotImplementedError(
-            "unregisterOnSharedPreferenceChangeListener is not currently implemented.",
-        )
+        listeners -= listener
     }
 
     private inline fun <reified T> getValue(
@@ -61,6 +58,13 @@ class FakeSharedPreferences : SharedPreferences {
             sharedPreferences.apply {
                 clear()
                 putAll(pendingSharedPreferences)
+
+                // Notify listeners
+                listeners.forEach { listener ->
+                    pendingSharedPreferences.keys.forEach { key ->
+                        listener.onSharedPreferenceChanged(this@FakeSharedPreferences, key)
+                    }
+                }
             }
         }
 
