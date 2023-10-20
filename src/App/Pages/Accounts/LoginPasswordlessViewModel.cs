@@ -23,7 +23,7 @@ namespace Bit.App.Pages
         private IAuthService _authService;
         private IPlatformUtilsService _platformUtilsService;
         private ILogger _logger;
-        private LoginPasswordlessDetails _resquest;
+        private LoginPasswordlessDetails _request;
         private CancellationTokenSource _requestTimeCts;
         private Task _requestTimeTask;
 
@@ -58,10 +58,10 @@ namespace Bit.App.Pages
 
         public LoginPasswordlessDetails LoginRequest
         {
-            get => _resquest;
+            get => _request;
             set
             {
-                SetProperty(ref _resquest, value, additionalPropertyNames: new string[]
+                SetProperty(ref _request, value, additionalPropertyNames: new string[]
                     {
                         nameof(LogInAttemptByLabel),
                         nameof(TimeOfRequestText),

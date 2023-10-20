@@ -654,7 +654,7 @@ namespace Bit.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<PasswordlessLoginResponse> GetPasswordlessLoginResquestAsync(string id, string accessCode)
+        public async Task<PasswordlessLoginResponse> GetPasswordlessLoginRequestAsync(string id, string accessCode)
         {
             return await _apiService.GetAuthResponseAsync(id, accessCode);
         }
