@@ -7,8 +7,8 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:skia="clr-namespace:SkiaSharp.Views.Maui.Controls;assembly=SkiaSharp.Views.Maui.Controls"
-    xmlns:core="clr-namespace:Bit.Core"
-    xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
+    xmlns:core="clr-namespace:Bit.Core" 
+    xmlns:maui="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
     x:Name="_page"
     Title="{Binding ScanQrPageTitle}">
 
@@ -34,18 +34,21 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <!-- TODO: [MAUI-Migration]
-            OnScanResult="OnScanResult"-->
-        <zxing:CameraBarcodeReaderView
-            x:Name="_zxing"
-            HorizontalOptions="FillAndExpand"
-            VerticalOptions="FillAndExpand"
-            AutomationId="zxingScannerView"
-            IsVisible="{Binding ShowScanner}"
-            Grid.Column="0"
-            Grid.Row="0"
-            Grid.RowSpan="3"
-            BarcodesDetected="_zxing_BarcodesDetected"/>
+        <maui:CameraView x:Name="_cameraView"
+                         AutomationId="zxingScannerView"
+                         HorizontalOptions="Fill"
+                         VerticalOptions="Fill"
+                         ControlBarcodeResultDuplicate="True"
+                         BarCodeDetectionEnabled="True"
+                         BarcodeDetected="CameraViewOnBarcodeDetected"
+                         BarCodeOptions="{Binding BarCodeOptions}" 
+                         Cameras="{Binding Cameras, Mode=OneWayToSource}" 
+                         Camera="{Binding Camera}" 
+                         AutoStartPreview="{Binding AutoStartPreview}" 
+                         NumCamerasDetected="{Binding NumCameras, Mode=OneWayToSource}"
+                         Grid.Column="0"
+                         Grid.Row="0"
+                         Grid.RowSpan="3" />
         <StackLayout
             VerticalOptions="Center"
             HorizontalOptions="FillAndExpand"

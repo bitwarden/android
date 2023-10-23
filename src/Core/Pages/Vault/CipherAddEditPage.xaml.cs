@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Bit.App.Abstractions;
+﻿using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.Core.Resources.Localization;
 using Bit.App.Utilities;
@@ -9,8 +7,6 @@ using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -62,14 +58,12 @@ namespace Bit.App.Pages
             _vm.CipherDetailsPage = cipherDetailsPage;
             _vm.Init();
             SetActivityIndicator();
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (_vm.EditMode && !_vm.CloneMode && Device.RuntimePlatform == Device.Android)
+            if (_vm.EditMode && !_vm.CloneMode && DeviceInfo.Platform == DevicePlatform.Android)
             {
                 ToolbarItems.Add(_attachmentsItem);
                 ToolbarItems.Add(_deleteItem);
             }
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.iOS)
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
                 ToolbarItems.Add(_closeItem);
                 if (_vm.EditMode && !_vm.CloneMode)
@@ -267,7 +261,7 @@ namespace Bit.App.Pages
             {
                 var page = new ScanPage(key =>
                 {
-                    Device.BeginInvokeOnMainThread(async () =>
+                    MainThread.BeginInvokeOnMainThread(async () =>
                     {
                         await Navigation.PopModalAsync();
                         await _vm.UpdateTotpKeyAsync(key);
@@ -335,8 +329,7 @@ namespace Bit.App.Pages
                 if (_vm.Cipher.Type == CipherType.Login && !_fromAutofill && !addLoginShown.GetValueOrDefault())
                 {
                     await _stateService.SetAddSitePromptShownAsync(true);
-                    // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-                    if (Device.RuntimePlatform == Device.iOS)
+                    if (DeviceInfo.Platform == DevicePlatform.iOS)
                     {
                         if (_deviceActionService.SystemMajorVersion() < 12)
                         {
@@ -349,9 +342,9 @@ namespace Bit.App.Pages
                                 AppResources.BitwardenAutofillAlert2, AppResources.Ok);
                         }
                     }
-                    else if (Device.RuntimePlatform == Device.Android &&
-                        !_autofillHandler.AutofillAccessibilityServiceRunning() &&
-                        !_autofillHandler.AutofillServiceEnabled())
+                    else if (DeviceInfo.Platform == DevicePlatform.Android &&
+                             !_autofillHandler.AutofillAccessibilityServiceRunning() &&
+                             !_autofillHandler.AutofillServiceEnabled())
                     {
                         await DisplayAlert(AppResources.BitwardenAutofillService,
                             AppResources.BitwardenAutofillServiceAlert2, AppResources.Ok);
@@ -362,8 +355,7 @@ namespace Bit.App.Pages
 
         private void AdjustToolbar()
         {
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if ((_vm.EditMode || _vm.CloneMode) && Device.RuntimePlatform == Device.Android)
+            if ((_vm.EditMode || _vm.CloneMode) && DeviceInfo.Platform == DevicePlatform.Android)
             {
                 if (_vm.Cipher == null)
                 {

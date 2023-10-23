@@ -1,9 +1,9 @@
-﻿using CommunityToolkit.Maui;
+﻿using Camera.MAUI;
+using CommunityToolkit.Maui;
 using FFImageLoading.Maui;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
 using SkiaSharp.Views.Maui.Controls.Hosting;
-using ZXing.Net.Maui.Controls;
 using AppEffects = Bit.App.Effects;
 
 namespace Bit.Core;
@@ -20,7 +20,7 @@ public static class MauiProgram
         builder
             .UseMauiCommunityToolkit()
             .UseMauiCompatibility()
-            .UseBarcodeReader()
+            .UseMauiCameraView()
             .UseSkiaSharp()
             .UseFFImageLoading()
             .ConfigureEffects(effects =>

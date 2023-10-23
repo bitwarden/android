@@ -71,6 +71,7 @@
 	  <AndroidNativeLibrary Include="Platforms\Android\lib\x86_64\libargon2.so" />
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="Camera.MAUI" Version="1.4.4" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
@@ -88,9 +89,7 @@
 		<PackageReference Include="Plugin.Fingerprint" Version="2.1.5" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.4-preview.84" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls.Compatibility" Version="2.88.4-preview.84" />
-		<PackageReference Include="ZXing.Net.Maui" Version="0.3.0-preview.1" />
 		<PackageReference Include="FFImageLoadingCompat.Maui" Version="0.1.1" />
-		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.3.0-preview.1" />
 		<PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.6" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 		<PackageReference Include="PCLCrypto" Version="2.0.147" />

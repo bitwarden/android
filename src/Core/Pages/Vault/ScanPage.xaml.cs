@@ -2,9 +2,9 @@
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using Camera.MAUI.ZXingHelper;
 using SkiaSharp;
 using SkiaSharp.Views.Maui;
-using ZXing.Net.Maui;
 
 namespace Bit.App.Pages
 {
@@ -12,8 +12,6 @@ namespace Bit.App.Pages
     {
         private ScanPageViewModel ViewModel => BindingContext as ScanPageViewModel;
         private readonly Action<string> _callback;
-        private CancellationTokenSource _autofocusCts;
-        private Task _continuousAutofocusTask;
         private readonly Color _greenColor;
         private readonly SKColor _blueSKColor;
         private readonly SKColor _greenSKColor;
@@ -27,10 +25,8 @@ namespace Bit.App.Pages
         {
             InitializeComponent();
             _callback = callback;
-            ViewModel.InitScannerCommand = new Command(() => InitScanner());
 
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.Android)
+            if (DeviceInfo.Platform == DevicePlatform.Android)
             {
                 ToolbarItems.RemoveAt(0);
             }
@@ -54,125 +50,47 @@ namespace Bit.App.Pages
             base.OnDisappearing();
         }
 
-        // Fix known bug with DelayBetweenAnalyzingFrames & DelayBetweenContinuousScans: https://github.com/Redth/ZXing.Net.Mobile/issues/721
-        private void InitScanner()
-        {
-            try
-            {
-                if (!ViewModel.HasCameraPermission || !ViewModel.ShowScanner || _zxing != null)
-                {
-                    return;
-                }
-
-                //_zxing = new ZXingScannerView();
-                _zxing.Options = new BarcodeReaderOptions
-                {
-                    //UseNativeScanning = true,
-                    //PossibleFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
-                    Formats = BarcodeFormat.QrCode,
-                    AutoRotate = false,
-                    TryInverted = true,
-                    //DelayBetweenAnalyzingFrames = 5,
-                    //DelayBetweenContinuousScans = 5
-                };
-                //_scannerContainer.Content = _zxing;
-                StartScanner();
-            }
-            catch (Exception ex)
-            {
-                _logger.Value.Exception(ex);
-            }
-        }
-
         private void StartScanner()
         {
-            if (_zxing == null)
-            {
-                return;
-            }
+            if (_cameraView == null) { return; }
 
-            //_zxing.OnScanResult -= OnScanResult;
-            //_zxing.OnScanResult += OnScanResult;
-            // TODO: [MAUI-Migration] [Critical]
-            //_zxing.IsScanning = true;
+            ViewModel.StartCameraCommand?.Execute(this);
 
-            // Fix for Autofocus, now it's done every 2 seconds so that the user does't have to do it
-            // https://github.com/Redth/ZXing.Net.Mobile/issues/414
-            _autofocusCts?.Cancel();
-            _autofocusCts = new CancellationTokenSource(TimeSpan.FromMinutes(3));
-
-            var autofocusCts = _autofocusCts;
-            // this task is needed to be awaited OnDisappearing to avoid some crashes
-            // when changing the value of _zxing.IsScanning
-            _continuousAutofocusTask = Task.Run(async () =>
-            {
-                try
-                {
-                    while (!autofocusCts.IsCancellationRequested)
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(2), autofocusCts.Token);
-                        await Device.InvokeOnMainThreadAsync(() =>
-                        {
-                            if (!autofocusCts.IsCancellationRequested)
-                            {
-                                try
-                                {
-                                    _zxing.AutoFocus();
-                                }
-                                catch (Exception ex)
-                                {
-                                    _logger.Value.Exception(ex);
-                                }
-                            }
-                        });
-                    }
-                }
-                catch (TaskCanceledException) { }
-                catch (Exception ex)
-                {
-                    _logger.Value.Exception(ex);
-                }
-            }, autofocusCts.Token);
             _pageIsActive = true;
             AnimationLoopAsync();
         }
 
         private async Task StopScanner()
         {
-            if (_zxing == null)
+            if (_cameraView == null)
             {
                 return;
             }
 
-            _autofocusCts?.Cancel();
-            if (_continuousAutofocusTask != null)
-            {
-                await _continuousAutofocusTask;
-            }
-            // TODO: [MAUI-Migration] [Critical]
-            //_zxing.IsScanning = false;
-            //_zxing.OnScanResult -= OnScanResult;
+            _cameraView.BarCodeDetectionEnabled = false;
+            
+            await _cameraView.StopCameraAsync();
             _pageIsActive = false;
         }
 
-        // TODO: [MAUI-Migration] [Critical]
-        private async void _zxing_BarcodesDetected(System.Object sender, ZXing.Net.Maui.BarcodeDetectionEventArgs e)
+        private async void CameraViewOnBarcodeDetected(object sender, BarcodeEventArgs e)
         {
             try
             {
-                if (!e.Results.Any())
+                if (!e.Result.Any())
                 {
                     return;
                 }
-                var result = e.Results[0];
+                var result = e.Result[0];
                 // Stop analysis until we navigate away so we don't keep reading barcodes
-                // TODO: [MAUI-Migration] [Critical]
-                //_zxing.IsAnalyzing = false;
-                var text = result?.Value;
+                _cameraView.BarCodeDetectionEnabled = false;
+
+                var text = result?.Text;
                 if (!string.IsNullOrWhiteSpace(text))
                 {
                     if (text.StartsWith("otpauth://totp"))
                     {
+                        if (_qrcodeFound) { return; } //To avoid duplicate barcode detected events
                         await QrCodeFoundAsync();
                         _callback(text);
                         return;
@@ -185,6 +103,7 @@ namespace Bit.App.Pages
                         {
                             if (part.StartsWith("secret="))
                             {
+                                if (_qrcodeFound) { return; } //To avoid duplicate barcode detected events
                                 await QrCodeFoundAsync();
                                 var subResult = part.Substring(7);
                                 if (!string.IsNullOrEmpty(subResult))
@@ -196,7 +115,11 @@ namespace Bit.App.Pages
                         }
                     }
                 }
-                _callback(null);
+
+                if (!_qrcodeFound)
+                {
+                    _callback(null);
+                }
             }
             catch (Exception ex)
             {
@@ -209,8 +132,6 @@ namespace Bit.App.Pages
             _qrcodeFound = true;
             Vibration.Vibrate();
             await Task.Delay(1000);
-            // TODO: [MAUI-Migration] [Critical]
-            //_zxing.IsScanning = false;
         }
 
         private async void Close_Clicked(object sender, System.EventArgs e)
