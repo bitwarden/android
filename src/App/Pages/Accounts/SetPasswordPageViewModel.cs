@@ -203,7 +203,7 @@ namespace Bit.App.Pages
 
             try
             {
-                await _deviceActionService.ShowLoadingAsync(AppResources.CreatingAccount);
+                await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
                 // Set Password and relevant information
                 await _apiService.SetPasswordAsync(request);
                 await _stateService.SetKdfConfigurationAsync(kdfConfig);

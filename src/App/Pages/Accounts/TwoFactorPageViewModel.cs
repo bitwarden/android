@@ -10,6 +10,7 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
+using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
@@ -345,7 +346,7 @@ namespace Bit.App.Pages
                         if (!decryptOptions.HasMasterPassword &&
                             decryptOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
                         {
-                            await _stateService.SetForcePasswordResetReasonAsync(Core.Models.Domain.ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission);
+                            await _stateService.SetForcePasswordResetReasonAsync(ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission);
                         }
                         // Device is trusted and has keys, so we can decrypt
                         _syncService.FullSyncAsync(true).FireAndForget();
