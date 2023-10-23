@@ -6,7 +6,7 @@
                     x:Class="Bit.App.Styles.ControlTemplates">
 
     <u:StringHasValueConverter x:Key="stringHasValueConverter" />
-    <u:BoolEnablementToTextColorConverter x:Key="boolToColorConverter" />
+    <u:BoolEnablementToTextColorConverter x:Key="boolEnablementToTextColorConverter" />
 
     <ControlTemplate x:Key="SettingControlTemplate">
         <Grid
@@ -18,7 +18,7 @@
                 Grid.Column="0"
                 MaxLines="2"
                 Text="{TemplateBinding Title}"
-                TextColor="{TemplateBinding IsEnabled, Converter={StaticResource boolToColorConverter}}"
+                TextColor="{TemplateBinding IsEnabled, Converter={StaticResource boolEnablementToTextColorConverter}}"
                 HorizontalOptions="StartAndExpand"
                 LineBreakMode="TailTruncation" />
 
