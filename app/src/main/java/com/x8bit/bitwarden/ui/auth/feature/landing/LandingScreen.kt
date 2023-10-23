@@ -41,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
@@ -66,6 +67,13 @@ fun LandingScreen(
             )
         }
     }
+
+    BitwardenBasicDialog(
+        visibilityState = state.errorDialogState,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(LandingAction.ErrorDialogDismiss) }
+        },
+    )
 
     val scrollState = rememberScrollState()
     Column(

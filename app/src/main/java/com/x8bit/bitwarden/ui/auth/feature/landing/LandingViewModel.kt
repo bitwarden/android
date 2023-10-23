@@ -3,8 +3,12 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -28,6 +32,7 @@ class LandingViewModel @Inject constructor(
             isContinueButtonEnabled = authRepository.rememberedEmailAddress != null,
             isRememberMeEnabled = authRepository.rememberedEmailAddress != null,
             selectedRegion = LandingState.RegionOption.BITWARDEN_US,
+            errorDialogState = BasicDialogState.Hidden,
         ),
 ) {
 
@@ -42,6 +47,7 @@ class LandingViewModel @Inject constructor(
         when (action) {
             is LandingAction.ContinueButtonClick -> handleContinueButtonClicked()
             LandingAction.CreateAccountClick -> handleCreateAccountClicked()
+            is LandingAction.ErrorDialogDismiss -> handleErrorDialogDismiss()
             is LandingAction.RememberMeToggle -> handleRememberMeToggled(action)
             is LandingAction.EmailInputChanged -> handleEmailInputUpdated(action)
             is LandingAction.RegionOptionSelect -> handleRegionSelect(action)
@@ -59,8 +65,15 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleContinueButtonClicked() {
-        // TODO: add actual validation here: BIT-193
-        if (mutableStateFlow.value.emailInput.isBlank()) {
+        if (!mutableStateFlow.value.emailInput.isValidEmail()) {
+            mutableStateFlow.update {
+                it.copy(
+                    errorDialogState = BasicDialogState.Shown(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.invalid_email.asText(),
+                    ),
+                )
+            }
             return
         }
 
@@ -77,6 +90,12 @@ class LandingViewModel @Inject constructor(
 
     private fun handleCreateAccountClicked() {
         sendEvent(LandingEvent.NavigateToCreateAccount)
+    }
+
+    private fun handleErrorDialogDismiss() {
+        mutableStateFlow.update {
+            it.copy(errorDialogState = BasicDialogState.Hidden)
+        }
     }
 
     private fun handleRememberMeToggled(action: LandingAction.RememberMeToggle) {
@@ -101,6 +120,7 @@ data class LandingState(
     val isContinueButtonEnabled: Boolean,
     val isRememberMeEnabled: Boolean,
     val selectedRegion: RegionOption,
+    val errorDialogState: BasicDialogState,
 ) : Parcelable {
     /**
      * Enumerates the possible region options with their corresponding labels.
@@ -142,6 +162,11 @@ sealed class LandingAction {
      * Indicates that the Create Account text was clicked.
      */
     data object CreateAccountClick : LandingAction()
+
+    /**
+     * Indicates that an error dialog is attempting to be dismissed.
+     */
+    data object ErrorDialogDismiss : LandingAction()
 
     /**
      * Indicates that the Remember Me switch has been toggled.

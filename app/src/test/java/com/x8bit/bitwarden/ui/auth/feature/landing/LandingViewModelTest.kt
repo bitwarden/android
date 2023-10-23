@@ -2,7 +2,10 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -49,23 +52,41 @@ class LandingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ContinueButtonClick should emit NavigateToLogin`() = runTest {
+    fun `ContinueButtonClick with valid email should emit NavigateToLogin`() = runTest {
+        val validEmail = "email@bitwarden.com"
         val viewModel = createViewModel()
-        viewModel.trySendAction(LandingAction.EmailInputChanged("input"))
+        viewModel.trySendAction(LandingAction.EmailInputChanged(validEmail))
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(LandingAction.ContinueButtonClick)
             assertEquals(
-                LandingEvent.NavigateToLogin("input"),
+                LandingEvent.NavigateToLogin(validEmail),
                 awaitItem(),
             )
         }
     }
 
     @Test
-    fun `ContinueButtonClick with empty input should do nothing`() = runTest {
+    fun `ContinueButtonClick with invalid email should display an error dialog`() = runTest {
+        val invalidEmail = "bitwarden.com"
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
+        viewModel.trySendAction(LandingAction.EmailInputChanged(invalidEmail))
+        val initialState = DEFAULT_STATE.copy(
+            emailInput = invalidEmail,
+            isContinueButtonEnabled = true,
+        )
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+
             viewModel.actionChannel.trySend(LandingAction.ContinueButtonClick)
+            assertEquals(
+                initialState.copy(
+                    errorDialogState = BasicDialogState.Shown(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.invalid_email.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -157,6 +178,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             isContinueButtonEnabled = false,
             isRememberMeEnabled = false,
             selectedRegion = LandingState.RegionOption.BITWARDEN_US,
+            errorDialogState = BasicDialogState.Hidden,
         )
     }
 }
