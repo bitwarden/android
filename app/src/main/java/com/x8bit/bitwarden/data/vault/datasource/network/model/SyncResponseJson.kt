@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.model
 
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.time.LocalDateTime
 
 /**
  * Represents the response model for vault data fetched from the server.
@@ -14,7 +16,6 @@ import kotlinx.serialization.Serializable
  * @property domains A domains object associated with the vault data.
  * @property sends A list of send objects associated with the vault data (nullable).
  */
-// TODO determine encrypted params and rename them to emphasize encryption in BIT-636
 @Serializable
 data class SyncResponseJson(
     @SerialName("folders")
@@ -68,7 +69,6 @@ data class SyncResponseJson(
             @SerialName("domains")
             val domains: List<String>?,
 
-            // TODO Parse type enum in BIT-636
             @SerialName("type")
             val type: Int,
         )
@@ -83,9 +83,9 @@ data class SyncResponseJson(
      */
     @Serializable
     data class Folder(
-        // TODO Serialize revision date in BIT-636
         @SerialName("revisionDate")
-        val revisionDate: String?,
+        @Contextual
+        val revisionDate: LocalDateTime?, // Date
 
         @SerialName("name")
         val name: String?,
@@ -110,9 +110,8 @@ data class SyncResponseJson(
         @SerialName("id")
         val id: String,
 
-        // TODO Parse type enum in BIT-636
         @SerialName("type")
-        val type: Int,
+        val type: PolicyTypeJson,
 
         @SerialName("enabled")
         val isEnabled: Boolean,
@@ -257,7 +256,7 @@ data class SyncResponseJson(
 
             @SerialName("keyConnectorUrl")
             val keyConnectorUrl: String?,
-            // TODO Parse type enum in BIT-636
+
             @SerialName("type")
             val type: Int,
 
@@ -267,7 +266,6 @@ data class SyncResponseJson(
             @SerialName("enabled")
             val isEnabled: Boolean,
 
-            // TODO Parse provider type enum in BIT-636
             @SerialName("providerType")
             val providerType: Int,
 
@@ -331,7 +329,6 @@ data class SyncResponseJson(
             @SerialName("useResetPassword")
             val shouldUseResetPassword: Boolean,
 
-            // TODO Parse plan product type enum in BIT-636
             @SerialName("planProductType")
             val planProductType: Int,
 
@@ -362,9 +359,9 @@ data class SyncResponseJson(
             @SerialName("useTotp")
             val shouldUseTotp: Boolean,
 
-            // TODO Serialize family sponsorship last sync date in BIT-636
             @SerialName("familySponsorshipLastSyncDate")
-            val familySponsorshipLastSyncDate: String?,
+            @Contextual
+            val familySponsorshipLastSyncDate: LocalDateTime?,
 
             @SerialName("useScim")
             val shouldUseScim: Boolean,
@@ -412,7 +409,6 @@ data class SyncResponseJson(
             @SerialName("id")
             val id: String,
 
-            // TODO Parse type enum in BIT-636
             @SerialName("type")
             val type: Int,
 
@@ -532,7 +528,7 @@ data class SyncResponseJson(
         val shouldOrganizationUseTotp: Boolean,
 
         @SerialName("reprompt")
-        val reprompt: Int,
+        val reprompt: CipherRepromptTypeJson,
 
         @SerialName("edit")
         val shouldEdit: Boolean,
@@ -540,20 +536,19 @@ data class SyncResponseJson(
         @SerialName("passwordHistory")
         val passwordHistory: List<PasswordHistory>?,
 
-        // TODO Serialize revision date in BIT-636
         @SerialName("revisionDate")
-        val revisionDate: String?,
+        @Contextual
+        val revisionDate: LocalDateTime?,
 
-        // TODO Parse type enum in BIT-636
         @SerialName("type")
-        val type: Int,
+        val type: CipherTypeJson,
 
         @SerialName("login")
         val login: Login,
 
-        // TODO Serialize creation date in BIT-636
         @SerialName("creationDate")
-        val creationDate: String?,
+        @Contextual
+        val creationDate: LocalDateTime?,
 
         @SerialName("secureNote")
         val secureNote: SecureNote,
@@ -564,9 +559,9 @@ data class SyncResponseJson(
         @SerialName("organizationId")
         val organizationId: String?,
 
-        // TODO Serialize deleted date in BIT-636
         @SerialName("deletedDate")
-        val deletedDate: String?,
+        @Contextual
+        val deletedDate: LocalDateTime?,
 
         @SerialName("identity")
         val identity: Identity,
@@ -657,7 +652,7 @@ data class SyncResponseJson(
         /**
          * Represents a field in the vault response.
          *
-         * @property linkedId The linked ID of the field (nullable).
+         * @property linkedIdType The linked ID of the field (nullable).
          * @property name The name of the field (nullable).
          * @property type The type of field.
          * @property value The value of the field (nullable).
@@ -665,14 +660,13 @@ data class SyncResponseJson(
         @Serializable
         data class Field(
             @SerialName("linkedId")
-            val linkedId: String?,
+            val linkedIdType: LinkedIdTypeJson?,
 
             @SerialName("name")
             val name: String?,
 
-            // TODO Parse type enum in BIT-636
             @SerialName("type")
-            val type: Int,
+            val type: FieldTypeJson,
 
             @SerialName("value")
             val value: String?,
@@ -779,9 +773,9 @@ data class SyncResponseJson(
             @SerialName("password")
             val password: String?,
 
-            // TODO Serialize password revision date in BIT-636
             @SerialName("passwordRevisionDate")
-            val passwordRevisionDate: String?,
+            @Contextual
+            val passwordRevisionDate: LocalDateTime?,
 
             @SerialName("autofillOnPageLoad")
             val shouldAutofillOnPageLoad: Boolean?,
@@ -795,13 +789,13 @@ data class SyncResponseJson(
             /**
              * Represents a URI in the vault response.
              *
-             * @property match The match of the URI.
+             * @property uriMatchType The match type of the URI.
              * @property uri The actual string representing the URI (nullable).
              */
             @Serializable
             data class Uri(
                 @SerialName("match")
-                val match: Int,
+                val uriMatchType: UriMatchTypeJson,
 
                 @SerialName("uri")
                 val uri: String?,
@@ -819,9 +813,9 @@ data class SyncResponseJson(
             @SerialName("password")
             val password: String,
 
-            // TODO Serialize last used date in BIT-636
             @SerialName("lastUsedDate")
-            val lastUsedDate: String,
+            @Contextual
+            val lastUsedDate: LocalDateTime,
         )
 
         /**
@@ -831,9 +825,8 @@ data class SyncResponseJson(
          */
         @Serializable
         data class SecureNote(
-            // TODO Parse type enum in BIT-636
             @SerialName("type")
-            val type: Int,
+            val type: SecureNoteTypeJson,
         )
     }
 
@@ -865,9 +858,9 @@ data class SyncResponseJson(
         @SerialName("notes")
         val notes: String?,
 
-        // TODO Serialize revision date in BIT-636
         @SerialName("revisionDate")
-        val revisionDate: String,
+        @Contextual
+        val revisionDate: LocalDateTime,
 
         @SerialName("maxAccessCount")
         val maxAccessCount: Int?,
@@ -875,9 +868,8 @@ data class SyncResponseJson(
         @SerialName("hideEmail")
         val shouldHideEmail: Boolean,
 
-        // TODO Parse type enum in BIT-636
         @SerialName("type")
-        val type: Int,
+        val type: SendTypeJson,
 
         @SerialName("accessId")
         val accessId: String?,
@@ -888,9 +880,9 @@ data class SyncResponseJson(
         @SerialName("file")
         val file: File,
 
-        // TODO Serialize deletion date in BIT-636
         @SerialName("deletionDate")
-        val deletionDate: String,
+        @Contextual
+        val deletionDate: LocalDateTime,
 
         @SerialName("name")
         val name: String?,
@@ -907,9 +899,9 @@ data class SyncResponseJson(
         @SerialName("key")
         val key: String?,
 
-        // TODO Serialize expiration date in BIT-636
         @SerialName("expirationDate")
-        val expirationDate: String?,
+        @Contextual
+        val expirationDate: LocalDateTime?,
     ) {
         /**
          * Represents a file in the vault response.

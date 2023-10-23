@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.datasource.network.di
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.x8bit.bitwarden.data.platform.datasource.network.core.ResultCallAdapterFactory
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
+import com.x8bit.bitwarden.data.platform.datasource.network.serializer.LocalDateTimeSerializer
 import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigServiceImpl
 import dagger.Module
@@ -11,11 +12,13 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.create
+import java.time.LocalDateTime
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -98,5 +101,8 @@ object NetworkModule {
 
         // We allow for nullable values to have keys missing in the JSON response.
         explicitNulls = false
+        serializersModule = SerializersModule {
+            contextual(LocalDateTime::class, LocalDateTimeSerializer())
+        }
     }
 }
