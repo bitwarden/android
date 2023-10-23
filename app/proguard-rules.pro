@@ -8,6 +8,14 @@
 -keep class com.bitwarden.sdk.** { *; }
 
 ################################################################################
+# Bitwarden Models
+################################################################################
+
+# R8 currently has trouble with some Retrofit calls dealing with sealed classes.
+# For now we will keep all network layer models.
+-keepclassmembers class com.x8bit.bitwarden.**.network.model.** { *; }
+
+################################################################################
 # Firebase Crashlytics
 ################################################################################
 
