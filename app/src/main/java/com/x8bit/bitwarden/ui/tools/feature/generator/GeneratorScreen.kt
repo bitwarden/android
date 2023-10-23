@@ -49,6 +49,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.toDp
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
+import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextFieldWithTwoIcons
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
@@ -110,6 +111,9 @@ fun GeneratorScreen(viewModel: GeneratorViewModel = hiltViewModel()) {
             BitwardenMediumTopAppBar(
                 title = stringResource(id = R.string.generator),
                 scrollBehavior = scrollBehavior,
+                actions = {
+                    BitwardenOverflowActionItem()
+                },
             )
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),

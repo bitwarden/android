@@ -4,24 +4,32 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountActionItem
+import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
+import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
 
 /**
  * The vault screen for the application.
@@ -56,6 +64,8 @@ fun VaultScreen(
 /**
  * Scaffold for the [VaultScreen]
  */
+@Suppress("LongMethod")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun VaultScreenScaffold(
     state: VaultState,
@@ -66,11 +76,26 @@ private fun VaultScreenScaffold(
     var accountMenuVisible by rememberSaveable {
         mutableStateOf(false)
     }
+    val scrollBehavior =
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
     Scaffold(
         topBar = {
-            VaultTopBar(
-                accountIconClickAction = { accountMenuVisible = !accountMenuVisible },
-                searchIconClickAction = searchIconClickAction,
+            BitwardenMediumTopAppBar(
+                title = stringResource(id = R.string.my_vault),
+                scrollBehavior = scrollBehavior,
+                actions = {
+                    BitwardenAccountActionItem(
+                        initials = state.initials,
+                        color = state.avatarColor,
+                        onClick = { accountMenuVisible = !accountMenuVisible },
+                    )
+                    BitwardenSearchActionItem(
+                        contentDescription = stringResource(id = R.string.search_vault),
+                        onClick = searchIconClickAction,
+                    )
+                    BitwardenOverflowActionItem()
+                },
             )
         },
         floatingActionButton = {
@@ -81,22 +106,23 @@ private fun VaultScreenScaffold(
                 enter = fadeIn() + expandIn { IntSize(width = 1, height = 1) },
             ) {
                 FloatingActionButton(
-                    containerColor = MaterialTheme.colorScheme.primary,
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
                     onClick = addItemClickAction,
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Add,
+                        painter = painterResource(id = R.drawable.ic_plus),
                         contentDescription = stringResource(id = R.string.add_item),
-                        tint = MaterialTheme.colorScheme.onPrimary,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
             }
         },
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { paddingValues ->
-        when (state) {
-            is VaultState.Content -> VaultContentView(paddingValues = paddingValues)
-            is VaultState.Loading -> VaultLoadingView(paddingValues = paddingValues)
-            is VaultState.NoItems -> VaultNoItemsView(
+        when (state.viewState) {
+            is VaultState.ViewState.Content -> VaultContentView(paddingValues = paddingValues)
+            is VaultState.ViewState.Loading -> VaultLoadingView(paddingValues = paddingValues)
+            is VaultState.ViewState.NoItems -> VaultNoItemsView(
                 paddingValues = paddingValues,
                 addItemClickAction = addItemClickAction,
             )

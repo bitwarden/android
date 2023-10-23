@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +14,12 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class VaultViewModel @Inject constructor() : BaseViewModel<VaultState, VaultEvent, VaultAction>(
-    initialState = VaultState.Loading,
+    // TODO retrieve this from the data layer BIT-205
+    initialState = VaultState(
+        initials = "BW",
+        avatarColor = Color.Blue,
+        viewState = VaultState.ViewState.Loading,
+    ),
 ) {
 
     init {
@@ -21,7 +27,9 @@ class VaultViewModel @Inject constructor() : BaseViewModel<VaultState, VaultEven
             // TODO will need to load actual vault items BIT-205
             @Suppress("MagicNumber")
             delay(2000)
-            mutableStateFlow.update { VaultState.NoItems }
+            mutableStateFlow.update { currentState ->
+                currentState.copy(viewState = VaultState.ViewState.NoItems)
+            }
         }
     }
 
@@ -44,23 +52,40 @@ class VaultViewModel @Inject constructor() : BaseViewModel<VaultState, VaultEven
 }
 
 /**
- * Models state for the [VaultScreen].
+ * Represents the overall state for the [VaultScreen].
+ *
+ * @property avatarColor The color of the avatar in HEX format.
+ * @property initials The initials to be displayed on the avatar.
+ * @property viewState The specific view state representing loading, no items, or content state.
  */
-sealed class VaultState {
-    /**
-     * Loading state for the [VaultScreen].
-     */
-    data object Loading : VaultState()
+data class VaultState(
+    val avatarColor: Color,
+    val initials: String,
+    val viewState: ViewState,
+) {
 
     /**
-     * No items state for the [VaultScreen].
+     * Represents the specific view states for the [VaultScreen].
      */
-    data object NoItems : VaultState()
+    sealed class ViewState {
 
-    /**
-     * Content state for the [VaultScreen].
-     */
-    data class Content(val itemList: List<String>) : VaultState()
+        /**
+         * Loading state for the [VaultScreen], signifying that the content is being processed.
+         */
+        data object Loading : ViewState()
+
+        /**
+         * Represents a state where the [VaultScreen] has no items to display.
+         */
+        data object NoItems : ViewState()
+
+        /**
+         * Content state for the [VaultScreen] showing the actual content or items.
+         *
+         * @property itemList The list of items to be displayed in the [VaultScreen].
+         */
+        data class Content(val itemList: List<String>) : ViewState()
+    }
 }
 
 /**
