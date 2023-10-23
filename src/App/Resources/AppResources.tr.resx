@@ -2687,10 +2687,7 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>{0} olarak giriş yapılıyor</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
-    <value>Kasa zaman aşımı eylemi oturumu kapatmak için değiştirildi</value>
-  </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Aynı şifre anahtarına sahip başka bir kayıt olduğu için bu kaydı kuruluşunuzla paylaşamazsınız.</value>
+    <value>Kasa zaman aşımı eylemi "çıkış yap" olarak değiştirildi</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Otomatik doldurmayı engelle</value>
@@ -2745,7 +2742,7 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>Cihazla giriş yap</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
-    <value>Giriş yapılan yer</value>
+    <value>Giriş yapılan konum</value>
   </data>
   <data name="Vault" xml:space="preserve">
     <value>Kasa</value>
@@ -2800,7 +2797,7 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>Cihazınızdaki diğer uygulamalarda hesap bilgilerini doldurmak için Android Otomatik Doldurma Sistemi kullanılır.</value>
   </data>
   <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
-    <value>Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</value>
+    <value>Seçtiğiniz klavye destekliyorsa satır içi otomatik doldurma kullanılır. Aksi halde varsayılan üstünde gösterme kullanılır.</value>
   </data>
   <data name="AdditionalOptions" xml:space="preserve">
     <value>Ek seçenekler</value>
@@ -2822,7 +2819,7 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>App Store'a gitmek ister misiniz?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
-    <value>Bitwarden web uygulamasında iki adımlı giriş ayarlayarak hesabınızı daha güvenli hale getirin.</value>
+    <value>Bitwarden web uygulamasında iki aşamalı girişi ayarlayarak hesabınızın güvenliğini artırabilirsiniz.</value>
   </data>
   <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
     <value>Ana parolanızı Bitwarden web uygulamasında değiştirebilirsiniz.</value>
@@ -2844,7 +2841,7 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>Bitwarden'ın kuruluş özelliğini kullanarak kasanızdaki kayıtları başkalarıyla paylaşabilirsiniz. Daha fazla bilgi için bitwarden.com sitesini ziyaret edin.</value>
   </data>
   <data name="RateAppDescriptionLong" xml:space="preserve">
-    <value>Başkalarının Bitwarden'ın kendileri için uygun olup olmadığını öğrenmelerine yardımcı olun. Uygulama mağazasını ziyaret edin ve şimdi bir derecelendirme bırakın.</value>
+    <value>Bitwarden'ı başkalarına da tanımak ister misiniz? Uygulama mağazasını ziyaret edip Bitwarden'ı değerlendirin.</value>
   </data>
   <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
     <value>Cihazınızın koyu modu kullanımdayken kullanılacak koyu temayı seçin</value>

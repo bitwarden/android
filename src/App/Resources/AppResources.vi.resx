@@ -2691,9 +2691,6 @@ Bạn có muốn chuyển sang tài khoản này không?</value>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Hành động sau khi hết thời gian mở kho đã thay đổi thành đăng xuất</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Không thể chia sẻ mục này với tổ chức vì đã có một mục có cùng passkey.</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Chặn tự động điền</value>
   </data>

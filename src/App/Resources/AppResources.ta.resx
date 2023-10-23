@@ -947,7 +947,7 @@
     <value>உங்கள் குறியாக்க விசையை புதுப்பிக்கும் வரை இந்த அம்சத்தைப் பயன்படுத்த முடியாது.</value>
   </data>
   <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
-    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+    <value>மறையாக்க விசை பெயர்ப்பு தேவை. தயவுசெய்து வலைப் பெட்டகத்தில் உள்நுழைந்து உமது மறையாக்க விசையைப் புதுப்பிக்கவும்.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>மேலும் அறிக</value>
@@ -2453,7 +2453,7 @@
     <value>Generate an email alias with an external forwarding service.</value>
   </data>
   <data name="Random" xml:space="preserve">
-    <value>Random</value>
+    <value>ஏதோவொரு</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
     <value>Connect to Watch</value>
@@ -2623,19 +2623,19 @@
     <value>Logged in!</value>
   </data>
   <data name="ApproveWithMyOtherDevice" xml:space="preserve">
-    <value>Approve with my other device</value>
+    <value>எனது மற்றொரு சாதனத்துடன் ஒப்புதலளி</value>
   </data>
   <data name="RequestAdminApproval" xml:space="preserve">
-    <value>Request admin approval</value>
+    <value>நிர்வாகி ஒப்புதல் கோரு</value>
   </data>
   <data name="ApproveWithMasterPassword" xml:space="preserve">
-    <value>Approve with master password</value>
+    <value>பிரதான கடவுச்சொலுடன் ஒப்புக்கொள்</value>
   </data>
   <data name="TurnOffUsingPublicDevice" xml:space="preserve">
-    <value>Turn off using a public device</value>
+    <value>பொது சாதனம் பயன்படுத்துவதை முடக்கு</value>
   </data>
   <data name="RememberThisDevice" xml:space="preserve">
-    <value>Remember this device</value>
+    <value>இச்சாதனத்தை நினைவுகொள்</value>
   </data>
   <data name="Passkey" xml:space="preserve">
     <value>கடவுவிசை</value>
@@ -2647,7 +2647,7 @@
     <value>செயலி</value>
   </data>
   <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
-    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+    <value>கடவுவிசைச் செயலியைத் திருத்துதல் கடவுவிசையை செல்லாததாக்குவதால் அது முடியாது</value>
   </data>
   <data name="PasskeyWillNotBeCopied" xml:space="preserve">
     <value>கடவிவிசை நகலெடுக்கப்படாது</value>
@@ -2674,25 +2674,22 @@
     <value>செல்லாத API கிள்ளாக்கு</value>
   </data>
   <data name="AdminApprovalRequested" xml:space="preserve">
-    <value>Admin approval requested</value>
+    <value>நிர்வாகி ஒப்புதல் கோரப்பட்டது</value>
   </data>
   <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
-    <value>Your request has been sent to your admin.</value>
+    <value>உமது கோரிக்கை உமது நிர்வாகிக்கு அனுப்பப்பட்டது.</value>
   </data>
   <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
     <value>ஏற்கப்பட்ட பின் அறிவிக்கப்படுவீர். </value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
-    <value>Trouble logging in?</value>
+    <value>உள்நுழைவதில் சிக்கலா?</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
     <value>{0} ஆக உள்நுழைகிறது</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
-    <value>Vault timeout action changed to log out</value>
-  </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
+    <value>பெட்டக நேரமுடிவு செயல் வெளியேறு என மாற்றப்பட்டது</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>தன்னிரப்பலைத் தடு</value>
@@ -2750,37 +2747,37 @@
     <value>இதில் உள்நுழைகிறது</value>
   </data>
   <data name="Vault" xml:space="preserve">
-    <value>Vault</value>
+    <value>பெட்டகம்</value>
   </data>
   <data name="Appearance" xml:space="preserve">
-    <value>Appearance</value>
+    <value>தோற்றம்</value>
   </data>
   <data name="AccountSecurity" xml:space="preserve">
-    <value>Account security</value>
+    <value>கணக்கு பாதுகாப்பு</value>
   </data>
   <data name="BitwardenHelpCenter" xml:space="preserve">
-    <value>Bitwarden Help Center</value>
+    <value>Bitwarden உதவி மையம்</value>
   </data>
   <data name="ContactBitwardenSupport" xml:space="preserve">
-    <value>Contact Bitwarden support</value>
+    <value>Bitwarden ஆதரவைத் தொடர்புகொள்</value>
   </data>
   <data name="CopyAppInformation" xml:space="preserve">
-    <value>Copy app information</value>
+    <value>செயலி தகவலை நகலெடு</value>
   </data>
   <data name="SyncNow" xml:space="preserve">
-    <value>Sync now</value>
+    <value>இப்போது ஒத்திசை</value>
   </data>
   <data name="UnlockOptions" xml:space="preserve">
     <value>Unlock options</value>
   </data>
   <data name="SessionTimeout" xml:space="preserve">
-    <value>Session timeout</value>
+    <value>அமர்வு நேரமுடிவு</value>
   </data>
   <data name="SessionTimeoutAction" xml:space="preserve">
-    <value>Session timeout action</value>
+    <value>அமர்வு நேரமுடிவு செயல்</value>
   </data>
   <data name="AccountFingerprintPhrase" xml:space="preserve">
-    <value>Account fingerprint phrase</value>
+    <value>கணக்கு கைரேகைச் சொற்றொடர்</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="OneHourAndOneMinute" xml:space="preserve">
@@ -2856,9 +2853,9 @@
     <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
   </data>
   <data name="TooManyAttempts" xml:space="preserve">
-    <value>Too many attempts</value>
+    <value>மிக அதிக முயற்சிகள்</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
-    <value>Account logged out.</value>
+    <value>கணக்கிலிருந்து வெளியேறப்பட்டது.</value>
   </data>
 </root>

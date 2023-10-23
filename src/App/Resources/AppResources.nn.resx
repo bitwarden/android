@@ -2691,9 +2691,6 @@ Do you want to switch to this account?</value>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Vault timeout action changed to log out</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Denne gjenstanden kan ikkje delast med organisasjonen fordi det allereie finst ein med same passnøkkel.</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Block auto-fill</value>
   </data>

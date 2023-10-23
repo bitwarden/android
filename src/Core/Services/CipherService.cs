@@ -564,13 +564,8 @@ namespace Bit.Core.Services
             await UpsertAsync(data);
         }
 
-        public async Task<ICipherService.ShareWithServerError> ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds)
+        public async Task ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds)
         {
-            if (!await ValidateCanBeSharedWithOrgAsync(cipher, organizationId))
-            {
-                return ICipherService.ShareWithServerError.DuplicatedPasskeyInOrg;
-            }
-
             var attachmentTasks = new List<Task>();
             if (cipher.Attachments != null)
             {
@@ -591,21 +586,6 @@ namespace Bit.Core.Services
             var userId = await _stateService.GetActiveUserIdAsync();
             var data = new CipherData(response, userId, collectionIds);
             await UpsertAsync(data);
-
-            return ICipherService.ShareWithServerError.None;
-        }
-
-        private async Task<bool> ValidateCanBeSharedWithOrgAsync(CipherView cipher, string organizationId)
-        {
-            if (!cipher.HasFido2Key)
-            {
-                return true;
-            }
-
-            var decCiphers = await GetAllDecryptedAsync();
-            return !decCiphers
-                .Where(c => c.OrganizationId == organizationId)
-                .Any(c => !cipher.Login.MainFido2Key.IsUniqueAgainst(c.Login?.MainFido2Key));
         }
 
         public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, CipherView cipherView, string filename, byte[] data)
@@ -1176,14 +1156,17 @@ namespace Bit.Core.Services
                             cipher.Login.Uris.Add(loginUri);
                         }
                     }
-                    if (model.Login.HasFido2Keys)
+                    if (model.Login.HasFido2Credentials)
                     {
-                        cipher.Login.Fido2Keys = new List<Fido2Key>();
-                        foreach (var fido2Key in model.Login.Fido2Keys)
+                        cipher.Login.Fido2Credentials = new List<Fido2Credential>();
+                        foreach (var fido2Credential in model.Login.Fido2Credentials)
                         {
-                            var fido2KeyDomain = new Fido2Key();
-                            await EncryptObjPropertyAsync(fido2Key, fido2KeyDomain, Fido2Key.EncryptableProperties, key);
-                            cipher.Login.Fido2Keys.Add(fido2KeyDomain);
+                            var fido2CredentialDomain = new Fido2Credential
+                            {
+                                CreationDate = fido2Credential.CreationDate
+                            };
+                            await EncryptObjPropertyAsync(fido2Credential, fido2CredentialDomain, Fido2Credential.EncryptablePropertiesToMap, key);
+                            cipher.Login.Fido2Credentials.Add(fido2CredentialDomain);
                         }
                     }
                     break;
