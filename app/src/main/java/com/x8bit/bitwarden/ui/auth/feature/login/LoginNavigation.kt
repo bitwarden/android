@@ -10,7 +10,7 @@ import androidx.navigation.navArgument
 
 private const val EMAIL_ADDRESS: String = "email_address"
 private const val CAPTCHA_TOKEN = "captcha_token"
-private const val LOGIN_ROUTE: String = "login/{$EMAIL_ADDRESS}/{$CAPTCHA_TOKEN}"
+private const val LOGIN_ROUTE: String = "login/{$EMAIL_ADDRESS}?$CAPTCHA_TOKEN={$CAPTCHA_TOKEN}"
 
 /**
  * Class to retrieve login arguments from the [SavedStateHandle].
@@ -30,7 +30,10 @@ fun NavController.navigateToLogin(
     captchaToken: String?,
     navOptions: NavOptions? = null,
 ) {
-    this.navigate("login/$emailAddress/$captchaToken", navOptions)
+    this.navigate(
+        "login/$emailAddress?$CAPTCHA_TOKEN=$captchaToken",
+        navOptions,
+    )
 }
 
 /**
@@ -43,6 +46,10 @@ fun NavGraphBuilder.loginDestinations(
         route = LOGIN_ROUTE,
         arguments = listOf(
             navArgument(EMAIL_ADDRESS) { type = NavType.StringType },
+            navArgument(CAPTCHA_TOKEN) {
+                type = NavType.StringType
+                nullable = true
+            },
         ),
     ) {
         LoginScreen(
