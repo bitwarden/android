@@ -1,50 +1,42 @@
 package com.x8bit.bitwarden.ui.platform.components
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.material3.DropdownMenu
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 
 /**
- * A custom Bitwarden-themed large top app bar with an overflow menu action.
+ * A custom Bitwarden-themed medium top app bar with support for actions.
  *
- * This app bar wraps around the Material 3's [LargeTopAppBar] and customizes its appearance
+ * This app bar wraps around Material 3's [MediumTopAppBar] and customizes its appearance
  * and behavior according to the app theme.
- * It provides a title and an optional overflow menu, represented by a dropdown containing
- * a set of menu items.
+ * It provides a title and an optional set of actions on the trailing side.
+ * These actions are arranged within a custom action row tailored to the app's design requirements.
  *
  * @param title The text to be displayed as the title of the app bar.
- * @param dropdownMenuItemContent A single overflow menu in the right with contents
- *   defined by the [dropdownMenuItemContent]. It is strongly recommended that this content
- *   be a stack of [DropdownMenuItem].
  * @param scrollBehavior Defines the scrolling behavior of the app bar. It controls how the app bar
  * behaves in conjunction with scrolling content.
+ * @param actions A lambda containing the set of actions (usually icons or similar) to display
+ * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
+ * defining the layout of the actions.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BitwardenMediumTopAppBar(
     title: String,
-    dropdownMenuItemContent: @Composable ColumnScope.() -> Unit = {},
     scrollBehavior: TopAppBarScrollBehavior,
+    actions: @Composable RowScope.() -> Unit = {},
 ) {
-    var isOverflowMenuVisible by remember { mutableStateOf(false) }
-
     MediumTopAppBar(
         colors = TopAppBarDefaults.largeTopAppBarColors(
             scrolledContainerColor = MaterialTheme.colorScheme.surface,
@@ -57,21 +49,30 @@ fun BitwardenMediumTopAppBar(
                 color = MaterialTheme.colorScheme.onSurface,
             )
         },
-        actions = {
-            Box {
-                IconButton(onClick = { isOverflowMenuVisible = !isOverflowMenuVisible }) {
+        actions = actions,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
+@Composable
+private fun BitwardenMediumTopAppBar_preview() {
+    MaterialTheme {
+        BitwardenMediumTopAppBar(
+            title = "Preview Title",
+            scrollBehavior = TopAppBarDefaults
+                .exitUntilCollapsedScrollBehavior(
+                    rememberTopAppBarState(),
+                ),
+            actions = {
+                IconButton(onClick = { }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_more),
-                        contentDescription = stringResource(id = R.string.more),
+                        contentDescription = "",
                         tint = MaterialTheme.colorScheme.onSurface,
                     )
                 }
-                DropdownMenu(
-                    expanded = isOverflowMenuVisible,
-                    onDismissRequest = { isOverflowMenuVisible = false },
-                    content = dropdownMenuItemContent,
-                )
-            }
-        },
-    )
+            },
+        )
+    }
 }

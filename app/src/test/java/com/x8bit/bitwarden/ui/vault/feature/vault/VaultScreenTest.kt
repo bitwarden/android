@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -17,7 +18,13 @@ class VaultScreenTest : BaseComposeTest() {
     fun `search icon click should send SearchIconClick action`() {
         val viewModel = mockk<VaultViewModel>(relaxed = true) {
             every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(VaultState.NoItems)
+            every { stateFlow } returns MutableStateFlow(
+                VaultState(
+                    avatarColor = Color.Blue,
+                    initials = "BW",
+                    viewState = VaultState.ViewState.NoItems,
+                ),
+            )
         }
         composeTestRule.apply {
             setContent {
@@ -34,7 +41,13 @@ class VaultScreenTest : BaseComposeTest() {
     fun `floating action button click should send AddItemClick action`() {
         val viewModel = mockk<VaultViewModel>(relaxed = true) {
             every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(VaultState.NoItems)
+            every { stateFlow } returns MutableStateFlow(
+                VaultState(
+                    avatarColor = Color.Blue,
+                    initials = "BW",
+                    viewState = VaultState.ViewState.NoItems,
+                ),
+            )
         }
         composeTestRule.apply {
             setContent {
@@ -51,8 +64,15 @@ class VaultScreenTest : BaseComposeTest() {
     fun `add an item button click should send AddItemClick action`() {
         val viewModel = mockk<VaultViewModel>(relaxed = true) {
             every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(VaultState.NoItems)
+            every { stateFlow } returns MutableStateFlow(
+                VaultState(
+                    avatarColor = Color.Blue,
+                    initials = "BW",
+                    viewState = VaultState.ViewState.NoItems,
+                ),
+            )
         }
+
         composeTestRule.apply {
             setContent {
                 VaultScreen(
