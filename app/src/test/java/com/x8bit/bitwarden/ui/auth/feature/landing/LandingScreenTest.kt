@@ -2,6 +2,9 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -18,16 +21,10 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 
 class LandingScreenTest : BaseComposeTest() {
+
     @Test
     fun `continue button should be enabled or disabled according to the state`() {
-        val mutableStateFlow = MutableStateFlow(
-            LandingState(
-                emailInput = "",
-                isContinueButtonEnabled = true,
-                isRememberMeEnabled = false,
-                selectedRegion = LandingState.RegionOption.BITWARDEN_US,
-            ),
-        )
+        val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
         val viewModel = mockk<LandingViewModel>(relaxed = true) {
             every { eventFlow } returns emptyFlow()
             every { stateFlow } returns mutableStateFlow
@@ -50,14 +47,7 @@ class LandingScreenTest : BaseComposeTest() {
     fun `continue button click should send ContinueButtonClick action`() {
         val viewModel = mockk<LandingViewModel>(relaxed = true) {
             every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(
-                LandingState(
-                    emailInput = "",
-                    isContinueButtonEnabled = true,
-                    isRememberMeEnabled = false,
-                    selectedRegion = LandingState.RegionOption.BITWARDEN_US,
-                ),
-            )
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
         }
         composeTestRule.setContent {
             LandingScreen(
@@ -73,17 +63,31 @@ class LandingScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `remember me should be toggled on or off according to the state`() {
+        val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
+        val viewModel = mockk<LandingViewModel>(relaxed = true) {
+            every { eventFlow } returns emptyFlow()
+            every { stateFlow } returns mutableStateFlow
+        }
+        composeTestRule.setContent {
+            LandingScreen(
+                onNavigateToCreateAccount = {},
+                onNavigateToLogin = { _ -> },
+                viewModel = viewModel,
+            )
+        }
+        composeTestRule.onNodeWithText("Remember me").assertIsOff()
+
+        mutableStateFlow.update { it.copy(isRememberMeEnabled = true) }
+
+        composeTestRule.onNodeWithText("Remember me").assertIsOn()
+    }
+
+    @Test
     fun `remember me click should send RememberMeToggle action`() {
         val viewModel = mockk<LandingViewModel>(relaxed = true) {
             every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(
-                LandingState(
-                    emailInput = "",
-                    isContinueButtonEnabled = true,
-                    isRememberMeEnabled = false,
-                    selectedRegion = LandingState.RegionOption.BITWARDEN_US,
-                ),
-            )
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
         }
         composeTestRule.setContent {
             LandingScreen(
@@ -104,14 +108,7 @@ class LandingScreenTest : BaseComposeTest() {
     fun `create account click should send CreateAccountClick action`() {
         val viewModel = mockk<LandingViewModel>(relaxed = true) {
             every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(
-                LandingState(
-                    emailInput = "",
-                    isContinueButtonEnabled = true,
-                    isRememberMeEnabled = false,
-                    selectedRegion = LandingState.RegionOption.BITWARDEN_US,
-                ),
-            )
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
         }
         composeTestRule.setContent {
             LandingScreen(
@@ -127,18 +124,37 @@ class LandingScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `email address should change according to state`() {
+        val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
+        val viewModel = mockk<LandingViewModel>(relaxed = true) {
+            every { eventFlow } returns emptyFlow()
+            every { stateFlow } returns mutableStateFlow
+        }
+        composeTestRule.setContent {
+            LandingScreen(
+                onNavigateToCreateAccount = {},
+                onNavigateToLogin = { _ -> },
+                viewModel = viewModel,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Email address")
+            .assertTextEquals("Email address", "")
+
+        mutableStateFlow.update { it.copy(emailInput = "test@bitwarden.com") }
+
+        composeTestRule
+            .onNodeWithText("Email address")
+            .assertTextEquals("Email address", "test@bitwarden.com")
+    }
+
+    @Test
     fun `email address change should send EmailInputChanged action`() {
         val input = "email"
         val viewModel = mockk<LandingViewModel>(relaxed = true) {
             every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(
-                LandingState(
-                    emailInput = "",
-                    isContinueButtonEnabled = true,
-                    isRememberMeEnabled = false,
-                    selectedRegion = LandingState.RegionOption.BITWARDEN_US,
-                ),
-            )
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
         }
         composeTestRule.setContent {
             LandingScreen(
@@ -158,14 +174,7 @@ class LandingScreenTest : BaseComposeTest() {
         var onNavigateToCreateAccountCalled = false
         val viewModel = mockk<LandingViewModel>(relaxed = true) {
             every { eventFlow } returns flowOf(LandingEvent.NavigateToCreateAccount)
-            every { stateFlow } returns MutableStateFlow(
-                LandingState(
-                    emailInput = "",
-                    isContinueButtonEnabled = true,
-                    isRememberMeEnabled = false,
-                    selectedRegion = LandingState.RegionOption.BITWARDEN_US,
-                ),
-            )
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
         }
         composeTestRule.setContent {
             LandingScreen(
@@ -185,14 +194,7 @@ class LandingScreenTest : BaseComposeTest() {
 
         val viewModel = mockk<LandingViewModel>(relaxed = true) {
             every { eventFlow } returns flowOf(LandingEvent.NavigateToLogin(testEmail))
-            every { stateFlow } returns MutableStateFlow(
-                LandingState(
-                    emailInput = "",
-                    isContinueButtonEnabled = true,
-                    isRememberMeEnabled = false,
-                    selectedRegion = LandingState.RegionOption.BITWARDEN_US,
-                ),
-            )
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
         }
 
         composeTestRule.setContent {
@@ -213,14 +215,7 @@ class LandingScreenTest : BaseComposeTest() {
         val selectedRegion = LandingState.RegionOption.BITWARDEN_EU
         val viewModel = mockk<LandingViewModel>(relaxed = true) {
             every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(
-                LandingState(
-                    emailInput = "",
-                    isContinueButtonEnabled = true,
-                    isRememberMeEnabled = false,
-                    selectedRegion = LandingState.RegionOption.BITWARDEN_US,
-                ),
-            )
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
         }
 
         composeTestRule.setContent {
@@ -240,5 +235,14 @@ class LandingScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(LandingAction.RegionOptionSelect(selectedRegion))
         }
+    }
+
+    companion object {
+        val DEFAULT_STATE = LandingState(
+            emailInput = "",
+            isContinueButtonEnabled = true,
+            isRememberMeEnabled = false,
+            selectedRegion = LandingState.RegionOption.BITWARDEN_US,
+        )
     }
 }
