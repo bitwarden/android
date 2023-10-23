@@ -2689,9 +2689,6 @@ Möchtest du zu diesem Konto wechseln?</value>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Tresor-Timeoutaktion auf "Abmelden" geändert</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Dieser Eintrag kann nicht mit der Organisation geteilt werden, da bereits einer mit dem gleichen Passkey existiert.</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Auto-Ausfüllen blockieren</value>
   </data>

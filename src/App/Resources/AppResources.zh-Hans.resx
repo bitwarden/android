@@ -1644,7 +1644,7 @@
     <value>文件格式</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>输入主密码来导出你的密码库。</value>
+    <value>输入您的主密码以导出你的密码库数据。</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
     <value>发送验证码到您的电子邮箱</value>
@@ -2689,9 +2689,6 @@
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>密码库超时动作已更改为注销</value>
-  </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>无法与组织共享此项目，因为已经有一个项目具有相同的通行密钥。</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>阻止自动填充</value>

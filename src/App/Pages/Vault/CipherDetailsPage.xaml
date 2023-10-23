@@ -11,6 +11,7 @@
     xmlns:dts="clr-namespace:Bit.App.Lists.DataTemplateSelectors"
     xmlns:il="clr-namespace:Bit.App.Lists.ItemLayouts.CustomFields"
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    xmlns:appResources="clr-namespace:Bit.App.Resources"
     x:DataType="pages:CipherDetailsPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -23,6 +24,7 @@
             <u:InverseBoolConverter x:Key="inverseBool" />
             <u:StringHasValueConverter x:Key="stringHasValue" />
             <u:IsNotNullConverter x:Key="notNull" />
+            <u:DateTimeConverter x:Key="dateTime" Format="{x:Static appResources:AppResources.CreatedXY}" />
             <ToolbarItem Text="{u:I18n Collections}"
                          x:Key="collectionsItem"
                          x:Name="_collectionsItem"
@@ -201,10 +203,10 @@
                                 Margin="0,10,0,0"
                                 IsVisible="{Binding Cipher.Login.MainFido2Credential, Converter={StaticResource notNull}}"/>
                             <Entry
-                                Text="{Binding CreationDate}"
+                                Text="{Binding Cipher.Login.MainFido2Credential.CreationDate, Mode=OneWay, Converter={StaticResource dateTime}, FallbackValue=''}"
                                 IsEnabled="False"
                                 StyleClass="box-value,text-muted"
-                                IsVisible="{Binding Cipher.Login.MainFido2Credential, Converter={StaticResource notNull}}" />
+                                IsVisible="{Binding Cipher.Login.MainFido2Credential, Converter={StaticResource notNull}, FallbackValue=False}" />
                             <Grid StyleClass="box-row"
                                   IsVisible="{Binding ShowTotp}"
                                   AutomationId="ItemRow">

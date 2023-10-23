@@ -2690,9 +2690,6 @@ Soovid selle konto peale lülituda?</value>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Vault timeout action changed to log out</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Seda kirjet ei saa organisatsiooniga jagada, sest sama pääsukoodiga kirje juba eksisteerib.</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Automaatse täitmise keelamine</value>
   </data>

@@ -721,7 +721,7 @@
     <value>Bitwarden Verkkoholvi</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>Etkö pysty käyttämään todennussovellustasi?</value>
+    <value>Etkö voi käyttää todennussovellustasi?</value>
   </data>
   <data name="Items" xml:space="preserve">
     <value>Kohteet</value>
@@ -892,10 +892,10 @@
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
     <value>Kohdista kamera QR-koodiin.
-Koodi luetaan automaattisesti.</value>
+Koodi skannataan automaattisesti.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>Lue QR-koodi</value>
+    <value>Skannaa QR-koodi</value>
   </data>
   <data name="Camera" xml:space="preserve">
     <value>Kamera</value>
@@ -907,7 +907,7 @@ Koodi luetaan automaattisesti.</value>
     <value>Kopioi TOTP-todennuskoodi</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>TOTP-todennuskoodi kopioidaan automaattisesti leikepöydälle automaattisen täytön yhteydessä, jos kirjautumistieto sisältää kaksivaiheisen todennusmenetelmän avaimen.</value>
+    <value>Jos kirjautumistieto sisältää kaksivaiheisen TOTP-todennusavaimen, kopioidaan todennuskoodi automaattisesti leikepöydälle automaattisen täytön yhteydessä.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>TOTP-koodin kopiointi</value>
@@ -2276,16 +2276,16 @@ Koodi luetaan automaattisesti.</value>
     <value>Etkö voi lisätä todennusavainta? </value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
-    <value>Lue QR-koodi</value>
+    <value>Skannaa QR-koodi</value>
   </data>
   <data name="CannotScanQRCode" xml:space="preserve">
-    <value>Etkö voi lukea QR-koodia? </value>
+    <value>Eikö QR-koodin skannaus onnistu? </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
     <value>Todentajan avain</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Syötä koodi manuaalisesti</value>
+    <value>Syötä se manuaalisesti</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
     <value>Lisää TOTP</value>
@@ -2307,7 +2307,7 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
     <value>Pyyntöäsi ei voitu käsitellä. Yritä uudelleen tai ota meihin yhteyttä.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
-    <value>Salli kuvakaappaus</value>
+    <value>Salli kuvankaappaus</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Haluatko varmasti sallia kuvankaappauksen?</value>
@@ -2319,7 +2319,7 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
     <value>Yritätkö kirjautua sisään?</value>
   </data>
   <data name="LogInAttemptByXOnY" xml:space="preserve">
-    <value>Kirjautumisyritys tunnuksella {0} laitteella {1}</value>
+    <value>Kirjautumisyritys tunnuksella {0} kohteessa {1}.</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
     <value>Laitteen tyyppi</value>
@@ -2337,7 +2337,7 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
     <value>Vahvista kirjautuminen</value>
   </data>
   <data name="DenyLogIn" xml:space="preserve">
-    <value>Estä kirjautuminen</value>
+    <value>Hylkää kirjautuminen</value>
   </data>
   <data name="JustNow" xml:space="preserve">
     <value>Juuri nyt</value>
@@ -2355,7 +2355,7 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
     <value>Hyväksy kirjautumispyyntöjä</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Hyväksy kirjautumispyyntöjä tällä laitteella</value>
+    <value>Hyväksy muiden laitteiden kirjautumispyyntöjä tällä laitteella</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Salli ilmoitukset</value>
@@ -2533,7 +2533,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Odottavia pyyntöjä ei ole</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Myönnä kameran käyttöoikeus skannerin käyttämiseksi</value>
+    <value>Myönnä kameran käyttöoikeus käyttääksesi skannausta</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>Kieli</value>
@@ -2620,10 +2620,10 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Nykyinen pääsalasana</value>
   </data>
   <data name="LoggedIn" xml:space="preserve">
-    <value>Kirjautuminen onnistui!</value>
+    <value>Kirjautuminen onnistui</value>
   </data>
   <data name="ApproveWithMyOtherDevice" xml:space="preserve">
-    <value>Hyväksy muilta laitteiltasi</value>
+    <value>Hyväksy toisella laitteellani</value>
   </data>
   <data name="RequestAdminApproval" xml:space="preserve">
     <value>Pyydä hyväksyntää ylläpidolta</value>
@@ -2690,9 +2690,6 @@ Haluatko vaihtaa tähän tiliin?</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Holvin aikakatkaisutoiminnoksi vaihdettiin uloskirjaus</value>
-  </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Kohdetta ei voida jakaa organisaatiolle, koska siellä on jo samaa suojausavainta käyttävä kohde.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Estä automaattinen täyttö</value>
@@ -2771,7 +2768,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Synkronoi nyt</value>
   </data>
   <data name="UnlockOptions" xml:space="preserve">
-    <value>Lukitseminen</value>
+    <value>Avausasetukset</value>
   </data>
   <data name="SessionTimeout" xml:space="preserve">
     <value>Istunnon aikakatkaisu</value>
@@ -2780,17 +2777,17 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Istunnon aikakatkaisutoiminto</value>
   </data>
   <data name="AccountFingerprintPhrase" xml:space="preserve">
-    <value>Tilisi tunnistelauseke</value>
+    <value>Tilin tunnistelauseke</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="OneHourAndOneMinute" xml:space="preserve">
-    <value>Tunti ja minuutti</value>
+    <value>1 tunti 1 minuutti</value>
   </data>
   <data name="OneHourAndXMinute" xml:space="preserve">
-    <value>Tunti ja {0} minuuttia</value>
+    <value>1 tunti {0} minuuttia</value>
   </data>
   <data name="XHoursAndOneMinute" xml:space="preserve">
-    <value>{0} tuntia yksi minuutti</value>
+    <value>{0} tuntia 1 minuutti</value>
   </data>
   <data name="XHoursAndYMinutes" xml:space="preserve">
     <value>{0} tuntia {1} minuuttia</value>
@@ -2799,10 +2796,10 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>{0} tuntia</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
-    <value>Android Autofill Framework -rajapintaa käytetään kirjautumistietojen täyttöön laitteen muihin sovelluksiin.</value>
+    <value>Android Autofill Framework -rajapintaa käytetään täytettäessä kirjautumistietoja laitteen muihin sovelluksiin.</value>
   </data>
   <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
-    <value>Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</value>
+    <value>Tekstinsisäistä automattitäyttöä käytetään, jos aktiivinen näppäimistö tukee sitä. Muussa tapauksessa käytetään ponnahdusvalintaa.</value>
   </data>
   <data name="AdditionalOptions" xml:space="preserve">
     <value>Lisäasetukset</value>
@@ -2818,23 +2815,23 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Avataanko Tukikeskus?</value>
   </data>
   <data name="ContinueToContactSupport" xml:space="preserve">
-    <value>Avataanko asiakaspalvelu?</value>
+    <value>Siirrytäänkö asiakaspalveluun?</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Avataanko sovelluskauppa?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
-    <value>Paranna tilisi suojausta määrittämällä kaksivaiheinen kirjautuminen Bitwarden-verkkosovelluksesta.</value>
+    <value>Paranna tilisi suojausta määrittämällä kaksivaiheinen kirjautuminen Bitwardenin verkkosovelluksessa.</value>
   </data>
   <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
-    <value>Voit vaihtaa pääsalasanasi Bitwarden-verkkosovelluksesta.</value>
+    <value>Voit vaihtaa pääsalasanasi Bitwardenin verkkosovelluksessa.</value>
   </data>
   <data name="YouCanImportDataToYourVaultOnX" xml:space="preserve">
     <value>Voit tuoda tietoja holviisi osoitteessa {0}.</value>
     <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
   </data>
   <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
-    <value>Opi käyttämään Bitwardenia Tukikeskuksessa.</value>
+    <value>Tutustu Bitwardeniin ja opettele käyttämään sitä Tukikeskuksessa.</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Etkö löydä etsimääsi? Tavoitat Bitwardenin asiakaspalvelun osoitteesta bitwarden.com.</value>
@@ -2843,13 +2840,13 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Tutustu Bitwarden-tilisi muihin omimaisuuksiin verkkosovelluksessa.</value>
   </data>
   <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
-    <value>Bitwarden mahdollistaa holvisi sisällön jakamisen organisaation avulla. Lisätietoja saat bitwarden.com-sivustolta.</value>
+    <value>Bitwarden mahdollistaa holvisi sisällön jakamisen organisaation avulla. Lue lisää osoitteesta bitwarden.com.</value>
   </data>
   <data name="RateAppDescriptionLong" xml:space="preserve">
     <value>Auta muita selvittämään sopiiko Bitwarden heille. Arvioi se sovelluskaupassa nyt.</value>
   </data>
   <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
-    <value>Valitse tumma teema kun laitteesi tumma tila on käytössä.</value>
+    <value>Valitse tumma teema kun laitteesi tumma tila on aktiivinen.</value>
   </data>
   <data name="CreatedXY" xml:space="preserve">
     <value>Luotu {0} - {1}</value>

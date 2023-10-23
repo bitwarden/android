@@ -1161,8 +1161,11 @@ namespace Bit.Core.Services
                         cipher.Login.Fido2Credentials = new List<Fido2Credential>();
                         foreach (var fido2Credential in model.Login.Fido2Credentials)
                         {
-                            var fido2CredentialDomain = new Fido2Credential();
-                            await EncryptObjPropertyAsync(fido2Credential, fido2CredentialDomain, Fido2Credential.EncryptableProperties, key);
+                            var fido2CredentialDomain = new Fido2Credential
+                            {
+                                CreationDate = fido2Credential.CreationDate
+                            };
+                            await EncryptObjPropertyAsync(fido2Credential, fido2CredentialDomain, Fido2Credential.EncryptablePropertiesToMap, key);
                             cipher.Login.Fido2Credentials.Add(fido2CredentialDomain);
                         }
                     }
