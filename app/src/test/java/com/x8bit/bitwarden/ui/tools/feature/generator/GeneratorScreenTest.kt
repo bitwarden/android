@@ -4,6 +4,8 @@ import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher.Companion.expectValue
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasProgressBarRangeInfo
@@ -156,22 +158,22 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("A—Z")
             .performScrollTo()
-            .assertIsDisplayed()
+            .assertIsOn()
 
         composeTestRule
             .onNodeWithText("a—z")
             .performScrollTo()
-            .assertIsDisplayed()
+            .assertIsOn()
 
         composeTestRule
             .onNodeWithText("0-9")
             .performScrollTo()
-            .assertIsDisplayed()
+            .assertIsOn()
 
         composeTestRule
             .onNodeWithText("!@#$%^&*")
             .performScrollTo()
-            .assertIsDisplayed()
+            .assertIsOff()
 
         composeTestRule
             .onNodeWithContentDescription("Minimum numbers, 1")
