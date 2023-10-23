@@ -17,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -50,6 +52,7 @@ fun BitwardenWideSwitch(
                 onClick = { onCheckedChange?.invoke(!isChecked) },
             )
             .semantics(mergeDescendants = true) {
+                toggleableState = ToggleableState(isChecked)
                 if (contentDescription != null) {
                     this.contentDescription = contentDescription
                 }
