@@ -32,6 +32,12 @@ import org.junit.jupiter.api.Test
 
 class CreateAccountViewModelTest : BaseViewModelTest() {
 
+    /**
+     * Saved state handle that has valid inputs. Useful for tests that want to test things
+     * after the user has entered all valid inputs.
+     */
+    private val validInputHandle = SavedStateHandle(mapOf("state" to VALID_INPUT_STATE))
+
     private val mockAuthRepository = mockk<AuthRepository> {
         every { captchaTokenResultFlow } returns flowOf()
     }
@@ -203,33 +209,16 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             } returns RegisterResult.Success(captchaToken = "mock_token")
         }
         val viewModel = CreateAccountViewModel(
-            savedStateHandle = SavedStateHandle(),
+            savedStateHandle = validInputHandle,
             authRepository = repo,
         )
-        viewModel.trySendAction(PasswordInputChange("longenoughpassword"))
-        viewModel.trySendAction(EmailInputChange(EMAIL))
-        viewModel.trySendAction(PasswordInputChange(PASSWORD))
-        viewModel.trySendAction(ConfirmPasswordInputChange(PASSWORD))
-        viewModel.trySendAction(AcceptPoliciesToggle(true))
         turbineScope {
             val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
             val eventFlow = viewModel.eventFlow.testIn(backgroundScope)
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    emailInput = EMAIL,
-                    passwordInput = PASSWORD,
-                    confirmPasswordInput = PASSWORD,
-                    isAcceptPoliciesToggled = true,
-                ),
-                stateFlow.awaitItem(),
-            )
+            assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
             viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
             assertEquals(
-                DEFAULT_STATE.copy(
-                    emailInput = EMAIL,
-                    passwordInput = PASSWORD,
-                    confirmPasswordInput = PASSWORD,
-                    isAcceptPoliciesToggled = true,
+                VALID_INPUT_STATE.copy(
                     loadingDialogState = LoadingDialogState.Shown(
                         text = R.string.creating_account.asText(),
                     ),
@@ -243,16 +232,8 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                 ),
                 eventFlow.awaitItem(),
             )
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    emailInput = EMAIL,
-                    passwordInput = PASSWORD,
-                    confirmPasswordInput = PASSWORD,
-                    isAcceptPoliciesToggled = true,
-                    loadingDialogState = LoadingDialogState.Hidden,
-                ),
-                stateFlow.awaitItem(),
-            )
+            // Make sure loading dialog is hidden:
+            assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
         }
     }
 
@@ -270,30 +251,14 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             } returns RegisterResult.Error(errorMessage = "mock_error")
         }
         val viewModel = CreateAccountViewModel(
-            savedStateHandle = SavedStateHandle(),
+            savedStateHandle = validInputHandle,
             authRepository = repo,
         )
-        viewModel.trySendAction(EmailInputChange(EMAIL))
-        viewModel.trySendAction(PasswordInputChange(PASSWORD))
-        viewModel.trySendAction(ConfirmPasswordInputChange(PASSWORD))
-        viewModel.trySendAction(AcceptPoliciesToggle(true))
         viewModel.stateFlow.test {
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    emailInput = EMAIL,
-                    passwordInput = PASSWORD,
-                    confirmPasswordInput = PASSWORD,
-                    isAcceptPoliciesToggled = true,
-                ),
-                awaitItem(),
-            )
+            assertEquals(VALID_INPUT_STATE, awaitItem())
             viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
             assertEquals(
-                DEFAULT_STATE.copy(
-                    emailInput = EMAIL,
-                    passwordInput = PASSWORD,
-                    confirmPasswordInput = PASSWORD,
-                    isAcceptPoliciesToggled = true,
+                VALID_INPUT_STATE.copy(
                     loadingDialogState = LoadingDialogState.Shown(
                         text = R.string.creating_account.asText(),
                     ),
@@ -301,11 +266,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
             assertEquals(
-                DEFAULT_STATE.copy(
-                    emailInput = EMAIL,
-                    passwordInput = PASSWORD,
-                    confirmPasswordInput = PASSWORD,
-                    isAcceptPoliciesToggled = true,
+                VALID_INPUT_STATE.copy(
                     loadingDialogState = LoadingDialogState.Hidden,
                     errorDialogState = BasicDialogState.Shown(
                         title = R.string.an_error_has_occurred.asText(),
@@ -335,13 +296,9 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             } returns RegisterResult.CaptchaRequired(captchaId = "mock_captcha_id")
         }
         val viewModel = CreateAccountViewModel(
-            savedStateHandle = SavedStateHandle(),
+            savedStateHandle = validInputHandle,
             authRepository = repo,
         )
-        viewModel.trySendAction(EmailInputChange(EMAIL))
-        viewModel.trySendAction(PasswordInputChange(PASSWORD))
-        viewModel.trySendAction(ConfirmPasswordInputChange(PASSWORD))
-        viewModel.trySendAction(AcceptPoliciesToggle(true))
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
             assertEquals(
@@ -369,13 +326,9 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             } returns RegisterResult.Success(captchaToken = "mock_captcha_token")
         }
         val viewModel = CreateAccountViewModel(
-            savedStateHandle = SavedStateHandle(),
+            savedStateHandle = validInputHandle,
             authRepository = repo,
         )
-        viewModel.trySendAction(EmailInputChange(EMAIL))
-        viewModel.trySendAction(PasswordInputChange(PASSWORD))
-        viewModel.trySendAction(ConfirmPasswordInputChange(PASSWORD))
-        viewModel.trySendAction(AcceptPoliciesToggle(true))
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
             assertEquals(
@@ -497,6 +450,8 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
     }
 
     companion object {
+        private const val PASSWORD = "longenoughtpassword"
+        private const val EMAIL = "test@test.com"
         private val DEFAULT_STATE = CreateAccountState(
             passwordInput = "",
             emailInput = "",
@@ -507,10 +462,17 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             errorDialogState = BasicDialogState.Hidden,
             loadingDialogState = LoadingDialogState.Hidden,
         )
+        private val VALID_INPUT_STATE = CreateAccountState(
+            passwordInput = PASSWORD,
+            emailInput = EMAIL,
+            confirmPasswordInput = PASSWORD,
+            passwordHintInput = "",
+            isCheckDataBreachesToggled = false,
+            isAcceptPoliciesToggled = true,
+            errorDialogState = BasicDialogState.Hidden,
+            loadingDialogState = LoadingDialogState.Hidden,
+        )
         private const val LOGIN_RESULT_PATH =
             "com.x8bit.bitwarden.data.auth.repository.util.CaptchaUtilsKt"
-
-        private const val PASSWORD = "longenoughtpassword"
-        private const val EMAIL = "test@test.com"
     }
 }
