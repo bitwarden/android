@@ -1,15 +1,23 @@
 package com.x8bit.bitwarden.ui.auth.feature.landing
 
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -21,7 +29,6 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 
 class LandingScreenTest : BaseComposeTest() {
-
     @Test
     fun `continue button should be enabled or disabled according to the state`() {
         val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -237,12 +244,83 @@ class LandingScreenTest : BaseComposeTest() {
         }
     }
 
+    @Test
+    fun `error dialog should be shown or hidden according to the state`() {
+        val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
+        val viewModel = mockk<LandingViewModel>(relaxed = true) {
+            every { eventFlow } returns emptyFlow()
+            every { stateFlow } returns mutableStateFlow
+        }
+        composeTestRule.setContent {
+            LandingScreen(
+                onNavigateToCreateAccount = {},
+                onNavigateToLogin = { _ -> },
+                viewModel = viewModel,
+            )
+        }
+
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                errorDialogState = BasicDialogState.Shown(
+                    title = "Error dialog title".asText(),
+                    message = "Error dialog message".asText(),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(isDialog()).assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Error dialog title")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Error dialog message")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Ok")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `error dialog OK click should send ErrorDialogDismiss action`() {
+        val viewModel = mockk<LandingViewModel>(relaxed = true) {
+            every { eventFlow } returns emptyFlow()
+            every { stateFlow } returns MutableStateFlow(
+                DEFAULT_STATE.copy(
+                    errorDialogState = BasicDialogState.Shown(
+                        title = "title".asText(),
+                        message = "message".asText(),
+                    ),
+                ),
+            )
+            every { trySendAction(LandingAction.ErrorDialogDismiss) } returns Unit
+        }
+        composeTestRule.setContent {
+            LandingScreen(
+                onNavigateToCreateAccount = {},
+                onNavigateToLogin = { _ -> },
+                viewModel = viewModel,
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify { viewModel.trySendAction(LandingAction.ErrorDialogDismiss) }
+    }
+
     companion object {
         val DEFAULT_STATE = LandingState(
             emailInput = "",
             isContinueButtonEnabled = true,
             isRememberMeEnabled = false,
             selectedRegion = LandingState.RegionOption.BITWARDEN_US,
+            errorDialogState = BasicDialogState.Hidden,
         )
     }
 }
