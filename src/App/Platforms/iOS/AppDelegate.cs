@@ -249,16 +249,15 @@ namespace Bit.iOS
             return _deepLinkContext.Value.OnNewUri(url) || base.OpenUrl(app, url, options);
         }
 
-        // TODO: [MAUI-Migration] Check if this works given that the baes will call the invoke the service lifecycle.
-        /* public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity,
+        public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity,
             UIApplicationRestorationHandler completionHandler)
         {
-            if (Xamarin.Essentials.Platform.ContinueUserActivity(application, userActivity, completionHandler))
+            if (Microsoft.Maui.ApplicationModel.Platform.ContinueUserActivity(application, userActivity, completionHandler))
             {
                 return true;
             }
             return base.ContinueUserActivity(application, userActivity, completionHandler);
-        } */
+        }
 
         [Export("application:didFailToRegisterForRemoteNotificationsWithError:")]
         public void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
