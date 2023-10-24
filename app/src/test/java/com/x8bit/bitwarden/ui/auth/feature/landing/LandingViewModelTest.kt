@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
@@ -145,14 +146,14 @@ class LandingViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `RegionOptionSelect should update value of selected region`() = runTest {
-        val inputRegion = LandingState.RegionOption.BITWARDEN_EU
+    fun `EnvironmentTypeSelect should update value of selected region`() = runTest {
+        val inputEnvironment = Environment.Eu
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             awaitItem()
-            viewModel.trySendAction(LandingAction.RegionOptionSelect(inputRegion))
+            viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(inputEnvironment.type))
             assertEquals(
-                DEFAULT_STATE.copy(selectedRegion = LandingState.RegionOption.BITWARDEN_EU),
+                DEFAULT_STATE.copy(selectedEnvironment = Environment.Eu),
                 awaitItem(),
             )
         }
@@ -162,10 +163,14 @@ class LandingViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         rememberedEmail: String? = null,
+        environment: Environment = Environment.Us,
         savedStateHandle: SavedStateHandle = SavedStateHandle(),
     ): LandingViewModel = LandingViewModel(
         authRepository = mockk(relaxed = true) {
             every { rememberedEmailAddress } returns rememberedEmail
+        },
+        environmentRepository = mockk(relaxed = true) {
+            every { this@mockk.environment } returns environment
         },
         savedStateHandle = savedStateHandle,
     )
@@ -177,7 +182,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             emailInput = "",
             isContinueButtonEnabled = false,
             isRememberMeEnabled = false,
-            selectedRegion = LandingState.RegionOption.BITWARDEN_US,
+            selectedEnvironment = Environment.Us,
             errorDialogState = BasicDialogState.Hidden,
         )
     }

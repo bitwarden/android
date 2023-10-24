@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
@@ -132,10 +133,10 @@ fun LandingScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        RegionSelector(
-            selectedOption = state.selectedRegion,
+        EnvironmentSelector(
+            selectedOption = state.selectedEnvironment.type,
             onOptionSelected = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.RegionOptionSelect(it)) }
+                { viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(it)) }
             },
             modifier = Modifier
                 .semantics { testTag = "RegionSelectorDropdown" }
@@ -208,19 +209,19 @@ fun LandingScreen(
  * from a list of options. When an option is selected, it invokes the provided callback
  * and displays the currently selected region on the UI.
  *
- * @param selectedOption The currently selected region option.
- * @param onOptionSelected A callback that gets invoked when a region option is selected
+ * @param selectedOption The currently selected environment option.
+ * @param onOptionSelected A callback that gets invoked when an environment option is selected
  * and passes the selected option as an argument.
  * @param modifier A [Modifier] for the composable.
  *
  */
 @Composable
-private fun RegionSelector(
-    selectedOption: LandingState.RegionOption,
-    onOptionSelected: (LandingState.RegionOption) -> Unit,
+private fun EnvironmentSelector(
+    selectedOption: Environment.Type,
+    onOptionSelected: (Environment.Type) -> Unit,
     modifier: Modifier,
 ) {
-    val options = LandingState.RegionOption.values().toList()
+    val options = Environment.Type.values()
     var expanded by remember { mutableStateOf(false) }
 
     Box(modifier = modifier) {
@@ -238,7 +239,7 @@ private fun RegionSelector(
                 modifier = Modifier.padding(end = 12.dp),
             )
             Text(
-                text = selectedOption.label,
+                text = selectedOption.label(),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(end = 8.dp),
@@ -256,7 +257,7 @@ private fun RegionSelector(
         ) {
             options.forEach { optionString ->
                 DropdownMenuItem(
-                    text = { Text(text = optionString.label) },
+                    text = { Text(text = optionString.label()) },
                     onClick = {
                         expanded = false
                         onOptionSelected(optionString)

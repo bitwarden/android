@@ -11,7 +11,9 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
@@ -31,6 +33,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val environmentRepository: EnvironmentRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginState, LoginEvent, LoginAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -38,7 +41,7 @@ class LoginViewModel @Inject constructor(
             emailAddress = LoginArgs(savedStateHandle).emailAddress,
             isLoginButtonEnabled = true,
             passwordInput = "",
-            region = authRepository.selectedRegionLabel,
+            environmentLabel = environmentRepository.environment.label,
             loadingDialogState = LoadingDialogState.Hidden,
             errorDialogState = BasicDialogState.Hidden,
             captchaToken = LoginArgs(savedStateHandle).captchaToken,
@@ -193,7 +196,7 @@ data class LoginState(
     val passwordInput: String,
     val emailAddress: String,
     val captchaToken: String?,
-    val region: String,
+    val environmentLabel: Text,
     val isLoginButtonEnabled: Boolean,
     val loadingDialogState: LoadingDialogState,
     val errorDialogState: BasicDialogState,

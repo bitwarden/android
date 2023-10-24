@@ -147,12 +147,12 @@ fun LoginScreen(
                     .padding(bottom = 24.dp),
                 isEnabled = state.isLoginButtonEnabled,
             )
-            // TODO Get the "login target" from a dropdown (BIT-202)
+
             Text(
                 text = stringResource(
                     id = R.string.logging_in_as_x_on_y,
                     state.emailAddress,
-                    state.region,
+                    state.environmentLabel(),
                 ),
                 textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.bodyMedium,
