@@ -15,11 +15,8 @@ namespace Bit.App.Handlers
                     magImage.LayoutParameters = new Android.Widget.LinearLayout.LayoutParams(0, 0);
                 }
                 catch { }
-                // TODO: [MAUI-Migration] [Check]
                 handler.PlatformView.ImeOptions = handler.PlatformView.ImeOptions | (int)ImeFlags.NoPersonalizedLearning |
                     (int)ImeFlags.NoExtractUi;
-                //Control.SetImeOptions(Control.ImeOptions | (ImeAction)ImeFlags.NoPersonalizedLearning |
-                //    (ImeAction)ImeFlags.NoExtractUi);
             });
         }
     }

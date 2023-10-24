@@ -14,15 +14,7 @@ namespace Bit.App.Handlers
                 var t = ResourcesCompat.GetDrawable(handler.PlatformView.Resources, Resource.Drawable.slider_thumb, null);
                 if (t is GradientDrawable thumb && slider is ExtendedSlider extSlider)
                 {
-                    // TODO: [MAUI-Migration]
-                    //if (view.ThumbColor == Colors.Default)
-                    //{
-                    //    thumb.SetColor(Colors.White.ToAndroid());
-                    //}
-                    //else
-                    //{
                     thumb.SetColor(extSlider.ThumbColor.ToAndroid());
-                    //}
                     thumb.SetStroke(3, extSlider.ThumbBorderColor.ToAndroid());
                     handler.PlatformView.SetThumb(thumb);
                 }
