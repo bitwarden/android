@@ -17,8 +17,8 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Pas
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
-import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -70,8 +70,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             passwordHintInput = "hint",
             isCheckDataBreachesToggled = false,
             isAcceptPoliciesToggled = false,
-            errorDialogState = BasicDialogState.Hidden,
-            loadingDialogState = LoadingDialogState.Hidden,
+            dialog = null,
         )
         val handle = SavedStateHandle(mapOf("state" to savedState))
         val viewModel = CreateAccountViewModel(
@@ -91,9 +90,11 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(EmailInputChange(input))
         val expectedState = DEFAULT_STATE.copy(
             emailInput = input,
-            errorDialogState = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.invalid_email.asText(),
+            dialog = CreateAccountDialog.Error(
+                BasicDialogState.Shown(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.invalid_email.asText(),
+                ),
             ),
         )
         viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
@@ -112,10 +113,12 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(EmailInputChange(input))
         val expectedState = DEFAULT_STATE.copy(
             emailInput = input,
-            errorDialogState = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.validation_field_required
-                    .asText(R.string.email_address.asText()),
+            dialog = CreateAccountDialog.Error(
+                BasicDialogState.Shown(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.validation_field_required
+                        .asText(R.string.email_address.asText()),
+                ),
             ),
         )
         viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
@@ -136,9 +139,11 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         val expectedState = DEFAULT_STATE.copy(
             emailInput = EMAIL,
             passwordInput = input,
-            errorDialogState = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.master_password_length_val_message_x.asText(12),
+            dialog = CreateAccountDialog.Error(
+                BasicDialogState.Shown(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.master_password_length_val_message_x.asText(12),
+                ),
             ),
         )
         viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
@@ -159,9 +164,11 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         val expectedState = DEFAULT_STATE.copy(
             emailInput = "test@test.com",
             passwordInput = input,
-            errorDialogState = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.master_password_confirmation_val_message.asText(),
+            dialog = CreateAccountDialog.Error(
+                BasicDialogState.Shown(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.master_password_confirmation_val_message.asText(),
+                ),
             ),
         )
         viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
@@ -184,9 +191,11 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             emailInput = "test@test.com",
             passwordInput = password,
             confirmPasswordInput = password,
-            errorDialogState = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.accept_policies_error.asText(),
+            dialog = CreateAccountDialog.Error(
+                BasicDialogState.Shown(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.accept_policies_error.asText(),
+                ),
             ),
         )
         viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
@@ -205,6 +214,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                     masterPassword = PASSWORD,
                     masterPasswordHint = null,
                     captchaToken = null,
+                    shouldCheckDataBreaches = false,
                 )
             } returns RegisterResult.Success(captchaToken = "mock_token")
         }
@@ -218,11 +228,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
             viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
             assertEquals(
-                VALID_INPUT_STATE.copy(
-                    loadingDialogState = LoadingDialogState.Shown(
-                        text = R.string.creating_account.asText(),
-                    ),
-                ),
+                VALID_INPUT_STATE.copy(dialog = CreateAccountDialog.Loading),
                 stateFlow.awaitItem(),
             )
             assertEquals(
@@ -247,6 +253,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                     masterPassword = PASSWORD,
                     masterPasswordHint = null,
                     captchaToken = null,
+                    shouldCheckDataBreaches = false,
                 )
             } returns RegisterResult.Error(errorMessage = "mock_error")
         }
@@ -258,19 +265,16 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             assertEquals(VALID_INPUT_STATE, awaitItem())
             viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
             assertEquals(
-                VALID_INPUT_STATE.copy(
-                    loadingDialogState = LoadingDialogState.Shown(
-                        text = R.string.creating_account.asText(),
-                    ),
-                ),
+                VALID_INPUT_STATE.copy(dialog = CreateAccountDialog.Loading),
                 awaitItem(),
             )
             assertEquals(
                 VALID_INPUT_STATE.copy(
-                    loadingDialogState = LoadingDialogState.Hidden,
-                    errorDialogState = BasicDialogState.Shown(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = "mock_error".asText(),
+                    dialog = CreateAccountDialog.Error(
+                        BasicDialogState.Shown(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = "mock_error".asText(),
+                        ),
                     ),
                 ),
                 awaitItem(),
@@ -292,6 +296,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                     masterPassword = PASSWORD,
                     masterPasswordHint = null,
                     captchaToken = null,
+                    shouldCheckDataBreaches = false,
                 )
             } returns RegisterResult.CaptchaRequired(captchaId = "mock_captcha_id")
         }
@@ -322,6 +327,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                     masterPassword = PASSWORD,
                     masterPasswordHint = null,
                     captchaToken = null,
+                    shouldCheckDataBreaches = false,
                 )
             } returns RegisterResult.Success(captchaToken = "mock_captcha_token")
         }
@@ -340,6 +346,69 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `ContinueWithBreachedPasswordClick should call repository with checkDataBreaches false`() {
+        val repo = mockk<AuthRepository> {
+            every { captchaTokenResultFlow } returns flowOf()
+            coEvery {
+                register(
+                    email = EMAIL,
+                    masterPassword = PASSWORD,
+                    masterPasswordHint = null,
+                    captchaToken = null,
+                    shouldCheckDataBreaches = false,
+                )
+            } returns RegisterResult.Error(null)
+        }
+        val viewModel = CreateAccountViewModel(
+            savedStateHandle = validInputHandle,
+            authRepository = repo,
+        )
+        viewModel.trySendAction(CreateAccountAction.ContinueWithBreachedPasswordClick)
+        coVerify {
+            repo.register(
+                email = EMAIL,
+                masterPassword = PASSWORD,
+                masterPasswordHint = null,
+                captchaToken = null,
+                shouldCheckDataBreaches = false,
+            )
+        }
+    }
+
+    @Test
+    fun `SubmitClick register returns ShowDataBreaches should show HaveIBeenPwned dialog`() =
+        runTest {
+            val repo = mockk<AuthRepository> {
+                every { captchaTokenResultFlow } returns flowOf()
+                coEvery {
+                    register(
+                        email = EMAIL,
+                        masterPassword = PASSWORD,
+                        masterPasswordHint = null,
+                        captchaToken = null,
+                        shouldCheckDataBreaches = true,
+                    )
+                } returns RegisterResult.DataBreachFound
+            }
+            val viewModel = CreateAccountViewModel(
+                savedStateHandle = validInputHandle,
+                authRepository = repo,
+            )
+            viewModel.actionChannel.trySend(CreateAccountAction.CheckDataBreachesToggle(true))
+            viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
+            viewModel.stateFlow.test {
+                assertEquals(
+                    VALID_INPUT_STATE.copy(
+                        isCheckDataBreachesToggled = true,
+                        dialog = CreateAccountDialog.HaveIBeenPwned,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `CloseClick should emit NavigateBack`() = runTest {
@@ -459,8 +528,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             passwordHintInput = "",
             isCheckDataBreachesToggled = false,
             isAcceptPoliciesToggled = false,
-            errorDialogState = BasicDialogState.Hidden,
-            loadingDialogState = LoadingDialogState.Hidden,
+            dialog = null,
         )
         private val VALID_INPUT_STATE = CreateAccountState(
             passwordInput = PASSWORD,
@@ -469,8 +537,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             passwordHintInput = "",
             isCheckDataBreachesToggled = false,
             isAcceptPoliciesToggled = true,
-            errorDialogState = BasicDialogState.Hidden,
-            loadingDialogState = LoadingDialogState.Hidden,
+            dialog = null,
         )
         private const val LOGIN_RESULT_PATH =
             "com.x8bit.bitwarden.data.auth.repository.util.CaptchaUtilsKt"

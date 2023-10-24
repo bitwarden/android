@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJs
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
+import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
@@ -35,9 +36,11 @@ private const val DEFAULT_KDF_ITERATIONS = 600000
 /**
  * Default implementation of [AuthRepository].
  */
+@Suppress("LongParameterList")
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val accountsService: AccountsService,
+    private val haveIBeenPwnedService: HaveIBeenPwnedService,
     private val identityService: IdentityService,
     private val authSdkSource: AuthSdkSource,
     private val authDiskSource: AuthDiskSource,
@@ -143,12 +146,26 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    @Suppress("ReturnCount")
     override suspend fun register(
         email: String,
         masterPassword: String,
         masterPasswordHint: String?,
         captchaToken: String?,
+        shouldCheckDataBreaches: Boolean,
     ): RegisterResult {
+        if (shouldCheckDataBreaches) {
+            haveIBeenPwnedService
+                .hasPasswordBeenBreached(password = masterPassword)
+                .fold(
+                    onFailure = { return RegisterResult.Error(null) },
+                    onSuccess = { foundDataBreaches ->
+                        if (foundDataBreaches) {
+                            return RegisterResult.DataBreachFound
+                        }
+                    },
+                )
+        }
         val kdf = Kdf.Pbkdf2(DEFAULT_KDF_ITERATIONS.toUInt())
         return authSdkSource
             .makeRegisterKeys(

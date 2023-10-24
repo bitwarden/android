@@ -45,6 +45,7 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Acc
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CheckDataBreachesToggle
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ConfirmPasswordInputChange
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ContinueWithBreachedPasswordClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ErrorDialogDismiss
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordHintChange
@@ -56,12 +57,15 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountEvent.Navi
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountEvent.NavigateToTerms
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButtonTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.theme.clickableSpanStyle
 
 /**
@@ -104,13 +108,49 @@ fun CreateAccountScreen(
             }
         }
     }
-    BitwardenBasicDialog(
-        visibilityState = state.errorDialogState,
-        onDismissRequest = remember(viewModel) { { viewModel.trySendAction(ErrorDialogDismiss) } },
-    )
-    BitwardenLoadingDialog(
-        visibilityState = state.loadingDialogState,
-    )
+
+    val haveIBeenPwnedMessage = remember {
+        R.string.weak_password_identified_and_found_in_a_data_breach_alert_description.asText()
+    }
+
+    // Show dialog if needed:
+    when (val dialog = state.dialog) {
+        is CreateAccountDialog.Error -> {
+            BitwardenBasicDialog(
+                visibilityState = dialog.state,
+                onDismissRequest = remember(viewModel) {
+                    { viewModel.trySendAction(ErrorDialogDismiss) }
+                },
+            )
+        }
+
+        CreateAccountDialog.HaveIBeenPwned -> {
+            BitwardenTwoButtonDialog(
+                title = R.string.weak_and_exposed_master_password.asText(),
+                message = haveIBeenPwnedMessage,
+                confirmButtonText = R.string.yes.asText(),
+                dismissButtonText = R.string.no.asText(),
+                onConfirmClick = remember(viewModel) {
+                    { viewModel.trySendAction(ContinueWithBreachedPasswordClick) }
+                },
+                onDismissClick = remember(viewModel) {
+                    { viewModel.trySendAction(ErrorDialogDismiss) }
+                },
+                onDismissRequest = remember(viewModel) {
+                    { viewModel.trySendAction(ErrorDialogDismiss) }
+                },
+            )
+        }
+
+        CreateAccountDialog.Loading -> {
+            BitwardenLoadingDialog(
+                visibilityState = LoadingDialogState.Shown(R.string.create_account.asText()),
+            )
+        }
+
+        null -> Unit
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()

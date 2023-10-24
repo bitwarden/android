@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJs
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
+import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
@@ -22,6 +23,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -45,6 +47,7 @@ class AuthRepositoryTest {
 
     private val accountsService: AccountsService = mockk()
     private val identityService: IdentityService = mockk()
+    private val haveIBeenPwnedService: HaveIBeenPwnedService = mockk()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val authSdkSource = mockk<AuthSdkSource> {
         coEvery {
@@ -76,6 +79,7 @@ class AuthRepositoryTest {
     private val repository = AuthRepositoryImpl(
         accountsService = accountsService,
         identityService = identityService,
+        haveIBeenPwnedService = haveIBeenPwnedService,
         authSdkSource = authSdkSource,
         authDiskSource = fakeAuthDiskSource,
         dispatcher = UnconfinedTestDispatcher(),
@@ -83,7 +87,7 @@ class AuthRepositoryTest {
 
     @BeforeEach
     fun beforeEach() {
-        clearMocks(identityService, accountsService)
+        clearMocks(identityService, accountsService, haveIBeenPwnedService)
         mockkStatic(GET_TOKEN_RESPONSE_EXTENSIONS_PATH)
     }
 
@@ -231,6 +235,72 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `register check data breaches error should return Error`() = runTest {
+        coEvery {
+            haveIBeenPwnedService.hasPasswordBeenBreached(PASSWORD)
+        } returns Result.failure(Throwable())
+
+        val result = repository.register(
+            email = EMAIL,
+            masterPassword = PASSWORD,
+            masterPasswordHint = null,
+            captchaToken = null,
+            shouldCheckDataBreaches = true,
+        )
+        assertEquals(RegisterResult.Error(null), result)
+    }
+
+    @Test
+    fun `register check data breaches found should return DataBreachFound`() = runTest {
+        coEvery {
+            haveIBeenPwnedService.hasPasswordBeenBreached(PASSWORD)
+        } returns true.asSuccess()
+
+        val result = repository.register(
+            email = EMAIL,
+            masterPassword = PASSWORD,
+            masterPasswordHint = null,
+            captchaToken = null,
+            shouldCheckDataBreaches = true,
+        )
+        assertEquals(RegisterResult.DataBreachFound, result)
+    }
+
+    @Test
+    fun `register check data breaches Success should return Success`() = runTest {
+        coEvery {
+            haveIBeenPwnedService.hasPasswordBeenBreached(PASSWORD)
+        } returns false.asSuccess()
+        coEvery {
+            accountsService.register(
+                body = RegisterRequestJson(
+                    email = EMAIL,
+                    masterPasswordHash = PASSWORD_HASH,
+                    masterPasswordHint = null,
+                    captchaResponse = null,
+                    key = ENCRYPTED_USER_KEY,
+                    keys = RegisterRequestJson.Keys(
+                        publicKey = PUBLIC_KEY,
+                        encryptedPrivateKey = PRIVATE_KEY,
+                    ),
+                    kdfType = PBKDF2_SHA256,
+                    kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
+                ),
+            )
+        } returns Result.success(RegisterResponseJson.Success(captchaBypassToken = CAPTCHA_KEY))
+
+        val result = repository.register(
+            email = EMAIL,
+            masterPassword = PASSWORD,
+            masterPasswordHint = null,
+            captchaToken = null,
+            shouldCheckDataBreaches = true,
+        )
+        assertEquals(RegisterResult.Success(CAPTCHA_KEY), result)
+        coVerify { haveIBeenPwnedService.hasPasswordBeenBreached(PASSWORD) }
+    }
+
+    @Test
     fun `register Success should return Success`() = runTest {
         coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
         coEvery {
@@ -256,6 +326,7 @@ class AuthRepositoryTest {
             masterPassword = PASSWORD,
             masterPasswordHint = null,
             captchaToken = null,
+            shouldCheckDataBreaches = false,
         )
         assertEquals(RegisterResult.Success(CAPTCHA_KEY), result)
     }
@@ -295,6 +366,7 @@ class AuthRepositoryTest {
                 masterPassword = PASSWORD,
                 masterPasswordHint = null,
                 captchaToken = null,
+                shouldCheckDataBreaches = false,
             )
             assertEquals(RegisterResult.Error(errorMessage = null), result)
         }
@@ -334,6 +406,7 @@ class AuthRepositoryTest {
                 masterPassword = PASSWORD,
                 masterPasswordHint = null,
                 captchaToken = null,
+                shouldCheckDataBreaches = false,
             )
             assertEquals(RegisterResult.CaptchaRequired(captchaId = CAPTCHA_KEY), result)
         }
@@ -364,6 +437,7 @@ class AuthRepositoryTest {
             masterPassword = PASSWORD,
             masterPasswordHint = null,
             captchaToken = null,
+            shouldCheckDataBreaches = false,
         )
         assertEquals(RegisterResult.Error(errorMessage = null), result)
     }
