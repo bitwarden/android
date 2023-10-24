@@ -77,9 +77,6 @@ class AuthRepositoryImpl @Inject constructor(
             authDiskSource.rememberedEmailAddress = value
         }
 
-    // TODO Handle selected region functionality BIT-725
-    override var selectedRegionLabel: String = "bitwarden.us"
-
     override suspend fun login(
         email: String,
         password: String,

@@ -8,6 +8,8 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
@@ -29,7 +31,6 @@ class LoginViewModelTest : BaseViewModelTest() {
 
     private val savedStateHandle = SavedStateHandle().also {
         it["email_address"] = "test@gmail.com"
-        it["region_label"] = ""
     }
 
     @BeforeEach
@@ -47,7 +48,9 @@ class LoginViewModelTest : BaseViewModelTest() {
         val viewModel = LoginViewModel(
             authRepository = mockk {
                 every { captchaTokenResultFlow } returns flowOf()
-                every { selectedRegionLabel } returns "bitwarden.us"
+            },
+            environmentRepository = mockk {
+                every { environment } returns Environment.Us
             },
             savedStateHandle = savedStateHandle,
         )
@@ -72,6 +75,9 @@ class LoginViewModelTest : BaseViewModelTest() {
             authRepository = mockk {
                 every { captchaTokenResultFlow } returns flowOf()
             },
+            environmentRepository = mockk {
+                every { environment } returns Environment.Us
+            },
             savedStateHandle = handle,
         )
         viewModel.stateFlow.test {
@@ -84,7 +90,9 @@ class LoginViewModelTest : BaseViewModelTest() {
         val viewModel = LoginViewModel(
             authRepository = mockk {
                 every { captchaTokenResultFlow } returns flowOf()
-                every { selectedRegionLabel } returns "bitwarden.us"
+            },
+            environmentRepository = mockk {
+                every { environment } returns Environment.Us
             },
             savedStateHandle = savedStateHandle,
         )
@@ -108,10 +116,13 @@ class LoginViewModelTest : BaseViewModelTest() {
                 )
             } returns LoginResult.Error(errorMessage = "mock_error")
             every { captchaTokenResultFlow } returns flowOf()
-            every { selectedRegionLabel } returns "bitwarden.us"
+        }
+        val environmentRepository = mockk<EnvironmentRepository> {
+            every { environment } returns Environment.Us
         }
         val viewModel = LoginViewModel(
             authRepository = authRepository,
+            environmentRepository = environmentRepository,
             savedStateHandle = savedStateHandle,
         )
         viewModel.stateFlow.test {
@@ -148,10 +159,12 @@ class LoginViewModelTest : BaseViewModelTest() {
                 login("test@gmail.com", "", captchaToken = null)
             } returns LoginResult.Success
             every { captchaTokenResultFlow } returns flowOf()
-            every { selectedRegionLabel } returns "bitwarden.us"
         }
         val viewModel = LoginViewModel(
             authRepository = authRepository,
+            environmentRepository = mockk {
+                every { environment } returns Environment.Us
+            },
             savedStateHandle = savedStateHandle,
         )
         viewModel.stateFlow.test {
@@ -186,10 +199,12 @@ class LoginViewModelTest : BaseViewModelTest() {
                 coEvery { login("test@gmail.com", "", captchaToken = null) } returns
                     LoginResult.CaptchaRequired(captchaId = "mock_captcha_id")
                 every { captchaTokenResultFlow } returns flowOf()
-                every { selectedRegionLabel } returns "bitwarden.us"
             }
             val viewModel = LoginViewModel(
                 authRepository = authRepository,
+                environmentRepository = mockk {
+                    every { environment } returns Environment.Us
+                },
                 savedStateHandle = savedStateHandle,
             )
             viewModel.eventFlow.test {
@@ -207,7 +222,9 @@ class LoginViewModelTest : BaseViewModelTest() {
         val viewModel = LoginViewModel(
             authRepository = mockk {
                 every { captchaTokenResultFlow } returns flowOf()
-                every { selectedRegionLabel } returns "bitwarden.us"
+            },
+            environmentRepository = mockk {
+                every { environment } returns Environment.Us
             },
             savedStateHandle = savedStateHandle,
         )
@@ -226,7 +243,9 @@ class LoginViewModelTest : BaseViewModelTest() {
         val viewModel = LoginViewModel(
             authRepository = mockk {
                 every { captchaTokenResultFlow } returns flowOf()
-                every { selectedRegionLabel } returns "bitwarden.us"
+            },
+            environmentRepository = mockk {
+                every { environment } returns Environment.Us
             },
             savedStateHandle = savedStateHandle,
         )
@@ -245,7 +264,9 @@ class LoginViewModelTest : BaseViewModelTest() {
         val viewModel = LoginViewModel(
             authRepository = mockk {
                 every { captchaTokenResultFlow } returns flowOf()
-                every { selectedRegionLabel } returns "bitwarden.us"
+            },
+            environmentRepository = mockk {
+                every { environment } returns Environment.Us
             },
             savedStateHandle = savedStateHandle,
         )
@@ -264,7 +285,9 @@ class LoginViewModelTest : BaseViewModelTest() {
         val viewModel = LoginViewModel(
             authRepository = mockk {
                 every { captchaTokenResultFlow } returns flowOf()
-                every { selectedRegionLabel } returns "bitwarden.us"
+            },
+            environmentRepository = mockk {
+                every { environment } returns Environment.Us
             },
             savedStateHandle = savedStateHandle,
         )
@@ -283,7 +306,6 @@ class LoginViewModelTest : BaseViewModelTest() {
             every { captchaTokenResultFlow } returns flowOf(
                 CaptchaCallbackTokenResult.Success("token"),
             )
-            every { selectedRegionLabel } returns "bitwarden.us"
             coEvery {
                 login(
                     "test@gmail.com",
@@ -292,8 +314,12 @@ class LoginViewModelTest : BaseViewModelTest() {
                 )
             } returns LoginResult.Success
         }
+        val environmentRepository = mockk<EnvironmentRepository> {
+            every { environment } returns Environment.Us
+        }
         LoginViewModel(
             authRepository = authRepository,
+            environmentRepository = environmentRepository,
             savedStateHandle = savedStateHandle,
         )
         coVerify {
@@ -306,7 +332,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             emailAddress = "test@gmail.com",
             passwordInput = "",
             isLoginButtonEnabled = true,
-            region = "bitwarden.us",
+            environmentLabel = Environment.Us.type.label,
             loadingDialogState = LoadingDialogState.Hidden,
             errorDialogState = BasicDialogState.Hidden,
             captchaToken = null,

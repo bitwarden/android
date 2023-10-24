@@ -5,6 +5,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
@@ -24,6 +26,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class LandingViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val environmentRepository: EnvironmentRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LandingState, LandingEvent, LandingAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -31,15 +34,20 @@ class LandingViewModel @Inject constructor(
             emailInput = authRepository.rememberedEmailAddress.orEmpty(),
             isContinueButtonEnabled = authRepository.rememberedEmailAddress != null,
             isRememberMeEnabled = authRepository.rememberedEmailAddress != null,
-            selectedRegion = LandingState.RegionOption.BITWARDEN_US,
+            selectedEnvironment = environmentRepository.environment,
             errorDialogState = BasicDialogState.Hidden,
         ),
 ) {
 
     init {
-        // As state updates, write to saved state handle:
+        // As state updates:
+        // - write to saved state handle
+        // - updated selected environment
         stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
+            .onEach {
+                savedStateHandle[KEY_STATE] = it
+                environmentRepository.environment = it.selectedEnvironment
+            }
             .launchIn(viewModelScope)
     }
 
@@ -50,7 +58,7 @@ class LandingViewModel @Inject constructor(
             is LandingAction.ErrorDialogDismiss -> handleErrorDialogDismiss()
             is LandingAction.RememberMeToggle -> handleRememberMeToggled(action)
             is LandingAction.EmailInputChanged -> handleEmailInputUpdated(action)
-            is LandingAction.RegionOptionSelect -> handleRegionSelect(action)
+            is LandingAction.EnvironmentTypeSelect -> handleEnvironmentTypeSelect(action)
         }
     }
 
@@ -82,8 +90,6 @@ class LandingViewModel @Inject constructor(
 
         // Update the remembered email address
         authRepository.rememberedEmailAddress = email.takeUnless { !isRememberMeEnabled }
-        // Update the selected region selectedRegionLabel
-        authRepository.selectedRegionLabel = mutableStateFlow.value.selectedRegion.label
 
         sendEvent(LandingEvent.NavigateToLogin(email))
     }
@@ -102,10 +108,21 @@ class LandingViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(isRememberMeEnabled = action.isChecked) }
     }
 
-    private fun handleRegionSelect(action: LandingAction.RegionOptionSelect) {
+    private fun handleEnvironmentTypeSelect(action: LandingAction.EnvironmentTypeSelect) {
+        val environment = when (action.environmentType) {
+            Environment.Type.US -> Environment.Us
+            Environment.Type.EU -> Environment.Eu
+            Environment.Type.SELF_HOSTED -> {
+                // TODO Show dialog for setting selected environment (BIT-330)
+                Environment.SelfHosted(
+                    environmentUrlData = Environment.Us.environmentUrlData,
+                )
+            }
+        }
+
         mutableStateFlow.update {
             it.copy(
-                selectedRegion = action.regionOption,
+                selectedEnvironment = environment,
             )
         }
     }
@@ -119,18 +136,9 @@ data class LandingState(
     val emailInput: String,
     val isContinueButtonEnabled: Boolean,
     val isRememberMeEnabled: Boolean,
-    val selectedRegion: RegionOption,
+    val selectedEnvironment: Environment,
     val errorDialogState: BasicDialogState,
-) : Parcelable {
-    /**
-     * Enumerates the possible region options with their corresponding labels.
-     */
-    enum class RegionOption(val label: String) {
-        BITWARDEN_US("bitwarden.com"),
-        BITWARDEN_EU("bitwarden.eu"),
-        SELF_HOSTED("Self-hosted"),
-    }
-}
+) : Parcelable
 
 /**
  * Models events for the landing screen.
@@ -185,7 +193,7 @@ sealed class LandingAction {
     /**
      * Indicates that the selection from the region drop down has changed.
      */
-    data class RegionOptionSelect(
-        val regionOption: LandingState.RegionOption,
+    data class EnvironmentTypeSelect(
+        val environmentType: Environment.Type,
     ) : LandingAction()
 }

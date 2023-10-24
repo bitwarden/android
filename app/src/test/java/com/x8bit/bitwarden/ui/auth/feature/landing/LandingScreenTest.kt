@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.landing
 
+import android.app.Application
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
@@ -15,6 +16,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import androidx.test.core.app.ApplicationProvider
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
@@ -29,6 +32,9 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 
 class LandingScreenTest : BaseComposeTest() {
+    private val resources
+        get() = ApplicationProvider.getApplicationContext<Application>().resources
+
     @Test
     fun `continue button should be enabled or disabled according to the state`() {
         val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -218,8 +224,8 @@ class LandingScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `selecting region should send RegionOptionSelect action`() {
-        val selectedRegion = LandingState.RegionOption.BITWARDEN_EU
+    fun `selecting environment should send EnvironmentOptionSelect action`() {
+        val selectedEnvironment = Environment.Eu
         val viewModel = mockk<LandingViewModel>(relaxed = true) {
             every { eventFlow } returns emptyFlow()
             every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
@@ -234,13 +240,17 @@ class LandingScreenTest : BaseComposeTest() {
         }
 
         // Clicking to open dropdown
-        composeTestRule.onNodeWithText(LandingState.RegionOption.BITWARDEN_US.label).performClick()
+        composeTestRule
+            .onNodeWithText(Environment.Us.label.toString(resources))
+            .performClick()
 
         // Clicking item from the dropdown menu
-        composeTestRule.onNodeWithText(selectedRegion.label).performClick()
+        composeTestRule
+            .onNodeWithText(selectedEnvironment.label.toString(resources))
+            .performClick()
 
         verify {
-            viewModel.trySendAction(LandingAction.RegionOptionSelect(selectedRegion))
+            viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(selectedEnvironment.type))
         }
     }
 
@@ -319,7 +329,7 @@ class LandingScreenTest : BaseComposeTest() {
             emailInput = "",
             isContinueButtonEnabled = true,
             isRememberMeEnabled = false,
-            selectedRegion = LandingState.RegionOption.BITWARDEN_US,
+            selectedEnvironment = Environment.Us,
             errorDialogState = BasicDialogState.Hidden,
         )
     }

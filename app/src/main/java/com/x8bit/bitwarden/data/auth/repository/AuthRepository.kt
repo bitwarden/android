@@ -28,12 +28,6 @@ interface AuthRepository {
     var rememberedEmailAddress: String?
 
     /**
-     * The currently selected region label (`null` if not set).
-     */
-    // TODO replace this with a more robust selected region object BIT-725
-    var selectedRegionLabel: String
-
-    /**
      * Attempt to login with the given email and password. Updated access token will be reflected
      * in [authStateFlow].
      */
