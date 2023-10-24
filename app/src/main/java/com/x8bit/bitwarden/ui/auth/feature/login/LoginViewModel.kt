@@ -7,10 +7,10 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
@@ -73,6 +73,7 @@ class LoginViewModel @Inject constructor(
             is LoginAction.Internal.ReceiveCaptchaToken -> {
                 handleCaptchaTokenReceived(action.tokenResult)
             }
+
             is LoginAction.Internal.ReceiveLoginResult -> {
                 handleReceiveLoginResult(action = action)
             }
@@ -89,6 +90,7 @@ class LoginViewModel @Inject constructor(
                     ),
                 )
             }
+
             is LoginResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
@@ -101,6 +103,7 @@ class LoginViewModel @Inject constructor(
                     )
                 }
             }
+
             is LoginResult.Success -> {
                 mutableStateFlow.update { it.copy(loadingDialogState = LoadingDialogState.Hidden) }
             }

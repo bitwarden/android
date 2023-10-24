@@ -38,6 +38,7 @@ class LocalDateTimeSerializerTest {
             ),
         )
     }
+
     @Test
     fun `properly deserializes raw JSON with nano seconds to LocalDate`() {
         assertEquals(

@@ -4,6 +4,7 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
 import javax.inject.Singleton
+
 /**
  * Interceptor responsible for adding the auth token(Bearer) to API requests.
  */
