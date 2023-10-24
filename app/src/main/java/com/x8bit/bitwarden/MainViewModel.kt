@@ -2,8 +2,8 @@ package com.x8bit.bitwarden
 
 import android.content.Intent
 import androidx.lifecycle.ViewModel
-import com.x8bit.bitwarden.data.auth.repository.util.getCaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.util.getCaptchaCallbackTokenResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

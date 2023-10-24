@@ -52,6 +52,7 @@ fun LoginScreen(
             is LoginEvent.NavigateToCaptcha -> {
                 intentHandler.startCustomTabsActivity(uri = event.uri)
             }
+
             is LoginEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
             }

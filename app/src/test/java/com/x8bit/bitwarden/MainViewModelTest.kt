@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden
 
 import android.content.Intent
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
