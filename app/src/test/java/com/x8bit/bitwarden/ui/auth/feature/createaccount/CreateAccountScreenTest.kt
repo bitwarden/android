@@ -27,7 +27,6 @@ import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
-import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -312,9 +311,11 @@ class CreateAccountScreenTest : BaseComposeTest() {
         val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
             every { stateFlow } returns MutableStateFlow(
                 DEFAULT_STATE.copy(
-                    errorDialogState = BasicDialogState.Shown(
-                        title = "title".asText(),
-                        message = "message".asText(),
+                    dialog = CreateAccountDialog.Error(
+                        BasicDialogState.Shown(
+                            title = "title".asText(),
+                            message = "message".asText(),
+                        ),
                     ),
                 ),
             )
@@ -336,13 +337,61 @@ class CreateAccountScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `clicking No on the HIBP dialog should send ErrorDialogDismiss action`() {
+        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+            every { stateFlow } returns MutableStateFlow(
+                DEFAULT_STATE.copy(dialog = CreateAccountDialog.HaveIBeenPwned),
+            )
+            every { eventFlow } returns emptyFlow()
+            every { trySendAction(CreateAccountAction.ErrorDialogDismiss) } returns Unit
+        }
+        composeTestRule.setContent {
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText("No")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify { viewModel.trySendAction(CreateAccountAction.ErrorDialogDismiss) }
+    }
+
+    @Test
+    fun `clicking Yes on the HIBP dialog should send ContinueWithBreachedPasswordClick action`() {
+        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+            every { stateFlow } returns MutableStateFlow(
+                DEFAULT_STATE.copy(dialog = CreateAccountDialog.HaveIBeenPwned),
+            )
+            every { eventFlow } returns emptyFlow()
+            every { trySendAction(CreateAccountAction.ErrorDialogDismiss) } returns Unit
+        }
+        composeTestRule.setContent {
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify { viewModel.trySendAction(CreateAccountAction.ContinueWithBreachedPasswordClick) }
+    }
+
+    @Test
     fun `when BasicDialogState is Shown should show dialog`() {
         val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
             every { stateFlow } returns MutableStateFlow(
                 DEFAULT_STATE.copy(
-                    errorDialogState = BasicDialogState.Shown(
-                        title = "title".asText(),
-                        message = "message".asText(),
+                    dialog = CreateAccountDialog.Error(
+                        BasicDialogState.Shown(
+                            title = "title".asText(),
+                            message = "message".asText(),
+                        ),
                     ),
                 ),
             )
@@ -407,8 +456,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
             passwordHintInput = "",
             isCheckDataBreachesToggled = false,
             isAcceptPoliciesToggled = false,
-            errorDialogState = BasicDialogState.Hidden,
-            loadingDialogState = LoadingDialogState.Hidden,
+            dialog = null,
         )
     }
 }

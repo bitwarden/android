@@ -50,6 +50,7 @@ interface AuthRepository {
         masterPassword: String,
         masterPasswordHint: String?,
         captchaToken: String?,
+        shouldCheckDataBreaches: Boolean,
     ): RegisterResult
 
     /**

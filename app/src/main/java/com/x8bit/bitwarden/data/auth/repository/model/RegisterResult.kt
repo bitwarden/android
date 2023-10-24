@@ -24,4 +24,9 @@ sealed class RegisterResult {
      * @param errorMessage a message describing the error.
      */
     data class Error(val errorMessage: String?) : RegisterResult()
+
+    /**
+     * Password hash was found in a data breach.
+     */
+    data object DataBreachFound : RegisterResult()
 }

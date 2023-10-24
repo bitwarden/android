@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.AcceptPoliciesToggle
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CheckDataBreachesToggle
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ConfirmPasswordInputChange
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ContinueWithBreachedPasswordClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
@@ -22,7 +23,6 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
-import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -51,8 +51,7 @@ class CreateAccountViewModel @Inject constructor(
             passwordHintInput = "",
             isAcceptPoliciesToggled = false,
             isCheckDataBreachesToggled = false,
-            errorDialogState = BasicDialogState.Hidden,
-            loadingDialogState = LoadingDialogState.Hidden,
+            dialog = null,
         ),
 ) {
 
@@ -93,6 +92,8 @@ class CreateAccountViewModel @Inject constructor(
             is CreateAccountAction.Internal.ReceiveCaptchaToken -> {
                 handleReceiveCaptchaToken(action)
             }
+
+            ContinueWithBreachedPasswordClick -> handleContinueWithBreachedPasswordClick()
         }
     }
 
@@ -103,16 +104,21 @@ class CreateAccountViewModel @Inject constructor(
             is CaptchaCallbackTokenResult.MissingToken -> {
                 mutableStateFlow.update {
                     it.copy(
-                        errorDialogState = BasicDialogState.Shown(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.captcha_failed.asText(),
+                        dialog = CreateAccountDialog.Error(
+                            BasicDialogState.Shown(
+                                title = R.string.an_error_has_occurred.asText(),
+                                message = R.string.captcha_failed.asText(),
+                            ),
                         ),
                     )
                 }
             }
 
             is CaptchaCallbackTokenResult.Success -> {
-                submitRegisterAccountRequest(captchaToken = result.token)
+                submitRegisterAccountRequest(
+                    shouldCheckForDataBreaches = false,
+                    captchaToken = result.token,
+                )
             }
         }
     }
@@ -122,7 +128,7 @@ class CreateAccountViewModel @Inject constructor(
     ) {
         when (val registerAccountResult = action.registerResult) {
             is RegisterResult.CaptchaRequired -> {
-                mutableStateFlow.update { it.copy(loadingDialogState = LoadingDialogState.Hidden) }
+                mutableStateFlow.update { it.copy(dialog = null) }
                 sendEvent(
                     CreateAccountEvent.NavigateToCaptcha(
                         uri = generateUriForCaptcha(captchaId = registerAccountResult.captchaId),
@@ -134,24 +140,31 @@ class CreateAccountViewModel @Inject constructor(
                 // TODO parse and display server errors BIT-910
                 mutableStateFlow.update {
                     it.copy(
-                        loadingDialogState = LoadingDialogState.Hidden,
-                        errorDialogState = BasicDialogState.Shown(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = registerAccountResult.errorMessage?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                        dialog = CreateAccountDialog.Error(
+                            BasicDialogState.Shown(
+                                title = R.string.an_error_has_occurred.asText(),
+                                message = registerAccountResult.errorMessage?.asText()
+                                    ?: R.string.generic_error_message.asText(),
+                            ),
                         ),
                     )
                 }
             }
 
             is RegisterResult.Success -> {
-                mutableStateFlow.update { it.copy(loadingDialogState = LoadingDialogState.Hidden) }
+                mutableStateFlow.update { it.copy(dialog = null) }
                 sendEvent(
                     CreateAccountEvent.NavigateToLogin(
                         email = mutableStateFlow.value.emailInput,
                         captchaToken = registerAccountResult.captchaToken,
                     ),
                 )
+            }
+
+            RegisterResult.DataBreachFound -> {
+                mutableStateFlow.update {
+                    it.copy(dialog = CreateAccountDialog.HaveIBeenPwned)
+                }
             }
         }
     }
@@ -174,7 +187,7 @@ class CreateAccountViewModel @Inject constructor(
 
     private fun handleDialogDismiss() {
         mutableStateFlow.update {
-            it.copy(errorDialogState = BasicDialogState.Hidden)
+            it.copy(dialog = null)
         }
     }
 
@@ -205,7 +218,7 @@ class CreateAccountViewModel @Inject constructor(
                 message = R.string.validation_field_required
                     .asText(R.string.email_address.asText()),
             )
-            mutableStateFlow.update { it.copy(errorDialogState = dialog) }
+            mutableStateFlow.update { it.copy(dialog = CreateAccountDialog.Error(dialog)) }
         }
 
         !mutableStateFlow.value.emailInput.isValidEmail() -> {
@@ -213,7 +226,7 @@ class CreateAccountViewModel @Inject constructor(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.invalid_email.asText(),
             )
-            mutableStateFlow.update { it.copy(errorDialogState = dialog) }
+            mutableStateFlow.update { it.copy(dialog = CreateAccountDialog.Error(dialog)) }
         }
 
         mutableStateFlow.value.passwordInput.length < MIN_PASSWORD_LENGTH -> {
@@ -221,7 +234,7 @@ class CreateAccountViewModel @Inject constructor(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.master_password_length_val_message_x.asText(MIN_PASSWORD_LENGTH),
             )
-            mutableStateFlow.update { it.copy(errorDialogState = dialog) }
+            mutableStateFlow.update { it.copy(dialog = CreateAccountDialog.Error(dialog)) }
         }
 
         mutableStateFlow.value.passwordInput != mutableStateFlow.value.confirmPasswordInput -> {
@@ -229,7 +242,7 @@ class CreateAccountViewModel @Inject constructor(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.master_password_confirmation_val_message.asText(),
             )
-            mutableStateFlow.update { it.copy(errorDialogState = dialog) }
+            mutableStateFlow.update { it.copy(dialog = CreateAccountDialog.Error(dialog)) }
         }
 
         !mutableStateFlow.value.isAcceptPoliciesToggled -> {
@@ -237,24 +250,31 @@ class CreateAccountViewModel @Inject constructor(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.accept_policies_error.asText(),
             )
-            mutableStateFlow.update { it.copy(errorDialogState = dialog) }
+            mutableStateFlow.update { it.copy(dialog = CreateAccountDialog.Error(dialog)) }
         }
 
         else -> {
-            submitRegisterAccountRequest(captchaToken = null)
+            submitRegisterAccountRequest(
+                shouldCheckForDataBreaches = mutableStateFlow.value.isCheckDataBreachesToggled,
+                captchaToken = null,
+            )
         }
     }
 
-    private fun submitRegisterAccountRequest(captchaToken: String?) {
+    private fun handleContinueWithBreachedPasswordClick() {
+        submitRegisterAccountRequest(shouldCheckForDataBreaches = false, captchaToken = null)
+    }
+
+    private fun submitRegisterAccountRequest(
+        shouldCheckForDataBreaches: Boolean,
+        captchaToken: String?,
+    ) {
         mutableStateFlow.update {
-            it.copy(
-                loadingDialogState = LoadingDialogState.Shown(
-                    text = R.string.creating_account.asText(),
-                ),
-            )
+            it.copy(dialog = CreateAccountDialog.Loading)
         }
         viewModelScope.launch {
             val result = authRepository.register(
+                shouldCheckDataBreaches = shouldCheckForDataBreaches,
                 email = mutableStateFlow.value.emailInput,
                 masterPassword = mutableStateFlow.value.passwordInput,
                 masterPasswordHint = mutableStateFlow.value.passwordHintInput.ifBlank { null },
@@ -280,9 +300,31 @@ data class CreateAccountState(
     val passwordHintInput: String,
     val isCheckDataBreachesToggled: Boolean,
     val isAcceptPoliciesToggled: Boolean,
-    val errorDialogState: BasicDialogState,
-    val loadingDialogState: LoadingDialogState,
+    val dialog: CreateAccountDialog?,
 ) : Parcelable
+
+/**
+ * Models dialogs that can be displayed on the create account screen.
+ */
+sealed class CreateAccountDialog : Parcelable {
+    /**
+     * Loading dialog.
+     */
+    @Parcelize
+    data object Loading : CreateAccountDialog()
+
+    /**
+     * Confirm the user wants to continue with potentially breached password.
+     */
+    @Parcelize
+    data object HaveIBeenPwned : CreateAccountDialog()
+
+    /**
+     * General error dialog with an OK button.
+     */
+    @Parcelize
+    data class Error(val state: BasicDialogState.Shown) : CreateAccountDialog()
+}
 
 /**
  * Models events for the create account screen.
@@ -336,6 +378,11 @@ sealed class CreateAccountAction {
      * User clicked close.
      */
     data object CloseClick : CreateAccountAction()
+
+    /**
+     * User clicked "Yes" when being asked if they are sure they want to use a breached password.
+     */
+    data object ContinueWithBreachedPasswordClick : CreateAccountAction()
 
     /**
      * Email input changed.
