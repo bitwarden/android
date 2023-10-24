@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.repository
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,9 +17,14 @@ import org.junit.jupiter.api.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class NetworkConfigRepositoryTest {
     private val mutableAuthStateFlow = MutableStateFlow<AuthState>(AuthState.Uninitialized)
+    private val mutableEnvironmentStateFlow = MutableStateFlow<Environment>(Environment.Us)
 
     private val authRepository: AuthRepository = mockk() {
         every { authStateFlow } returns mutableAuthStateFlow
+    }
+
+    private val environmentRepository: EnvironmentRepository = mockk {
+        every { environmentStateFlow } returns mutableEnvironmentStateFlow
     }
 
     private val authTokenInterceptor = AuthTokenInterceptor()
@@ -30,6 +36,7 @@ class NetworkConfigRepositoryTest {
         networkConfigRepository = NetworkConfigRepositoryImpl(
             authRepository = authRepository,
             authTokenInterceptor = authTokenInterceptor,
+            environmentRepository = environmentRepository,
             dispatcher = UnconfinedTestDispatcher(),
         )
     }

@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.onEach
 class NetworkConfigRepositoryImpl(
     private val authRepository: AuthRepository,
     private val authTokenInterceptor: AuthTokenInterceptor,
+    private val environmentRepository: EnvironmentRepository,
     dispatcher: CoroutineDispatcher,
 ) : NetworkConfigRepository {
 
@@ -28,6 +29,13 @@ class NetworkConfigRepositoryImpl(
                     is AuthState.Unauthenticated -> null
                     is AuthState.Uninitialized -> null
                 }
+            }
+            .launchIn(scope)
+
+        environmentRepository
+            .environmentStateFlow
+            .onEach { environment ->
+                // TODO: Update base URL interceptors (BIT-725)
             }
             .launchIn(scope)
     }

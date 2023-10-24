@@ -1,16 +1,15 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
-import androidx.core.content.edit
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
+import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-private const val BASE_KEY = "bwPreferencesStorage"
 private const val REMEMBERED_EMAIL_ADDRESS_KEY = "$BASE_KEY:rememberedEmail"
 private const val STATE_KEY = "$BASE_KEY:state"
 
@@ -18,9 +17,10 @@ private const val STATE_KEY = "$BASE_KEY:state"
  * Primary implementation of [AuthDiskSource].
  */
 class AuthDiskSourceImpl(
-    private val sharedPreferences: SharedPreferences,
+    sharedPreferences: SharedPreferences,
     private val json: Json,
-) : AuthDiskSource {
+) : BaseDiskSource(sharedPreferences = sharedPreferences),
+    AuthDiskSource {
     override var rememberedEmailAddress: String?
         get() = getString(key = REMEMBERED_EMAIL_ADDRESS_KEY)
         set(value) {
@@ -48,25 +48,12 @@ class AuthDiskSourceImpl(
         extraBufferCapacity = Int.MAX_VALUE,
     )
 
-    private val onSharedPreferenceChangeListener =
-        OnSharedPreferenceChangeListener { _, key ->
-            when (key) {
-                STATE_KEY -> mutableUserStateFlow.tryEmit(userState)
-            }
+    override fun onSharedPreferenceChanged(
+        sharedPreferences: SharedPreferences?,
+        key: String?,
+    ) {
+        when (key) {
+            STATE_KEY -> mutableUserStateFlow.tryEmit(userState)
         }
-
-    init {
-        sharedPreferences
-            .registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
     }
-
-    private fun getString(
-        key: String,
-        default: String? = null,
-    ): String? = sharedPreferences.getString(key, default)
-
-    private fun putString(
-        key: String,
-        value: String?,
-    ): Unit = sharedPreferences.edit { putString(key, value) }
 }
