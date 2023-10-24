@@ -17,7 +17,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
-import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -27,7 +26,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -43,7 +41,6 @@ class AuthRepositoryImpl @Inject constructor(
     private val identityService: IdentityService,
     private val authSdkSource: AuthSdkSource,
     private val authDiskSource: AuthDiskSource,
-    private val authTokenInterceptor: AuthTokenInterceptor,
     dispatcher: CoroutineDispatcher,
 ) : AuthRepository {
     private val scope = CoroutineScope(dispatcher)
@@ -62,14 +59,6 @@ class AuthRepositoryImpl @Inject constructor(
                     )
                 }
                 ?: AuthState.Unauthenticated
-        }
-        .onEach {
-            // TODO: Create intermediate class for providing auth token to interceptor (BIT-411)
-            authTokenInterceptor.authToken = when (it) {
-                is AuthState.Authenticated -> it.accessToken
-                AuthState.Unauthenticated -> null
-                AuthState.Uninitialized -> null
-            }
         }
         .stateIn(
             scope = scope,
