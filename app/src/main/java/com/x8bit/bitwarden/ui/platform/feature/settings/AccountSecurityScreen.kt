@@ -23,7 +23,8 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 
 /**
  * Displays the account security screen.
@@ -43,14 +44,16 @@ fun AccountSecurityScreen(
             .fillMaxSize()
             .background(color = MaterialTheme.colorScheme.surface),
     ) {
-        BitwardenOverflowTopAppBar(
+        BitwardenTopAppBar(
             title = stringResource(id = R.string.account),
             navigationIcon = painterResource(id = R.drawable.ic_back),
             navigationIconContentDescription = stringResource(id = R.string.back),
             onNavigationIconClick = remember(viewModel) {
                 { viewModel.trySendAction(AccountSecurityAction.BackClick) }
             },
-            dropdownMenuItemContent = {},
+            actions = {
+                BitwardenOverflowActionItem()
+            },
         )
         Spacer(Modifier.height(8.dp))
         AccountSecurityRow(

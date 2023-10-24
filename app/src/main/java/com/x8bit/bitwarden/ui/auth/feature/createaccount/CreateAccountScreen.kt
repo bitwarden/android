@@ -62,8 +62,9 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
-import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButtonTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.theme.clickableSpanStyle
@@ -157,18 +158,21 @@ fun CreateAccountScreen(
             .background(MaterialTheme.colorScheme.surface)
             .verticalScroll(rememberScrollState()),
     ) {
-        BitwardenTextButtonTopAppBar(
+        BitwardenTopAppBar(
             title = stringResource(id = R.string.create_account),
             navigationIcon = painterResource(id = R.drawable.ic_close),
             navigationIconContentDescription = stringResource(id = R.string.close),
             onNavigationIconClick = remember(viewModel) {
                 { viewModel.trySendAction(CloseClick) }
             },
-            buttonText = stringResource(id = R.string.submit),
-            onButtonClick = remember(viewModel) {
-                { viewModel.trySendAction(SubmitClick) }
+            actions = {
+                BitwardenTextButton(
+                    label = stringResource(id = R.string.submit),
+                    onClick = remember(viewModel) {
+                        { viewModel.trySendAction(SubmitClick) }
+                    },
+                )
             },
-            isButtonEnabled = true,
         )
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenTextField(

@@ -31,8 +31,9 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOutlinedButtonWithIcon
-import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 
 /**
  * The top level composable for the Login screen.
@@ -74,20 +75,24 @@ fun LoginScreen(
             visibilityState = state.errorDialogState,
             onDismissRequest = { viewModel.trySendAction(LoginAction.ErrorDialogDismiss) },
         )
-        BitwardenOverflowTopAppBar(
+        BitwardenTopAppBar(
             title = stringResource(id = R.string.app_name),
             navigationIcon = painterResource(id = R.drawable.ic_close),
             navigationIconContentDescription = stringResource(id = R.string.close),
             onNavigationIconClick = remember(viewModel) {
                 { viewModel.trySendAction(LoginAction.CloseButtonClick) }
             },
-            dropdownMenuItemContent = {
-                DropdownMenuItem(
-                    text = {
-                        Text(text = stringResource(id = R.string.get_password_hint))
-                    },
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(LoginAction.MasterPasswordHintClick) }
+            actions = {
+                BitwardenOverflowActionItem(
+                    dropdownMenuItemContent = {
+                        DropdownMenuItem(
+                            text = {
+                                Text(text = stringResource(id = R.string.get_password_hint))
+                            },
+                            onClick = remember(viewModel) {
+                                { viewModel.trySendAction(LoginAction.MasterPasswordHintClick) }
+                            },
+                        )
                     },
                 )
             },
