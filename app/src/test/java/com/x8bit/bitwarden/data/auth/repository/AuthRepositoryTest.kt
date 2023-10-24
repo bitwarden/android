@@ -22,7 +22,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
-import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -46,7 +45,6 @@ class AuthRepositoryTest {
 
     private val accountsService: AccountsService = mockk()
     private val identityService: IdentityService = mockk()
-    private val authInterceptor = AuthTokenInterceptor()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val authSdkSource = mockk<AuthSdkSource> {
         coEvery {
@@ -80,7 +78,6 @@ class AuthRepositoryTest {
         identityService = identityService,
         authSdkSource = authSdkSource,
         authDiskSource = fakeAuthDiskSource,
-        authTokenInterceptor = authInterceptor,
         dispatcher = UnconfinedTestDispatcher(),
     )
 
@@ -199,7 +196,6 @@ class AuthRepositoryTest {
         val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
         assertEquals(LoginResult.Success, result)
         assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
-        assertEquals(ACCESS_TOKEN, authInterceptor.authToken)
         coVerify { accountsService.preLogin(email = EMAIL) }
         coVerify {
             identityService.getToken(
@@ -404,7 +400,6 @@ class AuthRepositoryTest {
         repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
 
         assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
-        assertEquals(ACCESS_TOKEN, authInterceptor.authToken)
         assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
 
         // Then call logout:
@@ -414,7 +409,6 @@ class AuthRepositoryTest {
             repository.logout()
 
             assertEquals(AuthState.Unauthenticated, awaitItem())
-            assertNull(authInterceptor.authToken)
             assertNull(fakeAuthDiskSource.userState)
         }
     }
@@ -443,7 +437,6 @@ class AuthRepositoryTest {
         repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
 
         assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
-        assertEquals(ACCESS_TOKEN, authInterceptor.authToken)
         assertEquals(MULTI_USER_STATE, fakeAuthDiskSource.userState)
 
         // Then call logout:
@@ -453,7 +446,6 @@ class AuthRepositoryTest {
             repository.logout()
 
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN_2), awaitItem())
-            assertEquals(ACCESS_TOKEN_2, authInterceptor.authToken)
             assertEquals(SINGLE_USER_STATE_2, fakeAuthDiskSource.userState)
         }
     }
