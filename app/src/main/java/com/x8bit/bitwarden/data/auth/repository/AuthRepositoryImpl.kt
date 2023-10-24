@@ -157,14 +157,11 @@ class AuthRepositoryImpl @Inject constructor(
         if (shouldCheckDataBreaches) {
             haveIBeenPwnedService
                 .hasPasswordBeenBreached(password = masterPassword)
-                .fold(
-                    onFailure = { return RegisterResult.Error(null) },
-                    onSuccess = { foundDataBreaches ->
-                        if (foundDataBreaches) {
-                            return RegisterResult.DataBreachFound
-                        }
-                    },
-                )
+                .onSuccess { foundDataBreaches ->
+                    if (foundDataBreaches) {
+                        return RegisterResult.DataBreachFound
+                    }
+                }
         }
         val kdf = Kdf.Pbkdf2(DEFAULT_KDF_ITERATIONS.toUInt())
         return authSdkSource

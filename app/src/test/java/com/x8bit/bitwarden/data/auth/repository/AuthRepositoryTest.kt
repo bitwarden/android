@@ -235,10 +235,27 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `register check data breaches error should return Error`() = runTest {
+    fun `register check data breaches error should still return register success`() = runTest {
         coEvery {
             haveIBeenPwnedService.hasPasswordBeenBreached(PASSWORD)
         } returns Result.failure(Throwable())
+        coEvery {
+            accountsService.register(
+                body = RegisterRequestJson(
+                    email = EMAIL,
+                    masterPasswordHash = PASSWORD_HASH,
+                    masterPasswordHint = null,
+                    captchaResponse = null,
+                    key = ENCRYPTED_USER_KEY,
+                    keys = RegisterRequestJson.Keys(
+                        publicKey = PUBLIC_KEY,
+                        encryptedPrivateKey = PRIVATE_KEY,
+                    ),
+                    kdfType = PBKDF2_SHA256,
+                    kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
+                ),
+            )
+        } returns Result.success(RegisterResponseJson.Success(captchaBypassToken = CAPTCHA_KEY))
 
         val result = repository.register(
             email = EMAIL,
@@ -247,7 +264,7 @@ class AuthRepositoryTest {
             captchaToken = null,
             shouldCheckDataBreaches = true,
         )
-        assertEquals(RegisterResult.Error(null), result)
+        assertEquals(RegisterResult.Success(CAPTCHA_KEY), result)
     }
 
     @Test
