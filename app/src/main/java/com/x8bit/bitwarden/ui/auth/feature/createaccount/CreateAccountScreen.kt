@@ -17,9 +17,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,6 +33,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -72,6 +77,7 @@ import com.x8bit.bitwarden.ui.platform.theme.clickableSpanStyle
 /**
  * Top level composable for the create account screen.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
 @Composable
 fun CreateAccountScreen(
@@ -152,110 +158,121 @@ fun CreateAccountScreen(
         null -> Unit
     }
 
-    Column(
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface)
-            .verticalScroll(rememberScrollState()),
-    ) {
-        BitwardenTopAppBar(
-            title = stringResource(id = R.string.create_account),
-            navigationIcon = painterResource(id = R.drawable.ic_close),
-            navigationIconContentDescription = stringResource(id = R.string.close),
-            onNavigationIconClick = remember(viewModel) {
-                { viewModel.trySendAction(CloseClick) }
-            },
-            actions = {
-                BitwardenTextButton(
-                    label = stringResource(id = R.string.submit),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(SubmitClick) }
-                    },
-                )
-            },
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        BitwardenTextField(
-            label = stringResource(id = R.string.email_address),
-            value = state.emailInput,
-            onValueChange = remember(viewModel) {
-                { viewModel.trySendAction(EmailInputChange(it)) }
-            },
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            BitwardenTopAppBar(
+                title = stringResource(id = R.string.create_account),
+                scrollBehavior = scrollBehavior,
+                navigationIcon = painterResource(id = R.drawable.ic_close),
+                navigationIconContentDescription = stringResource(id = R.string.close),
+                onNavigationIconClick = remember(viewModel) {
+                    { viewModel.trySendAction(CloseClick) }
+                },
+                actions = {
+                    BitwardenTextButton(
+                        label = stringResource(id = R.string.submit),
+                        onClick = remember(viewModel) {
+                            { viewModel.trySendAction(SubmitClick) }
+                        },
+                    )
+                },
+            )
+        },
+    ) { innerPadding ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        var showPassword by rememberSaveable { mutableStateOf(false) }
-        BitwardenPasswordField(
-            label = stringResource(id = R.string.master_password),
-            showPassword = showPassword,
-            showPasswordChange = { showPassword = it },
-            value = state.passwordInput,
-            onValueChange = remember(viewModel) {
-                { viewModel.trySendAction(PasswordInputChange(it)) }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        BitwardenPasswordField(
-            label = stringResource(id = R.string.retype_master_password),
-            value = state.confirmPasswordInput,
-            showPassword = showPassword,
-            showPasswordChange = { showPassword = it },
-            onValueChange = remember(viewModel) {
-                { viewModel.trySendAction(ConfirmPasswordInputChange(it)) }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        BitwardenTextField(
-            label = stringResource(id = R.string.master_password_hint),
-            value = state.passwordHintInput,
-            onValueChange = remember(viewModel) {
-                { viewModel.trySendAction(PasswordHintChange(it)) }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = stringResource(id = R.string.master_password_hint_description),
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier
-                .padding(horizontal = 32.dp),
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        BitwardenSwitch(
-            label = stringResource(id = R.string.check_known_data_breaches_for_this_password),
-            isChecked = state.isCheckDataBreachesToggled,
-            onCheckedChange = remember(viewModel) {
-                { newState ->
-                    viewModel.trySendAction(CheckDataBreachesToggle(newState = newState))
-                }
-            },
-            modifier = Modifier
-                .padding(horizontal = 16.dp),
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        TermsAndPrivacySwitch(
-            isChecked = state.isAcceptPoliciesToggled,
-            onCheckedChange = remember(viewModel) {
-                { viewModel.trySendAction(AcceptPoliciesToggle(it)) }
-            },
-            onTermsClick = remember(viewModel) {
-                { viewModel.trySendAction(TermsClick) }
-            },
-            onPrivacyPolicyClick = remember(viewModel) {
-                { viewModel.trySendAction(PrivacyPolicyClick) }
-            },
-        )
+                .padding(innerPadding)
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.surface)
+                .verticalScroll(rememberScrollState()),
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+            BitwardenTextField(
+                label = stringResource(id = R.string.email_address),
+                value = state.emailInput,
+                onValueChange = remember(viewModel) {
+                    { viewModel.trySendAction(EmailInputChange(it)) }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            var showPassword by rememberSaveable { mutableStateOf(false) }
+            BitwardenPasswordField(
+                label = stringResource(id = R.string.master_password),
+                showPassword = showPassword,
+                showPasswordChange = { showPassword = it },
+                value = state.passwordInput,
+                onValueChange = remember(viewModel) {
+                    { viewModel.trySendAction(PasswordInputChange(it)) }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            BitwardenPasswordField(
+                label = stringResource(id = R.string.retype_master_password),
+                value = state.confirmPasswordInput,
+                showPassword = showPassword,
+                showPasswordChange = { showPassword = it },
+                onValueChange = remember(viewModel) {
+                    { viewModel.trySendAction(ConfirmPasswordInputChange(it)) }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            BitwardenTextField(
+                label = stringResource(id = R.string.master_password_hint),
+                value = state.passwordHintInput,
+                onValueChange = remember(viewModel) {
+                    { viewModel.trySendAction(PasswordHintChange(it)) }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = stringResource(id = R.string.master_password_hint_description),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier
+                    .padding(horizontal = 32.dp),
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            BitwardenSwitch(
+                label = stringResource(id = R.string.check_known_data_breaches_for_this_password),
+                isChecked = state.isCheckDataBreachesToggled,
+                onCheckedChange = remember(viewModel) {
+                    { newState ->
+                        viewModel.trySendAction(CheckDataBreachesToggle(newState = newState))
+                    }
+                },
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            TermsAndPrivacySwitch(
+                isChecked = state.isAcceptPoliciesToggled,
+                onCheckedChange = remember(viewModel) {
+                    { viewModel.trySendAction(AcceptPoliciesToggle(it)) }
+                },
+                onTermsClick = remember(viewModel) {
+                    { viewModel.trySendAction(TermsClick) }
+                },
+                onPrivacyPolicyClick = remember(viewModel) {
+                    { viewModel.trySendAction(PrivacyPolicyClick) }
+                },
+            )
+        }
     }
 }
 

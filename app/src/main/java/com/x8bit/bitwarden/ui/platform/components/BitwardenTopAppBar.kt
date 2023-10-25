@@ -7,6 +7,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -29,12 +32,18 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 @Composable
 fun BitwardenTopAppBar(
     title: String,
+    scrollBehavior: TopAppBarScrollBehavior,
     navigationIcon: Painter,
     navigationIconContentDescription: String,
     onNavigationIconClick: () -> Unit,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     TopAppBar(
+        colors = TopAppBarDefaults.largeTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+        ),
+        scrollBehavior = scrollBehavior,
         navigationIcon = {
             IconButton(
                 onClick = { onNavigationIconClick() },
@@ -57,12 +66,17 @@ fun BitwardenTopAppBar(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 private fun BitwardenTopAppBar_preview() {
     BitwardenTheme {
         BitwardenTopAppBar(
             title = "Title",
+            scrollBehavior = TopAppBarDefaults
+                .exitUntilCollapsedScrollBehavior(
+                    rememberTopAppBarState(),
+                ),
             navigationIcon = painterResource(id = R.drawable.ic_close),
             navigationIconContentDescription = stringResource(id = R.string.close),
             onNavigationIconClick = {},
