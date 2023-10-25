@@ -39,7 +39,8 @@ fun BitwardenMediumTopAppBar(
 ) {
     MediumTopAppBar(
         colors = TopAppBarDefaults.largeTopAppBarColors(
-            scrolledContainerColor = MaterialTheme.colorScheme.surface,
+            containerColor = MaterialTheme.colorScheme.surface,
+            scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
         ),
         scrollBehavior = scrollBehavior,
         title = {
