@@ -6,15 +6,13 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedSe
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedServiceImpl
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityServiceImpl
-import com.x8bit.bitwarden.data.platform.datasource.network.di.NetworkModule
+import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
-import retrofit2.Retrofit
 import retrofit2.create
-import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -27,23 +25,30 @@ object NetworkModule {
     @Provides
     @Singleton
     fun providesAccountService(
-        @Named(NetworkModule.UNAUTHORIZED) retrofit: Retrofit,
+        retrofits: Retrofits,
         json: Json,
-    ): AccountsService = AccountsServiceImpl(retrofit.create(), json)
+    ): AccountsService = AccountsServiceImpl(
+        accountsApi = retrofits.unauthenticatedApiRetrofit.create(),
+        json = json,
+    )
 
     @Provides
     @Singleton
     fun providesIdentityService(
-        @Named(NetworkModule.UNAUTHORIZED) retrofit: Retrofit,
+        retrofits: Retrofits,
         json: Json,
-    ): IdentityService = IdentityServiceImpl(retrofit.create(), json)
+    ): IdentityService = IdentityServiceImpl(
+        api = retrofits.unauthenticatedIdentityRetrofit.create(),
+        json = json,
+    )
 
     @Provides
     @Singleton
     fun providesHaveIBeenPwnedService(
-        @Named(NetworkModule.UNAUTHORIZED) retrofit: Retrofit,
+        retrofits: Retrofits,
     ): HaveIBeenPwnedService = HaveIBeenPwnedServiceImpl(
-        retrofit.newBuilder()
+        retrofits
+            .staticRetrofitBuilder
             .baseUrl("https://api.pwnedpasswords.com")
             .build()
             .create(),
