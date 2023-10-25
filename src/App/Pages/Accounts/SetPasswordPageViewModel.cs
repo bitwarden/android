@@ -103,8 +103,8 @@ namespace Bit.App.Pages
         public string OrgId { get; set; }
         public ForcePasswordResetReason? ForceSetPasswordReason { get; private set; }
 
-        public string SetMasterPasswordSummary => ForceSetPasswordReason == ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission 
-                                                    ? AppResources.YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword 
+        public string SetMasterPasswordSummary => ForceSetPasswordReason == ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission
+                                                    ? AppResources.YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword
                                                     : AppResources.YourOrganizationRequiresYouToSetAMasterPassword;
 
         public async Task InitAsync()
@@ -178,17 +178,7 @@ namespace Bit.App.Pages
 
             var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(newMasterKey,
                 await _cryptoService.GetUserKeyAsync() ?? await _cryptoService.MakeUserKeyAsync());
-            KeysRequest keysRequest = null;
-            if (ForceSetPasswordReason != ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission)
-            {
-                var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync(newUserKey);
-                keysRequest = new KeysRequest
-                {
-                    PublicKey = newPublicKey,
-                    EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
-                };
-
-            }
+            var keysRequest = await GetKeysForSetPasswordRequestAsync(newUserKey);
             var request = new SetPasswordRequest
             {
                 MasterPasswordHash = masterPasswordHash,
@@ -255,6 +245,23 @@ namespace Bit.App.Pages
                         AppResources.AnErrorHasOccurred);
                 }
             }
+        }
+
+        private async Task<KeysRequest> GetKeysForSetPasswordRequestAsync(UserKey newUserKey)
+        {
+            KeysRequest keysRequest = null;
+            if (ForceSetPasswordReason != ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission)
+            {
+                var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync(newUserKey);
+                keysRequest = new KeysRequest
+                {
+                    PublicKey = newPublicKey,
+                    EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
+                };
+
+            }
+
+            return keysRequest;
         }
 
         public void TogglePassword()

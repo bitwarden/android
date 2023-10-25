@@ -109,13 +109,11 @@ namespace Bit.App.Pages
                 if (forcePasswordResetReason.Value == ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission)
                 {
                     // TDE users only have one org
-                    var orgId = (await _stateService.GetOrganizationsAsync()).FirstOrDefault().Value.Identifier;
+                    var orgId = (await _stateService.GetOrganizationsAsync()).First().Value.Identifier;
                     _messagingService.Send(Constants.ForceSetPassword, orgId);
+                    return;
                 }
-                else
-                {
-                    _messagingService.Send(Constants.ForceUpdatePassword);
-                }
+                _messagingService.Send(Constants.ForceUpdatePassword);
             }
         }
 

@@ -404,7 +404,6 @@ namespace Bit.Core.Services
 
         private async Task SetPasswordSetReasonIfNeededAsync(ProfileResponse response)
         {
-
             // The `ForcePasswordReset` flag indicates an admin has reset the user's password and must be updated
             if (response.ForcePasswordReset)
             {
@@ -419,7 +418,7 @@ namespace Bit.Core.Services
             {
                 return;
             }
-            
+
             var decryptionOptions = await _stateService.GetAccountDecryptionOptions();
             if (decryptionOptions?.HasMasterPassword == false)
             {
