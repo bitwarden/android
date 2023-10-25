@@ -64,7 +64,7 @@ namespace Bit.Core.Services
                 Base = BaseUrl,
                 Api = ApiUrl,
                 Identity = IdentityUrl
-            }.GetDomainOrHost();
+            }.GetDomainOrHostname();
         }
 
         public async Task SetUrlsFromStorageAsync()
