@@ -248,19 +248,17 @@ namespace Bit.App.Pages
 
         private async Task<KeysRequest> GetKeysForSetPasswordRequestAsync(UserKey newUserKey)
         {
-            KeysRequest keysRequest = null;
-            if (ForceSetPasswordReason != ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission)
+            if (ForceSetPasswordReason == ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission)
             {
-                var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync(newUserKey);
-                keysRequest = new KeysRequest
-                {
-                    PublicKey = newPublicKey,
-                    EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
-                };
-
+                return null;
             }
 
-            return keysRequest;
+            var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync(newUserKey);
+            return new KeysRequest
+            {
+                PublicKey = newPublicKey,
+                EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
+            };
         }
 
         public void TogglePassword()
