@@ -29,7 +29,6 @@ class IdentityServiceTest : BaseServiceTest() {
     private val identityService = IdentityServiceImpl(
         api = identityApi,
         json = Json,
-        baseUrl = server.url("/").toString(),
         deviceModelProvider = deviceModelProvider,
     )
 

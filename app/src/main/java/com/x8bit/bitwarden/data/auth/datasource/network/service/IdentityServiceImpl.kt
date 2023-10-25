@@ -13,8 +13,6 @@ import java.util.UUID
 class IdentityServiceImpl constructor(
     private val api: IdentityApi,
     private val json: Json,
-    // TODO: use correct base URL here BIT-328
-    private val baseUrl: String = "https://vault.bitwarden.com",
     private val deviceModelProvider: DeviceModelProvider = DeviceModelProvider(),
 ) : IdentityService {
 
@@ -24,8 +22,6 @@ class IdentityServiceImpl constructor(
         captchaToken: String?,
     ): Result<GetTokenResponseJson> = api
         .getToken(
-            // TODO: use correct base URL here BIT-328
-            url = "$baseUrl/identity/connect/token",
             scope = "api+offline_access",
             clientId = "mobile",
             authEmail = email.base64UrlEncode(),

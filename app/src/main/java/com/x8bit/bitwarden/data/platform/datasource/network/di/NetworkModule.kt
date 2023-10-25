@@ -1,8 +1,9 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.di
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.x8bit.bitwarden.data.platform.datasource.network.core.ResultCallAdapterFactory
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
+import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.RetrofitsImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.serializer.LocalDateTimeSerializer
 import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigServiceImpl
@@ -13,13 +14,8 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
 import retrofit2.create
 import java.time.LocalDateTime
-import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -30,13 +26,11 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    const val AUTHORIZED: String = "authorized"
-    const val UNAUTHORIZED: String = "unauthorized"
-
     @Provides
     @Singleton
-    fun providesConfigService(@Named(UNAUTHORIZED) retrofit: Retrofit): ConfigService =
-        ConfigServiceImpl(retrofit.create())
+    fun providesConfigService(
+        retrofits: Retrofits,
+    ): ConfigService = ConfigServiceImpl(retrofits.unauthenticatedApiRetrofit.create())
 
     @Provides
     @Singleton
@@ -44,50 +38,16 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesOkHttpClientBuilder(): OkHttpClient.Builder =
-        OkHttpClient.Builder().addInterceptor(
-            HttpLoggingInterceptor().apply {
-                setLevel(HttpLoggingInterceptor.Level.BODY)
-            },
-        )
-
-    @Provides
-    @Singleton
-    fun providesRetrofitBuilder(
-        json: Json,
-    ): Retrofit.Builder {
-        val contentType = "application/json".toMediaType()
-        return Retrofit.Builder().baseUrl("https://api.bitwarden.com")
-            .addConverterFactory(json.asConverterFactory(contentType))
-            .addCallAdapterFactory(ResultCallAdapterFactory())
-    }
-
-    @Provides
-    @Singleton
-    @Named(UNAUTHORIZED)
-    fun providesUnauthorizedRetrofit(
-        okHttpClientBuilder: OkHttpClient.Builder,
-        retrofitBuilder: Retrofit.Builder,
-    ): Retrofit =
-        retrofitBuilder
-            .client(
-                okHttpClientBuilder.build(),
-            )
-            .build()
-
-    @Provides
-    @Singleton
-    @Named(AUTHORIZED)
-    fun providesAuthorizedRetrofit(
-        okHttpClientBuilder: OkHttpClient.Builder,
-        retrofitBuilder: Retrofit.Builder,
+    fun provideRetrofits(
         authTokenInterceptor: AuthTokenInterceptor,
-    ): Retrofit =
-        retrofitBuilder
-            .client(
-                okHttpClientBuilder.addInterceptor(authTokenInterceptor).build(),
-            )
-            .build()
+        baseUrlInterceptors: BaseUrlInterceptors,
+        json: Json,
+    ): Retrofits =
+        RetrofitsImpl(
+            authTokenInterceptor = authTokenInterceptor,
+            baseUrlInterceptors = baseUrlInterceptors,
+            json = json,
+        )
 
     @OptIn(ExperimentalSerializationApi::class)
     @Provides

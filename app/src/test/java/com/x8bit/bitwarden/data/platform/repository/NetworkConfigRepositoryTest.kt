@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.repository
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import io.mockk.every
 import io.mockk.mockk
@@ -28,6 +29,7 @@ class NetworkConfigRepositoryTest {
     }
 
     private val authTokenInterceptor = AuthTokenInterceptor()
+    private val baseUrlInterceptors = BaseUrlInterceptors()
 
     private lateinit var networkConfigRepository: NetworkConfigRepository
 
@@ -37,6 +39,7 @@ class NetworkConfigRepositoryTest {
             authRepository = authRepository,
             authTokenInterceptor = authTokenInterceptor,
             environmentRepository = environmentRepository,
+            baseUrlInterceptors = baseUrlInterceptors,
             dispatcher = UnconfinedTestDispatcher(),
         )
     }
@@ -54,5 +57,20 @@ class NetworkConfigRepositoryTest {
 
         mutableAuthStateFlow.value = AuthState.Unauthenticated
         assertNull(authTokenInterceptor.authToken)
+    }
+
+    @Test
+    fun `changes in the Environment should update the BaseUrlInterceptors`() {
+        mutableEnvironmentStateFlow.value = Environment.Us
+        assertEquals(
+            Environment.Us,
+            baseUrlInterceptors.environment,
+        )
+
+        mutableEnvironmentStateFlow.value = Environment.Eu
+        assertEquals(
+            Environment.Eu,
+            baseUrlInterceptors.environment,
+        )
     }
 }
