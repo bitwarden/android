@@ -526,7 +526,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             emailInput = "",
             confirmPasswordInput = "",
             passwordHintInput = "",
-            isCheckDataBreachesToggled = false,
+            isCheckDataBreachesToggled = true,
             isAcceptPoliciesToggled = false,
             dialog = null,
         )

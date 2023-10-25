@@ -50,7 +50,7 @@ class CreateAccountViewModel @Inject constructor(
             confirmPasswordInput = "",
             passwordHintInput = "",
             isAcceptPoliciesToggled = false,
-            isCheckDataBreachesToggled = false,
+            isCheckDataBreachesToggled = true,
             dialog = null,
         ),
 ) {
