@@ -51,7 +51,6 @@
 
     <!-- Dark System -->
     <color name="dark_border">@color/grey_666666</color>
-    <color name="dark_navigation_bar_background">@color/grey_191919</color>
     <color name="dark_notification_bar">@color/grey_191919</color>
     <color name="dark_primary">@color/blue_B2C5FF</color>
     <color name="dark_on_primary">@color/blue_002B74</color>
