@@ -1,4 +1,5 @@
-﻿using Bit.Core.Models.Domain;
+﻿using System;
+using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Models.Api
 {
@@ -21,6 +22,7 @@ namespace Bit.Core.Models.Api
             UserHandle = fido2Key.UserHandle?.EncryptedString;
             UserName = fido2Key.UserName?.EncryptedString;
             Counter = fido2Key.Counter?.EncryptedString;
+            CreationDate = fido2Key.CreationDate;
         }
 
         public string CredentialId { get; set; }
@@ -34,5 +36,6 @@ namespace Bit.Core.Models.Api
         public string UserHandle { get; set; }
         public string UserName { get; set; }
         public string Counter { get; set; }
+        public DateTime CreationDate { get; set; }
     }
 }

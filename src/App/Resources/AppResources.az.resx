@@ -2689,9 +2689,6 @@ Bu hesaba keçmək istəyirsiniz?</value>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Anbar vaxt bitməsi əməliyyatı "çıxış et" olaraq dəyişdirildi</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Bu element təşkilatla paylaşıla bilmir, çünki eyni keçid açarına sahib bir element artıq mövcuddur.</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Avto-doldurmanı əngəllə</value>
   </data>

@@ -2690,9 +2690,6 @@ Vil du skifte til denne konto?</value>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Boks-timeouthandling ændret til udlogning</value>
   </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Dette emne kan ikke deles med organisationen, da der allerede er et med den samme adgangsnøgle.</value>
-  </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Blokér autoudfyldning</value>
   </data>
@@ -2770,7 +2767,7 @@ Vil du skifte til denne konto?</value>
     <value>Synk nu</value>
   </data>
   <data name="UnlockOptions" xml:space="preserve">
-    <value>Oplås muligheder</value>
+    <value>Oplåsningsmuligheder</value>
   </data>
   <data name="SessionTimeout" xml:space="preserve">
     <value>Sessionstimeout</value>
@@ -2820,7 +2817,7 @@ Vil du skifte til denne konto?</value>
     <value>Fortsæt med at kontakte support?</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
-    <value>Fortsæt til App Store?</value>
+    <value>Fortsæt til app-butik?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>Øg kontosikkerheden ved at oprette totrins-indlogning i Bitwarden web-appen.</value>

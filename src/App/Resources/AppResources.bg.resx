@@ -2637,22 +2637,22 @@ select Add TOTP to store the key safely</value>
     <value>Запомняне на това устройство</value>
   </data>
   <data name="Passkey" xml:space="preserve">
-    <value>Passkey</value>
+    <value>Секретен ключ</value>
   </data>
   <data name="Passkeys" xml:space="preserve">
-    <value>Passkeys</value>
+    <value>Секретни ключове</value>
   </data>
   <data name="Application" xml:space="preserve">
     <value>Приложение</value>
   </data>
   <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
-    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+    <value>Не може да редактирате приложението за секретни ключове, защото секретният ключ ще спре да работи</value>
   </data>
   <data name="PasskeyWillNotBeCopied" xml:space="preserve">
-    <value>Passkey will not be copied</value>
+    <value>Секретният ключ няма да бъде копиран</value>
   </data>
   <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
-    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+    <value>Секретният ключ няма да бъде копиран в клонирания елемент. Искате ли да продължите с клонирането на елемента?</value>
   </data>
   <data name="CopyApplication" xml:space="preserve">
     <value>Копиране на приложението</value>
@@ -2689,9 +2689,6 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Действието при изтичане на времето за достъп до трезора е променено на отписване</value>
-  </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Блокиране на авт. попълване</value>
@@ -2770,7 +2767,7 @@ select Add TOTP to store the key safely</value>
     <value>Синхронизиране сега</value>
   </data>
   <data name="UnlockOptions" xml:space="preserve">
-    <value>Unlock options</value>
+    <value>Настройки за отключване</value>
   </data>
   <data name="SessionTimeout" xml:space="preserve">
     <value>Изтичане на времето за сесията</value>
