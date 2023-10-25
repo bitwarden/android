@@ -7,13 +7,15 @@
         <item name="android:colorActivatedHighlight">@android:color/transparent</item>
         <item name="android:colorControlNormal">@color/dark_border</item>
         <item name="android:colorPrimaryDark">@color/dark_notification_bar</item>
-        <item name="android:navigationBarColor">@color/dark_navigation_bar_background</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:popupTheme">@android:style/ThemeOverlay.Material</item>
         <item name="android:textCursorDrawable">@null</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowActionModeOverlay">true</item>
         <item name="android:windowBackground">@null</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">default</item>
     </style>
 
     <style name="ButtonStyle" parent="android:Widget.Material.Button">

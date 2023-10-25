@@ -1,13 +1,19 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import android.os.Parcelable
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.exclude
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -98,7 +104,11 @@ private fun VaultUnlockedNavBarScaffold(
     generatorTabClickedAction: () -> Unit,
     settingsTabClickedAction: () -> Unit,
 ) {
+    // This scaffold will host screens that contain top bars while not hosting one itself.
+    // We need to ignore the status bar insets here and let the content screens handle
+    // it themselves.
     Scaffold(
+        contentWindowInsets = ScaffoldDefaults.contentWindowInsets.exclude(WindowInsets.statusBars),
         bottomBar = {
             BottomAppBar(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer,
@@ -157,10 +167,14 @@ private fun VaultUnlockedNavBarScaffold(
             }
         },
     ) { innerPadding ->
+        // This NavHost will consume the navigation bars insets since the bottom bar
+        // is handling them and we do not want the child to receive them.
         NavHost(
             navController = navController,
             startDestination = VAULT_ROUTE,
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier
+                .consumeWindowInsets(WindowInsets.navigationBars)
+                .padding(innerPadding),
         ) {
             vaultDestination()
             sendDestination()
