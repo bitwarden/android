@@ -205,9 +205,8 @@ namespace Bit.App.Pages
 
                 // Set private key only for new JIT provisioned users in MP encryption orgs
                 // Existing TDE users will have private key set on sync or on login
-                if (keysRequest != null && ForceSetPasswordReason != ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission)
+                if (keysRequest != null)
                 {
-
                     await _cryptoService.SetUserPrivateKeyAsync(keysRequest.EncryptedPrivateKey);
                 }
 

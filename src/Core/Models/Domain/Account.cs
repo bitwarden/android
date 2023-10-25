@@ -54,7 +54,6 @@ namespace Bit.Core.Models.Domain
                 AvatarColor = copy.AvatarColor;
                 ForcePasswordResetReason = copy.ForcePasswordResetReason;
                 UserDecryptionOptions = copy.UserDecryptionOptions;
-                HasManageResetPasswordPermission = copy.HasManageResetPasswordPermission;
             }
 
             public string UserId;
@@ -71,7 +70,6 @@ namespace Bit.Core.Models.Domain
             public bool? HasPremiumPersonally;
             public ForcePasswordResetReason? ForcePasswordResetReason;
             public AccountDecryptionOptions UserDecryptionOptions;
-            public bool? HasManageResetPasswordPermission;
         }
 
         public class AccountTokens
