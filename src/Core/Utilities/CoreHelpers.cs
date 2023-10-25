@@ -267,13 +267,16 @@ namespace Bit.Core.Utilities
 
         public static string TextColorFromBgColor(string hexColor, int threshold = 166)
         {
-            if (new ColorConverter().ConvertFromString(hexColor) is Color bgColor)
+            var isValidColor = Color.TryParse(hexColor, out var bgColor);
+            if (isValidColor)
             {
-                var luminance = bgColor.Red * 0.299 + bgColor.Green * 0.587 + bgColor.Blue * 0.114;
+                var luminance = (bgColor.Red * 255 * 0.299) + (bgColor.Green * 255 * 0.587) + (bgColor.Blue * 255 * 0.114);
                 return luminance > threshold ? "#ff000000" : "#ffffffff";
             }
-
-            return "#ff000000";
+            else
+            {
+                return "#ff000000";
+            }
         }
 
         public static string StringToColor(string str, string fallback)

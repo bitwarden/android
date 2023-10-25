@@ -219,10 +219,10 @@
 	  <MauiImage Include="Resources\more.svg">
 	    <BaseSize>24,24</BaseSize>
 	  </MauiImage>
-	  <MauiImage Include="Resources\plus.svg">
+	  <MauiImage Include="Resources\plus.svg" TintColor="#FFFFFFFF">
 	    <BaseSize>24,24</BaseSize>
 	  </MauiImage>
-	  <MauiImage Include="Resources\search.svg">
+	  <MauiImage Include="Resources\search.svg" TintColor="#FFFFFFFF">
 	    <BaseSize>24,24</BaseSize>
 	  </MauiImage>
 	  <MauiImage Include="Resources\send.svg">
