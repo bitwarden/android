@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="BaseTheme" parent="android:Theme.Material.Light.DarkActionBar">
-        <item name="android:buttonStyle">@style/ButtonStyle</item>
-        <item name="android:colorAccent">@color/primary</item>
-        <item name="android:colorActivatedHighlight">@android:color/transparent</item>
-        <item name="android:colorControlNormal">@color/border</item>
-        <item name="android:colorPrimary">@color/primary</item>
-        <item name="android:colorPrimaryDark">@color/notification_bar</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:popupTheme">@android:style/ThemeOverlay.Material.Light</item>
         <item name="android:textCursorDrawable">@null</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowBackground">@null</item>
@@ -19,18 +12,10 @@
         <item name="android:windowLayoutInDisplayCutoutMode">default</item>
     </style>
 
-    <style name="ButtonStyle" parent="android:Widget.Material.Button">
-        <item name="android:textAllCaps">false</item>
-    </style>
-
     <!-- Launch theme (for auto dark/light based on system) -->
     <style name="LaunchTheme" parent="Theme.SplashScreen">
         <item name="postSplashScreenTheme">@style/BaseTheme</item>
-        <item name="windowSplashScreenAnimatedIcon">
-            @drawable/logo_rounded
-        </item>
-        <item name="windowSplashScreenBackground">
-            @color/ic_launcher_background
-        </item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_rounded</item>
+        <item name="windowSplashScreenBackground">@color/ic_launcher_background</item>
     </style>
 </resources>
