@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 
 class LandingScreenTest : BaseComposeTest() {
     private val resources
@@ -196,7 +197,7 @@ class LandingScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
             )
         }
-        assert(onNavigateToCreateAccountCalled)
+        assertTrue(onNavigateToCreateAccountCalled)
     }
 
     @Test

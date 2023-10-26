@@ -10,6 +10,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import retrofit2.create
 
@@ -33,7 +34,7 @@ class AccountsServiceTest : BaseServiceTest() {
             """
         val response = MockResponse().setBody(json)
         server.enqueue(response)
-        assert(service.preLogin(EMAIL).isFailure)
+        assertTrue(service.preLogin(EMAIL).isFailure)
     }
 
     @Test
@@ -47,7 +48,7 @@ class AccountsServiceTest : BaseServiceTest() {
             """
         val response = MockResponse().setBody(json)
         server.enqueue(response)
-        assert(service.preLogin(EMAIL).isFailure)
+        assertTrue(service.preLogin(EMAIL).isFailure)
     }
 
     @Test
@@ -61,7 +62,7 @@ class AccountsServiceTest : BaseServiceTest() {
             """
         val response = MockResponse().setBody(json)
         server.enqueue(response)
-        assert(service.preLogin(EMAIL).isFailure)
+        assertTrue(service.preLogin(EMAIL).isFailure)
     }
 
     @Test
@@ -144,6 +145,7 @@ class AccountsServiceTest : BaseServiceTest() {
             result.getOrThrow(),
         )
     }
+
     @Test
     fun `register failure with Error json should return Error`() = runTest {
         val json = """
