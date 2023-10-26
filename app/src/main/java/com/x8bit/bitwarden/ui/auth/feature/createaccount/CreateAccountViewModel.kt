@@ -137,7 +137,6 @@ class CreateAccountViewModel @Inject constructor(
             }
 
             is RegisterResult.Error -> {
-                // TODO parse and display server errors BIT-910
                 mutableStateFlow.update {
                     it.copy(
                         dialog = CreateAccountDialog.Error(

@@ -460,6 +460,108 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `register returns Invalid should return Error with invalid message`() = runTest {
+        coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery {
+            accountsService.register(
+                body = RegisterRequestJson(
+                    email = EMAIL,
+                    masterPasswordHash = PASSWORD_HASH,
+                    masterPasswordHint = null,
+                    captchaResponse = null,
+                    key = ENCRYPTED_USER_KEY,
+                    keys = RegisterRequestJson.Keys(
+                        publicKey = PUBLIC_KEY,
+                        encryptedPrivateKey = PRIVATE_KEY,
+                    ),
+                    kdfType = PBKDF2_SHA256,
+                    kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
+                ),
+            )
+        } returns Result.success(RegisterResponseJson.Invalid("message", mapOf()))
+
+        val result = repository.register(
+            email = EMAIL,
+            masterPassword = PASSWORD,
+            masterPasswordHint = null,
+            captchaToken = null,
+            shouldCheckDataBreaches = false,
+        )
+        assertEquals(RegisterResult.Error(errorMessage = "message"), result)
+    }
+
+    @Test
+    fun `register returns Invalid should return Error with first message in map`() = runTest {
+        coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery {
+            accountsService.register(
+                body = RegisterRequestJson(
+                    email = EMAIL,
+                    masterPasswordHash = PASSWORD_HASH,
+                    masterPasswordHint = null,
+                    captchaResponse = null,
+                    key = ENCRYPTED_USER_KEY,
+                    keys = RegisterRequestJson.Keys(
+                        publicKey = PUBLIC_KEY,
+                        encryptedPrivateKey = PRIVATE_KEY,
+                    ),
+                    kdfType = PBKDF2_SHA256,
+                    kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
+                ),
+            )
+        } returns Result.success(
+            RegisterResponseJson.Invalid(
+                message = "message",
+                validationErrors = mapOf("" to listOf("expected")),
+            ),
+        )
+
+        val result = repository.register(
+            email = EMAIL,
+            masterPassword = PASSWORD,
+            masterPasswordHint = null,
+            captchaToken = null,
+            shouldCheckDataBreaches = false,
+        )
+        assertEquals(RegisterResult.Error(errorMessage = "expected"), result)
+    }
+
+    @Test
+    fun `register returns Error body should return Error with message`() = runTest {
+        coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery {
+            accountsService.register(
+                body = RegisterRequestJson(
+                    email = EMAIL,
+                    masterPasswordHash = PASSWORD_HASH,
+                    masterPasswordHint = null,
+                    captchaResponse = null,
+                    key = ENCRYPTED_USER_KEY,
+                    keys = RegisterRequestJson.Keys(
+                        publicKey = PUBLIC_KEY,
+                        encryptedPrivateKey = PRIVATE_KEY,
+                    ),
+                    kdfType = PBKDF2_SHA256,
+                    kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
+                ),
+            )
+        } returns Result.success(
+            RegisterResponseJson.Error(
+                message = "message",
+            ),
+        )
+
+        val result = repository.register(
+            email = EMAIL,
+            masterPassword = PASSWORD,
+            masterPasswordHint = null,
+            captchaToken = null,
+            shouldCheckDataBreaches = false,
+        )
+        assertEquals(RegisterResult.Error(errorMessage = "message"), result)
+    }
+
+    @Test
     fun `setCaptchaCallbackToken should change the value of captchaTokenFlow`() = runTest {
         repository.captchaTokenResultFlow.test {
             repository.setCaptchaCallbackTokenResult(CaptchaCallbackTokenResult.Success("mockk"))

@@ -146,7 +146,7 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    @Suppress("ReturnCount")
+    @Suppress("ReturnCount", "LongMethod")
     override suspend fun register(
         email: String,
         masterPassword: String,
@@ -198,6 +198,21 @@ class AuthRepositoryImpl @Inject constructor(
 
                         is RegisterResponseJson.Success -> {
                             RegisterResult.Success(captchaToken = it.captchaBypassToken)
+                        }
+
+                        is RegisterResponseJson.Invalid -> {
+                            RegisterResult.Error(
+                                errorMessage = it
+                                    .validationErrors
+                                    ?.values
+                                    ?.firstOrNull()
+                                    ?.firstOrNull()
+                                    ?: it.message,
+                            )
+                        }
+
+                        is RegisterResponseJson.Error -> {
+                            RegisterResult.Error(it.message)
                         }
                     }
                 },

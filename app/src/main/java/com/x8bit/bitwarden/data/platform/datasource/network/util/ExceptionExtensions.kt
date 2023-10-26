@@ -12,13 +12,13 @@ import retrofit2.HttpException
  * If the receiver is not an [HttpException] or the error body cannot be parsed, null will be
  * returned.
  *
- * @param code HTTP code associated with the error. Only responses with this code will be attempted
- * to be parsed.
+ * @param codes a list of HTTP codes associated with the error. Only responses with a matching code
+ * will be attempted to be parsed.
  * @param json [Json] serializer to use.
  */
-inline fun <reified T> BitwardenError.parseErrorBodyOrNull(code: Int, json: Json): T? =
+inline fun <reified T> BitwardenError.parseErrorBodyOrNull(codes: List<Int>, json: Json): T? =
     (this as? BitwardenError.Http)
-        ?.takeIf { it.code == code }
+        ?.takeIf { codes.any { it == this.code } }
         ?.responseBodyString
         ?.let { responseBody ->
             try {
@@ -27,3 +27,9 @@ inline fun <reified T> BitwardenError.parseErrorBodyOrNull(code: Int, json: Json
                 null
             }
         }
+
+/**
+ * Helper for calling [parseErrorBodyOrNull] with a single code.
+ */
+inline fun <reified T> BitwardenError.parseErrorBodyOrNull(code: Int, json: Json): T? =
+    parseErrorBodyOrNull(listOf(code), json)
