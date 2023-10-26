@@ -17,6 +17,11 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_0
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_1
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_2
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_3
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_4
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
@@ -641,6 +646,27 @@ class AuthRepositoryTest {
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN_2), awaitItem())
             assertEquals(SINGLE_USER_STATE_2, fakeAuthDiskSource.userState)
         }
+    }
+
+    @Test
+    fun `getPasswordStrength should be based on password length`() = runTest {
+        // TODO: Replace with SDK call (BIT-964)
+        assertEquals(LEVEL_0.asSuccess(), repository.getPasswordStrength(EMAIL, "1"))
+        assertEquals(LEVEL_0.asSuccess(), repository.getPasswordStrength(EMAIL, "12"))
+        assertEquals(LEVEL_0.asSuccess(), repository.getPasswordStrength(EMAIL, "123"))
+
+        assertEquals(LEVEL_1.asSuccess(), repository.getPasswordStrength(EMAIL, "1234"))
+        assertEquals(LEVEL_1.asSuccess(), repository.getPasswordStrength(EMAIL, "12345"))
+        assertEquals(LEVEL_1.asSuccess(), repository.getPasswordStrength(EMAIL, "123456"))
+
+        assertEquals(LEVEL_2.asSuccess(), repository.getPasswordStrength(EMAIL, "1234567"))
+        assertEquals(LEVEL_2.asSuccess(), repository.getPasswordStrength(EMAIL, "12345678"))
+        assertEquals(LEVEL_2.asSuccess(), repository.getPasswordStrength(EMAIL, "123456789"))
+
+        assertEquals(LEVEL_3.asSuccess(), repository.getPasswordStrength(EMAIL, "123456789a"))
+        assertEquals(LEVEL_3.asSuccess(), repository.getPasswordStrength(EMAIL, "123456789ab"))
+
+        assertEquals(LEVEL_4.asSuccess(), repository.getPasswordStrength(EMAIL, "123456789abc"))
     }
 
     companion object {

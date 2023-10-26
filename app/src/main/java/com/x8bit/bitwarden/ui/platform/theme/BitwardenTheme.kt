@@ -12,7 +12,10 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -52,12 +55,20 @@ fun BitwardenTheme(
         }
     }
 
-    // Set overall theme based on color scheme and typography settings
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content,
-    )
+    val nonMaterialColors = if (darkTheme) {
+        darkNonMaterialColors(context)
+    } else {
+        lightNonMaterialColors(context)
+    }
+
+    CompositionLocalProvider(LocalNonMaterialColors provides nonMaterialColors) {
+        // Set overall theme based on color scheme and typography settings
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = Typography,
+            content = content,
+        )
+    }
 }
 
 private fun darkColorScheme(context: Context): ColorScheme =
@@ -135,3 +146,33 @@ private fun lightColorScheme(context: Context): ColorScheme =
 @ColorRes
 private fun Int.toColor(context: Context): Color =
     Color(context.getColor(this))
+
+/**
+ * Provides access to non material theme colors throughout the app.
+ */
+val LocalNonMaterialColors: ProvidableCompositionLocal<NonMaterialColors> =
+    compositionLocalOf {
+        // Default value here will immediately be overridden in BitwardenTheme, similar
+        // to how MaterialTheme works.
+        NonMaterialColors(Color.Transparent, Color.Transparent)
+    }
+
+/**
+ * Models colors that live outside of the Material Theme spec.
+ */
+data class NonMaterialColors(
+    val passwordWeak: Color,
+    val passwordStrong: Color,
+)
+
+private fun lightNonMaterialColors(context: Context): NonMaterialColors =
+    NonMaterialColors(
+        passwordWeak = R.color.light_password_strength_weak.toColor(context),
+        passwordStrong = R.color.light_password_strength_strong.toColor(context),
+    )
+
+private fun darkNonMaterialColors(context: Context): NonMaterialColors =
+    NonMaterialColors(
+        passwordWeak = R.color.dark_password_strength_weak.toColor(context),
+        passwordStrong = R.color.dark_password_strength_strong.toColor(context),
+    )

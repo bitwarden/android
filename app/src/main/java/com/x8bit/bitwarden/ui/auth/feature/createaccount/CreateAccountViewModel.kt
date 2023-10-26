@@ -5,6 +5,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
@@ -14,16 +15,19 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Che
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ContinueWithBreachedPasswordClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.EmailInputChange
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Internal.ReceivePasswordStrengthResult
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PrivacyPolicyClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.SubmitClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.TermsClick
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -52,8 +56,15 @@ class CreateAccountViewModel @Inject constructor(
             isAcceptPoliciesToggled = false,
             isCheckDataBreachesToggled = true,
             dialog = null,
+            passwordStrengthState = PasswordStrengthState.NONE,
         ),
 ) {
+
+    /**
+     * Keeps track of async request to get password strength. Should be cancelled
+     * when user input changes.
+     */
+    private var passwordStrengthJob: Job = Job().apply { complete() }
 
     init {
         // As state updates, write to saved state handle:
@@ -94,6 +105,24 @@ class CreateAccountViewModel @Inject constructor(
             }
 
             ContinueWithBreachedPasswordClick -> handleContinueWithBreachedPasswordClick()
+            is ReceivePasswordStrengthResult -> handlePasswordStrengthResult(action)
+        }
+    }
+
+    private fun handlePasswordStrengthResult(action: ReceivePasswordStrengthResult) {
+        action.result.onSuccess {
+            val updatedState = when (it) {
+                PasswordStrength.LEVEL_0 -> PasswordStrengthState.WEAK_1
+                PasswordStrength.LEVEL_1 -> PasswordStrengthState.WEAK_2
+                PasswordStrength.LEVEL_2 -> PasswordStrengthState.WEAK_3
+                PasswordStrength.LEVEL_3 -> PasswordStrengthState.GOOD
+                PasswordStrength.LEVEL_4 -> PasswordStrengthState.STRONG
+            }
+            mutableStateFlow.update { oldState ->
+                oldState.copy(
+                    passwordStrengthState = updatedState,
+                )
+            }
         }
     }
 
@@ -203,7 +232,23 @@ class CreateAccountViewModel @Inject constructor(
     }
 
     private fun handlePasswordInputChanged(action: PasswordInputChange) {
+        // Update input:
         mutableStateFlow.update { it.copy(passwordInput = action.input) }
+        // Update password strength:
+        passwordStrengthJob.cancel()
+        if (action.input.isEmpty()) {
+            mutableStateFlow.update {
+                it.copy(passwordStrengthState = PasswordStrengthState.NONE)
+            }
+        } else {
+            passwordStrengthJob = viewModelScope.launch {
+                val result = authRepository.getPasswordStrength(
+                    email = mutableStateFlow.value.emailInput,
+                    password = action.input,
+                )
+                trySendAction(ReceivePasswordStrengthResult(result))
+            }
+        }
     }
 
     private fun handleConfirmPasswordInputChanged(action: ConfirmPasswordInputChange) {
@@ -300,7 +345,14 @@ data class CreateAccountState(
     val isCheckDataBreachesToggled: Boolean,
     val isAcceptPoliciesToggled: Boolean,
     val dialog: CreateAccountDialog?,
-) : Parcelable
+    val passwordStrengthState: PasswordStrengthState,
+) : Parcelable {
+
+    val passwordLengthLabel: Text
+        get() =
+            R.string.your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum
+                .asText(MIN_PASSWORD_LENGTH)
+}
 
 /**
  * Models dialogs that can be displayed on the create account screen.
@@ -444,6 +496,13 @@ sealed class CreateAccountAction {
          */
         data class ReceiveRegisterResult(
             val registerResult: RegisterResult,
+        ) : Internal()
+
+        /**
+         * Indicates a password strength result has been received.
+         */
+        data class ReceivePasswordStrengthResult(
+            val result: Result<PasswordStrength>,
         ) : Internal()
     }
 }

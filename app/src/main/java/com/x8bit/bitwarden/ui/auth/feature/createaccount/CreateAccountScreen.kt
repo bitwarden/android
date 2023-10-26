@@ -215,7 +215,19 @@ fun CreateAccountScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = state.passwordLengthLabel(),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 32.dp),
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            PasswordStrengthIndicator(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                state = state.passwordStrengthState,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             BitwardenPasswordField(
                 label = stringResource(id = R.string.retype_master_password),
                 value = state.confirmPasswordInput,
