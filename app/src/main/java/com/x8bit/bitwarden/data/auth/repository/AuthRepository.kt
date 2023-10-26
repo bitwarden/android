@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository
 
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
@@ -57,4 +58,9 @@ interface AuthRepository {
      * Set the value of [captchaTokenResultFlow].
      */
     fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult)
+
+    /**
+     * Get the password strength for the given [email] and [password] combo.
+     */
+    suspend fun getPasswordStrength(email: String, password: String): Result<PasswordStrength>
 }

@@ -62,5 +62,9 @@
     <!-- Misc Colors -->
     <color name="silver_DDDDDD">#dddddd</color>
     <color name="black_000000">#000000</color>
+    <color name="orange_B27400">#FFB27400</color>
+    <color name="orange_C9914F">#FFC9914F</color>
+    <color name="green_009A38">#FF009A38</color>
+    <color name="green_41B06D">#FF41B06D</color>
 
 </resources>

@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -18,6 +19,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -224,5 +226,23 @@ class AuthRepositoryImpl @Inject constructor(
 
     override fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult) {
         mutableCaptchaTokenFlow.tryEmit(tokenResult)
+    }
+
+    @Suppress("MagicNumber")
+    override suspend fun getPasswordStrength(
+        email: String,
+        password: String,
+    ): Result<PasswordStrength> {
+        // TODO: Replace with SDK call (BIT-964)
+        // Ex: return authSdkSource.passwordStrength(email, password)
+        val length = password.length
+        return when {
+            length <= 3 -> PasswordStrength.LEVEL_0
+            length <= 6 -> PasswordStrength.LEVEL_1
+            length <= 9 -> PasswordStrength.LEVEL_2
+            length <= 11 -> PasswordStrength.LEVEL_3
+            else -> PasswordStrength.LEVEL_4
+        }
+            .asSuccess()
     }
 }

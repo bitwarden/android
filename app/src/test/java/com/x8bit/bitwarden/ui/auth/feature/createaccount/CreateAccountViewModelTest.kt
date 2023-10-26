@@ -5,13 +5,21 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_0
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_1
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_2
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_3
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_4
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
+import com.x8bit.bitwarden.data.platform.util.asFailure
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.AcceptPoliciesToggle
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.EmailInputChange
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Internal.ReceivePasswordStrengthResult
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -71,6 +79,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             isCheckDataBreachesToggled = false,
             isAcceptPoliciesToggled = false,
             dialog = null,
+            passwordStrengthState = PasswordStrengthState.NONE,
         )
         val handle = SavedStateHandle(mapOf("state" to savedState))
         val viewModel = CreateAccountViewModel(
@@ -129,13 +138,16 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `SubmitClick with password below 12 chars should show password length dialog`() = runTest {
+        val input = "abcdefghikl"
+        coEvery {
+            mockAuthRepository.getPasswordStrength("test@test.com", input)
+        } returns Throwable().asFailure()
         val viewModel = CreateAccountViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
         )
-        val input = "abcdefghikl"
         viewModel.trySendAction(EmailInputChange(EMAIL))
-        viewModel.trySendAction(PasswordInputChange("abcdefghikl"))
+        viewModel.trySendAction(PasswordInputChange(input))
         val expectedState = DEFAULT_STATE.copy(
             emailInput = EMAIL,
             passwordInput = input,
@@ -154,11 +166,14 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `SubmitClick with passwords not matching should show password match dialog`() = runTest {
+        val input = "testtesttesttest"
+        coEvery {
+            mockAuthRepository.getPasswordStrength("test@test.com", input)
+        } returns Throwable().asFailure()
         val viewModel = CreateAccountViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
         )
-        val input = "testtesttesttest"
         viewModel.trySendAction(EmailInputChange("test@test.com"))
         viewModel.trySendAction(PasswordInputChange(input))
         val expectedState = DEFAULT_STATE.copy(
@@ -179,11 +194,14 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `SubmitClick without policies accepted should show accept policies error`() = runTest {
+        val password = "testtesttesttest"
+        coEvery {
+            mockAuthRepository.getPasswordStrength("test@test.com", password)
+        } returns Throwable().asFailure()
         val viewModel = CreateAccountViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
         )
-        val password = "testtesttesttest"
         viewModel.trySendAction(EmailInputChange("test@test.com"))
         viewModel.trySendAction(PasswordInputChange(password))
         viewModel.trySendAction(ConfirmPasswordInputChange(password))
@@ -483,7 +501,10 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `PasswordInputChange update passwordInput`() = runTest {
+    fun `PasswordInputChange update passwordInput and call getPasswordStrength`() = runTest {
+        coEvery {
+            mockAuthRepository.getPasswordStrength("", "input")
+        } returns Result.failure(Throwable())
         val viewModel = CreateAccountViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
@@ -492,6 +513,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE.copy(passwordInput = "input"), awaitItem())
         }
+        coVerify { mockAuthRepository.getPasswordStrength("", "input") }
     }
 
     @Test
@@ -518,6 +540,62 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `ReceivePasswordStrengthResult should update password strength state`() = runTest {
+        val viewModel = CreateAccountViewModel(
+            savedStateHandle = SavedStateHandle(),
+            authRepository = mockAuthRepository,
+        )
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    passwordStrengthState = PasswordStrengthState.NONE,
+                ),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(ReceivePasswordStrengthResult(LEVEL_0.asSuccess()))
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    passwordStrengthState = PasswordStrengthState.WEAK_1,
+                ),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(ReceivePasswordStrengthResult(LEVEL_1.asSuccess()))
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    passwordStrengthState = PasswordStrengthState.WEAK_2,
+                ),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(ReceivePasswordStrengthResult(LEVEL_2.asSuccess()))
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    passwordStrengthState = PasswordStrengthState.WEAK_3,
+                ),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(ReceivePasswordStrengthResult(LEVEL_3.asSuccess()))
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    passwordStrengthState = PasswordStrengthState.GOOD,
+                ),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(ReceivePasswordStrengthResult(LEVEL_4.asSuccess()))
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    passwordStrengthState = PasswordStrengthState.STRONG,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
     companion object {
         private const val PASSWORD = "longenoughtpassword"
         private const val EMAIL = "test@test.com"
@@ -529,6 +607,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             isCheckDataBreachesToggled = true,
             isAcceptPoliciesToggled = false,
             dialog = null,
+            passwordStrengthState = PasswordStrengthState.NONE,
         )
         private val VALID_INPUT_STATE = CreateAccountState(
             passwordInput = PASSWORD,
@@ -538,6 +617,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             isCheckDataBreachesToggled = false,
             isAcceptPoliciesToggled = true,
             dialog = null,
+            passwordStrengthState = PasswordStrengthState.GOOD,
         )
         private const val LOGIN_RESULT_PATH =
             "com.x8bit.bitwarden.data.auth.repository.util.CaptchaUtilsKt"

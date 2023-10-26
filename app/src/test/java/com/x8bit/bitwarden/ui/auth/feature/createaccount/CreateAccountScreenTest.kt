@@ -33,6 +33,7 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -409,6 +410,46 @@ class CreateAccountScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `password strength should change as state changes`() {
+        val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
+        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+            every { stateFlow } returns mutableStateFlow
+            every { eventFlow } returns emptyFlow()
+        }
+        composeTestRule.setContent {
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
+        }
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(passwordStrengthState = PasswordStrengthState.WEAK_1)
+        }
+        composeTestRule.onNodeWithText("Weak").assertIsDisplayed()
+
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(passwordStrengthState = PasswordStrengthState.WEAK_2)
+        }
+        composeTestRule.onNodeWithText("Weak").assertIsDisplayed()
+
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(passwordStrengthState = PasswordStrengthState.WEAK_3)
+        }
+        composeTestRule.onNodeWithText("Weak").assertIsDisplayed()
+
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(passwordStrengthState = PasswordStrengthState.GOOD)
+        }
+        composeTestRule.onNodeWithText("Good").assertIsDisplayed()
+
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(passwordStrengthState = PasswordStrengthState.STRONG)
+        }
+        composeTestRule.onNodeWithText("Strong").assertIsDisplayed()
+    }
+
+    @Test
     fun `toggling one password field visibility should toggle the other`() {
         val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
             every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
@@ -457,6 +498,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
             isCheckDataBreachesToggled = false,
             isAcceptPoliciesToggled = false,
             dialog = null,
+            passwordStrengthState = PasswordStrengthState.NONE,
         )
     }
 }
