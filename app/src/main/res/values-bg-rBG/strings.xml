@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
   <string name="about">Относно</string>
   <string name="add">Добавяне</string>
   <string name="add_folder">Добавяне на папка</string>
@@ -78,7 +78,6 @@
   <string name="version">Версия</string>
   <string name="view">Преглед</string>
   <string name="visit_our_website">Посетете нашия сайт</string>
-  <string name="visit_our_website_description">Посетете сайта ни за помощ, новини, начини да се свържете с нас и как да ползвате Bitwarden.</string>
   <string name="website">Сайт</string>
   <string name="yes">Да</string>
   <string name="account">Регистрация</string>
@@ -96,11 +95,10 @@
   <string name="change_email">Промяна на имейла</string>
   <string name="change_email_confirmation">Адресът ви за е-поща може да се промени чрез сайта bitwarden.com. Искате ли да го посетите?</string>
   <string name="change_master_password">Промяна на главната парола</string>
-  <string name="change_password_confirmation">Главната парола на трезор може да се промени чрез сайта bitwarden.com. Искате ли да го посетите?</string>
   <string name="close">Затваряне</string>
   <string name="continue_text">Продължаване</string>
   <string name="create_account">Регистрация</string>
-  <string name="creating_account">Създаване на сметката…</string>
+  <string name="creating_account">Създаване на сметката...</string>
   <string name="edit_item">Редактиране на елемента</string>
   <string name="enable_automatic_syncing">Автоматично синхронизиране</string>
   <string name="enter_email_for_hint">Въведете адреса си на е-поща, за да получите писмо с подсказка за главната парола.</string>
@@ -178,7 +176,6 @@
   <string name="sync_vault_now">Синхронизиране сега</string>
   <string name="touch_id">Удостоверяване с докосване (Touch ID)</string>
   <string name="two_step_login">Двустепенно удостоверяване</string>
-  <string name="two_step_login_confirmation">Двустепенното вписване защищава регистрацията ви като ви кара да потвърдите влизането си чрез устройство-ключ, приложение за идентификация, мобилно съобщение, телефонно обаждане или е-поща. Двустепенното вписване може да се включи чрез сайта bitwarden.com. Искате ли да го посетите?</string>
   <string name="unlock_with">Отключване с %1$s</string>
   <string name="unlock_with_pin">Отключване с ПИН</string>
   <string name="validating">Потвърждаване</string>
@@ -208,10 +205,7 @@
   <string name="bitwarden_autofill_service_match_confirm">Сигурни ли сте, че искате да допишете с този запис? Той не е точно съвпадение за „%1$s“.</string>
   <string name="matching_items">Съвпадащи записи</string>
   <string name="possible_matching_items">Възможно съвпадащи записи</string>
-  <string-array name="Search">
-    <item>Търсене</item>
-    <item>Търсене</item>
-  </string-array>
+  <string name="search">Търсене</string>
   <string name="bitwarden_autofill_service_search">Търсене на запис за автоматично дописване на „%1$s“.</string>
   <string name="learn_org">Разберете повече за организациите</string>
   <string name="cannot_open_app">Програмата „%1$s“ не може да се отвори.</string>
@@ -258,6 +252,7 @@
   <string name="feature_unavailable">Функцията е недостъпна</string>
   <string name="max_file_size">Големината на файла е най-много 100 MB.</string>
   <string name="update_key">Трябва да обновите шифриращия си ключ, за да използвате тази възможност.</string>
+  <string name="encryption_key_migration_required_description_long">Необходима е промяна на шифриращия ключ. Впишете се в трезора си по уеб, за да обновите своя шифриращ ключ.</string>
   <string name="learn_more">Научете повече</string>
   <string name="api_url">Адрес на ППИ-сървъра</string>
   <string name="custom_environment">Специална среда</string>
@@ -450,7 +445,6 @@
   <string name="theme_description">Промяна на цветовия облик на програмата.</string>
   <string name="theme_default">По подразбиране (от системата)</string>
   <string name="default_dark_theme">Стандартен тъмен облик</string>
-  <string name="default_dark_theme_description">Изберете тъмния облик, който да се ползва, когато е избран стандартният (от системата) облик и тъмният режим на устройството Ви е включен.</string>
   <string name="copy_notes">Копиране на бележките</string>
   <string name="exit">Изход</string>
   <string name="exit_confirmation">Сигурни ли сте, че искате да спрете Битуорден?</string>
@@ -502,7 +496,7 @@
   <string name="soft_deleting">Преместване в кошчето…</string>
   <string name="item_soft_deleted">Записът е преместен в кошчето.</string>
   <string name="restore">Възстановяване</string>
-  <string name="restoring">Възстановяване…</string>
+  <string name="restoring">Възстановяване...</string>
   <string name="item_restored">Записът бе възстановен.</string>
   <string name="trash">Кошче</string>
   <string name="search_trash">Търсене в кошчето</string>
@@ -664,7 +658,7 @@
   <string name="options_collapsed">Възможностите са свити. Докоснете за разгъване.</string>
   <string name="uppercase_ato_z">Главни букви (A-Z)</string>
   <string name="lowercase_ato_z">Малки букви (a-z)</string>
-  <string name="numbers_zero_to_nine">Числа (0–9)</string>
+  <string name="numbers_zero_to_nine">Числа (0-9)</string>
   <string name="special_characters">Специални знаци (!@#$%^&amp;*)</string>
   <string name="tap_to_go_back">Досокнете за връщане назад</string>
   <string name="password_is_visible_tap_to_hide">Паролата е видима. Докоснете за скриване.</string>
@@ -722,7 +716,7 @@ select Add TOTP to store the key safely</string>
   <string name="domain_name_required_parenthesis">Име на домейн (задължително)</string>
   <string name="api_key_required_parenthesis">Ключ за API (задължително)</string>
   <string name="service">Услуга</string>
-  <string name="anon_addy">AnonAddy</string>
+  <string name="addy_io">addy.io</string>
   <string name="firefox_relay">Firefox Relay</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
@@ -799,13 +793,12 @@ select Add TOTP to store the key safely</string>
   <string name="approve_with_master_password">Одобряване с главната парола</string>
   <string name="turn_off_using_public_device">Изключване на използването на публично устройство</string>
   <string name="remember_this_device">Запомняне на това устройство</string>
-  <string name="passkey">Passkey</string>
-  <string name="passkeys">Passkeys</string>
-  <string name="created_x">Създадено на %1$s</string>
+  <string name="passkey">Секретен ключ</string>
+  <string name="passkeys">Секретни ключове</string>
   <string name="application">Приложение</string>
-  <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">You cannot edit passkey application because it would invalidate the passkey</string>
-  <string name="passkey_will_not_be_copied">Passkey will not be copied</string>
-  <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</string>
+  <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">Не може да редактирате приложението за секретни ключове, защото секретният ключ ще спре да работи</string>
+  <string name="passkey_will_not_be_copied">Секретният ключ няма да бъде копиран</string>
+  <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Секретният ключ няма да бъде копиран в клонирания елемент. Искате ли да продължите с клонирането на елемента?</string>
   <string name="copy_application">Копиране на приложението</string>
   <string name="available_for_two_step_login">Налично за двустепенно удостоверяване</string>
   <string name="master_password_re_prompt_help">Помощ за повторното запитване за главната парола</string>
@@ -818,7 +811,6 @@ select Add TOTP to store the key safely</string>
   <string name="trouble_logging_in">Имате проблем с вписването?</string>
   <string name="logging_in_as_x">Вписване като %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Действието при изтичане на времето за достъп до трезора е променено на отписване</string>
-  <string name="this_item_cannot_be_shared_with_the_organization_because_there_is_one_already_with_the_same_passkey">This item cannot be shared with the organization because there is one already with the same passkey.</string>
   <string name="block_auto_fill">Блокиране на авт. попълване</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">Автоматичното попълване няма да бъде предлагано за тези адреси.</string>
   <string name="new_blocked_uri">Нов блокиран адрес</string>
@@ -837,13 +829,40 @@ select Add TOTP to store the key safely</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Вписването с устройство трябва да е включено в настройките на приложението на Битуорден. Друга настройка ли търсите?</string>
   <string name="log_in_with_device">Вписване с устройство</string>
   <string name="logging_in_on">Вписване в</string>
-  <string name="there_are_no_items_to_list">Няма елементи за показване</string>
-  <string name="to_view_verification_codes_upgrade_to_premium">За да видите кодовете за потвърждаване, надградете до платен план</string>
-  <string name="add2_factor_autentication_to_an_item_to_view_verification_codes">Добавете двустепенно удостоверяване към елемент, за да видите кодовете за потвърждаване</string>
-  <string name="log_in_to_bitwarden_on_your_i_phone_to_view_verification_codes">Впишете се в Битуорден на своя iPhone, за да видите кодовете за потвърждаване</string>
-  <string name="syncing_items_containing_verification_codes">Синхронизиране на елементите съдържащи кодове за потвърждаване</string>
-  <string name="unlock_bitwarden_on_your_i_phone_to_view_verification_codes">Отключете Битуорден на своя iPhone, за да видите кодовете за потвърждаване</string>
-  <string name="set_up_bitwarden_to_view_items_containing_verification_codes">Настройте Битуорден, за да видите елементите съдържащи кодове за потвърждаване</string>
-  <string name="no_items_found">Няма намерени елементи</string>
-  <string name="set_up_apple_watch_passcode_in_order_to_use_bitwarden">Настройте парола за Apple Watch, за да използвате Битуорден</string>
+  <string name="vault">Трезор</string>
+  <string name="appearance">Външен вид</string>
+  <string name="account_security">Защита на регистрацията</string>
+  <string name="bitwarden_help_center">Помощен център на Битуорден</string>
+  <string name="contact_bitwarden_support">Свържете се с поддръжката на Битуорден</string>
+  <string name="copy_app_information">Копиране на информацията за приложението</string>
+  <string name="sync_now">Синхронизиране сега</string>
+  <string name="unlock_options">Настройки за отключване</string>
+  <string name="session_timeout">Изтичане на времето за сесията</string>
+  <string name="session_timeout_action">Действие при изтичане на времето за сесията</string>
+  <string name="account_fingerprint_phrase">Уникална фраза, идентифицираща регистрацията Ви</string>
+  <string name="one_hour_and_one_minute">Един час и една минута</string>
+  <string name="one_hour_and_x_minute">Един час и %1$s минути</string>
+  <string name="x_hours_and_one_minute">%1$s часа и една минута</string>
+  <string name="x_hours_and_y_minutes">%1$s часа и %2$s минути</string>
+  <string name="x_hours">%1$s часа</string>
+  <string name="autofill_services_explanation_long">Подсистемата за автоматично попълване на Андроид се използва за попълване на данните за вход в други приложения на устройството.</string>
+  <string name="use_inline_autofill_explanation_long">Използвайте вграденото автоматично попълване, ако избраната от Вас клавиатура го поддържа. Иначе използвайте слоя по подразбиране.</string>
+  <string name="additional_options">Допълнителни настройки</string>
+  <string name="continue_to_web_app">Продължаване към уеб приложението?</string>
+  <string name="continue_to_x">Продължаване към %1$s?</string>
+  <string name="continue_to_help_center">Продължаване към помощния център?</string>
+  <string name="continue_to_contact_support">Продължаване към връзка с поддръжката?</string>
+  <string name="continue_to_app_store">Продължаване към магазина за приложения?</string>
+  <string name="two_step_login_description_long">Подобрете защитата на регистрацията си, като настроите двустепенното удостоверяване в уеб приложението на Битуорден.</string>
+  <string name="change_master_password_description_long">Може да промените главната си парола в уеб приложението на Битуорден.</string>
+  <string name="you_can_import_data_to_your_vault_on_x">Може да внесете данни в трезора си на %1$s.</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Научете повече относно това как да използвате Битуорден в помощния център.</string>
+  <string name="contact_support_description_long">Не намирате това, което търсите? Свържете се с поддръжката на Битуорден на bitwarden.com.</string>
+  <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Разгледайте още от възможностите на регистрацията си в Битуорден в уеб приложението.</string>
+  <string name="learn_about_organizations_description_long">Битуорден позволява да споделяте части от трезора си чрез използването на организация. Научете повече на сайта bitwarden.com.</string>
+  <string name="rate_app_description_long">Помогнете на другите да разберат дали Битуорден е подходящ за тях. Посетете магазина за приложения и дайте оценка още сега.</string>
+  <string name="default_dark_theme_description_long">Изберете коя тъмна тема да се използва когато е включен тъмният режим на устройството Ви</string>
+  <string name="created_xy">Създадено на %1$s, %2$s</string>
+  <string name="too_many_attempts">Твърде много опити</string>
+  <string name="account_logged_out_biometric_exceeded">Акаунтът е отписан.</string>
 </resources>

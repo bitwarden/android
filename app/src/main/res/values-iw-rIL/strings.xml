@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
   <string name="about">אודות</string>
   <string name="add">הוסף</string>
   <string name="add_folder">הוסף תיקיה</string>
@@ -13,7 +13,7 @@
   <string name="copy_username">העתק שם משתמש</string>
   <string name="credits">תודות</string>
   <string name="delete">מחק</string>
-  <string name="deleting">מוחק…</string>
+  <string name="deleting">מוחק...</string>
   <string name="do_you_really_want_to_delete">האם אתה בטוח שברצונך למחוק? זוהי פעולה בלתי הפיכה.</string>
   <string name="edit">ערוך</string>
   <string name="edit_folder">ערוך תיקייה</string>
@@ -59,7 +59,7 @@
   <string name="password">סיסמה</string>
   <string name="save">שמור</string>
   <string name="move">העבר</string>
-  <string name="saving">שומר…</string>
+  <string name="saving">שומר...</string>
   <string name="settings">הגדרות</string>
   <string name="show">הצג</string>
   <string name="item_deleted">הפריט נמחק.</string>
@@ -78,7 +78,6 @@
   <string name="version">גירסה</string>
   <string name="view">תצוגה</string>
   <string name="visit_our_website">בקרו באתר שלנו</string>
-  <string name="visit_our_website_description">בקר באתר שלנו לקבלת עזרה, חדשות, פניות במייל, ו\או עבור הסברים כיצד להשתמש בBitwarden.</string>
   <string name="website">אתר</string>
   <string name="yes">כן</string>
   <string name="account">חשבון</string>
@@ -96,11 +95,10 @@
   <string name="change_email">החלף אימייל</string>
   <string name="change_email_confirmation">באפשרותך לשנות את כתובת האימייל שלך דרך הכספת באתר bitwarden.com. האם ברצונך לפתוח את האתר כעת?</string>
   <string name="change_master_password">החלף סיסמה ראשית</string>
-  <string name="change_password_confirmation">באפשרותך לשנות את הסיסמה הראשית שלך דרך הכספת באתר bitwarden.com. האם ברצונך לפתוח את האתר כעת?</string>
   <string name="close">סגירה</string>
   <string name="continue_text">המשך</string>
   <string name="create_account">צור חשבון</string>
-  <string name="creating_account">יוצר חשבון…</string>
+  <string name="creating_account">יוצר חשבון...</string>
   <string name="edit_item">ערוך פריט</string>
   <string name="enable_automatic_syncing">הפעל סנכרון אוטומטי</string>
   <string name="enter_email_for_hint">הכנס את פרטי האימייל שלך לקבלת רמז עבור הסיסמה הראשית.</string>
@@ -132,7 +130,7 @@
   <string name="vault_timeout">משך זמן מירבי עבור חיבור לכספת</string>
   <string name="vault_timeout_action">פעולה לביצוע בכספת בתום זמן החיבור</string>
   <string name="vault_timeout_log_out_confirmation">יציאה תגרום להסרת כל גישה שיש לך לכספת ודורשת אימות אונליין לאחר משך זמן מסויים. האם אתה בטוח שברצונך להשתמש באפשרות זו?</string>
-  <string name="logging_in">מתחבר…</string>
+  <string name="logging_in">מתחבר...</string>
   <string name="login_or_create_new_account">היכנס או צור חשבון חדש כדי לגשת לכספת המאובטחת שלך.</string>
   <string name="manage">נהל</string>
   <string name="master_password_confirmation_val_message">שדה אימות סיסמה שגוי.</string>
@@ -171,14 +169,13 @@
   <string name="set_pin_direction">הזן קוד PIN של 4 ספרות בכדי לבטל את נעילת האפליקציה.</string>
   <string name="item_information">מידע על הפריט</string>
   <string name="item_updated">הפריט עודכן.</string>
-  <string name="submitting">שולח…</string>
-  <string name="syncing">מסנכרן…</string>
+  <string name="submitting">שולח...</string>
+  <string name="syncing">מסנכרן...</string>
   <string name="syncing_complete">הסינכרון הושלם.</string>
   <string name="syncing_failed">הסינכרון נכשל.</string>
   <string name="sync_vault_now">סנכרן את הכספת עכשיו</string>
   <string name="touch_id">טביעת אצבע Touch ID</string>
   <string name="two_step_login">התחברות בשני-שלבים</string>
-  <string name="two_step_login_confirmation">התחברות בשני-שלבים הופכת את החשבון שלך למאובטח יותר בכך שאתה נדרש לוודא בכל כניסה בעזרת מכשיר אחר כדוגמת מפתח אבטחה, תוכנת אימות, SMS, שיחת טלפון, או אימייל. ניתן להפעיל את \"התחברות בשני-שלבים\" בכספת שבאתר bitwarden.com. האם ברצונך לפתוח את האתר כעת?</string>
   <string name="unlock_with">בטל נעילה עם %1$s</string>
   <string name="unlock_with_pin">בטל נעילה עם קוד PIN</string>
   <string name="validating">מאמת</string>
@@ -209,10 +206,7 @@ Bitwarden בעזרת פתיחת חלון \"הגדרות\".</string>
   <string name="bitwarden_autofill_service_match_confirm">האם אתה בטוח שברצונך לבצע השלמה אוטומטית בעזרת פריט זה? יתכן שפריט זה לא מותאם עבור \"%1$s\" במלואו.</string>
   <string name="matching_items">פריטים תואמים</string>
   <string name="possible_matching_items">פריטים תואמים אך לא במלואם</string>
-  <string-array name="Search">
-    <item>חיפוש</item>
-    <item>Search</item>
-  </string-array>
+  <string name="search">חיפוש</string>
   <string name="bitwarden_autofill_service_search">אתה מחפש פריט להשלמה אוטומטית עבור \"%1$s\".</string>
   <string name="learn_org">למד אודות ארגונים</string>
   <string name="cannot_open_app">לא ניתן לפתוח את האפליקציה \"%1$s\".</string>
@@ -234,7 +228,7 @@ Bitwarden בעזרת פתיחת חלון \"הגדרות\".</string>
   <string name="attachments">קבצים מצורפים</string>
   <string name="unable_to_download_file">לא ניתן להוריד את הקובץ.</string>
   <string name="unable_to_open_file">המכשיר שלך לא יכול לפתוח סוג זה של קובץ.</string>
-  <string name="downloading">מוריד…</string>
+  <string name="downloading">מוריד...</string>
   <string name="attachment_large_warning">גודל הקובץ המצורף הוא %1$s. האם אתה בטוח שברצונך להוריד אותו למכשירך?</string>
   <string name="authenticator_key">מפתח אימות (TOTP)</string>
   <string name="verification_code_totp">קוד אימות (TOTP)</string>
@@ -246,7 +240,7 @@ Scanning will happen automatically.</string>
   <string name="camera">מצלמה</string>
   <string name="photos">תמונות</string>
   <string name="copy_totp">העתק TOTP</string>
-  <string name="copy_totp_automatically_description">If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</string>
+  <string name="copy_totp_automatically_description">If a login has an authenticator key, copy the TOTP verification code to your clipboard when you auto-fill the login.</string>
   <string name="copy_totp_automatically">Copy TOTP automatically</string>
   <string name="premium_required">בכדי להשתמש ביכולת זו יש צורך במנוי פרמיום.</string>
   <string name="attachement_added">קובץ מצורף התווסף</string>
@@ -259,6 +253,7 @@ Scanning will happen automatically.</string>
   <string name="feature_unavailable">יכולת זו לא זמינה</string>
   <string name="max_file_size">גודל הקובץ המירבי הוא 100 מגה.</string>
   <string name="update_key">לא ניתן להשתמש ביכולת זו עד שתעדכן את מפתח ההצפנה שלך.</string>
+  <string name="encryption_key_migration_required_description_long">Encryption key migration required. Please login through the web vault to update your encryption key.</string>
   <string name="learn_more">למידע נוסף</string>
   <string name="api_url">כתובת שרת הAPI</string>
   <string name="custom_environment">סביבה מותאמת אישית</string>
@@ -339,7 +334,7 @@ Scanning will happen automatically.</string>
   <string name="use_face_id_to_unlock">השתמש בזיהוי פנים של Apple עבור פתיחת המכשיר</string>
   <string name="verify_face_id">ודא זיהוי פנים</string>
   <string name="windows_hello">Windows Hello</string>
-  <string name="bitwarden_autofill_go_to_settings">לא הצלחנו לפתוח את הגדרות ההשלמה האוטומטית של אנדרואיד עבורך. באפשרותך לפתוח את הגדרות ההשלמה האוטומטית בצורה ידנית דרך הגדרות אנדרואיד &lt; מערכת &lt; שפה וקלט &lt; מתקדם &lt; שירות השלמה אוטומטית</string>
+  <string name="bitwarden_autofill_go_to_settings">לא הצלחנו לפתוח את הגדרות ההשלמה האוטומטית של אנדרואיד עבורך. באפשרותך לפתוח את הגדרות ההשלמה האוטומטית בצורה ידנית דרך הגדרות אנדרואיד &lt;מערכת &lt;שפה וקלט &lt;מתקדם &lt;שירות השלמה אוטומטית</string>
   <string name="custom_field_name">שם שדה מותאם אישית</string>
   <string name="field_type_boolean">אמת או שקר</string>
   <string name="field_type_hidden">מוסתר</string>
@@ -387,7 +382,7 @@ Scanning will happen automatically.</string>
   <string name="secure_notes">פתקים מאובטחים</string>
   <string name="all_items">כל הפריטים</string>
   <string name="ur_is">כתובות</string>
-  <string name="checking_password">בודק סיסמה…</string>
+  <string name="checking_password">בודק סיסמה...</string>
   <string name="check_password">בדוק אם הסיסמה נחשפה.</string>
   <string name="password_exposed">הסיסמה הזו נחשפה %1$s פעמים בפריצות אבטחה. כדאי לשנות אותה.</string>
   <string name="password_safe">הסיסמה לא נמצאה בפריצות אבטחה ידועות. היא בטוחה לשימוש.</string>
@@ -452,7 +447,6 @@ Scanning will happen automatically.</string>
   <string name="theme_description">שנה את ערכת הצבע של האפליקציה.</string>
   <string name="theme_default">ברירת מחדל (מערכת)</string>
   <string name="default_dark_theme">Default dark theme</string>
-  <string name="default_dark_theme_description">Choose the dark theme to use when using Default (System) theme while your device\'s dark mode is in use.</string>
   <string name="copy_notes">העתק פתק</string>
   <string name="exit">יציאה</string>
   <string name="exit_confirmation">האם את/ה בטוח/ה שברצונך לצאת מ-Bitwarden?</string>
@@ -501,10 +495,10 @@ Scanning will happen automatically.</string>
   <string name="save_attachment_success">הקובץ המצורף נשמר בהצלחה</string>
   <string name="autofill_tile_accessibility_required">אנא הפעל את \"שירות ההשלמה האוטומטית של שירות הנגישות\" מתוך ההגדרות של Bitwarden כדי להשתמש בשירות ההשלמה האוטומטית.</string>
   <string name="autofill_tile_uri_not_found">לא זוהו תיבות לכתיבת סיסמאות</string>
-  <string name="soft_deleting">שולח לסל המחזור…</string>
+  <string name="soft_deleting">שולח לסל המחזור...</string>
   <string name="item_soft_deleted">הפריט הועבר לסל המחזור.</string>
   <string name="restore">שחזור</string>
-  <string name="restoring">משחזר…</string>
+  <string name="restoring">משחזר...</string>
   <string name="item_restored">הפריט שוחזר.</string>
   <string name="trash">סל המחזור</string>
   <string name="search_trash">חפש בסל המחזור</string>
@@ -708,7 +702,7 @@ select Add TOTP to store the key safely</string>
   <string name="log_in_accepted">Login confirmed</string>
   <string name="log_in_denied">Login denied</string>
   <string name="approve_login_requests">Approve login requests</string>
-  <string name="use_this_device_to_approve_login_requests_made_from_other_devices">Use this device to approve login requests made from other devices.</string>
+  <string name="use_this_device_to_approve_login_requests_made_from_other_devices">Use this device to approve login requests made from other devices</string>
   <string name="allow_notifications">Allow notifications</string>
   <string name="receive_push_notifications_for_new_login_requests">Receive push notifications for new login requests</string>
   <string name="no_thanks">No thanks</string>
@@ -725,7 +719,7 @@ select Add TOTP to store the key safely</string>
   <string name="domain_name_required_parenthesis">Domain name (required)</string>
   <string name="api_key_required_parenthesis">API key (required)</string>
   <string name="service">Service</string>
-  <string name="anon_addy">AnonAddy</string>
+  <string name="addy_io">addy.io</string>
   <string name="firefox_relay">Firefox Relay</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
@@ -804,7 +798,6 @@ Do you want to switch to this account?</string>
   <string name="remember_this_device">Remember this device</string>
   <string name="passkey">Passkey</string>
   <string name="passkeys">Passkeys</string>
-  <string name="created_x">Created %1$s</string>
   <string name="application">Application</string>
   <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">You cannot edit passkey application because it would invalidate the passkey</string>
   <string name="passkey_will_not_be_copied">Passkey will not be copied</string>
@@ -821,7 +814,6 @@ Do you want to switch to this account?</string>
   <string name="trouble_logging_in">Trouble logging in?</string>
   <string name="logging_in_as_x">Logging in as %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Vault timeout action changed to log out</string>
-  <string name="this_item_cannot_be_shared_with_the_organization_because_there_is_one_already_with_the_same_passkey">This item cannot be shared with the organization because there is one already with the same passkey.</string>
   <string name="block_auto_fill">Block auto-fill</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">Auto-fill will not be offered for these URIs.</string>
   <string name="new_blocked_uri">New blocked URI</string>
@@ -840,13 +832,40 @@ Do you want to switch to this account?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Log in with device must be set up in the settings of the Bitwarden app. Need another option?</string>
   <string name="log_in_with_device">Log in with device</string>
   <string name="logging_in_on">Logging in on</string>
-  <string name="there_are_no_items_to_list">There are no items to list</string>
-  <string name="to_view_verification_codes_upgrade_to_premium">To view verification codes, upgrade to premium</string>
-  <string name="add2_factor_autentication_to_an_item_to_view_verification_codes">Add 2 factor authentication to an item to view the verification codes</string>
-  <string name="log_in_to_bitwarden_on_your_i_phone_to_view_verification_codes">Log in to Bitwarden on your iPhone to view verification codes</string>
-  <string name="syncing_items_containing_verification_codes">Syncing items containing verification codes</string>
-  <string name="unlock_bitwarden_on_your_i_phone_to_view_verification_codes">Unlock Bitwarden on your iPhone to view verification codes</string>
-  <string name="set_up_bitwarden_to_view_items_containing_verification_codes">Set up Bitwarden to view items containing verification codes</string>
-  <string name="no_items_found">No items found</string>
-  <string name="set_up_apple_watch_passcode_in_order_to_use_bitwarden">Set up Apple Watch passcode in order to use Bitwarden</string>
+  <string name="vault">Vault</string>
+  <string name="appearance">Appearance</string>
+  <string name="account_security">Account security</string>
+  <string name="bitwarden_help_center">Bitwarden Help Center</string>
+  <string name="contact_bitwarden_support">Contact Bitwarden support</string>
+  <string name="copy_app_information">Copy app information</string>
+  <string name="sync_now">Sync now</string>
+  <string name="unlock_options">Unlock options</string>
+  <string name="session_timeout">Session timeout</string>
+  <string name="session_timeout_action">Session timeout action</string>
+  <string name="account_fingerprint_phrase">Account fingerprint phrase</string>
+  <string name="one_hour_and_one_minute">One hour and one minute</string>
+  <string name="one_hour_and_x_minute">One hour and %1$s minutes</string>
+  <string name="x_hours_and_one_minute">%1$s hours and one minute</string>
+  <string name="x_hours_and_y_minutes">%1$s hours and %2$s minutes</string>
+  <string name="x_hours">%1$s hours</string>
+  <string name="autofill_services_explanation_long">The Android Autofill Framework is used to assist in filling login information into other apps on your device.</string>
+  <string name="use_inline_autofill_explanation_long">Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</string>
+  <string name="additional_options">Additional options</string>
+  <string name="continue_to_web_app">Continue to web app?</string>
+  <string name="continue_to_x">Continue to %1$s?</string>
+  <string name="continue_to_help_center">Continue to Help center?</string>
+  <string name="continue_to_contact_support">Continue to contact support?</string>
+  <string name="continue_to_app_store">Continue to app store?</string>
+  <string name="two_step_login_description_long">Make your account more secure by setting up two-step login in the Bitwarden web app.</string>
+  <string name="change_master_password_description_long">You can change your master password on the Bitwarden web app.</string>
+  <string name="you_can_import_data_to_your_vault_on_x">You can import data to your vault on %1$s.</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Learn more about how to use Bitwarden on the Help center.</string>
+  <string name="contact_support_description_long">Can’t find what you are looking for? Reach out to Bitwarden support on bitwarden.com.</string>
+  <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Explore more features of your Bitwarden account on the web app.</string>
+  <string name="learn_about_organizations_description_long">Bitwarden allows you to share your vault items with others by using an organization. Learn more on the bitwarden.com website.</string>
+  <string name="rate_app_description_long">Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now.</string>
+  <string name="default_dark_theme_description_long">Choose the dark theme to use when your device’s dark mode is in use</string>
+  <string name="created_xy">Created %1$s, %2$s</string>
+  <string name="too_many_attempts">Too many attempts</string>
+  <string name="account_logged_out_biometric_exceeded">Account logged out.</string>
 </resources>

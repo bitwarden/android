@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
   <string name="about">アプリ情報</string>
   <string name="add">追加</string>
   <string name="add_folder">フォルダーを追加</string>
@@ -55,11 +55,11 @@
   <string name="name">名前</string>
   <string name="no">いいえ</string>
   <string name="notes">メモ</string>
-  <string name="ok">Ok</string>
+  <string name="ok">OK</string>
   <string name="password">パスワード</string>
   <string name="save">保存</string>
   <string name="move">移動</string>
-  <string name="saving">保存中…</string>
+  <string name="saving">保存中...</string>
   <string name="settings">設定</string>
   <string name="show">表示</string>
   <string name="item_deleted">アイテムを削除しました。</string>
@@ -78,7 +78,6 @@
   <string name="version">バージョン</string>
   <string name="view">表示</string>
   <string name="visit_our_website">ウェブサイトを開く</string>
-  <string name="visit_our_website_description">私たちのウェブサイトでヘルプ、ニュース、問い合わせや Bitwarden の詳しい使い方をチェックしてください。</string>
   <string name="website">ウェブサイト</string>
   <string name="yes">はい</string>
   <string name="account">アカウント</string>
@@ -96,11 +95,10 @@
   <string name="change_email">メールアドレスの変更</string>
   <string name="change_email_confirmation">メールアドレスは bitwarden.com ウェブ保管庫で変更できます。ウェブサイトを開きますか？</string>
   <string name="change_master_password">マスターパスワードの変更</string>
-  <string name="change_password_confirmation">マスターパスワードは bitwarden.com ウェブ保管庫で変更できます。ウェブサイトを開きますか？</string>
   <string name="close">閉じる</string>
   <string name="continue_text">続行</string>
   <string name="create_account">アカウントの作成</string>
-  <string name="creating_account">アカウントの作成中…</string>
+  <string name="creating_account">アカウントの作成中...</string>
   <string name="edit_item">アイテムの編集</string>
   <string name="enable_automatic_syncing">自動同期を有効化</string>
   <string name="enter_email_for_hint">マスターパスワードのヒントを受信するため、アカウントのメールアドレスを入力してください。</string>
@@ -132,7 +130,7 @@
   <string name="vault_timeout">保管庫のタイムアウト</string>
   <string name="vault_timeout_action">保管庫タイムアウト時のアクション</string>
   <string name="vault_timeout_log_out_confirmation">ログアウトすると保管庫へのすべてのアクセスが制限され、タイムアウト期間後にオンライン認証が必要になります。 この設定を使用してもよろしいですか？</string>
-  <string name="logging_in">ログイン中…</string>
+  <string name="logging_in">ログイン中...</string>
   <string name="login_or_create_new_account">安全なデータ保管庫へアクセスするためにログインまたはアカウントを作成してください。</string>
   <string name="manage">管理</string>
   <string name="master_password_confirmation_val_message">パスワードの確認が正しくありません。</string>
@@ -171,14 +169,13 @@
   <string name="set_pin_direction">アプリのロック解除に使う4桁の PIN コードを入力してください。</string>
   <string name="item_information">アイテム情報</string>
   <string name="item_updated">アイテムを更新しました。</string>
-  <string name="submitting">送信中…</string>
-  <string name="syncing">同期中…</string>
+  <string name="submitting">送信中...</string>
+  <string name="syncing">同期中...</string>
   <string name="syncing_complete">同期が完了しました。</string>
   <string name="syncing_failed">同期に失敗しました。</string>
   <string name="sync_vault_now">保管庫を同期する</string>
   <string name="touch_id">Touch ID</string>
   <string name="two_step_login">2段階認証</string>
-  <string name="two_step_login_confirmation">2段階認証を有効にすると、他の端末でログインする際にセキュリティキー、認証アプリ、SMS、電話、またはメールで認証することが必要となり，アカウントの安全性が高まります。2段階認証を有効にするのはBitwarden.comのウェブ保管庫でできます。ウェブサイトに進みますか？</string>
   <string name="unlock_with">%1$sでロック解除</string>
   <string name="unlock_with_pin">PIN コードでロック解除</string>
   <string name="validating">認証中</string>
@@ -196,7 +193,7 @@
   <string name="bitwarden_autofill_service_notification_content">この通知をタップすると保管庫から自動入力します。</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">ユーザー補助設定を開く</string>
   <string name="bitwarden_autofill_service_step1">1. Android のユーザー補助設定で「Bitwarden」をタッチしてください。</string>
-  <string name="bitwarden_autofill_service_step2">2. トグルをオンにして、「Ok」を押してください。</string>
+  <string name="bitwarden_autofill_service_step2">2. トグルをオンにして、「OK」を押してください。</string>
   <string name="disabled">無効</string>
   <string name="enabled">有効</string>
   <string name="off" tools:override="true">オフ</string>
@@ -208,10 +205,7 @@
   <string name="bitwarden_autofill_service_match_confirm">このアイテムを自動入力しますか? 「%1$s」とは完全には一致していません。</string>
   <string name="matching_items">一致するアイテム</string>
   <string name="possible_matching_items">一致するかも知れないアイテム</string>
-  <string-array name="Search">
-    <item>検索</item>
-    <item>検索</item>
-  </string-array>
+  <string name="search">検索</string>
   <string name="bitwarden_autofill_service_search">「%1$s」への自動入力アイテムを検索中です。</string>
   <string name="learn_org">組織について学ぶ</string>
   <string name="cannot_open_app">%1$s を開けません。</string>
@@ -233,7 +227,7 @@
   <string name="attachments">添付ファイル</string>
   <string name="unable_to_download_file">ファイルをダウンロードできません。</string>
   <string name="unable_to_open_file">お使いの端末ではこの種類のファイルを開けません。</string>
-  <string name="downloading">ダウンロード中…</string>
+  <string name="downloading">ダウンロード中...</string>
   <string name="attachment_large_warning">この添付ファイルのサイズは%1$sです。本当に端末にダウンロードしますか？</string>
   <string name="authenticator_key">認証キー (TOTP)</string>
   <string name="verification_code_totp">認証コード (TOTP)</string>
@@ -258,6 +252,7 @@
   <string name="feature_unavailable">サービスが利用できません</string>
   <string name="max_file_size">最大ファイルサイズは100MBです。</string>
   <string name="update_key">暗号キーを更新するまでこの機能は使用できません。</string>
+  <string name="encryption_key_migration_required_description_long">暗号化キーの移行が必要です。暗号化キーを更新するには、ウェブ保管庫からログインしてください。</string>
   <string name="learn_more">詳細情報</string>
   <string name="api_url">API サーバー URL</string>
   <string name="custom_environment">カスタム環境</string>
@@ -338,7 +333,7 @@
   <string name="use_face_id_to_unlock">Face ID を使用してロック解除</string>
   <string name="verify_face_id">Face ID で認証</string>
   <string name="windows_hello">Windows Hello</string>
-  <string name="bitwarden_autofill_go_to_settings">Android の自動入力設定を自動的に開けませんでした。Android の設定 &gt; システム &gt; 言語と入力 &gt; 詳細設定 &gt; 自動入力サービスで自動入力を設定できます。</string>
+  <string name="bitwarden_autofill_go_to_settings">Android の自動入力設定を自動的に開けませんでした。Android の設定 &gt;システム &gt;言語と入力 &gt;詳細設定 &gt;自動入力サービスで自動入力を設定できます。</string>
   <string name="custom_field_name">カスタムフィールド名</string>
   <string name="field_type_boolean">真偽値</string>
   <string name="field_type_hidden">非表示</string>
@@ -386,7 +381,7 @@
   <string name="secure_notes">秘密のメモ</string>
   <string name="all_items">すべてのアイテム</string>
   <string name="ur_is">URI</string>
-  <string name="checking_password">パスワードを確認しています…</string>
+  <string name="checking_password">パスワードを確認しています...</string>
   <string name="check_password">パスワードが漏洩していないか確認する</string>
   <string name="password_exposed">このパスワードは過去に %1$s 回漏洩しています。変更するべきです。</string>
   <string name="password_safe">このパスワードは過去に漏洩したデータにはありません。安全だと思われます。</string>
@@ -450,7 +445,6 @@
   <string name="theme_description">アプリのテーマカラーを変更します。</string>
   <string name="theme_default">デフォルト (システム)</string>
   <string name="default_dark_theme">デフォルトのダークテーマ</string>
-  <string name="default_dark_theme_description">デバイスでダークモードが有効になっている間、デフォルト（システム）テーマを使用するときに使用するダークテーマを選択してください</string>
   <string name="copy_notes">メモをコピー</string>
   <string name="exit">終了</string>
   <string name="exit_confirmation">Bitwarden を終了しますか？</string>
@@ -502,7 +496,7 @@
   <string name="soft_deleting">ごみ箱に入れています…</string>
   <string name="item_soft_deleted">アイテムをごみ箱に入れました。</string>
   <string name="restore">リストア</string>
-  <string name="restoring">リストア中…</string>
+  <string name="restoring">リストア中...</string>
   <string name="item_restored">アイテムをリストアしました。</string>
   <string name="trash">ごみ箱</string>
   <string name="search_trash">ごみ箱を検索</string>
@@ -722,7 +716,7 @@
   <string name="domain_name_required_parenthesis">ドメイン名（必須）</string>
   <string name="api_key_required_parenthesis">API キー (必須)</string>
   <string name="service">サービス</string>
-  <string name="anon_addy">AnonAddy</string>
+  <string name="addy_io">addy.io</string>
   <string name="firefox_relay">Firefox Relay</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
@@ -801,7 +795,6 @@
   <string name="remember_this_device">このデバイスを記憶する</string>
   <string name="passkey">パスキー</string>
   <string name="passkeys">パスキー</string>
-  <string name="created_x">%1$s に作成</string>
   <string name="application">アプリ</string>
   <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">パスキーが無効になってしまうため、パスキーアプリを編集することはできません</string>
   <string name="passkey_will_not_be_copied">パスキーはコピーされません</string>
@@ -809,7 +802,7 @@
   <string name="copy_application">アプリをコピー</string>
   <string name="available_for_two_step_login">2段階認証に利用可能です</string>
   <string name="master_password_re_prompt_help">マスターパスワードの再プロンプトヘルプ</string>
-  <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</string>
+  <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">メモリ不足により、ロック解除に失敗する可能性があります。解決するには、KDF のメモリ設定を減らすか、生体認証によるロック解除を設定してください。</string>
   <string name="invalid_api_key">無効な API キー</string>
   <string name="invalid_api_token">無効な API トークン</string>
   <string name="admin_approval_requested">管理者の承認を要求しました</string>
@@ -818,7 +811,6 @@
   <string name="trouble_logging_in">ログインできない場合</string>
   <string name="logging_in_as_x">%1$s としてログイン中</string>
   <string name="vault_timeout_action_changed_to_log_out">保管庫のタイムアウトアクションがログアウトに変更されました</string>
-  <string name="this_item_cannot_be_shared_with_the_organization_because_there_is_one_already_with_the_same_passkey">すでに同じパスキーを持つものがあるため、このアイテムは組織と共有することはできません。</string>
   <string name="block_auto_fill">自動入力をブロック</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">これらの URI に対しては自動入力しません。</string>
   <string name="new_blocked_uri">新しくブロックする URI</string>
@@ -837,13 +829,40 @@
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Bitwarden アプリで「デバイスでログイン」の設定をする必要があります。別のオプションが必要ですか？</string>
   <string name="log_in_with_device">デバイスでログイン</string>
   <string name="logging_in_on">ログイン先</string>
-  <string name="there_are_no_items_to_list">表示するアイテムがありません</string>
-  <string name="to_view_verification_codes_upgrade_to_premium">認証コードを表示するには、プレミアムにアップグレードしてください</string>
-  <string name="add2_factor_autentication_to_an_item_to_view_verification_codes">認証コードを表示するために、アイテムに二要素認証を追加します</string>
-  <string name="log_in_to_bitwarden_on_your_i_phone_to_view_verification_codes">認証コードを表示するにはあなたの iPhone で Bitwarden にログインしてください</string>
-  <string name="syncing_items_containing_verification_codes">認証コードを含むアイテムを同期中</string>
-  <string name="unlock_bitwarden_on_your_i_phone_to_view_verification_codes">認証コードを表示するには、iPhone で Bitwarden をロック解除してください</string>
-  <string name="set_up_bitwarden_to_view_items_containing_verification_codes">認証コードを含んだアイテムを表示するには Bitwarden をセットアップしてください</string>
-  <string name="no_items_found">アイテムが見つかりません</string>
-  <string name="set_up_apple_watch_passcode_in_order_to_use_bitwarden">Bitwarden を使うには Apple Watch のパスコードを設定してください</string>
+  <string name="vault">保管庫</string>
+  <string name="appearance">外観</string>
+  <string name="account_security">アカウントのセキュリティ</string>
+  <string name="bitwarden_help_center">Bitwarden ヘルプセンター</string>
+  <string name="contact_bitwarden_support">Bitwarden サポートへの問い合わせ</string>
+  <string name="copy_app_information">アプリ情報をコピー</string>
+  <string name="sync_now">今すぐ同期</string>
+  <string name="unlock_options">ロック解除オプション</string>
+  <string name="session_timeout">セッションタイムアウト</string>
+  <string name="session_timeout_action">セッションタイムアウト時のアクション</string>
+  <string name="account_fingerprint_phrase">アカウントのフィンガープリントフレーズ</string>
+  <string name="one_hour_and_one_minute">1 時間1分</string>
+  <string name="one_hour_and_x_minute">1時間%1$s分</string>
+  <string name="x_hours_and_one_minute">%1$s時間1分</string>
+  <string name="x_hours_and_y_minutes">%1$s時間%2$s分</string>
+  <string name="x_hours">%1$s時間</string>
+  <string name="autofill_services_explanation_long">Android Autofill Frameworkは、お使いのデバイス上の他のアプリケーションにログイン情報を入力する際に使用されます。</string>
+  <string name="use_inline_autofill_explanation_long">選択したキーボードがインライン入力をサポートしている場合は、インライン入力を使用します。そうでない場合は、デフォルトの自動入力を使用します。</string>
+  <string name="additional_options">追加オプション</string>
+  <string name="continue_to_web_app">ウェブアプリに進みますか?</string>
+  <string name="continue_to_x">%1$s に進みますか?</string>
+  <string name="continue_to_help_center">ヘルプセンターに進みますか?</string>
+  <string name="continue_to_contact_support">サポートに連絡しますか?</string>
+  <string name="continue_to_app_store">アプリストアに進みますか?</string>
+  <string name="two_step_login_description_long">Bitwarden ウェブアプリで2段階認証を設定すると、アカウントがより安全になります。</string>
+  <string name="change_master_password_description_long">Bitwarden ウェブアプリでマスターパスワードを変更できます。</string>
+  <string name="you_can_import_data_to_your_vault_on_x">%1$s の保管庫にデータをインポートできます。</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Bitwarden のヘルプセンターで使用方法の詳細をご覧ください。</string>
+  <string name="contact_support_description_long">お探しのものが見つかりませんか? bitwarden.com で Bitwarden のサポートにご連絡ください。</string>
+  <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Bitwarden アカウントの機能をウェブアプリでご確認ください。</string>
+  <string name="learn_about_organizations_description_long">Bitwarden は組織を使って保管庫アイテムを他の人と共有することができます。詳細は bitwarden.com ウェブサイトをご覧ください。</string>
+  <string name="rate_app_description_long">Bitwarden の使いやすさを他のユーザーにも知ってもらいましょう。アプリストアでレビューをしてください。</string>
+  <string name="default_dark_theme_description_long">お使いのデバイスがダークモードの時に使用するダークテーマを選択してください</string>
+  <string name="created_xy">作成日時 %1$s %2$s</string>
+  <string name="too_many_attempts">試行回数が多すぎます</string>
+  <string name="account_logged_out_biometric_exceeded">アカウントからログアウトしました。</string>
 </resources>

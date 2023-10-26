@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
   <string name="about">Over</string>
   <string name="add">Toevoegen</string>
   <string name="add_folder">Map toevoegen</string>
@@ -59,7 +59,7 @@
   <string name="password">Wachtwoord</string>
   <string name="save">Opslaan</string>
   <string name="move">Verplaatsen</string>
-  <string name="saving">Opslaan…</string>
+  <string name="saving">Opslaan...</string>
   <string name="settings">Instellingen</string>
   <string name="show">Weergeven</string>
   <string name="item_deleted">Item verwijderd</string>
@@ -78,7 +78,6 @@
   <string name="version">Versie</string>
   <string name="view">Weergeven</string>
   <string name="visit_our_website">Bezoek onze website</string>
-  <string name="visit_our_website_description">Bezoek onze website voor hulp, nieuws, om ons een e-mail te sturen en/of om meer te weten te komen over het gebruik van Bitwarden.</string>
   <string name="website">Website</string>
   <string name="yes">Ja</string>
   <string name="account">Account</string>
@@ -96,11 +95,10 @@
   <string name="change_email">E-mailadres wijzigen</string>
   <string name="change_email_confirmation">Je kunt je e-mailadres wijzigen in de kluis op bitwarden.com. Wil je de website nu bezoeken?</string>
   <string name="change_master_password">Hoofdwachtwoord wijzigen</string>
-  <string name="change_password_confirmation">Je kunt je hoofdwachtwoord wijzigen in de kluis op bitwarden.com. Wil je de website nu bezoeken?</string>
   <string name="close">Sluiten</string>
   <string name="continue_text">Doorgaan</string>
   <string name="create_account">Account aanmaken</string>
-  <string name="creating_account">Account aanmaken…</string>
+  <string name="creating_account">Account aanmaken...</string>
   <string name="edit_item">Item bewerken</string>
   <string name="enable_automatic_syncing">Automatische synchronisatie inschakelen</string>
   <string name="enter_email_for_hint">Voer het e-mailadres van je account in om je hoofdwachwoordhint te ontvangen.</string>
@@ -132,7 +130,7 @@
   <string name="vault_timeout">Time-out van de kluis</string>
   <string name="vault_timeout_action">Actie bij time-out</string>
   <string name="vault_timeout_log_out_confirmation">Uitloggen ontneemt je de toegang tot je kluis en vereist online authenticatie na een periode van time-out. Weet je zeker dat je deze instelling wilt gebruiken?</string>
-  <string name="logging_in">Inloggen…</string>
+  <string name="logging_in">Inloggen...</string>
   <string name="login_or_create_new_account">Log in of maak een nieuw account aan om toegang te krijgen tot je beveiligde kluis.</string>
   <string name="manage">Beheer</string>
   <string name="master_password_confirmation_val_message">De wachtwoorden komen niet overeen.</string>
@@ -171,17 +169,16 @@
   <string name="set_pin_direction">Voer een PIN-code van 4 tekens in om de app mee te ontgrendelen.</string>
   <string name="item_information">Item</string>
   <string name="item_updated">Item bijgewerkt</string>
-  <string name="submitting">Opslaan…</string>
-  <string name="syncing">Synchroniseren…</string>
+  <string name="submitting">Opslaan...</string>
+  <string name="syncing">Synchroniseren...</string>
   <string name="syncing_complete">Synchronisatie voltooid</string>
   <string name="syncing_failed">Synchronisatie mislukt</string>
   <string name="sync_vault_now">Kluis nu synchroniseren</string>
   <string name="touch_id">Touch ID</string>
   <string name="two_step_login">Tweestapsaanmelding</string>
-  <string name="two_step_login_confirmation">Tweestapsaanmelding beschermt je account door je inlogpoging te bevestigen met een ander apparaat zoals een beveiligingssleutel, authenticatie-app, SMS, spraakoproep of e-mail. Je kunt Tweestapsaanmelding inschakelen in de webkluis op bitwarden.com. Wil je de website nu bezoeken?</string>
   <string name="unlock_with">Ontgrendelen met %1$s</string>
   <string name="unlock_with_pin">Ontgrendelen met PIN</string>
-  <string name="validating">Valideren…</string>
+  <string name="validating">Valideren...</string>
   <string name="verification_code">Verificatiecode</string>
   <string name="view_item">Item weergeven</string>
   <string name="web_vault">Bitwarden Webkluis</string>
@@ -208,10 +205,7 @@
   <string name="bitwarden_autofill_service_match_confirm">Weet je zeker dat je dit item automatisch wilt invullen? Het komt niet volledig overeen met \"%1$s\".</string>
   <string name="matching_items">Overeenkomstige items</string>
   <string name="possible_matching_items">Mogelijke overeenkomstige items</string>
-  <string-array name="Search">
-    <item>Zoeken</item>
-    <item>Zoeken</item>
-  </string-array>
+  <string name="search">Zoeken</string>
   <string name="bitwarden_autofill_service_search">Je zoekt automatisch aanvullen voor \"%1$s\".</string>
   <string name="learn_org">Meer over organisaties</string>
   <string name="cannot_open_app">Kan de app \"%1$s\" niet openen.</string>
@@ -233,7 +227,7 @@
   <string name="attachments">Bijlagen</string>
   <string name="unable_to_download_file">Kon bestand niet downloaden.</string>
   <string name="unable_to_open_file">Je apparaat kan dit type bestand niet openen.</string>
-  <string name="downloading">Downloaden…</string>
+  <string name="downloading">Downloaden...</string>
   <string name="attachment_large_warning">Deze bijlage heeft een omvang van %1$s. Weet je zeker dat je deze naar je apparaat wilt downloaden?</string>
   <string name="authenticator_key">Authenticatiesleutel (TOTP)</string>
   <string name="verification_code_totp">Verificatiecode (TOTP)</string>
@@ -258,6 +252,7 @@ Het scannen gebeurt automatisch.</string>
   <string name="feature_unavailable">Functionaliteit niet beschikbaar</string>
   <string name="max_file_size">De maximale bestandsgrootte is 100 MB.</string>
   <string name="update_key">Je kunt deze functie pas gebruiken als je je encryptiesleutel bijwerkt.</string>
+  <string name="encryption_key_migration_required_description_long">Encryption key migration required. Please login through the web vault to update your encryption key.</string>
   <string name="learn_more">Meer informatie</string>
   <string name="api_url">API server-URL</string>
   <string name="custom_environment">Aangepaste omgeving</string>
@@ -386,7 +381,7 @@ Het scannen gebeurt automatisch.</string>
   <string name="secure_notes">Veilige notities</string>
   <string name="all_items">Alle items</string>
   <string name="ur_is">URI\'s</string>
-  <string name="checking_password">Wachtwoord controleren…</string>
+  <string name="checking_password">Wachtwoord controleren...</string>
   <string name="check_password">Controleer of wachtwoord is gelekt.</string>
   <string name="password_exposed">Dit wachtwoord is %1$s keer gelekt. Je zou het moeten veranderen.</string>
   <string name="password_safe">Dit wachtwoord is niet gevonden in de bekende datalekken. Het kan veilig gebruikt worden.</string>
@@ -450,7 +445,6 @@ Het scannen gebeurt automatisch.</string>
   <string name="theme_description">Het kleurenthema van de applicatie wijzigen.</string>
   <string name="theme_default">Standaard (Systeem)</string>
   <string name="default_dark_theme">Standaard donkere thema</string>
-  <string name="default_dark_theme_description">Kies welk donkere thema te gebruiken als standaard (systeem) thema wanneer de donkere modus van je apparaat is ingeschakeld.</string>
   <string name="copy_notes">Notities kopiëren</string>
   <string name="exit">Afsluiten</string>
   <string name="exit_confirmation">Weet je zeker dat je Bitwarden wilt afsluiten?</string>
@@ -499,10 +493,10 @@ Het scannen gebeurt automatisch.</string>
   <string name="save_attachment_success">Bijlage succesvol opgeslagen</string>
   <string name="autofill_tile_accessibility_required">Schakel bij de instellingen van Bitwarden de \"Toegankelijkheidsdienst voor automatisch invullen\" in om de tegel automatisch invullen te gebruiken.</string>
   <string name="autofill_tile_uri_not_found">Geen wachtwoordvelden gevonden</string>
-  <string name="soft_deleting">Naar prullenbak verzenden…</string>
+  <string name="soft_deleting">Naar prullenbak verzenden...</string>
   <string name="item_soft_deleted">Item verplaatst naar de prullenbak.</string>
   <string name="restore">Herstellen</string>
-  <string name="restoring">Herstellen…</string>
+  <string name="restoring">Herstellen...</string>
   <string name="item_restored">Item is hersteld.</string>
   <string name="trash">Prullenbak</string>
   <string name="search_trash">Prullenbak doorzoeken</string>
@@ -722,7 +716,7 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</string>
   <string name="domain_name_required_parenthesis">Domeinnaam (verplicht)</string>
   <string name="api_key_required_parenthesis">API-sleutel (verplicht)</string>
   <string name="service">Dienst</string>
-  <string name="anon_addy">AnonAddy</string>
+  <string name="addy_io">addy.io</string>
   <string name="firefox_relay">Firefox Relay</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
@@ -801,7 +795,6 @@ Wilt u naar dit account wisselen?</string>
   <string name="remember_this_device">Remember this device</string>
   <string name="passkey">Passkey</string>
   <string name="passkeys">Passkeys</string>
-  <string name="created_x">Aangemaakt %1$s</string>
   <string name="application">Applicatie</string>
   <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">Je kunt de passkey-applicatie niet bewerken omdat dat de passkey ongeldig zou maken</string>
   <string name="passkey_will_not_be_copied">Passkey wordt niet gekopieerd</string>
@@ -818,7 +811,6 @@ Wilt u naar dit account wisselen?</string>
   <string name="trouble_logging_in">Trouble logging in?</string>
   <string name="logging_in_as_x">Logging in as %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Vault timeout action changed to log out</string>
-  <string name="this_item_cannot_be_shared_with_the_organization_because_there_is_one_already_with_the_same_passkey">Je kunt dit item niet delen met de organisatie omdat er al een met dezelfde passkey is.</string>
   <string name="block_auto_fill">Automatisch aanvullen blokkeren</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">Automatisch is uitgeschakeld voor deze URIs.</string>
   <string name="new_blocked_uri">Nieuwe geblokkeerde URI</string>
@@ -837,13 +829,40 @@ Wilt u naar dit account wisselen?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Log in with device must be set up in the settings of the Bitwarden app. Need another option?</string>
   <string name="log_in_with_device">Log in with device</string>
   <string name="logging_in_on">Logging in on</string>
-  <string name="there_are_no_items_to_list">Er zijn geen items om weer te geven</string>
-  <string name="to_view_verification_codes_upgrade_to_premium">Upgrade naar premium om verificatiecodes te bekijken</string>
-  <string name="add2_factor_autentication_to_an_item_to_view_verification_codes">Voeg tweestapsverificatie toe aan een item voor het weergeven van verificatiecodes</string>
-  <string name="log_in_to_bitwarden_on_your_i_phone_to_view_verification_codes">Log in op Bitwarden op je iPhone voor het weergeven van verificatiecodes</string>
-  <string name="syncing_items_containing_verification_codes">Synchroniseer items die verificatiecodes bevatten</string>
-  <string name="unlock_bitwarden_on_your_i_phone_to_view_verification_codes">Ontgrendel Bitwarden op je iPhone voor het weergeven van verificatiecodes</string>
-  <string name="set_up_bitwarden_to_view_items_containing_verification_codes">Bitwarden instellen voor het weergeven van item met verificatie codes op je iPhone</string>
-  <string name="no_items_found">Geen items gevonden</string>
-  <string name="set_up_apple_watch_passcode_in_order_to_use_bitwarden">Stel een pincode op je Apple Watch in om Bitwarden te gebruiken</string>
+  <string name="vault">Kluis</string>
+  <string name="appearance">Weergave</string>
+  <string name="account_security">Accountbeveiliging</string>
+  <string name="bitwarden_help_center">Bitwarden Hulpcentrum</string>
+  <string name="contact_bitwarden_support">Contacteer Bitwarden support</string>
+  <string name="copy_app_information">App-informatie kopiëren</string>
+  <string name="sync_now">Nu synchroniseren</string>
+  <string name="unlock_options">Ontgrendelopties</string>
+  <string name="session_timeout">Sessie time-out</string>
+  <string name="session_timeout_action">Actie voor sessie time-out</string>
+  <string name="account_fingerprint_phrase">Vingerafdrukzin van je account</string>
+  <string name="one_hour_and_one_minute">Een uur en een minuut</string>
+  <string name="one_hour_and_x_minute">Een uur en %1$s minuten</string>
+  <string name="x_hours_and_one_minute">%1$s uur en een minuut</string>
+  <string name="x_hours_and_y_minutes">%1$s uur en %2$s minuten</string>
+  <string name="x_hours">%1$s uur</string>
+  <string name="autofill_services_explanation_long">Het Android Autofill Framework helpt het het invullen van inloggegevens in andere apps op je apparaat.</string>
+  <string name="use_inline_autofill_explanation_long">Gebruik inline automatisch aanvullen als het geselecteerde toetsenbord dit ondersteunt. Gebruik anders de standaard overlay.</string>
+  <string name="additional_options">Extra instellingen</string>
+  <string name="continue_to_web_app">Doorgaan naar web-app?</string>
+  <string name="continue_to_x">Doorgaan naar %1$s?</string>
+  <string name="continue_to_help_center">Doorgaan met Helpcentrum?</string>
+  <string name="continue_to_contact_support">Doorgaan met het contact opnemen met support?</string>
+  <string name="continue_to_app_store">Doorgaan naar de app store?</string>
+  <string name="two_step_login_description_long">Maak je account veiliger met het instellen van tweestapsaanmelding in de Bitwarden-webapp.</string>
+  <string name="change_master_password_description_long">Je kunt je hoofdwachtwoord wijzigen in de Bitwarden-webapp.</string>
+  <string name="you_can_import_data_to_your_vault_on_x">Je kunt gegevens importeren in je kluis op %1$s.</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Leer meer over het gebruik van Bitwarden in het Helpcentrum.</string>
+  <string name="contact_support_description_long">Kan je niet vinden wat je zoekt? Neem contact op met Bitwarden-ondersteuning via bitwarden.com.</string>
+  <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Ontdek meer functies van je Bitwarden-account in de webapp.</string>
+  <string name="learn_about_organizations_description_long">Met Bitwarden kun je je kluis-items met anderen delen door gebruik te maken van een organisatie. Lees meer op de website bitwarden.com.</string>
+  <string name="rate_app_description_long">Help anderen met beslissen of Bitwarden iets voor hen is. Bezoek de app store en laat een beoordeling achter.</string>
+  <string name="default_dark_theme_description_long">Kies het donkere thema dat je wilt gebruiken wanneer de donkere modus van je apparaat actief is</string>
+  <string name="created_xy">Aangemaakt %1$s, %2$s</string>
+  <string name="too_many_attempts">Too many attempts</string>
+  <string name="account_logged_out_biometric_exceeded">Account logged out.</string>
 </resources>

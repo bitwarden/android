@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
   <string name="about">Σχετικά</string>
   <string name="add">Προσθήκη</string>
   <string name="add_folder">Προσθήκη Φακέλου</string>
@@ -13,7 +13,7 @@
   <string name="copy_username">Αντιγραφή Ονόματος Χρήστη</string>
   <string name="credits">Συντελεστές</string>
   <string name="delete">Διαγραφή</string>
-  <string name="deleting">Διαγραφή…</string>
+  <string name="deleting">Διαγραφή...</string>
   <string name="do_you_really_want_to_delete">Είστε σίγουροι για τη διαγραφή; Αυτό δεν μπορεί να αναιρεθεί.</string>
   <string name="edit">Επεξεργασία</string>
   <string name="edit_folder">Επεξεργασία Φακέλου</string>
@@ -36,8 +36,7 @@
   <string name="help_and_feedback">Βοήθεια και Σχόλια</string>
   <string name="hide">Απόκρυψη</string>
   <string name="internet_connection_required_message">Συνδεθείτε στο διαδίκτυο πριν συνεχίσετε.</string>
-  <string name="internet_connection_required_title">28/5000
-Απαιτείται σύνδεση στο διαδίκτυο</string>
+  <string name="internet_connection_required_title">28/5000Απαιτείται σύνδεση στο διαδίκτυο</string>
   <string name="invalid_master_password">Μη έγκυρος κύριος κωδικός, δοκιμάστε ξανά.</string>
   <string name="invalid_pin">Μη έγκυρο PIN. Προσπάθηστε ξανά.</string>
   <string name="launch">Εκκίνηση</string>
@@ -60,7 +59,7 @@
   <string name="password">Κωδικός</string>
   <string name="save">Αποθήκευση</string>
   <string name="move">Μετακίνηση</string>
-  <string name="saving">Αποθήκευση…</string>
+  <string name="saving">Αποθήκευση...</string>
   <string name="settings">Ρυθμίσεις</string>
   <string name="show">Εμφάνιση</string>
   <string name="item_deleted">Το στοιχείο έχει διαγραφεί.</string>
@@ -79,7 +78,6 @@
   <string name="version">Έκδοση</string>
   <string name="view">Προβολή</string>
   <string name="visit_our_website">Επισκεφθείτε την ιστοσελίδα μας</string>
-  <string name="visit_our_website_description">Επισκευθείτε την ιστοσελίδα μας για να λάβετε βοήθεια, νέα, να μας στείλετε email ή να μάθετε περισσότερα σχετικά με τον τρόπο χρήσης του Bitwarden.</string>
   <string name="website">Ιστοσελίδα</string>
   <string name="yes">Ναι</string>
   <string name="account">Λογαριασμός</string>
@@ -97,11 +95,10 @@
   <string name="change_email">Αλλαγή Email</string>
   <string name="change_email_confirmation">Μπορείτε να αλλάξετε τη διεύθυνση του email σας στο bitwarden.com. Θέλετε να επισκεφθείτε την ιστοσελίδα τώρα;</string>
   <string name="change_master_password">Αλλαγή Κύριου Κωδικού</string>
-  <string name="change_password_confirmation">Μπορείτε να αλλάξετε τον κύριο κωδικό στο bitwarden.com. Θέλετε να επισκεφθείτε την ιστοσελίδα τώρα;</string>
   <string name="close">Κλείσιμο</string>
   <string name="continue_text">Συνέχεια</string>
   <string name="create_account">Δημιουργία Λογαριασμού</string>
-  <string name="creating_account">Δημιουργία λογαριασμού…</string>
+  <string name="creating_account">Δημιουργία λογαριασμού...</string>
   <string name="edit_item">Επεξεργασία Στοιχείου</string>
   <string name="enable_automatic_syncing">Ενεργοποίηση Αυτόματου Συγχρονισμού</string>
   <string name="enter_email_for_hint">Εισάγετε την διεύθυνση email του λογαριασμού σας, προκειμένου για να λάβετε υπόδειξη του κύριου κωδικού.</string>
@@ -133,7 +130,7 @@
   <string name="vault_timeout">Χρόνος Λήξης Vault</string>
   <string name="vault_timeout_action">Ενέργεια Χρόνου Λήξης Vault</string>
   <string name="vault_timeout_log_out_confirmation">Η αποσύνδεση θα καταργήσει όλη την πρόσβαση στο vault σας και απαιτεί online έλεγχο ταυτότητας μετά το χρονικό όριο λήξης. Είστε βέβαιοι ότι θέλετε να χρησιμοποιήσετε αυτήν τη ρύθμιση;</string>
-  <string name="logging_in">Σύνδεση…</string>
+  <string name="logging_in">Σύνδεση...</string>
   <string name="login_or_create_new_account">Συνδεθείτε ή δημιουργήστε έναν νέο λογαριασμό για να αποκτήσετε πρόσβαση στο ασφαλές vault σας.</string>
   <string name="manage">Διαχείριση</string>
   <string name="master_password_confirmation_val_message">Η επιβεβαίωση του κύριου κωδικού δεν είναι σωστή.</string>
@@ -172,14 +169,13 @@
   <string name="set_pin_direction">Εισαγωγή τετραψήφιου αριθμού PIN για ξεκλείδωμα εφαρμογής.</string>
   <string name="item_information">Πληροφορίες Στοιχείου</string>
   <string name="item_updated">Το στοιχείο ενημερώθηκε.</string>
-  <string name="submitting">Υποβολή…</string>
-  <string name="syncing">Συγχρονισμός…</string>
+  <string name="submitting">Υποβολή...</string>
+  <string name="syncing">Συγχρονισμός...</string>
   <string name="syncing_complete">Ο συγχρονισμός ολοκληρώθηκε.</string>
   <string name="syncing_failed">Ο συγχρονισμός απέτυχε.</string>
   <string name="sync_vault_now">Συγχρονισμός Vault Τώρα</string>
   <string name="touch_id">Touch ID</string>
   <string name="two_step_login">Σύνδεση σε δύο βήματα</string>
-  <string name="two_step_login_confirmation">Η σύνδεση σε δύο βήματα καθιστά πιο ασφαλή τον λογαριασμό σας, απαιτώντας να επαληθεύσετε τα στοιχεία σας με μια άλλη συσκευή, όπως κλειδί ασφαλείας, εφαρμογή επαλήθευσης, μήνυμα SMS, τηλεφωνική κλήση ή email. Μπορείτε να ενεργοποιήσετε τη σύνδεση σε δύο βήματα στο bitwarden.com. Θέλετε να επισκεφθείτε την ιστοσελίδα τώρα;</string>
   <string name="unlock_with">Ξεκλείδωμα με %1$s</string>
   <string name="unlock_with_pin">Ξεκλείδωμα με PIN</string>
   <string name="validating">Επαλήθευση</string>
@@ -209,10 +205,7 @@
   <string name="bitwarden_autofill_service_match_confirm">Είστε βέβαιοι για την αυτόματη συμπλήρωση αυτού του στοιχείου; Δεν υπάρχει πλήρης αντιστοιχία για \"%1$s\".</string>
   <string name="matching_items">Αντιστοίχιση Στοιχείων</string>
   <string name="possible_matching_items">Πιθανά Στοιχεία Αντιστοίχισης</string>
-  <string-array name="Search">
-    <item>Αναζήτηση</item>
-    <item>Search</item>
-  </string-array>
+  <string name="search">Αναζήτηση</string>
   <string name="bitwarden_autofill_service_search">Αναζήτηση στοιχείου αυτόματης συμπλήρωσης για \"%1$s\".</string>
   <string name="learn_org">Μάθετε για τους Οργανισμούς</string>
   <string name="cannot_open_app">Δεν είναι δυνατή η πρόσβαση στην εφαρμογή \"%1$s\".</string>
@@ -234,7 +227,7 @@
   <string name="attachments">Συνημμένα</string>
   <string name="unable_to_download_file">Αδυναμία λήψης αρχείου.</string>
   <string name="unable_to_open_file">Η συσκευή σας δεν μπορεί να ανοίξει αυτού του τύπου αρχεία.</string>
-  <string name="downloading">Λήψη…</string>
+  <string name="downloading">Λήψη...</string>
   <string name="attachment_large_warning">Αυτό το συνημμένο έχει μέγεθος %1$s. Είστε βέβαιοι ότι θέλετε να το κατεβάσετε στη συσκευή σας;</string>
   <string name="authenticator_key">Κλειδί επαλήθευσης (TOTP)</string>
   <string name="verification_code_totp">Κωδικός Επαλήθευσης (TOTP)</string>
@@ -258,6 +251,7 @@
   <string name="feature_unavailable">Μη διαθέσιμο χαρακτηριστικό</string>
   <string name="max_file_size">Το μέγιστο μέγεθος αρχείου είναι 100 MB.</string>
   <string name="update_key">Δεν μπορείτε να χρησιμοποιήσετε αυτήν τη δυνατότητα μέχρι να ενημερώσετε το κλειδί κρυπτογράφησης.</string>
+  <string name="encryption_key_migration_required_description_long">Encryption key migration required. Please login through the web vault to update your encryption key.</string>
   <string name="learn_more">Μάθετε Περισσότερα</string>
   <string name="api_url">URL Διακομιστή API</string>
   <string name="custom_environment">Προσαρμοσμένο Περιβάλλον</string>
@@ -386,7 +380,7 @@
   <string name="secure_notes">Ασφαλείς Σημειώσεις</string>
   <string name="all_items">Όλα τα Στοιχεία</string>
   <string name="ur_is">URIs</string>
-  <string name="checking_password">Έλεγχος κωδικού…</string>
+  <string name="checking_password">Έλεγχος κωδικού...</string>
   <string name="check_password">Ελέγξτε εάν ο κωδικός σας έχει εκτεθεί.</string>
   <string name="password_exposed">Ο κωδικός αυτός έχει εκτεθεί %1$s φορά (ες) σε διαρροές δεδομένων. Πρέπει να τον αλλάξετε.</string>
   <string name="password_safe">Ο κωδικός αυτός δεν βρέθηκε σε γνωστές διαρροές δεδομένων. Είναι ασφαλής για χρήση.</string>
@@ -450,7 +444,6 @@
   <string name="theme_description">Αλλαγή χρώματος, θέματος εφαρμογής.</string>
   <string name="theme_default">Προεπιλογή (σύστημα)</string>
   <string name="default_dark_theme">Προεπιλεγμένο σκοτεινό θέμα</string>
-  <string name="default_dark_theme_description">Επιλέξτε το σκούρο θέμα που θα χρησιμοποιηθεί όταν χρησιμοποιείτε το προεπιλεγμένο (System) θέμα ενώ η σκοτεινή λειτουργία της συσκευής σας είναι ενεργοποιημένη.</string>
   <string name="copy_notes">Αντιγραφή Σημειώσεων</string>
   <string name="exit">Έξοδος</string>
   <string name="exit_confirmation">Είστε βέβαιοι ότι θέλετε να βγείτε από το Bitwarden;</string>
@@ -499,10 +492,10 @@
   <string name="save_attachment_success">Το συνημμένο αποθηκεύτηκε με επιτυχία</string>
   <string name="autofill_tile_accessibility_required">Ενεργοποιήστε την \"Υπηρεσία αυτόματης συμπλήρωσης προσβασιμότητας\" από τις ρυθμίσεις Bitwarden για να χρησιμοποιήσετε το εικονίδιο αυτόματης συμπλήρωσης.</string>
   <string name="autofill_tile_uri_not_found">Δεν εντοπίστηκαν πεδία κωδικού πρόσβασης</string>
-  <string name="soft_deleting">Αποστολή στον κάδο απορριμμάτων …</string>
+  <string name="soft_deleting">Αποστολή στον κάδο απορριμμάτων ...</string>
   <string name="item_soft_deleted">Το στοιχείο έχει σταλεί στον κάδο απορριμμάτων.</string>
   <string name="restore">Ανάκτηση</string>
-  <string name="restoring">Γίνεται επαναφορά…</string>
+  <string name="restoring">Γίνεται επαναφορά...</string>
   <string name="item_restored">Το στοιχείο έχει ανακτηθεί.</string>
   <string name="trash">Κάδος</string>
   <string name="search_trash">Αναζήτηση Κάδου</string>
@@ -578,7 +571,7 @@
   <string name="password_info">Προαιρετικά απαιτείται κωδικός πρόσβασης για τους χρήστες για να έχουν πρόσβαση σε αυτό το Send.</string>
   <string name="remove_password">Αφαίρεση κωδικού</string>
   <string name="are_you_sure_remove_send_password">Είστε βέβαιοι ότι θέλετε να καταργήσετε τον κωδικό πρόσβασης;</string>
-  <string name="removing_send_password">Αφαίρεση κωδικού…</string>
+  <string name="removing_send_password">Αφαίρεση κωδικού...</string>
   <string name="send_password_removed">Ο κωδικός έχει αφαιρεθεί.</string>
   <string name="notes_info">Ιδιωτικές σημειώσεις σχετικά με αυτό το Send.</string>
   <string name="disable_send">Απενεργοποιήστε αυτό το Send έτσι ώστε κανείς να μην μπορεί να έχει πρόσβαση σε αυτό.</string>
@@ -650,7 +643,7 @@
   <string name="invalid_verification_code">Μη Έγκυρος Κωδικός Επαλήθευσης.</string>
   <string name="request_otp">Αιτηθείτε τον κωδικό πρόσβασης μιας χρήσης</string>
   <string name="send_code">Αποστολή Κωδικού</string>
-  <string name="sending">Αποστολή….</string>
+  <string name="sending">Αποστολή....</string>
   <string name="copy_send_link_on_save">Αντιγράψτε το σύνδεσμο αποστολής κατά την αποθήκευση</string>
   <string name="sending_code">Αποστολή κωδικού</string>
   <string name="verifying">Επαλήθευση</string>
@@ -722,7 +715,7 @@
   <string name="domain_name_required_parenthesis">Όνομα Τομέα (απαιτείται)</string>
   <string name="api_key_required_parenthesis">Κλειδί API (απαιτείται)</string>
   <string name="service">Υπηρεσία</string>
-  <string name="anon_addy">AnonAddy</string>
+  <string name="addy_io">addy.io</string>
   <string name="firefox_relay">Firefox Relay</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
@@ -801,7 +794,6 @@
   <string name="remember_this_device">Remember this device</string>
   <string name="passkey">Συνθηματικό</string>
   <string name="passkeys">Συνθηματικά</string>
-  <string name="created_x">Δημιουργήθηκε %1$s</string>
   <string name="application">Εφαρμογή</string>
   <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">Δεν μπορείτε να επεξεργαστείτε την εφαρμογή κλειδιού πρόσβασης επειδή θα ακυρώσει το κλειδί</string>
   <string name="passkey_will_not_be_copied">Το κλειδί πρόσβασης δεν θα αντιγραφεί</string>
@@ -818,7 +810,6 @@
   <string name="trouble_logging_in">Trouble logging in?</string>
   <string name="logging_in_as_x">Logging in as %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Vault timeout action changed to log out</string>
-  <string name="this_item_cannot_be_shared_with_the_organization_because_there_is_one_already_with_the_same_passkey">This item cannot be shared with the organization because there is one already with the same passkey.</string>
   <string name="block_auto_fill">Block auto-fill</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">Auto-fill will not be offered for these URIs.</string>
   <string name="new_blocked_uri">New blocked URI</string>
@@ -837,13 +828,40 @@
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Log in with device must be set up in the settings of the Bitwarden app. Need another option?</string>
   <string name="log_in_with_device">Log in with device</string>
   <string name="logging_in_on">Logging in on</string>
-  <string name="there_are_no_items_to_list">There are no items to list</string>
-  <string name="to_view_verification_codes_upgrade_to_premium">To view verification codes, upgrade to premium</string>
-  <string name="add2_factor_autentication_to_an_item_to_view_verification_codes">Add 2 factor authentication to an item to view the verification codes</string>
-  <string name="log_in_to_bitwarden_on_your_i_phone_to_view_verification_codes">Log in to Bitwarden on your iPhone to view verification codes</string>
-  <string name="syncing_items_containing_verification_codes">Syncing items containing verification codes</string>
-  <string name="unlock_bitwarden_on_your_i_phone_to_view_verification_codes">Unlock Bitwarden on your iPhone to view verification codes</string>
-  <string name="set_up_bitwarden_to_view_items_containing_verification_codes">Set up Bitwarden to view items containing verification codes</string>
-  <string name="no_items_found">No items found</string>
-  <string name="set_up_apple_watch_passcode_in_order_to_use_bitwarden">Set up Apple Watch passcode in order to use Bitwarden</string>
+  <string name="vault">Vault</string>
+  <string name="appearance">Appearance</string>
+  <string name="account_security">Account security</string>
+  <string name="bitwarden_help_center">Bitwarden Help Center</string>
+  <string name="contact_bitwarden_support">Contact Bitwarden support</string>
+  <string name="copy_app_information">Copy app information</string>
+  <string name="sync_now">Sync now</string>
+  <string name="unlock_options">Unlock options</string>
+  <string name="session_timeout">Session timeout</string>
+  <string name="session_timeout_action">Session timeout action</string>
+  <string name="account_fingerprint_phrase">Account fingerprint phrase</string>
+  <string name="one_hour_and_one_minute">One hour and one minute</string>
+  <string name="one_hour_and_x_minute">One hour and %1$s minutes</string>
+  <string name="x_hours_and_one_minute">%1$s hours and one minute</string>
+  <string name="x_hours_and_y_minutes">%1$s hours and %2$s minutes</string>
+  <string name="x_hours">%1$s hours</string>
+  <string name="autofill_services_explanation_long">The Android Autofill Framework is used to assist in filling login information into other apps on your device.</string>
+  <string name="use_inline_autofill_explanation_long">Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</string>
+  <string name="additional_options">Additional options</string>
+  <string name="continue_to_web_app">Continue to web app?</string>
+  <string name="continue_to_x">Continue to %1$s?</string>
+  <string name="continue_to_help_center">Continue to Help center?</string>
+  <string name="continue_to_contact_support">Continue to contact support?</string>
+  <string name="continue_to_app_store">Continue to app store?</string>
+  <string name="two_step_login_description_long">Make your account more secure by setting up two-step login in the Bitwarden web app.</string>
+  <string name="change_master_password_description_long">You can change your master password on the Bitwarden web app.</string>
+  <string name="you_can_import_data_to_your_vault_on_x">You can import data to your vault on %1$s.</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Learn more about how to use Bitwarden on the Help center.</string>
+  <string name="contact_support_description_long">Can’t find what you are looking for? Reach out to Bitwarden support on bitwarden.com.</string>
+  <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Explore more features of your Bitwarden account on the web app.</string>
+  <string name="learn_about_organizations_description_long">Bitwarden allows you to share your vault items with others by using an organization. Learn more on the bitwarden.com website.</string>
+  <string name="rate_app_description_long">Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now.</string>
+  <string name="default_dark_theme_description_long">Choose the dark theme to use when your device’s dark mode is in use</string>
+  <string name="created_xy">Created %1$s, %2$s</string>
+  <string name="too_many_attempts">Too many attempts</string>
+  <string name="account_logged_out_biometric_exceeded">Account logged out.</string>
 </resources>

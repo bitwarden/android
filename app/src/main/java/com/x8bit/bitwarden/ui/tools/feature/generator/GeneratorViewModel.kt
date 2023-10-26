@@ -682,7 +682,7 @@ data class GeneratorState(
                      * the label for each type.
                      */
                     enum class ServiceTypeOption(val labelRes: Int) {
-                        ANON_ADDY(R.string.anon_addy),
+                        ANON_ADDY(R.string.addy_io),
                         DUCK_DUCK_GO(R.string.duck_duck_go),
                         FAST_MAIL(R.string.fastmail),
                         FIREFOX_RELAY(R.string.firefox_relay),

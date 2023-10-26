@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
   <string name="about">Oor</string>
   <string name="add">Voeg toe</string>
   <string name="add_folder">Voeg vouer toe</string>
@@ -78,7 +78,6 @@
   <string name="version">Weergawe</string>
   <string name="view">Bekyk</string>
   <string name="visit_our_website">Besoek ons webwerf</string>
-  <string name="visit_our_website_description">Besoek ons webwerf vir hulp, nuus, om ’n e-pos aan ons te stuur en/of om meer te leer oor die gebruik van Bitwarden.</string>
   <string name="website">Webwerf</string>
   <string name="yes">Ja</string>
   <string name="account">Rekening</string>
@@ -96,7 +95,6 @@
   <string name="change_email">Verander e-pos</string>
   <string name="change_email_confirmation">U kan u e-posadres op die bitwarden.com-webkluis verander. Wil u die webwerf nou besoek?</string>
   <string name="change_master_password">Verander hoofwagwoord</string>
-  <string name="change_password_confirmation">U kan u hoofwagwoord op die bitwarden.com-webkluis verander. Wil u die webwerf nou besoek?</string>
   <string name="close">Sluit</string>
   <string name="continue_text">Gaan voort</string>
   <string name="create_account">Skep rekening</string>
@@ -172,13 +170,12 @@
   <string name="item_information">Iteminligting</string>
   <string name="item_updated">Item bygewerk.</string>
   <string name="submitting">Word ingedien…</string>
-  <string name="syncing">Sinkroniseer…</string>
+  <string name="syncing">Sinkroniseer...</string>
   <string name="syncing_complete">Klaar gesinchroniseer.</string>
   <string name="syncing_failed">Sinkronisasie het misluk.</string>
   <string name="sync_vault_now">Sichroniseer kluis nou</string>
   <string name="touch_id">Touch ID</string>
   <string name="two_step_login">Tweestapaantekening</string>
-  <string name="two_step_login_confirmation">Tweestapsaantekening maak u rekening veiliger deur u aantekenpoging te bevestig met ’n ander toestel soos ’n beveiligingsleutel, waarmerktoep, SMS, telefoonoproep of e-pos. U kan tweestapsaantekening in die webkluis op bitwarden.com aktiveer. Wil u die webwerf nou besoek?</string>
   <string name="unlock_with">Ontgrendel met %1$s</string>
   <string name="unlock_with_pin">Ontgrendel met PIN-kode</string>
   <string name="validating">Validering</string>
@@ -208,10 +205,7 @@
   <string name="bitwarden_autofill_service_match_confirm">Is u sekeru wil hierdie item outovul? Dit is nie ’n volledige ooreenstemming met “%1$s” nie.</string>
   <string name="matching_items">Ooreenkomstige items</string>
   <string name="possible_matching_items">Moontlik ooreenkomstige items</string>
-  <string-array name="Search">
-    <item>Soek</item>
-    <item>Search</item>
-  </string-array>
+  <string name="search">Soek</string>
   <string name="bitwarden_autofill_service_search">U soek na ’n outovulitem vir “%1$s”.</string>
   <string name="learn_org">Meer oor organisasies</string>
   <string name="cannot_open_app">Kan nie die toep “%1$s” open nie.</string>
@@ -258,6 +252,7 @@ Skandering gebeur outomaties.</string>
   <string name="feature_unavailable">Funksie Onbeskikbaar</string>
   <string name="max_file_size">Maksimumlêergrootte is 100 MB.</string>
   <string name="update_key">U kan nie hierdie funksie gebruik tot u u enkripsiesleutel bygewerk het nie.</string>
+  <string name="encryption_key_migration_required_description_long">Encryption key migration required. Please login through the web vault to update your encryption key.</string>
   <string name="learn_more">Leer meer</string>
   <string name="api_url">API-bedienerbronadres</string>
   <string name="custom_environment">Pasgemaakte omgewing</string>
@@ -450,7 +445,6 @@ Skandering gebeur outomaties.</string>
   <string name="theme_description">Verander die toepassing se kleurtema.</string>
   <string name="theme_default">Verstek (Stelsel)</string>
   <string name="default_dark_theme">Verstekdonkertema</string>
-  <string name="default_dark_theme_description">Kies welke donkertema om te gebruik as stelseltema wanneer u toestel se donkertema geaktiveer is.</string>
   <string name="copy_notes">Kopieer notas</string>
   <string name="exit">Verlaat</string>
   <string name="exit_confirmation">Is u seker u wil Bitwarden verlaat?</string>
@@ -722,7 +716,7 @@ kies u Voeg TOTP toe om die sleutel veilig te bewaar</string>
   <string name="domain_name_required_parenthesis">Domeinnaam (vereis)</string>
   <string name="api_key_required_parenthesis">API-sleutel (vereis)</string>
   <string name="service">Diens</string>
-  <string name="anon_addy">AnonAddy</string>
+  <string name="addy_io">addy.io</string>
   <string name="firefox_relay">Firefox Relay</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
@@ -801,7 +795,6 @@ Wil u na die rekening omskakel?</string>
   <string name="remember_this_device">Remember this device</string>
   <string name="passkey">Passkey</string>
   <string name="passkeys">Passkeys</string>
-  <string name="created_x">Created %1$s</string>
   <string name="application">Application</string>
   <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">You cannot edit passkey application because it would invalidate the passkey</string>
   <string name="passkey_will_not_be_copied">Passkey will not be copied</string>
@@ -818,7 +811,6 @@ Wil u na die rekening omskakel?</string>
   <string name="trouble_logging_in">Trouble logging in?</string>
   <string name="logging_in_as_x">Logging in as %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Vault timeout action changed to log out</string>
-  <string name="this_item_cannot_be_shared_with_the_organization_because_there_is_one_already_with_the_same_passkey">This item cannot be shared with the organization because there is one already with the same passkey.</string>
   <string name="block_auto_fill">Block auto-fill</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">Auto-fill will not be offered for these URIs.</string>
   <string name="new_blocked_uri">New blocked URI</string>
@@ -837,13 +829,40 @@ Wil u na die rekening omskakel?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Log in with device must be set up in the settings of the Bitwarden app. Need another option?</string>
   <string name="log_in_with_device">Log in with device</string>
   <string name="logging_in_on">Logging in on</string>
-  <string name="there_are_no_items_to_list">There are no items to list</string>
-  <string name="to_view_verification_codes_upgrade_to_premium">To view verification codes, upgrade to premium</string>
-  <string name="add2_factor_autentication_to_an_item_to_view_verification_codes">Add 2 factor authentication to an item to view the verification codes</string>
-  <string name="log_in_to_bitwarden_on_your_i_phone_to_view_verification_codes">Log in to Bitwarden on your iPhone to view verification codes</string>
-  <string name="syncing_items_containing_verification_codes">Syncing items containing verification codes</string>
-  <string name="unlock_bitwarden_on_your_i_phone_to_view_verification_codes">Unlock Bitwarden on your iPhone to view verification codes</string>
-  <string name="set_up_bitwarden_to_view_items_containing_verification_codes">Set up Bitwarden to view items containing verification codes</string>
-  <string name="no_items_found">No items found</string>
-  <string name="set_up_apple_watch_passcode_in_order_to_use_bitwarden">Set up Apple Watch passcode in order to use Bitwarden</string>
+  <string name="vault">Vault</string>
+  <string name="appearance">Appearance</string>
+  <string name="account_security">Account security</string>
+  <string name="bitwarden_help_center">Bitwarden Help Center</string>
+  <string name="contact_bitwarden_support">Contact Bitwarden support</string>
+  <string name="copy_app_information">Copy app information</string>
+  <string name="sync_now">Sync now</string>
+  <string name="unlock_options">Unlock options</string>
+  <string name="session_timeout">Session timeout</string>
+  <string name="session_timeout_action">Session timeout action</string>
+  <string name="account_fingerprint_phrase">Account fingerprint phrase</string>
+  <string name="one_hour_and_one_minute">One hour and one minute</string>
+  <string name="one_hour_and_x_minute">One hour and %1$s minutes</string>
+  <string name="x_hours_and_one_minute">%1$s hours and one minute</string>
+  <string name="x_hours_and_y_minutes">%1$s hours and %2$s minutes</string>
+  <string name="x_hours">%1$s hours</string>
+  <string name="autofill_services_explanation_long">The Android Autofill Framework is used to assist in filling login information into other apps on your device.</string>
+  <string name="use_inline_autofill_explanation_long">Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</string>
+  <string name="additional_options">Additional options</string>
+  <string name="continue_to_web_app">Continue to web app?</string>
+  <string name="continue_to_x">Continue to %1$s?</string>
+  <string name="continue_to_help_center">Continue to Help center?</string>
+  <string name="continue_to_contact_support">Continue to contact support?</string>
+  <string name="continue_to_app_store">Continue to app store?</string>
+  <string name="two_step_login_description_long">Make your account more secure by setting up two-step login in the Bitwarden web app.</string>
+  <string name="change_master_password_description_long">You can change your master password on the Bitwarden web app.</string>
+  <string name="you_can_import_data_to_your_vault_on_x">You can import data to your vault on %1$s.</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Learn more about how to use Bitwarden on the Help center.</string>
+  <string name="contact_support_description_long">Can’t find what you are looking for? Reach out to Bitwarden support on bitwarden.com.</string>
+  <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Explore more features of your Bitwarden account on the web app.</string>
+  <string name="learn_about_organizations_description_long">Bitwarden allows you to share your vault items with others by using an organization. Learn more on the bitwarden.com website.</string>
+  <string name="rate_app_description_long">Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now.</string>
+  <string name="default_dark_theme_description_long">Choose the dark theme to use when your device’s dark mode is in use</string>
+  <string name="created_xy">Created %1$s, %2$s</string>
+  <string name="too_many_attempts">Too many attempts</string>
+  <string name="account_logged_out_biometric_exceeded">Account logged out.</string>
 </resources>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
   <string name="about">O aplikácii</string>
   <string name="add">Pridať</string>
   <string name="add_folder">Pridať priečinok</string>
@@ -13,7 +13,7 @@
   <string name="copy_username">Kopírovať používateľské meno</string>
   <string name="credits">Poďakovania</string>
   <string name="delete">Odstrániť</string>
-  <string name="deleting">Odstraňuje sa…</string>
+  <string name="deleting">Odstraňuje sa...</string>
   <string name="do_you_really_want_to_delete">Naozaj chcete odstrániť? Nedá sa to vrátiť späť.</string>
   <string name="edit">Upraviť</string>
   <string name="edit_folder">Upraviť priečinok</string>
@@ -59,7 +59,7 @@
   <string name="password">Heslo</string>
   <string name="save">Uložiť</string>
   <string name="move">Presunúť</string>
-  <string name="saving">Ukladá sa…</string>
+  <string name="saving">Ukladá sa...</string>
   <string name="settings">Nastavenia</string>
   <string name="show">Zobraziť</string>
   <string name="item_deleted">Položka bola odstránená.</string>
@@ -78,7 +78,6 @@
   <string name="version">Verzia</string>
   <string name="view">Zobraziť</string>
   <string name="visit_our_website">Navštívte našu stránku</string>
-  <string name="visit_our_website_description">Navštívte našu stránku pre získanie pomoci, noviniek, poslať nám email, alebo sa dozvedieť viac, ako používať bitwarden.</string>
   <string name="website">Webstránka</string>
   <string name="yes">Áno</string>
   <string name="account">Účet</string>
@@ -96,11 +95,10 @@
   <string name="change_email">Zmeniť email</string>
   <string name="change_email_confirmation">Svoju emailovú adresu môžete zmeniť na webovom trezore bitwarden.com. Chcete navštíviť túto stránku teraz?</string>
   <string name="change_master_password">Zmeniť hlavné heslo</string>
-  <string name="change_password_confirmation">Svoje hlavné heslo môžete zmeniť na webovom trezore bitwarden.com. Chcete navštíviť túto stránku teraz?</string>
   <string name="close">Zavrieť</string>
   <string name="continue_text">Pokračovať</string>
   <string name="create_account">Vytvoriť účet</string>
-  <string name="creating_account">Vytvára sa účet…</string>
+  <string name="creating_account">Vytvára sa účet...</string>
   <string name="edit_item">Upraviť položku</string>
   <string name="enable_automatic_syncing">Zapnúť automatickú synchronizáciu</string>
   <string name="enter_email_for_hint">Zadajte emailovú adresu na zaslanie nápovedy pre vaše hlavné heslo.</string>
@@ -132,7 +130,7 @@
   <string name="vault_timeout">Časový limit pre trezor</string>
   <string name="vault_timeout_action">Akcia pri vypršaní času pre trezor</string>
   <string name="vault_timeout_log_out_confirmation">Odhlásenie bude vyžadovať online prihlásenie po vypršaní časového limitu. Naozaj chcete použiť toto nastavenie?</string>
-  <string name="logging_in">Prihlasovanie…</string>
+  <string name="logging_in">Prihlasovanie...</string>
   <string name="login_or_create_new_account">Prihláste sa, alebo vytvorte nový účet pre prístup k vášmu bezpečnému trezoru.</string>
   <string name="manage">Spravovať</string>
   <string name="master_password_confirmation_val_message">Potvrdenie hesla nie je správne.</string>
@@ -171,14 +169,13 @@
   <string name="set_pin_direction">Zadajte 4-ciferný PIN kód na odomknutie aplikácie.</string>
   <string name="item_information">Informácie o položke</string>
   <string name="item_updated">Položka bola aktualizovaná.</string>
-  <string name="submitting">Odosielam…</string>
-  <string name="syncing">Synchronizujem…</string>
+  <string name="submitting">Odosielam...</string>
+  <string name="syncing">Synchronizujem...</string>
   <string name="syncing_complete">Synchronizácia kompletná.</string>
   <string name="syncing_failed">Synchronizácia zlyhala.</string>
   <string name="sync_vault_now">Synchronizovať trezor teraz</string>
   <string name="touch_id">Touch ID</string>
   <string name="two_step_login">Dvojstupňové prihlásenie</string>
-  <string name="two_step_login_confirmation">Dvojstupňové prihlasovanie robí váš účet bezpečnejsí vyžadovaním bezpečnostného kódu z overovacej aplikácie vždy, keď sa prihlásite. Dvojstupňové prihlasovanie môžete povoliť na webovom trezore bitwarden.com. Chcete navštíviť túto stránku teraz?</string>
   <string name="unlock_with">Odomknúť s %1$s</string>
   <string name="unlock_with_pin">Odomknúť s PIN kódom</string>
   <string name="validating">Overujem</string>
@@ -196,7 +193,7 @@
   <string name="bitwarden_autofill_service_notification_content">Ťuknite na túto notifikáciu pre automatické vyplnenie prihlasovacích údajov z vášho trezora.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Otvoriť nastavenia zjednodušenia prístupu</string>
   <string name="bitwarden_autofill_service_step1">1. Otvorte obrazovku Uľahčenia prístupu, ťuknite na \"Bitwarden\" pod nadpisom Služby.</string>
-  <string name="bitwarden_autofill_service_step2">2. Zapnite a stlačte Ok pre potvrdenie.</string>
+  <string name="bitwarden_autofill_service_step2">2. Zapnite a stlačte OK pre potvrdenie.</string>
   <string name="disabled">Vypnuté</string>
   <string name="enabled">Zapnuté</string>
   <string name="off" tools:override="true">Vypnuté</string>
@@ -208,10 +205,7 @@
   <string name="bitwarden_autofill_service_match_confirm">Naozaj chcete automaticky vyplniť toto prihlásenie? Nie je to úplná zhoda pre %1$s.</string>
   <string name="matching_items">Zodpovedajúce položky</string>
   <string name="possible_matching_items">Možné zodpovedajúce položky</string>
-  <string-array name="Search">
-    <item>Hladať</item>
-    <item>Hladať</item>
-  </string-array>
+  <string name="search">Hladať</string>
   <string name="bitwarden_autofill_service_search">Hľadáte automaticky vypľňané prihlásenie pre \"%1$s\".</string>
   <string name="learn_org">Zistiť viac o organizáciách</string>
   <string name="cannot_open_app">Nemožno spustiť aplikáciu \"%1$s\".</string>
@@ -233,7 +227,7 @@
   <string name="attachments">Prílohy</string>
   <string name="unable_to_download_file">Nepodarilo sa stiahnuť súbor.</string>
   <string name="unable_to_open_file">Vaše zariadenie nevie otvoriť tento typ súboru.</string>
-  <string name="downloading">Sťahovanie…</string>
+  <string name="downloading">Sťahovanie...</string>
   <string name="attachment_large_warning">Táto príloha je veľká %1$s. Naozaj ju chcete stiahnúť do vášho zariadenia?</string>
   <string name="authenticator_key">Kľúč overovateľa (TOTP)</string>
   <string name="verification_code_totp">Overovací kód (TOTP)</string>
@@ -258,6 +252,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="feature_unavailable">Funkcia nie je k dispozícii</string>
   <string name="max_file_size">Maximálna veľkosť súboru je 100 MB.</string>
   <string name="update_key">Túto funkciu nemožno použiť, kým neaktualizujete svoj šifrovací kľúč.</string>
+  <string name="encryption_key_migration_required_description_long">Vyžaduje sa migrácia šifrovacieho kľúča. Na aktualizáciu šifrovacieho kľúča sa prihláste cez webový trezor.</string>
   <string name="learn_more">Zistiť viac</string>
   <string name="api_url">URL API servera</string>
   <string name="custom_environment">Vlastné prostredie</string>
@@ -386,7 +381,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="secure_notes">Zabezpečené poznámky</string>
   <string name="all_items">Všetky položky</string>
   <string name="ur_is">Adresy URI</string>
-  <string name="checking_password">Overujem heslo…</string>
+  <string name="checking_password">Overujem heslo...</string>
   <string name="check_password">Overiť či došlo k úniku hesla.</string>
   <string name="password_exposed">Toto heslo uniklo %1$s krát v dátových únikoch. Mali by ste ho zmeniť.</string>
   <string name="password_safe">Heslo nebolo nájdene v žiadnom úniku dát. Malo by byť bezpečné.</string>
@@ -450,7 +445,6 @@ Skenovanie prebehne automaticky.</string>
   <string name="theme_description">Zmeniť motív aplikácie.</string>
   <string name="theme_default">Predvolené systémom</string>
   <string name="default_dark_theme">Predvolený tmavý motív</string>
-  <string name="default_dark_theme_description">Vyberte tmavý motív, ktorý sa použije ako Predvolený (Systém), keď bude zapnutý tmavý režim na zariadení</string>
   <string name="copy_notes">Kopírovať poznámku</string>
   <string name="exit">Ukončiť</string>
   <string name="exit_confirmation">Naozaj chcete ukončiť Bitwarden?</string>
@@ -499,10 +493,10 @@ Skenovanie prebehne automaticky.</string>
   <string name="save_attachment_success">Príloha úspešne uložená</string>
   <string name="autofill_tile_accessibility_required">Zapnite službu dostupnosti pre automatické vypĺňanie v nastaveniach Bitwardenu aby ste mohli používať dlaždicu pre automatické dopĺňanie.</string>
   <string name="autofill_tile_uri_not_found">Nenájdené žiadne políčka na heslo</string>
-  <string name="soft_deleting">Posielanie do koša…</string>
+  <string name="soft_deleting">Posielanie do koša...</string>
   <string name="item_soft_deleted">Položka bola poslaná do koša.</string>
   <string name="restore">Obnoviť</string>
-  <string name="restoring">Obnovovanie…</string>
+  <string name="restoring">Obnovovanie...</string>
   <string name="item_restored">Položka bola obnovená.</string>
   <string name="trash">Kôš</string>
   <string name="search_trash">Hľadať v koši</string>
@@ -722,7 +716,7 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
   <string name="domain_name_required_parenthesis">Názov domény (povinné)</string>
   <string name="api_key_required_parenthesis">Kľúč API (povinné)</string>
   <string name="service">Služba</string>
-  <string name="anon_addy">AnonAddy</string>
+  <string name="addy_io">addy.io</string>
   <string name="firefox_relay">Firefox Relay</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
@@ -801,7 +795,6 @@ Chcete prepnúť na toto konto?</string>
   <string name="remember_this_device">Zapamätať si toto zariadenie</string>
   <string name="passkey">Prístupový kľúč</string>
   <string name="passkeys">Prístupové kľúče</string>
-  <string name="created_x">Vytvorené %1$s</string>
   <string name="application">Aplikácia</string>
   <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">Zmena aplikácie prístupového kódu nie je možná, pretože by sa tým prístupový kód znefunkčnil</string>
   <string name="passkey_will_not_be_copied">Prístupový kód sa neskopíruje</string>
@@ -809,7 +802,7 @@ Chcete prepnúť na toto konto?</string>
   <string name="copy_application">Kopírovať aplikáciu</string>
   <string name="available_for_two_step_login">K dispozícii pre dvojstupňové prihlásenie</string>
   <string name="master_password_re_prompt_help">Pomoc s opätovnou výzvou na zadanie hlavného hesla</string>
-  <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</string>
+  <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">Odomknutie môže zlyhať z dôvodu nedostatku pamäte. Znížte nastavenia pamäte KDF alebo nastavte biometrické odomykanie pre vyriešenie problému.</string>
   <string name="invalid_api_key">Neplatný kľúč API</string>
   <string name="invalid_api_token">Neplatný token API</string>
   <string name="admin_approval_requested">Vyžaduje sa schválenie správcom</string>
@@ -818,7 +811,6 @@ Chcete prepnúť na toto konto?</string>
   <string name="trouble_logging_in">Máte problémy s prihlásením?</string>
   <string name="logging_in_as_x">Prihlasujete sa ako %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Akcia pri vypršaní času pre trezor zmenená na odhlásenie</string>
-  <string name="this_item_cannot_be_shared_with_the_organization_because_there_is_one_already_with_the_same_passkey">Túto položku nemožno zdieľať s organizáciou, pretože už existuje jedna s rovnakým prístupovým kľúčom.</string>
   <string name="block_auto_fill">Blokovať automatické vypĺňanie</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">Pre tieto URI nebude automatické vypĺňanie ponukané.</string>
   <string name="new_blocked_uri">Nové blokované URI</string>
@@ -837,13 +829,40 @@ Chcete prepnúť na toto konto?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Prihlásenie pomocou zariadenia musí byť nastavené v nastaveniach aplikácie Bitwarden. Potrebujete inú možnosť?</string>
   <string name="log_in_with_device">Prihlásiť pomocou zariadenia</string>
   <string name="logging_in_on">Prihlásenie na</string>
-  <string name="there_are_no_items_to_list">Neexistujú žiadne položky na zobrazenie</string>
-  <string name="to_view_verification_codes_upgrade_to_premium">Ak chcete zobraziť overovacie kódy, prejdite na prémium</string>
-  <string name="add2_factor_autentication_to_an_item_to_view_verification_codes">Ak chcete zobraziť overovacie kódy, pridajte k položke dvojfaktorové overenie</string>
-  <string name="log_in_to_bitwarden_on_your_i_phone_to_view_verification_codes">Prihláste sa do Bitwardenu na iPhone a zobrazte si overovacie kódy</string>
-  <string name="syncing_items_containing_verification_codes">Synchronizácia položiek obsahujúcich overovacie kódy</string>
-  <string name="unlock_bitwarden_on_your_i_phone_to_view_verification_codes">Ak chcete zobraziť overovacie kódy, odomknite na svojom iPhone Bitwarden</string>
-  <string name="set_up_bitwarden_to_view_items_containing_verification_codes">Nastavte Bitwarden na zobrazenie položiek obsahujúcich overovacie kódy</string>
-  <string name="no_items_found">Nenašli sa žiadne položky</string>
-  <string name="set_up_apple_watch_passcode_in_order_to_use_bitwarden">Ak chcete používať Bitwarden, nastavte prístupový kód Apple Watch</string>
+  <string name="vault">Trezor</string>
+  <string name="appearance">Vzhľad</string>
+  <string name="account_security">Zabezpečenie účtu</string>
+  <string name="bitwarden_help_center">Centrum pomoci Bitwarden</string>
+  <string name="contact_bitwarden_support">Kontaktovať podporu Bitwardenu</string>
+  <string name="copy_app_information">Kopírovať informácie o aplikácii</string>
+  <string name="sync_now">Synchronizovať teraz</string>
+  <string name="unlock_options">Možnosti odomknutia</string>
+  <string name="session_timeout">Časový limit relácie</string>
+  <string name="session_timeout_action">Akcia po vypršaní relácie</string>
+  <string name="account_fingerprint_phrase">Fráza odtlačku účtu</string>
+  <string name="one_hour_and_one_minute">Jedna hodina a jedna minúta</string>
+  <string name="one_hour_and_x_minute">Jedna hodina a %1$s minút</string>
+  <string name="x_hours_and_one_minute">%1$s hodín a jedna minúta</string>
+  <string name="x_hours_and_y_minutes">%1$s hodín a %2$s minút</string>
+  <string name="x_hours">%1$s hodín</string>
+  <string name="autofill_services_explanation_long">Android Autofill Framework sa používa na uľahčenie vyplňovania prihlasovacích údajov do iných aplikácií na vašom zariadení.</string>
+  <string name="use_inline_autofill_explanation_long">Použite zabudované automatické vypĺňanie, ak ho vybraná klávesnica podporuje. V opačnom prípade použite predvolené automatické vyplnenie.</string>
+  <string name="additional_options">Ďalšie možnosti</string>
+  <string name="continue_to_web_app">Pokračovať vo webovej aplikácii?</string>
+  <string name="continue_to_x">Pokračovať v %1$s?</string>
+  <string name="continue_to_help_center">Pokračovať v centre pomoci?</string>
+  <string name="continue_to_contact_support">Pokračovať v kontaktovaní podpory?</string>
+  <string name="continue_to_app_store">Pokračovať v obchode s aplikáciami?</string>
+  <string name="two_step_login_description_long">Zabezpečte svoje konto nastavením dvojstupňového prihlasovania vo webovej aplikácii Bitwarden.</string>
+  <string name="change_master_password_description_long">Hlavné heslo si môžete zmeniť vo webovej aplikácii Bitwarden.</string>
+  <string name="you_can_import_data_to_your_vault_on_x">Údaje do trezora môžete importovať na %1$s.</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Viac informácií o používaní Bitwardenu nájdete v centre pomoci.</string>
+  <string name="contact_support_description_long">Nemôžete nájsť, čo hľadáte? Obráťte sa na podporu Bitwarden na stránke bitwarden.com.</string>
+  <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Preskúmajte ďalšie funkcie svojho účtu na Bitwarden vo webovej aplikácii.</string>
+  <string name="learn_about_organizations_description_long">Bitwarden vám umožňuje zdieľať vaše položky trezora s ostatnými pomocou organizácie. Viac informácií nájdete na webovej stránke bitwarden.com.</string>
+  <string name="rate_app_description_long">Pomôžte ostatným zistiť, či je Bitwarden pre nich vhodný. Navštívte obchod s aplikáciami a pridajte hodnotenie.</string>
+  <string name="default_dark_theme_description_long">Vyberte tmavý motív, ktorý sa má použiť, keď sa používa tmavý režim v zariadení</string>
+  <string name="created_xy">Vytvorené %1$s, %2$s</string>
+  <string name="too_many_attempts">Príliš veľa pokusov</string>
+  <string name="account_logged_out_biometric_exceeded">Účet bol odhlásený.</string>
 </resources>

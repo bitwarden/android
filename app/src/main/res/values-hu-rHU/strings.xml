@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
   <string name="about">Névjegy</string>
   <string name="add">Hozzáadás</string>
   <string name="add_folder">Mappa hozzáadása</string>
@@ -13,7 +13,7 @@
   <string name="copy_username">Felhasználónév másolása</string>
   <string name="credits">Készítők</string>
   <string name="delete">Törlés</string>
-  <string name="deleting">Törlés…</string>
+  <string name="deleting">Törlés...</string>
   <string name="do_you_really_want_to_delete">Tényleg törölni akarod? Ezt nem lehet visszavonni.</string>
   <string name="edit">Szerkesztés</string>
   <string name="edit_folder">Mappa szerkesztése</string>
@@ -59,7 +59,7 @@
   <string name="password">Jelszó</string>
   <string name="save">Mentés</string>
   <string name="move">Áthelyezés</string>
-  <string name="saving">Mentés…</string>
+  <string name="saving">Mentés...</string>
   <string name="settings">Beállítások</string>
   <string name="show">Mutat</string>
   <string name="item_deleted">Az elem törlésre került.</string>
@@ -78,7 +78,6 @@
   <string name="version">Verzió</string>
   <string name="view">Megtekintés</string>
   <string name="visit_our_website">Fejlesztői webhely felkeresése</string>
-  <string name="visit_our_website_description">A fejlesztői webhely felkeresése segítségért, hírekért, email küldése a fejlesztőknek és/vagy további információk a Bitwarden használatáról.</string>
   <string name="website">Weboldal</string>
   <string name="yes">Igen</string>
   <string name="account">Fiók</string>
@@ -96,11 +95,10 @@
   <string name="change_email">Email cím megváltoztatása</string>
   <string name="change_email_confirmation">E-mail címedet a bitwarden.com webes széfében tudod megváltoztatni. Szeretnéd meglátogatni most a weboldalt?</string>
   <string name="change_master_password">Mesterjelszó megváltoztatása</string>
-  <string name="change_password_confirmation">Mesterjelszavadat a bitwarden.com webes széfében tudod megváltoztatni. Szeretnéd meglátogatni most a weboldalt?</string>
   <string name="close">Bezár</string>
   <string name="continue_text">Folytatás</string>
   <string name="create_account">Fiók létrehozása</string>
-  <string name="creating_account">Fiók létrehozása…</string>
+  <string name="creating_account">Fiók létrehozása...</string>
   <string name="edit_item">Elem szerkesztése</string>
   <string name="enable_automatic_syncing">Automatikus szinkronizálás engedélyezése</string>
   <string name="enter_email_for_hint">Írd be a fiókod e-mail címét, hogy megkapd a mesterjelszó emlékeztetőt.</string>
@@ -132,7 +130,7 @@
   <string name="vault_timeout">Széf időkifutás</string>
   <string name="vault_timeout_action">Széf időkifutás művelet</string>
   <string name="vault_timeout_log_out_confirmation">Kijelentkezve az összes széf elérés eltávolításra kerül és webes hitelesítésre van szükség az időkifutás után. Biztosan szeretnénk használni ezt a beállítást?</string>
-  <string name="logging_in">Bejelentkezés…</string>
+  <string name="logging_in">Bejelentkezés...</string>
   <string name="login_or_create_new_account">Jelentkezz be vagy készíts új fiókot a biztonsági széfed eléréshez.</string>
   <string name="manage">Kezelés</string>
   <string name="master_password_confirmation_val_message">A megadott két jelszó nem egyezik.</string>
@@ -171,14 +169,13 @@
   <string name="set_pin_direction">Egy 4 számjegyű PIN-kód beállítása az alkalmazás kinyitásához.</string>
   <string name="item_information">Elem információ</string>
   <string name="item_updated">Az elem frissítésre került.</string>
-  <string name="submitting">Küldés…</string>
-  <string name="syncing">Szinkronizálás…</string>
+  <string name="submitting">Küldés...</string>
+  <string name="syncing">Szinkronizálás...</string>
   <string name="syncing_complete">A szinkronizálás kész.</string>
   <string name="syncing_failed">A szinkronizálás nem sikerült.</string>
   <string name="sync_vault_now">Széf szinkronizálása most</string>
   <string name="touch_id">Touch ID</string>
   <string name="two_step_login">Kétlépcsős bejelentkezés</string>
-  <string name="two_step_login_confirmation">A kétlépcsős bejelentkezés biztonságosabbá teszi a fiókot, mert egy másik eszközzel, például biztonsági kulccsal, hitelesítőalkalmazással, sms- segítségével, telefonhívással vagy emaillel is jóvá kell hagyni a bejelentkezést. A kétlépcsős bejelentkezés a bitwarden.com webes széfjében kapcsolható be. Megnyitásra kerüljön a webhely most?</string>
   <string name="unlock_with">Kinyitás ezzel: %1$s</string>
   <string name="unlock_with_pin">Kinyitás PIN-kóddal</string>
   <string name="validating">Hitelesítés</string>
@@ -196,7 +193,7 @@
   <string name="bitwarden_autofill_service_notification_content">Erre az értesítésre koppintva automatikusan kitölthető egy elem a széfből.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Akadálymentesítési szolgáltatások megnyitása</string>
   <string name="bitwarden_autofill_service_step1">1. Az Android Kisegítő lehetőségek képernyőjén koppintsunk a Bitwarden elemre a Szolgáltatások szakaszban.</string>
-  <string name="bitwarden_autofill_service_step2">2. A felugró ablakban a jóváhagyáshoz bökj az Ok gombra.</string>
+  <string name="bitwarden_autofill_service_step2">2. A felugró ablakban a jóváhagyáshoz bökj az OK gombra.</string>
   <string name="disabled">Letiltva</string>
   <string name="enabled">Engedélyezve</string>
   <string name="off" tools:override="true">Ki</string>
@@ -208,10 +205,7 @@
   <string name="bitwarden_autofill_service_match_confirm">Biztos, hogy automatikusan kitöltésre kerüljön ez az elem? Nem teljesen egyezik: %1$s.</string>
   <string name="matching_items">Megegyező elemek</string>
   <string name="possible_matching_items">Lehetséges megfelelő elemek</string>
-  <string-array name="Search">
-    <item>Keresés</item>
-    <item>Keresés</item>
-  </string-array>
+  <string name="search">Keresés</string>
   <string name="bitwarden_autofill_service_search">Automatikus kitöltési elem keresése folyik: \"%1$s\".</string>
   <string name="learn_org">Információ szervezetekről</string>
   <string name="cannot_open_app">Nem lehet megnyitni a(z) \"%1$s\" alkalmazást.</string>
@@ -233,7 +227,7 @@
   <string name="attachments">Mellékletek</string>
   <string name="unable_to_download_file">Nem lehet letölteni a fájlt.</string>
   <string name="unable_to_open_file">A készülék nem tudja megnyitni az ilyen típusú fájlt.</string>
-  <string name="downloading">Letöltés…</string>
+  <string name="downloading">Letöltés...</string>
   <string name="attachment_large_warning">Ez a melléklet %1$s méretű. Biztosan le akarod tölteni a készülékedre?</string>
   <string name="authenticator_key">Igazolókód (TOTP)</string>
   <string name="verification_code_totp">Ellenőrzőkód (TOTP)</string>
@@ -257,6 +251,7 @@
   <string name="feature_unavailable">Ez a funkció nem érhető el.</string>
   <string name="max_file_size">Maximális fájl méret 100 MB.</string>
   <string name="update_key">Ez a funkció nem használható, amíg nem frissíted a titkosítási kulcsodat.</string>
+  <string name="encryption_key_migration_required_description_long">Titkosítási kulcs migráció szükséges. Jelentkezzünk be a webes széfen keresztül a titkosítási kulcs frissítéséhez.</string>
   <string name="learn_more">További információ</string>
   <string name="api_url">API szerver webcím</string>
   <string name="custom_environment">Egyedi környezet</string>
@@ -385,7 +380,7 @@
   <string name="secure_notes">Védett jegyzetek</string>
   <string name="all_items">Összes elem</string>
   <string name="ur_is">URI elemek</string>
-  <string name="checking_password">A jelszó ellenőrzése folyamatban van…</string>
+  <string name="checking_password">A jelszó ellenőrzése folyamatban van...</string>
   <string name="check_password">Ellenőrizzük, hogy a jelszó kiszivárgott-e.</string>
   <string name="password_exposed">Ez a jelszó %1$s alkalommal jelent meg az adatszivárgásban. Változtassuk meg.</string>
   <string name="password_safe">Ez a jelszó nem érintett egyetlen ismert adatszivárgásban sem. Biztonságos a használata.</string>
@@ -449,7 +444,6 @@
   <string name="theme_description">Az alkalmazás színének megváltoztatása.</string>
   <string name="theme_default">Alapértelmezett (rendszer)</string>
   <string name="default_dark_theme">Alapértelmezett sötét téma</string>
-  <string name="default_dark_theme_description">A sötét téma választása használatra, ha az Alapértelmezett (Rendszer) témát használjuk az eszköz bekapcsolt sötét módja mellett.</string>
   <string name="copy_notes">Jegyzet másolása</string>
   <string name="exit">Kilépés</string>
   <string name="exit_confirmation">Biztosan kilépünk?</string>
@@ -498,10 +492,10 @@
   <string name="save_attachment_success">A melléklet sikeresen mentésre került.</string>
   <string name="autofill_tile_accessibility_required">Engedélyezzük az \"Automatikus kitöltés elérés szolgáltatás\" lehetőséget a Bitwarden beállításainál az automatikus kitöltés engedélyezéséhez.</string>
   <string name="autofill_tile_uri_not_found">Nincs érzékelt jelszó mező.</string>
-  <string name="soft_deleting">A lomtárba küldés folyamatban van…</string>
+  <string name="soft_deleting">A lomtárba küldés folyamatban van...</string>
   <string name="item_soft_deleted">Az elem a lomtárba került.</string>
   <string name="restore">Visszaállítás</string>
-  <string name="restoring">A visszaállítás folyamatban van…</string>
+  <string name="restoring">A visszaállítás folyamatban van...</string>
   <string name="item_restored">Az elem visszaállításra került.</string>
   <string name="trash">Lomtár</string>
   <string name="search_trash">Keresés a lomtárban</string>
@@ -649,7 +643,7 @@
   <string name="invalid_verification_code">A hitelesítő kód érvénytelen.</string>
   <string name="request_otp">Egyszeri jelszó kérése</string>
   <string name="send_code">Send kód</string>
-  <string name="sending">Küldés…</string>
+  <string name="sending">Küldés...</string>
   <string name="copy_send_link_on_save">Send hivatkozás másolása mentéskor</string>
   <string name="sending_code">Küldési kód</string>
   <string name="verifying">Ellenőrzés</string>
@@ -721,7 +715,7 @@ TOTP hozzáadása a kulcs biztonságos tárolásához lehetőséget.</string>
   <string name="domain_name_required_parenthesis">Domain név (kötelező)</string>
   <string name="api_key_required_parenthesis">API kulcs (kötelező)</string>
   <string name="service">Szolgáltatás</string>
-  <string name="anon_addy">AnonAddy</string>
+  <string name="addy_io">addy.io</string>
   <string name="firefox_relay">Firefox Relay</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
@@ -800,7 +794,6 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="remember_this_device">Eszköz megjegyzése</string>
   <string name="passkey">Hozzáférési kulcs</string>
   <string name="passkeys">Hozzáférési kulcsok</string>
-  <string name="created_x">Létrehozta %1$s</string>
   <string name="application">Alkalmazás</string>
   <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">Nem szerkeszthető a hozzáférési kulcs alkalmazás, mert az érvénytelenítené a hozzáférési kulcsot.</string>
   <string name="passkey_will_not_be_copied">A hozzáférési kulcs nem kerül másolásra.</string>
@@ -808,7 +801,7 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="copy_application">Alkalmazás másolása</string>
   <string name="available_for_two_step_login">Kétlépcsős bejelentkezéshez érhető el</string>
   <string name="master_password_re_prompt_help">Mesterjelszó újbóli bekérés súgó</string>
-  <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</string>
+  <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">A feloldás meghiúsulhat, mert nincs elegendő memória. A megoldáshoz csökkentsük a KDF memóriabeállításait.</string>
   <string name="invalid_api_key">Érvénytelen API kulcs</string>
   <string name="invalid_api_token">Érvénytelen API vezérjel</string>
   <string name="admin_approval_requested">Adminisztrátori jóváhagyás kérés történt</string>
@@ -817,7 +810,6 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="trouble_logging_in">Probléma van a bejelentkezéssel?</string>
   <string name="logging_in_as_x">Bejelentkezés mint %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">A széf időkifutási művelete kijelentkezésre módosult.</string>
-  <string name="this_item_cannot_be_shared_with_the_organization_because_there_is_one_already_with_the_same_passkey">Ez az elem nem osztható meg a szervezettel, mert már van egy ugyanezzel a hozzáférési kulccsal.</string>
   <string name="block_auto_fill">Automatikus kitöltés blokkolása</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">Az automatikus kitöltés nem kerül felajánlásra ezeknél a webcímeknél.</string>
   <string name="new_blocked_uri">Új blokkolt URI</string>
@@ -836,13 +828,40 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Az eszközzel történő bejelentkezést be kell állítani a Bitwarden alkalmazás beállításaiban. Más opcióra van szükség?</string>
   <string name="log_in_with_device">Bejelentkezés eszközzel</string>
   <string name="logging_in_on">Bejelentkezés:</string>
-  <string name="there_are_no_items_to_list">Nincsenek listázandó elemek.</string>
-  <string name="to_view_verification_codes_upgrade_to_premium">Az ellenőrző kódok megtekintéséhez térjünk át a prémium csomagra.</string>
-  <string name="add2_factor_autentication_to_an_item_to_view_verification_codes">Adjunk hozzá kéttényezős hitelesítést egy elemnél az ellenőrző kódok megtekintéséhez.</string>
-  <string name="log_in_to_bitwarden_on_your_i_phone_to_view_verification_codes">Az ellenőrző kódok megtekintéséhez jelentkezzünk be a Bitwardenbe az iPhone-on.</string>
-  <string name="syncing_items_containing_verification_codes">Ellenőrző kódokat tartalmazó elemek szinkronizálása</string>
-  <string name="unlock_bitwarden_on_your_i_phone_to_view_verification_codes">Oldjuk fel a Bitwarden zárolását az iPhone-on az ellenőrző kódok megtekintéséhez.</string>
-  <string name="set_up_bitwarden_to_view_items_containing_verification_codes">A Bitwarden beállítása az ellenőrző kódokat tartalmazó elemek megtekintéséhez</string>
-  <string name="no_items_found">Nem található elem.</string>
-  <string name="set_up_apple_watch_passcode_in_order_to_use_bitwarden">Állítsuk be az Apple Watch jelszót a Bitwarden használatához.</string>
+  <string name="vault">Széf</string>
+  <string name="appearance">Megjelenés</string>
+  <string name="account_security">Fiókbiztonság</string>
+  <string name="bitwarden_help_center">Bitwardsn Segítségközpont</string>
+  <string name="contact_bitwarden_support">Bitwarden ügyfélszolgálat</string>
+  <string name="copy_app_information">Alkalmazás információ másolása</string>
+  <string name="sync_now">Szinkronizálás most</string>
+  <string name="unlock_options">Zárolási opciók</string>
+  <string name="session_timeout">Munkamenet időkifutás</string>
+  <string name="session_timeout_action">Munkamenet időkifutási művelet</string>
+  <string name="account_fingerprint_phrase">Fiók ujjnyomat kifejezés</string>
+  <string name="one_hour_and_one_minute">Egy óra és egy perc</string>
+  <string name="one_hour_and_x_minute">Egy óra és %1$s perc</string>
+  <string name="x_hours_and_one_minute">%1$s óra és egy perc</string>
+  <string name="x_hours_and_y_minutes">%1$s óra és %2$s perc</string>
+  <string name="x_hours">%1$s óra</string>
+  <string name="autofill_services_explanation_long">Az Android automatikus kitöltési keretrendszere segít a bejelentkezési adatok kitöltésében az eszközön lévő más alkalmazásokba.</string>
+  <string name="use_inline_autofill_explanation_long">Használjuk a sorközi automatikus kitöltést, ha a kiválasztott billentyűzet azt támogatja. Ellenkező esetben használjuk az alapértelmezett átfedést.</string>
+  <string name="additional_options">Kiegészítő opciók</string>
+  <string name="continue_to_web_app">Tovább a webes alkalmazáshoz?</string>
+  <string name="continue_to_x">Tovább: %1$s?</string>
+  <string name="continue_to_help_center">Tovább a Segítség Központhoz?</string>
+  <string name="continue_to_contact_support">Tovább az ügyfélszolgálathoz?</string>
+  <string name="continue_to_app_store">Tovább az alkalmazásboltba?</string>
+  <string name="two_step_login_description_long">Tegyük biztonságosabbá a fiókot a kétlépcsős bejelentkezés beállításával a Bitwarden webalkalmazásban.</string>
+  <string name="change_master_password_description_long">A mesterjelszó a Bitwarden webalkalmazásban módosítható.</string>
+  <string name="you_can_import_data_to_your_vault_on_x">Adatokat importálhatunk a széfbe itt: %1$s.</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">További információ a Bitwarden használatáról a Súgó Központban.</string>
+  <string name="contact_support_description_long">Nem találjuk, amit keresünk? Lépjünk kapcsolatba a Bitwarden ügyfélszolgálatával a bitwarden.com oldalon.</string>
+  <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Fedezzük fel a Bitwarden-fiók további funkcióit a webalkalmazásban.</string>
+  <string name="learn_about_organizations_description_long">A Bitwarden lehetővé teszi a széf elemeinek megosztását másokkal egy szervezet használatával. További információ a bitwarden.com webhelyen.</string>
+  <string name="rate_app_description_long">Segítsünk másoknak megtudni, hogy a Bitwarden megfelelő-e számukra. Látogassunk el az alkalmazásboltba és értékeljünk most.</string>
+  <string name="default_dark_theme_description_long">Válasszuk a sötét témát az eszköz sötét módban történő használata esetén.</string>
+  <string name="created_xy">Létrehozta: %1$s, %2$s</string>
+  <string name="too_many_attempts">Túl sok próbálkozás történt</string>
+  <string name="account_logged_out_biometric_exceeded">A fiók kijelentkezett.</string>
 </resources>

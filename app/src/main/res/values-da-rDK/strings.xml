@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
   <string name="about">Om</string>
   <string name="add">Tilføj</string>
   <string name="add_folder">Tilføj mappe</string>
@@ -13,7 +13,7 @@
   <string name="copy_username">Kopiér brugernavn</string>
   <string name="credits">Tak til</string>
   <string name="delete">Slet</string>
-  <string name="deleting">Sletter…</string>
+  <string name="deleting">Sletter...</string>
   <string name="do_you_really_want_to_delete">Er du sikker på, at du vil slette? Dette kan ikke fortrydes.</string>
   <string name="edit">Redigér</string>
   <string name="edit_folder">Redigér mappe</string>
@@ -59,7 +59,7 @@
   <string name="password">Adgangskode</string>
   <string name="save">Gem</string>
   <string name="move">Flyt</string>
-  <string name="saving">Gemmer…</string>
+  <string name="saving">Gemmer...</string>
   <string name="settings">Indstillinger</string>
   <string name="show">Vis</string>
   <string name="item_deleted">Element slettet</string>
@@ -78,7 +78,6 @@
   <string name="version">Version</string>
   <string name="view">Vis</string>
   <string name="visit_our_website">Besøg vores websted</string>
-  <string name="visit_our_website_description">Besøg vores hjemmeside for at få hjælp, nyheder, e-maile os og/eller få mere at vide om, hvordan du benytter Bitwarden.</string>
   <string name="website">Hjemmeside</string>
   <string name="yes">Ja</string>
   <string name="account">Konto</string>
@@ -96,11 +95,10 @@
   <string name="change_email">Skift e-mail</string>
   <string name="change_email_confirmation">Du kan skifte din e-mailadresse i bitwarden.com web-boksen. Vil du besøge hjemmesiden nu?</string>
   <string name="change_master_password">Skift hovedadgangskode</string>
-  <string name="change_password_confirmation">Du kan skifte din hovedadgangskode i bitwarden.com web-boksen. Vil du besøge hjemmesiden nu?</string>
   <string name="close">Luk</string>
   <string name="continue_text">Forsæt</string>
   <string name="create_account">Opret konto</string>
-  <string name="creating_account">Opretter konto…</string>
+  <string name="creating_account">Opretter konto...</string>
   <string name="edit_item">Redigér element</string>
   <string name="enable_automatic_syncing">Tillad automatisk synkronisering</string>
   <string name="enter_email_for_hint">Angiv din kontos e-mailadresse for at modtage dit hovedadgangskodetip.</string>
@@ -132,7 +130,7 @@
   <string name="vault_timeout">Boks-timeout</string>
   <string name="vault_timeout_action">Boks-timeout handling</string>
   <string name="vault_timeout_log_out_confirmation">Udlogning vil fjerne al adgang til din boks og vil kræve online-godkendelse efter timeout-perioden. Sikker på, at du vil benytte denne indstilling?</string>
-  <string name="logging_in">Logger ind…</string>
+  <string name="logging_in">Logger ind...</string>
   <string name="login_or_create_new_account">Log ind, eller opret en ny konto, for at tilgå din sikre boks.</string>
   <string name="manage">Håndtér</string>
   <string name="master_password_confirmation_val_message">Adgangskodebekræftelse er forkert.</string>
@@ -171,14 +169,13 @@
   <string name="set_pin_direction">Angiv en 4-cifret pinkode til at låse appen op med.</string>
   <string name="item_information">Elementinformation</string>
   <string name="item_updated">Element gemt</string>
-  <string name="submitting">Indsender…</string>
-  <string name="syncing">Synkroniserer…</string>
+  <string name="submitting">Indsender...</string>
+  <string name="syncing">Synkroniserer...</string>
   <string name="syncing_complete">Synkronisering fuldført.</string>
   <string name="syncing_failed">Synkronisering mislykkedes</string>
   <string name="sync_vault_now">Synkronisér boks nu</string>
   <string name="touch_id">Touch ID</string>
   <string name="two_step_login">To-trins login</string>
-  <string name="two_step_login_confirmation">To-trins login gør din konto mere sikker ved at kræve, at du verificerer dit login med en anden enhed, såsom en sikkerhedsnøgle, autentificeringsapp, SMS, telefonopkald eller e-mail. To-trins login kan aktiveres i bitwarden.com web-boksen. Vil du besøge hjemmesiden nu?</string>
   <string name="unlock_with">Lås op med %1$s</string>
   <string name="unlock_with_pin">Lås op med pinkode</string>
   <string name="validating">Validerer</string>
@@ -196,7 +193,7 @@
   <string name="bitwarden_autofill_service_notification_content">Tryk på denne notifikation for at autoudfylde med et element fra din boks.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Åbn indstillinger for hjælpefunktioner</string>
   <string name="bitwarden_autofill_service_step1">1. Tryk fra Androids Hjælpefunktioner på \"Bitwarden\" under Tjenester-sektionen.</string>
-  <string name="bitwarden_autofill_service_step2">2. Slå kontakten til og tryk på Ok for at acceptere.</string>
+  <string name="bitwarden_autofill_service_step2">2. Slå kontakten til og tryk på OK for at acceptere.</string>
   <string name="disabled">Deaktiveret</string>
   <string name="enabled">Aktiveret</string>
   <string name="off" tools:override="true">Fra</string>
@@ -208,10 +205,7 @@
   <string name="bitwarden_autofill_service_match_confirm">Er du sikker på du vil autoudfylde dette element? Det er ikke et fuldstændigt match til \"%1$s\".</string>
   <string name="matching_items">Matchende elementer</string>
   <string name="possible_matching_items">Mulige matchende elementer</string>
-  <string-array name="Search">
-    <item>Søg</item>
-    <item>Søgning</item>
-  </string-array>
+  <string name="search">Søg</string>
   <string name="bitwarden_autofill_service_search">Du søger efter et autoudfyld element til \"%1$s\".</string>
   <string name="learn_org">Få mere at vide om organisationer</string>
   <string name="cannot_open_app">Kan ikke åbne appen \"%1$s\".</string>
@@ -233,7 +227,7 @@
   <string name="attachments">Vedhæftninger</string>
   <string name="unable_to_download_file">Kunne ikke hente fil.</string>
   <string name="unable_to_open_file">Din enhed kan ikke åbne denne type fil.</string>
-  <string name="downloading">Henter…</string>
+  <string name="downloading">Henter...</string>
   <string name="attachment_large_warning">Størrelsen på denne vedhæftning er %1$s. Er du sikker på at du hente den ned på din enhed?</string>
   <string name="authenticator_key">Autentificeringsnøgle (TOTP)</string>
   <string name="verification_code_totp">Bekræftelseskode (TOTP)</string>
@@ -258,6 +252,7 @@ Skanning vil ske automatisk.</string>
   <string name="feature_unavailable">Funktion utilgængelig</string>
   <string name="max_file_size">Maksimum filstørrelse er 100 MB.</string>
   <string name="update_key">Du kan ikke bruge denne funktion, før du opdaterer din krypteringsnøgle.</string>
+  <string name="encryption_key_migration_required_description_long">Krypteringsnøglemigrering nødvendig. Log ind gennem web-boksen for at opdatere krypteringsnøglen.</string>
   <string name="learn_more">Få mere at vide</string>
   <string name="api_url">API server URL</string>
   <string name="custom_environment">Brugerdefineret miljø</string>
@@ -386,7 +381,7 @@ Skanning vil ske automatisk.</string>
   <string name="secure_notes">Sikre notater</string>
   <string name="all_items">Alle elementer</string>
   <string name="ur_is">URI\'er</string>
-  <string name="checking_password">Kontrollerer adgangskode…</string>
+  <string name="checking_password">Kontrollerer adgangskode...</string>
   <string name="check_password">Tjek om adgangskoden er blevet afsløret.</string>
   <string name="password_exposed">Denne adgangskode er blevet afsløret %1$s gang(e) i datalæk. Du burde skifte den.</string>
   <string name="password_safe">Denne adgangskode er ikke fundet i nogen kendte datalæk. Den burde være sikker at bruge.</string>
@@ -450,7 +445,6 @@ Skanning vil ske automatisk.</string>
   <string name="theme_description">Skift app\'ens farvetema.</string>
   <string name="theme_default">Standard (system)</string>
   <string name="default_dark_theme">Standard mørkt tema</string>
-  <string name="default_dark_theme_description">Vælg det mørke tema, der skal bruges, når Standard (System) temaet bruges, mens din enheds mørke tilstand er aktiveret.</string>
   <string name="copy_notes">Kopiér notat</string>
   <string name="exit">Afslut</string>
   <string name="exit_confirmation">Er du sikker på, at du vil afslutte Bitwarden?</string>
@@ -499,10 +493,10 @@ Skanning vil ske automatisk.</string>
   <string name="save_attachment_success">Vedhæftning gemt</string>
   <string name="autofill_tile_accessibility_required">Aktivér \"Autoudfyld Tilgængelighedstjeneste\" fra Bitwarden-indstillinger for at benytte flisen Autoudfyld.</string>
   <string name="autofill_tile_uri_not_found">Ingen adgangskodefelter fundet</string>
-  <string name="soft_deleting">Sender til papirkurven…</string>
+  <string name="soft_deleting">Sender til papirkurven...</string>
   <string name="item_soft_deleted">Element er sendt til papirkurven</string>
   <string name="restore">Gendan</string>
-  <string name="restoring">Gendanner…</string>
+  <string name="restoring">Gendanner...</string>
   <string name="item_restored">Element gendannet</string>
   <string name="trash">Papirkurv</string>
   <string name="search_trash">Søg i papirkurven</string>
@@ -722,7 +716,7 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</string>
   <string name="domain_name_required_parenthesis">Domænenavn (obligatorisk)</string>
   <string name="api_key_required_parenthesis">API-nøgle (obligatorisk)</string>
   <string name="service">Tjeneste</string>
-  <string name="anon_addy">AnonAddy</string>
+  <string name="addy_io">addy.io</string>
   <string name="firefox_relay">Firefox Relay</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
@@ -801,7 +795,6 @@ Vil du skifte til denne konto?</string>
   <string name="remember_this_device">Husk denne enhed</string>
   <string name="passkey">Adgangsnøgle</string>
   <string name="passkeys">Adgangsnøgler</string>
-  <string name="created_x">Oprettet %1$s</string>
   <string name="application">Applikation</string>
   <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">Adgangsnøgleapplikationen kan ikke redigeres, da det ville ugyldiggøre adgangsnøglen</string>
   <string name="passkey_will_not_be_copied">Adgangsnøglen kopieres ikke</string>
@@ -818,7 +811,6 @@ Vil du skifte til denne konto?</string>
   <string name="trouble_logging_in">Problemer med at logge ind?</string>
   <string name="logging_in_as_x">Logger ind som %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Boks-timeouthandling ændret til udlogning</string>
-  <string name="this_item_cannot_be_shared_with_the_organization_because_there_is_one_already_with_the_same_passkey">Dette emne kan ikke deles med organisationen, da der allerede er et med den samme adgangsnøgle.</string>
   <string name="block_auto_fill">Blokér autoudfyldning</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">Autoudfyldning vil ikke blive tilbudt for disse URI\'er.</string>
   <string name="new_blocked_uri">Ny blokeret URI</string>
@@ -837,13 +829,40 @@ Vil du skifte til denne konto?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Indlogning med enhed skal være opsat i indstillingerne i Bitwarden-appen. Behov for en anden mulighed?</string>
   <string name="log_in_with_device">Log ind med enhed</string>
   <string name="logging_in_on">Logger ind på</string>
-  <string name="there_are_no_items_to_list">Der er ingen emner at vise</string>
-  <string name="to_view_verification_codes_upgrade_to_premium">Opgradér til Premium for at se bekræftelseskoder</string>
-  <string name="add2_factor_autentication_to_an_item_to_view_verification_codes">Føj tofaktorgodkendelse til et element for at se bekræftelseskoderne</string>
-  <string name="log_in_to_bitwarden_on_your_i_phone_to_view_verification_codes">Log ind på Bitwarden på din iPhone for at se bekræftelseskoder</string>
-  <string name="syncing_items_containing_verification_codes">Synker emner med bekræftelseskoder</string>
-  <string name="unlock_bitwarden_on_your_i_phone_to_view_verification_codes">Oplås Bitwarden på din iPhone for at se bekræftelseskoder</string>
-  <string name="set_up_bitwarden_to_view_items_containing_verification_codes">Opsæt Bitwarden for at se emner indeholdende bekræftelseskoder</string>
-  <string name="no_items_found">Ingen emner fundet</string>
-  <string name="set_up_apple_watch_passcode_in_order_to_use_bitwarden">Opsæt Apple Watch-adgangskode for brug af Bitwarden</string>
+  <string name="vault">Boks</string>
+  <string name="appearance">Udseende</string>
+  <string name="account_security">Kontosikkerhed</string>
+  <string name="bitwarden_help_center">Bitwarden Hjælpecenter</string>
+  <string name="contact_bitwarden_support">Kontakt Bitwarden-support</string>
+  <string name="copy_app_information">Kopiér app-information</string>
+  <string name="sync_now">Synk nu</string>
+  <string name="unlock_options">Oplåsningsmuligheder</string>
+  <string name="session_timeout">Sessionstimeout</string>
+  <string name="session_timeout_action">Handling ved sessionstimeout</string>
+  <string name="account_fingerprint_phrase">Fingeraftrykssætning for konto</string>
+  <string name="one_hour_and_one_minute">En time og et minut</string>
+  <string name="one_hour_and_x_minute">En time og %1$s minutter</string>
+  <string name="x_hours_and_one_minute">%1$s timer og et minut</string>
+  <string name="x_hours_and_y_minutes">%1$s timer and %2$s minutter</string>
+  <string name="x_hours">%1$s timer</string>
+  <string name="autofill_services_explanation_long">Android Autofill Framework bruges til at hjælpe med at udfylde loginoplysninger i andre apps på enheden.</string>
+  <string name="use_inline_autofill_explanation_long">Brug inline-autofyld, hvis det valgte tastatur understøtter det, ellers brug standardoverlejring.</string>
+  <string name="additional_options">Yderligere indstillinger</string>
+  <string name="continue_to_web_app">Fortsæt til web-app?</string>
+  <string name="continue_to_x">Fortsæt til %1$s?</string>
+  <string name="continue_to_help_center">Fortsæt til Hjælpecenter?</string>
+  <string name="continue_to_contact_support">Fortsæt med at kontakte support?</string>
+  <string name="continue_to_app_store">Fortsæt til app-butik?</string>
+  <string name="two_step_login_description_long">Øg kontosikkerheden ved at oprette totrins-indlogning i Bitwarden web-appen.</string>
+  <string name="change_master_password_description_long">Hovedadgangskoden kan ændres fra Bitwarden web-appen.</string>
+  <string name="you_can_import_data_to_your_vault_on_x">Data kan importere til din Boks på %1$s.</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Læs mere i Hjælpecenter om, hvordan man bruger Bitwarden.</string>
+  <string name="contact_support_description_long">Kan ikke finde det, der søges efter? Kontakt Bitwarden-supporten via bitwarden.com.</string>
+  <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Tjek flere funktioner ud i Bitwarden-kontoen på web-appen.</string>
+  <string name="learn_about_organizations_description_long">Bitwarden muliggør deling af emner i din Boks med andre vha. en organisation. Læs mere på bitwarden.com-webstedet.</string>
+  <string name="rate_app_description_long">Hjælp andre med at finde ud af, om Bitwarden er det rigtige for dem. Besøg App Store og skriv en bedømmelse nu.</string>
+  <string name="default_dark_theme_description_long">Vælg det mørke tema, der skal bruges, når enhedens mørke-tilstand er i brug</string>
+  <string name="created_xy">Oprettet %1$s, %2$s</string>
+  <string name="too_many_attempts">For mange forsøg</string>
+  <string name="account_logged_out_biometric_exceeded">Konto logget ud.</string>
 </resources>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
   <string name="about">Apie</string>
   <string name="add">Pridėti</string>
   <string name="add_folder">Pridėti katalogą</string>
@@ -13,7 +13,7 @@
   <string name="copy_username">Kopijuoti vartotojo vardą</string>
   <string name="credits">Kūrėjų sąrašas</string>
   <string name="delete">Ištrinti</string>
-  <string name="deleting">Panaikinama: @…</string>
+  <string name="deleting">Panaikinama: @...</string>
   <string name="do_you_really_want_to_delete">Ar tikrai norite panaikinti? Atkurti nebebus galima.</string>
   <string name="edit">Redaguoti</string>
   <string name="edit_folder">Redaguoti aplanką</string>
@@ -59,7 +59,7 @@
   <string name="password">Slaptažodis</string>
   <string name="save">Išsaugoti</string>
   <string name="move">Perkelti</string>
-  <string name="saving">Išsaugoma…</string>
+  <string name="saving">Išsaugoma...</string>
   <string name="settings">Nustatymai</string>
   <string name="show">Rodyti</string>
   <string name="item_deleted">Elementas panaikintas</string>
@@ -78,7 +78,6 @@
   <string name="version">Versija</string>
   <string name="view">Peržiūrėti</string>
   <string name="visit_our_website">Apsilankykite mūsų svetainėje</string>
-  <string name="visit_our_website_description">Apsilankykite mūsų svetainėje ir gaukite pagalbos, naujienų, atsiųskite mums el. laišką ir (arba) sužinokite daugiau apie tai, kaip naudotis „Bitwarden“.</string>
   <string name="website">Tinklapis</string>
   <string name="yes">Taip</string>
   <string name="account">Paskyra</string>
@@ -96,11 +95,10 @@
   <string name="change_email">Pakeisti el. pašto adresą</string>
   <string name="change_email_confirmation">Pagrindinį slaptažodį galite pakeisti bitwarden.com žiniatinklio saugykloje. Ar norite dabar apsilankyti svetainėje?</string>
   <string name="change_master_password">Keisti pagrindinį slaptažodį</string>
-  <string name="change_password_confirmation">Pagrindinį slaptažodį galite pakeisti bitwarden.com žiniatinklio saugykloje. Ar norite dabar apsilankyti svetainėje?</string>
   <string name="close">Uždaryti</string>
   <string name="continue_text">Tęsti</string>
   <string name="create_account">Sukurti paskyrą</string>
-  <string name="creating_account">Kuriama paskyra…</string>
+  <string name="creating_account">Kuriama paskyra...</string>
   <string name="edit_item">Redaguoti elementą</string>
   <string name="enable_automatic_syncing">Leisti automatinį sinchronizavimą</string>
   <string name="enter_email_for_hint">Įveskite savo paskyros el. pašto adresą, kad gautumėte pagrindinio slaptažodžio užuominą.</string>
@@ -132,7 +130,7 @@
   <string name="vault_timeout">Atsijungta nuo saugyklos</string>
   <string name="vault_timeout_action">Saugyklos skirtojo laiko veiksmas</string>
   <string name="vault_timeout_log_out_confirmation">Atsijungus bus pašalinta visa prieiga prie saugyklos, o pasibaigus skirtajam laikotarpiui reikės autentifikuoti prisijungus. Ar tikrai norite naudoti šį nustatymą?</string>
-  <string name="logging_in">Prisijungiama…</string>
+  <string name="logging_in">Prisijungiama...</string>
   <string name="login_or_create_new_account">Prisijunkite arba sukurkite naują paskyrą, kad galėtumėte pasiekti saugyklą.</string>
   <string name="manage">Tvarkyti</string>
   <string name="master_password_confirmation_val_message">Slaptažodžio patvirtinimas neteisingas.</string>
@@ -171,14 +169,13 @@
   <string name="set_pin_direction">Norėdami atrakinti programą, įveskite 4 skaitmenų PIN kodą.</string>
   <string name="item_information">Informacija</string>
   <string name="item_updated">Elementas pridėtas</string>
-  <string name="submitting">Pateikiama…</string>
-  <string name="syncing">Sinchronizuojama…</string>
+  <string name="submitting">Pateikiama...</string>
+  <string name="syncing">Sinchronizuojama...</string>
   <string name="syncing_complete">Sinchronizacija baigta</string>
   <string name="syncing_failed">Sinchronizuoti nepavyko</string>
   <string name="sync_vault_now">Sinchronizuoti saugyklą dabar</string>
   <string name="touch_id">„Touch ID“</string>
   <string name="two_step_login">Dviejų žingsnių prisijungimas</string>
-  <string name="two_step_login_confirmation">Prisijungus dviem veiksmais, jūsų paskyra tampa saugesnė, reikalaujant patvirtinti prisijungimą naudojant kitą įrenginį, pvz., Saugos raktą, autentifikavimo programą, SMS, telefono skambutį ar el. Paštą. Dviejų žingsnių prisijungimą galima įjungti „bitwarden.com“ interneto saugykloje. Ar norite dabar apsilankyti svetainėje?</string>
   <string name="unlock_with">Atrakinti naudojant %1$s</string>
   <string name="unlock_with_pin">Atrakinti PIN kodu</string>
   <string name="validating">Tikrinimas</string>
@@ -196,7 +193,7 @@
   <string name="bitwarden_autofill_service_notification_content">Bakstelėkite šį pranešimą, kad automatiškai užpildytumėte elementą iš saugyklos.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Atidarykite pritaikymo neįgaliesiems nustatymus</string>
   <string name="bitwarden_autofill_service_step1">1. „Android“ pritaikymo neįgaliesiems nustatymų ekrane palieskite „Bitwarden“ po antrašte „Paslaugos“.</string>
-  <string name="bitwarden_autofill_service_step2">2. Įjunkite jungiklį ir paspauskite Ok, kad priimtumėte.</string>
+  <string name="bitwarden_autofill_service_step2">2. Įjunkite jungiklį ir paspauskite OK, kad priimtumėte.</string>
   <string name="disabled">Išjungta</string>
   <string name="enabled">Įjungta</string>
   <string name="off" tools:override="true">Išjungta</string>
@@ -208,10 +205,7 @@
   <string name="bitwarden_autofill_service_match_confirm">Ar tikrai norite automatiškai užpildyti šį elementą? Tai nevisiškai atitinka „%1$s“.</string>
   <string name="matching_items">Atitinkantys elementai</string>
   <string name="possible_matching_items">Galimai atitinkantys elementai</string>
-  <string-array name="Search">
-    <item>Ieškoti</item>
-    <item>Search</item>
-  </string-array>
+  <string name="search">Ieškoti</string>
   <string name="bitwarden_autofill_service_search">Jūs ieškote automatinio užpildymo elemento „%1$s“.</string>
   <string name="learn_org">Sužinoti apie organizacijas</string>
   <string name="cannot_open_app">Nepavyko atidaryti programos „%1$s“.</string>
@@ -233,7 +227,7 @@
   <string name="attachments">Priedai</string>
   <string name="unable_to_download_file">Nepavyksta atsiųsti failo.</string>
   <string name="unable_to_open_file">Jūsų įrenginys negali atidaryti tokio tipo failo.</string>
-  <string name="downloading">Atsiunčiama…</string>
+  <string name="downloading">Atsiunčiama...</string>
   <string name="attachment_large_warning">Šis priedas yra %1$s dydžio. Ar tikrai norite jį atsisiųsti į savo įrenginį?</string>
   <string name="authenticator_key">Vienkartinio autentifikavimo raktas (TOTP)</string>
   <string name="verification_code_totp">Patvirtinimo kodas (TOTP)</string>
@@ -258,6 +252,7 @@ Nuskaitymas vyks automatiškai.</string>
   <string name="feature_unavailable">Funkcija nepasiekiama</string>
   <string name="max_file_size">Maximum file size is 100 MB.</string>
   <string name="update_key">Negalite naudoti šios funkcijos, kol neatnaujinsite šifravimo raktą.</string>
+  <string name="encryption_key_migration_required_description_long">Encryption key migration required. Please login through the web vault to update your encryption key.</string>
   <string name="learn_more">Sužinoti daugiau</string>
   <string name="api_url">API serverio nuoroda</string>
   <string name="custom_environment">Individualizuota aplinka</string>
@@ -386,7 +381,7 @@ Nuskaitymas vyks automatiškai.</string>
   <string name="secure_notes">Saugūs įrašai</string>
   <string name="all_items">Visi elementai</string>
   <string name="ur_is">URI - \"nuoroda\"</string>
-  <string name="checking_password">Tikrinamas slaptažodis…</string>
+  <string name="checking_password">Tikrinamas slaptažodis...</string>
   <string name="check_password">Patikrinkite, ar slaptažodis buvo atskleistas.</string>
   <string name="password_exposed">Šis slaptažodis buvo atskleistas %1$s kartą (-us) dėl duomenų pažeidimų. Turėtumėte jį pakeisti.</string>
   <string name="password_safe">Šis slaptažodis nebuvo rastas per jokius žinomus duomenų pažeidimus. Jis turėtų būti saugus naudoti.</string>
@@ -450,7 +445,6 @@ Nuskaitymas vyks automatiškai.</string>
   <string name="theme_description">Pakeisti programos spalvos temą.</string>
   <string name="theme_default">Numatytasis (sistema)</string>
   <string name="default_dark_theme">Numatytoji tamsi tema</string>
-  <string name="default_dark_theme_description">Pasirinkite tamsiąją temą, kurią norite naudoti, kai naudojate numatytąją (sistemos) temą, kai naudojamas įrenginio tamsusis režimas.</string>
   <string name="copy_notes">Kopijuoti pastabas</string>
   <string name="exit">Išeiti</string>
   <string name="exit_confirmation">Ar tikrai norite išeiti iš „Bitwarden“?</string>
@@ -499,10 +493,10 @@ Nuskaitymas vyks automatiškai.</string>
   <string name="save_attachment_success">Priedas sėkmingai išsaugotas</string>
   <string name="autofill_tile_accessibility_required">Norėdami naudoti automatinio pildymo plytelę, „Bitwarden“ nustatymuose įjunkite „Automatinio pildymo prieinamumo paslaugą“.</string>
   <string name="autofill_tile_uri_not_found">Slaptažodžio laukų neaptikta</string>
-  <string name="soft_deleting">Siunčiama į šiukšliadėžę…</string>
+  <string name="soft_deleting">Siunčiama į šiukšliadėžę...</string>
   <string name="item_soft_deleted">Elementas išsiųstas į šiukšliadėžę.</string>
   <string name="restore">Atkurti</string>
-  <string name="restoring">Atkuriama…</string>
+  <string name="restoring">Atkuriama...</string>
   <string name="item_restored">Elementas atkurtas</string>
   <string name="trash">Šiukšliadėžė</string>
   <string name="search_trash">Ieškoti šiukšliadėžėje</string>
@@ -529,8 +523,7 @@ Nuskaitymas vyks automatiškai.</string>
   <string name="master_password_policy_validation_title">Neteisingas slaptažodis</string>
   <string name="master_password_policy_validation_message">Slaptažodis neatitinka organizacijos reikalavimų. Patikrinkite politikos informaciją ir bandykite dar kartą.</string>
   <string name="loading">Įkeliama</string>
-  <string name="accept_policies">Aktyvuodami šį jungiklį sutinkate su šiais dalykais:
-</string>
+  <string name="accept_policies">Aktyvuodami šį jungiklį sutinkate su šiais dalykais:</string>
   <string name="accept_policies_error">Paslaugų teikimo sąlygos ir privatumo politika nebuvo pripažinti.</string>
   <string name="terms_of_service">Paslaugų teikimo sąlygos</string>
   <string name="privacy_policy">Privatumo politika</string>
@@ -723,7 +716,7 @@ pasirinkite Pridėti TOTP, kad raktas būtų saugiai išsaugotas</string>
   <string name="domain_name_required_parenthesis">Domeno vardas (būtina)</string>
   <string name="api_key_required_parenthesis">API raktas (būtinas)</string>
   <string name="service">Paslauga</string>
-  <string name="anon_addy">AnonAddy</string>
+  <string name="addy_io">addy.io</string>
   <string name="firefox_relay">Firefox Relay</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
@@ -802,7 +795,6 @@ Ar norite pereiti prie šios paskyros?</string>
   <string name="remember_this_device">Remember this device</string>
   <string name="passkey">Passkey</string>
   <string name="passkeys">Passkeys</string>
-  <string name="created_x">Created %1$s</string>
   <string name="application">Application</string>
   <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">You cannot edit passkey application because it would invalidate the passkey</string>
   <string name="passkey_will_not_be_copied">Passkey will not be copied</string>
@@ -819,7 +811,6 @@ Ar norite pereiti prie šios paskyros?</string>
   <string name="trouble_logging_in">Trouble logging in?</string>
   <string name="logging_in_as_x">Logging in as %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Vault timeout action changed to log out</string>
-  <string name="this_item_cannot_be_shared_with_the_organization_because_there_is_one_already_with_the_same_passkey">This item cannot be shared with the organization because there is one already with the same passkey.</string>
   <string name="block_auto_fill">Block auto-fill</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">Auto-fill will not be offered for these URIs.</string>
   <string name="new_blocked_uri">New blocked URI</string>
@@ -838,13 +829,40 @@ Ar norite pereiti prie šios paskyros?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Log in with device must be set up in the settings of the Bitwarden app. Need another option?</string>
   <string name="log_in_with_device">Log in with device</string>
   <string name="logging_in_on">Logging in on</string>
-  <string name="there_are_no_items_to_list">There are no items to list</string>
-  <string name="to_view_verification_codes_upgrade_to_premium">To view verification codes, upgrade to premium</string>
-  <string name="add2_factor_autentication_to_an_item_to_view_verification_codes">Add 2 factor authentication to an item to view the verification codes</string>
-  <string name="log_in_to_bitwarden_on_your_i_phone_to_view_verification_codes">Log in to Bitwarden on your iPhone to view verification codes</string>
-  <string name="syncing_items_containing_verification_codes">Syncing items containing verification codes</string>
-  <string name="unlock_bitwarden_on_your_i_phone_to_view_verification_codes">Unlock Bitwarden on your iPhone to view verification codes</string>
-  <string name="set_up_bitwarden_to_view_items_containing_verification_codes">Set up Bitwarden to view items containing verification codes</string>
-  <string name="no_items_found">No items found</string>
-  <string name="set_up_apple_watch_passcode_in_order_to_use_bitwarden">Set up Apple Watch passcode in order to use Bitwarden</string>
+  <string name="vault">Vault</string>
+  <string name="appearance">Appearance</string>
+  <string name="account_security">Account security</string>
+  <string name="bitwarden_help_center">Bitwarden Help Center</string>
+  <string name="contact_bitwarden_support">Contact Bitwarden support</string>
+  <string name="copy_app_information">Copy app information</string>
+  <string name="sync_now">Sync now</string>
+  <string name="unlock_options">Unlock options</string>
+  <string name="session_timeout">Session timeout</string>
+  <string name="session_timeout_action">Session timeout action</string>
+  <string name="account_fingerprint_phrase">Account fingerprint phrase</string>
+  <string name="one_hour_and_one_minute">One hour and one minute</string>
+  <string name="one_hour_and_x_minute">One hour and %1$s minutes</string>
+  <string name="x_hours_and_one_minute">%1$s hours and one minute</string>
+  <string name="x_hours_and_y_minutes">%1$s hours and %2$s minutes</string>
+  <string name="x_hours">%1$s hours</string>
+  <string name="autofill_services_explanation_long">The Android Autofill Framework is used to assist in filling login information into other apps on your device.</string>
+  <string name="use_inline_autofill_explanation_long">Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</string>
+  <string name="additional_options">Additional options</string>
+  <string name="continue_to_web_app">Continue to web app?</string>
+  <string name="continue_to_x">Continue to %1$s?</string>
+  <string name="continue_to_help_center">Continue to Help center?</string>
+  <string name="continue_to_contact_support">Continue to contact support?</string>
+  <string name="continue_to_app_store">Continue to app store?</string>
+  <string name="two_step_login_description_long">Make your account more secure by setting up two-step login in the Bitwarden web app.</string>
+  <string name="change_master_password_description_long">You can change your master password on the Bitwarden web app.</string>
+  <string name="you_can_import_data_to_your_vault_on_x">You can import data to your vault on %1$s.</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Learn more about how to use Bitwarden on the Help center.</string>
+  <string name="contact_support_description_long">Can’t find what you are looking for? Reach out to Bitwarden support on bitwarden.com.</string>
+  <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Explore more features of your Bitwarden account on the web app.</string>
+  <string name="learn_about_organizations_description_long">Bitwarden allows you to share your vault items with others by using an organization. Learn more on the bitwarden.com website.</string>
+  <string name="rate_app_description_long">Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now.</string>
+  <string name="default_dark_theme_description_long">Choose the dark theme to use when your device’s dark mode is in use</string>
+  <string name="created_xy">Created %1$s, %2$s</string>
+  <string name="too_many_attempts">Too many attempts</string>
+  <string name="account_logged_out_biometric_exceeded">Account logged out.</string>
 </resources>
