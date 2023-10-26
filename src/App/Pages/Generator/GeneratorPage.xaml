@@ -278,6 +278,15 @@
                             Text="{Binding AddyIoDomainName}"
                             StyleClass="box-value"
                             AutomationId="AnonAddyDomainNameEntry" />
+                        <Label IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.ForwardEmail}}"
+                            Text="{u:I18n DomainNameRequiredParenthesis}"
+                            StyleClass="box-label"
+                            Margin="0,10,0,0"/>
+                        <Entry IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.ForwardEmail}}"
+                            x:Name="_forwardEmailDomainNameEntry"
+                            Text="{Binding ForwardEmailDomainName}"
+                            StyleClass="box-value"
+                            AutomationId="ForwardEmailDomainNameEntry" />
                     </StackLayout>                    
                     <!--RANDOM WORD OPTIONS-->
                     <Grid IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.RandomWord}}">
