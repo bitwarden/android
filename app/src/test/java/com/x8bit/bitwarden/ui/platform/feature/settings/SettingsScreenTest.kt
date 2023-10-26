@@ -9,6 +9,7 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertTrue
 
 class SettingsScreenTest : BaseComposeTest() {
 
@@ -124,6 +125,6 @@ class SettingsScreenTest : BaseComposeTest() {
                 },
             )
         }
-        assert(haveCalledNavigateToAccountSecurity)
+        assertTrue(haveCalledNavigateToAccountSecurity)
     }
 }
