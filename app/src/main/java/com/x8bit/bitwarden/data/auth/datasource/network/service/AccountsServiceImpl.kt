@@ -8,7 +8,6 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJs
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import kotlinx.serialization.json.Json
-import java.net.HttpURLConnection
 
 class AccountsServiceImpl constructor(
     private val accountsApi: AccountsApi,
@@ -25,13 +24,10 @@ class AccountsServiceImpl constructor(
             .recoverCatching { throwable ->
                 val bitwardenError = throwable.toBitwardenError()
                 bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.CaptchaRequired>(
-                    code = HttpURLConnection.HTTP_BAD_REQUEST,
+                    code = 400,
                     json = json,
                 ) ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
-                    codes = listOf(
-                        HttpURLConnection.HTTP_BAD_REQUEST,
-                        429,
-                    ),
+                    codes = listOf(400, 429),
                     json = json,
                 ) ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Error>(
                     code = 429,

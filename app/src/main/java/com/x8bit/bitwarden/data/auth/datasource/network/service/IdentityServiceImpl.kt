@@ -7,7 +7,6 @@ import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
 import kotlinx.serialization.json.Json
-import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import java.util.UUID
 
 class IdentityServiceImpl constructor(
@@ -16,6 +15,7 @@ class IdentityServiceImpl constructor(
     private val deviceModelProvider: DeviceModelProvider = DeviceModelProvider(),
 ) : IdentityService {
 
+    @Suppress("MagicNumber")
     override suspend fun getToken(
         email: String,
         passwordHash: String,
@@ -37,10 +37,10 @@ class IdentityServiceImpl constructor(
         .recoverCatching { throwable ->
             val bitwardenError = throwable.toBitwardenError()
             bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.CaptchaRequired>(
-                code = HTTP_BAD_REQUEST,
+                code = 400,
                 json = json,
             ) ?: bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.Invalid>(
-                code = HTTP_BAD_REQUEST,
+                code = 400,
                 json = json,
             ) ?: throw throwable
         }
