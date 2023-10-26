@@ -14,7 +14,7 @@ import javax.inject.Singleton
  */
 @Module
 @InstallIn(SingletonComponent::class)
-object SdkModule {
+object AuthSdkModule {
 
     @Provides
     @Singleton
