@@ -190,7 +190,8 @@ namespace Bit.Droid.Services
                 {
                     try
                     {
-                        var file = new Java.IO.File(activity.FilesDir, "temp_camera_photo.jpg");
+                        var tmpDir = new Java.IO.File(activity.FilesDir, Constants.TEMP_CAMERA_IMAGE_DIR);
+                        var file = new Java.IO.File(tmpDir, Constants.TEMP_CAMERA_IMAGE_NAME);
                         if (!file.Exists())
                         {
                             file.ParentFile.Mkdirs();

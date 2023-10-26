@@ -1,17 +1,18 @@
-﻿using Bit.Core.Models.Domain;
-using Bit.Core.Models.Export;
+﻿using System;
+using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Models.Api
 {
-    public class Fido2KeyApi
+    public class Fido2CredentialApi
     {
-        public Fido2KeyApi()
+        public Fido2CredentialApi()
         {
         }
 
-        public Fido2KeyApi(Fido2Key fido2Key)
+        public Fido2CredentialApi(Fido2Credential fido2Key)
         {
-            NonDiscoverableId = fido2Key.NonDiscoverableId?.EncryptedString;
+            CredentialId = fido2Key.CredentialId?.EncryptedString;
+            Discoverable = fido2Key.Discoverable?.EncryptedString;
             KeyType = fido2Key.KeyType?.EncryptedString;
             KeyAlgorithm = fido2Key.KeyAlgorithm?.EncryptedString;
             KeyCurve = fido2Key.KeyCurve?.EncryptedString;
@@ -21,17 +22,20 @@ namespace Bit.Core.Models.Api
             UserHandle = fido2Key.UserHandle?.EncryptedString;
             UserName = fido2Key.UserName?.EncryptedString;
             Counter = fido2Key.Counter?.EncryptedString;
+            CreationDate = fido2Key.CreationDate;
         }
 
-        public string NonDiscoverableId { get; set; }
-        public string KeyType { get; set; } = Constants.DefaultFido2KeyType;
-        public string KeyAlgorithm { get; set; } = Constants.DefaultFido2KeyAlgorithm;
-        public string KeyCurve { get; set; } = Constants.DefaultFido2KeyCurve;
+        public string CredentialId { get; set; }
+        public string Discoverable { get; set; }
+        public string KeyType { get; set; } = Constants.DefaultFido2CredentialType;
+        public string KeyAlgorithm { get; set; } = Constants.DefaultFido2CredentialAlgorithm;
+        public string KeyCurve { get; set; } = Constants.DefaultFido2CredentialCurve;
         public string KeyValue { get; set; }
         public string RpId { get; set; }
         public string RpName { get; set; }
         public string UserHandle { get; set; }
         public string UserName { get; set; }
         public string Counter { get; set; }
+        public DateTime CreationDate { get; set; }
     }
 }

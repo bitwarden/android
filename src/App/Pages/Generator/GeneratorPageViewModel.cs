@@ -81,6 +81,7 @@ namespace Bit.App.Pages
                 ForwardedEmailServiceType.DuckDuckGo,
                 ForwardedEmailServiceType.Fastmail,
                 ForwardedEmailServiceType.FirefoxRelay,
+                ForwardedEmailServiceType.ForwardEmail,
                 ForwardedEmailServiceType.SimpleLogin
             };
 
@@ -461,6 +462,8 @@ namespace Bit.App.Pages
                         return _usernameOptions.FirefoxRelayApiAccessToken;
                     case ForwardedEmailServiceType.SimpleLogin:
                         return _usernameOptions.SimpleLoginApiKey;
+                    case ForwardedEmailServiceType.ForwardEmail:
+                        return _usernameOptions.ForwardEmailApiAccessToken;
                     default:
                         return null;
                 }
@@ -505,6 +508,14 @@ namespace Bit.App.Pages
                             changed = true;
                         }
                         break;
+
+                    case ForwardedEmailServiceType.ForwardEmail:
+                        if (_usernameOptions.ForwardEmailApiAccessToken != value)
+                        {
+                            _usernameOptions.ForwardEmailApiAccessToken = value;
+                            changed = true;
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -529,6 +540,7 @@ namespace Bit.App.Pages
                     case ForwardedEmailServiceType.DuckDuckGo:
                     case ForwardedEmailServiceType.Fastmail:
                     case ForwardedEmailServiceType.SimpleLogin:
+                    case ForwardedEmailServiceType.ForwardEmail:
                         return AppResources.APIKeyRequiredParenthesis;
                     default:
                         return null;
@@ -545,7 +557,7 @@ namespace Bit.App.Pages
             set => SetProperty(ref _showForwardedEmailApiSecret, value);
         }
 
-        public string AnonAddyDomainName
+        public string AddyIoDomainName
         {
             get => _usernameOptions.AnonAddyDomainName;
             set
@@ -553,7 +565,21 @@ namespace Bit.App.Pages
                 if (_usernameOptions.AnonAddyDomainName != value)
                 {
                     _usernameOptions.AnonAddyDomainName = value;
-                    TriggerPropertyChanged(nameof(AnonAddyDomainName));
+                    TriggerPropertyChanged(nameof(AddyIoDomainName));
+                    SaveUsernameOptionsAsync(false).FireAndForget();
+                }
+            }
+        }
+
+        public string ForwardEmailDomainName
+        {
+            get => _usernameOptions.ForwardEmailDomainName;
+            set
+            {
+                if (_usernameOptions.ForwardEmailDomainName != value)
+                {
+                    _usernameOptions.ForwardEmailDomainName = value;
+                    TriggerPropertyChanged(nameof(ForwardEmailDomainName));
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
             }
@@ -793,7 +819,7 @@ namespace Bit.App.Pages
             TriggerPropertyChanged(nameof(CapitalizeRandomWordUsername));
             TriggerPropertyChanged(nameof(ForwardedEmailApiSecret));
             TriggerPropertyChanged(nameof(ForwardedEmailApiSecretLabel));
-            TriggerPropertyChanged(nameof(AnonAddyDomainName));
+            TriggerPropertyChanged(nameof(AddyIoDomainName));
             TriggerPropertyChanged(nameof(CatchAllEmailDomain));
             TriggerPropertyChanged(nameof(ForwardedEmailServiceSelected));
             TriggerPropertyChanged(nameof(UsernameTypeSelected));
@@ -803,6 +829,7 @@ namespace Bit.App.Pages
             TriggerPropertyChanged(nameof(GeneratorTypeSelected));
             TriggerPropertyChanged(nameof(UsernameTypeDescriptionLabel));
             TriggerPropertyChanged(nameof(EmailWebsite));
+            TriggerPropertyChanged(nameof(ForwardEmailDomainName));
         }
 
         private void SetOptions()

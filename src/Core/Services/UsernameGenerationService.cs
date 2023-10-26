@@ -141,6 +141,13 @@ namespace Bit.Core.Services
                                     .GenerateAsync(_apiService, (AnonAddyForwarderOptions)options.GetForwarderOptions());
             }
 
+            if (options.ServiceType == ForwardedEmailServiceType.ForwardEmail)
+            {
+                var forwardedEmailOptions = (ForwardEmailForwarderOptions)options.GetForwarderOptions();
+                return await new ForwardEmailForwarder(forwardedEmailOptions.DomainName)
+                                    .GenerateAsync(_apiService, forwardedEmailOptions);
+            }
+
             BaseForwarder<ForwarderOptions> simpleForwarder = null;
 
             switch (options.ServiceType)

@@ -9,11 +9,12 @@ namespace Bit.Core
         public const string AndroidAppProtocol = "androidapp://";
         public const string iOSAppProtocol = "iosapp://";
         public const string DefaultUsernameGenerated = "-";
+        public const string AppIdKey = "appId";
         public const string StateVersionKey = "stateVersion";
         public const string StateKey = "state";
         public const string PreAuthEnvironmentUrlsKey = "preAuthEnvironmentUrls";
         public const string LastFileCacheClearKey = "lastFileCacheClear";
-        public const string AutofillTileAdded = "autofillTileAdded";
+        public const string AutofillTileAddedKey = "autofillTileAdded";
         public const string PushRegisteredTokenKey = "pushRegisteredToken";
         public const string PushInitialPromptShownKey = "pushInitialPromptShown";
         public const string PushInstallationRegistrationErrorKey = "pushInstallationRegistrationError";
@@ -66,9 +67,11 @@ namespace Bit.Core
         public const int Argon2MemoryInMB = 64;
         public const int Argon2Parallelism = 4;
         public const int MasterPasswordMinimumChars = 12;
-        public const string DefaultFido2KeyType = "public-key";
-        public const string DefaultFido2KeyAlgorithm = "ECDSA";
-        public const string DefaultFido2KeyCurve = "P-256";
+        public const int CipherKeyRandomBytesLength = 64;
+        public const string CipherKeyEncryptionMinServerVersion = "2023.9.1";
+        public const string DefaultFido2CredentialType = "public-key";
+        public const string DefaultFido2CredentialAlgorithm = "ECDSA";
+        public const string DefaultFido2CredentialCurve = "P-256";
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {
@@ -92,8 +95,7 @@ namespace Bit.Core
         public static string FoldersKey(string userId) => $"folders_{userId}";
         public static string CollectionsKey(string userId) => $"collections_{userId}";
         public static string OrganizationsKey(string userId) => $"organizations_{userId}";
-        public static string LocalDataKey(string userId) => $"ciphersLocalData_{userId}";
-        public static string NeverDomainsKey(string userId) => $"neverDomains_{userId}";
+        public static string CiphersLocalDataKey(string userId) => $"ciphersLocalData_{userId}";
         public static string SendsKey(string userId) => $"sends_{userId}";
         public static string PoliciesKey(string userId) => $"policies_{userId}";
         public static string EncOrgKeysKey(string userId) => $"encOrgKeys_{userId}";

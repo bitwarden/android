@@ -396,9 +396,6 @@
   <data name="VisitOurWebsite" xml:space="preserve">
     <value>Visite o nosso site</value>
   </data>
-  <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Visite o nosso site para obter ajuda, notícias, enviar-nos um e-mail e/ou saber mais sobre como usar o Bitwarden.</value>
-  </data>
   <data name="Website" xml:space="preserve">
     <value>Site</value>
     <comment>Label for a website.</comment>
@@ -419,7 +416,7 @@
     <value>Extensão da aplicação</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Utilize o serviço de acessibilidade do Bitwarden para preencher automaticamente as suas credenciais em todas as aplicações e na Web.</value>
+    <value>Utilize o serviço de acessibilidade Bitwarden para preencher automaticamente as suas credenciais entre as aplicações e a web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Serviço de preenchimento automático</value>
@@ -450,9 +447,6 @@
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Alterar palavra-passe mestra</value>
-  </data>
-  <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Pode alterar o seu endereço de e-mail no cofre do site bitwarden.com. Deseja visitar o site agora?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Fechar</value>
@@ -707,9 +701,6 @@
   <data name="TwoStepLogin" xml:space="preserve">
     <value>Verificação de dois passos</value>
   </data>
-  <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>A verificação de dois passos torna a sua conta mais segura, exigindo que verifique o seu início de sessão com outro dispositivo, como uma chave de segurança, aplicação de autenticação, SMS, chamada telefónica ou e-mail. A verificação de dois passos pode ser configurada em bitwarden.com. Pretende visitar o site agora?</value>
-  </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Desbloquear com {0}</value>
   </data>
@@ -727,7 +718,7 @@
     <value>Ver item</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Cofre Web Bitwarden</value>
+    <value>Cofre web Bitwarden</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Perdeu a aplicação de autenticação?</value>
@@ -954,6 +945,9 @@ A leitura será efetuada automaticamente.</value>
   <data name="UpdateKey" xml:space="preserve">
     <value>Não pode utilizar esta funcionalidade até atualizar a sua chave de encriptação.</value>
   </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>É necessária a migração da chave de encriptação. Inicie sessão através do cofre web para atualizar a sua chave de encriptação.</value>
+  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Saber mais</value>
   </data>
@@ -987,7 +981,7 @@ A leitura será efetuada automaticamente.</value>
     <value>URL do servidor</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>URL do servidor do cofre Web</value>
+    <value>URL do servidor do cofre web</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>Toque nesta notificação para ver itens do seu cofre.</value>
@@ -1232,7 +1226,7 @@ A leitura será efetuada automaticamente.</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Domínio base</value>
+    <value>Domínio de base</value>
   </data>
   <data name="Default" xml:space="preserve">
     <value>Predefinido</value>
@@ -1468,7 +1462,7 @@ A leitura será efetuada automaticamente.</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>O Bitwarden permite-lhe partilhar os itens do seu cofre com outros ao utilizar uma conta de organização. Gostaria de visitar o website bitwarden.com para saber mais?</value>
+    <value>O Bitwarden permite-lhe partilhar os itens do seu cofre com outros ao utilizar uma conta de organização. Gostaria de visitar o site bitwarden.com para saber mais?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Exportar cofre</value>
@@ -1554,9 +1548,6 @@ A leitura será efetuada automaticamente.</value>
   </data>
   <data name="DefaultDarkTheme" xml:space="preserve">
     <value>Tema escuro predefinido</value>
-  </data>
-  <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Escolha o tema escuro a utilizar quando o tema Predefinido (Sistema) do seu dispositivo estiver no modo escuro.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copiar nota</value>
@@ -1681,7 +1672,7 @@ A leitura será efetuada automaticamente.</value>
     <value>Aviso</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>Ocorreu um problema ao exportar o seu cofre. Se o problema persistir, terá de exportar a partir do cofre Web.</value>
+    <value>Ocorreu um problema ao exportar o seu cofre. Se o problema persistir, terá de exportar a partir do cofre web.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
     <value>Cofre exportado com sucesso</value>
@@ -1698,7 +1689,7 @@ A leitura será efetuada automaticamente.</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>Houve um problema ao guardar este anexo. Se o problema persistir, poderá guardá-lo através do cofre Web.</value>
+    <value>Houve um problema ao guardar este anexo. Se o problema persistir, poderá guardá-lo através do cofre web.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Anexo guardado com sucesso</value>
@@ -1837,10 +1828,10 @@ A leitura será efetuada automaticamente.</value>
     <value>Utilizar a acessibilidade</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Utilize o Serviço de acessibilidade do Bitwarden para preencher automaticamente as suas credenciais em aplicações e na Web. Quando configurado, exibiremos um pop-up quando os campos de início de sessão forem selecionados.</value>
+    <value>Utilize o Serviço de acessibilidade do Bitwarden para preencher automaticamente as suas credenciais em aplicações e na web. Quando configurado, exibiremos um pop-up quando os campos de início de sessão forem selecionados.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Utilize o Serviço de acessibilidade do Bitwarden para preencher automaticamente as suas credenciais em aplicações e na Web. (Requer que a definição Aparecer sobre outras também esteja ativada)</value>
+    <value>Utilize o Serviço de acessibilidade do Bitwarden para preencher automaticamente as suas credenciais em aplicações e na web. (Requer que a definição Aparecer sobre outras também esteja ativada)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
     <value>Utilize o Serviço de acessibilidade do Bitwarden para utilizar o botão de preenchimento automático do Painel instantâneo e/ou mostrar um pop-up utilizando a definição Aparecer sobre outras (se estiver ativada).</value>
@@ -2067,7 +2058,7 @@ A leitura será efetuada automaticamente.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Tem de verificar o seu e-mail para utilizar ficheiros com o Send. Pode verificar o seu e-mail no cofre Web.</value>
+    <value>Tem de verificar o seu e-mail para utilizar ficheiros com o Send. Pode verificar o seu e-mail no cofre web.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
@@ -2412,9 +2403,9 @@ A leitura será efetuada automaticamente.</value>
   <data name="Service" xml:space="preserve">
     <value>Serviço</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2650,10 +2641,6 @@ Deseja mudar para esta conta?</value>
   <data name="Passkeys" xml:space="preserve">
     <value>Chaves de acesso</value>
   </data>
-  <data name="CreatedX" xml:space="preserve">
-    <value>Criada a {0}</value>
-    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
-  </data>
   <data name="Application" xml:space="preserve">
     <value>Aplicação</value>
   </data>
@@ -2701,9 +2688,6 @@ Deseja mudar para esta conta?</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Ação de tempo limite do cofre alterada para terminar sessão</value>
-  </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Este item não pode ser partilhado com a organização porque já existe um com a mesma chave de acesso.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Bloquear preenchimento automático</value>
@@ -2759,5 +2743,117 @@ Deseja mudar para esta conta?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>A iniciar sessão em</value>
+  </data>
+  <data name="Vault" xml:space="preserve">
+    <value>Cofre</value>
+  </data>
+  <data name="Appearance" xml:space="preserve">
+    <value>Aparência</value>
+  </data>
+  <data name="AccountSecurity" xml:space="preserve">
+    <value>Segurança da conta</value>
+  </data>
+  <data name="BitwardenHelpCenter" xml:space="preserve">
+    <value>Centro de ajuda Bitwarden</value>
+  </data>
+  <data name="ContactBitwardenSupport" xml:space="preserve">
+    <value>Contactar o suporte Bitwarden</value>
+  </data>
+  <data name="CopyAppInformation" xml:space="preserve">
+    <value>Copiar informações da aplicação</value>
+  </data>
+  <data name="SyncNow" xml:space="preserve">
+    <value>Sincronizar agora</value>
+  </data>
+  <data name="UnlockOptions" xml:space="preserve">
+    <value>Opções de desbloqueio</value>
+  </data>
+  <data name="SessionTimeout" xml:space="preserve">
+    <value>Tempo limite da sessão</value>
+  </data>
+  <data name="SessionTimeoutAction" xml:space="preserve">
+    <value>Ação de tempo limite da sessão</value>
+  </data>
+  <data name="AccountFingerprintPhrase" xml:space="preserve">
+    <value>Frase de impressão digital da conta</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="OneHourAndOneMinute" xml:space="preserve">
+    <value>Uma hora e um minuto</value>
+  </data>
+  <data name="OneHourAndXMinute" xml:space="preserve">
+    <value>Uma hora e {0} minutos</value>
+  </data>
+  <data name="XHoursAndOneMinute" xml:space="preserve">
+    <value>{0} horas e um minuto</value>
+  </data>
+  <data name="XHoursAndYMinutes" xml:space="preserve">
+    <value>{0} horas e {1} minutos</value>
+  </data>
+  <data name="XHours" xml:space="preserve">
+    <value>{0} horas</value>
+  </data>
+  <data name="AutofillServicesExplanationLong" xml:space="preserve">
+    <value>A estrutura de preenchimento automático do Android é utilizada para ajudar a preencher as informações de início de sessão noutras aplicações do seu dispositivo.</value>
+  </data>
+  <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
+    <value>Utilize o preenchimento automático em linha se o teclado selecionado o suportar. Caso contrário, utilize a sobreposição predefinida.</value>
+  </data>
+  <data name="AdditionalOptions" xml:space="preserve">
+    <value>Opções adicionais</value>
+  </data>
+  <data name="ContinueToWebApp" xml:space="preserve">
+    <value>Continuar para a aplicação web?</value>
+  </data>
+  <data name="ContinueToX" xml:space="preserve">
+    <value>Continuar para {0}?</value>
+    <comment>The parameter is an URL, like bitwarden.com.</comment>
+  </data>
+  <data name="ContinueToHelpCenter" xml:space="preserve">
+    <value>Continuar para o Centro de ajuda?</value>
+  </data>
+  <data name="ContinueToContactSupport" xml:space="preserve">
+    <value>Continuar a contactar o apoio ao cliente?</value>
+  </data>
+  <data name="ContinueToAppStore" xml:space="preserve">
+    <value>Continuar para a loja de aplicações?</value>
+  </data>
+  <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
+    <value>Torne a sua conta mais segura configurando o login em duas etapas na aplicação web Bitwarden.</value>
+  </data>
+  <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
+    <value>Pode alterar a sua palavra-passe mestra na aplicação web Bitwarden.</value>
+  </data>
+  <data name="YouCanImportDataToYourVaultOnX" xml:space="preserve">
+    <value>Pode importar dados para o seu cofre em {0}.</value>
+    <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
+  </data>
+  <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
+    <value>Saiba mais sobre como utilizar o Bitwarden no Centro de ajuda.</value>
+  </data>
+  <data name="ContactSupportDescriptionLong" xml:space="preserve">
+    <value>Não consegue encontrar o que está a procurar? Entre em contacto com o suporte da Bitwarden em bitwarden.com.</value>
+  </data>
+  <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
+    <value>Explore mais funcionalidades da sua conta Bitwarden na aplicação web.</value>
+  </data>
+  <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
+    <value>O Bitwarden permite-lhe partilhar os seus itens do cofre com outras pessoas através da utilização de uma organização. Saiba mais no site bitwarden.com.</value>
+  </data>
+  <data name="RateAppDescriptionLong" xml:space="preserve">
+    <value>Ajude outras pessoas a descobrir se o Bitwarden é adequado para elas. Visite a loja de aplicações e deixe uma avaliação agora.</value>
+  </data>
+  <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
+    <value>Escolha o tema escuro a utilizar quando o modo escuro do seu dispositivo estiver a ser utilizado</value>
+  </data>
+  <data name="CreatedXY" xml:space="preserve">
+    <value>Criada a {0}, {1}</value>
+    <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Demasiadas tentativas</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Conta com sessão terminada.</value>
   </data>
 </root>

@@ -16,7 +16,7 @@ namespace Bit.Core.Models.Data
             PasswordRevisionDate = data.PasswordRevisionDate;
             Totp = data.Totp;
             Uris = data.Uris?.Select(u => new LoginUriData(u)).ToList();
-            Fido2Key = data.Fido2Key != null ? new Fido2KeyData(data.Fido2Key) : null;
+            Fido2Credentials = data.Fido2Credentials?.Select(f => new Fido2CredentialData(f)).ToList();
         }
 
         public List<LoginUriData> Uris { get; set; }
@@ -24,6 +24,6 @@ namespace Bit.Core.Models.Data
         public string Password { get; set; }
         public DateTime? PasswordRevisionDate { get; set; }
         public string Totp { get; set; }
-        public Fido2KeyData Fido2Key { get; set; }
+        public List<Fido2CredentialData> Fido2Credentials { get; set; }
     }
 }

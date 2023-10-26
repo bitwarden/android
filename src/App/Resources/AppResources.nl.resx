@@ -396,9 +396,6 @@
   <data name="VisitOurWebsite" xml:space="preserve">
     <value>Bezoek onze website</value>
   </data>
-  <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Bezoek onze website voor hulp, nieuws, om ons een e-mail te sturen en/of om meer te weten te komen over het gebruik van Bitwarden.</value>
-  </data>
   <data name="Website" xml:space="preserve">
     <value>Website</value>
     <comment>Label for a website.</comment>
@@ -450,9 +447,6 @@
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Hoofdwachtwoord wijzigen</value>
-  </data>
-  <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Je kunt je hoofdwachtwoord wijzigen in de kluis op bitwarden.com. Wil je de website nu bezoeken?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Sluiten</value>
@@ -707,9 +701,6 @@
   <data name="TwoStepLogin" xml:space="preserve">
     <value>Tweestapsaanmelding</value>
   </data>
-  <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Tweestapsaanmelding beschermt je account door je inlogpoging te bevestigen met een ander apparaat zoals een beveiligingssleutel, authenticatie-app, SMS, spraakoproep of e-mail. Je kunt Tweestapsaanmelding inschakelen in de webkluis op bitwarden.com. Wil je de website nu bezoeken?</value>
-  </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Ontgrendelen met {0}</value>
   </data>
@@ -953,6 +944,9 @@ Het scannen gebeurt automatisch.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
     <value>Je kunt deze functie pas gebruiken als je je encryptiesleutel bijwerkt.</value>
+  </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Meer informatie</value>
@@ -1554,9 +1548,6 @@ Het scannen gebeurt automatisch.</value>
   </data>
   <data name="DefaultDarkTheme" xml:space="preserve">
     <value>Standaard donkere thema</value>
-  </data>
-  <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Kies welk donkere thema te gebruiken als standaard (systeem) thema wanneer de donkere modus van je apparaat is ingeschakeld.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Notities kopiëren</value>
@@ -2413,9 +2404,9 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</value>
   <data name="Service" xml:space="preserve">
     <value>Dienst</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2651,10 +2642,6 @@ Wilt u naar dit account wisselen?</value>
   <data name="Passkeys" xml:space="preserve">
     <value>Passkeys</value>
   </data>
-  <data name="CreatedX" xml:space="preserve">
-    <value>Aangemaakt {0}</value>
-    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
-  </data>
   <data name="Application" xml:space="preserve">
     <value>Applicatie</value>
   </data>
@@ -2702,9 +2689,6 @@ Wilt u naar dit account wisselen?</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Vault timeout action changed to log out</value>
-  </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Je kunt dit item niet delen met de organisatie omdat er al een met dezelfde passkey is.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Automatisch aanvullen blokkeren</value>
@@ -2760,5 +2744,117 @@ Wilt u naar dit account wisselen?</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Logging in on</value>
+  </data>
+  <data name="Vault" xml:space="preserve">
+    <value>Kluis</value>
+  </data>
+  <data name="Appearance" xml:space="preserve">
+    <value>Weergave</value>
+  </data>
+  <data name="AccountSecurity" xml:space="preserve">
+    <value>Accountbeveiliging</value>
+  </data>
+  <data name="BitwardenHelpCenter" xml:space="preserve">
+    <value>Bitwarden Hulpcentrum</value>
+  </data>
+  <data name="ContactBitwardenSupport" xml:space="preserve">
+    <value>Contacteer Bitwarden support</value>
+  </data>
+  <data name="CopyAppInformation" xml:space="preserve">
+    <value>App-informatie kopiëren</value>
+  </data>
+  <data name="SyncNow" xml:space="preserve">
+    <value>Nu synchroniseren</value>
+  </data>
+  <data name="UnlockOptions" xml:space="preserve">
+    <value>Ontgrendelopties</value>
+  </data>
+  <data name="SessionTimeout" xml:space="preserve">
+    <value>Sessie time-out</value>
+  </data>
+  <data name="SessionTimeoutAction" xml:space="preserve">
+    <value>Actie voor sessie time-out</value>
+  </data>
+  <data name="AccountFingerprintPhrase" xml:space="preserve">
+    <value>Vingerafdrukzin van je account</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="OneHourAndOneMinute" xml:space="preserve">
+    <value>Een uur en een minuut</value>
+  </data>
+  <data name="OneHourAndXMinute" xml:space="preserve">
+    <value>Een uur en {0} minuten</value>
+  </data>
+  <data name="XHoursAndOneMinute" xml:space="preserve">
+    <value>{0} uur en een minuut</value>
+  </data>
+  <data name="XHoursAndYMinutes" xml:space="preserve">
+    <value>{0} uur en {1} minuten</value>
+  </data>
+  <data name="XHours" xml:space="preserve">
+    <value>{0} uur</value>
+  </data>
+  <data name="AutofillServicesExplanationLong" xml:space="preserve">
+    <value>Het Android Autofill Framework helpt het het invullen van inloggegevens in andere apps op je apparaat.</value>
+  </data>
+  <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
+    <value>Gebruik inline automatisch aanvullen als het geselecteerde toetsenbord dit ondersteunt. Gebruik anders de standaard overlay.</value>
+  </data>
+  <data name="AdditionalOptions" xml:space="preserve">
+    <value>Extra instellingen</value>
+  </data>
+  <data name="ContinueToWebApp" xml:space="preserve">
+    <value>Doorgaan naar web-app?</value>
+  </data>
+  <data name="ContinueToX" xml:space="preserve">
+    <value>Doorgaan naar {0}?</value>
+    <comment>The parameter is an URL, like bitwarden.com.</comment>
+  </data>
+  <data name="ContinueToHelpCenter" xml:space="preserve">
+    <value>Doorgaan met Helpcentrum?</value>
+  </data>
+  <data name="ContinueToContactSupport" xml:space="preserve">
+    <value>Doorgaan met het contact opnemen met support?</value>
+  </data>
+  <data name="ContinueToAppStore" xml:space="preserve">
+    <value>Doorgaan naar de app store?</value>
+  </data>
+  <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
+    <value>Maak je account veiliger met het instellen van tweestapsaanmelding in de Bitwarden-webapp.</value>
+  </data>
+  <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
+    <value>Je kunt je hoofdwachtwoord wijzigen in de Bitwarden-webapp.</value>
+  </data>
+  <data name="YouCanImportDataToYourVaultOnX" xml:space="preserve">
+    <value>Je kunt gegevens importeren in je kluis op {0}.</value>
+    <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
+  </data>
+  <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
+    <value>Leer meer over het gebruik van Bitwarden in het Helpcentrum.</value>
+  </data>
+  <data name="ContactSupportDescriptionLong" xml:space="preserve">
+    <value>Kan je niet vinden wat je zoekt? Neem contact op met Bitwarden-ondersteuning via bitwarden.com.</value>
+  </data>
+  <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
+    <value>Ontdek meer functies van je Bitwarden-account in de webapp.</value>
+  </data>
+  <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
+    <value>Met Bitwarden kun je je kluis-items met anderen delen door gebruik te maken van een organisatie. Lees meer op de website bitwarden.com.</value>
+  </data>
+  <data name="RateAppDescriptionLong" xml:space="preserve">
+    <value>Help anderen met beslissen of Bitwarden iets voor hen is. Bezoek de app store en laat een beoordeling achter.</value>
+  </data>
+  <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
+    <value>Kies het donkere thema dat je wilt gebruiken wanneer de donkere modus van je apparaat actief is</value>
+  </data>
+  <data name="CreatedXY" xml:space="preserve">
+    <value>Aangemaakt {0}, {1}</value>
+    <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Too many attempts</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Account logged out.</value>
   </data>
 </root>

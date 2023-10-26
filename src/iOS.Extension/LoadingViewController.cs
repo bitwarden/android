@@ -110,6 +110,7 @@ namespace Bit.iOS.Extension
                 else if (navController.TopViewController is LockPasswordViewController passwordViewController)
                 {
                     passwordViewController.LoadingController = this;
+                    passwordViewController.LaunchHomePage = () => DismissViewController(false, () => LaunchHomePage());
                     segue.DestinationViewController.PresentationController.Delegate =
                         new CustomPresentationControllerDelegate(passwordViewController.DismissModalAction);
                 }

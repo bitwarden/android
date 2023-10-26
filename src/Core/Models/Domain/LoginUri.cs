@@ -24,9 +24,9 @@ namespace Bit.Core.Models.Domain
         public EncString Uri { get; set; }
         public UriMatchType? Match { get; set; }
 
-        public Task<LoginUriView> DecryptAsync(string orgId)
+        public Task<LoginUriView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
-            return DecryptObjAsync(new LoginUriView(this), this, _map, orgId);
+            return DecryptObjAsync(new LoginUriView(this), this, _map, orgId, key);
         }
 
         public LoginUriData ToLoginUriData()

@@ -396,9 +396,6 @@
   <data name="VisitOurWebsite" xml:space="preserve">
     <value>Посетете нашия сайт</value>
   </data>
-  <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Посетете сайта ни за помощ, новини, начини да се свържете с нас и как да ползвате Bitwarden.</value>
-  </data>
   <data name="Website" xml:space="preserve">
     <value>Сайт</value>
     <comment>Label for a website.</comment>
@@ -450,9 +447,6 @@
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Промяна на главната парола</value>
-  </data>
-  <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Главната парола на трезор може да се промени чрез сайта bitwarden.com. Искате ли да го посетите?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Затваряне</value>
@@ -707,9 +701,6 @@
   <data name="TwoStepLogin" xml:space="preserve">
     <value>Двустепенно удостоверяване</value>
   </data>
-  <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Двустепенното вписване защищава регистрацията ви като ви кара да потвърдите влизането си чрез устройство-ключ, приложение за идентификация, мобилно съобщение, телефонно обаждане или е-поща. Двустепенното вписване може да се включи чрез сайта bitwarden.com. Искате ли да го посетите?</value>
-  </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Отключване с {0}</value>
   </data>
@@ -953,6 +944,9 @@
   </data>
   <data name="UpdateKey" xml:space="preserve">
     <value>Трябва да обновите шифриращия си ключ, за да използвате тази възможност.</value>
+  </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Необходима е промяна на шифриращия ключ. Впишете се в трезора си по уеб, за да обновите своя шифриращ ключ.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Научете повече</value>
@@ -1554,9 +1548,6 @@
   </data>
   <data name="DefaultDarkTheme" xml:space="preserve">
     <value>Стандартен тъмен облик</value>
-  </data>
-  <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Изберете тъмния облик, който да се ползва, когато е избран стандартният (от системата) облик и тъмният режим на устройството Ви е включен.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Копиране на бележките</value>
@@ -2413,9 +2404,9 @@ select Add TOTP to store the key safely</value>
   <data name="Service" xml:space="preserve">
     <value>Услуга</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2646,26 +2637,22 @@ select Add TOTP to store the key safely</value>
     <value>Запомняне на това устройство</value>
   </data>
   <data name="Passkey" xml:space="preserve">
-    <value>Passkey</value>
+    <value>Секретен ключ</value>
   </data>
   <data name="Passkeys" xml:space="preserve">
-    <value>Passkeys</value>
-  </data>
-  <data name="CreatedX" xml:space="preserve">
-    <value>Създадено на {0}</value>
-    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
+    <value>Секретни ключове</value>
   </data>
   <data name="Application" xml:space="preserve">
     <value>Приложение</value>
   </data>
   <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
-    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+    <value>Не може да редактирате приложението за секретни ключове, защото секретният ключ ще спре да работи</value>
   </data>
   <data name="PasskeyWillNotBeCopied" xml:space="preserve">
-    <value>Passkey will not be copied</value>
+    <value>Секретният ключ няма да бъде копиран</value>
   </data>
   <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
-    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+    <value>Секретният ключ няма да бъде копиран в клонирания елемент. Искате ли да продължите с клонирането на елемента?</value>
   </data>
   <data name="CopyApplication" xml:space="preserve">
     <value>Копиране на приложението</value>
@@ -2702,9 +2689,6 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Действието при изтичане на времето за достъп до трезора е променено на отписване</value>
-  </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>This item cannot be shared with the organization because there is one already with the same passkey.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Блокиране на авт. попълване</value>
@@ -2760,5 +2744,117 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Вписване в</value>
+  </data>
+  <data name="Vault" xml:space="preserve">
+    <value>Трезор</value>
+  </data>
+  <data name="Appearance" xml:space="preserve">
+    <value>Външен вид</value>
+  </data>
+  <data name="AccountSecurity" xml:space="preserve">
+    <value>Защита на регистрацията</value>
+  </data>
+  <data name="BitwardenHelpCenter" xml:space="preserve">
+    <value>Помощен център на Битуорден</value>
+  </data>
+  <data name="ContactBitwardenSupport" xml:space="preserve">
+    <value>Свържете се с поддръжката на Битуорден</value>
+  </data>
+  <data name="CopyAppInformation" xml:space="preserve">
+    <value>Копиране на информацията за приложението</value>
+  </data>
+  <data name="SyncNow" xml:space="preserve">
+    <value>Синхронизиране сега</value>
+  </data>
+  <data name="UnlockOptions" xml:space="preserve">
+    <value>Настройки за отключване</value>
+  </data>
+  <data name="SessionTimeout" xml:space="preserve">
+    <value>Изтичане на времето за сесията</value>
+  </data>
+  <data name="SessionTimeoutAction" xml:space="preserve">
+    <value>Действие при изтичане на времето за сесията</value>
+  </data>
+  <data name="AccountFingerprintPhrase" xml:space="preserve">
+    <value>Уникална фраза, идентифицираща регистрацията Ви</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="OneHourAndOneMinute" xml:space="preserve">
+    <value>Един час и една минута</value>
+  </data>
+  <data name="OneHourAndXMinute" xml:space="preserve">
+    <value>Един час и {0} минути</value>
+  </data>
+  <data name="XHoursAndOneMinute" xml:space="preserve">
+    <value>{0} часа и една минута</value>
+  </data>
+  <data name="XHoursAndYMinutes" xml:space="preserve">
+    <value>{0} часа и {1} минути</value>
+  </data>
+  <data name="XHours" xml:space="preserve">
+    <value>{0} часа</value>
+  </data>
+  <data name="AutofillServicesExplanationLong" xml:space="preserve">
+    <value>Подсистемата за автоматично попълване на Андроид се използва за попълване на данните за вход в други приложения на устройството.</value>
+  </data>
+  <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
+    <value>Използвайте вграденото автоматично попълване, ако избраната от Вас клавиатура го поддържа. Иначе използвайте слоя по подразбиране.</value>
+  </data>
+  <data name="AdditionalOptions" xml:space="preserve">
+    <value>Допълнителни настройки</value>
+  </data>
+  <data name="ContinueToWebApp" xml:space="preserve">
+    <value>Продължаване към уеб приложението?</value>
+  </data>
+  <data name="ContinueToX" xml:space="preserve">
+    <value>Продължаване към {0}?</value>
+    <comment>The parameter is an URL, like bitwarden.com.</comment>
+  </data>
+  <data name="ContinueToHelpCenter" xml:space="preserve">
+    <value>Продължаване към помощния център?</value>
+  </data>
+  <data name="ContinueToContactSupport" xml:space="preserve">
+    <value>Продължаване към връзка с поддръжката?</value>
+  </data>
+  <data name="ContinueToAppStore" xml:space="preserve">
+    <value>Продължаване към магазина за приложения?</value>
+  </data>
+  <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
+    <value>Подобрете защитата на регистрацията си, като настроите двустепенното удостоверяване в уеб приложението на Битуорден.</value>
+  </data>
+  <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
+    <value>Може да промените главната си парола в уеб приложението на Битуорден.</value>
+  </data>
+  <data name="YouCanImportDataToYourVaultOnX" xml:space="preserve">
+    <value>Може да внесете данни в трезора си на {0}.</value>
+    <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
+  </data>
+  <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
+    <value>Научете повече относно това как да използвате Битуорден в помощния център.</value>
+  </data>
+  <data name="ContactSupportDescriptionLong" xml:space="preserve">
+    <value>Не намирате това, което търсите? Свържете се с поддръжката на Битуорден на bitwarden.com.</value>
+  </data>
+  <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
+    <value>Разгледайте още от възможностите на регистрацията си в Битуорден в уеб приложението.</value>
+  </data>
+  <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
+    <value>Битуорден позволява да споделяте части от трезора си чрез използването на организация. Научете повече на сайта bitwarden.com.</value>
+  </data>
+  <data name="RateAppDescriptionLong" xml:space="preserve">
+    <value>Помогнете на другите да разберат дали Битуорден е подходящ за тях. Посетете магазина за приложения и дайте оценка още сега.</value>
+  </data>
+  <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
+    <value>Изберете коя тъмна тема да се използва когато е включен тъмният режим на устройството Ви</value>
+  </data>
+  <data name="CreatedXY" xml:space="preserve">
+    <value>Създадено на {0}, {1}</value>
+    <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Твърде много опити</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Акаунтът е отписан.</value>
   </data>
 </root>

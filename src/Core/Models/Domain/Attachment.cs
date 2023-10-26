@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.View;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 
 namespace Bit.Core.Models.Domain
@@ -11,11 +13,11 @@ namespace Bit.Core.Models.Domain
     {
         private HashSet<string> _map = new HashSet<string>
         {
-            "Id",
-            "Url",
-            "SizeName",
-            "FileName",
-            "Key"
+            nameof(Id),
+            nameof(Url),
+            nameof(SizeName),
+            nameof(FileName),
+            nameof(Key)
         };
 
         public Attachment() { }
@@ -23,7 +25,7 @@ namespace Bit.Core.Models.Domain
         public Attachment(AttachmentData obj, bool alreadyEncrypted = false)
         {
             Size = obj.Size;
-            BuildDomainModel(this, obj, _map, alreadyEncrypted, new HashSet<string> { "Id", "Url", "SizeName" });
+            BuildDomainModel(this, obj, _map, alreadyEncrypted, new HashSet<string> { nameof(Id), nameof(Url), nameof(SizeName) });
         }
 
         public string Id { get; set; }
@@ -33,25 +35,26 @@ namespace Bit.Core.Models.Domain
         public EncString Key { get; set; }
         public EncString FileName { get; set; }
 
-        public async Task<AttachmentView> DecryptAsync(string orgId)
+        public async Task<AttachmentView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
             var view = await DecryptObjAsync(new AttachmentView(this), this, new HashSet<string>
             {
-                "FileName"
-            }, orgId);
+                nameof(FileName)
+            }, orgId, key);
 
             if (Key != null)
             {
-                var cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
                 try
                 {
-                    var orgKey = await cryptoService.GetOrgKeyAsync(orgId);
-                    var decValue = await cryptoService.DecryptToBytesAsync(Key, orgKey);
+                    var cryptoService = ServiceContainer.Resolve<ICryptoService>();
+
+                    var decryptKey = key ?? await cryptoService.GetOrgKeyAsync(orgId);
+                    var decValue = await cryptoService.DecryptToBytesAsync(Key, decryptKey);
                     view.Key = new SymmetricCryptoKey(decValue);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // TODO: error?
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
                 }
             }
             return view;
@@ -61,7 +64,7 @@ namespace Bit.Core.Models.Domain
         {
             var a = new AttachmentData();
             a.Size = Size;
-            BuildDataModel(this, a, _map, new HashSet<string> { "Id", "Url", "SizeName" });
+            BuildDataModel(this, a, _map, new HashSet<string> { nameof(Id), nameof(Url), nameof(SizeName) });
             return a;
         }
     }

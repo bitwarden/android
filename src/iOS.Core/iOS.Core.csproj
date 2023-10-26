@@ -53,6 +53,17 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
+    <OutputPath>bin\iPhoneSimulator\Release\</OutputPath>
+    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;VSX1000</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FDroid|AnyCPU'">
     <OutputPath>bin\FDroid\</OutputPath>
     <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
@@ -146,7 +157,6 @@
     <Compile Include="Controllers\ExtendedUITableViewCell.cs" />
     <Compile Include="Controllers\ExtendedUIViewController.cs" />
     <Compile Include="Controllers\ExtendedUITableViewSource.cs" />
-    <Compile Include="Controllers\LockPasswordViewController.cs" />
     <Compile Include="Controllers\LoginAddViewController.cs" />
     <Compile Include="Controllers\PasswordGeneratorViewController.cs" />
     <Compile Include="Models\AppExtensionContext.cs" />

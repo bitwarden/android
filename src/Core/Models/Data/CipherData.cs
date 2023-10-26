@@ -28,6 +28,7 @@ namespace Bit.Core.Models.Data
             Notes = response.Notes;
             CollectionIds = collectionIds?.ToList() ?? response.CollectionIds;
             Reprompt = response.Reprompt;
+            Key = response.Key;
 
             try // Added to address Issue (https://github.com/bitwarden/mobile/issues/1006)
             {
@@ -44,9 +45,6 @@ namespace Bit.Core.Models.Data
                         break;
                     case Enums.CipherType.Identity:
                         Identity = new IdentityData(response.Identity);
-                        break;
-                    case Enums.CipherType.Fido2Key:
-                        Fido2Key = new Fido2KeyData(response.Fido2Key);
                         break;
                     default:
                         break;
@@ -86,11 +84,11 @@ namespace Bit.Core.Models.Data
         public SecureNoteData SecureNote { get; set; }
         public CardData Card { get; set; }
         public IdentityData Identity { get; set; }
-        public Fido2KeyData Fido2Key { get; set; }
         public List<FieldData> Fields { get; set; }
         public List<AttachmentData> Attachments { get; set; }
         public List<PasswordHistoryData> PasswordHistory { get; set; }
         public List<string> CollectionIds { get; set; }
         public Enums.CipherRepromptType Reprompt { get; set; }
+        public string Key { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
@@ -44,8 +45,9 @@ namespace Bit.Core.Utilities
             var organizationService = new OrganizationService(stateService, apiService);
             var settingsService = new SettingsService(stateService);
             var fileUploadService = new FileUploadService(apiService);
+            var configService = new ConfigService(apiService, stateService, logger);
             var cipherService = new CipherService(cryptoService, stateService, settingsService, apiService,
-                fileUploadService, storageService, i18nService, () => searchService, clearCipherCacheKey,
+                fileUploadService, storageService, i18nService, () => searchService, configService, clearCipherCacheKey,
                 allClearCipherCacheKeys);
             var folderService = new FolderService(cryptoService, stateService, apiService, i18nService, cipherService);
             var collectionService = new CollectionService(cryptoService, stateService, i18nService);
@@ -58,8 +60,7 @@ namespace Bit.Core.Utilities
             var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService,
                 cryptoService, stateService, keyConnectorService);
             var vaultTimeoutService = new VaultTimeoutService(cryptoService, stateService, platformUtilsService,
-                folderService, cipherService, collectionService, searchService, messagingService, tokenService,
-                userVerificationService,
+                folderService, cipherService, collectionService, searchService, tokenService, userVerificationService,
                 (extras) =>
                 {
                     messagingService.Send("locked", extras);
@@ -89,7 +90,6 @@ namespace Bit.Core.Utilities
             var environmentService = new EnvironmentService(apiService, stateService, conditionedRunner);
             var eventService = new EventService(apiService, stateService, organizationService, cipherService);
             var usernameGenerationService = new UsernameGenerationService(cryptoService, apiService, stateService);
-            var configService = new ConfigService(apiService, stateService, logger);
 
             Register<IConditionedAwaiterManager>(conditionedRunner);
             Register<ITokenService>("tokenService", tokenService);
@@ -97,6 +97,7 @@ namespace Bit.Core.Utilities
             Register<IAppIdService>("appIdService", appIdService);
             Register<IOrganizationService>("organizationService", organizationService);
             Register<ISettingsService>("settingsService", settingsService);
+            Register<IConfigService>(configService);
             Register<ICipherService>("cipherService", cipherService);
             Register<IFolderService>("folderService", folderService);
             Register<ICollectionService>("collectionService", collectionService);
@@ -115,7 +116,6 @@ namespace Bit.Core.Utilities
             Register<IEnvironmentService>("environmentService", environmentService);
             Register<IEventService>("eventService", eventService);
             Register<IUsernameGenerationService>(usernameGenerationService);
-            Register<IConfigService>(configService);
             Register<IDeviceTrustCryptoService>(deviceTrustCryptoService);
             Register<IPasswordResetEnrollmentService>(passwordResetEnrollmentService);
         }
@@ -229,7 +229,7 @@ namespace Bit.Core.Utilities
                 // and lower case the 2nd one (index 1)
                 indexToLowerCase = 1;
             }
-            sb.Append(char.ToLower(typeName[indexToLowerCase]));
+            sb.Append(char.ToLower(typeName[indexToLowerCase], new CultureInfo("en-US")));
             sb.Append(typeName.Substring(++indexToLowerCase));
             return sb.ToString();
         }

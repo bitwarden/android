@@ -13,6 +13,7 @@ namespace Bit.Core.Abstractions
         Task RefreshKeysAsync();
         Task SetUserKeyAsync(UserKey userKey, string userId = null);
         Task<UserKey> GetUserKeyAsync(string userId = null);
+        Task<bool> IsLegacyUserAsync(MasterKey masterKey = null, string userId = null);
         Task<UserKey> GetUserKeyWithLegacySupportAsync(string userId = null);
         Task<bool> HasUserKeyAsync(string userId = null);
         Task<bool> HasEncryptedUserKeyAsync(string userId = null);
@@ -60,5 +61,7 @@ namespace Bit.Core.Abstractions
         Task<EncString> EncryptAsync(string plainValue, SymmetricCryptoKey key = null);
         Task<EncByteArray> EncryptToBytesAsync(byte[] plainValue, SymmetricCryptoKey key = null);
         Task<UserKey> DecryptAndMigrateOldPinKeyAsync(bool masterPasswordOnRestart, string pin, string email, KdfConfig kdfConfig, EncString oldPinKey);
+        Task<MasterKey> GetOrDeriveMasterKeyAsync(string password, string userId = null);
+        Task UpdateMasterKeyAndUserKeyAsync(MasterKey masterKey);
     }
 }

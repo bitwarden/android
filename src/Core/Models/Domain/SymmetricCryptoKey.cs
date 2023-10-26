@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Bit.Core.Enums;
 
 namespace Bit.Core.Models.Domain
@@ -99,6 +98,13 @@ namespace Bit.Core.Models.Domain
     public class OrgKey : SymmetricCryptoKey
     {
         public OrgKey(byte[] key, EncryptionType? encType = null)
+            : base(key, encType)
+        { }
+    }
+
+    public class CipherKey : SymmetricCryptoKey
+    {
+        public CipherKey(byte[] key, EncryptionType? encType = null)
             : base(key, encType)
         { }
     }

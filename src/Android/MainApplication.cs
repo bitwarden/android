@@ -159,7 +159,8 @@ namespace Bit.Droid
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);
             var biometricService = new BiometricService(stateService, cryptoService);
-            var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
+            var userPinService = new UserPinService(stateService, cryptoService);
+            var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService, stateService);
 
             ServiceContainer.Register<ISynchronousStorageService>(preferencesStorage);
             ServiceContainer.Register<IBroadcasterService>("broadcasterService", broadcasterService);
@@ -182,6 +183,7 @@ namespace Bit.Droid
             ServiceContainer.Register<ICryptoService>("cryptoService", cryptoService);
             ServiceContainer.Register<IPasswordRepromptService>("passwordRepromptService", passwordRepromptService);
             ServiceContainer.Register<IAvatarImageSourcePool>("avatarImageSourcePool", new AvatarImageSourcePool());
+            ServiceContainer.Register<IUserPinService>(userPinService);
 
             // Push
 #if FDROID

@@ -60,9 +60,6 @@ namespace Bit.App.Pages
                         case CipherType.Identity:
                             _name = AppResources.TypeIdentity;
                             break;
-                        case CipherType.Fido2Key:
-                            _name = AppResources.Passkey;
-                            break;
                         default:
                             break;
                     }
@@ -110,9 +107,6 @@ namespace Bit.App.Pages
                             break;
                         case CipherType.Identity:
                             _icon = BitwardenIcons.IdCard;
-                            break;
-                        case CipherType.Fido2Key:
-                            _icon = BitwardenIcons.Passkey;
                             break;
                         default:
                             _icon = BitwardenIcons.Globe;
