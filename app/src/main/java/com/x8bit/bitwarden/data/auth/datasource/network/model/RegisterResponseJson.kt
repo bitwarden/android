@@ -42,4 +42,30 @@ sealed class RegisterResponseJson {
             val captchaKeys: List<String>,
         )
     }
+
+    /**
+     * Represents the json body of an invalid register request.
+     *
+     * @param message
+     * @param validationErrors a map where each value is a list of error messages for each key.
+     * The values in the array should be used for display to the user, since the keys tend to come
+     * back as nonsense. (eg: empty string key)
+     */
+    @Serializable
+    data class Invalid(
+        @SerialName("message")
+        val message: String?,
+
+        @SerialName("validationErrors")
+        val validationErrors: Map<String, List<String>>?,
+    ) : RegisterResponseJson()
+
+    /**
+     * A different register error with a message.
+     */
+    @Serializable
+    data class Error(
+        @SerialName("Message")
+        val message: String?,
+    ) : RegisterResponseJson()
 }

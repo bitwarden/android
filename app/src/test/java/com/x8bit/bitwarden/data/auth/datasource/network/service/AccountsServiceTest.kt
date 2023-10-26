@@ -10,7 +10,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import retrofit2.create
 
@@ -19,7 +18,9 @@ class AccountsServiceTest : BaseServiceTest() {
     private val accountsApi: AccountsApi = retrofit.create()
     private val service = AccountsServiceImpl(
         accountsApi = accountsApi,
-        json = Json,
+        json = Json {
+            ignoreUnknownKeys = true
+        },
     )
 
     @Test
@@ -117,7 +118,7 @@ class AccountsServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `register failure json should be failure`() = runTest {
+    fun `register failure with Invalid json should be Invalid`() = runTest {
         val json = """
             {
               "message": "The model state is invalid.",
@@ -134,7 +135,32 @@ class AccountsServiceTest : BaseServiceTest() {
             """
         val response = MockResponse().setResponseCode(400).setBody(json)
         server.enqueue(response)
-        assertTrue(service.register(registerRequestBody).isFailure)
+        val result = service.register(registerRequestBody)
+        assertEquals(
+            RegisterResponseJson.Invalid(
+                message = "The model state is invalid.",
+                validationErrors = mapOf("" to listOf("Email '' is already taken.")),
+            ),
+            result.getOrThrow(),
+        )
+    }
+    @Test
+    fun `register failure with Error json should return Error`() = runTest {
+        val json = """
+            {
+              "Object": "error",
+              "Message": "Slow down! Too many requests. Try again soon."
+            }
+        """.trimIndent()
+        val response = MockResponse().setResponseCode(429).setBody(json)
+        server.enqueue(response)
+        val result = service.register(registerRequestBody)
+        assertEquals(
+            RegisterResponseJson.Error(
+                message = "Slow down! Too many requests. Try again soon.",
+            ),
+            result.getOrThrow(),
+        )
     }
 
     @Test

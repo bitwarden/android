@@ -18,16 +18,24 @@ class AccountsServiceImpl constructor(
     override suspend fun preLogin(email: String): Result<PreLoginResponseJson> =
         accountsApi.preLogin(PreLoginRequestJson(email = email))
 
-    // TODO add error parsing and pass along error message for validations BIT-763
+    @Suppress("MagicNumber")
     override suspend fun register(body: RegisterRequestJson): Result<RegisterResponseJson> =
         accountsApi
             .register(body)
             .recoverCatching { throwable ->
-                throwable
-                    .toBitwardenError()
-                    .parseErrorBodyOrNull<RegisterResponseJson.CaptchaRequired>(
-                        code = HttpURLConnection.HTTP_BAD_REQUEST,
-                        json = json,
-                    ) ?: throw throwable
+                val bitwardenError = throwable.toBitwardenError()
+                bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.CaptchaRequired>(
+                    code = HttpURLConnection.HTTP_BAD_REQUEST,
+                    json = json,
+                ) ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
+                    codes = listOf(
+                        HttpURLConnection.HTTP_BAD_REQUEST,
+                        429,
+                    ),
+                    json = json,
+                ) ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Error>(
+                    code = 429,
+                    json = json,
+                ) ?: throw throwable
             }
 }
