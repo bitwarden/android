@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
   <string name="about">Haqqında</string>
   <string name="add">Əlavə et</string>
   <string name="add_folder">Qovluq əlavə et</string>
@@ -13,7 +13,7 @@
   <string name="copy_username">İstifadəçi adını kopyalayın</string>
   <string name="credits">Ərsəyə gətirənlər</string>
   <string name="delete">Sil</string>
-  <string name="deleting">Silinir…</string>
+  <string name="deleting">Silinir...</string>
   <string name="do_you_really_want_to_delete">Həqiqətən silmək istəyirsiniz? Bunun geri dönüşü yoxdur.</string>
   <string name="edit">Redaktə edin</string>
   <string name="edit_folder">Qovluğa düzəliş et</string>
@@ -59,7 +59,7 @@
   <string name="password">Parol</string>
   <string name="save">Saxla</string>
   <string name="move">Daşı</string>
-  <string name="saving">Saxlanılır…</string>
+  <string name="saving">Saxlanılır...</string>
   <string name="settings">Tənzimləmələr</string>
   <string name="show">Göstər</string>
   <string name="item_deleted">Element silindi.</string>
@@ -78,7 +78,6 @@
   <string name="version">Versiya</string>
   <string name="view">Bax</string>
   <string name="visit_our_website">Veb saytımızı ziyarət edin</string>
-  <string name="visit_our_website_description">Kömək almaq, xəbərlərə baxmaq, bizə e-poçt göndərmək və/və ya \"Bitwarden\"in necə istifadə edildiyini öyrənmək üçün veb saytımızı ziyarət edin.</string>
   <string name="website">Veb sayt</string>
   <string name="yes">Bəli</string>
   <string name="account">Hesab</string>
@@ -96,11 +95,10 @@
   <string name="change_email">E-poçtu dəyişdir</string>
   <string name="change_email_confirmation">E-poçt ünvanınızı bitwarden.com veb anbarında dəyişdirə bilərsiniz. İndi saytı ziyarət etmək istəyirsiniz?</string>
   <string name="change_master_password">Ana parolu dəyişdir</string>
-  <string name="change_password_confirmation">Ana parolunuzu bitwarden.com veb anbarında dəyişdirə bilərsiniz. İndi saytı ziyarət etmək istəyirsiniz?</string>
   <string name="close">Bağla</string>
   <string name="continue_text">Davam</string>
   <string name="create_account">Hesab yarat</string>
-  <string name="creating_account">Hesab yaradılır…</string>
+  <string name="creating_account">Hesab yaradılır...</string>
   <string name="edit_item">Elementə düzəliş et</string>
   <string name="enable_automatic_syncing">Avto-eyniləşdirməni fəallaşdır</string>
   <string name="enter_email_for_hint">Ana parol məsləhətini alacağınız hesabınızın e-poçt ünvanını daxil edin.</string>
@@ -132,7 +130,7 @@
   <string name="vault_timeout">Anbara müraciət bitəcək</string>
   <string name="vault_timeout_action">Anbara müraciət vaxtının bitmə əməliyyatı</string>
   <string name="vault_timeout_log_out_confirmation">Çıxış edəndə, anbarınıza bütün müraciətiniz dayanacaq və vaxt bitməsindən sonra onlayn kimlik təsdiqləməsi tələb olunacaq. Bu tənzimləməni istifadə etmək istədiyinizə əminsiniz?</string>
-  <string name="logging_in">Giriş edilir…</string>
+  <string name="logging_in">Giriş edilir...</string>
   <string name="login_or_create_new_account">Güvənli anbarınıza müraciət etmək üçün giriş edin və ya yeni bir hesab yaradın.</string>
   <string name="manage">İdarə et</string>
   <string name="master_password_confirmation_val_message">Parol təsdiqləmə doğru deyil.</string>
@@ -171,14 +169,13 @@
   <string name="set_pin_direction">Tətbiq kilidini açmaq üçün 4 rəqəmli PIN kod daxil edin.</string>
   <string name="item_information">Element məlumatları</string>
   <string name="item_updated">Element güncəlləndi.</string>
-  <string name="submitting">Göndərilir…</string>
-  <string name="syncing">Eyniləşdirilir…</string>
+  <string name="submitting">Göndərilir...</string>
+  <string name="syncing">Eyniləşdirilir...</string>
   <string name="syncing_complete">Eyniləşdirmə tamamlandı.</string>
   <string name="syncing_failed">Uğursuz eyniləşdirmə.</string>
   <string name="sync_vault_now">Anbarı indi eyniləşdir</string>
   <string name="touch_id">Touch ID</string>
   <string name="two_step_login">İki mərhələli giriş</string>
-  <string name="two_step_login_confirmation">İki mərhələli giriş, güvənlik açarı, kimlik təsdiqləyici tətbiq, SMS, telefon zəngi və ya e-poçt kimi digər cihazlarla girişinizi təsdiqləməyinizi tələb edərək hesabınızı daha da güvənli edir. İki mərhələli giriş, bitwarden.com veb anbarında fəallaşdırıla bilər. Veb saytı indi ziyarət etmək istəyirsiniz?</string>
   <string name="unlock_with">%1$s ilə kilidi açın</string>
   <string name="unlock_with_pin">PIN kod ilə kilidi açın</string>
   <string name="validating">Təsdiqlənir</string>
@@ -208,10 +205,7 @@
   <string name="bitwarden_autofill_service_match_confirm">Bu elementi avto-doldurmaq istədiyinizə əminsiniz? \"%1$s\" ilə tam uyğun gəlmir.</string>
   <string name="matching_items">Uyğun gələnlər</string>
   <string name="possible_matching_items">Uyğun gələ bilənlər</string>
-  <string-array name="Search">
-    <item>Axtar</item>
-    <item>Axtar</item>
-  </string-array>
+  <string name="search">Axtar</string>
   <string name="bitwarden_autofill_service_search">\"%1$s\" üçün avto-doldurma elementi axtarırsınız.</string>
   <string name="learn_org">Təşkilatlar barədə daha ətraflı</string>
   <string name="cannot_open_app">\"%1$s\" tətbiqi açıla bilmir.</string>
@@ -233,7 +227,7 @@
   <string name="attachments">Qoşmalar</string>
   <string name="unable_to_download_file">Fayl endirilə bilmir.</string>
   <string name="unable_to_open_file">Cihazınız bu növdəki faylları aça bilmir.</string>
-  <string name="downloading">Endirilir…</string>
+  <string name="downloading">Endirilir...</string>
   <string name="attachment_large_warning">Bu qoşmanın həcmi %1$s. Faylı cihazınıza endirmək istədiyinizə əminsiniz?</string>
   <string name="authenticator_key">Kimlik təsdiqləyici açarı (TOTP)</string>
   <string name="verification_code_totp">Təsdiqləmə kodu (TOTP)</string>
@@ -258,6 +252,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="feature_unavailable">Özəllik əlçatmazdır</string>
   <string name="max_file_size">Maksimal fayl həcmi 100 MB-dır</string>
   <string name="update_key">Şifrələmə açarınızı güncəlləyənə qədər bu özəlliyi istifadə edə bilməzsiniz.</string>
+  <string name="encryption_key_migration_required_description_long">Şifrələmə açarının daşınması tələb olunur. Şifrələmə açarınızı güncəlləmək üçün zəhmət olmasa veb anbar üzərindən giriş edin.</string>
   <string name="learn_more">Daha ətraflı</string>
   <string name="api_url">API server URL-si</string>
   <string name="custom_environment">Özəl mühit</string>
@@ -386,7 +381,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="secure_notes">Güvənli qeydlər</string>
   <string name="all_items">Bütün elementlər</string>
   <string name="ur_is">URI-lər</string>
-  <string name="checking_password">Parol yoxlanılır…</string>
+  <string name="checking_password">Parol yoxlanılır...</string>
   <string name="check_password">Parolunuzun oğurlanıb oğurlanmadığını yoxlayın.</string>
   <string name="password_exposed">Bu parol, məlumat pozuntularında %1$s dəfə üzə çıxıb. Dəyişdirməyi məsləhət görürük.</string>
   <string name="password_safe">Bu parol, məlumat pozuntularında qeydə alınmayıb. Rahatlıqla istifadə edə bilərsiniz.</string>
@@ -450,7 +445,6 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="theme_description">Tətbiqin rəng temasını dəyişdirin.</string>
   <string name="theme_default">İlkin (Sistem)</string>
   <string name="default_dark_theme">İlkin tünd tema</string>
-  <string name="default_dark_theme_description">Cihazınızda tünd rejim fəal olanda İlkin (Sistem) temanı istifadə edərkən istifadə ediləcək tünd temanı seçin</string>
   <string name="copy_notes">Qeydləri kopyala</string>
   <string name="exit">Çıxış</string>
   <string name="exit_confirmation">Bitwarden-dən çıxış etmək istədiyinizə əminsiniz?</string>
@@ -499,10 +493,10 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="save_attachment_success">Qoşma uğurla saxlanıldı</string>
   <string name="autofill_tile_accessibility_required">Avto-doldurma qutusunu istifadə etmək üçün zəhmət olmasa \"Bitwarden\" tənzimləmələrində \"Avto-doldurma əlçatımlılıq xidməti\"ni fəallaşdırın.</string>
   <string name="autofill_tile_uri_not_found">Heç bir parol sahəsi aşkarlanmadı</string>
-  <string name="soft_deleting">Tullantı qutusuna göndərilir…</string>
+  <string name="soft_deleting">Tullantı qutusuna göndərilir...</string>
   <string name="item_soft_deleted">Element tullantı qutusuna göndərildi.</string>
   <string name="restore">Bərpa et</string>
-  <string name="restoring">Bərpa edilid…</string>
+  <string name="restoring">Bərpa edilid...</string>
   <string name="item_restored">Element bərpa edildi.</string>
   <string name="trash">Tullantı qutusu</string>
   <string name="search_trash">Tullantı qutusunda axtar</string>
@@ -664,7 +658,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="options_collapsed">Seçimlər yığcamlaşdırıldı, genişləndirmək üçün toxunun.</string>
   <string name="uppercase_ato_z">Böyük hərf (A-Z)</string>
   <string name="lowercase_ato_z">Kiçik hərf (Z-A)</string>
-  <string name="numbers_zero_to_nine">Rəqəmlər (0–9)</string>
+  <string name="numbers_zero_to_nine">Rəqəmlər (0-9)</string>
   <string name="special_characters">Xüsusi simvollar (!@#$%^&amp;*)</string>
   <string name="tap_to_go_back">Geriyə getmək üçün toxun</string>
   <string name="password_is_visible_tap_to_hide">Parol görünür, gizlətmək üçün toxunun.</string>
@@ -721,7 +715,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="domain_name_required_parenthesis">Domen adı (tələb olunur)</string>
   <string name="api_key_required_parenthesis">API açarı (tələb olunur)</string>
   <string name="service">Xidmət</string>
-  <string name="anon_addy">AnonAddy</string>
+  <string name="addy_io">addy.io</string>
   <string name="firefox_relay">Firefox Relay</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
@@ -798,17 +792,16 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="approve_with_master_password">Ana parolla təsdiqlə</string>
   <string name="turn_off_using_public_device">Hər kəsə açıq bir cihaz istifadə edərək söndür</string>
   <string name="remember_this_device">Bu cihazı xatırla</string>
-  <string name="passkey">Passkey</string>
-  <string name="passkeys">Passkeys</string>
-  <string name="created_x">Created %1$s</string>
-  <string name="application">Application</string>
-  <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">You cannot edit passkey application because it would invalidate the passkey</string>
-  <string name="passkey_will_not_be_copied">Passkey will not be copied</string>
-  <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</string>
-  <string name="copy_application">Copy application</string>
-  <string name="available_for_two_step_login">Available for two-step login</string>
+  <string name="passkey">Keçid açarı</string>
+  <string name="passkeys">Keçid açarı</string>
+  <string name="application">Tətbiq</string>
+  <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">Keçid açarı tətbiqinə düzəliş edə bilməzsiniz, çünki bu, keçid açarını yararsız edəcək</string>
+  <string name="passkey_will_not_be_copied">Keçid açarı kopyalanmır</string>
+  <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Keçid açarı, klonlanmış elementə kopyalanmayacaq. Bu elementi klonlamağa davam etmək istəyirsiniz?</string>
+  <string name="copy_application">Tətbiqi kopyala</string>
+  <string name="available_for_two_step_login">İki addımlı giriş üçün əlçatandır</string>
   <string name="master_password_re_prompt_help">Ana parolu təkrar soruş köməyi</string>
-  <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</string>
+  <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">Yetərsiz yaddaşa görə kilid açma uğursuz ola bilər. Həll etmək üçün KDF yaddaş tənzimləmələrinizi azaldın və ya biometrik kilid açmanı quraşdırın.</string>
   <string name="invalid_api_key">Yararsız API açarı</string>
   <string name="invalid_api_token">Yararsız API tokeni</string>
   <string name="admin_approval_requested">Admin təsdiqi tələb olunur</string>
@@ -817,7 +810,6 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="trouble_logging_in">Girişdə problem var?</string>
   <string name="logging_in_as_x">%1$s olaraq giriş edilir</string>
   <string name="vault_timeout_action_changed_to_log_out">Anbar vaxt bitməsi əməliyyatı \"çıxış et\" olaraq dəyişdirildi</string>
-  <string name="this_item_cannot_be_shared_with_the_organization_because_there_is_one_already_with_the_same_passkey">This item cannot be shared with the organization because there is one already with the same passkey.</string>
   <string name="block_auto_fill">Avto-doldurmanı əngəllə</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">Bu URI-lər üçün avto-doldurma təklif olunmayacaq.</string>
   <string name="new_blocked_uri">Yeni əngəllənən URI</string>
@@ -836,13 +828,40 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Cihazla giriş etmə, Bitwarden tətbiqinin tənzimləmələrində quraşdırılmalıdır. Başqa bir seçimə ehtiyacınız var?</string>
   <string name="log_in_with_device">Cihazla giriş et</string>
   <string name="logging_in_on">Giriş edilir</string>
-  <string name="there_are_no_items_to_list">Siyahılanacaq heç bir element yoxdur</string>
-  <string name="to_view_verification_codes_upgrade_to_premium">Təsdiqləmə kodlarına baxmaq üçün premiuma yüksəldin</string>
-  <string name="add2_factor_autentication_to_an_item_to_view_verification_codes">Təsdiqləmə kodlarına baxmaq üçün bir elementə 2 faktorlu kimlik təsdiqləmə əlavə edin</string>
-  <string name="log_in_to_bitwarden_on_your_i_phone_to_view_verification_codes">Təsdiqləmə kodlarına baxmaq üçün iPhone-nunuzda Bitwarden-ə giriş edin</string>
-  <string name="syncing_items_containing_verification_codes">Təsdiqləmə kodlarını ehtiva edən elementlər sinxronlaşdırılır</string>
-  <string name="unlock_bitwarden_on_your_i_phone_to_view_verification_codes">Təsdiqləmə kodlarına baxmaq üçün iPhone-nunuzda Bitwarden-in kilidini açın</string>
-  <string name="set_up_bitwarden_to_view_items_containing_verification_codes">Təsdiqləmə kodlarını ehtiva edən elementlərə baxmaq üçün Bitwarden-i quraşdırın</string>
-  <string name="no_items_found">Heç bir element tapılmadı</string>
-  <string name="set_up_apple_watch_passcode_in_order_to_use_bitwarden">Bitwarden-i istifadə etmək üçün Apple Watch parolunu quraşdırın</string>
+  <string name="vault">Anbar</string>
+  <string name="appearance">Görünüş</string>
+  <string name="account_security">Hesab güvənliyi</string>
+  <string name="bitwarden_help_center">Bitwarden Kömək Mərkəzi</string>
+  <string name="contact_bitwarden_support">Bitwarden dəstəyi ilə əlaqə saxla</string>
+  <string name="copy_app_information">Tətbiq məlumatlarını kopyala</string>
+  <string name="sync_now">İndi sinxr.</string>
+  <string name="unlock_options">Kilid açma seçimləri</string>
+  <string name="session_timeout">Seans vaxt bitməsi</string>
+  <string name="session_timeout_action">Seans vaxt bitmə əməliyyatı</string>
+  <string name="account_fingerprint_phrase">Hesab barmaq izi ifadəsi</string>
+  <string name="one_hour_and_one_minute">Bir saat bir dəqiqə</string>
+  <string name="one_hour_and_x_minute">Bir saat %1$s dəqiqə</string>
+  <string name="x_hours_and_one_minute">%1$s saat bir dəqiqə</string>
+  <string name="x_hours_and_y_minutes">%1$s saat %2$s dəqiqə</string>
+  <string name="x_hours">%1$s saat</string>
+  <string name="autofill_services_explanation_long">Android Avto-doldurma Çərçivəsi, giriş məlumatlarını cihazınızdakı digər tətbiqlərə doldurmağa kömək etmək üçün istifadə olunur.</string>
+  <string name="use_inline_autofill_explanation_long">Seçdiyiniz klaviatura dəstəkləyirsə sətir daxili avto-doldurmani istifadə edin. Əks halda, ilkin örtük istifadə edin.</string>
+  <string name="additional_options">Əlavə seçimlər</string>
+  <string name="continue_to_web_app">Veb tətbiqlə davam edilsin?</string>
+  <string name="continue_to_x">%1$s ilə davam edilsin?</string>
+  <string name="continue_to_help_center">Kömək mərkəzi ilə davam edilsin?</string>
+  <string name="continue_to_contact_support">Dəstək komandası ilə əlaqə qurmağa davam edilsin?</string>
+  <string name="continue_to_app_store">Tətbiq mağazası ilə davam edilsin?</string>
+  <string name="two_step_login_description_long">Bitwarden veb tətbiqində iki addımlı girişi quraraq hesabınızı daha güvənli edin.</string>
+  <string name="change_master_password_description_long">Ana parolunuzu Bitwarden veb tətbiqində dəyişdirə bilərsiniz.</string>
+  <string name="you_can_import_data_to_your_vault_on_x">Datanı %1$s üzərindən anbarınıza köçürə bilərsiniz.</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Kömək mərkəzində Bitwarden-in necə istifadə ediləcəyi ilə bağlı ətraflı öyrənin.</string>
+  <string name="contact_support_description_long">Axtardığınızı tapa bilmirsiniz? bitwarden.com üzərindən Bitwarden dəstəyinə müraciət edin.</string>
+  <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Veb tətbiqində Bitwarden hesabınızın daha çox özəlliyini kəşf edin.</string>
+  <string name="learn_about_organizations_description_long">Bitwarden, bir təşkilat hesabı istifadə edərək anbar elementlərinizi başqaları ilə paylaşmağınıza icazə verər. bitwarden.com veb saytında ətraflı öyrənin.</string>
+  <string name="rate_app_description_long">Başqalarının Bitwarden-in onlar üçün uyğun olub-olmadığını öyrənməkdə kömək edin. Tətbiq mağazasını ziyarət edin və tətbiqimizi qiymətləndirin.</string>
+  <string name="default_dark_theme_description_long">Cihazınızda qaranlıq rejim açıq olduqda istifadə ediləcək qaranlıq temanı seçin</string>
+  <string name="created_xy">Yaradıldı: %1$s, %2$s</string>
+  <string name="too_many_attempts">Həddən artıq cəhd</string>
+  <string name="account_logged_out_biometric_exceeded">Hesabdan çıxış edildi.</string>
 </resources>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
   <string name="about">Om</string>
   <string name="add">Legg til</string>
   <string name="add_folder">Legg til en mappe</string>
@@ -13,7 +13,7 @@
   <string name="copy_username">Kopier brukernavn</string>
   <string name="credits">Krediteringer</string>
   <string name="delete">Slett</string>
-  <string name="deleting">Sletter…</string>
+  <string name="deleting">Sletter...</string>
   <string name="do_you_really_want_to_delete">Vil du virkelig slette den? Dette kan ikke angres på.</string>
   <string name="edit">Rediger</string>
   <string name="edit_folder">Rediger mappe</string>
@@ -55,11 +55,11 @@
   <string name="name">Navn</string>
   <string name="no">Nei</string>
   <string name="notes">Notater</string>
-  <string name="ok">Ok</string>
+  <string name="ok">OK</string>
   <string name="password">Passord</string>
   <string name="save">Lagre</string>
   <string name="move">Flytt</string>
-  <string name="saving">Lagrer…</string>
+  <string name="saving">Lagrer...</string>
   <string name="settings">Innstillinger</string>
   <string name="show">Vis</string>
   <string name="item_deleted">Elementet har blitt slettet.</string>
@@ -78,7 +78,6 @@
   <string name="version">Versjon</string>
   <string name="view">Vis</string>
   <string name="visit_our_website">Besøk nettstedet vårt</string>
-  <string name="visit_our_website_description">Besøk vårt nettsted for å få hjelp, nyheter, sende oss E-poster, og/eller lære mer om å bruke Bitwarden.</string>
   <string name="website">Nettsted</string>
   <string name="yes">Ja</string>
   <string name="account">Konto</string>
@@ -96,11 +95,10 @@
   <string name="change_email">Endre e-postadresse</string>
   <string name="change_email_confirmation">Du kan endre din kontos E-postadresse på bitwarden.net-netthvelvet. Vil du besøke det nettstedet nå?</string>
   <string name="change_master_password">Endre hovedpassord</string>
-  <string name="change_password_confirmation">Du kan endre hovedpassordet ditt på bitwarden.com-netthvelvet. Vil du besøke nettstedet nå?</string>
   <string name="close">Lukk</string>
   <string name="continue_text">Fortsett</string>
   <string name="create_account">Opprett konto</string>
-  <string name="creating_account">Oppretter konto…</string>
+  <string name="creating_account">Oppretter konto...</string>
   <string name="edit_item">Rediger elementet</string>
   <string name="enable_automatic_syncing">Aktiver automatisk synkronisering</string>
   <string name="enter_email_for_hint">Skriv inn kontoens e-postadresse for å motta hint om hovedpassordet ditt.</string>
@@ -132,7 +130,7 @@
   <string name="vault_timeout">Tidsavbrudd for hvelvet</string>
   <string name="vault_timeout_action">Hendelse ved tidsavbrudd for hvelvet</string>
   <string name="vault_timeout_log_out_confirmation">Dersom du logger ut vil all tilgang til hvelvet fjernes og du må autentisere online etter tidsavbruddet. Er du sikker på at du vil bruke denne innstillingen?</string>
-  <string name="logging_in">Logger på…</string>
+  <string name="logging_in">Logger på...</string>
   <string name="login_or_create_new_account">Logg på eller opprett en konto for å få tilgang til ditt sikre hvelv.</string>
   <string name="manage">Behandle</string>
   <string name="master_password_confirmation_val_message">Passordbekreftelsen er ikke riktig.</string>
@@ -150,7 +148,7 @@
   <string name="no_items">Det er ingen gjenstander i hvelvet ditt.</string>
   <string name="no_items_tap">Det er ingen oppføringer i ditt hvelv for dette nettstedet. Trykk for å legge til en.</string>
   <string name="no_username_password_configured">Denne innloggingen har verken et brukernavn eller passord satt opp.</string>
-  <string name="ok_got_it">Ok, skjønner!</string>
+  <string name="ok_got_it">OK, skjønner!</string>
   <string name="option_defaults">Alternativenes standardvalg er bestemt av passordgeneratorverktøyet til Bitwarden sin hovedapp.</string>
   <string name="options">Alternativer</string>
   <string name="other">Annet</string>
@@ -171,14 +169,13 @@
   <string name="set_pin_direction">Skriv inn en 4-sifret PIN-kode til å låse opp appen med.</string>
   <string name="item_information">Elementinformasjon</string>
   <string name="item_updated">Element oppdatert.</string>
-  <string name="submitting">Sender inn…</string>
-  <string name="syncing">Synkroniserer…</string>
+  <string name="submitting">Sender inn...</string>
+  <string name="syncing">Synkroniserer...</string>
   <string name="syncing_complete">Synkronisering fullført.</string>
   <string name="syncing_failed">Synkronisering mislyktes.</string>
   <string name="sync_vault_now">Synkroniser hvelvet nå</string>
   <string name="touch_id">Touch ID</string>
   <string name="two_step_login">2-trinnsinnlogging</string>
-  <string name="two_step_login_confirmation">2-trinnsinnlogging gjør kontoen din mer sikker, ved å kreve at du verifiserer din innlogging med en annen enhet, f.eks. en autentiseringsapp, SMS, E-post, telefonsamtale, eller sikkerhetsnøkkel. 2-trinnsinnlogging kan aktiveres på bitwarden.com-netthvelvet. Vil du besøke den nettsiden nå?</string>
   <string name="unlock_with">Lås opp med %1$s</string>
   <string name="unlock_with_pin">Lås opp med PIN-kode</string>
   <string name="validating">Validerer</string>
@@ -196,7 +193,7 @@
   <string name="bitwarden_autofill_service_notification_content">Trykk på denne beskjeden for å auto-utfylle en gjenstand fra ditt hvelv.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Åpne tilgjengelighetsinnstillinger</string>
   <string name="bitwarden_autofill_service_step1">1) På Android sin meny for tilgjengelighetsinnstillinger, trykk på \"Bitwarden\" i Tjenester-listen.</string>
-  <string name="bitwarden_autofill_service_step2">2) Skru på bryteren, og trykk på Ok for å akseptere.</string>
+  <string name="bitwarden_autofill_service_step2">2) Skru på bryteren, og trykk på OK for å akseptere.</string>
   <string name="disabled">Deaktivert</string>
   <string name="enabled">Aktivert</string>
   <string name="off" tools:override="true">Av</string>
@@ -208,10 +205,7 @@
   <string name="bitwarden_autofill_service_match_confirm">Er du sikker på at du vil auto-utfylle dette elementet? Den samsvarer ikke fullstendig med \"%1$s\".</string>
   <string name="matching_items">Samsvarende elementer</string>
   <string name="possible_matching_items">Mulig samsvarende elementer</string>
-  <string-array name="Search">
-    <item>Søk</item>
-    <item>Search</item>
-  </string-array>
+  <string name="search">Søk</string>
   <string name="bitwarden_autofill_service_search">Du søker etter en auto-utfyllingsgjenstand for \"%1$s\".</string>
   <string name="learn_org">Lær om organisasjoner</string>
   <string name="cannot_open_app">Kan ikke åpne appen \"%1$s\".</string>
@@ -233,7 +227,7 @@
   <string name="attachments">Vedlegg</string>
   <string name="unable_to_download_file">Kunne ikke laste ned filen.</string>
   <string name="unable_to_open_file">Enheten din kan ikke åpne denne filtypen.</string>
-  <string name="downloading">Laster ned…</string>
+  <string name="downloading">Laster ned...</string>
   <string name="attachment_large_warning">Dette vedlegget er %1$s stort. Er du sikker på at du vil laste det ned til enheten din?</string>
   <string name="authenticator_key">Autentiseringsnøkkel (TOTP)</string>
   <string name="verification_code_totp">Verifiseringskode (TOTP)</string>
@@ -258,6 +252,7 @@ Skanning skjer automatisk.</string>
   <string name="feature_unavailable">Funksjon utilgjengelig</string>
   <string name="max_file_size">Maksimal filstørrelse er 100 MB.</string>
   <string name="update_key">Du kan ikke bruke denne funksjonen før du oppdaterer krypteringsnøkkelen din.</string>
+  <string name="encryption_key_migration_required_description_long">Encryption key migration required. Please login through the web vault to update your encryption key.</string>
   <string name="learn_more">Lær mer</string>
   <string name="api_url">API-tjenernettadresse</string>
   <string name="custom_environment">Tilpasset miljø</string>
@@ -386,7 +381,7 @@ Skanning skjer automatisk.</string>
   <string name="secure_notes">Sikre notater</string>
   <string name="all_items">Alle elementer</string>
   <string name="ur_is">URI-er</string>
-  <string name="checking_password">Sjekker passord …</string>
+  <string name="checking_password">Sjekker passord ...</string>
   <string name="check_password">Sjekk om passordet har blitt eksponert.</string>
   <string name="password_exposed">Dette passordet har blitt eksponert %1$s gang(er) i datalekkasjer. Du bør endre det.</string>
   <string name="password_safe">Dette passordet ble ikke funnet i noen kjente datalekkasjer. Det bør være trygt å bruke.</string>
@@ -450,7 +445,6 @@ Skanning skjer automatisk.</string>
   <string name="theme_description">Endre appens fargetema.</string>
   <string name="theme_default">Standard (System)</string>
   <string name="default_dark_theme">Standard mørkt tema</string>
-  <string name="default_dark_theme_description">Velg mørkt tema som skal brukes når du bruker standard (System) tema når din enhets mørke modus er aktivert</string>
   <string name="copy_notes">Kopier notater</string>
   <string name="exit">Avslutt</string>
   <string name="exit_confirmation">Er du sikker på at du vil avslutte Bitwarden?</string>
@@ -499,10 +493,10 @@ Skanning skjer automatisk.</string>
   <string name="save_attachment_success">Vedlegget ble lagret</string>
   <string name="autofill_tile_accessibility_required">Aktiver \"Auto-utfyllingstjenester\" fra Bitwarden-innstillingene for å bruke auto-utfyllingsflisen.</string>
   <string name="autofill_tile_uri_not_found">Ingen passordfelt oppdaget</string>
-  <string name="soft_deleting">Sender til papirkurv…</string>
+  <string name="soft_deleting">Sender til papirkurv...</string>
   <string name="item_soft_deleted">Elementet ble sendt til papirkurven.</string>
   <string name="restore">Gjenopprett</string>
-  <string name="restoring">Gjenoppretter…</string>
+  <string name="restoring">Gjenoppretter...</string>
   <string name="item_restored">Elementet har blitt gjenopprettet.</string>
   <string name="trash">Papirkurv</string>
   <string name="search_trash">Søk i papirkurven</string>
@@ -529,8 +523,7 @@ Skanning skjer automatisk.</string>
   <string name="master_password_policy_validation_title">Ugyldig passord</string>
   <string name="master_password_policy_validation_message">Passordet oppfyller ikke organisasjonens krav. Kontroller organisasjonens vilkår og prøv på nytt.</string>
   <string name="loading">Laster</string>
-  <string name="accept_policies">Ved å aktivere denne bryteren samtykker du til følgende:
-</string>
+  <string name="accept_policies">Ved å aktivere denne bryteren samtykker du til følgende:</string>
   <string name="accept_policies_error">Vilkårene for tjeneste og personvernerklæring er ikke akseptert.</string>
   <string name="terms_of_service">Tjenestevilkår</string>
   <string name="privacy_policy">Personvernsretningslinjer</string>
@@ -723,7 +716,7 @@ velg Legg til TOTP for å lagre nøkkelen sikkert</string>
   <string name="domain_name_required_parenthesis">Domenenavn (obligatorisk)</string>
   <string name="api_key_required_parenthesis">API-nøkkel (obligatorisk)</string>
   <string name="service">Tjeneste</string>
-  <string name="anon_addy">AnonAddy</string>
+  <string name="addy_io">addy.io</string>
   <string name="firefox_relay">Firefox Relay</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
@@ -802,7 +795,6 @@ Vil du bytte til denne kontoen?</string>
   <string name="remember_this_device">Husk denne enheten</string>
   <string name="passkey">Passnøkkel</string>
   <string name="passkeys">Passnøkler</string>
-  <string name="created_x">Opprettet %1$s</string>
   <string name="application">Applikasjon</string>
   <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">Du kan ikke endre tilgangsnøkkel-applikasjonen fordi det vil ugyldiggjøre passnøkkelen</string>
   <string name="passkey_will_not_be_copied">Passnøkkelen blir ikke kopiert</string>
@@ -819,7 +811,6 @@ Vil du bytte til denne kontoen?</string>
   <string name="trouble_logging_in">Problemer med å logge inn?</string>
   <string name="logging_in_as_x">Logger inn som %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Vault timeout action changed to log out</string>
-  <string name="this_item_cannot_be_shared_with_the_organization_because_there_is_one_already_with_the_same_passkey">This item cannot be shared with the organization because there is one already with the same passkey.</string>
   <string name="block_auto_fill">Block auto-fill</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">Auto-fill will not be offered for these URIs.</string>
   <string name="new_blocked_uri">New blocked URI</string>
@@ -838,13 +829,40 @@ Vil du bytte til denne kontoen?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Log in with device must be set up in the settings of the Bitwarden app. Need another option?</string>
   <string name="log_in_with_device">Logg inn med enhet</string>
   <string name="logging_in_on">Logger inn på</string>
-  <string name="there_are_no_items_to_list">There are no items to list</string>
-  <string name="to_view_verification_codes_upgrade_to_premium">To view verification codes, upgrade to premium</string>
-  <string name="add2_factor_autentication_to_an_item_to_view_verification_codes">Add 2 factor authentication to an item to view the verification codes</string>
-  <string name="log_in_to_bitwarden_on_your_i_phone_to_view_verification_codes">Log in to Bitwarden on your iPhone to view verification codes</string>
-  <string name="syncing_items_containing_verification_codes">Syncing items containing verification codes</string>
-  <string name="unlock_bitwarden_on_your_i_phone_to_view_verification_codes">Unlock Bitwarden on your iPhone to view verification codes</string>
-  <string name="set_up_bitwarden_to_view_items_containing_verification_codes">Set up Bitwarden to view items containing verification codes</string>
-  <string name="no_items_found">No items found</string>
-  <string name="set_up_apple_watch_passcode_in_order_to_use_bitwarden">Set up Apple Watch passcode in order to use Bitwarden</string>
+  <string name="vault">Vault</string>
+  <string name="appearance">Appearance</string>
+  <string name="account_security">Account security</string>
+  <string name="bitwarden_help_center">Bitwarden Help Center</string>
+  <string name="contact_bitwarden_support">Contact Bitwarden support</string>
+  <string name="copy_app_information">Copy app information</string>
+  <string name="sync_now">Sync now</string>
+  <string name="unlock_options">Unlock options</string>
+  <string name="session_timeout">Session timeout</string>
+  <string name="session_timeout_action">Session timeout action</string>
+  <string name="account_fingerprint_phrase">Account fingerprint phrase</string>
+  <string name="one_hour_and_one_minute">One hour and one minute</string>
+  <string name="one_hour_and_x_minute">One hour and %1$s minutes</string>
+  <string name="x_hours_and_one_minute">%1$s hours and one minute</string>
+  <string name="x_hours_and_y_minutes">%1$s hours and %2$s minutes</string>
+  <string name="x_hours">%1$s hours</string>
+  <string name="autofill_services_explanation_long">The Android Autofill Framework is used to assist in filling login information into other apps on your device.</string>
+  <string name="use_inline_autofill_explanation_long">Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</string>
+  <string name="additional_options">Additional options</string>
+  <string name="continue_to_web_app">Continue to web app?</string>
+  <string name="continue_to_x">Continue to %1$s?</string>
+  <string name="continue_to_help_center">Continue to Help center?</string>
+  <string name="continue_to_contact_support">Continue to contact support?</string>
+  <string name="continue_to_app_store">Continue to app store?</string>
+  <string name="two_step_login_description_long">Make your account more secure by setting up two-step login in the Bitwarden web app.</string>
+  <string name="change_master_password_description_long">You can change your master password on the Bitwarden web app.</string>
+  <string name="you_can_import_data_to_your_vault_on_x">You can import data to your vault on %1$s.</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Learn more about how to use Bitwarden on the Help center.</string>
+  <string name="contact_support_description_long">Can’t find what you are looking for? Reach out to Bitwarden support on bitwarden.com.</string>
+  <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Explore more features of your Bitwarden account on the web app.</string>
+  <string name="learn_about_organizations_description_long">Bitwarden allows you to share your vault items with others by using an organization. Learn more on the bitwarden.com website.</string>
+  <string name="rate_app_description_long">Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now.</string>
+  <string name="default_dark_theme_description_long">Choose the dark theme to use when your device’s dark mode is in use</string>
+  <string name="created_xy">Created %1$s, %2$s</string>
+  <string name="too_many_attempts">For mange forsøk</string>
+  <string name="account_logged_out_biometric_exceeded">Konto logget ut.</string>
 </resources>

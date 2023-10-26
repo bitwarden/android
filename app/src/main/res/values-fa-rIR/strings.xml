@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
   <string name="about">درباره</string>
   <string name="add">افزودن</string>
   <string name="add_folder">افزودن پوشه</string>
@@ -13,7 +13,7 @@
   <string name="copy_username">کپی نام کاربری</string>
   <string name="credits">پدید آورندگان</string>
   <string name="delete">حذف</string>
-  <string name="deleting">در حال حذف…</string>
+  <string name="deleting">در حال حذف...</string>
   <string name="do_you_really_want_to_delete">مطمئنید می‌خواهید حذف کنید؟ این عمل قابل بازگشت نیست.</string>
   <string name="edit">ویرایش</string>
   <string name="edit_folder">ويرايش پوشه</string>
@@ -47,7 +47,7 @@
   <string name="remove_account">حذف حساب</string>
   <string name="remove_account_confirmation">آیا از حذف این حساب اطمینان دارید؟</string>
   <string name="account_already_added">حساب قبلا اضافه شده</string>
-  <string name="switch_to_already_added_account_confirmation"> آیا می‌خواهید همین الان تعویض کنید؟</string>
+  <string name="switch_to_already_added_account_confirmation">آیا می‌خواهید همین الان تعویض کنید؟</string>
   <string name="master_password">کلمه عبور اصلی</string>
   <string name="more">بیشتر</string>
   <string name="my_vault">گاوصندوق من</string>
@@ -59,7 +59,7 @@
   <string name="password">کلمه عبور</string>
   <string name="save">ذخیره</string>
   <string name="move">انتقال</string>
-  <string name="saving">درحال ذخیره…</string>
+  <string name="saving">درحال ذخیره...</string>
   <string name="settings">تنظیمات</string>
   <string name="show">نمایش</string>
   <string name="item_deleted">مورد حذف شد.</string>
@@ -78,7 +78,6 @@
   <string name="version">نسخه</string>
   <string name="view">مشاهده</string>
   <string name="visit_our_website">از وب‌سایت ما دیدن کنید</string>
-  <string name="visit_our_website_description">برای کمک گرفتن، اخبار، ایمیل ما، و یا آموزش بیشتر برای استفاده از Bitwarden از وب سایت ما دیدن کنید.</string>
   <string name="website">وب‌سایت</string>
   <string name="yes">بله</string>
   <string name="account">حساب</string>
@@ -96,11 +95,10 @@
   <string name="change_email">تغییر ایمیل</string>
   <string name="change_email_confirmation">شما می‌توانید نشانی ایمیل را در نسخه وب گاوصندوق bitwarden.com تغییر دهید. می‌خواهید اکنون از سایت بازدید کنید؟</string>
   <string name="change_master_password">تغییر کلمه عبور اصلی</string>
-  <string name="change_password_confirmation">شما می‌توانید کلمه عبور اصلی خود را در bitwarden.com تغییر دهید. آیا می‌خواهید از سایت بازدید کنید؟</string>
   <string name="close">بستن</string>
   <string name="continue_text">ادامه</string>
   <string name="create_account">ایجاد حساب کاربری</string>
-  <string name="creating_account">در حال ایجاد حساب کاربری…</string>
+  <string name="creating_account">در حال ایجاد حساب کاربری...</string>
   <string name="edit_item">ویرایش مورد</string>
   <string name="enable_automatic_syncing">فعال کردن همگام‌سازی خودکار</string>
   <string name="enter_email_for_hint">برای دریافت یادآور کلمه عبور اصلی خود نشانی ایمیل‌تان را وارد کنید.</string>
@@ -132,8 +130,8 @@
   <string name="vault_timeout">متوقف شدن گاو‌صندوق</string>
   <string name="vault_timeout_action">عمل متوقف شدن گاو‌صندوق</string>
   <string name="vault_timeout_log_out_confirmation">خروج از سیستم، تمام دسترسی ها به گاو‌صندوق شما را از بین می‌برد و نیاز به احراز هویت آنلاین پس از مدت زمان توقف دارد. آیا مطمئن هستید که می‌خواهید از این تنظیمات استفاده کنید؟</string>
-  <string name="logging_in">در حال ورود…</string>
-  <string name="login_or_create_new_account">وارد شوید یا یک حساب کاربری بسازید تا به گاوصندوق امنتان دسترسی یابید.</string>
+  <string name="logging_in">در حال ورود...</string>
+  <string name="login_or_create_new_account">وارد شوید یا یک حساب کاربری بسازید تا به گاوصندوق امن‌تان دسترسی یابید.</string>
   <string name="manage">مدیریت</string>
   <string name="master_password_confirmation_val_message">تأیید کلمه عبور صحیح نیست.</string>
   <string name="master_password_description">کلمه عبور اصلی، کلمه عبوری است که شما برای دسترسی به گاوصندوق خود استفاده می‌کنید. به یاد داشتن کلمه عبور اصلی بسیار اهمیت دارد. اگر فراموشش کنید هیچ راهی برای بازگردانی آن وجود ندارد.</string>
@@ -171,14 +169,13 @@
   <string name="set_pin_direction">یک کد پین ۴ رقمی برای باز کردن برنامه وارد کنید.</string>
   <string name="item_information">اطلاعات مورد</string>
   <string name="item_updated">موارد بروزرسانی شد.</string>
-  <string name="submitting">در حال ثبت…</string>
-  <string name="syncing">در حال همگام‌سازی…</string>
+  <string name="submitting">در حال ثبت...</string>
+  <string name="syncing">در حال همگام‌سازی...</string>
   <string name="syncing_complete">همگام‌سازی کامل شد.</string>
   <string name="syncing_failed">همگام‌سازی شکست خورد.</string>
   <string name="sync_vault_now">همگام‌سازی گاوصندوق</string>
   <string name="touch_id">Touch ID</string>
   <string name="two_step_login">ورود دو مرحله ای</string>
-  <string name="two_step_login_confirmation">ورود دو مرحله ای باعث می‌شود که حساب کاربری شما با استفاده از یک دستگاه دیگر مانند کلید امنیتی، برنامه احراز هویت، پیامک، تماس تلفنی و یا ایمیل، اعتبار خود را با ایمنی بیشتر اثبات کند. ورود دو مرحله ای می تواند در bitwarden.com فعال شود. آیا می‌خواهید از سایت بازدید کنید؟</string>
   <string name="unlock_with">باز کردن با %1$s</string>
   <string name="unlock_with_pin">باز کردن با کد پین</string>
   <string name="validating">اعتبار سنجی</string>
@@ -208,10 +205,7 @@
   <string name="bitwarden_autofill_service_match_confirm">آیا از پر کردن خودکار این مورد اطمینان دارید؟ کاملاً منطبق با \"%1$s\" نیست.</string>
   <string name="matching_items">موارد منطبق</string>
   <string name="possible_matching_items">موارد منطبق احتمالی</string>
-  <string-array name="Search">
-    <item>جستجو</item>
-    <item>جستجو</item>
-  </string-array>
+  <string name="search">جستجو</string>
   <string name="bitwarden_autofill_service_search">شما به دنبال یافتن یک پر کردن خودکار برای \"%1$s\" هستید.</string>
   <string name="learn_org">درباره سازمان‌ها اطلاعات کسب کنید</string>
   <string name="cannot_open_app">نمی‌توان برنامه را باز کرد \"%1$s\".</string>
@@ -233,7 +227,7 @@
   <string name="attachments">پیوست‌ها</string>
   <string name="unable_to_download_file">نمی‌توان پرونده را دانلود کرد.</string>
   <string name="unable_to_open_file">دستگاهتان قادر به باز کردن این نوع از پرونده نیست.</string>
-  <string name="downloading">در حال دانلود…</string>
+  <string name="downloading">در حال دانلود...</string>
   <string name="attachment_large_warning">حجم این پیوست %1$s است. آیا مایل به دانلود این پرونده به دستگاهتان هستید؟</string>
   <string name="authenticator_key">کلید احراز هویت (TOTP)</string>
   <string name="verification_code_totp">کد تأیید (TOTP)</string>
@@ -258,6 +252,7 @@
   <string name="feature_unavailable">ویژگی موجود نیست</string>
   <string name="max_file_size">بیشترین حجم پرونده ۱۰۰ مگابایت است.</string>
   <string name="update_key">تا زمانی که کد رمزنگاری را به‌روز نکنید نمی‌توانید از این قابلیت استفاده کنید.</string>
+  <string name="encryption_key_migration_required_description_long">انتقال کلید رمزگذاری مورد نیاز است. لطفاً از طریق گاوصندوق وب وارد شوید تا کلید رمزگذاری خود را به روز کنید.</string>
   <string name="learn_more">بیشتر بدانید</string>
   <string name="api_url">نشانی سرور API</string>
   <string name="custom_environment">محیط سفارشی</string>
@@ -338,7 +333,7 @@
   <string name="use_face_id_to_unlock">از Face ID برای قفل گشایی استفاده شود</string>
   <string name="verify_face_id">تأیید Face ID</string>
   <string name="windows_hello">Windows Hello</string>
-  <string name="bitwarden_autofill_go_to_settings">ما نتوانستیم به صورت خودکار منو تنظیمات پر کردن خودکار اندروید را برای شما باز کنیم. شما می‌توانید منوی تنظیمات را به صورت دستی مرور کنید. از تنظیمات اندروید &gt; سیستم &gt; زبان‌ها و ورودی &gt; پیشرفته &gt; سرویس پر کردن خودکار.</string>
+  <string name="bitwarden_autofill_go_to_settings">ما نتوانستیم به صورت خودکار منو تنظیمات پر کردن خودکار اندروید را برای شما باز کنیم. شما می‌توانید منوی تنظیمات را به صورت دستی مرور کنید. از تنظیمات اندروید &gt;سیستم &gt;زبان‌ها و ورودی &gt;پیشرفته &gt;سرویس پر کردن خودکار.</string>
   <string name="custom_field_name">نام فیلد سفارشی</string>
   <string name="field_type_boolean">منطقی</string>
   <string name="field_type_hidden">مخفی</string>
@@ -450,7 +445,6 @@
   <string name="theme_description">تغییر رنگ پوسته برنامه.</string>
   <string name="theme_default">پیش‌فرض (سیستم)</string>
   <string name="default_dark_theme">تم تیره پیش‌‌فرض</string>
-  <string name="default_dark_theme_description">هنگام استفاده از طرح زمینه پیش‌فرض (سیستم) در حالی که حالت تاریک دستگاه شما فعال است، تم تیره را انتخاب کنید</string>
   <string name="copy_notes">کپی یادداشت‌ها</string>
   <string name="exit">خروج</string>
   <string name="exit_confirmation">آیا مطمئنید که می‌خواهید از Bitwarden خارج شوید؟</string>
@@ -499,7 +493,7 @@
   <string name="save_attachment_success">پیوست با موفقیت ذخیره شد.</string>
   <string name="autofill_tile_accessibility_required">لطفاً برای استفاده از کاشی پر کردن خودکار، \"سرویس دسترسی پر کردن خودکار\" را از تنظیمات Bitwarden فعال کنید.</string>
   <string name="autofill_tile_uri_not_found">هیچ فیلدی برای کلمه عبور شناسایی نشد</string>
-  <string name="soft_deleting">درحال ارسال به سطل زباله…</string>
+  <string name="soft_deleting">درحال ارسال به سطل زباله...</string>
   <string name="item_soft_deleted">مورد به سطل زباله فرستاده شد.</string>
   <string name="restore">بازیابی</string>
   <string name="restoring">درحال بازیابی…</string>
@@ -615,15 +609,14 @@
   <string name="updated_master_password">کلمه عبور اصلی به‌روز شد</string>
   <string name="update_master_password">به‌روزرسانی کلمه عبور اصلی</string>
   <string name="update_master_password_warning">کلمه عبور اصلی شما اخیراً توسط سرپرست سازمان‌تان تغییر کرده است. برای دسترسی به گاوصندوق، باید همین حالا کلمه عبور اصلی خود را به‌روز کنید. در صورت ادامه، شما از نشست فعلی خود خارج می‌شوید و باید دوباره وارد سیستم شوید. نشست فعال در دستگاه های دیگر ممکن است تا یک ساعت همچنان فعال باقی بمانند.</string>
-  <string name="updating_password">در حال به روز رسانی کلمه عبور…</string>
+  <string name="updating_password">در حال به روز رسانی کلمه عبور...</string>
   <string name="update_password_error">در حال حاضر نمی‌توان کلمه عبور را به‌روز کرد</string>
   <string name="remove_master_password">حذف کلمه عبور اصلی</string>
   <string name="remove_master_password_warning">%1$s از SSO با رمزگذاری مدیریت شده توسط مشتری استفاده می‌کند. ادامه، کلمه عبور اصلی شما را از حسابتان حذف می‌کند و نیاز به ورود SSO دارد.</string>
   <string name="remove_master_password_warning2">اگر نمی‌خواهید کلمه عبور اصلی خود را حذف کنید، می‌توانید این سازمان را ترک کنید.</string>
   <string name="leave_organization">ترک سازمان</string>
   <string name="leave_organization_name">%1$s را ترک می‌کنید؟</string>
-  <string name="fido2_title">FIDO2 WebAuthn
-</string>
+  <string name="fido2_title">FIDO2 WebAuthn</string>
   <string name="fido2_instruction">برای ادامه، کلید امنیتی FIDO2 WebAuthn خود را فعال کنید و دستورالعمل ها را پس از کلیک روی \"احراز هویت WebAuthn\" در صفحه بعدی دنبال کنید.</string>
   <string name="fido2_desc">احراز هویت با استفاده از FIDO2 WebAuthn، می‌توانید با استفاده از یک کلید امنیتی خارجی احراز هویت کنید.</string>
   <string name="fido2_authenticate_web_authn">تأیید اعتبار در WebAuthn</string>
@@ -723,7 +716,7 @@
   <string name="domain_name_required_parenthesis">نام دامنه (الزامی)</string>
   <string name="api_key_required_parenthesis">کلید API (الزامی)</string>
   <string name="service">سرویس</string>
-  <string name="anon_addy">AnonAddy</string>
+  <string name="addy_io">addy.io</string>
   <string name="firefox_relay">رله فایرفاکس</string>
   <string name="simple_login">ورود ساده</string>
   <string name="duck_duck_go">داک داک گو</string>
@@ -747,7 +740,7 @@
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">تلاش برای ورود از:
 %1$s
 آیا می‌خواهید به این حساب تغییر دهید؟</string>
-  <string name="new_around_here">اینجا جدیده؟</string>
+  <string name="new_around_here">اینجا تازه واردی؟</string>
   <string name="get_master_passwordword_hint">دریافت یادآور کلمه عبور اصلی</string>
   <string name="logging_in_as_x_on_y">درحال وارد شدن به عنوان %1$s در %2$s</string>
   <string name="not_you">شما نیستید؟</string>
@@ -794,15 +787,14 @@
   <string name="region">منطقه</string>
   <string name="update_weak_master_password_warning">کلمه عبور اصلی شما با یک یا چند سیاست سازمان‌تان مطابقت ندارد. برای دسترسی به گاوصندوق، باید همین حالا کلمه عبور اصلی خود را به‌روز کنید. در صورت ادامه، شما از نشست فعلی خود خارج می‌شوید و باید دوباره وارد سیستم شوید. نشست فعال در دستگاه های دیگر ممکن است تا یک ساعت همچنان فعال باقی بمانند.</string>
   <string name="current_master_password">کلمه عبور اصلی فعلی</string>
-  <string name="logged_in">Logged in!</string>
-  <string name="approve_with_my_other_device">Approve with my other device</string>
-  <string name="request_admin_approval">Request admin approval</string>
-  <string name="approve_with_master_password">Approve with master password</string>
-  <string name="turn_off_using_public_device">Turn off using a public device</string>
-  <string name="remember_this_device">Remember this device</string>
+  <string name="logged_in">وارد شده!</string>
+  <string name="approve_with_my_other_device">تایید با دستگاه دیگرم</string>
+  <string name="request_admin_approval">درخواست تایید مدیر</string>
+  <string name="approve_with_master_password">تایید با کلمه عبور اصلی</string>
+  <string name="turn_off_using_public_device">اگر از دستگاه عمومی استفاده میکنید خاموش کنید</string>
+  <string name="remember_this_device">این دستگاه را به خاطر بسپار</string>
   <string name="passkey">کلید عبور</string>
   <string name="passkeys">کلیدهای عبور</string>
-  <string name="created_x">%1$s ایجاد شد</string>
   <string name="application">درخواست</string>
   <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">شما نمی‌توانید برنامه کلید عبور را ویرایش کنید زیرا باعث بی اعتباری کلید عبور می‌شود</string>
   <string name="passkey_will_not_be_copied">کلید عبور کپی نمی‌شود</string>
@@ -810,16 +802,15 @@
   <string name="copy_application">درخواست را کپی کنید</string>
   <string name="available_for_two_step_login">برای ورود دو مرحله ای موجود است</string>
   <string name="master_password_re_prompt_help">راهنمای درخواست مجدد کلمه عبور اصلی</string>
-  <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</string>
+  <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">بازگشایی ممکن است به دلیل حافظه ناکافی انجام نشود. برای انجام تنظیمات حافظه KDF خود را کاهش دهید یا از بازگشایی زیست‌سنجی استفاده کنید.</string>
   <string name="invalid_api_key">کلید API نامعتبر</string>
   <string name="invalid_api_token">توکن API نامعتبر</string>
-  <string name="admin_approval_requested">Admin approval requested</string>
-  <string name="your_request_has_been_sent_to_your_admin">Your request has been sent to your admin.</string>
-  <string name="you_will_be_notified_once_approved">You will be notified once approved. </string>
-  <string name="trouble_logging_in">Trouble logging in?</string>
-  <string name="logging_in_as_x">Logging in as %1$s</string>
-  <string name="vault_timeout_action_changed_to_log_out">Vault timeout action changed to log out</string>
-  <string name="this_item_cannot_be_shared_with_the_organization_because_there_is_one_already_with_the_same_passkey">این مورد را نمی‌توان با سازمان به اشتراک گذاشت زیرا قبلاً موردی با کلید عبور یکسان وجود دارد.</string>
+  <string name="admin_approval_requested">تایید مدیر در خواست شد</string>
+  <string name="your_request_has_been_sent_to_your_admin">درخواست شما به مدیرتان فرستاده شد.</string>
+  <string name="you_will_be_notified_once_approved">به محض تایید مطلع خواهید شد. </string>
+  <string name="trouble_logging_in">در ورود مشکلی دارید؟</string>
+  <string name="logging_in_as_x">ورود به عنوان %1$s</string>
+  <string name="vault_timeout_action_changed_to_log_out">اقدام پایان زمان گاوصندوق به خروج تغییر کرد</string>
   <string name="block_auto_fill">پر کردن خودکار را مسدود کنید</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">پر کردن خودکار برای این نشانی‌های اینترنتی ارائه نمی‌شود.</string>
   <string name="new_blocked_uri">نشانی اینترنتی مسدود شده جدید</string>
@@ -834,17 +825,44 @@
   <string name="there_are_no_blocked_ur_is">هیچ نشانی اینترنتی مسدود شده ای وجود ندارد</string>
   <string name="the_urix_is_already_blocked">%1$s نشانی اینترنتی قبلاً مسدود شده است</string>
   <string name="cannot_edit_multiple_ur_is_at_once">نمی‌توان چندین نشانی اینترنتی را همزمان ویرایش کرد</string>
-  <string name="login_approved">Login approved</string>
-  <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Log in with device must be set up in the settings of the Bitwarden app. Need another option?</string>
-  <string name="log_in_with_device">Log in with device</string>
-  <string name="logging_in_on">Logging in on</string>
-  <string name="there_are_no_items_to_list">هیچ موردی برای نمایش وجود ندارد</string>
-  <string name="to_view_verification_codes_upgrade_to_premium">برای مشاهده کدهای تأیید، به پرمیوم ارتقا دهید</string>
-  <string name="add2_factor_autentication_to_an_item_to_view_verification_codes">برای مشاهده کدهای تأیید، احراز هویت دو عاملی را به یک مورد اضافه کنید</string>
-  <string name="log_in_to_bitwarden_on_your_i_phone_to_view_verification_codes">برای مشاهده کدهای تأیید در آیفون خود وارد Bitwarden شوید</string>
-  <string name="syncing_items_containing_verification_codes">همگام‌سازی موارد حاوی کدهای تأیید</string>
-  <string name="unlock_bitwarden_on_your_i_phone_to_view_verification_codes">برای مشاهده کدهای تأیید، قفل Bitwarden را در آیفون خود باز کنید</string>
-  <string name="set_up_bitwarden_to_view_items_containing_verification_codes">Bitwarden را برای مشاهده موارد حاوی کدهای تأیید تنظیم کنید</string>
-  <string name="no_items_found">موردی یافت نشد</string>
-  <string name="set_up_apple_watch_passcode_in_order_to_use_bitwarden">برای استفاده از Bitwarden، رمز عبور Apple Watch را تنظیم کنید</string>
+  <string name="login_approved">ورود تایید شد</string>
+  <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">ورود با دستگاه باید در تنظیمات برنامه‌ی Bitwarden تنظیم شود. به گزینه دیگری نیاز دارید؟</string>
+  <string name="log_in_with_device">ورود با دستگاه</string>
+  <string name="logging_in_on">ورود با</string>
+  <string name="vault">گاوصندوق</string>
+  <string name="appearance">ظاهر</string>
+  <string name="account_security">امنیت حساب</string>
+  <string name="bitwarden_help_center">مرکز راهنمایی Bitwarden</string>
+  <string name="contact_bitwarden_support">پیام به پشتیبانی Bitwarden</string>
+  <string name="copy_app_information">اطلاعات اپ را کپی کن</string>
+  <string name="sync_now">اکنون همگام‌سازی شود</string>
+  <string name="unlock_options">باز کردن امکانات</string>
+  <string name="session_timeout">پایان جلسه</string>
+  <string name="session_timeout_action">نشست را متوقف کن</string>
+  <string name="account_fingerprint_phrase">عبارت اثر انگشت حساب</string>
+  <string name="one_hour_and_one_minute">یک ساعت و یک دقیقه</string>
+  <string name="one_hour_and_x_minute">یک ساعت و %1$s دقیقه</string>
+  <string name="x_hours_and_one_minute"> %1$s ساعت و یک دقیقه</string>
+  <string name="x_hours_and_y_minutes">%1$s ساعت و %2$s دقیقه</string>
+  <string name="x_hours">%1$s ساعت</string>
+  <string name="autofill_services_explanation_long">چارچوب پر کردن خودکار اندروید برای کمک به پر کردن اطلاعات ورود به سیستم در سایر برنامه‌های دستگاه شما استفاده می‌شود.</string>
+  <string name="use_inline_autofill_explanation_long">اگر صفحه کلید انتخابی شما از آن پشتیبانی می‌کند، از پر کردن خودکار درون خطی استفاده کنید. در غیر این صورت، از پوشش پیش‌فرض استفاده کنید.</string>
+  <string name="additional_options">گزینه‌های اضافی</string>
+  <string name="continue_to_web_app">با برنامه وب ادامه می‌دهید؟</string>
+  <string name="continue_to_x">به %1$s ادامه می‌دهید؟</string>
+  <string name="continue_to_help_center">به مرکز راهنمایی ادامه می‌دهید؟</string>
+  <string name="continue_to_contact_support">می‌خواهید با پشتیبانی تماس بگیرید؟</string>
+  <string name="continue_to_app_store">به فروشگاه برنامه ادامه می‌دهید؟</string>
+  <string name="two_step_login_description_long">با راه‌اندازی ورود دو مرحله‌ای در برنامه وب Bitwarden، حساب خود را ایمن‌تر کنید.</string>
+  <string name="change_master_password_description_long">می‌توانید کلمه عبور اصلی خود را در برنامه وب Bitwarden تغییر دهید.</string>
+  <string name="you_can_import_data_to_your_vault_on_x">می‌توانید داده‌ها را در %1$s به گاوصندوق خود وارد کنید.</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">درباره نحوه استفاده از Bitwarden در مرکز راهنمایی بیشتر بیاموزید.</string>
+  <string name="contact_support_description_long">چیزی را که به دنبالش هستید پیدا نمی‌کنید؟ با پشتیبانی Bitwarden در bitwarden.com تماس بگیرید.</string>
+  <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">ویژگی‌های بیشتر حساب Bitwarden خود را در برنامه وب کاوش کنید.</string>
+  <string name="learn_about_organizations_description_long">Bitwarden به شما اجازه می‌دهد تا با استفاده از یک سازمان، موارد گاوصندوق خود را با دیگران به اشتراک بگذارید. در وب سایت bitwarden.com بیشتر بیاموزید.</string>
+  <string name="rate_app_description_long">به دیگران کمک کنید بفهمند آیا Bitwarden برای آنها مناسب است یا خیر. از فروشگاه برنامه دیدن کنید و اکنون رتبه بندی کنید.</string>
+  <string name="default_dark_theme_description_long">تم تیره را برای استفاده در زمانی که حالت تاریک دستگاه شما در حال استفاده است انتخاب کنید</string>
+  <string name="created_xy">ایجاد شده در %1$s، %2$s</string>
+  <string name="too_many_attempts">تلاش‌ها بیش از حد مجاز بود</string>
+  <string name="account_logged_out_biometric_exceeded">حساب از سیستم خارج شد.</string>
 </resources>

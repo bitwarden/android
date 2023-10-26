@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
   <string name="about">關於</string>
   <string name="add">新增</string>
   <string name="add_folder">新增資料夾</string>
@@ -13,7 +13,7 @@
   <string name="copy_username">複製使用者名稱</string>
   <string name="credits">銘謝</string>
   <string name="delete">刪除</string>
-  <string name="deleting">正在刪除…</string>
+  <string name="deleting">正在刪除...</string>
   <string name="do_you_really_want_to_delete">您確定要刪除嗎？刪除後將無法復原。</string>
   <string name="edit">編輯</string>
   <string name="edit_folder">編輯資料夾</string>
@@ -59,7 +59,7 @@
   <string name="password">密碼</string>
   <string name="save">儲存</string>
   <string name="move">移動</string>
-  <string name="saving">正在儲存…</string>
+  <string name="saving">正在儲存...</string>
   <string name="settings">設定</string>
   <string name="show">顯示</string>
   <string name="item_deleted">已刪除項目</string>
@@ -78,7 +78,6 @@
   <string name="version">版本</string>
   <string name="view">檢視</string>
   <string name="visit_our_website">造訪我們的網站</string>
-  <string name="visit_our_website_description">瀏覽我們的網站以取得協助、了解新消息、傳送電子郵件給我們或瀏覽更多有關使用 Bitwarden 的秘訣。</string>
   <string name="website">網站</string>
   <string name="yes">是</string>
   <string name="account">帳戶</string>
@@ -96,11 +95,10 @@
   <string name="change_email">變更電子郵件</string>
   <string name="change_email_confirmation">您可以在 bitwarden.com 網頁版密碼庫變更電子郵件地址。現在要前往嗎？</string>
   <string name="change_master_password">變更主密碼</string>
-  <string name="change_password_confirmation">您可以在 bitwarden.com 網頁版密碼庫變更主密碼。現在要前往嗎？</string>
   <string name="close">關閉</string>
   <string name="continue_text">繼續</string>
   <string name="create_account">建立帳戶</string>
-  <string name="creating_account">正在建立帳戶…</string>
+  <string name="creating_account">正在建立帳戶...</string>
   <string name="edit_item">編輯項目</string>
   <string name="enable_automatic_syncing">啟用自動同步</string>
   <string name="enter_email_for_hint">請輸入您的帳户電子郵件地址以接收主密碼提示。</string>
@@ -132,7 +130,7 @@
   <string name="vault_timeout">密碼庫逾時時間</string>
   <string name="vault_timeout_action">密碼庫逾時動作</string>
   <string name="vault_timeout_log_out_confirmation">選擇登出將會在密碼庫逾時後移除對密碼庫的所有存取權限，若要重新驗證則需連線網路。確定要使用此設定嗎？</string>
-  <string name="logging_in">正在登入…</string>
+  <string name="logging_in">正在登入...</string>
   <string name="login_or_create_new_account">登入或建立帳戶以存取您的安全密碼庫。</string>
   <string name="manage">管理</string>
   <string name="master_password_confirmation_val_message">兩次填寫的主密碼不一致。</string>
@@ -171,14 +169,13 @@
   <string name="set_pin_direction">輸入一個用於解鎖程式的 4 位數 PIN 碼。</string>
   <string name="item_information">項目資訊</string>
   <string name="item_updated">項目已儲存</string>
-  <string name="submitting">正在送出…</string>
-  <string name="syncing">正在同步…</string>
+  <string name="submitting">正在送出...</string>
+  <string name="syncing">正在同步...</string>
   <string name="syncing_complete">同步完成</string>
   <string name="syncing_failed">同步失敗</string>
   <string name="sync_vault_now">立即同步</string>
   <string name="touch_id">Touch ID</string>
   <string name="two_step_login">兩步驟登入</string>
-  <string name="two_step_login_confirmation">兩步驟登入需要您從其他裝置（例如安全金鑰、驗證器程式、SMS、手機或電子郵件）來驗證您的登入，這使您的帳戶更加安全。兩步驟登入可以在 bitwarden.com 網頁版密碼庫啟用。現在要前往嗎？</string>
   <string name="unlock_with">使用 %1$s 解鎖</string>
   <string name="unlock_with_pin">使用 PIN 碼解鎖</string>
   <string name="validating">正在驗證</string>
@@ -208,10 +205,7 @@
   <string name="bitwarden_autofill_service_match_confirm">您確定要自動填入此項目嗎？它與「%1$s」不完全一致。</string>
   <string name="matching_items">相符的項目</string>
   <string name="possible_matching_items">可能相符的項目</string>
-  <string-array name="Search">
-    <item>搜尋</item>
-    <item>搜尋</item>
-  </string-array>
+  <string name="search">搜尋</string>
   <string name="bitwarden_autofill_service_search">您正在搜尋用於「%1$s」的自動填入項目。</string>
   <string name="learn_org">了解組織</string>
   <string name="cannot_open_app">無法開啟應用程式「%1$s」。</string>
@@ -233,7 +227,7 @@
   <string name="attachments">附件</string>
   <string name="unable_to_download_file">無法下載檔案。</string>
   <string name="unable_to_open_file">您的裝置無法開啟這種類型的檔案。</string>
-  <string name="downloading">正在下載…</string>
+  <string name="downloading">正在下載...</string>
   <string name="attachment_large_warning">這個附件大小為 %1$s 。確定要下載至您的裝置嗎？</string>
   <string name="authenticator_key">驗證器金鑰 (TOTP)</string>
   <string name="verification_code_totp">驗證碼 (TOTP)</string>
@@ -258,6 +252,7 @@
   <string name="feature_unavailable">功能不可用</string>
   <string name="max_file_size">檔案最大為 100MB。</string>
   <string name="update_key">更新加密金鑰前不能使用此功能。</string>
+  <string name="encryption_key_migration_required_description_long">Encryption key migration required. Please login through the web vault to update your encryption key.</string>
   <string name="learn_more">深入了解</string>
   <string name="api_url">API 伺服器 URL</string>
   <string name="custom_environment">自訂環境</string>
@@ -386,9 +381,9 @@
   <string name="secure_notes">安全筆記</string>
   <string name="all_items">所有項目</string>
   <string name="ur_is">URIs</string>
-  <string name="checking_password">正在檢查密碼…</string>
-  <string name="check_password">檢查密碼是否已外洩。</string>
-  <string name="password_exposed">此密碼已外洩了 %1$s 次，應立即變更密碼。</string>
+  <string name="checking_password">正在檢查密碼...</string>
+  <string name="check_password">檢查密碼是否已暴露。</string>
+  <string name="password_exposed">此密碼在資料外洩事件中被暴露了 %1$s 次，應立即變更它。</string>
   <string name="password_safe">任何已知的外洩密碼資料庫中都沒有此密碼，它目前是安全的。</string>
   <string name="identity_name">身分名稱</string>
   <string name="value">值</string>
@@ -450,7 +445,6 @@
   <string name="theme_description">變更應用程式的主題色彩。</string>
   <string name="theme_default">預設（系統）</string>
   <string name="default_dark_theme">預設深色主題</string>
-  <string name="default_dark_theme_description">當裝置的深色模式開啟時，選擇用於替代預設（系統）主題的深色主題。</string>
   <string name="copy_notes">複製備註</string>
   <string name="exit">結束</string>
   <string name="exit_confirmation">您確定要結束 Bitwarden 嗎？</string>
@@ -502,7 +496,7 @@
   <string name="soft_deleting">正在傳送至垃圾桶…</string>
   <string name="item_soft_deleted">已將項目傳送至垃圾桶。</string>
   <string name="restore">還原</string>
-  <string name="restoring">正在還原…</string>
+  <string name="restoring">正在還原...</string>
   <string name="item_restored">項目已還原</string>
   <string name="trash">垃圾桶</string>
   <string name="search_trash">搜尋垃圾桶</string>
@@ -705,7 +699,7 @@
   <string name="log_in_accepted">登入已確認</string>
   <string name="log_in_denied">登入被拒絕</string>
   <string name="approve_login_requests">批准登入要求</string>
-  <string name="use_this_device_to_approve_login_requests_made_from_other_devices">使用此裝置準予來自其他裝置的登入要求。</string>
+  <string name="use_this_device_to_approve_login_requests_made_from_other_devices">使用此裝置批准來自其他裝置的登入要求。</string>
   <string name="allow_notifications">允許通知</string>
   <string name="receive_push_notifications_for_new_login_requests">接收新的登入要求的推播通知</string>
   <string name="no_thanks">不用了，謝謝</string>
@@ -722,7 +716,7 @@
   <string name="domain_name_required_parenthesis">網域名稱（必填）</string>
   <string name="api_key_required_parenthesis">API 金鑰（必填）</string>
   <string name="service">服務</string>
-  <string name="anon_addy">AnonAddy</string>
+  <string name="addy_io">addy.io</string>
   <string name="firefox_relay">Firefox Relay</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
@@ -776,10 +770,10 @@
   <string name="weak">脆弱</string>
   <string name="good">良好</string>
   <string name="strong">高強度</string>
-  <string name="check_known_data_breaches_for_this_password">在被攻擊的資料庫中搜尋是否有此密碼</string>
-  <string name="exposed_master_password">Exposed Master Password</string>
-  <string name="password_found_in_a_data_breach_alert_description">在其他資料庫中找到您的密碼。我們建議您使用一個獨特的密碼來保護您的帳號，您確定要用這個密碼嗎？</string>
-  <string name="weak_and_exposed_master_password">主密碼強度不足</string>
+  <string name="check_known_data_breaches_for_this_password">檢查外洩密碼資料庫中是否有此密碼</string>
+  <string name="exposed_master_password">已暴露的主密碼</string>
+  <string name="password_found_in_a_data_breach_alert_description">在資料外洩事件中找到了密碼。我們建議您使用一個獨特的密碼來保護您的帳戶，您確定要使用已暴露的密碼嗎？</string>
+  <string name="weak_and_exposed_master_password">強度不足且已暴露的主密碼</string>
   <string name="weak_password_identified_and_found_in_a_data_breach_alert_description">是密碼強度不足，且在其他資料庫中找到這個密碼。使用一個強度足夠和獨特的密碼來保護您的帳號。請問您確定要用這個密碼嗎？</string>
   <string name="organization_sso_identifier_required">需要單一登入 (SSO) 組織識別碼。</string>
   <string name="add_the_key_to_an_existing_or_new_item">Add the key to an existing or new item</string>
@@ -801,7 +795,6 @@
   <string name="remember_this_device">Remember this device</string>
   <string name="passkey">Passkey</string>
   <string name="passkeys">Passkeys</string>
-  <string name="created_x">Created %1$s</string>
   <string name="application">應用程式</string>
   <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">You cannot edit passkey application because it would invalidate the passkey</string>
   <string name="passkey_will_not_be_copied">Passkey will not be copied</string>
@@ -818,7 +811,6 @@
   <string name="trouble_logging_in">Trouble logging in?</string>
   <string name="logging_in_as_x">Logging in as %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Vault timeout action changed to log out</string>
-  <string name="this_item_cannot_be_shared_with_the_organization_because_there_is_one_already_with_the_same_passkey">This item cannot be shared with the organization because there is one already with the same passkey.</string>
   <string name="block_auto_fill">封鎖表單自動填入功能</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">不對下列 URI 提供自動填寫功能。</string>
   <string name="new_blocked_uri">新增要封鎖的 URI</string>
@@ -837,13 +829,40 @@
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Log in with device must be set up in the settings of the Bitwarden app. Need another option?</string>
   <string name="log_in_with_device">Log in with device</string>
   <string name="logging_in_on">Logging in on</string>
-  <string name="there_are_no_items_to_list">沒有可列出的項目。</string>
-  <string name="to_view_verification_codes_upgrade_to_premium">請升級到 Premium 版，才能檢視驗證碼</string>
-  <string name="add2_factor_autentication_to_an_item_to_view_verification_codes">為項目加入雙因素驗證機制，即可檢視驗證碼</string>
-  <string name="log_in_to_bitwarden_on_your_i_phone_to_view_verification_codes">在您的 iPhone 登入 Bitwarden 即可檢視驗證碼</string>
-  <string name="syncing_items_containing_verification_codes">同步含有驗證碼的項目</string>
-  <string name="unlock_bitwarden_on_your_i_phone_to_view_verification_codes">解鎖您的 iPhone 上的 Bitwarden 即可檢視驗證碼</string>
-  <string name="set_up_bitwarden_to_view_items_containing_verification_codes">設定 Bitwarden 即可檢視含有驗證碼的項目</string>
-  <string name="no_items_found">找不到任何項目</string>
-  <string name="set_up_apple_watch_passcode_in_order_to_use_bitwarden">設定 Apple Watch 解鎖碼即可使用 Bitwarden</string>
+  <string name="vault">Vault</string>
+  <string name="appearance">Appearance</string>
+  <string name="account_security">Account security</string>
+  <string name="bitwarden_help_center">Bitwarden Help Center</string>
+  <string name="contact_bitwarden_support">Contact Bitwarden support</string>
+  <string name="copy_app_information">Copy app information</string>
+  <string name="sync_now">Sync now</string>
+  <string name="unlock_options">Unlock options</string>
+  <string name="session_timeout">Session timeout</string>
+  <string name="session_timeout_action">Session timeout action</string>
+  <string name="account_fingerprint_phrase">Account fingerprint phrase</string>
+  <string name="one_hour_and_one_minute">One hour and one minute</string>
+  <string name="one_hour_and_x_minute">One hour and %1$s minutes</string>
+  <string name="x_hours_and_one_minute">%1$s hours and one minute</string>
+  <string name="x_hours_and_y_minutes">%1$s hours and %2$s minutes</string>
+  <string name="x_hours">%1$s hours</string>
+  <string name="autofill_services_explanation_long">The Android Autofill Framework is used to assist in filling login information into other apps on your device.</string>
+  <string name="use_inline_autofill_explanation_long">Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</string>
+  <string name="additional_options">Additional options</string>
+  <string name="continue_to_web_app">Continue to web app?</string>
+  <string name="continue_to_x">Continue to %1$s?</string>
+  <string name="continue_to_help_center">Continue to Help center?</string>
+  <string name="continue_to_contact_support">Continue to contact support?</string>
+  <string name="continue_to_app_store">Continue to app store?</string>
+  <string name="two_step_login_description_long">Make your account more secure by setting up two-step login in the Bitwarden web app.</string>
+  <string name="change_master_password_description_long">You can change your master password on the Bitwarden web app.</string>
+  <string name="you_can_import_data_to_your_vault_on_x">You can import data to your vault on %1$s.</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Learn more about how to use Bitwarden on the Help center.</string>
+  <string name="contact_support_description_long">Can’t find what you are looking for? Reach out to Bitwarden support on bitwarden.com.</string>
+  <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Explore more features of your Bitwarden account on the web app.</string>
+  <string name="learn_about_organizations_description_long">Bitwarden allows you to share your vault items with others by using an organization. Learn more on the bitwarden.com website.</string>
+  <string name="rate_app_description_long">Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now.</string>
+  <string name="default_dark_theme_description_long">Choose the dark theme to use when your device’s dark mode is in use</string>
+  <string name="created_xy">Created %1$s, %2$s</string>
+  <string name="too_many_attempts">嘗試次數過多</string>
+  <string name="account_logged_out_biometric_exceeded">帳號已登出。</string>
 </resources>
