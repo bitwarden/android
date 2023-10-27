@@ -1,24 +1,25 @@
-package com.x8bit.bitwarden.data.platform.repository
+package com.x8bit.bitwarden.data.platform.manager
 
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 /**
- * Primary implementation of [NetworkConfigRepository].
+ * Primary implementation of [NetworkConfigManager].
  */
-class NetworkConfigRepositoryImpl(
+class NetworkConfigManagerImpl(
     private val authRepository: AuthRepository,
     private val authTokenInterceptor: AuthTokenInterceptor,
     private val environmentRepository: EnvironmentRepository,
     private val baseUrlInterceptors: BaseUrlInterceptors,
     dispatcher: CoroutineDispatcher,
-) : NetworkConfigRepository {
+) : NetworkConfigManager {
 
     private val scope = CoroutineScope(dispatcher)
 

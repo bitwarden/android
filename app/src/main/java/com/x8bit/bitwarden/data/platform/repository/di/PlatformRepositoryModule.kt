@@ -4,10 +4,10 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
+import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManagerImpl
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepositoryImpl
-import com.x8bit.bitwarden.data.platform.repository.NetworkConfigRepository
-import com.x8bit.bitwarden.data.platform.repository.NetworkConfigRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,13 +34,13 @@ object PlatformRepositoryModule {
 
     @Provides
     @Singleton
-    fun provideNetworkConfigRepository(
+    fun provideNetworkConfigManager(
         authRepository: AuthRepository,
         authTokenInterceptor: AuthTokenInterceptor,
         environmentRepository: EnvironmentRepository,
         baseUrlInterceptors: BaseUrlInterceptors,
-    ): NetworkConfigRepository =
-        NetworkConfigRepositoryImpl(
+    ): NetworkConfigManager =
+        NetworkConfigManagerImpl(
             authRepository = authRepository,
             authTokenInterceptor = authTokenInterceptor,
             environmentRepository = environmentRepository,

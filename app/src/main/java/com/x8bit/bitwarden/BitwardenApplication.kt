@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden
 
 import android.app.Application
-import com.x8bit.bitwarden.data.platform.repository.NetworkConfigRepository
+import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -13,5 +13,5 @@ class BitwardenApplication : Application() {
     // Inject classes here that must be triggered on startup but are not otherwise consumed by
     // other callers.
     @Inject
-    lateinit var networkConfigRepository: NetworkConfigRepository
+    lateinit var networkConfigManager: NetworkConfigManager
 }
