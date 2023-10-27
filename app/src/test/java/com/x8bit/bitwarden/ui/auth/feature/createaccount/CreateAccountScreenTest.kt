@@ -4,6 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
@@ -94,6 +96,32 @@ class CreateAccountScreenTest : BaseComposeTest() {
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(CheckDataBreachesToggle(true)) }
+    }
+
+    @Test
+    fun `accept policies should be toggled on or off according to the state`() {
+        val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
+        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+            every { stateFlow } returns mutableStateFlow
+            every { eventFlow } returns emptyFlow()
+            every { trySendAction(AcceptPoliciesToggle(true)) } returns Unit
+        }
+        composeTestRule.setContent {
+            CreateAccountScreen(
+                onNavigateBack = {},
+                onNavigateToLogin = { _, _ -> },
+                viewModel = viewModel,
+            )
+        }
+        composeTestRule
+            .onNodeWithText("By activating this switch you agree", substring = true)
+            .assertIsOff()
+
+        mutableStateFlow.update { it.copy(isAcceptPoliciesToggled = true) }
+
+        composeTestRule
+            .onNodeWithText("By activating this switch you agree", substring = true)
+            .assertIsOn()
     }
 
     @Test
