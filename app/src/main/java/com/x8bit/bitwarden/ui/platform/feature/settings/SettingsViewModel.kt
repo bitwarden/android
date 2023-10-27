@@ -26,23 +26,23 @@ class SettingsViewModel @Inject constructor() : BaseViewModel<Unit, SettingsEven
             }
 
             Settings.AUTO_FILL -> {
-                // TODO: BIT-927 Launch auto-fill UI
+                sendEvent(SettingsEvent.NavigateAutoFill)
             }
 
             Settings.VAULT -> {
-                // TODO: BIT-928 Launch vault UI
+                sendEvent(SettingsEvent.NavigateVault)
             }
 
             Settings.APPEARANCE -> {
-                // TODO: BIT-929 Launch appearance UI
+                sendEvent(SettingsEvent.NavigateAppearance)
             }
 
             Settings.OTHER -> {
-                // TODO: BIT-930 Launch other UI
+                sendEvent(SettingsEvent.NavigateOther)
             }
 
             Settings.ABOUT -> {
-                // TODO: BIT-931 Launch about UI
+                sendEvent(SettingsEvent.NavigateAbout)
             }
         }
     }
@@ -53,9 +53,34 @@ class SettingsViewModel @Inject constructor() : BaseViewModel<Unit, SettingsEven
  */
 sealed class SettingsEvent {
     /**
+     * Navigate to the about screen.
+     */
+    data object NavigateAbout : SettingsEvent()
+
+    /**
      * Navigate to the account security screen.
      */
     data object NavigateAccountSecurity : SettingsEvent()
+
+    /**
+     * Navigate to the appearance screen.
+     */
+    data object NavigateAppearance : SettingsEvent()
+
+    /**
+     * Navigate to the auto-fill screen.
+     */
+    data object NavigateAutoFill : SettingsEvent()
+
+    /**
+     * Navigate to the other screen.
+     */
+    data object NavigateOther : SettingsEvent()
+
+    /**
+     * Navigate to the vault screen.
+     */
+    data object NavigateVault : SettingsEvent()
 }
 
 /**
@@ -75,12 +100,11 @@ sealed class SettingsAction {
  *
  * @property text The [Text] of the string that represents the label of each setting.
  */
-// TODO: BIT-944 Missing correct resources for "Account Security", "Vault", and "Appearance".
 enum class Settings(val text: Text) {
-    ACCOUNT_SECURITY(R.string.security.asText()),
+    ACCOUNT_SECURITY(R.string.account_security.asText()),
     AUTO_FILL(R.string.autofill.asText()),
-    VAULT(R.string.vaults.asText()),
-    APPEARANCE(R.string.language.asText()),
+    VAULT(R.string.vault.asText()),
+    APPEARANCE(R.string.appearance.asText()),
     OTHER(R.string.other.asText()),
     ABOUT(R.string.about.asText()),
 }

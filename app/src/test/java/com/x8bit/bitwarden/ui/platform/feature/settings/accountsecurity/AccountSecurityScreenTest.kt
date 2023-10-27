@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.feature.settings
+package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -9,8 +9,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
+import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.assertTrue
 
 class AccountSecurityScreenTest : BaseComposeTest() {
 

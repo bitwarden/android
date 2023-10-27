@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.feature.settings
+package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository

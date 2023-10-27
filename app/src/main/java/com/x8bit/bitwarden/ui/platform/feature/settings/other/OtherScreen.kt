@@ -1,21 +1,14 @@
-package com.x8bit.bitwarden.ui.platform.feature.settings
+package com.x8bit.bitwarden.ui.platform.feature.settings.other
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -24,29 +17,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 
 /**
- * Displays the account security screen.
+ * Displays the other screen.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountSecurityScreen(
+fun OtherScreen(
     onNavigateBack: () -> Unit,
-    viewModel: AccountSecurityViewModel = hiltViewModel(),
+    viewModel: OtherViewModel = hiltViewModel(),
 ) {
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            AccountSecurityEvent.NavigateBack -> onNavigateBack.invoke()
+            OtherEvent.NavigateBack -> onNavigateBack.invoke()
         }
     }
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Scaffold(
         modifier = Modifier
@@ -54,15 +44,12 @@ fun AccountSecurityScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.account),
+                title = stringResource(id = R.string.other),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.BackClick) }
-                },
-                actions = {
-                    BitwardenOverflowActionItem()
+                    { viewModel.trySendAction(OtherAction.BackClick) }
                 },
             )
         },
@@ -74,33 +61,7 @@ fun AccountSecurityScreen(
                 .background(color = MaterialTheme.colorScheme.surface)
                 .verticalScroll(rememberScrollState()),
         ) {
-            Spacer(Modifier.height(8.dp))
-            AccountSecurityRow(
-                text = R.string.log_out.asText(),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.LogoutClick) }
-                },
-            )
+            // TODO: BIT-930 Display Other UI
         }
     }
-}
-
-@Composable
-private fun AccountSecurityRow(
-    text: Text,
-    onClick: () -> Unit,
-) {
-    Text(
-        modifier = Modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
-                onClick = onClick,
-            )
-            .padding(horizontal = 16.dp, vertical = 16.dp)
-            .fillMaxWidth(),
-        text = text(),
-        style = MaterialTheme.typography.bodyLarge,
-        color = MaterialTheme.colorScheme.onSurface,
-    )
 }

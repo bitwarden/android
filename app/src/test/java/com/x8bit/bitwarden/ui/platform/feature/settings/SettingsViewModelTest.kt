@@ -9,11 +9,11 @@ import org.junit.jupiter.api.Test
 class SettingsViewModelTest : BaseViewModelTest() {
 
     @Test
-    fun `on SettingsClick with ABOUT should emit nothing`() = runTest {
+    fun `on SettingsClick with ABOUT should emit NavigateAbout`() = runTest {
         val viewModel = SettingsViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SettingsAction.SettingsClick(Settings.ABOUT))
-            expectNoEvents()
+            assertEquals(SettingsEvent.NavigateAbout, awaitItem())
         }
     }
 
@@ -27,38 +27,38 @@ class SettingsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on SettingsClick with APPEARANCE should emit nothing`() = runTest {
+    fun `on SettingsClick with APPEARANCE should emit NavigateAppearance`() = runTest {
         val viewModel = SettingsViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SettingsAction.SettingsClick(Settings.APPEARANCE))
-            expectNoEvents()
+            assertEquals(SettingsEvent.NavigateAppearance, awaitItem())
         }
     }
 
     @Test
-    fun `on SettingsClick with AUTO_FILL should emit nothing`() = runTest {
+    fun `on SettingsClick with AUTO_FILL should emit NavigateAutoFill`() = runTest {
         val viewModel = SettingsViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SettingsAction.SettingsClick(Settings.AUTO_FILL))
-            expectNoEvents()
+            assertEquals(SettingsEvent.NavigateAutoFill, awaitItem())
         }
     }
 
     @Test
-    fun `on SettingsClick with OTHER should emit nothing`() = runTest {
+    fun `on SettingsClick with OTHER should emit NavigateOther`() = runTest {
         val viewModel = SettingsViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SettingsAction.SettingsClick(Settings.OTHER))
-            expectNoEvents()
+            assertEquals(SettingsEvent.NavigateOther, awaitItem())
         }
     }
 
     @Test
-    fun `on SettingsClick with VAULT should emit nothing`() = runTest {
+    fun `on SettingsClick with VAULT should emit NavigateVault`() = runTest {
         val viewModel = SettingsViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SettingsAction.SettingsClick(Settings.VAULT))
-            expectNoEvents()
+            assertEquals(SettingsEvent.NavigateVault, awaitItem())
         }
     }
 }

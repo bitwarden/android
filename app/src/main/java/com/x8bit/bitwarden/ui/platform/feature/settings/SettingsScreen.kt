@@ -44,12 +44,22 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
+    onNavigateToAbout: () -> Unit,
     onNavigateToAccountSecurity: () -> Unit,
+    onNavigateToAppearance: () -> Unit,
+    onNavigateToAutoFill: () -> Unit,
+    onNavigateToOther: () -> Unit,
+    onNavigateToVault: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
+            SettingsEvent.NavigateAbout -> onNavigateToAbout()
             SettingsEvent.NavigateAccountSecurity -> onNavigateToAccountSecurity.invoke()
+            SettingsEvent.NavigateAppearance -> onNavigateToAppearance()
+            SettingsEvent.NavigateAutoFill -> onNavigateToAutoFill()
+            SettingsEvent.NavigateOther -> onNavigateToOther()
+            SettingsEvent.NavigateVault -> onNavigateToVault()
         }
     }
 

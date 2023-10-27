@@ -8,8 +8,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
+import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.assertTrue
 
 class SettingsScreenTest : BaseComposeTest() {
 
@@ -22,7 +22,12 @@ class SettingsScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             SettingsScreen(
                 viewModel = viewModel,
+                onNavigateToAbout = { },
                 onNavigateToAccountSecurity = { },
+                onNavigateToAppearance = { },
+                onNavigateToAutoFill = { },
+                onNavigateToOther = { },
+                onNavigateToVault = { },
             )
         }
         composeTestRule.onNodeWithText("About").performClick()
@@ -40,10 +45,15 @@ class SettingsScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             SettingsScreen(
                 viewModel = viewModel,
+                onNavigateToAbout = { },
                 onNavigateToAccountSecurity = { },
+                onNavigateToAppearance = { },
+                onNavigateToAutoFill = { },
+                onNavigateToOther = { },
+                onNavigateToVault = { },
             )
         }
-        composeTestRule.onNodeWithText("Security").performClick()
+        composeTestRule.onNodeWithText("Account security").performClick()
         verify { viewModel.trySendAction(SettingsAction.SettingsClick(Settings.ACCOUNT_SECURITY)) }
     }
 
@@ -56,10 +66,15 @@ class SettingsScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             SettingsScreen(
                 viewModel = viewModel,
+                onNavigateToAbout = { },
                 onNavigateToAccountSecurity = { },
+                onNavigateToAppearance = { },
+                onNavigateToAutoFill = { },
+                onNavigateToOther = { },
+                onNavigateToVault = { },
             )
         }
-        composeTestRule.onNodeWithText("Language").performClick()
+        composeTestRule.onNodeWithText("Appearance").performClick()
         verify { viewModel.trySendAction(SettingsAction.SettingsClick(Settings.APPEARANCE)) }
     }
 
@@ -72,7 +87,12 @@ class SettingsScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             SettingsScreen(
                 viewModel = viewModel,
+                onNavigateToAbout = { },
                 onNavigateToAccountSecurity = { },
+                onNavigateToAppearance = { },
+                onNavigateToAutoFill = { },
+                onNavigateToOther = { },
+                onNavigateToVault = { },
             )
         }
         composeTestRule.onNodeWithText("Auto-fill").performClick()
@@ -88,7 +108,12 @@ class SettingsScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             SettingsScreen(
                 viewModel = viewModel,
+                onNavigateToAbout = { },
                 onNavigateToAccountSecurity = { },
+                onNavigateToAppearance = { },
+                onNavigateToAutoFill = { },
+                onNavigateToOther = { },
+                onNavigateToVault = { },
             )
         }
         composeTestRule.onNodeWithText("Other").performClick()
@@ -104,11 +129,38 @@ class SettingsScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             SettingsScreen(
                 viewModel = viewModel,
+                onNavigateToAbout = { },
                 onNavigateToAccountSecurity = { },
+                onNavigateToAppearance = { },
+                onNavigateToAutoFill = { },
+                onNavigateToOther = { },
+                onNavigateToVault = { },
             )
         }
-        composeTestRule.onNodeWithText("Vaults").performClick()
+        composeTestRule.onNodeWithText("Vault").performClick()
         verify { viewModel.trySendAction(SettingsAction.SettingsClick(Settings.VAULT)) }
+    }
+
+    @Test
+    fun `on NavigateAbout should call onNavigateToAbout`() {
+        var haveCalledNavigateToAbout = false
+        val viewModel = mockk<SettingsViewModel> {
+            every { eventFlow } returns flowOf(SettingsEvent.NavigateAbout)
+        }
+        composeTestRule.setContent {
+            SettingsScreen(
+                viewModel = viewModel,
+                onNavigateToAbout = {
+                    haveCalledNavigateToAbout = true
+                },
+                onNavigateToAccountSecurity = { },
+                onNavigateToAppearance = { },
+                onNavigateToAutoFill = { },
+                onNavigateToOther = { },
+                onNavigateToVault = { },
+            )
+        }
+        assertTrue(haveCalledNavigateToAbout)
     }
 
     @Test
@@ -120,11 +172,102 @@ class SettingsScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             SettingsScreen(
                 viewModel = viewModel,
+                onNavigateToAbout = { },
                 onNavigateToAccountSecurity = {
                     haveCalledNavigateToAccountSecurity = true
                 },
+                onNavigateToAppearance = { },
+                onNavigateToAutoFill = { },
+                onNavigateToOther = { },
+                onNavigateToVault = { },
             )
         }
         assertTrue(haveCalledNavigateToAccountSecurity)
+    }
+
+    @Test
+    fun `on NavigateAccountSecurity should call NavigateAppearance`() {
+        var haveCalledNavigateToAppearance = false
+        val viewModel = mockk<SettingsViewModel> {
+            every { eventFlow } returns flowOf(SettingsEvent.NavigateAppearance)
+        }
+        composeTestRule.setContent {
+            SettingsScreen(
+                viewModel = viewModel,
+                onNavigateToAbout = { },
+                onNavigateToAccountSecurity = { },
+                onNavigateToAppearance = { haveCalledNavigateToAppearance = true },
+                onNavigateToAutoFill = { },
+                onNavigateToOther = { },
+                onNavigateToVault = { },
+            )
+        }
+        assertTrue(haveCalledNavigateToAppearance)
+    }
+
+    @Test
+    fun `on NavigateAccountSecurity should call onNavigateToAutoFill`() {
+        var haveCalledNavigateToAutoFill = false
+        val viewModel = mockk<SettingsViewModel> {
+            every { eventFlow } returns flowOf(SettingsEvent.NavigateAutoFill)
+        }
+        composeTestRule.setContent {
+            SettingsScreen(
+                viewModel = viewModel,
+                onNavigateToAbout = { },
+                onNavigateToAccountSecurity = { },
+                onNavigateToAppearance = { },
+                onNavigateToAutoFill = {
+                    haveCalledNavigateToAutoFill = true
+                },
+                onNavigateToOther = { },
+                onNavigateToVault = { },
+            )
+        }
+        assertTrue(haveCalledNavigateToAutoFill)
+    }
+
+    @Test
+    fun `on NavigateAccountSecurity should call onNavigateToOther`() {
+        var haveCalledNavigateToOther = false
+        val viewModel = mockk<SettingsViewModel> {
+            every { eventFlow } returns flowOf(SettingsEvent.NavigateOther)
+        }
+        composeTestRule.setContent {
+            SettingsScreen(
+                viewModel = viewModel,
+                onNavigateToAbout = { },
+                onNavigateToAccountSecurity = { },
+                onNavigateToAppearance = { },
+                onNavigateToAutoFill = { },
+                onNavigateToOther = {
+                    haveCalledNavigateToOther = true
+                },
+                onNavigateToVault = { },
+            )
+        }
+        assertTrue(haveCalledNavigateToOther)
+    }
+
+    @Test
+    fun `on NavigateAccountSecurity should call NavigateVault`() {
+        var haveCalledNavigateToVault = false
+        val viewModel = mockk<SettingsViewModel> {
+            every { eventFlow } returns flowOf(SettingsEvent.NavigateVault)
+        }
+        composeTestRule.setContent {
+            SettingsScreen(
+                viewModel = viewModel,
+                onNavigateToAbout = { },
+                onNavigateToAccountSecurity = { },
+                onNavigateToAppearance = { },
+                onNavigateToAutoFill = { },
+                onNavigateToOther = { },
+                onNavigateToVault = {
+                    haveCalledNavigateToVault = true
+                },
+            )
+        }
+        assertTrue(haveCalledNavigateToVault)
     }
 }
