@@ -2423,6 +2423,10 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Fastmail</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>E-posta ilet</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API erişim token'ı</value>
   </data>

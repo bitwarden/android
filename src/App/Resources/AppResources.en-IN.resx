@@ -2438,6 +2438,10 @@ select Add TOTP to store the key safely</value>
     <value>Fastmail</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API access token</value>
   </data>
