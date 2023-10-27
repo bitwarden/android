@@ -40,6 +40,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -317,6 +319,7 @@ private fun TermsAndPrivacySwitch(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .semantics(mergeDescendants = true) {
+                toggleableState = ToggleableState(isChecked)
                 customActions = listOf(
                     CustomAccessibilityAction(
                         label = termsString,
