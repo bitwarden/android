@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AuthenticationServices;
+﻿using AuthenticationServices;
 using Bit.App.Abstractions;
 using Bit.App.Pages;
 using Bit.App.Services;
@@ -11,12 +8,12 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
-using Bit.iOS.Core.Services;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Services;
+using CoreGraphics;
 using CoreNFC;
 using Foundation;
-using Microsoft.Maui.Controls.Compatibility.Platform.iOS;
+using Microsoft.Maui.Platform;
 using UIKit;
 using WatchConnectivity;
 
@@ -77,7 +74,7 @@ namespace Bit.iOS
                     }
                     else if (message.Command is ThemeManager.UPDATED_THEME_MESSAGE_KEY)
                     {
-                        Device.BeginInvokeOnMainThread(() =>
+                        MainThread.BeginInvokeOnMainThread(() =>
                         {
                             iOSCoreHelpers.AppearanceAdjustments();
                         });
@@ -97,7 +94,7 @@ namespace Bit.iOS
                     }
                     else if (message.Command == "showAppExtension")
                     {
-                        Device.BeginInvokeOnMainThread(() => ShowAppExtension((ExtensionPageViewModel)message.Data));
+                        MainThread.BeginInvokeOnMainThread(() => ShowAppExtension((ExtensionPageViewModel)message.Data));
                     }
                     else if (message.Command == "syncCompleted")
                     {
@@ -193,24 +190,30 @@ namespace Bit.iOS
 
         public override void OnResignActivation(UIApplication uiApplication)
         {
-            var view = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
+            if (UIApplication.SharedApplication.KeyWindow != null)
             {
-                Tag = SPLASH_VIEW_TAG
-            };
-            var backgroundView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
-            {
-                BackgroundColor = ThemeManager.GetResourceColor("SplashBackgroundColor").ToUIColor()
-            };
-            var logo = new UIImage(!ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png");
-            var imageView = new UIImageView(logo)
-            {
-                Center = new CoreGraphics.CGPoint(view.Center.X, view.Center.Y - 30)
-            };
-            view.AddSubview(backgroundView);
-            view.AddSubview(imageView);
-            UIApplication.SharedApplication.KeyWindow.AddSubview(view);
-            UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
-            UIApplication.SharedApplication.KeyWindow.EndEditing(true);
+                var view = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
+                {
+                    Tag = SPLASH_VIEW_TAG
+                };
+                var backgroundView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
+                {
+                    BackgroundColor = ThemeManager.GetResourceColor("SplashBackgroundColor").ToPlatform()
+                };
+                var logo = new UIImage(!ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png");
+                var frame = new CGRect(0, 0, 280, 100); //Setting image width to avoid it being larger and getting cropped on smaller devices. This harcoded size should be good even for very small devices.
+                var imageView = new UIImageView(frame)
+                {
+                    Image = logo,
+                    Center = new CGPoint(view.Center.X, view.Center.Y - 30),
+                    ContentMode = UIViewContentMode.ScaleAspectFit
+                };
+                view.AddSubview(backgroundView);
+                view.AddSubview(imageView);
+                UIApplication.SharedApplication.KeyWindow.AddSubview(view);
+                UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
+                UIApplication.SharedApplication.KeyWindow.EndEditing(true);
+            }
             base.OnResignActivation(uiApplication);
         }
 
@@ -368,7 +371,7 @@ namespace Bit.iOS
             _eventTimer?.Invalidate();
             _eventTimer?.Dispose();
             _eventTimer = null;
-            Device.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(() =>
             {
                 _eventTimer = NSTimer.CreateScheduledTimer(60, true, timer =>
                 {

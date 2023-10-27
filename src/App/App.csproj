@@ -186,11 +186,6 @@
 	<ItemGroup>
 				<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
-
-	  <MauiSplashScreen Include="Resources\Splash\splash.svg">
-	    <Color>#175DDC</Color>
-	    <BaseSize>128,128</BaseSize>
-	  </MauiSplashScreen>
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiImage Include="Resources\cog_settings.svg">
@@ -229,6 +224,9 @@
 	    <BaseSize>24,24</BaseSize>
 	  </MauiImage>
 	  <MauiImage Include="Resources\yubikey.png" />
+	</ItemGroup>
+		<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+	  <InterfaceDefinition Include="Platforms\iOS\LaunchScreen.storyboard" />
 	</ItemGroup>
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
 		<ProjectReference Include="..\iOS.Autofill\iOS.Autofill.csproj">
