@@ -1,9 +1,10 @@
-package com.x8bit.bitwarden.data.platform.repository
+package com.x8bit.bitwarden.data.platform.manager
 
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import io.mockk.every
 import io.mockk.mockk
@@ -16,7 +17,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class NetworkConfigRepositoryTest {
+class NetworkConfigManagerTest {
     private val mutableAuthStateFlow = MutableStateFlow<AuthState>(AuthState.Uninitialized)
     private val mutableEnvironmentStateFlow = MutableStateFlow<Environment>(Environment.Us)
 
@@ -31,11 +32,11 @@ class NetworkConfigRepositoryTest {
     private val authTokenInterceptor = AuthTokenInterceptor()
     private val baseUrlInterceptors = BaseUrlInterceptors()
 
-    private lateinit var networkConfigRepository: NetworkConfigRepository
+    private lateinit var networkConfigManager: NetworkConfigManager
 
     @BeforeEach
     fun setUp() {
-        networkConfigRepository = NetworkConfigRepositoryImpl(
+        networkConfigManager = NetworkConfigManagerImpl(
             authRepository = authRepository,
             authTokenInterceptor = authTokenInterceptor,
             environmentRepository = environmentRepository,
