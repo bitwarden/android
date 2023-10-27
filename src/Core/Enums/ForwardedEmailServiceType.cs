@@ -15,5 +15,7 @@ namespace Bit.Core.Enums
         DuckDuckGo = 3,
         [LocalizableEnum("Fastmail")]
         Fastmail = 4,
+        [LocalizableEnum("ForwardEmail")]
+        ForwardEmail = 5,
     }
 }
