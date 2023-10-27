@@ -225,9 +225,6 @@
 	  </MauiImage>
 	  <MauiImage Include="Resources\yubikey.png" />
 	</ItemGroup>
-		<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
-	  <InterfaceDefinition Include="Platforms\iOS\LaunchScreen.storyboard" />
-	</ItemGroup>
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
 		<ProjectReference Include="..\iOS.Autofill\iOS.Autofill.csproj">
 			<IsAppExtension>true</IsAppExtension>
