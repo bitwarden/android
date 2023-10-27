@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Bit.App.Abstractions;
+﻿using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Abstractions;
@@ -9,8 +6,6 @@ using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -62,8 +57,7 @@ namespace Bit.App.Pages
                 _vm.VaultFilterDescription = vaultFilterSelection;
             }
 
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.iOS)
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
                 _absLayout.Children.Remove(_fab);
                 ToolbarItems.Add(_addItem);
@@ -85,7 +79,7 @@ namespace Bit.App.Pages
             }
         }
 
-        protected async override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
             if (_syncService.SyncInProgress)
@@ -105,7 +99,7 @@ namespace Bit.App.Pages
                 {
                     if (message.Command == "syncStarted")
                     {
-                        Device.BeginInvokeOnMainThread(() => IsBusy = true);
+                        MainThread.BeginInvokeOnMainThread(() => IsBusy = true);
                     }
                     else if (message.Command == "syncCompleted")
                     {
@@ -114,7 +108,7 @@ namespace Bit.App.Pages
                         {
                             _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
                         }
-                        Device.BeginInvokeOnMainThread(() =>
+                        MainThread.BeginInvokeOnMainThread(() =>
                         {
                             IsBusy = false;
                             if (_vm.LoadedOnce)
@@ -164,8 +158,7 @@ namespace Bit.App.Pages
             // Push registration
             var lastPushRegistration = await _stateService.GetPushLastRegistrationDateAsync();
             lastPushRegistration = lastPushRegistration.GetValueOrDefault(DateTime.MinValue);
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.iOS)
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
                 var pushPromptShow = await _stateService.GetPushInitialPromptShownAsync();
                 if (!pushPromptShow.GetValueOrDefault(false))
@@ -180,7 +173,7 @@ namespace Bit.App.Pages
                     await _pushNotificationService.RegisterAsync();
                 }
             }
-            else if (Device.RuntimePlatform == Device.Android)
+            else if (DeviceInfo.Platform == DevicePlatform.Android)
             {
                 if (DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
                 {
@@ -292,8 +285,7 @@ namespace Bit.App.Pages
 
         private async void AddButton_Clicked(object sender, EventArgs e)
         {
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            var skipAction = _accountListOverlay.IsVisible && Device.RuntimePlatform == Device.Android;
+            var skipAction = _accountListOverlay.IsVisible && DeviceInfo.Platform == DevicePlatform.Android;
             await _accountListOverlay.HideAsync();
             if (skipAction)
             {
