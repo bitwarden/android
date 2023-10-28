@@ -11,6 +11,7 @@
     xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:dts="clr-namespace:Bit.App.Lists.DataTemplateSelectors"
     xmlns:il="clr-namespace:Bit.App.Lists.ItemLayouts.CustomFields"
+    HideSoftInputOnTapped="True"
     xmlns:core="clr-namespace:Bit.Core"
     x:DataType="pages:CipherAddEditPageViewModel"
     x:Name="_page"

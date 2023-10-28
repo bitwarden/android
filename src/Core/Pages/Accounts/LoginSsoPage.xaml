@@ -6,6 +6,7 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     x:DataType="pages:LoginSsoPageViewModel"
+    HideSoftInputOnTapped="True"
     Title="{Binding PageTitle}">
     
     <ContentPage.BindingContext>

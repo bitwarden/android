@@ -7,6 +7,7 @@
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     x:DataType="pages:HomeViewModel"
+    HideSoftInputOnTapped="True"
     x:Name="_page"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
@@ -34,6 +35,7 @@
                 <Image
                     x:Name="_logo"
                     Source="logo.png"
+                    HeightRequest="60"
                     VerticalOptions="Center" />
                 <Label Text="{u:I18n LoginOrCreateNewAccount}"
                         StyleClass="text-lg"

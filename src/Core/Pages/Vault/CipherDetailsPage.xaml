@@ -12,6 +12,7 @@
     xmlns:il="clr-namespace:Bit.App.Lists.ItemLayouts.CustomFields"
     xmlns:core="clr-namespace:Bit.Core"
     x:DataType="pages:CipherDetailsPageViewModel"
+    HideSoftInputOnTapped="True"
     x:Name="_page"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>

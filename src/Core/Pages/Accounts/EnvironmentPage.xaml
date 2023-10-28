@@ -5,6 +5,7 @@
     x:Class="Bit.App.Pages.EnvironmentPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
+    HideSoftInputOnTapped="True"
     x:DataType="pages:EnvironmentPageViewModel"
     Title="{Binding PageTitle}">
 

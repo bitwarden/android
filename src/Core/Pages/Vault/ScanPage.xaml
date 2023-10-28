@@ -9,6 +9,7 @@
     xmlns:skia="clr-namespace:SkiaSharp.Views.Maui.Controls;assembly=SkiaSharp.Views.Maui.Controls"
     xmlns:core="clr-namespace:Bit.Core" 
     xmlns:maui="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
+    HideSoftInputOnTapped="True"
     x:Name="_page"
     Title="{Binding ScanQrPageTitle}">
 

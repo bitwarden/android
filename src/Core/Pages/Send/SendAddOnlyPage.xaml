@@ -9,6 +9,7 @@
     xmlns:behaviors="clr-namespace:Bit.App.Behaviors"
     xmlns:effects="clr-namespace:Bit.App.Effects"
     x:DataType="pages:SendAddEditPageViewModel"
+    HideSoftInputOnTapped="True"
     x:Name="_page"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>

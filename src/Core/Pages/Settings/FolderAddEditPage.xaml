@@ -6,6 +6,7 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     x:DataType="pages:FolderAddEditPageViewModel"
+    HideSoftInputOnTapped="True"
     x:Name="_page"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>

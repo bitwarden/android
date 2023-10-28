@@ -10,6 +10,7 @@
     xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:core="clr-namespace:Bit.Core"
     xmlns:enums="clr-namespace:Bit.Core.Enums"
+    HideSoftInputOnTapped="True"
     x:DataType="pages:GeneratorPageViewModel"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>

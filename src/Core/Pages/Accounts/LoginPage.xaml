@@ -9,6 +9,7 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     x:DataType="pages:LoginPageViewModel"
     x:Name="_page"
+    HideSoftInputOnTapped="True"
     Title="{Binding PageTitle}"
     AutomationId="PageTitleLabel">
     
