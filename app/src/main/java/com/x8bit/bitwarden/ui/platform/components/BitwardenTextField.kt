@@ -1,9 +1,11 @@
 package com.x8bit.bitwarden.ui.platform.components
 
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 
 /**
@@ -20,6 +22,7 @@ fun BitwardenTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    keyboardType: KeyboardType = KeyboardType.Text,
 ) {
     OutlinedTextField(
         modifier = modifier,
@@ -27,6 +30,7 @@ fun BitwardenTextField(
         value = value,
         onValueChange = onValueChange,
         singleLine = true,
+        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
     )
 }
 
