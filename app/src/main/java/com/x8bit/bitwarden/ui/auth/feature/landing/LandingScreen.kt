@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -131,6 +132,7 @@ fun LandingScreen(
                 { viewModel.trySendAction(LandingAction.EmailInputChanged(it)) }
             },
             label = stringResource(id = R.string.email_address),
+            keyboardType = KeyboardType.Email,
         )
 
         Spacer(modifier = Modifier.height(10.dp))
