@@ -43,6 +43,16 @@ private data class ResText(@StringRes private val id: Int) : Text {
 }
 
 /**
+ * Implementation of [Text] backed by an array of [Text]s. This makes it easy to concatenate texts.
+ */
+@Parcelize
+private data class TextConcatenation(private val args: List<Text>) : Text {
+    override fun invoke(
+        res: Resources,
+    ): CharSequence = args.joinToString(separator = "") { it.invoke(res) }
+}
+
+/**
  * Implementation of [Text] that formats a string resource with arguments.
  */
 @Parcelize
@@ -92,6 +102,11 @@ private data class StringText(private val string: String) : Text {
  * Convert a [String] to [Text].
  */
 fun String.asText(): Text = StringText(this)
+
+/**
+ * Concatenates multiple [Text]s into a singular [Text].
+ */
+fun Text.concat(vararg args: Text): Text = TextConcatenation(listOf(this, *args))
 
 /**
  * Convert a resource Id to [Text].
