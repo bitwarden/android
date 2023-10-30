@@ -2424,6 +2424,10 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
     <value>Fastmail</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token d'accés a l'API</value>
   </data>
