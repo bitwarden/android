@@ -19,6 +19,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -31,6 +33,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 
 /**
  * Displays the account security screen.
@@ -41,10 +44,29 @@ fun AccountSecurityScreen(
     onNavigateBack: () -> Unit,
     viewModel: AccountSecurityViewModel = hiltViewModel(),
 ) {
+    val state by viewModel.stateFlow.collectAsState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             AccountSecurityEvent.NavigateBack -> onNavigateBack.invoke()
         }
+    }
+
+    if (state.shouldShowConfirmLogoutDialog) {
+        BitwardenTwoButtonDialog(
+            title = R.string.log_out.asText(),
+            message = R.string.logout_confirmation.asText(),
+            confirmButtonText = R.string.yes.asText(),
+            onConfirmClick = remember(viewModel) {
+                { viewModel.trySendAction(AccountSecurityAction.ConfirmLogoutClick) }
+            },
+            dismissButtonText = R.string.cancel.asText(),
+            onDismissClick = remember(viewModel) {
+                { viewModel.trySendAction(AccountSecurityAction.DismissDialog) }
+            },
+            onDismissRequest = remember(viewModel) {
+                { viewModel.trySendAction(AccountSecurityAction.DismissDialog) }
+            },
+        )
     }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Scaffold(
