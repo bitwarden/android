@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.ui.platform.feature.splash.splashDestination
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VAULT_UNLOCKED_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.navigateToVaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.vaultUnlockedGraph
+import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
 
 /**
  * Controls root level [NavHost] for the app.
@@ -39,6 +40,10 @@ fun RootNavScreen(
     NavHost(
         navController = navController,
         startDestination = SPLASH_ROUTE,
+        enterTransition = RootTransitionProviders.Enter.fadeIn,
+        exitTransition = RootTransitionProviders.Exit.fadeOut,
+        popEnterTransition = RootTransitionProviders.Enter.fadeIn,
+        popExitTransition = RootTransitionProviders.Exit.fadeOut,
     ) {
         splashDestination()
         authGraph(navController)
