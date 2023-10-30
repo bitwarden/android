@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
 
 private const val EMAIL_ADDRESS: String = "email_address"
 private const val CAPTCHA_TOKEN = "captcha_token"
@@ -51,6 +52,10 @@ fun NavGraphBuilder.loginDestinations(
                 nullable = true
             },
         ),
+        enterTransition = TransitionProviders.Enter.slideUp,
+        exitTransition = TransitionProviders.Exit.slideDown,
+        popEnterTransition = TransitionProviders.Enter.slideUp,
+        popExitTransition = TransitionProviders.Exit.slideDown,
     ) {
         LoginScreen(
             onNavigateBack = onNavigateBack,

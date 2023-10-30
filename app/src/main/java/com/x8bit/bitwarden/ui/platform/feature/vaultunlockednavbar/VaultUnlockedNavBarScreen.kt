@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.ui.platform.components.PlaceholderComposable
 import com.x8bit.bitwarden.ui.platform.feature.settings.SETTINGS_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
+import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
 import com.x8bit.bitwarden.ui.tools.feature.generator.GENERATOR_ROUTE
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGenerator
@@ -175,6 +176,10 @@ private fun VaultUnlockedNavBarScaffold(
             modifier = Modifier
                 .consumeWindowInsets(WindowInsets.navigationBars)
                 .padding(innerPadding),
+            enterTransition = RootTransitionProviders.Enter.fadeIn,
+            exitTransition = RootTransitionProviders.Exit.fadeOut,
+            popEnterTransition = RootTransitionProviders.Enter.fadeIn,
+            popExitTransition = RootTransitionProviders.Exit.fadeOut,
         ) {
             vaultDestination()
             sendDestination()

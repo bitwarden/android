@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
 
 private const val CREATE_ACCOUNT_ROUTE = "create_account"
 
@@ -21,7 +22,13 @@ fun NavGraphBuilder.createAccountDestinations(
     onNavigateBack: () -> Unit,
     onNavigateToLogin: (emailAddress: String, captchaToken: String) -> Unit,
 ) {
-    composable(route = CREATE_ACCOUNT_ROUTE) {
+    composable(
+        route = CREATE_ACCOUNT_ROUTE,
+        enterTransition = TransitionProviders.Enter.slideUp,
+        exitTransition = TransitionProviders.Exit.slideDown,
+        popEnterTransition = TransitionProviders.Enter.slideUp,
+        popExitTransition = TransitionProviders.Exit.slideDown,
+    ) {
         CreateAccountScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToLogin = onNavigateToLogin,

@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
 
 const val LANDING_ROUTE: String = "landing"
 
@@ -21,7 +22,13 @@ fun NavGraphBuilder.landingDestinations(
     onNavigateToCreateAccount: () -> Unit,
     onNavigateToLogin: (emailAddress: String) -> Unit,
 ) {
-    composable(route = LANDING_ROUTE) {
+    composable(
+        route = LANDING_ROUTE,
+        enterTransition = TransitionProviders.Enter.stay,
+        exitTransition = TransitionProviders.Exit.stay,
+        popEnterTransition = TransitionProviders.Enter.stay,
+        popExitTransition = TransitionProviders.Exit.stay,
+    ) {
         LandingScreen(
             onNavigateToCreateAccount = onNavigateToCreateAccount,
             onNavigateToLogin = onNavigateToLogin,
