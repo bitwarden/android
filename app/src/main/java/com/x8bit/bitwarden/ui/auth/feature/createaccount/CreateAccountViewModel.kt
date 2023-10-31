@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Ter
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -349,9 +350,16 @@ data class CreateAccountState(
 ) : Parcelable {
 
     val passwordLengthLabel: Text
-        get() =
-            R.string.your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum
-                .asText(MIN_PASSWORD_LENGTH)
+        // Have to concat a few strings here, resulting string is:
+        // Important: Your master password cannot be recovered if you forget it! 12
+        // characters minimum
+        @Suppress("MaxLineLength")
+        get() = R.string.important.asText()
+            .concat(
+                ": ".asText(),
+                R.string.your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum
+                    .asText(MIN_PASSWORD_LENGTH),
+            )
 }
 
 /**
