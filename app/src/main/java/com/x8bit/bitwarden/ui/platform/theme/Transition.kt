@@ -22,9 +22,36 @@ typealias NonNullExitTransitionProvider =
     (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition)
 
 /**
- * The default transition time (in milliseconds) for all transitions in the [TransitionProviders].
+ * The default transition time (in milliseconds) for all fade transitions in the
+ * [TransitionProviders].
  */
-const val DEFAULT_TRANSITION_TIME_MS: Int = 350
+const val DEFAULT_FADE_TRANSITION_TIME_MS: Int = 300
+
+/**
+ * The default transition time (in milliseconds) for all slide transitions in the
+ * [TransitionProviders].
+ */
+const val DEFAULT_SLIDE_TRANSITION_TIME_MS: Int = 450
+
+/**
+ * The default transition time (in milliseconds) for all slide transitions in the
+ * [TransitionProviders].
+ */
+const val DEFAULT_PUSH_TRANSITION_TIME_MS: Int = 300
+
+/**
+ * The default transition time (in milliseconds) for all "stay"/no-op transitions in the
+ * [TransitionProviders].
+ *
+ * This should be at least as large as any other transition that might also be happening during a
+ * navigation.
+ */
+val DEFAULT_STAY_TRANSITION_TIME_MS: Int =
+    maxOf(
+        DEFAULT_FADE_TRANSITION_TIME_MS,
+        DEFAULT_SLIDE_TRANSITION_TIME_MS,
+        DEFAULT_PUSH_TRANSITION_TIME_MS,
+    )
 
 /**
  * Checks if the parent of the destination before and after the navigation is the same. This is
@@ -186,7 +213,7 @@ object RootTransitionProviders {
          * Fades the new screen in.
          */
         val fadeIn: NonNullEnterTransitionProvider = {
-            fadeIn(tween(DEFAULT_TRANSITION_TIME_MS))
+            fadeIn(tween(DEFAULT_FADE_TRANSITION_TIME_MS))
         }
 
         /**
@@ -195,8 +222,8 @@ object RootTransitionProviders {
         val pushLeft: NonNullEnterTransitionProvider = {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                animationSpec = tween(DEFAULT_TRANSITION_TIME_MS),
-            ) + fadeIn(tween(DEFAULT_TRANSITION_TIME_MS))
+                animationSpec = tween(DEFAULT_PUSH_TRANSITION_TIME_MS),
+            ) + fadeIn(tween(DEFAULT_PUSH_TRANSITION_TIME_MS))
         }
 
         /**
@@ -205,8 +232,8 @@ object RootTransitionProviders {
         val pushRight: NonNullEnterTransitionProvider = {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                animationSpec = tween(DEFAULT_TRANSITION_TIME_MS),
-            ) + fadeIn(tween(DEFAULT_TRANSITION_TIME_MS))
+                animationSpec = tween(DEFAULT_PUSH_TRANSITION_TIME_MS),
+            ) + fadeIn(tween(DEFAULT_PUSH_TRANSITION_TIME_MS))
         }
 
         /**
@@ -215,7 +242,7 @@ object RootTransitionProviders {
         val slideUp: NonNullEnterTransitionProvider = {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                animationSpec = tween(DEFAULT_TRANSITION_TIME_MS),
+                animationSpec = tween(DEFAULT_SLIDE_TRANSITION_TIME_MS),
             )
         }
 
@@ -226,7 +253,7 @@ object RootTransitionProviders {
          */
         val stay: NonNullEnterTransitionProvider = {
             fadeIn(
-                animationSpec = tween(DEFAULT_TRANSITION_TIME_MS),
+                animationSpec = tween(DEFAULT_STAY_TRANSITION_TIME_MS),
                 initialAlpha = 1f,
             )
         }
@@ -240,7 +267,7 @@ object RootTransitionProviders {
          * Fades the current screen out.
          */
         val fadeOut: NonNullExitTransitionProvider = {
-            fadeOut(tween(DEFAULT_TRANSITION_TIME_MS))
+            fadeOut(tween(DEFAULT_FADE_TRANSITION_TIME_MS))
         }
 
         /**
@@ -249,8 +276,8 @@ object RootTransitionProviders {
         val pushLeft: NonNullExitTransitionProvider = {
             slideOutOfContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                animationSpec = tween(DEFAULT_TRANSITION_TIME_MS),
-            ) + fadeOut(tween(DEFAULT_TRANSITION_TIME_MS))
+                animationSpec = tween(DEFAULT_PUSH_TRANSITION_TIME_MS),
+            ) + fadeOut(tween(DEFAULT_PUSH_TRANSITION_TIME_MS))
         }
 
         /**
@@ -259,8 +286,8 @@ object RootTransitionProviders {
         val pushRight: NonNullExitTransitionProvider = {
             slideOutOfContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                animationSpec = tween(DEFAULT_TRANSITION_TIME_MS),
-            ) + fadeOut(tween(DEFAULT_TRANSITION_TIME_MS))
+                animationSpec = tween(DEFAULT_PUSH_TRANSITION_TIME_MS),
+            ) + fadeOut(tween(DEFAULT_PUSH_TRANSITION_TIME_MS))
         }
 
         /**
@@ -269,7 +296,7 @@ object RootTransitionProviders {
         val slideDown: NonNullExitTransitionProvider = {
             slideOutOfContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Down,
-                animationSpec = tween(DEFAULT_TRANSITION_TIME_MS),
+                animationSpec = tween(DEFAULT_SLIDE_TRANSITION_TIME_MS),
             )
         }
 
@@ -280,7 +307,7 @@ object RootTransitionProviders {
          */
         val stay: NonNullExitTransitionProvider = {
             fadeOut(
-                animationSpec = tween(DEFAULT_TRANSITION_TIME_MS),
+                animationSpec = tween(DEFAULT_STAY_TRANSITION_TIME_MS),
                 targetAlpha = 0.99f,
             )
         }
