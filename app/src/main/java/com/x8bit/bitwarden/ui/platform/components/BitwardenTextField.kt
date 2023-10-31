@@ -15,6 +15,10 @@ import androidx.compose.ui.tooling.preview.Preview
  * @param value current next on the text field.
  * @param modifier modifier for the composable.
  * @param onValueChange callback that is triggered when the input of the text field changes.
+ * @param placeholder the optional placeholder to be displayed when the text field is in focus and
+ * the [value] is empty.
+ * @param readOnly `true` if the input should be read-only and not accept user interactions.
+ * @param keyboardType the preferred type of keyboard input.
  */
 @Composable
 fun BitwardenTextField(
@@ -22,6 +26,7 @@ fun BitwardenTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    placeholder: String? = null,
     readOnly: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
 ) {
@@ -29,6 +34,9 @@ fun BitwardenTextField(
         modifier = modifier,
         label = { Text(text = label) },
         value = value,
+        placeholder = placeholder?.let {
+            { Text(text = it) }
+        },
         onValueChange = onValueChange,
         singleLine = true,
         readOnly = readOnly,

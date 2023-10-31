@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.ui.auth.feature.landing.LANDING_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.landing.landingDestinations
 import com.x8bit.bitwarden.ui.auth.feature.login.loginDestinations
 import com.x8bit.bitwarden.ui.auth.feature.login.navigateToLogin
+import com.x8bit.bitwarden.ui.auth.feature.environment.navigateToEnvironment
+import com.x8bit.bitwarden.ui.auth.feature.environment.environmentDestination
 
 const val AUTH_GRAPH_ROUTE: String = "auth_graph"
 
@@ -43,8 +45,14 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
                     captchaToken = null,
                 )
             },
+            onNavigateToEnvironment = {
+                navController.navigateToEnvironment()
+            },
         )
         loginDestinations(
+            onNavigateBack = { navController.popBackStack() },
+        )
+        environmentDestination(
             onNavigateBack = { navController.popBackStack() },
         )
     }

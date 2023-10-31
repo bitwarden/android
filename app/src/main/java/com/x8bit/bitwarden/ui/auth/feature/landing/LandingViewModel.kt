@@ -113,10 +113,9 @@ class LandingViewModel @Inject constructor(
             Environment.Type.US -> Environment.Us
             Environment.Type.EU -> Environment.Eu
             Environment.Type.SELF_HOSTED -> {
-                // TODO Show dialog for setting selected environment (BIT-330)
-                Environment.SelfHosted(
-                    environmentUrlData = Environment.Us.environmentUrlData,
-                )
+                // Launch the self-hosted screen and select the full environment details there.
+                sendEvent(LandingEvent.NavigateToEnvironment)
+                return
             }
         }
 
@@ -155,6 +154,11 @@ sealed class LandingEvent {
     data class NavigateToLogin(
         val emailAddress: String,
     ) : LandingEvent()
+
+    /**
+     * Navigates to the self-hosted/custom environment screen.
+     */
+    data object NavigateToEnvironment : LandingEvent()
 }
 
 /**

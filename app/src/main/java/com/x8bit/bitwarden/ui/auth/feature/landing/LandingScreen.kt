@@ -60,6 +60,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 fun LandingScreen(
     onNavigateToCreateAccount: () -> Unit,
     onNavigateToLogin: (emailAddress: String) -> Unit,
+    onNavigateToEnvironment: () -> Unit,
     viewModel: LandingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -69,6 +70,8 @@ fun LandingScreen(
             is LandingEvent.NavigateToLogin -> onNavigateToLogin(
                 event.emailAddress,
             )
+
+            LandingEvent.NavigateToEnvironment -> onNavigateToEnvironment()
         }
     }
 

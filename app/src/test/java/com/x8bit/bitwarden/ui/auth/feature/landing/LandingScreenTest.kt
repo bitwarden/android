@@ -47,6 +47,7 @@ class LandingScreenTest : BaseComposeTest() {
             LandingScreen(
                 onNavigateToCreateAccount = {},
                 onNavigateToLogin = { _ -> },
+                onNavigateToEnvironment = {},
                 viewModel = viewModel,
             )
         }
@@ -67,6 +68,7 @@ class LandingScreenTest : BaseComposeTest() {
             LandingScreen(
                 onNavigateToCreateAccount = {},
                 onNavigateToLogin = { _ -> },
+                onNavigateToEnvironment = {},
                 viewModel = viewModel,
             )
         }
@@ -87,6 +89,7 @@ class LandingScreenTest : BaseComposeTest() {
             LandingScreen(
                 onNavigateToCreateAccount = {},
                 onNavigateToLogin = { _ -> },
+                onNavigateToEnvironment = {},
                 viewModel = viewModel,
             )
         }
@@ -107,6 +110,7 @@ class LandingScreenTest : BaseComposeTest() {
             LandingScreen(
                 onNavigateToCreateAccount = {},
                 onNavigateToLogin = { _ -> },
+                onNavigateToEnvironment = {},
                 viewModel = viewModel,
             )
         }
@@ -128,6 +132,7 @@ class LandingScreenTest : BaseComposeTest() {
             LandingScreen(
                 onNavigateToCreateAccount = {},
                 onNavigateToLogin = { _ -> },
+                onNavigateToEnvironment = {},
                 viewModel = viewModel,
             )
         }
@@ -148,6 +153,7 @@ class LandingScreenTest : BaseComposeTest() {
             LandingScreen(
                 onNavigateToCreateAccount = {},
                 onNavigateToLogin = { _ -> },
+                onNavigateToEnvironment = {},
                 viewModel = viewModel,
             )
         }
@@ -174,6 +180,7 @@ class LandingScreenTest : BaseComposeTest() {
             LandingScreen(
                 onNavigateToCreateAccount = {},
                 onNavigateToLogin = { _ -> },
+                onNavigateToEnvironment = {},
                 viewModel = viewModel,
             )
         }
@@ -194,6 +201,7 @@ class LandingScreenTest : BaseComposeTest() {
             LandingScreen(
                 onNavigateToCreateAccount = { onNavigateToCreateAccountCalled = true },
                 onNavigateToLogin = { _ -> },
+                onNavigateToEnvironment = {},
                 viewModel = viewModel,
             )
         }
@@ -217,11 +225,30 @@ class LandingScreenTest : BaseComposeTest() {
                 onNavigateToLogin = { email ->
                     capturedEmail = email
                 },
+                onNavigateToEnvironment = {},
                 viewModel = viewModel,
             )
         }
 
         assertEquals(testEmail, capturedEmail)
+    }
+
+    @Test
+    fun `NavigateToEnvironment event should call onNavigateToEvent`() {
+        var onNavigateToEnvironmentCalled = false
+        val viewModel = mockk<LandingViewModel>(relaxed = true) {
+            every { eventFlow } returns flowOf(LandingEvent.NavigateToEnvironment)
+            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
+        }
+        composeTestRule.setContent {
+            LandingScreen(
+                onNavigateToCreateAccount = { },
+                onNavigateToLogin = { _ -> },
+                onNavigateToEnvironment = { onNavigateToEnvironmentCalled = true },
+                viewModel = viewModel,
+            )
+        }
+        assertTrue(onNavigateToEnvironmentCalled)
     }
 
     @Test
@@ -236,6 +263,7 @@ class LandingScreenTest : BaseComposeTest() {
             LandingScreen(
                 onNavigateToCreateAccount = {},
                 onNavigateToLogin = { _ -> },
+                onNavigateToEnvironment = {},
                 viewModel = viewModel,
             )
         }
@@ -272,6 +300,7 @@ class LandingScreenTest : BaseComposeTest() {
             LandingScreen(
                 onNavigateToCreateAccount = {},
                 onNavigateToLogin = { _ -> },
+                onNavigateToEnvironment = {},
                 viewModel = viewModel,
             )
         }
@@ -321,6 +350,7 @@ class LandingScreenTest : BaseComposeTest() {
             LandingScreen(
                 onNavigateToCreateAccount = {},
                 onNavigateToLogin = { _ -> },
+                onNavigateToEnvironment = {},
                 viewModel = viewModel,
             )
         }
