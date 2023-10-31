@@ -281,7 +281,7 @@ object RootTransitionProviders {
         val stay: NonNullExitTransitionProvider = {
             fadeOut(
                 animationSpec = tween(DEFAULT_TRANSITION_TIME_MS),
-                targetAlpha = 0f,
+                targetAlpha = 0.99f,
             )
         }
     }
