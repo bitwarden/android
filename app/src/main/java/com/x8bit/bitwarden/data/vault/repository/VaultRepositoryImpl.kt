@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.vault.repository
 
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -15,10 +15,10 @@ import kotlinx.coroutines.launch
 class VaultRepositoryImpl constructor(
     private val syncService: SyncService,
     private val vaultSdkSource: VaultSdkSource,
-    dispatcher: CoroutineDispatcher,
+    dispatcherManager: DispatcherManager,
 ) : VaultRepository {
 
-    private val scope = CoroutineScope(dispatcher)
+    private val scope = CoroutineScope(dispatcherManager.io)
 
     private var syncJob: Job = Job().apply { complete() }
 

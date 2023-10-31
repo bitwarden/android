@@ -2,9 +2,9 @@ package com.x8bit.bitwarden.data.platform.repository
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrls
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -16,10 +16,10 @@ import kotlinx.coroutines.flow.stateIn
  */
 class EnvironmentRepositoryImpl(
     private val environmentDiskSource: EnvironmentDiskSource,
-    private val dispatcher: CoroutineDispatcher,
+    dispatcherManager: DispatcherManager,
 ) : EnvironmentRepository {
 
-    private val scope = CoroutineScope(dispatcher)
+    private val scope = CoroutineScope(dispatcherManager.io)
 
     override var environment: Environment
         get() = environmentDiskSource

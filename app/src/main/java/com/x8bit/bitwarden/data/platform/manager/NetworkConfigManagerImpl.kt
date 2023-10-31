@@ -4,8 +4,8 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -18,10 +18,10 @@ class NetworkConfigManagerImpl(
     private val authTokenInterceptor: AuthTokenInterceptor,
     private val environmentRepository: EnvironmentRepository,
     private val baseUrlInterceptors: BaseUrlInterceptors,
-    dispatcher: CoroutineDispatcher,
+    dispatcherManager: DispatcherManager,
 ) : NetworkConfigManager {
 
-    private val scope = CoroutineScope(dispatcher)
+    private val scope = CoroutineScope(dispatcherManager.io)
 
     init {
         authRepository

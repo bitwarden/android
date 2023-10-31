@@ -7,11 +7,11 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.AuthRepositoryImpl
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 /**
@@ -30,12 +30,13 @@ object AuthRepositoryModule {
         haveIBeenPwnedService: HaveIBeenPwnedService,
         authSdkSource: AuthSdkSource,
         authDiskSource: AuthDiskSource,
+        dispatchers: DispatcherManager,
     ): AuthRepository = AuthRepositoryImpl(
         accountsService = accountsService,
         identityService = identityService,
         authSdkSource = authSdkSource,
         authDiskSource = authDiskSource,
         haveIBeenPwnedService = haveIBeenPwnedService,
-        dispatcher = Dispatchers.IO,
+        dispatcherManager = dispatchers,
     )
 }
