@@ -58,6 +58,26 @@ object TransitionProviders {
         }
 
         /**
+         * Slides the new screen in from the left of the screen.
+         */
+        val pushLeft: EnterTransitionProvider = {
+            RootTransitionProviders
+                .Enter
+                .pushLeft(this)
+                .takeIf { isSameGraphNavigation }
+        }
+
+        /**
+         * Slides the new screen in from the right of the screen.
+         */
+        val pushRight: EnterTransitionProvider = {
+            RootTransitionProviders
+                .Enter
+                .pushRight(this)
+                .takeIf { isSameGraphNavigation }
+        }
+
+        /**
          * Slides the new screen in from the bottom of the screen.
          *
          * Note that this represents a `null` transition when navigating between different nested
@@ -100,6 +120,26 @@ object TransitionProviders {
             RootTransitionProviders
                 .Exit
                 .fadeOut(this)
+                .takeIf { isSameGraphNavigation }
+        }
+
+        /**
+         * Slides the current screen out to the left of the screen.
+         */
+        val pushLeft: ExitTransitionProvider = {
+            RootTransitionProviders
+                .Exit
+                .pushLeft(this)
+                .takeIf { isSameGraphNavigation }
+        }
+
+        /**
+         * Slides the current screen out to the right of the screen.
+         */
+        val pushRight: ExitTransitionProvider = {
+            RootTransitionProviders
+                .Exit
+                .pushRight(this)
                 .takeIf { isSameGraphNavigation }
         }
 
@@ -150,6 +190,26 @@ object RootTransitionProviders {
         }
 
         /**
+         * Slides the new screen in from the left of the screen.
+         */
+        val pushLeft: NonNullEnterTransitionProvider = {
+            slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(DEFAULT_TRANSITION_TIME_MS),
+            ) + fadeIn(tween(DEFAULT_TRANSITION_TIME_MS))
+        }
+
+        /**
+         * Slides the new screen in from the right of the screen.
+         */
+        val pushRight: NonNullEnterTransitionProvider = {
+            slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(DEFAULT_TRANSITION_TIME_MS),
+            ) + fadeIn(tween(DEFAULT_TRANSITION_TIME_MS))
+        }
+
+        /**
          * Slides the new screen in from the bottom of the screen.
          */
         val slideUp: NonNullEnterTransitionProvider = {
@@ -181,6 +241,26 @@ object RootTransitionProviders {
          */
         val fadeOut: NonNullExitTransitionProvider = {
             fadeOut(tween(DEFAULT_TRANSITION_TIME_MS))
+        }
+
+        /**
+         * Slides the current screen out to the left of the screen.
+         */
+        val pushLeft: NonNullExitTransitionProvider = {
+            slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(DEFAULT_TRANSITION_TIME_MS),
+            ) + fadeOut(tween(DEFAULT_TRANSITION_TIME_MS))
+        }
+
+        /**
+         * Slides the current screen out to the right of the screen.
+         */
+        val pushRight: NonNullExitTransitionProvider = {
+            slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(DEFAULT_TRANSITION_TIME_MS),
+            ) + fadeOut(tween(DEFAULT_TRANSITION_TIME_MS))
         }
 
         /**

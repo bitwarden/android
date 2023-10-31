@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.other.navigateToOther
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.otherDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.navigateToVault
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.vaultDestination
+import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
 
 const val SETTINGS_GRAPH_ROUTE: String = "settings_graph"
 private const val SETTINGS_ROUTE: String = "settings"
@@ -31,7 +32,13 @@ fun NavGraphBuilder.settingsGraph(
         startDestination = SETTINGS_ROUTE,
         route = SETTINGS_GRAPH_ROUTE,
     ) {
-        composable(SETTINGS_ROUTE) {
+        composable(
+            route = SETTINGS_ROUTE,
+            enterTransition = TransitionProviders.Enter.stay,
+            exitTransition = TransitionProviders.Exit.pushLeft,
+            popEnterTransition = TransitionProviders.Enter.pushRight,
+            popExitTransition = TransitionProviders.Exit.fadeOut,
+        ) {
             SettingsScreen(
                 onNavigateToAbout = { navController.navigateToAbout() },
                 onNavigateToAccountSecurity = { navController.navigateToAccountSecurity() },

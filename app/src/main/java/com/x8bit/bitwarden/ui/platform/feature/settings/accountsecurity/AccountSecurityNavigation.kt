@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
 
 private const val ACCOUNT_SECURITY_ROUTE = "settings_account_security"
 
@@ -13,7 +14,13 @@ private const val ACCOUNT_SECURITY_ROUTE = "settings_account_security"
 fun NavGraphBuilder.accountSecurityDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composable(ACCOUNT_SECURITY_ROUTE) {
+    composable(
+        route = ACCOUNT_SECURITY_ROUTE,
+        enterTransition = TransitionProviders.Enter.pushLeft,
+        exitTransition = TransitionProviders.Exit.pushLeft,
+        popEnterTransition = TransitionProviders.Enter.pushLeft,
+        popExitTransition = TransitionProviders.Exit.pushRight,
+    ) {
         AccountSecurityScreen(onNavigateBack = onNavigateBack)
     }
 }
