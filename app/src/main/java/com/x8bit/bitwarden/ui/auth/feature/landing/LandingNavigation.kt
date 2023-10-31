@@ -21,6 +21,7 @@ fun NavController.navigateToLanding(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.landingDestinations(
     onNavigateToCreateAccount: () -> Unit,
     onNavigateToLogin: (emailAddress: String) -> Unit,
+    onNavigateToEnvironment: () -> Unit,
 ) {
     composable(
         route = LANDING_ROUTE,
@@ -32,6 +33,7 @@ fun NavGraphBuilder.landingDestinations(
         LandingScreen(
             onNavigateToCreateAccount = onNavigateToCreateAccount,
             onNavigateToLogin = onNavigateToLogin,
+            onNavigateToEnvironment = onNavigateToEnvironment,
         )
     }
 }
