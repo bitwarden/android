@@ -3,12 +3,15 @@ package com.x8bit.bitwarden.ui.tools.feature.generator
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher.Companion.expectValue
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasProgressBarRangeInfo
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onLast
@@ -96,6 +99,7 @@ class GeneratorScreenTest : BaseComposeTest() {
             .onAllNodesWithText(text = "Password")
             .onLast()
             .performScrollTo()
+            .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
         verify {
@@ -103,6 +107,11 @@ class GeneratorScreenTest : BaseComposeTest() {
                 GeneratorAction.MainTypeOptionSelect(GeneratorState.MainTypeOption.PASSWORD),
             )
         }
+
+        // Make sure dialog is hidden:
+        composeTestRule
+            .onNode(isDialog())
+            .assertDoesNotExist()
     }
 
     @Test
@@ -120,6 +129,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onAllNodesWithText(text = "Passphrase")
             .onLast()
+            .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
         verify {
@@ -129,6 +139,11 @@ class GeneratorScreenTest : BaseComposeTest() {
                 ),
             )
         }
+
+        // Make sure dialog is hidden:
+        composeTestRule
+            .onNode(isDialog())
+            .assertDoesNotExist()
     }
 
     //region Passcode Password Tests
