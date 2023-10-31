@@ -240,19 +240,25 @@ class LandingScreenTest : BaseComposeTest() {
             )
         }
 
-        // Clicking to open dropdown
+        // Clicking to open dialog
         composeTestRule
             .onNodeWithText(Environment.Us.label.toString(resources))
             .performClick()
 
-        // Clicking item from the dropdown menu
+        // Clicking item on dialog
         composeTestRule
             .onNodeWithText(selectedEnvironment.label.toString(resources))
+            .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
         verify {
             viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(selectedEnvironment.type))
         }
+
+        // Make sure dialog is hidden:
+        composeTestRule
+            .onNode(isDialog())
+            .assertDoesNotExist()
     }
 
     @Test
