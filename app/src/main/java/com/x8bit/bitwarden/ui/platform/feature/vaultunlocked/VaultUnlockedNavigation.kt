@@ -6,6 +6,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VAULT_UNLOCKED_NAV_BAR_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
+import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultAddItem
+import com.x8bit.bitwarden.ui.vault.feature.vault.vaultAddItemDestination
 
 const val VAULT_UNLOCKED_GRAPH_ROUTE: String = "vault_unlocked_graph"
 
@@ -19,11 +21,16 @@ fun NavController.navigateToVaultUnlockedGraph(navOptions: NavOptions? = null) {
 /**
  * Add vault unlocked destinations to the root nav graph.
  */
-fun NavGraphBuilder.vaultUnlockedGraph() {
+fun NavGraphBuilder.vaultUnlockedGraph(
+    navController: NavController,
+) {
     navigation(
         startDestination = VAULT_UNLOCKED_NAV_BAR_ROUTE,
         route = VAULT_UNLOCKED_GRAPH_ROUTE,
     ) {
-        vaultUnlockedNavBarDestination()
+        vaultUnlockedNavBarDestination(
+            onNavigateToVaultAddItem = { navController.navigateToVaultAddItem() },
+        )
+        vaultAddItemDestination(onNavigateBack = { navController.popBackStack() })
     }
 }

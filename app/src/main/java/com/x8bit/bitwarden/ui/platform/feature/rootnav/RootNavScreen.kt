@@ -47,7 +47,7 @@ fun RootNavScreen(
     ) {
         splashDestination()
         authGraph(navController)
-        vaultUnlockedGraph()
+        vaultUnlockedGraph(navController)
     }
 
     val targetRoute = when (state) {

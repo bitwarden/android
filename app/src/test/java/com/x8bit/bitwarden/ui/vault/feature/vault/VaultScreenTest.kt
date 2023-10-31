@@ -10,6 +10,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOf
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class VaultScreenTest : BaseComposeTest() {
@@ -30,6 +32,7 @@ class VaultScreenTest : BaseComposeTest() {
             setContent {
                 VaultScreen(
                     viewModel = viewModel,
+                    onNavigateToVaultAddItemScreen = {},
                 )
             }
             onNodeWithContentDescription("Search vault").performClick()
@@ -53,6 +56,7 @@ class VaultScreenTest : BaseComposeTest() {
             setContent {
                 VaultScreen(
                     viewModel = viewModel,
+                    onNavigateToVaultAddItemScreen = {},
                 )
             }
             onNodeWithContentDescription("Add Item").performClick()
@@ -77,10 +81,35 @@ class VaultScreenTest : BaseComposeTest() {
             setContent {
                 VaultScreen(
                     viewModel = viewModel,
+                    onNavigateToVaultAddItemScreen = {},
                 )
             }
             onNodeWithText("Add an Item").performClick()
         }
         verify { viewModel.trySendAction(VaultAction.AddItemClick) }
+    }
+
+    @Test
+    fun `NavigateToAddItemScreen event should call onNavigateToVaultAddItemScreen`() {
+        var onNavigateToVaultAddItemScreenCalled = false
+        val viewModel = mockk<VaultViewModel>(relaxed = true) {
+            every { eventFlow } returns flowOf(VaultEvent.NavigateToAddItemScreen)
+            every { stateFlow } returns MutableStateFlow(
+                VaultState(
+                    avatarColor = Color.Blue,
+                    initials = "BW",
+                    viewState = VaultState.ViewState.NoItems,
+                ),
+            )
+        }
+
+        composeTestRule.setContent {
+            VaultScreen(
+                onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
+                viewModel = viewModel,
+            )
+        }
+
+        assertTrue(onNavigateToVaultAddItemScreenCalled)
     }
 }

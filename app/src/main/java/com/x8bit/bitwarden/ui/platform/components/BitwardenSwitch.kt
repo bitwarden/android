@@ -40,11 +40,17 @@ fun BitwardenSwitch(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
-                onClick = { onCheckedChange?.invoke(!isChecked) },
-            )
+            .run {
+                if (onCheckedChange != null) {
+                    this.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
+                        onClick = { onCheckedChange.invoke(!isChecked) },
+                    )
+                } else {
+                    this
+                }
+            }
             .semantics(mergeDescendants = true) {
                 toggleableState = ToggleableState(isChecked)
             }
