@@ -1,7 +1,8 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.di
 
+import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
+import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncServiceImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
-import com.x8bit.bitwarden.data.vault.datasource.network.api.SyncApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +19,9 @@ object VaultNetworkModule {
 
     @Provides
     @Singleton
-    fun provideSyncApiService(
+    fun provideSyncService(
         retrofits: Retrofits,
-    ): SyncApi = retrofits.authenticatedApiRetrofit.create()
+    ): SyncService = SyncServiceImpl(
+        syncApi = retrofits.authenticatedApiRetrofit.create(),
+    )
 }

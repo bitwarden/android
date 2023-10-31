@@ -77,7 +77,7 @@ data class SyncResponseJson(
     /**
      * Represents a folder in the vault response.
      *
-     * @property revisionDate The revision date of the folder (nullable).
+     * @property revisionDate The revision date of the folder.
      * @property name The name of the folder (nullable).
      * @property id The ID of the folder.
      */
@@ -85,7 +85,7 @@ data class SyncResponseJson(
     data class Folder(
         @SerialName("revisionDate")
         @Contextual
-        val revisionDate: LocalDateTime?, // Date
+        val revisionDate: LocalDateTime,
 
         @SerialName("name")
         val name: String?,
@@ -236,7 +236,7 @@ data class SyncResponseJson(
          * @property shouldUseActivateAutofillPolicy If the organization should
          * use auto fill policy.
          * @property shouldUseEvents If the organization should use events.
-         * @property isFamilySponsorshipFriendlyName If the family sponsorship is a friendly name.
+         * @property familySponsorshipFriendlyName If the family sponsorship is a friendly name.
          * @property isKeyConnectorEnabled If the key connector is enabled.
          * @property shouldUseTotp If he organization should use TOTP.
          * @property familySponsorshipLastSyncDate The last date the family sponsorship
@@ -351,7 +351,7 @@ data class SyncResponseJson(
             val shouldUseEvents: Boolean,
 
             @SerialName("familySponsorshipFriendlyName")
-            val isFamilySponsorshipFriendlyName: String?,
+            val familySponsorshipFriendlyName: String?,
 
             @SerialName("keyConnectorEnabled")
             val isKeyConnectorEnabled: Boolean,
@@ -376,7 +376,8 @@ data class SyncResponseJson(
             val isSsoBound: Boolean,
 
             @SerialName("familySponsorshipValidUntil")
-            val familySponsorshipValidUntil: String?,
+            @Contextual
+            val familySponsorshipValidUntil: LocalDateTime?,
 
             @SerialName("status")
             val status: Int,
@@ -499,10 +500,10 @@ data class SyncResponseJson(
      * @property shouldEdit If the cipher can edit.
      * @property passwordHistory A list of password history objects
      * associated with the cipher (nullable).
-     * @property revisionDate The revision date of the cipher (nullable).
+     * @property revisionDate The revision date of the cipher.
      * @property type The type of cipher.
      * @property login The login of the cipher.
-     * @property creationDate The creation date of the cipher (nullable).
+     * @property creationDate The creation date of the cipher.
      * @property secureNote The secure note of the cipher.
      * @property folderId The folder ID of the cipher (nullable).
      * @property organizationId The organization ID of the cipher (nullable).
@@ -538,20 +539,20 @@ data class SyncResponseJson(
 
         @SerialName("revisionDate")
         @Contextual
-        val revisionDate: LocalDateTime?,
+        val revisionDate: LocalDateTime,
 
         @SerialName("type")
         val type: CipherTypeJson,
 
         @SerialName("login")
-        val login: Login,
+        val login: Login?,
 
         @SerialName("creationDate")
         @Contextual
-        val creationDate: LocalDateTime?,
+        val creationDate: LocalDateTime,
 
         @SerialName("secureNote")
-        val secureNote: SecureNote,
+        val secureNote: SecureNote?,
 
         @SerialName("folderId")
         val folderId: String?,
@@ -564,7 +565,7 @@ data class SyncResponseJson(
         val deletedDate: LocalDateTime?,
 
         @SerialName("identity")
-        val identity: Identity,
+        val identity: Identity?,
 
         @SerialName("collectionIds")
         val collectionIds: List<String>?,
@@ -585,7 +586,7 @@ data class SyncResponseJson(
         val isFavorite: Boolean,
 
         @SerialName("card")
-        val card: Card,
+        val card: Card?,
     ) {
         /**
          * Represents an attachment in the vault response.
@@ -795,7 +796,7 @@ data class SyncResponseJson(
             @Serializable
             data class Uri(
                 @SerialName("match")
-                val uriMatchType: UriMatchTypeJson,
+                val uriMatchType: UriMatchTypeJson?,
 
                 @SerialName("uri")
                 val uri: String?,
