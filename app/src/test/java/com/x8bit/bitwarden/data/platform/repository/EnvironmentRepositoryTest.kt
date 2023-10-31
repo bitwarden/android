@@ -2,18 +2,18 @@ package com.x8bit.bitwarden.data.platform.repository
 
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
+import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrls
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -22,12 +22,14 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class EnvironmentRepositoryTest {
+
+    private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
+
     private val fakeEnvironmentDiskSource = FakeEnvironmentDiskSource()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     private val repository = EnvironmentRepositoryImpl(
         environmentDiskSource = fakeEnvironmentDiskSource,
-        dispatcher = UnconfinedTestDispatcher(),
+        dispatcherManager = dispatcherManager,
     )
 
     @BeforeEach

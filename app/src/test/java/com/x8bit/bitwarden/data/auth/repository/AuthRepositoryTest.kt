@@ -28,6 +28,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
+import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.clearMocks
 import io.mockk.coEvery
@@ -36,11 +38,9 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -50,6 +50,7 @@ import org.junit.jupiter.api.Test
 
 class AuthRepositoryTest {
 
+    private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val accountsService: AccountsService = mockk()
     private val identityService: IdentityService = mockk()
     private val haveIBeenPwnedService: HaveIBeenPwnedService = mockk()
@@ -80,14 +81,13 @@ class AuthRepositoryTest {
         )
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     private val repository = AuthRepositoryImpl(
         accountsService = accountsService,
         identityService = identityService,
         haveIBeenPwnedService = haveIBeenPwnedService,
         authSdkSource = authSdkSource,
         authDiskSource = fakeAuthDiskSource,
-        dispatcher = UnconfinedTestDispatcher(),
+        dispatcherManager = dispatcherManager,
     )
 
     @BeforeEach

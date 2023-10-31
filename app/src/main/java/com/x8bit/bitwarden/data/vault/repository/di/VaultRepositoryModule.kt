@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.repository.di
 
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -8,7 +9,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 /**
@@ -23,9 +23,10 @@ class VaultRepositoryModule {
     fun providesVaultRepository(
         syncService: SyncService,
         vaultSdkSource: VaultSdkSource,
+        dispatcherManager: DispatcherManager,
     ): VaultRepository = VaultRepositoryImpl(
         syncService = syncService,
         vaultSdkSource = vaultSdkSource,
-        dispatcher = Dispatchers.IO,
+        dispatcherManager = dispatcherManager,
     )
 }

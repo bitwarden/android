@@ -19,9 +19,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -46,9 +46,9 @@ class AuthRepositoryImpl @Inject constructor(
     private val identityService: IdentityService,
     private val authSdkSource: AuthSdkSource,
     private val authDiskSource: AuthDiskSource,
-    dispatcher: CoroutineDispatcher,
+    dispatcherManager: DispatcherManager,
 ) : AuthRepository {
-    private val scope = CoroutineScope(dispatcher)
+    private val scope = CoroutineScope(dispatcherManager.io)
 
     override val authStateFlow: StateFlow<AuthState> = authDiskSource
         .userStateFlow
