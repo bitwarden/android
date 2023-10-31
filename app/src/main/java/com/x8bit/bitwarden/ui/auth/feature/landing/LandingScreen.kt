@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -44,8 +42,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
+import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionDialog
+import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
@@ -226,12 +227,12 @@ private fun EnvironmentSelector(
     modifier: Modifier,
 ) {
     val options = Environment.Type.values()
-    var expanded by remember { mutableStateOf(false) }
+    var shouldShowDialog by remember { mutableStateOf(false) }
 
     Box(modifier = modifier) {
         Row(
             modifier = Modifier
-                .clickable { expanded = !expanded }
+                .clickable { shouldShowDialog = !shouldShowDialog }
                 .fillMaxWidth()
                 .padding(start = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -255,18 +256,21 @@ private fun EnvironmentSelector(
             )
         }
 
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-        ) {
-            options.forEach { optionString ->
-                DropdownMenuItem(
-                    text = { Text(text = optionString.label()) },
-                    onClick = {
-                        expanded = false
-                        onOptionSelected(optionString)
-                    },
-                )
+        if (shouldShowDialog) {
+            BitwardenSelectionDialog(
+                title = R.string.logging_in_on.asText(),
+                onDismissRequest = { shouldShowDialog = false },
+            ) {
+                options.forEach {
+                    BitwardenSelectionRow(
+                        text = it.label,
+                        onClick = {
+                            onOptionSelected.invoke(it)
+                            shouldShowDialog = false
+                        },
+                        isSelected = it == selectedOption,
+                    )
+                }
             }
         }
     }
