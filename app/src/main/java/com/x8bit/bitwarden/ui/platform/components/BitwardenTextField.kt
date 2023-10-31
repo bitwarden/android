@@ -22,6 +22,7 @@ fun BitwardenTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    readOnly: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
 ) {
     OutlinedTextField(
@@ -30,6 +31,7 @@ fun BitwardenTextField(
         value = value,
         onValueChange = onValueChange,
         singleLine = true,
+        readOnly = readOnly,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
     )
 }

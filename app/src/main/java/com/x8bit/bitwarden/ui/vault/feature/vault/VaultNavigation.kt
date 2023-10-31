@@ -10,9 +10,13 @@ const val VAULT_ROUTE: String = "vault"
 /**
  * Add vault destination to the nav graph.
  */
-fun NavGraphBuilder.vaultDestination() {
+fun NavGraphBuilder.vaultDestination(
+    onNavigateToVaultAddItemScreen: () -> Unit,
+) {
     composable(VAULT_ROUTE) {
-        VaultScreen()
+        VaultScreen(
+            onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
+        )
     }
 }
 

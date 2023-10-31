@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.generatorDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGenerator
 import com.x8bit.bitwarden.ui.vault.feature.vault.VAULT_ROUTE
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVault
+import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultAddItem
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultDestination
 import kotlinx.parcelize.Parcelize
 
@@ -53,6 +54,7 @@ import kotlinx.parcelize.Parcelize
 fun VaultUnlockedNavBarScreen(
     viewModel: VaultUnlockedNavBarViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
+    onNavigateToVaultAddItem: () -> Unit,
 ) {
     EventsEffect(viewModel = viewModel) { event ->
         navController.apply {
@@ -78,6 +80,7 @@ fun VaultUnlockedNavBarScreen(
     }
     VaultUnlockedNavBarScaffold(
         navController = navController,
+        navigateToVaultAddItem = onNavigateToVaultAddItem,
         generatorTabClickedAction = {
             viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick)
         },
@@ -104,6 +107,7 @@ private fun VaultUnlockedNavBarScaffold(
     sendTabClickedAction: () -> Unit,
     generatorTabClickedAction: () -> Unit,
     settingsTabClickedAction: () -> Unit,
+    navigateToVaultAddItem: () -> Unit,
 ) {
     // This scaffold will host screens that contain top bars while not hosting one itself.
     // We need to ignore the status bar insets here and let the content screens handle
@@ -181,7 +185,11 @@ private fun VaultUnlockedNavBarScaffold(
             popEnterTransition = RootTransitionProviders.Enter.fadeIn,
             popExitTransition = RootTransitionProviders.Exit.fadeOut,
         ) {
-            vaultDestination()
+            vaultDestination(
+                onNavigateToVaultAddItemScreen = {
+                    navigateToVaultAddItem()
+                },
+            )
             sendDestination()
             generatorDestination()
             settingsGraph(navController)

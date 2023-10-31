@@ -37,15 +37,12 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
 @Composable
 fun VaultScreen(
     viewModel: VaultViewModel = hiltViewModel(),
+    onNavigateToVaultAddItemScreen: () -> Unit,
 ) {
     val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            VaultEvent.NavigateToAddItemScreen -> {
-                // TODO Create add item screen and navigation implementation BIT-207
-                Toast.makeText(context, "Navigate to the add item screen.", Toast.LENGTH_SHORT)
-                    .show()
-            }
+            VaultEvent.NavigateToAddItemScreen -> onNavigateToVaultAddItemScreen()
 
             VaultEvent.NavigateToVaultSearchScreen -> {
                 // TODO Create vault search screen and navigation implementation BIT-213
