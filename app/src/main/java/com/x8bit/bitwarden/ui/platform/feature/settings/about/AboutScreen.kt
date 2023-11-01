@@ -161,7 +161,7 @@ private fun ContentColum(
             isChecked = state.isSubmitCrashLogsEnabled,
             onCheckedChange = onSubmitCrashLogsCheckedChange,
             modifier = Modifier
-                .defaultMinSize(56.dp)
+                .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             contentDescription = stringResource(id = R.string.submit_crash_logs),
         )
