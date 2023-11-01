@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -47,14 +46,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.toDp
+import com.x8bit.bitwarden.ui.platform.components.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
-import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenReadOnlyTextFieldWithActions
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
-import com.x8bit.bitwarden.ui.platform.components.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_LENGTH_SLIDER_MAX
@@ -167,15 +166,12 @@ private fun ScrollContent(
             onMainStateOptionClicked = onMainStateOptionClicked,
         )
 
-        Row(
-            Modifier.height(32.dp),
-            verticalAlignment = Alignment.Bottom,
-        ) {
-            BitwardenListHeaderText(
-                label = stringResource(id = R.string.options),
-                modifier = Modifier.padding(horizontal = 16.dp),
-            )
-        }
+        BitwardenListHeaderText(
+            label = stringResource(id = R.string.options),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+        )
 
         when (val selectedType = state.selectedType) {
             is GeneratorState.MainType.Passcode -> {
@@ -419,7 +415,9 @@ private fun PasswordCapitalLettersToggleItem(
         label = "A—Z",
         isChecked = useCapitals,
         onCheckedChange = onPasswordToggleCapitalLettersChange,
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         contentDescription = stringResource(id = R.string.uppercase_ato_z),
     )
 }
@@ -433,7 +431,9 @@ private fun PasswordLowercaseLettersToggleItem(
         label = "a—z",
         isChecked = useLowercase,
         onCheckedChange = onPasswordToggleLowercaseLettersChange,
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         contentDescription = stringResource(id = R.string.lowercase_ato_z),
     )
 }
@@ -447,7 +447,9 @@ private fun PasswordNumbersToggleItem(
         label = "0-9",
         isChecked = useNumbers,
         onCheckedChange = onPasswordToggleNumbersChange,
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         contentDescription = stringResource(id = R.string.numbers_zero_to_nine),
     )
 }
@@ -461,7 +463,9 @@ private fun PasswordSpecialCharactersToggleItem(
         label = "!@#$%^&*",
         isChecked = useSpecialChars,
         onCheckedChange = onPasswordToggleSpecialCharactersChange,
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         contentDescription = stringResource(id = R.string.special_characters),
     )
 }
@@ -539,7 +543,9 @@ private fun PasswordAvoidAmbiguousCharsToggleItem(
         label = stringResource(id = R.string.avoid_ambiguous_characters),
         isChecked = avoidAmbiguousChars,
         onCheckedChange = onPasswordToggleAvoidAmbiguousCharsChange,
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
     )
 }
 
@@ -636,7 +642,9 @@ private fun PassphraseCapitalizeToggleItem(
         label = stringResource(id = R.string.capitalize),
         isChecked = capitalize,
         onCheckedChange = onPassphraseCapitalizeToggleChange,
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
     )
 }
 
@@ -649,7 +657,9 @@ private fun PassphraseIncludeNumberToggleItem(
         label = stringResource(id = R.string.include_number),
         isChecked = includeNumber,
         onCheckedChange = onPassphraseIncludeNumberToggleChange,
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
     )
 }
 

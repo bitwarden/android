@@ -24,7 +24,10 @@ fun BitwardenListHeaderText(
         text = label,
         style = MaterialTheme.typography.labelMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = modifier.padding(top = 8.dp),
+        modifier = modifier.padding(
+            top = 12.dp,
+            bottom = 4.dp,
+        ),
     )
 }
 

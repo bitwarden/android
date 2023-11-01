@@ -103,7 +103,6 @@ fun VaultAddItemScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .background(MaterialTheme.colorScheme.surface)
-                .padding(top = 8.dp)
                 .fillMaxSize()
                 .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -111,7 +110,9 @@ fun VaultAddItemScreen(
 
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.item_information),
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             )
             TypeOptionsItem(
                 selectedType = state.selectedType,
@@ -227,11 +228,10 @@ private fun AddLoginTypeItemContent(
 
     BitwardenListHeaderText(
         label = stringResource(id = R.string.authenticator_key),
-        modifier = Modifier.padding(
-            top = 8.dp,
-            start = 16.dp,
-            end = 16.dp,
-        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)
+            .padding(horizontal = 16.dp),
     )
 
     BitwardenFilledButtonWithIcon(
@@ -245,11 +245,10 @@ private fun AddLoginTypeItemContent(
 
     BitwardenListHeaderText(
         label = stringResource(id = R.string.ur_is),
-        modifier = Modifier.padding(
-            top = 8.dp,
-            start = 16.dp,
-            end = 16.dp,
-        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)
+            .padding(horizontal = 16.dp),
     )
 
     BitwardenTextFieldWithActions(
@@ -278,11 +277,10 @@ private fun AddLoginTypeItemContent(
 
     BitwardenListHeaderText(
         label = stringResource(id = R.string.miscellaneous),
-        modifier = Modifier.padding(
-            top = 8.dp,
-            start = 16.dp,
-            end = 16.dp,
-        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)
+            .padding(horizontal = 16.dp),
     )
 
     BitwardenMultiSelectButton(
@@ -326,11 +324,10 @@ private fun AddLoginTypeItemContent(
 
     BitwardenListHeaderText(
         label = stringResource(id = R.string.notes),
-        modifier = Modifier.padding(
-            top = 8.dp,
-            start = 16.dp,
-            end = 16.dp,
-        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)
+            .padding(horizontal = 16.dp),
     )
 
     Column(
@@ -348,11 +345,10 @@ private fun AddLoginTypeItemContent(
 
     BitwardenListHeaderText(
         label = stringResource(id = R.string.custom_fields),
-        modifier = Modifier.padding(
-            top = 8.dp,
-            start = 16.dp,
-            end = 16.dp,
-        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)
+            .padding(horizontal = 16.dp),
     )
 
     BitwardenFilledTonalButton(
@@ -365,11 +361,10 @@ private fun AddLoginTypeItemContent(
 
     BitwardenListHeaderText(
         label = stringResource(id = R.string.ownership),
-        modifier = Modifier.padding(
-            top = 8.dp,
-            start = 16.dp,
-            end = 16.dp,
-        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)
+            .padding(horizontal = 16.dp),
     )
 
     BitwardenMultiSelectButton(

@@ -4,8 +4,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
@@ -44,7 +46,6 @@ fun BitwardenWideSwitch(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .fillMaxWidth()
             .wrapContentHeight()
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
@@ -53,9 +54,7 @@ fun BitwardenWideSwitch(
             )
             .semantics(mergeDescendants = true) {
                 toggleableState = ToggleableState(isChecked)
-                if (contentDescription != null) {
-                    this.contentDescription = contentDescription
-                }
+                contentDescription?.let { this.contentDescription = it }
             }
             .then(modifier),
     ) {
@@ -63,7 +62,12 @@ fun BitwardenWideSwitch(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier
+                .weight(1f)
+                .padding(vertical = 8.dp),
         )
+
+        Spacer(modifier = Modifier.width(16.dp))
 
         Switch(
             modifier = Modifier
