@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
  * Content view for the [VaultScreen].
  */
 @Composable
-fun VaultContentView(paddingValues: PaddingValues) {
+fun VaultContent(paddingValues: PaddingValues) {
     // TODO create proper VaultContentView in BIT-205
     Column(
         modifier = Modifier

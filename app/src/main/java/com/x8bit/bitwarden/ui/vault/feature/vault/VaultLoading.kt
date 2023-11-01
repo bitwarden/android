@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
  * Loading view for the [VaultScreen].
  */
 @Composable
-fun VaultLoadingView(paddingValues: PaddingValues) {
+fun VaultLoading(paddingValues: PaddingValues) {
     Column(
         modifier = Modifier
             .fillMaxSize()
