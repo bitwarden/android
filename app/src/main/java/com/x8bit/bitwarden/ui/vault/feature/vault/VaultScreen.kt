@@ -117,9 +117,9 @@ private fun VaultScreenScaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { paddingValues ->
         when (state.viewState) {
-            is VaultState.ViewState.Content -> VaultContentView(paddingValues = paddingValues)
-            is VaultState.ViewState.Loading -> VaultLoadingView(paddingValues = paddingValues)
-            is VaultState.ViewState.NoItems -> VaultNoItemsView(
+            is VaultState.ViewState.Content -> VaultContent(paddingValues = paddingValues)
+            is VaultState.ViewState.Loading -> VaultLoading(paddingValues = paddingValues)
+            is VaultState.ViewState.NoItems -> VaultNoItems(
                 paddingValues = paddingValues,
                 addItemClickAction = addItemClickAction,
             )

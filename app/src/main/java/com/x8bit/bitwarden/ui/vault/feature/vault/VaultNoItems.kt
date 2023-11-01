@@ -25,7 +25,7 @@ import com.x8bit.bitwarden.R
  * No items view for the [VaultScreen].
  */
 @Composable
-fun VaultNoItemsView(
+fun VaultNoItems(
     paddingValues: PaddingValues,
     addItemClickAction: () -> Unit,
 ) {
