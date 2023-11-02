@@ -587,6 +587,9 @@ data class SyncResponseJson(
 
         @SerialName("card")
         val card: Card?,
+
+        @SerialName("key")
+        val key: String?,
     ) {
         /**
          * Represents an attachment in the vault response.
