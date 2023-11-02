@@ -299,7 +299,8 @@ private const val SYNC_SUCCESS_JSON = """
         "expYear": "mockExpirationYear-1",
         "cardholderName": "mockCardholderName-1",
         "brand": "mockBrand-1"
-      }
+      },
+      "key": "mockKey-1"
     }
   ],
   "domains": {

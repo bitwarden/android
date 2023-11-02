@@ -29,6 +29,7 @@ fun createMockCipher(number: Int): SyncResponseJson.Cipher =
         shouldEdit = false,
         shouldOrganizationUseTotp = false,
         shouldViewPassword = false,
+        key = "mockKey-$number",
     )
 
 /**
