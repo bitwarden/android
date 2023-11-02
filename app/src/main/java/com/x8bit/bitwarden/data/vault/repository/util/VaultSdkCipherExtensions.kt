@@ -40,6 +40,7 @@ fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
         organizationId = organizationId,
         folderId = folderId,
         collectionIds = collectionIds.orEmpty(),
+        key = null,
         name = name.orEmpty(),
         notes = notes,
         type = type.toSdkCipherType(),

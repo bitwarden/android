@@ -26,6 +26,7 @@ fun createMockSdkCipher(number: Int): Cipher =
         organizationId = "mockOrganizationId-$number",
         folderId = "mockFolderId-$number",
         collectionIds = listOf("mockCollectionId-$number"),
+        key = null,
         name = "mockName-$number",
         notes = "mockNotes-$number",
         type = CipherType.LOGIN,
