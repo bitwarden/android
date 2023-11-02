@@ -1,8 +1,4 @@
-﻿using System;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
-
-namespace Bit.App.Controls
+﻿namespace Bit.App.Controls
 {
     public class ExtendedDatePicker : DatePicker
     {
@@ -82,6 +78,12 @@ namespace Bit.App.Controls
                     UpdateDate();
                 }
             }
+        }
+
+        //Currently the Disconnect Handler needs to be manually called from the App: https://github.com/dotnet/maui/issues/3604
+        public void DisconnectHandler()
+        {
+            Handler?.DisconnectHandler();
         }
     }
 }

@@ -1,11 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
-using CommunityToolkit.Maui.Converters;
-using CommunityToolkit.Maui.ImageSources;
-using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Maui.Layouts;
 using CommunityToolkit.Maui.Views;
 
 namespace Bit.App.Controls
@@ -31,6 +24,11 @@ namespace Bit.App.Controls
                 _datePicker.PlaceHolder = dateTimeViewModel.DatePlaceholder;
                 _timePicker.PlaceHolder = dateTimeViewModel.TimePlaceholder;
             }
+        }
+
+        private void DateTimePicker_OnUnloaded(object sender, EventArgs e)
+        {
+            _datePicker?.DisconnectHandler();
         }
     }
 

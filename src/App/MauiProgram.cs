@@ -29,6 +29,7 @@
                     Bit.App.Handlers.ToolbarHandlerMappings.Setup();
 
                     handlers.AddHandler(typeof(Bit.App.Pages.TabsPage), typeof(Bit.App.Handlers.CustomTabbedPageHandler));
+                    handlers.AddHandler(typeof(Bit.App.Controls.ExtendedDatePicker), typeof(Bit.App.Handlers.ExtendedDatePickerHandler));
 #else
                     iOS.Core.Utilities.iOSCoreHelpers.ConfigureMAUIHandlers(handlers);
 #endif
