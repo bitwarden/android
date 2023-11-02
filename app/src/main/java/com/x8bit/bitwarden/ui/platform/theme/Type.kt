@@ -1,10 +1,12 @@
 package com.x8bit.bitwarden.ui.platform.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import com.x8bit.bitwarden.R
 
@@ -15,6 +17,11 @@ val Typography: Typography = Typography(
         fontFamily = FontFamily(Font(R.font.roboto_regular)),
         fontWeight = FontWeight.W400,
         letterSpacing = (-0.25).sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     displayMedium = TextStyle(
         fontSize = 45.sp,
@@ -22,6 +29,11 @@ val Typography: Typography = Typography(
         fontFamily = FontFamily(Font(R.font.roboto_regular)),
         fontWeight = FontWeight.W400,
         letterSpacing = (0).sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     displaySmall = TextStyle(
         fontSize = 36.sp,
@@ -29,6 +41,11 @@ val Typography: Typography = Typography(
         fontFamily = FontFamily(Font(R.font.roboto_regular)),
         fontWeight = FontWeight.W400,
         letterSpacing = 0.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     headlineLarge = TextStyle(
         fontSize = 32.sp,
@@ -36,6 +53,11 @@ val Typography: Typography = Typography(
         fontFamily = FontFamily(Font(R.font.roboto_regular)),
         fontWeight = FontWeight.W400,
         letterSpacing = 0.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     headlineMedium = TextStyle(
         fontSize = 28.sp,
@@ -43,6 +65,11 @@ val Typography: Typography = Typography(
         fontFamily = FontFamily(Font(R.font.roboto_regular)),
         fontWeight = FontWeight.W400,
         letterSpacing = 0.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     headlineSmall = TextStyle(
         fontSize = 24.sp,
@@ -50,6 +77,11 @@ val Typography: Typography = Typography(
         fontFamily = FontFamily(Font(R.font.roboto_regular)),
         fontWeight = FontWeight.W400,
         letterSpacing = 0.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     titleLarge = TextStyle(
         fontSize = 22.sp,
@@ -57,6 +89,11 @@ val Typography: Typography = Typography(
         fontFamily = FontFamily(Font(R.font.roboto_regular)),
         fontWeight = FontWeight.W400,
         letterSpacing = 0.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     titleMedium = TextStyle(
         fontSize = 16.sp,
@@ -64,6 +101,11 @@ val Typography: Typography = Typography(
         fontFamily = FontFamily(Font(R.font.roboto_medium)),
         fontWeight = FontWeight.W500,
         letterSpacing = 0.15.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     titleSmall = TextStyle(
         fontSize = 14.sp,
@@ -71,6 +113,11 @@ val Typography: Typography = Typography(
         fontFamily = FontFamily(Font(R.font.roboto_medium)),
         fontWeight = FontWeight.W500,
         letterSpacing = 0.1.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     bodyLarge = TextStyle(
         fontSize = 16.sp,
@@ -78,6 +125,11 @@ val Typography: Typography = Typography(
         fontFamily = FontFamily(Font(R.font.roboto_regular)),
         fontWeight = FontWeight.W400,
         letterSpacing = 0.5.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     bodyMedium = TextStyle(
         fontSize = 14.sp,
@@ -85,6 +137,11 @@ val Typography: Typography = Typography(
         fontFamily = FontFamily(Font(R.font.roboto_regular)),
         fontWeight = FontWeight.W400,
         letterSpacing = 0.25.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     bodySmall = TextStyle(
         fontSize = 12.sp,
@@ -92,6 +149,11 @@ val Typography: Typography = Typography(
         fontFamily = FontFamily(Font(R.font.roboto_regular)),
         fontWeight = FontWeight.W400,
         letterSpacing = 0.4.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     labelLarge = TextStyle(
         fontSize = 14.sp,
@@ -99,6 +161,11 @@ val Typography: Typography = Typography(
         fontFamily = FontFamily(Font(R.font.roboto_medium)),
         fontWeight = FontWeight.W500,
         letterSpacing = 0.1.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     labelMedium = TextStyle(
         fontSize = 12.sp,
@@ -106,6 +173,11 @@ val Typography: Typography = Typography(
         fontFamily = FontFamily(Font(R.font.roboto_medium)),
         fontWeight = FontWeight.W500,
         letterSpacing = 0.5.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     labelSmall = TextStyle(
         fontSize = 11.sp,
@@ -113,5 +185,10 @@ val Typography: Typography = Typography(
         fontFamily = FontFamily(Font(R.font.roboto_medium)),
         fontWeight = FontWeight.W500,
         letterSpacing = 0.5.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
 )
