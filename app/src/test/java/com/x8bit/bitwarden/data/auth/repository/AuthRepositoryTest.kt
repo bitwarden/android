@@ -4,9 +4,9 @@ import app.cash.turbine.test
 import com.bitwarden.core.Kdf
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RsaKeyPair
-import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson.PBKDF2_SHA256
@@ -38,9 +38,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -186,34 +183,43 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `login get token succeeds should return Success and update AuthState`() = runTest {
-        val successResponse = GET_TOKEN_RESPONSE_SUCCESS
-        coEvery {
-            accountsService.preLogin(email = EMAIL)
-        } returns Result.success(PRE_LOGIN_SUCCESS)
-        coEvery {
-            identityService.getToken(
-                email = EMAIL,
-                passwordHash = PASSWORD_HASH,
-                captchaToken = null,
+    fun `login get token succeeds should return Success and update AuthState and stored keys`() =
+        runTest {
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            coEvery {
+                accountsService.preLogin(email = EMAIL)
+            } returns Result.success(PRE_LOGIN_SUCCESS)
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    passwordHash = PASSWORD_HASH,
+                    captchaToken = null,
+                )
+            }
+                .returns(Result.success(successResponse))
+            every {
+                GET_TOKEN_RESPONSE_SUCCESS.toUserState(previousUserState = null)
+            } returns SINGLE_USER_STATE_1
+            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            assertEquals(LoginResult.Success, result)
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+            coVerify { accountsService.preLogin(email = EMAIL) }
+            fakeAuthDiskSource.assertPrivateKey(
+                userId = USER_ID_1,
+                privateKey = "privateKey",
             )
-        }
-            .returns(Result.success(successResponse))
-        every {
-            GET_TOKEN_RESPONSE_SUCCESS.toUserState(previousUserState = null)
-        } returns SINGLE_USER_STATE_1
-        val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
-        assertEquals(LoginResult.Success, result)
-        assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
-        coVerify { accountsService.preLogin(email = EMAIL) }
-        coVerify {
-            identityService.getToken(
-                email = EMAIL,
-                passwordHash = PASSWORD_HASH,
-                captchaToken = null,
+            fakeAuthDiskSource.assertUserKey(
+                userId = USER_ID_1,
+                userKey = "key",
             )
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    passwordHash = PASSWORD_HASH,
+                    captchaToken = null,
+                )
+            }
         }
-    }
 
     @Test
     fun `login get token returns captcha request should return CaptchaRequired`() = runTest {
@@ -578,7 +584,7 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `logout for single account should clear the access token`() = runTest {
+    fun `logout for single account should clear the access toke and stored keys`() = runTest {
         // First login:
         val successResponse = GET_TOKEN_RESPONSE_SUCCESS
         coEvery {
@@ -608,45 +614,62 @@ class AuthRepositoryTest {
 
             assertEquals(AuthState.Unauthenticated, awaitItem())
             assertNull(fakeAuthDiskSource.userState)
+            fakeAuthDiskSource.assertPrivateKey(
+                userId = USER_ID_1,
+                privateKey = null,
+            )
+            fakeAuthDiskSource.assertUserKey(
+                userId = USER_ID_1,
+                userKey = null,
+            )
         }
     }
 
     @Test
-    fun `logout for multiple accounts should update current access token`() = runTest {
-        // First populate multiple user accounts
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
+    fun `logout for multiple accounts should update current access token and stored keys`() =
+        runTest {
+            // First populate multiple user accounts
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
 
-        // Then login:
-        val successResponse = GET_TOKEN_RESPONSE_SUCCESS
-        coEvery {
-            accountsService.preLogin(email = EMAIL)
-        } returns Result.success(PRE_LOGIN_SUCCESS)
-        coEvery {
-            identityService.getToken(
-                email = EMAIL,
-                passwordHash = PASSWORD_HASH,
-                captchaToken = null,
-            )
-        } returns Result.success(successResponse)
-        every {
-            GET_TOKEN_RESPONSE_SUCCESS.toUserState(previousUserState = SINGLE_USER_STATE_2)
-        } returns MULTI_USER_STATE
+            // Then login:
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            coEvery {
+                accountsService.preLogin(email = EMAIL)
+            } returns Result.success(PRE_LOGIN_SUCCESS)
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    passwordHash = PASSWORD_HASH,
+                    captchaToken = null,
+                )
+            } returns Result.success(successResponse)
+            every {
+                GET_TOKEN_RESPONSE_SUCCESS.toUserState(previousUserState = SINGLE_USER_STATE_2)
+            } returns MULTI_USER_STATE
 
-        repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
 
-        assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
-        assertEquals(MULTI_USER_STATE, fakeAuthDiskSource.userState)
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+            assertEquals(MULTI_USER_STATE, fakeAuthDiskSource.userState)
 
-        // Then call logout:
-        repository.authStateFlow.test {
-            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), awaitItem())
+            // Then call logout:
+            repository.authStateFlow.test {
+                assertEquals(AuthState.Authenticated(ACCESS_TOKEN), awaitItem())
 
-            repository.logout()
+                repository.logout()
 
-            assertEquals(AuthState.Authenticated(ACCESS_TOKEN_2), awaitItem())
-            assertEquals(SINGLE_USER_STATE_2, fakeAuthDiskSource.userState)
+                assertEquals(AuthState.Authenticated(ACCESS_TOKEN_2), awaitItem())
+                assertEquals(SINGLE_USER_STATE_2, fakeAuthDiskSource.userState)
+                fakeAuthDiskSource.assertPrivateKey(
+                    userId = USER_ID_1,
+                    privateKey = null,
+                )
+                fakeAuthDiskSource.assertUserKey(
+                    userId = USER_ID_1,
+                    userKey = null,
+                )
+            }
         }
-    }
 
     @Test
     fun `getPasswordStrength should be based on password length`() = runTest {
@@ -773,23 +796,4 @@ class AuthRepositoryTest {
             ),
         )
     }
-}
-
-private class FakeAuthDiskSource : AuthDiskSource {
-    override var rememberedEmailAddress: String? = null
-
-    override var userState: UserStateJson? = null
-        set(value) {
-            field = value
-            mutableUserStateFlow.tryEmit(value)
-        }
-
-    override val userStateFlow: Flow<UserStateJson?>
-        get() = mutableUserStateFlow.onSubscription { emit(userState) }
-
-    private val mutableUserStateFlow =
-        MutableSharedFlow<UserStateJson?>(
-            replay = 1,
-            extraBufferCapacity = Int.MAX_VALUE,
-        )
 }

@@ -2,14 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.network.service
 
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import com.x8bit.bitwarden.data.vault.datasource.network.api.SyncApi
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCollection
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockDomains
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFolder
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockProfile
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSend
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSyncResponse
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Test
@@ -27,7 +20,7 @@ class SyncServiceTest : BaseServiceTest() {
     fun `sync should return the correct response`() = runTest {
         server.enqueue(MockResponse().setBody(SYNC_SUCCESS_JSON))
         val result = syncService.sync()
-        assertEquals(SYNC_SUCCESS, result.getOrThrow())
+        assertEquals(createMockSyncResponse(number = 1), result.getOrThrow())
     }
 }
 
@@ -363,13 +356,3 @@ private const val SYNC_SUCCESS_JSON = """
   ]
 }    
 """
-
-private val SYNC_SUCCESS = SyncResponseJson(
-    folders = listOf(createMockFolder(number = 1)),
-    collections = listOf(createMockCollection(number = 1)),
-    profile = createMockProfile(number = 1),
-    ciphers = listOf(createMockCipher(number = 1)),
-    policies = listOf(createMockPolicy(number = 1)),
-    domains = createMockDomains(number = 1),
-    sends = listOf(createMockSend(number = 1)),
-)

@@ -12,6 +12,8 @@ import kotlinx.serialization.json.Json
 
 private const val REMEMBERED_EMAIL_ADDRESS_KEY = "$BASE_KEY:rememberedEmail"
 private const val STATE_KEY = "$BASE_KEY:state"
+private const val MASTER_KEY_ENCRYPTION_USER_KEY = "masterKeyEncryptedUserKey"
+private const val MASTER_KEY_ENCRYPTION_PRIVATE_KEY = "encPrivateKey"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -55,5 +57,25 @@ class AuthDiskSourceImpl(
         when (key) {
             STATE_KEY -> mutableUserStateFlow.tryEmit(userState)
         }
+    }
+
+    override fun getUserKey(userId: String): String? =
+        getString(key = "${MASTER_KEY_ENCRYPTION_USER_KEY}_$userId")
+
+    override fun storeUserKey(userId: String, userKey: String?) {
+        putString(
+            key = "${MASTER_KEY_ENCRYPTION_USER_KEY}_$userId",
+            value = userKey,
+        )
+    }
+
+    override fun getPrivateKey(userId: String): String? =
+        getString(key = "${MASTER_KEY_ENCRYPTION_PRIVATE_KEY}_$userId")
+
+    override fun storePrivateKey(userId: String, privateKey: String?) {
+        putString(
+            key = "${MASTER_KEY_ENCRYPTION_PRIVATE_KEY}_$userId",
+            value = privateKey,
+        )
     }
 }
