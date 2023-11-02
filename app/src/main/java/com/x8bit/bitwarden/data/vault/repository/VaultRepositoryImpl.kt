@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.repository
 
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 class VaultRepositoryImpl constructor(
     private val syncService: SyncService,
     private val vaultSdkSource: VaultSdkSource,
+    private val authDiskSource: AuthDiskSource,
     dispatcherManager: DispatcherManager,
 ) : VaultRepository {
 
@@ -29,8 +31,11 @@ class VaultRepositoryImpl constructor(
                 .sync()
                 .fold(
                     onSuccess = { syncResponse ->
+                        storeUserKeyAndPrivateKey(
+                            userKey = syncResponse.profile?.key,
+                            privateKey = syncResponse.profile?.privateKey,
+                        )
                         // TODO transform into domain object consumable by VaultViewModel BIT-205.
-
                         // TODO initialize crypto in BIT-990
                         syncResponse.ciphers?.let { networkCiphers ->
                             vaultSdkSource.decryptCipherList(
@@ -47,6 +52,24 @@ class VaultRepositoryImpl constructor(
                         // TODO handle failure BIT-205.
                     },
                 )
+        }
+    }
+
+    private fun storeUserKeyAndPrivateKey(
+        userKey: String?,
+        privateKey: String?,
+    ) {
+        val userId = authDiskSource.userState?.activeUserId ?: return
+        if (userKey == null || privateKey == null) return
+        authDiskSource.apply {
+            storeUserKey(
+                userId = userId,
+                userKey = userKey,
+            )
+            storePrivateKey(
+                userId = userId,
+                privateKey = privateKey,
+            )
         }
     }
 }

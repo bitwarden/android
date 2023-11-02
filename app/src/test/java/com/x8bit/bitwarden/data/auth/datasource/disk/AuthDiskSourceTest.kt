@@ -87,6 +87,79 @@ class AuthDiskSourceTest {
             assertEquals(USER_STATE, awaitItem())
         }
     }
+
+    @Test
+    fun `getUserKey should pull from SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val mockUserKey = "mockUserKey"
+        fakeSharedPreferences
+            .edit()
+            .putString(
+                "masterKeyEncryptedUserKey_$mockUserId",
+                mockUserKey,
+            )
+            .apply()
+        val actual = authDiskSource.getUserKey(userId = mockUserId)
+        assertEquals(
+            mockUserKey,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeUserKey should update SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val mockUserKey = "mockUserKey"
+        authDiskSource.storeUserKey(
+            userId = mockUserId,
+            userKey = mockUserKey,
+        )
+        val actual = fakeSharedPreferences
+            .getString(
+                "masterKeyEncryptedUserKey_$mockUserId",
+                null,
+            )
+        assertEquals(
+            mockUserKey,
+            actual,
+        )
+    }
+
+    @Test
+    fun `getPrivateKey should pull from SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val mockPrivateKey = "mockPrivateKey"
+        fakeSharedPreferences
+            .edit()
+            .putString(
+                "encPrivateKey_$mockUserId",
+                mockPrivateKey,
+            )
+            .apply()
+        val actual = authDiskSource.getPrivateKey(userId = mockUserId)
+        assertEquals(
+            mockPrivateKey,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storePrivateKey should update SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val mockPrivateKey = "mockPrivateKey"
+        authDiskSource.storePrivateKey(
+            userId = mockUserId,
+            privateKey = mockPrivateKey,
+        )
+        val actual = fakeSharedPreferences.getString(
+            "encPrivateKey_$mockUserId",
+            null,
+        )
+        assertEquals(
+            mockPrivateKey,
+            actual,
+        )
+    }
 }
 
 private const val USER_STATE_JSON = """

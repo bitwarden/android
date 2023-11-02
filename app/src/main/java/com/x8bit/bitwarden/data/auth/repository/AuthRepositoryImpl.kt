@@ -112,6 +112,16 @@ class AuthRepositoryImpl @Inject constructor(
                             .toUserState(
                                 previousUserState = authDiskSource.userState,
                             )
+                            .also { userState ->
+                                authDiskSource.storeUserKey(
+                                    userId = userState.activeUserId,
+                                    userKey = it.key,
+                                )
+                                authDiskSource.storePrivateKey(
+                                    userId = userState.activeUserId,
+                                    privateKey = it.privateKey,
+                                )
+                            }
                         LoginResult.Success
                     }
 
@@ -131,7 +141,8 @@ class AuthRepositoryImpl @Inject constructor(
         val updatedAccounts = currentUserState
             .accounts
             .filterKeys { it != activeUserId }
-
+        authDiskSource.storeUserKey(userId = activeUserId, userKey = null)
+        authDiskSource.storePrivateKey(userId = activeUserId, privateKey = null)
         // Check if there is a new active user
         if (updatedAccounts.isNotEmpty()) {
             val (updatedActiveUserId, updatedActiveAccount) =
