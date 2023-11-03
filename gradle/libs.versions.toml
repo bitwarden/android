@@ -23,7 +23,7 @@ androidxRoom = "2.5.2"
 androidxSplash = "1.1.0-alpha02"
 # Once the app and SDK reach a critical point of completeness we should begin fixing the version
 # here (BIT-311).
-bitwardenSdk = "0.3.1-20231102.172014-25"
+bitwardenSdk = "0.3.1-SNAPSHOT"
 detekt = "1.23.1"
 firebaseBom = "32.3.1"
 glide = "4.15.1"
