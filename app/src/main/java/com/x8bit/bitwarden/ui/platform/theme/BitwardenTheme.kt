@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.theme
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -42,6 +43,9 @@ fun BitwardenTheme(
         darkTheme -> darkColorScheme(context)
         else -> lightColorScheme(context)
     }
+        // This is here to ensure the Scaffold backgrounds are using the surface color. The
+        // "background" is not used in our current design system and should not impact our screens.
+        .run { copy(background = surface) }
 
     // Update status bar according to scheme
     val view = LocalView.current
@@ -52,6 +56,7 @@ fun BitwardenTheme(
             val insetsController = WindowCompat.getInsetsController(window, view)
             insetsController.isAppearanceLightStatusBars = !darkTheme
             insetsController.isAppearanceLightNavigationBars = !darkTheme
+            window.setBackgroundDrawable(ColorDrawable(colorScheme.surface.value.toInt()))
         }
     }
 

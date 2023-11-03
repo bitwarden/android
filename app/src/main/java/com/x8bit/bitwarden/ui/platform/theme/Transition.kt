@@ -6,6 +6,8 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.NavHost
 
@@ -37,7 +39,7 @@ const val DEFAULT_SLIDE_TRANSITION_TIME_MS: Int = 450
  * The default transition time (in milliseconds) for all slide transitions in the
  * [TransitionProviders].
  */
-const val DEFAULT_PUSH_TRANSITION_TIME_MS: Int = 300
+const val DEFAULT_PUSH_TRANSITION_TIME_MS: Int = 350
 
 /**
  * The default transition time (in milliseconds) for all "stay"/no-op transitions in the
@@ -220,20 +222,32 @@ object RootTransitionProviders {
          * Slides the new screen in from the left of the screen.
          */
         val pushLeft: NonNullEnterTransitionProvider = {
-            slideIntoContainer(
-                towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                animationSpec = tween(DEFAULT_PUSH_TRANSITION_TIME_MS),
-            ) + fadeIn(tween(DEFAULT_PUSH_TRANSITION_TIME_MS))
+            val totalTransitionDurationMs = DEFAULT_PUSH_TRANSITION_TIME_MS
+            slideInHorizontally(
+                animationSpec = tween(durationMillis = totalTransitionDurationMs),
+                initialOffsetX = { fullWidth -> fullWidth / 2 },
+            ) + fadeIn(
+                animationSpec = tween(
+                    durationMillis = totalTransitionDurationMs / 2,
+                    delayMillis = totalTransitionDurationMs / 2,
+                ),
+            )
         }
 
         /**
          * Slides the new screen in from the right of the screen.
          */
         val pushRight: NonNullEnterTransitionProvider = {
-            slideIntoContainer(
-                towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                animationSpec = tween(DEFAULT_PUSH_TRANSITION_TIME_MS),
-            ) + fadeIn(tween(DEFAULT_PUSH_TRANSITION_TIME_MS))
+            val totalTransitionDurationMs = DEFAULT_PUSH_TRANSITION_TIME_MS
+            slideInHorizontally(
+                animationSpec = tween(durationMillis = totalTransitionDurationMs),
+                initialOffsetX = { fullWidth -> -fullWidth / 2 },
+            ) + fadeIn(
+                animationSpec = tween(
+                    durationMillis = totalTransitionDurationMs / 2,
+                    delayMillis = totalTransitionDurationMs / 2,
+                ),
+            )
         }
 
         /**
@@ -273,21 +287,45 @@ object RootTransitionProviders {
         /**
          * Slides the current screen out to the left of the screen.
          */
+        @Suppress("MagicNumber")
         val pushLeft: NonNullExitTransitionProvider = {
-            slideOutOfContainer(
-                towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                animationSpec = tween(DEFAULT_PUSH_TRANSITION_TIME_MS),
-            ) + fadeOut(tween(DEFAULT_PUSH_TRANSITION_TIME_MS))
+            val totalTransitionDurationMs = DEFAULT_PUSH_TRANSITION_TIME_MS
+            val delayMs = totalTransitionDurationMs / 7
+            val slideWithoutDelayMs = totalTransitionDurationMs - delayMs
+            slideOutHorizontally(
+                animationSpec = tween(
+                    durationMillis = slideWithoutDelayMs,
+                    delayMillis = delayMs,
+                ),
+                targetOffsetX = { fullWidth -> -fullWidth / 2 },
+            ) + fadeOut(
+                animationSpec = tween(
+                    durationMillis = totalTransitionDurationMs / 2,
+                    delayMillis = delayMs,
+                ),
+            )
         }
 
         /**
          * Slides the current screen out to the right of the screen.
          */
+        @Suppress("MagicNumber")
         val pushRight: NonNullExitTransitionProvider = {
-            slideOutOfContainer(
-                towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                animationSpec = tween(DEFAULT_PUSH_TRANSITION_TIME_MS),
-            ) + fadeOut(tween(DEFAULT_PUSH_TRANSITION_TIME_MS))
+            val totalTransitionDurationMs = DEFAULT_PUSH_TRANSITION_TIME_MS
+            val delayMs = totalTransitionDurationMs / 7
+            val slideWithoutDelayMs = totalTransitionDurationMs - delayMs
+            slideOutHorizontally(
+                animationSpec = tween(
+                    durationMillis = slideWithoutDelayMs,
+                    delayMillis = delayMs,
+                ),
+                targetOffsetX = { fullWidth -> fullWidth / 2 },
+            ) + fadeOut(
+                animationSpec = tween(
+                    durationMillis = totalTransitionDurationMs / 2,
+                    delayMillis = delayMs,
+                ),
+            )
         }
 
         /**
