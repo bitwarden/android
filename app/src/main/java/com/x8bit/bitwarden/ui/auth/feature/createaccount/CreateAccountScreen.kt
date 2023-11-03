@@ -212,19 +212,13 @@ fun CreateAccountScreen(
                 showPassword = showPassword,
                 showPasswordChange = { showPassword = it },
                 value = state.passwordInput,
+                hint = state.passwordLengthLabel(),
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(PasswordInputChange(it)) }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = state.passwordLengthLabel(),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 32.dp),
             )
             Spacer(modifier = Modifier.height(8.dp))
             PasswordStrengthIndicator(
@@ -251,17 +245,10 @@ fun CreateAccountScreen(
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(PasswordHintChange(it)) }
                 },
+                hint = stringResource(id = R.string.master_password_hint_description),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = stringResource(id = R.string.master_password_hint_description),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier
-                    .padding(horizontal = 32.dp),
             )
             Spacer(modifier = Modifier.height(24.dp))
             BitwardenSwitch(
