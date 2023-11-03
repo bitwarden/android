@@ -34,7 +34,7 @@ class LandingViewModel @Inject constructor(
             emailInput = authRepository.rememberedEmailAddress.orEmpty(),
             isContinueButtonEnabled = authRepository.rememberedEmailAddress != null,
             isRememberMeEnabled = authRepository.rememberedEmailAddress != null,
-            selectedEnvironment = environmentRepository.environment,
+            selectedEnvironmentType = environmentRepository.environment.type,
             errorDialogState = BasicDialogState.Hidden,
         ),
 ) {
@@ -42,11 +42,19 @@ class LandingViewModel @Inject constructor(
     init {
         // As state updates:
         // - write to saved state handle
-        // - updated selected environment
         stateFlow
             .onEach {
                 savedStateHandle[KEY_STATE] = it
-                environmentRepository.environment = it.selectedEnvironment
+            }
+            .launchIn(viewModelScope)
+
+        // Listen for changes in environment triggered both by this VM and externally.
+        environmentRepository
+            .environmentStateFlow
+            .onEach { environment ->
+                sendAction(
+                    LandingAction.Internal.UpdatedEnvironmentReceive(environment = environment),
+                )
             }
             .launchIn(viewModelScope)
     }
@@ -59,6 +67,9 @@ class LandingViewModel @Inject constructor(
             is LandingAction.RememberMeToggle -> handleRememberMeToggled(action)
             is LandingAction.EmailInputChanged -> handleEmailInputUpdated(action)
             is LandingAction.EnvironmentTypeSelect -> handleEnvironmentTypeSelect(action)
+            is LandingAction.Internal.UpdatedEnvironmentReceive -> {
+                handleUpdatedEnvironmentReceive(action)
+            }
         }
     }
 
@@ -119,9 +130,17 @@ class LandingViewModel @Inject constructor(
             }
         }
 
+        // Update the environment in the repo; the VM state will update accordingly because it is
+        // listening for changes.
+        environmentRepository.environment = environment
+    }
+
+    private fun handleUpdatedEnvironmentReceive(
+        action: LandingAction.Internal.UpdatedEnvironmentReceive,
+    ) {
         mutableStateFlow.update {
             it.copy(
-                selectedEnvironment = environment,
+                selectedEnvironmentType = action.environment.type,
             )
         }
     }
@@ -135,7 +154,7 @@ data class LandingState(
     val emailInput: String,
     val isContinueButtonEnabled: Boolean,
     val isRememberMeEnabled: Boolean,
-    val selectedEnvironment: Environment,
+    val selectedEnvironmentType: Environment.Type,
     val errorDialogState: BasicDialogState,
 ) : Parcelable
 
@@ -200,4 +219,17 @@ sealed class LandingAction {
     data class EnvironmentTypeSelect(
         val environmentType: Environment.Type,
     ) : LandingAction()
+
+    /**
+     * Actions for internal use by the ViewModel.
+     */
+    sealed class Internal : LandingAction() {
+
+        /**
+         * Indicates that there has been a change in [environment].
+         */
+        data class UpdatedEnvironmentReceive(
+            val environment: Environment,
+        ) : Internal()
+    }
 }

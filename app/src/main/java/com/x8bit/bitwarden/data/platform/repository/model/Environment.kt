@@ -1,18 +1,15 @@
 package com.x8bit.bitwarden.data.platform.repository.model
 
-import android.os.Parcelable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import kotlinx.parcelize.Parcelize
-import kotlinx.parcelize.RawValue
 
 /**
  * A higher-level wrapper around [EnvironmentUrlDataJson] that provides type-safety, enumerability,
  * and human-readable labels.
  */
-sealed class Environment : Parcelable {
+sealed class Environment {
     /**
      * The [Type] of the environment.
      */
@@ -31,7 +28,6 @@ sealed class Environment : Parcelable {
     /**
      * The default US environment.
      */
-    @Parcelize
     data object Us : Environment() {
         override val type: Type get() = Type.US
         override val environmentUrlData: EnvironmentUrlDataJson
@@ -41,7 +37,6 @@ sealed class Environment : Parcelable {
     /**
      * The default EU environment.
      */
-    @Parcelize
     data object Eu : Environment() {
         override val type: Type get() = Type.EU
         override val environmentUrlData: EnvironmentUrlDataJson
@@ -51,9 +46,8 @@ sealed class Environment : Parcelable {
     /**
      * A custom self-hosted environment with a fully configurable [environmentUrlData].
      */
-    @Parcelize
     data class SelfHosted(
-        override val environmentUrlData: @RawValue EnvironmentUrlDataJson,
+        override val environmentUrlData: EnvironmentUrlDataJson,
     ) : Environment() {
         override val type: Type get() = Type.SELF_HOSTED
     }
