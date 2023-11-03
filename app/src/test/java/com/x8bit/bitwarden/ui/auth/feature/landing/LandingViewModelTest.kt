@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
@@ -14,6 +15,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class LandingViewModelTest : BaseViewModelTest() {
+
+    private val fakeEnvironmentRepository = FakeEnvironmentRepository()
+
     @Test
     fun `initial state should be correct when there is no remembered email`() = runTest {
         val viewModel = createViewModel()
@@ -146,14 +150,44 @@ class LandingViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `EnvironmentTypeSelect should update value of selected region`() = runTest {
-        val inputEnvironment = Environment.Eu
+    fun `external environment updates should update the selected environment type`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            fakeEnvironmentRepository.environment = Environment.Eu
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    selectedEnvironmentType = Environment.Type.EU,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `EnvironmentTypeSelect should update value of selected region for US or EU`() = runTest {
+        val inputEnvironmentType = Environment.Type.EU
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             awaitItem()
-            viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(inputEnvironment.type))
+            viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(inputEnvironmentType))
             assertEquals(
-                DEFAULT_STATE.copy(selectedEnvironment = Environment.Eu),
+                DEFAULT_STATE.copy(selectedEnvironmentType = Environment.Type.EU),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `EnvironmentTypeSelect should emit NavigateToEnvironment for self-hosted`() = runTest {
+        val inputEnvironmentType = Environment.Type.SELF_HOSTED
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(inputEnvironmentType))
+            assertEquals(
+                LandingEvent.NavigateToEnvironment,
                 awaitItem(),
             )
         }
@@ -163,15 +197,12 @@ class LandingViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         rememberedEmail: String? = null,
-        environment: Environment = Environment.Us,
         savedStateHandle: SavedStateHandle = SavedStateHandle(),
     ): LandingViewModel = LandingViewModel(
         authRepository = mockk(relaxed = true) {
             every { rememberedEmailAddress } returns rememberedEmail
         },
-        environmentRepository = mockk(relaxed = true) {
-            every { this@mockk.environment } returns environment
-        },
+        environmentRepository = fakeEnvironmentRepository,
         savedStateHandle = savedStateHandle,
     )
 
@@ -182,7 +213,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             emailInput = "",
             isContinueButtonEnabled = false,
             isRememberMeEnabled = false,
-            selectedEnvironment = Environment.Us,
+            selectedEnvironmentType = Environment.Type.US,
             errorDialogState = BasicDialogState.Hidden,
         )
     }

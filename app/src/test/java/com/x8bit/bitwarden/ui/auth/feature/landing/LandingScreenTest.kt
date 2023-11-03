@@ -366,7 +366,7 @@ class LandingScreenTest : BaseComposeTest() {
             emailInput = "",
             isContinueButtonEnabled = true,
             isRememberMeEnabled = false,
-            selectedEnvironment = Environment.Us,
+            selectedEnvironmentType = Environment.Type.US,
             errorDialogState = BasicDialogState.Hidden,
         )
     }

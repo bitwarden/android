@@ -142,7 +142,7 @@ fun LandingScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         EnvironmentSelector(
-            selectedOption = state.selectedEnvironment.type,
+            selectedOption = state.selectedEnvironmentType,
             onOptionSelected = remember(viewModel) {
                 { viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(it)) }
             },
