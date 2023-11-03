@@ -63,13 +63,6 @@ namespace Bit.Core.Services
         /// </param>
         public async Task<bool> IsLockedAsync(string userId = null)
         {
-            // If biometrics are used, we can use the flag to determine locked state
-            var biometricSet = await IsBiometricLockSetAsync(userId);
-            if (biometricSet && await _stateService.GetBiometricLockedAsync(userId))
-            {
-                return true;
-            }
-
             if (!await _cryptoService.HasUserKeyAsync(userId))
             {
                 try
