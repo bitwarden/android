@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -26,19 +27,24 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionRow
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
+import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 
 /**
  * Displays the account security screen.
@@ -58,6 +64,10 @@ fun AccountSecurityScreen(
         when (event) {
             AccountSecurityEvent.NavigateBack -> onNavigateBack()
 
+            AccountSecurityEvent.NavigateToFingerprintPhrase -> {
+                intentHandler.launchUri("http://bitwarden.com/help/fingerprint-phrase".toUri())
+            }
+
             is AccountSecurityEvent.ShowToast -> {
                 Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()
             }
@@ -71,6 +81,16 @@ fun AccountSecurityScreen(
             },
             onConfirmClick = remember(viewModel) {
                 { viewModel.trySendAction(AccountSecurityAction.ConfirmLogoutClick) }
+            },
+        )
+
+        AccountSecurityDialog.FingerprintPhrase -> FingerPrintPhraseDialog(
+            fingerprintPhrase = state.fingerprintPhrase,
+            onDismissRequest = remember(viewModel) {
+                { viewModel.trySendAction(AccountSecurityAction.DismissDialog) }
+            },
+            onLearnMore = remember(viewModel) {
+                { viewModel.trySendAction(AccountSecurityAction.FingerPrintLearnMoreClick) }
             },
         )
 
@@ -273,6 +293,55 @@ private fun ConfirmLogoutDialog(
         dismissButtonText = R.string.cancel.asText(),
         onDismissClick = onDismiss,
         onDismissRequest = onDismiss,
+    )
+}
+
+@Composable
+private fun FingerPrintPhraseDialog(
+    fingerprintPhrase: Text,
+    onDismissRequest: () -> Unit,
+    onLearnMore: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        dismissButton = {
+            BitwardenTextButton(
+                label = stringResource(id = R.string.close),
+                onClick = onDismissRequest,
+            )
+        },
+        confirmButton = {
+            BitwardenTextButton(
+                label = stringResource(id = R.string.learn_more),
+                onClick = onLearnMore,
+            )
+        },
+        title = {
+            Text(
+                text = stringResource(id = R.string.fingerprint_phrase),
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        },
+        text = {
+            Column {
+                Text(
+                    text = stringResource(id = R.string.your_accounts_fingerprint),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = fingerprintPhrase(),
+                    color = LocalNonMaterialColors.current.fingerprint,
+                    style = LocalNonMaterialTypography.current.fingerprint,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        },
+        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
     )
 }
 

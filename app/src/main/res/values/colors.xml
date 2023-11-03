@@ -104,6 +104,8 @@
     <color name="gray">@color/grey_738182</color>
     <color name="light_gray">@color/grey_EFEFF4</color>
     <color name="white">@color/white_FFFFFF</color>
+    <color name="light_fingerprint">@color/magenta_C01176</color>
+    <color name="dark_fingerprint">@color/magenta_F08DC7</color>
     <color name="light_password_strength_weak">@color/orange_B27400</color>
     <color name="dark_password_strength_weak">@color/orange_C9914F</color>
     <color name="light_password_strength_strong">@color/green_009A38</color>

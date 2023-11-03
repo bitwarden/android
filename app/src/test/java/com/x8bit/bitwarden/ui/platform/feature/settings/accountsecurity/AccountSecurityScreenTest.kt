@@ -14,6 +14,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.core.net.toUri
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -257,9 +258,60 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         verify { viewModel.trySendAction(AccountSecurityAction.DismissDialog) }
     }
 
+    @Test
+    fun `fingerprint phrase dialog should be shown or hidden according to the state`() {
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        mutableStateFlow.update { it.copy(dialog = AccountSecurityDialog.FingerprintPhrase) }
+        composeTestRule
+            .onNodeWithText("Fingerprint phrase")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Learn more")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Close")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("fingerprint-placeholder")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on close click should send DismissDialog`() {
+        mutableStateFlow.update { it.copy(dialog = AccountSecurityDialog.FingerprintPhrase) }
+        composeTestRule
+            .onNodeWithText("Close")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify { viewModel.trySendAction(AccountSecurityAction.DismissDialog) }
+    }
+
+    @Test
+    fun `on learn more click should send FingerPrintLearnMoreClick`() {
+        mutableStateFlow.update { it.copy(dialog = AccountSecurityDialog.FingerprintPhrase) }
+        composeTestRule
+            .onNodeWithText("Learn more")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify { viewModel.trySendAction(AccountSecurityAction.FingerPrintLearnMoreClick) }
+    }
+
+    @Test
+    fun `on NavigateToFingerprintPhrase should call launchUri on intentHandler`() {
+        mutableEventFlow.tryEmit(AccountSecurityEvent.NavigateToFingerprintPhrase)
+        verify {
+            intentHandler.launchUri("http://bitwarden.com/help/fingerprint-phrase".toUri())
+        }
+    }
+
     companion object {
         private val DEFAULT_STATE = AccountSecurityState(
             dialog = null,
+            fingerprintPhrase = "fingerprint-placeholder".asText(),
             isApproveLoginRequestsEnabled = false,
             isUnlockWithBiometricsEnabled = false,
             isUnlockWithPinEnabled = false,
