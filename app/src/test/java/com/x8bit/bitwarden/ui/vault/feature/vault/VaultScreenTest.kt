@@ -59,7 +59,7 @@ class VaultScreenTest : BaseComposeTest() {
                     onNavigateToVaultAddItemScreen = {},
                 )
             }
-            onNodeWithContentDescription("Add Item").performClick()
+            onNodeWithContentDescription("Add item").performClick()
         }
         verify { viewModel.trySendAction(VaultAction.AddItemClick) }
     }
