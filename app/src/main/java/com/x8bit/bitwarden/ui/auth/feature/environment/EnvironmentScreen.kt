@@ -13,7 +13,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -101,6 +100,7 @@ fun EnvironmentScreen(
                 label = stringResource(id = R.string.server_url),
                 value = state.serverUrl,
                 placeholder = "ex. https://bitwarden.company.com",
+                hint = stringResource(id = R.string.self_hosted_environment_footer),
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.ServerUrlChange(it)) }
                 },
@@ -108,17 +108,6 @@ fun EnvironmentScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Text(
-                text = stringResource(id = R.string.self_hosted_environment_footer),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp),
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -180,21 +169,11 @@ fun EnvironmentScreen(
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.IconsServerUrlChange(it)) }
                 },
+                hint = stringResource(id = R.string.custom_environment_footer),
                 keyboardType = KeyboardType.Uri,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Text(
-                text = stringResource(id = R.string.custom_environment_footer),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp),
             )
         }
     }

@@ -1,5 +1,10 @@
 package com.x8bit.bitwarden.ui.platform.components
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -18,6 +23,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 
 /**
@@ -31,6 +37,7 @@ import com.x8bit.bitwarden.R
  * @param showPasswordChange Lambda that is called when user request show/hide be toggled.
  * @param onValueChange Callback that is triggered when the password changes.
  * @param modifier Modifier for the composable.
+ * @param hint optional hint text that will appear below the text input.
  */
 @Composable
 fun BitwardenPasswordField(
@@ -40,40 +47,59 @@ fun BitwardenPasswordField(
     showPasswordChange: (Boolean) -> Unit,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    hint: String? = null,
 ) {
-    OutlinedTextField(
+    Column(
         modifier = modifier,
-        textStyle = MaterialTheme.typography.bodyLarge,
-        label = { Text(text = label) },
-        value = value,
-        onValueChange = onValueChange,
-        visualTransformation = if (showPassword) {
-            VisualTransformation.None
-        } else {
-            PasswordVisualTransformation()
-        },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        trailingIcon = {
-            IconButton(
-                onClick = { showPasswordChange.invoke(!showPassword) },
-            ) {
-                if (showPassword) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_visibility_off),
-                        contentDescription = stringResource(id = R.string.hide),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                } else {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_visibility),
-                        contentDescription = stringResource(id = R.string.show),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
+    ) {
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            textStyle = MaterialTheme.typography.bodyLarge,
+            label = { Text(text = label) },
+            value = value,
+            onValueChange = onValueChange,
+            visualTransformation = if (showPassword) {
+                VisualTransformation.None
+            } else {
+                PasswordVisualTransformation()
+            },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            trailingIcon = {
+                IconButton(
+                    onClick = { showPasswordChange.invoke(!showPassword) },
+                ) {
+                    if (showPassword) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_visibility_off),
+                            contentDescription = stringResource(id = R.string.hide),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    } else {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_visibility),
+                            contentDescription = stringResource(id = R.string.show),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                 }
-            }
-        },
-    )
+            },
+        )
+
+        hint?.let {
+            Spacer(
+                modifier = Modifier.height(4.dp),
+            )
+            Text(
+                text = hint,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
+        }
+    }
 }
 
 /**
@@ -84,6 +110,7 @@ fun BitwardenPasswordField(
  * @param value Current next on the text field.
  * @param onValueChange Callback that is triggered when the password changes.
  * @param modifier Modifier for the composable.
+ * @param hint optional hint text that will appear below the text input.
  * @param initialShowPassword The initial state of the show/hide password control. A value of
  * `false` (the default) indicates that that password should begin in the hidden state.
  */
@@ -93,6 +120,7 @@ fun BitwardenPasswordField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    hint: String? = null,
     initialShowPassword: Boolean = false,
 ) {
     var showPassword by rememberSaveable { mutableStateOf(initialShowPassword) }
@@ -103,6 +131,7 @@ fun BitwardenPasswordField(
         showPassword = showPassword,
         showPasswordChange = { showPassword = !showPassword },
         onValueChange = onValueChange,
+        hint = hint,
     )
 }
 
@@ -114,6 +143,7 @@ private fun BitwardenPasswordField_preview_withInput_hidePassword() {
         value = "Password",
         onValueChange = {},
         initialShowPassword = false,
+        hint = "Hint",
     )
 }
 
@@ -125,6 +155,7 @@ private fun BitwardenPasswordField_preview_withInput_showPassword() {
         value = "Password",
         onValueChange = {},
         initialShowPassword = true,
+        hint = "Hint",
     )
 }
 
@@ -136,6 +167,7 @@ private fun BitwardenPasswordField_preview_withoutInput_hidePassword() {
         value = "",
         onValueChange = {},
         initialShowPassword = false,
+        hint = "Hint",
     )
 }
 
@@ -147,5 +179,6 @@ private fun BitwardenPasswordField_preview_withoutInput_showPassword() {
         value = "",
         onValueChange = {},
         initialShowPassword = true,
+        hint = "Hint",
     )
 }
