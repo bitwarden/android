@@ -61,7 +61,10 @@ fun BitwardenTheme(
         lightNonMaterialColors(context)
     }
 
-    CompositionLocalProvider(LocalNonMaterialColors provides nonMaterialColors) {
+    CompositionLocalProvider(
+        LocalNonMaterialColors provides nonMaterialColors,
+        LocalNonMaterialTypography provides nonMaterialTypography,
+    ) {
         // Set overall theme based on color scheme and typography settings
         MaterialTheme(
             colorScheme = colorScheme,
@@ -148,31 +151,40 @@ private fun Int.toColor(context: Context): Color =
     Color(context.getColor(this))
 
 /**
+ * Provides access to non material theme typography throughout the app.
+ */
+val LocalNonMaterialTypography: ProvidableCompositionLocal<NonMaterialTypography> =
+    compositionLocalOf { nonMaterialTypography }
+
+/**
  * Provides access to non material theme colors throughout the app.
  */
 val LocalNonMaterialColors: ProvidableCompositionLocal<NonMaterialColors> =
     compositionLocalOf {
         // Default value here will immediately be overridden in BitwardenTheme, similar
         // to how MaterialTheme works.
-        NonMaterialColors(Color.Transparent, Color.Transparent)
+        NonMaterialColors(Color.Transparent, Color.Transparent, Color.Transparent)
     }
 
 /**
  * Models colors that live outside of the Material Theme spec.
  */
 data class NonMaterialColors(
+    val fingerprint: Color,
     val passwordWeak: Color,
     val passwordStrong: Color,
 )
 
 private fun lightNonMaterialColors(context: Context): NonMaterialColors =
     NonMaterialColors(
+        fingerprint = R.color.light_fingerprint.toColor(context),
         passwordWeak = R.color.light_password_strength_weak.toColor(context),
         passwordStrong = R.color.light_password_strength_strong.toColor(context),
     )
 
 private fun darkNonMaterialColors(context: Context): NonMaterialColors =
     NonMaterialColors(
+        fingerprint = R.color.dark_fingerprint.toColor(context),
         passwordWeak = R.color.dark_password_strength_weak.toColor(context),
         passwordStrong = R.color.dark_password_strength_strong.toColor(context),
     )

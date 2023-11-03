@@ -22,14 +22,21 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on AccountFingerprintPhraseClick should emit ShowToast`() = runTest {
+    fun `on AccountFingerprintPhraseClick should show the fingerprint phrase dialog`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(AccountSecurityAction.AccountFingerprintPhraseClick)
+        assertEquals(
+            DEFAULT_STATE.copy(dialog = AccountSecurityDialog.FingerprintPhrase),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `on FingerPrintLearnMoreClick should emit NavigateToFingerprintPhrase`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(AccountSecurityAction.AccountFingerprintPhraseClick)
-            assertEquals(
-                AccountSecurityEvent.ShowToast("Display fingerprint phrase.".asText()),
-                awaitItem(),
-            )
+            viewModel.trySendAction(AccountSecurityAction.FingerPrintLearnMoreClick)
+            assertEquals(AccountSecurityEvent.NavigateToFingerprintPhrase, awaitItem())
         }
     }
 
@@ -226,7 +233,9 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         authRepository: AuthRepository = mockk(relaxed = true),
-        savedStateHandle: SavedStateHandle = SavedStateHandle(),
+        savedStateHandle: SavedStateHandle = SavedStateHandle().apply {
+            set("state", DEFAULT_STATE)
+        },
     ): AccountSecurityViewModel = AccountSecurityViewModel(
         authRepository = authRepository,
         savedStateHandle = savedStateHandle,
@@ -235,6 +244,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     companion object {
         private val DEFAULT_STATE = AccountSecurityState(
             dialog = null,
+            fingerprintPhrase = "fingerprint-placeholder".asText(),
             isApproveLoginRequestsEnabled = false,
             isUnlockWithBiometricsEnabled = false,
             isUnlockWithPinEnabled = false,

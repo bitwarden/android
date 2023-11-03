@@ -29,6 +29,7 @@ class AccountSecurityViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: AccountSecurityState(
             dialog = null,
+            fingerprintPhrase = "fingerprint-placeholder".asText(),
             isApproveLoginRequestsEnabled = false,
             isUnlockWithBiometricsEnabled = false,
             isUnlockWithPinEnabled = false,
@@ -50,6 +51,7 @@ class AccountSecurityViewModel @Inject constructor(
         AccountSecurityAction.ConfirmLogoutClick -> handleConfirmLogoutClick()
         AccountSecurityAction.DeleteAccountClick -> handleDeleteAccountClick()
         AccountSecurityAction.DismissDialog -> handleDismissDialog()
+        AccountSecurityAction.FingerPrintLearnMoreClick -> handleFingerPrintLearnMoreClick()
         AccountSecurityAction.LockNowClick -> handleLockNowClick()
         is AccountSecurityAction.LoginRequestToggle -> handleLoginRequestToggle(action)
         AccountSecurityAction.LogoutClick -> handleLogoutClick()
@@ -69,8 +71,7 @@ class AccountSecurityViewModel @Inject constructor(
     }
 
     private fun handleAccountFingerprintPhraseClick() {
-        // TODO BIT-470: Display fingerprint phrase
-        sendEvent(AccountSecurityEvent.ShowToast("Display fingerprint phrase.".asText()))
+        mutableStateFlow.update { it.copy(dialog = AccountSecurityDialog.FingerprintPhrase) }
     }
 
     private fun handleBackClick() = sendEvent(AccountSecurityEvent.NavigateBack)
@@ -92,6 +93,10 @@ class AccountSecurityViewModel @Inject constructor(
 
     private fun handleDismissDialog() {
         mutableStateFlow.update { it.copy(dialog = null) }
+    }
+
+    private fun handleFingerPrintLearnMoreClick() {
+        sendEvent(AccountSecurityEvent.NavigateToFingerprintPhrase)
     }
 
     private fun handleLockNowClick() {
@@ -162,6 +167,7 @@ class AccountSecurityViewModel @Inject constructor(
 @Parcelize
 data class AccountSecurityState(
     val dialog: AccountSecurityDialog?,
+    val fingerprintPhrase: Text,
     val isApproveLoginRequestsEnabled: Boolean,
     val isUnlockWithBiometricsEnabled: Boolean,
     val isUnlockWithPinEnabled: Boolean,
@@ -178,6 +184,12 @@ sealed class AccountSecurityDialog : Parcelable {
      */
     @Parcelize
     data object ConfirmLogout : AccountSecurityDialog()
+
+    /**
+     * Allows the user to view their fingerprint phrase.
+     */
+    @Parcelize
+    data object FingerprintPhrase : AccountSecurityDialog()
 
     /**
      * Allows the user to select a session timeout action.
@@ -202,6 +214,11 @@ sealed class AccountSecurityEvent {
      * Navigate back.
      */
     data object NavigateBack : AccountSecurityEvent()
+
+    /**
+     * Navigate to fingerprint phrase information.
+     */
+    data object NavigateToFingerprintPhrase : AccountSecurityEvent()
 
     /**
      * Displays a toast with the given [Text].
@@ -245,6 +262,11 @@ sealed class AccountSecurityAction {
      * User dismissed the currently displayed dialog.
      */
     data object DismissDialog : AccountSecurityAction()
+
+    /**
+     * User clicked fingerprint phrase.
+     */
+    data object FingerPrintLearnMoreClick : AccountSecurityAction()
 
     /**
      * User clicked lock now.
