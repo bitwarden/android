@@ -175,6 +175,10 @@
                 Value="Bold" />
         <Setter Property="Margin"
                 Value="0, 5, 0, 0" />
+        <Setter Property="CornerRadius"
+                Value="5" />
+        <Setter Property="MinimumHeightRequest"
+                Value="45" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">

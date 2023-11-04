@@ -107,7 +107,7 @@
                             </Label>
                         </Grid>
                     </StackLayout>
-                    <StackLayout Padding="10, 10">
+                    <StackLayout Padding="10, 10" Spacing="6">
                         <Button x:Name="_loginWithMasterPassword"
                             Text="{u:I18n LogInWithMasterPassword}" 
                                 StyleClass="btn-primary"
