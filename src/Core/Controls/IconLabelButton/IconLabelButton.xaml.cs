@@ -25,6 +25,8 @@ namespace Bit.App.Controls
         public static readonly BindableProperty CornerRadiusProperty = BindableProperty.Create(
             nameof(CornerRadius), typeof(CornerRadius), typeof(IconLabelButton));
 
+        public event EventHandler<TappedEventArgs> Tapped;
+
         public IconLabelButton()
         {
             InitializeComponent();
@@ -70,6 +72,11 @@ namespace Bit.App.Controls
         {
             get { return (CornerRadius)GetValue(CornerRadiusProperty); }
             set { SetValue(CornerRadiusProperty, value); }
+        }
+
+        private void TapGestureRecognizer_OnTapped(object sender, TappedEventArgs e)
+        {
+            Tapped?.Invoke(sender, e);
         }
     }
 }

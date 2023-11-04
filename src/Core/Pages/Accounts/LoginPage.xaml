@@ -128,11 +128,9 @@
                             VerticalOptions="CenterAndExpand"
                             Icon="{Binding Source={x:Static core:BitwardenIcons.Suitcase}}"
                             Label="{u:I18n LogInSso}"
-                            AutomationId="LogInWithSsoButton">
-                            <controls:IconLabelButton.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="LogInSSO_Clicked" />
-                            </controls:IconLabelButton.GestureRecognizers>
-                        </controls:IconLabelButton>
+                            AutomationId="LogInWithSsoButton"
+                            Tapped="LogInSSO_Clicked"
+                            />
                         <Label
                             Text="{Binding LoggingInAsText}"
                             StyleClass="text-sm"

@@ -11,13 +11,13 @@
             <RoundRectangle CornerRadius="{Binding CornerRadius, Source={x:Reference _iconLabelButton}}" />
         </Border.StrokeShape>
         <Grid>
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_OnTapped" Command="{Binding ButtonCommand, Source={x:Reference _iconLabelButton}}" />
+            </Grid.GestureRecognizers>
             <StackLayout
                 Spacing="6"
                 Orientation="Horizontal"
                 HorizontalOptions="Center">
-                <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding ButtonCommand, Source={x:Reference _iconLabelButton}}" />
-                </StackLayout.GestureRecognizers>
                 <controls:IconLabel
                     VerticalOptions="Center"
                     HorizontalTextAlignment="Center"
