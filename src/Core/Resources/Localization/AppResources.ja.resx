@@ -396,9 +396,6 @@
   <data name="VisitOurWebsite" xml:space="preserve">
     <value>ウェブサイトを開く</value>
   </data>
-  <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>私たちのウェブサイトでヘルプ、ニュース、問い合わせや Bitwarden の詳しい使い方をチェックしてください。</value>
-  </data>
   <data name="Website" xml:space="preserve">
     <value>ウェブサイト</value>
     <comment>Label for a website.</comment>
@@ -450,9 +447,6 @@
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>マスターパスワードの変更</value>
-  </data>
-  <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>マスターパスワードは bitwarden.com ウェブ保管庫で変更できます。ウェブサイトを開きますか？</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>閉じる</value>
@@ -706,9 +700,6 @@
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
     <value>2段階認証</value>
-  </data>
-  <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>2段階認証を有効にすると、他の端末でログインする際にセキュリティキー、認証アプリ、SMS、電話、またはメールで認証することが必要となり，アカウントの安全性が高まります。2段階認証を有効にするのはBitwarden.comのウェブ保管庫でできます。ウェブサイトに進みますか？</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>{0}でロック解除</value>
@@ -1557,9 +1548,6 @@
   </data>
   <data name="DefaultDarkTheme" xml:space="preserve">
     <value>デフォルトのダークテーマ</value>
-  </data>
-  <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>デバイスでダークモードが有効になっている間、デフォルト（システム）テーマを使用するときに使用するダークテーマを選択してください</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>メモをコピー</value>
@@ -2436,6 +2424,10 @@
     <value>Fastmail</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API アクセストークン</value>
   </data>
@@ -2654,10 +2646,6 @@
   <data name="Passkeys" xml:space="preserve">
     <value>パスキー</value>
   </data>
-  <data name="CreatedX" xml:space="preserve">
-    <value>{0} に作成</value>
-    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
-  </data>
   <data name="Application" xml:space="preserve">
     <value>アプリ</value>
   </data>
@@ -2705,9 +2693,6 @@
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>保管庫のタイムアウトアクションがログアウトに変更されました</value>
-  </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>すでに同じパスキーを持つものがあるため、このアイテムは組織と共有することはできません。</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>自動入力をブロック</value>
@@ -2763,6 +2748,112 @@
   </data>
   <data name="LoggingInOn" xml:space="preserve">
     <value>ログイン先</value>
+  </data>
+  <data name="Vault" xml:space="preserve">
+    <value>保管庫</value>
+  </data>
+  <data name="Appearance" xml:space="preserve">
+    <value>外観</value>
+  </data>
+  <data name="AccountSecurity" xml:space="preserve">
+    <value>アカウントのセキュリティ</value>
+  </data>
+  <data name="BitwardenHelpCenter" xml:space="preserve">
+    <value>Bitwarden ヘルプセンター</value>
+  </data>
+  <data name="ContactBitwardenSupport" xml:space="preserve">
+    <value>Bitwarden サポートへの問い合わせ</value>
+  </data>
+  <data name="CopyAppInformation" xml:space="preserve">
+    <value>アプリ情報をコピー</value>
+  </data>
+  <data name="SyncNow" xml:space="preserve">
+    <value>今すぐ同期</value>
+  </data>
+  <data name="UnlockOptions" xml:space="preserve">
+    <value>ロック解除オプション</value>
+  </data>
+  <data name="SessionTimeout" xml:space="preserve">
+    <value>セッションタイムアウト</value>
+  </data>
+  <data name="SessionTimeoutAction" xml:space="preserve">
+    <value>セッションタイムアウト時のアクション</value>
+  </data>
+  <data name="AccountFingerprintPhrase" xml:space="preserve">
+    <value>アカウントのフィンガープリントフレーズ</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="OneHourAndOneMinute" xml:space="preserve">
+    <value>1 時間1分</value>
+  </data>
+  <data name="OneHourAndXMinute" xml:space="preserve">
+    <value>1時間{0}分</value>
+  </data>
+  <data name="XHoursAndOneMinute" xml:space="preserve">
+    <value>{0}時間1分</value>
+  </data>
+  <data name="XHoursAndYMinutes" xml:space="preserve">
+    <value>{0}時間{1}分</value>
+  </data>
+  <data name="XHours" xml:space="preserve">
+    <value>{0}時間</value>
+  </data>
+  <data name="AutofillServicesExplanationLong" xml:space="preserve">
+    <value>Android Autofill Frameworkは、お使いのデバイス上の他のアプリケーションにログイン情報を入力する際に使用されます。</value>
+  </data>
+  <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
+    <value>選択したキーボードがインライン入力をサポートしている場合は、インライン入力を使用します。そうでない場合は、デフォルトの自動入力を使用します。</value>
+  </data>
+  <data name="AdditionalOptions" xml:space="preserve">
+    <value>追加オプション</value>
+  </data>
+  <data name="ContinueToWebApp" xml:space="preserve">
+    <value>ウェブアプリに進みますか?</value>
+  </data>
+  <data name="ContinueToX" xml:space="preserve">
+    <value>{0} に進みますか?</value>
+    <comment>The parameter is an URL, like bitwarden.com.</comment>
+  </data>
+  <data name="ContinueToHelpCenter" xml:space="preserve">
+    <value>ヘルプセンターに進みますか?</value>
+  </data>
+  <data name="ContinueToContactSupport" xml:space="preserve">
+    <value>サポートに連絡しますか?</value>
+  </data>
+  <data name="ContinueToAppStore" xml:space="preserve">
+    <value>アプリストアに進みますか?</value>
+  </data>
+  <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
+    <value>Bitwarden ウェブアプリで2段階認証を設定すると、アカウントがより安全になります。</value>
+  </data>
+  <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
+    <value>Bitwarden ウェブアプリでマスターパスワードを変更できます。</value>
+  </data>
+  <data name="YouCanImportDataToYourVaultOnX" xml:space="preserve">
+    <value>{0} の保管庫にデータをインポートできます。</value>
+    <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
+  </data>
+  <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
+    <value>Bitwarden のヘルプセンターで使用方法の詳細をご覧ください。</value>
+  </data>
+  <data name="ContactSupportDescriptionLong" xml:space="preserve">
+    <value>お探しのものが見つかりませんか? bitwarden.com で Bitwarden のサポートにご連絡ください。</value>
+  </data>
+  <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
+    <value>Bitwarden アカウントの機能をウェブアプリでご確認ください。</value>
+  </data>
+  <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
+    <value>Bitwarden は組織を使って保管庫アイテムを他の人と共有することができます。詳細は bitwarden.com ウェブサイトをご覧ください。</value>
+  </data>
+  <data name="RateAppDescriptionLong" xml:space="preserve">
+    <value>Bitwarden の使いやすさを他のユーザーにも知ってもらいましょう。アプリストアでレビューをしてください。</value>
+  </data>
+  <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
+    <value>お使いのデバイスがダークモードの時に使用するダークテーマを選択してください</value>
+  </data>
+  <data name="CreatedXY" xml:space="preserve">
+    <value>作成日時 {0} {1}</value>
+    <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
   </data>
   <data name="TooManyAttempts" xml:space="preserve">
     <value>試行回数が多すぎます</value>

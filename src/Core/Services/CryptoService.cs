@@ -719,6 +719,17 @@ namespace Bit.Core.Services
                 await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile)));
         }
 
+        public async Task UpdateMasterKeyAndUserKeyAsync(MasterKey masterKey)
+        {
+            var userKey = await DecryptUserKeyWithMasterKeyAsync(masterKey);
+            await SetMasterKeyAsync(masterKey);
+            var hasKey = await HasUserKeyAsync();
+            if (!hasKey)
+            {
+                await SetUserKeyAsync(userKey);
+            }
+        }
+
         // --HELPER METHODS--
 
         private async Task StoreAdditionalKeysAsync(UserKey userKey, string userId = null)
@@ -1076,6 +1087,12 @@ namespace Bit.Core.Services
             if (await _stateService.GetBiometricUnlockAsync(userId) is true)
             {
                 await _stateService.SetUserKeyBiometricUnlockAsync(userKey, userId);
+            }
+            // Clear old enc key only if we don't need to still migrate PIN
+            if (await _stateService.GetPinProtectedAsync() == null
+                && await _stateService.GetPinProtectedKeyAsync() == null)
+            {
+                await _stateService.SetEncKeyEncryptedAsync(null, userId);
             }
             await _stateService.SetKeyEncryptedAsync(null, userId);
 

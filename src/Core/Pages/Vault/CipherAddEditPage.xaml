@@ -12,7 +12,8 @@
     xmlns:dts="clr-namespace:Bit.App.Lists.DataTemplateSelectors"
     xmlns:il="clr-namespace:Bit.App.Lists.ItemLayouts.CustomFields"
     HideSoftInputOnTapped="True"
-    xmlns:core="clr-namespace:Bit.Core"
+    xmlns:core="clr-namespace:Bit.Core" 
+    xmlns:appResources="clr-namespace:Bit.Core.Resources.Localization"
     x:DataType="pages:CipherAddEditPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -29,6 +30,8 @@
             <u:InverseBoolConverter x:Key="inverseBool" />
             <u:StringHasValueConverter x:Key="stringHasValue" />
             <u:IsNotNullConverter x:Key="notNull" />
+            <u:DateTimeConverter x:Key="dateTime" Format="{x:Static appResources:AppResources.CreatedXY}" />
+
             <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
                          x:Key="closeItem" x:Name="_closeItem" />
             <ToolbarItem Text="{u:I18n Collections}"
@@ -230,7 +233,7 @@
                         Margin="0,10,0,0"
                         IsVisible="{Binding ShowPasskeyInfo}"/>
                     <Entry
-                        Text="{Binding CreationDate}"
+                        Text="{Binding Cipher.Login.MainFido2Credential.CreationDate, Mode=OneWay, Converter={StaticResource dateTime}, FallbackValue=''}"
                         IsEnabled="False"
                         StyleClass="box-value,text-muted" 
                         IsVisible="{Binding ShowPasskeyInfo}" />

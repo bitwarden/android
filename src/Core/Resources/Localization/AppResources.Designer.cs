@@ -1508,15 +1508,6 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?.
-        /// </summary>
-        public static string ChangePasswordConfirmation {
-            get {
-                return ResourceManager.GetString("ChangePasswordConfirmation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Checking password....
         /// </summary>
         public static string CheckingPassword {
@@ -1877,15 +1868,6 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Created {0}.
-        /// </summary>
-        public static string CreatedX {
-            get {
-                return ResourceManager.GetString("CreatedX", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Created {0}, {1}.
         /// </summary>
         public static string CreatedXY {
@@ -2053,15 +2035,6 @@ namespace Bit.Core.Resources.Localization {
         public static string DefaultDarkTheme {
             get {
                 return ResourceManager.GetString("DefaultDarkTheme", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Choose the dark theme to use when using Default (System) theme while your device&apos;s dark mode is in use..
-        /// </summary>
-        public static string DefaultDarkThemeDescription {
-            get {
-                return ResourceManager.GetString("DefaultDarkThemeDescription", resourceCulture);
             }
         }
         
@@ -3259,6 +3232,15 @@ namespace Bit.Core.Resources.Localization {
         public static string ForwardedEmailDescription {
             get {
                 return ResourceManager.GetString("ForwardedEmailDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ForwardEmail.
+        /// </summary>
+        public static string ForwardEmail {
+            get {
+                return ResourceManager.GetString("ForwardEmail", resourceCulture);
             }
         }
         
@@ -6687,16 +6669,6 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This item cannot be shared with the organization because there is one already with the same passkey..
-        /// </summary>
-        public static string ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey {
-            get {
-                return ResourceManager.GetString("ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePassk" +
-                        "ey", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to This request is no longer valid.
         /// </summary>
         public static string ThisRequestIsNoLongerValid {
@@ -6855,15 +6827,6 @@ namespace Bit.Core.Resources.Localization {
         public static string TwoStepLogin {
             get {
                 return ResourceManager.GetString("TwoStepLogin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be set up on the bitwarden.com web vault. Do you want to visit the website now?.
-        /// </summary>
-        public static string TwoStepLoginConfirmation {
-            get {
-                return ResourceManager.GetString("TwoStepLoginConfirmation", resourceCulture);
             }
         }
         
@@ -7575,15 +7538,6 @@ namespace Bit.Core.Resources.Localization {
         public static string VisitOurWebsite {
             get {
                 return ResourceManager.GetString("VisitOurWebsite", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Visit our website to get help, news, email us, and/or learn more about how to use Bitwarden..
-        /// </summary>
-        public static string VisitOurWebsiteDescription {
-            get {
-                return ResourceManager.GetString("VisitOurWebsiteDescription", resourceCulture);
             }
         }
         

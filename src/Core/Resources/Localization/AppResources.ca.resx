@@ -396,9 +396,6 @@
   <data name="VisitOurWebsite" xml:space="preserve">
     <value>Visiteu el nostre lloc web</value>
   </data>
-  <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Visiteu el nostre lloc web per obtenir ajuda, notícies, enviar-nos un correu electrònic i obtenir més informació sobre com utilitzar Bitwarden.</value>
-  </data>
   <data name="Website" xml:space="preserve">
     <value>Lloc web</value>
     <comment>Label for a website.</comment>
@@ -450,9 +447,6 @@
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Canvia la contrasenya mestra</value>
-  </data>
-  <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Podeu canviar la contrasenya mestra a la caixa forta web de bitwarden.com. Voleu visitar el lloc web ara?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Tanca</value>
@@ -707,9 +701,6 @@
   <data name="TwoStepLogin" xml:space="preserve">
     <value>Inici de sessió en dues passes</value>
   </data>
-  <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>L'inici de sessió en dues passes fa que el vostre compte siga més segur, ja que obliga a verificar el vostre inici de sessió amb un altre dispositiu, com ara una clau de seguretat, una aplicació autenticadora, un SMS, una trucada telefònica o un correu electrònic. Es pot habilitar l'inici de sessió en dues passes a la caixa forta web de bitwarden.com. Voleu visitar el lloc web ara?</value>
-  </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Desbloqueja amb {0}</value>
   </data>
@@ -955,7 +946,7 @@ L'escaneig es farà automàticament.</value>
     <value>No podeu utilitzar aquesta característica fins que no actualitzeu la vostra clau de xifratge.</value>
   </data>
   <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
-    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+    <value>Cal migrar la clau de xifratge. Inicieu la sessió a la caixa forta web per actualitzar la clau de xifratge.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Més informació</value>
@@ -1557,9 +1548,6 @@ L'escaneig es farà automàticament.</value>
   </data>
   <data name="DefaultDarkTheme" xml:space="preserve">
     <value>Tema fosc per defecte</value>
-  </data>
-  <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Tria el tema fosc quan feu servir el tema predeterminat (sistema) mentre el mode fosc del vostre dispositiu està habilitat</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copia nota</value>
@@ -2436,6 +2424,10 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
     <value>Fastmail</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token d'accés a l'API</value>
   </data>
@@ -2654,10 +2646,6 @@ Voleu canviar a aquest compte?</value>
   <data name="Passkeys" xml:space="preserve">
     <value>Claus de pas</value>
   </data>
-  <data name="CreatedX" xml:space="preserve">
-    <value>Creats {0}</value>
-    <comment>To state the date in which the cipher was created: Created 03/21/2023</comment>
-  </data>
   <data name="Application" xml:space="preserve">
     <value>Aplicació</value>
   </data>
@@ -2705,9 +2693,6 @@ Voleu canviar a aquest compte?</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>L'acció de temps d'espera de la caixa forta ha canviat per tancar la sessió</value>
-  </data>
-  <data name="ThisItemCannotBeSharedWithTheOrganizationBecauseThereIsOneAlreadyWithTheSamePasskey" xml:space="preserve">
-    <value>Aquest element no es pot compartir amb l'organització perquè ja n'hi ha un amb la mateixa clau de pas.</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Bloqueja l'emplenament automàtic</value>
@@ -2764,10 +2749,116 @@ Voleu canviar a aquest compte?</value>
   <data name="LoggingInOn" xml:space="preserve">
     <value>Inici de sessió en</value>
   </data>
+  <data name="Vault" xml:space="preserve">
+    <value>Caixa forta</value>
+  </data>
+  <data name="Appearance" xml:space="preserve">
+    <value>Aparença</value>
+  </data>
+  <data name="AccountSecurity" xml:space="preserve">
+    <value>Seguretat del compte</value>
+  </data>
+  <data name="BitwardenHelpCenter" xml:space="preserve">
+    <value>Centre d'ajuda de Bitwarden</value>
+  </data>
+  <data name="ContactBitwardenSupport" xml:space="preserve">
+    <value>Contacta amb l'assistència de Bitwarden</value>
+  </data>
+  <data name="CopyAppInformation" xml:space="preserve">
+    <value>Copia la informació de l'aplicació</value>
+  </data>
+  <data name="SyncNow" xml:space="preserve">
+    <value>Sincronitza ara</value>
+  </data>
+  <data name="UnlockOptions" xml:space="preserve">
+    <value>Opcions de desbloqueig</value>
+  </data>
+  <data name="SessionTimeout" xml:space="preserve">
+    <value>Temps de sessió</value>
+  </data>
+  <data name="SessionTimeoutAction" xml:space="preserve">
+    <value>Acció de temps d'espera de la sessió</value>
+  </data>
+  <data name="AccountFingerprintPhrase" xml:space="preserve">
+    <value>Frase d'empremta digital</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="OneHourAndOneMinute" xml:space="preserve">
+    <value>Una hora i un minut</value>
+  </data>
+  <data name="OneHourAndXMinute" xml:space="preserve">
+    <value>Una hora i {0} minuts</value>
+  </data>
+  <data name="XHoursAndOneMinute" xml:space="preserve">
+    <value>{0} hores i un minut</value>
+  </data>
+  <data name="XHoursAndYMinutes" xml:space="preserve">
+    <value>{0} hores i {1} minuts</value>
+  </data>
+  <data name="XHours" xml:space="preserve">
+    <value>{0} hores</value>
+  </data>
+  <data name="AutofillServicesExplanationLong" xml:space="preserve">
+    <value>El marc d'emplenament automàtic d'Android s'utilitza per ajudar a omplir la informació d'inici de sessió a altres aplicacions del vostre dispositiu.</value>
+  </data>
+  <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
+    <value>Utilitzeu l'emplenament automàtic en línia si el vostre teclat seleccionat ho admet. En cas contrari, utilitzeu la superposició predeterminada.</value>
+  </data>
+  <data name="AdditionalOptions" xml:space="preserve">
+    <value>Opcions addicionals</value>
+  </data>
+  <data name="ContinueToWebApp" xml:space="preserve">
+    <value>Continua cap a l'aplicació web?</value>
+  </data>
+  <data name="ContinueToX" xml:space="preserve">
+    <value>Voleu continuar cap a {0}?</value>
+    <comment>The parameter is an URL, like bitwarden.com.</comment>
+  </data>
+  <data name="ContinueToHelpCenter" xml:space="preserve">
+    <value>Voleu continuar cap al Centre d'ajuda?</value>
+  </data>
+  <data name="ContinueToContactSupport" xml:space="preserve">
+    <value>Voleu continuar per contactar amb l'assistència?</value>
+  </data>
+  <data name="ContinueToAppStore" xml:space="preserve">
+    <value>Voleu continuar cap a l'app store?</value>
+  </data>
+  <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
+    <value>Fes que el vostre compte siga més segur configurant l'inici de sessió en dos passos a l'aplicació web de Bitwarden.</value>
+  </data>
+  <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
+    <value>Podeu canviar la vostra contrasenya mestra a l'aplicació web de Bitwarden.</value>
+  </data>
+  <data name="YouCanImportDataToYourVaultOnX" xml:space="preserve">
+    <value>Podeu importar dades a la vostra caixa forta a {0}.</value>
+    <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
+  </data>
+  <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
+    <value>Obteniu més informació sobre com utilitzar Bitwarden al Centre d'ajuda.</value>
+  </data>
+  <data name="ContactSupportDescriptionLong" xml:space="preserve">
+    <value>No trobeu el que esteu buscant? Poseu-vos en contacte amb l'assistència de Bitwarden a bitwarden.com.</value>
+  </data>
+  <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
+    <value>Exploreu més característiques del vostre compte Bitwarden a l'aplicació web.</value>
+  </data>
+  <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
+    <value>Bitwarden us permet compartir els elements de la vostra caixa forta amb altres usuaris mitjançant una organització. Més informació al lloc web bitwarden.com.</value>
+  </data>
+  <data name="RateAppDescriptionLong" xml:space="preserve">
+    <value>Ajudeu els altres a descobrir si Bitwarden és adequat per a ells. Visiteu la botiga d'aplicacions i deixeu-nos una valoració.</value>
+  </data>
+  <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
+    <value>Tria el tema fosc quan el mode fosc del vostre dispositiu estiga en ús</value>
+  </data>
+  <data name="CreatedXY" xml:space="preserve">
+    <value>Creat {0}, {1}</value>
+    <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
+  </data>
   <data name="TooManyAttempts" xml:space="preserve">
-    <value>Too many attempts</value>
+    <value>Ha hagut massa intents</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
-    <value>Account logged out.</value>
+    <value>S'ha tancat la sessió del compte.</value>
   </data>
 </root>
