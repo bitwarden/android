@@ -35,6 +35,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
@@ -60,6 +63,20 @@ fun EnvironmentScreen(
             }
         }
     }
+
+    BitwardenBasicDialog(
+        visibilityState = if (state.shouldShowErrorDialog) {
+            BasicDialogState.Shown(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.environment_page_urls_error.asText(),
+            )
+        } else {
+            BasicDialogState.Hidden
+        },
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss) }
+        },
+    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Scaffold(

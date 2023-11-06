@@ -29,4 +29,42 @@ class StringExtensionTest {
             assertTrue(it.isValidEmail())
         }
     }
+
+    @Test
+    fun `isValidUri should return true for an absolute URL`() {
+        assertTrue("https://abc.com".isValidUri())
+    }
+
+    @Test
+    fun `isValidUri should return true for an absolute non-URL path`() {
+        assertTrue("file:///abc/com".isValidUri())
+    }
+
+    @Test
+    fun `isValidUri should return true for a relative URI`() {
+        assertTrue("abc.com".isValidUri())
+    }
+
+    @Test
+    fun `isValidUri should return false for a blank or empty String`() {
+        listOf(
+            "",
+            "  ",
+        )
+            .forEach { badUri ->
+                assertFalse(badUri.isValidUri())
+            }
+    }
+
+    @Test
+    fun `isValidUri should return false when there are invalid characters present`() {
+        listOf(
+            "abc com",
+            "abc<>com",
+            "abc[]com",
+        )
+            .forEach { badUri ->
+                assertFalse(badUri.isValidUri())
+            }
+    }
 }

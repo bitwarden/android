@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
@@ -44,7 +45,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `initial state should be correct`() = runTest {
+    fun `initial state should be correct for non-custom Environments`() = runTest {
         val viewModel = LoginViewModel(
             authRepository = mockk {
                 every { captchaTokenResultFlow } returns flowOf()
@@ -58,6 +59,57 @@ class LoginViewModelTest : BaseViewModelTest() {
             assertEquals(DEFAULT_STATE, awaitItem())
         }
     }
+
+    @Test
+    fun `initial state should be correct for custom Environments with empty base URLs`() = runTest {
+        val viewModel = LoginViewModel(
+            authRepository = mockk {
+                every { captchaTokenResultFlow } returns flowOf()
+            },
+            environmentRepository = mockk {
+                every { environment } returns Environment.SelfHosted(
+                    environmentUrlData = EnvironmentUrlDataJson(
+                        base = "",
+                    ),
+                )
+            },
+            savedStateHandle = savedStateHandle,
+        )
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    environmentLabel = "".asText(),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `initial state should be correct for custom Environments with non-empty base URLs`() =
+        runTest {
+            val viewModel = LoginViewModel(
+                authRepository = mockk {
+                    every { captchaTokenResultFlow } returns flowOf()
+                },
+                environmentRepository = mockk {
+                    every { environment } returns Environment.SelfHosted(
+                        environmentUrlData = EnvironmentUrlDataJson(
+                            base = "https://abc.com/path-1/path-2",
+                        ),
+                    )
+                },
+                savedStateHandle = savedStateHandle,
+            )
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        environmentLabel = "abc.com".asText(),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `initial state should pull from handle when present`() = runTest {
