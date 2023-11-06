@@ -150,23 +150,6 @@ class LandingViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `external environment updates should update the selected environment type`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
-
-            fakeEnvironmentRepository.environment = Environment.Eu
-
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    selectedEnvironmentType = Environment.Type.EU,
-                ),
-                awaitItem(),
-            )
-        }
-    }
-
-    @Test
     fun `EnvironmentTypeSelect should update value of selected region for US or EU`() = runTest {
         val inputEnvironmentType = Environment.Type.EU
         val viewModel = createViewModel()

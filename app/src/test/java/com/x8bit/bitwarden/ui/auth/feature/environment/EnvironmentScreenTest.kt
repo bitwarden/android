@@ -1,6 +1,12 @@
 package com.x8bit.bitwarden.ui.auth.feature.environment
 
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -57,6 +63,49 @@ class EnvironmentScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(EnvironmentAction.SaveClick)
         }
+    }
+
+    @Test
+    fun `error dialog should be shown or hidden according to the state`() {
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                shouldShowErrorDialog = true,
+            )
+        }
+
+        composeTestRule.onNode(isDialog()).assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("An error has occurred.")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(
+                "One or more of the URLs entered are invalid. " +
+                    "Please revise it and try to save again.",
+            )
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Ok")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `error dialog OK click should send ErrorDialogDismiss action`() {
+        mutableStateFlow.update {
+            it.copy(
+                shouldShowErrorDialog = true,
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify { viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss) }
     }
 
     @Test
@@ -195,6 +244,7 @@ class EnvironmentScreenTest : BaseComposeTest() {
             apiServerUrl = "",
             identityServerUrl = "",
             iconsServerUrl = "",
+            shouldShowErrorDialog = false,
         )
     }
 }
