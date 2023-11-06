@@ -23,17 +23,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.components.PlaceholderComposable
 import com.x8bit.bitwarden.ui.platform.feature.settings.SETTINGS_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
@@ -41,9 +38,11 @@ import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
 import com.x8bit.bitwarden.ui.tools.feature.generator.GENERATOR_ROUTE
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGenerator
+import com.x8bit.bitwarden.ui.tools.feature.send.SEND_GRAPH_ROUTE
+import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSend
+import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
 import com.x8bit.bitwarden.ui.vault.feature.vault.VAULT_ROUTE
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVault
-import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultAddItem
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultDestination
 import kotlinx.parcelize.Parcelize
 
@@ -190,7 +189,7 @@ private fun VaultUnlockedNavBarScaffold(
                     navigateToVaultAddItem()
                 },
             )
-            sendDestination()
+            sendGraph()
             generatorDestination()
             settingsGraph(navController)
         }
@@ -257,7 +256,7 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
         override val iconRes get() = R.drawable.ic_send
         override val labelRes get() = R.string.send
         override val contentDescriptionRes get() = R.string.send
-        override val route get() = SEND_ROUTE
+        override val route get() = SEND_GRAPH_ROUTE
     }
 
     /**
@@ -296,38 +295,3 @@ private fun NavController.vaultUnlockedNavBarScreenNavOptions(): NavOptions =
         launchSingleTop = true
         restoreState = true
     }
-
-/**
- * The functions below should be moved to their respective feature packages once they exist.
- *
- * For an example of how to setup these nav extensions, see NIA project.
- */
-
-// #region Send
-/**
- * TODO: move to send package (BIT-149)
- */
-private const val SEND_ROUTE = "send"
-
-/**
- * Add send destination to the nav graph.
- *
- * TODO: move to send package (BIT-149)
- */
-private fun NavGraphBuilder.sendDestination() {
-    composable(SEND_ROUTE) {
-        PlaceholderComposable(text = "Send")
-    }
-}
-
-/**
- * Navigate to the send screen. Note this will only work if send screen was added
- * via [sendDestination].
- *
- * TODO: move to send package (BIT-149)
- *
- */
-private fun NavController.navigateToSend(navOptions: NavOptions? = null) {
-    navigate(SEND_ROUTE, navOptions)
-}
-// #endregion Send
