@@ -33,7 +33,6 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionDialog
@@ -149,7 +148,7 @@ fun AccountSecurityScreen(
                     .padding(horizontal = 16.dp),
             )
             BitwardenTextRow(
-                text = R.string.pending_log_in_requests.asText(),
+                text = stringResource(id = R.string.pending_log_in_requests),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick) }
                 },
@@ -199,7 +198,7 @@ fun AccountSecurityScreen(
                     .padding(horizontal = 16.dp),
             )
             BitwardenTextRow(
-                text = R.string.session_timeout.asText(),
+                text = stringResource(id = R.string.session_timeout),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.SessionTimeoutClick) }
                 },
@@ -212,7 +211,7 @@ fun AccountSecurityScreen(
                 )
             }
             BitwardenTextRow(
-                text = R.string.session_timeout_action.asText(),
+                text = stringResource(id = R.string.session_timeout_action),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.SessionTimeoutActionClick) }
                 },
@@ -233,14 +232,14 @@ fun AccountSecurityScreen(
                     .padding(horizontal = 16.dp),
             )
             BitwardenTextRow(
-                text = R.string.account_fingerprint_phrase.asText(),
+                text = stringResource(id = R.string.account_fingerprint_phrase),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.AccountFingerprintPhraseClick) }
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
             BitwardenExternalLinkRow(
-                text = R.string.two_step_login.asText(),
+                text = stringResource(id = R.string.two_step_login),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.TwoStepLoginClick) }
                 },
@@ -248,7 +247,7 @@ fun AccountSecurityScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
             BitwardenExternalLinkRow(
-                text = R.string.change_master_password.asText(),
+                text = stringResource(id = R.string.change_master_password),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.ChangeMasterPasswordClick) }
                 },
@@ -256,21 +255,21 @@ fun AccountSecurityScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
             BitwardenTextRow(
-                text = R.string.lock_now.asText(),
+                text = stringResource(id = R.string.lock_now),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.LockNowClick) }
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
             BitwardenTextRow(
-                text = R.string.log_out.asText(),
+                text = stringResource(id = R.string.log_out),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.LogoutClick) }
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
             BitwardenTextRow(
-                text = R.string.delete_account.asText(),
+                text = stringResource(id = R.string.delete_account),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.DeleteAccountClick) }
                 },
@@ -286,11 +285,11 @@ private fun ConfirmLogoutDialog(
     onConfirmClick: () -> Unit,
 ) {
     BitwardenTwoButtonDialog(
-        title = R.string.log_out.asText(),
-        message = R.string.logout_confirmation.asText(),
-        confirmButtonText = R.string.yes.asText(),
+        title = stringResource(id = R.string.log_out),
+        message = stringResource(id = R.string.logout_confirmation),
+        confirmButtonText = stringResource(id = R.string.yes),
         onConfirmClick = onConfirmClick,
-        dismissButtonText = R.string.cancel.asText(),
+        dismissButtonText = stringResource(id = R.string.cancel),
         onDismissClick = onDismiss,
         onDismissRequest = onDismiss,
     )
@@ -352,7 +351,7 @@ private fun SessionTimeoutActionDialog(
     onActionSelect: (SessionTimeoutAction) -> Unit,
 ) {
     BitwardenSelectionDialog(
-        title = R.string.vault_timeout_action.asText(),
+        title = stringResource(id = R.string.vault_timeout_action),
         onDismissRequest = onDismissRequest,
     ) {
         SessionTimeoutAction.values().forEach { option ->

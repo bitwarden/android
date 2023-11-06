@@ -4,10 +4,9 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.x8bit.bitwarden.ui.platform.base.util.Text
 
 /**
- * Represents a Bitwarden-styled dialog that is hidden or shown based on [visibilityState].
+ * Represents a Bitwarden-styled dialog with two buttons.
  *
  * @param title title to show.
  * @param message message to show.
@@ -20,10 +19,10 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
  */
 @Composable
 fun BitwardenTwoButtonDialog(
-    title: Text,
-    message: Text,
-    confirmButtonText: Text,
-    dismissButtonText: Text,
+    title: String,
+    message: String,
+    confirmButtonText: String,
+    dismissButtonText: String,
     onConfirmClick: () -> Unit,
     onDismissClick: () -> Unit,
     onDismissRequest: () -> Unit,
@@ -32,26 +31,26 @@ fun BitwardenTwoButtonDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
             BitwardenTextButton(
-                label = dismissButtonText(),
+                label = dismissButtonText,
                 onClick = onDismissClick,
             )
         },
         confirmButton = {
             BitwardenTextButton(
-                label = confirmButtonText(),
+                label = confirmButtonText,
                 onClick = onConfirmClick,
             )
         },
         title = {
             Text(
-                text = title(),
+                text = title,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.headlineSmall,
             )
         },
         text = {
             Text(
-                text = message(),
+                text = message,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodyMedium,
             )

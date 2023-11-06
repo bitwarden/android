@@ -97,7 +97,7 @@ fun BitwardenMultiSelectButton(
         )
         if (shouldShowDialog) {
             BitwardenSelectionDialog(
-                title = label.asText(),
+                title = label,
                 onDismissRequest = { shouldShowDialog = false },
             ) {
                 options.forEach { optionString ->

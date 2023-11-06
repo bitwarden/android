@@ -31,7 +31,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
  */
 @Composable
 fun BitwardenSelectionDialog(
-    title: Text,
+    title: String,
     onDismissRequest: () -> Unit,
     selectionItems: @Composable ColumnScope.() -> Unit = {},
 ) {
@@ -50,7 +50,7 @@ fun BitwardenSelectionDialog(
                 modifier = Modifier
                     .padding(24.dp)
                     .fillMaxWidth(),
-                text = title(),
+                text = title,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.headlineSmall,
             )

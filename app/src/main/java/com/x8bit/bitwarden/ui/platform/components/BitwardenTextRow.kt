@@ -18,13 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import com.x8bit.bitwarden.ui.platform.base.util.Text
 
 /**
  * Represents a clickable row of text and can contains an optional [content] that appears to the
  * right of the [text].
  *
- * @param text The label for the row as a [Text].
+ * @param text The label for the row as a [String].
  * @param onClick The callback when the row is clicked.
  * @param modifier The modifier to be applied to the layout.
  * @param withDivider Indicates if a divider should be drawn on the bottom of the row, defaults
@@ -33,7 +32,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
  */
 @Composable
 fun BitwardenTextRow(
-    text: Text,
+    text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     withDivider: Boolean = false,
@@ -61,7 +60,7 @@ fun BitwardenTextRow(
                 modifier = Modifier
                     .padding(end = 16.dp)
                     .weight(1f),
-                text = text(),
+                text = text,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,
             )
