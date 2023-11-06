@@ -6228,6 +6228,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set up an unlock option to change your vault timeout action..
+        /// </summary>
+        public static string SetUpAnUnlockOptionToChangeYourVaultTimeoutAction {
+            get {
+                return ResourceManager.GetString("SetUpAnUnlockOptionToChangeYourVaultTimeoutAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set up TOTP.
         /// </summary>
         public static string SetupTotp {
