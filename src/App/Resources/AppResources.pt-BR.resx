@@ -1116,7 +1116,7 @@ A leitura será feita automaticamente.</value>
     <value>Setembro</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Número de Segurança Social</value>
+    <value>Cadastro de Pessoas Físicas (CPF)</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
     <value>Estado / Província</value>
@@ -2800,29 +2800,29 @@ Você deseja mudar para esta conta?</value>
     <value>{0} horas</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
-    <value>The Android Autofill Framework is used to assist in filling login information into other apps on your device.</value>
+    <value>O Framework de Preenchimento Automático do Android é usado para ajudar a preencher informações de login em outros aplicativos do seu dispositivo.</value>
   </data>
   <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
-    <value>Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</value>
+    <value>Use o autopreenchimento interno se o teclado selecionado o suporta. Caso contrário, use a sobreposição padrão.</value>
   </data>
   <data name="AdditionalOptions" xml:space="preserve">
     <value>Opções adicionais</value>
   </data>
   <data name="ContinueToWebApp" xml:space="preserve">
-    <value>Continue to web app?</value>
+    <value>Continuar no aplicativo web?</value>
   </data>
   <data name="ContinueToX" xml:space="preserve">
-    <value>Continue to {0}?</value>
+    <value>Continuar para {0}?</value>
     <comment>The parameter is an URL, like bitwarden.com.</comment>
   </data>
   <data name="ContinueToHelpCenter" xml:space="preserve">
-    <value>Continue to Help center?</value>
+    <value>Continuar para o centro de ajuda?</value>
   </data>
   <data name="ContinueToContactSupport" xml:space="preserve">
-    <value>Continue to contact support?</value>
+    <value>Continuar e contatar o suporte?</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
-    <value>Continue to app store?</value>
+    <value>Continuar para a loja de apps?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>Make your account more secure by setting up two-step login in the Bitwarden web app.</value>
@@ -2850,7 +2850,7 @@ Você deseja mudar para esta conta?</value>
     <value>Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now.</value>
   </data>
   <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
-    <value>Choose the dark theme to use when your device’s dark mode is in use</value>
+    <value>Usar o tema escuro quando o modo escuro do seu dispositivo estiver ativado</value>
   </data>
   <data name="CreatedXY" xml:space="preserve">
     <value>Criado em {0}, {1}</value>

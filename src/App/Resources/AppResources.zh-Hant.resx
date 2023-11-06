@@ -854,7 +854,7 @@
     <value>若要繼續，請將您的 YubiKey 靠在裝置的背面或者將 YubiKey 插入您裝置的 USB 連接埠，然後按下按鈕。</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey 安全金鑰</value>
+    <value>YubiKey 安全鑰匙</value>
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -946,7 +946,7 @@
     <value>更新加密金鑰前不能使用此功能。</value>
   </data>
   <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
-    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+    <value>需要遷移加密金鑰。請透過網頁版密碼庫登入以更新您的加密金鑰。</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>深入了解</value>
@@ -1180,7 +1180,7 @@
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>使用 Face ID 驗證</value>
+    <value>使用 Face ID 驗證。</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
     <value>使用 Face ID 解鎖</value>
@@ -1678,7 +1678,7 @@
     <value>已成功匯出密碼庫</value>
   </data>
   <data name="Clone" xml:space="preserve">
-    <value>複製</value>
+    <value>克隆</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
@@ -1741,10 +1741,10 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>該帳戶的生物特徵識別解鎖已被停用，等待驗證主密碼。</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>該帳戶的自動填入生物特徵識別解鎖已停用，等待驗證主密碼。</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>啟用重新整理時同步</value>
@@ -2110,10 +2110,10 @@
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>若要繼續，請準備好 FIDO2 WebAuthn 相容的安全金鑰，在下個畫面按下 [驗證 WebAuthn]，接著遵循指引。</value>
+    <value>若要繼續，請準備好 FIDO2 WebAuthn 相容的安全鑰匙，在下個畫面按下 [驗證 WebAuthn]，接著遵循指引。</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>使用 FIDO2 WebAuthn 驗證，您可以使用外部安全金鑰進行驗證。</value>
+    <value>使用 FIDO2 WebAuthn 驗證，您可以使用外部安全鑰匙進行驗證。</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
     <value>驗證 WebAuthn</value>
@@ -2131,10 +2131,10 @@
     <value>您的組織原則正在影響您的密碼庫逾時時間。密碼庫逾時時間最多可以設定到 {0} 小時 {1} 分鐘。</value>
   </data>
   <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s). Your vault timeout action is set to {2}.</value>
+    <value>您的組織原則正在影響您的密碼庫逾時時間。密碼庫逾時時間最多可以設定到 {0} 小時 {1} 分鐘。您密碼庫的逾時動作被設定為 {2}。</value>
   </data>
   <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies have set your vault timeout action to {0}.</value>
+    <value>您的組織原則已將密碼庫逾時動作設定為 {0}。</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>您的密碼庫逾時時間超過組織設定的限制。</value>
@@ -2488,7 +2488,7 @@
     <value>獲取主密碼提示</value>
   </data>
   <data name="LoggingInAsXOnY" xml:space="preserve">
-    <value>Logging in as {0} on {1}</value>
+    <value>在 {1} 上以 {0} 身份登入</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>不是您嗎？</value>
@@ -2524,16 +2524,16 @@
     <value>待處理的登入請求。</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
-    <value>Decline all requests</value>
+    <value>拒絕所有要求</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>Are you sure you want to decline all pending login requests?</value>
+    <value>您確定要拒絕所有待處理的登入要求嗎？</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
-    <value>Requests declined</value>
+    <value>要求已拒絕</value>
   </data>
   <data name="NoPendingRequests" xml:space="preserve">
-    <value>No pending requests</value>  
+    <value>無待處理的要求</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
     <value>允許相機權限以使用掃描功能</value>
@@ -2542,13 +2542,13 @@
     <value>語言</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
-    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+    <value>語言已被變更為 {0}。請重啓應用程式以查看變更</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
-    <value>Language change requires app restart</value>
+    <value>變更語言需要重啓應用程式</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>預設（系統）</value>
   </data>
   <data name="Important" xml:space="preserve">
     <value>重要</value>
@@ -2584,22 +2584,22 @@
     <value>強度不足且已暴露的主密碼</value>
   </data>
   <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
-    <value>是密碼強度不足，且在其他資料庫中找到這個密碼。使用一個強度足夠和獨特的密碼來保護您的帳號。請問您確定要用這個密碼嗎？</value>
+    <value>密碼強度不足，且在資料外洩事件中找到了這個密碼。使用一個強度足夠和獨特的密碼來保護您的帳戶。您確定要使用這個密碼嗎？</value>
   </data>
   <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
     <value>需要單一登入 (SSO) 組織識別碼。</value>
   </data>
   <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
-    <value>Add the key to an existing or new item</value>
+    <value>將金輪新增到現有或新的項目</value>
   </data>
   <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
-    <value>There are no items in your vault that match "{0}"</value>
+    <value>您的密碼庫中沒有與「{0}」一致的項目</value>
   </data>
   <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
-    <value>Search for an item or add a new item</value>
+    <value>搜尋項目或新增項目</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
-    <value>There are no items that match the search</value>
+    <value>您的密碼庫中沒有與搜尋一致的項目</value>
   </data>
   <data name="US" xml:space="preserve">
     <value>美國</value>
@@ -2608,10 +2608,10 @@
     <value>歐盟</value>
   </data>
   <data name="SelfHosted" xml:space="preserve">
-    <value>Self-hosted</value>
+    <value>自我裝載</value>
   </data>
   <data name="DataRegion" xml:space="preserve">
-    <value>Data region</value>
+    <value>資料區域</value>
   </data>
   <data name="Region" xml:space="preserve">
     <value>區域</value>
@@ -2623,76 +2623,76 @@
     <value>目前主密碼</value>
   </data>
   <data name="LoggedIn" xml:space="preserve">
-    <value>Logged in!</value>
+    <value>已登入！</value>
   </data>
   <data name="ApproveWithMyOtherDevice" xml:space="preserve">
-    <value>Approve with my other device</value>
+    <value>使用我的其他裝置核准</value>
   </data>
   <data name="RequestAdminApproval" xml:space="preserve">
-    <value>Request admin approval</value>
+    <value>要求管理員核准</value>
   </data>
   <data name="ApproveWithMasterPassword" xml:space="preserve">
-    <value>Approve with master password</value>
+    <value>使用主密碼核准</value>
   </data>
   <data name="TurnOffUsingPublicDevice" xml:space="preserve">
-    <value>Turn off using a public device</value>
+    <value>不允許使用公用裝置</value>
   </data>
   <data name="RememberThisDevice" xml:space="preserve">
-    <value>Remember this device</value>
+    <value>記住這個裝置</value>
   </data>
   <data name="Passkey" xml:space="preserve">
-    <value>Passkey</value>
+    <value>密碼金鑰</value>
   </data>
   <data name="Passkeys" xml:space="preserve">
-    <value>Passkeys</value>
+    <value>密碼金鑰</value>
   </data>
   <data name="Application" xml:space="preserve">
     <value>應用程式</value>
   </data>
   <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
-    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+    <value>您不能編輯密碼金鑰應用程式，因為這會使密碼金鑰失效</value>
   </data>
   <data name="PasskeyWillNotBeCopied" xml:space="preserve">
-    <value>Passkey will not be copied</value>
+    <value>密碼金鑰不會被複製</value>
   </data>
   <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
-    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+    <value>密碼金鑰不會被複製到克隆的項目。 您想繼續克隆該項目嗎？</value>
   </data>
   <data name="CopyApplication" xml:space="preserve">
-    <value>Copy application</value>
+    <value>複製應用程式</value>
   </data>
   <data name="AvailableForTwoStepLogin" xml:space="preserve">
-    <value>Available for two-step login</value>
+    <value>可用於兩步驟登入</value>
   </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
-    <value>Master password re-prompt help</value>
+    <value>重新詢問主密碼幫助</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+    <value>由於記憶體不足，解鎖可能會失敗。請減少您的 KDF 記憶體設定或設定生物特徵識別解鎖來解決此問題。</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
-    <value>Invalid API key</value>
+    <value>無效的 API 金輪</value>
   </data>
   <data name="InvalidAPIToken" xml:space="preserve">
-    <value>Invalid API token</value>
+    <value>無效的 API 權杖</value>
   </data>
   <data name="AdminApprovalRequested" xml:space="preserve">
-    <value>Admin approval requested</value>
+    <value>已要求管理員核准</value>
   </data>
   <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
-    <value>Your request has been sent to your admin.</value>
+    <value>您的要求已傳送給您的管理員</value>
   </data>
   <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
-    <value>You will be notified once approved. </value>
+    <value>核准後將通知您。 </value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
-    <value>Trouble logging in?</value>
+    <value>登入時遇到困難？</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>正以 {0} 身分登入</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
-    <value>Vault timeout action changed to log out</value>
+    <value>密碼庫逾時動作已變更為登出</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>封鎖表單自動填入功能</value>
@@ -2738,127 +2738,127 @@
     <value>無法一次編輯多組 URI</value>
   </data>
   <data name="LoginApproved" xml:space="preserve">
-    <value>Login approved</value>
+    <value>登入已核准</value>
   </data>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
-    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+    <value>必須先在 Bitwarden 應用程式設定中開啟後，才可以使用裝置登入。要改用其他選項嗎？</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
-    <value>Log in with device</value>
+    <value>使用裝置登入</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
-    <value>Logging in on</value>
+    <value>正登入到</value>
   </data>
   <data name="Vault" xml:space="preserve">
-    <value>Vault</value>
+    <value>密碼庫</value>
   </data>
   <data name="Appearance" xml:space="preserve">
-    <value>Appearance</value>
+    <value>外觀</value>
   </data>
   <data name="AccountSecurity" xml:space="preserve">
-    <value>Account security</value>
+    <value>帳戶安全性</value>
   </data>
   <data name="BitwardenHelpCenter" xml:space="preserve">
-    <value>Bitwarden Help Center</value>
+    <value>Bitwarden 幫助中心</value>
   </data>
   <data name="ContactBitwardenSupport" xml:space="preserve">
-    <value>Contact Bitwarden support</value>
+    <value>連絡 Bitwarden 支援</value>
   </data>
   <data name="CopyAppInformation" xml:space="preserve">
-    <value>Copy app information</value>
+    <value>複製應用程式資訊</value>
   </data>
   <data name="SyncNow" xml:space="preserve">
-    <value>Sync now</value>
+    <value>立即同步</value>
   </data>
   <data name="UnlockOptions" xml:space="preserve">
-    <value>Unlock options</value>
+    <value>解鎖選項</value>
   </data>
   <data name="SessionTimeout" xml:space="preserve">
-    <value>Session timeout</value>
+    <value>工作階段逾時</value>
   </data>
   <data name="SessionTimeoutAction" xml:space="preserve">
-    <value>Session timeout action</value>
+    <value>工作階段逾時動作</value>
   </data>
   <data name="AccountFingerprintPhrase" xml:space="preserve">
-    <value>Account fingerprint phrase</value>
+    <value>帳戶指紋短語</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="OneHourAndOneMinute" xml:space="preserve">
-    <value>One hour and one minute</value>
+    <value>1 小時 1 分鐘</value>
   </data>
   <data name="OneHourAndXMinute" xml:space="preserve">
-    <value>One hour and {0} minutes</value>
+    <value>1 小時 {0} 分鐘</value>
   </data>
   <data name="XHoursAndOneMinute" xml:space="preserve">
-    <value>{0} hours and one minute</value>
+    <value>{0} 小時 1 分鐘</value>
   </data>
   <data name="XHoursAndYMinutes" xml:space="preserve">
-    <value>{0} hours and {1} minutes</value>
+    <value>{0} 小時 {1} 分鐘</value>
   </data>
   <data name="XHours" xml:space="preserve">
-    <value>{0} hours</value>
+    <value>{0} 小時</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
-    <value>The Android Autofill Framework is used to assist in filling login information into other apps on your device.</value>
+    <value>Android 自動填入框架用於協助將登入資訊填入裝置上的其他應用程式。</value>
   </data>
   <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
-    <value>Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</value>
+    <value>如果您選擇的鍵盤支持，請使用内嵌式自動填入。否則，使用預設覆蓋。</value>
   </data>
   <data name="AdditionalOptions" xml:space="preserve">
-    <value>Additional options</value>
+    <value>額外選項</value>
   </data>
   <data name="ContinueToWebApp" xml:space="preserve">
-    <value>Continue to web app?</value>
+    <value>接下來造訪 Web App 嗎？</value>
   </data>
   <data name="ContinueToX" xml:space="preserve">
-    <value>Continue to {0}?</value>
+    <value>接下來造訪 {0} 嗎？</value>
     <comment>The parameter is an URL, like bitwarden.com.</comment>
   </data>
   <data name="ContinueToHelpCenter" xml:space="preserve">
-    <value>Continue to Help center?</value>
+    <value>接下來造訪幫助中心嗎？</value>
   </data>
   <data name="ContinueToContactSupport" xml:space="preserve">
-    <value>Continue to contact support?</value>
+    <value>接下來聯絡支援嗎？</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
-    <value>Continue to app store?</value>
+    <value>接下來造訪 App Store 嗎？</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
-    <value>Make your account more secure by setting up two-step login in the Bitwarden web app.</value>
+    <value>在 Bitwarden Web 應用程式中設定兩步驟登入，讓您的帳戶更加安全。</value>
   </data>
   <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
-    <value>You can change your master password on the Bitwarden web app.</value>
+    <value>您可以在 Bitwarden Web 應用程式上變更主密碼。</value>
   </data>
   <data name="YouCanImportDataToYourVaultOnX" xml:space="preserve">
-    <value>You can import data to your vault on {0}.</value>
+    <value>您可以將資料匯入到 {0} 上的密碼庫。</value>
     <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
   </data>
   <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
-    <value>Learn more about how to use Bitwarden on the Help center.</value>
+    <value>在幫助中心了解有關如何使用 Bitwarden 的更多資訊。</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
-    <value>Can’t find what you are looking for? Reach out to Bitwarden support on bitwarden.com.</value>
+    <value>不能找到你想要的？請在 bitwarden.com 上聯絡 Bitwarden 支援。</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
-    <value>Explore more features of your Bitwarden account on the web app.</value>
+    <value>在 Web 應用程式上探索 Bitwarden 帳戶的更多功能。</value>
   </data>
   <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault items with others by using an organization. Learn more on the bitwarden.com website.</value>
+    <value>Bitwarden 可讓您透過組織與其他人共用您的密碼庫項目。請造訪 bitwarden.com 網站以了解更多資訊。</value>
   </data>
   <data name="RateAppDescriptionLong" xml:space="preserve">
-    <value>Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now.</value>
+    <value>幫助其他人了解 Bitwarden 是否適合他們。立即造訪 App Store 並留下評分。</value>
   </data>
   <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
-    <value>Choose the dark theme to use when your device’s dark mode is in use</value>
+    <value>選擇當您的裝置使用深色模式時要使用的深色主題</value>
   </data>
   <data name="CreatedXY" xml:space="preserve">
-    <value>Created {0}, {1}</value>
+    <value>建立於 {0}, {1}</value>
     <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
   </data>
   <data name="TooManyAttempts" xml:space="preserve">
     <value>嘗試次數過多</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
-    <value>帳號已登出。</value>
+    <value>帳戶已登出。</value>
   </data>
 </root>

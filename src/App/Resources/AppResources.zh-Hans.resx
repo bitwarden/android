@@ -1340,7 +1340,7 @@
     <value>所有项目</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>URIs</value>
+    <value>URI</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
@@ -2846,7 +2846,7 @@
     <value>Bitwarden 允许您使用组织与他人共享您的密码库项目。访问 bitwarden.com 网站以了解更多。</value>
   </data>
   <data name="RateAppDescriptionLong" xml:space="preserve">
-    <value>帮助别人了解 Bitwarden 是否适合他们。立即访问应用商店并留下评分。</value>
+    <value>帮助别人了解 Bitwarden 是否适合他们。立即访问 App Store 并留下评分。</value>
   </data>
   <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
     <value>当设备的深色模式启用时，选择要使用的深色主题。</value>
