@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -32,6 +33,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param isChecked The current state of the switch (either checked or unchecked).
  * @param onCheckedChange A lambda that is invoked when the switch's state changes.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
+ * @param description An optional description label to be displayed below the [label].
  * @param contentDescription A description of the switch's UI for accessibility purposes.
  */
 @Composable
@@ -40,6 +42,7 @@ fun BitwardenWideSwitch(
     isChecked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
     modifier: Modifier = Modifier,
+    description: String? = null,
     contentDescription: String? = null,
 ) {
     Row(
@@ -58,14 +61,24 @@ fun BitwardenWideSwitch(
             }
             .then(modifier),
     ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface,
+        Column(
             modifier = Modifier
                 .weight(1f)
                 .padding(vertical = 8.dp),
-        )
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            description?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.width(16.dp))
 
