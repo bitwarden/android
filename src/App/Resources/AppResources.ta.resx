@@ -2797,16 +2797,16 @@
     <value>{0} hours and {1} minutes</value>
   </data>
   <data name="XHours" xml:space="preserve">
-    <value>{0} hours</value>
+    <value>{0} மணிநேரம்</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
-    <value>The Android Autofill Framework is used to assist in filling login information into other apps on your device.</value>
+    <value>தானியங்கு நிரப்புதல் சேவைகள் விளக்கம் இன்னுங்கூடுதலான.</value>
   </data>
   <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
-    <value>Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</value>
+    <value>தானியங்கு நிரப்புதலை பயன்படுத்தவும்.</value>
   </data>
   <data name="AdditionalOptions" xml:space="preserve">
-    <value>Additional options</value>
+    <value>கூடுதல் தேர்வுகள்</value>
   </data>
   <data name="ContinueToWebApp" xml:space="preserve">
     <value>Continue to web app?</value>

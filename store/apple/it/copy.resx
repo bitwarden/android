@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden - Gestore di Password</value>
+    <value>Bitwarden Password Manager</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
@@ -151,7 +151,7 @@ Proteggi e condividi i dati sensibili all'interno della tua cassaforte di Bitwar
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bit warden,8bit,password,gestore password gratis,gestore password,gestore login</value>
+    <value>bit warden,8bit,password,gestore password gratis,gestore password,gestore login,password manager,password manager gratis</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
