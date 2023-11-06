@@ -35,7 +35,7 @@ class SendScreenTest : BaseComposeTest() {
     @Test
     fun `on add item FAB click should send AddItemClick`() {
         composeTestRule
-            .onNodeWithContentDescription("Add Item")
+            .onNodeWithContentDescription("Add item")
             .performClick()
         verify { viewModel.trySendAction(SendAction.AddSendClick) }
     }
