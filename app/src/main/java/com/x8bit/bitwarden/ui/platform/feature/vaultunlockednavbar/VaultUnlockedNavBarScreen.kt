@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.exclude
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
@@ -31,6 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.max
 import com.x8bit.bitwarden.ui.platform.feature.settings.SETTINGS_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
@@ -171,14 +173,16 @@ private fun VaultUnlockedNavBarScaffold(
             }
         },
     ) { innerPadding ->
-        // This NavHost will consume the navigation bars insets since the bottom bar
-        // is handling them and we do not want the child to receive them.
+        // Because this Scaffold has a bottom navigation bar, the NavHost will:
+        // - consume the navigation bar insets.
+        // - consume the IME insets.
         NavHost(
             navController = navController,
             startDestination = VAULT_ROUTE,
             modifier = Modifier
                 .consumeWindowInsets(WindowInsets.navigationBars)
-                .padding(innerPadding),
+                .consumeWindowInsets(WindowInsets.ime)
+                .padding(innerPadding.max(WindowInsets.ime)),
             enterTransition = RootTransitionProviders.Enter.fadeIn,
             exitTransition = RootTransitionProviders.Exit.fadeOut,
             popEnterTransition = RootTransitionProviders.Enter.fadeIn,

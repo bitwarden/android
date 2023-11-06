@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
  * @param text The label for the row as a [String].
  * @param onClick The callback when the row is clicked.
  * @param modifier The modifier to be applied to the layout.
+ * @param description An optional description label to be displayed below the [text].
  * @param withDivider Indicates if a divider should be drawn on the bottom of the row, defaults
  * to `false`.
  * @param content The content of the [BitwardenTextRow].
@@ -35,6 +37,7 @@ fun BitwardenTextRow(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    description: String? = null,
     withDivider: Boolean = false,
     content: (@Composable () -> Unit)? = null,
 ) {
@@ -56,14 +59,24 @@ fun BitwardenTextRow(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(
+            Column(
                 modifier = Modifier
                     .padding(end = 16.dp)
                     .weight(1f),
-                text = text,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
+            ) {
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                description?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
             content?.invoke()
         }
         if (withDivider) {
