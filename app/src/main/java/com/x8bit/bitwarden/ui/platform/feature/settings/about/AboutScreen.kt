@@ -167,19 +167,19 @@ private fun ContentColum(
         )
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenExternalLinkRow(
-            text = R.string.bitwarden_help_center.asText(),
+            text = stringResource(id = R.string.bitwarden_help_center),
             onClick = onHelpCenterClick,
         )
         BitwardenExternalLinkRow(
-            text = R.string.web_vault.asText(),
+            text = stringResource(id = R.string.web_vault),
             onClick = onWebVaultClick,
         )
         BitwardenExternalLinkRow(
-            text = R.string.learn_org.asText(),
+            text = stringResource(id = R.string.learn_org),
             onClick = onLearnAboutOrgsClick,
         )
         BitwardenExternalLinkRow(
-            text = R.string.rate_the_app.asText(),
+            text = stringResource(id = R.string.rate_the_app),
             onClick = onRateTheAppClick,
         )
         CopyRow(

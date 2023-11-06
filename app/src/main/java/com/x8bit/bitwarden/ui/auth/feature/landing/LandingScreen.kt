@@ -42,7 +42,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionDialog
@@ -261,7 +260,7 @@ private fun EnvironmentSelector(
 
         if (shouldShowDialog) {
             BitwardenSelectionDialog(
-                title = R.string.logging_in_on.asText(),
+                title = stringResource(id = R.string.logging_in_on),
                 onDismissRequest = { shouldShowDialog = false },
             ) {
                 options.forEach {
