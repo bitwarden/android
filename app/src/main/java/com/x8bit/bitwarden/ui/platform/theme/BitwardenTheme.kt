@@ -43,9 +43,6 @@ fun BitwardenTheme(
         darkTheme -> darkColorScheme(context)
         else -> lightColorScheme(context)
     }
-        // This is here to ensure the Scaffold backgrounds are using the surface color. The
-        // "background" is not used in our current design system and should not impact our screens.
-        .run { copy(background = surface) }
 
     // Update status bar according to scheme
     val view = LocalView.current
