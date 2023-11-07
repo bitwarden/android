@@ -1,6 +1,11 @@
 package com.x8bit.bitwarden.ui.tools.feature.send
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,6 +32,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -283,78 +289,84 @@ private fun NewSendOptions(
         )
     }
     // Hide all content if not expanded:
-    if (!isExpanded) {
-        return
+    AnimatedVisibility(
+        visible = isExpanded,
+        enter = fadeIn() + slideInVertically(),
+        exit = fadeOut() + slideOutVertically(),
+        modifier = Modifier.clipToBounds(),
+    ) {
+        Column {
+            SendExpirationDateChooser(
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            BitwardenReadOnlyTextFieldWithActions(
+                label = stringResource(R.string.maximum_access_count),
+                // we use a space instead of empty string to make sure label is shown small and
+                // above the input
+                value = state.maxAccessCount?.toString() ?: " ",
+                actions = {
+                    BitwardenIconButtonWithResource(
+                        iconRes = IconResource(
+                            iconPainter = painterResource(id = R.drawable.ic_minus),
+                            contentDescription = "\u2212",
+                        ),
+                        onClick = {
+                            onIncrementMaxAccessCountClick.invoke((state.maxAccessCount ?: 0) - 1)
+                        },
+                        isEnabled = state.maxAccessCount != null,
+                    )
+                    BitwardenIconButtonWithResource(
+                        iconRes = IconResource(
+                            iconPainter = painterResource(id = R.drawable.ic_plus),
+                            contentDescription = "+",
+                        ),
+                        onClick = {
+                            onDecrementMaxAccessCountClick.invoke((state.maxAccessCount ?: 0) + 1)
+                        },
+                    )
+                },
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = stringResource(id = R.string.maximum_access_count_info),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp),
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            BitwardenPasswordField(
+                label = stringResource(id = R.string.new_password),
+                hint = stringResource(id = R.string.password_info),
+                value = state.passwordInput,
+                onValueChange = onPasswordChange,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            BitwardenTextField(
+                label = stringResource(id = R.string.notes),
+                hint = stringResource(id = R.string.notes_info),
+                value = state.noteInput,
+                onValueChange = onNoteChange,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            BitwardenWideSwitch(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                label = stringResource(id = R.string.hide_email),
+                isChecked = state.isHideEmailChecked,
+                onCheckedChange = onHideEmailChecked,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            BitwardenWideSwitch(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                label = stringResource(id = R.string.disable_send),
+                isChecked = state.isDeactivateChecked,
+                onCheckedChange = onDeactivateSendChecked,
+            )
+        }
     }
-    SendExpirationDateChooser(
-        modifier = Modifier.padding(horizontal = 16.dp),
-    )
-    Spacer(modifier = Modifier.height(16.dp))
-    BitwardenReadOnlyTextFieldWithActions(
-        label = stringResource(R.string.maximum_access_count),
-        // we use a space instead of empty string to make sure label is shown small and above
-        // the input
-        value = state.maxAccessCount?.toString() ?: " ",
-        actions = {
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_minus),
-                    contentDescription = "\u2212",
-                ),
-                onClick = {
-                    onIncrementMaxAccessCountClick.invoke((state.maxAccessCount ?: 0) - 1)
-                },
-                isEnabled = state.maxAccessCount != null,
-            )
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_plus),
-                    contentDescription = "+",
-                ),
-                onClick = {
-                    onDecrementMaxAccessCountClick.invoke((state.maxAccessCount ?: 0) + 1)
-                },
-            )
-        },
-        modifier = Modifier.padding(horizontal = 16.dp),
-    )
-    Spacer(modifier = Modifier.height(4.dp))
-    Text(
-        text = stringResource(id = R.string.maximum_access_count_info),
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 32.dp),
-    )
-    Spacer(modifier = Modifier.height(16.dp))
-    BitwardenPasswordField(
-        label = stringResource(id = R.string.new_password),
-        hint = stringResource(id = R.string.password_info),
-        value = state.passwordInput,
-        onValueChange = onPasswordChange,
-        modifier = Modifier.padding(horizontal = 16.dp),
-    )
-    Spacer(modifier = Modifier.height(16.dp))
-    BitwardenTextField(
-        label = stringResource(id = R.string.notes),
-        hint = stringResource(id = R.string.notes_info),
-        value = state.noteInput,
-        onValueChange = onNoteChange,
-        modifier = Modifier.padding(horizontal = 16.dp),
-    )
-    Spacer(modifier = Modifier.height(16.dp))
-    BitwardenWideSwitch(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        label = stringResource(id = R.string.hide_email),
-        isChecked = state.isHideEmailChecked,
-        onCheckedChange = onHideEmailChecked,
-    )
-    Spacer(modifier = Modifier.height(16.dp))
-    BitwardenWideSwitch(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        label = stringResource(id = R.string.disable_send),
-        isChecked = state.isDeactivateChecked,
-        onCheckedChange = onDeactivateSendChecked,
-    )
 }
