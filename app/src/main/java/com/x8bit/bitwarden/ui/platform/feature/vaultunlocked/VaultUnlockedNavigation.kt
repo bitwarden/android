@@ -6,6 +6,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VAULT_UNLOCKED_NAV_BAR_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
+import com.x8bit.bitwarden.ui.tools.feature.send.navigateToNewSend
+import com.x8bit.bitwarden.ui.tools.feature.send.newSendDestination
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultAddItem
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultAddItemDestination
 
@@ -30,7 +32,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
     ) {
         vaultUnlockedNavBarDestination(
             onNavigateToVaultAddItem = { navController.navigateToVaultAddItem() },
+            onNavigateToNewSend = { navController.navigateToNewSend() },
         )
         vaultAddItemDestination(onNavigateBack = { navController.popBackStack() })
+        newSendDestination(onNavigateBack = { navController.popBackStack() })
     }
 }

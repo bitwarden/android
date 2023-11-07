@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendScreen(
+    onNavigateNewSend: () -> Unit,
     viewModel: SendViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -42,6 +43,7 @@ fun SendScreen(
     val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
+            is SendEvent.NavigateNewSend -> onNavigateNewSend()
             is SendEvent.ShowToast -> Toast
                 .makeText(context, event.messsage(context.resources), Toast.LENGTH_SHORT)
                 .show()

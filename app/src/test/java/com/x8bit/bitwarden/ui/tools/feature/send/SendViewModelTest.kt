@@ -26,11 +26,11 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AddSendClick should emit ShowToast`() = runTest {
+    fun `AddSendClick should emit NavigateNewSend`() = runTest {
         val viewModel = SendViewModel(SavedStateHandle())
         viewModel.eventFlow.test {
             viewModel.trySendAction(SendAction.AddSendClick)
-            assertEquals(SendEvent.ShowToast("New Send Not Implemented".asText()), awaitItem())
+            assertEquals(SendEvent.NavigateNewSend, awaitItem())
         }
     }
 

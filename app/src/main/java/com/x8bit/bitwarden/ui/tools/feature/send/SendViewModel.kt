@@ -40,10 +40,7 @@ class SendViewModel @Inject constructor(
         sendEvent(SendEvent.ShowToast("Search Not Implemented".asText()))
     }
 
-    private fun handleSendClick() {
-        // TODO: navigate to new send UI BIT-479
-        sendEvent(SendEvent.ShowToast("New Send Not Implemented".asText()))
-    }
+    private fun handleSendClick() = sendEvent(SendEvent.NavigateNewSend)
 }
 
 /**
@@ -76,6 +73,11 @@ sealed class SendAction {
  * Models events for the send screen.
  */
 sealed class SendEvent {
+    /**
+     * Navigate to the new send screen.
+     */
+    data object NavigateNewSend : SendEvent()
+
     /**
      * Show a toast to the user.
      */
