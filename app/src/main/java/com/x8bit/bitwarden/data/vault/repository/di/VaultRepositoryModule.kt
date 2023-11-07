@@ -17,7 +17,7 @@ import javax.inject.Singleton
  */
 @Module
 @InstallIn(SingletonComponent::class)
-class VaultRepositoryModule {
+object VaultRepositoryModule {
 
     @Provides
     @Singleton

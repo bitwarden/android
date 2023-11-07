@@ -5,21 +5,98 @@ import com.bitwarden.core.CipherListView
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
+import com.bitwarden.core.InitCryptoRequest
+import com.bitwarden.sdk.BitwardenException
+import com.bitwarden.sdk.ClientCrypto
 import com.bitwarden.sdk.ClientVault
+import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import kotlin.IllegalStateException
 
 class VaultSdkSourceTest {
     private val clientVault = mockk<ClientVault>()
-
+    private val clientCrypto = mockk<ClientCrypto>()
     private val vaultSdkSource: VaultSdkSource = VaultSdkSourceImpl(
         clientVault = clientVault,
+        clientCrypto = clientCrypto,
     )
+
+    @Test
+    fun `initializeCrypto with sdk success should return InitializeCryptoResult Success`() =
+        runBlocking {
+            val mockInitCryptoRequest = mockk<InitCryptoRequest>()
+            coEvery {
+                clientCrypto.initializeCrypto(
+                    req = mockInitCryptoRequest,
+                )
+            } returns Unit
+            val result = vaultSdkSource.initializeCrypto(
+                request = mockInitCryptoRequest,
+            )
+            assertEquals(
+                InitializeCryptoResult.Success.asSuccess(),
+                result,
+            )
+            coVerify {
+                clientCrypto.initializeCrypto(
+                    req = mockInitCryptoRequest,
+                )
+            }
+        }
+
+    @Test
+    fun `initializeCrypto with sdk failure should return failure`() = runBlocking {
+        val mockInitCryptoRequest = mockk<InitCryptoRequest>()
+        val expectedException = IllegalStateException("mock")
+        coEvery {
+            clientCrypto.initializeCrypto(
+                req = mockInitCryptoRequest,
+            )
+        } throws expectedException
+        val result = vaultSdkSource.initializeCrypto(
+            request = mockInitCryptoRequest,
+        )
+        assertEquals(
+            expectedException.asFailure(),
+            result,
+        )
+        coVerify {
+            clientCrypto.initializeCrypto(
+                req = mockInitCryptoRequest,
+            )
+        }
+    }
+
+    @Test
+    fun `initializeCrypto with BitwardenException failure should return AuthenticationError`() =
+        runBlocking {
+            val mockInitCryptoRequest = mockk<InitCryptoRequest>()
+            val expectedException = BitwardenException.E(message = "")
+            coEvery {
+                clientCrypto.initializeCrypto(
+                    req = mockInitCryptoRequest,
+                )
+            } throws expectedException
+            val result = vaultSdkSource.initializeCrypto(
+                request = mockInitCryptoRequest,
+            )
+            assertEquals(
+                InitializeCryptoResult.AuthenticationError.asSuccess(),
+                result,
+            )
+            coVerify {
+                clientCrypto.initializeCrypto(
+                    req = mockInitCryptoRequest,
+                )
+            }
+        }
 
     @Test
     fun `Cipher decrypt should call SDK and return a Result with correct data`() = runBlocking {

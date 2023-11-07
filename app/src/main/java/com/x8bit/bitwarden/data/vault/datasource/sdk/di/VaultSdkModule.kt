@@ -14,11 +14,15 @@ import javax.inject.Singleton
  */
 @Module
 @InstallIn(SingletonComponent::class)
-class VaultSdkModule {
+object VaultSdkModule {
 
     @Provides
     @Singleton
     fun providesVaultSdkSource(
         client: Client,
-    ): VaultSdkSource = VaultSdkSourceImpl(clientVault = client.vault())
+    ): VaultSdkSource =
+        VaultSdkSourceImpl(
+            clientVault = client.vault(),
+            clientCrypto = client.crypto(),
+        )
 }

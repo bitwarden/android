@@ -31,6 +31,8 @@ import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -45,12 +47,14 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class AuthRepositoryTest {
 
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val accountsService: AccountsService = mockk()
     private val identityService: IdentityService = mockk()
     private val haveIBeenPwnedService: HaveIBeenPwnedService = mockk()
+    private val vaultRepository: VaultRepository = mockk()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val authSdkSource = mockk<AuthSdkSource> {
         coEvery {
@@ -85,6 +89,7 @@ class AuthRepositoryTest {
         authSdkSource = authSdkSource,
         authDiskSource = fakeAuthDiskSource,
         dispatcherManager = dispatcherManager,
+        vaultRepository = vaultRepository,
     )
 
     @BeforeEach
@@ -183,7 +188,8 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `login get token succeeds should return Success and update AuthState and stored keys`() =
+    @Suppress("MaxLineLength")
+    fun `login get token succeeds should return Success, update AuthState, update stored keys, and unlockVaultAndSync`() =
         runTest {
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS
             coEvery {
@@ -197,6 +203,9 @@ class AuthRepositoryTest {
                 )
             }
                 .returns(Result.success(successResponse))
+            coEvery {
+                vaultRepository.unlockVaultAndSync(masterPassword = PASSWORD)
+            } returns VaultUnlockResult.Success
             every {
                 GET_TOKEN_RESPONSE_SUCCESS.toUserState(previousUserState = null)
             } returns SINGLE_USER_STATE_1
@@ -218,6 +227,9 @@ class AuthRepositoryTest {
                     passwordHash = PASSWORD_HASH,
                     captchaToken = null,
                 )
+            }
+            coVerify {
+                vaultRepository.unlockVaultAndSync(masterPassword = PASSWORD)
             }
         }
 
@@ -597,6 +609,9 @@ class AuthRepositoryTest {
                 captchaToken = null,
             )
         } returns Result.success(successResponse)
+        coEvery {
+            vaultRepository.unlockVaultAndSync(masterPassword = PASSWORD)
+        } returns VaultUnlockResult.Success
         every {
             GET_TOKEN_RESPONSE_SUCCESS.toUserState(previousUserState = null)
         } returns SINGLE_USER_STATE_1
@@ -643,6 +658,9 @@ class AuthRepositoryTest {
                     captchaToken = null,
                 )
             } returns Result.success(successResponse)
+            coEvery {
+                vaultRepository.unlockVaultAndSync(masterPassword = PASSWORD)
+            } returns VaultUnlockResult.Success
             every {
                 GET_TOKEN_RESPONSE_SUCCESS.toUserState(previousUserState = SINGLE_USER_STATE_2)
             } returns MULTI_USER_STATE

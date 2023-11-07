@@ -18,10 +18,12 @@ import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
+import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,22 +32,20 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import javax.inject.Inject
 import javax.inject.Singleton
-
-private const val DEFAULT_KDF_ITERATIONS = 600000
 
 /**
  * Default implementation of [AuthRepository].
  */
 @Suppress("LongParameterList")
 @Singleton
-class AuthRepositoryImpl @Inject constructor(
+class AuthRepositoryImpl constructor(
     private val accountsService: AccountsService,
     private val haveIBeenPwnedService: HaveIBeenPwnedService,
     private val identityService: IdentityService,
     private val authSdkSource: AuthSdkSource,
     private val authDiskSource: AuthDiskSource,
+    private val vaultRepository: VaultRepository,
     dispatcherManager: DispatcherManager,
 ) : AuthRepository {
     private val scope = CoroutineScope(dispatcherManager.io)
@@ -122,6 +122,7 @@ class AuthRepositoryImpl @Inject constructor(
                                     privateKey = it.privateKey,
                                 )
                             }
+                        vaultRepository.unlockVaultAndSync(masterPassword = password)
                         LoginResult.Success
                     }
 
@@ -176,7 +177,7 @@ class AuthRepositoryImpl @Inject constructor(
                     }
                 }
         }
-        val kdf = Kdf.Pbkdf2(DEFAULT_KDF_ITERATIONS.toUInt())
+        val kdf = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt())
         return authSdkSource
             .makeRegisterKeys(
                 email = email,
