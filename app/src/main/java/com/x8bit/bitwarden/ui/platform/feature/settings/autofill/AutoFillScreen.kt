@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -82,7 +81,6 @@ fun AutoFillScreen(
             Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.surface)
                 .verticalScroll(rememberScrollState()),
         ) {
             BitwardenListHeaderText(

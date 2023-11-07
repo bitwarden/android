@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.createaccount
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -194,7 +193,6 @@ fun CreateAccountScreen(
                 .semantics { testTagsAsResourceId = true }
                 .padding(innerPadding)
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.surface)
                 .verticalScroll(rememberScrollState()),
         ) {
             Spacer(modifier = Modifier.height(16.dp))

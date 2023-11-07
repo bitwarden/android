@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -79,7 +78,6 @@ fun SettingsScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.surface)
                 .verticalScroll(state = rememberScrollState()),
         ) {
             Settings.values().forEach {
@@ -145,8 +143,7 @@ private fun SettingsRows_preview() {
         Column(
             modifier = Modifier
                 .padding(16.dp)
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.surface),
+                .fillMaxSize(),
         ) {
             Settings.values().forEach {
                 SettingsRow(
