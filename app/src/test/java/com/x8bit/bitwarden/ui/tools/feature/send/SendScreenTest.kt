@@ -14,6 +14,7 @@ import org.junit.Test
 
 class SendScreenTest : BaseComposeTest() {
 
+    private var onNavigateToNewSendCalled = false
     private val mutableEventFlow = MutableSharedFlow<SendEvent>(
         extraBufferCapacity = Int.MAX_VALUE,
     )
@@ -28,6 +29,7 @@ class SendScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             SendScreen(
                 viewModel = viewModel,
+                onNavigateNewSend = { onNavigateToNewSendCalled = true },
             )
         }
     }
@@ -54,6 +56,12 @@ class SendScreenTest : BaseComposeTest() {
             .onNodeWithContentDescription("Search Sends")
             .performClick()
         verify { viewModel.trySendAction(SendAction.SearchClick) }
+    }
+
+    @Test
+    fun `on NavigateToNewSend should call onNavgiateToNewSend`() {
+        mutableEventFlow.tryEmit(SendEvent.NavigateNewSend)
+        assert(onNavigateToNewSendCalled)
     }
 }
 

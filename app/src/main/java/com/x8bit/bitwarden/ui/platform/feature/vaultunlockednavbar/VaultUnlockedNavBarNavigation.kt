@@ -23,6 +23,7 @@ fun NavController.navigateToVaultUnlockedNavBar(navOptions: NavOptions? = null) 
  */
 fun NavGraphBuilder.vaultUnlockedNavBarDestination(
     onNavigateToVaultAddItem: () -> Unit,
+    onNavigateToNewSend: () -> Unit,
 ) {
     composable(
         route = VAULT_UNLOCKED_NAV_BAR_ROUTE,
@@ -31,6 +32,9 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
         popEnterTransition = TransitionProviders.Enter.stay,
         popExitTransition = TransitionProviders.Exit.stay,
     ) {
-        VaultUnlockedNavBarScreen(onNavigateToVaultAddItem = onNavigateToVaultAddItem)
+        VaultUnlockedNavBarScreen(
+            onNavigateToVaultAddItem = onNavigateToVaultAddItem,
+            onNavigateToNewSend = onNavigateToNewSend,
+        )
     }
 }

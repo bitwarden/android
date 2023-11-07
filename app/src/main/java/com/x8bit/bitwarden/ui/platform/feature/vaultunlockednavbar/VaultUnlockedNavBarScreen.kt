@@ -56,6 +56,7 @@ fun VaultUnlockedNavBarScreen(
     viewModel: VaultUnlockedNavBarViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
     onNavigateToVaultAddItem: () -> Unit,
+    onNavigateToNewSend: () -> Unit,
 ) {
     EventsEffect(viewModel = viewModel) { event ->
         navController.apply {
@@ -82,6 +83,7 @@ fun VaultUnlockedNavBarScreen(
     VaultUnlockedNavBarScaffold(
         navController = navController,
         navigateToVaultAddItem = onNavigateToVaultAddItem,
+        navigateToNewSend = onNavigateToNewSend,
         generatorTabClickedAction = {
             viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick)
         },
@@ -109,6 +111,7 @@ private fun VaultUnlockedNavBarScaffold(
     generatorTabClickedAction: () -> Unit,
     settingsTabClickedAction: () -> Unit,
     navigateToVaultAddItem: () -> Unit,
+    navigateToNewSend: () -> Unit,
 ) {
     // This scaffold will host screens that contain top bars while not hosting one itself.
     // We need to ignore the status bar insets here and let the content screens handle
@@ -193,7 +196,7 @@ private fun VaultUnlockedNavBarScaffold(
                     navigateToVaultAddItem()
                 },
             )
-            sendGraph()
+            sendGraph(onNavigateToNewSend = navigateToNewSend)
             generatorDestination()
             settingsGraph(navController)
         }

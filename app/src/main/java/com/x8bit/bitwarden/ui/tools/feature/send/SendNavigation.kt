@@ -11,7 +11,9 @@ const val SEND_ROUTE: String = "send"
 /**
  * Add send destination to the nav graph.
  */
-fun NavGraphBuilder.sendDestination() {
+fun NavGraphBuilder.sendDestination(
+    onNavigateToNewSend: () -> Unit,
+) {
     composable(
         route = SEND_ROUTE,
         enterTransition = TransitionProviders.Enter.stay,
@@ -19,7 +21,9 @@ fun NavGraphBuilder.sendDestination() {
         popEnterTransition = TransitionProviders.Enter.pushRight,
         popExitTransition = TransitionProviders.Exit.fadeOut,
     ) {
-        SendScreen()
+        SendScreen(
+            onNavigateNewSend = onNavigateToNewSend,
+        )
     }
 }
 
