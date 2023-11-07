@@ -185,6 +185,10 @@ namespace Bit.Core.Abstractions
         void SetConfigs(ConfigResponse value);
         Task<bool> GetShouldTrustDeviceAsync();
         Task SetShouldTrustDeviceAsync(bool value);
+        Task<Region?> GetActiveUserRegionAsync();
+        Task<Region?> GetPreAuthRegionAsync();
+        Task SetPreAuthRegionAsync(Region value);
+
         [Obsolete("Use GetPinKeyEncryptedUserKeyAsync instead, left for migration purposes")]
         Task<string> GetPinProtectedAsync(string userId = null);
         [Obsolete("Use SetPinKeyEncryptedUserKeyAsync instead, left for migration purposes")]
