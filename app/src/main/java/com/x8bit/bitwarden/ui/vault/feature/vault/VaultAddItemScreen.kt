@@ -1,10 +1,15 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -13,12 +18,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -78,6 +83,9 @@ fun VaultAddItemScreen(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
+        contentWindowInsets = ScaffoldDefaults
+            .contentWindowInsets
+            .exclude(WindowInsets.navigationBars),
         topBar = {
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.add_item),
@@ -103,15 +111,14 @@ fun VaultAddItemScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.item_information),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.height(8.dp))
             TypeOptionsItem(
                 selectedType = state.selectedType,
                 onTypeOptionClicked = remember(viewModel) {
@@ -176,6 +183,7 @@ private fun AddLoginTypeItemContent(
     state: VaultAddItemState.ItemType.Login,
     loginItemTypeHandlers: VaultAddLoginItemTypeHandlers,
 ) {
+    Spacer(modifier = Modifier.height(8.dp))
     BitwardenTextField(
         label = stringResource(id = R.string.name),
         value = state.name,
@@ -185,6 +193,7 @@ private fun AddLoginTypeItemContent(
             .padding(horizontal = 16.dp),
     )
 
+    Spacer(modifier = Modifier.height(8.dp))
     BitwardenTextFieldWithActions(
         label = stringResource(id = R.string.username),
         value = state.username,
@@ -201,6 +210,7 @@ private fun AddLoginTypeItemContent(
         modifier = Modifier.padding(horizontal = 16.dp),
     )
 
+    Spacer(modifier = Modifier.height(8.dp))
     BitwardenPasswordFieldWithActions(
         label = stringResource(id = R.string.password),
         value = state.password,
@@ -224,14 +234,15 @@ private fun AddLoginTypeItemContent(
         )
     }
 
+    Spacer(modifier = Modifier.height(24.dp))
     BitwardenListHeaderText(
         label = stringResource(id = R.string.authenticator_key),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp)
             .padding(horizontal = 16.dp),
     )
 
+    Spacer(modifier = Modifier.height(16.dp))
     BitwardenFilledButtonWithIcon(
         label = stringResource(id = R.string.setup_totp),
         icon = painterResource(id = R.drawable.ic_light_bulb),
@@ -241,14 +252,15 @@ private fun AddLoginTypeItemContent(
             .padding(horizontal = 16.dp),
     )
 
+    Spacer(modifier = Modifier.height(24.dp))
     BitwardenListHeaderText(
         label = stringResource(id = R.string.ur_is),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp)
             .padding(horizontal = 16.dp),
     )
 
+    Spacer(modifier = Modifier.height(8.dp))
     BitwardenTextFieldWithActions(
         label = stringResource(id = R.string.uri),
         value = state.uri,
@@ -265,6 +277,7 @@ private fun AddLoginTypeItemContent(
         modifier = Modifier.padding(horizontal = 16.dp),
     )
 
+    Spacer(modifier = Modifier.height(16.dp))
     BitwardenFilledTonalButton(
         label = stringResource(id = R.string.new_uri),
         onClick = loginItemTypeHandlers.onAddNewUriClick,
@@ -273,14 +286,15 @@ private fun AddLoginTypeItemContent(
             .padding(horizontal = 16.dp),
     )
 
+    Spacer(modifier = Modifier.height(24.dp))
     BitwardenListHeaderText(
         label = stringResource(id = R.string.miscellaneous),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp)
             .padding(horizontal = 16.dp),
     )
 
+    Spacer(modifier = Modifier.height(8.dp))
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.folder),
         options = state.availableFolders,
@@ -289,6 +303,7 @@ private fun AddLoginTypeItemContent(
         modifier = Modifier.padding(horizontal = 16.dp),
     )
 
+    Spacer(modifier = Modifier.height(16.dp))
     BitwardenSwitch(
         label = stringResource(
             id = R.string.favorite,
@@ -300,6 +315,7 @@ private fun AddLoginTypeItemContent(
             .padding(horizontal = 16.dp),
     )
 
+    Spacer(modifier = Modifier.height(16.dp))
     BitwardenSwitchWithActions(
         label = stringResource(id = R.string.password_prompt),
         isChecked = state.masterPasswordReprompt,
@@ -320,35 +336,33 @@ private fun AddLoginTypeItemContent(
         },
     )
 
+    Spacer(modifier = Modifier.height(24.dp))
     BitwardenListHeaderText(
         label = stringResource(id = R.string.notes),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp)
             .padding(horizontal = 16.dp),
     )
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        BitwardenTextField(
-            label = stringResource(id = R.string.notes),
-            value = state.notes,
-            onValueChange = loginItemTypeHandlers.onNotesTextChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
-    }
+    Spacer(modifier = Modifier.height(8.dp))
+    BitwardenTextField(
+        label = stringResource(id = R.string.notes),
+        value = state.notes,
+        onValueChange = loginItemTypeHandlers.onNotesTextChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
 
+    Spacer(modifier = Modifier.height(24.dp))
     BitwardenListHeaderText(
         label = stringResource(id = R.string.custom_fields),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp)
             .padding(horizontal = 16.dp),
     )
 
+    Spacer(modifier = Modifier.height(16.dp))
     BitwardenFilledTonalButton(
         label = stringResource(id = R.string.new_custom_field),
         onClick = loginItemTypeHandlers.onAddNewCustomFieldClick,
@@ -357,23 +371,22 @@ private fun AddLoginTypeItemContent(
             .padding(horizontal = 16.dp),
     )
 
+    Spacer(modifier = Modifier.height(24.dp))
     BitwardenListHeaderText(
         label = stringResource(id = R.string.ownership),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp)
             .padding(horizontal = 16.dp),
     )
 
+    Spacer(modifier = Modifier.height(8.dp))
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.who_owns_this_item),
         options = state.availableOwners,
         selectedOption = state.ownership,
         onOptionSelected = loginItemTypeHandlers.onOwnershipTextChange,
-        modifier = Modifier.padding(
-            bottom = 30.dp,
-            start = 16.dp,
-            end = 16.dp,
-        ),
+        modifier = Modifier.padding(horizontal = 16.dp),
     )
+    Spacer(modifier = Modifier.height(24.dp))
+    Spacer(modifier = Modifier.navigationBarsPadding())
 }
