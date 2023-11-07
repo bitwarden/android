@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.tools.feature.send
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,8 +28,7 @@ fun SendEmpty(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.surface),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

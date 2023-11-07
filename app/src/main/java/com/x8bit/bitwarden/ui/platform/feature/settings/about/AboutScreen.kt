@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -152,7 +151,6 @@ private fun ContentColum(
 ) {
     Column(
         modifier = modifier
-            .background(color = MaterialTheme.colorScheme.surface)
             .verticalScroll(rememberScrollState()),
     ) {
         Spacer(modifier = Modifier.height(8.dp))

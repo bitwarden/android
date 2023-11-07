@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -32,8 +31,7 @@ fun VaultNoItems(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues)
-            .background(color = MaterialTheme.colorScheme.surface),
+            .padding(paddingValues),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
