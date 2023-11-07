@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.base.util
 
+import androidx.compose.ui.text.AnnotatedString
 import java.net.URI
 
 /**
@@ -21,3 +22,8 @@ fun String.isValidUri(): Boolean =
     } catch (_: IllegalArgumentException) {
         false
     }
+
+/**
+ * Returns the [String] as an [AnnotatedString].
+ */
+fun String.toAnnotatedString(): AnnotatedString = AnnotatedString(text = this)

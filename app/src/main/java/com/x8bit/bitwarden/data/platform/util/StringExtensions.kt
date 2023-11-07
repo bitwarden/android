@@ -1,7 +1,5 @@
 package com.x8bit.bitwarden.data.platform.util
 
-import androidx.compose.ui.text.AnnotatedString
-
 /**
  * Returns the original [String] only if:
  *
@@ -12,8 +10,3 @@ import androidx.compose.ui.text.AnnotatedString
  */
 fun String?.orNullIfBlank(): String? =
     this?.takeUnless { it.isBlank() }
-
-/**
- * Returns the [String] as an [AnnotatedString].
- */
-fun String.toAnnotatedString(): AnnotatedString = AnnotatedString(text = this)
