@@ -1,18 +1,25 @@
 package com.x8bit.bitwarden.data.vault.repository
 
+import com.bitwarden.core.InitCryptoRequest
+import com.bitwarden.core.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSyncResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.createMockSdkFolder
+import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class VaultRepositoryTest {
@@ -50,6 +57,182 @@ class VaultRepositoryTest {
             privateKey = "mockPrivateKey-1",
         )
     }
+
+    @Test
+    fun `unlockVaultAndSync with initializeCrypto Success should sync and return Success`() =
+        runTest {
+            coEvery {
+                syncService.sync()
+            } returns Result.success(createMockSyncResponse(number = 1))
+            coEvery {
+                vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
+            } returns mockk()
+            coEvery {
+                vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
+            } returns mockk()
+            fakeAuthDiskSource.storePrivateKey(
+                userId = "mockUserId",
+                privateKey = "mockPrivateKey-1",
+            )
+            fakeAuthDiskSource.storeUserKey(
+                userId = "mockUserId",
+                userKey = "mockKey-1",
+            )
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                vaultSdkSource.initializeCrypto(
+                    request = InitCryptoRequest(
+                        kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
+                        email = "email",
+                        password = "mockPassword-1",
+                        userKey = "mockKey-1",
+                        privateKey = "mockPrivateKey-1",
+                        organizationKeys = mapOf(),
+                    ),
+                )
+            } returns Result.success(InitializeCryptoResult.Success)
+
+            val result = vaultRepository.unlockVaultAndSync(masterPassword = "mockPassword-1")
+
+            assertEquals(
+                VaultUnlockResult.Success,
+                result,
+            )
+            coVerify { syncService.sync() }
+        }
+
+    @Test
+    fun `unlockVaultAndSync with initializeCrypto failure should return GenericError`() =
+        runTest {
+            coEvery {
+                syncService.sync()
+            } returns Result.success(createMockSyncResponse(number = 1))
+            coEvery {
+                vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
+            } returns mockk()
+            coEvery {
+                vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
+            } returns mockk()
+            fakeAuthDiskSource.storePrivateKey(
+                userId = "mockUserId",
+                privateKey = "mockPrivateKey-1",
+            )
+            fakeAuthDiskSource.storeUserKey(
+                userId = "mockUserId",
+                userKey = "mockKey-1",
+            )
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                vaultSdkSource.initializeCrypto(
+                    request = InitCryptoRequest(
+                        kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
+                        email = "email",
+                        password = "mockPassword-1",
+                        userKey = "mockKey-1",
+                        privateKey = "mockPrivateKey-1",
+                        organizationKeys = mapOf(),
+                    ),
+                )
+            } returns Result.failure(IllegalStateException())
+
+            val result = vaultRepository.unlockVaultAndSync(masterPassword = "mockPassword-1")
+
+            assertEquals(
+                VaultUnlockResult.GenericError,
+                result,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultAndSync with initializeCrypto AuthenticationError should return AuthenticationError`() =
+        runTest {
+            coEvery { syncService.sync() } returns Result.success(createMockSyncResponse(number = 1))
+            coEvery {
+                vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
+            } returns mockk()
+            coEvery {
+                vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
+            } returns mockk()
+            fakeAuthDiskSource.storePrivateKey(
+                userId = "mockUserId",
+                privateKey = "mockPrivateKey-1",
+            )
+            fakeAuthDiskSource.storeUserKey(
+                userId = "mockUserId",
+                userKey = "mockKey-1",
+            )
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                vaultSdkSource.initializeCrypto(
+                    request = InitCryptoRequest(
+                        kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
+                        email = "email",
+                        password = "",
+                        userKey = "mockKey-1",
+                        privateKey = "mockPrivateKey-1",
+                        organizationKeys = mapOf(),
+                    ),
+                )
+            } returns Result.success(InitializeCryptoResult.AuthenticationError)
+
+            val result = vaultRepository.unlockVaultAndSync(masterPassword = "")
+            assertEquals(
+                VaultUnlockResult.AuthenticationError,
+                result,
+            )
+        }
+
+    @Test
+    fun `unlockVaultAndSync with missing user state should return InvalidStateError `() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = vaultRepository.unlockVaultAndSync(masterPassword = "")
+
+            assertEquals(
+                VaultUnlockResult.InvalidStateError,
+                result,
+            )
+        }
+
+    @Test
+    fun `unlockVaultAndSync with missing user key should return InvalidStateError `() =
+        runTest {
+            val result = vaultRepository.unlockVaultAndSync(masterPassword = "")
+            fakeAuthDiskSource.storeUserKey(
+                userId = "mockUserId",
+                userKey = null,
+            )
+            fakeAuthDiskSource.storePrivateKey(
+                userId = "mockUserId",
+                privateKey = "mockPrivateKey-1",
+            )
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            assertEquals(
+                VaultUnlockResult.InvalidStateError,
+                result,
+            )
+        }
+
+    @Test
+    fun `unlockVaultAndSync with missing private key should return InvalidStateError `() =
+        runTest {
+            val result = vaultRepository.unlockVaultAndSync(masterPassword = "")
+            fakeAuthDiskSource.storeUserKey(
+                userId = "mockUserId",
+                userKey = "mockKey-1",
+            )
+            fakeAuthDiskSource.storePrivateKey(
+                userId = "mockUserId",
+                privateKey = null,
+            )
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            assertEquals(
+                VaultUnlockResult.InvalidStateError,
+                result,
+            )
+        }
 }
 
 private val MOCK_USER_STATE = UserStateJson(
