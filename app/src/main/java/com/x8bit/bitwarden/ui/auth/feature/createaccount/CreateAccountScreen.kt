@@ -32,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -40,6 +41,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.semantics.toggleableState
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.buildAnnotatedString
@@ -80,7 +83,7 @@ import com.x8bit.bitwarden.ui.platform.theme.clickableSpanStyle
 /**
  * Top level composable for the create account screen.
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Suppress("LongMethod")
 @Composable
 fun CreateAccountScreen(
@@ -188,6 +191,7 @@ fun CreateAccountScreen(
     ) { innerPadding ->
         Column(
             modifier = Modifier
+                .semantics { testTagsAsResourceId = true }
                 .padding(innerPadding)
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.surface)
@@ -201,6 +205,7 @@ fun CreateAccountScreen(
                     { viewModel.trySendAction(EmailInputChange(it)) }
                 },
                 modifier = Modifier
+                    .semantics { testTag = "EmailAddressEntry" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 keyboardType = KeyboardType.Email,
@@ -217,8 +222,10 @@ fun CreateAccountScreen(
                     { viewModel.trySendAction(PasswordInputChange(it)) }
                 },
                 modifier = Modifier
+                    .semantics { testTag = "MasterPasswordEntry" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
+                showPasswordTestTag = "PasswordVisibilityToggle",
             )
             Spacer(modifier = Modifier.height(8.dp))
             PasswordStrengthIndicator(
@@ -235,8 +242,10 @@ fun CreateAccountScreen(
                     { viewModel.trySendAction(ConfirmPasswordInputChange(it)) }
                 },
                 modifier = Modifier
+                    .semantics { testTag = "ConfirmMasterPasswordEntry" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
+                showPasswordTestTag = "ConfirmPasswordVisibilityToggle",
             )
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenTextField(
@@ -247,6 +256,7 @@ fun CreateAccountScreen(
                 },
                 hint = stringResource(id = R.string.master_password_hint_description),
                 modifier = Modifier
+                    .semantics { testTag = "MasterPasswordHintLabel" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -260,6 +270,7 @@ fun CreateAccountScreen(
                     }
                 },
                 modifier = Modifier
+                    .semantics { testTag = "CheckExposedMasterPasswordToggle" }
                     .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -308,6 +319,7 @@ private fun TermsAndPrivacySwitch(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .semantics(mergeDescendants = true) {
+                testTag = "AcceptPoliciesToggle"
                 toggleableState = ToggleableState(isChecked)
                 customActions = listOf(
                     CustomAccessibilityAction(

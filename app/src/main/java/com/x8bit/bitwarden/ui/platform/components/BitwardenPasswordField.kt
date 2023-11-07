@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.components
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +21,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -48,6 +52,7 @@ fun BitwardenPasswordField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     hint: String? = null,
+    showPasswordTestTag: String? = null,
 ) {
     Column(
         modifier = modifier,
@@ -69,19 +74,21 @@ fun BitwardenPasswordField(
                 IconButton(
                     onClick = { showPasswordChange.invoke(!showPassword) },
                 ) {
-                    if (showPassword) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_visibility_off),
-                            contentDescription = stringResource(id = R.string.hide),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
+                    @DrawableRes
+                    val painterRes = if (showPassword) {
+                        R.drawable.ic_visibility_off
                     } else {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_visibility),
-                            contentDescription = stringResource(id = R.string.show),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
+                        R.drawable.ic_visibility
                     }
+
+                    @StringRes
+                    val contentDescriptionRes = if (showPassword) R.string.hide else R.string.show
+                    Icon(
+                        modifier = Modifier.semantics { showPasswordTestTag?.let { testTag = it } },
+                        painter = painterResource(id = painterRes),
+                        contentDescription = stringResource(id = contentDescriptionRes),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
             },
         )
