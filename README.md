@@ -97,6 +97,11 @@ The following is a list of all third-party dependencies included as part of the 
     - Purpose: A Kotlin-based declarative UI framework.
     - License: Apache 2.0
 
+- **kotlinx.collections.immutable**
+    - https://github.com/Kotlin/kotlinx.collections.immutable
+    - Purpose: Immutable collection interfaces and implementation prototypes for Kotlin.
+    - License: Apache 2.0
+
 - **kotlinx.coroutines**
     - https://github.com/Kotlin/kotlinx.coroutines)
     - Purpose: Kotlin coroutines library for asynchronous and reactive code.

@@ -32,6 +32,7 @@ junit5 = "5.8.2"
 jvmTarget = "1.8"
 kotlin = "1.9.10"
 kotlinCompilerExtensionVersion = "1.5.3"
+kotlinxCollectionsImmutable = "0.3.6"
 kotlinxCoroutines = "1.7.3"
 kotlinxSerialization = "1.5.1"
 kotlinxKover = "0.7.3"
@@ -81,6 +82,7 @@ google-hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", ver
 jakewharton-retrofit-kotlinx-serialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerialization" }
 junit-junit5 = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5" }
 junit-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable"}
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
