@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.base.util
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
+import androidx.core.graphics.toColorInt
 import java.net.URI
 
 /**
@@ -27,3 +29,16 @@ fun String.isValidUri(): Boolean =
  * Returns the [String] as an [AnnotatedString].
  */
 fun String.toAnnotatedString(): AnnotatedString = AnnotatedString(text = this)
+
+/**
+ * Converts a hex string to a [Color].
+ *
+ * Supported formats:
+ * - "rrggbb" / "#rrggbb"
+ * - "aarrggbb" / "#aarrggbb"
+ */
+fun String.hexToColor(): Color = if (startsWith("#")) {
+    Color(toColorInt())
+} else {
+    Color("#$this".toColorInt())
+}
