@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -29,7 +30,8 @@ fun BitwardenListHeaderTextWithSupportLabel(
             .padding(
                 top = 12.dp,
                 bottom = 4.dp,
-            ),
+            )
+            .semantics(mergeDescendants = true) { },
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
