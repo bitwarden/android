@@ -6,7 +6,7 @@ namespace Bit.App.Controls
     public partial class SettingChooserItemView : BaseSettingItemView
     {
         public static readonly BindableProperty DisplayValueProperty = BindableProperty.Create(
-            nameof(DisplayValue), typeof(string), typeof(SettingChooserItemView), null, BindingMode.OneWay);
+            nameof(DisplayValue), typeof(string), typeof(SettingChooserItemView), null);
 
         public static readonly BindableProperty ChooseCommandProperty = BindableProperty.Create(
             nameof(ChooseCommand), typeof(ICommand), typeof(ExternalLinkItemView));

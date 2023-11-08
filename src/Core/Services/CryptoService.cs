@@ -1088,6 +1088,12 @@ namespace Bit.Core.Services
             {
                 await _stateService.SetUserKeyBiometricUnlockAsync(userKey, userId);
             }
+            // Clear old enc key only if we don't need to still migrate PIN
+            if (await _stateService.GetPinProtectedAsync() == null
+                && await _stateService.GetPinProtectedKeyAsync() == null)
+            {
+                await _stateService.SetEncKeyEncryptedAsync(null, userId);
+            }
             await _stateService.SetKeyEncryptedAsync(null, userId);
 
             // Set encrypted user key just in case the user locks without syncing

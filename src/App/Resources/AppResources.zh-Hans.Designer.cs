@@ -607,7 +607,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 应用.
+        ///   Looks up a localized string similar to 应用程序.
         /// </summary>
         internal static string Application {
             get {
@@ -778,7 +778,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 验证器应用.
+        ///   Looks up a localized string similar to 验证器 App.
         /// </summary>
         internal static string AuthenticatorAppTitle {
             get {
@@ -1651,7 +1651,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 连接到手表.
+        ///   Looks up a localized string similar to 连接到 Watch.
         /// </summary>
         internal static string ConnectToWatch {
             get {
@@ -1750,7 +1750,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 复制应用.
+        ///   Looks up a localized string similar to 复制应用程序.
         /// </summary>
         internal static string CopyApplication {
             get {
@@ -2542,7 +2542,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 请输入您的验证器应用中的 6 位数验证码。.
+        ///   Looks up a localized string similar to 请输入您的验证器 App 中的 6 位数验证码。.
         /// </summary>
         internal static string EnterVerificationCodeApp {
             get {
@@ -2623,7 +2623,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 过期日.
+        ///   Looks up a localized string similar to 有效期.
         /// </summary>
         internal static string Expiration {
             get {
@@ -3231,6 +3231,15 @@ namespace Bit.App.Resources {
         internal static string ForwardedEmailDescription {
             get {
                 return ResourceManager.GetString("ForwardedEmailDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ForwardEmail.
+        /// </summary>
+        internal static string ForwardEmail {
+            get {
+                return ResourceManager.GetString("ForwardEmail", resourceCulture);
             }
         }
         
@@ -4101,7 +4110,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 使用设备登录.
+        ///   Looks up a localized string similar to 使用其他设备登录.
         /// </summary>
         internal static string LogInWithAnotherDevice {
             get {
@@ -4155,7 +4164,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 丢失了验证器应用？.
+        ///   Looks up a localized string similar to 丢失了验证器 App？.
         /// </summary>
         internal static string Lost2FAApp {
             get {
@@ -4254,7 +4263,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 密码不符合组织要求。请检查策略信息并重试。.
+        ///   Looks up a localized string similar to 密码不符合组织要求。请检查策略信息然后重试。.
         /// </summary>
         internal static string MasterPasswordPolicyValidationMessage {
             get {
@@ -4821,7 +4830,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 此账户已设置两步登录，但此设备不支持任何已配置的两步提供程序。请使用受支持的设备和/或添加其他跨设备支持的提供程序（例如验证器应用）。.
+        ///   Looks up a localized string similar to 此账户已设置两步登录，但此设备不支持任何已配置的两步提供程序。请使用受支持的设备和/或添加能更好支持跨设备使用的其他提供程序（例如验证器 App）.
         /// </summary>
         internal static string NoTwoStepAvailable {
             get {
@@ -5534,7 +5543,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 帮助别人了解 Bitwarden 是否适合他们。立即访问应用商店并留下评分。.
+        ///   Looks up a localized string similar to 帮助别人了解 Bitwarden 是否适合他们。立即访问 App Store 并留下评分。.
         /// </summary>
         internal static string RateAppDescriptionLong {
             get {
@@ -6299,7 +6308,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 在每个登录旁显示一个可识别的图像。.
+        ///   Looks up a localized string similar to 在每个登录项目旁边显示一个可识别的图像。.
         /// </summary>
         internal static string ShowWebsiteIconsDescription {
             get {
@@ -6821,7 +6830,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 在 Bitwarden 网页应用中设置两步登录，可以使您的账户更加安全。.
+        ///   Looks up a localized string similar to 通过在 Bitwarden 网页应用中设置两步登录，可以使您的账户更加安全。.
         /// </summary>
         internal static string TwoStepLoginDescriptionLong {
             get {
@@ -7127,7 +7136,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to URIs.
+        ///   Looks up a localized string similar to URI.
         /// </summary>
         internal static string URIs {
             get {
@@ -7217,7 +7226,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 使用此设备批准其他设备的登录请求.
+        ///   Looks up a localized string similar to 使用此设备批准来自其他设备的登录请求.
         /// </summary>
         internal static string UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices {
             get {
@@ -7739,7 +7748,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 您的账户的指纹短语.
+        ///   Looks up a localized string similar to 您的账户指纹短语.
         /// </summary>
         internal static string YourAccountsFingerprint {
             get {
@@ -7775,7 +7784,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 要继续，请将您的 YubiKey 靠在设备背面或者将 YubiKey 插入您设备的 USB 端口，然后按下按钮。.
+        ///   Looks up a localized string similar to 要继续，请将您的 YubiKey NEO 靠在设备背面或者将 YubiKey 插入设备的 USB 端口，然后触摸其按钮。.
         /// </summary>
         internal static string YubiKeyInstruction {
             get {
@@ -7784,7 +7793,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 要继续，请将您的 YubiKey 靠在设备背面。.
+        ///   Looks up a localized string similar to 要继续，请将您的 YubiKey NEO 靠在设备背面。.
         /// </summary>
         internal static string YubiKeyInstructionIos {
             get {

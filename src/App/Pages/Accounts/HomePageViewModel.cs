@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
+using Bit.App.Styles;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
@@ -10,13 +11,12 @@ using Bit.Core.Models.Data;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
+using BwRegion = Bit.Core.Enums.Region;
 
 namespace Bit.App.Pages
 {
     public class HomeViewModel : BaseViewModel
     {
-        private const string LOGGING_IN_ON_US = "bitwarden.com";
-        private const string LOGGING_IN_ON_EU = "bitwarden.eu";
 
         private readonly IStateService _stateService;
         private readonly IMessagingService _messagingService;
@@ -165,8 +165,8 @@ namespace Bit.App.Pages
         {
             _displayEuEnvironment = await _configService.GetFeatureFlagBoolAsync(Constants.DisplayEuEnvironmentFlag);
             var options = _displayEuEnvironment
-                    ? new string[] { LOGGING_IN_ON_US, LOGGING_IN_ON_EU, AppResources.SelfHosted }
-                    : new string[] { LOGGING_IN_ON_US, AppResources.SelfHosted };
+                    ? new string[] { BwRegion.US.Domain(), BwRegion.EU.Domain(), AppResources.SelfHosted }
+                    : new string[] { BwRegion.US.Domain(), AppResources.SelfHosted };
 
             await Device.InvokeOnMainThreadAsync(async () =>
             {
@@ -183,35 +183,23 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                await _environmentService.SetUrlsAsync(result == LOGGING_IN_ON_EU ? EnvironmentUrlData.DefaultEU : EnvironmentUrlData.DefaultUS);
+                await _environmentService.SetRegionAsync(result == BwRegion.EU.Domain() ? BwRegion.EU : BwRegion.US);
                 await _configService.GetAsync(true);
                 SelectedEnvironmentName = result;
             });
         }
 
-        public async Task UpdateEnvironment()
+        public async Task UpdateEnvironmentAsync()
         {
-            var environmentsSaved = await _stateService.GetPreAuthEnvironmentUrlsAsync();
-            if (environmentsSaved == null || environmentsSaved.IsEmpty)
+            var region = _environmentService.SelectedRegion;
+            if (region == BwRegion.SelfHosted)
             {
-                await _environmentService.SetUrlsAsync(EnvironmentUrlData.DefaultUS);
-                environmentsSaved = EnvironmentUrlData.DefaultUS;
-                SelectedEnvironmentName = LOGGING_IN_ON_US;
-                return;
-            }
-
-            if (environmentsSaved.Base == EnvironmentUrlData.DefaultUS.Base)
-            {
-                SelectedEnvironmentName = LOGGING_IN_ON_US;
-            }
-            else if (environmentsSaved.Base == EnvironmentUrlData.DefaultEU.Base)
-            {
-                SelectedEnvironmentName = LOGGING_IN_ON_EU;
+                SelectedEnvironmentName = AppResources.SelfHosted;
+                await _configService.GetAsync(true);
             }
             else
             {
-                await _configService.GetAsync(true);
-                SelectedEnvironmentName = AppResources.SelfHosted;
+                SelectedEnvironmentName = region.Domain();
             }
         }
     }

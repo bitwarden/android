@@ -1371,6 +1371,21 @@ namespace Bit.Core.Services
             account.Profile.UserDecryptionOptions.HasMasterPassword = value;
             await SaveAccountAsync(account, reconciledOptions);
         }
+        
+        public async Task<Region?> GetActiveUserRegionAsync()
+        {
+            return await GetActiveUserCustomDataAsync(a => a?.Settings?.Region);
+        }
+
+        public async Task<Region?> GetPreAuthRegionAsync()
+        {
+            return await _storageMediatorService.GetAsync<Region?>(Constants.RegionEnvironment);
+        }
+
+        public async Task SetPreAuthRegionAsync(Region value)
+        {
+            await _storageMediatorService.SaveAsync(Constants.RegionEnvironment, value);
+        }
 
         // Helpers
 
@@ -1561,6 +1576,7 @@ namespace Bit.Core.Services
             await CheckStateAsync();
 
             account.Settings.EnvironmentUrls = await GetPreAuthEnvironmentUrlsAsync();
+            account.Settings.Region = await GetPreAuthRegionAsync();
 
             // Storage
             var state = await GetStateFromStorageAsync() ?? new State();

@@ -3235,6 +3235,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ForwardEmail.
+        /// </summary>
+        internal static string ForwardEmail {
+            get {
+                return ResourceManager.GetString("ForwardEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 4 óra.
         /// </summary>
         internal static string FourHours {

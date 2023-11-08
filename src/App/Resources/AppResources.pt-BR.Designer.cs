@@ -923,7 +923,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Android Autofill Framework is used to assist in filling login information into other apps on your device..
+        ///   Looks up a localized string similar to O Framework de Preenchimento Automático do Android é usado para ajudar a preencher informações de login em outros aplicativos do seu dispositivo..
         /// </summary>
         internal static string AutofillServicesExplanationLong {
             get {
@@ -1688,7 +1688,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Continue to app store?.
+        ///   Looks up a localized string similar to Continuar para a loja de apps?.
         /// </summary>
         internal static string ContinueToAppStore {
             get {
@@ -1697,7 +1697,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Continue to contact support?.
+        ///   Looks up a localized string similar to Continuar e contatar o suporte?.
         /// </summary>
         internal static string ContinueToContactSupport {
             get {
@@ -1706,7 +1706,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Continue to Help center?.
+        ///   Looks up a localized string similar to Continuar para o centro de ajuda?.
         /// </summary>
         internal static string ContinueToHelpCenter {
             get {
@@ -1715,7 +1715,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Continue to web app?.
+        ///   Looks up a localized string similar to Continuar no aplicativo web?.
         /// </summary>
         internal static string ContinueToWebApp {
             get {
@@ -1724,7 +1724,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Continue to {0}?.
+        ///   Looks up a localized string similar to Continuar para {0}?.
         /// </summary>
         internal static string ContinueToX {
             get {
@@ -2039,7 +2039,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose the dark theme to use when your device’s dark mode is in use.
+        ///   Looks up a localized string similar to Usar o tema escuro quando o modo escuro do seu dispositivo estiver ativado.
         /// </summary>
         internal static string DefaultDarkThemeDescriptionLong {
             get {
@@ -3232,6 +3232,15 @@ namespace Bit.App.Resources {
         internal static string ForwardedEmailDescription {
             get {
                 return ResourceManager.GetString("ForwardedEmailDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ForwardEmail.
+        /// </summary>
+        internal static string ForwardEmail {
+            get {
+                return ResourceManager.GetString("ForwardEmail", resourceCulture);
             }
         }
         
@@ -6345,7 +6354,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Número de Segurança Social.
+        ///   Looks up a localized string similar to Cadastro de Pessoas Físicas (CPF).
         /// </summary>
         internal static string SSN {
             get {
@@ -7191,7 +7200,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay..
+        ///   Looks up a localized string similar to Use o autopreenchimento interno se o teclado selecionado o suporta. Caso contrário, use a sobreposição padrão..
         /// </summary>
         internal static string UseInlineAutofillExplanationLong {
             get {

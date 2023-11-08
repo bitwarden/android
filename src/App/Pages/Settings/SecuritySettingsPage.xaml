@@ -67,7 +67,7 @@
             <controls:CustomLabel
                 Text="{u:I18n SessionTimeout}"
                 StyleClass="settings-header" />
-
+            
             <Frame
                 IsVisible="{Binding ShowVaultTimeoutPolicyInfo}"
                 Padding="10"
@@ -110,8 +110,10 @@
             
             <controls:SettingChooserItemView
                 Title="{u:I18n SessionTimeoutAction}"
+                Subtitle="{Binding SetUpUnlockMethodLabel}"
                 DisplayValue="{Binding VaultTimeoutActionPickerViewModel.SelectedValue}"
                 ChooseCommand="{Binding VaultTimeoutActionPickerViewModel.SelectOptionCommand}"
+                IsEnabled="{Binding IsVaultTimeoutActionLockAllowed}"
                 AutomationId="VaultTimeoutActionChooser"
                 StyleClass="settings-item-view"
                 HorizontalOptions="FillAndExpand"/>
@@ -148,6 +150,7 @@
             
             <controls:CustomLabel
                 Text="{u:I18n LockNow}"
+                IsVisible="{Binding IsVaultTimeoutActionLockAllowed}"
                 StyleClass="settings-navigatable-label"
                 AutomationId="LockNowLabel">
                 <Label.GestureRecognizers>

@@ -1813,7 +1813,7 @@ A leitura será efetuada automaticamente.</value>
     <value>Política de privacidade</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>O Bitwarden precisa de atenção - Ative "Aparecer sobre outras" em "Serviços de preenchimento automático" nas definições do Bitwarden</value>
+    <value>O Bitwarden precisa de atenção - Ative a definição "Aparecer sobre outras" em "Serviços de preenchimento automático" nas definições do Bitwarden</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Serviços de preenchimento automático</value>
@@ -1831,16 +1831,16 @@ A leitura será efetuada automaticamente.</value>
     <value>Utilize o Serviço de acessibilidade do Bitwarden para preencher automaticamente as suas credenciais em aplicações e na web. Quando configurado, exibiremos um pop-up quando os campos de início de sessão forem selecionados.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Utilize o Serviço de acessibilidade do Bitwarden para preencher automaticamente as suas credenciais em aplicações e na web. (Requer que a definição Aparecer sobre outras também esteja ativada)</value>
+    <value>Utilize o Serviço de acessibilidade do Bitwarden para preencher automaticamente as suas credenciais em aplicações e na Web. (Requer que a definição "Aparecer sobre outras" também esteja ativada)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Utilize o Serviço de acessibilidade do Bitwarden para utilizar o botão de preenchimento automático do Painel instantâneo e/ou mostrar um pop-up utilizando a definição Aparecer sobre outras (se estiver ativada).</value>
+    <value>Utilize o Serviço de acessibilidade do Bitwarden para utilizar o botão de preenchimento automático do Painel instantâneo e/ou mostrar um pop-up utilizando a definição "Aparecer sobre outras" (se estiver ativada).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Necessário para utilizar o botão de preenchimento automático do Painel instantâneo, ou para aumentar o serviço de preenchimento automático utilizando a definição Aparecer sobre outras (se estiver ativada).</value>
+    <value>Necessário para utilizar o botão de preenchimento automático do Painel instantâneo, ou para aumentar o serviço de preenchimento automático utilizando a definição "Aparecer sobre outras" (se estiver ativada).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Utilizar definição Aparecer sobre outras</value>
+    <value>Utilizar a definição "Aparecer sobre outras"</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
     <value>Permite que o Serviço de acessibilidade do Bitwarden apresente um pop-up quando os campos de início de sessão são selecionados.</value>
@@ -2423,6 +2423,10 @@ A leitura será efetuada automaticamente.</value>
     <value>Fastmail</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token de acesso à API</value>
   </data>
@@ -2690,7 +2694,7 @@ Deseja mudar para esta conta?</value>
     <value>Ação de tempo limite do cofre alterada para terminar sessão</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
-    <value>Bloquear preenchimento automático</value>
+    <value>Bloquear o preenchimento automático</value>
   </data>
   <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
     <value>O preenchimento automático não será oferecido para estes URIs.</value>

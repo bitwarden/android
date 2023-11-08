@@ -121,7 +121,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Utilize o Serviço de acessibilidade do Bitwarden para preencher automaticamente as suas credenciais em aplicações e na web. (Requer que a definição Aparecer sobre outras também esteja ativada).
+        ///   Looks up a localized string similar to Utilize o Serviço de acessibilidade do Bitwarden para preencher automaticamente as suas credenciais em aplicações e na Web. (Requer que a definição &quot;Aparecer sobre outras&quot; também esteja ativada).
         /// </summary>
         internal static string AccessibilityDescription2 {
             get {
@@ -130,7 +130,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Utilize o Serviço de acessibilidade do Bitwarden para utilizar o botão de preenchimento automático do Painel instantâneo e/ou mostrar um pop-up utilizando a definição Aparecer sobre outras (se estiver ativada)..
+        ///   Looks up a localized string similar to Utilize o Serviço de acessibilidade do Bitwarden para utilizar o botão de preenchimento automático do Painel instantâneo e/ou mostrar um pop-up utilizando a definição &quot;Aparecer sobre outras&quot; (se estiver ativada)..
         /// </summary>
         internal static string AccessibilityDescription3 {
             get {
@@ -139,7 +139,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Necessário para utilizar o botão de preenchimento automático do Painel instantâneo, ou para aumentar o serviço de preenchimento automático utilizando a definição Aparecer sobre outras (se estiver ativada)..
+        ///   Looks up a localized string similar to Necessário para utilizar o botão de preenchimento automático do Painel instantâneo, ou para aumentar o serviço de preenchimento automático utilizando a definição &quot;Aparecer sobre outras&quot; (se estiver ativada)..
         /// </summary>
         internal static string AccessibilityDescription4 {
             get {
@@ -157,7 +157,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to O Bitwarden precisa de atenção - Ative &quot;Aparecer sobre outras&quot; em &quot;Serviços de preenchimento automático&quot; nas definições do Bitwarden.
+        ///   Looks up a localized string similar to O Bitwarden precisa de atenção - Ative a definição &quot;Aparecer sobre outras&quot; em &quot;Serviços de preenchimento automático&quot; nas definições do Bitwarden.
         /// </summary>
         internal static string AccessibilityDrawOverPermissionAlert {
             get {
@@ -1336,7 +1336,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bloquear preenchimento automático.
+        ///   Looks up a localized string similar to Bloquear o preenchimento automático.
         /// </summary>
         internal static string BlockAutoFill {
             get {
@@ -2281,7 +2281,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Utilizar definição Aparecer sobre outras.
+        ///   Looks up a localized string similar to Utilizar a definição &quot;Aparecer sobre outras&quot;.
         /// </summary>
         internal static string DrawOver {
             get {
@@ -3231,6 +3231,15 @@ namespace Bit.App.Resources {
         internal static string ForwardedEmailDescription {
             get {
                 return ResourceManager.GetString("ForwardedEmailDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ForwardEmail.
+        /// </summary>
+        internal static string ForwardEmail {
+            get {
+                return ResourceManager.GetString("ForwardEmail", resourceCulture);
             }
         }
         

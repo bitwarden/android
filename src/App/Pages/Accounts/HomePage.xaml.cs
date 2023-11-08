@@ -74,7 +74,7 @@ namespace Bit.App.Pages
             });
             try
             {
-                await _vm.UpdateEnvironment();
+                await _vm.UpdateEnvironmentAsync();
             }
             catch (Exception ex)
             {

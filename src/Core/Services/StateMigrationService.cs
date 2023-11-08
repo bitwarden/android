@@ -8,12 +8,13 @@ using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
+using Newtonsoft.Json;
 
 namespace Bit.Core.Services
 {
     public class StateMigrationService : IStateMigrationService
     {
-        private const int StateVersion = 6;
+        private const int StateVersion = 7;
 
         private readonly DeviceType _deviceType;
         private readonly IStorageService _preferencesStorageService;
@@ -86,6 +87,9 @@ namespace Bit.Core.Services
                     goto case 5;
                 case 5:
                     await MigrateFrom5To6Async();
+                    goto case 6;
+                case 6:
+                    await MigrateFrom6To7Async();
                     break;
             }
         }
@@ -835,6 +839,42 @@ namespace Bit.Core.Services
             }
         }
 
+        #endregion
+
+        #region v6 to v7 Migration
+
+        private class V7Keys
+        {
+            // global keys
+            internal const string StateKey = "state";
+            internal const string RegionEnvironmentKey = "regionEnvironment";
+            internal const string PreAuthEnvironmentUrlsKey = "preAuthEnvironmentUrls";
+        }
+
+        private async Task MigrateFrom6To7Async()
+        {
+            // account data
+            var state = await GetValueAsync<State>(Storage.Prefs, V7Keys.StateKey);
+
+            // Migrate environment data to use Regions
+            foreach (var account in state.Accounts.Where(a => a.Value?.Profile?.UserId != null && a.Value?.Settings != null))
+            {
+                var urls = account.Value.Settings.EnvironmentUrls ?? Region.US.GetUrls();
+                account.Value.Settings.Region = urls.Region;
+                account.Value.Settings.EnvironmentUrls = urls.Region.GetUrls() ?? urls;
+            }
+
+            await SetValueAsync(Storage.Prefs, Constants.StateKey, state);
+
+            // Update pre auth urls and region
+            var preAuthUrls = await GetValueAsync<EnvironmentUrlData>(Storage.Prefs, V7Keys.PreAuthEnvironmentUrlsKey) ?? Region.US.GetUrls();
+            await SetValueAsync(Storage.Prefs, V7Keys.RegionEnvironmentKey, preAuthUrls.Region);
+            await SetValueAsync(Storage.Prefs, V7Keys.PreAuthEnvironmentUrlsKey, preAuthUrls.Region.GetUrls() ?? preAuthUrls);
+
+
+            // Update stored version
+            await SetLastStateVersionAsync(7);
+        }
         #endregion
 
         // Helpers
