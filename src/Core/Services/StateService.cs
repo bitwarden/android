@@ -1371,7 +1371,7 @@ namespace Bit.Core.Services
             account.Profile.UserDecryptionOptions.HasMasterPassword = value;
             await SaveAccountAsync(account, reconciledOptions);
         }
-        
+
         public async Task<Region?> GetActiveUserRegionAsync()
         {
             return await GetActiveUserCustomDataAsync(a => a?.Settings?.Region);
