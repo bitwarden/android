@@ -103,6 +103,7 @@ dependencies {
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)
     implementation(libs.jakewharton.retrofit.kotlinx.serialization)
+    implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization)
     implementation(libs.nulab.zxcvbn4j)
