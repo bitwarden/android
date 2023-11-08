@@ -50,10 +50,15 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenReadOnlyTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MAX_NUMBER_OF_WORDS
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MIN_NUMBER_OF_WORDS
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_COUNTER_MAX
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_COUNTER_MIN
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_LENGTH_SLIDER_MAX
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_LENGTH_SLIDER_MIN
 
@@ -472,29 +477,11 @@ private fun PasswordMinNumbersCounterItem(
     minNumbers: Int,
     onPasswordMinNumbersCounterChange: (Int) -> Unit,
 ) {
-    BitwardenReadOnlyTextFieldWithActions(
+    BitwardenStepper(
         label = stringResource(id = R.string.min_numbers),
-        value = minNumbers.toString(),
-        actions = {
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_minus),
-                    contentDescription = "\u2212",
-                ),
-                onClick = {
-                    onPasswordMinNumbersCounterChange(minNumbers - 1)
-                },
-            )
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_plus),
-                    contentDescription = "+",
-                ),
-                onClick = {
-                    onPasswordMinNumbersCounterChange(minNumbers + 1)
-                },
-            )
-        },
+        value = minNumbers,
+        range = PASSWORD_COUNTER_MIN..PASSWORD_COUNTER_MAX,
+        onValueChange = onPasswordMinNumbersCounterChange,
         modifier = Modifier.padding(horizontal = 16.dp),
     )
 }
@@ -504,29 +491,11 @@ private fun PasswordMinSpecialCharactersCounterItem(
     minSpecial: Int,
     onPasswordMinSpecialCharactersChange: (Int) -> Unit,
 ) {
-    BitwardenReadOnlyTextFieldWithActions(
+    BitwardenStepper(
         label = stringResource(id = R.string.min_special),
-        value = minSpecial.toString(),
-        actions = {
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_minus),
-                    contentDescription = "\u2212",
-                ),
-                onClick = {
-                    onPasswordMinSpecialCharactersChange(minSpecial - 1)
-                },
-            )
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_plus),
-                    contentDescription = "+",
-                ),
-                onClick = {
-                    onPasswordMinSpecialCharactersChange(minSpecial + 1)
-                },
-            )
-        },
+        value = minSpecial,
+        range = PASSWORD_COUNTER_MIN..PASSWORD_COUNTER_MAX,
+        onValueChange = onPasswordMinSpecialCharactersChange,
         modifier = Modifier.padding(horizontal = 16.dp),
     )
 }
@@ -586,29 +555,11 @@ private fun PassphraseNumWordsCounterItem(
     numWords: Int,
     onPassphraseNumWordsCounterChange: (Int) -> Unit,
 ) {
-    BitwardenReadOnlyTextFieldWithActions(
+    BitwardenStepper(
         label = stringResource(id = R.string.number_of_words),
-        value = numWords.toString(),
-        actions = {
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_minus),
-                    contentDescription = "\u2212",
-                ),
-                onClick = {
-                    onPassphraseNumWordsCounterChange(numWords - 1)
-                },
-            )
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_plus),
-                    contentDescription = "+",
-                ),
-                onClick = {
-                    onPassphraseNumWordsCounterChange(numWords + 1)
-                },
-            )
-        },
+        value = numWords,
+        range = PASSPHRASE_MIN_NUMBER_OF_WORDS..PASSPHRASE_MAX_NUMBER_OF_WORDS,
+        onValueChange = onPassphraseNumWordsCounterChange,
         modifier = Modifier.padding(horizontal = 16.dp),
     )
 }

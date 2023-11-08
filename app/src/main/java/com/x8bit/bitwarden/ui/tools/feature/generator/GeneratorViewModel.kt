@@ -9,11 +9,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MAX_NUMBER_OF_WORDS
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MIN_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_COUNTER_MAX
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_COUNTER_MIN
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeTypeOption
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.AnonAddy
@@ -24,8 +20,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import java.lang.Integer.max
-import java.lang.Integer.min
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -266,24 +260,16 @@ class GeneratorViewModel @Inject constructor(
     private fun handleMinNumbersChange(
         action: GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange,
     ) {
-        val adjustedMinNumbers = action
-            .minNumbers
-            .coerceIn(PASSWORD_COUNTER_MIN, PASSWORD_COUNTER_MAX)
-
         updatePasswordType { currentPasswordType ->
-            currentPasswordType.copy(minNumbers = adjustedMinNumbers)
+            currentPasswordType.copy(minNumbers = action.minNumbers)
         }
     }
 
     private fun handleMinSpecialChange(
         action: GeneratorAction.MainType.Passcode.PasscodeType.Password.MinSpecialCharactersChange,
     ) {
-        val adjustedMinSpecial = action
-            .minSpecial
-            .coerceIn(PASSWORD_COUNTER_MIN, PASSWORD_COUNTER_MAX)
-
         updatePasswordType { currentPasswordType ->
-            currentPasswordType.copy(minSpecial = adjustedMinSpecial)
+            currentPasswordType.copy(minSpecial = action.minSpecial)
         }
     }
 
@@ -352,11 +338,7 @@ class GeneratorViewModel @Inject constructor(
         action: GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.NumWordsCounterChange,
     ) {
         updatePassphraseType { passphraseType ->
-            val newNumWords = max(
-                PASSPHRASE_MIN_NUMBER_OF_WORDS,
-                min(PASSPHRASE_MAX_NUMBER_OF_WORDS, action.numWords),
-            )
-            passphraseType.copy(numWords = newNumWords)
+            passphraseType.copy(numWords = action.numWords)
         }
     }
 

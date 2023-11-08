@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
-import kotlin.math.max
 
 private const val KEY_STATE = "state"
 
@@ -127,7 +126,7 @@ class NewSendViewModel @Inject constructor(
 
     private fun handleMaxAccessCountChange(action: NewSendAction.MaxAccessCountChange) {
         mutableStateFlow.update {
-            it.copy(maxAccessCount = max(1, action.newValue))
+            it.copy(maxAccessCount = action.value)
         }
     }
 }
@@ -239,9 +238,9 @@ sealed class NewSendAction {
     data class HideByDefaultToggle(val isChecked: Boolean) : NewSendAction()
 
     /**
-     * User incremented or decremented the max access count.
+     * User incremented the max access count.
      */
-    data class MaxAccessCountChange(val newValue: Int) : NewSendAction()
+    data class MaxAccessCountChange(val value: Int) : NewSendAction()
 
     /**
      * User toggled the "hide my email" toggle.
