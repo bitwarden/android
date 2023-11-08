@@ -102,18 +102,35 @@ namespace Bit.App.Pages
                 _messagingService.Send("convertAccountToKeyConnector");
             }
 
-            var forcePasswordResetReason = await _stateService.GetForcePasswordResetReasonAsync();
+            await ForcePasswordResetIfNeededAsync();
+        }
 
-            if (forcePasswordResetReason.HasValue)
+        private async Task ForcePasswordResetIfNeededAsync()
+        {
+            var forcePasswordResetReason = await _stateService.GetForcePasswordResetReasonAsync();
+            switch (forcePasswordResetReason)
             {
-                if (forcePasswordResetReason.Value == ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission)
-                {
-                    // TDE users only have one org
-                    var orgId = (await _stateService.GetOrganizationsAsync()).First().Value.Identifier;
-                    _messagingService.Send(Constants.ForceSetPassword, orgId);
+                case ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission:
+                    // TDE users should only have one org
+                    var userOrgs = await _stateService.GetOrganizationsAsync();
+                    if (userOrgs != null && userOrgs.Any())
+                    {
+                        _messagingService.Send(Constants.ForceSetPassword, userOrgs.First().Value.Identifier);
+                        return;
+                    }
+                    var rememberedOrg = _stateService.GetRememberedOrgIdentifierAsync();
+                    if (rememberedOrg == null)
+                    {
+                        return;
+                    }
+                    _messagingService.Send(Constants.ForceSetPassword, rememberedOrg);
                     return;
-                }
-                _messagingService.Send(Constants.ForceUpdatePassword);
+                case ForcePasswordResetReason.AdminForcePasswordReset:
+                case ForcePasswordResetReason.WeakMasterPasswordOnLogin:
+                    _messagingService.Send(Constants.ForceUpdatePassword);
+                    break;
+                default:
+                    return;
             }
         }
 
