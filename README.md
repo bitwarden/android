@@ -88,7 +88,7 @@ The following is a list of all third-party dependencies included as part of the 
     - License: Apache 2.0
 
 - **Glide**
-    - https://github.com/bumptech/glide)
+    - https://github.com/bumptech/glide
     - Purpose: Image loading and caching.
     - License: BSD, part MIT and Apache 2.0
 
@@ -103,7 +103,7 @@ The following is a list of all third-party dependencies included as part of the 
     - License: Apache 2.0
 
 - **kotlinx.coroutines**
-    - https://github.com/Kotlin/kotlinx.coroutines)
+    - https://github.com/Kotlin/kotlinx.coroutines
     - Purpose: Kotlin coroutines library for asynchronous and reactive code.
     - License: Apache 2.0
 
