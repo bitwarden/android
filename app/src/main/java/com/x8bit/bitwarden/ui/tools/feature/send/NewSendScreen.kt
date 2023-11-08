@@ -43,19 +43,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButton
-import com.x8bit.bitwarden.ui.platform.components.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.BitwardenReadOnlyTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSegmentedButton
+import com.x8bit.bitwarden.ui.platform.components.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.SegmentedButtonState
-import com.x8bit.bitwarden.ui.platform.components.model.IconResource
-import com.x8bit.bitwarden.ui.tools.feature.send.NewSendAction.MaxAccessCountChange
 
 /**
  * Displays new send UX.
@@ -211,11 +208,8 @@ fun NewSendScreen(
             Spacer(modifier = Modifier.height(16.dp))
             NewSendOptions(
                 state = state,
-                onIncrementMaxAccessCountClick = remember(viewModel) {
-                    { viewModel.trySendAction(MaxAccessCountChange(it)) }
-                },
-                onDecrementMaxAccessCountClick = remember(viewModel) {
-                    { viewModel.trySendAction(MaxAccessCountChange(it)) }
+                onMaxAccessCountChange = remember(viewModel) {
+                    { viewModel.trySendAction(NewSendAction.MaxAccessCountChange(it)) }
                 },
                 onPasswordChange = remember(viewModel) {
                     { viewModel.trySendAction(NewSendAction.PasswordChange(it)) }
@@ -238,8 +232,7 @@ fun NewSendScreen(
  * Displays a collapsable set of new send options.
  *
  * @param state state.
- * @param onIncrementMaxAccessCountClick called when increment max access count is clicked.
- * @param onDecrementMaxAccessCountClick called when decrement max access count is clicked.
+ * @param onMaxAccessCountChange called when max access count changes.
  * @param onPasswordChange called when the password changes.
  * @param onNoteChange called when the notes changes.
  * @param onHideEmailChecked called when hide email is checked.
@@ -249,8 +242,7 @@ fun NewSendScreen(
 @Composable
 private fun NewSendOptions(
     state: NewSendState,
-    onIncrementMaxAccessCountClick: (Int) -> Unit,
-    onDecrementMaxAccessCountClick: (Int) -> Unit,
+    onMaxAccessCountChange: (Int) -> Unit,
     onPasswordChange: (String) -> Unit,
     onNoteChange: (String) -> Unit,
     onHideEmailChecked: (Boolean) -> Unit,
@@ -300,33 +292,13 @@ private fun NewSendOptions(
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(16.dp))
-            BitwardenReadOnlyTextFieldWithActions(
-                label = stringResource(R.string.maximum_access_count),
-                // we use a space instead of empty string to make sure label is shown small and
-                // above the input
-                value = state.maxAccessCount?.toString() ?: " ",
-                actions = {
-                    BitwardenIconButtonWithResource(
-                        iconRes = IconResource(
-                            iconPainter = painterResource(id = R.drawable.ic_minus),
-                            contentDescription = "\u2212",
-                        ),
-                        onClick = {
-                            onIncrementMaxAccessCountClick.invoke((state.maxAccessCount ?: 0) - 1)
-                        },
-                        isEnabled = state.maxAccessCount != null,
-                    )
-                    BitwardenIconButtonWithResource(
-                        iconRes = IconResource(
-                            iconPainter = painterResource(id = R.drawable.ic_plus),
-                            contentDescription = "+",
-                        ),
-                        onClick = {
-                            onDecrementMaxAccessCountClick.invoke((state.maxAccessCount ?: 0) + 1)
-                        },
-                    )
-                },
-                modifier = Modifier.padding(horizontal = 16.dp),
+            BitwardenStepper(
+                label = stringResource(id = R.string.maximum_access_count),
+                value = state.maxAccessCount,
+                onValueChange = onMaxAccessCountChange,
+                isDecrementEnabled = state.maxAccessCount != null,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(

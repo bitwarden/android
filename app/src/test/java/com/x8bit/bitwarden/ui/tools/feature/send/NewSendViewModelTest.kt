@@ -88,16 +88,6 @@ class NewSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `MaxAccessCountChang below 1 should keep maxAccessCount at 1`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(NewSendAction.MaxAccessCountChange(0))
-            assertEquals(DEFAULT_STATE.copy(maxAccessCount = 1), awaitItem())
-        }
-    }
-
-    @Test
     fun `TextChange should update text input`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {

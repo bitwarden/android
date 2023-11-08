@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import org.junit.Test
 
+@Suppress("LargeClass")
 class GeneratorScreenTest : BaseComposeTest() {
     private val mutableStateFlow = MutableStateFlow(
         GeneratorState(
@@ -411,6 +412,70 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `in Passcode_Password state, decrementing the minimum numbers counter below 0 should do nothing`() {
+        val initialMinNumbers = 0
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState
+                    .MainType
+                    .Passcode(
+                        GeneratorState
+                            .MainType
+                            .Passcode
+                            .PasscodeType
+                            .Password(minNumbers = initialMinNumbers),
+                    ),
+            ),
+        )
+
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithContentDescription("Minimum numbers, $initialMinNumbers")
+            .onChildren()
+            .filterToOne(hasContentDescription("\u2212"))
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 0) { viewModel.trySendAction(any()) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Passcode_Password state, incrementing the minimum numbers counter above 5 should do nothing`() {
+        val initialMinNumbers = 5
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState
+                    .MainType
+                    .Passcode(
+                        GeneratorState
+                            .MainType
+                            .Passcode
+                            .PasscodeType
+                            .Password(minNumbers = initialMinNumbers),
+                    ),
+            ),
+        )
+
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithContentDescription("Minimum numbers, $initialMinNumbers")
+            .onChildren()
+            .filterToOne(hasContentDescription("+"))
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 0) { viewModel.trySendAction(any()) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `in Passcode_Password state, decrementing the minimum special characters counter should send MinSpecialCharactersChange action`() {
         val initialSpecialChars = 1
         updateState(
@@ -487,6 +552,70 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `in Passcode_Password state, decrementing the minimum special characters below 0 should do nothing`() {
+        val initialSpecialChars = 0
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState
+                    .MainType
+                    .Passcode(
+                        GeneratorState
+                            .MainType
+                            .Passcode
+                            .PasscodeType
+                            .Password(minSpecial = initialSpecialChars),
+                    ),
+            ),
+        )
+
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithContentDescription("Minimum special, $initialSpecialChars")
+            .onChildren()
+            .filterToOne(hasContentDescription("\u2212"))
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 0) { viewModel.trySendAction(any()) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Passcode_Password state, decrementing the minimum special characters above 5 should do nothing`() {
+        val initialSpecialChars = 5
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState
+                    .MainType
+                    .Passcode(
+                        GeneratorState
+                            .MainType
+                            .Passcode
+                            .PasscodeType
+                            .Password(minSpecial = initialSpecialChars),
+                    ),
+            ),
+        )
+
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithContentDescription("Minimum special, $initialSpecialChars")
+            .onChildren()
+            .filterToOne(hasContentDescription("+"))
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 0) { viewModel.trySendAction(any()) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `in Passcode_Password state, toggling the use avoid ambiguous characters toggle should send ToggleSpecialCharactersChange action`() {
         composeTestRule.setContent {
             GeneratorScreen(viewModel = viewModel)
@@ -517,7 +646,7 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Passphrase state, decrementing number of words should send NumWordsCounterChange action with decremented value`() {
-        val initialNumWords = 3
+        val initialNumWords = 4
         updateState(
             GeneratorState(
                 generatedText = "Placeholder",
@@ -528,7 +657,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .MainType
                             .Passcode
                             .PasscodeType
-                            .Passphrase(),
+                            .Passphrase(numWords = initialNumWords),
                     ),
             ),
         )
@@ -539,7 +668,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         // Unicode for "minus" used for content description
         composeTestRule
-            .onNodeWithContentDescription("Number of words, 3")
+            .onNodeWithContentDescription("Number of words, $initialNumWords")
             .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
@@ -552,6 +681,70 @@ class GeneratorScreenTest : BaseComposeTest() {
                 ),
             )
         }
+    }
+
+    @Test
+    fun `in Passcode_Passphrase state, decrementing number of words under 3 should do nothing`() {
+        val initialNumWords = 3
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState
+                    .MainType
+                    .Passcode(
+                        GeneratorState
+                            .MainType
+                            .Passcode
+                            .PasscodeType
+                            .Passphrase(numWords = initialNumWords),
+                    ),
+            ),
+        )
+
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        // Unicode for "minus" used for content description
+        composeTestRule
+            .onNodeWithContentDescription("Number of words, $initialNumWords")
+            .onChildren()
+            .filterToOne(hasContentDescription("\u2212"))
+            .performScrollTo()
+            .performClick()
+        verify(exactly = 0) { viewModel.trySendAction(any()) }
+    }
+
+    @Test
+    fun `in Passcode_Passphrase state, incrementing number of words over 20 should do nothing`() {
+        val initialNumWords = 20
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState
+                    .MainType
+                    .Passcode(
+                        GeneratorState
+                            .MainType
+                            .Passcode
+                            .PasscodeType
+                            .Passphrase(numWords = initialNumWords),
+                    ),
+            ),
+        )
+
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        // Unicode for "minus" used for content description
+        composeTestRule
+            .onNodeWithContentDescription("Number of words, $initialNumWords")
+            .onChildren()
+            .filterToOne(hasContentDescription("+"))
+            .performScrollTo()
+            .performClick()
+        verify(exactly = 0) { viewModel.trySendAction(any()) }
     }
 
     @Suppress("MaxLineLength")
