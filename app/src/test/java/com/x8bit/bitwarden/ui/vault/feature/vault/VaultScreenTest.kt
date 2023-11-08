@@ -1,10 +1,16 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasScrollToNodeAction
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToNode
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -66,94 +72,287 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `clicking a login item should send LoginGroupClick action`() {
+    fun `clicking a favorite item should send VaultItemClick with the correct item`() {
+        val itemText = "Test Item"
+        val username = "BitWarden"
+        val vaultItem = VaultState.ViewState.VaultItem.Login(
+            id = "12345",
+            name = itemText.asText(),
+            username = username.asText(),
+        )
         mutableStateFlow.update {
             it.copy(
-                viewState = VaultState.ViewState.Content(
-                    loginItemsCount = 0,
-                    cardItemsCount = 0,
-                    identityItemsCount = 0,
-                    secureNoteItemsCount = 0,
-                    favoriteItems = emptyList(),
-                    folderItems = emptyList(),
-                    noFolderItems = emptyList(),
-                    trashItemsCount = 0,
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    favoriteItems = listOf(vaultItem),
                 ),
             )
         }
 
-        composeTestRule.onNodeWithText("Login").performScrollTo().performClick()
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        // Header
+        composeTestRule
+            .onNodeWithText("Favorites")
+            .assertTextEquals("Favorites", 1.toString())
+        // Item
+        composeTestRule
+            .onNodeWithText(itemText)
+            .assertTextEquals(itemText, username)
+            .performClick()
+        verify {
+            viewModel.trySendAction(VaultAction.VaultItemClick(vaultItem))
+        }
+    }
+
+    @Test
+    fun `clicking a folder item should send FolderClick with the correct item`() {
+        val folderText = "Test Folder"
+        val count = 3
+        val folderItem = VaultState.ViewState.FolderItem(
+            id = "12345",
+            name = folderText.asText(),
+            itemCount = count,
+        )
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    folderItems = listOf(folderItem),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(folderText))
+        composeTestRule
+            .onNodeWithText(folderText)
+            .assertTextEquals(folderText, count.toString())
+            .performClick()
+        verify {
+            viewModel.trySendAction(VaultAction.FolderClick(folderItem))
+        }
+    }
+
+    @Test
+    fun `clicking a no folder item should send VaultItemClick with the correct item`() {
+        val itemText = "Test Item"
+        val userName = "BitWarden"
+        val vaultItem = VaultState.ViewState.VaultItem.Login(
+            id = "12345",
+            name = itemText.asText(),
+            username = userName.asText(),
+        )
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    noFolderItems = listOf(vaultItem),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        composeTestRule
+            .onNodeWithText(itemText)
+            .assertTextEquals(itemText, userName)
+            .performClick()
+        verify {
+            viewModel.trySendAction(VaultAction.VaultItemClick(vaultItem))
+        }
+    }
+
+    @Test
+    fun `login item count should update according to state`() {
+        val rowText = "Login"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        }
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).assertTextEquals(rowText, 0.toString())
+
+        val count = 45
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    loginItemsCount = count,
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).assertTextEquals(rowText, count.toString())
+    }
+
+    @Test
+    fun `clicking a login item should send LoginGroupClick action`() {
+        val rowText = "Login"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).performClick()
         verify {
             viewModel.trySendAction(VaultAction.LoginGroupClick)
         }
     }
 
     @Test
-    fun `clicking a card item should send CardGroupClick action`() {
+    fun `card item count should update according to state`() {
+        val rowText = "Card"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        }
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).assertTextEquals(rowText, 0.toString())
+
+        val count = 3
         mutableStateFlow.update {
             it.copy(
-                viewState = VaultState.ViewState.Content(
-                    loginItemsCount = 0,
-                    cardItemsCount = 0,
-                    identityItemsCount = 0,
-                    secureNoteItemsCount = 0,
-                    favoriteItems = emptyList(),
-                    folderItems = emptyList(),
-                    noFolderItems = emptyList(),
-                    trashItemsCount = 0,
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    cardItemsCount = count,
                 ),
             )
         }
 
-        composeTestRule.onNodeWithText("Card").performScrollTo().performClick()
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).assertTextEquals(rowText, count.toString())
+    }
+
+    @Test
+    fun `clicking a card item should send CardGroupClick action`() {
+        val rowText = "Card"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).performClick()
         verify {
             viewModel.trySendAction(VaultAction.CardGroupClick)
         }
     }
 
     @Test
-    fun `clicking an identity item should send IdentityGroupClick action`() {
+    fun `identity item count should update according to state`() {
+        val rowText = "Identity"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        }
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).assertTextEquals(rowText, 0.toString())
+
+        val count = 14
         mutableStateFlow.update {
             it.copy(
-                viewState = VaultState.ViewState.Content(
-                    loginItemsCount = 0,
-                    cardItemsCount = 0,
-                    identityItemsCount = 0,
-                    secureNoteItemsCount = 0,
-                    favoriteItems = emptyList(),
-                    folderItems = emptyList(),
-                    noFolderItems = emptyList(),
-                    trashItemsCount = 0,
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    identityItemsCount = count,
                 ),
             )
         }
 
-        composeTestRule.onNodeWithText("Identity").performScrollTo().performClick()
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).assertTextEquals(rowText, count.toString())
+    }
+
+    @Test
+    fun `clicking an identity item should send IdentityGroupClick action`() {
+        val rowText = "Identity"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).performClick()
         verify {
             viewModel.trySendAction(VaultAction.IdentityGroupClick)
         }
     }
 
     @Test
-    fun `clicking a secure note item should send SecureNoteGroupClick action`() {
+    fun `secure note item count should update according to state`() {
+        val rowText = "Secure note"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        }
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).assertTextEquals(rowText, 0.toString())
+
+        val count = 7
         mutableStateFlow.update {
             it.copy(
-                viewState = VaultState.ViewState.Content(
-                    loginItemsCount = 0,
-                    cardItemsCount = 0,
-                    identityItemsCount = 0,
-                    secureNoteItemsCount = 0,
-                    favoriteItems = emptyList(),
-                    folderItems = emptyList(),
-                    noFolderItems = emptyList(),
-                    trashItemsCount = 0,
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    secureNoteItemsCount = count,
                 ),
             )
         }
 
-        composeTestRule.onNodeWithText("Secure note").performScrollTo().performClick()
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).assertTextEquals(rowText, count.toString())
+    }
+
+    @Test
+    fun `clicking a secure note item should send SecureNoteGroupClick action`() {
+        val rowText = "Secure note"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).performClick()
         verify {
             viewModel.trySendAction(VaultAction.SecureNoteGroupClick)
+        }
+    }
+
+    @Test
+    fun `trash count should update according to state`() {
+        val rowText = "Trash"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        }
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        // Header
+        composeTestRule
+            .onAllNodes(hasText(rowText))
+            .filterToOne(!hasClickAction())
+            .assertTextEquals(rowText, 0.toString())
+        // Item
+        composeTestRule
+            .onAllNodes(hasText(rowText))
+            .filterToOne(hasClickAction())
+            .assertTextEquals(rowText, 0.toString())
+
+        val trashCount = 5
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    trashItemsCount = 5,
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        // Header
+        composeTestRule
+            .onAllNodes(hasText(rowText))
+            .filterToOne(!hasClickAction())
+            .assertTextEquals(rowText, trashCount.toString())
+        // Item
+        composeTestRule
+            .onAllNodes(hasText(rowText))
+            .filterToOne(hasClickAction())
+            .assertTextEquals(rowText, trashCount.toString())
+    }
+
+    @Test
+    fun `clicking trash item should send TrashClick action`() {
+        val rowText = "Trash"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onAllNodes(hasText(rowText)).filterToOne(hasClickAction()).performClick()
+        verify {
+            viewModel.trySendAction(VaultAction.TrashClick)
         }
     }
 }
@@ -162,4 +361,15 @@ private val DEFAULT_STATE: VaultState = VaultState(
     avatarColorString = "FF0000FF",
     initials = "BW",
     viewState = VaultState.ViewState.Loading,
+)
+
+private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(
+    loginItemsCount = 0,
+    cardItemsCount = 0,
+    identityItemsCount = 0,
+    secureNoteItemsCount = 0,
+    favoriteItems = emptyList(),
+    folderItems = emptyList(),
+    noFolderItems = emptyList(),
+    trashItemsCount = 0,
 )

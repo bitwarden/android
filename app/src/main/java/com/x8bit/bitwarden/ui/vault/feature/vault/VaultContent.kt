@@ -62,7 +62,9 @@ fun VaultContent(
                     label = favoriteItem.name(),
                     supportingLabel = favoriteItem.supportingLabel?.invoke(),
                     onClick = { vaultItemClick(favoriteItem) },
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                 )
             }
 
@@ -70,7 +72,9 @@ fun VaultContent(
                 HorizontalDivider(
                     thickness = 1.dp,
                     color = MaterialTheme.colorScheme.outlineVariant,
-                    modifier = Modifier.padding(all = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 16.dp),
                 )
             }
         }
@@ -95,7 +99,9 @@ fun VaultContent(
                 label = stringResource(id = R.string.type_login),
                 supportingLabel = state.loginItemsCount.toString(),
                 onClick = loginGroupClick,
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             )
         }
 
@@ -105,7 +111,9 @@ fun VaultContent(
                 label = stringResource(id = R.string.type_card),
                 supportingLabel = state.cardItemsCount.toString(),
                 onClick = cardGroupClick,
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             )
         }
 
@@ -115,7 +123,9 @@ fun VaultContent(
                 label = stringResource(id = R.string.type_identity),
                 supportingLabel = state.identityItemsCount.toString(),
                 onClick = identityGroupClick,
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             )
         }
 
@@ -125,7 +135,9 @@ fun VaultContent(
                 label = stringResource(id = R.string.type_secure_note),
                 supportingLabel = state.secureNoteItemsCount.toString(),
                 onClick = secureNoteGroupClick,
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             )
         }
 
@@ -134,7 +146,9 @@ fun VaultContent(
                 HorizontalDivider(
                     thickness = 1.dp,
                     color = MaterialTheme.colorScheme.outlineVariant,
-                    modifier = Modifier.padding(all = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 16.dp),
                 )
             }
 
@@ -156,9 +170,11 @@ fun VaultContent(
                 VaultGroupListItem(
                     startIcon = painterResource(id = R.drawable.ic_folder),
                     label = folder.name(),
-                    supportingLabel = state.folderItems.count().toString(),
+                    supportingLabel = folder.itemCount.toString(),
                     onClick = { folderClick(folder) },
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                 )
             }
         }
@@ -168,7 +184,9 @@ fun VaultContent(
                 HorizontalDivider(
                     thickness = 1.dp,
                     color = MaterialTheme.colorScheme.outlineVariant,
-                    modifier = Modifier.padding(all = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 16.dp),
                 )
             }
 
@@ -198,7 +216,9 @@ fun VaultContent(
             HorizontalDivider(
                 thickness = 1.dp,
                 color = MaterialTheme.colorScheme.outlineVariant,
-                modifier = Modifier.padding(all = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 16.dp),
             )
         }
 
