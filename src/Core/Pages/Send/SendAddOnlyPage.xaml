@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <pages:BaseContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -74,7 +74,7 @@
                         StyleClass="box-label" />
                     <Entry
                         x:Name="_nameEntry"
-                        Text="{Binding Send.Name}"
+                        Text="{Binding Send.Name, FallbackValue=''}"
                         IsEnabled="{Binding SendEnabled}"
                         StyleClass="box-value" />
                     <Label
@@ -113,7 +113,7 @@
                     <Editor
                         x:Name="_textEditor"
                         AutoSize="TextChanges"
-                        Text="{Binding Send.Text.Text}"
+                        Text="{Binding Send.Text.Text, FallbackValue=''}"
                         IsEnabled="{Binding SendEnabled}"
                         StyleClass="box-value"
                         Margin="{Binding EditorMargins}" 
@@ -140,7 +140,7 @@
                             VerticalOptions="Center"
                             HorizontalOptions="StartAndExpand" />
                         <Switch
-                            IsToggled="{Binding Send.Text.Hidden}"
+                            IsToggled="{Binding Send.Text.Hidden, FallbackValue=False}"
                             IsEnabled="{Binding SendEnabled}"
                             HorizontalOptions="End"
                             Margin="10,0,0,0" />
@@ -148,8 +148,8 @@
                 </StackLayout>
                 <StackLayout
                     Orientation="Horizontal"
+                    InputTransparent="False"
                     Spacing="0"
-                    AutomationProperties.IsInAccessibleTree="True"
                     SemanticProperties.Description="{Binding OptionsAccessilibityText}">
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OptionsHeader_Tapped" />
@@ -158,10 +158,12 @@
                         Text="{u:I18n Options}"
                         TextColor="{DynamicResource PrimaryColor}"
                         Margin="0,0,5,0"
+                        InputTransparent="True"
                         AutomationProperties.IsInAccessibleTree="False"/>
                     <controls:IconLabel
                         Text="{Binding OptionsShowHideIcon}"
                         TextColor="{DynamicResource PrimaryColor}"
+                        InputTransparent="True"
                         AutomationProperties.IsInAccessibleTree="False"/>
                 </StackLayout>
                 <pages:SendAddOnlyOptionsLazyView x:Name="_lazyOptionsView" IsVisible="{Binding ShowOptions}" />

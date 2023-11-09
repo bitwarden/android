@@ -194,7 +194,7 @@ namespace Bit.App.Pages
             get => _fileName ?? AppResources.NoFileChosen;
             set
             {
-                if (SetProperty(ref _fileName, value))
+                if (SetProperty(ref _fileName, value) && Send?.File != null)
                 {
                     Send.File.FileName = _fileName;
                 }
@@ -528,7 +528,7 @@ namespace Bit.App.Pages
 
         public void ToggleOptions()
         {
-            ShowOptions = !ShowOptions;
+            MainThread.BeginInvokeOnMainThread(() => ShowOptions = !ShowOptions);
         }
 
         private void DeletionTypeChanged()

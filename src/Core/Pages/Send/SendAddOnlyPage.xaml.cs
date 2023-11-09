@@ -1,12 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Bit.App.Models;
+﻿using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -53,10 +49,8 @@ namespace Bit.App.Pages
             }
         }
 
-        protected override async void OnAppearing()
+        protected override async void OnNavigatedTo(NavigatedToEventArgs args)
         {
-            base.OnAppearing();
-
             try
             {
                 if (!await AppHelpers.IsVaultTimeoutImmediateAsync())
@@ -92,9 +86,10 @@ namespace Bit.App.Pages
             }
         }
 
-        protected override void OnDisappearing()
+
+        protected override void OnNavigatingFrom(NavigatingFromEventArgs args)
         {
-            base.OnDisappearing();
+            base.OnNavigatingFrom(args);
             _accountAvatar?.OnDisappearing();
         }
 

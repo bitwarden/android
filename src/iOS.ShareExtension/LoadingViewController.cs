@@ -12,19 +12,19 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
-using Bit.iOS.Core.Controllers;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using Bit.iOS.ShareExtension.Models;
 using CoreNFC;
 using Foundation;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Platform;
 using MobileCoreServices;
 using UIKit;
-using Xamarin.Forms;
 
 namespace Bit.iOS.ShareExtension
 {
-    public partial class LoadingViewController : ExtendedUIViewController, IAccountsManagerHost
+    public partial class LoadingViewController : UIViewController, IAccountsManagerHost
     {
         const string STORYBOARD_NAME = "MainInterface";
 
@@ -200,7 +200,7 @@ namespace Bit.iOS.ShareExtension
         private void NavigateToPage(ContentPage page)
         {
             var navigationPage = new NavigationPage(page);
-            _currentModalController = navigationPage.CreateViewController();
+            _currentModalController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             _currentModalController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             _presentingOnNavigationPage = true;
             PresentViewController(_currentModalController, true, null);
@@ -444,7 +444,7 @@ namespace Bit.iOS.ShareExtension
             }
 
             var navigationPage = new NavigationPage(loginApproveDevicePage);
-            var loginApproveDeviceController = navigationPage.CreateViewController();
+            var loginApproveDeviceController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             loginApproveDeviceController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(loginApproveDeviceController, true, null);
         }

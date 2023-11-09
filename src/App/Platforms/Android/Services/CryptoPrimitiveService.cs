@@ -41,13 +41,13 @@ namespace Bit.Droid.Services
             JavaSystem.LoadLibrary("argon2");
             int keySize = 32;
             var key = new byte[keySize];
-            argon2id_hash_raw(iterations, memory, parallelism,
-                password, password.Length, salt, salt.Length, key, key.Length);
+            //argon2id_hash_raw(iterations, memory, parallelism,
+            //    password, password.Length, salt, salt.Length, key, key.Length);
             return key;
         }
 
-        [DllImport("argon2", EntryPoint = "argon2id_hash_raw")]
-        private static extern int argon2id_hash_raw(int timeCost, int memoryCost, int parallelism,
-            byte[] pwd, int pwdlen, byte[] salt, int saltlen, byte[] hash, int hashlen);
+        //[DllImport("argon2", EntryPoint = "argon2id_hash_raw")]
+        //private static extern int argon2id_hash_raw(int timeCost, int memoryCost, int parallelism,
+        //    byte[] pwd, int pwdlen, byte[] salt, int saltlen, byte[] hash, int hashlen);
     }
 }
