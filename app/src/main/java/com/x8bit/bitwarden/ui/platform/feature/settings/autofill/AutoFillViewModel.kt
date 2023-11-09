@@ -123,6 +123,7 @@ data class AutoFillState(
     enum class UriDetectionMethod(val text: Text) {
         DEFAULT(text = R.string.default_text.asText()),
         BASE_DOMAIN(text = R.string.base_domain.asText()),
+        HOST(text = R.string.host.asText()),
         STARTS_WITH(text = R.string.starts_with.asText()),
         REGULAR_EXPRESSION(text = R.string.reg_ex.asText()),
         EXACT(text = R.string.exact.asText()),
