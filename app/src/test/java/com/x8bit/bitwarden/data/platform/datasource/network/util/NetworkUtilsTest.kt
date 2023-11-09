@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.datasource.network.util
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import java.net.UnknownHostException
 
 class NetworkUtilsTest {
     @Test
@@ -38,6 +39,22 @@ class NetworkUtilsTest {
     fun `base64UrlDecodeOrNull should return null value a non-encoded String`() {
         assertNull(
             "*.*".base64UrlDecodeOrNull(),
+        )
+    }
+
+    @Test
+    fun `isNoConnectionError should return return true for UnknownHostException`() {
+        assertEquals(
+            true,
+            UnknownHostException().isNoConnectionError(),
+        )
+    }
+
+    @Test
+    fun `isNoConnectionError should return return false for not UnknownHostException`() {
+        assertEquals(
+            false,
+            IllegalStateException().isNoConnectionError(),
         )
     }
 }

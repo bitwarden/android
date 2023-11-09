@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFolder
-import com.x8bit.bitwarden.data.vault.datasource.sdk.createMockSdkFolder
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

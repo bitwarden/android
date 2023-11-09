@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.vault.datasource.sdk
+package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
 import com.bitwarden.core.Attachment
 import com.bitwarden.core.Card
