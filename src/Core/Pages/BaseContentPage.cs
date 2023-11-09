@@ -25,13 +25,16 @@ namespace Bit.App.Pages
             }
         }
 
+        //IsInitialized is used as a workaround to avoid duplicate initialization issues for some pages where OnNavigatedTo is called twice.
+        protected bool HasInitialized { get; set; }
+
         public DateTime? LastPageAction { get; set; }
 
         public bool IsThemeDirty { get; set; }
 
-        protected override async void OnAppearing()
+        protected override async void OnNavigatedTo(NavigatedToEventArgs args)
         {
-            base.OnAppearing();
+            base.OnNavigatedTo(args);
 
             if (IsThemeDirty)
             {

@@ -48,12 +48,14 @@ namespace Bit.Core.Services
             }
             else
             {
-                var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(secret, null);
+                var masterKey = await _cryptoService.GetOrDeriveMasterKeyAsync(secret);
+                var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(secret, masterKey);
                 if (!passwordValid)
                 {
                     await InvalidSecretErrorAsync(verificationType);
                     return false;
                 }
+                await _cryptoService.UpdateMasterKeyAndUserKeyAsync(masterKey);
             }
 
             return true;

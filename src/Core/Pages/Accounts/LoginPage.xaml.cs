@@ -1,15 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using Bit.App.Models;
+﻿using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
-using Bit.Core.Services;
 using Bit.Core.Utilities;
-
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -30,11 +24,11 @@ namespace Bit.App.Pages
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>();
             _vm = BindingContext as LoginPageViewModel;
             _vm.Page = this;
-            _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
-            _vm.LogInSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
+            _vm.StartTwoFactorAction = () => MainThread.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
+            _vm.LogInSuccessAction = () => MainThread.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
             _vm.LogInWithDeviceAction = () => StartLoginWithDeviceAsync().FireAndForget();
-            _vm.StartSsoLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
-            _vm.UpdateTempPasswordAction = () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
+            _vm.StartSsoLoginAction = () => MainThread.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
+            _vm.UpdateTempPasswordAction = () => MainThread.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.CloseAction = async () =>
             {
                 await _accountListOverlay.HideAsync();
@@ -50,8 +44,7 @@ namespace Bit.App.Pages
             _vm.Email = email;
             MasterPasswordEntry = _masterPassword;
 
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.iOS)
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
                 ToolbarItems.Add(_moreItem);
             }
@@ -73,14 +66,19 @@ namespace Bit.App.Pages
 
         public Entry MasterPasswordEntry { get; set; }
 
-        protected override async void OnAppearing()
+        protected override async void OnNavigatedTo(NavigatedToEventArgs args)
         {
-            base.OnAppearing();
+            base.OnNavigatedTo(args);
+
+            //IsInitialized is used as a workaround to avoid duplicate initialization issues because of OnNavigatedTo being called twice.
+            if (HasInitialized) { return; }
+            HasInitialized = true;
+
             _broadcasterService.Subscribe(nameof(LoginPage), message =>
             {
                 if (message.Command == Constants.ClearSensitiveFields)
                 {
-                    Device.BeginInvokeOnMainThread(_vm.ResetPasswordField);
+                    MainThread.BeginInvokeOnMainThread(_vm.ResetPasswordField);
                 }
             });
             _mainContent.Content = _mainLayout;
@@ -96,11 +94,18 @@ namespace Bit.App.Pages
                 RequestFocus(_masterPassword);
                 _inputFocused = true;
             }
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.Android && !_vm.CanRemoveAccount)
+            if (DeviceInfo.Platform == DevicePlatform.Android && !_vm.CanRemoveAccount)
             {
                 ToolbarItems.Add(_removeAccount);
             }
+        }
+
+        protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
+        {
+            base.OnNavigatedFrom(args);
+
+            _accountAvatar?.OnDisappearing();
+            _broadcasterService.Unsubscribe(nameof(LoginPage));
         }
 
         protected override bool OnBackButtonPressed()
@@ -111,14 +116,6 @@ namespace Bit.App.Pages
                 return true;
             }
             return false;
-        }
-
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-
-            _accountAvatar?.OnDisappearing();
-            _broadcasterService.Unsubscribe(nameof(LoginPage));
         }
 
         private async void LogIn_Clicked(object sender, EventArgs e)

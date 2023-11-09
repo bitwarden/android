@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     x:Class="Bit.App.Controls.DateTimePicker"
+    Unloaded="DateTimePicker_OnUnloaded"
     ColumnDefinitions="*,*">
     <controls:ExtendedDatePicker
         x:Name="_datePicker"

@@ -312,7 +312,7 @@ namespace Bit.App.Pages
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public bool HasTotpValue => IsLogin && !string.IsNullOrEmpty(Cipher?.Login?.Totp);
         public string SetupTotpText => $"{BitwardenIcons.Camera} {AppResources.SetupTotp}";
-        public bool ShowPasskeyInfo => Cipher?.HasFido2Key == true && !CloneMode;
+        public bool ShowPasskeyInfo => Cipher?.HasFido2Credential == true && !CloneMode;
 
         public void Init()
         {
@@ -374,7 +374,7 @@ namespace Bit.App.Pages
                         if (Cipher.Type == CipherType.Login)
                         {
                             // passkeys can't be cloned
-                            Cipher.Login.Fido2Keys = null;
+                            Cipher.Login.Fido2Credentials = null;
                         }
                     }
                     if (appOptions?.OtpData != null && Cipher.Type == CipherType.Login)

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Bit.App.Abstractions;
+﻿using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.Core.Resources.Localization;
 using Bit.App.Utilities;
@@ -11,9 +8,6 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Networking;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -395,8 +389,7 @@ namespace Bit.App.Pages
                 var sendId = await _sendService.SaveWithServerAsync(send, encryptedFileData);
                 await _deviceActionService.HideLoadingAsync();
 
-                // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-                if (Device.RuntimePlatform == Device.Android && IsFile)
+                if (DeviceInfo.Platform == DevicePlatform.Android && IsFile)
                 {
                     // Workaround for https://github.com/xamarin/Xamarin.Forms/issues/5418
                     // Exiting and returning (file picker) calls OnAppearing on list page instead of this modal, and
@@ -455,8 +448,7 @@ namespace Bit.App.Pages
         {
             if (IsAddFromShare)
             {
-                // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-                if (Device.RuntimePlatform == Device.Android)
+                if (DeviceInfo.Platform == DevicePlatform.Android)
                 {
                     _deviceActionService.CloseMainApp();
                     return;
@@ -513,8 +505,7 @@ namespace Bit.App.Pages
                         await _platformUtilsService.ShowDialogAsync(AppResources.SendFileEmailVerificationRequired);
                     }
 
-                    // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-                    if (IsAddFromShare && Device.RuntimePlatform == Device.Android)
+                    if (IsAddFromShare && DeviceInfo.Platform == DevicePlatform.Android)
                     {
                         _deviceActionService.CloseMainApp();
                         return;
@@ -630,7 +621,7 @@ namespace Bit.App.Pages
 
         internal void TriggerSendTextPropertyChanged()
         {
-            Device.BeginInvokeOnMainThread(() => TriggerPropertyChanged(nameof(Send)));
+            MainThread.BeginInvokeOnMainThread(() => TriggerPropertyChanged(nameof(Send)));
         }
     }
 }

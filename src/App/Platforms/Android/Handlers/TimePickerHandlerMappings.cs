@@ -16,19 +16,19 @@ namespace Bit.App.Handlers
                     handler.PlatformView.Gravity = GravityFlags.CenterHorizontal;
 
                     // use placeholder until NullableTime set 
-                    if (!extTimePicker.NullableTime.HasValue)
+                    if (!extTimePicker.NullableTime.HasValue && !string.IsNullOrWhiteSpace(extTimePicker.PlaceHolder))
                     {
                         handler.PlatformView.Text = extTimePicker.PlaceHolder;
                     }
                 }
             });
 
-            TimePickerHandler.Mapper.AppendToMapping(nameof(ITimePicker.Time), UpdateTextPlaceholderOnFormatLikePlacholder);
+            TimePickerHandler.Mapper.AppendToMapping(nameof(ITimePicker.Time), UpdateTextPlaceholderOnFormatLikePlaceholder);
 
-            TimePickerHandler.Mapper.AppendToMapping(nameof(ITimePicker.Format), UpdateTextPlaceholderOnFormatLikePlacholder);
+            TimePickerHandler.Mapper.AppendToMapping(nameof(ITimePicker.Format), UpdateTextPlaceholderOnFormatLikePlaceholder);
         }
 
-        private static void UpdateTextPlaceholderOnFormatLikePlacholder(ITimePickerHandler handler, ITimePicker timePicker)
+        private static void UpdateTextPlaceholderOnFormatLikePlaceholder(ITimePickerHandler handler, ITimePicker timePicker)
         {
             if (timePicker is ExtendedTimePicker extDatePicker && extDatePicker.Format == extDatePicker.PlaceHolder)
             {

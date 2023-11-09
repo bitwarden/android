@@ -6,11 +6,11 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
-    xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:views="clr-namespace:Bit.Core.Models.View"
     xmlns:dts="clr-namespace:Bit.App.Lists.DataTemplateSelectors"
     xmlns:il="clr-namespace:Bit.App.Lists.ItemLayouts.CustomFields"
-    xmlns:core="clr-namespace:Bit.Core"
+    xmlns:core="clr-namespace:Bit.Core" 
+    xmlns:localization="clr-namespace:Bit.Core.Resources.Localization"
     x:DataType="pages:CipherDetailsPageViewModel"
     HideSoftInputOnTapped="True"
     x:Name="_page"
@@ -24,6 +24,7 @@
             <u:InverseBoolConverter x:Key="inverseBool" />
             <u:StringHasValueConverter x:Key="stringHasValue" />
             <u:IsNotNullConverter x:Key="notNull" />
+            <u:DateTimeConverter x:Key="dateTime" Format="{x:Static localization:AppResources.CreatedXY}" />
             <ToolbarItem Text="{u:I18n Collections}"
                          x:Key="collectionsItem"
                          x:Name="_collectionsItem"
@@ -200,12 +201,12 @@
                                 Text="{u:I18n Passkey}"
                                 StyleClass="box-label"
                                 Margin="0,10,0,0"
-                                IsVisible="{Binding Cipher.Login.MainFido2Key, Converter={StaticResource notNull}}"/>
+                                IsVisible="{Binding Cipher.Login.MainFido2Credential, Converter={StaticResource notNull}}"/>
                             <Entry
-                                Text="{Binding CreationDate}"
+                                Text="{Binding Cipher.Login.MainFido2Credential.CreationDate, Mode=OneWay, Converter={StaticResource dateTime}, FallbackValue=''}"
                                 IsEnabled="False"
                                 StyleClass="box-value,text-muted"
-                                IsVisible="{Binding Cipher.Login.MainFido2Key, Converter={StaticResource notNull}}" />
+                                IsVisible="{Binding Cipher.Login.MainFido2Credential, Converter={StaticResource notNull}, FallbackValue=False}" />
                             <Grid StyleClass="box-row"
                                   IsVisible="{Binding ShowTotp}"
                                   AutomationId="ItemRow">

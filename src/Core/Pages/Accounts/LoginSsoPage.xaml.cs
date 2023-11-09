@@ -1,11 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Bit.App.Models;
+﻿using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -24,28 +20,44 @@ namespace Bit.App.Pages
             InitializeComponent();
             _vm = BindingContext as LoginSsoPageViewModel;
             _vm.Page = this;
-            _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
+            _vm.StartTwoFactorAction = () => MainThread.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
             _vm.StartSetPasswordAction = () =>
-                Device.BeginInvokeOnMainThread(async () => await StartSetPasswordAsync());
-            _vm.SsoAuthSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await SsoAuthSuccessAsync());
+                MainThread.BeginInvokeOnMainThread(async () => await StartSetPasswordAsync());
+            _vm.SsoAuthSuccessAction = () => MainThread.BeginInvokeOnMainThread(async () => await SsoAuthSuccessAsync());
             _vm.UpdateTempPasswordAction =
-                () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
+                () => MainThread.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.StartDeviceApprovalOptionsAction =
-                () => Device.BeginInvokeOnMainThread(async () => await StartDeviceApprovalOptionsAsync());
+                () => MainThread.BeginInvokeOnMainThread(async () => await StartDeviceApprovalOptionsAsync());
             _vm.CloseAction = async () =>
             {
                 await Navigation.PopModalAsync();
             };
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.Android)
+
+            if (DeviceInfo.Platform == DevicePlatform.Android)
             {
                 ToolbarItems.RemoveAt(0);
             }
         }
 
-        protected override async void OnAppearing()
+        protected override async void OnNavigatedTo(NavigatedToEventArgs args)
         {
-            base.OnAppearing();
+            base.OnNavigatedTo(args);
+
+            //IsInitialized is used as a workaround to avoid duplicate initialization issues because of OnNavigatedTo being called twice.
+            if (HasInitialized) { return; }
+            HasInitialized = true;
+
+            await _vm.InitAsync();
+            if (string.IsNullOrWhiteSpace(_vm.OrgIdentifier))
+            {
+                RequestFocus(_orgIdentifier);
+            }
+        }
+
+        protected override async void OnNavigatedFrom(NavigatedFromEventArgs args)
+        {
+            base.OnNavigatedFrom(args);
+
             await _vm.InitAsync();
             if (string.IsNullOrWhiteSpace(_vm.OrgIdentifier))
             {

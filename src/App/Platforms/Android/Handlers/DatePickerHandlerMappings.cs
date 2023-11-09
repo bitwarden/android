@@ -23,12 +23,12 @@ namespace Bit.App.Handlers
                 }
             });
 
-            DatePickerHandler.Mapper.AppendToMapping(nameof(IDatePicker.Date), UpdateTextPlaceholderOnFormatLikePlacholder);
+            DatePickerHandler.Mapper.AppendToMapping(nameof(IDatePicker.Date), UpdateTextPlaceholderOnFormatLikePlaceholder);
 
-            DatePickerHandler.Mapper.AppendToMapping(nameof(IDatePicker.Format), UpdateTextPlaceholderOnFormatLikePlacholder);
+            DatePickerHandler.Mapper.AppendToMapping(nameof(IDatePicker.Format), UpdateTextPlaceholderOnFormatLikePlaceholder);
         }
 
-        private static void UpdateTextPlaceholderOnFormatLikePlacholder(IDatePickerHandler handler, IDatePicker datePicker)
+        private static void UpdateTextPlaceholderOnFormatLikePlaceholder(IDatePickerHandler handler, IDatePicker datePicker)
         {
             if (datePicker is ExtendedDatePicker extDatePicker && extDatePicker.Format == extDatePicker.PlaceHolder)
             {

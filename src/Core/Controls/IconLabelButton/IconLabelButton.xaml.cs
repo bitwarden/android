@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Bit.Core.Models.Domain;
-using Microsoft.Maui.Controls.Xaml;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
+﻿using System.Windows.Input;
 
 namespace Bit.App.Controls
 {
-    public partial class IconLabelButton : Frame
+    public partial class IconLabelButton : ContentView
     {
         public static readonly BindableProperty IconProperty = BindableProperty.Create(
             nameof(Icon), typeof(string), typeof(IconLabelButton));
@@ -31,6 +21,11 @@ namespace Bit.App.Controls
 
         public static readonly BindableProperty IconLabelBorderColorProperty = BindableProperty.Create(
             nameof(IconLabelBorderColor), typeof(Color), typeof(IconLabelButton), Colors.White);
+
+        public static readonly BindableProperty CornerRadiusProperty = BindableProperty.Create(
+            nameof(CornerRadius), typeof(CornerRadius), typeof(IconLabelButton));
+
+        public event EventHandler<TappedEventArgs> Tapped;
 
         public IconLabelButton()
         {
@@ -71,6 +66,17 @@ namespace Bit.App.Controls
         {
             get { return (Color)GetValue(IconLabelBorderColorProperty); }
             set { SetValue(IconLabelBorderColorProperty, value); }
+        }
+
+        public CornerRadius CornerRadius
+        {
+            get { return (CornerRadius)GetValue(CornerRadiusProperty); }
+            set { SetValue(CornerRadiusProperty, value); }
+        }
+
+        private void TapGestureRecognizer_OnTapped(object sender, TappedEventArgs e)
+        {
+            Tapped?.Invoke(sender, e);
         }
     }
 }

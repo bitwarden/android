@@ -51,13 +51,7 @@ namespace Bit.App.Services
             {
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
 
-                var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
-                await _cryptoService.SetMasterKeyAsync(masterKey);
-                var hasKey = await _cryptoService.HasUserKeyAsync();
-                if (!hasKey)
-                {
-                    await _cryptoService.SetUserKeyAsync(userKey);
-                }
+                await _cryptoService.UpdateMasterKeyAndUserKeyAsync(masterKey);
             }
 
             return passwordValid;

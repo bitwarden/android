@@ -4,8 +4,8 @@
   <style name="LaunchTheme" parent="BaseTheme">
     <item name="android:windowBackground">@drawable/splash_screen</item>
     <item name="android:windowNoTitle">true</item>
-   <item name="android:windowSplashScreenBackground">@color/ic_launcher_background</item>
-   <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_screen_round</item>
+    <item name="android:windowSplashScreenBackground">@color/ic_launcher_background</item>
+    <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_screen_round</item>
   </style>
 
   <style name="BaseTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
@@ -21,6 +21,7 @@
     <item name="android:textCursorDrawable">@null</item>
     <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     <item name="buttonStyle">@style/ButtonStyle</item>
+    <item name="android:textAllCaps">false</item>
   </style>
 
   <style name="ButtonStyle" parent="Widget.AppCompat.Button">

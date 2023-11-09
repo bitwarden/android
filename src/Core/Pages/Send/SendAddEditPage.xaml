@@ -12,6 +12,7 @@
     xmlns:core="clr-namespace:Bit.Core"
     x:DataType="pages:SendAddEditPageViewModel"
     HideSoftInputOnTapped="True"
+    Unloaded="OnUnloaded"
     x:Name="_page"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
@@ -310,6 +311,7 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <controls:ExtendedDatePicker
+                                        x:Name="_deletionExtendedDatePicker"
                                         NullableDate="{Binding DeletionDateTimeViewModel.Date, Mode=TwoWay}"
                                         Format="d"
                                         IsEnabled="{Binding SendEnabled}"
@@ -353,6 +355,7 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <controls:ExtendedDatePicker
+                                        x:Name="_expirationExtendedDatePicker"
                                         NullableDate="{Binding ExpirationDateTimeViewModel.Date, Mode=TwoWay}"
                                         PlaceHolder="mm/dd/yyyy"
                                         Format="d"

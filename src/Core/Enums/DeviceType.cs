@@ -27,24 +27,4 @@ namespace Bit.Core.Enums
         VivaldiExtension = 19,
         SafariExtension = 20
     }
-
-    public static class DeviceTypeExtensions
-    {
-        public static List<DeviceType> GetMobileTypes() => new List<DeviceType>
-            {
-                DeviceType.Android,
-                DeviceType.AndroidAmazon,
-                DeviceType.iOS
-            };
-
-        public static List<DeviceType> GetDesktopTypes() => new List<DeviceType>
-            {
-                DeviceType.WindowsDesktop,
-                DeviceType.MacOsDesktop,
-                DeviceType.LinuxDesktop,
-                DeviceType.UWP,
-            };
-
-        public static List<DeviceType> GetDesktopAndMobileTypes() => GetMobileTypes().Concat(GetDesktopTypes()).ToList();
-    }
 }
