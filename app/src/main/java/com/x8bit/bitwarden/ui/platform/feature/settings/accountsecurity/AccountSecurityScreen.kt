@@ -330,7 +330,7 @@ private fun FingerPrintPhraseDialog(
         text = {
             Column {
                 Text(
-                    text = stringResource(id = R.string.your_accounts_fingerprint),
+                    text = "${stringResource(id = R.string.your_accounts_fingerprint)}:",
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.fillMaxWidth(),
