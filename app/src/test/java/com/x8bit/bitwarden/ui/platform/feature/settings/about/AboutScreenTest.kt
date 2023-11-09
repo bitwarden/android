@@ -4,6 +4,10 @@ import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -50,8 +54,9 @@ class AboutScreenTest : BaseComposeTest() {
         verify { viewModel.trySendAction(AboutAction.BackClick) }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on bitwarden help center click should send HelpCenterClick`() {
+    fun `on bitwarden help center click should display confirmation dialog and confirm click should emit HelpCenterClick`() {
         val viewModel: AboutViewModel = mockk {
             every { stateFlow } returns mutableStateFlow
             every { eventFlow } returns emptyFlow()
@@ -63,14 +68,22 @@ class AboutScreenTest : BaseComposeTest() {
                 onNavigateBack = { },
             )
         }
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule.onNodeWithText("Bitwarden Help Center").performClick()
+        composeTestRule.onNode(isDialog()).assertExists()
+        composeTestRule
+            .onAllNodesWithText("Continue")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
         verify {
             viewModel.trySendAction(AboutAction.HelpCenterClick)
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on bitwarden web vault click should send WebVaultClick`() {
+    fun `on bitwarden web vault click should display confirmation dialog and confirm click should emit WebVaultClick`() {
         val viewModel: AboutViewModel = mockk {
             every { stateFlow } returns mutableStateFlow
             every { eventFlow } returns emptyFlow()
@@ -82,7 +95,14 @@ class AboutScreenTest : BaseComposeTest() {
                 onNavigateBack = { },
             )
         }
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule.onNodeWithText("Bitwarden web vault").performClick()
+        composeTestRule.onNode(isDialog()).assertExists()
+        composeTestRule
+            .onAllNodesWithText("Continue")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
         verify {
             viewModel.trySendAction(AboutAction.WebVaultClick)
         }
@@ -110,8 +130,9 @@ class AboutScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on learn about organizations click should send LearnAboutOrganizationsClick`() {
+    fun `on learn about organizations click should display confirmation dialog and confirm click should emit LearnAboutOrganizationsClick`() {
         val viewModel: AboutViewModel = mockk {
             every { stateFlow } returns mutableStateFlow
             every { eventFlow } returns emptyFlow()
@@ -123,7 +144,14 @@ class AboutScreenTest : BaseComposeTest() {
                 onNavigateBack = { },
             )
         }
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule.onNodeWithText("Learn about organizations").performClick()
+        composeTestRule.onNode(isDialog()).assertExists()
+        composeTestRule
+            .onAllNodesWithText("Continue")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
         verify {
             viewModel.trySendAction(AboutAction.LearnAboutOrganizationsClick)
         }
@@ -208,8 +236,9 @@ class AboutScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on rate the app click should send RateAppClick`() {
+    fun `on rate the app click should display confirmation dialog and confirm click should emit RateAppClick`() {
         val viewModel: AboutViewModel = mockk {
             every { stateFlow } returns mutableStateFlow
             every { eventFlow } returns emptyFlow()
@@ -221,7 +250,14 @@ class AboutScreenTest : BaseComposeTest() {
                 onNavigateBack = { },
             )
         }
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule.onNodeWithText("Rate the app").performClick()
+        composeTestRule.onNode(isDialog()).assertExists()
+        composeTestRule
+            .onAllNodesWithText("Continue")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
         verify {
             viewModel.trySendAction(AboutAction.RateAppClick)
         }

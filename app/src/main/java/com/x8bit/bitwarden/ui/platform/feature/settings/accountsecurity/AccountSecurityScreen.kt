@@ -238,18 +238,24 @@ fun AccountSecurityScreen(
             )
             BitwardenExternalLinkRow(
                 text = stringResource(id = R.string.two_step_login),
-                onClick = remember(viewModel) {
+                onConfirmClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.TwoStepLoginClick) }
                 },
                 withDivider = false,
+                dialogTitle = stringResource(id = R.string.continue_to_web_app),
+                dialogMessage = stringResource(id = R.string.two_step_login_description_long),
                 modifier = Modifier.fillMaxWidth(),
             )
             BitwardenExternalLinkRow(
                 text = stringResource(id = R.string.change_master_password),
-                onClick = remember(viewModel) {
+                onConfirmClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.ChangeMasterPasswordClick) }
                 },
                 withDivider = false,
+                dialogTitle = stringResource(id = R.string.continue_to_web_app),
+                dialogMessage = stringResource(
+                    id = R.string.change_master_password_description_long,
+                ),
                 modifier = Modifier.fillMaxWidth(),
             )
             BitwardenTextRow(

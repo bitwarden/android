@@ -111,7 +111,7 @@ fun AboutScreen(
             )
         },
     ) { innerPadding ->
-        ContentColum(
+        ContentColumn(
             state = state,
             modifier = Modifier
                 .padding(innerPadding)
@@ -138,8 +138,9 @@ fun AboutScreen(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
-private fun ContentColum(
+private fun ContentColumn(
     state: AboutState,
     onHelpCenterClick: () -> Unit,
     onLearnAboutOrgsClick: () -> Unit,
@@ -166,19 +167,33 @@ private fun ContentColum(
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenExternalLinkRow(
             text = stringResource(id = R.string.bitwarden_help_center),
-            onClick = onHelpCenterClick,
+            onConfirmClick = onHelpCenterClick,
+            dialogTitle = stringResource(id = R.string.continue_to_help_center),
+            dialogMessage = stringResource(
+                id = R.string.learn_more_about_how_to_use_bitwarden_on_the_help_center,
+            ),
         )
         BitwardenExternalLinkRow(
             text = stringResource(id = R.string.web_vault),
-            onClick = onWebVaultClick,
+            onConfirmClick = onWebVaultClick,
+            dialogTitle = stringResource(id = R.string.continue_to_web_app),
+            dialogMessage = stringResource(
+                id = R.string.explore_more_features_of_your_bitwarden_account_on_the_web_app,
+            ),
         )
         BitwardenExternalLinkRow(
             text = stringResource(id = R.string.learn_org),
-            onClick = onLearnAboutOrgsClick,
+            onConfirmClick = onLearnAboutOrgsClick,
+            dialogTitle = stringResource(id = R.string.continue_to_web_app),
+            dialogMessage = stringResource(
+                id = R.string.learn_about_organizations_description_long,
+            ),
         )
         BitwardenExternalLinkRow(
             text = stringResource(id = R.string.rate_the_app),
-            onClick = onRateTheAppClick,
+            onConfirmClick = onRateTheAppClick,
+            dialogTitle = stringResource(id = R.string.continue_to_app_store),
+            dialogMessage = stringResource(id = R.string.rate_app_description_long),
         )
         CopyRow(
             text = state.version,
