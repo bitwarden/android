@@ -178,21 +178,37 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithText("Vault timeout action").assertIsDisplayed()
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on two-step login click should send TwoStepLoginClick`() {
+    fun `on two-step login click should display confirmation dialog and confirm click should send TwoStepLoginClick`() {
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule
             .onNodeWithText("Two-step login")
             .performScrollTo()
             .performClick()
+        composeTestRule.onNode(isDialog()).assertExists()
+        composeTestRule
+            .onAllNodesWithText("Continue")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
         verify { viewModel.trySendAction(AccountSecurityAction.TwoStepLoginClick) }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on change master password click should send ChangeMasterPasswordClick`() {
+    fun `on change master password click should display confirmation dialog and confirm should send ChangeMasterPasswordClick`() {
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule
             .onNodeWithText("Change master password")
             .performScrollTo()
             .performClick()
+        composeTestRule.onNode(isDialog()).assertExists()
+        composeTestRule
+            .onAllNodesWithText("Continue")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
         verify { viewModel.trySendAction(AccountSecurityAction.ChangeMasterPasswordClick) }
     }
 
