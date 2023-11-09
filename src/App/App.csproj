@@ -49,13 +49,17 @@
     <UseInterpreter>False</UseInterpreter>
     <DebugSymbols>False</DebugSymbols>
     <RunAOTCompilation>False</RunAOTCompilation>
+    <AndroidSupportedAbis>armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
+    <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
   </PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
 		<RuntimeIdentifier>iossimulator-arm64</RuntimeIdentifier>
 		<!--<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>-->
 	  <CodesignProvision>Automatic</CodesignProvision>
-	  <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Developer</CodesignKey>
 	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
 	  <MtouchInterpreter>all</MtouchInterpreter>
 	  <MtouchLink>None</MtouchLink>
@@ -63,7 +67,13 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
-		<MtouchExtraArgs>-gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>
+		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+    <CodesignProvision>Automatic:AppStore</CodesignProvision>
+    <CodesignKey>iPhone Distribution</CodesignKey>
+	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+	  <MtouchInterpreter>all</MtouchInterpreter>
+	  <MtouchLink>None</MtouchLink>
+		<MtouchExtraArgs>--linkskip=LiteDB --linkskip=CsvHelper -gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>
 	</PropertyGroup>
 	<ItemGroup>
 	  <AndroidNativeLibrary Include="Platforms\Android\lib\arm64-v8a\libargon2.so" />
