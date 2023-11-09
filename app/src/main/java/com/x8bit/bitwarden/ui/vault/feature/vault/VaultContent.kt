@@ -154,7 +154,7 @@ fun VaultContent(
 
             item {
                 BitwardenListHeaderTextWithSupportLabel(
-                    label = stringResource(id = R.string.folder),
+                    label = stringResource(id = R.string.folders),
                     supportingLabel = state.folderItems.count().toString(),
                     modifier = Modifier
                         .fillMaxWidth()
