@@ -3,15 +3,24 @@ package com.x8bit.bitwarden.data.vault.repository
 import com.bitwarden.core.InitCryptoRequest
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
+import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.util.flatMap
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
@@ -28,8 +37,23 @@ class VaultRepositoryImpl constructor(
 
     private var syncJob: Job = Job().apply { complete() }
 
+    private val vaultDataMutableStateFlow =
+        MutableStateFlow<DataState<VaultData>>(DataState.Loading)
+
+    override val vaultDataStateFlow: StateFlow<DataState<VaultData>>
+        get() = vaultDataMutableStateFlow.asStateFlow()
+
+    override fun clearVaultData() {
+        vaultDataMutableStateFlow.update { DataState.Loading }
+    }
+
     override fun sync() {
         if (!syncJob.isCompleted) return
+        vaultDataMutableStateFlow.value.data?.let { data ->
+            vaultDataMutableStateFlow.update {
+                DataState.Pending(data = data)
+            }
+        }
         syncJob = scope.launch {
             syncService
                 .sync()
@@ -39,20 +63,23 @@ class VaultRepositoryImpl constructor(
                             userKey = syncResponse.profile?.key,
                             privateKey = syncResponse.profile?.privateKey,
                         )
-                        // TODO transform into domain object consumable by VaultViewModel BIT-205.
-                        syncResponse.ciphers?.let { networkCiphers ->
-                            vaultSdkSource.decryptCipherList(
-                                cipherList = networkCiphers.toEncryptedSdkCipherList(),
-                            )
-                        }
-                        syncResponse.folders?.let { networkFolders ->
-                            vaultSdkSource.decryptFolderList(
-                                folderList = networkFolders.toEncryptedSdkFolderList(),
-                            )
-                        }
+                        decryptSyncResponseAndUpdateVaultDataState(
+                            syncResponse = syncResponse,
+                        )
                     },
-                    onFailure = {
-                        // TODO handle failure BIT-205.
+                    onFailure = { throwable ->
+                        vaultDataMutableStateFlow.update {
+                            if (throwable.isNoConnectionError()) {
+                                DataState.NoNetwork(
+                                    data = it.data,
+                                )
+                            } else {
+                                DataState.Error(
+                                    error = throwable,
+                                    data = it.data,
+                                )
+                            }
+                        }
                     },
                 )
         }
@@ -107,5 +134,35 @@ class VaultRepositoryImpl constructor(
                 onFailure = { VaultUnlockResult.GenericError },
                 onSuccess = { it.toVaultUnlockResult() },
             )
+    }
+
+    private suspend fun decryptSyncResponseAndUpdateVaultDataState(syncResponse: SyncResponseJson) {
+        val newState = vaultSdkSource
+            .decryptCipherList(
+                cipherList = (syncResponse.ciphers ?: emptyList())
+                    .toEncryptedSdkCipherList(),
+            )
+            .flatMap { decryptedCipherList ->
+                vaultSdkSource
+                    .decryptFolderList(
+                        folderList = (syncResponse.folders ?: emptyList())
+                            .toEncryptedSdkFolderList(),
+                    )
+                    .map { decryptedFolderList ->
+                        decryptedCipherList to decryptedFolderList
+                    }
+            }
+            .fold(
+                onSuccess = { (decryptedCipherList, decryptedFolderList) ->
+                    DataState.Loaded(
+                        data = VaultData(
+                            cipherListViewList = decryptedCipherList,
+                            folderViewList = decryptedFolderList,
+                        ),
+                    )
+                },
+                onFailure = { DataState.Error(error = it) },
+            )
+        vaultDataMutableStateFlow.update { newState }
     }
 }

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.util
 
 import okio.ByteString.Companion.decodeBase64
+import java.net.UnknownHostException
 import java.nio.charset.Charset
 import java.util.Base64
 
@@ -32,3 +33,11 @@ fun String.base64UrlDecodeOrNull(): String? =
         .replace("_", "/")
         .decodeBase64()
         ?.string(Charset.defaultCharset())
+
+/**
+ * Returns true if the throwable represents a no network error.
+ */
+fun Throwable?.isNoConnectionError(): Boolean {
+    return this is UnknownHostException ||
+        this?.cause?.isNoConnectionError() ?: false
+}

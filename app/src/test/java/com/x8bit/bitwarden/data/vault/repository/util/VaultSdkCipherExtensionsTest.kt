@@ -17,15 +17,15 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockLogin
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPasswordHistory
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSecureNote
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockUri
-import com.x8bit.bitwarden.data.vault.datasource.sdk.createMockSdkAttachment
-import com.x8bit.bitwarden.data.vault.datasource.sdk.createMockSdkCard
-import com.x8bit.bitwarden.data.vault.datasource.sdk.createMockSdkCipher
-import com.x8bit.bitwarden.data.vault.datasource.sdk.createMockSdkField
-import com.x8bit.bitwarden.data.vault.datasource.sdk.createMockSdkIdentity
-import com.x8bit.bitwarden.data.vault.datasource.sdk.createMockSdkLogin
-import com.x8bit.bitwarden.data.vault.datasource.sdk.createMockSdkPasswordHistory
-import com.x8bit.bitwarden.data.vault.datasource.sdk.createMockSdkSecureNote
-import com.x8bit.bitwarden.data.vault.datasource.sdk.createMockSdkUri
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkAttachment
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCard
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkField
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkIdentity
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkLogin
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPasswordHistory
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSecureNote
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkUri
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
