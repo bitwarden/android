@@ -7776,6 +7776,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your organization permissions were updated, requiring you to set a master password..
+        /// </summary>
+        public static string YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword {
+            get {
+                return ResourceManager.GetString("YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your organization requires you to set a master password..
+        /// </summary>
+        public static string YourOrganizationRequiresYouToSetAMasterPassword {
+            get {
+                return ResourceManager.GetString("YourOrganizationRequiresYouToSetAMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your request has been sent to your admin..
         /// </summary>
         public static string YourRequestHasBeenSentToYourAdmin {
