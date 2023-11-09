@@ -25,7 +25,6 @@
             HeightRequest="120"
             Margin="0,100,0,0"
             IsVisible="{Binding ShowList, Converter={StaticResource inverseBool}}"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n ThereAreNoBlockedURIs}" />
         <controls:CustomLabel
             StyleClass="box-label-regular"
@@ -63,7 +62,6 @@
                                 Text="{Binding Source={x:Static core:BitwardenIcons.PencilSquare}}"
                                 Command="{Binding EditUriCommand}"
                                 Margin="5,0,15,0"
-                                AutomationProperties.IsInAccessibleTree="True"
                                 SemanticProperties.Description="{u:I18n EditURI}"
                                 AutomationId="EditUriButton" />
                         </StackLayout>
@@ -79,7 +77,6 @@
             HeightRequest="40"
             Opacity="0.8"
             Margin="14,5,14,10"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n NewBlockedURI}"
             AutomationId="NewBlockedUriButton" />
     </StackLayout>

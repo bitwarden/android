@@ -21,7 +21,6 @@
             TextColor="{DynamicResource TextColor}"
             HorizontalOptions="End"
             VerticalOptions="Center"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{Binding Title, Mode=OneWay, Source={x:Reference _contentView}}" />
 
     </StackLayout>

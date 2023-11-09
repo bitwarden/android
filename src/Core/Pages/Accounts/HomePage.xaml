@@ -22,7 +22,6 @@
             Order="Primary"
             Priority="-1"
             UseOriginalImage="True"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n Account}"
             AutomationId="AccountIconButton" />
         <ToolbarItem x:Name="_closeButton" Text="{u:I18n Close}" Command="{Binding CloseCommand}" Order="Primary" Priority="-1"/>

@@ -67,7 +67,6 @@
             Grid.Row="0"
             Grid.Column="2"
             Grid.RowSpan="2"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n Options}" />
     </Grid>
     <BoxView StyleClass="box-row-separator" />

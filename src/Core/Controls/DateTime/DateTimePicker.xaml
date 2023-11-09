@@ -10,12 +10,10 @@
         x:Name="_datePicker"
         Grid.Column="0"
         NullableDate="{Binding Date, Mode=TwoWay}"
-        Format="d"
-        AutomationProperties.IsInAccessibleTree="True" />
+        Format="d" />
     <controls:ExtendedTimePicker
         x:Name="_timePicker"
         Grid.Column="1"
         NullableTime="{Binding Time, Mode=TwoWay}"
-        Format="t"
-        AutomationProperties.IsInAccessibleTree="True" />
+        Format="t" />
 </Grid>

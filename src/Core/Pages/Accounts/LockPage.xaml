@@ -23,7 +23,6 @@
                 Order="Primary"
                 Priority="-1"
                 UseOriginalImage="True"
-                AutomationProperties.IsInAccessibleTree="True"
                 SemanticProperties.Description="{u:I18n Account}"
                 AutomationId="AccountIconButton" />
     </ContentPage.ToolbarItems>
@@ -33,7 +32,6 @@
             <u:InverseBoolConverter x:Key="inverseBool" />
             <ToolbarItem IconImageSource="more_vert.png" Clicked="More_Clicked" Order="Primary"
                 x:Name="_moreItem" x:Key="moreItem"
-                AutomationProperties.IsInAccessibleTree="True"
                 SemanticProperties.Description="{u:I18n Options}" />
             <ToolbarItem Text="{u:I18n LogOut}"
                 x:Key="logOut"
@@ -81,9 +79,8 @@
                                 Grid.Row="0"
                                 Grid.Column="1"
                                 Grid.RowSpan="2"
-                                AutomationProperties.IsInAccessibleTree="True"
                                 SemanticProperties.Description="{u:I18n ToggleVisibility}" 
-                                AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
+                                SemanticProperties.Hint="{Binding PasswordVisibilityAccessibilityText}"
                                 AutomationId="PinVisibilityToggle" />
                         </Grid>
                         <Grid
@@ -123,9 +120,8 @@
                                 Grid.Row="0"
                                 Grid.Column="1"
                                 Grid.RowSpan="2"
-                                AutomationProperties.IsInAccessibleTree="True"
                                 SemanticProperties.Description="{u:I18n ToggleVisibility}"
-                                AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
+                                SemanticProperties.Hint="{Binding PasswordVisibilityAccessibilityText}"
                                 AutomationId="PasswordVisibilityToggle"
                                 />
                         </Grid>

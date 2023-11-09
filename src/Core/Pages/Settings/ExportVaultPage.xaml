@@ -108,9 +108,8 @@
                         Command="{Binding TogglePasswordCommand}"
                         Grid.Row="1"
                         Grid.Column="1"
-                        AutomationProperties.IsInAccessibleTree="True"
                         SemanticProperties.Description="{u:I18n ToggleVisibility}"
-                        AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
+                        SemanticProperties.Hint="{Binding PasswordVisibilityAccessibilityText}"
                         IsVisible="{Binding UseOTPVerification, Converter={StaticResource inverseBool}}"
                         AutomationId="TogglePasswordVisibilityButton" />
                     <Label

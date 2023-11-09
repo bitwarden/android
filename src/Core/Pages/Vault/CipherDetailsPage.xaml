@@ -41,7 +41,6 @@
                          x:Name="_editItem" x:Key="editItem" />
             <ToolbarItem IconImageSource="more_vert.png" Clicked="More_Clicked" Order="Primary"
                          x:Name="_moreItem" x:Key="moreItem"
-                         AutomationProperties.IsInAccessibleTree="True"
                          SemanticProperties.Description="{u:I18n Options}" />
             <ToolbarItem Text="{u:I18n Attachments}" Clicked="Attachments_Clicked" Order="Secondary"
                          x:Name="_attachmentsItem" x:Key="attachmentsItem" />
@@ -119,7 +118,6 @@
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
                                     SemanticProperties.Description="{u:I18n CopyUsername}"
                                     AutomationId="CopyValueButton" />
                             </Grid>
@@ -166,7 +164,6 @@
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
                                     SemanticProperties.Description="{u:I18n CheckPassword}"
                                     IsVisible="{Binding Cipher.ViewPassword}"
                                     AutomationId="CheckPasswordButton" />
@@ -177,9 +174,8 @@
                                     Grid.Row="0"
                                     Grid.Column="2"
                                     Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
                                     SemanticProperties.Description="{u:I18n ToggleVisibility}"
-                                    AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
+                                    SemanticProperties.Hint="{Binding PasswordVisibilityAccessibilityText}"
                                     IsVisible="{Binding Cipher.ViewPassword}"
                                     AutomationId="ShowValueButton" />
                                 <controls:IconButton
@@ -190,7 +186,6 @@
                                     Grid.Row="0"
                                     Grid.Column="3"
                                     Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
                                     SemanticProperties.Description="{u:I18n CopyPassword}"
                                     IsVisible="{Binding Cipher.ViewPassword}"
                                     AutomationId="CopyValueButton" />
@@ -263,7 +258,6 @@
                                     Grid.Row="0"
                                     Grid.Column="2"
                                     Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
                                     SemanticProperties.Description="{u:I18n CopyTotp}"
                                     AutomationId="CopyValueButton" />
                                 <Label
@@ -332,7 +326,6 @@
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
                                     SemanticProperties.Description="{u:I18n ToggleVisibility}"
                                     AutomationId="ShowValueButton" />
                                 <controls:IconButton
@@ -343,7 +336,6 @@
                                     Grid.Row="0"
                                     Grid.Column="2"
                                     Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
                                     SemanticProperties.Description="{u:I18n CopyNumber}"
                                     AutomationId="CopyValueButton" />
                             </Grid>
@@ -416,7 +408,6 @@
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
                                     SemanticProperties.Description="{u:I18n ToggleVisibility}"
                                     AutomationId="ShowValueButton" />
                                 <controls:IconButton
@@ -427,7 +418,6 @@
                                     Grid.Row="0"
                                     Grid.Column="2"
                                     Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
                                     SemanticProperties.Description="{u:I18n CopySecurityCode}"
                                     AutomationId="CopyValueButton" />
                             </Grid>
@@ -628,7 +618,6 @@
                                                 Grid.Column="1"
                                                 Grid.RowSpan="2"
                                                 IsVisible="{Binding CanLaunch, Mode=OneWay}"
-                                                AutomationProperties.IsInAccessibleTree="True"
                                                 SemanticProperties.Description="{u:I18n Launch}"
                                                 AutomationId="LaunchUriButton" />
                                             <controls:IconButton
@@ -639,7 +628,6 @@
                                                 Grid.Row="0"
                                                 Grid.Column="2"
                                                 Grid.RowSpan="2"
-                                                AutomationProperties.IsInAccessibleTree="True"
                                                 SemanticProperties.Description="{u:I18n Copy}"
                                                 AutomationId="CopyUriButton" />
                                         </Grid>
@@ -701,7 +689,6 @@
                                                 Command="{Binding BindingContext.DownloadAttachmentCommand, Source={x:Reference _page}}"
                                                 CommandParameter="{Binding .}"
                                                 VerticalOptions="Center"
-                                                AutomationProperties.IsInAccessibleTree="True"
                                                 SemanticProperties.Description="{u:I18n Download}"
                                                 AutomationId="CipherAttachmentDownloadButton" />
                                         </StackLayout>
@@ -754,7 +741,6 @@
             Style="{StaticResource btn-fab}"
             AbsoluteLayout.LayoutFlags="PositionProportional"
             AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n EditItem}"
             AutomationId="CipherEditButton"
             IsVisible="{Binding CanEdit}"/>

@@ -57,7 +57,6 @@
             Grid.Row="0"
             Grid.Column="1"
             Grid.RowSpan="2"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n Options}"
             AutomationId="LinkedCustomFieldOptionsButton" />
     </Grid>

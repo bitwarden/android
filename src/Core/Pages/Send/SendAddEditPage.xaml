@@ -32,7 +32,6 @@
                          x:Key="closeItem" x:Name="_closeItem" />
             <ToolbarItem IconImageSource="more_vert.png" Clicked="More_Clicked" Order="Primary" x:Name="_moreItem"
                          x:Key="moreItem"
-                         AutomationProperties.IsInAccessibleTree="True"
                          SemanticProperties.Description="{u:I18n Options}" />
             <ToolbarItem Text="{u:I18n RemovePassword}"
                          Clicked="RemovePassword_Clicked"
@@ -124,9 +123,8 @@
                                     HeightRequest="{Binding SegmentedButtonHeight}"
                                     FontSize="{Binding SegmentedButtonFontSize}"
                                     Clicked="FileType_Clicked"
-                                    AutomationProperties.IsInAccessibleTree="True"
                                     SemanticProperties.Description="{u:I18n File}"
-                                    AutomationProperties.HelpText="{Binding FileTypeAccessibilityLabel}"
+                                    SemanticProperties.Hint="{Binding FileTypeAccessibilityLabel}"
                                     AutomationId="SendFileButton"
                                     Grid.Column="0">
                                 </Button>
@@ -137,9 +135,8 @@
                                     HeightRequest="{Binding SegmentedButtonHeight}"
                                     FontSize="{Binding SegmentedButtonFontSize}"
                                     Clicked="TextType_Clicked"
-                                    AutomationProperties.IsInAccessibleTree="True"
                                     SemanticProperties.Description="{u:I18n Text}"
-                                    AutomationProperties.HelpText="{Binding TextTypeAccessibilityLabel}"
+                                    SemanticProperties.Hint="{Binding TextTypeAccessibilityLabel}"
                                     AutomationId="SendTextButton"
                                     Grid.Column="1">
                                 </Button>
@@ -255,7 +252,6 @@
                         <StackLayout
                             Orientation="Horizontal"
                             Spacing="0"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{Binding OptionsAccessilibityText}">
                             <StackLayout.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding ToggleOptionsCommand}" />
@@ -300,7 +296,6 @@
                                     SelectedIndex="{Binding DeletionDateTypeSelectedIndex}"
                                     IsEnabled="{Binding SendEnabled}"
                                     StyleClass="box-value"
-                                    AutomationProperties.IsInAccessibleTree="True"
                                     SemanticProperties.Description="{u:I18n DeletionTime}"
                                     AutomationId="SendDeletionOptionsPicker" />
                                 <Grid
@@ -315,7 +310,6 @@
                                         NullableDate="{Binding DeletionDateTimeViewModel.Date, Mode=TwoWay}"
                                         Format="d"
                                         IsEnabled="{Binding SendEnabled}"
-                                        AutomationProperties.IsInAccessibleTree="True"
                                         SemanticProperties.Description="{u:I18n DeletionDate}"
                                         Grid.Column="0"
                                         AutomationId="SendCustomDeletionDatePicker" />
@@ -323,7 +317,6 @@
                                         NullableTime="{Binding DeletionDateTimeViewModel.Time, Mode=TwoWay}"
                                         Format="t"
                                         IsEnabled="{Binding SendEnabled}"
-                                        AutomationProperties.IsInAccessibleTree="True"
                                         SemanticProperties.Description="{u:I18n DeletionTime}"
                                         Grid.Column="1"
                                         AutomationId="SendCustomDeletionTimePicker" />
@@ -344,7 +337,6 @@
                                     SelectedIndex="{Binding ExpirationDateTypeSelectedIndex}"
                                     IsEnabled="{Binding SendEnabled}"
                                     StyleClass="box-value"
-                                    AutomationProperties.IsInAccessibleTree="True"
                                     SemanticProperties.Description="{u:I18n ExpirationTime}"
                                     AutomationId="SendExpirationOptionsPicker" />
                                 <Grid
@@ -360,7 +352,6 @@
                                         PlaceHolder="mm/dd/yyyy"
                                         Format="d"
                                         IsEnabled="{Binding SendEnabled}"
-                                        AutomationProperties.IsInAccessibleTree="True"
                                         SemanticProperties.Description="{u:I18n ExpirationDate}"
                                         Grid.Column="0"
                                         AutomationId="SendCustomExpirationDatePicker" />
@@ -369,7 +360,6 @@
                                         PlaceHolder="--:-- --"
                                         Format="t"
                                         IsEnabled="{Binding SendEnabled}"
-                                        AutomationProperties.IsInAccessibleTree="True"
                                         SemanticProperties.Description="{u:I18n ExpirationTime}"
                                         Grid.Column="1"
                                         AutomationId="SendCustomExpirationTimePicker" />
@@ -463,9 +453,8 @@
                                         Text="{Binding ShowPasswordIcon}"
                                         Command="{Binding TogglePasswordCommand}"
                                         Margin="10,0,0,0"
-                                        AutomationProperties.IsInAccessibleTree="True"
                                         SemanticProperties.Description="{u:I18n ToggleVisibility}"
-                                        AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
+                                        SemanticProperties.Hint="{Binding PasswordVisibilityAccessibilityText}"
                                         AutomationId="SendShowHidePasswordButton" />
                                 </StackLayout>
                                 <Label

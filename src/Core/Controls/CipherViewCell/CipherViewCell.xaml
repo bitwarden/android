@@ -95,7 +95,6 @@
             Margin="5, 0, 0, 0"
             Text="{Binding Source={x:Static core:BitwardenIcons.Collection}}"
             IsVisible="{Binding Cipher.Shared, Mode=OneTime}"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n Shared}"
             AutomationId="CipherInCollectionIcon" />
         <controls:IconLabel
@@ -107,7 +106,6 @@
             Margin="5, 0, 0, 0"
             Text="{Binding Source={x:Static core:BitwardenIcons.Paperclip}}"
             IsVisible="{Binding Cipher.HasAttachments, Mode=OneTime}"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n Attachments}"
             AutomationId="CipherWithAttachmentsIcon" />
     </Grid>
@@ -120,7 +118,6 @@
         Clicked="MoreButton_Clicked"
         VerticalOptions="CenterAndExpand"
         HorizontalOptions="EndAndExpand"
-        AutomationProperties.IsInAccessibleTree="True"
         SemanticProperties.Description="{u:I18n Options}"
         AutomationId="CipherOptionsButton" />
 

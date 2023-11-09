@@ -23,7 +23,6 @@
                          Clicked="Close_Clicked" Order="Primary" Priority="-1" />
             <ToolbarItem x:Name="_addItem" x:Key="addItem" IconImageSource="plus.png"
                          Clicked="AddButton_Clicked" Order="Primary"
-                         AutomationProperties.IsInAccessibleTree="True"
                          SemanticProperties.Description="{u:I18n AddItem}" />
             <StackLayout x:Name="_mainLayout" x:Key="mainLayout">
                 <Label IsVisible="{Binding ShowNoData}"
@@ -75,7 +74,6 @@
             Style="{StaticResource btn-fab}"
             AbsoluteLayout.LayoutFlags="PositionProportional"
             AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n AddFolder}"/>
     </AbsoluteLayout>
 

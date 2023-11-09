@@ -46,7 +46,6 @@
                          Order="Secondary" />
             <ToolbarItem IconImageSource="more_vert.png" Clicked="More_Clicked" Order="Primary" x:Name="_moreItem"
                          x:Key="moreItem"
-                         AutomationProperties.IsInAccessibleTree="True"
                          SemanticProperties.Description="{u:I18n Options}" />
             <ToolbarItem Text="{u:I18n Attachments}"
                          Clicked="Attachments_Clicked"
@@ -132,7 +131,6 @@
                         x:Name="_nameEntry"
                         Text="{Binding Cipher.Name, FallbackValue=''}"
                         StyleClass="box-value"
-                        AutomationProperties.IsInAccessibleTree="True"
                         SemanticProperties.Description="{u:I18n Name}"
                         AutomationId="ItemNameEntry" />
                 </StackLayout>
@@ -148,7 +146,6 @@
                             Text="{Binding Cipher.Login.Username, FallbackValue=''}"
                             StyleClass="box-value" 
                             Grid.Row="1"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n Username}"
                             AutomationId="LoginUsernameEntry" />
                         <controls:IconButton 
@@ -157,7 +154,6 @@
                             Command="{Binding GenerateUsernameCommand}"
                             Grid.Column="1"
                             Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n GenerateUsername}"
                             AutomationId="GenerateUsernameButton" />
                     </Grid>
@@ -188,7 +184,6 @@
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False"
                             IsEnabled="{Binding Cipher.ViewPassword, FallbackValue=False}"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n Password}"
                             AutomationId="LoginPasswordEntry" />
                         <controls:IconButton 
@@ -198,7 +193,6 @@
                             Grid.Row="0"
                             Grid.Column="1"
                             Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n CheckPassword}"
                             IsVisible="{Binding Cipher.ViewPassword, FallbackValue=False}"
                             AutomationId="CheckPasswordButton" />
@@ -209,9 +203,8 @@
                             Grid.Row="0"
                             Grid.Column="2"
                             Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n ToggleVisibility}"
-                            AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
+                            SemanticProperties.Hint="{Binding PasswordVisibilityAccessibilityText}"
                             IsVisible="{Binding Cipher.ViewPassword, FallbackValue=False}"
                             AutomationId="ViewPasswordButton" />
                         <controls:IconButton 
@@ -221,7 +214,6 @@
                             Grid.Row="0"
                             Grid.Column="3"
                             Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n GeneratePassword}"
                             IsVisible="{Binding Cipher.ViewPassword, FallbackValue=False}"
                             AutomationId="RegeneratePasswordButton" />
@@ -284,7 +276,6 @@
                             Grid.Row="1"
                             Grid.Column="0"
                             Grid.ColumnSpan="{Binding TotpColumnSpan}"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n AuthenticatorKey}"
                             AutomationId="LoginTotpEntry" />
                         <controls:IconButton 
@@ -295,7 +286,6 @@
                             Grid.Row="0"
                             Grid.Column="1"
                             Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n CopyTotp}"
                             AutomationId="CopyTotpValueButton" />
                         <controls:IconButton 
@@ -306,7 +296,6 @@
                             Grid.Column="2"
                             Grid.RowSpan="2"
                             IsVisible="{Binding HasTotpValue}"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n ScanQrTitle}"
                             />
                     </Grid>
@@ -345,7 +334,6 @@
                             IsPassword="{Binding ShowCardNumber, Converter={StaticResource inverseBool}}"
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n Number}"
                             AutomationId="CardNumberEntry" />
                         <controls:IconButton 
@@ -355,7 +343,6 @@
                             Grid.Row="0"
                             Grid.Column="1"
                             Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n ToggleVisibility}"
                             AutomationId="ShowCardNumberButton" />
                     </Grid>
@@ -390,7 +377,6 @@
                             Text="{Binding Cipher.Card.ExpYear, FallbackValue=''}"
                             StyleClass="box-value"
                             Keyboard="Numeric"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n ExpirationYear}"
                             AutomationId="CardExpirationYearEntry" />
                     </StackLayout>
@@ -418,7 +404,6 @@
                             IsPassword="{Binding ShowCardCode, Converter={StaticResource inverseBool}}"
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n SecurityCode}"
                             AutomationId="CardSecurityCodeEntry" />
                         <controls:IconButton 
@@ -428,7 +413,6 @@
                             Grid.Row="0"
                             Grid.Column="1"
                             Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n ToggleVisibility}"
                             AutomationId="CardShowSecurityCodeButton" />
                     </Grid>
@@ -453,7 +437,6 @@
                             x:Name="_identityFirstNameEntry"
                             Text="{Binding Cipher.Identity.FirstName, FallbackValue=''}"
                             StyleClass="box-value,capitalize-word-input"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n FirstName}"
                             AutomationId="IdentityFirstNameEntry" />
                     </StackLayout>
@@ -465,7 +448,6 @@
                             x:Name="_identityMiddleNameEntry"
                             Text="{Binding Cipher.Identity.MiddleName, FallbackValue=''}"
                             StyleClass="box-value,capitalize-word-input"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n MiddleName}"
                             AutomationId="IdentityMiddleNameEntry" />
                     </StackLayout>
@@ -477,7 +459,6 @@
                             x:Name="_identityLastNameEntry"
                             Text="{Binding Cipher.Identity.LastName, FallbackValue=''}"
                             StyleClass="box-value,capitalize-word-input"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n LastName}"
                             AutomationId="IdentityLastNameEntry" />
                     </StackLayout>
@@ -489,7 +470,6 @@
                             x:Name="_identityUsernameEntry"
                             Text="{Binding Cipher.Identity.Username, FallbackValue=''}"
                             StyleClass="box-value"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n Username}"
                             AutomationId="IdentityUsernameEntry" />
                     </StackLayout>
@@ -501,7 +481,6 @@
                             x:Name="_identityCompanyEntry"
                             Text="{Binding Cipher.Identity.Company, FallbackValue=''}"
                             StyleClass="box-value" 
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n Company}"
                             AutomationId="IdentityCompanyEntry" />
                     </StackLayout>
@@ -513,7 +492,6 @@
                             x:Name="_identitySsnEntry"
                             Text="{Binding Cipher.Identity.SSN, FallbackValue=''}"
                             StyleClass="box-value" 
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n SSN}"
                             AutomationId="IdentitySsnEntry" />
                     </StackLayout>
@@ -525,7 +503,6 @@
                             x:Name="_identityPassportNumberEntry"
                             Text="{Binding Cipher.Identity.PassportNumber, FallbackValue=''}"
                             StyleClass="box-value" 
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n PassportNumber}"
                             AutomationId="IdentityPassportNumberEntry" />
                     </StackLayout>
@@ -537,7 +514,6 @@
                             x:Name="_identityLicenseNumberEntry"
                             Text="{Binding Cipher.Identity.LicenseNumber, FallbackValue=''}"
                             StyleClass="box-value"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n LicenseNumber}"
                             AutomationId="IdentityLicenseNumberEntry" />
                     </StackLayout>
@@ -550,7 +526,6 @@
                             Keyboard="Email"
                             Text="{Binding Cipher.Identity.Email, FallbackValue=''}"
                             StyleClass="box-value" 
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n Email}"
                             AutomationId="IdentityEmailEntry" />
                     </StackLayout>
@@ -563,7 +538,6 @@
                             Text="{Binding Cipher.Identity.Phone, FallbackValue=''}"
                             Keyboard="Telephone"
                             StyleClass="box-value"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n Phone}"
                             AutomationId="IdentityPhoneEntry" />
                     </StackLayout>
@@ -575,7 +549,6 @@
                             x:Name="_identityAddress1Entry"
                             Text="{Binding Cipher.Identity.Address1, FallbackValue=''}"
                             StyleClass="box-value" 
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n Address1}"
                             AutomationId="IdentityAddressOneEntry" />
                     </StackLayout>
@@ -587,7 +560,6 @@
                             x:Name="_identityAddress2Entry"
                             Text="{Binding Cipher.Identity.Address2, FallbackValue=''}"
                             StyleClass="box-value"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n Address2}"
                             AutomationId="IdentityAddressTwoEntry" />
                     </StackLayout>
@@ -599,7 +571,6 @@
                             x:Name="_identityAddress3Entry"
                             Text="{Binding Cipher.Identity.Address3, FallbackValue=''}"
                             StyleClass="box-value"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n Address3}"
                             AutomationId="IdentityAddressThreeEntry" />
                     </StackLayout>
@@ -611,7 +582,6 @@
                             x:Name="_identityCityEntry"
                             Text="{Binding Cipher.Identity.City, FallbackValue=''}"
                             StyleClass="box-value,capitalize-sentence-input"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n CityTown}"
                             AutomationId="IdentityCityEntry" />
                     </StackLayout>
@@ -623,7 +593,6 @@
                             x:Name="_identityStateEntry"
                             Text="{Binding Cipher.Identity.State, FallbackValue=''}"
                             StyleClass="box-value,capitalize-sentence-input"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n StateProvince}"
                             AutomationId="IdentityStateEntry" />
                     </StackLayout>
@@ -635,7 +604,6 @@
                             x:Name="_identityPostalCodeEntry"
                             Text="{Binding Cipher.Identity.PostalCode, FallbackValue=''}"
                             StyleClass="box-value"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n ZipPostalCode}"
                             AutomationId="IdentityPostalCodeEntry" />
                     </StackLayout>
@@ -647,7 +615,6 @@
                             x:Name="_identityCountryEntry"
                             Text="{Binding Cipher.Identity.Country, FallbackValue=''}"
                             StyleClass="box-value,capitalize-sentence-input"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n Country}"
                             AutomationId="IdentityCountryEntry" />
                     </StackLayout>
@@ -681,7 +648,6 @@
                                     StyleClass="box-value"
                                     Grid.Row="1"
                                     Grid.Column="0"
-                                    AutomationProperties.IsInAccessibleTree="True"
                                     SemanticProperties.Description="{u:I18n URI}"
                                     AutomationId="LoginUriEntry" />
                                 <controls:IconButton
@@ -692,7 +658,6 @@
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
                                     SemanticProperties.Description="{u:I18n Options}"
                                     AutomationId="LoginUriOptionsButton" />
                             </Grid>
@@ -739,7 +704,6 @@
                         Text="{Binding Source={x:Static core:BitwardenIcons.QuestionCircle}}"
                         Command="{Binding PasswordPromptHelpCommand}"
                         TextColor="{DynamicResource MutedColor}"
-                        AutomationProperties.IsInAccessibleTree="True"
                         SemanticProperties.Description="{u:I18n MasterPasswordRePromptHelp}"
                         HorizontalOptions="StartAndExpand" />
                     <Switch
@@ -763,7 +727,6 @@
                         StyleClass="box-value"
                         effects:ScrollEnabledEffect.IsScrollEnabled="false"
                         Text="{Binding Cipher.Notes, FallbackValue=''}"
-                        AutomationProperties.IsInAccessibleTree="True"
                         SemanticProperties.Description="{u:I18n Notes}"
                         AutomationId="ItemNotesEntry">
                         <Editor.Behaviors>

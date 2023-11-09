@@ -104,7 +104,6 @@
                             HorizontalOptions="End"
                             ios:TimePicker.UpdateMode="WhenFinished"
                             AutomationId="SettingCustomVaultTimeoutPicker"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{Binding CustomVaultTimeoutTimeVerbalized}"/>
             </controls:BaseSettingItemView>
             

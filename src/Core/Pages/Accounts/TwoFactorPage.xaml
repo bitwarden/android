@@ -30,7 +30,6 @@
                 IconImageSource="more_vert.png"
                 Order="Primary"
                 Command="{Binding MoreCommand}"
-                AutomationProperties.IsInAccessibleTree="True"
                 SemanticProperties.Description="{u:I18n Options}" />
             <ToolbarItem Text="{u:I18n UseAnotherTwoStepMethod}" 
                 Clicked="Methods_Clicked" 

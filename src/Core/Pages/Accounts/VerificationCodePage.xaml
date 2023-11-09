@@ -69,7 +69,6 @@
                         Command="{Binding TogglePasswordCommand}"
                         Grid.Row="1"
                         Grid.Column="1"
-                        AutomationProperties.IsInAccessibleTree="True"
                         SemanticProperties.Description="{u:I18n ToggleVisibility}"/>
                     <Label
                         Text="{u:I18n ConfirmYourIdentity}"

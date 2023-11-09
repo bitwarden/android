@@ -73,7 +73,6 @@
                 TextColor="Black"
                 HorizontalOptions="End"
                 VerticalOptions="Center"
-                AutomationProperties.IsInAccessibleTree="True"
                 SemanticProperties.Description="{u:I18n CopyAppInformation}">
                 <controls:IconLabel.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding CopyAppInfoCommand}" />

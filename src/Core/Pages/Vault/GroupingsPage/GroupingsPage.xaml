@@ -24,11 +24,9 @@
             Order="Primary"
             Priority="-1"
             UseOriginalImage="True"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n Account}"
             AutomationId="AccountIconButton" />
         <ToolbarItem IconImageSource="search.png" Clicked="Search_Clicked"
-                     AutomationProperties.IsInAccessibleTree="True"
                      SemanticProperties.Description="{u:I18n Search}" />
     </ContentPage.ToolbarItems>
 
@@ -44,7 +42,6 @@
                          Clicked="Exit_Clicked" Order="Secondary" />
             <ToolbarItem x:Name="_addItem" x:Key="addItem" IconImageSource="plus.png"
                          Clicked="AddButton_Clicked" Order="Primary"
-                         AutomationProperties.IsInAccessibleTree="True"
                          SemanticProperties.Description="{u:I18n AddItem}" />
 
             <DataTemplate x:Key="cipherTemplate"
@@ -135,7 +132,6 @@
                         StyleClass="text-md, text-muted"
                         VerticalOptions="Center"
                         HorizontalOptions="StartAndExpand"
-                        AutomationProperties.IsInAccessibleTree="True"
                         SemanticProperties.Description="{u:I18n Filter}" />
                     <controls:MiButton
                         Text="{Binding Source={x:Static core:BitwardenIcons.ViewCellMenu}}"
@@ -143,7 +139,6 @@
                         Command="{Binding VaultFilterCommand}"
                         VerticalOptions="Center"
                         HorizontalOptions="End"
-                        AutomationProperties.IsInAccessibleTree="True"
                         SemanticProperties.Description="{u:I18n Filter}" />
                 </StackLayout>
                 <StackLayout
@@ -196,7 +191,6 @@
             Style="{StaticResource btn-fab}"
             AbsoluteLayout.LayoutFlags="PositionProportional"
             AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n AddItem}"/>
 
         <controls:AccountSwitchingOverlayView

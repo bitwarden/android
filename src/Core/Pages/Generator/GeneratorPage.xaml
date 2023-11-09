@@ -36,7 +36,6 @@
                      x:Name="_historyItem"
                      x:Key="historyItem" />
             <ToolbarItem IconImageSource="more_vert.png"
-                         AutomationProperties.IsInAccessibleTree="True"
                          SemanticProperties.Description="{u:I18n Options}"
                          Clicked="More_Clicked"
                          x:Name="_moreItem"
@@ -91,7 +90,6 @@
                         Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
                         Command="{Binding CopyCommand}"
                         Grid.Column="1"
-                        AutomationProperties.IsInAccessibleTree="True"
                         SemanticProperties.Description="{u:I18n CopyPassword}"
                         AutomationId="CopyValueButton" />
                     <controls:IconButton 
@@ -99,7 +97,6 @@
                         Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
                         Command="{Binding RegenerateCommand}"
                         Grid.Column="2"
-                        AutomationProperties.IsInAccessibleTree="True"
                         SemanticProperties.Description="{u:I18n GeneratePassword}"
                         AutomationId="RegenerateValueButton" />
                 </Grid>
@@ -119,7 +116,6 @@
                         Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
                         Command="{Binding CopyCommand}"
                         Grid.Column="1"
-                        AutomationProperties.IsInAccessibleTree="True"
                         SemanticProperties.Description="{u:I18n CopyUsername}"
                         AutomationId="CopyValueButton" />
                     <controls:IconButton 
@@ -127,7 +123,6 @@
                         Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
                         Command="{Binding RegenerateUsernameCommand}"
                         Grid.Column="2"
-                        AutomationProperties.IsInAccessibleTree="True"
                         SemanticProperties.Description="{u:I18n GenerateUsername}"
                         AutomationId="RegenerateValueButton" />
                 </Grid>
@@ -161,7 +156,6 @@
                             Text="{Binding Source={x:Static core:BitwardenIcons.QuestionCircle}}"
                             Command="{Binding UsernameTypePromptHelpCommand}"
                             TextColor="{DynamicResource HyperlinkColor}"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n UsernamePromptHelpLink}"
                             VerticalOptions="Center"/>
                     </StackLayout>
@@ -414,7 +408,7 @@
                             <controls:ExtendedSlider
                                 DragCompleted="LengthSlider_DragCompleted"
                                 Value="{Binding Length}"
-                                AutomationProperties.HelpText="{Binding Length}"
+                                SemanticProperties.Hint="{Binding Length}"
                                 StyleClass="box-value"
                                 VerticalOptions="CenterAndExpand"
                                 HorizontalOptions="FillAndExpand"
@@ -428,7 +422,6 @@
                                 Text="A-Z"
                                 StyleClass="box-label-regular"
                                 HorizontalOptions="StartAndExpand" 
-                                AutomationProperties.IsInAccessibleTree="True"
                                 SemanticProperties.Description="{u:I18n UppercaseAtoZ}"/>
                             <Switch
                                 IsToggled="{Binding Uppercase}"
@@ -436,7 +429,6 @@
                                     Converter={StaticResource inverseBool}}"
                                 StyleClass="box-value"
                                 HorizontalOptions="End" 
-                                AutomationProperties.IsInAccessibleTree="True"
                                 SemanticProperties.Description="{u:I18n UppercaseAtoZ}"
                                 AutomationId="UppercaseAtoZToggle" />
                         </StackLayout>
@@ -446,7 +438,6 @@
                                 Text="a-z"
                                 StyleClass="box-label-regular"
                                 HorizontalOptions="StartAndExpand" 
-                                AutomationProperties.IsInAccessibleTree="True"
                                 SemanticProperties.Description="{u:I18n LowercaseAtoZ}"/>
                             <Switch
                                 IsToggled="{Binding Lowercase}"
@@ -454,7 +445,6 @@
                                     Converter={StaticResource inverseBool}}"
                                 StyleClass="box-value"
                                 HorizontalOptions="End"
-                                AutomationProperties.IsInAccessibleTree="True"
                                 SemanticProperties.Description="{u:I18n LowercaseAtoZ}"
                                 AutomationId="LowercaseAtoZToggle" />
                         </StackLayout>
@@ -464,7 +454,6 @@
                                 Text="0-9"
                                 StyleClass="box-label-regular"
                                 HorizontalOptions="StartAndExpand" 
-                                AutomationProperties.IsInAccessibleTree="True"
                                 SemanticProperties.Description="{u:I18n NumbersZeroToNine}"/>
                             <Switch
                                 IsToggled="{Binding Number}"
@@ -472,7 +461,6 @@
                                     Converter={StaticResource inverseBool}}"
                                 StyleClass="box-value"
                                 HorizontalOptions="End" 
-                                AutomationProperties.IsInAccessibleTree="True"
                                 SemanticProperties.Description="{u:I18n NumbersZeroToNine}"
                                 AutomationId="NumbersZeroToNineToggle" />
                         </StackLayout>
@@ -482,7 +470,6 @@
                                 Text="!@#$%^&amp;*"
                                 StyleClass="box-label-regular"
                                 HorizontalOptions="StartAndExpand" 
-                                AutomationProperties.IsInAccessibleTree="True"
                                 SemanticProperties.Description="{u:I18n SpecialCharacters}"/>
                             <Switch
                                 IsToggled="{Binding Special}"
@@ -490,7 +477,6 @@
                                     Converter={StaticResource inverseBool}}"
                                 StyleClass="box-value"
                                 HorizontalOptions="End"
-                                AutomationProperties.IsInAccessibleTree="True"
                                 SemanticProperties.Description="{u:I18n SpecialCharacters}"
                                 AutomationId="SpecialCharactersToggle" />
                         </StackLayout>

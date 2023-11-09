@@ -18,11 +18,9 @@
             Order="Primary"
             Priority="-1"
             UseOriginalImage="True"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n Account}"
             AutomationId="AccountIconButton" />
         <ToolbarItem IconImageSource="search.png" Clicked="Search_Clicked"
-                     AutomationProperties.IsInAccessibleTree="True"
                      SemanticProperties.Description="{u:I18n Search}" />
     </ContentPage.ToolbarItems>
 
@@ -42,7 +40,6 @@
                          IconImageSource="plus.png"
                          Command="{Binding AddCipherCommand}"
                          Order="Primary"
-                         AutomationProperties.IsInAccessibleTree="True"
                          SemanticProperties.Description="{u:I18n AddItem}" />
 
             <DataTemplate x:Key="cipherTemplate"

@@ -24,7 +24,6 @@
                 Order="Primary"
                 Priority="-1"
                 UseOriginalImage="True"
-                AutomationProperties.IsInAccessibleTree="True"
                 SemanticProperties.Description="{u:I18n Account}"
                 AutomationId="AccountIconButton" />
     </ContentPage.ToolbarItems>
@@ -34,7 +33,6 @@
             <u:InverseBoolConverter x:Key="inverseBool" />
             <ToolbarItem IconImageSource="more_vert.png" Clicked="More_Clicked" Order="Primary"
                 x:Name="_moreItem" x:Key="moreItem"
-                 AutomationProperties.IsInAccessibleTree="True"
                  SemanticProperties.Description="{u:I18n Options}"
                  AutomationId="OptionsButton" />
             <ToolbarItem Text="{u:I18n GetPasswordHint}"
@@ -87,10 +85,9 @@
                                 Grid.Row="1"
                                 Grid.Column="1"
                                 Grid.RowSpan="1"
-                                AutomationProperties.IsInAccessibleTree="True"
                                 AutomationId="PasswordVisibilityToggle"
                                 SemanticProperties.Description="{u:I18n ToggleVisibility}"
-                                AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"/>
+                                SemanticProperties.Hint="{Binding PasswordVisibilityAccessibilityText}"/>
                             <Label
                                 Text="{u:I18n GetMasterPasswordwordHint}"
                                 StyleClass="box-footer-label"

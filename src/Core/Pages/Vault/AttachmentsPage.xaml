@@ -58,7 +58,6 @@
                                         Command="{Binding BindingContext.DeleteAttachmentCommand, Source={x:Reference _page}}"
                                         CommandParameter="{Binding .}"
                                         VerticalOptions="Center"
-                                        AutomationProperties.IsInAccessibleTree="True"
                                         SemanticProperties.Description="{u:I18n Delete}"
                                         AutomationId="AttachmentDeleteButton" />
                                 </StackLayout>

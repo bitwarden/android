@@ -44,7 +44,6 @@
             Grid.Row="1"
             Grid.Column="0"
             IsVisible="{Binding IsEditing}"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{Binding Field.Name}"
             AutomationId="TextCustomFieldValueEntry" />
         <controls:IconButton
@@ -55,7 +54,6 @@
             Grid.Row="0"
             Grid.Column="1"
             Grid.RowSpan="2"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n Copy}"
             AutomationId="TextCustomFieldCopyValue" />
         <controls:IconButton 
@@ -66,7 +64,6 @@
             Grid.Row="0"
             Grid.Column="1"
             Grid.RowSpan="2"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n Options}"
             AutomationId="TextCustomFieldOptionsButton" />
     </Grid>

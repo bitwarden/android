@@ -18,8 +18,8 @@ namespace Bit.App.Controls
                 &&
                 BindingContext is DateTimeViewModel dateTimeViewModel)
             {
-                AutomationProperties.SetName(_datePicker, dateTimeViewModel.DateName);
-                AutomationProperties.SetName(_timePicker, dateTimeViewModel.TimeName);
+                SemanticProperties.SetDescription(_datePicker, dateTimeViewModel.DateName);
+                SemanticProperties.SetDescription(_timePicker, dateTimeViewModel.TimeName);
 
                 _datePicker.PlaceHolder = dateTimeViewModel.DatePlaceholder;
                 _timePicker.PlaceHolder = dateTimeViewModel.TimePlaceholder;

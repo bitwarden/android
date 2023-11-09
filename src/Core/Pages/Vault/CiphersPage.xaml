@@ -34,7 +34,6 @@
                     VerticalOptions="CenterAndExpand"
                     Clicked="BackButton_Clicked"
                     x:Name="_backButton"
-                    AutomationProperties.IsInAccessibleTree="True"
                     SemanticProperties.Description="{u:I18n TapToGoBack}"/>
                 <controls:ExtendedSearchBar
                     x:Name="_searchBar"
@@ -62,7 +61,6 @@
                 StyleClass="text-md, text-muted"
                 VerticalOptions="Center"
                 HorizontalOptions="StartAndExpand"
-                AutomationProperties.IsInAccessibleTree="True"
                 SemanticProperties.Description="{u:I18n Filter}" />
             <controls:MiButton
                 Text="{Binding Source={x:Static core:BitwardenIcons.ViewCellMenu}}"
@@ -70,7 +68,6 @@
                 Command="{Binding VaultFilterCommand}"
                 VerticalOptions="Center"
                 HorizontalOptions="End"
-                AutomationProperties.IsInAccessibleTree="True"
                 SemanticProperties.Description="{u:I18n Filter}" />
         </StackLayout>
         <BoxView StyleClass="box-row-separator" />

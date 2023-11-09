@@ -16,7 +16,6 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="search.png" Clicked="Search_Clicked"
-                     AutomationProperties.IsInAccessibleTree="True"
                      SemanticProperties.Description="{u:I18n Search}" />
     </ContentPage.ToolbarItems>
 
@@ -26,7 +25,6 @@
 
             <ToolbarItem x:Name="_aboutIconItem" x:Key="aboutIconItem" IconImageSource="info.png"
                          Clicked="About_Clicked" Order="Primary" Priority="-1"
-                         AutomationProperties.IsInAccessibleTree="True"
                          SemanticProperties.Description="{u:I18n AboutSend}" />
             <ToolbarItem x:Name="_syncItem" x:Key="syncItem" Text="{u:I18n Sync}"
                          Clicked="Sync_Clicked" Order="Secondary" />
@@ -36,7 +34,6 @@
                          Clicked="About_Clicked" Order="Secondary" />
             <ToolbarItem x:Name="_addItem" x:Key="addItem" IconImageSource="plus.png"
                          Clicked="AddButton_Clicked" Order="Primary"
-                         AutomationProperties.IsInAccessibleTree="True"
                          SemanticProperties.Description="{u:I18n AddItem}" />
 
             <DataTemplate x:Key="sendTemplate"
@@ -165,7 +162,6 @@
             Style="{StaticResource btn-fab}"
             AbsoluteLayout.LayoutFlags="PositionProportional"
             AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
-            AutomationProperties.IsInAccessibleTree="True"
             SemanticProperties.Description="{u:I18n AddItem}"/>
     </AbsoluteLayout>
 

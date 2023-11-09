@@ -30,7 +30,6 @@
                          x:Key="clearItem"
                          AutomationId="ClearPasswordList" />
             <ToolbarItem IconImageSource="more_vert.png"
-                         AutomationProperties.IsInAccessibleTree="True"
                          SemanticProperties.Description="{u:I18n Options}"
                          Clicked="More_Clicked"
                          x:Name="_moreItem"
@@ -90,7 +89,6 @@
                             Grid.Row="0"
                             Grid.Column="1"
                             Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
                             SemanticProperties.Description="{u:I18n CopyPassword}"
                             AutomationId="CopyPasswordValueButton" />
                     </Grid>

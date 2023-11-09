@@ -70,9 +70,8 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         Grid.RowSpan="2"
-                        AutomationProperties.IsInAccessibleTree="True"
                         SemanticProperties.Description="{u:I18n ToggleVisibility}" 
-                        AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
+                        SemanticProperties.Hint="{Binding PasswordVisibilityAccessibilityText}"
                         AutomationId="PasswordVisibilityToggle"/>
                 </Grid>
                 <Label
@@ -122,10 +121,9 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         Grid.RowSpan="2"
-                        AutomationProperties.IsInAccessibleTree="True"
                         AutomationId="ConfirmPasswordVisibilityToggle"
                         SemanticProperties.Description="{u:I18n ToggleVisibility}"
-                        AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}" />
+                        SemanticProperties.Hint="{Binding PasswordVisibilityAccessibilityText}" />
                 </Grid>
                 <StackLayout StyleClass="box-row">
                     <Label
