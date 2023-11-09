@@ -118,9 +118,12 @@ namespace Bit.App.Pages
                         _messagingService.Send(Constants.ForceSetPassword, userOrgs.First().Value.Identifier);
                         return;
                     }
+                    _logger.Value.Error("TDE user needs to set password but has no organizations.");
+
                     var rememberedOrg = _stateService.GetRememberedOrgIdentifierAsync();
                     if (rememberedOrg == null)
                     {
+                        _logger.Value.Error("TDE user needs to set password but has no organizations or remembered org identifier.");
                         return;
                     }
                     _messagingService.Send(Constants.ForceSetPassword, rememberedOrg);
