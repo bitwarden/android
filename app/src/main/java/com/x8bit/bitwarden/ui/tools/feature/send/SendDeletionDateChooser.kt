@@ -19,16 +19,15 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
 
 /**
- * Displays UX for choosing expiration date of a send.
+ * Displays UX for choosing deletion date of a send.
  *
  * TODO: Implement custom date choosing and send choices to the VM: BIT-1090.
  */
 @Composable
-fun SendExpirationDateChooser(
+fun SendDeletionDateChooser(
     modifier: Modifier = Modifier,
 ) {
     val options = listOf(
-        stringResource(id = R.string.never),
         stringResource(id = R.string.one_day),
         stringResource(id = R.string.two_days),
         stringResource(id = R.string.three_days),
@@ -36,20 +35,20 @@ fun SendExpirationDateChooser(
         stringResource(id = R.string.thirty_days),
         stringResource(id = R.string.custom),
     )
-    val defaultOption = stringResource(id = R.string.never)
+    val defaultOption = stringResource(id = R.string.seven_days)
     var selectedOption: String by rememberSaveable { mutableStateOf(defaultOption) }
     Column(
         modifier = modifier,
     ) {
         BitwardenMultiSelectButton(
-            label = stringResource(id = R.string.expiration_date),
+            label = stringResource(id = R.string.deletion_date),
             options = options,
             selectedOption = selectedOption,
             onOptionSelected = { selectedOption = it },
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = stringResource(id = R.string.expiration_date_info),
+            text = stringResource(id = R.string.deletion_date_info),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier

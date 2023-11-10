@@ -175,7 +175,10 @@ class NewSendScreenTest : BaseComposeTest() {
     @Test
     fun `options sections should start hidden and show after options clicked`() {
         composeTestRule
-            .onNodeWithText("Deletion date")
+            .onNodeWithContentDescription("Deletion date", substring = true)
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithContentDescription("Expiration date", substring = true)
             .assertDoesNotExist()
         composeTestRule
             .onNodeWithText("Maximum access count")
@@ -197,7 +200,10 @@ class NewSendScreenTest : BaseComposeTest() {
             .performScrollTo()
             .performClick()
         composeTestRule
-            .onNodeWithText("Deletion date", useUnmergedTree = true)
+            .onNodeWithContentDescription("Deletion date", substring = true)
+            .assertExists()
+        composeTestRule
+            .onNodeWithContentDescription("Expiration date", substring = true)
             .assertExists()
         composeTestRule
             .onNodeWithText("Maximum access count")

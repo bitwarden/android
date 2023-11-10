@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -103,10 +104,10 @@ fun NewSendScreen(
     ) { innerPadding ->
         Column(
             modifier = Modifier
+                .imePadding()
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(paddingValues = innerPadding)
-                .imePadding(),
+                .padding(paddingValues = innerPadding),
         ) {
             BitwardenTextField(
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -224,6 +225,8 @@ fun NewSendScreen(
                     { viewModel.trySendAction(NewSendAction.DeactivateThisSendToggle(it)) }
                 },
             )
+            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
 }
@@ -288,10 +291,14 @@ private fun NewSendOptions(
         modifier = Modifier.clipToBounds(),
     ) {
         Column {
+            SendDeletionDateChooser(
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             SendExpirationDateChooser(
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             BitwardenStepper(
                 label = stringResource(id = R.string.maximum_access_count),
                 value = state.maxAccessCount,
@@ -309,7 +316,7 @@ private fun NewSendOptions(
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp),
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             BitwardenPasswordField(
                 label = stringResource(id = R.string.new_password),
                 hint = stringResource(id = R.string.password_info),
@@ -317,7 +324,7 @@ private fun NewSendOptions(
                 onValueChange = onPasswordChange,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextField(
                 label = stringResource(id = R.string.notes),
                 hint = stringResource(id = R.string.notes_info),
