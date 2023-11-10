@@ -12,10 +12,12 @@ const val VAULT_ROUTE: String = "vault"
  */
 fun NavGraphBuilder.vaultDestination(
     onNavigateToVaultAddItemScreen: () -> Unit,
+    onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
 ) {
     composable(VAULT_ROUTE) {
         VaultScreen(
             onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
+            onDimBottomNavBarRequest = onDimBottomNavBarRequest,
         )
     }
 }

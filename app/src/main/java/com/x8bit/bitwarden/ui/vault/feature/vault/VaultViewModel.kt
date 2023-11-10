@@ -6,12 +6,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -25,14 +28,16 @@ private const val KEY_STATE = "state"
 /**
  * Manages [VaultState], handles [VaultAction], and launches [VaultEvent] for the [VaultScreen].
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class VaultViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     // TODO retrieve this from the data layer BIT-205
     initialState = savedStateHandle[KEY_STATE] ?: VaultState(
-        initials = "BW",
-        avatarColorString = "FF0000FF",
+        initials = activeAccountSummary.initials,
+        avatarColorString = activeAccountSummary.avatarColorHex,
+        accountSummaries = accountSummaries,
         viewState = VaultState.ViewState.Loading,
     ),
 ) {
@@ -79,6 +84,8 @@ class VaultViewModel @Inject constructor(
             VaultAction.IdentityGroupClick -> handleIdentityClick()
             VaultAction.LoginGroupClick -> handleLoginClick()
             VaultAction.SearchIconClick -> handleSearchIconClick()
+            is VaultAction.AccountSwitchClick -> handleAccountSwitchClick(action)
+            VaultAction.AddAccountClick -> handleAddAccountClick()
             VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             VaultAction.TrashClick -> handleTrashClick()
             is VaultAction.VaultItemClick -> handleVaultItemClick(action)
@@ -110,6 +117,28 @@ class VaultViewModel @Inject constructor(
         sendEvent(VaultEvent.NavigateToVaultSearchScreen)
     }
 
+    private fun handleAccountSwitchClick(action: VaultAction.AccountSwitchClick) {
+        when (action.accountSummary.status) {
+            AccountSummary.Status.ACTIVE -> {
+                // Nothing to do for the active account
+            }
+
+            AccountSummary.Status.LOCKED -> {
+                // TODO: Handle switching accounts (BIT-853)
+                sendEvent(VaultEvent.NavigateToVaultUnlockScreen)
+            }
+
+            AccountSummary.Status.UNLOCKED -> {
+                // TODO: Handle switching accounts (BIT-853)
+                sendEvent(VaultEvent.ShowToast(message = "Not yet implemented."))
+            }
+        }
+    }
+
+    private fun handleAddAccountClick() {
+        sendEvent(VaultEvent.NavigateToLoginScreen)
+    }
+
     private fun handleTrashClick() {
         sendEvent(VaultEvent.NavigateToTrash)
     }
@@ -124,6 +153,34 @@ class VaultViewModel @Inject constructor(
     //endregion VaultAction Handlers
 }
 
+// TODO: Get data from repository (BIT-205)
+private val accountSummaries = persistentListOf(
+    AccountSummary(
+        userId = "lockedUserId",
+        name = "Locked User",
+        email = "locked@bitwarden.com",
+        avatarColorHex = "#00aaaa",
+        status = AccountSummary.Status.LOCKED,
+    ),
+    AccountSummary(
+        userId = "activeUserId",
+        name = "Active User",
+        email = "active@bitwarden.com",
+        avatarColorHex = "#aa00aa",
+        status = AccountSummary.Status.ACTIVE,
+    ),
+    AccountSummary(
+        userId = "unlockedUserId",
+        name = "Unlocked User",
+        email = "unlocked@bitwarden.com",
+        avatarColorHex = "#aaaa00",
+        status = AccountSummary.Status.UNLOCKED,
+    ),
+)
+
+private val activeAccountSummary = accountSummaries
+    .first { it.status == AccountSummary.Status.ACTIVE }
+
 /**
  * Represents the overall state for the [VaultScreen].
  *
@@ -135,6 +192,7 @@ class VaultViewModel @Inject constructor(
 data class VaultState(
     private val avatarColorString: String,
     val initials: String,
+    val accountSummaries: List<AccountSummary>,
     val viewState: ViewState,
 ) : Parcelable {
 
@@ -359,6 +417,21 @@ sealed class VaultEvent {
      * Navigate to the secure notes group screen.
      */
     data object NavigateToSecureNotesGroup : VaultEvent()
+
+    /**
+     * Navigate to the login flow for an additional account.
+     */
+    data object NavigateToLoginScreen : VaultEvent()
+
+    /**
+     * Navigate to the vault unlock screen.
+     */
+    data object NavigateToVaultUnlockScreen : VaultEvent()
+
+    /**
+     * Show a toast with the given [message].
+     */
+    data class ShowToast(val message: String) : VaultEvent()
 }
 
 /**
@@ -375,6 +448,18 @@ sealed class VaultAction {
      * Click the search icon.
      */
     data object SearchIconClick : VaultAction()
+
+    /**
+     * User clicked an account in the account switcher.
+     */
+    data class AccountSwitchClick(
+        val accountSummary: AccountSummary,
+    ) : VaultAction()
+
+    /**
+     * User clicked on Add Account in the account switcher.
+     */
+    data object AddAccountClick : VaultAction()
 
     /**
      * Action to trigger when a specific vault item is clicked.
