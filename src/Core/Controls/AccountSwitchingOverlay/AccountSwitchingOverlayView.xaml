@@ -36,13 +36,11 @@
                 effects:ScrollViewContentInsetAdjustmentBehaviorEffect.ContentInsetAdjustmentBehavior="Never"
                 AutomationId="AccountListView">
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="view:AccountView">
+                    <DataTemplate x:DataType="controls:AccountViewCellViewModel">
                         <controls:AccountViewCell
-                            Account="{Binding .}"
                             SelectAccountCommand="{Binding SelectAccountCommand, Source={x:Reference _mainOverlay}}"
                             LongPressAccountCommand="{Binding LongPressAccountCommand, Source={x:Reference _mainOverlay}}"
-                            AutomationId="AccountViewCell"
-                            />
+                            AutomationId="AccountViewCell" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.Effects>

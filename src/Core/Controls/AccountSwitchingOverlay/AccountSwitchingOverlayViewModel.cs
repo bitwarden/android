@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
-using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Controls
 {
@@ -35,7 +29,9 @@ namespace Bit.App.Controls
         // this needs to be a new list every time for the binding to get updated,
         // XF doesn't currentlyl provide a direct way to update on same instance
         // https://github.com/xamarin/Xamarin.Forms/issues/1950
-        public List<AccountView> AccountViews => _stateService?.AccountViews is null ? null : new List<AccountView>(_stateService.AccountViews);
+        public List<AccountViewCellViewModel> AccountViews => _stateService?.AccountViews is null
+            ? null
+            : new List<AccountViewCellViewModel>(_stateService.AccountViews.Select(a => new AccountViewCellViewModel(a)).ToList());
 
         public bool AllowActiveAccountSelection { get; set; }
 
@@ -83,7 +79,7 @@ namespace Bit.App.Controls
         {
             await _stateService.RefreshAccountViewsAsync(AllowAddAccountRow);
 
-            Device.BeginInvokeOnMainThread(() => TriggerPropertyChanged(nameof(AccountViews)));
+            MainThread.BeginInvokeOnMainThread(() => TriggerPropertyChanged(nameof(AccountViews)));
         }
     }
 }

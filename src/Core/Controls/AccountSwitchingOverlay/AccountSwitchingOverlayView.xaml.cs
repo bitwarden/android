@@ -1,11 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
-using Bit.App.Utilities;
 
 namespace Bit.App.Controls
 {
@@ -62,8 +58,11 @@ namespace Bit.App.Controls
 
         public ICommand LongPressAccountCommand { get; }
 
-        public int AccountListRowHeight => // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-Device.RuntimePlatform == Device.Android ? 74 : 70;
+#if IOS
+        public int AccountListRowHeight => 70;
+#else
+        public int AccountListRowHeight => 74;
+#endif
 
         public bool LongPressAccountEnabled { get; set; } = true;
 
@@ -90,7 +89,7 @@ Device.RuntimePlatform == Device.Android ? 74 : 70;
 
             await ViewModel.RefreshAccountViewsAsync();
 
-            await Device.InvokeOnMainThreadAsync(async () =>
+            await MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 // start listView in default (off-screen) position
                 await _accountListContainer.TranslateTo(0, _accountListContainer.Height * -1, 0);
@@ -106,11 +105,10 @@ Device.RuntimePlatform == Device.Android ? 74 : 70;
                 IsVisible = true;
                 this.FadeTo(1, 100);
 
-                if (Device.RuntimePlatform == Device.Android && MainFab != null)
-                {
-                    // start fab fade-out
-                    MainFab.FadeTo(0, 200);
-                }
+#if ANDROID
+                // start fab fade-out
+                MainFab?.FadeTo(0, 200);
+#endif
 
                 // slide account list into view
                 await _accountListContainer.TranslateTo(0, 0, 200, Easing.SinOut);
@@ -125,16 +123,15 @@ Device.RuntimePlatform == Device.Android ? 74 : 70;
                 return;
             }
             // Not all animations are awaited. This is intentional to allow multiple simultaneous animations.
-            await Device.InvokeOnMainThreadAsync(async () =>
+            await MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 // start overlay fade-out
                 this.FadeTo(0, 200);
 
-                if (Device.RuntimePlatform == Device.Android && MainFab != null)
-                {
-                    // start fab fade-in
-                    MainFab.FadeTo(1, 200);
-                }
+#if ANDROID
+                // start fab fade-in
+                MainFab?.FadeTo(1, 200);
+#endif
 
                 // slide account list out of view
                 await _accountListContainer.TranslateTo(0, _accountListContainer.Height * -1, 200, Easing.SinIn);
