@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.auth.repository.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.mockk
@@ -25,6 +26,58 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = state)
         assertEquals(state, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `on AccountSwitchClick for the active account should do nothing`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            VaultAction.AccountSwitchClick(
+                accountSummary = mockk {
+                    every { status } returns AccountSummary.Status.ACTIVE
+                },
+            )
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `on AccountSwitchClick for a locked account emit NavigateToVaultUnlockScreen`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                VaultAction.AccountSwitchClick(
+                    accountSummary = mockk {
+                        every { status } returns AccountSummary.Status.LOCKED
+                    },
+                ),
+            )
+            assertEquals(VaultEvent.NavigateToVaultUnlockScreen, awaitItem())
+        }
+    }
+
+    @Test
+    fun `on AccountSwitchClick for an unlocked account emit ShowToast`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                VaultAction.AccountSwitchClick(
+                    accountSummary = mockk {
+                        every { status } returns AccountSummary.Status.UNLOCKED
+                    },
+                ),
+            )
+            assertEquals(VaultEvent.ShowToast("Not yet implemented."), awaitItem())
+        }
+    }
+
+    @Test
+    fun `on AddAccountClick should emit NavigateToLoginScreen`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.AddAccountClick)
+            assertEquals(VaultEvent.NavigateToLoginScreen, awaitItem())
+        }
     }
 
     @Test
@@ -126,5 +179,6 @@ class VaultViewModelTest : BaseViewModelTest() {
 private val DEFAULT_STATE: VaultState = VaultState(
     avatarColorString = "FF0000FF",
     initials = "BW",
+    accountSummaries = emptyList(),
     viewState = VaultState.ViewState.Loading,
 )

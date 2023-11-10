@@ -2,8 +2,11 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandIn
-import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -22,15 +25,17 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.IntSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountActionItem
+import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * The vault screen for the application.
@@ -40,6 +45,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
 fun VaultScreen(
     viewModel: VaultViewModel = hiltViewModel(),
     onNavigateToVaultAddItemScreen: () -> Unit,
+    onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
 ) {
     val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
@@ -94,6 +100,26 @@ fun VaultScreen(
                     .makeText(context, "Navigate to trash screen.", Toast.LENGTH_SHORT)
                     .show()
             }
+
+            VaultEvent.NavigateToLoginScreen -> {
+                // TODO: Handle adding accounts (BIT-853)
+                Toast
+                    .makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+            VaultEvent.NavigateToVaultUnlockScreen -> {
+                // TODO: Handle unlocking accounts (BIT-853)
+                Toast
+                    .makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+            is VaultEvent.ShowToast -> {
+                Toast
+                    .makeText(context, event.message, Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
     }
     VaultScreenScaffold(
@@ -104,6 +130,13 @@ fun VaultScreen(
         searchIconClickAction = remember(viewModel) {
             { viewModel.trySendAction(VaultAction.SearchIconClick) }
         },
+        accountSwitchClickAction = remember(viewModel) {
+            { viewModel.trySendAction(VaultAction.AccountSwitchClick(it)) }
+        },
+        addAccountClickAction = remember(viewModel) {
+            { viewModel.trySendAction(VaultAction.AddAccountClick) }
+        },
+        onDimBottomNavBarRequest = onDimBottomNavBarRequest,
         vaultItemClick = remember(viewModel) {
             { vaultItem -> viewModel.trySendAction(VaultAction.VaultItemClick(vaultItem)) }
         },
@@ -138,6 +171,9 @@ private fun VaultScreenScaffold(
     state: VaultState,
     addItemClickAction: () -> Unit,
     searchIconClickAction: () -> Unit,
+    accountSwitchClickAction: (AccountSummary) -> Unit,
+    addAccountClickAction: () -> Unit,
+    onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     vaultItemClick: (VaultState.ViewState.VaultItem) -> Unit,
     folderClick: (VaultState.ViewState.FolderItem) -> Unit,
     loginGroupClick: () -> Unit,
@@ -146,12 +182,18 @@ private fun VaultScreenScaffold(
     secureNoteGroupClick: () -> Unit,
     trashClick: () -> Unit,
 ) {
-    // TODO Create account menu and logging in ability BIT-205
     var accountMenuVisible by rememberSaveable {
         mutableStateOf(false)
     }
+    val updateAccountMenuVisibility = { shouldShowMenu: Boolean ->
+        accountMenuVisible = shouldShowMenu
+        onDimBottomNavBarRequest(shouldShowMenu)
+    }
     val scrollBehavior =
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
+            state = rememberTopAppBarState(),
+            canScroll = { !accountMenuVisible },
+        )
 
     BitwardenScaffold(
         topBar = {
@@ -162,7 +204,9 @@ private fun VaultScreenScaffold(
                     BitwardenAccountActionItem(
                         initials = state.initials,
                         color = state.avatarColor,
-                        onClick = { accountMenuVisible = !accountMenuVisible },
+                        onClick = {
+                            updateAccountMenuVisibility(!accountMenuVisible)
+                        },
                     )
                     BitwardenSearchActionItem(
                         contentDescription = stringResource(id = R.string.search_vault),
@@ -175,9 +219,8 @@ private fun VaultScreenScaffold(
         floatingActionButton = {
             AnimatedVisibility(
                 visible = !accountMenuVisible,
-                // The enter transition is required for AnimatedVisibility to work correctly on
-                // FloatingActionButton. See - https://issuetracker.google.com/issues/224005027?pli=1
-                enter = fadeIn() + expandIn { IntSize(width = 1, height = 1) },
+                enter = scaleIn(),
+                exit = scaleOut(),
             ) {
                 FloatingActionButton(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -193,23 +236,37 @@ private fun VaultScreenScaffold(
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { paddingValues ->
-        when (val viewState = state.viewState) {
-            is VaultState.ViewState.Content -> VaultContent(
-                state = viewState,
-                vaultItemClick = vaultItemClick,
-                folderClick = folderClick,
-                loginGroupClick = loginGroupClick,
-                cardGroupClick = cardGroupClick,
-                identityGroupClick = identityGroupClick,
-                secureNoteGroupClick = secureNoteGroupClick,
-                trashClick = trashClick,
-                paddingValues = paddingValues,
-            )
+        Box {
+            when (val viewState = state.viewState) {
+                is VaultState.ViewState.Content -> VaultContent(
+                    state = viewState,
+                    vaultItemClick = vaultItemClick,
+                    folderClick = folderClick,
+                    loginGroupClick = loginGroupClick,
+                    cardGroupClick = cardGroupClick,
+                    identityGroupClick = identityGroupClick,
+                    secureNoteGroupClick = secureNoteGroupClick,
+                    trashClick = trashClick,
+                    paddingValues = paddingValues,
+                )
 
-            is VaultState.ViewState.Loading -> VaultLoading(paddingValues = paddingValues)
-            is VaultState.ViewState.NoItems -> VaultNoItems(
-                paddingValues = paddingValues,
-                addItemClickAction = addItemClickAction,
+                is VaultState.ViewState.Loading -> VaultLoading(paddingValues = paddingValues)
+                is VaultState.ViewState.NoItems -> VaultNoItems(
+                    paddingValues = paddingValues,
+                    addItemClickAction = addItemClickAction,
+                )
+            }
+
+            BitwardenAccountSwitcher(
+                isVisible = accountMenuVisible,
+                accountSummaries = state.accountSummaries.toImmutableList(),
+                onAccountSummaryClick = accountSwitchClickAction,
+                onAddAccountClick = addAccountClickAction,
+                onDismissRequest = { updateAccountMenuVisibility(false) },
+                topAppBarScrollBehavior = scrollBehavior,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
             )
         }
     }

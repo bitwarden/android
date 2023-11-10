@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasClickAction
@@ -9,14 +10,17 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import com.x8bit.bitwarden.data.auth.repository.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -24,6 +28,7 @@ import org.junit.Test
 class VaultScreenTest : BaseComposeTest() {
 
     private var onNavigateToVaultAddItemScreenCalled = false
+    private var onDimBottomNavBarRequestCalled = false
 
     private val mutableEventFlow = MutableSharedFlow<VaultEvent>(
         extraBufferCapacity = Int.MAX_VALUE,
@@ -40,8 +45,47 @@ class VaultScreenTest : BaseComposeTest() {
             VaultScreen(
                 viewModel = viewModel,
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
+                onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
             )
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `account icon click should show the account switcher and trigger the nav bar dim request`() {
+        composeTestRule.onNodeWithText("active@bitwarden.com").assertDoesNotExist()
+        composeTestRule.onNodeWithText("locked@bitwarden.com").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Add account").assertDoesNotExist()
+        assertFalse(onDimBottomNavBarRequestCalled)
+
+        composeTestRule.onNodeWithText("AU").performClick()
+
+        composeTestRule.onNodeWithText("active@bitwarden.com").assertIsDisplayed()
+        composeTestRule.onNodeWithText("locked@bitwarden.com").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Add account").assertIsDisplayed()
+        assertTrue(onDimBottomNavBarRequestCalled)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `account click in the account switcher should send AccountSwitchClick and close switcher`() {
+        // Open the Account Switcher
+        composeTestRule.onNodeWithText("AU").performClick()
+
+        composeTestRule.onNodeWithText("locked@bitwarden.com").performClick()
+        verify { viewModel.trySendAction(VaultAction.AccountSwitchClick(LOCKED_ACCOUNT_SUMMARY)) }
+        composeTestRule.onNodeWithText("locked@bitwarden.com").assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Add Account click in the account switcher should send AddAccountClick and close switcher`() {
+        // Open the Account Switcher
+        composeTestRule.onNodeWithText("AU").performClick()
+
+        composeTestRule.onNodeWithText("Add account").performClick()
+        verify { viewModel.trySendAction(VaultAction.AddAccountClick) }
+        composeTestRule.onNodeWithText("Add account").assertDoesNotExist()
     }
 
     @Test
@@ -357,9 +401,29 @@ class VaultScreenTest : BaseComposeTest() {
     }
 }
 
+private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
+    userId = "activeUserId",
+    name = "Active User",
+    email = "active@bitwarden.com",
+    avatarColorHex = "#aa00aa",
+    status = AccountSummary.Status.ACTIVE,
+)
+
+private val LOCKED_ACCOUNT_SUMMARY = AccountSummary(
+    userId = "lockedUserId",
+    name = "Locked User",
+    email = "locked@bitwarden.com",
+    avatarColorHex = "#00aaaa",
+    status = AccountSummary.Status.LOCKED,
+)
+
 private val DEFAULT_STATE: VaultState = VaultState(
-    avatarColorString = "FF0000FF",
-    initials = "BW",
+    avatarColorString = "#aa00aa",
+    initials = "AU",
+    accountSummaries = persistentListOf(
+        ACTIVE_ACCOUNT_SUMMARY,
+        LOCKED_ACCOUNT_SUMMARY,
+    ),
     viewState = VaultState.ViewState.Loading,
 )
 

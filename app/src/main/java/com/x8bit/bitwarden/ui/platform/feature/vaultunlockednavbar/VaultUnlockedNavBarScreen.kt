@@ -1,9 +1,12 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import android.os.Parcelable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.exclude
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
@@ -17,7 +20,12 @@ import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,6 +40,8 @@ import androidx.navigation.navOptions
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.max
+import com.x8bit.bitwarden.ui.platform.base.util.toDp
+import com.x8bit.bitwarden.ui.platform.components.BitwardenAnimatedScrim
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.feature.settings.SETTINGS_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
@@ -113,66 +123,36 @@ private fun VaultUnlockedNavBarScaffold(
     navigateToVaultAddItem: () -> Unit,
     navigateToNewSend: () -> Unit,
 ) {
+    var shouldDimNavBar by remember { mutableStateOf(false) }
+
     // This scaffold will host screens that contain top bars while not hosting one itself.
     // We need to ignore the status bar insets here and let the content screens handle
     // it themselves.
     BitwardenScaffold(
         contentWindowInsets = ScaffoldDefaults.contentWindowInsets.exclude(WindowInsets.statusBars),
         bottomBar = {
-            BottomAppBar(
-                containerColor = MaterialTheme.colorScheme.surfaceContainer,
-            ) {
-                val destinations = listOf(
-                    VaultUnlockedNavBarTab.Vault,
-                    VaultUnlockedNavBarTab.Send,
-                    VaultUnlockedNavBarTab.Generator,
-                    VaultUnlockedNavBarTab.Settings,
+            Box {
+                var appBarHeightPx by remember { mutableIntStateOf(0) }
+                VaultBottomAppBar(
+                    navController = navController,
+                    vaultTabClickedAction = vaultTabClickedAction,
+                    sendTabClickedAction = sendTabClickedAction,
+                    generatorTabClickedAction = generatorTabClickedAction,
+                    settingsTabClickedAction = settingsTabClickedAction,
+                    modifier = Modifier
+                        .onGloballyPositioned {
+                            appBarHeightPx = it.size.height
+                        },
                 )
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
-                destinations.forEach { destination ->
-
-                    val isSelected = currentDestination?.hierarchy?.any {
-                        it.route == destination.route
-                    } == true
-
-                    NavigationBarItem(
-                        icon = {
-                            Icon(
-                                painter = painterResource(
-                                    id = if (isSelected) {
-                                        destination.iconResSelected
-                                    } else {
-                                        destination.iconRes
-                                    },
-                                ),
-                                contentDescription = stringResource(
-                                    id = destination.contentDescriptionRes,
-                                ),
-                                tint = if (isSelected) {
-                                    MaterialTheme.colorScheme.onSecondaryContainer
-                                } else {
-                                    MaterialTheme.colorScheme.onSurface
-                                },
-                            )
-                        },
-                        label = {
-                            Text(text = stringResource(id = destination.labelRes))
-                        },
-                        selected = isSelected,
-                        onClick = {
-                            when (destination) {
-                                VaultUnlockedNavBarTab.Vault -> vaultTabClickedAction()
-                                VaultUnlockedNavBarTab.Send -> sendTabClickedAction()
-                                VaultUnlockedNavBarTab.Generator -> generatorTabClickedAction()
-                                VaultUnlockedNavBarTab.Settings -> settingsTabClickedAction()
-                            }
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            indicatorColor = MaterialTheme.colorScheme.secondaryContainer,
-                        ),
-                    )
-                }
+                BitwardenAnimatedScrim(
+                    isVisible = shouldDimNavBar,
+                    onClick = {
+                        // Do nothing
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(appBarHeightPx.toDp()),
+                )
             }
         },
     ) { innerPadding ->
@@ -195,10 +175,80 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToVaultAddItemScreen = {
                     navigateToVaultAddItem()
                 },
+                onDimBottomNavBarRequest = { shouldDim ->
+                    shouldDimNavBar = shouldDim
+                },
             )
             sendGraph(onNavigateToNewSend = navigateToNewSend)
             generatorDestination()
             settingsGraph(navController)
+        }
+    }
+}
+
+@Composable
+private fun VaultBottomAppBar(
+    navController: NavHostController,
+    vaultTabClickedAction: () -> Unit,
+    sendTabClickedAction: () -> Unit,
+    generatorTabClickedAction: () -> Unit,
+    settingsTabClickedAction: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    BottomAppBar(
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+        modifier = modifier,
+    ) {
+        val destinations = listOf(
+            VaultUnlockedNavBarTab.Vault,
+            VaultUnlockedNavBarTab.Send,
+            VaultUnlockedNavBarTab.Generator,
+            VaultUnlockedNavBarTab.Settings,
+        )
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.destination
+        destinations.forEach { destination ->
+
+            val isSelected = currentDestination?.hierarchy?.any {
+                it.route == destination.route
+            } == true
+
+            NavigationBarItem(
+                icon = {
+                    Icon(
+                        painter = painterResource(
+                            id = if (isSelected) {
+                                destination.iconResSelected
+                            } else {
+                                destination.iconRes
+                            },
+                        ),
+                        contentDescription = stringResource(
+                            id = destination.contentDescriptionRes,
+                        ),
+                        tint = if (isSelected) {
+                            MaterialTheme.colorScheme.onSecondaryContainer
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        },
+                    )
+                },
+                label = {
+                    Text(text = stringResource(id = destination.labelRes))
+                },
+                selected = isSelected,
+                onClick = {
+                    when (destination) {
+                        VaultUnlockedNavBarTab.Vault -> vaultTabClickedAction()
+                        VaultUnlockedNavBarTab.Send -> sendTabClickedAction()
+                        VaultUnlockedNavBarTab.Generator -> generatorTabClickedAction()
+                        VaultUnlockedNavBarTab.Settings -> settingsTabClickedAction()
+                    }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    indicatorColor = MaterialTheme.colorScheme.secondaryContainer,
+                ),
+            )
         }
     }
 }
