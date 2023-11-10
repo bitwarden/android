@@ -2860,4 +2860,13 @@ Bu hesaba keçmək istəyirsiniz?</value>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Hesabdan çıxış edildi.</value>
   </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization requires you to set a master password.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Anbar vaxt bitməsi əməliyyatınızı dəyişdirmək üçün bir kilid açma seçimi qurun.</value>
+  </data>
 </root>

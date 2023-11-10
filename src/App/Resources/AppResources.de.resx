@@ -2860,4 +2860,13 @@ Möchtest du zu diesem Konto wechseln?</value>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Konto abgemeldet.</value>
   </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization requires you to set a master password.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Richte eine Entsperroption ein, um deine Aktion bei Tresor-Timeout zu ändern.</value>
+  </data>
 </root>

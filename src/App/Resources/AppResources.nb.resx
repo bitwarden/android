@@ -946,7 +946,7 @@ Skanning skjer automatisk.</value>
     <value>Du kan ikke bruke denne funksjonen før du oppdaterer krypteringsnøkkelen din.</value>
   </data>
   <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
-    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+    <value>Krypteringsnøkkelmigrasjon kreves. Logg inn gjennom web-hvelvet ditt for å oppdatere krypteringsnøkkelen din.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Lær mer</value>
@@ -2861,5 +2861,14 @@ Vil du bytte til denne kontoen?</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Konto logget ut.</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization requires you to set a master password.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Set up an unlock option to change your vault timeout action.</value>
   </data>
 </root>

@@ -2861,4 +2861,13 @@
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Ви вийшли з облікового запису.</value>
   </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization requires you to set a master password.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Налаштуйте спосіб розблокування, щоб змінити час очікування сховища.</value>
+  </data>
 </root>

@@ -2861,4 +2861,13 @@
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>アカウントからログアウトしました。</value>
   </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization requires you to set a master password.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>保管庫のタイムアウト動作を変更するには、ロック解除方法を設定してください。</value>
+  </data>
 </root>

@@ -2861,4 +2861,13 @@ Voleu canviar a aquest compte?</value>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>S'ha tancat la sessió del compte.</value>
   </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Els permisos de la vostra organització s'han actualitzat, cal que establiu una contrasenya mestra.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>La vostra organització requereix que establiu una contrasenya mestra.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Configura una opció de desbloqueig per canviar l'acció de temps d'espera de la caixa forta.</value>
+  </data>
 </root>

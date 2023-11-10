@@ -2860,4 +2860,13 @@ Deseja mudar para esta conta?</value>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Conta com sessão terminada.</value>
   </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>As permissões da sua organização foram atualizadas, exigindo a definição de uma palavra-passe mestra.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>A sua organização exige a definição de uma palavra-passe mestra.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Configure uma opção de desbloqueio para alterar a ação de tempo limite do seu cofre.</value>
+  </data>
 </root>
