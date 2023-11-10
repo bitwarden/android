@@ -2861,4 +2861,13 @@ select Add TOTP to store the key safely</value>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Акаунтът е отписан.</value>
   </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization requires you to set a master password.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Задайте начин за отключване, за да може да промените действието при изтичане на времето за достъп до трезора.</value>
+  </data>
 </root>

@@ -2861,4 +2861,13 @@ Vil du skifte til denne konto?</value>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Konto logget ud.</value>
   </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Organisationstilladelserne er blevet opdateret, og der kræves nu oprettelse af en hovedadgangskode.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Organisationen kræver, at der oprettes en hovedadgangskode.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Opsæt en oplåsningsmetode for at ændre Bokstimeouthandlingen.</value>
+  </data>
 </root>
