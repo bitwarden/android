@@ -1,10 +1,7 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Controls
 {
@@ -26,7 +23,7 @@ namespace Bit.App.Controls
         {
             InitializeComponent();
 
-            var fontScale = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService").GetSystemFontSizeScale();
+            var fontScale = ServiceContainer.Resolve<IDeviceActionService>().GetSystemFontSizeScale();
             _iconColumn.Width = new GridLength(ICON_COLUMN_DEFAULT_WIDTH * fontScale, GridUnitType.Absolute);
             _iconImage.WidthRequest = ICON_IMAGE_DEFAULT_WIDTH * fontScale;
             _iconImage.HeightRequest = ICON_IMAGE_DEFAULT_WIDTH * fontScale;
@@ -53,21 +50,10 @@ namespace Bit.App.Controls
         protected override void OnPropertyChanged(string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
-            if (propertyName == CipherProperty.PropertyName)
+
+            if (BindingContext is CipherViewCellViewModel cipherViewCellViewModel && propertyName == WebsiteIconsEnabledProperty.PropertyName)
             {
-                if (Cipher == null)
-                {
-                    return;
-                }
-                BindingContext = new CipherViewCellViewModel(Cipher, WebsiteIconsEnabled ?? false);
-            }
-            else if (propertyName == WebsiteIconsEnabledProperty.PropertyName)
-            {
-                if (Cipher == null)
-                {
-                    return;
-                }
-                ((CipherViewCellViewModel)BindingContext).WebsiteIconsEnabled = WebsiteIconsEnabled ?? false;
+                cipherViewCellViewModel.WebsiteIconsEnabled = WebsiteIconsEnabled ?? false;
             }
         }
 

@@ -32,7 +32,7 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <u:InverseBoolConverter x:Key="inverseBool" />
+            <controls:CipherViewToCipherViewCellViewModelConverter x:Key="cipherViewToCipherViewCellViewModel" />
 
             <ToolbarItem x:Name="_syncItem" x:Key="syncItem" Text="{u:I18n Sync}"
                          Clicked="Sync_Clicked" Order="Secondary" />
@@ -47,7 +47,7 @@
             <DataTemplate x:Key="cipherTemplate"
                           x:DataType="pages:GroupingsPageListItem">
                 <controls:CipherViewCell
-                    Cipher="{Binding Cipher}"
+                    BindingContext="{Binding Cipher, Converter={StaticResource cipherViewToCipherViewCellViewModel}}"
                     ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}"
                     WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}" />
             </DataTemplate>

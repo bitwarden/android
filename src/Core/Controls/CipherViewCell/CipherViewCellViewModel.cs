@@ -1,9 +1,24 @@
-﻿using Bit.App.Utilities;
+﻿using System.Globalization;
+using Bit.App.Utilities;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 
 namespace Bit.App.Controls
 {
+    public class CipherViewToCipherViewCellViewModelConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is CipherView cipher)
+            {
+                return new CipherViewCellViewModel(cipher, false);
+            }
+            return null;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
+
     public class CipherViewCellViewModel : ExtendedViewModel
     {
         private CipherView _cipher;

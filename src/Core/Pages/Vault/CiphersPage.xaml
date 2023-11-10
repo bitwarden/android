@@ -18,6 +18,8 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
+            <controls:CipherViewToCipherViewCellViewModelConverter x:Key="cipherViewToCipherViewCellViewModel" />
+
             <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
                          x:Name="_closeItem" x:Key="closeItem" />
             <StackLayout
@@ -107,11 +109,14 @@
                 AutomationId="CipherList">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="views:CipherView">
-                    <controls:CipherViewCell
-                        Cipher="{Binding .}"
-                        ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}"
-                        WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
-                        />
+                    <!--Binding context is not applied if the cell is the direct child, check for context https://github.com/dotnet/maui/issues/9131-->
+                    <Grid>
+                        <controls:CipherViewCell
+                            BindingContext="{Binding ., Converter={StaticResource cipherViewToCipherViewCellViewModel}}"
+                            ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}"
+                            WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
+                            />
+                    </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </controls:ExtendedCollectionView>
