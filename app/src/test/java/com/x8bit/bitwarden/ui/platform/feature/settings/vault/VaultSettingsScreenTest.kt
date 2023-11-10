@@ -11,32 +11,32 @@ import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class VaultScreenTest : BaseComposeTest() {
+class VaultSettingsScreenTest : BaseComposeTest() {
 
     @Test
     fun `on back click should send BackClick`() {
-        val viewModel: VaultViewModel = mockk {
+        val viewModel: VaultSettingsViewModel = mockk {
             every { eventFlow } returns emptyFlow()
-            every { trySendAction(VaultAction.BackClick) } returns Unit
+            every { trySendAction(VaultSettingsAction.BackClick) } returns Unit
         }
         composeTestRule.setContent {
-            VaultScreen(
+            VaultSettingsScreen(
                 viewModel = viewModel,
                 onNavigateBack = { },
             )
         }
         composeTestRule.onNodeWithContentDescription("Back").performClick()
-        verify { viewModel.trySendAction(VaultAction.BackClick) }
+        verify { viewModel.trySendAction(VaultSettingsAction.BackClick) }
     }
 
     @Test
     fun `on NavigateAbout should call onNavigateToVault`() {
         var haveCalledNavigateBack = false
-        val viewModel = mockk<VaultViewModel> {
-            every { eventFlow } returns flowOf(VaultEvent.NavigateBack)
+        val viewModel = mockk<VaultSettingsViewModel> {
+            every { eventFlow } returns flowOf(VaultSettingsEvent.NavigateBack)
         }
         composeTestRule.setContent {
-            VaultScreen(
+            VaultSettingsScreen(
                 viewModel = viewModel,
                 onNavigateBack = { haveCalledNavigateBack = true },
             )
