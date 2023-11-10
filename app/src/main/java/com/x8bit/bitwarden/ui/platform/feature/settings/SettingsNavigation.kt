@@ -15,8 +15,8 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.autoFillDestina
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.navigateToAutoFill
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.navigateToOther
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.otherDestination
-import com.x8bit.bitwarden.ui.platform.feature.settings.vault.navigateToVault
-import com.x8bit.bitwarden.ui.platform.feature.settings.vault.vaultDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.vault.navigateToVaultSettings
+import com.x8bit.bitwarden.ui.platform.feature.settings.vault.vaultSettingsDestination
 import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
 
 const val SETTINGS_GRAPH_ROUTE: String = "settings_graph"
@@ -45,7 +45,7 @@ fun NavGraphBuilder.settingsGraph(
                 onNavigateToAppearance = { navController.navigateToAppearance() },
                 onNavigateToAutoFill = { navController.navigateToAutoFill() },
                 onNavigateToOther = { navController.navigateToOther() },
-                onNavigateToVault = { navController.navigateToVault() },
+                onNavigateToVault = { navController.navigateToVaultSettings() },
             )
         }
         aboutDestination(onNavigateBack = { navController.popBackStack() })
@@ -53,7 +53,7 @@ fun NavGraphBuilder.settingsGraph(
         appearanceDestination(onNavigateBack = { navController.popBackStack() })
         autoFillDestination(onNavigateBack = { navController.popBackStack() })
         otherDestination(onNavigateBack = { navController.popBackStack() })
-        vaultDestination(onNavigateBack = { navController.popBackStack() })
+        vaultSettingsDestination(onNavigateBack = { navController.popBackStack() })
     }
 }
 

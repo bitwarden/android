@@ -25,13 +25,13 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VaultScreen(
+fun VaultSettingsScreen(
     onNavigateBack: () -> Unit,
-    viewModel: VaultViewModel = hiltViewModel(),
+    viewModel: VaultSettingsViewModel = hiltViewModel(),
 ) {
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            VaultEvent.NavigateBack -> onNavigateBack.invoke()
+            VaultSettingsEvent.NavigateBack -> onNavigateBack.invoke()
         }
     }
 
@@ -47,7 +47,7 @@ fun VaultScreen(
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultAction.BackClick) }
+                    { viewModel.trySendAction(VaultSettingsAction.BackClick) }
                 },
             )
         },
