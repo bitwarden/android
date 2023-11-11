@@ -24,6 +24,9 @@ namespace Bit.Core.Services
             {
                 return null;
             }
+            
+            key = key.Trim();
+
             var period = Constants.TotpDefaultTimer;
             var alg = CryptoHashAlgorithm.Sha1;
             var digits = 6;
