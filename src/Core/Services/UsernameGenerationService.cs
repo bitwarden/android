@@ -148,6 +148,12 @@ namespace Bit.Core.Services
                                     .GenerateAsync(_apiService, forwardedEmailOptions);
             }
 
+            if (options.ServiceType == ForwardedEmailServiceType.Fastmail)
+            {
+                return await new FastmailForwarder()
+                                    .GenerateAsync(_apiService, (FastmailForwarderOptions)options.GetForwarderOptions());
+            }
+
             BaseForwarder<ForwarderOptions> simpleForwarder = null;
 
             switch (options.ServiceType)
@@ -160,9 +166,6 @@ namespace Bit.Core.Services
                     break;
                 case ForwardedEmailServiceType.DuckDuckGo:
                     simpleForwarder = new DuckDuckGoForwarder();
-                    break;
-                case ForwardedEmailServiceType.Fastmail:
-                    simpleForwarder = new FastmailForwarder();
                     break;
                 default:
                     _logger.Value.Error($"Error UsernameGenerationService: ForwardedEmailServiceType {options.ServiceType} not implemented.");
