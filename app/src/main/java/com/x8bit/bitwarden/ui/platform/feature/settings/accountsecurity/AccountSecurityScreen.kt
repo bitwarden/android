@@ -52,6 +52,7 @@ import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 @Composable
 fun AccountSecurityScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToDeleteAccount: () -> Unit,
     viewModel: AccountSecurityViewModel = hiltViewModel(),
     intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
 ) {
@@ -61,6 +62,8 @@ fun AccountSecurityScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             AccountSecurityEvent.NavigateBack -> onNavigateBack()
+
+            AccountSecurityEvent.NavigateToDeleteAccount -> onNavigateToDeleteAccount()
 
             AccountSecurityEvent.NavigateToFingerprintPhrase -> {
                 intentHandler.launchUri("http://bitwarden.com/help/fingerprint-phrase".toUri())

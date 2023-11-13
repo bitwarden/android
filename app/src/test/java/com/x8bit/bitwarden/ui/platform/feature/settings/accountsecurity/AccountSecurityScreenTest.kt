@@ -33,6 +33,7 @@ import org.junit.Test
 class AccountSecurityScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
+    private var onNavigateToDeleteAccountCalled = false
 
     private val intentHandler = mockk<IntentHandler> {
         every { launchUri(any()) } just runs
@@ -51,6 +52,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             AccountSecurityScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToDeleteAccount = { onNavigateToDeleteAccountCalled = true },
                 viewModel = viewModel,
                 intentHandler = intentHandler,
             )
@@ -234,6 +236,12 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     fun `on NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(AccountSecurityEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `on NavigateToDeleteAccount should call onNavigateToDeleteAccountCalled`() {
+        mutableEventFlow.tryEmit(AccountSecurityEvent.NavigateToDeleteAccount)
+        assertTrue(onNavigateToDeleteAccountCalled)
     }
 
     @Test

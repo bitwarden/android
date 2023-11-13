@@ -13,6 +13,7 @@ private const val ACCOUNT_SECURITY_ROUTE = "settings_account_security"
  */
 fun NavGraphBuilder.accountSecurityDestination(
     onNavigateBack: () -> Unit,
+    onNavigateToDeleteAccount: () -> Unit,
 ) {
     composable(
         route = ACCOUNT_SECURITY_ROUTE,
@@ -21,7 +22,10 @@ fun NavGraphBuilder.accountSecurityDestination(
         popEnterTransition = TransitionProviders.Enter.pushLeft,
         popExitTransition = TransitionProviders.Exit.pushRight,
     ) {
-        AccountSecurityScreen(onNavigateBack = onNavigateBack)
+        AccountSecurityScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateToDeleteAccount = onNavigateToDeleteAccount,
+        )
     }
 }
 

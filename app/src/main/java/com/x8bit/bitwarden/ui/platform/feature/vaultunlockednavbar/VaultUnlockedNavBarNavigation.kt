@@ -24,6 +24,7 @@ fun NavController.navigateToVaultUnlockedNavBar(navOptions: NavOptions? = null) 
 fun NavGraphBuilder.vaultUnlockedNavBarDestination(
     onNavigateToVaultAddItem: () -> Unit,
     onNavigateToNewSend: () -> Unit,
+    onNavigateToDeleteAccount: () -> Unit,
 ) {
     composable(
         route = VAULT_UNLOCKED_NAV_BAR_ROUTE,
@@ -35,6 +36,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
         VaultUnlockedNavBarScreen(
             onNavigateToVaultAddItem = onNavigateToVaultAddItem,
             onNavigateToNewSend = onNavigateToNewSend,
+            onNavigateToDeleteAccount = onNavigateToDeleteAccount,
         )
     }
 }

@@ -67,6 +67,7 @@ fun VaultUnlockedNavBarScreen(
     navController: NavHostController = rememberNavController(),
     onNavigateToVaultAddItem: () -> Unit,
     onNavigateToNewSend: () -> Unit,
+    onNavigateToDeleteAccount: () -> Unit,
 ) {
     EventsEffect(viewModel = viewModel) { event ->
         navController.apply {
@@ -94,6 +95,7 @@ fun VaultUnlockedNavBarScreen(
         navController = navController,
         navigateToVaultAddItem = onNavigateToVaultAddItem,
         navigateToNewSend = onNavigateToNewSend,
+        navigateToDeleteAccount = onNavigateToDeleteAccount,
         generatorTabClickedAction = {
             viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick)
         },
@@ -122,6 +124,7 @@ private fun VaultUnlockedNavBarScaffold(
     settingsTabClickedAction: () -> Unit,
     navigateToVaultAddItem: () -> Unit,
     navigateToNewSend: () -> Unit,
+    navigateToDeleteAccount: () -> Unit,
 ) {
     var shouldDimNavBar by remember { mutableStateOf(false) }
 
@@ -181,7 +184,10 @@ private fun VaultUnlockedNavBarScaffold(
             )
             sendGraph(onNavigateToNewSend = navigateToNewSend)
             generatorDestination()
-            settingsGraph(navController)
+            settingsGraph(
+                navController = navController,
+                onNavigateToDeleteAccount = navigateToDeleteAccount,
+            )
         }
     }
 }
