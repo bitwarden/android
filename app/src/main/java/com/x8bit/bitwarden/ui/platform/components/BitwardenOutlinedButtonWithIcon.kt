@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.components
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -41,18 +42,17 @@ fun BitwardenOutlinedButtonWithIcon(
             vertical = 10.dp,
             horizontal = 24.dp,
         ),
+        colors = ButtonDefaults.outlinedButtonColors(),
     ) {
         Icon(
             painter = icon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .padding(end = 8.dp),
         )
 
         Text(
             text = label,
-            color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.labelLarge,
         )
     }

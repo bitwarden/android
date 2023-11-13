@@ -43,22 +43,17 @@ fun BitwardenFilledButtonWithIcon(
             vertical = 10.dp,
             horizontal = 24.dp,
         ),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-        ),
+        colors = ButtonDefaults.buttonColors(),
     ) {
         Icon(
             painter = icon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSecondaryContainer,
             modifier = Modifier
                 .padding(end = 8.dp),
         )
 
         Text(
             text = label,
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
             style = MaterialTheme.typography.labelLarge,
         )
     }
