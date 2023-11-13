@@ -32,10 +32,12 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `on AccountSwitchClick for the active account should do nothing`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            VaultAction.AccountSwitchClick(
-                accountSummary = mockk {
-                    every { status } returns AccountSummary.Status.ACTIVE
-                },
+            viewModel.trySendAction(
+                VaultAction.AccountSwitchClick(
+                    accountSummary = mockk {
+                        every { status } returns AccountSummary.Status.ACTIVE
+                    },
+                ),
             )
             expectNoEvents()
         }
