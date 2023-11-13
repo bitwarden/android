@@ -1,18 +1,21 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ViewCell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-          xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
           x:Class="Bit.App.Controls.AccountViewCell"
           xmlns:controls="clr-namespace:Bit.App.Controls"
           xmlns:u="clr-namespace:Bit.App.Utilities"
-          xmlns:core="clr-namespace:Bit.Core"
+          xmlns:core="clr-namespace:Bit.Core" 
+          xmlns:behaviors="clr-namespace:CommunityToolkit.Maui.Behaviors"
           x:Name="_accountView"
           x:DataType="controls:AccountViewCellViewModel">
-    <!--TODO: [MAUI-Migration] add long press ( https://github.com/CommunityToolkit/Maui/issues/86 )
-          xct:TouchEffect.LongPressCommand="{Binding LongPressAccountCommand, Source={x:Reference _accountView}}"
-          xct:TouchEffect.LongPressCommandParameter="{Binding .}"-->
     <Grid RowSpacing="0"
           ColumnSpacing="0">
+        <Grid.Behaviors>
+            <!--TODO: [MAUI-Migration] Currently using a "copied" implementation from the github issue in the link until they add this to the Community Toolkit ( https://github.com/CommunityToolkit/Maui/issues/86 ) -->
+            <behaviors:TouchBehavior NativeAnimation="True" 
+                                     LongPressCommand="{Binding LongPressAccountCommand, Source={x:Reference _accountView}}" 
+                                     LongPressCommandParameter="{Binding .BindingContext, Source={x:Reference _accountView}}" />
+        </Grid.Behaviors>
         <Grid.GestureRecognizers>
             <TapGestureRecognizer Command="{Binding SelectAccountCommand, Source={x:Reference _accountView}}" CommandParameter="{Binding .}" />
         </Grid.GestureRecognizers>

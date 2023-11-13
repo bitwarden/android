@@ -172,7 +172,7 @@ namespace Bit.App.Controls
 
         private async Task LongPressAccountAsync(AccountViewCellViewModel item)
         {
-            if (!LongPressAccountEnabled || !item.IsAccount)
+            if (!LongPressAccountEnabled || item == null || !item.IsAccount)
             {
                 return;
             }

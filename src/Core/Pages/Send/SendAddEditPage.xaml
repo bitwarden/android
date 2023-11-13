@@ -248,7 +248,7 @@
                                     AutomationId="SendHideTextByDefaultToggle" />
                             </StackLayout>
                         </StackLayout>
-                            <!--TODO: [MAUI-Migration] xct:TouchEffect.Command="{Binding ToggleOptionsCommand}" for below ( https://github.com/CommunityToolkit/Maui/issues/86 ) -->
+                        <!--TODO: [MAUI-Migration] xct:TouchEffect.Command="{Binding ToggleOptionsCommand}" for below ( https://github.com/CommunityToolkit/Maui/issues/86 ) -->
                         <StackLayout
                             Orientation="Horizontal"
                             Spacing="0"
