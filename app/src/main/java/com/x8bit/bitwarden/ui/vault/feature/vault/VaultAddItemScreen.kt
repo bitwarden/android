@@ -29,8 +29,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButtonWithIcon
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButton
+import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButtonWithIcon
 import com.x8bit.bitwarden.ui.platform.components.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
@@ -236,7 +236,7 @@ private fun AddLoginTypeItemContent(
     )
 
     Spacer(modifier = Modifier.height(16.dp))
-    BitwardenFilledButtonWithIcon(
+    BitwardenFilledTonalButtonWithIcon(
         label = stringResource(id = R.string.setup_totp),
         icon = painterResource(id = R.drawable.ic_light_bulb),
         onClick = loginItemTypeHandlers.onSetupTotpClick,
