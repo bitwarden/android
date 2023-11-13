@@ -156,9 +156,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            if (item.Send != null)
+            if (item.SendItemViewModel != null)
             {
-                await _vm.SelectSendAsync(item.Send);
+                await _vm.SelectSendAsync(item.SendItemViewModel.Send);
             }
             else if (item.Type != null)
             {

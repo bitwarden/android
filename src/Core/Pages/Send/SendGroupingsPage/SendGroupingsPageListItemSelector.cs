@@ -18,7 +18,7 @@ namespace Bit.App.Pages
 
             if (item is SendGroupingsPageListItem listItem)
             {
-                return listItem.Send != null ? SendTemplate : GroupTemplate;
+                return listItem.SendItemViewModel != null ? SendTemplate : GroupTemplate;
             }
             return null;
         }

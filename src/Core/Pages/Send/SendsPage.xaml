@@ -71,11 +71,9 @@
                ExtraDataForLogging="Sends Page"
                AutomationId="SendCellList">
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="views:SendView">
+                <DataTemplate x:DataType="controls:SendViewCellViewModel">
                     <controls:SendViewCell
-                        Send="{Binding .}"
                         ButtonCommand="{Binding BindingContext.SendOptionsCommand, Source={x:Reference _page}}"
-                        ShowOptions="{Binding BindingContext.SendEnabled, Source={x:Reference _page}}"
                         AutomationId="SendCell" />
                 </DataTemplate>
             </CollectionView.ItemTemplate>

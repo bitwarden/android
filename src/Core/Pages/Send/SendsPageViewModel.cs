@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Bit.App.Controls;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -22,13 +17,13 @@ namespace Bit.App.Pages
 
         public SendsPageViewModel()
         {
-            _searchService = ServiceContainer.Resolve<ISearchService>("searchService");
-            Sends = new ExtendedObservableCollection<SendView>();
+            _searchService = ServiceContainer.Resolve<ISearchService>();
+            Sends = new ExtendedObservableCollection<SendViewCellViewModel>();
             SendOptionsCommand = new Command<SendView>(SendOptionsAsync);
         }
 
         public Command SendOptionsCommand { get; set; }
-        public ExtendedObservableCollection<SendView> Sends { get; set; }
+        public ExtendedObservableCollection<SendViewCellViewModel> Sends { get; set; }
         public Func<SendView, bool> Filter { get; set; }
 
         public bool SendEnabled
@@ -102,9 +97,9 @@ namespace Bit.App.Pages
                 {
                     sends = new List<SendView>();
                 }
-                Device.BeginInvokeOnMainThread(() =>
+                MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    Sends.ResetWithRange(sends);
+                    Sends.ResetWithRange(sends.Select(s => new SendViewCellViewModel(s, SendEnabled)).ToList());
                     ShowNoData = searchable && Sends.Count == 0;
                     ShowList = searchable && !ShowNoData;
                 });

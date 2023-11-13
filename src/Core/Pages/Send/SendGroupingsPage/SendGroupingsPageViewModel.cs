@@ -153,36 +153,20 @@ namespace Bit.App.Pages
                     groupedSends.Add(new SendGroupingsPageListGroup(
                         AppResources.Types, 0, uppercaseGroupNames, true)
                     {
-                        new SendGroupingsPageListItem
-                        {
-                            Type = SendType.Text,
-                            ItemCount = (_typeCounts.ContainsKey(SendType.Text) ?
-                                _typeCounts[SendType.Text] : 0).ToString("N0")
-                        },
-                        new SendGroupingsPageListItem
-                        {
-                            Type = SendType.File,
-                            ItemCount = (_typeCounts.ContainsKey(SendType.File) ?
-                                _typeCounts[SendType.File] : 0).ToString("N0")
-                        },
+                        new SendGroupingsPageListItem(SendType.Text, _typeCounts.TryGetValue(SendType.Text, out var textCountValue) ? textCountValue : 0),
+                        new SendGroupingsPageListItem(SendType.File, _typeCounts.TryGetValue(SendType.File, out var fileCountValue) ? fileCountValue : 0)
                     });
                 }
 
-                if (Sends?.Any() ?? false)
+                if (Sends?.Any() == true)
                 {
-                    var sendsListItems = Sends.Select(s => new SendGroupingsPageListItem
-                    {
-                        Send = s,
-                        ShowOptions = SendEnabled
-                    }).ToList();
+                    var sendsListItems = Sends.Select(s => new SendGroupingsPageListItem(s, SendEnabled)).ToList();
                     groupedSends.Add(new SendGroupingsPageListGroup(sendsListItems,
                         MainPage ? AppResources.AllSends : AppResources.Sends, sendsListItems.Count,
                         uppercaseGroupNames, !MainPage));
                 }
 
-                // TODO: refactor this
-                // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-                                if (Device.RuntimePlatform == Device.Android
+                if (DeviceInfo.Platform == DevicePlatform.Android
                     ||
                     GroupedSends.Any())
                 {

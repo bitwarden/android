@@ -37,12 +37,13 @@
                          SemanticProperties.Description="{u:I18n AddItem}" />
 
             <DataTemplate x:Key="sendTemplate"
-                          x:DataType="pages:SendGroupingsPageListItem">
-                <controls:SendViewCell
-                    Send="{Binding Send}"
-                    ButtonCommand="{Binding BindingContext.SendOptionsCommand, Source={x:Reference _page}}"
-                    ShowOptions="{Binding BindingContext.SendEnabled, Source={x:Reference _page}}"
-                    AutomationId="SendCell" />
+                          x:DataType="pages:SendGroupingsPageListItem"> 
+                <Grid>
+                    <controls:SendViewCell
+                        BindingContext="{Binding SendItemViewModel}"
+                        ButtonCommand="{Binding BindingContext.SendOptionsCommand, Source={x:Reference _page}}"
+                        AutomationId="SendCell" />
+                </Grid>
             </DataTemplate>
 
             <DataTemplate x:Key="sendGroupTemplate"

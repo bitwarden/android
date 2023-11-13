@@ -108,9 +108,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            if (e.CurrentSelection?.FirstOrDefault() is SendView send)
+            if (e.CurrentSelection?.FirstOrDefault() is SendViewCellViewModel sendVM)
             {
-                await _vm.SelectSendAsync(send);
+                await _vm.SelectSendAsync(sendVM.Send);
             }
         }
 
