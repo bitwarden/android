@@ -62,14 +62,11 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on DeleteAccountClick should emit ShowToast`() = runTest {
+    fun `on DeleteAccountClick should emit NavigateToDeleteAccount`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(AccountSecurityAction.DeleteAccountClick)
-            assertEquals(
-                AccountSecurityEvent.ShowToast("Not yet implemented.".asText()),
-                awaitItem(),
-            )
+            assertEquals(AccountSecurityEvent.NavigateToDeleteAccount, awaitItem())
         }
     }
 

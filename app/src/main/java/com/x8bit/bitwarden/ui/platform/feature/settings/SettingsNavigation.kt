@@ -27,6 +27,7 @@ private const val SETTINGS_ROUTE: String = "settings"
  */
 fun NavGraphBuilder.settingsGraph(
     navController: NavController,
+    onNavigateToDeleteAccount: () -> Unit,
 ) {
     navigation(
         startDestination = SETTINGS_ROUTE,
@@ -49,7 +50,10 @@ fun NavGraphBuilder.settingsGraph(
             )
         }
         aboutDestination(onNavigateBack = { navController.popBackStack() })
-        accountSecurityDestination(onNavigateBack = { navController.popBackStack() })
+        accountSecurityDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToDeleteAccount = onNavigateToDeleteAccount,
+        )
         appearanceDestination(onNavigateBack = { navController.popBackStack() })
         autoFillDestination(onNavigateBack = { navController.popBackStack() })
         otherDestination(onNavigateBack = { navController.popBackStack() })

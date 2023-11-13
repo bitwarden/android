@@ -87,8 +87,7 @@ class AccountSecurityViewModel @Inject constructor(
     }
 
     private fun handleDeleteAccountClick() {
-        // TODO BIT-1031: Navigate to delete account
-        sendEvent(AccountSecurityEvent.ShowToast("Not yet implemented.".asText()))
+        sendEvent(AccountSecurityEvent.NavigateToDeleteAccount)
     }
 
     private fun handleDismissDialog() {
@@ -214,6 +213,11 @@ sealed class AccountSecurityEvent {
      * Navigate back.
      */
     data object NavigateBack : AccountSecurityEvent()
+
+    /**
+     * Navigate to the delete account screen.
+     */
+    data object NavigateToDeleteAccount : AccountSecurityEvent()
 
     /**
      * Navigate to fingerprint phrase information.
