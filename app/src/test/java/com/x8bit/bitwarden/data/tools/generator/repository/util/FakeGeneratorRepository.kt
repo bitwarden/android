@@ -1,9 +1,9 @@
-package com.x8bit.bitwarden.data.generator.repository.util
+package com.x8bit.bitwarden.data.tools.generator.repository.util
 
 import com.bitwarden.core.PasswordGeneratorRequest
-import com.x8bit.bitwarden.data.generator.repository.GeneratorRepository
-import com.x8bit.bitwarden.data.generator.repository.model.GeneratedPasswordResult
-import com.x8bit.bitwarden.data.generator.repository.model.PasswordGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.PasswordGenerationOptions
 
 /**
  * A fake implementation of [GeneratorRepository] for testing purposes.

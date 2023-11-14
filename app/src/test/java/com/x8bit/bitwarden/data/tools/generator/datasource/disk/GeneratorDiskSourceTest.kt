@@ -1,6 +1,6 @@
-package com.x8bit.bitwarden.data.generator.datasource.disk
+package com.x8bit.bitwarden.data.tools.generator.datasource.disk
 
-import com.x8bit.bitwarden.data.generator.repository.model.PasswordGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.PasswordGenerationOptions
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString

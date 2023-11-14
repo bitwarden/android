@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.generator.datasource.sdk
+package com.x8bit.bitwarden.data.tools.generator.datasource.sdk
 
 import com.bitwarden.core.PasswordGeneratorRequest
 

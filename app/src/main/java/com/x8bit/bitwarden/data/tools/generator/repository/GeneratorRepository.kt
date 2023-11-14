@@ -1,8 +1,8 @@
-package com.x8bit.bitwarden.data.generator.repository
+package com.x8bit.bitwarden.data.tools.generator.repository
 
 import com.bitwarden.core.PasswordGeneratorRequest
-import com.x8bit.bitwarden.data.generator.repository.model.GeneratedPasswordResult
-import com.x8bit.bitwarden.data.generator.repository.model.PasswordGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.PasswordGenerationOptions
 
 /**
  * Responsible for managing generator data.

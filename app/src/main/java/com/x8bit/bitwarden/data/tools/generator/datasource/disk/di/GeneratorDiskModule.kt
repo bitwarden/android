@@ -1,8 +1,8 @@
-package com.x8bit.bitwarden.data.generator.datasource.disk.di
+package com.x8bit.bitwarden.data.tools.generator.datasource.disk.di
 
 import android.content.SharedPreferences
-import com.x8bit.bitwarden.data.generator.datasource.disk.GeneratorDiskSource
-import com.x8bit.bitwarden.data.generator.datasource.disk.GeneratorDiskSourceImpl
+import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
+import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
