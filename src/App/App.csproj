@@ -103,7 +103,7 @@
 		<PackageReference Include="FFImageLoadingCompat.Maui" Version="0.1.1" />
 		<PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.6" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
-		<PackageReference Include="PCLCrypto" Version="2.0.147" />
+		<PackageReference Include="PCLCrypto" Version="2.1.40-alpha" />
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 	</ItemGroup>
 
