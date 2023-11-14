@@ -1,9 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
-
-namespace Bit.App.Pages
+﻿namespace Bit.App.Pages
 {
     public partial class RegisterPage : BaseContentPage
     {
@@ -16,18 +11,17 @@ namespace Bit.App.Pages
             InitializeComponent();
             _vm = BindingContext as RegisterPageViewModel;
             _vm.Page = this;
-            _vm.RegistrationSuccess = () => Device.BeginInvokeOnMainThread(async () => await RegistrationSuccessAsync(homePage));
+            _vm.RegistrationSuccess = () => MainThread.BeginInvokeOnMainThread(async () => await RegistrationSuccessAsync(homePage));
             _vm.CloseAction = async () =>
             {
                 await Navigation.PopModalAsync();
             };
             MasterPasswordEntry = _masterPassword;
             ConfirmMasterPasswordEntry = _confirmMasterPassword;
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.Android)
-            {
-                ToolbarItems.RemoveAt(0);
-            }
+
+#if ANDROID
+            ToolbarItems.RemoveAt(0);
+#endif
 
             _email.ReturnType = ReturnType.Next;
             _email.ReturnCommand = new Command(() => _masterPassword.Focus());
@@ -40,14 +34,17 @@ namespace Bit.App.Pages
         public Entry MasterPasswordEntry { get; set; }
         public Entry ConfirmMasterPasswordEntry { get; set; }
 
-        protected override void OnAppearing()
+        protected override bool ShouldCheckToPreventOnNavigatedToCalledTwice => true;
+
+        protected override Task InitOnNavigatedToAsync()
         {
-            base.OnAppearing();
             if (!_inputFocused)
             {
                 RequestFocus(_email);
                 _inputFocused = true;
             }
+
+            return Task.CompletedTask;
         }
 
         private async void Submit_Clicked(object sender, EventArgs e)

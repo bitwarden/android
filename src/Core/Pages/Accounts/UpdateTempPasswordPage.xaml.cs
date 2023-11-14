@@ -1,9 +1,6 @@
-﻿using System;
+﻿using Bit.Core.Abstractions;
 using Bit.Core.Resources.Localization;
-using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -17,8 +14,8 @@ namespace Bit.App.Pages
         public UpdateTempPasswordPage()
         {
             // Service Init
-            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _messagingService = ServiceContainer.Resolve<IMessagingService>();
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
 
             // Binding
             InitializeComponent();
@@ -30,9 +27,9 @@ namespace Bit.App.Pages
             // Actions Declaration
             _vm.LogOutAction = () =>
             {
-                _messagingService.Send("logout");
+                _messagingService.Send(AccountsManagerMessageCommands.LOGOUT);
             };
-            _vm.UpdateTempPasswordSuccessAction = () => Device.BeginInvokeOnMainThread(UpdateTempPasswordSuccess);
+            _vm.UpdateTempPasswordSuccessAction = () => MainThread.BeginInvokeOnMainThread(UpdateTempPasswordSuccess);
 
             // Link fields that will be referenced in codebehind
             MasterPasswordEntry = _masterPassword;
@@ -48,9 +45,10 @@ namespace Bit.App.Pages
         public Entry MasterPasswordEntry { get; set; }
         public Entry ConfirmMasterPasswordEntry { get; set; }
 
-        protected override async void OnAppearing()
+        protected override bool ShouldCheckToPreventOnNavigatedToCalledTwice => true;
+
+        protected override async Task InitOnNavigatedToAsync()
         {
-            base.OnAppearing();
             await LoadOnAppearedAsync(_mainLayout, true, async () =>
             {
                 await _vm.InitAsync(true);
@@ -81,7 +79,7 @@ namespace Bit.App.Pages
 
         private void UpdateTempPasswordSuccess()
         {
-            _messagingService.Send("logout");
+            _messagingService.Send(AccountsManagerMessageCommands.LOGOUT);
         }
     }
 }

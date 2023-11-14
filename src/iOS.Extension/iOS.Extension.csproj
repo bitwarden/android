@@ -73,10 +73,6 @@
     </Compile>
     <BundleResource Include="Resources\MaterialIcons_Regular.ttf" />
     <BundleResource Include="Resources\bwi-font.ttf" />
-    <Compile Include="TestViewController.cs" />
-    <Compile Include="TestViewController.designer.cs">
-      <DependentUpon>TestViewController.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />

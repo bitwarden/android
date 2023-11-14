@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Bit.App.Models;
+﻿using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
     public partial class LoginApproveDevicePage : BaseContentPage
     {
-
         private readonly LoginApproveDeviceViewModel _vm;
         private readonly AppOptions _appOptions;
 
@@ -28,9 +22,11 @@ namespace Bit.App.Pages
             _appOptions = appOptions;
         }
 
-        protected override void OnAppearing()
+        protected override bool ShouldCheckToPreventOnNavigatedToCalledTwice => true;
+
+        protected override async Task InitOnNavigatedToAsync()
         {
-            _vm.InitAsync();
+            await _vm.InitAsync();
         }
 
         private async Task ContinueToVaultAsync()
@@ -62,4 +58,3 @@ namespace Bit.App.Pages
         }
     }
 }
-

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Bit.App.Models;
+﻿using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -20,16 +16,16 @@ namespace Bit.App.Pages
 
         public HomePage(AppOptions appOptions = null)
         {
-            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>();
             _appOptions = appOptions;
             InitializeComponent();
             _vm = BindingContext as HomeViewModel;
             _vm.Page = this;
             _vm.ShowCancelButton = _appOptions?.IosExtension ?? false;
             _vm.StartLoginAction = async () => await StartLoginAsync();
-            _vm.StartRegisterAction = () => Device.BeginInvokeOnMainThread(async () => await StartRegisterAsync());
-            _vm.StartSsoLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
-            _vm.StartEnvironmentAction = () => Device.BeginInvokeOnMainThread(async () => await StartEnvironmentAsync());
+            _vm.StartRegisterAction = () => MainThread.BeginInvokeOnMainThread(async () => await StartRegisterAsync());
+            _vm.StartSsoLoginAction = () => MainThread.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
+            _vm.StartEnvironmentAction = () => MainThread.BeginInvokeOnMainThread(async () => await StartEnvironmentAsync());
             _vm.CloseAction = async () =>
             {
                  await _accountListOverlay.HideAsync();
@@ -53,34 +49,42 @@ namespace Bit.App.Pages
             await Navigation.PushModalAsync(new NavigationPage(new LoginPage(email, _appOptions)));
         }
 
-        protected override async void OnAppearing()
+        protected override async void OnNavigatedTo(NavigatedToEventArgs args)
         {
-            base.OnAppearing();
-             _mainContent.Content = _mainLayout;
-            _accountAvatar?.OnAppearing();
+            base.OnNavigatedTo(args);
 
-            if (!_appOptions?.HideAccountSwitcher ?? false)
-            {
-                _vm.AvatarImageSource = await GetAvatarImageSourceAsync(false);
-            }
-            _broadcasterService.Subscribe(nameof(HomePage), (message) =>
-            {
-                if (message.Command is ThemeManager.UPDATED_THEME_MESSAGE_KEY)
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        UpdateLogo();
-                    });
-                }
-            });
+            await MainThread.InvokeOnMainThreadAsync(() => _mainContent.Content = _mainLayout);
+
             try
             {
+                _accountAvatar?.OnAppearing();
+
+                if (!_appOptions?.HideAccountSwitcher ?? false)
+                {
+                    await MainThread.InvokeOnMainThreadAsync(async () => _vm.AvatarImageSource = await GetAvatarImageSourceAsync(false));
+                }
+                _broadcasterService.Subscribe(nameof(HomePage), (message) =>
+                {
+                    if (message.Command is ThemeManager.UPDATED_THEME_MESSAGE_KEY)
+                    {
+                        MainThread.BeginInvokeOnMainThread(UpdateLogo);
+                    }
+                });
+
                 await _vm.UpdateEnvironment();
             }
             catch (Exception ex)
             {
                 _logger.Value?.Exception(ex);
             }
+        }
+
+        protected override void OnNavigatingFrom(NavigatingFromEventArgs args)
+        {
+            base.OnNavigatingFrom(args);
+
+            _broadcasterService?.Unsubscribe(nameof(HomePage));
+            _accountAvatar?.OnDisappearing();
         }
 
         protected override bool OnBackButtonPressed()
@@ -91,13 +95,6 @@ namespace Bit.App.Pages
                 return true;
             }
             return false;
-        }
-
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-            _broadcasterService.Unsubscribe(nameof(HomePage));
-             _accountAvatar?.OnDisappearing();
         }
 
         private void UpdateLogo()

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Bit.App.Models;
+﻿using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Enums;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -23,23 +18,25 @@ namespace Bit.App.Pages
             _vm.Email = email;
             _vm.AuthRequestType = authRequestType;
             _vm.AuthingWithSso = authingWithSso;
-            _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
-            _vm.LogInSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
-            _vm.UpdateTempPasswordAction = () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
+            _vm.StartTwoFactorAction = () => MainThread.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
+            _vm.LogInSuccessAction = () => MainThread.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
+            _vm.UpdateTempPasswordAction = () => MainThread.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.CloseAction = () => { Navigation.PopModalAsync(); };
 
             _vm.CreatePasswordlessLoginCommand.Execute(null);
         }
 
-        protected override void OnAppearing()
+        protected override bool ShouldCheckToPreventOnNavigatedToCalledTwice => true;
+
+        protected override Task InitOnNavigatedToAsync()
         {
-            base.OnAppearing();
             _vm.StartCheckLoginRequestStatus();
+            return Task.CompletedTask;
         }
 
-        protected override void OnDisappearing()
+        protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
         {
-            base.OnDisappearing();
+            base.OnNavigatedFrom(args);
             _vm.StopCheckLoginRequestStatus();
         }
 
@@ -66,4 +63,3 @@ namespace Bit.App.Pages
         }
     }
 }
-

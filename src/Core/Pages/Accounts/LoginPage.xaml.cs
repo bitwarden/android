@@ -64,16 +64,12 @@ namespace Bit.App.Pages
             }
         }
 
+        protected override bool ShouldCheckToPreventOnNavigatedToCalledTwice => true;
+
         public Entry MasterPasswordEntry { get; set; }
 
-        protected override async void OnNavigatedTo(NavigatedToEventArgs args)
+        protected override async Task InitOnNavigatedToAsync()
         {
-            base.OnNavigatedTo(args);
-
-            //IsInitialized is used as a workaround to avoid duplicate initialization issues because of OnNavigatedTo being called twice.
-            if (HasInitialized) { return; }
-            HasInitialized = true;
-
             _broadcasterService.Subscribe(nameof(LoginPage), message =>
             {
                 if (message.Command == Constants.ClearSensitiveFields)

@@ -3,8 +3,10 @@ using Bit.App.Controls;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+#if IOS
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
+#endif
 
 namespace Bit.App.Pages
 {
@@ -16,21 +18,33 @@ namespace Bit.App.Pages
         protected int ShowModalAnimationDelay = 400;
         protected int ShowPageAnimationDelay = 100;
 
+        /// <summary>
+        /// Used as a workaround to avoid duplicate initialization issues for some pages where OnNavigatedTo is called twice.
+        /// </summary>
+        private bool _hasInitedOnNavigatedTo;
+
         public BaseContentPage()
         {
-            if (DeviceInfo.Platform == DevicePlatform.iOS)
-            {
-                On<iOS>().SetUseSafeArea(true);
-                On<iOS>().SetModalPresentationStyle(UIModalPresentationStyle.FullScreen);
-            }
+#if IOS
+            On<iOS>().SetUseSafeArea(true);
+            On<iOS>().SetModalPresentationStyle(UIModalPresentationStyle.FullScreen);
+#endif
         }
-
-        //IsInitialized is used as a workaround to avoid duplicate initialization issues for some pages where OnNavigatedTo is called twice.
-        protected bool HasInitialized { get; set; }
 
         public DateTime? LastPageAction { get; set; }
 
         public bool IsThemeDirty { get; set; }
+
+        /// <summary>
+        /// This flag is used to see if check is needed to avoid duplicate calls of <see cref="OnNavigatedTo(NavigatedToEventArgs)"/>
+        /// Usually on modal navigation to the current page this flag should be <c>true</c>
+        /// Also this flag is added instead of directly checking for all pages to avoid potential issues on the app
+        /// and focusing only on the places where it's actually needed.
+        /// </summary>
+        /// <remarks>
+        /// This should be removed once MAUI fixes the issue of duplicate call to the method.
+        /// </remarks>
+        protected virtual bool ShouldCheckToPreventOnNavigatedToCalledTwice => false;
 
         protected override async void OnNavigatedTo(NavigatedToEventArgs args)
         {
@@ -42,6 +56,22 @@ namespace Bit.App.Pages
             }
 
             await SaveActivityAsync();
+
+            if (ShouldCheckToPreventOnNavigatedToCalledTwice && _hasInitedOnNavigatedTo)
+            {
+                return;
+            }
+            _hasInitedOnNavigatedTo = true;
+
+            await InitOnNavigatedToAsync();
+        }
+
+        protected virtual Task InitOnNavigatedToAsync() => Task.CompletedTask;
+
+        protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
+        {
+            base.OnNavigatedFrom(args);
+            _hasInitedOnNavigatedTo = false;
         }
 
         public bool DoOnce(Action action = null, int milliseconds = 1000)

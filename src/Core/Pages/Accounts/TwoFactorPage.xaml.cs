@@ -22,8 +22,8 @@ namespace Bit.App.Pages
             SetActivityIndicator();
             _appOptions = appOptions;
             _orgIdentifier = orgIdentifier;
-            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
-            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>();
+            _messagingService = ServiceContainer.Resolve<IMessagingService>();
             _vm = BindingContext as TwoFactorPageViewModel;
             _vm.Page = this;
             _vm.AuthingWithSso = authingWithSso ?? false;
@@ -40,25 +40,21 @@ namespace Bit.App.Pages
             _vm.CloseAction = async () => await Navigation.PopModalAsync();
             DuoWebView = _duoWebView;
 
-            if (DeviceInfo.Platform == DevicePlatform.Android)
-            {
-                ToolbarItems.Remove(_cancelItem);
-            }
-            if (DeviceInfo.Platform == DevicePlatform.iOS)
-            {
-                ToolbarItems.Add(_moreItem);
-            }
-            else
-            {
-                ToolbarItems.Add(_useAnotherTwoStepMethod);
-            }
+#if ANDROID
+            ToolbarItems.Remove(_cancelItem);
+            ToolbarItems.Add(_useAnotherTwoStepMethod);
+#else
+
+            ToolbarItems.Add(_moreItem);
+#endif
         }
 
         public HybridWebView DuoWebView { get; set; }
 
-        protected override async void OnAppearing()
+        protected override bool ShouldCheckToPreventOnNavigatedToCalledTwice => true;
+
+        protected override async Task InitOnNavigatedToAsync()
         {
-            base.OnAppearing();
             _broadcasterService.Subscribe(nameof(TwoFactorPage), (message) =>
             {
                 if (message.Command == "gotYubiKeyOTP")
@@ -101,10 +97,11 @@ namespace Bit.App.Pages
                 return Task.FromResult(0);
             });
         }
-        
-        protected override void OnDisappearing()
+
+        protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
         {
-            base.OnDisappearing();
+            base.OnNavigatedFrom(args);
+
             if (!_vm.YubikeyMethod)
             {
                 _messagingService.Send("listenYubiKeyOTP", false);

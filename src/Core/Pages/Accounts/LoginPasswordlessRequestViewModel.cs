@@ -1,25 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Bit.App.Abstractions;
-using Bit.Core.Resources.Localization;
 using Bit.App.Utilities;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Response;
-using Bit.Core.Services;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
-
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -72,7 +60,7 @@ namespace Bit.App.Pages
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            CloseCommand = new AsyncCommand(() => Device.InvokeOnMainThreadAsync(CloseAction),
+            CloseCommand = new AsyncCommand(() => MainThread.InvokeOnMainThreadAsync(CloseAction),
                 onException: _logger.Exception,
                 allowsMultipleExecutions: false);
         }

@@ -39,25 +39,10 @@ namespace Bit.App.Pages
             }
         }
 
-        protected override async void OnNavigatedTo(NavigatedToEventArgs args)
+        protected override bool ShouldCheckToPreventOnNavigatedToCalledTwice => true;
+
+        protected override async Task InitOnNavigatedToAsync()
         {
-            base.OnNavigatedTo(args);
-
-            //IsInitialized is used as a workaround to avoid duplicate initialization issues because of OnNavigatedTo being called twice.
-            if (HasInitialized) { return; }
-            HasInitialized = true;
-
-            await _vm.InitAsync();
-            if (string.IsNullOrWhiteSpace(_vm.OrgIdentifier))
-            {
-                RequestFocus(_orgIdentifier);
-            }
-        }
-
-        protected override async void OnNavigatedFrom(NavigatedFromEventArgs args)
-        {
-            base.OnNavigatedFrom(args);
-
             await _vm.InitAsync();
             if (string.IsNullOrWhiteSpace(_vm.OrgIdentifier))
             {
