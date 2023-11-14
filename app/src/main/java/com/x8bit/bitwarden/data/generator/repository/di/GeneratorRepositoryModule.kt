@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.generator.repository.di
 
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.generator.datasource.sdk.GeneratorSdkSource
 import com.x8bit.bitwarden.data.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.generator.repository.GeneratorRepositoryImpl
@@ -20,5 +22,11 @@ object GeneratorRepositoryModule {
     @Singleton
     fun provideGeneratorRepository(
         generatorSdkSource: GeneratorSdkSource,
-    ): GeneratorRepository = GeneratorRepositoryImpl(generatorSdkSource)
+        generatorDiskSource: GeneratorDiskSource,
+        authDiskSource: AuthDiskSource,
+    ): GeneratorRepository = GeneratorRepositoryImpl(
+        generatorSdkSource = generatorSdkSource,
+        generatorDiskSource = generatorDiskSource,
+        authDiskSource = authDiskSource,
+    )
 }
