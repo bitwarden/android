@@ -9,10 +9,10 @@ namespace Bit.iOS.Core.Handlers
     {
         public static void Setup()
         {
-            EntryHandler.Mapper.AppendToMapping("CustomEntryHandler", (handler, editor) =>
+            EntryHandler.Mapper.AppendToMapping("CustomEntryHandler", (handler, entry) =>
             {
                 handler.PlatformView.ClearButtonMode = UITextFieldViewMode.WhileEditing;
-                UpdateTintColor(handler, editor);
+                UpdateTintColor(handler, entry);
                 iOSHelpers.SetBottomBorder(handler.PlatformView);
 
                 if (!ThemeHelpers.LightTheme)
@@ -24,9 +24,10 @@ namespace Bit.iOS.Core.Handlers
             EntryHandler.Mapper.AppendToMapping(nameof(IEntry.TextColor), UpdateTintColor);
         }
 
-        private static void UpdateTintColor(IEntryHandler handler, IEntry editor)
+        private static void UpdateTintColor(IEntryHandler handler, IEntry entry)
         {
-            handler.PlatformView.TintColor = editor.TextColor.ToPlatform();
+            // Note: the default black value is to avoid an error on the iOS extensions while lazy loading a view
+            handler.PlatformView.TintColor = entry.TextColor.ToPlatform(Colors.Black);
         }
     }
 }

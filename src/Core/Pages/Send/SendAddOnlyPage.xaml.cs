@@ -16,7 +16,7 @@ namespace Bit.App.Pages
     public partial class SendAddOnlyPage : BaseContentPage
     {
         private readonly IVaultTimeoutService _vaultTimeoutService;
-        private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
+        private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
 
         private AppOptions _appOptions;
         private SendAddEditPageViewModel _vm;
@@ -61,6 +61,7 @@ namespace Bit.App.Pages
                 {
                     return;
                 }
+
                 await _vm.InitAsync();
 
                 if (!await _vm.LoadAsync())
@@ -70,7 +71,7 @@ namespace Bit.App.Pages
                 }
 
                 _accountAvatar?.OnAppearing();
-                await Device.InvokeOnMainThreadAsync(async () => _vm.AvatarImageSource = await GetAvatarImageSourceAsync());
+                await MainThread.InvokeOnMainThreadAsync(async () => _vm.AvatarImageSource = await GetAvatarImageSourceAsync());
 
                 await HandleCreateRequest();
                 if (string.IsNullOrWhiteSpace(_vm.Send?.Name))
@@ -86,10 +87,10 @@ namespace Bit.App.Pages
             }
         }
 
-
         protected override void OnNavigatingFrom(NavigatingFromEventArgs args)
         {
             base.OnNavigatingFrom(args);
+
             _accountAvatar?.OnDisappearing();
         }
 
@@ -160,14 +161,21 @@ namespace Bit.App.Pages
             return Task.CompletedTask;
         }
 
-        void OptionsHeader_Tapped(object sender, EventArgs e)
+        async void OptionsHeader_Tapped(object sender, EventArgs e)
         {
-            _vm.ToggleOptionsCommand.Execute(null);
-
-            if (!_lazyOptionsView.IsLoaded)
+            try
             {
-                _lazyOptionsView.MainScrollView = _scrollView;
-                _lazyOptionsView.LoadViewAsync();
+                _vm.ToggleOptionsCommand.Execute(null);
+
+                if (!_lazyOptionsView.HasLazyViewLoaded)
+                {
+                    _lazyOptionsView.MainScrollView = _scrollView;
+                    await _lazyOptionsView.LoadViewAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Value.Exception(ex);
             }
         }
     }

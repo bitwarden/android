@@ -1,13 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Bit.App.Behaviors;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
-using CommunityToolkit.Maui.Converters;
-using CommunityToolkit.Maui.ImageSources;
-using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Maui.Layouts;
 using CommunityToolkit.Maui.Views;
 
 namespace Bit.App.Pages
@@ -60,7 +52,7 @@ namespace Bit.App.Pages
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (!_lazyDeletionDateTimePicker.IsLoaded
+            if (!_lazyDeletionDateTimePicker.HasLazyViewLoaded
                 &&
                 e.PropertyName == nameof(SendAddEditPageViewModel.ShowDeletionCustomPickers)
                 &&
@@ -69,7 +61,7 @@ namespace Bit.App.Pages
                 _lazyDeletionDateTimePicker.LoadViewAsync();
             }
 
-            if (!_lazyExpirationDateTimePicker.IsLoaded
+            if (!_lazyExpirationDateTimePicker.HasLazyViewLoaded
                 &&
                 e.PropertyName == nameof(SendAddEditPageViewModel.ShowExpirationCustomPickers)
                 &&

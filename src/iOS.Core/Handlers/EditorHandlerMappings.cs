@@ -28,7 +28,8 @@ namespace Bit.iOS.Core.Handlers
 
         private static void UpdateTintColor(IEditorHandler handler, IEditor editor)
         {
-            handler.PlatformView.TintColor = editor.TextColor.ToPlatform();
+            // Note: the default black value is to avoid an error on the iOS extensions while lazy loading a view
+            handler.PlatformView.TintColor = editor.TextColor.ToPlatform(Colors.Black);
         }
     }
 }

@@ -59,7 +59,6 @@
     <Compile Include="ExtensionNavigationController.designer.cs">
       <DependentUpon>ExtensionNavigationController.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="..\iOS\Resources\logo_white%403x.png">

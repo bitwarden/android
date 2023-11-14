@@ -10,8 +10,8 @@ namespace Bit.App.Pages
 {
     public class BaseContentPage : ContentPage
     {
-        private IStateService _stateService;
-        private IDeviceActionService _deviceActionService;
+        private readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>();
+        private readonly LazyResolve<IDeviceActionService> _deviceActionService = new LazyResolve<IDeviceActionService>();
 
         protected int ShowModalAnimationDelay = 400;
         protected int ShowPageAnimationDelay = 100;
@@ -122,41 +122,28 @@ namespace Bit.App.Pages
 
         protected async Task<bool> ShowAccountSwitcherAsync()
         {
-            return await _stateService.GetActiveUserIdAsync() != null;
+            return await _stateService.Value.GetActiveUserIdAsync() != null;
         }
 
         protected async Task<AvatarImageSource> GetAvatarImageSourceAsync(bool useCurrentActiveAccount = true)
         {
             if (useCurrentActiveAccount)
             {
-                var user = await _stateService.GetActiveUserCustomDataAsync(a => (a?.Profile?.UserId, a?.Profile?.Name, a?.Profile?.Email, a?.Profile?.AvatarColor));
+                var user = await _stateService.Value.GetActiveUserCustomDataAsync(a => (a?.Profile?.UserId, a?.Profile?.Name, a?.Profile?.Email, a?.Profile?.AvatarColor));
                 return new AvatarImageSource(user.UserId, user.Name, user.Email, user.AvatarColor);
             }
             return new AvatarImageSource();
         }
 
-        private void SetServices()
-        {
-            if (_stateService == null)
-            {
-                _stateService = ServiceContainer.Resolve<IStateService>("stateService");
-            }
-            if (_deviceActionService == null)
-            {
-                _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            }
-        }
-
         private async Task SaveActivityAsync()
         {
-            SetServices();
-            if (await _stateService.GetActiveUserIdAsync() == null)
+            if (await _stateService.Value.GetActiveUserIdAsync() == null)
             {
                 // Fresh install and/or all users logged out won't have an active user, skip saving last active time
                 return;
             }
 
-            await _stateService.SetLastActiveTimeAsync(_deviceActionService.GetActiveTime());
+            await _stateService.Value.SetLastActiveTimeAsync(_deviceActionService.Value.GetActiveTime());
         }
     }
 }

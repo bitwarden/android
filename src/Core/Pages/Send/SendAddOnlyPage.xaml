@@ -150,6 +150,7 @@
                     InputTransparent="False"
                     Spacing="0"
                     SemanticProperties.Description="{Binding OptionsAccessilibityText}">
+                    <!-- TODO: TapGestureRecognizer not working https://github.com/dotnet/maui/issues/17948 -->
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OptionsHeader_Tapped" />
                     </StackLayout.GestureRecognizers>
