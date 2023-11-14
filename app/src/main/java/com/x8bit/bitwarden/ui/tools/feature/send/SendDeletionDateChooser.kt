@@ -28,6 +28,7 @@ fun SendDeletionDateChooser(
     modifier: Modifier = Modifier,
 ) {
     val options = listOf(
+        stringResource(id = R.string.one_hour),
         stringResource(id = R.string.one_day),
         stringResource(id = R.string.two_days),
         stringResource(id = R.string.three_days),
