@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.generator.repository
+package com.x8bit.bitwarden.data.tools.generator.repository
 
 import com.bitwarden.core.PasswordGeneratorRequest
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -10,10 +10,10 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
-import com.x8bit.bitwarden.data.generator.datasource.disk.GeneratorDiskSource
-import com.x8bit.bitwarden.data.generator.datasource.sdk.GeneratorSdkSource
-import com.x8bit.bitwarden.data.generator.repository.model.GeneratedPasswordResult
-import com.x8bit.bitwarden.data.generator.repository.model.PasswordGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
+import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSource
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.PasswordGenerationOptions
 import io.mockk.Runs
 import io.mockk.clearMocks
 import io.mockk.coEvery

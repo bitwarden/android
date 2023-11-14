@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.generator.repository.model
+package com.x8bit.bitwarden.data.tools.generator.repository.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

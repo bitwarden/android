@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.generator.repository.model
+package com.x8bit.bitwarden.data.tools.generator.repository.model
 
 /**
  * Represents the outcome of a generator operation.

@@ -1,10 +1,10 @@
-package com.x8bit.bitwarden.data.generator.repository.di
+package com.x8bit.bitwarden.data.tools.generator.repository.di
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.generator.datasource.disk.GeneratorDiskSource
-import com.x8bit.bitwarden.data.generator.datasource.sdk.GeneratorSdkSource
-import com.x8bit.bitwarden.data.generator.repository.GeneratorRepository
-import com.x8bit.bitwarden.data.generator.repository.GeneratorRepositoryImpl
+import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
+import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSource
+import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

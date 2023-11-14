@@ -1,8 +1,8 @@
-package com.x8bit.bitwarden.data.generator.datasource.sdk.di
+package com.x8bit.bitwarden.data.tools.generator.datasource.sdk.di
 
 import com.bitwarden.sdk.Client
-import com.x8bit.bitwarden.data.generator.datasource.sdk.GeneratorSdkSource
-import com.x8bit.bitwarden.data.generator.datasource.sdk.GeneratorSdkSourceImpl
+import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSource
+import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
