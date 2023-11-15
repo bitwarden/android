@@ -129,6 +129,7 @@ fun BitwardenPasswordField(
     modifier: Modifier = Modifier,
     hint: String? = null,
     initialShowPassword: Boolean = false,
+    showPasswordTestTag: String? = null,
 ) {
     var showPassword by rememberSaveable { mutableStateOf(initialShowPassword) }
     BitwardenPasswordField(
@@ -139,6 +140,7 @@ fun BitwardenPasswordField(
         showPasswordChange = { showPassword = !showPassword },
         onValueChange = onValueChange,
         hint = hint,
+        showPasswordTestTag = showPasswordTestTag,
     )
 }
 
