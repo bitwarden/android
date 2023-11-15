@@ -20,11 +20,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,7 +48,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 /**
  * The top level composable for the Login screen.
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 @Suppress("LongMethod")
 fun LoginScreen(
@@ -101,6 +105,7 @@ fun LoginScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
+                .semantics { testTagsAsResourceId = true }
                 .padding(innerPadding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
@@ -118,12 +123,14 @@ fun LoginScreen(
             ) {
                 BitwardenPasswordField(
                     modifier = Modifier
+                        .semantics { testTag = "MasterPasswordEntry" }
                         .fillMaxWidth(),
                     value = state.passwordInput,
                     onValueChange = remember(viewModel) {
                         { viewModel.trySendAction(LoginAction.PasswordInputChanged(it)) }
                     },
                     label = stringResource(id = R.string.master_password),
+                    showPasswordTestTag = "PasswordVisibilityToggle",
                 )
 
                 // TODO: Need to figure out better handling for very small clickable text (BIT-724)
@@ -132,6 +139,7 @@ fun LoginScreen(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
+                        .semantics { testTag = "GetMasterPasswordHintLabel" }
                         .fillMaxWidth()
                         .padding(bottom = 8.dp)
                         .clickable {
@@ -150,6 +158,7 @@ fun LoginScreen(
                     },
                     isEnabled = state.isLoginButtonEnabled,
                     modifier = Modifier
+                        .semantics { testTag = "LogInWithMasterPasswordButton" }
                         .fillMaxWidth()
                         .padding(vertical = 12.dp),
                 )
@@ -162,6 +171,7 @@ fun LoginScreen(
                         { viewModel.trySendAction(LoginAction.SingleSignOnClick) }
                     },
                     modifier = Modifier
+                        .semantics { testTag = "LogInWithSsoButton" }
                         .fillMaxWidth()
                         .padding(bottom = 24.dp),
                     isEnabled = state.isLoginButtonEnabled,
@@ -177,6 +187,7 @@ fun LoginScreen(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier
+                        .semantics { testTag = "LoggingInAsLabel" }
                         .fillMaxWidth()
                         .padding(bottom = 8.dp),
                 )
@@ -184,6 +195,7 @@ fun LoginScreen(
                 // TODO: Need to figure out better handling for very small clickable text (BIT-724)
                 Text(
                     modifier = Modifier
+                        .semantics { testTag = "NotYouLabel" }
                         .clickable { viewModel.trySendAction(LoginAction.NotYouButtonClick) },
                     text = stringResource(id = R.string.not_you),
                     textAlign = TextAlign.Start,
