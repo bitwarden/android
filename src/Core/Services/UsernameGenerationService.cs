@@ -150,8 +150,9 @@ namespace Bit.Core.Services
 
             if (options.ServiceType == ForwardedEmailServiceType.Fastmail)
             {
+                var fastmailEmailOptions = (FastmailForwarderOptions)options.GetForwarderOptions();
                 return await new FastmailForwarder()
-                                    .GenerateAsync(_apiService, (FastmailForwarderOptions)options.GetForwarderOptions());
+                                    .GenerateAsync(_apiService, fastmailEmailOptions);
             }
 
             BaseForwarder<ForwarderOptions> simpleForwarder = null;

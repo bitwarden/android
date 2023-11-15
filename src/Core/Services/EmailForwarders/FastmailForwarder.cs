@@ -61,7 +61,7 @@ namespace Bit.Core.Services.EmailForwarders
                                         ["description"] = "",
                                         ["url"] = "",
                                         ["emailPrefix"] = "",
-                                        ["forDomain"] = ( null == options.Website ? "" : options.Website )
+                                        ["forDomain"] = options.Website ?? ""
                                     }
                                 }
                             },
