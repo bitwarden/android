@@ -14,21 +14,22 @@ import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSyncResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.testingtools.hangs
+import com.x8bit.bitwarden.testingtools.just
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -346,10 +347,7 @@ class VaultRepositoryTest {
                     organizationKeys = mapOf(),
                 ),
             )
-        } coAnswers {
-            delay(Long.MAX_VALUE)
-            Result.success(InitializeCryptoResult.Success)
-        }
+        } just hangs()
 
         val scope = CoroutineScope(Dispatchers.Unconfined)
         scope.launch {
@@ -393,10 +391,7 @@ class VaultRepositoryTest {
                     organizationKeys = mapOf(),
                 ),
             )
-        } coAnswers {
-            delay(Long.MAX_VALUE)
-            Result.success(InitializeCryptoResult.Success)
-        }
+        } just hangs()
 
         val scope = CoroutineScope(Dispatchers.Unconfined)
         scope.launch {
