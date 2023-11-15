@@ -45,18 +45,18 @@ class LocalDateTimeSerializerTest {
             LocalDateTimeData(
                 dataAsLocalDateTime = LocalDateTime.of(
                     2023,
-                    10,
-                    6,
-                    17,
-                    22,
-                    28,
-                    446666700,
+                    8,
+                    1,
+                    16,
+                    13,
+                    3,
+                    502391000,
                 ),
             ),
             json.decodeFromString<LocalDateTimeData>(
                 """
                 {
-                 "dataAsLocalDateTime": "2023-10-06T17:22:28.4466667Z"
+                 "dataAsLocalDateTime": "2023-08-01T16:13:03.502391Z"
                 }
                 """,
             ),
@@ -69,7 +69,7 @@ class LocalDateTimeSerializerTest {
             json.parseToJsonElement(
                 """
                 {
-                  "dataAsLocalDateTime": "2023-10-06T17:22:28.44Z"
+                  "dataAsLocalDateTime": "2023-10-06T17:22:28.4400000Z"
                 }
                 """,
             ),

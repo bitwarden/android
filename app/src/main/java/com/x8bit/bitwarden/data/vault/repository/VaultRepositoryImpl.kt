@@ -20,6 +20,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -37,6 +41,8 @@ class VaultRepositoryImpl constructor(
 
     private var syncJob: Job = Job().apply { complete() }
 
+    private var willSyncAfterUnlock = false
+
     private val vaultDataMutableStateFlow =
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
 
@@ -48,7 +54,7 @@ class VaultRepositoryImpl constructor(
     }
 
     override fun sync() {
-        if (!syncJob.isCompleted) return
+        if (!syncJob.isCompleted || willSyncAfterUnlock) return
         vaultDataMutableStateFlow.value.data?.let { data ->
             vaultDataMutableStateFlow.update {
                 DataState.Pending(data = data)
@@ -86,10 +92,16 @@ class VaultRepositoryImpl constructor(
     }
 
     override suspend fun unlockVaultAndSync(masterPassword: String): VaultUnlockResult {
-        return initializeCrypto(masterPassword = masterPassword)
-            .also { vaultUnlockedResult ->
-                if (vaultUnlockedResult is VaultUnlockResult.Success) sync()
+        return flow {
+            willSyncAfterUnlock = true
+            emit(initializeCrypto(masterPassword = masterPassword))
+        }
+            .onEach {
+                willSyncAfterUnlock = false
+                if (it is VaultUnlockResult.Success) sync()
             }
+            .onCompletion { willSyncAfterUnlock = false }
+            .first()
     }
 
     private fun storeUserKeyAndPrivateKey(
@@ -156,7 +168,7 @@ class VaultRepositoryImpl constructor(
                 onSuccess = { (decryptedCipherList, decryptedFolderList) ->
                     DataState.Loaded(
                         data = VaultData(
-                            cipherListViewList = decryptedCipherList,
+                            cipherViewList = decryptedCipherList,
                             folderViewList = decryptedFolderList,
                         ),
                     )

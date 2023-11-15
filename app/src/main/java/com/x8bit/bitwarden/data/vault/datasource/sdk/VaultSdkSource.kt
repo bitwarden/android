@@ -27,7 +27,12 @@ interface VaultSdkSource {
     /**
      * Decrypts a list of [Cipher]s returning a list of [CipherListView] wrapped in a [Result].
      */
-    suspend fun decryptCipherList(cipherList: List<Cipher>): Result<List<CipherListView>>
+    suspend fun decryptCipherListCollection(cipherList: List<Cipher>): Result<List<CipherListView>>
+
+    /**
+     * Decrypts a list of [Cipher]s returning a list of [CipherView] wrapped in a [Result].
+     */
+    suspend fun decryptCipherList(cipherList: List<Cipher>): Result<List<CipherView>>
 
     /**
      * Decrypts a [Folder] returning a [FolderView] wrapped in a [Result].
